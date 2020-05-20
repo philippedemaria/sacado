@@ -1,0 +1,96 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+
+
+{% endblock %} 
+
+{% block body %}
+
+ 
+ 
+ 
+{% if request.user.is_superuser %}
+
+
+<div class="col-xs-12 col-md-12" >  
+    <div class="content_title">
+        <h1 class="thin">
+            <i class="fa fa-life-ring"></i> Modèles et aides</a>
+        </h1>
+    </div>
+</div>
+
+<section class="content_main">  
+ 
+     <div class="row"> 
+        <div class="col-lg-12 col-md-12  col-xs-12">
+            <h2 class="thin">Tutoriel</h2>
+        </div>
+    </div>  
+    <div class="row"> 
+        <div class="col-lg-4 col-md-4  col-xs-12">
+            <p><a href="{% static 'uploads/tuto.pdf' %}" target="_blank"> <img src="{% static 'img/pdf.png' %}" width="60px" /> Créer un exercice interactif avec GGB</a></p>
+        </div>
+        <div class="col-lg-8 col-md-8 col-xs-12">
+            <div class="alert alert-danger">
+                <p>Chaque exercice comporte une première page qui rappelle le savoir faire ciblé ou rajoute un attribut de l'exercice. Cette première page disparait au clic lorsque l'exercice démarre. Il doit comporter sa correction interactive.</p>
+                <p>Il est obligatoire de faire une capture d'écran de l'exercice 750px par 550px. L'image est demandéE lors de l'enregistrement de l'exercice;</p>
+ 
+                <p>Pour enregistrer un score, le fichier Geogebra doit OBLIGATOIREMENT utiliser le nom des variables <strong>grade</strong> (compte le nombre de réponse justes) et <strong>numexo</strong> (compte le nombre total de situations effectuées.</p>             
+
+            </div>
+        </div>
+    </div>  
+    <hr/>
+      <div class="row"> 
+        <div class="col-lg-12 col-md-12  col-xs-12">
+            <h2 class="thin">Modèles</h2>
+        </div>
+    </div>  
+    <div class="row"> 
+        <div class="col-lg-4 col-md-4  col-xs-12">
+            <p><a href="{% static 'uploads/ggbfiles/modele.ggb' %}" target="_blank"  class="btn btn-subsacado  btn-large"><img src="{% static 'img/ggb.png' %}" width="40px" />  Modèle cadre fond blanc</a></p>
+        </div>
+ 
+        <div class="col-lg-4 col-md-4  col-xs-12">
+            <p><a href="{% static 'uploads/ggbfiles/modele2.ggb' %}" target="_blank" class="btn btn-subsacado  btn-large"><img src="{% static 'img/ggb.png' %}" width="40px" /> Modèle cadre ajouré pour grille ou repère</a></p>
+        </div>
+ 
+        <div class="col-lg-4 col-md-4  col-xs-12">
+            <p><a href="{% static 'img/sacadoLogo.png' %}" target="_blank"  class="btn btn-subsacado  btn-large"> <img src="{% static 'img/sacadoLogo.png' %}" width="40px" />Télécharger le logo </a></p>
+        </div>
+
+
+    </div> 
+    <hr/>
+      <div class="row"> 
+        <div class="col-lg-12 col-md-12  col-xs-12">
+            <h2 class="thin">Images de fond</h2>
+        </div>
+    </div>  
+    <div class="row"> 
+        <div class="col-lg-4 col-md-4  col-xs-12">
+            <p><a href="{% static 'img/000-fond.png' %}"><img src="{% static 'img/000-fond.png' %}" width="300px" /></a></p>
+        </div>
+        <div class="col-lg-4 col-md-4  col-xs-12">
+            <p><a href="{% static 'img/00-fond.png' %}"><img src="{% static 'img/00-fond.png' %}" width="300px" /></a></p>
+        </div>
+        <div class="col-lg-4 col-md-4  col-xs-12">
+            <p><a href="{% static 'img/0-fond.png' %}"><img src="{% static 'img/0-fond.png' %}" width="300px" /></a></p>
+        </div>
+    </div> 
+
+
+</section>
+{% endif %} 
+ 
+{% endblock %}

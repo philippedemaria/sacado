@@ -1,0 +1,139 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+    {% if parcours %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+
+    <script>
+        require(['script/ajax-parcours']);
+    </script> 
+
+{% endblock %} 
+
+
+ 
+
+{% block page_title %}
+<span  style="color:{{ parcours.color }}"> <i class="fa fa-map"></i>    {{ parcours }} </a> 
+ 
+ 
+<img src="{% static 'img/angle-right.png' %}"/> 
+<small class="thin">{{ nb_exercises }} exercice{{ nb_exercises|pluralize }}</small> </span>
+{% endblock %}
+
+
+
+
+{% block page_menu_right %}
+
+    {% include 'qcm/submenu_parcours.html' %}
+ 
+
+ 
+
+    <li>
+        <form action="" method="POST" enctype='multipart/form-data'>     
+            {% csrf_token %}
+            <div class="btn-group"  style="padding:0px;margin:0px;">
+                <a href="#" class="btn btn-default" 
+                    id="parcours_publisher"    style="padding:5px;font-size:18px;font-weight: 100"
+                    data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
+                  {% if parcours.is_publish %} Dépublier  {% else %} Publier {% endif  %} 
+                </a><span class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" id="parcours_statut"  style="padding:5px;font-size:18px;font-weight: 100">  
+                  {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
+                </span>
+            </div>
+        </form>
+    </li>
+
+{% endblock %}
+
+ 
+
+{% block body %}
+
+<style type="text/css">
+body{
+    overflow: hidden;
+}  
+
+
+</style>
+ 
+<form action="" methode="POST">      
+<section class="content_list exercise_sortable" id="miseEnAttenteDashboard">
+
+<input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
+    {% for relation in relationships %}
+        {%  if relation.exercise.supportfile.is_title %}       
+            <h2 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}</h2>
+        {%  elif relation.exercise.supportfile.is_subtitle %}
+            <h3 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}</h3>
+       {% else %}  
+
+            {% include 'qcm/details_card.html' %}
+
+
+
+
+        {% endif %}  
+
+
+    {% empty %}
+    <div class="row">
+        <div class="col-sm-12 col-md-12" style="margin:40px">
+        <a href="{% url 'peuplate_parcours' parcours.id   %}" class="label label-danger"> Associer des exercices à {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
+        </div> 
+    </div> 
+
+    {% endfor %}
+
+
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="form-group">
+    {% if parcours.teacher != teacher %}                <a href="{% url 'clone_parcours' parcours.id %}" class="btn btn-sacado">Cloner ce parcours</a>    {% endif %} 
+                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+            </div>
+        </div>
+         
+    </div>  
+  
+</section>
+</form>
+
+
+<div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="help">
+    <div class="modal-dialog" role="document"  style="width:700px;">
+        <div class="modal-content" style="padding-top :0px;">
+            <div class="modal-header">
+                <h4>Détail d'un exercice.</4>
+                Pour organiser l'ordre dans le parcours, glisser et déposer les exercices.
+            </div>
+            <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12 col-xs-12">   
+                             <img src="{% static 'img/card_details.jpg' %}">
+                        </div>   
+                    </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'qcm/order_list.html' %}
+
+{% endblock %}
+
+ 
+ 
+ 
+ 

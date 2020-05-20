@@ -1,0 +1,63 @@
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <i class="fa fa-cogs"></i> {{ knowledge.name }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <table class="table table-hover" style="width:100%">
+            <tbody>
+                {% for exercise in exercises  %}
+                    {% if group.parcours %}
+                        {%  get_is_selected  exercise  group.parcours  as  e_is_selected %} 
+                    {% endif %}
+                    <tr {% if group.parcours %}{% if e_is_selected %} style="background-color: #f5f6f9" {% endif %}{% endif %}>
+                        <td>
+                           <input type="checkbox" value="{{ exercise.id }}" name="exercises"   {% if group.parcours %}{% if e_is_selected %} checked {% endif %}{% endif %}/>
+                        </td>                                               
+                        <td class="sublistingtd"> 
+                                   
+                                 <a href="{% url 'show_this_exercise' exercise.id   %}" class="listing" >  {{ exercise.supportfile.annoncement|cleanhtml|capfirst }}</a>
+                                        <br>
+                                        <a href="{% url 'show_this_exercise' exercise.id   %}" >  
+                                        <img src="../../../../static/uploads/{{ exercise.supportfile.imagefile }}" class="imagefile"></a>
+ 
+                                <span style="font-size:16px;">                                  {% if exercise.supportfile.calculator %}
+                                  <img src="{% static 'img/calculator.png' %}" width="30px" class="pull-right" />
+                                {% else %}
+                                  <img src="{% static 'img/no_calculator.png' %}"  width="30px" class="pull-right"  />
+                                {% endif  %}     
+                                    <i class="fa fa-barcode"></i> {{ exercise.supportfile.code }} {% if exercise.knowledge.name|make_list|length < 140 %}<br>{% endif %}
+                                    <i class="fa fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.knowledge.name|make_list|length < 140 %}<br>{% endif %}
+                                    <i class="fa fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}}  minimum
+                                </span>
+                        </td>
+                        <td>
+                            {% for r in exercise.exercise_remediation.all %}
+                                <a href="../../{{ r.mediation }}" target="_blank">
+                                    {% if r.mstyle %} 
+                                        <img src="{% static 'img/ggb.png' %}" width="20px" />
+                                    {% else %}
+                                        <img src="{% static 'img/pdf.png' %}" width="20px" />
+                                    {% endif %}
+                                 </a>
+                            {% endfor %}                                               
+                        </td>
+                    </tr>
+                {% empty %} 
+                    <tr>
+                        <td colspan="2"> 
+                            <div class="alert alert-danger">Aucun exercice.</div>
+                        </td>
+                    </tr>
+                {% endfor %} 
+            </tbody>
+        </table>
+    </div>
+</div>

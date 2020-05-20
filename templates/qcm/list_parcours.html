@@ -1,0 +1,156 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2_mini.js' %}"></script>
+ 
+    <script>
+        require(['script/ajax-parcours']);
+    </script> 
+
+
+{% endblock %}
+
+ 
+
+{% block page_title %}
+    <i class="fa fa-map"></i> Tous mes parcours  <img width="25px" src="{% static 'img/angle-right.png' %}"/>   
+{% endblock %}
+
+{% block page_menu_right %}
+  <li> <a href="{% url 'all_parcourses' %}"   class="no_button"> Tous les parcours</a></li>
+  <li> <a href="{% url 'create_parcours' %}"   class="btn btn-new" ><img width="15px" src="{% static 'img/plus.png' %}"/> Nouveau parcours</a> </li>
+{% endblock %}
+
+
+
+
+
+{% block body  %} 
+<style>
+body{
+    overflow: hidden;
+}
+</style> 
+<section class="content_list"> 
+
+<div class="row">    
+   <div class="col-sm-12 col-md-12">
+        <table class="table table-hovered standard_tab_sort"  style="width:100%">
+            <thead> 
+                <tr> 
+                    <th style="width:2px"></th>                  
+                    <th>Nom</th>
+                    <th>Niveau</th>
+                    <th>Groupes affectés</th>
+                    <th>Elèves</th>
+                    <th>Publication</th>                    
+                </tr> 
+            </thead>
+            <tbody>
+            {% for parcours in parcourses %}
+                    <tr style="{% if not parcours.is_publish %}background-color:#F4F4F4;{% endif  %}">
+                        <td style="text-align:center">
+                            <span class="fa-stack">
+                              <i class="fa fa-{% if parcours.is_evaluation %}bullseye{% else %}square{% endif  %} fa-2x" style="color: {{ parcours.color }} ;"></i>
+                              {% if parcours.is_favorite %}<i class="fa fa-star fa-stack-1x" style="font-size: 12px; color:#FFF" ></i>{% endif  %}
+                            </span>
+                        </td>  
+                        <td>
+                            <a href="{% url 'update_parcours' parcours.id 0 %}" > {{ parcours.title }} {% if parcours.linked %}(Par défaut){% endif %} <i class="fa fa-pencil-square pull-right" aria-hidden="true"></i></a>
+                             <div style="font-size:14px;margin-top:-5px;">
+                                {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }} - {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }} {% endif %}min. 
+                                <div><a href="{% url 'update_parcours' parcours.id 0 %}" style="font-size: 12px;"><i class="fa fa-laptop"></i> Sélectionner les exercices</a> </div>
+
+ 
+                                {% if not parcours.linked %}
+
+                                <div><a href="{% url 'organize_parcours' parcours.id   %}"  style="font-size: 12px;"><i class="fa fa-th"></i> Organiser  le parcours</a></div>
+                                {% else %} 
+                                <div><a href="{% url 'organize_parcours' parcours.parcours_group.id %}" style="font-size: 12px;"><i class="fa fa-th"></i> Organiser  le parcours</a> </div> 
+                                {% endif %} 
+ 
+
+                                <div><a href="{% url 'detail_task_parcours' parcours.id 0  %}" style="font-size: 12px;"><i class="fa fa-calendar-check-o"></i> Voir les taches  </a>  </div>
+                                <div><a href="{% url 'result_parcours' parcours.id  %}" style="font-size: 12px;"><i class="fa fa-mortar-board"></i> Suivi du parcours par élève</a></div> 
+                                <div><a href="{% url 'result_parcours_knowledge' parcours.id   %}" style="font-size: 12px;"><i class="fa fa-trophy" style="font-size: 12px"></i> Suivi du parcours par savoir faire </a></div>
+
+                            </div>
+                        </td> 
+                        <td>
+                            {% for l in  parcours.level_list  %}
+                                <small>{{ l }}{% if not forloop.last %}, {% endif %}</small>
+                            {% endfor %}
+                        </td> 
+                        <td>
+                            {% for g in  parcours.group_list  %}
+                                {% get_parcours_group_students_count parcours g as nb_st %}
+                                <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
+
+                            {% empty %}
+                                <i class="fa fa-warning"></i> <span style="font-size:12px;color:#c70000;">Non affecté </span><a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-xs btn-danger">{{ p.students.count }}<i class="fa fa-users"></i> Affecter des élèves à {% if p.is_evaluation %}cette évaluation{% else %}ce parcours{% endif %}</a> 
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <form action="#" method="POST">
+                                {% csrf_token %}
+                                <a  href="#groupe_name_anchor{{ group.name.id }}" class="vue menuactionparcours" data-toggle='modal' style="float:left; margin-right:10px"  
+                                    data-group_name='{{ group.name }}' data-parcours_id='{{ parcours.id }}' data-target='#listing'> 
+                                    <span class="label label-default"> {{ parcours.students.count }}<i class="fa fa-users"></i></span>
+                                </a>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="#" method="POST" enctype='multipart/form-data'>     {% csrf_token %}
+                                <a href="#groupe_name_anchor{{ group.name.id }}" class="btn btn-{% if parcours.is_publish %}success{% else  %}danger{% endif  %} publisher" style="padding:7px;font-size:12px;font-weight: 100" id="parcours_publisher{{parcours.id}}"  data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}" data-from=1  > 
+                                {% if parcours.is_evaluation %}
+                                    {% if parcours.is_publish %} Evaluation publiée  {% else %} Evaluation non publiée {% endif  %} 
+                                {% else %}
+                                    {% if parcours.is_publish %} Parcours publié  {% else %} Parcours non publié {% endif  %}  
+                                {% endif %}
+                                </a>
+                                
+                                <font style="font-size:12px">
+                                    {% if parcours.is_evaluation %}
+                                    Du {{  parcours.start|date:"d N Y"  }}, {{  parcours.starter  }} 
+                                        {% if parcours.stop %}
+                                            au {{  parcours.stop|date:"d N Y"  }} {% if parcours.stopper %}, {{  parcours.stopper  }} {% endif %}    
+                                        {% endif %}                                
+                                    {% endif %}
+                                </font>
+                            </form>
+                        </td>
+                    </tr>
+            {% endfor  %} 
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</section>
+
+    <div class="modal fade bd-example-modal-lg" id="listing" tabindex="-1" role="dialog" aria-labelledby="listing" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>                
+                    <h5 class="modal-title">Liste des élèves - <span id="modal_group_name"></span></h5>
+                </div>
+                <div class="modal-body">
+                    <div id="list_students"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock  %}   
+
+
+ 

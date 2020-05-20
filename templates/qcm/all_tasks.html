@@ -1,0 +1,112 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+
+
+
+{% endblock %} 
+
+  
+{% block page_title %}
+    <i class="fa fa-calendar-check-o"></i> Toutes les taches en cours</span>
+{% endblock %}
+
+{% block page_menu_right %}
+    <li><small>{% now "d N Y, H:i" %}</small></li>
+    <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default"/></a>
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main">  
+    <div class="row"> 
+        <div class="col-sm-12 col-md-12">
+ 
+            <table  class="table table-hover display" >
+                {% regroup relationships by parcours as parcours_list %}  
+                {% for p in parcours_list %}
+                <thead>
+                    <tr style="background-color: {{ p.grouper.color }}; color : #FFF ">
+                        <th>{{ p.grouper }} </th>
+                        <th> <a href="{% url 'organize_parcours'  p.grouper.id   %}" class="btn btn-xs btn-default">Créer une tache</a></th>
+                        <th> <a href="{% url 'detail_task'  p.grouper.id  0  %}" class="btn btn-xs btn-default">En détails</a></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in p.list %}
+                        <tr> 
+                            <td >
+                                <a href="{% url 'show_this_exercise' r.exercise.id %}" target="_blank">
+
+                                
+                                    <img src="../../static/uploads/{{ r.exercise.supportfile.imagefile }}" class="imagefile">
+
+
+                                    {{ r.exercise.supportfile.annoncement|cleanhtml|capfirst  }} 
+                                                {% if r.exercise.supportfile.calculator %}
+                                                  <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                                {% else %}
+                                                  <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                                {% endif  %}   <br>
+                                    <i class="fa fa-barcode"></i> {{ r.exercise.supportfile.code }}      <br>                                 
+                                    <i class="fa fa-clock-o"></i> {{ r.exercise.supportfile.duration }} minutes<br>
+                                    <i class="fa fa-save"></i> {{ r.exercise.supportfile.situation }}  situation{{ r.exercise.supportfile.situation|pluralize }}<br>        
+                                </a>
+                            </td>
+                            <td>
+                                {% if r.parcours.linked %} 
+                                    {% get_nb_task_done  r.exercise  r.parcours.parcours_group as nb_task_done %}
+                                    {% get_who_are_done  r.exercise p.grouper.parcours_group as who_are %}
+                                {% else %} 
+                                    {% get_nb_task_parcours_done  r.exercise  r.parcours as nb_task_done %}
+                                    {% get_who_are_done_parcours  r.exercise  p.grouper  as who_are  %}
+                                {% endif %}
+
+
+
+                                {% if r.parcours.linked %} 
+                                    {{ nb_task_done}}/{{ r.parcours.parcours_group.students.count  }}
+                                {% else %} 
+                                    {{ nb_task_done}}/{{ r.parcours.students.count  }} 
+                                {% endif %}<br/>
+                                
+                                {%  for s in who_are %} 
+                                <small>{{ s.student.user.last_name|lower|capfirst }}{% if not forloop.last %}, {% endif %} </small>
+                                {% endfor %}  
+                            </td>
+
+
+                     
+
+                        {% if r.parcours.linked %} 
+                            <td>{{ r.date_limit }} <br/><br/><a href="{% url 'detail_task'  p.grouper.parcours_group.id  r.exercise.id   %}" class="btn btn-sacado">En détails</a></td>
+                        {% else %}
+                            <td>{{ r.date_limit }} <br/><br/><a href="{% url 'detail_task'  p.grouper.id  r.exercise.id   %}" class="btn btn-sacado">En détails</a></td>
+                        {% endif %}
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+                {% endfor %}
+            </table>
+  
+        </div>
+    </div> 
+    <div class="row"> 
+        <div class="col-sm-12 col-md-12">
+                {% for parcours in parcourses %}
+                    <a href="{% url 'organize_parcours'  parcours.id   %}" class="btn btn-xs btn-default">Créer une tache dans {{ parcours }} </a> 
+                {% endfor %}
+        </div>
+    </div> 
+
+</section>
+{% endblock %}

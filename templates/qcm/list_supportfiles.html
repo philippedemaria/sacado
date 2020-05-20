@@ -1,0 +1,177 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+{% endblock %} 
+
+  
+{% block page_title %}
+    <img src="{% static 'img/ggb.png' %}" width="25px"> Les supports GGB
+{% endblock %}
+
+{% block page_menu_right %}
+
+
+{% endblock %}
+
+
+{% block body %}
+<section class="content_container">  
+    {% if datas %} 
+
+        <ul  class="nav nav-tabs">
+     
+                {% for data in datas %}
+            <li {% if forloop.first %}class="active"{% endif %}><a  href="#{{ forloop.counter}}a" data-toggle="tab">{{ data.name.shortname }}</a></li>
+                {% endfor  %}
+
+
+            {% if not '/admin' in request.path %}
+            <li> <a href="{% url 'profile' %}" class="thin">+</a></li>
+            {% endif %}
+        </ul>
+        <div class="tab-content clearfix">
+            {% for data in datas %} 
+            <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ forloop.counter}}a">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <table class="table  table-hover display100" style="width:100%">
+                            <thead> 
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </thead> 
+                            <tbody>
+                                {% for theme in data.themes  %} 
+                                    <tr style="background:#e6e2dd">
+                                        <td style="width:85%">{{theme.name}}</td> 
+                                    </tr>  
+                                    {% for knowledge in theme.knowledges  %} 
+                                        {% if knowledge.supportfiles|length > 0 %}
+                                                <tr> 
+                                                    <td class="listingtd">
+                                                        
+                                                        {{ knowledge.name.name|capfirst }} 
+                                                        {% if request.user.is_superuser and '/admin' in request.path %}                                                       
+                                                        <a href="{% url 'create_supportfile_knowledge' knowledge.name.id %}" class="edit"><i class='fa fa-plus pull-right' style="font-size: 10px; margin-right:20px"></i></a>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+
+
+                                                {% for supportfile in knowledge.supportfiles  %} 
+                                                    <tr>
+                                                        <td>
+                                                            <div class="pull-right" > 
+
+                                                            {% for e in supportfile.levels_used %}  
+                                                                <span class="subtitle">{{ e.level.name }}</span>{% if not forloop.last %}<br>{% endif %}
+                                                            {% empty %}
+                                                                <a href="{% url 'show_this_supportfile' supportfile.id  %}"  class="btn btn-danger" target="_blank" >Non utilisé</a>
+                                                            {% endfor %}
+                                                               <br><a href="{% url 'create_exercise' supportfile.id %}" class="btn btn-primary"  >Associer/Dissocier un savoir faire à ce support</a>
+                                                            </div>
+
+
+                                                                <a href="{% url 'show_this_supportfile' supportfile.id   %}" target="_blank"   >  
+                                                                    <!--<img src="../../static/uploads/{{ supportfile.imagefile }}" class="imagefile">-->
+                                                                </a>
+
+
+                                                                <a href="{% url 'update_supportfile'  supportfile.id   %}" class="listing" style="font-size: 18px">
+                                                                    {{ supportfile.annoncement|cleanhtml|capfirst }} 
+                                                                </a> 
+
+
+                                                                {% if supportfile.calculator %}
+                                                                  <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                                                {% else %}
+                                                                  <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                                                {% endif  %}   
+                                                                 <br>
+                                                                <small>   
+                                                                    <i class="fa fa-barcode"></i> {{ supportfile.code }}  {% if supportfile.annoncement|make_list|length < 120 %}<br>{% endif %} 
+                                                                    <i class="fa fa-clock-o"></i> {{ supportfile.duration }} minutes {% if supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                                                                    <i class="fa fa-save"></i> {{ supportfile.situation}} situation{{ supportfile.situation|pluralize}} minimum
+                                                                </small>   
+                                                       </td>
+                                                    </tr>
+                                                {% endfor %} 
+
+
+                                                {% for exercise in knowledge.exercises  %} 
+                                                    <tr>
+                                                        <td>
+                                                            <div class="pull-right" > 
+
+                                                                {{ exercise.supportfile.knowledge.level.name }}
+
+                                                            </div>
+
+
+                                                                <a href="{% url 'show_this_supportfile' exercise.supportfile.id   %}" target="_blank"   >  
+                                                                    <!--<img src="../../static/uploads/{{ exercise.supportfile.imagefile }}" class="imagefile">-->
+                                                                </a>
+                                                                {% if exercise.supportfile.calculator %}
+                                                                  <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                                                {% else %}
+                                                                  <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                                                {% endif  %}   
+                                                                 <br>
+                                                                <small>   
+                                                                    <i class="fa fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %} 
+                                                                    <i class="fa fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                                                                    <i class="fa fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum
+                                                                </small>   
+                                                       </td>
+                                                    </tr>
+                                                {% endfor %} 
+
+
+
+
+                                        {% else %} 
+                                                <tr> 
+                                                    <td>
+                                                        {{ knowledge.name }} 
+                                                        {% if request.user.is_superuser and '/admin' in request.path %}
+                                                        <a href="{% url 'create_supportfile_knowledge' knowledge.name.id %}" class="edit"><i class='fa fa-plus pull-right' style="font-size: 10px; margin-right:20px"></i></a>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    
+                                {% endfor %}
+
+                            </tbody>
+              
+                        </table>
+
+
+
+                    </div>
+                </div>
+            </div>
+            {% endfor  %}
+        </div>
+    {% else %}
+
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            <div class="alert alert-danger">
+                Avant de visiter les exercices par niveau, vous devez choisir vos <a href="{% url 'profile' %}">niveaux préférés</a>.
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+
+</section>
+{% endblock %}

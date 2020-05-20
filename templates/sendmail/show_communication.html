@@ -1,0 +1,30 @@
+{% load widget_tweaks %}
+
+ 
+
+<div class="modal-header"> 
+    <div class="row">
+      <div class="col-lg-12 col-xs-12"><a href="#" class="vue pull-right" data-dismiss="modal"><i class="fa fa-times"></i></a>
+              <h1 style="padding-left: 10px">{{ communication.subject }}
+                
+              </h1>                  
+        </div>
+    </div> 
+    <div class="row">
+      <div class="col-lg-12 col-xs-12">
+            <div class="mailbox-read-info">
+             De : {{ communication.teacher.get_full_name }}
+                <span class="mailbox-read-time pull-right"><small>  {{ communication.today|date:"d N Y" }}</small></span>
+            </div>
+            <hr>
+            <div class="mailbox-read-message">
+              {{ communication.texte|safe }}
+            </div>
+      </div>
+   </div> 
+</div> 
+
+ 
+ 
+
+  

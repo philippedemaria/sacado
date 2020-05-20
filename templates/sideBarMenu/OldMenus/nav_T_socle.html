@@ -1,0 +1,168 @@
+{% load static %}
+<!-- ********************************************************** Socle  ************************************************************************** -->
+    {% if teacher.degre == 1 %}
+          {% if divisions|length > 1 %}
+              <li>
+               <div class="panel-group"> 
+              {% if '/groups' in request.path %}
+                  <div class="panel panel-primary">
+              {% else %}
+                  <div class="panel panel-default">
+              {% endif %}
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a href='#'><i class="fa fa-newspaper-o"></i> Livrets périodiques</a> <i class='fa fa-caret-down pull-right vue'></i>
+                    </h4>
+                  </div>
+                  <div class="submenu panel-collapse collapse">
+                    <ul class="list-group">
+                      {% for division in  divisions.all %}
+                        <li class='list-group-item'><a href="{% url 'complete_livret_by_division'  division.id 0 0 %}"> <i class='fa fa-newspaper-o' style='color: {{ division.color }}'></i> {{ division.name }}</a></li> 
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+             </li>
+          {% else  %}
+              {% for division in divisions %}
+                <li>
+                 <div class="panel-group">
+                      <div class="panel panel-info" >
+                        <div class="panel-heading">
+                          <h4 class="panel-title">
+                            <a href="{% url 'complete_livret_by_division' division.id 0 0 %}" ><i class='fa fa-newspaper-o' style='color: {{ division.color }}'></i> Livrets de ma classe</a>  
+                          </h4>
+                        </div>
+                      </div>
+                  </div>
+                </li>
+               {% endfor  %}
+          {% endif  %}
+  {% endif  %}
+     <li>
+     <div class="panel-group"> 
+      <div class="panel panel-default" >
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a href='#'><i class="fa fa-newspaper-o"></i> Livrets par groupe</a> <i class='fa fa-caret-down pull-right vue'></i>
+          </h4>
+        </div>
+        <div class="submenu panel-collapse collapse">
+          <ul class="list-group">
+            {% for group in  groups.all %}
+              <li class='list-group-item'><a href="{% url 'complete_livret_by_subject'  group.id  %}"> <i class='fa fa-square' style='color: {{ group.color }}'></i> {{ group.name }}</a></li> 
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+   </li>
+
+
+{% if teacher.teacher_in_division ==  3 or teacher.teacher_in_division ==  6 or teacher.teacher_in_division ==  9 or teacher.teacher_in_division ==  12  %}
+  <li>
+    <div class="panel-group"> 
+      <div class="panel panel-default" >
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" href="#collapse9900011"><i class="fa fa-cogs"></i> Bilans de cycle</a><i class='fa fa-caret-down pull-right vue'></i>
+          </h4>
+        </div>
+        <div class="submenu panel-collapse collapse">
+          <ul class="list-group">
+
+
+            {% for division in  divisions.all %}
+              <li class='list-group-item'><a href="{% url 'complete_bilan_by_division'  division.id  %}"> <i class='fa fa-square' style='color: {{ division.color }}'></i> {{ division.name }}</a></li> 
+            {% endfor %}
+
+            {% for group in  groups.all %}
+              <li class='list-group-item'><a href="{% url 'complete_bilan'  group.id  %}"> <i class='fa fa-square' style='color: {{ group.color }}'></i> {{ group.name }}</a></li> 
+            {% endfor %}
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+  </li>
+{% endif %}
+
+<!--*******************************************************  Pour les enseignants du primaire ************************************************ -->
+<li class='divider'></li>
+{% for division in divisions %}
+  <li>
+   <div class="panel-group">
+        <div class="panel panel-default" >
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a href="{% url 'attestation_assn' division.id %}" ><img src="{% static '/img/swim.png' %}"/> A.S.S.N. </a>   
+            </h4>
+          </div>
+        </div>
+    </div>
+  </li>
+  <li>
+   <div class="panel-group">
+        <div class="panel panel-default" >
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a href="{% url 'attestation_aper' division.id %}" ><i class="fa fa-bicycle"></i> A.P.E.R. </a>
+            </h4>
+          </div>
+        </div>
+    </div>
+  </li>
+  <li>
+     <div class="panel-group">
+        <div class="panel panel-default" >
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a href="{% url 'attestation_aps' division.id %}" >
+                <i class="fa fa-medkit"></i> A.P.S.
+              </a> 
+            </h4>
+          </div>
+        </div>
+    </div>  
+  </li>
+{% endfor %}
+    <!-- ******************************************************************************  Domaines  ***********************************************************************************-->
+  <li class='divider'></li>
+  <li>
+   <div class="panel-group">
+        <div class="panel panel-default" >
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a href="{% url 'domains' %}"><i class="fa fa-tags"></i> Domaines </a>   
+            </h4>
+          </div>
+        </div>
+    </div>
+  </li>
+  <li>
+    <!-- ******************************************************************************  Compétences  ***********************************************************************************-->
+    <div class="panel-group">
+        <div class="panel panel-default" >
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a href="{% url 'competencies' %}"><i class="fa fa-list"></i> Compétences </a>
+              </h4>
+            </div>
+        </div>
+    </div>
+  </li>
+  <li>
+    <!-- ******************************************************************************  Savoirs  ***********************************************************************************-->
+     <div class="panel-group">
+        <div class="panel panel-default" >
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a href="{% url 'knowledges' %}"><i class="fa fa-wrench"></i> Savoirs </a>
+            </h4>
+          </div>
+        </div>
+     </div>
+  </li>
+ 

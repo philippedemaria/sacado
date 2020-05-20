@@ -1,0 +1,54 @@
+{% extends 'qcm/result_parcours.html' %}
+{% load item_tags %}
+
+{% block sub_page_title %}par savoir faire{% endblock %}
+
+
+
+
+{% block tab_title %}
+	{% for knowledge in exercise_knowledges %}
+        <td style="font-size:10px">
+        	{{ knowledge.name }}
+		</td>
+	{% endfor %}
+{% endblock %} 
+
+
+
+
+{% block result %}
+ 
+ 
+	{% for knowledge in exercise_knowledges %}
+        <td>
+		{% get_score_student_parcours  knowledge  student parcours as score %}
+
+			{% if score != "" %}
+			    <a class="markdown
+			            {% if score < 30 %}
+			             red 
+			            {% elif score < 60 %}
+			            orange
+			            {% elif score < 80 %}
+			            green
+			            {% else %}
+			            darkgreen
+			            {% endif %}" style="cursor:help">
+				        {{ score }}
+					<div class="details_exos">{{ knowledge }}</div>
+			        
+			    </a>
+			{% else %}
+			    <a class="markdown" data-container="body" style="cursor:help"
+                                         data-toggle="popover"
+                                         data-trigger="hover"
+                                         data-content=" {{ knowledge }}"> 
+			          {{ score }}<div class="details_exos" >{{ knowledge }}</div>
+			    </a> 
+			{% endif %}
+		</td>
+	{% endfor %}
+
+ 
+{% endblock %}

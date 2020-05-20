@@ -1,0 +1,85 @@
+{% extends 'account/detail_student.html' %}
+{% load static %}
+{% load item_tags %}
+
+
+
+ 
+
+{% block datae %}  
+
+                <table class="table table-bordered table-hover standard_tab_sort300">
+                    <thead>
+                        <tr class="no_padding" style="background-color: {{ parcours.color }};color:#eee">
+                            <td>{{parcours }} <img src="{% static 'img/angle-right-white.png' %}" width="25px" /> Sections et exercices </th>
+                            <td style="width:330px">Scores</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for relation in relationships  %}   
+                        {% if relation.exercise.supportfile.is_title %}    
+                            <tr class="no_padding" style="background-color: {{ parcours.color }};color:#eee;opacity:0.6">
+                                <td>{{ relation.exercise.id }}{{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}</td>
+                                <td></td>
+                            </tr>
+                        {% else %}    
+                            <tr class="no_padding" {% if not relation.is_publish %} style="background-color:#F0F0F0;"{% endif %}   >
+                                <td {% if relation.is_publish %} style="padding:0px"{% endif %}"> 
+                                    <div {% if relation.is_publish %} style="border-left: 4px solid #00AC18; padding:10px"{% endif %}">
+                                        <a href="{% url 'show_this_exercise' relation.exercise.id   %}" >  
+                                            <img src="../../../../static/uploads/{{ relation.exercise.supportfile.imagefile }}" class="imagefile">
+                                        </a>
+                                                                   
+                                        <em>{% if relation.exercise.supportfile.annoncement %}{{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}{% else %} {{relation.exercise.knowledge.name|capfirst }}  {% endif %}</em>   
+                                            {% if relation.exercise.supportfile.calculator %}
+                                              <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                            {% else %}
+                                              <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                            {% endif  %}  <br>
+                                        <span style="font-size:16px;">    
+                                            <i class="fa fa-barcode"></i> {{ relation.exercise.supportfile.code }} {% if knowledge.name|make_list|length < 140 %}<br>{% endif %}
+                                            <i class="fa fa-clock-o"></i> {{ relation.exercise.supportfile.duration }} minutes {% if knowledge.name|make_list|length < 140 %}<br>{% endif %}
+                                            <i class="fa fa-save"></i> {{ relation.exercise.supportfile.situation}} situation{{ relation.exercise.supportfile.situation|pluralize}}  
+                                        </span>
+                                    </div>     
+                                </td>
+                                <td>  
+                                    {% get_score_and_time  relation.exercise  student  as details  %}  
+
+                                        {% for detail in details %}
+                                            {% if detail.score   %}
+                                                <div class="markdown_div
+                                                        {% if detail.score < 30 %}
+                                                         red 
+                                                        {% elif  detail.score < 60 %}
+                                                        orange
+                                                        {% elif  detail.score < 80 %}
+                                                        green
+                                                        {% else %}
+                                                        darkgreen
+                                                        {% endif %}">
+                                                    <strong>{{ detail.score }}%</strong>
+                                                    <small>
+                                                        <br>situations : {{ detail.numexo }}
+                                                        <br>temps : {{ detail.time }}
+                                                        <br>date : {{ detail.date|date:"d m Y" }}
+                                                    </small>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                </td>
+                            </tr>
+                        {% endif %}    
+                    {% endfor %}
+
+
+                    
+                    </tbody>      
+                </table>
+
+
+
+
+
+ 
+{% endblock %}

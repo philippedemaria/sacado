@@ -1,0 +1,163 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+ 
+
+ 
+{% block page_title %}
+      {{ supportfile.knowledge.name }}
+{% endblock %}
+
+{% block page_menu_right %}
+{% if supportfile.annoncement %} <li style="margin-top:15px"><em>{{ supportfile.annoncement|safe  }} </em></li>  {% endif %}
+{% endblock %}
+
+
+{% block body  %}  
+
+
+
+
+
+<div class="pull-right">
+    {% with  supportfile.level.image   as level_image %}
+       <img src="{% static level_image %}"  />
+    {% endwith %}
+</div>
+
+
+<section class="content_main">
+ 
+<div class="alert alert-danger" role="alert" id="message_alert">
+  <i class="fa fa-warning"></i> Si vous voyez ce message après 10 secondes, l'exercice ne s'est pas chargé. Rechargez votre page.
+</div>
+
+
+    <div class="col-sm-0 col-md-1 col-lg-1">
+        {% if  supportfile.calculator %}
+          <img src="{% static 'img/calculator.png' %}"  with="80px"  height="80px" />
+        {% else %}
+          <img src="{% static 'img/no_calculator.png' %}"  with="80px"  height="80px"  />
+        {% endif  %} 
+<br>
+<br>
+        {% if upportfile.duration == 5 %}
+          <img src="{% static 'img/horloge5.png' %}" with="80px"  height="80px"  />
+        {% elif supportfile.duration == 10 %}
+          <img src="{% static 'img/horloge10.png' %}" with="80px"  height="80px"/>
+        {% elif supportfile.duration == 15 %}
+          <img src="{% static 'img/horloge15.png' %}" with="80px"  height="80px"  />
+        {% elif supportfile.duration == 20 %}
+          <img src="{% static 'img/horloge20.png' %}" with="80px"  height="80px"   />
+        {% elif supportfile.duration == 25 %}
+          <img src="{% static 'img/horloge25.png' %}" with="80px"  height="80px"   />
+        {% elif supportfile.duration == 30 %}
+          <img src="{% static 'img/horloge30.png' %}" with="80px"  height="80px"  />
+        {% elif supportfile.duration == 35 %}
+          <img src="{% static 'img/horloge35.png' %}"  with="80px"  height="80px"  />
+        {% elif supportfile.duration == 40 %}
+          <img src="{% static 'img/horloge40.png' %}" with="80px"  height="80px" />
+        {% elif supportfile.duration == 45 %}
+          <img src="{% static 'img/horloge45.png' %}"  with="80px"  height="80px"  />
+        {% elif supportfile.duration == 50 %}
+          <img src="{% static 'img/horloge50.png' %}" with="80px"  height="80px"  />
+        {% elif supportfile.duration == 55 %}
+          <img src="{% static 'img/horloge55.png' %}" with="80px"  height="80px"  />
+        {% elif supportfile.duration == 60 %}
+          <img src="{% static 'img/horloge60.png' %}" with="80px"  height="80px"  />
+        {% else %}
+          <img src="{% static 'img/horloge15.png' %}" with="80px"  height="80px"  />
+        {% endif  %} 
+        <p> {{ supportfile.duration }} minute{{ supportfile.duration|pluralize }}</p>
+
+
+          <img src="{% static 'img/situation.png' %}" with="75px"  height="75px"  />
+
+
+        <p style="font-size:14px;">{{ supportfile.situation }} situation{{ supportfile.situation|pluralize }}</p>
+        <i class="fa fa-barcode fa-4x"></i><p>{{ supportfile.code }}</p>
+
+    </div>  
+    <div class="col-sm-12 col-md-8 col-lg-8">
+
+      <form action="{% url 'content_is_done' supportfile.id %}" method="POST" enctype='multipart/form-data'> 
+{% csrf_token %}  
+      <div id="preloader">
+          <div class="alert alert-danger" role="alert" id="message_alert">
+              <i class="fa fa-warning"></i> Si vous voyez ce message après 15 secondes, l'exercice ne s'est pas chargé correctement. Rechargez votre page.<br> Sous Windows, appuyez simultanement sur CTRL et la touche F5
+          </div>
+      </div>
+
+        <div class='justify-content-center'>
+            <div class = 'col-auto' id='ggb_applet_container' style="display:none"></div>
+        </div>
+
+     
+                <div class="form-group">
+   
+                    <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                               class="btn btn-default "/></a>
+
+
+     
+                </div>
+          
+      </form>
+
+
+
+    </div> 
+
+    
+  
+                    <!-- Additional Javascript for Geogebra exercises -->
+        <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script>
+   <!-- <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script> -->
+        <script type="text/javascript">
+             // parameters of the geogebra app
+            var parameters = {
+                "appname":"classic",
+                "id":"ggb_applet_container",
+              "prerelease":false,
+              "width":{{ supportfile.width }},
+              "height":{{ supportfile.height }},
+              "showToolBar":{{ supportfile.toolBar|lower }},
+              "showfullscreenbutton":true,
+              "borderColor":"#f5f8fd",
+              "showMenuBar":{{ supportfile.menuBar|lower }},
+              "showAlgebraInput":{{ supportfile.algebraInput|lower }},
+              "showResetIcon":{{ supportfile.resetIcon|lower }},
+              "enableLabelDrags":false,
+              "enableShiftDragZoom":{{ supportfile.dragZoom|lower }},
+              "enableRightClick":false,
+              "capturingThreshold":null,
+              "showToolBarHelp":false,
+              "errorDialogsActive":false,
+              "useBrowserForJS":true,
+                  "langage":"en",
+              "filename":"../../../../static/uploads/{{ supportfile.ggbfile }}",
+               "appletOnLoad" :  function(applet) {  
+                        applet.setValue("situation",{{ supportfile.situation }});
+                }
+             }
+            var applet = new GGBApplet('5.0', parameters,true);
+            // Geogebra applet creation
+            applet.inject('ggb_applet_container', 'preferHTML5'); 
+
+
+        </script>
+
+ 
+</section>
+
+
+{% endblock  %}   
+
+
+    {% block require %}
+        <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3.js' %}"></script>  
+        <script>
+           require(['script/ajax-score']);
+        </script>  
+    {% endblock %} 

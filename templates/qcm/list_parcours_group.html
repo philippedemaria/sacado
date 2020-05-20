@@ -1,0 +1,299 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3_mini.js' %}"></script>
+ 
+    <script>
+        require(['script/ajax-parcours']);
+    </script> 
+
+
+{% endblock %}
+
+ 
+
+{% block page_title %}
+       <span style="color:{{ group.color }}"><i class="fa fa-map"></i> {{ group }}    <img width="25px" src="{% static 'img/angle-right.png' %}"/> Parcours </span>  
+{% endblock %}
+
+{% block page_menu_right %}
+
+  <li> <a href="{% url 'create_parcours' %}"   class="btn btn-new" ><img width="15px" src="{% static 'img/plus.png' %}"/> Nouveau parcours</a> </li>  
+{% endblock %}
+
+{% block css_files %}
+{% endblock %}
+
+
+
+{% block body  %}
+<section class="content_main" id="principal_section"> 
+    {% for parcours in parcours_tab %}  
+        <div  class="box box-widget widget-user-2"  
+              style="{% if parcours.vignette %}background-image: url('../../../../static/uploads/{{ parcours.vignette }}'); background-size: cover; {% else %} background-color:{{parcours.color }}{% endif %};"> 
+              <!-- Add the bg color to the header using any of the bg-* classes -->
+            <div class="handler widget-user-header">
+
+                <div class="group_show  group_show{{parcours.id }}"> 
+                    <form action="#" method="POST">
+                                {% csrf_token %}
+                        <a  href="#principal_section" class="vue menuactionparcours" data-toggle='modal' style="float:left; margin-right:10px"  
+                            data-group_name='{{ group.name }}' data-parcours_id='{{ parcours.id }}' data-target='#listing'> 
+                            {% get_parcours_group_students_count parcours group as parcours_group_students %}
+                            <span class="label label-default"> {{ parcours_group_students.nb }}<i class="fa fa-users"></i></span>
+                        </a> 
+                    </form>
+                    <font style="font-size:11px; color:#AAA">
+                        {% for s in   parcours_group_students.students|dictsort:"user.last_name"  %}
+                        <a  href="#principal_section" class="detail_student_parcours"  data-student_id="{{ s.user.id }}"  
+                            data-parcours_id="{{ parcours.id }}" >{{s}}</a>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </font>
+                    <div style="clear:both"></div>
+                </div>
+
+                <a href="#" data-parcours_id="{{parcours.id }}" class="overlay_show white">
+                <div class="disc disc{{parcours.id }}" style="background-color:{% if parcours.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %};"> 
+                    <i class="fa fa-ellipsis-v"></i>
+                </div>
+                </a> 
+
+
+                <!-- Fenetre accessible par le disc et les 3 points -->
+
+                <div class="overlay  overlay_show{{parcours.id }}"> 
+                    <div class="overlay_expand">
+                        <form action="#" method="POST" enctype='multipart/form-data'>    
+                            {% csrf_token %}
+                            <div class="btn-group">
+                                <a href="#" class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %} publisher" data-from="2"
+                                    id="parcours_publisher{{parcours.id}}" 
+                                    data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
+                                  {% if parcours.is_publish %} Publié {% else %} Non publié {% endif  %} 
+                                </a> 
+                            </div>
+                                 <br>
+                            <span class="label_icon" style="color:{{ parcours.color }};">
+                                {% if parcours.is_evaluation %}
+                                    {{  parcours.start|date:"d N Y"  }},  {{  parcours.starter  }} 
+                                    {% if parcours.stop %}
+                                       - {{  parcours.stop|date:"d N Y"  }}{% if parcours.stopper %}, {{  parcours.stopper  }} {% endif %}    
+                                    {% endif %}                                
+                                {% endif %}
+                            </span>
+                        </form>     
+                    </div>
+                    <hr>  
+                    <div class="overlay_expand">
+                        <div class="col-md-6 col-lg-6 col-xs-6">
+                            <a href="{% url 'update_parcours' parcours.id group.id %}" class="edit" > <i class="fa fa-edit"></i> <span class="label_icon">Modifier</span> </a><br>
+                        </div>
+                        {% if not parcours.linked %}
+                        <div class="col-lg-6 col-md-6 col-xs-6">
+                            <a href="{% url 'delete_parcours' parcours.id group.id %}" class="trash" onclick="return TestDelete('ce parcours')"><i class="fa fa-trash"></i>  <span class="label_icon">Supprimer</span></a>
+                        </div> 
+                        {% else %}
+                        <div class="col-lg-6 col-md-6 col-xs-6">
+                            <span class="label_icon" style="color:red"">Suppression interdite</span>
+                        </div> 
+                        {% endif %}
+                    </div>  
+                </div>
+                <div class="group_show  overlay_export{{parcours.id }}"> 
+                    <div class="overlay_expand">
+                        <h4 style="color:{{parcours.color }}">Exportation CSV 
+                        <a href="#" class="export_shower pull-right" data-parcours_id="{{parcours.id }}"><i class="fa fa-times"></i> </a>
+                        <br><small>Pour exporter vers Pronote, les listes d'élèves Pronote et SACADO doivent être identiques.<span id="loading_export{{ parcours.id }}"></span></small></h4>
+                        {% if request.user.is_extra %}
+                        <form action="{% url 'export_note' group.id parcours.id  %}" method="POST" enctype='multipart/form-data'>     {% csrf_token %}
+                            <div class="col-md-6 col-lg-6 col-xs-6">
+                                <input type="text" class="form-control" placeholder ="Noté sur ?" name="on_mark" id="on_mark{{ parcours.id }}" />
+                            </div>
+ 
+                            <div class="col-md-6 col-lg-6 col-xs-6" style="padding-left:5px">
+                                <button href="#" class="btn btn-primary exportation_de_note" type="submit" data-parcours_id="{{parcours.id }}"  data-group_id="{{group.id }}"  > Export de notes</button>
+                            </div>
+                        </form>
+                        {% else %}
+                            <span style="color:red;font-size: 14px">Action non permise</span>
+                        {% endif %}
+                    </div> 
+                </div>
+                <!-- Fin de la fenetre  -->
+                {% if parcours.is_evaluation %}   
+                    <div class="icon_evaluation">
+                        <i class="fa fa-bullseye"></i> 
+                    </div>
+                {% endif %}
+
+
+
+
+                {% if parcours.vignette %}                
+                    <div class="box_title_underlay_vignette" style="background-color:{{ parcours.color }};">
+                    </div> 
+                {% endif  %}
+                <div class="box_title_vignette"> 
+                    <a href="{% url 'show_parcours'  parcours.id  %}" style="color:{{ parcours.color|contrast_color }};"> {{ parcours.title|truncatechars:"18" }}
+                        <span style="font-size:12px"> 
+                            {% if parcours.linked %}(par défaut){% endif %}
+                            {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}
+                            {% if not parcours.linked %}, 
+                                {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }} {% endif %}min.
+                            {% endif %}
+                        </span>
+                    </a>
+                    {% if parcours.group_list|length > 1 %}
+                    <span class="shared" style="color:{{ parcours.color }};">Parcours partagé</span>
+                    {% endif %} 
+                </div>
+            </div>
+            <div class="box-footer">
+                <div class="row extend">                              
+                    <div class="col-lg-4 col-xs-4">
+                        {% if not parcours.linked %}
+                        <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit"><i class="fa fa-laptop"></i> <span class="label_icon">Sélect.</span>
+                        </a>  
+                        {% else %} 
+                        <a href="{% url 'populate_parcours' parcours.parcours_group.id   %}" class="edit"><i class="fa fa-laptop"></i> <span class="label_icon">Sélect.</span>
+                        </a> 
+                        {% endif %} 
+                    </div>
+                    <div class="col-lg-4 col-xs-4">
+                        <a href="{% url 'organize_parcours' parcours.id %}"  class="edit" ><i class="fa fa-th"></i> <span class="label_icon">Gérer</span>
+                        </a> 
+                    </div>
+                    <div class="col-lg-4 col-xs-4">
+                        <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"  class="edit"><i class="fa fa-tasks"></i> <span class="label_icon">Gérer</span> </a> 
+                    </div>  
+                </div>
+                <div class="row extend">                              
+                    <div class="col-lg-4 col-xs-4">
+                        <a  href="{% url 'result_parcours' parcours.id  %}"  class="edit" ><i class="fa fa-mortar-board"></i> <span class="label_icon">Suivi</span>
+                        </a>   
+                    </div>
+                    <div class="col-lg-4 col-xs-4">
+                        <a  href="{% url 'result_parcours_knowledge' parcours.id  %}" class="edit"><i class="fa fa-trophy"></i> <span class="label_icon">Suivi</span>
+                        </a>   
+                    </div>
+
+                    <div class="col-lg-4 col-xs-4">
+                        {% if not parcours.is_evaluation %}
+                        <a  href="{% url 'detail_task_parcours' parcours.id 0  %}"   class="edit"   >
+                            {% if not parcours.is_task_exists %}<i class="fa fa-calendar"></i>{% else %}<i class="fa fa-calendar-check"></i>{% endif %}
+                             <span class="label_icon">Tâches</span>
+                        </a>  
+                        {% else %} 
+                        <a href="#" class="edit export_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-upload"></i>  <span class="label_icon">Export</span>
+                        </a>
+                        {% endif %} 
+                    </div>
+                </div>
+                <div class="row">  
+                    <div class="col-lg-4 col-xs-4">
+                        <a href="{% url 'individualise_parcours' parcours.id group.id  %}" class="edit" ><i class="fa fa-user"></i> <span class="label_icon">Individual.</span>
+                        </a> 
+                    </div> 
+                    <div class="col-lg-4 col-xs-4">
+                        <a  href="{% url 'stat_parcours' parcours.id %}" class="edit"><i class="fa fa-bar-chart"></i>  <span class="label_icon">{% if parcours.is_evaluation %} Résultats{% else  %}Stats {% endif %}</span>
+                        </a>   
+                    </div>
+                    <div class="col-lg-4 col-xs-4">
+                        <a href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-users"></i>  <span class="label_icon">Groupe</span>
+                        </a>
+                    </div> 
+                </div>
+            </div>
+        </div>   
+    {% empty %}
+        <div class="col-sm-12 col-md-12">
+            <div class="alert alert-danger">Aucun parcours créé ou affecté. <a href="{% url 'parcours' %}" >Voir la liste de mes parcours</a></div>
+        </div>
+    {% endfor %}
+
+  
+
+</section>
+
+
+
+    <div class="modal fade bd-example-modal-lg" id="listing" tabindex="-1" role="dialog" aria-labelledby="listing"aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>                
+                    <h5 class="modal-title" id="exampleModalLabel">Liste des élèves - <span id="modal_group_name"></span></h5>
+                </div>
+                <div class="modal-body">
+                    <div id="list_students"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade bd-example-modal-lg" id="help"  tabindex="-1" role="dialog" aria-labelledby="help" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document" style="margin:0px!important">
+ 
+            {% if user.user_type == 2 %}
+                <div class="modal-content help" >
+ 
+                    <div class="helpdiv_help_title_page"  style="left:500px;">
+                        titre de page
+                    </div>
+                    <div class="helpdiv_help_groupe"   style="top:{% if parcours_tab|length > 0 %}360px{% else %}100px{% endif %}">
+                        {% if parcours_tab|length > 0 %}<img src="{% static 'img/fleche_up_left.png' %}" width="40px" />{% endif %}
+                        <div class="help_groupe" style="float:left;width:800px" >
+                            {% if parcours_tab|length > 0 %}
+                               <br><i class="fa fa-laptop"></i> Sélect. : Sélectionner les exercices à placer dans le parcours
+                               <br><i class="fa fa-th"></i> Gérer : Gestion des exercices, tâches, publications du parcours avec une vue en carte
+                               <br><i class="fa fa-tasks"></i> Gérer : Gestion des exercices, tâches, publications du parcours avec une vue en liste. Creéation de sections, sous sections pour structurer le parcours.
+                               <br><i class="fa fa-mortar-board"></i> Suivis : Suivis par élève et par exercice du parcours
+                               <br><i class="fa fa-trophy"></i> Suivis : Suivis par élève et par savoir faire du parcours
+                               <br><i class="fa fa-calendar"></i> Tâches : vers la liste des tâches en cours. Si une tâche est donnée, il y a une coche sur l'icone.
+                               <br><i class="fa fa-user"></i> Individual. : ouvre une fenêtre avec la liste des élèves. Lorsqu'un élève est cliqué, on obient ses résultats.
+                               <br><i class="fa fa-trophy"></i> Suivis : Suivis par élève et par savoir faire
+                               <br><i class="fa fa-calendar"></i> Stats : vers la liste des tâches en cours
+                               <br><i class="fa fa-users"></i> Groupe : ouvre une fenetre avec la liste des élèves de ce parcours. Lorsqu'un élève est cliqué, on obtient ses résultats.
+                            {% else %}
+                                <h2>Corps de page</h2> 
+                                <br>Renseignez vos niveaux préférés, puis créer un premier groupe avec le bouton ci-dessus.
+                                <br> Les groupes créés s'affichent ici.
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+                    <div class="helpdiv_help_acces"  style="top:50px;right:50px;">
+                        Création d'un nouveau parcours |<img src="{% static 'img/fleche_up_right.png' %}" width="40px" style="vertical-align:bottom" />
+                    </div>
+
+
+                    {% if parcours_tab|length > 0 %}
+                    <div class="helpdiv_help_disc">
+                        <div class="help_disc" >
+
+                              Modifier, supprimer, publier un parcours
+
+                                <br><br><br>
+                                Voir le parcours  
+                        </div><br><img src="{% static 'img/fleche_up_right.png' %}" width="40px" /><br><br><img src="{% static 'img/fleche_bottom_right.png' %}" width="30px" style="vertical-align:middle;"/>
+
+                    </div>
+                    {% endif %}
+
+
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+
+{% endblock  %}   

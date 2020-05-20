@@ -1,0 +1,37 @@
+
+<section>  
+    {% for course in courses  %}
+        <div class="col-lg-3 col-xs-3">  
+            <div class="box box-widget widget-user-2" style="background-color:  {{course.color }} ">
+
+            <div  class="box box-widget widget-user-2" id="contenerbox{{ course.id }}" 
+                  style="{% if course.photo %}background-image: url('../uploads/{{ course.photo }}'); background-size: contain; {% else %} background-color:   {{course.color }}{% endif %} ;">
+
+                  <div class="handler widget-user-header  ">
+
+                  </div>
+                  <div class="box-footer">
+                      <div class="box_title_under"> <a href="{% url 'student_active_sequence' course.id  course.subject.shortname  %}" >  {{ course.subject.name }}</a></div>
+                      <div class="row">                              
+                            <div class="col-lg-3 col-xs-3 text_center">  
+                                <a href="" class="edit" title="Tâches"><i class="fa fa-tasks"></i></a>
+                            </div>
+                            <div class="col-lg-3 col-xs-3 text_center"> 
+                                <a href="" class="edit" title="Forum"><i class="fa fa-comments"></i></a>
+                            </div>
+                            <div class="col-lg-3 col-xs-3 text_center">
+                                <a href="" class="edit" title="Documents"><i class="fa fa-folder-open"></i></a>
+                            </div>                           
+                      </div>
+                  </div>
+                </div>
+          </div>                       
+  {% endfor %}
+</section>
+ 
+ 
+
+
+ 
+
+ 

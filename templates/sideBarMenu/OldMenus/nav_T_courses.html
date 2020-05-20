@@ -1,0 +1,117 @@
+<!-- ********************************************************** Menu Course ************************************************************************** -->
+
+ 
+  <li>
+    <a href="{% url 'create_sequence' %}" class='btn btn-danger white bouton_new' data-target='#newCourriel' data-whatever='newMessage'><i class="fa fa-plus"></i> Nouvelle séquence </a>
+  </li>
+
+    <!-- ******************************************************************************  Mychapter par niveau  ***********************************************************************************-->
+ 
+ <!-- ********* Si l'enseignant est du Secondaire ********* -->
+
+
+
+
+    <!-- ******************************************************************************  Mychapter par groupes  ***********************************************************************************-->
+    <li> 
+     <div class="panel-group">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title"> 
+            <a href='#'><i class="fa fa-folder-open"></i> Classées par groupe  {{tst}}</a><i class='fa fa-caret-down pull-right vue'></i>
+          </h4>
+        </div>
+        <div id="collapse010" class="submenu panel-collapse 
+              {% if '/sequences' not in request.path %}
+               collapse
+              {% endif %}
+        ">
+          <ul class="list-group">
+            {% for group in  groups.all %}
+              <li class="list-group-item 
+
+              {% if '/group.id' in request.path %}
+                  active
+              {% endif %}
+              "><a href="{% url 'sequences'  group.id  %}"> <i class='fa fa-square' style='color: {{ group.color }}'></i> {{ group.name }}</a></li> 
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+     </div>
+    </li>
+   <!-- ******************************************************************************  Correction  ***********************************************************************************-->
+   <!-- *************// le primaire n'a pas accès à cette section *********** 
+    <li> 
+     <div class="panel-group">
+      <div class="panel panel-default" >
+        <div class="panel-heading">
+          <h4 class="panel-title"> 
+            <i class="fa fa-pencil-square-o"></i> Tâches en ligne<i class='fa fa-caret-down pull-right vue'></i>
+          </h4>
+        </div>
+        <div id="collapse011task" class="submenu panel-collapse collapse">
+          <ul class="list-group">
+            {% for group in  groups.all %}
+              <li class='list-group-item'><a href="{% url 'tasks' group.id   %}"> <i class='fa fa-square' style='color: {{ group.color }}'></i> {{ group.name }}</a></li> 
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+     </div>
+    </li>
+
+     
+     *************// fin de la section   *********** 
+    <li>
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+               <a href=""><i class="fa fa-briefcase"></i> Ressources <span class='sacado'> SacAdo</span></a>
+            </h4>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li>
+    <div class="panel-group">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+             <a href=""><i class="fa fa-qrcode"></i> Création de qrcodes </a>
+          </h4>
+        </div>
+      </div>
+    </div>
+    </li>
+    <li>
+    <div class="panel-group">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+             <a href=""><i class="fa fa-search"></i> Recherche</a>
+          </h4>
+        </div>
+      </div>
+    </div>
+    </li>
+      ******************************************************************************  Qui se connecte ?  ***********************************************************************************
+
+    <li>  
+       <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <i class="fa fa-rss"></i> Qui se connecte ? <i class='fa fa-caret-down pull-right vue'></i>
+            </h4>
+          </div>
+          <div id="collapse0100100" class="submenu panel-collapse  collapse">
+            <ul class="list-group">
+               <li class='list-group-item $act'><a href=''> <i class='fa fa-square' style='color:'></i> par nom de groupe </a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </li>
+ -->

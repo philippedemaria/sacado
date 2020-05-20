@@ -1,0 +1,119 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+ 
+     <script>
+        require(['script/ajax-exercise']);
+    </script> 
+ 
+{% endblock %}
+
+ 
+
+{% block page_title %}
+
+<div id="new_style">
+    <i class="fa fa-laptop"></i>  Exercice<img src="{% static 'img/angle-right.png' %}"/>   
+ 
+    <small>         
+        Associer un support à un ou plusieurs savoir faire
+    </small>  
+ 
+</div>
+{% endblock %}
+
+{% block page_menu_right %}
+ 
+{% endblock %}
+
+
+
+
+{% block body %}
+ 
+        
+<div class="content_main">
+         
+
+    <form action="" method="POST" enctype='multipart/form-data'> 
+    {% csrf_token %}
+        <div class="col-xs-12 col-md-5" >
+            <h3>Renseignements lors de l'enregistrement</h3>
+            {{ supportfile.level.name }}, {{ supportfile.theme.name }} </br>
+            {{ supportfile.knowledge.name }}  </br>
+        
+            <a href="{% url 'update_supportfile'  supportfile.id   %}" class="listing" style="font-size: 18px">
+                {{ supportfile.annoncement|cleanhtml|capfirst }} 
+            </a>              
+            {% if supportfile.calculator %}
+                <img src="{% static 'img/calculator.png' %}" width="50px" />
+            {% else %}
+                <img src="{% static 'img/no_calculator.png' %}"  width="50px" />
+            {% endif  %}   
+             <br>
+            <a  href="{% url 'update_supportfile'  supportfile.id  %}" class="sublisting"> <small>   
+                <i class="fa fa-barcode"></i> {{ supportfile.code }}  {% if supportfile.annoncement|make_list|length < 120 %}{% endif %} 
+                <i class="fa fa-clock-o"></i> {{ supportfile.duration }} minutes {% if supportfile.annoncement|make_list|length < 120 %}{% endif %}
+                <i class="fa fa-save"></i> {{ supportfile.situation}} situation{{ supportfile.situation|pluralize}}</small>
+            </a>  <br>                                     
+            <a href="{% url 'show_this_supportfile' supportfile.id   %}"   >  
+                <img src="../../../static/uploads/{{ supportfile.imagefile }}" height="400px">
+            </a>
+ 
+            <div class="form-group">
+                <input value="Associer ce support à ces savoir faire" type="submit" class="btn btn-primary"/>
+                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+            </div>
+ 
+
+
+
+
+
+        </div>
+        <div class="col-xs-12 col-md-7" >  
+            <div class="content_list">
+                <table class="table  table-hover standard_tab_1000" style="width:100%">
+                    <thead> 
+                        <tr>
+                            <td></td> 
+                        </tr>
+                    </thead>
+                    <tbody> 
+                    {% regroup knowledges by level as level_list %}    
+                    {% for level in level_list  %} 
+                        <tr style="background:#271942; color:#FFF">
+                            <td>{{ level.grouper.name }}</td> 
+                        </tr>  
+                        {% for knowledge in level.list  %}
+                        {% get_an_association_knowledge_supportfile knowledge supportfile as  knowledge_supportfile %}
+                        <tr>
+                            <td {% if knowledge_supportfile.exercise  %} style="border-left:10px solid {% if knowledge_supportfile.parcours  %} #dd4b39 {% else %} #00AC18 {% endif %}" {% endif %}>
+                                <label>
+                                    {% if knowledge_supportfile.parcours %}
+                                        <i class="fa fa-check text-success"></i>    <strong>{{ knowledge.level.name }},</strong> {{ knowledge.name|capfirst }}<input type="hidden" name="choice_knowledges" value="{{ knowledge.id }}" />
+                                    {% else %}
+                                    <input type="checkbox" name="choice_knowledges" value="{{ knowledge.id }}" class="check_box"
+                                        {% if knowledge_supportfile.exercise %}checked{% endif %}/> <strong>{{ knowledge.level.name }},</strong> {{ knowledge.name|capfirst }}
+                                    {% endif %}
+                                </label>
+                            </td> 
+                        </tr>  
+                        {% endfor %}
+                    {% endfor %} 
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</div>    
+
+
+
+{% endblock %}

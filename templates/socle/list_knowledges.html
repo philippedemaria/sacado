@@ -1,0 +1,75 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+{% block general_js %}
+    {% if knowledge %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-action2.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-index.js' %}"></script>
+    {% endif %}
+{% endblock %}
+
+ 
+
+
+
+ 
+{% block page_title %}
+      Savoir faire 
+{% endblock %}
+
+{% block page_menu_right %}
+    <li><a href="{% url 'create_multi_knowledge' %}" class="btn btn-subsacado" ><img width="25px" src="{% static 'img/plus.png' %}"/>Création mulitple</a></li>  
+    <li><a href="{% url 'create_knowledge' %}" class="btn btn-subsacado" ><img width="25px" src="{% static 'img/plus.png' %}"/>Nouveau savoir faire</a></li>
+{% endblock %}
+
+
+{% block body  %}   
+<section class="content_main"> 
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table id="standard_tab" class="table table-bordered table-hover"  class="display" style="width:100%">
+                  <thead>
+                      <tr>
+                        <th>Nom</th>                      
+                        <th>Thème</th>
+                        <th>Niveau</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                        {% for knowledge in knowledges %}
+                        <tr> 
+                          <td>
+                              <a href="{% url 'update_knowledge' knowledge.id %}">{{ knowledge.name }}  {% if knowledge.used %}<i class="fa fa-check text-success"></i> [{{ knowledge.nb_exercise }}]   {% endif %}</a> 
+                              <small>
+                              <a href="{% url 'delete_knowledge' knowledge.id %}"  onclick="return TestDelete('ce savoir faire')"><i class='fa fa-trash pull-right'></i></a>
+                              </small>
+                          </td>
+                          <td >
+                              {{ knowledge.theme.name }} 
+                          </td> 
+                          <td >
+                              {{ knowledge.level.name }}
+                          </td>
+                        </tr>
+                        {% endfor %}
+                  </tbody>
+            </table>
+        </div>
+      </div>
+ 
+
+</section>
+
+ 
+
+
+
+{% endblock  %}   
+
+
+ 

@@ -1,0 +1,76 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+     
+            <h1 class="thin">
+                 <nav class="navbar navbar-default">
+                  <div class="container-fluid">
+                    <div class="navbar-header">
+                      {{ num_exo }}
+                    </div>
+                 
+                    <ul class="nav navbar-nav navbar-right">
+                     <a href="#" id="closeStudent" class="detail_student pull-right"> <i class="fa fa-times"></i></a>
+                    </ul>
+                  </div>
+                </nav> 
+            </h1>
+        </div>
+    </div>
+
+<div class="content_list">
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table class="table table-hover" style="width:100%; font-size: 14px">
+                <tbody>
+                    {% for stat  in stats  %} 
+                    <tr> 
+                        <td>{{ stat.name }}</td>
+                        <td>{{ stat.duration }}</td>
+                        <td> 
+                            {% if stat.average_score != "" %}
+                                <span class="
+                                        {% if stat.average_score < 30 %}
+                                         text-red  
+                                        {% elif stat.average_score < 60 %}
+                                        text-orange
+                                        {% elif stat.average_score < 80 %}
+                                        text-green
+                                        {% else %}
+                                        text-darkgreen
+                                        {% endif %}">
+                                    {{ stat.average_score }}%
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if stat.median != "" %}
+                                <span class="
+                                        {% if stat.average_score < 30 %}
+                                         text-red  
+                                        {% elif stat.average_score < 60 %}
+                                        text-orange
+                                        {% elif stat.average_score < 80 %}
+                                        text-green
+                                        {% else %}
+                                        text-darkgreen
+                                        {% endif %}">
+                                    {{ stat.median }}%
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td>{{ stat.heure_min|date:"Y m d - H:i" }}</td>
+                        <td>{% if nb %}x{{ nb }}{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+ 

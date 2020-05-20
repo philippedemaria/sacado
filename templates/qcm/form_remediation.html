@@ -1,0 +1,153 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+
+{% block require %}
+ 
+    {% if remediation %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% endif %}
+
+    <script>
+        require(['script/ajax-remediation']);
+    </script> 
+
+{% endblock %}
+
+
+
+
+ 
+  
+   
+{% block page_title %}
+    <i class="fa fa-laptop"></i>  Remédiation/Approfondissement <img src="{% static 'img/angle-right.png' %}"/>   <small> {% if remediation %}Modification{% else %}Nouveau{% endif %}</small> 
+{% endblock %}
+
+{% block page_menu_right %}
+ 
+{% endblock %}
+ 
+         
+ 
+{% block body %}     
+    <section class="content_main"> 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="alert alert-info">
+                    Exercice de référence : {{ exercise.knowledge.name}} 
+                </div>                
+            </div>
+        </div>
+        <form action="" method="POST" enctype='multipart/form-data'> 
+        {% csrf_token %}
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group">
+                        {{ form.title.label_tag }}
+                        {{ form.title |add_class:"form-control" }}
+                        {{ form.title.errors }}
+                    </div>
+                </div>           
+            </div> 
+            <div class="row">
+                <div class="col-sm-12 col-md-3">
+                    <div class="form-group">
+                        {{ form.duration.label_tag }}
+                        {{ form.duration |add_class:"form-control" }}
+                        {{ form.duration.errors }}
+                    </div>
+                </div>   
+            </div>   
+            <div class="row">
+                <div class="col-sm-12 col-md-3">
+                     <div class="form-group">
+                        {{ form.sort.label_tag }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3">
+                     <div class="form-group">
+                        {{ form.sort |attr:"data-toggle:toggle" |attr:"data-onstyle:danger"|attr:"data-offstyle:success"|attr:"data-on:Rem"|attr:"data-off:App"}}
+                        {{ form.sort.errors }}
+                    </div>
+                </div>
+            </div> 
+            <div class="row">
+                <div class="col-sm-12 col-md-3">
+                    <div class="form-group">
+                        Type de document
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3">
+                    <div class="form-group">
+                        <input type="checkbox" id="type_choice" data-toggle="toggle"  data-onstyle="primary" data-offstyle="default" data-on="Fichier" data-off="Vidéo" />
+                    </div>
+                </div>
+            </div> 
+
+
+
+
+            <div class="row">
+                <div class="col-sm-12 col-md-4"  id="file">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-3">
+                             <div class="form-group">
+                                {{ form.width.label_tag }}
+                                {{ form.width |add_class:"form-control" }}
+                                {{ form.width.errors }}
+                            </div>
+                        </div>  
+                        <div class="col-sm-12 col-md-3">
+                            <div class="form-group">
+                                {{ form.height.label_tag }}
+                                {{ form.height |add_class:"form-control" }}
+                                {{ form.height.errors }}
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                {{ form.mediation.label_tag }}
+                                {{ form.mediation |add_class:"btn btn-default" }}
+                                {{ form.mediation.errors }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-5" id="video">            
+                    <div class="form-group">
+                        {{ form.video.label_tag }}<small> N'utiliser que vos propres vidéos</small>
+                        {{ form.video |add_class:"form-control"|attr:"placeholder:INkui5BHDZU" }}
+                        {{ form.video.errors }}
+                    </div>
+                    <div class="form-group">
+                        <img src="{% static 'img/code_video_youtube.png' %}"/>
+                    </div>
+                </div>
+            </div> 
+            
+
+
+
+
+     
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <input value="Enregistrer" type="submit" class="btn btn-sacado"/>
+                        <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                                   class="btn btn-default "/></a>
+                    </div>
+                </div>
+            </div>   
+        </form>
+    </section> 
+{% endblock %}
+
+ 
+ 

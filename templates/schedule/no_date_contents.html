@@ -1,0 +1,5 @@
+<div class="panel-body">
+    {% for content  in no_date_contents  %}
+      <li class="sans_puce"><a href="{% url 'update_content'  content.id content.contenttype.slug course.id  %}">{{ content.name }}</a></li>
+    {% endfor  %} 
+</div>

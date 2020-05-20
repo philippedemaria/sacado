@@ -1,0 +1,78 @@
+{% extends 'account/detail_student.html' %}
+{% load static %}
+{% load item_tags %}
+
+
+
+ 
+
+{% block datae %} 
+
+                <table class="table table-bordered table-hover standard_tab_sort300">
+                    <thead>
+                        <tr  style="color:#FFF;background-color: {{ group.color }}">
+                            <th>{{ theme }}<img src="{% static 'img/angle-right-white.png' %}" width="25px" /> Sections et exercices </th>
+                            <th style="width:370px">Scores</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for d in datas   %}   
+                        <tr style="color:#FFF;background-color: {{ group.color }}; opacity : 0.5;">
+                            <td>{{ d.name.name }}</td>
+                            <td style="width:370px"></td>
+                        </tr>
+                        {% for relation in d.exercises  %}   
+                        <tr class="no_padding" {% if not relation.name.is_publish %} style="background-color:#F0F0F0;"{% endif %}>
+                            <td {% if relation.name.is_publish %} style="padding:5px"{% endif %}"> 
+                                    <a href="{% url 'show_this_exercise' relation.name.exercise.id   %}" >  
+                                        <img src="../../../../static/uploads/{{ relation.name.exercise.supportfile.imagefile }}" class="imagefile">
+                                    </a>
+                                                               
+                                    <em>{% if relation.name.exercise.supportfile.annoncement %}{{relation.name.exercise.supportfile.annoncement|cleanhtml|capfirst }}{% else %} {{relation.name.exercise.knowledge.name|capfirst }}  {% endif %}</em>   
+                                        {% if relation.name.exercise.supportfile.calculator %}
+                                          <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                        {% else %}
+                                          <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                        {% endif  %}  <br>
+                                    <span style="font-size:16px;">    
+                                        <i class="fa fa-barcode"></i> {{ relation.name.exercise.supportfile.code }} {% if relation.name.exercise.knowledge|make_list|length < 140 %}  {% endif %}
+                                        <i class="fa fa-clock-o"></i> {{ relation.name.exercise.supportfile.duration }} minutes {% if relation.name.exercise.knowledge|make_list|length < 140 %}  {% endif %}
+                                        <i class="fa fa-save"></i> {{ relation.name.exercise.supportfile.situation}} situation{{ relation.name.exercise.supportfile.situation|pluralize}}  minimum
+                                    </span>
+                            </td>
+                            <td style="width:370px">     
+                                {% for sta  in relation.scores  %}  
+                                    {% if sta.point   %}
+                                        <div class="markdown_div
+                                                {% if sta.point < 30 %}
+                                                 red 
+                                                {% elif  sta.point < 60 %}
+                                                orange
+                                                {% elif  sta.point < 80 %}
+                                                green
+                                                {% else %}
+                                                darkgreen
+                                                {% endif %}">
+                                            <strong>{{ sta.point }}%</strong>
+                                            <small>
+                                                <br>situations : {{ sta.numexo }}
+                                                <br>temps : {{ sta.secondes|time_done }}
+                                                <br>date : {{ sta.date|date:"d m Y" }}
+                                            </small>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+
+                        
+                    {% endfor %}  
+                    </tbody>      
+                </table>
+
+
+
+ 
+{% endblock %}

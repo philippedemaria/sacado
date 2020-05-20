@@ -1,0 +1,101 @@
+ 
+<li class="{% if '/dashboard' in request.path %} active {% endif %}">
+    <!-- ******************************************************************************  Progression  ***********************************************************************************-->
+     <div class="panel-group"> 
+        {% if '/dashboard' in request.path %}
+        <div class="panel panel-primary">
+        {% else %}
+        <div class="panel panel-default">
+        {% endif %}
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a href="{% url 'dashboard' %}"><i class="fa fa-tachometer-alt"></i> Tableau de bord </a>
+          </h4>
+        </div>
+      </div>
+    </div>
+</li>
+<li class="{% if '/calendar' in request.path %} active {% endif %}">
+    <!-- ******************************************************************************  Edt  ***********************************************************************************-->
+     <div class="panel-group">
+      <div class="panel panel-{% if '/average' in request.path %}primary {% else %}default {% endif %}" >
+        <div class="panel-heading">
+          <h4 class="panel-title">
+               <a href="{% url 'student_cdt' %}"><i class='fa fa-book'></i> Cahier de texte</a> 
+          </h4>
+        </div>
+      </div>
+    </div>
+</li>
+<li class="{% if '/average' in request.path %} active {% endif %}">
+
+    <!-- ****************************************************************************** Compétences ***********************************************************************************-->
+  <div class="panel-group"> 
+      <div class="panel panel-{% if '/average' in request.path %} primary {% else %}default{% endif %}" >
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a href="{% url 'student_grades' student.user_id  %}"><i class="fa fa-sort-numeric-asc"></i>  Notes </a>
+          </h4>
+        </div>
+        </div>
+      </div>
+</li>
+<li class="{% if '/average' in request.path %} active {% endif %}">
+    <!-- ****************************************************************************** Compétences ***********************************************************************************-->
+     <div class="panel-group"> 
+      <div class="panel panel-{% if '/average' in request.path %}primary{% else %}default{% endif %}" >
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a href="{% url 'student_items' student.user_id  %}"><i class="fa fa-database"></i>  Acquis de compétences</a>           
+          </h4>
+        </div>
+        </div>
+      </div>
+</li>
+<li class="{% if '/average' in request.path %} active {% endif %}">
+    <!-- ****************************************************************************** Savoirs ***********************************************************************************-->
+     <div class="panel-group"> 
+        <div class="panel panel-{% if '/average' in request.path %}primary {% else %}default {% endif %}" >
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a href="{% url 'student_knowledges' student.user_id  %}"><i class="fa fa-wrench"></i>  Acquis de savoirs</a>           
+          </h4>
+        </div>
+        </div>
+     </div>
+</li>
+<li class="{% if '/viescolaire' in request.path %} active {% endif %}">
+    <!-- ****************************************************************************** Compétences ***********************************************************************************-->
+     <div class="panel-group"> 
+      <div class="panel panel-{% if '/average' in request.path %}primary{% else %}default{% endif %}" >
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a href="{% url 'listing_for_student'  %}"><i class="fa fa-paw"></i>  Absences et incidents</a>           
+          </h4>
+        </div>
+        </div>
+      </div>
+</li>
+<!-- <li class="{% if '/average' in request.path %} active {% endif %}">   
+   
+     <div class="panel-group"> 
+      <div class="panel panel-{% if '/average' in request.path %}primary {% else %}default {% endif %}" >
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a href="?to=tdb_student_search_searchModule"><i class="fa fa-search"></i>  Recherche</a>   
+        </div>
+      </div>
+    </div>
+</li> -->
+<li> 
+    <!-- ******************************************************************************  Fiches exercices  ***********************************************************************************-->
+     <div class="panel-group"> 
+      <div class="panel panel-default" >
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a href="https://folios.onisep.fr/saml/login?_pre_saml_idp=profacad&_saml_idp=" target="_blank"><img src="../../../static/img/folios.png" border="0" width="160px" height="25px"/> </a>
+          </h4>
+        </div>
+      </div>
+    </div>
+</li>

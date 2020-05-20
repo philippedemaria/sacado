@@ -1,0 +1,208 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+
+{% block require %}
+ 
+    {% if course %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-action2.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-index.js' %}"></script>
+    {% endif %}
+
+
+    <script>
+        require(['script/ajax-user']);
+    </script>
+ 
+<script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+{% endblock %}
+
+
+
+{% block body %}
+ 
+<div class="col-sm-12 col-md-9">
+
+    <div class="content_title">
+        <h1 class="thin"><i class='fa fa-users'></i> Participant  </h1>
+    </div>
+
+
+ 
+    <div class="content_title">
+        <h1 class="thin">
+             <nav class="navbar navbar-default">
+              <div class="container-fluid">
+                <div class="navbar-header">
+                  <i class='fa fa-users'></i> Participant 
+                </div>
+             
+                <ul class="nav navbar-nav navbar-right">
+
+
+                  {% if datas|length > 1 %}
+                    <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"  style="font-size:14px">Parcours </a>
+                        <ul id="products-menu" class="dropdown-menu clearfix" role="menu">
+                            {% for d in datas %}
+                            <li><a href="#menu{{ forloop.counter }}" {% if forloop.first %} class="active" {% endif %}  data-toggle="pill" style="font-size:16px; color:#EEE;border-radius: 20px; background-color:{{ d.parcours.color }} ;margin-right:15px" >{{ d.parcours.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li> 
+                {% else %}
+
+                    <li><a href="#menu{{ forloop.counter }}" {% if forloop.first %} class="active" {% endif %}  data-toggle="pill" style="font-size:16px; color:#EEE;border-radius: 20px;background-color:{{ d.parcours.color }} ;margin-right:15px" >{{ d.parcours.title }}</a></li>
+                {% endif %} 
+                    <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"  style="font-size:14px">Tous </a>
+                        <ul id="products-menu" class="dropdown-menu clearfix" role="menu">
+                            <li><a href="{% url 'detail_student'  student.user.id   %}" ><i class="fa fa-caret-right"></i> Par savoir faire</a></li>
+                            <li><a href="{% url 'detail_student'  student.user.id  %}"><i class="fa fa-caret-right"></i> Par exercice</a></li>
+                        </ul>
+                    </li> 
+                {% for theme in themes %}
+                    <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"  style="font-size:14px">{{theme.name}} </a>
+                        <ul id="products-menu" class="dropdown-menu clearfix" role="menu">
+                            <li><a href="{% url 'detail_student_theme'  student.user.id  theme.id  %}" ><i class="fa fa-caret-right"></i> Par savoir faire</a></li>
+                            <li><a href="{% url 'detail_student_theme'  student.user.id  theme.id  %}"><i class="fa fa-caret-right"></i> Par exercice</a></li>
+                        </ul>
+                    </li> 
+                {% endfor %}
+                    <li><a href="javascript:history.back()"  class="btn btn-subsacado pull-right" > <i class="fa fa-users"></i></a></li>  
+                </ul>
+              </div>
+            </nav> 
+        </h1>
+    </div>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="col-md-3">
+            {% include 'sub_menu_left.html' %}
+    </div>
+    <div class="col-md-9">
+
+        <section class="content_bgwhite">
+              <form method="post"  enctype='multipart/form-data' >
+                <input type="hidden" value="{% if user %}1{%else%}0{% endif %}" id="update" /> 
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    <label>{{ user_form.user_type.label_tag }}</label>
+                                    {{ user_form.user_type |add_class:"form-control select2" }}
+                                    {{ user_form.user_type.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="teacher_div">
+                            <div class="col-sm-12 col-md-8">
+                                <div class="form-group">                
+                                    <label>{{ teacher_form.subjects.label_tag }}</label>
+                                    {{ teacher_form.subjects |add_class:"form-control select2" }}
+                                    {{ teacher_form.subjects.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-2">
+                                <div class="form-group">
+                                    <label>{{ user_form.civilite.label_tag }}</label>
+                                    {{ user_form.civilite |add_class:"form-control select2" }}
+                                    {{ user_form.civilite.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    <label>{{ user_form.last_name.label_tag }}</label>
+                                    {{ user_form.last_name |add_class:"form-control" }}
+                                    {{ user_form.last_name.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    <label>{{ user_form.first_name.label_tag }}</label>
+                                    {{ user_form.first_name |add_class:"form-control" }}
+                                    {{ user_form.first_name.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-8">
+                                <div class="form-group">                
+                                    <label>{{ user_form.email.label_tag }}</label>
+                                    {{ user_form.email |add_class:"form-control" }}
+                                    {{ user_form.email.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label>{{ user_form.username.label_tag }}</label>
+                                    {{ user_form.username |add_class:"form-control" }}
+                                    {{ user_form.username.errors }}
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label>{{ user_form.password1.label_tag }} <small>Le mot de passe par défaut est 1234567890</small></label>
+                                    {{ user_form.password1 |add_class:"form-control" }}
+                                    {{ user_form.password1.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-8">
+                                <div class="form-group">                
+                                    <label>{{ user_form.email.label_tag }}</label>
+                                    {{ user_form.email |add_class:"form-control" }}
+                                    {{ user_form.email.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <button type="submit" class="btn btn-sacado">Enregistrer le profil</button>   
+
+                                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default"  /></a>
+                            </div>
+                        </div>
+                </form>
+        </section>
+    </div>
+</div> 
+
+
+
+
+{% endblock %}

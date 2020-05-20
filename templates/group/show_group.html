@@ -1,0 +1,138 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+ 
+
+{% block page_title %}
+    <i class='fa fa-users'></i> Détails du groupe
+{% endblock %}
+
+{% block page_menu_right %}
+ 
+                    <li><a  href="{% url 'list_parcours_group' group.id  %}"   class="no_button" > Parcours associés</a> </li> 
+                    <li><a href="{% url 'update_group' group.id %}" class="no_button"> Configuration</a></li>  
+                    <li><a  href="{% url 'result_group_exercise'  group.id %}"   class="no_button" > Suivi par exercice</a> </li>  
+                    <li><a  href="{% url 'result_group'  group.id %}" class="no_button"> Suivi  par savoir faire</a></li>  
+                    <li><a  href="{% url 'task_group'  group.id %}" class="no_button" > Tâches</a></li>  
+                    <li><a  href="{% url 'stat_group'  group.id %}" class="no_button"> Statistiques</a></li>     
+
+{% endblock %}
+ 
+
+{% block body %}
+<div class="content_main">  
+ 
+ 
+        <div class="row">
+            <div class="col-sm-12 col-md-3">
+        
+                <ul style="font-size:24px;margin-top: : 30px;">
+                    <li class="sanspuce">  <h1 class='thin'><i class="fa fa-square" style="color:{{ group.color }}"></i> {{ group.name }}  </h1>  </li>   
+                    <li class="sanspuce" style="margin-top: 10px;"> <i class="fa fa-barcode"></i> {{ group.code }} </li>
+                    <li class="sanspuce" style="margin-top: 10px;"><i class="fa fa-cubes" ></i> {{ group.level.name }}</li>
+                    <li class="sanspuce" style="margin-top: 10px;"><i class="fa fa-users" ></i> {{ group.students.count }} élève{{ group.students.count|pluralize }} </li>
+      
+   
+
+
+                    <li class="sanspuce" style="margin-top: 70px;font-size:14px;">Les élèves peuvent rejoindre ce groupe dès que vous leur avez communiqué cette URL : <br><strong>http://parcours.erlm.tn/group/{{ group.code }}</strong>. <br><br><br>Ils peuvent aussi s’inscrire à l’adresse <br><strong>http://parcours.erlm.tn/#students</strong><br> et utiliser le code suivant : <strong>{{ group.code }}</strong><br><br>
+                    </li>
+
+
+
+                    <li class="sanspuce" style="margin-top: 10px;"><a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                               class="btn btn-default "/></a></li>
+
+                </ul>
+ 
+
+            </div>
+            <div class="col-sm-11 col-md-9">
+
+                <table class="table table-hover standard_tab_sort">
+                    <thead>
+                    <tr>
+                        <td>Nom prénom</td>
+                        <td>Mail</td>
+                        <td>Identifiant </td>
+                        <td>Dernière connexion</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in group.students.all|dictsort:"user.last_name"  %}
+                            <tr>
+                                <td>
+                                   <a  href="{% url 'detail_student_all_views'  s.user.id   %}"> {{ s }} <i class="fa fa-trophy" style="font-size:10px"></i></a> 
+                                <td style="width:150px">
+                                    {{ s.user.email }}
+                                </td>
+                                <td>
+                                    {{ s.user.username }}   
+                                </td>
+                                <td style="width:28%;">
+                                    {% if s.user.last_login %}{{ s.user.last_login|date:"Y m d, H:i"  }}{% else %}Jamais{% endif %}
+
+                                    <a  href="{% url 'detail_student_all_views'  s.user.id   %}" class="pull-right"> 
+                                         
+                                    </a>
+  
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>   
+        </div> 
+</div> 
+
+
+
+    <div class="modal fade bd-example-modal-lg" id="help"  tabindex="-1" role="dialog" aria-labelledby="help" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document" style="margin:0px!important">
+ 
+            {% if user.user_type == 2 %}
+                <div class="modal-content help" >
+ 
+                    <div class="helpdiv_help_title_page"  style="left:500px;">
+                        titre de page
+                    </div>
+                    <div class="helpdiv_help_groupe"   style="top:100px">
+                        <br><br><br><br><br><br><br><br><br><img src="{% static 'img/fleche_bottom_left.png' %}" width="40px" />
+                        <div class="help_groupe" style="float:left;width:200px;height:200px" >
+
+                               <br>
+                               <br><i class="fa fa-barcode"></i> Code
+                               <br> 
+                               <br><i class="fa fa-cubes"></i> Niveau
+                               <br> 
+                               <br><i class="fa fa-users"></i> Nombre d'élèves
+                               <br> 
+                               <br>Lien à donner aux élèves pour leur inscription en autonomie.
+
+                        </div>
+                    </div>
+
+
+                    <div class="helpdiv_help_acces"  style="top:45px;right:50px;border-top: 2px #fff solid;padding:10px;width:800PX">
+                        Sous menu contextuel <img src="{% static 'img/fleche_up_right.png' %}" width="40px" style="vertical-align:bottom" />
+                    </div>
+
+
+
+                    <div class="helpdiv_help_list">
+                        <div class="help_list">
+
+                            <br><br><br> Liste des élèves. <br>Cliquer sur un élève pour obtenir sa fiche de suivi.
+                        </div>
+                         <br> <br><img src="{% static 'img/fleche_up_right.png' %}" width="40px" /><br><br><img src="{% static 'img/fleche_bottom_right.png' %}" width="40px" style="vertical-align:middle;"/>
+
+                    </div>
+       
+
+
+                </div>
+            {% endif %}
+        </div>
+    </div>
+  
+{% endblock %}

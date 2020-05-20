@@ -1,0 +1,162 @@
+{% extends 'layout.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-actions.js' %}"></script>
+{% endblock %}
+
+
+{% block title_page %}
+    <h1><i class='fas fa-user-tie'></i> Personnel de direction
+        <small><i class='fa fa-chevron-right'></i>
+            {% if director %}
+                Modification
+            {% else %}
+                Création
+            {% endif %}
+        </small>
+    </h1>
+{% endblock %}
+
+
+{% block body %}
+    <section class='content'>
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>{{ user_form.username.label_tag }}</label>
+                        {{ user_form.username |add_class:"form-control" }}
+                        {{ user_form.username.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>{{ user_form.password.label_tag }}</label>
+                        {{ user_form.password  |add_class:"form-control" }}
+                        {{ user_form.password.errors }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>{{ user_form.civilite.label_tag }}</label>
+                        {{ user_form.civilite  |add_class:"form-control select2" }}
+                        {{ user_form.civilite.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>{{ user_form.last_name.label_tag }}</label>
+                        {{ user_form.last_name  |add_class:"form-control" }}
+                        {{ user_form.last_name.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>{{ user_form.first_name.label_tag }}</label>
+                        {{ user_form.first_name  |add_class:"form-control" }}
+                        {{ user_form.first_name.errors }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>{{ user_form.email.label_tag }}</label>
+                        {{ user_form.email  |add_class:"form-control" }}
+                        {{ user_form.email.errors }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>{{ user_form.phone.label_tag }}</label>
+                        {{ user_form.phone  |add_class:"form-control" }}
+                        {{ user_form.phone.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>{{ user_form.phone_home.label_tag }}</label>
+                        {{ user_form.phone_home  |add_class:"form-control" }}
+                        {{ user_form.phone_home.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>{{ user_form.address.label_tag }}</label>
+                        {{ user_form.address  |add_class:"form-control" }}
+                        {{ user_form.address.errors }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>{{ user_form.photo.label_tag }}</label>
+                        {{ user_form.photo  |add_class:"btn btn-default" }}
+                        {{ user_form.photo.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>{{ director_form.signature.label_tag }}</label>
+                        {{ director_form.signature  |add_class:"btn btn-default" }}
+                        {{ director_form.signature.errors }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>{{ director_form.secretaries.label_tag }}</label>
+                        {{ director_form.secretaries  |add_class:"form-control select2" }}
+                        {{ director_form.secretaries.errors }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+                        <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                                   class="btn btn-default "/></a>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        {% if director %}
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <form action="{% url 'delete_director' director.user_id %}" method='POST'>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <button type=submit" class="btn btn-danger ">
+                                Supprimer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+
+
+    </section>
+{% endblock %}
+
+ 

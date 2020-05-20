@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+ 
+
+    {% load static %} 
+    {% load widget_tweaks %}   
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}" />    
+
+
+    <title>S'inscrire à {{ group }} - {{ group.teacher.user.last_name|capfirst }}</title>
+    {% load bootstrap3 %}
+    {% bootstrap_messages %}
+
+ 
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}" /> 
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/select2/select2.css' %}" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+<link rel="stylesheet" href="{% static 'plugins/datatables/dataTables.bootstrap.css' %}">
+<link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" >
+<link rel="stylesheet" href="{% static 'plugins/colorpicker/bootstrap-colorpicker.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datepicker/datepicker3.css' %}">
+ 
+
+ 
+<!-- Custom CSS
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
+<link rel="stylesheet" type="text/css"  href="{% static 'css/slide_menu.css' %}">
+ -->
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,700,900">
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Amatic+SC:400,900">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pinyon+Script"> 
+
+
+<style>
+body{
+    background-color: #364e61 ;
+}
+#inscription{
+    background-color: #FFF ;
+    box-shadow: 0 1px 4px 1px rgba(0,0,0,0.4);
+    margin-top: 100px;
+    margin-right: auto;
+    margin-left: auto;
+    width : 600px;
+}
+#head_inscription{
+    background-color: #364e61 ;
+    color: #F7F7F7;
+    padding:10px 20px;
+}
+
+#body_inscription{
+    padding: 20px;
+}
+.form-control{  
+  border-radius : 0px; 
+  -webkit-box-shadow: inset 0 0px 0px rgba(0,0,0,0);
+}
+.sacado{
+  font-family:'Amatic Sc';
+}
+.btn-sacado {
+  border-radius: 0px;
+  background-color: #364e61 ;
+  border-color: #364e61;
+  color:#FFF;
+}
+
+.btn-sacado:hover,
+.btn-sacado:active,
+.btn-sacado.hover {
+  background-color: #d7e3e9;
+  color:#657574;
+}
+.thin{
+  font-weight: 100;
+}
+</style>
+
+
+
+</head>
+
+<body>
+
+    <div id="inscription">
+        <form action="" method="POST" id="student_form">
+            <div id="head_inscription">
+                
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <h3><img src="{% static 'img/sacadoA1.png' %}" style="width:30px"/> SacAdo</h3>
+                        </div>
+                    </div>   
+            </div>
+            <div id="body_inscription">
+                {% csrf_token %}
+                <h2 class="thin">S'inscrire à {{ group }}<span class="pull-right"><small>{{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}</small></span></h2>
+                <input name="group_id" value="{{ group_id }}" type="hidden" /> 
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group">
+                            {{ u_form.last_name.label_tag }}
+                            {{ u_form.last_name |add_class:"form-control id_last_name" }}
+                            {{ u_form.last_name.errors }}
+                        </div>
+                    </div>    
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group">
+                            {{ u_form.first_name.label_tag }}
+                            {{ u_form.first_name |add_class:"form-control id_first_name" }}
+                            {{ u_form.first_name.errors }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-11 col-md-12">
+                        <div class="form-group">
+                            {{ u_form.email.label_tag }} <small>(optionnel)</small>
+                            {{ u_form.email |add_class:"form-control email" }}
+                            {{ u_form.email.errors }}
+                        </div>
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="col-sm-11 col-md-11">
+                        <div class="form-group">
+                            {{ u_form.username.label_tag }}
+                            {{ u_form.username |add_class:"form-control username" }}
+                            {{ u_form.username.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-1 col-md-1">
+                        <div class="form-group">
+                            <span class="ajaxresult pull-right"></span>
+                        </div>
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group">
+                            {{ u_form.password1.label_tag }} <small><em>Au moins 8 caractères</em></small>
+                            {{ u_form.password1 |add_class:"form-control" }}
+                            {{ u_form.password1.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group">
+                            {{ u_form.password2.label_tag }}
+                            {{ u_form.password2 |add_class:"form-control" }}
+                            {{ u_form.password2.errors }}
+                        </div>
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                             <a href="#"  data-toggle='modal' data-target='#rgpd'>Voir le règlement général sur la protection des données.</a>
+                        </div>
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <input value="Enregistrer" type="submit" class="btn btn-sacado pull-right"/>
+                        </div>
+                    </div>
+                </div>  
+
+
+
+           </div> 
+
+        </form>
+
+    </div>
+
+
+<div class="modal fade" id="rgpd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Règlement général sur la protection des données </h2>
+            </div>
+            <div class="modal-body">
+                {% include 'setup/rgpd.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  <script src="{% static 'index/lib/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'index/lib/jquery/jquery-migrate.min.js' %}"></script>
+  <script src="{% static 'index/lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+ 
+
+  <script src="{% static 'js/script/accueil.js' %}"></script> 
+</body>
+ 
+</html>
+
+
+
+ 

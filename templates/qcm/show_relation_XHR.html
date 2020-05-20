@@ -1,0 +1,246 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+ 
+{% block page_title %}
+ {{ relation.exercise.knowledge.name }}
+{% endblock %}
+
+{% block page_menu_right %}
+{% if relation.exercise.supportfile.annoncement %} <li style="margin-top:15px"><em><p>{{ relation.exercise.supportfile.annoncement|safe  }} </p></em></li>  {% endif %}
+{% endblock %}
+
+{% block require %}
+  <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3.js' %}"></script>  
+  <script>
+     require(['script/ajax-score']);
+  </script>  
+{% endblock %} 
+
+{% block body  %}  
+<div class="pull-right">
+    {% with  relation.exercise.level.image   as level_image %}
+       <img src="{% static level_image %}"  />
+    {% endwith %}
+</div>
+
+
+<section class="content_main">
+ 
+ 
+
+
+    <div class="col-sm-0 col-md-1 col-lg-1">
+        {% if relation.exercise.supportfile.calculator %}
+          <img src="{% static 'img/calculator.png' %}"  with="80px"  height="80px" />
+        {% else %}
+          <img src="{% static 'img/no_calculator.png' %}"  with="80px"  height="80px"  />
+        {% endif  %} 
+<br>
+<br>
+        {% if relation.duration == 5 %}
+          <img src="{% static 'img/horloge5.png' %}" with="80px"  height="80px"  />
+        {% elif relation.duration == 10 %}
+          <img src="{% static 'img/horloge10.png' %}" with="80px"  height="80px"/>
+        {% elif relation.duration == 15 %}
+          <img src="{% static 'img/horloge15.png' %}" with="80px"  height="80px"  />
+        {% elif relation.duration == 20 %}
+          <img src="{% static 'img/horloge20.png' %}" with="80px"  height="80px"   />
+        {% elif relation.duration == 25 %}
+          <img src="{% static 'img/horloge25.png' %}" with="80px"  height="80px"   />
+        {% elif relation.duration == 30 %}
+          <img src="{% static 'img/horloge30.png' %}" with="80px"  height="80px"  />
+        {% elif relation.duration == 35 %}
+          <img src="{% static 'img/horloge35.png' %}"  with="80px"  height="80px"  />
+        {% elif relation.duration == 40 %}
+          <img src="{% static 'img/horloge40.png' %}" with="80px"  height="80px" />
+        {% elif relation.duration == 45 %}
+          <img src="{% static 'img/horloge45.png' %}"  with="80px"  height="80px"  />
+        {% elif relation.duration == 50 %}
+          <img src="{% static 'img/horloge50.png' %}" with="80px"  height="80px"  />
+        {% elif relation.duration == 55 %}
+          <img src="{% static 'img/horloge55.png' %}" with="80px"  height="80px"  />
+        {% elif relation.duration == 60 %}
+          <img src="{% static 'img/horloge60.png' %}" with="80px"  height="80px"  />
+        {% else %}
+          <img src="{% static 'img/horloge15.png' %}" with="80px"  height="80px"  />
+        {% endif  %} 
+        <p style="font-size:12px;text-align: center;width:100%"> {{ relation.duration }} minute{{ relation.duration|pluralize }}</p>
+
+
+          <img src="{% static 'img/situation.png' %}" with="75px"  height="75px"  />
+
+
+        <p style="font-size:12px;text-align: center;width:100%">{{ relation.situation }} situation{{ relation.situation|pluralize }}</p>
+        <i class="fa fa-barcode fa-4x"></i><p style="font-size:14px;text-align: center;width:100%">{{ relation.exercise.supportfile.code }}</p>
+
+    </div>  
+    <div class="col-sm-12 col-md-8 col-lg-8">
+
+      <form action="{% url 'show_parcours_student' relation.parcours.id %}" method="POST" enctype='multipart/form-data'> 
+{% csrf_token %}  
+      <div id="preloader">
+          <div class="alert alert-danger" role="alert" id="message_alert">
+              <i class="fa fa-warning"></i> Si vous voyez ce message après 15 secondes, l'exercice ne s'est pas chargé correctement. Rechargez votre page.<br> Sous Windows, appuyez simultanement sur CTRL et la touche F5
+          </div>
+      </div>
+
+        <div class='justify-content-center'  style="position:relative">
+
+            <div style="position:absolute;bottom:80px;font-size: 12px;width:50px;color:#0d72ac;right:60px;">
+                Mode plein <br> écran <br>
+                <img src="{% static 'img/flechebleue.png' %}" style="position:absolute; right:30px;"/>            
+            </div>
+
+            <div class = 'col-auto' id='ggb_applet_container' style="display:none" ></div>
+        </div>
+
+     
+                <div class="form-group">
+                  {% if user.user_type == 0 %}
+                    <button class="btn btn-sacado" data-relation_id="{{ relation.id }}"  data-situation="{{ relation.situation }}"  data-start_time="{{ start_time }}" type="submit" id="submit_button_relation" {% if user.user_type != 0 %} disabled {% endif %}  disabled=""> Enregistrer le résultat</button>
+                  {% endif %}   
+                    <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+
+                    <input id="situation" type="hidden" value="{{ relation.situation }}"/>
+                </div>
+          
+      </form>
+    </div> 
+
+    
+    <div class="col-sm-12 col-md-3 col-lg-3">
+        {% if user.user_type == 2 %}
+            <form action="{% url 'add_exercice_in_a_parcours' %}" method="POST" enctype='multipart/form-data'>   {% csrf_token %}
+                <input type="hidden" id="id_exercise"  name="exercise" required="" value="{{ exercise.id }}">
+                 Attribuer cet exercice à un parcours 
+                <input type="hidden" id="exercises_parcours"  name="exercises_parcours" required="" value="{% for p in parcours %}{%  get_is_selected   exercise  p   as is_sel  %}{% if is_sel %}{{ p.id }}{% endif %}{% if not forloop.last %}-{% endif %}{% endfor %}">
+                 <table class = "table">
+                {% for p in parcours %}
+                    <tr>{% if p %} {%  get_is_selected   exercise  p   as is_sel  %} {% endif %} 
+                        <td><label><input type="checkbox" id="id_parcours"  name="parcours"  value="{{ p.id }}"  {% if is_sel %} checked{% endif %}> {{ p.title }}</label></td>
+                        <td>Ordre. <input type="number" id="id_orders" class="form-control" name="orders" min="0" step ="1" > </td>
+                    </tr>
+                {% empty %}
+                    <tr><td><small>Pour attribuer cet exercice à un parcours, il faut <a href="{% url 'create_parcours' %}" class="btn-primary">créer un parcours</a>.</small></td></tr>
+                {% endfor %}
+                </table>
+
+
+                {% if parcours|length > 0 %}
+                <div class="form-group">
+                  <input value="Associer/Dissocier" type="submit" class="btn btn-primary"/>
+                </div>
+                {% endif %}
+
+            </form>
+        {% endif  %}  
+              <div class="row">
+                  <div class="col-lg-12 col-xs-12"> 
+                    <div class="form-group"> 
+                        <a href="#" id='error_set' class="pull-right btn btn-warning" >Signaler <span class="label_plus"> un problème sur cet exercice</span> ? </a>
+                    </div>
+                 </div>                     
+              </div> 
+              <div class="row">
+                  <div class="col-lg-12 col-xs-12"> 
+                    <div class="form-group" id='form_error_set'> 
+                        <form action="" method="POST">    {% csrf_token %}
+                            <div class="form-group">
+                                <textarea name="message" id="message"  class="form-control" placeholder="Pourriez-vous nous décrire le problème brièvement ? Merci."></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-xs-12">   
+                                    <div class="form-group">
+                                        <a id="error_sender" data-from ="0" data-exercise_id="{{ exercise.id }}" class="pull-right btn btn-warning">Signaler</a>
+                                    </div>
+                                </div>  
+                                <div class="col-lg-12 col-xs-12">   
+                                    <div class="verif_sender">
+                                    </div>
+                                </div>  
+                            </div> 
+                        </form>
+                    </div>
+                 </div>                     
+            </div> 
+    </div>  
+
+
+        <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script>
+                  <!-- Additional Javascript for Geogebra exercises -->
+    <!-- <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script> -->
+    <script type="text/javascript">
+          // parameters of the geogebra app
+        var parameters = {
+                "appname":"classic",
+                "id":"ggb_applet_container",
+              "prerelease":false,
+              "width":{{ exercise.supportfile.width }},
+              "height":{{ exercise.supportfile.height }},
+              "showToolBar":{{ exercise.supportfile.toolBar|lower }},
+              "showfullscreenbutton":true,
+              "borderColor":"#f5f8fd",
+              "showMenuBar":{{ exercise.supportfile.menuBar|lower }},
+              "showAlgebraInput":{{ exercise.supportfile.algebraInput|lower }},
+              "showResetIcon":{{ exercise.supportfile.resetIcon|lower }},
+              "enableLabelDrags":false,
+              "enableShiftDragZoom":{{ exercise.supportfile.dragZoom|lower }},
+              "enableRightClick":false,
+              "capturingThreshold":null,
+              "showToolBarHelp":false,
+              "errorDialogsActive":false,
+              "useBrowserForJS":false,
+              "langage":"en",
+              "filename":"../../../../static/uploads/{{ exercise.supportfile.ggbfile }}",
+               "appletOnLoad" :  function(applet) {  
+                        applet.setValue("situation",{{ relation.situation }});
+                        applet.registerObjectUpdateListener("numexo", "getNumexo");
+
+                }
+
+        };
+
+
+ 
+          function getNumexo(objName) {
+                // get value from applet1 and set value in applet2   
+            var changedValue = ggbApplet.getValue(objName);        //  ggbApplet est super important !      
+
+            situation = document.getElementById("situation").value  ;
+ 
+              if(changedValue>situation) {
+                    document.getElementById("submit_button_relation").disabled = false;
+
+                    var xhr = getXhr();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            leselect = xhr.responseText;
+                        }
+                    };
+                    xhr.open("POST", "./sql/questionAction.php?a=4", true);
+                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    xhr.send("changedValue=" + changedValue);
+
+
+                }
+          }
+ 
+
+
+        var applet = new GGBApplet('5.0', parameters,true);
+        // Geogebra applet creation
+          applet.inject('ggb_applet_container', 'preferHTML5');  
+ 
+
+    </script>
+    
+    <div style="height:20px"></div>
+
+</section>
+
+
+{% endblock  %}   
+
+ 

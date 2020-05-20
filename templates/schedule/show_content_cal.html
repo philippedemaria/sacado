@@ -1,0 +1,64 @@
+{% load static %}
+{% load widget_tweaks %} 
+{% load item_tags %} 
+
+<script>
+
+    $('#update_div').hide();
+
+    $('.update_event_modal').on('click', function () { 
+          
+            $('#update_div').toggle(500);
+    });
+
+ 
+</script>
+
+ 
+
+
+      <div class="modal-content">
+          <div class="modal-header" style="background-color:{{ relationship.parcours.color  }}">
+              <div class="row" style="color:#FFF">                      
+                  <div class="col-sm-12 col-md-12">
+                     <div class="event-group"><small><a href="#" class="white" data-dismiss="modal"><i class="fa fa-times pull-right"></i></a></small>
+                        <p> {% if relationship.exercise.supportfile.annoncement %} 
+                                {{ relationship.exercise.supportfile.annoncement|safe  }}
+                             {% else %} 
+                                {{ relationship.exercise.knowledge.name }}
+                             {% endif %}
+                                
+                        </p>
+                    </div>
+                  </div>
+              </div>
+              <div class="row"  style="color:#FFF">
+                    <div class="col-sm-9 col-md-9">                         
+                             <p>
+                            {{ relationship.date_limit|date:"D d M Y" }}  - Durée prévue : {{ relationship.duration  }} min - Situation : {{ relationship.situation  }}{% if relationship.is_evaluation %}- Evaluation  {% endif %} 
+                            </p>  
+                    </div> 
+                    <div class="col-sm-3 col-md-3"> 
+                        <small> <a href=" " class="white pull-right" onclick="return TestDelete('cette tache')" ><i class='fa fa-trash'></i></a></small>    
+                    </div>   
+              </div>
+          </div>
+          <div class="modal-body">  
+                  <div class="row">   
+                      <div class="col-sm-12 col-md-12">
+                          <img src="../static/uploads/{{ relationship.exercise.supportfile.imagefile }}" style="width:570px">
+                      </div>
+                  </div>
+                  <div class="row">   
+                      <div class="col-sm-12 col-md-12">
+ 
+                          <a href="{% url 'execute_exercise'  relationship.parcours.id  relationship.exercise.id   %}" class="btn btn-primary"> Travailler cet exercice  </a>
+ 
+                      </div>
+                  </div>
+
+          </div>
+      </div>
+ 
+ 
+ 

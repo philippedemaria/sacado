@@ -1,0 +1,14 @@
+
+
+{% if courses %}
+<ul class="nav nav-pills nav-stacked">
+    {% for course in courses %}
+    	 {% if  course.subject   %}
+        <li  {% if  course.subject.shortname  in request.path   %} class="active" {% endif %} >
+           			<a href="{% url 'student_active_sequence'  course.id  course.subject.shortname    %}"> 
+           			{{ course.subject.name }} </a>
+        </li>
+    	 {% endif  %}
+    {% endfor %}
+</ul>
+{% endif %}

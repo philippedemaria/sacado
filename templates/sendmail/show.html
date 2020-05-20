@@ -1,0 +1,108 @@
+<script type="text/javascript">
+  
+CKEDITOR.replace( 'texte_id' );
+
+
+        $('#response').hide() ;
+    $('.response_call').on('click', function () { 
+          
+            $('#response').toggle(500);
+    });
+
+
+
+        // Ajoute ou supprime une pièce jointe
+        $('#more_filer').on('click', function () { 
+            $("#file_attachr").append('<input type="file" id="file_ar" name="attachment" class="file_email btn btn-default btn-file" />');
+        })
+
+        $('#less_filer').on('click', function () {
+            $("#file_ar").remove();
+        })
+
+</script>
+
+ 
+
+<div class="modal-header"> 
+    <div class="row">
+      <div class="col-lg-12 col-xs-12"><a href="#" class="vue pull-right" data-dismiss="modal"><i class="fa fa-times"></i></a>
+              <h1 style="padding-left: 10px">{{ email.subject }}
+
+                 <div class="btn-group  pull-right" style="font-size:11px">
+<!--                     <a href="#" class="response_call" data-email_id="{{ email.id }}" data-response="0">Répondre</a> 
+                  | <a href="#" class="response_call" data-email_id="{{ email.id }}" data-response="1">Répondre à tous</a> 
+                  | <a href="#" class="transfert_email" data-email_id="{{ email.id }}" data-response_all="2">Transférer à</a> 
+                  | <a href="#" class="print_email"  data-email_id="{{ email.id }}">Imprimer</a> 
+                  | <a href="#" class="delete_email"  data-email_id="{{ email.id }}">Supprimer</a> -->
+
+                    <a href="#" class="response_call">Répondre</a>  
+                  <span class="text-danger"> Prioriser votre messagerie habituelle pour répondre</span>
+
+
+                  </div>                   
+              </h1>                  
+        </div>
+    </div> 
+    <div class="row">
+      <div class="col-lg-12 col-xs-12">
+            <div class="mailbox-read-info">
+             De : {{ email.author.get_full_name }}
+                <span class="mailbox-read-time pull-right"><small>  {{ email.today }}</small></span>
+             <div>à : {% for r in email.receivers.all %} {{ r.get_full_name }}{% if not forloop.last %}, {% endif %} {% endfor %}</div>
+            </div>
+            <div class="mailbox-read-message">
+              {{ email.texte|safe }}
+            </div>
+            <div class="box-footer">
+            <div id="email_attachment"></div>
+              <ul class="mailbox-attachments clearfix">
+                {% for a in  email.attachment.all %}
+                <li>
+                  <div class="mailbox-attachment-info">
+                        <span class="mailbox-attachment-size">
+                            {{ a }}
+                          <a href="#" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+                        </span>
+                  </div>
+                </li>
+                {% endfor %}                
+              </ul>
+            </div>
+      </div>
+   </div> 
+   <!-- répondre -->   <!-- répondre -->   <!-- répondre -->   <!-- répondre -->   <!-- répondre -->   <!-- répondre -->   <!-- répondre -->   <!-- répondre -->
+  <!-- répondre -->   <!-- répondre -->   <!-- répondre -->   <!-- répondre -->   <!-- répondre -->   <!-- répondre -->   <!-- répondre -->   <!-- répondre -->
+  <!-- répondre -->   <!-- répondre -->   <!-- répondre -->   <!-- répondre -->   <!-- répondre -->   <!-- répondre -->   <!-- répondre -->   <!-- répondre -->
+
+   <!-- répondre -->
+  <div class="row" id="response">
+    <form action="{% url 'create_email' %}" name="principal_form" method="post" enctype="multipart/form-data">
+    {% csrf_token %} 
+        <div class="col-lg-12 col-xs-12" >
+            <div class="form-group">
+            <textarea id="texte_id" name="texte"></textarea>
+            </div>
+            <div class="form-group">Pièce jointe   <small>(2Mo max.)</small>        
+              <div class="row">
+                  <div class="col-lg-2 col-xs-2"><a href="#" id="more_filer" class="btn btn-default"><i class="fa fa-plus"></i></a><a href="#" id="less_filer" class="btn btn-danger"><i class="fa fa-trash"></i></a></div>
+                  <div class="col-lg-3 col-xs-3" id="file_attachr"></div>
+              </div>
+            </div> 
+      </div>
+      <!-- /.box-body -->
+      <div class="box-footer">
+          <button type="submit" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Envoyer</button>
+          <button type='button' class='btn btn-secondary' data-dismiss='modal'>Fermer</button>
+      </div>
+      </form>
+   </div> 
+
+
+
+</div> 
+
+ 
+ 
+
+  

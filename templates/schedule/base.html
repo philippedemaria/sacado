@@ -1,0 +1,82 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+{% block page_title %}
+
+        <i class="fa fa-calendar"></i> Calendrier des taches  
+     
+
+
+{% endblock %}
+
+{% block page_menu_right %}
+    <li> <a href="javascript:history.back()"   class="btn btn-default" style="margin-top:4px; margin-left:15px;padding:9px;font-size:18px;font-weight: 100" />Retour</a></li>
+{% endblock %}
+
+
+
+{% block require %}
+ 
+<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-for-calendar.js' %}"></script>
+ 
+     <script>
+        require(['script/ajax-schedule']);
+
+    </script>
+{% endblock %} 
+
+{% block body  %} 
+
+    <link href="{% static 'schedule/fullcalendar/fullcalendar.min.css' %}" rel='stylesheet' />
+    <link href="{% static 'schedule/fullcalendar/fullcalendar.print.min.css' %}" rel='stylesheet' media='print' />
+
+
+<div class="col-xs-12 col-lg-10">   
+    <section class="paragraph">  
+      <form  action="" method="POST">
+        {% csrf_token %}  
+          <div class='calendar'></div>
+      </form>
+    </section>
+</div>
+
+ <div class="col-xs-12 col-lg-2">  
+
+ {% if request.user.user_type == 2 %}
+    {% include '../right_menu.html' %}
+ {% else %}
+    {% include '../right_menu_student.html' %}
+ {% endif  %}
+</div> 
+
+
+<div class="modal fade" id="new_event" tabindex="-1" role="dialog" aria-labelledby="new_event" aria-hidden="true" >
+  <div class="modal-dialog" role="document">
+    <form  action="{% url 'create_event' %}" method="POST">
+      {% csrf_token %}  
+         {% include 'schedule/form.html' %}
+    </form>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="show_event" tabindex="-1" role="dialog" aria-labelledby="show_event" aria-hidden="true"  data-focus-on="input:first">
+  <div class="modal-dialog" role="document">
+         <div id='formulaire'></div>
+    </form>
+  </div>
+</div>
+
+
+
+
+    
+
+
+
+     
+{% endblock %}

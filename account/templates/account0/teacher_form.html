@@ -1,0 +1,102 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block require %}
+    {% if '/edit'   in request.path %}
+        <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-actions3.js' %}"></script>
+    {% else %}
+        <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-actions.js' %}"></script>
+    {% endif %}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">Mon profil
+    </div>
+{% endblock %}
+
+{% block body %}
+    <section class='content'>
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>{{ user_form.username.label_tag }}</label>
+                        {{ user_form.username |add_class:"form-control" }}
+                        {{ user_form.username.errors }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>{{ user_form.civilite.label_tag }}</label>
+                        {{ user_form.civilite  |add_class:"form-control select2" }}
+                        {{ user_form.civilite.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>{{ user_form.last_name.label_tag }}</label>
+                        {{ user_form.last_name  |add_class:"form-control" }}
+                        {{ user_form.last_name.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>{{ user_form.first_name.label_tag }}</label>
+                        {{ user_form.first_name  |add_class:"form-control" }}
+                        {{ user_form.first_name.errors }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>{{ user_form.email.label_tag }}</label>
+                        {{ user_form.email  |add_class:"form-control" }}
+                        {{ user_form.email.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>{{ teacher_form.subject.label_tag }}</label>
+                        {{ teacher_form.subject   |add_class:"form-control select2" }}
+                        {{ teacher_form.subject.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label>{{ teacher_form.zone.label_tag }}</label>
+                        {{ teacher_form.zone  |add_class:"form-control select2" }}
+                        {{ teacher_form.zone.errors }}
+                    </div>
+                </div>
+            </div>                
+                </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+                            <a href="javascript:history.back()">
+                                <input type="button" value="Annuler"
+                                       class="btn btn-default "/>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+        </form>
+    </section>
+{% endblock %}
+
+ 

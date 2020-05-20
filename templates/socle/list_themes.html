@@ -1,0 +1,71 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+{% block general_js %}
+    {% if item %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-action2.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-index.js' %}"></script>
+    {% endif %}
+{% endblock %}
+
+
+ 
+
+
+
+ 
+{% block page_title %}
+     Thèmes  
+{% endblock %}    
+ 
+{% block page_menu_right %}
+    <li><a href="{% url 'create_theme' %}" class="btn btn-subsacado" ><img width="25px" src="{% static 'img/plus.png' %}"/> Nouveau Thème</a>  
+{% endblock %}</li> 
+
+
+
+{% block  body %} 
+
+<section class="content_main"> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table id="standard_tab" class="table table-bordered table-hover"  class="display" style="width:100%">
+                  <thead>
+                      <tr>
+                        <th>Nom</th>                  
+                        <th>Niveau</th> 
+ 
+                      </tr>
+                  </thead>
+                  <tbody>
+                        {% for theme in themes %}
+                        <tr> 
+                          <td>
+                             <a href="{% url 'update_theme' theme.id %}">{{ theme.name }} </a> 
+                              <a href="{% url 'delete_theme' theme.id %}"  onclick="return TestDelete('ce thème')"><i class='fa fa-trash pull-right'></i></a>
+                          </td>
+                          <td>     
+                               {% for l in theme.theme_level.all %}                 
+                                 {{ l.name  }}{% if not forloop.last %}, {% endif %}
+                               {% endfor %} 
+                          </td> 
+                        </tr>
+                        {% endfor %}
+                  </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+ 
+
+
+
+{% endblock  %}   
+
+
+ 

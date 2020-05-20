@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+
+
+{% block require %}
+        require(['script/accueil']);     
+{% endblock %}  
+   
+
+
+{% block body %}
+ 
+
+     <div class="space70"></div>
+
+	<div class="row marginbottom50 fullpage" id="intro">
+		<div class="col-md-6 col-xs-12">
+			<div class="title">S'entrainer. Progresser. <br/>Auto-évaluer ses techniques mathématiques.</div>
+			<div class="subtitle marginbottom100">1000 exercices interactifs du CP à la Terminale</div>
+
+			<a  href="#" data-toggle='modal' data-target='#myModal2'  class="btn btn-sacado marginbottom100  btn-large"> Inscription gratuite</a> 
+
+
+		</div>
+		<div class="col-md-6 col-xs-12">
+
+		    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+			    <!-- Wrapper for slides -->
+			    <div class="carousel-inner">
+			      <div class="item active">
+			        <img src="{% static 'img/accueil.png' %}" style="height:300px">
+			      </div>
+			      <div class="item">
+			        <img src="{% static 'img/accueil1.png' %}" style="height:300px">
+			      </div>
+			      <div class="item">
+			        <img src="{% static 'img/accueil2.png' %}" style="height:300px">
+			      </div>
+			    </div>
+		    </div>
+
+
+		</div>
+	</div>
+ 
+	<section class="fullpage" id="parcours"> 
+	<h3 class="subtitle">Les parcours et exercices</h3>
+ 
+	<div class="row">                        
+		{% for level in levels %}
+		<div class="col-md-2 col-xs-4" style="margin-bottom: 40px;">
+			<div class="card {{ level.cycle }}">
+			  	<div class="card-body">
+			    	 <a href="{% url 'exercises_level'  level.id  %}" style="color:#FFF;">{{ level.shortname }}</a>
+			  	</div>
+			  	<div class="card-bottom">
+			  		{{ level.level_exercise.count }} exercice{{ level.shortname|pluralize }}
+			  	</div>
+			</div>
+		</div>
+        {% endfor %}
+	</div>
+	</section>
+ 
+	<section class="fullpage" id="teachers"> 
+	<div class="row">
+		<div class="col-md-2 col-xs-12">
+			<img src="{% static 'img/teacher.png' %}" width="150px"/>
+		</div>
+		<div class="col-md-10 col-xs-12">
+			<h3 class="subtitle" >Pour les enseignants.</h3> 
+			<div style="margin-bottom:20px">Inscrivez-vous gratuitement et proposez des parcours personnalisés ou pré-definis à vos élèves.<br/> Suivez les évolutions en temps réel depuis votre tableau de bord personnel. </div>
+			<img src="{% static 'img/ggb.png' %}" width="20px" /> Les exercices utilisent Geogebra. Les données sont aléatoires. 
+		</div>	 
+	</div>
+	<hr/>
+	<div class="row"> 
+		<div class="col-md-12 col-xs-12">
+			<h3 class="subtitle">Accès aux attendus de fin d'année et aux repères annuels de progression</h3>
+			<a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/2/02-Maths-CP-attendus-eduscol_1114732.pdf" target="_blank"><img src="{% static 'img/vignette_CP.jpg' %}" width="60px"/></a>
+			<a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/4/04-Maths-CE1-attendus-eduscol_1114734.pdf" target="_blank"><img src="{% static 'img/vignette_CE1.jpg' %}" width="60px"/></a>
+			<a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/6/06-Maths-CE2-attendus-eduscol_1114736.pdf" target="_blank"><img src="{% static 'img/vignette_CE2.jpg' %}" width="60px"/></a>
+			<a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/8/08-Maths-CM1-attendus-eduscol_1114738.pdf" target="_blank"><img src="{% static 'img/vignette_CM1.jpg' %}" width="60px"/></a>
+			<a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/0/10-Maths-CM2-attendus-eduscol_1114740.pdf" target="_blank"><img src="{% static 'img/vignette_CM2.jpg' %}" width="60px"/></a>
+			<a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/2/12-Maths-6e-attendus-eduscol_1114742.pdf" target="_blank"><img src="{% static 'img/vignette_6e.jpg' %}" width="60px"/></a>
+			<a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/4/14-Maths-5e-attendus-eduscol_1114744.pdf" target="_blank"><img src="{% static 'img/vignette_5e.jpg' %}" width="60px"/></a>
+			<a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/6/16-Maths-4e-attendus-eduscol_1114746.pdf" target="_blank"><img src="{% static 'img/vignette_4e.jpg' %}" width="60px"/></a>
+			<a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/8/18-Maths-3e-attendus-eduscol_1114748.pdf" target="_blank"><img src="{% static 'img/vignette_3e.jpg' %}" width="60px"/></a>
+			<a href="https://cache.media.education.gouv.fr/file/SP1-MEN-22-1-2019/95/7/spe631_annexe_1062957.pdf" target="_blank"><img src="{% static 'img/vignette_2.jpg' %}" width="60px"/></a>
+			<a href="https://cache.media.education.gouv.fr/file/SP1-MEN-22-1-2019/16/8/spe632_annexe_1063168.pdf" target="_blank"><img src="{% static 'img/vignette_1.jpg' %}" width="60px"/></a>
+			<a href="https://cache.media.education.gouv.fr/file/SPE8_MENJ_25_7_2019/90/7/spe246_annexe_1158907.pdf" target="_blank"><img src="{% static 'img/vignette_T.jpg' %}" width="60px"/></a>
+
+		</div>
+	</div>
+	</section>
+	<section class="fullpage" id="about"> 
+	<h3 class="subtitle">A propos</h3>
+ 
+	<div class="row">                        
+ 
+	</div>
+	</section>
+
+	
+	<section class="fullpage" id="contact"> 
+	<h3 class="subtitle">Contact</h3>
+ 
+	 
+	</section> 
+
+
+
+ 
+
+
+{% endblock %}

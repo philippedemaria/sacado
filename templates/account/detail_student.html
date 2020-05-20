@@ -1,0 +1,155 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common4.js' %}"></script> 
+{% endblock %}
+
+
+ 
+{% block page_title %}
+    <i class="fa fa-trophy"></i> {{ student |truncatechars:"30" }} 
+
+    {% if request.user.user_type == 2 %}
+        {% if 'detail_student_theme' in request.path %}
+            {% if sprev_id %}<a href="{% url 'detail_student_theme' sprev_id theme.id %}"  class="btn btn-default"> Elève précédent </a>{% endif  %}
+            {% if snext_id %}<a href="{% url 'detail_student_theme' snext_id theme.id %}"  class="btn btn-default"> Elève suivant</a>{% endif  %}
+
+        {% elif 'detail_student_parcours' in request.path %}
+            {% if sprev_id %}<a href="{% url 'detail_student_parcours' sprev_id  parcours.id %}"  class="btn btn-default"> Elève précédent </a>{% endif  %}
+            {% if snext_id %}<a href="{% url 'detail_student_parcours' snext_id  parcours.id %}"  class="btn btn-default"> Elève suivant</a>{% endif  %}
+
+        {% elif 'detail_student_all_views' in request.path %}
+            {% if sprev_id %}<a href="{% url 'detail_student_all_views' sprev_id  %}"  class="btn btn-default"> Elève précédent </a>{% endif  %}
+            {% if snext_id %}<a href="{% url 'detail_student_all_views' snext_id  %}"  class="btn btn-default"> Elève suivant</a>{% endif  %}
+
+        {% else %}
+            {% if sprev_id %}<a href="{% url 'detail_student' sprev_id  %}"  class="btn btn-default"> Elève précédent </a>{% endif  %}
+            {% if snext_id %}<a href="{% url 'detail_student' snext_id  %}"  class="btn btn-default"> Elève suivant</a>{% endif  %}
+        {% endif %}
+    {% else %}
+
+        <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small>{{ theme }}</small>
+        
+    {% endif %}
+
+{% endblock %}
+
+
+
+{% block page_menu_right %}
+
+    {% if request.user.user_type == 0 %}
+        <li><a href="{% url 'detail_student_all_views' user.id %}"  class="no_button"  style="font-size:18px;"> Mon suivi</a></li>
+    {% else %}
+        <li><a href="{% url 'detail_student_all_views' student.user.id  %}"  class="no_button"  style="font-size:18px;{% if 'detail_student_all_views' in request.path %}color:#007EE2{% endif %}"> Synthèse</a></li>
+    {% endif %}
+
+
+
+
+
+
+
+
+        <li class="dropdown {% if 'result' not in request.url %} select_item {% endif %}"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"  style="font-size:18px;{% if 'detail_student_theme' in request.path %}color:#007EE2{% endif %}"> Suivi par thème </a>
+            <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+                <li><a href="{% url 'detail_student'  student.user.id  %}" ><i class="fa fa-caret-right"></i> Général</a></li>
+                {% for theme in themes %}
+                     <li><a href="{% url 'detail_student_theme'  student.user.id  theme.id  %}" ><i class="fa fa-caret-right"></i> {{ theme }}</a></li>
+                {% endfor %}
+            </ul>
+        </li>
+
+
+        <li class="dropdown {% if 'result' not in request.url %} select_item {% endif %}"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"  style="font-size:18px;{% if 'detail_student_parcours' in request.path %}color:#007EE2{% endif %}"> Suivi par Parcours </a>
+            <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+                {% for parcours in parcourses|dictsortreversed:"is_publish" %}
+                    <li >
+                        <a href="{% url 'detail_student_parcours'  student.user.id  parcours.id  %}" {% if not parcours.is_publish %}style="color:#BBB"{% endif %} >
+                            <i class="fa fa-caret-right"></i> {{ parcours.title }}    
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+
+
+
+{% endblock %}
+
+ 
+{% block body %}
+<section class="content_list"> 
+    <div class="col-xs-12 col-md-12" >
+ 
+
+        {% block datae %}
+            <table class="table table-bordered table-hover standard_tab_sort300">
+                <thead>
+                    <tr style="color:#FFF;background-color: {{ group.color }}">
+                        <td>{{ group.name }}<img width="25px" src="{% static 'img/angle-right-white.png' %}"/>    Savoir faire</td>
+                        <td style="width:150px">Score</td>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for theme in datas %} 
+                    <tr class="no_padding" style="color:#FFF;background-color: {{ group.color }};opacity:0.6">
+                        <td> {{ theme.name }} 
+                        </td>  
+                        <td> </td>              
+                    </tr>   
+                        {% for exercise in theme.exercises %} 
+                        <tr class="no_padding"  {% if not exercise.is_publish %} style="background-color:#F0F0F0"{% endif %} >
+                            <td {% if exercise.is_publish %} style="padding:0px"{% endif %}"> 
+                                <div {% if exercise.is_publish %} style="border-left: 4px solid #00AC18; padding:10px;min-height:53px"{% endif %}">
+                                <small><strong>{{ theme.name }}</strong></small>
+                                {{exercise.name.knowledge.name }} {% if exercise.name.annoncement %} - <em>{{exercise.name.annoncement|cleanhtml }} </em> {% endif %}
+                                </div>  
+                            </td>
+                            <td style="text-align: center"> 
+                                {% for sta  in exercise.scores  %}     
+                                    {% if sta.point != "" %}
+                                        <a class="markdown
+                                                {% if sta.point < 30 %}
+                                                 red 
+                                                {% elif sta.point < 60 %}
+                                                orange
+                                                {% elif sta.point < 80 %}
+                                                green
+                                                {% else %}
+                                                darkgreen
+                                                {% endif %}">
+                                            {{ sta.point }}
+                                        </a>
+                                    {% else %}
+                                        <a class="markdown"   > 
+                                              {{ sta.point }}
+                                        </a>
+                                    {% endif %}
+
+                                {% endfor %}
+
+
+
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+
+                    
+                {% endfor %}  
+                </tbody>      
+            </table>
+       
+        {% endblock %}
+ 
+    </div>
+
+</section>
+
+{% endblock %}

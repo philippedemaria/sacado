@@ -1,0 +1,94 @@
+{% extends 'layout.html' %}
+{% load item_tags %}
+{% load widget_tweaks %}
+{% load static %}
+
+
+{% block require %}
+           
+{% endblock %}  
+   
+    {% block general_js %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    <script type="text/javascript">
+    require(['script/accueil']); 
+    </script>
+    {% endblock %} 
+
+{% block body %}
+
+ 
+ 
+<section class="content_main"> 
+  <div class="logolevel">
+      {% with  level.image as level_image %}
+         <img src="{% static level_image %}"  />
+      {% endwith %}
+  </div>
+
+
+    <ul  class="nav nav-tabs">
+    	{% regroup exercises by theme as theme_list %} 
+			{% for theme in theme_list %}
+        <li {% if forloop.first %}class="active"{% endif %}><a  href="#{{ forloop.counter}}a" data-toggle="tab">{{ theme.grouper.name  }}</a></li>
+			{% endfor  %}
+    </ul>
+
+    <div class="tab-content clearfix">
+    	{% regroup exercises by theme as theme_list %}   
+			{% for theme in theme_list %}
+        <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ forloop.counter}}a">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <table class="table  table-hover display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <td></td>
+                            </tr>
+                        </thead>
+		                <tbody>
+                            {% regroup theme.list by knowledge as knowledge_list %} 
+
+                            {% for knowledge in knowledge_list %} 
+                                <tr>
+                                    <td class="listingtd">{{knowledge.grouper.name}}</td>
+                                </tr>
+                                {% for exercise in knowledge.list %} 
+                                <tr> 
+                                    <td >
+                                        <a href="{% url 'show_exercise' exercise.id %}" class="sublisting">
+                                            <img src="../../../../static/uploads/{{ exercise.supportfile.imagefile }}" class="imagefile">
+                                                    
+                                            {{ exercise.supportfile.annoncement|cleanhtml|capfirst  }} 
+                                                        {% if exercise.supportfile.calculator %}
+                                                          <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                                        {% else %}
+                                                          <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                                        {% endif  %}   <br>
+                                            <i class="fa fa-barcode"></i> {{ exercise.supportfile.code }}      <br>                                 
+                                            <i class="fa fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes<br>
+                                            <i class="fa fa-save"></i> {{ exercise.supportfile.situation }}  situation{{ exercise.supportfile.situation|pluralize }}
+
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% endfor %}
+		                </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+			{% endfor  %}
+    </div>
+</section>
+
+ 
+
+
+ 
+
+ 
+
+
+{% endblock %}

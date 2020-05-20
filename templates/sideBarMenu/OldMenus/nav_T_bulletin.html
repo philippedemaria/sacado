@@ -1,0 +1,32 @@
+ <div id="sidebar">
+    <div id="scroller">
+        <li>
+            <div class="panel-group">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href=' '><i class='fa fa-newspaper-o'></i> {{ mygroup.name }}  </a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <hr>
+        <li>
+            <div class="panel-group">
+                    {% if group.id in request.path %}
+                        <div class="panel panel-primary">
+                    {% else %}
+                        <div class="panel panel-default">
+                    {% endif %}
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href=' '><i class='fa fa-newspaper-o'></i> {{ group.name }} </a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </div>
+</div>
+

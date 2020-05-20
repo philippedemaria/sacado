@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+
+
+{% block require %}
+        require(['script/accueil']);     
+{% endblock %}  
+   
+    {% block general_js %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% endblock %} 
+
+{% block body %}
+
+ 
+ 
+<section class="content_main"> 
+  
+    <ul  class="nav nav-tabs">
+    	{% regroup exercises by theme as theme_list %} 
+			{% for theme in theme_list %}
+        <li {% if forloop.first %}class="active"{% endif %}><a  href="#{{ forloop.counter}}a" data-toggle="tab">{{ theme.grouper.name  }}</a></li>
+			{% endfor  %}
+    </ul>
+
+    <div class="tab-content clearfix">
+    	{% regroup exercises by theme as theme_list %} 
+			{% for theme in theme_list %}
+        <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ forloop.counter}}a">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <table class="table table-striped table-hover display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <td>Nom</td>
+                            </tr>
+                        </thead>
+		                <tbody>
+	                        {% for exercise in theme.list %} 
+	                        <tr> 
+	                          	<td >
+	                             	<a href="{% url 'show_exercise' exercise.id %}">{{ exercise.knowledge.name }}</a>
+	                          	</td>
+	                        </tr>
+	                        {% endfor %}
+		                </tbody>
+                    </table>
+
+
+
+                </div>
+            </div>
+        </div>
+			{% endfor  %}
+    </div>
+</section>
+
+ 
+
+
+ 
+
+ 
+
+
+{% endblock %}

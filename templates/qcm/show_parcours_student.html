@@ -1,0 +1,127 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+    {% if parcours %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+
+    <script>
+        require(['script/ajax-parcours']);
+    </script> 
+
+{% endblock %} 
+
+
+
+
+
+ 
+ 
+
+{% block page_title %}
+<span  style="color:{{ parcours.color }}"> <i class="fa fa-map"></i>   {{ parcours }} 
+ 
+ 
+<img src="{% static 'img/angle-right.png' %}"/> 
+<small class="thin">{{ nb_exercises }} exercice{{ nb_exercises|pluralize }}</small> </span>
+{% endblock %}
+
+{% block page_menu_right %}
+ <font style="font-size:16px">{{ today|date:"d N Y, H:i" }}</font> <a href="{%  url 'profile' %}" style="font-size:11px" title="Régler le fuseau horaire"><i class="fa fa-clock"></i></a>
+{% endblock %}
+
+ 
+
+{% block body %}
+ 
+      
+<section class="content_list"> 
+
+    {% for relation in relationships %}
+        {%  if relation.exercise.supportfile.is_title %}       
+            <h2 class="listing thin" style="width:100%; clear:both"> {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}</h2>
+        {%  elif relation.exercise.supportfile.is_subtitle %}
+            <h3 class="listing thin" style="width:100%; clear:both"> {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}</h3>
+       {% else %} 
+
+            {%  get_last_score_and_time   relation.exercise   relation.parcours   student    as    data %}
+            <div class="card_freeze" {% if data.score %} style="opacity:0.3" {% endif %}>
+                <div class="card-body student">
+                    <span style="font-size: 40px; padding-left:3px;float:left; padding-top: 10px; {% if not data.score %} color: {{ relation.parcours.color}} ;  {% endif %} ">
+                        {{ nb_exo_only|index:forloop.counter0 }}.</span> 
+                    <div class="card-score-student"  >
+                      
+                            {% if data.score %}
+                                <span class="markdown
+                                        {% if data.score < 30 %}
+                                         red 
+                                        {% elif data.score < 60 %}
+                                        orange
+                                        {% elif data.score < 80 %}
+                                        green
+                                        {% else %}
+                                        darkgreen
+                                        {% endif %}">
+                                    {{ data.score }}
+                                </span> <font style="font-size:10px">{{ data.time}}</font>
+                            {% else %}
+                                <span class="markdown"> 
+                                      {{ data.score }}
+                                </span>
+                            {% endif %}
+                    </div>
+                    {% if lc.calculator %}
+                      <img src="{% static 'img/calculator.png' %}" class="pull-right" width="35px" />
+                    {% else %}
+                      <img src="{% static 'img/no_calculator.png' %}" class="pull-right"   width="35px" />
+                    {% endif  %} 
+                </div>                    
+                <div class="card-image">
+                    {% if student %}
+                    <a href="{% url 'execute_exercise'  relation.parcours.id  relation.exercise.id   %}">  <img src="../../../static/uploads/{{ relation.exercise.supportfile.imagefile }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.3" {% endif %}    ></a>
+                    {% else %}
+                    <a href="#" class="detail_parcours"  data-exercise_id="{{ relation.exercise.id }}"  data-num_exo="{{ forloop.counter}}"
+                                               data-parcours_id="{{ parcours.id }}">
+                                                <img src="../../../static/uploads/{{ relation.exercise.supportfile.imagefile }}" class="image_parcours" {% if not relation.is_publish %} style="opacity:0.3" {% endif %}  >
+                                               </a> 
+                    {% endif  %}
+                    {% if  relation.date_limit %}
+                        {% if not data.score %} 
+                            <div  class="btn btn-danger"  style="position: absolute; right : 0px; top:120px;">   
+                                  Avant le {{relation.date_limit|date:"d N Y" }}
+                            </div>
+                        {% endif %}    
+                    {% endif %}   
+                    <div class="card-text" style="background-color:{{ parcours.color }}">
+                        <i class="fa fa-barcode"></i> {{ relation.exercise.supportfile.code }}  
+                        <i class="fa fa-clock-o"></i> {{ relation.duration }} min.
+                        <i class="fa fa-save"></i> {{ relation.situation}}
+                    </div>
+                </div>
+            </div> 
+
+        {% endif %}          
+
+    {% endfor %}
+
+
+ 
+
+ 
+
+
+</section>
+ 
+   
+{% endblock %}
+
+ 
+ 
+ 
+ 

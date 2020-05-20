@@ -1,0 +1,115 @@
+{% extends 'dashboard.html' %}
+{% load item_tags %}
+{% load widget_tweaks %}
+{% load static %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+{% endblock %} 
+
+
+
+
+{% block page_title %}
+    <i class="fa fa-laptop"></i>  {% if parcours   %} {{ parcours.title }}{% else %} {{ student.level.name}} {% endif %}<img src="{% static 'img/angle-right.png' %}"/>  {{ nb_exercises  }} exercice{{ nb_exercises|pluralize }} pour s'entrainer  
+{% endblock %}
+
+{% block page_menu_right %}
+    
+{% endblock %}
+
+
+
+{% block body %}
+
+
+<section class="content_main">  
+
+    <ul class="nav nav-tabs">
+        {% regroup relationships by exercise.theme  as theme_list %}  
+            {% for theme in theme_list %}
+                <li {% if forloop.first %}class="active"{% endif %}><a  href="#{{ forloop.counter}}a" data-toggle="tab">{{ theme.grouper  }}</a></li>
+            {% endfor  %}
+    </ul>
+
+    <div class="tab-content clearfix">
+    {% regroup relationships by exercise.theme as theme_list %} 
+        {% for theme in theme_list %}
+        <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ forloop.counter}}a">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <table class="table  table-hover display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <td>Exercices</td>
+                                <td>Score/temps</td>
+                                <td>Bonus</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for relationship in theme.list|dictsort:"order" %} 
+                            <tr> 
+                                <td class="sublistingtd"> 
+                                           
+                                     <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" class="listing" >  {{ relationship.exercise|capfirst }}</a>
+                                    {% if exercise.supportfile.calculator %}
+                                      <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                    {% else %}
+                                      <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                    {% endif  %}   <br>
+                                            <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" >  
+                                            <img src="../../../static/uploads/{{ relationship.exercise.supportfile.imagefile }}" class="imagefile"></a>
+                                                                        
+                                    {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }} <br>
+                                    <span style="font-size:16px;">    
+                                        <i class="fa fa-barcode"></i> {{ relationship.exercise.supportfile.code }} {% if knowledge.name|make_list|length < 140 %}<br>{% endif %}
+                                        <i class="fa fa-clock-o"></i> {{ relationship.exercise.supportfile.duration }} minutes {% if knowledge.name|make_list|length < 140 %}<br>{% endif %}
+                                        <i class="fa fa-save"></i> {{ relationship.exercise.supportfile.situation}} situation{{ relationship.exercise.supportfile.situation|pluralize}}  minimum
+                                    </span>
+                              	</td>
+                                <td  style="text-align: center;">
+                                    {% get_score_and_time  relationship.exercise student as st_list %}
+                                    {% for st in st_list %} 
+                                         <div  class="markdown
+                                        {% if st.score < 30 %}
+                                         red 
+                                        {% elif st.score < 60 %}
+                                        orange
+                                        {% elif st.score < 80 %}
+                                        green
+                                        {% else %}
+                                        darkgreen
+                                        {% endif %}" style="font-size:10px">
+                                            <span href="#" data-container="body"
+                                             data-toggle="popover"  data-placement="top"
+                                             data-trigger="hover"
+                                             data-content="en {{ st.time }} min.">{{ st.score }}% 
+                                            </span>
+                                        </div>  
+                                    {% endfor %}
+                                </td>
+                                <td  style="text-align: center;">
+                                    {% for r in relationship.exercise.exercise_remediation.all %}
+                                        <a href="{% url 'show_remediation' r.id %}">
+                                        {% if r.mstyle %} 
+                                            <img src="{% static 'img/ggb.png' %}" width="20px" />
+                                        {% else %}
+                                            <img src="{% static 'img/pdf.png' %}" width="20px"  />
+                                        {% endif %}
+                                        </a>
+                                    {% endfor %}
+                                </td> 
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    	{% endfor  %}
+    </div>
+ 
+</section> 
+ 
+{% endblock %}

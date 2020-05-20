@@ -1,0 +1,153 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+
+
+    {% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3.js' %}"></script>
+    {% endblock %}
+
+
+ 
+
+{% block page_title %}
+      <i class="fa fa-{% if  'parcours_task_and_publish' in request.path %}calendar-o{% else %}cogs{% endif %}" style="color:{{ parcours.color }}"></i> <span style="color:{{ parcours.color }}">{{ parcours.title }} </span>   <small style="font-weight: 100" ><img src="{% static 'img/angle-right.png' %}"/> Par défaut     <img src="{% static 'img/angle-right.png' %}"/>
+      {% if  'parcours_task_and_publish' in request.path %}
+      Tâches et publications
+      {% else %}
+      Ordonner les exercices
+      {% endif %}
+      </small>
+{% endblock %}
+
+
+
+{% block page_menu_right %}
+   <li>
+        <a href="{% url 'peuplate_parcours'  parcours.id %}"   class="no_button" ><i class="fa fa-tasks"></i> Sélectionner les exercices</a> 
+    </li>
+    <li>
+        <form action="" method="POST" enctype='multipart/form-data'>     {% csrf_token %}
+        <a href="#" class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" style="margin-top:-5px;margin-left:15px;padding:7px;font-size:18px;font-weight: 100" id="parcours_publisher"  data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}" >  
+          {% if parcours.is_publish %} Parcours publié  {% else %} Parcours dépublié {% endif  %} 
+        </a>
+        </form>
+    </li>
+{% endblock %}
+
+
+
+
+
+{% block body %} 
+<style>
+.panel {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+}
+ 
+body{
+  overflow: hidden;
+}
+
+ 
+
+</style>
+<div class="col-sm-12 col-md-12">
+    <section class="content_list"> 
+        <form action="#" method="POST"> 
+        <input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
+        {% csrf_token %} 
+          <div class="row">
+                  {% for data in data_tab %}
+                  <div  class="panel-section"  id="theme{{ data.theme.id }}" style="clear:both" />
+                      <input type="hidden" value="{{ data.theme.id }}" name="input_theme_id" class="div_theme_id"/><!--  sert à classer les thèmes  -->
+                      <div class="panel-title"> 
+                          <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter}}" class="listing" style="font-size:24px;padding-left:15px;clear:both">
+                              <i class="fa fa-caret-right"></i> {{ data.theme }} 
+                          </a>
+                          {% get_all_details  data.theme  parcours as detail_theme %} 
+                          <div class="pull-right" style="font-size: 20px; margin-top: 7px;">
+                              <span style="margin-right: 15px;">Exercices publiés : <strong>{{ detail_theme.pub}}</strong>/<strong>{{ detail_theme.total}}</strong></span>
+                              <span style="margin-right: 15px;">Tâches proposées : <strong>{{detail_theme.done}}</strong></span>
+                              <span> en cours : <strong>{{detail_theme.in_air}}</strong></span>
+                          </div>
+                      </div>
+                      <div id="collapse{{ forloop.counter}}" class="panel-collapse collapse in">
+                          <div class="panel panel-default exercise_sortable" style="border-radius:5px" id="miseEnAttenteDashboard"><!--  sert à classer les exercices  -->
+                              {% for relation in data.relationships|dictsort:"order" %} 
+                                    
+                                    {%  if relation.exercise.supportfile.is_title %}       
+                                        <h2 class="listing thin" style="width:100%; clear:both"> {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}</h2>
+                                    {%  elif relation.exercise.supportfile.is_subtitle %}
+                                        <h3 class="listing thin" style="width:100%; clear:both"> {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}</h3>
+                                    {% else %}  
+                                        <div class="card_freeze" style="{% if not relation.is_publish %}background-color: #CCC{% else %}background:#FFF{% endif %}">
+                                            <div class="card-body" style="height:50px;">
+                                                <input type="hidden" value="{{ relation.exercise.id }}" name="input_exercise_id" class="div_exercise_id"/><!--  sert à classer les thèmes  -->
+                                                <a href="" style="cursor:move;" class="move_inside">
+                                                {% if relation.is_publish %}
+                                                    <img src="{% static 'img/move_publish.png' %}" width="22px"  /> 
+                                                {% else %}
+                                                    <img src="{% static 'img/move.png' %}" width="22px"  />
+                                                {% endif %}
+                                                </a><strong>{{forloop.counter}}.</strong>
+                                                <font style="font-size: 14px">  {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}   </font>
+                                            </div>                    
+                                            <div class="card-image">
+                                        {% if relation.exercise.supportfile.calculator %}
+                                          <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                        {% else %}
+                                          <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                        {% endif  %} 
+
+                                                <a href="#" class="detail_parcours"  data-exercise_id="{{ relation.exercise.id }}"  data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}">
+                                                     <img src="../../../static/uploads/{{ relation.exercise.supportfile.imagefile }}"  class="image_parcours_order"  {% if not relation.is_publish %} style="opacity:0.5;" {% endif %}  >
+                                                </a> 
+                                                <div class="card-text" style="background-color:{{ parcours.color }}">
+
+                                                    <i class="fa fa-barcode"></i> {{ relation.exercise.supportfile.code }}  
+                                                    <i class="fa fa-clock-o"></i> {{ relation.exercise.supportfile.duration }} min.
+                                                    <i class="fa fa-save"></i> {{ relation.exercise.supportfile.situation}}
+                                                    <i class="fa fa-calculator"></i> OUI
+
+                                                    <a href="{% url 'create_evaluation' parcours.id  relation.exercise.id 1 %}" class="white pull-right"><i class="fa fa-graduation-cap"></i> ?</a>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        {% if forloop.counter|divisibleby:"4"  %}
+                                            <div style="clear:both"></div>
+                                        {% endif %}
+                                    {% endif %} 
+                               {% endfor %}
+                          </div>
+                      </div>
+                  </div>
+                  {% empty %}
+                      <h3 class="thin" style="padding-left: 10px">Aucun thème</h3>
+                  {% endfor %}
+
+          </div>
+        </form>
+        <div class="row">
+            <div  style="margin-top: 20px">
+                <div class="form-group">
+                    <a href="{% url 'groups' %}"  class="btn btn-subsacado "/><i class='fa fa-users'></i> Retour vers Mes groupes</a>
+                    {% if parcours %}
+                    <a href="javascript:history.back()"  class="btn btn-subsacado "/><i class='fa fa-map'></i> Retour vers {{ parcours }}</a>
+                    {% endif %}
+                    <a href="{% url 'parcours' %}"  class="btn btn-subsacado "/><i class='fa fa-map'></i> Retour vers Mes parcours</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+
+ 

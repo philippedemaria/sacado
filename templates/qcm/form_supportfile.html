@@ -1,0 +1,267 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+    {% if supportfile %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+
+    <script>
+        require(['script/ajax-exercise']);
+    </script> 
+ <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+{% endblock %}
+
+ 
+
+{% block page_title %}
+
+<div id="new_style">
+    <img src="{% static 'img/ggb.png' %}" width="25px"> Fichier GGB 
+    {% if knowledge  %}
+    <small>         
+        {{ knowledge.level.shortname }}, {{ knowledge.theme.name }},  {{ knowledge.name|truncatechars:"80" }}
+    </small>  
+    {% endif %} 
+</div>
+{% endblock %}
+
+{% block page_menu_right %}
+ 
+{% endblock %}
+
+
+
+
+{% block body %}
+<style>
+ul#id_skills li{
+    list-style: none;
+}
+</style>
+        
+<div class="content_main">
+         
+
+
+    <div class="col-xs-12 col-md-12" >  
+        
+
+        <form action="" method="POST" enctype='multipart/form-data'> 
+            {% csrf_token %}
+ 
+            <div class="row" id="standard_layer">
+
+                {% if knowledge %}
+                        <input value="{{ knowledge.level.id }}" name="level" id="id_level" type="hidden" />
+                        <input value="{{ knowledge.theme.id }}" name="theme" id="id_theme" type="hidden" />
+                        <input value="{{ knowledge.id }}" name="knowledge" id="id_knowledge" type="hidden" />
+                {% else %}  
+                <div class="row">
+                    <div class="col-sm-12 col-md-3">
+                        <div class="form-group">
+                            {{ form.level.label_tag }}
+                            {{ form.level |add_class:"form-control select2" }}
+                            {{ form.level.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-9">
+                        <div class="form-group">
+                            {{ form.theme.label_tag }}
+                            {{ form.theme |add_class:"form-control select2" }}
+                            {{ form.theme.errors }}
+                        </div>
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                            {{ form.knowledge.label_tag }}
+                            {{ form.knowledge |add_class:"form-control select2" }}
+                            {{ form.knowledge.errors }}
+                        </div>
+                    </div>
+                </div> 
+                {% endif %}  
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                {{ form.annoncement.label_tag }} <small><em>A privilégier</em></small>
+                                {{ form.annoncement |add_class:"form-control"|attr:"rows:3" }}
+                                {{ form.annoncement.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-7">
+                            <div class="form-group">
+                                {{ form.imagefile.label_tag }}
+                                {{ form.imagefile |add_class:"btn btn-default" }}
+                                {{ form.imagefile.errors }}
+                                <font style="font-size:12px;color:#c70000">largeur : 750px - hauteur : 550px.</font>
+                            </div>
+                            <div class="form-group">
+                                {{ form.ggbfile.label_tag }} 
+                                {{ form.ggbfile |add_class:"btn btn-default" }}
+                                {{ form.ggbfile.errors }}
+                                <font style="font-size:12px;color:#c70000">Le nom du fichier ne doit comporter ni accent, ni espace.</font>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-5">
+                            <div class="form-group">
+                                Compétences ciblées<br>
+                                {{ form.skills   }}
+                                {{ form.skills.errors }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-3">
+                        <div class="form-group">
+                            {{ form.duration.label_tag }}
+                            {{ form.duration |add_class:"form-control" }}
+                            {{ form.duration.errors }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.situation.label_tag }}
+                            {{ form.situation |add_class:"form-control" }}
+                            {{ form.situation.errors }}
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    {{ form.width.label_tag }}
+                                    {{ form.width |add_class:"form-control" }}
+                                    {{ form.width.errors }}
+                                    <font style="font-size:12px;">Largeur : 750px.</font>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    {{ form.height.label_tag }}
+                                    {{ form.height |add_class:"form-control" }}
+                                    {{ form.height.errors }}
+                                    <font style="font-size:12px;">hauteur : 550px.</font>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.calculator.label_tag }}
+                            {{ form.calculator |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                            {{ form.calculator.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-3">
+                        <h4 class="thin"><i class="fa fa-cog"></i> Configuration du fichier ggb</h4><hr/>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-8">
+                                <div class="form-group">
+                                    Barre d'outils ?
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    {{ form.toolBar |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                    {{ form.toolBar.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-8">
+                                <div class="form-group">
+                                   Barre de menu ?
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    {{ form.menuBar |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                    {{ form.menuBar.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-8">
+                                <div class="form-group">
+                                    Multi-fenêtres ?
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    {{ form.algebraInput |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                    {{ form.algebraInput.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-8">
+                                <div class="form-group">
+                                    Bouton Reset ?
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    {{ form.resetIcon |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                    {{ form.resetIcon.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-8">
+                                <div class="form-group">
+                                    Zoom/déplacement ?
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    {{ form.dragZoom |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                    {{ form.dragZoom.errors }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <input value="Enregistrer" type="submit" class="btn btn-sacado"/>
+                            <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                        </div>
+                    </div>
+                </div>
+                {% if supportfile %}
+                    {% if supportfile.levels_used|length > 0  %}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">                                             
+                            <a href="#" class="btn btn-danger" style="margin-left:5px" disabled > 
+                                <i class="fa fa-trash"> </i>   Suppression impossible - support utilisé
+                            </a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">                                             
+                            <a href="{% url 'delete_supportfile' supportfile.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('ce support GGB')" > 
+                                <i class="fa fa-trash"> </i>   Supprimer
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            </div> 
+        </form>
+ 
+
+    </div> 
+
+
+
+</div>    
+
+
+
+{% endblock %}

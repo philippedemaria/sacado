@@ -1,0 +1,37 @@
+{% load static %}
+{% load item_tags %}
+
+ 
+{% get_scores  relationship.exercise  student as scores %}
+
+{% get_score  relationship.exercise  student as score %}
+
+{% if score != "" %}
+    <a class="markdown
+            {% if score < 30 %}
+             red 
+            {% elif score < 60 %}
+            orange
+            {% elif score < 80 %}
+            green
+            {% else %}
+            darkgreen
+            {% endif %}"
+          href="{% url 'show_this_exercise'  relationship.exercise.id   %}" data-container="body"
+          data-toggle="popover" style="border : 1px solid {{student.get_exercises.parcours.color }}"
+          data-trigger="hover" data-placement="top"
+          title="Exercice : {{ scores }}"
+          data-content="{{ relationship.exercise.knowledge.name }}">
+        {{ score }}
+    </a>
+{% else %}
+    <a class="markdown"                                                   
+          href="{% url 'show_this_exercise' relationship.exercise.id %}" data-container="body"
+          data-toggle="popover" style="border : 1px solid {{student.get_exercises.parcours.color }}"
+          data-trigger="hover"
+          title="Exercice" data-placement="top"
+          data-content="{{ relationship.exercise.knowledge.name }}"> 
+          {{ score }}
+    </a>
+{% endif %}
+

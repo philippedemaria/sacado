@@ -1,0 +1,19 @@
+{% load scores %}
+ 
+
+{% regroup items by competency as competency_list %}
+
+{% for competency in competency_list %}
+    <h3>{{ competency.grouper.name }}</h3>
+    <ul>
+        {% for item in competency.list %}
+
+                        {% get_nb_evaluated item teacher_id as nbre %}			        	
+			            {% if nbre > 0 %} <li class='sanspucelistsocle'> <i class='fa fa-check green'></i>{% else %} <li>{% endif %}
+
+           {{ item }}</li>
+        {% endfor %}
+    </ul>
+{% empty %}
+    Aucun item de compétence associé à cette matière et ce cycle.
+{% endfor %}

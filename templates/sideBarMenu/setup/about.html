@@ -1,0 +1,215 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+{% block general_js %}
+    {% if test %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-action2.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-index.js' %}"></script>
+    {% endif %}
+{% endblock %}
+
+{% block breadcrumbs  %}
+ <div class="breadcrumbs">
+		Consignes et mode d'emploi de l'interface
+ </div>
+{% endblock  %}
+
+{% block body  %}  
+ 
+
+
+<style>
+
+* {box-sizing: border-box}
+
+/* Style the tab */
+.tab {
+  float: left;
+  border: 1px solid #96a1aa;
+  background-color: #d5e2ed;
+  width: 17%;
+  height: 100%;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  display: block;
+  background-color: inherit;
+  color: black;
+  padding: 22px 16px;
+  width: 100%;
+  border: none;
+  outline: none;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #9fabb5;
+}
+
+/* Create an active/current "tab button" class */
+.tab button.active {
+  background-color: #aab5bf;
+}
+
+/* Style the tab content */
+.tabcontent {
+  float: left;
+  padding: 0px 12px;
+ 
+  width: 75%;
+  border-left: none;
+  height: 100%;
+}
+</style>
+ 
+ <div class="row" style="margin-right:0px">
+    <div class="col-sm-12 col-md-12">
+ 
+ 
+			<div class="tab">
+        {% if user.user_type == 2 %} <button class="tablinks" onclick="openTab(event, 'pass_the_test')" id="defaultOpen">Faire passer le test</button>{% endif %}
+				{% if user.is_superuser %} 
+            <button class="tablinks" onclick="openTab(event, 'create_test')" id="defaultOpen">Créer un test</button> 
+				    <button class="tablinks" onclick="openTab(event, 'duplicate_test')" id="defaultOpen">Dupliquer un test</button>
+        {% endif %}
+				{% if user.is_superuser and user.is_staff %} 
+            <button class="tablinks" onclick="openTab(event, 'create_item')">Créer une question</button>
+        {% endif %}
+
+				{% if user.user_type == 2 %} <button class="tablinks" onclick="openTab(event, 'create_group')" id="defaultOpen">Créer un groupe</button>{% endif %}
+				{% if user.user_type == 2 %} <button class="tablinks" onclick="openTab(event, 'associate_student')" id="defaultOpen">Associer un élève</button>{% endif %}
+				{% if user.user_type == 2 %} <button class="tablinks" onclick="openTab(event, 'read_results')" id="defaultOpen">Lire les résultats</button>{% endif %}
+				{% if user.user_type == 2 %} <button class="tablinks" onclick="openTab(event, 'print_results')" id="defaultOpen">Imprimer les résultats</button>{% endif %}
+			</div>
+       
+ 
+      {% if user.is_superuser %}
+      <div id="pass_the_test" class="tabcontent">
+        <h3>Faire passer le test</h3>
+         <p>A partir du tableau de bord <a href="{% url 'dashboard' %}">ici</a>, Cliquer sur <button class="btn btn-defaut">Proposer le test à ce groupe </button></p>
+        <div class="alert alert-danger">Dès que le bouton devient rouge, le test est visible par les élèves du groupe.</div>
+        <p>Les élèves ont le temps prévu par le test pour passer le test. Après ce temps déterminé, leur session se cloture.</p>
+        <p><strong>La page d'accueil du test ne décompte pas le temps imparti</strong>. Il est important que les élèves comprennent ce qu'il y est écrit.</p> <p>Ils doivent cocher la case prévue à cet effet pour commencer le test.</p> 
+      </div>
+			<div id="create_test" class="tabcontent">
+			  <h3>Créer un test</h3>
+			     <p> Se rendre sur la page  <a href="{% url 'create_test' %}">Créer un test</a>.</p>
+        <ol>
+        <li>Renseigner le nom du test. Cela permettra de l'identifier facilement. </li>
+        <li>Renseigner les mots clés éventuels. </li>
+        <li>Renseigner le descriptif qui s'affiche en page d'introduction lors de la passation du test.  Sur cet exemple, le texte descriptif est :
+            <p><em><small>Vous venez de rentrer en classe de Seconde. Ce test de positionnement prépare votre accompagnement personnalisé en vérifiant vos points forts et vos faiblesses. Voici les détails de ce tests que vous devez lire attentivement.</small></em></p>
+        </li>
+
+        <img src="{% static 'img/intro_test.png' %}" width="800px" />
+
+        <li>Choisir les caractéristiques du test qui sont affichées sur la page d'introduction du test (ci-dessus) selon les choix sélectionnés. </li>
+
+        </ol>
+
+ 
+
+
+        <h3>Attribuer des questions à un test</h3>
+            <p>une fois le test créé et la banque de questions créée, aller sur le tableau de bord, puis cliquer sur  <i class="fa fa-link"></i> Associer des questions </p>
+            <p><strong> Conseil </strong>: pour lire toute les questions, afficher 100 entrées sur la partie des questions.</p>
+            <p>Cocher les questions souhaitées puis cliquer sur le bouton <button class="btn btn-primary"> Associer/Dissocier les questions </button>.</p>
+			</div>
+			<div id="duplicate_test" class="tabcontent">
+			  <h3>Dupliquer un test</h3>
+			  <p>A partir du tableau de bord <a href="{% url 'dashboard' %}">ici</a>, utiliser <button class="btn btn-defaut"><i class="fa fa-link"></i> Dupliquer le test </button></p>
+			</div>
+
+
+
+      {% endif %}
+			{% if user.is_superuser and user.is_staff %} 
+      <div id="create_item" class="tabcontent">
+			  <h3>Créer une question</h3>
+        <p>Se rendre sur la page <a href="{% url 'create_item' %}">Créer une question</a> et sélectionner les caractéristiques de la questions.</p>
+        <h3>Attribuer des questions à un test</h3>
+            <p>une fois le test créé et la banque de questions créée, aller sur le tableau de bord, puis cliquer sur  <i class="fa fa-link"></i> Associer des questions </p>
+            <p><strong> Conseil </strong>: pour lire toute les questions, afficher 100 entrées sur la partie des questions.</p>
+            <p>Cocher les questions souhaitées puis cliquer sur le bouton <button class="btn btn-primary"> Associer/Dissocier les questions </button>.</p>
+
+
+
+
+
+        
+			</div>
+      {% endif %}
+			<div id="create_group" class="tabcontent">
+			  <h3>Créer un groupe</h3>
+        <p> Vous avez trois possibilités pour créer un groupe.</p>
+        <ol>
+        <li><strong>Via le tableau de bord</strong>
+            <p>Cliquer sur le bouton <button class="btn btn-defaut"><i class="fa fa-plus"></i> Créer un groupe </button></p>
+        </li>
+        <li><strong>Via le menu</strong>
+            <p> Par l'icone Groupes <i class="fa fa-users fa-2x"></i> du menu.</p>
+        </li>
+
+        <li>Ou directement par <a href="{% url 'create_group' %}">ici</a> </li>
+        </ol>
+        L'icone de la page Groupes <i class="fa fa-users"></i>  permet de lister les élèves du groupes. Le nombre d'élèvs du groupes est inscrit à coté de l'icone. <a href="{% url 'groups' %}">Voir</a></p>      
+        <h3>Modifier un groupe</h3>			
+        <p> Se rendre sur la page  <a href="{% url 'groups' %}">des groupes</a> et cliquer sur le nom du groupe.</p>
+        <h3>Supprimer un groupe</h3>     
+        <p> Se rendre sur la page  <a href="{% url 'groups' %}">des groupes</a> et cliquer sur la poubelle en bout de ligne du groupe. <font class="text-danger">Attention action irréversible</font>.</p>
+
+
+
+      </div>
+			<div id="associate_student" class="tabcontent">
+			  <h3>Associer un élève</h3>
+			  <p>L'association des élèves se fait directement par les élèves. Chaque élève doit s'inscrire sur cette interface et créer son espace propre. </p>
+        <p>Vous devez d'abord créer vos groupes, puis donner  à chaque élève le code de son groupe.</p>
+        <p> Lors de leur inscription, le code leur sera nécessaire pour s'identifier. Dès son inscription, chaque élève sera directement assigné dans le groupe dont il aura renseigné le code. </p>
+        <p><strong>Imprimer le code du groupe.</strong></p>
+        <p>Dans la page Groupes, cliquer sur l'icone <i class="fa fa-print"></i> à coté du code. Une fiche imprimable contenant le code du groupe sera éditée. Il ne vous restrera plus qu'à l'imprimer et à distribuer le code à vos élèves.</p>
+        <p><a href="{% url 'groups' %}">Voir</a></p>
+
+			</div>
+			<div id="read_results" class="tabcontent">
+			  <h3>Lire les résultats</h3>
+			  <p>A partir du tableau de bord, cliquer sur le lien <i class="fa fa-trophy"></i> Résultats du groupe choisi. <a href="{% url 'dashboard' %}">Voir</a></p>
+			</div>
+			<div id="print_results" class="tabcontent">
+			  <h3>Imprimer les résultats</h3>
+        <p>A partir du tableau de bord, cliquer sur le lien <i class="fa fa-trophy"></i> Résultats  du groupe choisi. <a href="{% url 'dashboard' %}">Voir</a></p>
+        <p>En haut de la page Résultats, cliquer sur le lien en bleu : Imprimer les résultats du groupe.</p>
+			</div>
+
+        
+    </div>
+ </div>
+
+ <script>
+function openTab(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+</script>
+
+{% endblock  %}

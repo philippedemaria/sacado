@@ -1,0 +1,67 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+{% block general_js %}
+    {% if knowledge %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-action2.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-index.js' %}"></script>
+    {% endif %}
+{% endblock %}
+
+ 
+
+{% block page_title %}
+     Niveau  <img src="{% static 'img/angle-right.png' %}"/>  
+     {% if level %}
+     <small>Modification</small>
+    {% else %}
+     <small>Nouveau niveau</small>
+    {% endif %} 
+{% endblock %}
+
+{% block page_menu_right %}
+{% endblock %}
+
+{% block body  %} 
+<section class="content_main"> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <form method="post" action="" enctype='multipart/form-data'>
+            {% csrf_token %}
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <label>{{ form.name.label_tag }}</label>
+                            {{ form.name |add_class:"form-control" }}
+                            {{ form.name.errors }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-3">
+                        <div class="form-group">
+                            <label>{{ form.shortname.label_tag }}</label>
+                            {{ form.shortname |add_class:"form-control" }}
+                            {{ form.shortname.errors }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        {% if level %}
+                        <button type="submit" class="btn btn-sacado">Enregistrer les modifications</button>   
+                        {% else %}
+                        <button type="submit" class="btn btn-sacado">Créer le niveau</button> 
+                        {% endif %}
+                        <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock  %}   

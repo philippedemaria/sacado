@@ -1,0 +1,97 @@
+<tr id="new_exercice{{ exercise.id }}">
+    <td>
+        <div id="association{{ exercise.id }}" > 
+            {% include 'qcm/ajax_association.html' %}
+        </div>
+   </td>
+    <td> <small>A remplacer par</small> 
+         <input type="text" id="update_code{{ exercise.id }}" class="form-control" placeholder="code du support" />                               
+
+
+
+         <a href="#row{{ exercise.knowledge.id }}" data-exercise_id="{{ exercise.id }}" data-action="update" class="btn btn-primary update_association"   ><i class="fa fa-pencil-square-o"></i></a> 
+        
+         
+         <a href="#row{{ exercise.knowledge.id }}" 
+            data-exercise_id="{{ exercise.id }}" 
+            data-action="delete" 
+            class="btn btn-danger {% if not exercise.is_used %}delete_association{% endif %}"
+             {% if exercise.is_used %} disabled title="Déjà utilisé"{% endif %}  ><i class="fa fa-trash"></i>
+        </a> 
+
+        <div id="error_str{{ exercise.id }}" style="color:red"></div>                                        
+    </td> 
+</tr>
+
+    <script>
+ 
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('.update_association').on('click', function (event) {
+
+            let exercise_id = $(this).attr("data-exercise_id");
+            let action = $(this).attr("data-action");
+            let code = $("#update_code"+exercise_id).val();
+                if (code == "") { alert("Vous devez renseigner le code d'un support."); return false; }                
+                if (!confirm("Vous souhaitez modifier l'association avec ce support "+code+" ?")) return false; 
+           
+
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            console.log(exercise_id+"----"+action+"----"+code);
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'code': code,
+                        'exercise_id': exercise_id,
+                        'action': action,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "ajax_update_association",
+                    success: function (data) {
+
+                        $("#association"+exercise_id).html("").append(data.html) ;
+                        $("#error_str"+exercise_id).html("").append(data.error) ;
+
+                    }
+                }
+            )
+        });
+
+
+
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('.delete_association').on('click', function (event) {
+
+            let exercise_id = $(this).attr("data-exercise_id");
+            let action = $(this).attr("data-action");
+            if (!confirm("Vous souhaitez supprimer l'association avec ce support ?")) return false;  
+     
+
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            console.log(exercise_id+"----"+action);
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'exercise_id': exercise_id,
+                        'action': action,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "ajax_update_association",
+                    success: function (data) {
+
+                        $("#new_exercice"+exercise_id).remove() ;
+                    }
+                }
+            )
+        });
+
+
+
+    </script> 

@@ -1,0 +1,92 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+ 
+    <script>
+        require(['script/ajax-parcours']);
+    </script> 
+
+
+{% endblock %}
+
+{% block page_title %}
+    <i class="fa fa-map"></i> Tous les parcours  
+{% endblock %}
+
+{% block page_menu_right %}
+     <li  ><a href="{% url 'create_parcours' %}"   class="no_button"><img width="25px" src="{% static 'img/plus.png' %}"/> Nouveau parcours</a></li>
+{% endblock %}
+
+
+
+{% block body  %}  
+    <section class="content_main"> 
+     
+     
+            
+                <table class="table table-bordered table-hover display"  style="width:100%">
+                      <thead>
+                          <tr>
+                            <th  style="width:290px">Titre</th>   
+                            <th>Thèmes et Exercices</th>                                        
+                            <th>Niveau</th> 
+                            <th  style="width:150px">Auteur</th> 
+                          </tr>
+                      </thead>
+                      <tbody>
+                            {% for parcours in parcourses %}
+                            <tr> 
+                                <td style="border-left: {{ parcours.color }}  5px solid">
+                                   <a href="{% url 'show_parcours_visual'  parcours.id %}" class="listing">{{ parcours.title }} <small>[{{ parcours.exercises.count }} exercice{{ parcours.exercises.count|pluralize }}]</small> </a>
+                                </td>
+                                <td style="font-size:10px">
+                                    {% regroup parcours.exercises.all  by  knowledge.theme as theme_list %} 
+                                    {% for theme in theme_list  %}
+                                        <span class="open_details btn btn-subsacado">{{ theme.grouper.name }} 
+                                            <div class="details_exos">
+                                            {% for e in theme.list|dictsort:"theme.name"   %} 
+                                                {% ifchanged  %}
+                                                    <span style="color:#444">{{ e|truncatechars:76 }}</span><br/>
+                                                {% endifchanged  %}
+
+                                                <em>{{ e.annoncement|cleanhtml|truncatechars:76 }}</em> 
+                                                {% if not forloop.last %} <br/>{% endif %}
+                                            {% endfor %}
+                                            </div>
+                                        </span>
+                                    {% endfor %}
+                                </td>
+                                <td> 
+                                    {% for e in parcours.exercises_only|dictsort:"level.name" %}
+                                        {% ifchanged e.level.name %} 
+                                            <small>{{ e.level.name }}</small> 
+                                        {% endifchanged %} 
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    
+                                      {{ parcours.author.user.get_full_name|truncatechars:20 }} 
+                                    
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr> 
+                                <td>
+                                   Vous n'avez pas créé de parcours personnalisés et utilisez les parcours prédéfinis.
+                                </td>
+                                <td></td><td></td><td></td>
+                            </tr>
+                            {% endfor %}
+                      </tbody>
+                </table>
+    </section>
+{% endblock  %}   
+
+
+ 

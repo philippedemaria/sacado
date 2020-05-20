@@ -1,0 +1,129 @@
+{% load static %}
+{% load widget_tweaks %} 
+
+<script>
+    console.log("cfoucou")  ; 
+
+    $('#update_div').hide();
+
+    $('.update_event_modal').on('click', function () { 
+          
+            $('#update_div').toggle(500);
+    });
+
+ 
+</script>
+
+ 
+
+
+      <div class="modal-content">
+          <div class="modal-header" style="background-color: {{ event.color }}">
+              <div class="row" style="color:#FFF">                      
+                  <div class="col-sm-12 col-md-12">
+                     <div class="event-group">
+                        <h2>{{ event.title  }}<small><a href="#" class="vue" data-dismiss="modal"><i class="fa fa-times pull-right"></i></a></small>
+
+                        </h2>
+                    </div>
+                  </div>
+              </div>
+              <div class="row"  style="color:#FFF">
+                    <div class="col-sm-9 col-md-9">                        
+                      <div class="event-group">
+                            <h5>
+                            {% if event.is_allday == 0 %}
+                                {% if same_day  %}
+                                {{ event.start|date:"l j b Y"  }} <br><small  style="color:#FFF">de {{ event.start|date:"H:i"  }}  à {{ event.end|date:"H:i"   }}</small>
+                                {% else %}  
+                                Du {{ event.start|date:"l j b Y"  }} au {{ event.end|date:"l j b Y"   }}
+                                {% endif %}
+                             {% else %}  
+                                Toute la journée
+                            {% endif %}
+
+                            </h5>  
+                      </div> 
+                    </div> 
+                    <div class="col-sm-3 col-md-3"> 
+                            <a href="{% url 'delete_event' event.id %}" class="white pull-right" onclick="return TestDelete('cet événement ?')" ><i class='fa fa-trash'></i></a> 
+                            <a href="#" class="white update_event_modal pull-right" style='margin-right:10px' data-event_id="{{ event.id  }}" ><i class='fa fa-pencil'></i></a>   
+                    </div>   
+              </div>
+          </div>
+          <div class="modal-body" id="update_div">
+          {% include 'schedule/update_form.html'  %}
+
+          </div>
+          <div class="modal-body">                  
+                  <div class="row">   
+      
+                      <div class="col-sm-8 col-md-8">                      
+                          <div class="event-group">
+                          <i class='fa fa-university'></i> Lieu<br>
+                             <small> {{ event.place  }}</small>
+                          </div> 
+
+ 
+                          <div class="event-group"><i class='fa fa-calendar'></i> Calendrier
+                              {% for c in  event.calendar.all  %}
+                                    <li class="sanspuce"><small>{{ c.name }}</small></li>
+                              {% endfor %}
+                          </div>
+ 
+                          <div class="event-group">
+                              <div class="event-group"><i class='fa fa-users'></i> Personnes invités à cet événement
+                              {% for u in  event.users.all  %}
+                                    <li class="sanspuce"><small>{{ u.get_full_name }}</small></li>
+                              {% empty %}
+                                   <br> Aucune
+                              {% endfor %}
+                              </div>
+                          </div>
+                      </div>
+ 
+
+
+ 
+                      <div class="col-sm-4 col-md-4">
+                          <div class="event-group">
+                              
+                            {% if event.display == 0  %} <div class="alert alert-danger">Evènement privé</div> {% else %} <div class="alert alert-danger">Evènement public</div>  {% endif %}
+                              
+                          </div>
+                      </div>   
+                  </div> 
+                <!--<div class="row">   
+                      <div class="col-sm-2 col-md-2">                      
+                          <div class="event-group">
+                              <div class="event-group">
+                                  Notification<br>
+                                          <input type="checkbox" id="notification" name="notification" data-toggle="toggle" data-size="mini"
+                                           data-on="O" value="1"
+                                           data-off="N" data-onstyle="primary">
+                              </div>
+                          </div>  
+                      </div>
+                      <div class="col-sm-4 col-md-4">
+                          <div class="event-group">
+                              <input  type="number" id='days' name='days'  placeholder="jours avant" class="event-control select2"/>
+                          </div>
+                      </div> 
+                       <div class="col-sm-4 col-md-4">
+                          <div class="event-group">
+                              <input  type="date" id='date_notif' name='date_notif' class="event-control select2"/>
+                          </div>
+                      </div>                  
+                  </div> -->
+                  <div class="row">                    
+                      <div class="col-sm-12 col-md-12">
+                          <div class="event-group">
+                              <i class='fa fa-comment'></i>  Commentaire<br>
+                              <small>{{ event.comment |safe  }}</small>
+                          </div>
+                      </div>
+                  </div>   
+          </div>
+      </div>
+
+

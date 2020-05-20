@@ -1,0 +1,497 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+
+
+
+
+{% block body %}
+
+
+{% if messages %} 
+<ul class="messages">
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+     <!--==========================
+    Intro Section
+  ============================-->
+  <section id="intro" class="clearfix">
+    <div class="container d-flex h-100">
+      <div class="row justify-content-center align-self-center">
+        <div class="col-xs-12 col-lg-4 intro-info order-md-first order-last">
+          <div class="title">S'entraîner. Progresser. <br>S'auto-évaluer.</div>
+			    <div class="subtitle marginbottom50">  {{ nb_exercise }} exercice{{  nb_exercise|pluralize }} interactif{{ nb_exercise|pluralize }} corrigé{{  nb_exercise|pluralize }} du CP à la Terminale</div>
+          <a href="#" data-toggle='modal' data-target='#connexion'  class="btn btn-primary"> Se connecter </a><br>
+          <div style="color:#cb2131;margin-top: 50px">
+            <img src="{% static 'img/edge.jpg' %}" width="35px" />          
+            <img src="{% static 'img/firefox.jpg' %}" width="35px" />          
+            <img src="{% static 'img/chrome.jpg' %}" width="35px"  />
+            <img src="{% static 'img/safari.jpg' %}" width="35px" /><br>
+          <i class="fa fa-apple"></i> <a href="https://java.com/fr/download/help/mac_install.xml" target="_blank" style="color:#cb2131; border-bottom: 1px #cb2131 dashed">Pour safari, installer Java si nécessaire.</a></div> 
+
+
+
+
+        </div>
+
+
+        <div class="col-xs-12 col-lg-8">
+          <div style="height:30px"></div><div id="loader_index"></div>
+            <div class='justify-content-center' style="position: relative;">                
+                <div class = 'col-auto' id='ggb_applet_container'></div>
+            </div>  
+
+        <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script>
+
+
+         {% if 'logout' in request.path %}
+            <script type="text/javascript">         
+                var parameters = {
+                      "appname":"classic",
+                      "id":"ggb_applet_container",
+                      "prerelease":false,
+                      "width":750,
+                      "height":550,
+                      "showToolBar":false,
+                      "borderColor":"#f5f8fd",
+                      "showMenuBar":false,
+                      "showfullscreenbutton":true,
+                      "showAlgebraInput":false,
+                      "showResetIcon":false,
+                      "enableLabelDrags":false,
+                      "enableShiftDragZoom":true,
+                      "enableRightClick":false,
+                      "capturingThreshold":null,
+                      "showToolBarHelp":false,
+                      "errorDialogsActive":false,
+                      "useBrowserForJS":false,
+ 
+                   "filename":"../../static/uploads/ggbfiles/10/accueil0000.ggb"
+                };
+                var applet = new GGBApplet('5.0', parameters);
+                // Geogebra applet creation
+                  applet.inject('ggb_applet_container', 'preferHTML5'); 
+
+              </script>
+          {% else %}            
+
+            <script type="text/javascript">
+                  // parameters of the geogebra app
+                var parameters = {
+                      "appname":"classic",
+                      "id":"ggb_applet_container",
+                      "prerelease":false,
+                      "width":{{exercise.supportfile.width}},
+                      "height":{{exercise.supportfile.height}},
+                      "showToolBar":false,
+                      "borderColor":"#f5f8fd",
+                      "showMenuBar":false,
+                      "showAlgebraInput":false,
+                      "showResetIcon":false,
+                      "enableLabelDrags":false,
+                      "enableShiftDragZoom":true,
+                      "enableRightClick":false,
+                      "capturingThreshold":null,
+                      "showToolBarHelp":false,
+                      "errorDialogsActive":false,
+                      "useBrowserForJS":false,
+                          "langage":"en",
+                  "filename":"static/uploads/{{ exercise.supportfile.ggbfile }}" 
+                };
+                var applet = new GGBApplet('5.0', parameters);
+                // Geogebra applet creation
+                  applet.inject('ggb_applet_container', 'preferHTML5'); 
+
+              </script>
+
+          {% endif %}
+
+        </div>
+      </div>
+
+    </div>
+  </section><!-- #intro -->
+
+  <main id="main">
+
+
+
+
+    <!--==========================
+      Exercises exercises
+    ============================-->
+    <section id="exercises">
+      <div class="container">
+
+        <header class="section-header">
+          <h3>Exercices</h3>
+          <p style="padding-bottom:30px">Classés par niveaux, par thème, par savoir faire. </p>
+        </header>
+
+        <div class="row">
+
+        {% for level in levels %}
+
+          <div class="col-md-6 col-lg-3 wow bounceInUp" data-wow-duration="1.4s">
+          	<a href="{% url 'exercises_level'  level.id  %}" style="color:#FFF;">
+	            <div class="imagebox">
+	              <div class="icon {{ level.cycle }}" ><span class="sacado" > {{ level.name }}</span> <br>{{ level.exotot }} exercice{{ level.exotot|pluralize }}</div>
+                <img src="../../static/img/levels/level{{ forloop.counter }}.png" width="250" />
+	              <p class="description"></p>
+	            </div>
+	          </a>
+          </div>
+        {% endfor %}
+ 
+
+        <div style="height: 100px"></div>
+
+
+        </div>
+
+      </div>
+    </section><!-- #services -->
+
+    <!--==========================
+      Teachers Section
+    ============================-->
+    <section id="teachers" class="wow fadeIn">
+      <div class="container">
+        
+        <header class="section-header">
+          <h3>Enseignants</h3>
+        </header>
+
+            
+        <div class="row">
+
+          <div class="col-lg-6 col-xs-12">
+                <h1 class="thin">Suivi des compétences</h1>
+                <h1 class="thin">Suivi des savoir faire</h1>
+                <h1 class="thin">Suivi des acquisitions</h1>
+                <h1 class="thin">Exercices personnalisés</h1>
+          </div>
+          <div class="col-lg-6 col-xs-12">
+            <div class="teachers-content">
+              <div class="features wow bounceInUp clearfix">
+                <h4>Utiliser <span class="sacado">SACADO</span>.</h4>
+                <p>Vous souhaitez suivre les progrès de vos élèves et leur proposer un parcours adapté à leur apprentissage. Bénéficiez d'un tableau de bord personnalisé.</p>
+              </div>
+              <div class="features wow bounceInUp clearfix">
+                <h4>Gérer ses classes.</h4>
+                <p>Une interface pour créer vos groupes, gérer vos élèves, leur attribuer des exercices,  des parcours de maitrise, des tâches et suivre leurs progrès. 
+                <br>Des exercices pré-définis sur les niveaux de vos classes directement utilisables, des parcours individualisés construits en quelques clics. </p>
+                <p>     <a  href="#" data-toggle='modal' data-target='#myModal4'  class="btn btn-primary"> Inscription gratuite</a> </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="container">
+        <div class="row counters">
+          <div class="col-lg-3 col-6 text-center">
+            <span data-toggle="counter-up">{{ nb_exercise }}</span>
+            <p>Exercices</p>
+          </div>
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-toggle="counter-up">{{ nb_teacher }}</span>
+            <p>Enseignants</p>
+          </div>
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-toggle="counter-up">{{ nb_student }}</span>
+            <p>Elèves</p>
+          </div>
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-toggle="counter-up">{{ nb_group }}</span>
+            <p>Groupes</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!--==========================
+      Student  Section
+    ============================-->
+    <section id="students" class="wow fadeIn">
+        <div style="height: 40px"></div>
+      <div class="container">
+        <header class="section-header">
+          <h3>Elèves</h3>
+        </header>
+
+
+        <div class="row">
+
+          <div class="col-lg-6">
+            <div class="teachers-img">
+              <img src="{% static 'img/levels/all.png' %}" width="500" class="img-fluid">
+            </div>
+
+              <div class="features wow bounceInUp clearfix">
+              <br>
+                <h4>{{ nb_exercise }} exercice{{  nb_exercise|pluralize }} interactif{{ nb_exercise|pluralize }} varié{{  nb_exercise|pluralize }} et corrigé{{  nb_exercise|pluralize }}</h4>
+              </div>
+
+
+
+          </div>
+
+          <div class="col-lg-6">
+             
+                <form action="{%  url 'register_student' %}" method="POST" id="student_form"  > 
+                {% csrf_token %} 
+                    {% include 'student_form.html' %}
+                    <div style="height: 40px"></div>
+                    <div class="row">
+        
+                        <div class="col-lg-6 col-xs-6">   
+                            <div class="form-group"><input name="envoi" type="submit" class="btn btn-primary sendit"  disabled value="Rejoindre mon groupe" /></div>
+                        </div> 
+        
+                    </div> 
+                </form> 
+          </div>
+        </div>
+
+        <div style="height: 100px"></div>
+      </div>
+    </section> 
+
+      <!--==========================
+      Parent  Section
+    ============================-->
+    <section id="parents" class="wow fadeIn">
+        <div style="height: 40px"></div>
+      <div class="container">
+        <header class="section-header">
+          <h3>Parents</h3>
+        </header>
+
+
+        <div class="row">
+
+          <div class="col-lg-6">
+            <div class="teachers-img">
+              <img src="{% static 'img/accueil-parent.jpg' %}" width="500" class="img-fluid">
+            </div>
+
+              <div class="features wow bounceInUp clearfix">
+              <br>
+                <p>Suivi des activités en temps réel</p>
+              </div>
+
+
+
+          </div>
+
+          <div class="col-lg-6">
+             
+                <form action="{%  url 'register_parent' %}" method="POST" id="parent_form"  > 
+                {% csrf_token %} 
+                    {% include 'parent_form.html' %}
+                    <div style="height: 40px"></div>
+                    <div class="row">
+        
+                        <div class="col-lg-6 col-xs-6">   
+                            <div class="form-group"><input name="envoi" type="submit" class="btn btn-primary is_child_exist" value="Valider" /></div>
+                        </div> 
+        
+                    </div> 
+                </form> 
+          </div>
+        </div>
+
+        <div style="height: 100px"></div>
+      </div>
+    </section> 
+    <!--==========================
+      About  Section
+    ============================-->
+    <section id="about" class="wow fadeIn">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-6 col-md-6">
+          <h3>Progressivité et Programmes </h3>
+
+      <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/2/02-Maths-CP-attendus-eduscol_1114732.pdf" target="_blank"> CP - Repère de progressivité</a></li>
+ 
+      <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/4/04-Maths-CE1-attendus-eduscol_1114734.pdf" target="_blank"> CE1 - Repère de progressivité</a></li>
+ 
+      <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/6/06-Maths-CE2-attendus-eduscol_1114736.pdf" target="_blank"> CE2 - Repère de progressivité</a></li>
+ 
+
+      <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/8/08-Maths-CM1-attendus-eduscol_1114738.pdf" target="_blank">CM1 - Repère de progressivité</a></li>
+ 
+      <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/0/10-Maths-CM2-attendus-eduscol_1114740.pdf" target="_blank">CM2 - Repère de progressivité</a></li>
+ 
+      <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/2/12-Maths-6e-attendus-eduscol_1114742.pdf" target="_blank">6<sup>ème</sup> - Repère de progressivité</a> </li>
+ 
+
+      <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/4/14-Maths-5e-attendus-eduscol_1114744.pdf" target="_blank">5<sup>ème</sup> - Repère de progressivité</a> </li>
+ 
+      <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/6/16-Maths-4e-attendus-eduscol_1114746.pdf" target="_blank">4<sup>ème</sup> - Repère de progressivité </a></li>
+ 
+      <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/8/18-Maths-3e-attendus-eduscol_1114748.pdf" target="_blank">3<sup>ème</sup> - Repère de progressivité </a></li>
+  
+      <li class="sanspuce"><a href="https://cache.media.education.gouv.fr/file/SP1-MEN-22-1-2019/95/7/spe631_annexe_1062957.pdf" target="_blank">2<sup>nde</sup> - Programme </a></li>
+ 
+      <li class="sanspuce"><a href="https://cache.media.education.gouv.fr/file/SP1-MEN-22-1-2019/16/8/spe632_annexe_1063168.pdf" target="_blank">1<sup>ère</sup> - Programme </a></li>
+ 
+      <li class="sanspuce"><a href="https://cache.media.education.gouv.fr/file/SPE8_MENJ_25_7_2019/90/7/spe246_annexe_1158907.pdf" target="_blank">T<sup>ale</sup> - Programme </a> </li>
+ 
+
+         <img src="{% static 'img/logo-france.jpg' %}" width="150px" class="img-fluid"/>
+
+
+          </div>
+
+          <div class="col-lg-6 col-md-6">         
+          <header class="section-header">
+          <h3>A propos</h3>
+        </header>
+            <div class="about-content">
+ 
+              <h3>Les attendus et savoir faire des exercices sont issus des programmes officiels de l'éducation nationale.</h3>
+              <p>En aucun cas, ces exercices se substituent aux attentes des enseignants mais sont un complément pour un travail en autonomie.</p>
+
+              <h3>Les contributeurs SacAdo</h3>
+                <p>
+                    {% for c in contributeurs %} 
+                    {{ c.first_name }}{% if not forloop.last %},  {% else %}.{% endif %}
+                    {% endfor %}
+                </p>
+
+              <h3>La veille Bug SacAdo</h3>
+                <p>
+                    Julie, David, Jannick et nos élèves Yera, Alajandra, Emna, Abdu, ...
+                </p>
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section> 
+ 
+
+
+  <!--==========================
+    Footer
+  ============================-->
+  <footer id="footer" class="section-bg wow fadeIn">
+    <div class="footer-top">
+      <div class="container">
+
+        <div class="row">
+
+          <div class="col-lg-6">
+
+            <div class="row">
+
+                <div class="col-sm-6">
+
+                  <div class="footer-info">
+                    <h3>sacAdo</h3>
+                    <p>sacAdo est issue de l'idée de reprendre un exerciseur en ligne avec création d'exercices à variables aléatoires. Cette interface propose aux élèves de reprendre les savoir faire travaillés en classe pour leur permettre d'assoir leur technique mathématique de base.</p>
+                  </div>
+
+                  <div class="footer-newsletter">
+                    <h4>Rejoignez SacAdo</h4>
+                    <p>Vous pouvez contribuer au projet SacAdo en proposant vos fichiers interactifs dans les différents niveaux. Le formulaire ci-contre nous rapproche.</p>
+
+                  </div>
+
+                </div>
+
+                <div class="col-sm-6">
+                  <div class="footer-links">
+                    <h4>Liens utiles</h4>
+                    <ul>
+                        <li><a href="#intro">Accueil</a></li>
+                        <li><a href="#exercises">Exercices</a></li>
+                        <li><a href="#teachers">Enseignants</a></li>
+                        <li><a href="#students">Elèves</a></li>
+                        <li><a href="#about">A propos</a></li>
+                        <li><a href="#footer">Contact</a></li>
+                    </ul>
+                  </div>
+
+                  <div class="footer-links">
+                    <h4>Contact</h4>
+                    <p>
+                      Mehdi Boulifa - Tunisie <br> 
+                      Philippe Demaria - Tunisie <br>                         
+                      Bruno Serres - Nicaragua <br>   
+             
+                    </p>
+
+                    <h4>Illustration</h4>
+                    <p>
+                      Ilhiam Kervarrec
+                    </p>
+
+
+
+                  </div>
+ 
+
+                </div>
+
+            </div>
+
+          </div>
+
+          <div class="col-lg-6">
+
+            <div class="form">
+              
+              <h4>Envoyez un message</h4>
+              <p>Vous souhaitez devenir administrateur, obtenir des infos, laisser un message. Utiliser cet espace.</p>
+              <form action="{% url 'send_message' %}" method="post" >
+                  {% csrf_token %}
+                <div class="form-group">
+                  <input type="text" name="name" class="form-control" id="name" placeholder="Nom" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
+                </div>
+                <div class="form-group">
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Email" data-rule="email" data-msg="Please enter a valid email" />
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="subject" id="subject" placeholder="Objet" data-rule="minlen:4" data-msg="Au moins 8 caractères" />
+                </div>
+                <div class="form-group">
+                  <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Ecrire votre message" placeholder="Message"></textarea>
+                </div>
+ 
+ 
+
+                <div class="text-center"><button type="submit" class="btn btn-sacado">Envoyer</button></div>
+              </form>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </footer><!-- #footer -->
+
+  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+
+  </main> 
+
+{% endblock %}

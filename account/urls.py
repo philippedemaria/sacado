@@ -1,0 +1,65 @@
+from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import path
+from .views import DashboardView
+from setup.views import logout_view
+from account.views import *
+ 
+
+urlpatterns = [
+    path('login', view=LoginView.as_view(template_name='home.html',redirect_authenticated_user = True), name='login'),  
+    path('logout', LogoutView.as_view(template_name='home.html'), name='logout'),  
+    path('dashboard', view=DashboardView.as_view(), name='dashboard'),  
+
+    path('update_teacher/<int:id>/', update_teacher , name='update_teacher'),
+    path('delete_teacher/<int:id>/', delete_teacher , name='delete_teacher'),
+
+    path('list_teacher', list_teacher , name='list_teacher'),
+
+    path('close_an_account', close_an_account , name='close_an_account'),
+    path('close_my_account/<int:id>/', close_my_account , name='close_my_account'),
+
+
+    path('lost_password', lost_password , name='lost_password'),
+    path('updatepassword', updatepassword , name='updatepassword'),
+    
+    path('register_student', register_student , name='register_student'),
+
+    path('detail_student/<int:id>', detail_student , name='detail_student'),
+    path('detail_student_parcours/<int:id>/<int:idp>', detail_student_parcours , name='detail_student_parcours'),
+    path('detail_student_theme/<int:id>/<int:idt>', detail_student_theme , name='detail_student_theme'),
+
+
+    path('detail_student_all_views/<int:id>', detail_student_all_views , name='detail_student_all_views'),
+ 
+
+    path('newpassword_student/<int:id>/<int:idg>', newpassword_student , name='newpassword_student'),
+    path('update_student/<int:id>/<int:idg>', update_student , name='update_student'),
+    path('update_student_by_ajax', update_student_by_ajax , name='update_student_by_ajax'),
+    path('delete_student/<int:id>/<int:idg>', delete_student , name='delete_student'),
+
+    path('send_to_teachers', send_to_teachers , name='send_to_teachers'),
+    path('message_to_teachers_sent', message_to_teachers_sent , name='message_to_teachers_sent'),
+ 
+    path('register_teacher', register_teacher , name='register_teacher'),
+    path('profile', my_profile , name='profile'),
+
+    path('ajax/userinfo/', ajax_userinfo , name='ajax_userinfo'),
+    path('ajax/courseinfo/', ajax_courseinfo , name='ajax_courseinfo'),
+    path('ajax/control_code_student/', ajax_control_code_student , name='ajax_control_code_student'),
+    
+ 
+    path('ajax_detail_student/', ajax_detail_student , name='ajax_detail_student'),
+    path('ajax_detail_student_exercise/', ajax_detail_student_exercise , name='ajax_detail_student_exercise'),
+    path('ajax_detail_student_parcours/', ajax_detail_student_parcours , name='ajax_detail_student_parcours'),
+
+
+
+    path('register_parent', register_parent , name='register_parent'),
+    path('update_parent/<int:id>', update_parent , name='update_parent'),
+    path('delete_parent/<int:id>', delete_parent , name='delete_parent'),
+
+
+
+]
+
+ 

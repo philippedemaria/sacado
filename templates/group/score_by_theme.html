@@ -1,0 +1,33 @@
+{% load static %}
+{% load item_tags %}
+
+{% get_score exercice student as score %}
+
+{% if score != "" %}
+    <a class="markdown
+            {% if score < 30 %}
+             red 
+            {% elif score < 60 %}
+            orange
+            {% elif score < 80 %}
+            green
+            {% else %}
+            darkgreen
+            {% endif %}"
+          href="{% url 'show_this_exercise'  exercice.id   %}" data-container="body"
+          data-toggle="popover" style="border : 2px solid {{student.get_exercises.parcours.color }}"
+          data-trigger="hover" data-placement="top"
+          title="{{ exercises.parcours.title }} : {{ scores }}"
+          data-content="{{ exercice.knowledge.name }}">
+        {{ score }}
+    </a>
+{% else %}
+    <a class="markdown"                                                   
+          href="{% url 'show_this_exercise' exercice.id %}" data-container="body"
+          data-toggle="popover"  style="border : 2px solid {{student.get_exercises.parcours.color }}"
+          data-trigger="hover"
+          title="{{ exercises.parcours.title }}" data-placement="top"
+          data-content="{{ exercice.knowledge.name }}"> 
+          {{ score }}
+    </a>
+{% endif %}

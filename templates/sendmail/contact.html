@@ -1,0 +1,69 @@
+{% extends 'layout.html' %}
+{% load static %}
+ 
+
+{% block title_page %}  
+Contacts
+{% endblock  %}
+
+{% block body  %} 
+
+ 
+
+<section class="content_bgwhite">
+  <div id="result"></div>
+  <div class="row "> 
+    <div class="col-sm-12 col-md-12"> 
+      <a href="{% url 'create_contact' %}"   class="btn btn-xs btn-danger"><i class="fa fa-plus"></i> Nouveau groupe de contact</a>
+    </div>       
+  </div> 
+  <div class='clear'></div> 
+  <div class="row"> 
+    <div class="col-sm-12 col-md-12">
+ 
+
+        <table  id="standard_tab" class="table table-bordered table-hover">
+              <thead>
+                  <tr>
+                    <th>Nom </th>                   
+                    <th>Membres </th>                    
+                  </tr>
+              </thead>
+              <tbody>
+                    {% for c in contacts %}
+                    <tr> 
+
+                      <td>  
+                            {% if c.owner == user %}
+                             <a href="{% url 'update_contact'  c.id %}" class="btn btn-{% if c.share == 0 %}primary{% else %}info{% endif %} btn-xs" data-container="body"
+                                         data-toggle="popover"
+                                         data-trigger="hover"
+                                         title="{% if c.share == 0 %} Groupe privé  {% else %} Groupe public{% endif %} - {{ c.users.all |length }}  membres"
+                                         data-content="{% if c.share == 0 %} Vous seul voyez ce groupe  {% else %} Toute la communauté éducative voit ce groupe{% endif %}"
+                            > {{ c.name }} ({{ c.users.all |length }})</a>
+                            {% else %}
+                             <span  class="btn btn-{% if c.share == 0 %}primary{% else %}info{% endif %} btn-xs" 
+                                         data-container="body"
+                                         data-toggle="popover"
+                                         data-trigger="hover"
+                                         title="{% if c.share == 0 %} Groupe privé  {% else %} Groupe public {% endif %}- {{ c.users.all |length }}  membres "
+                                         data-content="{% if c.share == 0 %} Vous seul voyez ce groupe  {% else %} Toute la communauté éducative voit ce groupe{% endif %}"
+                             > {{ c.name }} </span>
+                            {% endif  %}
+                            {% if c.owner == user %}
+                                <a href="{% url 'delete_contact'  c.id %}" class="delete pull-right" title="Supprimer" onclick="return TestDelete('ce groupe')"><i class="fa fa-trash-o"></i> </a>
+                            {% endif  %} 
+                       </td> 
+                        <td style="font-size:10px"> {% for us in c.users.all %} {{ us }} {% if not forloop.last %}, {% endif %}  {% endfor %} </td>  
+                    </tr>
+                    {% endfor %}
+              </tbody>
+        </table>
+
+ 
+    </div>
+  </div>
+</section> 
+
+ 
+{% endblock %}

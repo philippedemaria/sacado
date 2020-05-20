@@ -1,0 +1,116 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+{% endblock %} 
+
+
+ 
+ 
+{% block page_title %}
+    <i class="fa fa-laptop"></i> Les exercices 
+{% endblock %}
+ 
+
+
+ 
+{% block page_menu_right %}
+    <li>{% if request.user.is_superuser %}<a href="{% url 'create_exercise' %}" class="btn  btn-new " ><img width="25px" src="{% static 'img/plus.png' %}"/> Nouvel exercice</a> {% endif  %}</li>
+{% endblock %}
+
+
+
+ 
+{% block body %}
+<section class="content_main">  
+ 
+ 
+  
+    <ul  class="nav nav-tabs">
+    	{% regroup exercises by level as level_list %} 
+			{% for level in level_list %}
+        <li {% if forloop.first %}class="active"{% endif %}><a  href="#{{ forloop.counter}}a" data-toggle="tab">{{ level.grouper.shortname  }}</a></li>
+			{% endfor  %}
+    </ul>
+
+    <div class="tab-content clearfix">
+    	{% regroup exercises by level as level_list %} 
+			{% for level in level_list %}
+        <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ forloop.counter}}a">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <table class="table  table-hover display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <td>Thème</td>
+                                <td>Code</td>
+                                <td>Nom</td>
+                                <td>Et après ?</td>
+                            </tr>
+                        </thead>
+		                <tbody>
+	                        {% for exercise in level.list  %} 
+	                        <tr> 
+                                <td>{{ exercise.theme.name }}</td>
+                                <td>{{ exercise.supportfile.code }}</td>
+	                          	<td >
+	                             	<a href="{% url 'update_exercise' exercise.id %}">{{ exercise.knowledge.name }}</a>
+
+                                         {% if request.user.user_type > 1 %}
+                                            <div class="pull-right">
+                                                <small>
+                                                    <a href="{% url 'delete_exercise' exercise.id   %}" class="pull-right trash" style="margin-left:5px" onclick="return TestDelete('cet exercice')"> 
+                                                            <i class="fa fa-trash"> </i>   
+                                                    </a>
+                                                    <a href="{% url 'show_this_exercise'  exercise.id   %}" class="pull-right edit" style="margin-left:5px"> 
+                                                            <i class="fa fa-eye"></i>   
+                                                    </a>
+                                                    <a href="{% url 'create_remediation'  exercise.id   %}" class="pull-right edit" style="margin-left:5px"> 
+                                                            <i class="fa fa-plus thin"></i>   
+                                                    </a>
+
+
+                                                </small>
+                                            </div>
+                                         {% endif %}
+	                          	</td>
+                                <td>
+                                    {% for r in exercise.exercise_remediation.all %}
+                                        <a href="../../{{ r.mediation }}" target="_blank">
+                                            {% if r.mstyle %} 
+                                                <img src="{% static 'img/ggb.png' %}" />
+                                            {% else %}
+                                                <img src="{% static 'img/pdf.png' %}" />
+                                            {% endif %}
+                                         </a>
+                                    {% endfor %}
+                                </td>
+	                        </tr>
+	                        {% endfor %}
+		                </tbody>
+                    </table>
+
+
+
+                </div>
+            </div>
+        </div>
+			{% endfor  %}
+    </div>
+</section>
+
+ 
+
+
+ 
+
+ 
+
+
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load sendmail_tags %} 
+
+{% block title_page %} 
+        {% if contact %}
+            Modifier le groupe de contact
+        {% else %}
+            Nouveau groupe de contact
+        {% endif   %}
+{% endblock  %}
+
+
+ 
+
+
+
+{% block body %}
+ 
+ 
+<section class="content_bgwhite">
+
+    <form  action="" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                    <label>{{ form.name.label_tag }}</label>
+                    {{ form.name |add_class:"form-control" }}
+                    {{ form.name.errors }}
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label>{{ form.share.label_tag }}</label> <br/>
+                    {{ form.share|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                    {{ form.share.errors }}
+                </div>
+            </div> 
+        </div>
+<!--         
+        <div class="row">
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label>{{ form.users.label_tag }}</label>  <br/>
+                    {{ form.users   }}
+                    {{ form.users.errors }}
+                </div>
+            </div> 
+        </div> 
+--> 
+
+
+      <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table  id="standard_tab" class="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th>Personnel</th>                      
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for value, label in form.users.field.choices %}
+                             {% is_in_group value contact as contact_test %}  
+                        <tr> 
+                            <td> 
+                                <label><input type="checkbox" value="{{ value }}" name="users"  id="id_users_{{ forloop.counter0 }}"  {% if contact_test  %} checked {% endif %} />   
+                                {% if contact_test  %} 
+                                         <font style="color:#336ba0;">{{ label }}</font> 
+                                {% else %} 
+                                         <font style="font-weight: 100">{{ label }}</font> 
+                                {% endif %}
+                                <label>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {{ form.users.errors }}
+                    </tbody>
+                </table>
+            </div> 
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">                 
+                <div class="form-group">
+                    <input value="Enregistrer" type="submit" class="btn btn-primary"/>            
+                    <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                </div>
+            </div>
+        </div>
+ 
+
+    </form>
+   
+</section>
+{% endblock  %}

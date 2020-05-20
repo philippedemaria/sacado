@@ -1,0 +1,110 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+ 
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common2.js' %}"></script> 
+    <script>
+       require(['script/ajax-sendmail']);
+    </script> 
+{% endblock %}
+
+
+{% block page_title %}
+    Communications
+{% endblock %}
+ 
+{% block page_menu_right %}
+ 
+{% endblock %}
+
+
+{% block body %}
+
+<style>
+.modal-lg {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto ;
+}
+</style>
+<script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script> 
+ 
+
+
+ 
+        <div class="content_main">
+ 
+ 
+            <a href="#"  data-toggle='modal' data-target='#newCom'   class="btn btn-xs btn-danger"><i class="fa fa-plus"></i> Nouveau message</a> <hr>
+
+
+ 
+                      <div class="row"> 
+                        <div class="col-sm-12 col-md-12">
+                            <form  action="" method="POST">
+                                {% csrf_token %} 
+                                <table class="table table-striped table-hover display">
+                                      <thead>
+                                          <tr>
+                                            <th>Date </th>
+                                            <th>Objet </th>        
+                                            <th>Affichage </th>   
+                                            <th> </th>    
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                            {% for c in communications %}
+                                            <tr> 
+                                                <td style="width:10%"><small>{{ c.today|date:"d b. Y" }}</small></td>                                              
+                                                <td>
+                                                    <a href="#" class="show_com"  data-toggle='modal' data-target='#showCom'  data-communication_id="{{ c.id }}"> {{ c.subject|truncatechars:30 }} </a> 
+                                                </td>  
+
+                                                <td style="width:10%">{% if c.active %}<i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i> {% endif %}</td>  
+                                                <td style="width:10%"> 
+                                                    <a href="{% url 'update_communication' c.id %}" ><i class="fa fa-pencil-square-o"></i></a>
+                                                    <a href="{% url 'delete_communication' c.id %}" onclick="return TestDelete('cette communication')"<i class="fa fa-trash"></i></a> 
+                                                </td>  
+                                            </tr>
+                                            {% endfor %}
+                                      </tbody>
+                                </table>
+                            </form>
+                          </div>
+                      </div>
+ 
+        </div>
+ 
+
+ 
+
+
+
+        <div class="modal fade" id="newCom" tabindex="-1" role="dialog" aria-labelledby="newCom" aria-hidden="true" >
+          <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                  {% include 'sendmail/form_communication.html'  %}
+              </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="updateCom" tabindex="-1" role="dialog" aria-labelledby="updateCom" aria-hidden="true" >
+          <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                  <div id='update_communication'></div>
+              </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="showCom" tabindex="-1" role="dialog" aria-labelledby="showCom" aria-hidden="true" >
+          <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                  <div id='communication_restitution'></div>
+              </div>
+          </div>
+        </div>
+
+{% endblock %}

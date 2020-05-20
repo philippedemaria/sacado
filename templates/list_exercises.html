@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+{% load item_tags %}
+{% load widget_tweaks %}
+{% load static %}
+
+
+{% block require %}
+           
+{% endblock %}  
+   
+    {% block general_js %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    <script type="text/javascript">
+    require(['script/accueil']); 
+    </script>
+    {% endblock %} 
+
+{% block body %}
+
+ 
+ 
+<section class="content_main"> 
+  <div class="logolevel">
+      {% with  level.image as level_image %}
+         <img src="{% static level_image %}"  />
+      {% endwith %}
+  </div>
+
+ 
+
+    <div class="tab-content clearfix">
+ 
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <table class="table  table-hover display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <td></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+             
+
+                            
+                                {% for exercise in exercises %} 
+                                <tr> 
+                                    <td >
+                                        <a href="{% url 'show_exercise' exercise.id %}" class="sublisting">
+                                            <img src="../../../../static/uploads/{{ exercise.supportfile.imagefile }}" class="imagefile">
+                                                    
+                                            {{ exercise.supportfile.annoncement|cleanhtml|capfirst  }} 
+                                                        {% if exercise.supportfile.calculator %}
+                                                          <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                                        {% else %}
+                                                          <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                                        {% endif  %}   <br>
+                                            <i class="fa fa-barcode"></i> {{ exercise.supportfile.code }}      <br>                                 
+                                            <i class="fa fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes<br>
+                                            <i class="fa fa-save"></i> {{ exercise.supportfile.situation }}  situation{{ exercise.supportfile.situation|pluralize }}
+
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+      
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+     
+ 
+    </div>
+</section>
+
+ 
+
+
+ 
+
+ 
+
+
+{% endblock %}

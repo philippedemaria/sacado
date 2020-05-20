@@ -1,0 +1,183 @@
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+ 
+		{% for data in datas %}   
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <table class="table  table-hover display100" style="width:100%">
+                        <thead>
+                            <tr><td></td><td></td><td></td></tr>
+                        </thead>
+                        <tbody>
+                            {% for theme in data.themes  %} 
+                                <tr style="background:#e6e2dd">
+                                    <td></td><td><strong>{{data.name}}</strong> : {{theme.name}} </td> <td></td>
+                                </tr>
+                                {% for knowledge in theme.knowledges  %}   
+                                   
+                                    {% if knowledge.exercises|length > 0 %} 
+                                            <tr><td><i class="fa fa-caret-right"></i></td>
+                                                <td class="listingtd">
+                                                    {{ knowledge.name.name|capfirst }} 
+                                                    {% if request.user.is_superuser and '/admin' in request.path %}
+                                                        <a href="{% url 'create_exercise_knowledge' knowledge.name.id %}" class="pull-right edit"><i class='fa fa-plus' style="margin-left:10px;font-size: 10px"></i></a>
+                                                    {% endif %}
+                                                </td><td></td>
+                                            </tr>
+                                            {% for e in knowledge.exercises  %}
+
+                                                    {%  get_is_selected  e  parcours  as  e_is_selected %} 
+
+
+                                                <tr>
+                                                    <td>
+                                                        <label class="container_checkbox">
+                                                        <input type="checkbox"  data-exercise_id="{{ e.id }}" data-parcours_id="{{ parcours.id }}"
+                                                                name="exercises" id="selector_e{{ e.id }}"  data-statut="{{ e_is_selected }}"
+                                                                {% if e_is_selected %}checked{% endif  %} 
+                                                                class="selector_e" /><span class="checkmark"></span>
+                                                        </label>
+                                        
+                                                        <!--
+                                                        <a href="#selector_e{{ e.id }}" class="btn btn-{% if e_is_selected %}success{% else  %}danger{% endif  %} selector_e" id="selector_e{{ e.id }}" data-exercise_id="{{ e.id }}" data-parcours_id="{{ parcours.id }}" data-statut="{{ e_is_selected }}" >  
+                                                            <div id="is_selected{{ e.id }}"><i class="fa fa-{% if e_is_selected %}check-circle fa-2x{% else  %}times{% endif  %}"></i></div> 
+                                                        </a>
+                                                        -->
+                                                    
+
+                                                    </td>
+                                                    <td> 
+                                                        <label for="selector_e{{ e.id }}"  class="label_select_checkbox">
+                                                        {% if request.user.is_superuser and '/admin' in request.path %}
+                                                            <a href="{% url 'show_this_exercise'  e.id   %}"  target="_blank" >  
+                                                               {% if ajax %}
+                                                                <img src="/static/uploads/{{ e.supportfile.imagefile }}" class="imagefile"> 
+                                                                {% else %}
+                                                                <img src="../../static/uploads/{{ e.supportfile.imagefile }}" class="imagefile">                                                     
+                                                                {% endif %}
+                                                            </a>
+
+
+                                                            <a href="{% url 'update_exercise'  e.id   %}" class="listing" style="font-size: 18px">
+                                                                {{ e.annoncement|cleanhtml|capfirst }} 
+                                                            </a> 
+
+                                                        {%  else %}
+                                                            <a href="{% url 'show_this_exercise'  e.id   %}"  target="_blank" >
+                                                               {% if ajax %}
+                                                                <img src="/static/uploads/{{ e.supportfile.imagefile }}" class="imagefile"> 
+                                                                {% else %}
+                                                                <img src="../../static/uploads/{{ e.supportfile.imagefile }}" class="imagefile">                                                     
+                                                                {% endif %}
+                                                            </a> 
+                                                              {{ e.supportfile.annoncement|cleanhtml|capfirst }} 
+                                                           
+                                                        {% endif %}
+                                                         {% if e.supportfile.calculator %}
+                                                          <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                                        {% else %}
+                                                          <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                                        {% endif  %}   
+                                                             <br>
+                                                                <small>   
+                                                                    <i class="fa fa-barcode"></i> {{ e.supportfile.code }}  {% if e.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %} 
+                                                                    <i class="fa fa-clock-o"></i> {{ e.supportfile.duration }} minutes {% if e.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                                                                    <i class="fa fa-save"></i> {{ e.supportfile.situation}} situation{{ e.supportfile.situation|pluralize}} minimum</small>
+                                                        </label>
+                                                    </td>
+                                                    <td>
+                                                        {% for r in e.exercise_remediation.all %}
+                                                            <a href="../../{{ r.mediation }}" target="_blank">
+                                                                {% if r.mstyle %} 
+                                                                    <img src="{% static 'img/ggb.png' %}" width="20px" />
+                                                                {% else %}
+                                                                    <img src="{% static 'img/pdf.png' %}" width="20px" />
+                                                                {% endif %}
+                                                             </a>
+                                                        {% endfor %}
+                                                        {% if request.user.is_superuser  and '/admin' in request.path %}
+                                                            <a href="{% url 'create_remediation'  e.id   %}" class="pull-right edit" style="margin-left:5px; font-size: 10px"> 
+                                                                <i class="fa fa-plus thin"></i>   
+                                                            </a> 
+                                                        {% endif %}                                                
+                                                    </td>
+                                                </tr>
+                                            {% endfor %} 
+                                    
+                                    {% else %} 
+                                            <tr><td></td> 
+                                                <td>
+                                                    {{ knowledge.name }} 
+                                                    {% if request.user.is_superuser and '/admin' in request.path %}
+                                                    <a href="{% url 'create_exercise_knowledge' knowledge.name.id %}" class="edit"><i class='fa fa-plus pull-right' style="font-size: 10px"></i></a>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                </td>
+                                            </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <script>
+             $('table.display100').DataTable({
+        "pageLength": 100,
+        "ordering": false,
+            "retrieve": true,
+    "paging": false
+                } );
+
+
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('.selector_e').on('click' ,function () {
+
+            let parcours_id = $(this).attr("data-parcours_id"); 
+            let exercise_id = $(this).attr("data-exercise_id"); 
+            let statut = $(this).attr("data-statut"); 
+
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            console.log("ici") ;
+ 
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'parcours_id': parcours_id,
+                        'exercise_id': exercise_id,
+                        'statut': statut,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../ajax_populate",
+                    success: function (data) {
+                        $('#is_selected'+exercise_id).html(data.html);   
+                        $('#selector_e'+exercise_id).attr("data-statut",data.statut);                  
+                        $('#selector_e'+exercise_id).removeClass(data.noclass);
+                        $('#selector_e'+exercise_id).addClass(data.class);
+                        $('#selector_e'+exercise_id).focus();
+                    }
+                }
+            )
+        });
+
+
+
+
+
+
+
+
+
+
+                </script>
+		{% endfor  %}
+

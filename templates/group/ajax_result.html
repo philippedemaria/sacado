@@ -1,0 +1,188 @@
+{% load static %}
+{% load item_tags %}
+
+<script>
+
+MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+
+</script>
+ 
+<div class="content_dark">
+      {{ student.user.get_full_name}}
+      <div class="row">
+          <div class="col-sm-12 col-md-12">
+            <strong>Résultat par questions</strong>
+                      <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                                    <table class="table  table-bordered-dark">
+                                    <tr>
+                                    {% for studentanswer in studentanswers  %} 
+                                      <td class="table-bordered-dark"> Q {{ forloop.counter }}   </td>
+                                    {% endfor %} 
+                                    </tr>
+                                    <tr >
+                                    {% for studentanswer in studentanswers  %} 
+                                          <td class="table-bordered-dark"><small> {% get_all_answers      studentanswer        studentanswer.studentanswer     as   all_answers %} {{ all_answers|safe }}</small></td>
+                                     {% endfor %} 
+                                    </tr>
+                                    <tr >
+                                    {% for studentanswer in studentanswers  %} 
+                                          <td class="table-bordered-dark">  {% if studentanswer.testanswer %} <font class="text-success">Juste</font> {% else %} <font class="text-danger">Erreur</font> {% endif %} </td>
+                                    {% endfor %} 
+                                    </tr>
+                                </table>
+                        </div>
+                </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-sm-12 col-md-6">
+              <strong>Résultat par compétences</strong>
+                      <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                                                              <table class="table table-hovered">
+                        {% for skill in skill_tab  %} 
+                            <tr><td>{{ skill.name }}</td>
+                                  <td style="text-align:center; ">  
+                                        {% if skill.percent < aptitude.fragile %} 
+                                            <i class="fa fa-circle fa-3x text-label1"></i> 
+                                        {% endif %} 
+                                  </td>
+                                  <td style="text-align:center; ">  
+                                        {% if skill.percent > aptitude.fragile and skill.percent < aptitude.good %} 
+                                             <i class="fa fa-circle fa-3x text-label2"></i>        
+                                        {% endif %} 
+                                   </td>
+                                  <td style="text-align:center; ">  
+                                        {% if skill.percent > aptitude.good and skill.percent < aptitude.expert %} 
+                                             <i class="fa fa-circle fa-3x text-label3"></i> 
+                                        {% endif %} 
+                                   </td>
+                                  <td style="text-align:center; ">  
+                                        {% if skill.percent > aptitude.expert %} 
+                                             <i class="fa fa-circle fa-3x text-label4"></i>  
+                                        {% endif %} 
+                                   </td>
+                            </tr>               
+                        {% endfor %}
+                            <tr>
+                                <td></td><td style="background-color:#9900ff;text-align:center; ">Maîtrise insufissante</td>
+                                <td style="background-color:#9999ff;text-align:center;  "> Maîtrise fragile    </td>
+                                <td style="background-color:#99cccc;text-align:center;   ">  Maitrise satisfaisante   </td>
+                                <td style="background-color:#99ff99;text-align:center;  "> Très bonne maitrise    </td>
+                            </tr>  
+                      </table>       
+                    </div>
+                  </div>
+          </div>
+          <div class="col-sm-12 col-md-6">
+              <strong>Résultat par Thèmes</strong>
+                      <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table class="table table-hovered">
+                              {% for theme in theme_tab  %} 
+                                  <tr><td>{{ theme.name }}</td>
+                                        <td style="text-align:center; ">  
+                                              {% if theme.percent < 40 %} 
+                                                  <i class="fa fa-circle fa-3x text-label1"></i> 
+                                              {% endif %} 
+                                        </td>
+                                        <td style="text-align:center; ">  
+                                              {% if theme.percent > 40 and theme.percent < 65 %} 
+                                                   <i class="fa fa-circle fa-3x text-label2"></i>        
+                                              {% endif %} 
+                                         </td>
+                                        <td style="text-align:center; ">  
+                                              {% if theme.percent > 65 and theme.percent < 85 %} 
+                                                   <i class="fa fa-circle fa-3x text-label3"></i> 
+                                              {% endif %} 
+                                         </td>
+                                        <td style="text-align:center; ">  
+                                              {% if theme.percent > 85 %} 
+                                                   <i class="fa fa-circle fa-3x text-label4"></i>  
+                                              {% endif %} 
+                                         </td>
+                                  </tr>               
+                              {% endfor %}
+                                  <tr>
+                                      <td></td><td style="background-color:#9900ff;text-align:center; ">Maîtrise insufissante</td>
+                                      <td style="background-color:#9999ff;text-align:center;  "> Maîtrise fragile    </td>
+                                      <td style="background-color:#99cccc;text-align:center;   ">  Maitrise satisfaisante   </td>
+                                      <td style="background-color:#99ff99;text-align:center;  "> Très bonne maitrise    </td>
+                                  </tr>  
+                            </table>     
+                        </div>
+                    </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-sm-12 col-md-6">              
+            <strong>Résultat par savoir faire </strong> 
+                <div class="box">
+                      <!-- /.box-header -->
+                      <div class="box-body">
+                        <table class="table ">
+                            <tr><th>Savoir faire</th><th>Taux de bonne réponse</th> </tr> 
+
+                              {% for list in knowledge_tab  %} 
+                              <tr >  
+                                  <td> 
+                                       {{ list.name }} 
+                                  </td>
+                                  <td>  {% if list.percent > 85 %} 
+                                            <font class="text-primary">{{ list.percent }} %</font> 
+                                        {% elif list.percent > 65 %} 
+                                            <font class="text-success">{{ list.percent }} %</font> 
+                                        {% elif list.percent > 40 %} 
+                                            <font class="text-warning">{{ list.percent }} %</font>           
+                                        {% else %} 
+                                            <font class="text-danger">{{ list.percent }} %</font> 
+                                        {% endif %} 
+                                   </td>
+                                </tr>               
+                                
+                          {% endfor %} 
+                        </table>   
+                      </div>
+                </div>
+          </div>
+          <div class="col-sm-12 col-md-6">
+              <strong>Résultat par attendus </strong>  
+                      <div class="box">
+                        <div class="box-body">
+                            <table class="table ">
+                                <tr><th>Attendus</th><th>Niveau de maitrise</th> </tr> 
+
+                                  {% for list in waiting_tab  %} 
+                                  <tr >  
+                                      <td> 
+                                           {{ list.name }} 
+                                      </td>
+                                      <td>  {% if list.percent > 85 %} 
+                                                <font class="text-primary">{{ list.percent }} %</font> 
+                                            {% elif list.percent > 65 %} 
+                                                <font class="text-success">{{ list.percent }} %</font> 
+                                            {% elif list.percent > 40 %} 
+                                                <font class="text-warning">{{ list.percent }} %</font>           
+                                            {% else %} 
+                                                <font class="text-danger">{{ list.percent }} %</font> 
+                                            {% endif %} 
+                                       </td>
+                                    </tr>               
+                                    
+                              {% endfor %} 
+                            </table>
+                        </div>
+                  </div>
+
+          </div>
+      </div>
+</div>
+
+
+
+ 
+        

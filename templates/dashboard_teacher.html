@@ -1,0 +1,334 @@
+{% load static %} 
+{% load item_tags %} 
+
+<div class="row" id ="principal_section"> 
+    <div class="col-xs-12 col-md-10 col-lg-10" style="margin-top:20px">
+        <div class="row">
+            {% for group in groups %}
+                <div class="col-lg-4 col-md-6  col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box" style="background-color:{{ group.color }}">
+                        <div class="group_show  group_show{{group.id }}"> 
+                            <form action="" method="POST">
+                            {% csrf_token %}
+                            <a href="#" class="vue menuaction" data-toggle='modal' style="float:left; margin-right:10px"
+                               data-group_name='{{ group.name }}' data-group_id='{{ group.id }}' data-target='#exampleModal'> <span class="label label-default"> {{ group.students.count }}<i class="fa fa-users"></i></span></a>
+                            </form>
+                            <font style="font-size:12px; color:#CCC">
+                                {% for s in group.students.all|dictsort:"user.last_name" %} 
+                                    <a href="{% url 'detail_student_all_views'  s.user.id   %}" class="small_users"> {{s}} </a>{% if not forloop.last %}, {% endif %}
+
+                                {% empty %}
+                                    Aucun élève 
+                                {% endfor %}
+                            </font>
+                            <div style="clear:both"></div>
+                        </div>
+
+
+                        <div class="inner" style="color:white;opacity:0.9">
+                            <h3>{{ group.name }} </h3>  
+                            <p>
+                                <a href="{% url 'update_group' group.id %}" class="white" >{{ group.students.count }} élève{{ group.students.count|pluralize }}</a>
+                            </p> 
+                                 
+                            <p><i class="fa fa-barcode"></i> {{ group.code }}</p> 
+                            <p style="font-size: 13px">{{ nb_parcours }} parcours dont {{ nb_parcours_visible }} publié{{ nb_parcours_visible|pluralize }} et {{ nb_parcours_favorite }} en favori </p> 
+                            
+                        </div>
+                        <div class="icon">
+                              <i class="fa fa-users"></i> 
+                        </div>
+
+                        <div class="small-box-footer">
+
+ 
+
+                            <div class="row">                              
+                                <div class="col-lg-3 col-xs-3" style="padding-right:0px">
+                                     <a href="{% url 'list_parcours_group' group.id  %}" class="label_small_box"><i class="fa fa-map"></i><span class="small_displayer"> Parcours</span> </a>   
+                                </div>
+                                <div class="col-lg-3 col-xs-3" style="padding-right:0px">
+                                    <a href="{% url 'show_group' group.id  %}" class="label_small_box"><i class="fa fa-arrow-circle-right"></i><span class="small_displayer"> Détails </span></a>    
+                                </div>
+                                <div class="col-lg-3 col-xs-3" style="padding-right:0px">
+                                    <a href="{% url 'update_group' group.id %}" class="label_small_box"> <i class="fa fa-cogs"  ></i><span class="small_displayer"> Config.</span></a>    
+                                </div>
+                                <div class="col-lg-3 col-xs-3" style="padding-right:0px">
+                                    <a href="{% url 'stat_group' group.id   %}" class="label_small_box" ><i class="fa fa-bar-chart"></i><span class="small_displayer"> Stats</span> </a>
+                                </div> 
+                            </div>
+                            <div class="row">  
+                                <div class="col-lg-3 col-xs-3" style="padding-right:0px">
+                                    <a  href="{% url 'result_group_exercise'  group.id %}"  class="label_small_box" ><i class="fa fa-mortar-board"></i><span class="small_displayer"> Suivis</span></a>   
+                                </div> 
+                                <div class="col-lg-3 col-xs-3" style="padding-right:0px">
+                                    <a href="{% url 'result_group'  group.id %}" class="label_small_box" ><i class="fa fa-trophy"></i><span class="small_displayer"> Suivis</span> </a>      
+                                </div>
+                                <div class="col-lg-3 col-xs-3" style="padding-right:0px">
+ 
+
+                                    {% if group.is_task_exists %}
+                                        <a  href="{% url 'all_my_tasks'  %}"  class="label_small_box">
+                                            <i class="fa fa-calendar-check"></i> 
+                                    {% else %}
+                                        <a  href="{% url 'task_group' group.id   %}"  class="label_small_box">
+                                            <i class="fa fa-calendar"></i>  
+                                    {% endif %}
+                                            <span class="small_displayer">Tâches</span>
+                                        </a> 
+
+
+
+                                </div> 
+                                <div class="col-lg-3 col-xs-3" style="padding-right:0px">
+                                    <a  href="#"  class="label_small_box group_shower" data-group_id="{{group.id }}"><i class="fa fa-users"></i><span class="small_displayer"> Elèves</span> </a>   
+                                </div>
+                            </div>
+
+
+ 
+
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="col-lg-12 col-xs-12">
+                <p></p>
+                {% if not groups  %}
+                    <div class="alert alert-danger">Vous devez créer au moins un groupe pour enregistrer vos élèves. Lors de la création d'un groupe, un parcours par défaut est généré. Il est possible de paramétrer ce parcours par défaut via le groupe uniquement.
+                    <br>
+                    <a href="{% url 'create_group' %}" class="btn btn-default full_width">Créer un nouveau groupe</a>
+                    </div>
+                {% endif %}
+            </div>
+            {% if teacher.levels.all.count == 0 %} 
+            <div class="col-lg-10 col-xs-12">
+                <h3 class="thin">
+                    <a href="{% url 'profile' %}" style="color:red">Choisir mes niveaux préférés</a>
+                </h3>
+            </div>
+            {% endif %}
+        </div>
+
+ 
+        {% if parcours_tab|length > 0 %}
+           <!-- Add the bg color to the header using any of the bg-* classes -->
+        <div class="row"></div><hr>
+        <h2 class="thin">Mes parcours non affectés</h2>
+         
+            {% for parcours in parcours_tab %}  
+                <div  class="box box-widget widget-user-2"  
+                      style="opacity:0.5;{% if parcours.vignette %}background-image: url('/static/uploads/{{ parcours.vignette }}'); background-size: cover; {% else %} background-color:{{parcours.color }}{% endif %};"> 
+                      <!-- Add the bg color to the header using any of the bg-* classes -->
+                    <div class="handler widget-user-header">
+
+                        <!-- Fenetre accessible par le disc et les 3 points -->
+
+
+                        <!-- Fin de la fenetre  -->
+                        {% if parcours.is_evaluation %}   
+                            <div class="icon_evaluation">
+                                <i class="fa fa-bullseye"></i> 
+                            </div>
+                        {% endif %}
+
+
+
+
+                        {% if parcours.vignette %}                
+                            <div class="box_title_underlay_vignette" style="background-color:{{ parcours.color }};">
+                            </div> 
+                        {% endif  %}
+                        <div class="box_title_vignette"> 
+                            <a href="{% url 'show_parcours'  parcours.id  %}" style="color:{{ parcours.color|contrast_color }};"> {{ parcours.title|truncatechars:"18" }}
+                                <span style="font-size:12px"> 
+                                    {% if parcours.linked %}(par défaut){% endif %}
+                                    {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}
+                                    {% if not parcours.linked %}, 
+                                        {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }} {% endif %}min.
+                                    {% endif %}
+                                </span>
+                            </a>
+                            {% if parcours.group_list|length > 1 %}
+                            <span class="shared" style="color:{{ parcours.color }};">Parcours partagé</span>
+                            {% endif %} 
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <div class="row extend">                              
+                            <div class="col-lg-4 col-xs-4">
+                                <a href="{% url 'update_parcours' parcours.id 0 %}" class="edit" > <i class="fa fa-users"></i> <span class="label_icon">Affecter</span> </a><br>
+                                </a>  
+                            </div>
+                            <div class="col-lg-4 col-xs-4">
+                                <a href="{% url 'update_parcours' parcours.id 0 %}" class="edit" > <i class="fa fa-edit"></i> <span class="label_icon">Modifier</span> </a><br>
+                                </a> 
+                            </div>
+                            <div class="col-lg-4 col-xs-4">
+                                <a href="{% url 'delete_parcours' parcours.id 0 %}" class="edit" onclick="return TestDelete('ce parcours')"><i class="fa fa-trash"></i>  <span class="label_icon">Supprimer</span></a>
+                            </div>  
+                        </div>
+                        <div class="row extend">                              
+                            <div class="col-lg-4 col-xs-4">
+                                {% if not parcours.linked %}
+                                <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit"><i class="fa fa-laptop"></i> <span class="label_icon">Sélect.</span>
+                                </a>  
+                                {% else %} 
+                                <a href="{% url 'populate_parcours' parcours.parcours_group.id   %}" class="edit"><i class="fa fa-laptop"></i> <span class="label_icon">Sélect.</span>
+                                </a> 
+                                {% endif %} 
+                            </div>
+                            <div class="col-lg-4 col-xs-4">
+                                <a href="{% url 'organize_parcours' parcours.id %}"  class="edit" ><i class="fa fa-th"></i> <span class="label_icon">Gérer</span>
+                                </a> 
+                            </div>
+                            <div class="col-lg-4 col-xs-4">
+                                <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"  class="edit"><i class="fa fa-tasks"></i> <span class="label_icon">Gérer</span> </a> 
+                            </div>  
+                        </div>
+                    </div>
+                </div>   
+            {% empty %}
+                <div class="col-sm-12 col-md-12">
+                    <div class="alert alert-danger">Aucun parcours créé ou affecté. <a href="{% url 'parcours' %}" >Voir la liste de mes parcours</a></div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+
+
+
+
+
+
+    </div>
+ <!-- ****************************************************************************************-->
+ <!-- ****************************************************************************************-->
+ <!--    ****************************          Colonne de droite              ****************-->
+ <!-- ****************************************************************************************-->
+ <!-- ***************************** **********************************************************-->
+    <div class="col-xs-12 col-md-12 col-lg-2"> 
+        {% include 'right_menu.html' %}
+    </div>
+
+
+</div>
+
+
+
+    <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>                
+                    <h3 class="modal-title" id="exampleModalLabel">Liste des élèves - <span id="modal_group_name"></span></h3>
+                </div>
+                <div class="modal-body">
+                    <div id="list_students"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+
+
+    <div class="modal fade bd-example-modal-lg" id="help"  tabindex="-1" role="dialog" aria-labelledby="help" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document" style="margin:0px!important">
+ 
+            {% if user.user_type == 2 %}
+                <div class="modal-content help" >
+                    <div class="helpdiv_help_menu_left_bar">                
+                        <img src="{% static 'img/fleche_left_up.png' %}" width="40px" />
+                        <div class="help_menu_left_bar">
+                           <br><i class="fa fa-user"></i> Compte : Déconnexion/Mon profil/Changer mon mot de passe/Clôturer mon compte/Notifications
+                           <br><i class="fa fa-tachometer-alt"></i> Tableau de bord : Vers le tableau de bord, cette page
+                           <br><i class="fa fa-map"></i> Parcours : Liste de tous mes parcours pour leur configuration.
+                           <br><i class="fa fa-inbox"></i>  Messages : Messagerie succinte vers les membres de sacado et mes groupes.
+                        </div>
+                    </div>
+                    <div class="helpdiv_help_title_page">
+                       = titre de page
+                    </div>
+                    <div class="helpdiv_help_groupe">
+                        <img src="{% static 'img/fleche_up_left.png' %}" width="40px" />
+                        <div class="help_groupe" style="float:left" >
+                            {% if groups|length > 0 %}
+                               <br><i class="fa fa-map"></i> Parcours : vers la liste des parcours 
+                               <br><i class="fa fa-arrow-circle-right"></i> Détails : voir les détails
+                               <br><i class="fa fa-cogs"></i> Config. : Modifier, supprimer
+                               <br><i class="fa fa-bar-chart"></i> Stats : Brèves statistiques par élève
+                               <br><i class="fa fa-mortar-board"></i> Suivis : Suivis par élève et par exercice
+                               <br><i class="fa fa-trophy"></i> Suivis : Suivis par élève et par savoir faire
+                               <br><i class="fa fa-calendar"></i> Tâches : vers la liste des tâches en cours
+                               <br><i class="fa fa-users"></i> Elèves : ouvre une fenetre avec la liste des élèves. Lorsqu'un élève est cliqué, on obtient ses résultats.
+                            {% else %}
+                                <h2>Corps de page</h2> 
+                                <br>Renseignez vos niveaux préférés, puis créer un premier groupe avec le bouton ci-dessus.
+                                <br> Les groupes s'affichent ici.
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="helpdiv_help_details_group">
+                        Nombre d'élèves. Accès au groupe.<br> <br>Code du groupe
+                    </div>
+
+                    <div class="helpdiv_help_acces">
+                        Recherche d'un exercice<img src="{% static 'img/fleche_bottom_right.png' %}" width="10px" />
+                    </div>
+                    <div class="helpdiv_help_menu_right_bar">             
+
+                        <div class="help_menu_right_bar">
+                           <i class="fa fa-calendar"></i> Accès au calendrier et les tâches qui y figurent 
+                        </div>
+
+                        <div class="help_menu_right_bar" style="margin-top:30px">
+                           Création d'un nouveau groupe, affichage dans le corps de cette page
+                           <br>Création d'un parcours en accès direct. 
+                        </div>
+
+                        <div class="help_menu_right_bar" style="margin-top:50px">
+                          Liste des parcours :<br> <i class="fa fa-ban"></i> si non publié, <i class="fa fa-check-circle text-success"></i> si publié. <br>Lors de la création d'un groupe, l'affectation d'un parcours à un groupe se propage par les élèves. Tant qu'aucun élève n'est attribué, le parcours reste non affecté et visible via l'icone <i class="fa fa-map"></i> du menu gauche 
+                        </div>
+       
+                        <div class="help_menu_right_bar" style="margin-top:60px">
+                           Les niveaux préférés choisis <br>Accès à mon compte pour modifier mes niveaux préférés. Seuls les exercices des niveaux préférés sont affichés.
+                        </div>
+                    
+                        <div class="help_menu_right_bar" style="margin-top:30px">
+                           Lorsque le bouton est rouge, l'équipe sacado propose une nouveauté à lire en cliquant.
+                        </div>
+
+                    </div>
+
+                    <div class="mini_width">
+                        <div class="mini_block">
+                               <li><i class="fa fa-calendar"></i> Accès au calendrier et les tâches qui y figurent</li> 
+
+                               <li>Création d'un nouveau groupe, affichage dans le corps de cette page
+                               <br>Création d'un parcours en accès direct. 
+                               <br>Accès à mon compte pour modifier mes niveaux préférés. Seuls les exercices des niveaux préférés sont affichés.</li> 
+
+                              <li>Liste des parcours :<br> 
+                              {% if parcours|length > 0 %}
+                                    <i class="fa fa-ban"></i> si non publié, <i class="fa fa-check-circle text-success"></i> si publié. <br>Lors de la création d'un groupe, l'affectation d'un parcours à un groupe se propage par les élèves. Tant qu'aucun élève n'est attribué, le parcours reste non affecté et visible via l'icone <i class="fa fa-map"></i> du menu gauche 
+                              {% else %}
+                                    Lorsque les parcours sont créés, retrouver la liste ici avec un accès direct à leurs attributs.
+                              {% endif %}
+                              </li> 
+
+                               <li>Les niveaux préférés choisis</li> 
+
+                               <li>Lorsque le bouton est rouge, l'équipe sacado propose une nouveauté à lire en cliquant.</li>
+                        </div>
+                        <img src="{% static 'img/fleche_left_bottom.png' %}" width="40px" class="pull-right" />
+                    </div>
+                        
+
+                </div>
+            {% endif %}
+        </div>
+    </div>

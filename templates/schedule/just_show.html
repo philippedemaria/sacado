@@ -1,0 +1,78 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+{% block general_js %}
+ 
+<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-for-calendar2.js' %}"></script>
+ 
+{% endblock %} 
+
+
+{% block general_css %}
+    <link href="{% static 'schedule/fullcalendar/fullcalendar.min.css' %}" rel='stylesheet' />
+    <link href="{% static 'schedule/fullcalendar/fullcalendar.print.min.css' %}" rel='stylesheet' media='print' />
+    <style type='text/css'>
+        body {
+                font-size: 14px;
+                font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+                }
+        #calendar {
+                width: 900px;
+                margin: 0 auto;
+                }
+    </style>
+{% endblock  %}
+
+{% block title_page %} 
+<style>
+.dropdown-menu { padding:5px; width:700px;}
+.showing-list { padding:10px; line-height: 30px; }
+</style>
+
+<div class="dropdown">
+  Agenda   {{ user_shown.last_name}} {{ user_shown.first_name}}     
+
+ 
+
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    Agendas partagés 
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              {% for co in calendarOs %}
+              <a href="{% url 'calendar_show' co.user.id  %}" class="showing-list"> <i class="fa fa-user" style="color:{{co.color}}"></i>  {{ co.user.last_name }} {{ co.user.first_name }}  <small><em>{% for t in co.user.user_former.teachings.all %} {{ t.shortname }} {% if not forloop.last %} - {% endif %} {% endfor %}</em></small>  </a>
+              {% if forloop.counter|divisibleby:"4" %}  <br/> {% endif %}    
+              {% endfor %} 
+  </ul>
+</div>
+
+
+{% endblock  %}
+
+{% block body  %} 
+ 
+ 
+ 
+    <script>
+        require(['script/ajax-show-schedule']);
+    </script>
+
+
+<section class="content_bgwhite">
+ 
+        <input type ="hidden" value="{{ user_shown.id }}" id="user_id" />
+        <div class='calendar'></div>
+ 
+</section>
+
+
+
+ 
+
+
+
+
+{% endblock %}

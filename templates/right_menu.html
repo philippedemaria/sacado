@@ -1,0 +1,117 @@
+{% load item_tags %} 
+
+<div class="events_title">
+     A venir <small><span class="pull-right parcours_displayer pull-right_top"><i class="fa fa-calendar"></i> <a href="{% url 'calendar_initialize' %}" class="a_venir" >Afficher le calendrier</a> <a href="{% url 'calendar_initialize' %}" style="font-size:10px" target="_blank" title="Lien externe"><i class="fa fa-share"></i></a></span> </small>
+</div>
+<div class="events {% if relationships|length > 6  %}  div_events{% endif %}" >
+
+        {%  if relationships %} 
+            {% for relationship in relationships|dictsort:"date_limit" %}
+            <li class="sans_puce"><i class="fa fa-square" style="color: {{ relationship.parcours.color }}"></i> 
+              {{ relationship.date_limit|date:"d.m.y" }} :
+                  {% if relationship.parcours.parcours_group %}
+                      <a href="{% url 'detail_task'  relationship.parcours.parcours_group.id  relationship.exercise.id   %}" class="parcours_displayer"> 
+                       {% if relationship.exercise.supportfile.annoncement  %} {{ relationship.exercise.supportfile.annoncement|cleanhtml }}{% else %}{{ relationship.exercise.knowledge.name }}{% endif %}
+                      </a>
+                  {% else %}
+                      <a href="{% url 'detail_task_parcours' relationship.parcours.id relationship.exercise.id   %}" class="parcours_displayer"> 
+                        {% if relationship.exercise.supportfile.annoncement  %} {{ relationship.exercise.supportfile.annoncement|cleanhtml }}{% else %}{{ relationship.exercise.knowledge.name }}{% endif %}
+                      </a>        
+                  {% endif %}
+
+            </li>
+            {% endfor %}
+
+        {% else %}
+
+            <li class="sans_puce">Aucune tâche proposée</li>
+
+        {% endif %}
+</div>
+
+
+
+
+
+<li class="sans_puce"><a href="{% url 'create_group' %}" class="btn btn-default full_width">Créer un nouveau groupe</a> </li>
+
+<li class="sans_puce"><a href="{% url 'create_parcours' %}" class="btn btn-default full_width">Créer un nouveau parcours</a> </li>                    
+ 
+
+<hr>
+<div {% if parcourses|length > 8  %} class="div_accordion" {% endif %}>
+    <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+    {% for parcours in parcourses|dictsortreversed:"is_publish" %}
+    <div class="btn btn-default full_width" style="text-align: left; font-size:15px; margin-bottom: 5px">
+
+            <span data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}" class="parcours_displayer" >
+               {% if parcours.is_publish %} <i class="fa fa-check-circle text-success pull-right pull-right_top"></i>  {% else %} <i class="fa fa-ban pull-right pull-right_top"></i>{% endif  %}  {{ parcours|truncatechars:"22" }} 
+            </span>
+
+        <div id="collapse{{ forloop.counter }}" class="collapse">
+            <div class="panel-body"  style="padding:0px">
+                <table class="table" style="margin-bottom: 0px;font-size:14px;color : {{  parcours.color }}">
+                    <tr>
+                        <td>
+                            <a href="{% url 'show_parcours' parcours.id   %}"  style="color : {{  parcours.color }}">{{ parcours.exercises.count }} exercice{{ parcours.exercises.count|pluralize }}</a> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ parcours.students.count }} élève{{ parcours.students.count|pluralize }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <a href="{% url 'update_parcours' parcours.id 99999999999 %}"  style="color : {{  parcours.color }}"> <i class="fa fa-cogs"  ></i> Configurer</a> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                          <a href="{% url 'stat_parcours' parcours.id  %}"   style="color : {{  parcours.color }}"><i class="fa fa-trophy"></i> Suivis </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="{% url 'show_parcours' parcours.id  %}"  style="color : {{  parcours.color }}"><i class="fa fa-arrow-circle-right"></i> En détails </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+      <!-- Accordion card -->
+    {% empty %}
+Aucun parcours
+    {% endfor %}
+    </div>
+</div>
+<hr>
+<li class="sans_puce" style="margin-bottom: 5px"><a href="{% url 'profile' %}" class="btn btn-default full_width"> Choisir mes niveaux préférés</a> </li>
+
+<div class="btn btn-default full_width" style="text-align: left; font-size:15px; margin-bottom: 5px">
+
+        <span data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}">
+           M{{ teacher.levels.all.count|pluralize:"on,es" }} {{ teacher.levels.all.count }} niveau{{ teacher.levels.all.count|pluralize:"x" }}  préféré{{  teacher.levels.all.count|pluralize }}  
+        </span>
+
+    <div id="collapse{{ forloop.counter }}" class="collapse">
+        <div class="panel-body" style="padding:0px">
+            <table class="table" style="margin-bottom: 0px;font-size:14px">
+                {% for l in teacher.levels.all %}
+                <tr>
+                    <td>
+                        {{ l.name }}
+                    </td>
+                </tr>
+                {% endfor %} 
+            </table>
+        </div>
+    </div>
+</div>
+<hr>
+{% if user.user_type == 2 %}
+    <a href="#" data-toggle='modal' data-target='#nouveaute'   class="btn btn-{% if communications|length > 0 %}danger{% else %}default{% endif %} full_width" >
+        {% if communications|length > 0 %}Lire {% endif %}Les nouveautés 
+    </a>
+{% endif %}

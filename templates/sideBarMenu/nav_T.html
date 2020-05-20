@@ -1,0 +1,76 @@
+{% load static %}
+<li  class='dropdown'>
+    <a><img src="{% static 'img/sacadoLogo.png' %}" style="vertical-align: text-bottom;" width="35px"/>
+
+        <div class="captionmenu sacado white">
+         SacAdo
+        </div>
+    </a>
+
+</li>
+
+
+
+<li class='dropdown {% if '/account' in request.path  %}active{% endif %}'>
+    <a href="#"  id="account">
+        <i class="fa fa-user fa-2x"></i> 
+        <div class="captionmenu">Compte</div>
+    </a>
+</li>
+
+<li class='dropdown {% if not '/account'  in request.path and not '/parcours'  in request.path and not '/parcours'  in request.path and not '/sendmail'  in request.path and not '/qcm'  in request.path  %}active{% endif %}'>
+    <a href="{% url 'index' %}" >
+        <i class="fa fa-tachometer-alt fa-2x"></i> 
+        <div class="captionmenu">Tableau de bord</div>
+    </a>
+</li>
+
+
+<!-- <li  class='dropdown {% if '/group' in request.path or parcours.linked %}active{% endif %}'>
+    <a href="{% url 'groups' %}"  >
+        <i class="fa fa-users fa-2x" aria-hidden="true"></i> 
+        <div class="captionmenu">Groupes</div>
+    </a>
+</li> -->
+
+
+ 
+
+<li  class='dropdown {% if '/parcours' in request.path    %}active{% endif %}'>
+    <a href="{% url 'parcours' %}"  >
+        <i class="fa fa-map fa-2x" aria-hidden="true"></i> 
+        <div class="captionmenu">Parcours</div>
+    </a>
+</li>
+<li  class='dropdown  {% if '/sendmail' in request.path %} active{% endif %}'>
+    <a href="{% url 'emails' %}">
+        <i class="fa fa-inbox fa-2x"></i> 
+        <div class="captionmenu">Messages</div>
+    </a>
+</li>
+  
+ 
+{% if request.user.is_superuser %}
+ <li  class='dropdown {% if 'exercise' in request.path %}active{% endif %}'>
+    <a href="{% url 'exercises' %}"  >
+        <i class="fa fa-laptop fa-2x" aria-hidden="true"></i> 
+        <div class="captionmenu">Exercices</div>
+    </a>
+</li> 
+<li  class='dropdown  {% if '/admin' in request.path %} active{% endif %}'>
+    <a href="#"   id="admin" >
+        <i class="fa fa-cloud fa-2x"></i> 
+        <div class="captionmenu">Admin</div>
+    </a>
+</li>
+{% endif  %}
+ 
+ {% if not  '/exercise' in request.path  and      '/sendmail'  not in request.path  and   '/account' not in request.path   %}
+ <li  class='dropdown'>
+     <a href="#" data-toggle='modal' data-target='#help'>
+        <i class="fa fa fa-life-ring  fa-2x"></i>
+        <div class="captionmenu">Aide</div>
+    </a>
+</li> 
+{% endif  %}                        
+

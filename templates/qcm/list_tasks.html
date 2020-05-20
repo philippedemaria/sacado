@@ -1,0 +1,91 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+
+
+
+{% endblock %} 
+
+  
+{% block page_title %}
+    <span style="color:{{ parcours.color }}"><i class="fa fa-calendar-check-o"></i> Tâches <img src="{% static 'img/angle-right.png' %}"/> {{ parcours }}</span>
+{% endblock %}
+
+{% block page_menu_right %}
+    <li style="font-size:14px; position: absolute;right:0px; top:-6px;" > {{ today|date:"d N Y" }}  </li>
+
+    <li><a href="{% url 'organize_parcours' parcours.id %}"   class="no_button" > Créer une tache</a> </li>
+    <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
+{% endblock %}
+
+{% block body %}
+<section class="content_main">  
+ 
+ 
+
+<div class="row"> 
+    <div class="col-sm-12 col-md-12">
+        <table class="table table-hover display" style="width:100%">
+            <thead> 
+                <tr>
+                    <td></td><td></td><td></td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in relationships  %} 
+                <tr {% if r.date_limit < date_today %} style="background-color:#DDD" {% endif %}> 
+                    <td >   
+                        <a href="{% url 'show_this_exercise' r.exercise.id %}" target="_blank">
+
+                        
+                            <img src="../../../../static/uploads/{{ r.exercise.supportfile.imagefile }}" class="imagefile">
+
+
+                            {{ r.exercise.supportfile.annoncement|cleanhtml|capfirst  }} 
+                                        {% if r.exercise.supportfile.calculator %}
+                                          <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                        {% else %}
+                                          <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                        {% endif  %}   <br>
+                            <i class="fa fa-barcode"></i> {{ r.exercise.supportfile.code }}      <br>                                 
+                            <i class="fa fa-clock-o"></i> {{ r.exercise.supportfile.duration }} minutes<br>
+                            <i class="fa fa-save"></i> {{ r.exercise.supportfile.situation }}  situation{{ r.exercise.supportfile.situation|pluralize }}<br>       
+                        </a>
+                    </td>
+                    <td>
+                        {% get_nb_task_done  r.exercise r.parcours  as nb_task_done %}
+                        {% if r.parcours.linked %} {{ nb_task_done}}/{{  r.parcours.students.count  }}{% else %} {{ nb_task_done}}/{{ r.parcours.students.count  }} {% endif %}<br/>
+                        {% get_who_are_done  r.exercise  r.parcours   as who_are %}
+                        {%  for s in who_are|dictsort:"student.user.last_name" %} 
+                        <small>{{ s.student.user.last_name|lower|capfirst }}{% if not forloop.last %}, {% endif %} </small>
+                        {% endfor %}  
+                    </td>
+                    <td>{{ r.date_limit }} <br/><br/>
+
+                        {% if r.parcours.linked %}
+                        <a href="{% url 'detail_task'   r.parcours.parcours_group.id  r.exercise.id   %}" class="btn btn-{% if r.date_limit < date_today %}default{% else %}sacado{% endif %} ">En détails</a>
+                        {% else %}
+                        <a href="{% url 'detail_task_parcours'   r.parcours.id  r.exercise.id   %}" class="btn btn-{% if r.date_limit < date_today %}default{% else %}sacado{% endif %} ">En détails</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                    
+                {% endfor %}
+            </tbody>
+
+        </table>
+
+
+
+    </div>
+</div> 
+ 
+</section>
+{% endblock %}

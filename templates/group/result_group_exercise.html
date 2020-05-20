@@ -1,0 +1,21 @@
+{% extends 'group/result_group.html' %}
+ 
+
+{% block legend %}
+
+Suivis des exercices déjà proposés
+{% endblock %}
+
+ 
+
+{% block result %} 
+
+     {% for r in student.resultexercises %}
+     	{%  with  r.exercise as  exercise %}  
+            {% include 'group/score.html' %}  
+        {%  endwith %}                                          
+    {% endfor %}                                                                    
+{% endblock %}
+
+
+ 

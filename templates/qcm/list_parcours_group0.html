@@ -1,0 +1,107 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+ 
+    <script>
+        require(['script/ajax-parcours']);
+    </script> 
+
+
+{% endblock %}
+
+ 
+
+{% block page_title %}
+       <span style="color:{{ group.color }}"><i class="fa fa-map"></i> {{ group }}    <img width="25px" src="{% static 'img/angle-right.png' %}"/> Parcours </span>  
+{% endblock %}
+
+{% block page_menu_right %}
+
+
+
+  <li> <a href="{% url 'parcours' %}"   class="no_button"> Mes parcours</a> </li>
+  <li> <a href="{% url 'create_parcours' %}"   class="btn btn-new" ><img width="15px" src="{% static 'img/plus.png' %}"/> Nouveau parcours</a> </li>  
+{% endblock %}
+
+
+
+
+
+{% block body  %}  
+<section class="content_main"> 
+ 
+
+<div class="row">    
+   <div class="col-sm-12 col-md-12">
+        <table class="table_search display_no_details20"  style="width:100%">
+            <thead> 
+                <tr> 
+                    <th style="width:2px"></th>                  
+                    <th style="width:150px"></th>
+                    <th style="width:80px"></th>
+                    <th></th>
+                    <th style="width:100px"></th>
+                    <th style="width:100px"></th>
+                </tr> 
+            </thead>
+            <tbody>
+ 
+
+                    {% for parcours in parcours_tab %}
+ 
+
+                        {% include 'qcm/list_parcours_body.html' %}
+              
+
+                    {% empty %}
+                    <tr> 
+                        <td >
+                            <div class="alert alert-danger">Aucun parcours créé. </div>
+                        </td>
+                        <td></td><td></td> <td></td> 
+                    </tr>
+                    {% endfor %}
+                
+ 
+            </tbody>
+        </table>
+    </div>
+</div>
+        <div class="row">
+            <div  style="margin-top: 20px">
+                <div class="form-group">
+                    <a href="{% url 'groups' %}"  class="btn btn-subsacado "/><i class='fa fa-users'></i> Retour vers Mes groupes</a>
+                    <a href="{% url 'parcours' %}"  class="btn btn-subsacado "/><i class='fa fa-map'></i> Retour vers Mes parcours</a>
+                </div>
+
+            </div>
+        </div>
+</section>
+
+
+
+    <div class="modal fade bd-example-modal-lg" id="listing" tabindex="-1" role="dialog" aria-labelledby="listing"aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>                
+                    <h5 class="modal-title" id="exampleModalLabel">Liste des élèves - <span id="modal_group_name"></span></h5>
+                </div>
+                <div class="modal-body">
+                    <div id="list_students"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock  %}   
+
+
+ 

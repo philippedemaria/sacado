@@ -1,0 +1,50 @@
+{% extends 'group/result_group.html' %}
+{% load item_tags %} 
+ 
+ 
+ 
+
+{% block skill_block %} 
+ 
+        {% for skill in skills %}
+             <th>
+             	{{ skill.name }}
+             </th>
+        {% endfor %}
+  
+ 
+{% endblock %}
+
+ 
+
+{% block skill_result %} 
+		
+    {% for skill in skills %}
+    	<td>
+    		{% get_result_skills student skill as resultskills %}
+			{% for r in resultskills %}
+					{% if r.point %}
+					    <a class="markdown
+					            {% if d.point < 30 %}
+					             red 
+					            {% elif r.point < 60 %}
+					            orange
+					            {% elif r.point < 80 %}
+					            green
+					            {% else %}
+					            darkgreen
+					            {% endif %}" >
+					        {{ r.point }}
+					    </a>
+					{% else %}
+					    <a class="markdown"  > 
+					          {{ r.point }}
+					    </a>
+					{% endif %}  
+	    	{% endfor %}  
+	    </td>
+	{% endfor %} 
+{% endblock %}
+
+
+ 

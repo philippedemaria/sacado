@@ -1,0 +1,52 @@
+{% load static %}
+<li>
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <span class="blue"> {{ user.first_name }} {{ user.last_name }}</span>
+                </h4>
+            </div>
+        </div>
+    </div>
+</li>
+<!-- ******************************************************************************  Mon compte  ***********************************************************************************-->
+<li>
+    <div class="panel-group">
+    {% if '/myaccount' in request.path %}
+        <div class="panel panel-primary">
+    {% else %}
+        <div class="panel panel-default">
+    {% endif %}
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="{% url 'myaccount' %}"><img src="{% static 'img/sacado-icon.png' %}" border="0" width="15px"/> Mon compte</a>
+                </h4>
+            </div>
+        </div>
+    </div>
+</li>
+<!-- ******************************************************************************  Mutation  ***********************************************************************************
+<li>
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href=" "> <i class="fa fa-external-link"></i> Mutation</a>
+                </h4>
+            </div>
+        </div>
+    </div>
+</li>-->
+<!-- ******************************************************************************  Déconnexion  ***********************************************************************************-->
+<li>
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="{% url 'logout' %}"> <i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+                </h4>
+            </div>
+        </div>
+    </div>
+</li>

@@ -1,0 +1,102 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+    {% if parcours %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+
+    <script>
+        require(['script/ajax-parcours']);
+    </script> 
+
+{% endblock %} 
+
+
+
+
+
+ 
+ 
+
+{% block page_title %}
+<span  style="color:{{ parcours.color }}"> <i class="fa fa-map"></i>   {{ parcours }} 
+ 
+ 
+<img src="{% static 'img/angle-right.png' %}"/> 
+<small class="thin">{{ nb_exercises }} exercice{{ nb_exercises|pluralize }}</small> </span>
+{% endblock %}
+
+{% block page_menu_right %}
+ <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
+{% endblock %}
+
+ 
+
+{% block body %}
+ 
+      
+<section class="content_list"> 
+
+    {% for relation in relationships %}
+        {%  if relation.exercise.supportfile.is_title %}       
+            <h2 class="listing thin" style="width:100%; clear:both"> {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}</h2>
+        {%  elif relation.exercise.supportfile.is_subtitle %}
+            <h3 class="listing thin" style="width:100%; clear:both"> {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}</h3>
+        {% else %} 
+
+ 
+            <div class="card_freeze" {% if data.score %} style="opacity:0.3" {% endif %}>
+                <div class="card-body student">
+                    <div style="color:{{ parcours.color }};font-size: 40px;padding-top: 6px">{{ nb_exo_only|index:forloop.counter0 }}.
+                    {% if lc.calculator %}
+                      <img src="{% static 'img/calculator.png' %}" class="pull-right" width="35px" />
+                    {% else %}
+                      <img src="{% static 'img/no_calculator.png' %}" class="pull-right"   width="35px" />
+                    {% endif  %} 
+                    </div>
+                </div>                    
+                <div class="card-image">
+ 
+                    <img src="../../../../static/uploads/{{ relation.exercise.supportfile.imagefile }}"  class="image_parcours_order"  >
+  
+                    <div class="card-text" style="background-color:{{ parcours.color }}">
+                        <i class="fa fa-barcode"></i> {{ relation.exercise.supportfile.code }}  
+                        <i class="fa fa-clock-o"></i> {{ relation.duration }} min.
+                        <i class="fa fa-save"></i> {{ relation.situation}}
+                    </div>
+                </div>
+            </div> 
+
+        {% endif %}          
+
+    {% endfor %}
+
+
+ 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="form-group">
+                <a href="{% url 'clone_parcours' parcours.id %}" class="btn btn-sacado">Cloner ce parcours</a>    
+                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+            </div>
+        </div>
+         
+    </div>  
+ 
+
+
+</section>
+ 
+   
+{% endblock %}
+
+ 
+ 
+ 
+ 

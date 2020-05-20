@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+{% load static %}
+{% load bootstrap3 %}
+{% bootstrap_messages %}
+{% load widget_tweaks %}    
+<link rel="icon" type="image/x-icon" href="{% static 'img/favicon.png' %}" />    
+
+
+<title>{% block title %}Test de  {{ student.user.get_full_name|title }} {% endblock %}</title>    
+
+
+
+
+{% include 'librariesCSS.html' %}
+<!-- *************************************************************************************************************************** -->
+<!-- *************************************************************************************************************************** -->
+<!-- *************************************************************************************************************************** -->
+<link rel="stylesheet" type="text/css" href="{% static 'css/backend.css' %}" />
+<!-- *************************************************************************************************************************** -->
+<!-- *************************************************************************************************************************** -->
+<!-- *************************************************************************************************************************** -->
+
+{% block general_css %}
+    <link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet"> 
+{% endblock  %}
+
+{% block general_js %} 
+<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-action.js' %}"></script>
+{% endblock %} 
+
+</head>
+
+  <body>
+
+
+ 
+        
+        {% block breadcrumbs %} 
+        {% endblock %}
+  
+
+
+        {% block body %}
+
+
+
+
+        {% endblock %}
+
+
+ 
+    
+        <!-- Footer -->
+        {% block footer %} 
+        {% endblock %}
+
+    
+</body>
+ 
+</html> 

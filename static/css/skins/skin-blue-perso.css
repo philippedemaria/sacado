@@ -1,0 +1,295 @@
+/********************************************* bleu :  #00819f ************************************/
+/********************************************* vert : #1bc074 *******************************************/
+/********************************************* orange: #ff9c00 ***************************************/
+/********************************************* rouge: #ff1e02 ***************************************/
+/********************************************* bleu side bar #e7eef0 ***************************************/
+/********************************************* bleu content #f5f8f9 ***************************************/
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,900);
+@import url(http://fonts.googleapis.com/css?family=Amatic+SC:400,900);
+@import url("prettyPhoto.css") screen;
+@import url("hoverex-all.css") screen;
+
+
+.edit{  color: #d6d6d6;}
+.edit:hover{  color: #1bc074;}
+.delete{  color: #d6d6d6;}
+.delete:hover{  color: #ff1e02;}
+.vue{  color: #d6d6d6;}
+
+.gray{  color: #95a5a6;}
+.green{  color: #1bc074;}
+.orange{  color: #ff9c00;}
+.red{color: #ff1e02;}
+
+
+.sacado{  
+  font-family: 'Amatic SC';
+  margin:10px;
+}
+.content-wrapper{  
+background-color: #f5f8f9;
+}
+
+.content-header{  
+padding:20px;
+}
+
+.action{ 
+width:40px;
+text-align:center;
+}
+
+.action3{ 
+width:50px;
+text-align:center;
+}
+
+.action4{ 
+width:60px;
+text-align:center;
+}
+
+.control-label {
+  color:#AAA;
+  font-weight: normal; 
+}
+
+.myButton {
+  background-color:#009e42;
+  -moz-border-radius:8px;
+  -webkit-border-radius:8px;
+  border-radius:8px;
+  border:0px;
+  display:inline-block;
+  cursor:pointer;
+  color:#ffffff;
+  font-size:14px;
+  padding:7px 20px;
+  text-decoration:none;
+}
+.myButton:hover {
+  background-color:#04883c;
+  color:#fff; 
+}
+
+a.white {
+  color:#fff; 
+}
+
+a.white:hover {
+  color:#f2f2f2; 
+}
+
+.progress-description{
+margin-top: 10px;
+text-align: right;
+}
+
+.bg-grey {
+  background: #95a5a6;  
+  color:#fff; 
+}
+
+
+.leftblock{
+    float: left;
+    width: 200px;
+    margin:5px;
+    border-radius: 5px 5px 5px 5px;
+    border:solid 1px #f0f0f0 ;    
+}
+
+.leftblock .title{
+    font-size:1.5em;
+    background: #00819f;
+    color: #fff;  
+    padding:5px;     
+    border-radius: 5px 5px 0px 0px;        
+}
+
+.leftblock .contentul{
+    margin:0px;  
+    padding:10px;   
+    background: #f5f8f9;     
+    width: 198px;           
+}
+
+
+
+.clear{
+clear: both; 
+height:20px;
+}
+
+
+
+
+
+
+
+
+.skin-blue .main-header .navbar {
+  background-color: #00819f;
+}
+.skin-blue .main-header .navbar .nav > li > a {
+  color: #ffffff;
+}
+.skin-blue .main-header .navbar .nav > li > a:hover,
+.skin-blue .main-header .navbar .nav > li > a:active,
+.skin-blue .main-header .navbar .nav > li > a:focus,
+.skin-blue .main-header .navbar .nav .open > a,
+.skin-blue .main-header .navbar .nav .open > a:hover,
+.skin-blue .main-header .navbar .nav .open > a:focus,
+.skin-blue .main-header .navbar .nav > .active > a {
+  background: rgba(0, 0, 0, 0.1);
+  color: #f6f6f6;
+}
+.skin-blue .main-header .navbar .sidebar-toggle {
+  color: #ffffff;
+}
+.skin-blue .main-header .navbar .sidebar-toggle:hover {
+  color: #f6f6f6;
+  background: rgba(0, 0, 0, 0.1);
+}
+.skin-blue .main-header .navbar .sidebar-toggle {
+  color: #fff;
+}
+.skin-blue .main-header .navbar .sidebar-toggle:hover {
+  background-color: #00819f;
+}
+@media (max-width: 767px) {
+  .skin-blue .main-header .navbar .dropdown-menu li.divider {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  .skin-blue .main-header .navbar .dropdown-menu li a {
+    color: #fff;
+  }
+  .skin-blue .main-header .navbar .dropdown-menu li a:hover {
+    background: #00819f;
+  }
+}
+.skin-blue .main-header .logo {
+  background-color: #00819f;
+  color: #ffffff;
+  border-bottom: 0 solid transparent;
+}
+
+.skin-blue .main-header .logo:hover {
+  background-color: #357ca5;
+}
+.skin-blue .main-header li.user-header {
+  background-color: #00819f;
+}
+.skin-blue .content-header {
+  background: transparent;
+}
+.skin-blue .wrapper,
+.skin-blue .main-sidebar,
+.skin-blue .left-side {
+  background-color: #e7eef0;
+}
+.skin-blue .user-panel > .info,
+.skin-blue .user-panel > .info > a {
+  color: #00819f;
+}
+.skin-blue .sidebar-menu > li.header {
+  color: #4b646f;
+  background: #e7eef0;
+}
+.skin-blue .sidebar-menu > li > a {
+  border-left: 3px solid transparent;
+  color: #00819f;
+}
+
+
+.skin-blue .sidebar-menu > li:hover > a,
+.skin-blue .sidebar-menu > li.active > a {
+  color: #1bc074;
+  background: #f5f8f9;
+  border-left-color: #1bc074;
+}
+
+
+a .bg-menu
+{
+  color: #e7eef0;
+}
+a:hover .bg-menu
+{
+  color: #fff;
+  background: #1bc074; 
+}
+
+
+.skin-blue .sidebar-menu > li > .treeview-menu {
+  margin: 0 1px;
+  background: #e7eef0;
+}
+.skin-blue .sidebar a {
+  color: #b8c7ce;
+}
+.skin-blue .sidebar a:hover {
+  text-decoration: none;
+}
+.skin-blue .treeview-menu > li > a {
+  color: #34a2bc;
+  background: #f5f8f9;  
+}
+
+
+.skin-blue .treeview-menu > li.active > a,
+.skin-blue .treeview-menu > li > a:hover {
+  color: #1bc074; 
+  background: #fff;   
+}
+
+.skin-blue .treeview-menu > li > a .bg-menu  {
+  color: #f5f8f9;
+}
+.skin-blue .treeview-menu > li > a:hover .bg-menu  {
+  background: #1bc074;
+}
+
+.skin-blue .sidebar-form {
+  border-radius: 3px;
+  border: 1px solid #374850;
+  margin: 10px 10px;
+}
+.skin-blue .sidebar-form input[type="text"],
+.skin-blue .sidebar-form .btn {
+  box-shadow: none;
+  background-color: #e7eef0;
+  border: 1px solid transparent;
+  height: 35px;
+}
+.skin-blue .sidebar-form input[type="text"] {
+  color: #666;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 2px;
+}
+.skin-blue .sidebar-form input[type="text"]:focus,
+.skin-blue .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
+  background-color: #fff;
+  color: #666;
+}
+.skin-blue .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
+  border-left-color: #fff;
+}
+.skin-blue .sidebar-form .btn {
+  color: #999;
+  border-top-left-radius: 0;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 0;
+}
+.skin-blue.layout-top-nav .main-header > .logo {
+  background-color: #00819f;
+  color: #ffffff;
+  border-bottom: 0 solid transparent;
+}
+.skin-blue.layout-top-nav .main-header > .logo:hover {
+  background-color: #3b8ab8;
+}

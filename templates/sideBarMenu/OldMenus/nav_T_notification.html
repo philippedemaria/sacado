@@ -1,0 +1,39 @@
+ 
+  <li> 
+    <a type='text' href=" " class='btn btn-danger white bouton_new' data-target='#newCourriel' data-whatever='newMessage' ><i class="fa fa-pencil"></i> Nouvelle notification </a>
+    <div class="panel-group">
+      <div class="panel panel-<?PHP if (in_array("mailbox", $tab)) { echo"primary";} else { echo"default";}?>" >
+        <div class="panel-heading">
+          <h4 class="panel-title">
+              <a href=""><i class="fa fa-envelope"></i><span> Boite de réception</span>
+                  
+             <span class='pull-right-container'><small class='label pull-right bg-orange'>$nC</small></span> 
+                  
+              </a>
+          </h4>
+        </div>
+      </div>
+    </div>  
+  </li>
+  <li>  
+    <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a href=""><i class="fa fa-share"></i> Messages envoyés</a>
+            </h4>
+          </div>
+        </div>
+    </div>
+  </li>
+  <li>   
+    <div class="panel-group">
+        <div class="panel panel-default" >
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a href=""><i class="fa fa-users"></i> Contact</a>
+            </h4>
+          </div>
+        </div>
+    </div>
+  </li>

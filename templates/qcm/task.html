@@ -1,0 +1,121 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+
+
+
+{% endblock %} 
+
+  
+{% block page_title %}
+    <span style="color:{{ parcours.color }}"><i class="fa fa-calendar-check-o"></i> {{ exercise }}</span>
+{% endblock %}
+
+{% block page_menu_right %}
+    <li><a href="{% url 'organize_parcours' parcours.id %}"   class="no_button" >Créer une tache</a>  </li>
+    <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default"/></a>
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main">  
+ 
+<div class="row"> 
+    <div class="col-sm-12 col-md-12">
+        <table class="table" style="width:100%">
+            <thead> 
+                <tr>
+                    <td></td><td></td><td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr> 
+                    <td >
+                        <a href="{% url 'show_this_exercise' exercise.id %}"  target="_blank" >
+
+                        
+                            <img src="../../../../static/uploads/{{ exercise.supportfile.imagefile }}" class="imagefile">
+
+
+                            {{ exercise.supportfile.annoncement|cleanhtml|capfirst  }} 
+                                        {% if exercise.supportfile.calculator %}
+                                          <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                        {% else %}
+                                          <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                        {% endif  %}   <br>
+                            <i class="fa fa-barcode"></i> {{ exercise.supportfile.code }}      <br>                                 
+                            <i class="fa fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes<br>
+                            <i class="fa fa-save"></i> {{ exercise.supportfile.situation }}  situation{{ exercise.supportfile.situation|pluralize }} 
+        
+                        </a>
+                    </td>
+                    <td>
+                        {% get_nb_task_done  exercise parcours  as nb_task_done %}
+                        {% if parcours.linked %} {{ nb_task_done}}/{{  parcours.students.count  }}{% else %} {{ nb_task_done}}/{{ parcours.students.count  }} {% endif %}<br/>  
+                    </td>
+                    <td>{{ relationship.date_limit }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>  
+
+<div class="row"> 
+    <div class="col-sm-12 col-md-12">
+        <table class="table table-hover table-striped standard_tab_sort" style="width:100%">
+            <thead> 
+                <tr>
+                    <td>Elèves</td><td>Score</td><td>Tentatives</td><td>Temps</td><td>Effectuée le</td><td>Heure</td>
+                </tr>
+            </thead>
+            <tbody> 
+                {% for d in details_tab  %} 
+                <tr> 
+                    <td style="width:400px">
+                         {{ d.student }}
+                    </td>
+                    <td>{% if d.point %}
+                         <a class="{% if s.point < 30 %}
+                                     red 
+                                    {% elif s.point < 60 %}
+                                    orange
+                                    {% elif s.point < 80 %}
+                                    green
+                                    {% else %}
+                                    darkgreen
+                                    {% endif %}" style="padding:2px 4px">{{ d.point }}</a>{% endif %}
+                    </td>
+                    <td>                         
+                        {{ d.numexo  }}
+                    </td>
+                    <td>                         
+                        {{ d.secondes }}
+                    </td>
+                    <td>
+                         {{ d.date|date:"Y-m-d" }}    
+                    </td>
+                    <td>                         
+                        {{ d.date|date:"H:i" }}
+                    </td>
+                </tr>
+                    
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+
+
+    </div>
+</div> 
+ 
+</section>
+{% endblock %}

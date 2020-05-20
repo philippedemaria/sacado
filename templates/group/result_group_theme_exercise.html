@@ -1,0 +1,33 @@
+{% extends 'group/result_group.html' %}
+{% load static %}
+{% load item_tags %}
+
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common4.js' %}"></script> 
+    <script>
+        require(['script/ajax-group']);
+    </script>
+{% endblock %}
+
+
+{% block legend %} 
+ 	 Exercises
+{% endblock %}
+
+{% block page_title %}
+    <i class='fa fa-trophy'></i>  {{ group.name }}    <img src="{% static 'img/angle-right.png'%}"/>  <small class='thin'>{{ theme }}</small>
+{% endblock %}
+
+
+{% block result %}
+     {%  get_resultexercises_by_theme student theme as resultexercises %}   
+        
+     {% for r in  resultexercises %}
+     	{%  with  r.exercise as  exercise %}  
+            {% include 'group/score.html' %}  
+        {%  endwith %}                                          
+    {% endfor %}      
+
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script>
+        require(['script/ajax-list-associations']);
+    </script> 
+{% endblock %} 
+
+  
+{% block page_title %}
+    <img src="{% static 'img/ggb.png' %}" width="25px"> Les exercices
+{% endblock %}
+
+{% block page_menu_right %}
+ 
+    <li  >{% if request.user.is_superuser and  '/admin' in request.path %}<a href="{% url 'create_supportfile' %}"   class="btn btn-new"><img width="25px" src="{% static 'img/plus.png' %}"/> Nouveau support GGB {% endif  %}</a> </li>
+
+{% endblock %}
+
+
+{% block body %}
+<section class="content_container">  
+    {% if datas %} 
+
+        <ul  class="nav nav-tabs">
+     
+                {% for data in datas %}
+            <li {% if forloop.first %}class="active"{% endif %}><a  href="#{{ forloop.counter}}a" data-toggle="tab">{{ data.name.shortname }}</a></li>
+                {% endfor  %}
+
+
+            {% if not '/admin' in request.path %}
+            <li> <a href="{% url 'profile' %}" class="thin">+</a></li>
+            {% endif %}
+
+
+
+
+        </ul>
+        <div class="tab-content clearfix">
+
+            {% for data in datas %} 
+            <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ forloop.counter}}a">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <form action="" method="POST" enctype='multipart/form-data'> 
+                        {% csrf_token %}
+                            <table class="table  table-hover standard_tab_1000" style="width:100%">
+                                <thead> 
+                                    <tr>
+                                        <td></td><td>  </td>
+                                    </tr>
+                                </thead> 
+                                <tbody>
+                                    {% for theme in data.themes  %} 
+                                        <tr style="background:#e6e2dd">
+                                            <td style="width:85%">{{theme.name}}</td> 
+                                            <td style="width:15%"> </td>
+                                        </tr>   
+                                        {% for knowledge in theme.knowledges  %} 
+                                            <tr  style="background:#F0F0F0" id="row{{ knowledge.name.id }}"> 
+                                                <td>
+                                                    Le savoir faire "<span style="color:#007EE2">{{ knowledge.name.name|capfirst }}</span>" est associé 
+                                                     {% if knowledge.exercises|length > 1%}aux {%  else %}au {% endif %}support{{ knowledge.exercises|length|pluralize }} GGB ci-dessous :
+                                                </td>
+                                                <td style="position: relative;" >
+
+                                                     <input type="text" id="create_code{{ knowledge.name.id }}" class="form-control" placeholder="code du support" />                               
+
+                                                     <a href="#row{{ knowledge.name.id }}" data-exercise_id="{{ knowledge.name.id }}" 
+                                                        data-action="create" 
+                                                        class="btn btn-success create_association" style="position: absolute;right:11px;top:10px"   ><i class="fa fa-plus"></i></a> 
+
+                                                </td>
+                                            </tr>
+                                            {% for exercise in knowledge.exercises  %} 
+                                            
+                                            <tr id="new_exercice{{ exercise.id }}">
+                                                <td>
+                                                    <div id="association{{ exercise.id }}" > 
+                                                        {% include 'qcm/ajax_association.html' %}
+                                                    </div>
+                                                </td>
+                                                <td  style="position: relative;" > <small>A remplacer par</small> 
+                                                     <input type="text" id="update_code{{ exercise.id }}" class="form-control" placeholder="code du support" />                               
+
+                                                     <a type="submit" href="#row{{ exercise.knowledge.id }}" data-exercise_id="{{ exercise.id }}" data-action="update" class="btn btn-primary update_association" style="position: absolute;right:11px;top:38px"   ><i class="fa fa-pencil-square-o"></i></a> 
+
+                                                     <a href="#row{{ exercise.knowledge.id }}" 
+                                                        data-exercise_id="{{ exercise.id }}" style="position: absolute;right:11px;top:78px"
+                                                        data-action="delete" 
+                                                        class="btn btn-danger {% if not exercise.is_used %}delete_association{% endif %}"
+                                                         {% if exercise.is_used %} disabled title="Déjà utilisé"{% endif %}  ><i class="fa fa-trash"></i>  
+                                                    </a> 
+                                                    <div id="error_str{{ exercise.id }}" style="color:red"></div>                                        
+                                                </td> 
+                                            </tr>
+                                              
+                                            {% endfor %}    
+                                        {% endfor %}
+                                        
+                                    {% endfor %}
+
+                                </tbody>
+                  
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor  %}
+        </div>
+    {% else %}
+
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            <div class="alert alert-danger">
+                Avant de visiter les exercices par niveau, vous devez choisir vos <a href="{% url 'profile' %}">niveaux préférés</a>.
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}

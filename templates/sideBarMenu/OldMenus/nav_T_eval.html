@@ -1,0 +1,209 @@
+<!-- ********************************************************** Menu Evaluation ************************************************************************** -->
+<li>
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="#"><i class="fa fa-cogs"></i> Évaluations
+
+                        <span href="#" data-container='body' data-toggle='popover'
+                              data-trigger='hover'
+                              data-content='Évaluations des compétences et/ou savoirs, savoir-faire sans note.'>
+                  <small><sup><i class="fa fa-question"></i></sup></small> 
+                  </span>
+                    </a><i class='fa fa-caret-down pull-right vue'></i>
+                </h4>
+            </div>
+            <div class="submenu panel-collapse collapse">
+                <ul class="list-group">
+                    {% for group in groups %}
+                        <li class='list-group-item'><a href="{% url 'evaluations' group.id %}"> <i class='fa fa-square'
+                                                                                                   style='color:{{ group.color }}  '></i> {{ group.name }}
+                            {% if group.evaluations.count > 6 %}
+                                <small class='label pull-right bg-green'> {{ group.evaluations.count }} </small>
+                            {% elif group.evaluations.count > 3 %}
+                                <small class='label pull-right bg-orange'> {{ group.evaluations.count }} </small>
+                            {% else %}
+                                <small class='label pull-right bg-red'> {{ group.evaluations.count }} </small>
+                            {% endif %}
+                        </a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</li>
+
+<!-- seul le primaire a accès à cette section -->
+
+<li>
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="#"><i class="fa fa-trophy"></i> Suivi de compétences </a><i
+                        class='fa fa-caret-down pull-right vue'></i>
+                </h4>
+            </div>
+            <div class="submenu panel-collapse  collapse">
+                <ul class="list-group">
+                    {% for group in groups %}
+                        <li class='list-group-item'>
+                            <a href="{% url 'show_competencies' group.id %}">
+                                <i class='fa fa-square' style='color:{{ group.color }}  '></i> {{ group.name }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</li>
+
+
+<!-- ****************************** Items de compétences ************************************************************-->
+<li>
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="#"><i class="fa fa-list"></i> Résultats par items</a> <i
+                        class='fa fa-caret-down pull-right vue'></i>
+                </h4>
+            </div>
+            <div class="submenu panel-collapse collapse">
+                <ul class="list-group">
+                    {% for group in groups %}
+                        <li class='list-group-item'><a href="{% url 'result_by_item' group.id %}"> <i
+                                class='fa fa-square' style='color:{{ group.color }}  '></i> {{ group.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</li>
+<!-- ********************************** Savoirs *********************************************************************-->
+<li>
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="#"><i class="fa fa-wrench"></i> Résultats par savoirs</a> <i
+                        class='fa fa-caret-down pull-right vue'></i>
+                </h4>
+            </div>
+            <div class="submenu panel-collapse  collapse">
+                <ul class="list-group">
+                    {% for group in groups %}
+                        <li class='list-group-item'>
+                            <a href="{% url 'result_by_knowledge' group.id %}">
+                                <i class='fa fa-square' style='color:{{ group.color }}  '></i> {{ group.name }}</a>
+                            {% if  group.number_of_evaluations > 0 %}
+                                <span class='label label-warning pull-right'>{{ group.evaluation.count }}</span>
+                            {% else %}
+                                <span class='label label-info pull-right'>{{ group.evaluation.count }}</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</li>
+
+<!-- EValuation des domaines -->
+
+{% if teacher.degre > 1 %}
+    <li>
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#"><i class="fa fa-database"></i> Résultats par domaines</a><i
+                            class='fa fa-caret-down pull-right vue'></i>
+                    </h4>
+                </div>
+                <div class="submenu panel-collapse collapse">
+                    <ul class="list-group">
+                        {% for group in groups %}
+                            <li class='list-group-item'><a href="{% url 'show_domains' group.id %}"> <i
+                                    class='fa fa-square' style='color:{{ group.color }}  '></i> {{ group.name }}</a>
+                            </li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </li>
+{% else %}
+    {% for division in  divisions %}
+        <li>
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="{% url 'show_domains'  division.id %}">
+                                <i class="fa fa-database"></i> Résultats par domaines</a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </li>
+    {% endfor %}
+{% endif %}
+
+<li class='divider'></li>
+<!-- *****************************************  Évaluations notées  *************************************************-->
+<li>
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="#"><i class="fa fa-sort-numeric-asc"></i> Évaluations notées </a><i
+                        class='fa fa-caret-down pull-right vue'></i>
+                </h4>
+            </div>
+            <div class="submenu panel-collapse collapse">
+                <ul class="list-group">
+                    {% for group in groups %}
+                        <li class='list-group-item'>
+                            <a href="{% url 'tests' group.id %}">
+                                <i class='fa fa-square' style='color:{{ group.color }}  '></i>
+                                {{ group.name }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</li>
+<!-- *********************************************  Statistiques  ***************************************************-->
+<li>
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="#"><i class="fa fa-line-chart"></i> Statistiques </a><i
+                        class='fa fa-caret-down pull-right vue'></i>
+                </h4>
+            </div>
+            <div class="submenu panel-collapse collapse">
+                <ul class="list-group">
+                    {% for group in groups %}
+                        <li class='list-group-item'>
+                            <a href="{% url 'evaluations' group.id %}">
+                                <i class='fa fa-square' style='color:{{ group.color }}  '></i> {{ group.name }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</li>
+
+
+ 

@@ -1,0 +1,116 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-index.js' %}"></script> 
+    <script>
+       require(['script/ajax-dashboard']);
+    </script> 
+{% endblock %}
+
+{% block page_title %}
+    <i class="fa fa-user"></i> Mon profil
+{% endblock %}
+ 
+{% block page_menu_right %}
+{% endblock %}
+
+
+{% block body %}
+    
+<section class="content_main">
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label>{{ user_form.username.label_tag }}</label>
+                    {{ user_form.username |add_class:"form-control" }}
+                    {{ user_form.username.errors }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-2">
+                <div class="form-group">
+                    <label>{{ user_form.civilite.label_tag }}</label>
+                    {{ user_form.civilite  |add_class:"form-control select2" }}
+                    {{ user_form.civilite.errors }}
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-5">
+                <div class="form-group">
+                    <label>{{ user_form.last_name.label_tag }}</label>
+                    {{ user_form.last_name  |add_class:"form-control" }}
+                    {{ user_form.last_name.errors }}
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-5">
+                <div class="form-group">
+                    <label>{{ user_form.first_name.label_tag }}</label>
+                    {{ user_form.first_name  |add_class:"form-control" }}
+                    {{ user_form.first_name.errors }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                    <label>{{ user_form.email.label_tag }}</label>
+                    {{ user_form.email  |add_class:"form-control" }}
+                    {{ user_form.email.errors }}
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                    <label>{{ user_form.time_zone.label_tag }}</label>
+                    {{ user_form.time_zone  |add_class:"form-control select2" }}
+                    {{ user_form.time_zone.errors }}
+                </div>
+            </div>
+        </div>   
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                    <label>{{ form.level.label_tag }}</label>
+                    {{ form.level |add_class:"form-control select2" }}
+                    {{ form.level.errors }}
+                </div>
+            </div>
+        </div>     
+
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                    Notification 
+                        <table class="table">
+                            <tr>
+                                <td><small><em>Recevoir chaque fois qu'une tache est envoyée par mon enseignant ?</em></small></td>
+                                <td>{{ form.task_post |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}    
+                                    {{ form.task_post.errors }}
+                                </td>                            
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <input value="Enregistrer" type="submit" class="btn btn-sacado"/>
+                        <a href="javascript:history.back()">
+                            <input type="button" value="Annuler"
+                                   class="btn btn-default "/>
+                        </a>
+                    </div>   
+                </div>
+        </div>
+    </form>
+</section>
+ 
+ 
+{% endblock %}
+
+ 

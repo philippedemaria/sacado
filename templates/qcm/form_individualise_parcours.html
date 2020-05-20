@@ -1,0 +1,167 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+ 
+
+    <script>
+        require(['script/ajax-parcours']);
+    </script> 
+
+{% endblock %} 
+
+
+{% block page_title %}
+    <span style="color:{{ parcours.color }}"><i class="fa fa-map"></i> {{ parcours }}    </span> <img src="{% static 'img/angle-right.png' %}"/>   <small> Individualiser le parcours</small> 
+{% endblock %}
+
+{% block page_menu_right %}
+
+    <li>
+        <a href="{% url 'list_parcours_group' group.id %}" class="no_button">Groupe {{ group }}</a>
+    </li>
+ 
+    <li>
+        <span class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" style="cursor:default" >  
+          {% if parcours.is_publish %} Parcours publié  {% else %} Parcours dépublié {% endif  %} 
+        </span>
+    </li>
+
+
+{% endblock %}
+
+
+{% block body %}
+ 
+  
+     
+<section class="content_main">
+    <div class="col-sm-12 col-md-12">
+
+        <form action="" method="POST" enctype='multipart/form-data'> 
+            {% csrf_token %} 
+            {% for relationship in relationships|dictsort:"order" %} 
+                <div class="row" style="margin-top:8px; padding-top: 8px; border-top: 1px solid #CCC;  border-top: 1px solid #CCC" id="relationship{{ relationship.id }}" >                        
+                    <div  class="col-sm-12 col-md-12">
+                        {% if not relationship.exercise.supportfile.is_title %}
+                        <div class="header_exercise"  style="clear:both" >
+                            <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" class="listing" >  {{ relationship.exercise.knowledge.name|capfirst }}</a>
+                        </div> 
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom:8px; padding-bottom: 8px; ">
+                    <div class="col-sm-12 col-md-5">        
+                        <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" >  
+                        <img src="../../../../static/uploads/{{ relationship.exercise.supportfile.imagefile }}" class="imagefile"></a>
+                                                            
+                         {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}          
+                    
+                        {% if relationship.exercise.supportfile.calculator %}
+                          <img src="{% static 'img/calculator.png' %}" width="30px" />
+                        {% else %}
+                          <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                        {% endif  %}  <br>
+                        <span style="font-size:16px;">    
+                            <i class="fa fa-barcode"></i> {{ relationship.exercise.supportfile.code }} {% if relationship.exercise.knowledge.name|make_list|length < 140 %}<br>{% endif %}
+                            <i class="fa fa-clock-o"></i> {{ relationship.exercise.supportfile.duration }} minutes {% if relationship.exercise.knowledge.name|make_list|length < 140 %}<br>{% endif %}
+                            <i class="fa fa-save"></i> {{ relationship.exercise.supportfile.situation}} situation{{ relationship.exercise.supportfile.situation|pluralize}}  minimum
+                        </span>
+
+
+                        <br>
+                        <span id="loading{{ relationship.exercise.id }}" class="pull-right"></span>
+                            <br>
+              
+                            <a href="{% url 'delete_relationship_by_individualise' relationship.id  relationship.parcours.id   group.id %}" class="btn btn-danger" onclick="return TestDelete('cet exercice de ce parcours')"  >
+                                <i class="fa fa-trash"></i> Supprimer cet exercice du parcours
+                            </a>
+            
+
+                    </div> 
+                    <div  class="col-sm-12 col-md-7">
+                            <span class="btn btn-info select_student" 
+                                id="selecteur{{relationship.exercise.id}}"    
+                                data-student_id="0"  
+                                data-exercise_id="{{ relationship.exercise.id }}" 
+                                data-statut="False"   
+                                data-parcours_id="{{ relationship.parcours.id }}"  style="min-width:75px; margin:1px; margin-right:0px"/>Tous
+
+                                <input  type="checkbox"  style="display:none"
+                                data-student_id="0"  
+                                data-exercise_id="{{ relationship.exercise.id }}" 
+                                data-statut="False"   
+                                data-parcours_id="{{ relationship.parcours.id }}" />
+                            </span>
+                            <span class="btn btn-warning select_student" 
+                                id="selecteur{{relationship.exercise.id}}"    
+                                data-student_id="0"  
+                                data-exercise_id="{{ relationship.exercise.id }}" 
+                                data-statut="True"   
+                                data-parcours_id="{{ relationship.parcours.id }}"  style="min-width:75px; margin:1px; margin-left:0px"/>Aucun
+
+                                <input  type="checkbox"  style="display:none"
+                                data-student_id="0"  
+                                data-exercise_id="{{ relationship.exercise.id }}" 
+                                data-statut="True"   
+                                data-parcours_id="{{ relationship.parcours.id }}" />
+                            </span>
+
+
+                        {% get_parcours_group_students_count relationship.parcours group as parcours_group_students %}
+
+                        {%  for s in  parcours_group_students.students|dictsort:"user.last_name" %}
+
+                            {% get_exercise s relationship as has_it %}
+                            <span class="btn btn-{% if has_it %}success{% else  %}danger{% endif  %} select_student selected_student{{relationship.exercise.id}}" 
+                                id="student{{relationship.exercise.id}}-{{s.user.id }}"
+                                data-student_id="{{ s.user.id }}" data-exercise_id="{{ relationship.exercise.id }}"  data-parcours_id="{{ relationship.parcours.id }}"  data-statut="{% if has_it %}True{% else  %}False{% endif  %}"  
+                                style="min-width:155px; margin:1px"/>{{ s.user }}</span>
+
+                        {%  endfor %}
+                    </div>   
+                </div>                
+                {% else %}
+                <div class="row">                        
+                    <div  class="col-sm-12 col-md-12">
+                    {% if relationship.exercise.supportfile.is_subtitle %}
+                        <h3>{{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}</h3>
+                    {% else %}
+                        <h2>{{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}</h2>
+                    {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            
+            {% empty %}
+
+                <div  class="col-sm-12 col-md-12">
+                    <div class="alert alert-danger">  
+                        Ce parcours ne contient aucun exercice. 
+                            {% if parcours.group.id %}
+                                <a href="{% url 'populate_parcours'  parcours.parcours_group.id %}"   class="no_button"> Sélectionner les exercices</a> 
+                            {% else  %}
+                                <a href="{% url 'peuplate_parcours'  parcours.id %}"   class="no_button"> Sélectionner les exercices</a> 
+                            {% endif  %}
+                    </div>
+                </div>
+
+            {% endfor %}
+
+  
+        </form>
+     
+    </div>   
+</section>   
+{% endblock %}
+
+ 
+ 
+ 
+       
+ 
+ 

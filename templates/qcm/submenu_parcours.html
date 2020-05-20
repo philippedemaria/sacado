@@ -1,0 +1,31 @@
+    {% load static %}
+
+    <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"> Options du parcours  </a>
+        <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+            <li>
+                {% if not parcours.linked %}
+                <a href="{% url 'peuplate_parcours' parcours.id   %}"><i class="fa fa-laptop"></i> Sélectionner</a>  
+                {% else %} 
+                <a href="{% url 'populate_parcours' parcours.parcours_group.id   %}"><i class="fa fa-laptop"></i> Sélectionner</a> 
+                {% endif %} 
+            </li>
+            <li><a href="#"  class="no_button" id="handler_order_exercises" ><img src="{% static 'img/order_handler.png' %}"/> Organiser les exercices </a> </li>  
+            <li><a href="{% url 'parcours_tasks_and_publishes' parcours.id %}" ><i class="fa fa-tasks"></i> Gérer les sections</a></li>  
+            <li><a href="{% url 'result_parcours' parcours.id  %}" ><i class="fa fa-mortar-board"></i> Suivi par élève</a></li>
+            <li><a href="{% url 'result_parcours_knowledge' parcours.id  %}" ><i class="fa fa-trophy"></i> Suivi des savoir faire</a></li>
+            <li>
+                {% if not parcours.is_evaluation %}
+                <a href="{% url 'detail_task_parcours' parcours.id 0  %}">
+                    {% if not parcours.is_task_exists %}<i class="fa fa-calendar"></i>{% else %}<i class="fa fa-calendar-check"></i>{% endif %}
+                    Tâches
+                </a>  
+                {% else %} 
+                <a href="#" data-parcours_id="{{parcours.id }}"><i class="fa fa-upload"></i> Export</a>
+                {% endif %} 
+            </li>
+            {% if group_id %}
+            <li><a href="{% url 'individualise_parcours' parcours.id group_id %}" ><i class="fa fa-user"></i> Individualisation</a> </li> 
+            {% endif %} 
+            <li><a href="{% url 'stat_parcours' parcours.id %}" ><i class="fa fa-bar-chart"></i> {% if parcours.is_evaluation %} Résultats{% else  %}Stats {% endif %}</a>   </li>
+        </ul>
+    </li>

@@ -1,0 +1,108 @@
+{% load item_tags %} 
+ 
+
+<div class="events_title">
+    A venir<small><span  class="pull-right parcours_displayer pull-right_top"><i class="fa fa-calendar"></i> <a href="{% url 'calendar_initialize' %}">Afficher le calendrier</a> <a href="{% url 'calendar_initialize' %}" style="font-size:10px" target="_blank" title="Lien externe"><i class="fa fa-share"></i></a></span></small>
+</div>
+<div class="events {% if relationships|length > 8 %} div_events{% endif %}" >
+        {%  if relationships|length > 0 %} 
+            {% for relationship in relationships|dictsort:"date_limit" %}
+            <li class="sans_puce"> {{ relationship.date_limit|date:"d.m.y" }} :
+
+                {% get_done relationship.exercise student as done %}
+                {% if done %}
+                    {% get_score_student_for_this relationship  student as score %}
+                        <span class="{% if score.point < 30 %}
+                                     text-red  
+                                    {% elif score.point < 60 %}
+                                    text-orange
+                                    {% elif score.point < 80 %}
+                                    text-green
+                                    {% else %}
+                                    text-darkgreen
+                                    {% endif %} parcours_displayer">
+                                    <i class="fa fa-check-circle"></i>
+                          </span>    
+                          <small>{{  score.point }}%</small>
+                      {% else %}
+
+                      <i class="fa fa-square" style="color: {{ relationship.parcours.color }}"></i> 
+
+                      {% endif  %}
+
+
+                <a href="{% url 'execute_exercise' relationship.parcours.id  relationship.exercise.id %}"  class="parcours_displayer">
+                 {% if relationship.exercise.supportfile.annoncement  %} {{ relationship.exercise.supportfile.annoncement|cleanhtml }}{% else %}{{ relationship.exercise.knowledge.name }}{% endif %}
+                </a>
+                 
+
+            </li>
+            {% endfor %}
+             
+                    <span style="padding-left: {{ ratiowidth }}%">{{ ratio }}%</span><br>
+                    <div class="progress">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ ratio }}%" aria-valuenow="{{ ratio }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+
+        {% else %}
+            <li class="sans_puce">Aucune tâche proposée</li>
+        {% endif %}
+</div>
+
+{%  if relationships_in_late %} 
+<div class="events_title">
+    <span class="text-red">En retard</span>
+    <small>
+        <span class="pull-right parcours_displayer pull-right_top"><i class="fa fa-calendar"></i> <a href="{% url 'calendar_initialize' %}" >Afficher le calendrier</a></span>
+    </small> 
+</div>
+<div class="events {% if relationships_in_late|length > 6  %} div_events{% endif %}">
+      {% for relationship in relationships_in_late|dictsort:"date_limit" %}
+      <li class="sans_puce"> {{ relationship.date_limit|date:"d.m.y" }} :
+
+          {% get_done relationship.exercise student as done %}
+          {% if done %}
+              {% get_score_student_for_this relationship  student as score %}
+                  <span class="{% if score.point < 30 %}
+                               text-red  
+                              {% elif score.point < 60 %}
+                              text-orange
+                              {% elif score.point < 80 %}
+                              text-green
+                              {% else %}
+                              text-darkgreen
+                              {% endif %}">
+                              <i class="fa fa-check-circle"></i>
+                    </span>    
+                    <small>{{  score.point }}%</small>
+                {% else %}
+                <i class="fa fa-square" style="color: {{ relationship.parcours.color }}"></i>
+                {% endif  %}
+          <a href="{% url 'execute_exercise' relationship.parcours.id  relationship.exercise.id %}">
+           {% if relationship.exercise.supportfile.annoncement  %} {{ relationship.exercise.supportfile.annoncement|cleanhtml }}{% else %}{{ relationship.exercise.knowledge.name }}{% endif %}
+          </a>
+      </li>
+      {% endfor %}
+</div>
+{% endif %}
+
+  <div class="btn btn-default full_width" style="font-size:15px; margin-bottom: 5px">
+
+          <span data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}" >
+              Paire avec le parent 
+          </span>
+
+      <div id="collapse{{ forloop.counter }}" class="collapse">
+          <div class="panel-body"  style="padding:0px">
+              <table class="table" style="margin-bottom: 0px;font-size:14px;">
+                  <tr>
+                      <td>
+                          {% if student.user.id < 31542 %}scd2{{ student.user.id }}{% else %}{{ student.user.id }}{% endif %}
+                      </td>
+                  </tr>
+              </table>
+          </div>
+      </div>
+  </div>
+
+<li class="sans_puce"><a href="#" id="select_parcours_div" class="btn btn-default full_width">Derniers exercices</a> </li>

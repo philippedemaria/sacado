@@ -1,0 +1,159 @@
+<li>
+    <div class="panel-group">
+
+    {% if '/dashboard' in request.path %}
+        <div class="panel panel-primary">
+    {% else %}
+        <div class="panel panel-default">
+    {% endif %}
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="{% url 'dashboard' %}"><i class="fa fa-tachometer-alt"></i> Tableau de bord </a>
+                </h4>
+            </div>
+        </div>
+    </div>
+</li>
+<!-- **********************************************  Edt ou cahier journal selon le cycle  ******************************************************************************-->
+
+<li>
+    <div class="panel-group">
+    {% if '/general' in request.path %}
+        <div class="panel panel-primary">
+    {% else %}
+        <div class="panel panel-default">
+    {% endif %}
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="{% url 'general' %}"><i class="fa fa-book"></i> Cahier journal </a>
+                </h4>
+            </div>
+        </div>
+    </div>
+</li>
+
+<!-- *************************************************************************************************************************************************************-->
+<!-- **********************************************  FIN si Prof du Primaire  ******************************************************************************-->
+<!-- *************************************************************************************************************************************************************-->
+
+
+<!-- ******************************************************************************  Absences  ***********************************************************************************-->
+
+
+<li>
+    <div class="panel-group">
+    {% if '/viescolaire' in request.path %}
+        <div class="panel panel-primary">
+    {% else %}
+        <div class="panel panel-default">
+    {% endif %}
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="{% url 'viescolaire' %}"><i class='fa fa-paw'></i> Absences/incidents</a>
+                </h4>
+            </div>
+        </div>
+    </div>
+</li>
+<!--**************** reservation de salles ************************
+<li>
+    <div class="panel-group">
+    {% if '/rooms' in request.path %}
+        <div class="panel panel-primary">
+    {% else %}
+        <div class="panel panel-default">
+    {% endif %}
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="{% url 'show_schedule_rooms' %}"><i class='fas fa-chalkboard'></i> Réservation de salle</a>
+                </h4>
+            </div>
+        </div>
+    </div>
+</li>
+-->
+
+
+<!--****************Primaire uniquement ************************-->
+<li>
+    <div class="panel-group">
+    {% if '/listGroupPrint' in request.path %}
+        <div class="panel panel-primary">
+    {% else %}
+        <div class="panel panel-default">
+    {% endif %}
+            <div class="panel-heading">
+                <h4 class="panel-title"><a href="{% url 'listGroupPrint' %}"><i class='fa fa-print'></i> Liste d'élèves</a>
+                </h4>
+            </div>
+        </div>
+    </div>
+</li>
+
+<!-- **************************************************************************  Mes groupes  ******************************************************************************-->
+
+<li>
+    <div class="panel-group">
+    {% if '/groups' in request.path %}
+        <div class="panel panel-primary">
+    {% else %}
+        <div class="panel panel-default">
+    {% endif %}
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="{% url 'groups' %}"><i class="fa fa-users"></i> Groupes </a>
+                </h4>
+            </div>
+        </div>
+    </div>
+</li>
+
+
+<li>
+    <div class="panel-group">
+    {% if '/spacedir' in request.path %}
+        <div class="panel panel-primary">
+    {% else %}
+        <div class="panel panel-default">
+    {% endif %}
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="{%  url 'showspacedirs' %}"><i class="fa fa-book"></i> Espace Direction </a>
+                </h4>
+            </div>
+        </div>
+    </div>
+</li>
+<!--**************** Fin Primaire uniquement ************************-->
+<!-- *************************************************************************************************************************************************************-->
+<!-- **********************************************  Seulement si Prof du Primaire  ******************************************************************************-->
+<!-- *************************************************************************************************************************************************************-->
+<li>
+    <div class="panel-group">
+    {% if '/slots' in request.path %}
+        <div class="panel panel-primary">
+    {% else %}
+        <div class="panel panel-default">
+    {% endif %}
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="{% url 'slots' %}"><i class="fas fa-calendar-alt"></i> Semainier annuel </a>
+                </h4>
+            </div>
+        </div>
+    </div>
+</li>
+
+<!-- ******************************************************************************  Folios   ***********************************************************************-->
+<li>
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="https://folios.onisep.fr/saml/login?_pre_saml_idp=profacad&_saml_idp=" target="_blank"><img
+                            src="../../../static/img/folios.png" border="0" width="150px" height="20px"/> </a>
+                </h4>
+            </div>
+        </div>
+    </div>
+</li>

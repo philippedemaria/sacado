@@ -1,0 +1,61 @@
+{% extends 'account/detail_student.html' %}
+{% load static %}
+{% load item_tags %}
+
+
+        {% block datae %}
+                    <table class="table table-bordered table-hover display100">
+                        <thead>
+                            <tr  style="color:#FFF;background-color: {{ group.color }}">
+                                <td>Savoir faire</td>
+                                <td style="width:330px">Scores</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for theme in datas %} 
+                            <tr class="no_padding" style="color:#FFF;background-color: {{ group.color }};opacity:0.6">
+                                <td> 
+                                    {{ theme.name }}                       
+                                </td>
+                                <td>  
+                                </td>
+                                                         
+                            </tr>     
+                                {% for exercise in theme.exercises %} 
+                                <tr class="no_padding">
+                                    <td> 
+                                        {{exercise.name.knowledge.name }} {% if exercise.name.annoncement %} - <em>{{exercise.name.annoncement|cleanhtml }} </em> {% endif %}
+                                    </td>
+                                    <td style="text-align: center"> 
+                                        {% for sta  in exercise.scores  %}  
+                                            {% if sta.point   %}
+                                                <div class="markdown_div
+                                                        {% if sta.point < 30 %}
+                                                         red 
+                                                        {% elif  sta.point < 60 %}
+                                                        orange
+                                                        {% elif  sta.point < 80 %}
+                                                        green
+                                                        {% else %}
+                                                        darkgreen
+                                                        {% endif %}">
+                                                    <strong>{{ sta.point }}%</strong>
+                                                    <small>
+                                                        <br>situations : {{ sta.numexo }}
+                                                        <br>temps : {{ sta.time }}
+                                                        <br>date : {{ sta.date|date:"d m Y" }}
+                                                    </small>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+
+                            
+                        {% endfor %}  
+                        </tbody>      
+                    </table>
+       
+        {% endblock %}

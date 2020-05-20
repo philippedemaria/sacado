@@ -1,0 +1,167 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3.js' %}"></script> 
+    <script>
+        require(['script/ajax-parcours']);
+    </script>
+{% endblock %}
+
+
+
+{% block page_title %}
+      <i class='fa fa-trophy'></i> {{ parcours }} <img src="{% static 'img/angle-right.png' %}"/>  Suivi   {% block sub_page_title %}par élève{% endblock %}
+{% endblock %}
+
+{% block page_menu_right %}  
+    {% if group_id %}
+    <li><a href="{% url 'result_parcours_exercise_students' parcours.id  group_id %}"  class="no_button" >Suivi par exercice </a> </li> 
+    {% endif %}
+
+
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle no_button" data-toggle="dropdown"> Export des savoir faire <b class="caret"></b></a> 
+        <ul class="dropdown-menu">
+            {% if request.user.is_extra %}
+            <form action="{% url 'export_knowledge' parcours.id  %}" method="POST" enctype='multipart/form-data'>     {% csrf_token %}
+                <div class="col-md-12 col-lg-12 col-xs-12" style="padding-left:5px">
+                    <button href="#" class="btn btn-success exportation_de_note" type="submit" data-parcours_id="{{parcours.id }}"  data-group_id="{{group.id }}"  > Export CSV</button>
+                </div>
+            </form>
+            {% else %}
+                <span style="color:red;font-size: 14px">Action non permise</span>
+            {% endif %}
+        </ul>
+    </li>
+
+
+
+
+
+
+    <a href="javascript:history.back()"  class="btn btn-default" >Retour </a>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+{% block body %}
+
+<style>
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    padding: 5px;
+    line-height: 1.42857143;
+    border-top: 1px solid #ddd;
+}
+</style>
+
+ 
+  
+<section class="content_list"> 
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table id="standard_tab" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Nom et prénom</th>
+                    {% block tab_title %} 
+                        <th>
+                                 
+                        </th>    
+                    {% endblock %} 
+                </tr>
+                </thead>
+                <tbody>
+                        {% for student in  students|dictsort:"user.last_name" %}
+                            <tr class="no_padding">
+                                <td style="width:200px">
+ 
+                                        <form  action="" method="POST">{% csrf_token %} 
+                                         {{ student |truncatechars:"30" }} 
+                                       <br><span style="font-size:14px;font-weight: 100">{{ student.nb_parcours}} parcours</span>  
+                                        <div class="pull-right"> 
+                                                <a href="#" data-toggle='modal'
+                                                    data-target='#writer' 
+                                                    class="send_message"   data-student_name="{{ student.user }}"
+                                                    data-student_email="{{ student.user.email }}">  
+
+                                                    {% if student.user.email  %}                                      
+                                                    <i class="fa fa-inbox" style="font-size:14px"></i> 
+                                                    {% else %}
+
+                                                    <span class="icon-stack">
+                                                      <i class="icon-inbox"></i>
+                                                      <i class="icon-ban-circle icon-stack-base text-error"></i>
+                                                    </span>
+
+                                                    {% endif %}
+                                                               
+                                        </div>  
+                                        </form>    
+                                </td>
+                                {% block result %}                                       
+                                <td> 
+                                    {% for relationship in relationships %}
+                                        {% include 'qcm/score.html' %}
+                                    {% endfor %} 
+                                </td>       
+                                {% endblock %}                                       
+                            </tr>
+                        {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+
+    <div class="modal fade" id="writer" tabindex="-1" role="dialog" aria-labelledby="writer" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>                
+                    <h5 class="modal-title" >Ecrire un message à  <span id="modal_student_name"></span></h5>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="post" > 
+                          {% csrf_token %}
+                        <div class="form-group"><input type="hidden" name="student_id" class="form-control" id="student_id"/>
+                          <input type="text" name="name" class="form-control" id="name" placeholder="Nom" />
+                        </div>
+                        <div class="form-group">
+                          <input type="email" class="form-control" name="email" id="email" placeholder="Email"  />
+                        </div>
+                        <div class="form-group">
+                            {{ form.subject|add_class:"form-control"|attr:"placeholder:Objet"|attr:"required" }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.texte  }}
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-sacado" id="sender_message">Envoyer</button>   
+                            <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Retour</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>  
+
+
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common4.js' %}"></script> 
+    <script>
+        require(['script/ajax-group']);
+    </script>
+{% endblock %}
+
+
+
+{% block body %}
+
+<style>
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    padding: 5px;
+    line-height: 1.42857143;
+    border-top: 1px solid #ddd;
+}
+</style>
+
+
+
+{% block page_title %}
+    <i class='fa fa-trophy'></i>  Résultats de {{ group.name }} -  {{ theme.name }} 
+{% endblock %}
+
+{% block page_menu_right %}
+    <li  ><a href="{% url 'populate_parcours'  group.id %}" class="no_button"><i class="fa fa-cogs"  style="font-size:14px"></i> Configurer le parcours</a></li>
+
+
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle no_button" data-toggle="dropdown"> Exercices par thème <b class="caret"></b></a> 
+        <ul class="dropdown-menu">
+            {% for theme in group.level.themes.all|dictsort:"id" %}
+            <li class="dropdown dropdown-submenu"><a href="{% url 'result_group_theme_exercise'  group.id theme.id %}" class="dropdown-toggle" data-toggle="dropdown"> {{ theme }} </a></li>
+            {% endfor %}
+        </ul>
+    </li>
+
+
+
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle no_button" data-toggle="dropdown"> Savoir faire par thème <b class="caret"></b></a> 
+        <ul class="dropdown-menu">
+            {% for theme in group.level.themes.all|dictsort:"id" %}
+            <li class="dropdown dropdown-submenu"><a href="{% url 'result_group_theme'  group.id theme.id %}" class="dropdown-toggle" data-toggle="dropdown"> {{ theme }} </a></li>
+            {% endfor %}
+        </ul>
+    </li>
+    <li><a href="{% url 'groups' %}"  class="no_button" > <i class="fa fa-users"></i> Mes groupes </a></li>  
+
+{% endblock %}
+
+ 
+
+               
+                 
+
+{% block body %} 
+ 
+    <section class="content_main"> 
+ 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table id="standard_tab" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>Nom et prénom</th>
+                        <th>Exercices </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in group.students.all|dictsort:"user.last_name" %}
+                            <tr class="no_padding">
+                                <td style="width:200px">
+                                    {{ student |truncatechars:"30" }}  
+                                </td>
+                                <td> 
+                                    {% block result %}
+                                        {% include 'group/score.html' %}
+                                     {% endblock %}                                        
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">     
+                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+            </div>
+        </div>
+    </section>
+    </div>
+{% endblock %}

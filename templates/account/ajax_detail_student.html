@@ -1,0 +1,182 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+ 
+        <h1 class="thin">
+             <nav class="navbar navbar-default">
+              <div class="container-fluid">
+                <div class="navbar-header">
+                  <i class='fa fa-users'></i> {{ student.user }} <br/><small class='thin'>Dernière connexion : {{student.user.last_login|date:"d N Y"}} à {{student.user.last_login|date:"H:i"}}</small>
+                </div>
+             
+                <ul class="nav navbar-nav navbar-right">
+                 <a href="#" id="closeStudent" class="detail_student pull-right"> <i class="fa fa-times"></i></a>
+                </ul>
+              </div>
+            </nav> 
+        </h1>
+
+
+
+
+
+    </div>
+</div>
+
+{% if themes  %} 
+<hr>
+<div class="row detail_student_div">
+    <div class="col-sm-12 col-md-12">
+        <table class="table table-hover" style="width:100%">
+            <thead>
+                <tr>
+                    <td>Thème</td>
+                    <td>Score global</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for theme in themes  %} 
+                <tr> 
+                    <td>{{ theme.name }}</td>
+                    {% get_score_by_theme theme student group as score_by_theme %}
+                    <td> 
+                        {% if score_by_theme != "" %}
+                            <span class="markdown
+                                    {% if score_by_theme < 30 %}
+                                     red 
+                                    {% elif score_by_theme < 60 %}
+                                    orange
+                                    {% elif score_by_theme < 80 %}
+                                    green
+                                    {% else %}
+                                    darkgreen
+                                    {% endif %}"
+                                   >
+                                {{ score_by_theme }}%
+                            </span>
+                        {% else %}
+                            <span class="markdown">  
+                                  {{ score_by_theme }} 
+                            </span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-4">
+        Apprentissage 
+    </div>
+    <div class="col-sm-12 col-md-2">
+    </div>
+    <div class="col-sm-12 col-md-6" style="text-align: center;">
+        Savoir faire travaillés
+    </div>
+</div>
+<div style="height:25px">
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-md-4" style="text-align: center;" >
+    {% get_knowledge_average student group as avg %}
+            {% if avg > 80 %}
+            <i class="fa fa-star text-success"></i>        <i class="fa fa-star text-success"></i>        <i class="fa fa-star text-success"></i>        <i class="fa fa-star text-success"></i>
+            {% elif avg > 60 %}
+            <i class="fa fa-star text-green"></i>        <i class="fa fa-star text-green"></i> <i class="fa fa-star text-green"></i>
+            {% elif avg > 30 %}
+            <i class="fa fa-star text-warning"></i>        <i class="fa fa-star text-warning"></i>      
+            {% else %}
+            <i class="fa fa-star text-danger"></i>
+            {% endif %}
+    </div>
+    <div class="col-sm-12 col-md-2">
+    </div>
+    <div class="col-sm-12 col-md-5" style="text-align: center;">
+    {% get_knowledge_worked student group as nb %}
+        <div class="circle"> 
+            {{ nb }} 
+        </div>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <a href="{% url 'detail_student' student.user.id %}"><i class='fa fa-angle-right'></i> Détail complet des savoir faire</a>
+    </div>
+</div>
+{% else  %} 
+<div class="row">
+    <div class="col-sm-10 col-md-10">
+        {{ theme.name }}   <small><a href="{% url 'detail_student_theme' student.user.id   theme.id %}"><i class='fa fa-angle-right'></i> Détail des savoir faire par exercice</a></small>
+     </div>  
+    <div class="col-sm-2 col-md-2">
+        {% get_score_by_theme theme student group as score_by_theme %}
+        {% if score_by_theme != "" %}
+            <span class="markdown
+                    {% if score_by_theme < 30 %}
+                     red 
+                    {% elif score_by_theme < 60 %}
+                    orange
+                    {% elif score_by_theme < 80 %}
+                    green
+                    {% else %}
+                    darkgreen
+                    {% endif %}"
+                   >
+                {{ score_by_theme }}%
+            </span>
+        {% else %}
+            <span class="markdown">  
+                  {{ score_by_theme }} 
+            </span>
+        {% endif %}
+     </div>                   
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-12"> 
+        <div class="detail_student_div">
+        <table style="width:100%">
+            <tbody>
+                {% for knowledge in knowledges  %} 
+                <tr> 
+                    <td><span style="font-size : 9px;">{{ knowledge.name|capfirst }}</span></td>
+                    <td>{%  get_exercises_by_knowledge  knowledge student group as exercises  %} 
+                        {% for e in exercises %}
+                            {% get_score e student as score %}
+                            {% if score != "" %}
+                                <i class="fa fa-square {% if score < 30 %}
+                                        text-red
+                                        {% elif score < 60 %}
+                                        text-yellow
+                                        {% elif score < 80 %}
+                                        text-green
+                                        {% else %}
+                                        text-darkgreen
+                                        {% endif %}" style="font-size : 10px;" >
+ 
+                                </i>
+                                
+
+
+                            {% else %}
+                                <i class="fa fa-square" style="color: #ccc ; font-size : 10px;">  </i>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+ 
+{% endif  %}
+ 

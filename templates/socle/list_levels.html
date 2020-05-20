@@ -1,0 +1,74 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+{% block general_js %}
+    {% if item %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-action2.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-index.js' %}"></script>
+    {% endif %}
+{% endblock %}
+
+
+ 
+{% block page_title %}
+     Niveaux 
+{% endblock %}
+
+{% block page_menu_right %}
+    <li><a href="{% url 'create_level' %}" class="btn btn-subsacado pull-right" ><img width="25px" src="{% static 'img/plus.png' %}"/> Nouveau niveau</a> </li> 
+{% endblock %}
+
+
+{% block  body %}
+<section class="content_main"> 
+
+    <div class="row"> 
+        <div class="col-sm-12 col-md-12">
+            <table id="standard_tab" class="table table-bordered table-hover"  class="display" style="width:100%">
+                  <thead>
+                      <tr>
+                        <th style="width:10px">Cycle</th>                       
+                        <th  style="width:200px">Nom</th>                  
+                        <th>Abréviations</th> 
+                        <th>Thèmes</th> 
+                      </tr>
+                  </thead>
+                  <tbody>
+                        {% for level in levels %}
+                        <tr> 
+                          <td class="{{ level.cycle }}">
+                             
+                          </td>
+                          <td>
+                             <a href="{% url 'update_level' level.id %}">{{ level.name }} </a> 
+                              <a href="{% url 'delete_level' level.id %}"  onclick="return TestDelete('ce niveau')"><i class='fa fa-trash pull-right'></i></a>
+                          </td>
+                          <td >
+                             {{ level.shortname }}
+                          </td>
+                          <td >
+                               {% for t in level.themes.all %}                 
+                                 {{ t.name  }}{% if not forloop.last %}, {% endif %}
+                               {% endfor %} 
+                          </td>
+                        </tr>
+                        {% endfor %}
+                  </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+ 
+
+
+
+{% endblock  %}   
+
+
+ 

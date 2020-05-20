@@ -1,0 +1,36 @@
+{% load static %}
+{% load item_tags %}
+
+
+ 
+
+{% get_scorek knowledge student as score %}
+
+
+{% if score != "" %}
+    <a class="markdown
+            {% if score < 30 %}
+             red 
+            {% elif score < 60 %}
+            orange
+            {% elif score < 80 %}
+            green
+            {% else %}
+            darkgreen
+            {% endif %}"
+          href=" " data-container="body"
+          data-toggle="popover"  style="border : 2px solid {{student.get_exercises.parcours.color }}"
+          data-trigger="hover" data-placement="top"
+          data-content="{{ knowledge.name }}"> 
+        {{ score }}
+    </a>
+{% else %}
+    <a class="markdown"                                                   
+          href="  " data-container="body"
+          data-toggle="popover"   style="border : 2px solid {{student.get_exercises.parcours.color }}"
+          data-trigger="hover"
+           data-placement="top" 
+          data-content="{{ knowledge.name }}"> 
+          {{ score }}
+    </a>
+{% endif %}

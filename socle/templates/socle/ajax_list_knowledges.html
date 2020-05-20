@@ -1,0 +1,34 @@
+{% load scores %}
+ 
+
+{% regroup knowledges by waiting.theme as theme_list %}
+
+{% for theme in theme_list %}
+ 
+	<h3>{{ theme.grouper.name }}</h3>
+	    <ul>
+			{% regroup theme.list by waiting   as waiting_list %}
+			{% for waiting in waiting_list  %}
+
+			    <h4>{{ waiting.grouper.name }}</h4>
+			    <ul>
+			        {% for knowledge in waiting.list %}
+
+                        {% get_nb_evaluated knowledge teacher_id as nbre %}			        	
+			            {% if nbre > 0 %} <li class='sanspucelistsocle green'> <span class='label label-success socle_center'>{{ nbre }}</span></i>{% else %} <li>{% endif %}
+			            
+							{{ knowledge }} 
+						</li>
+			        
+
+			        {% endfor %}
+			    </ul>
+			{% empty %}
+			    Aucun savoir ou connaissance associé.e à cette matière et ce cycle.
+			{% endfor %}
+		</ul>			
+
+{% empty %}
+    Aucun thème associé à cette matière et ce cycle.
+{% endfor %}
+ 

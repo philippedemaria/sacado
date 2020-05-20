@@ -1,0 +1,122 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+{% block title_page %} 
+    <div class="content_title">
+      <h3 class="thin"> <a href="" >Agenda</a>  <img src="{% static 'img/angle-right.png'  %}"/>   </h3>
+    </div>
+{% endblock  %}
+
+
+{% block general_js %}
+{% if calendar %}
+<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-action2.js' %}"></script>
+{% else %}
+<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-index.js' %}"></script>
+{% endif %}
+{% endblock %} 
+
+
+
+{% block body  %} 
+ 
+ 
+ 
+<section class="paragraph">
+
+    <div class="alert alert-info">Vous devez créer au moins un calendrier par défaut pour créer des tâches, et référencer vos événements importants. </div>
+
+ 
+    <form  action="{% url 'create_calendar' %}" method="POST">
+      {% csrf_token %}  
+        <div class="row">                      
+            <div class="col-sm-12 col-md-12">
+               <div class="form-group">Nom <br>
+                  {{ form.name |add_class:"form-control" }}
+              </div>
+            </div>
+        </div>
+
+        <div class="row">  
+            <div class="col-sm-2 col-md-2">
+                <div class="form-group">
+                    <div class="form-group">
+                        Couleur<br>
+                        <div id="cp2" class="input-group colorpicker-component">{{ form.color |add_class:"form-control"|attr:"value:#00AABB"  }}
+                            <span class="input-group-addon"><i></i></span></div>
+                    </div>
+                </div>
+            </div>  
+            <div class="col-sm-2 col-md-2">
+                <div class="form-group">
+                    <div class="form-group">
+                        Public<br>
+                        {{ form.status |add_class:"form-control"|attr:"data-toggle:toggle" |attr:"data-on:Oui"|attr:"data-off:Non"|attr:"data-onstyle:primary"|attr:"value:0"   }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-2">
+                <div class="form-group">
+                    <div class="form-group">
+                        Par défaut<br>
+                        {{ form.default |add_class:"form-control"|attr:"data-toggle:toggle" |attr:"data-on:Oui"|attr:"data-off:Non"|attr:"data-onstyle:primary"|attr:"value:1" |attr:"checked:checked"  }}
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="row"> 
+            <div class="col-sm-4 col-md-4">
+                <div class="form-group"><br>
+
+                        {% if calendar %}
+                         <input value="Enregistrer les modifications" type="submit" class="btn btn-warning" />
+                        {% else %}
+                         <input value="Enregistrer" type="submit" class="btn btn-primary" />
+                        {% endif %}
+
+
+                  <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a> 
+                </div>
+            </div> 
+        </div>
+    </form>
+ 
+
+
+
+ 
+<h4>Mes calendriers</h4>
+<div class="row"> 
+    <div class="col-sm-12 col-md-12">
+        <table id="standard_tab" class="table table-bordered table-hover"  class="display" style="width:100%;background-color: #FFF;">
+              <thead>
+                  <tr>
+                    <th>Titre</th>
+                    <th>Statut</th>                                  
+                  </tr>
+              </thead>
+              <tbody>
+                    {% for c in calendars %}
+                    <tr> 
+                        <td> <i class="fa fa-square" style="color:{{ c.color }}"></i>
+                            <a href="{% url 'update_calendar'  c.id %}" >{{ c.name }} {% if c.default == 1 %}  <small> ( par défaut )</small> {% endif %}</a>                             
+                            <a href="{% url 'delete_calendar'  c.id %}" class="pull-right" onclick="return TestDelete('{{ c.name }}')"><i class="fa fa-trash-o"></i> </a>
+                        </td>                      
+                        <td> {% if c.status == 0 %} Privé {% else %}Public {% endif %}</td>     
+                    </tr>
+                    {% endfor %}
+              </tbody>
+        </table>
+    </div>
+</div> 
+ 
+</section>
+
+{% endblock %} 
+ 

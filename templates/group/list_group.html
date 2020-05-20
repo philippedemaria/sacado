@@ -1,0 +1,123 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+ 
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-accueil.js' %}"></script> 
+    <script>
+        require(['script/ajax-dashboard']);
+        require(['script/ajax-group']);
+    </script>
+{% endblock %}
+
+
+
+{% block page_title %}
+    <i class='fa fa-users'></i> Mes groupes 
+{% endblock %}
+
+{% block page_menu_right %}
+    <a href="{% url 'create_group' %}" class="btn btn-new pull-right"><img width="25px" src="{% static 'img/plus.png' %}"/> Nouveau groupe</a>  
+{% endblock %}
+
+
+
+
+{% block body %}
+    <section class="content_main"> 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table id="standard_tab" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <td>Code</td>
+                        <td>Nom</td>
+                        <td>Participants </td>
+                        <td>Statistiques et suivis</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for group in groups %}
+                            <tr>
+                                <td style="width:90px;border-left:5px solid {{group.color}}">
+                                    <span style="color:{{group.color}}">{{ group.code }}</span> 
+                                </td>
+                                <td style="width:150px">
+                                     <a href="{% url 'update_group'  group.id %}" style="color:{{group.color}}">{{ group.name }} </a> <br>
+
+                                     
+
+                                </td>
+
+                                <td>
+                                    <form action="" method="POST">
+                                    {% csrf_token %}
+                                    <a href="#" class="vue menuaction" data-toggle='modal' style="float:left; margin-right:10px"
+                                       data-group_name='{{ group.name }}' data-group_id='{{ group.id }}' data-target='#exampleModal'> <span class="label label-default"> {{ group.students.count }}<i class="fa fa-users"></i></span></a>
+                                    </form>
+                                    
+                                        {% for s in group.students.all|dictsort:"user.last_name" %} 
+                                           <font style="font-size:14px">    <a  href="{% url 'detail_student_all_views'  s.user.id   %}"> {{s}} </a>{% if not forloop.last %}, {% endif %} </font>
+                                        {% empty %}
+                                        {% if group %}<br>
+                                            <div class="alert alert-danger">
+                                            Les élèves peuvent rejoindre ce groupe en utilisant cette URL : <strong>http://parcours.erlm.tn/group/{{ group.code }}</strong>. 
+                                            </div>
+                                        {% endif %}
+                                        {% endfor %}
+
+
+                                       
+                                </td>
+
+
+
+                                <td style="width:28%;">
+                                    <a  href="{% url 'list_parcours_group'  group.id %}"  class="btn btn-subsacado" ><i class="fa fa-map"></i> Parcours associés </a>   
+                                    <a href="{% url 'stat_group' group.id   %}" class="btn btn-subsacado"><i class="fa fa-bar-chart"></i> Statistiques</a>
+                                    <a  href="{% url 'result_group_exercise'  group.id %}"  class="btn btn-subsacado" ><i class="fa fa-trophy"></i> Suivi par exercice</a>                                      
+                                    <a  href="{% url 'result_group'  group.id %}"  class="btn btn-subsacado" ><i class="fa fa-trophy"></i> Suivi par savoir faire </a>
+                                    <a  href="{% url 'task_group'  group.id %}"  class="btn btn-subsacado" ><i class="fa fa-calendar-o"></i> Suivi des taches </a>
+                                </td>
+
+
+     
+                            </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">     
+                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+            </div>
+        </div>
+    </section>
+    </div>
+
+    <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>                
+                    <h5 class="modal-title" id="exampleModalLabel">Liste des élèves - <span id="modal_group_name"></span></h5>
+                </div>
+                <div class="modal-body">
+                    <div id="list_students"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

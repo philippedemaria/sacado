@@ -1,0 +1,110 @@
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %} 
+
+
+                    <tr class="spacer_up collapside{{ group.name.id}}" style="width:250px;{% if not parcours.is_publish %}background-color:#eee;{% endif  %}">
+                            <td style="background-color: {{ parcours.color }} ;"></td> 
+                            <td class="spacer_up"></td>
+                            <td class="spacer_up"></td>
+                            <td class="spacer_up"></td>
+                            <td class="spacer_up"></td>
+                            <td class="spacer_up"></td>
+                    </tr> 
+
+           
+                    <tr class="collapside{{ group.name.id}}" style="{% if not parcours.is_publish %}background-color:#eee;{% endif  %}">
+                        <td style="background-color: {{ parcours.color }} ;"></td> 
+                        <td>
+                            <a href="{% url 'update_parcours' parcours.id 0 %}">{% if parcours.linked %} Par défaut {% else %} {{ parcours.title }} {% endif %}</a>
+                            
+
+                            <br>
+                            <span style="font-size:14px">
+                                {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }} {% if parcours.linked %} par thème  {% endif %} - {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }} {% endif %}min.
+                            </span>
+ 
+                            <form action="#" method="POST" enctype='multipart/form-data'>     {% csrf_token %}
+                            <a href="#groupe_name_anchor{{ group.name.id }}" class="btn btn-{% if parcours.is_publish %}success{% else  %}danger{% endif  %} publisher" style="padding:7px;font-size:12px;font-weight: 100" id="parcours_publisher{{parcours.id}}"  data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}" data-from=1  > 
+                            {% if parcours.is_evaluation %}
+                                {% if parcours.is_publish %} Evaluation publiée  {% else %} Evaluation non publiée {% endif  %} 
+                            {% else %}
+                                {% if parcours.is_publish %} Parcours publié  {% else %} Parcours non publié {% endif  %}  
+                            {% endif %}
+                            </a>
+                            </form>
+                            <font style="font-size:12px">
+                            {% if parcours.is_evaluation %}
+                                Date de publication : {{  parcours.start|date:"d N Y"  }} à  {{  parcours.starter  }} 
+                                {% if parcours.stop %}
+                                    <br>Fin de publication : {{  parcours.stop|date:"d N Y"  }} {% if parcours.stopper %}à {{  parcours.stopper  }} {% endif %}    
+                                {% endif %}                                
+                            {% endif %}
+                            </font>
+                  
+                        </td>
+                        <td>
+                        {% for l in  parcours.level_list  %}
+                                <small>{{ l }}</small>
+                        {% endfor %}
+                        </td>
+                        <td>
+                            <form action="#" method="POST">
+                                {% csrf_token %}
+                                <a  href="#groupe_name_anchor{{ group.name.id }}" class="vue menuactionparcours" data-toggle='modal' style="float:left; margin-right:10px"  
+                                    data-group_name='{{ group.name }}' data-parcours_id='{{ parcours.id }}' data-target='#listing'> 
+                                    <span class="label label-default"> {{ parcours.students.count }}<i class="fa fa-users"></i></span>
+                                </a>
+                            </form>
+                            <font style="font-size:12px">
+                            {% for s in  parcours.students.all|dictsort:"user.last_name"  %}
+                                 <a href="#groupe_name_anchor{{ group.name.id }}" class="detail_student_parcours"  data-student_id="{{ s.user.id }}"  
+                                    data-parcours_id="{{ parcours.id }}" >{{s}}</a>{% if not forloop.last %}, {% endif %}
+
+                            {% endfor %}
+                            </font><br>
+                        </td>
+
+                        <td>
+
+
+                            
+
+
+                            {% if parcours.linked %}
+                            <a href="{% url 'populate_parcours' parcours.id  %}" disabled class="btn btn-gestsacado" ><i class="fa fa-laptop"></i> Exercices pré-sélectionnés </a>   
+                            {% else %}
+                            <a href="{% url 'peuplate_parcours' parcours.id %}" class="btn btn-gestsacado" ><i class="fa fa-laptop"></i> Selectionner les exercices</a>   
+                            {% endif %}   
+
+
+                            <a href="{% url 'organize_parcours' parcours.id %}"  class="btn btn-gestsacado" ><i class="fa fa-th-large"></i> Gérer le parcours </a> 
+
+                            <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"  class="btn btn-gestsacado" ><i class="fa fa-tasks"></i> Gérer le parcours </a> 
+
+
+                            
+                            <a href="{% url 'individualise_parcours' parcours.id %}" class="btn btn-gestsacado" ><i class="fa fa-user"></i> Individualiser le parcours</a> 
+
+ 
+
+                        </td>
+                        <td>
+                            <a href="{% url 'detail_task_parcours' parcours.id 0  %}" class="btn btn-subsacado alignLeft" ><i class="fa fa-calendar-check-o"></i>  Tâches en cours</a>                        
+
+                            <a  href="{% url 'result_parcours_knowledge' parcours.id  %}" class="btn btn-subsacado alignLeft" ><i class="fa fa-trophy"></i> Suivi par savoir faire </a>   
+                            <a  href="{% url 'result_parcours' parcours.id  %}"  class="btn btn-subsacado alignLeft" ><i class="fa fa-trophy"></i> Suivi par exercice </a>
+                            <a href="{% url 'stat_parcours' parcours.id %}" class="btn btn-subsacado alignLeft"><i class="fa fa-bar-chart"></i> 
+                                {% if parcours.is_evaluation %} Résultats{% else  %}Statistiques {% endif %}
+                            </a>
+
+                        </td>
+                    </tr>
+
+                    <tr class="spacer collapside{{ group.name.id }}" style="{% if not parcours.is_publish %}background-color:#eee;{% endif  %}">
+                    <td style="background-color: {{ parcours.color }} ;"></td> 
+                    <td class="spacer"></td><td class="spacer"></td><td class="spacer"></td><td class="spacer"></td><td class="spacer"></td>
+                    </tr>
+              
+
+ 

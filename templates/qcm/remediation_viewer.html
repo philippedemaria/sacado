@@ -1,0 +1,18 @@
+{% load widget_tweaks %}
+{% load static %}
+
+{% for r in exercise.exercise_remediation.all %}
+        
+            {% if r.video %} 
+                <a href="{% url 'show_remediation' r.id %}" target="_blank" style="font-size: 16px">
+                    <img src="{% static 'img/video.png' %}" width="40px" />
+            {% elif r.sort %} 
+                <a href="{% url 'show_remediation' r.id %}" target="_blank" style="font-size: 16px">
+                    <img src="{% static 'img/ggb.png' %}" width="40px" />
+            {% else %}
+                <a href="../../{{ r.mediation }}" target="_blank" style="font-size: 16px">
+                    <img src="{% static 'img/pdf.png' %}" width="40px" />
+            {% endif %}
+                {% if r.title %} {{ r.title }} {% endif %} </a>
+         
+{% endfor %}

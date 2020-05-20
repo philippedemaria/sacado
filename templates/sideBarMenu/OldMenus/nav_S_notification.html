@@ -1,0 +1,42 @@
+<?PHP if (in_array("mail", $tab)) { $activ ='active' ;} else { $activ ='';}?>
+  <li> 
+    <a type='text' href="?to=student_mail_courriel_compose" class='btn btn-danger white bouton_new' data-target='#newCourriel' data-whatever='newMessage' ><i class="fa fa-pencil"></i> Nouvelle notification </a>
+    <div class="panel-group">
+      <div class="panel panel-<?PHP if (in_array("mailbox", $tab)) { echo"primary";} else { echo"default";}?>" >
+        <div class="panel-heading">
+          <h4 class="panel-title">
+              <a href="?to=student_mail_courriel_mailbox"><i class="fa fa-envelope"></i><span> Boite de réception</span>
+                  
+            <?PHP $usr = $_SESSION['user_id'] ;
+            $nC = mysql_num_rows(mysql_query("SELECT * FROM courriel WHERE destinataire_id ='$usr' AND reading ='0' "));
+            if( $nC != 0) { 
+                     echo"<span class='pull-right-container'><small class='label pull-right bg-orange'>$nC</small></span>" ;} ?>
+                  
+              </a>
+          </h4>
+        </div>
+      </div>
+    </div>  
+  </li>
+  <li>  
+    <div class="panel-group">
+        <div class="panel panel-<?PHP if (in_array("sent", $tab)) { echo"primary";} else { echo"default";}?>" >
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a href="?to=student_mail_courriel_sent"><i class="fa fa-share"></i> Messages envoyés</a>
+            </h4>
+          </div>
+        </div>
+    </div>
+  </li>
+  <li>   
+    <div class="panel-group">
+        <div class="panel panel-<?PHP if (in_array("contact", $tab)) { echo"primary";} else { echo"default";}?>" >
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a href="?to=student_mail_courriel_contact"><i class="fa fa-users"></i> Contact</a>
+            </h4>
+          </div>
+        </div>
+    </div>
+  </li>

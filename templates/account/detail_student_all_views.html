@@ -1,0 +1,189 @@
+{% extends 'account/detail_student.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common4.js' %}"></script> 
+    <script>
+        require(['script/ajax-group']);
+    </script>
+
+ 
+
+{% endblock %}
+
+ 
+
+
+
+
+ 
+                 
+
+{% block datae %} 
+<style>
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    padding: 5px;
+    line-height: 1.42857143;
+    border-top: 1px solid #ddd;
+}
+</style>
+ 
+
+ 
+<div class="row">
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table class="table table-bordered table-hover standard_tab_sort300">
+                <tbody>
+                    <tr>
+                        <td>
+                            <h2> Suivi par savoir faire</h2> 
+                        </td>
+                        <td>
+                             Dernière connexion : {{ student.user.last_login|date:"d N Y, H:i"  }}
+                        </td>
+                    </tr>    
+                    <tr>
+                        <td colspan="2"> 
+                            {% for knowledge in knowledges %}
+                                {% get_scorek knowledge student as score %}
+                                {% if score != "" %}
+                                    <a class="markdown
+                                            {% if score < 30 %}
+                                             red 
+                                            {% elif score < 60 %}
+                                            orange
+                                            {% elif score < 80 %}
+                                            green
+                                            {% else %}
+                                            darkgreen
+                                            {% endif %}"
+                                          href=" " data-container="body"
+                                          data-toggle="popover"  style="border : 1px solid {{student.get_exercises.parcours.color }}"
+                                          data-trigger="hover" data-placement="bottom"
+                                          title="{{ knowledge}}"
+                                          data-content="{% for e in knowledge.knowledge_exercise.all %}{{ e.annoncement|cleanhtml }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+                                        {{ score }}
+                                    </a>
+                                {% else %}
+                                    <a class="markdown"                                                   
+                                          href="  " data-container="body"
+                                          data-toggle="popover"   style="border : 1px solid {{student.get_exercises.parcours.color }}"
+                                          data-trigger="hover"
+                                           data-placement="bottom" 
+                                          data-content="{{ knowledge.name }}"> 
+                                          {{ score }}
+                                    </a>
+                                {% endif %}
+                            {% endfor %}                                  
+                        </td>
+                    </tr>
+                    <tr class="no_padding">
+                        <td colspan="2">
+                            <h2> Suivi par exercices 
+                                <small class="thin">Si un exercice est effectué plusieurs fois, le dernier score est affiché ici. 
+                                <a href="{% url 'detail_student' student.user.id %}"  class="no_button"  style="font-size:18px;"> <i class="fa fa-angle-double-right" style="font-size:12px;"></i> Voir le suivi par exercices</a>.
+                                </small>
+
+                            </h2> 
+                        </td>
+                    </tr> 
+                    {% regroup knowledges by theme as theme_list %}
+                    {% for theme in theme_list %}
+                    <tr>
+                        <td>     
+                            {{ theme.grouper }}        
+                        </td>
+                        <td>  
+                            {%  get_resultexercises_by_theme student theme.grouper as resultexercises %}  
+
+
+                            {% for resultexercise in resultexercises %}  
+                                {% get_score resultexercise.exercise student as score %} 
+
+                                {% if score %}
+                                <a class="markdown
+                                        {% if score < 30 %}
+                                         red 
+                                        {% elif score < 60 %}
+                                        orange
+                                        {% elif score < 80 %}
+                                        green
+                                        {% else %}
+                                        darkgreen
+                                        {% endif %}"
+                                      href="{% url 'show_this_exercise'  resultexercise.exercise.id   %}" data-container="body"
+                                      data-toggle="popover" style="border : 1px solid #CCC"
+                                      data-trigger="hover" data-placement="top"
+                                      data-content="{{ resultexercise.exercise.knowledge.name }}">
+                                    {{ score }}
+                                </a>
+                                {% else %}
+                                    <a class="markdown"                                                   
+                                          href="{% url 'show_this_exercise' resultexercise.exercise.id %}" data-container="body"
+                                          data-toggle="popover" style="border : 1px solid #CCC"
+                                          data-trigger="hover"
+                                          data-placement="top"
+                                          data-content="{{ resultexercise.exercise.knowledge.name }}"> 
+                                          {{ score }}
+                                    </a>
+                                {% endif %}                                           
+                            {% endfor %}  
+                        </td>
+                    </tr>
+                    {% endfor %}   
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table class="table table-bordered table-hover">
+                <tbody>
+                    <tr>
+                        <td>
+                            Exercices faits <span class="pull-right">{{ std.nb_exo  }}</span>
+                        </td>
+                        <td>
+                            Score moyen  <span class="pull-right">{{ std.average_score  }}</span> 
+                        </td>
+                        <td>
+                            Score médian  <span class="pull-right">{{ std.median  }}</span> 
+                        </td>
+                        <td> 
+                            Durée totale  <span class="pull-right">{{ std.duration|time_done  }}</span> 
+                        </td>
+                    </tr>  
+                    <tr>
+                        <td>
+                            Tâches à rendre <span class="pull-right">{{ std.nb  }}</span>
+                        </td>
+                        <td>
+                            Tâches remises   <span class="pull-right">{% if std.done  > 0 %} <span class="label label-success">{{ std.done  }}</span>{% else %}{{ std.done  }}{% endif %}</span> 
+                        </td>
+                        <td>
+                            Tâches non remises <span class="pull-right">{% if std.no_done  > 0 %} <span class="label label-danger">{{ std.no_done  }}</span>{% else %}{{ std.no_done  }}{% endif %}</span> 
+                        </td>
+                        <td> 
+                            Tâches remises en retard <span class="pull-right">{% if std.late  > 0 %} <span class="label label-warning">{{ std.late  }}</span>{% else %}{{ std.late }}{% endif %}</span> 
+                        </td>
+                    </tr>    
+                </tbody>
+            </table>
+        </div>
+    </div> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">     
+                <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+        </div>
+    </div>
+</div>
+
+
+    
+
+{% endblock %}

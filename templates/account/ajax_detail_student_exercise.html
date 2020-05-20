@@ -1,0 +1,71 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+<div class="content_list"> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+     
+            <h1 class="thin">
+                 <nav class="navbar navbar-default">
+                  <div class="container-fluid">
+                    <div class="navbar-header">
+                      <i class='fa fa-users'></i> {{ student.user }} <span style="font-size:16px">{{ relationships|length }} exercice{{ relationships|length|pluralize }} attribué{{ relationships|length|pluralize }}</span> <br/><small class='thin'>Dernière connexion : {{student.user.last_login|date:"d N Y"}} à {{student.user.last_login|date:"H:i"}}</small>
+                    </div>
+                 
+                    <ul class="nav navbar-nav navbar-right">
+                     <a href="#" id="closeStudent" class="detail_student pull-right"> <i class="fa fa-times"></i></a>
+                    </ul>
+                  </div>
+                </nav> 
+            </h1>
+        </div>
+    </div>
+    <div class="row detail_student_div">
+        <div class="col-sm-12 col-md-12">
+            <table class="table table-hover" style="width:100%">
+                <thead>
+                    <tr>
+                        <td>Exercices</td>
+                        <td>Suivi</td>
+                    </tr>
+                </thead>
+                <tbody> 
+     
+                    {% for relationship  in relationships  %} 
+                    <tr> 
+                        <td style="font-size:16px">{{ forloop.counter }}. {{ relationship.exercise.knowledge.name|capfirst }}<br><em><span style="font-size:12px">{{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst}}</span></em></td>
+     
+                        <td>{% get_score_and_time relationship.exercise student  as studentanswers %} 
+                            {% for studentanswer  in studentanswers  %} 
+                                <span class="markdown
+                                        {% if studentanswer.score < 30 %}
+                                         red 
+                                        {% elif studentanswer.score < 60 %}
+                                        orange
+                                        {% elif studentanswer.score < 80 %}
+                                        green
+                                        {% else %}
+                                        darkgreen
+                                        {% endif %}"
+                                       >
+                                    {{  studentanswer.score }}%
+                                </span>
+                            {% endfor %}
+                        </td> 
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="content_main"> 
+<div class="row">
+
+    <a href="{% url 'detail_student_parcours' student.user.id parcours.id  %}">Résultat complet pour {{ student }} </a> <span style="font-size:14px">ou dans un nouvel onglet</span>
+
+    <a href="{% url 'detail_student_parcours' student.user.id parcours.id %}" target="_blank"><i class="fa fa-share-square"></i> </a>
+</div> 
+</div> 
+ 

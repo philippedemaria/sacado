@@ -1,0 +1,15 @@
+<li class="{% if '/course' in request.path %} active {% endif %}">
+
+ {% for seq in sequences %}
+     <div class="panel-group"> 
+      <div class="panel panel-{% if '/average' in request.path %}primary {% else %}default {% endif %}" >
+        <div class="panel-heading enseignement" style="border-radius: 0px; border-left: solid 10px {{ seq.subject.color }}; padding:10px 5px 10px 5px" >
+          <h4 class="panel-title">    
+             <a href='?to=student_course_mychapter_indexForStudent&idt=$subject_id' style='color:#FFF'>{{ seq.name }} </a> 
+          </h4>
+        </div>
+      </div>
+    </div>
+ {% endfor %}
+</li>
+

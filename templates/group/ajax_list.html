@@ -1,0 +1,119 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+{% block title_page %}
+<i class='fa fa-sitemap'></i> Mes groupes
+        <small><i class='fa fa-chevron-right'></i> Liste</small>
+{% endblock %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-accueil.js' %}"></script> 
+    <script>
+        require(['script/ajax-dashboard']);
+        require(['script/ajax-group']);
+    </script>
+{% endblock %}
+
+
+
+
+ 
+{% block page_title %}
+    <i class='fa fa-users'></i> Mes groupes   
+{% endblock %}
+
+{% block page_menu_right %}
+    <li><a href="{% url 'create_group' %}" class="btn btn-new pull-right"><img width="25px" src="{% static 'img/plus.png' %}"/> Nouveau groupe</a>  </li>
+{% endblock %} 
+
+    <div class="col-xs-12 col-md-10" >  
+    <div class="content_title">
+        <h1 class="thin">
+            <nav class="navbar navbar-default">
+              <div class="container-fluid">
+                <div class="navbar-header">
+                  <i class='fa fa-users'></i> Mes groupes  
+                </div>
+             
+                <ul class="nav navbar-nav navbar-right">
+                  <a href="{% url 'create_group' %}" class="btn btn-subsacado pull-right"><img width="25px" src="{% static 'img/plus.png' %}"/> Nouveau groupe</a>  
+                </ul>
+              </div>
+            </nav>
+        </h1>
+    </div>
+
+
+{% block body %} 
+    <section class="content_main"> 
+ 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table id="standard_tab" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Nom</th>
+                        <th> </th>
+ 
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for group in groups %}
+                        <tr>
+                            <td>
+                                {{ group.code }} 
+                            </td>
+                            <td><form action="" method="POST">
+                                {% csrf_token %}
+                                <i class='fa fa-square' style='color:{{ group.color }}'></i> <a
+                                    href="{% url 'update_group'  group.id %}">{{ group.name }} </a>
+ 
+                                
+                                <a href="#" class="vue pull-right menuaction" data-toggle='modal'
+                                   data-group_name='{{ group.name }}' data-group_id='{{ group.id }}' data-target='#exampleModal'> {{ group.students.count }}
+                                    <i class="fa fa-users"></i> </a>
+                                </form>
+                            </td>
+                            <td>
+                                <a href="{% url 'delete_group'  group.id %}" class="edit pull-right" onclick="return TestDelete('ce groupe')"><i class="fa fa-trash"></i> </a>    
+                            </td>
+ 
+                        </tr>
+
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">     
+                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+            </div>
+        </div>
+    </section>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>                
+                    <h5 class="modal-title" id="exampleModalLabel">Liste des élèves - <span id="modal_group_name"></span></h5>
+                </div>
+                <div class="modal-body">
+                    <div id="list_students"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

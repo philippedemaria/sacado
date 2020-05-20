@@ -1,0 +1,51 @@
+ 
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+
+<table class="table  table-hover display100" style="width:100%">
+    <thead> 
+        <tr>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for exercise in exercises  %} 
+        <tr>
+            <td>
+                <a href="{% url 'show_this_exercise'  exercise.id   %}">
+                    <img src="static/uploads/{{ exercise.supportfile.imagefile }}" class="imagefile">
+                </a> 
+                <a href="{% url 'show_this_exercise'  exercise.id   %}" class="listing" style="font-size: 18px"> {{ exercise.supportfile.annoncement|cleanhtml|capfirst }} </a> 
+                {% if exercise.supportfile.calculator %}
+                  <img src="{% static 'img/calculator.png' %}" width="30px" />
+                {% else %}
+                  <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                {% endif  %}   
+                <br>
+                <a href="{% url 'show_this_exercise'  exercise.id   %}" class="sublisting"> <small>   
+                    <i class="fa fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %} 
+                    <i class="fa fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                    <i class="fa fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum</small>
+                </a> 
+            </td>
+        </tr>
+        {% empty %} 
+        <tr>
+            <td>
+                <div class="alert alert-danger">
+                    Aucun exercice ne correspond à cette recherche
+                </div>    
+            </td>
+        </tr>
+        {% endfor %} 
+    </tbody>
+
+</table>
+
+
+

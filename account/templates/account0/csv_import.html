@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block title_page %}
+    <h1><i class='fas fa-user-graduate'></i> Elève
+        <small><i class='fa fa-chevron-right'></i>
+            Résultats de l'importation par CSV
+        </small>
+    </h1>
+{% endblock %}
+
+
+{% block body %}
+    <div class='content'>
+        <div class="row">
+            <h4>Résultats</h4>
+            {% if added_to_database %}
+                <i class="fa fa-check green"></i>
+                {{ added_to_database |length }}
+                importation{{ added_to_database |length |pluralize }} réalisée{{ added_to_database |length |pluralize }}
+                avec succès.
+                <br>
+            {% endif %}
+
+            {% if duplicated_username %}
+                <i class="fa fa-check green"></i>
+                {{ duplicated_username | length }}
+                importation{{ duplicated_username | length | pluralize }}
+                réalisée{{ duplicated_username |length | pluralize }} avec succès. Un nouveau nom d'utilisateur a été généré car celui fourni était déjà pris.
+                <br>
+            {% endif %}
+
+            {% if problem_during_import %}
+                <i class="fa fa-times red"></i>
+                {{ problem_during_import |length }}
+                importation{{ problem_during_import |length |pluralize }}
+                non-réalisée{{ problem_during_import |length |pluralize }} à cause de données mal-formatées.
+                <br>
+            {% endif %}
+        </div>
+
+        <div class="row">
+            <h4>Détails</h4>
+            <div class="col-lg-10 col-lg-offset-1">
+                <table class="table table-sm ">
+                    <tr>
+                        <th>Nom d'utilisateur</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Status</th>
+                    </tr>
+                    {% for student in added_to_database %}
+                        <tr>
+                            <td>{{ student.username }} </td>
+                            <td>{{ student.first_name }} </td>
+                            <td>{{ student.last_name }} </td>
+                            <td><i class="fa fa-check green"></i> Importation réalisée avec succès</td>
+                        </tr>
+                    {% endfor %}
+                    {% for student in duplicated_username %}
+                        <tr>
+                            <td>{{ student.username }} </td>
+                            <td>{{ student.first_name }} </td>
+                            <td>{{ student.last_name }} </td>
+                            <td><i class="fa fa-check green"></i> Importation réalisée avec succès - Nouveau nom d'utilisateur généré</td>
+                        </tr>
+                    {% endfor %}
+                    {% for student in problem_during_import %}
+                        <tr>
+                            <td>{{ student.username }} </td>
+                            <td>{{ student.first_name }} </td>
+                            <td>{{ student.last_name }} </td>
+                            <td><i class="fa fa-times red"></i>Format des données non conforme</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
