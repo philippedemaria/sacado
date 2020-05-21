@@ -565,14 +565,14 @@ class Resultexercise(models.Model): # Last result
 class Remediation(models.Model):
 
     title = models.CharField(max_length=255, default='',  blank=True,verbose_name="Titre")
-    exercises = models.ManyToManyField(Exercise,    blank=True,  related_name='exercise_remediation') 
+    relationship = models.ForeignKey(Relationship, on_delete=models.CASCADE, default='',   blank=True, related_name='relationship_remediation') 
     width = models.PositiveIntegerField(default = 500 , verbose_name="Largeur")
     height = models.PositiveIntegerField(default = 400 , verbose_name="Hauteur") 
-    video = models.CharField(max_length=255, default='',  blank=True,  verbose_name="Code de la vidéo Youtube")
+    video = models.CharField(max_length=255, default='',  blank=True,  verbose_name="url de la vidéo")
     mediation = models.FileField(upload_to=quiz_directory_path,verbose_name="Fichier", blank=True, default ="")
-    sort = models.BooleanField( default=0,    verbose_name="Remédiation ? Approfondissement ?") 
+    sort = models.BooleanField( default=0,    verbose_name="Type ? ") 
     duration = models.PositiveIntegerField(  default=15,  blank=True,  verbose_name="Durée estimée - en minutes")  
 
     def __str__(self):        
-        return "Remediation {}".format(self.title)
+        return "title {}".format(self.title)
  
