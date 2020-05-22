@@ -42,36 +42,6 @@ def index(request):
 
         if request.user.user_type == 2  :
 
-            """
-            groups = Group.objects.order_by("id")
-            parcourses = Parcours.objects.all()
- 
-            g_code =  []
-            for g in groups :
-                g_code.append(g.code)
-
-            for parcours in parcourses :
-                if parcours.code in g_code :
-                    parcours.linked = 1
-                    group = Group.objects.get(code = parcours.code)
-                    group.parcours = parcours
-                    group.save()
-                else :
-                    parcours.linked = 0  
-                parcours.save()
-
-            for group in groups :
-                if group.parcours == None :
-                    parcours = Parcours.objects.create(title=group.name, color=group.color, author=group.teacher, teacher=group.teacher, code=group.code, linked = 1) 
-
-            """
-
-
-
-
-
-
-
 
             teacher = Teacher.objects.get(user = request.user)
             groups = Group.objects.filter(teacher  = teacher)
@@ -82,14 +52,11 @@ def index(request):
 
             communications = Communication.objects.filter(active = 1)
 
-            nb_parcours_favorite = Parcours.objects.filter(teacher  = teacher,is_favorite=1).count() 
-            nb_parcours  = Parcours.objects.filter(teacher  = teacher).count()    
-            nb_parcours_visible = Parcours.objects.filter(teacher  = teacher,is_publish=1).count() 
 
-            parcours_tab = Parcours.objects.filter(students=None,teacher = teacher)
+            parcours_tab = Parcours.objects.filter(students=None,teacher = teacher,linked = 0)
 
-            context = {   'this_user' : this_user , 'teacher' : teacher ,  'groups' : groups ,   'parcourses' : parcourses ,   'relationships' : relationships , 'nb_parcours_visible' : nb_parcours_visible , \
-             'nb_parcours_favorite' : nb_parcours_favorite , 'nb_parcours' : nb_parcours , 'communications' : communications , 'parcours_tab' : parcours_tab , }
+            context = {   'this_user' : this_user , 'teacher' : teacher ,  'groups' : groups ,   'parcourses' : parcourses ,   'relationships' : relationships ,  \
+             'communications' : communications , 'parcours_tab' : parcours_tab , }
 
             
         elif request.user.user_type ==   0: ## student
