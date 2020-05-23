@@ -94,15 +94,11 @@
                         <div class="col-md-6 col-lg-6 col-xs-6">
                             <a href="{% url 'update_parcours' parcours.id group.id %}" class="edit" > <i class="fa fa-edit"></i> <span class="label_icon">Modifier</span> </a><br>
                         </div>
-                        {% if not parcours.linked %}
+ 
                         <div class="col-lg-6 col-md-6 col-xs-6">
                             <a href="{% url 'delete_parcours' parcours.id group.id %}" class="trash" onclick="return TestDelete('ce parcours')"><i class="fa fa-trash"></i>  <span class="label_icon">Supprimer</span></a>
                         </div> 
-                        {% else %}
-                        <div class="col-lg-6 col-md-6 col-xs-6">
-                            <span class="label_icon" style="color:red"">Suppression interdite</span>
-                        </div> 
-                        {% endif %}
+ 
                     </div>  
                 </div>
                 <div class="group_show  overlay_export{{parcours.id }}"> 
@@ -142,7 +138,7 @@
                 <div class="box_title_vignette"> 
                     <a href="{% url 'show_parcours'  parcours.id  %}" style="color:{{ parcours.color|contrast_color }};"> {{ parcours.title|truncatechars:"18" }}
                         <span style="font-size:12px"> 
-                            {% if parcours.linked %}(par défaut){% endif %}
+                            {% if parcours.linked %}({{parcours.level}}){% endif %}
                             {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}
                             {% if not parcours.linked %}, 
                                 {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }} {% endif %}min.
@@ -157,16 +153,11 @@
             <div class="box-footer">
                 <div class="row extend">                              
                     <div class="col-lg-4 col-xs-4">
-                        {% if not parcours.linked %}
                         <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit"><i class="fa fa-laptop"></i> <span class="label_icon">Sélect.</span>
                         </a>  
-                        {% else %} 
-                        <a href="{% url 'populate_parcours' parcours.parcours_group.id   %}" class="edit"><i class="fa fa-laptop"></i> <span class="label_icon">Sélect.</span>
-                        </a> 
-                        {% endif %} 
                     </div>
                     <div class="col-lg-4 col-xs-4">
-                        <a href="{% url 'organize_parcours' parcours.id %}"  class="edit" ><i class="fa fa-th"></i> <span class="label_icon">Gérer</span>
+                        <a href="{% url 'show_parcours' parcours.id %}"  class="edit" ><i class="fa fa-th"></i> <span class="label_icon">Gérer</span>
                         </a> 
                     </div>
                     <div class="col-lg-4 col-xs-4">
@@ -216,8 +207,7 @@
     <div class="row"> 
         <div class="col-sm-12 col-md-12">
             <div class="alert alert-danger">Aucun parcours n'est affecté à ce groupe. Tant qu'un groupe ne contient pas d'élève, vous ne pouvez pas lui attribuer de parcours. Les parcours sont rattachés au groupe par leurs élèves.<br>
-            <i class="fa fa-bullhorn"></i> <strong>Commencez à le préparer et assignez-le ensuite à vos élèves.</strong>
-
+            <i class="fa fa-bullhorn"></i> <strong>Préparez maintenant vos parcours</strong>, <strong>affectez-les à vos élèves</strong>, <strong>publiez</strong>.  
             </div>
         </div>
     </div>
@@ -227,9 +217,9 @@
             <h2 class='thin'><i class="fa fa-recycle"></i> 3 façons de disposer de parcours avec <span class="sacado">sacado</span></h2>  
                 
 
-                    <ol><i class="fa fa-hand-o-right"></i> Les parcours par défaut (Recommandé pour une première utilisation) <p> Ces parcours contiennent tous les exercices proposés par <span class="sacado">sacado</span>, classés par le thème dans le niveau {{ group.level}}. Vous pouvez les utiliser comme proposés, leur ajouter, supprimer des exercices.<br>Choisir le parcours souhaité <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   ><i class="fa fa-caret-right"></i>  Parcours par défaut</a><p></ol>
+                    <ol><i class="fa fa-hand-o-right"></i> Les parcours par défaut (Recommandé pour une première utilisation) <p> Ces parcours contiennent tous les exercices  de  {{ group.level}} proposés par <span class="sacado">sacado</span>, classés par le thème. Vous pouvez les utiliser directement, leur ajouter, leur supprimer des exercices.<br>Choisir le parcours souhaité <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   ><i class="fa fa-caret-right"></i>  Parcours par défaut</a><p></ol>
                     <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés <p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier un fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur <a href="{% url 'all_parcourses' %}"   ><i class="fa fa-caret-right"></i> Parcours mutualisés</a></p></ol>
-                    <ol><i class="fa fa-hand-o-right"></i>  Les parcours personnalisés <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br>  Créer votre parcours personnalisé <a href="{% url 'create_parcours' %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a></p></ol>
+                    <ol><i class="fa fa-hand-o-right"></i>  Les parcours personnalisés <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br>  Créer votre parcours personnalisé dans un premier temps puis sélectionner les exercices de votre choix. <a href="{% url 'create_parcours' %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a></p></ol>
 
 
 

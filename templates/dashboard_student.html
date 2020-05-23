@@ -53,6 +53,10 @@
                     </div>
                 </div>
             </div>
+            {% empty  %} 
+            <div class="col-md-12 col-lg-12 col-sm-12" style="text-align: center">
+                    <img src="{% static 'img/dashboard_empty.jpg' %}" />
+            </div>
             {% endfor  %} 
         </div> 
 

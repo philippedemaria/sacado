@@ -65,7 +65,7 @@
 
                 <div class="col-sm-12 col-md-6">
                     <div class="{% if teacher.levels.all.count == 0 %} alert alert-danger{% else %}form-group{% endif %}">
-                        <label>{{ user_form.time_zone.label_tag }}{% if teacher.levels.all.count == 0 %} <i class="fa fa-warning"></i> Renseigner{% endif %}</label> 
+                        <label>{{ user_form.time_zone.label_tag }}{% if teacher.levels.count == 0 %} <i class="fa fa-warning"></i> Renseigner{% endif %}</label> 
                         {{ user_form.time_zone  |add_class:"form-control select2" }}
                         {{ user_form.time_zone.errors }}
                     </div>
@@ -79,7 +79,7 @@
             <div class="row">
                 <div class="col-sm-12 col-md-6">
                     <div class="{% if teacher.levels.all.count == 0 %} alert alert-danger{% else %}form-group{% endif %}">
-                        <label>{{ teacher_form.levels.label_tag }} {% if teacher.levels.all.count == 0 %} <i class="fa fa-warning"></i> Renseigner{% endif %} </label>
+                        <label>{{ teacher_form.levels.label_tag }} {% if teacher.levels.count == 0 %} <i class="fa fa-warning"></i> Renseigner{% endif %} </label>
                         {{ teacher_form.levels  |add_class:"form-control select2" }}
                         {{ teacher_form.levels.errors }}
                     </div>
@@ -116,12 +116,12 @@
 
                     </div>
                 </div>
+ 
             </div>
  
 
-
             <div class="row" style="margin-top:40px">
-                    <div class="col-sm-12 col-md-12">
+                    <div class="col-sm-12 col-md-8">
                         <div class="form-group">
                             <input value="Enregistrer" type="submit" class="btn btn-sacado"/>
                             <a href="javascript:history.back()">
@@ -131,6 +131,7 @@
                         </div>   
                     </div>
             </div>
+
         </form>
     </section>
  

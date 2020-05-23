@@ -1,5 +1,5 @@
 {% load item_tags %} 
-
+{% if teacher.levels.all.count > 0 %} 
 <div class="events_title">
      A venir <small><span class="pull-right parcours_displayer pull-right_top"><i class="fa fa-calendar"></i> <a href="{% url 'calendar_initialize' %}" class="a_venir" >Afficher le calendrier</a> <a href="{% url 'calendar_initialize' %}" style="font-size:10px" target="_blank" title="Lien externe"><i class="fa fa-share"></i></a></span> </small>
 </div>
@@ -87,6 +87,7 @@ Aucun parcours
     </div>
 </div>
 <hr>
+ 
 <li class="sans_puce" style="margin-bottom: 5px"><a href="{% url 'profile' %}" class="btn btn-default full_width"> Choisir mes niveaux préférés</a> </li>
 
 <div class="btn btn-default full_width" style="text-align: left; font-size:15px; margin-bottom: 5px">
@@ -110,8 +111,14 @@ Aucun parcours
     </div>
 </div>
 <hr>
+
+
+
+
 {% if user.user_type == 2 %}
     <a href="#" data-toggle='modal' data-target='#nouveaute'   class="btn btn-{% if communications|length > 0 %}danger{% else %}default{% endif %} full_width" >
         {% if communications|length > 0 %}Lire {% endif %}Les nouveautés 
     </a>
+{% endif %}
+
 {% endif %}

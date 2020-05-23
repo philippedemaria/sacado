@@ -191,7 +191,9 @@ def create_group(request):
 
         if len(stdts) > 0 :
             include_students(stdts,nf)
- 
+        
+        if  teacher.teacher_to_group.count() == 1 :
+            messages.success(request, "Félicitations... Votre compte sacado est maintenant configuré et votre premier groupe créé !")
 
         return redirect('index')
     else:
@@ -605,8 +607,14 @@ def enroll(request,slug):
                 code = str(uuid.uuid4())[:8]
                 student = Student.objects.create(user=user,level=group.level,code=code)
                 group.students.add(student)
-                parcours = Parcours.objects.get(id=group.parcours.id)
-                parcours.students.add(student)
+                parcourses  = Parcours.objects.filter(teacher = group.teacher,level = group.level )
+                for parcours in parcourses :
+                    parcours.students.add(student)
+                relationships = Relationship.objects.filter(parcours__in = parcourses)
+                for relationship in relationships : 
+                    relationship.students.add(student)
+
+
                 user = authenticate(username=username, password = password)
                 login(request, user)
                 messages.success(request, "Inscription réalisée avec succès !")               

@@ -44,7 +44,10 @@ class UserUpdateForm(forms.ModelForm):
         exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined', 'user_type', 'password']
 
 
-
+class ParentForm(forms.ModelForm):
+    class Meta:
+        model = Parent
+        fields = '__all__'
  
 
 class ParentUpdateForm(forms.ModelForm):

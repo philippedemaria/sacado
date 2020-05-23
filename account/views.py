@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.views.generic import CreateView, UpdateView
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import PasswordChangeForm
-from .forms import   UserForm, UserUpdateForm, StudentForm, TeacherForm
+from .forms import   UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm
 from account.models import User, Teacher, Student, Resultknowledge, Parent
 from group.models import Group
 import uuid  
@@ -857,14 +857,17 @@ def my_profile(request):
                 teacher_form.save_m2m()
                 user_form.save()
                 messages.success(request, 'Votre profil a été changé avec succès !')
-                return redirect('profile')
+                if teacher.teacher_to_group.count() == 0 :
+                    return redirect ('index')
+                else :
+                    return redirect('profile')
             else :
                 print(user_form.errors)
                 print(teacher_form.errors)
 
         return render(request,'account/teacher_form.html', {'teacher_form':teacher_form, 'user_form':user_form, 'teacher':teacher})
 
-    else :
+    elif request.user.user_type == 1 :
 
         student = Student.objects.get(user=user)
         form = StudentForm(request.POST or None, request.FILES or None, instance=student)
@@ -878,8 +881,28 @@ def my_profile(request):
                 return redirect('profile')
 
             else :
-                print(teacher_form.errors)
+                print(form.errors)
         return render(request,'account/student_form.html', {'form':form, 'user_form':user_form, 'student':student, })
+
+    else :
+
+
+        parent = Parent.objects.get(user=user)
+        form = ParentForm(request.POST or None, request.FILES or None, instance=parent)
+        if request.method == "POST" :
+            if  all((user_form.is_valid(), form.is_valid())):
+                user_form.save()
+                parent_f = form.save(commit=False)
+                parent_f.user = user
+                parent_f.save()
+                messages.success(request, 'Votre profil a été changé avec succès !')
+                return redirect('profile')
+
+            else :
+                print(form.errors)
+        return render(request,'account/parent_form.html', {'form':form, 'user_form':user_form, 'student':student, })
+
+
 
 
 
