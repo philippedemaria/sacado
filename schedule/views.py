@@ -144,24 +144,17 @@ def calendar_initialize(request):
     if request.user.user_type == 2 :
         teacher = Teacher.objects.get(user=request.user)
         relationships = Relationship.objects.filter(parcours__teacher = teacher, date_limit__gte=today).exclude(date_limit = None) 
-        parcourses = Parcours.objects.filter(teacher = teacher,linked=0)
+        parcourses = Parcours.objects.filter(teacher = teacher)
         calendars = Calendar.objects.filter(user = request.user) 
+
      
         form = EventForm(user, request.POST or None)
         context = { 'form' : form ,'hours' : hours ,    'relationships' : relationships ,        'parcourses' : parcourses  ,        'calendars' : calendars    } 
     else :
         student = Student.objects.get(user=request.user.id)
 
-        parcourses = Parcours.objects.filter(students = student,is_publish = 1, linked=0)
-        groups = student.students_to_group.all()
-
-        parcours = []
-        for p in parcourses :
-            parcours.append(p)
-        for g in groups :
-            parcours.append(g.parcours)
-
-        relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).order_by("date_limit")
+ 
+        relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), students=student, date_limit__gte=today).order_by("date_limit")
         exercise_tab = []
         for r in relationships:
             if r not in exercise_tab:
@@ -177,9 +170,9 @@ def calendar_initialize(request):
             if not studentanswer.exercise in exercises:
                 exercises.append(studentanswer.exercise)
       
-        relationships_in_late = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, is_evaluation=0, date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
+        relationships_in_late = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), students=student, is_evaluation=0, date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
 
-        nb_relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).count()
+        nb_relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), students=student,  date_limit__gte=today).count()
 
         try :
             ratio = int(num/nb_relationships*100)

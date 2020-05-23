@@ -88,12 +88,10 @@ Aucun parcours
 </div>
 <hr>
  
-<li class="sans_puce" style="margin-bottom: 5px"><a href="{% url 'profile' %}" class="btn btn-default full_width"> Choisir mes niveaux préférés</a> </li>
-
 <div class="btn btn-default full_width" style="text-align: left; font-size:15px; margin-bottom: 5px">
 
         <span data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}">
-           M{{ teacher.levels.all.count|pluralize:"on,es" }} {{ teacher.levels.all.count }} niveau{{ teacher.levels.all.count|pluralize:"x" }}  préféré{{  teacher.levels.all.count|pluralize }}  
+            {{ teacher.levels.all.count }} niveau{{ teacher.levels.all.count|pluralize:"x" }}  préféré{{  teacher.levels.all.count|pluralize }}  <i class="fa fa-caret-down pull-right"></i>
         </span>
 
     <div id="collapse{{ forloop.counter }}" class="collapse">
@@ -106,6 +104,11 @@ Aucun parcours
                     </td>
                 </tr>
                 {% endfor %} 
+                <tr>
+                    <td>
+                        <a href="{% url 'profile' %}" style="font-size: 12px">Gérer mes préférences</a>
+                    </td>
+                </tr>
             </table>
         </div>
     </div>
