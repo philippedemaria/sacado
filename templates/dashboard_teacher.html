@@ -42,7 +42,14 @@
 
                         <div class="small-box-footer">
                             {% if group.nb_parcours == 0 %}
-                                   <a href="{% url 'list_parcours_group' group.id  %}" class="white"><i class="fa fa-map"></i> Attribuer un parcours  </a>    
+                                <div class="row">                              
+                                    <div class="col-lg-6 col-xs-3" style="padding-right:0px">
+                                         <a href="{% url 'list_parcours_group' group.id  %}" class="label_small_box"><i class="fa fa-map"></i><span class="small_displayer"> Cloner, créer un parcours</span> </a>   
+                                    </div>
+                                    <div class="col-lg-6 col-xs-3" style="padding-right:0px">
+                                        <a href="{% url 'update_group' group.id  %}" class="label_small_box"><i class="fa fa-cogs"></i><span class="small_displayer"> Configurer </span></a>    
+                                    </div>
+                                </div>
                             {% else  %}
                                 <div class="row">                              
                                     <div class="col-lg-3 col-xs-3" style="padding-right:0px">
@@ -102,9 +109,12 @@
                             <ol>2. Les parcours personnalisés</ol>
                             <ol>3. Les parcours existants</ol>
                         </ul>
-                        <h1 class="sacado">Démarrez votre sacAdo</h1>
-                    <a href="{% url 'create_group' %}" class="btn btn-danger">Créer un nouveau groupe</a>
 
+                        <div class="round"><br>
+                            <h1 class="sacado">Démarrez  avec </h1>
+                            <a href="{% url 'create_group' %}" class="btn btn-danger">Créer un nouveau groupe</a>
+                            <h1 class="sacado">sacAdo </h1>
+                        </div>
 
 
 
