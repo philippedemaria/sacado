@@ -915,41 +915,46 @@ def organize_parcours(request, id):
     teacher = Teacher.objects.get(user=request.user)
     today = time_zone_user(request.user)
 
-    if parcours.linked :
+    if parcours.linked:
         themes_tab = []
-        for e in parcours.exercises.order_by("theme"):
-            if not e.theme in themes_tab :
+        for e in parcours.exercises.select_related("theme").order_by("theme"):
+            if not e.theme in themes_tab:
                 themes_tab.append(e.theme)
         data_tab = []
 
-        for t in themes_tab :
+        for t in themes_tab:
             datas = {}
-            datas["theme"]=t
-            relationships = Relationship.objects.filter(parcours=parcours, exercise__theme = t ).order_by("exercise__theme")
-            datas["relationships"]=relationships
+            datas["theme"] = t
+            relationships = Relationship.objects.filter(parcours=parcours, exercise__theme=t).select_related(
+                'exercise__supportfile').order_by("exercise__theme")
+            datas["relationships"] = relationships
             data_tab.append(datas)
         # Si aucun exercice alors pas de thème donc on donne une liste vide à relationships.
- 
-        relationships = Relationship.objects.filter(parcours=parcours).order_by("order")
-        nb_exo_only, nb_exo_visible = [] , []
-        i=0
-        for r in relationships :
+
+        relationships = Relationship.objects.filter(parcours=parcours).prefetch_related(
+            'exercise__supportfile').order_by("order")
+        nb_exo_only, nb_exo_visible = [], []
+        i = 0
+
+        for r in relationships:
             if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle:
-                i=0
-            else :
-                i+=1
+                i = 0
+            else:
+                i += 1
             nb_exo_only.append(i)
-        j=0
-        for r in relationships :
-            if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle or r.is_publish==0 :
-                j=0
-            else :
-                j+=1
+        j = 0
+
+        for r in relationships:
+            if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle or r.is_publish == 0:
+                j = 0
+            else:
+                j += 1
             nb_exo_visible.append(j)
 
-        skills   = Skill.objects.all()
+        skills = Skill.objects.all()
 
-        context = {'data_tab': data_tab,  'parcours': parcours, 'skills': skills, 'teacher': teacher , 'today' : today , 'nb_exo_only' : nb_exo_only  , 'nb_exo_visible' : nb_exo_visible  }
+        context = {'data_tab': data_tab, 'parcours': parcours, 'skills': skills, 'teacher': teacher,
+                   'today': today, 'nb_exo_only': nb_exo_only, 'nb_exo_visible': nb_exo_visible}
         return render(request, 'qcm/organize_parcours_group_original.html', context)  
 
     else :
