@@ -422,16 +422,16 @@ class Parcours(models.Model):
 
     def level_list(self):
         
-        exercises = self.exercises.filter(supportfile__is_title=0).order_by("level") 
+        exercises = self.exercises.filter(supportfile__is_title=0).order_by("level")
         exercises_level_tab = []
         for e  in exercises :
             if e.level not in exercises_level_tab:
                 exercises_level_tab.append(e.level)
-        return exercises_level_tab 
+        return exercises_level_tab
 
     def duration_overall(self):
         som = self.duration
-        for e in self.exercises.all() : 
+        for e in self.exercises.all().prefetch_related('supportfile'):
             som += e.supportfile.duration
         return som 
 
