@@ -97,36 +97,27 @@
                     </div>
                 </div>
             {% endfor %}
-            <div class="col-lg-12 col-xs-12">
-                <p></p>
-                {% if not groups  %}
-                    Vous devez créer au moins un groupe pour enregistrer vos élèves.
-                    <br>
 
-                        Lorsque votre groupe sera créé, vous devrez lui attribuer des parcours. <br>Trois façons d'attribuer des parcours sont proposées :
-                        <ul>
-                            <ol>1. Les parcours par défaut</ol>
-                            <ol>2. Les parcours personnalisés</ol>
-                            <ol>3. Les parcours existants</ol>
-                        </ul>
-
-                        <div class="round"><br>
-                            <h1 class="sacado">Démarrez  avec </h1>
-                            <a href="{% url 'create_group' %}" class="btn btn-danger">Créer un nouveau groupe</a>
+            {% if teacher.levels.all.count == 0 %} 
+                        <div class="round"> 
+                            <h1 class="sacado">1.<br>Démarrez  avec </h1>
+                            <a href="{% url 'profile' %}">Configurer mon compte</a>
                             <h1 class="sacado">sacAdo </h1>
                         </div>
+            {% endif %}
 
 
+            <div class="col-lg-12 col-xs-12">
+                <p></p>
+                {% if not groups and  teacher.levels.all.count > 0 %}
 
+                        <div class="round">
+                            <h1 class="sacado">2.<br>Démarrez  avec </h1>
+                            <a href="{% url 'create_group' %}" >Créer mon premier groupe</a>
+                            <h1 class="sacado">sacAdo </h1>
+                        </div>
                 {% endif %}
             </div>
-            {% if teacher.levels.all.count == 0 %} 
-            <div class="col-lg-10 col-xs-12">
-                <h3 class="thin">
-                    <a href="{% url 'profile' %}" style="color:red">Choisir mes niveaux préférés</a>
-                </h3>
-            </div>
-            {% endif %}
         </div>
 
  
