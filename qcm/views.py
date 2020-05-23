@@ -186,33 +186,33 @@ def associate_parcours(request,id):
 @login_required
 @user_is_group_teacher
 def populate_parcours(request,id):
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = Teacher.objects.get(user_id=request.user.id)
     group = Group.objects.get(id=id)
     parcours = group.parcours
     # Récolte des id des anciens exercices.
-    old_exercice_ids =  Relationship.objects.values_list("exercise_id",flat=True).filter(parcours = parcours,exercise__supportfile__is_title=0)
- 
+    old_exercice_ids = Relationship.objects.values_list("exercise_id", flat=True).filter(parcours=parcours,
+                                                                                         exercise__supportfile__is_title=0)
+
     data = []
     level = group.level
     themes = level.themes.order_by("id")
-    for theme in themes :
-        themes_dict =  {}                
-        themes_dict["name"]=theme.name 
-        knowlegdes = Knowledge.objects.filter(theme=theme,level=level).order_by("theme")
-        knowledges_tab  =  []
-        for knowledge in knowlegdes :
-            knowledges_dict  =   {}  
-            knowledges_dict["name"]=knowledge 
+    for theme in themes:
+        themes_dict = {}
+        themes_dict["name"] = theme.name
+        knowlegdes = Knowledge.objects.filter(theme=theme, level=level).order_by("theme")
+        knowledges_tab = []
+        for knowledge in knowlegdes:
+            knowledges_dict = {}
+            knowledges_dict["name"] = knowledge
             exercises = Exercise.objects.filter(knowledge=knowledge).order_by("theme")
-            exercises_tab    =   []
-            for exercise in exercises :
-                exercises_tab.append(exercise)
-            knowledges_dict["exercises"]=exercises_tab
+            exercises_tab = list(exercises)
+
+            knowledges_dict["exercises"] = exercises_tab
             knowledges_tab.append(knowledges_dict)
-        themes_dict["knowledges"]=knowledges_tab
-        data.append(themes_dict) # Tous les exercices du niveau...
-    
-    context = {'data': data,   'parcours': parcours,  'group': group ,  'user': request.user   }
+        themes_dict["knowledges"] = knowledges_tab
+        data.append(themes_dict)  # Tous les exercices du niveau...
+
+    context = {'data': data, 'parcours': parcours, 'group': group, 'user': request.user}
 
     return render(request, 'qcm/form_populate_parcours.html', context)
 
@@ -549,40 +549,40 @@ def delete_parcours(request, id, idg=0):
         return redirect('list_parcours_group', idg)
 
 
-
-
 @login_required
 def show_parcours(request, id):
     parcours = Parcours.objects.get(id=id)
-    user = User.objects.get(pk = request.user.id)
-    teacher = Teacher.objects.get(user = user)
-    relationships = Relationship.objects.filter(parcours=parcours).order_by("order")
-    nb_exo_only, nb_exo_visible = [] , []
-    i=0
-    for r in relationships :
+    user = User.objects.get(pk=request.user.id)
+    teacher = Teacher.objects.get(user=user)
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
+    nb_exo_only, nb_exo_visible = [], []
+    i = 0
+    for r in relationships:
         if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle:
-            i=0
-        else :
-            i+=1
+            i = 0
+        else:
+            i += 1
         nb_exo_only.append(i)
-    j=0
-    for r in relationships :
-        if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle or r.is_publish==0 :
-            j=0
-        else :
-            j+=1
+    j = 0
+    for r in relationships:
+        if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle or r.is_publish == 0:
+            j = 0
+        else:
+            j += 1
         nb_exo_visible.append(j)
 
-    try :
+    try:
         group_id = request.session["group_id"]
-    except :
+    except:
         group_id = None
 
-    skills   = Skill.objects.all()
- 
+    skills = Skill.objects.all()
+
     nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count()
-    context = {'relationships': relationships,  'parcours': parcours, 'teacher': teacher, 'skills': skills, 'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible,'nb_exo_only': nb_exo_only ,'group_id': group_id  }
- 
+    context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills,
+               'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible, 'nb_exo_only': nb_exo_only,
+               'group_id': group_id}
+
     return render(request, 'qcm/show_parcours.html', context)
 
 
@@ -914,9 +914,11 @@ def parcours_tasks_and_publishes(request, id):
  
 
  
+ 
     relationships = Relationship.objects.filter(parcours=parcours).order_by("exercise__theme")
     context = {'relationships': relationships,  'parcours': parcours, 'teacher': teacher  , 'today' : today }
     return render(request, 'qcm/parcours_tasks_and_publishes.html', context)
+ 
 
  
 
