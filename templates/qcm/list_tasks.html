@@ -21,8 +21,9 @@
 {% block page_menu_right %}
     <li style="font-size:14px; position: absolute;right:0px; top:-6px;" > {{ today|date:"d N Y" }}  </li>
 
-    <li><a href="{% url 'organize_parcours' parcours.id %}"   class="no_button" > Créer une tache</a> </li>
-    <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
+   {% include 'qcm/submenu_parcours.html' %}    
+
+   <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
 {% endblock %}
 
 {% block body %}

@@ -24,6 +24,8 @@ def vignette_directory_path(instance, filename):
     return "vignettes/{}/{}".format(instance.teacher.user.id, filename)
 
 
+def file_directory_path(instance, filename):
+    return "files/{}/{}".format(instance.relationship.parcours.teacher.user.id, filename)
 
 def convert_time(duree) :
     d = int(duree)
@@ -350,10 +352,11 @@ class Parcours(models.Model):
  
     exercises = models.ManyToManyField(Exercise,   blank=True, through="Relationship", related_name = "exercises_parcours" )   
     students = models.ManyToManyField(Student, blank=True,  related_name='students_to_parcours', verbose_name="Elèves de ce parcours")
-    is_share = models.BooleanField( default = 1 ,  verbose_name="partagé ?")
-    is_publish = models.BooleanField( default = 0, editable= False)    
+    is_share = models.BooleanField( default = 1 ,  verbose_name="Partagé ?")
+    is_publish = models.BooleanField( default = 0,  verbose_name="Publié ?" )    
     code = models.CharField(max_length=100, unique=True, blank=True, default='', verbose_name="Code du parcours*") 
 
+    level = models.ForeignKey(Level, related_name = "level_parcours", on_delete=models.PROTECT,  default='', blank=True, null= True,  editable=False)
     linked  = models.BooleanField( default = 0 ,  editable=False)
     is_favorite  = models.BooleanField( default = 1  ,  verbose_name="Favori ?" )
 
@@ -561,17 +564,18 @@ class Resultexercise(models.Model): # Last result
 ########################################################################################################################################### 
 ########################################################################################################################################### 
 
+ 
+
+
 
 class Remediation(models.Model):
 
     title = models.CharField(max_length=255, default='',  blank=True,verbose_name="Titre")
     relationship = models.ForeignKey(Relationship, on_delete=models.CASCADE, default='',   blank=True, related_name='relationship_remediation') 
-    width = models.PositiveIntegerField(default = 500 , verbose_name="Largeur")
-    height = models.PositiveIntegerField(default = 400 , verbose_name="Hauteur") 
     video = models.CharField(max_length=255, default='',  blank=True,  verbose_name="url de la vidéo")
-    mediation = models.FileField(upload_to=quiz_directory_path,verbose_name="Fichier", blank=True, default ="")
-    sort = models.BooleanField( default=0,    verbose_name="Type ? ") 
-    duration = models.PositiveIntegerField(  default=15,  blank=True,  verbose_name="Durée estimée - en minutes")  
+    mediation = models.FileField(upload_to=file_directory_path,verbose_name="Fichier - pdf", blank=True, default ="")
+    sort = models.BooleanField( default=0,    verbose_name="Type du document") 
+    duration = models.PositiveIntegerField(  default=15,   verbose_name="Durée estimée (en min.)")  
 
     def __str__(self):        
         return "title {}".format(self.title)

@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required, permission_required,u
 from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group 
-from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile
+from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation
 from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm 
 from socle.models import  Theme, Knowledge , Level , Skill
 from django.http import JsonResponse 
@@ -149,9 +149,39 @@ def students_from_p_or_g(request,parcours) :
 
 #######################################################################################################################################################################
 #######################################################################################################################################################################
+#################   parcours par defaut
+#######################################################################################################################################################################
+#######################################################################################################################################################################
+def associate_parcours(request,id):
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    group = Group.objects.get(pk = id)
+    theme_theme_ids = request.POST.getlist("themes")
+    for theme_id in theme_theme_ids :
+        code = str(uuid.uuid4())[:8]
+        theme = Theme.objects.get(pk = int(theme_id))
+        parcours, created = Parcours.objects.get_or_create(title=theme.name, color=group.color, author=teacher, teacher=teacher, level=group.level,  is_favorite = 1,  is_share = 0, linked = 1, defaults={ 'code' : code}) 
+        exercises = Exercise.objects.filter(level= group.level,theme = theme, supportfile__is_title=0)
+        parcours.students.set(group.students.all())
+        i  = 0
+        for e in exercises:
+            relationship, created = Relationship.objects.get_or_create(parcours = parcours, exercise=e, order = i)
+            relationship.students.set(group.students.all())
+            i+=1
+
+    if len(parcours.students.all())>0 :
+        return redirect("list_parcours_group" , group.id )
+    else :
+        return redirect("parcours") 
+
+
+
+#######################################################################################################################################################################
+#######################################################################################################################################################################
 #################   parcours
 #######################################################################################################################################################################
 #######################################################################################################################################################################
+
+
 
 @login_required
 @user_is_group_teacher
@@ -715,10 +745,9 @@ def stat_parcours(request, id):
     form = EmailForm(request.POST or None )
     stats = []
 
-
-    if request.session["group_id"] :
+    try :
         group_id = request.session["group_id"]
-    else :
+    except :
         group_id = None
 
 
@@ -882,102 +911,14 @@ def parcours_tasks_and_publishes(request, id):
     today = time_zone_user(request.user)
     parcours = Parcours.objects.get(id=id)
     teacher = Teacher.objects.get(user=request.user)
-    if parcours.linked :
-        themes_tab = []
-        for e in parcours.exercises.order_by("theme"):
-            if not e.theme in themes_tab :
-                themes_tab.append(e.theme)
-        data_tab = []
-        for t in themes_tab :
-            datas = {}
-            datas["theme"]=t
-            relationships = Relationship.objects.filter(parcours=parcours, exercise__theme = t ).order_by("exercise__theme")
-            datas["relationships"]=relationships
-            data_tab.append(datas)
-
-
-        context = {'data_tab': data_tab,  'parcours': parcours, 'teacher': teacher , 'today' : today }
-        return render(request, 'qcm/parcours_group_tasks_and_publishes.html', context)  
-
-    else :
-
-        teacher = Teacher.objects.get(user = request.user)
-        relationships = Relationship.objects.filter(parcours=parcours).order_by("exercise__theme")
-        context = {'relationships': relationships,  'parcours': parcours, 'teacher': teacher  , 'today' : today }
-        return render(request, 'qcm/parcours_tasks_and_publishes.html', context)
-
-
-@user_is_parcours_teacher
-def organize_parcours(request, id):
+ 
 
  
-    parcours = Parcours.objects.get(id=id)
-    teacher = Teacher.objects.get(user=request.user)
-    today = time_zone_user(request.user)
+    relationships = Relationship.objects.filter(parcours=parcours).order_by("exercise__theme")
+    context = {'relationships': relationships,  'parcours': parcours, 'teacher': teacher  , 'today' : today }
+    return render(request, 'qcm/parcours_tasks_and_publishes.html', context)
 
-    if parcours.linked :
-        themes_tab = []
-        for e in parcours.exercises.order_by("theme"):
-            if not e.theme in themes_tab :
-                themes_tab.append(e.theme)
-        data_tab = []
-
-        for t in themes_tab :
-            datas = {}
-            datas["theme"]=t
-            relationships = Relationship.objects.filter(parcours=parcours, exercise__theme = t ).order_by("exercise__theme")
-            datas["relationships"]=relationships
-            data_tab.append(datas)
-        # Si aucun exercice alors pas de thème donc on donne une liste vide à relationships.
  
-        relationships = Relationship.objects.filter(parcours=parcours).order_by("order")
-        nb_exo_only, nb_exo_visible = [] , []
-        i=0
-        for r in relationships :
-            if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle:
-                i=0
-            else :
-                i+=1
-            nb_exo_only.append(i)
-        j=0
-        for r in relationships :
-            if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle or r.is_publish==0 :
-                j=0
-            else :
-                j+=1
-            nb_exo_visible.append(j)
-
-        skills   = Skill.objects.all()
-
-        context = {'data_tab': data_tab,  'parcours': parcours, 'skills': skills, 'teacher': teacher , 'today' : today , 'nb_exo_only' : nb_exo_only  , 'nb_exo_visible' : nb_exo_visible  }
-        return render(request, 'qcm/organize_parcours_group_original.html', context)  
-
-    else :
-
-        teacher = Teacher.objects.get(user = request.user)
-        relationships = Relationship.objects.filter(parcours=parcours).order_by("order")
-        nb_exo_only, nb_exo_visible = [] , []
-        i=0
-        for r in relationships :
-            if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle:
-                i=0
-            else :
-                i+=1
-            nb_exo_only.append(i)
-        j=0
-        for r in relationships :
-            if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle or r.is_publish==0 :
-                j=0
-            else :
-                j+=1
-            nb_exo_visible.append(j)
-
-        skills   = Skill.objects.all()
-
-        context = {'relationships': relationships,  'parcours': parcours, 'skills': skills,  'teacher': teacher  , 'today' : today , 'nb_exo_only' : nb_exo_only  , 'nb_exo_visible' : nb_exo_visible}
-        return render(request, 'qcm/organize_parcours_original.html', context)
-
-
 
  
 @login_required
@@ -1941,42 +1882,6 @@ def ajax_level_exercise(request):
 
  
 
-
-
-
-def ajax_level_exercise0(request):
-    level_id = request.POST.get('level_id', None)
-    parcours_id = request.POST.get('parcours_id', None)
-    data = {}
- 
-    exercises = Exercise.objects.filter(level_id=level_id)
-
-    if parcours_id != "0" : 
-        parcours  = Parcours.objects.get(pk=parcours_id)
-        exes = parcours.exercises.all()
-    else :
-        exes = [] 
-
-    exos = [] # liste pour être serializée
-    for e in exercises :
-        exos_dict = {}
-        exos_dict["id"] = e.id
-        if len(e.knowledge.name)> 120 : 
-            name =  e.knowledge.name[:120]+"..."
-        else :
-            name =  e.knowledge.name 
-        exos_dict["name"] = name
-        exos_dict["code"] = e.code
-        if e in exes : # pour veriier si l'exercice est déjà checked.
-            exos_dict["checked"] = True
-        else :
-            exos_dict["checked"] = False
-        exos.append(exos_dict)
- 
-
-    return JsonResponse(exos, safe=False)
-
-
  
 
 def ajax_knowledge_exercice(request):
@@ -2188,20 +2093,20 @@ def all_my_tasks(request):
     return render(request, 'qcm/all_tasks.html', context)
 
 
-
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 #################   Remédiation
 #######################################################################################################################################################################
 #######################################################################################################################################################################
+@csrf_exempt 
+def create_remediation(request,idr):
 
-def create_remediation(request,ide):
-
-    exercise = Exercise.objects.get(pk=ide) 
+    relationship = Relationship.objects.get(pk=idr) 
     form = RemediationForm(request.POST or None,request.FILES or None)
  
     if form.is_valid():
         nf =  form.save(commit = False)
+        nf.relationship = relationship
         nf.save()
         nf.exercises.add(exercise)
         return redirect('admin_exercises')
@@ -2214,8 +2119,8 @@ def create_remediation(request,ide):
 
 
 
-
-def update_remediation(request,ide, id):
+@csrf_exempt 
+def update_remediation(request,idr, id):
 
     remediation = Remediation.objects.get(id=id)
     exercise = Exercise.objects.get(pk=ide) 
@@ -2223,7 +2128,6 @@ def update_remediation(request,ide, id):
  
     if form.is_valid():
         nf.save()
-        nf.exercises.add(exercise)
         return redirect('exercises')
 
     context = {'form': form,  'exercise' : exercise}
@@ -2240,7 +2144,7 @@ def delete_remediation(request, id):
 
 
 
-
+@csrf_exempt 
 def show_remediation(request, id):
 
     remediation = Remediation.objects.get(id=id)
@@ -2262,6 +2166,71 @@ def show_remediation(request, id):
     context = {'remediation': remediation, 'video_url': video_url, 'ggb_file': ggb_file   }
     
     return render(request, 'qcm/show_remediation.html', context)
+
+
+
+@csrf_exempt 
+def ajax_remediation(request):
+
+    relationship_id =  int(request.POST.get("relationship_id"))
+    relationship = Relationship.objects.get( id = relationship_id)
+
+    form = RemediationForm(request.POST or None,request.FILES or None)
+    data = {}
+
+    remediations = Remediation.objects.filter(relationship = relationship)
+
+    context = {'form': form,  'relationship' : relationship ,  'remediations' : remediations } 
+    html = render_to_string('qcm/ajax_remediation.html',context)
+    data['html'] = html       
+
+    return JsonResponse(data)
+
+
+@csrf_exempt  
+def json_create_remediation(request,idr):
+
+    relationship = Relationship.objects.get(pk=idr) 
+    form = RemediationForm(request.POST or None, request.FILES or None )
+ 
+    if form.is_valid():
+        nf =  form.save(commit = False)
+        nf.relationship = relationship
+        nf.save()
+
+    return redirect( 'show_parcours', relationship.parcours.id )
+
+@csrf_exempt  
+def json_delete_remediation(request, id):
+    remediation = Remediation.objects.get(id=id)
+    remediation.delete()
+
+    return redirect( 'show_parcours', remediation.relationship.parcours.id )
+
+ 
+
+
+@csrf_exempt 
+def ajax_remediation_viewer(request): # student_view
+
+    remediation_id =  int(request.POST.get("remediation_id"))
+    remediation = Remediation.objects.get( id = remediation_id)
+    data = {}
+    context = { 'remediation' : remediation ,   } 
+    html = render_to_string('qcm/ajax_remediation_viewer.html',context)
+    data['html'] = html       
+
+    return JsonResponse(data)
+
+
+#######################################################################################################################################################################
+#######################################################################################################################################################################
+#################   exports
+#######################################################################################################################################################################
+#######################################################################################################################################################################
+
+
+
 
 
  
@@ -2288,8 +2257,7 @@ def export_note(request,idg,idp):
         writer.writerow( (full_name , score) )
     return response
 
- 
- 
+
 
 
  

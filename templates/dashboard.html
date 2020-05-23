@@ -129,6 +129,39 @@
 </div>
 
 
+<div class="modal fade" id="remediation" tabindex="-1" role="dialog" aria-labelledby="remediation">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2  class='sacado'  >Ajouter un fichier, une vidéo, une méthode,...</h2>
+            </div>
+            <div class="modal-body">
+                    <div id="remediation_form"> 
+                    </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="remediation_viewer" tabindex="-1" role="dialog" aria-labelledby="remediation_viewer">
+    <div class="modal-dialog" role="document" style="width:70%">
+        <div class="modal-content" >
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <div id="remediation_shower"> 
+                    <div id="loader_shower"></div>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
 {%  if request.user.user_type == 2 %}
 <div class="modal fade" id="nouveaute" tabindex="-1" role="dialog" aria-labelledby="nouveaute" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -152,6 +185,7 @@
         </div>
     </div>
 </div>  
+
 {%  endif  %}
 
 
@@ -345,6 +379,10 @@
         </div>  
     </div>
 </div>
+
+
+
+{% include 'qcm/order_list.html' %}
 {% endif %}
 
 

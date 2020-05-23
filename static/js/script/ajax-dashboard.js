@@ -1036,12 +1036,56 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                             flex_size ++;
                         });
 
-       
+        // ==================================================================================================================  
+        // ==================================================================================================================             
+        // ====================================================   fenetre modale ============================================ 
+        // ================================================================================================================== 
+        // ==================================================================================================================  
  
+            $('.remediation').on('click', function (event) {
+                let relationship_id = $(this).attr("data-relationship_id");
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                console.log(relationship_id);
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            'relationship_id': relationship_id,
+                            csrfmiddlewaretoken: csrf_token
+                        },
+                        url: "../../ajax/remediation" ,
+                        success: function (data) {
+                            $('#remediation_form').html('').html(data.html);          
+                        }
+                    }
+                )
+
+                });
 
 
+ 
+            $('.remediation_viewer').on('click', function (event) {
+                let remediation_id = $(this).attr("data-remediation_id");
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                console.log(remediation_id);
+                $("#loader_shower").html("<i class='fa fa-spinner fa-pulse fa-fw fa-3x'></i>");  
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            'remediation_id': remediation_id,
+                            csrfmiddlewaretoken: csrf_token
+                        },
+                        url: "../../ajax/remediation_viewer" ,
+                        success: function (data) {
+                            $('#remediation_shower').html('').html(data.html);          
+                        }
+                    }
+                )
 
-
+                });
 
 
 

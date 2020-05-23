@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block page_menu_right %}
-    <li><a href="{% url 'organize_parcours' parcours.id %}"   class="no_button" >Créer une tache</a>  </li>
+    {% include 'qcm/submenu_parcours.html' %}
     <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default"/></a>
 {% endblock %}
 

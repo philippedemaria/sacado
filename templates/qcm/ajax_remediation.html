@@ -1,0 +1,152 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+<form action="{% if remediation %}{%  url 'json_update_remediation' relationship.id %}{% else %}{%  url 'json_create_remediation' relationship.id %}{% endif %}" method="POST" enctype='multipart/form-data'> 
+	<div class="row">
+	    <div class="col-sm-12 col-md-12">
+	        {{ relationship.parcours.title }}       
+	    </div>
+	</div>
+	<div class="row">
+	    <div class="col-sm-12 col-md-12">
+	        {{ relationship.exercise.supportfile.annoncement|safe }}       
+	    </div>
+	</div>
+	{% if remediations|length > 0 %}
+	<div class="row">
+	    <div class="col-sm-12 col-md-12">
+		    <div class="alert alert-info">
+			 {% for remediation in remediations %}
+			 <div style="font-size:16px"> 
+			 		{% if remediation.sort %}
+			 			<a href="https://www.youtube.com/watch?v={{ remediation.video }}"  target="_blank"><img src="{%  static 'img/video.png' %}" width="15px" /> {{ remediation.title }} </a>
+	 		 		{% else %}
+			 			<a href="../../../static/uploads/{{ remediation.mediation }}"  target="_blank"><img src="{%  static 'img/pdf.png' %}" width="15px" /> {{ remediation.title }} </a>			 			
+			 		{% endif  %}
+			 		<a href="{%  url 'json_delete_remediation' remediation.id %}"  onclick="return TestDelete('cette ressource ')"  class="pull-right"><i class="fa fa-trash"></i></a>
+			 </div>
+			 {% empty  %}
+			 Aucun document
+			 {% endfor  %}
+		    </div>
+	    </div>
+	</div>
+	{% endif  %}
+
+
+
+
+	{% csrf_token %}
+	<div class="row">
+		<div class="col-sm-12 col-md-8">
+		    <div class="form-group">
+		        {{ form.title.label_tag }}
+		        {{ form.title |add_class:"form-control" }}
+		        {{ form.title.errors }}
+		    </div>
+		</div>           
+		<div class="col-sm-12 col-md-4">
+		    <div class="form-group">
+		        {{ form.duration.label_tag }}
+		        {{ form.duration |add_class:"form-control" }}
+		    </div>
+		</div>   
+	</div>   
+	<div class="row">
+		<div class="col-sm-12 col-md-9">
+		     <div class="form-group">
+		        {{ form.sort.label_tag }}
+		    </div>
+		</div>
+		<div class="col-sm-12 col-md-3">
+		     <div class="form-group">
+		        {{ form.sort |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Rem"|attr:"data-off:App"}}
+		        {{ form.sort.errors }}
+		    </div>
+		</div>
+	</div> 
+	<div class="row">
+		<div class="col-sm-12 col-md-9">
+		    <div class="form-group">
+		        <label>Format du document</label>
+		    </div>
+		</div>
+		<div class="col-sm-12 col-md-3">
+		    <div class="form-group">
+		        <input type="checkbox" id="choice_div" data-onstyle="primary" data-offstyle="default" data-on="Vidéo" data-off="Fichier" />
+		    </div>
+		</div>
+	</div> 
+	<div class="row"  id="file">
+        <div class="col-sm-12 col-md-12">
+            <div class="form-group">
+                {{ form.mediation.label_tag }}
+                {{ form.mediation |add_class:"btn btn-default" }}
+                {{ form.mediation.errors }}
+            </div>
+        </div>
+	</div>
+	<div class="row" id="video">
+	    <div class="col-sm-12 col-md-12">            
+	        <div class="form-group">
+	            {{ form.video.label_tag }}<small> N'utiliser que vos propres vidéos</small>
+	            {{ form.video |add_class:"form-control"|attr:"placeholder:INkui5BHDZU" }}
+	            {{ form.video.errors }}
+	        </div>
+	    </div>
+	    <div class="col-sm-12 col-md-12">            
+	        <div class="form-group">
+	            <img src="{% static 'img/code_video_youtube.png' %}"/>
+	        </div>
+	    </div>
+	</div> 
+	<div class="row">
+	    <div class="col-sm-12 col-md-12">
+	         <div class="form-group">
+                <input value="Poster la ressource" type="submit" class="btn btn-primary"/>
+                <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">
+                    Annuler
+                </button> 
+            </div>
+        </div>    
+    </div>
+</form>
+
+<script>
+
+$(document).ready(function () { 
+ 
+    $('#choice_div').bootstrapToggle(); 
+    $('#id_sort').bootstrapToggle();  
+ 
+                $('#file').show();
+                $('#video').hide();
+ 
+
+ 
+        $('#choice_div').change(function () {
+        	console.log("coucou");
+            if ($('#choice_div').is(":checked")) {
+                $('#file').hide(500);
+                $('#video').show(500);
+
+            } else {
+                $('#file').show(500);
+                $('#video').hide(500);
+            }
+        });
+           
+
+ 
+                
+});
+</script>   
+
+
+            
+
+
+
+

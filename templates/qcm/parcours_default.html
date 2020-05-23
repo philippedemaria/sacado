@@ -1,0 +1,25 @@
+
+
+
+<form action="{% url 'associate_parcours' group.id %}" method="POST" enctype='multipart/form-data'> 
+	<table style="margin: 10px">
+	    {% for theme in group.level.themes.all %}
+	    <tr>                            
+	        <td><label><input type="checkbox"  value="{{ theme.id }}" name="themes" /> parcours {{theme}}</label></td>
+	    </tr>
+	    {% endfor   %}
+	</table>
+            {% csrf_token %}
+    <div class="row" >
+        <div class="col-sm-12 col-md-12">
+            <div class="form-group">
+                <input value="Récupérer le ou les parcours souhaités" type="submit" class="btn btn-sacado"/>
+                <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">
+                    Fermer
+                </button> 
+            </div>
+        </div> 
+    </div>   
+
+
+</form>

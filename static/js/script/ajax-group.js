@@ -16,7 +16,7 @@ define(['jquery', 'bootstrap'], function ($) {
             $('#id_assign').on('change', function (){  
 
                 if ( $('#id_assign').prop('checked') == false) {  
-                    !confirm('Vous souhaitez dissocier tous les exercices de ce groupe ? Vous pourrez les rajouter plus tard.') ; return false;
+                    if (!confirm('Vous souhaitez dissocier tous les exercices de ce groupe ? Vous pourrez les rajouter plus tard.')) return false;
                     }  
 
                 });

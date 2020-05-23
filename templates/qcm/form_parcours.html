@@ -30,28 +30,16 @@
 
 {% endblock %}
 
+
+
+
 {% block page_menu_right %}    
 
- 
-
-    <li>
-        <form action="" method="POST" enctype='multipart/form-data'>     
-            {% csrf_token %}
-            <div class="btn-group"  style="padding:0px;margin:0px;">
-                <a href="#" class="btn btn-default"  data-from="0" 
-                    id="parcours_publisher"    style="padding:5px;font-size:18px;font-weight: 100"
-                    data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
-                  {% if parcours.is_publish %} Dépublier  {% else %} Publier {% endif  %} 
-                </a><span class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" id="parcours_statut"  style="padding:5px;font-size:18px;font-weight: 100">  
-                  {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
-                </span>
-            </div>
-        </form>
-    </li>
-
-
-
 {% endblock %}
+
+  <li> <a href="{% url 'all_parcourses' %}"   class="no_button"> Tous les parcours</a></li>
+
+
 
 
 {% block body %}
@@ -96,14 +84,14 @@
                         {{ form.is_favorite.errors }}
                     </div>
                 </div>
-                <div class="col-sm-4  col-md-6  col-lg-2">
+                <div class="col-sm-4  col-md-4  col-lg-2">
                     <div class="form-group">
                         {{ form.is_share.label_tag }} <br>
                         {{ form.is_share |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                         {{ form.is_share.errors }}
                     </div>
                 </div>
-                <div class="col-sm-4  col-md-6  col-lg-4">
+                <div class="col-sm-4  col-md-4  col-lg-2">
                     <div class="form-group">
                         {{ form.is_evaluation.label_tag }}<br>
                         {% if parcours.is_evaluation %} 
@@ -114,6 +102,13 @@
                         {{ form.is_evaluation.errors }}
                     </div>
                 </div>
+                <div class="col-sm-4  col-md-4  col-lg-2">
+                    <div class="form-group">
+                        {{ form.is_publish.label_tag }} <br>
+                        {{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                        {{ form.is_publish.errors }}
+                    </div>
+                </div>   
             </div> 
             <div class="row">
                 <div class="col-sm-6 col-md-4   col-lg-3">
@@ -226,13 +221,11 @@
             <div class="row">
                 <div class="col-sm-12 col-md-12">
                 {% if parcours %}
-                    {% if not parcours.linked %}
+ 
                         <a href="{% url 'delete_parcours' parcours.id  idg  %}" class="btn btn-danger"  onclick="return TestDelete('ce parcours')"> 
                             <i class="fa fa-trash"> </i>   Supprimer
                         </a>
-                    {% else %}
-                        <span class="label_icon" style="color:red"">Parcours par défaut, suppression interdite</span>
-                    {% endif %}
+ 
                 {% endif %}  
                 </div>
             </div>  

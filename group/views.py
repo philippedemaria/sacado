@@ -125,6 +125,30 @@ def include_students(liste,group):
             pass 
 
 
+
+def include_students_in_a_model(liste,model):
+ 
+    students_tab = liste.split("\r")
+ 
+    for student_tab in students_tab :
+        details = student_tab.split(";")
+        try:
+            fname = cleanhtml(details[0].replace(" ",""))
+            lname = cleanhtml(details[1].replace(" ",""))
+            password = make_password("sacado2020")
+            username = str(lname).strip()+str(fname).strip()
+            try:
+                email = cleanhtml(details[2])
+                send_mail("Inscription SacAdo", "Bonjour "+fname+", \n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : "+username+"\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , "saca_do_not_reply@sacado.fr" , [email]) 
+            except:
+                email = ""
+            user = User.objects.create(last_name=str(lname), first_name=str(fname),username=username, password=password, email=email,user_type=0)
+            code = str(uuid.uuid4())[:8] # code pour la relation avec les parents
+            student = Student.objects.create(user=user,level=group.level,code=code)
+            model.students.add(student)  
+        except:
+            pass 
+
  
 def convert_seconds_in_time(secondes):
     if secondes < 60 :
@@ -141,17 +165,10 @@ def convert_seconds_in_time(secondes):
 
 
 
-
-
-
-
-
 @login_required
 def list_groups(request):
     groups = Group.objects.filter(teacher__user_id = request.user.id)
     return render(request, 'group/list_group.html', {'groups': groups})
-
-
 
 
 
@@ -169,25 +186,12 @@ def create_group(request):
         nf = form.save(commit = False)
         nf.teacher = teacher
         nf.code = code
-        parcours = Parcours.objects.create(title=nf.name, color=nf.color, author=teacher, teacher=teacher, code=code, linked = 1)   
-        parcours.is_share = 0
-        parcours.save()
-        nf.parcours = parcours
         nf.save()
         stdts = request.POST.get("students")
 
         if len(stdts) > 0 :
             include_students(stdts,nf)
-
-        if request.POST.get("assign"):
-            exercises = Exercise.objects.filter(level=nf.level,supportfile__is_title=0).order_by("theme")
-            i  = 0
-            for e in exercises:
-                try:
-                    Relationship.objects.get_or_create(parcours = parcours, exercise=e, order = i)
-                    i+=1
-                except :
-                    pass
+ 
 
         return redirect('index')
     else:
@@ -217,23 +221,7 @@ def update_group(request, id):
 
         include_students(stdts,group)
         
-        exercises = Exercise.objects.filter(level=nf.level, supportfile__is_title=0)
-        if request.POST.get("assign"):
-            i  = 0
-            for e in exercises:
-                try:
-                    Relationship.objects.get_or_create(parcours = group.parcours, exercise=e, order = i)
-                    i+=1
-                except :
-                    pass
-        else :
-            for e in exercises:
-                try:
-                    r,created = Relationship.objects.get_or_create(parcours = group.parcours, exercise=e)
-                    if not created :
-                        r.delete() 
-                except :
-                    pass
+ 
 
 
         return redirect('index')
@@ -254,11 +242,13 @@ def delete_group(request, id):
         if Group.objects.filter(students=student).exclude(pk=group.id) == 0 :
             student.student_user.delete()
             student.delete()
+    """
     parcours = group.parcours
     relationships = Relationship.objects.filter(parcours=parcours)
     for r in relationships:
         r.delete()
     parcours.delete() 
+    """
     group.delete()
     return redirect('index')
 

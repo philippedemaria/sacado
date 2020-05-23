@@ -22,10 +22,10 @@
 {% endblock %}
 
 {% block page_menu_right %}
-  <li> <a href="{% url 'all_parcourses' %}"   class="no_button"> Tous les parcours</a></li>
-  <li> <a href="{% url 'create_parcours' %}"   class="btn btn-new" ><img width="15px" src="{% static 'img/plus.png' %}"/> Nouveau parcours</a> </li>
+  <li> <a href="{% url 'index' %}"    class="no_button"  > Parcours par défaut  via mes groupes</a></li>
+  <li> <a href="{% url 'all_parcourses' %}"   class="no_button"> Parcours mutualisés</a></li>
+  <li> <a href="{% url 'create_parcours' %}"   class="btn btn-new" ><img width="15px" src="{% static 'img/plus.png' %}"/> Nouveau parcours</a> </li>  
 {% endblock %}
-
 
 
 
@@ -37,7 +37,7 @@ body{
 }
 </style> 
 <section class="content_list"> 
-
+{% if parcourses %}
 <div class="row">    
    <div class="col-sm-12 col-md-12">
         <table class="table table-hovered standard_tab_sort"  style="width:100%">
@@ -64,21 +64,15 @@ body{
                             <a href="{% url 'update_parcours' parcours.id 0 %}" > {{ parcours.title }} {% if parcours.linked %}(Par défaut){% endif %} <i class="fa fa-pencil-square pull-right" aria-hidden="true"></i></a>
                              <div style="font-size:14px;margin-top:-5px;">
                                 {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }} - {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }} {% endif %}min. 
-                                <div><a href="{% url 'update_parcours' parcours.id 0 %}" style="font-size: 12px;"><i class="fa fa-laptop"></i> Sélectionner les exercices</a> </div>
+                                <div><a href="{% url 'peuplate_parcours' parcours.id %}" style="font-size: 12px;"><i class="fa fa-laptop"></i> Sélectionner les exercices</a> </div>
 
- 
-                                {% if not parcours.linked %}
-
-                                <div><a href="{% url 'organize_parcours' parcours.id   %}"  style="font-size: 12px;"><i class="fa fa-th"></i> Organiser  le parcours</a></div>
-                                {% else %} 
-                                <div><a href="{% url 'organize_parcours' parcours.parcours_group.id %}" style="font-size: 12px;"><i class="fa fa-th"></i> Organiser  le parcours</a> </div>
-                                {% endif %} 
- 
+                                <div><a href="{% url 'show_parcours' parcours.id   %}"  style="font-size: 12px;"><i class="fa fa-th"></i> Gérer  le parcours</a></div>
 
                                 <div><a href="{% url 'detail_task_parcours' parcours.id 0  %}" style="font-size: 12px;"><i class="fa fa-calendar-check-o"></i> Voir les taches  </a>  </div>
+                                {% if request.session.group_id %}
                                 <div><a href="{% url 'result_parcours' parcours.id  %}" style="font-size: 12px;"><i class="fa fa-mortar-board"></i> Suivi du parcours par élève</a></div> 
                                 <div><a href="{% url 'result_parcours_knowledge' parcours.id   %}" style="font-size: 12px;"><i class="fa fa-trophy" style="font-size: 12px"></i> Suivi du parcours par savoir faire </a></div>
-
+                                {% endif %}
                             </div>
                         </td> 
                         <td>
@@ -130,6 +124,38 @@ body{
         </table>
     </div>
 </div>
+{% else %}
+
+<div class="row"> 
+    <div class="col-sm-12 col-md-12">
+        <h2 class='thin'><i class="fa fa-map"></i> Les parcours  <span class="sacado">sacado</span></h2>  
+            <ol><i class="fa fa-hand-o-right"></i> Un même parcours à plusieurs groupes. <p>Si vous avez plusieurs classes de même niveau, vous pouvez créer un seul parcours et l'attribuer à chaque classe. <i class="fa fa-warning"></i> Les données du parcours seront partagées aux deux groupes et seront indissociables. Pour individualiser les exercices par élève, il faudra utiliser l'icone <i class="fa fa-user"></i> du parcours.</p></ol>
+            <ol><i class="fa fa-hand-o-right"></i> Un parcours par groupe. <p>Cette option vous permet plus de flexibilité.</p></ol>
+                
+            <div class="alert alert-danger">Tant qu'un groupe ne contient pas d'élève, vous ne pouvez pas lui attribuer de parcours. Les parcours sont rattachés au groupe par leurs élèves.<i class="fa fa-bullhorn"></i>  <strong>Commencez à le préparer et assignez-le ensuite à vos élèves.</strong></div>
+    </div>
+</div>    
+<div class="row"> 
+    <div class="col-sm-12 col-md-12">
+        <h2 class='thin'><i class="fa fa-recycle"></i> 3 façons de disposer de parcours avec <span class="sacado">sacado</span></h2>  
+            
+
+                <ol><i class="fa fa-hand-o-right"></i> Les parcours par défaut (Recommandé pour une première utilisation) <p> Ces parcours contiennent tous les exercices proposés par <span class="sacado">sacado</span>, classés par le thème dans le niveau {{ group.level}}. Vous pouvez les utiliser comme proposés, leur ajouter, supprimer des exercices.<br>Ces parcours dépendent du niveau du groupe. Pour les créer, il faut se passer par un groupe <a href="{% url 'index' %}"  ><i class="fa fa-caret-right"></i>  Parcours par défaut</a><p></ol>
+                <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés <p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier un fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur <a href="{% url 'all_parcourses' %}"   ><i class="fa fa-caret-right"></i> Parcours mutualisés</a></p></ol>
+                <ol><i class="fa fa-hand-o-right"></i>  Les parcours personnalisés <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br>  Créer votre parcours personnalisé <a href="{% url 'create_parcours' %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a></p></ol>
+
+
+
+    </div>
+</div>
+{% endif  %}
+
+
+
+
+
+
+
 
 </section>
 

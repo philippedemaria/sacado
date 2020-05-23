@@ -47,13 +47,14 @@ def index(request):
             groups = Group.objects.filter(teacher  = teacher)
             this_user =  request.user 
 
+
             relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("parcours")
             parcourses = Parcours.objects.filter(teacher  = teacher)
 
             communications = Communication.objects.filter(active = 1)
 
 
-            parcours_tab = Parcours.objects.filter(students=None,teacher = teacher,linked = 0)
+            parcours_tab = Parcours.objects.filter(students=None,teacher = teacher,is_favorite = 1)
 
             context = {   'this_user' : this_user , 'teacher' : teacher ,  'groups' : groups ,   'parcourses' : parcourses ,   'relationships' : relationships ,  \
              'communications' : communications , 'parcours_tab' : parcours_tab , }

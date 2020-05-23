@@ -3,6 +3,7 @@
 {% load widget_tweaks %}                     
 
 <div class="card_freeze" style="{% if not relation.is_publish %}background-color: #F5F5F5{% else %}background:#FFF{% endif %}" id="card{{relation.id}}">
+    <!-- Entete de la card  -->
     <div class="card-body" style="height:37px;">
           <input type="hidden" value="{{ relation.exercise.id }}" name="input_exercise_id" class="div_exercise_id"/><!--  sert à classer les thèmes  -->
           <a href="" style="cursor:move;" class="move_inside" style="color:{{ parcours.color }}"> 
@@ -26,25 +27,35 @@
           {% else %}
             <img src="{% static 'img/no_calculator.png' %}" class="pull-right" width="35px" />
           {% endif  %}
-    </div>                    
+    </div>   
+    <!-- Fin Entete de la card  -->
+
+    <!-- Partie sur laquelle est posée l'image  -->                  
     <div class="card-image">
+          <!-- Publication  -->
           <div href="#card{{relation.id}}" class="action_content {% if  relation.is_publish %}btn btn-success{% else %}btn btn-danger{% endif %}"  style="position: absolute; right : 0px; top:90px;" id="publisher{{relation.id}}"  data-relationship_id="{{relation.id}}" data-statut="{{relation.is_publish }}" >   
               {% if  relation.is_publish %}Publié{% elif relation.start %}{{ relation.start }}{% else %}Dépublié{% endif %}
           </div>
+
+          <!-- Tache  -->
           <div href="#card{{relation.id}}" class="btn btn-{% if  relation.date_limit %}success{% else %}default{% endif %} select_task"  style="position: absolute; right : 0px; top:120px;" id="pub_task{{relation.id}}" data-relationship_id="{{relation.id}}" data-statut="{{relation.is_task }}" >   
               <span id="loading{{ relation.id }}"></span>{% if  relation.date_limit %}{{relation.date_limit }}{% else %}Tâche ?{% endif %}
           </div>
 
 
-          <!-- Pop up du détail d'un exercice  -->
+          <!-- Pop up de la date de la tache d'un exercice  -->
           <div id="detail_dateur{{relation.id}}" class="card-dateur"  > 
                 Pour le ? <span href="#card{{relation.id}}" class="select_task_close" data-relationship_id="{{relation.id}}"><i class="fa fa-times pull-right"></i></span><br/>
                 <input type="type" name="dateur" data-relationship_id="{{relation.id}}" data-type ="1" value="{{ relation.date_limit|date:"Y-m-d" }}" class="datepicker dateur pull-right" />
           </div>
+
+          <!-- Pop up de la date de publication d'un exercice  -->
           <div id="detail_pub{{relation.id}}" class="card-dateur"  > 
                 Date de publication ? <span href="#card{{relation.id}}" class="select_publish_close" data-relationship_id="{{relation.id}}"><i class="fa fa-times pull-right"></i></span><br/>
                 <input type="type" name="start" data-relationship_id="{{relation.id}}" data-type ="0" value="{{ relation.date_limit|date:"Y-m-d" }}" class="datepicker dateur pull-right" />
           </div>
+
+          <!-- Pop up de la durée et du nombre de situation d'un exercice  -->
           <div id="details{{relation.id}}" class="card-dateur"  > 
                 <span href="#card{{relation.id}}" class="select_details_close" data-relationship_id="{{relation.id}}"><i class="fa fa-times pull-right"></i></span><br/>
                <div class="row">
@@ -62,13 +73,15 @@
                     </div>
                 </div> 
           </div>
+
+          <!-- Pop up de partage d'un exercice  -->
           <div id="share{{ relation.id }}" class="card-dateur"  > 
                 <span href="#card{{relation.id}}" class="select_share_close" data-relationship_id="{{relation.id}}"><i class="fa fa-times pull-right"></i></span><br/>
                 <a href="http://parcours.erlm.tn/qcm/show_this_exercise/{{ relation.exercise.id }}/" target="_blank" style="font-size:11px"><i class="fa fa-eye"></i> Vers l'exercice</a><br>
                 <span href="#card{{relation.id}}" class="copy" data-exercise_id="{{ relation.exercise.id}}" data-relationship_id="{{ relation.id}}"  data-parcours_id="{{ relation.parcours.id}}" style="font-size:11px"><i class="fa fa-clipboard"></i> Copier pour coller dans une autre page</span>
           </div>
 
-
+          <!-- Pop up des compétences d'un exercice  -->
           <div id="skill{{ relation.id }}" class="card-skill"> Compétences visées
               <span   class="select_skill_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>
                 {% for skill in skills %}
@@ -82,8 +95,7 @@
 
 
 
-          <!--  fin Pop up du détail d'un exercice  -->
-
+          <!--  Image de la card  -->
           <a href="#card{{relation.id}}" class="detail_parcours"  data-exercise_id="{{ relation.exercise.id }}"  data-num_exo="{{ forloop.counter}}" data-parcours_id="{% if group.id %}{{ group.id}}{% else %}{{ parcours.id }}{% endif %}">
                <img src="../../../static/uploads/{{ relation.exercise.supportfile.imagefile }}"  class="image_parcours_order"  >
           </a> 
@@ -92,24 +104,31 @@
           <a href="{% url 'create_evaluation' relation.parcours.id  relation.exercise.id  %}" class="btn btn-info"  style="position: absolute; right : 0px; top:150px;"><i class="fa fa-graduation-cap"></i> {{ relation.start }}, {{ relation.beginner }}   </a>
           {% endif %}
 
-
+        <!--  Barre d'outil de la card  -->
         <div class="card-text" style="background-color:{{ parcours.color }}; text-align:center">
-            <span class="horizontalmargin5"><i class="fa fa-barcode"></i> {{ relation.exercise.supportfile.code }}</span>  
+            <!-- Appel de la fenetre remédiation 
+                  Appel ajax vers la modale qui est dans la page dashboard : id="remediation"
+            -->
 
-             <span class="white select_skills horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="skill{{relation.id}}"><i class="fa fa-cogs"></i> </span>             
-
-            <span class="white select_details horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="clock{{relation.id}}">
-                 <i class="fa fa-clock-o"></i> {{ relation.duration }} min. 
+            <span style="font-size:9px">{{  relation.relationship_remediation.all|length }}</span>
+            <span class="white horizontalmargin5"><a href="#" data-target="#remediation" data-relationship_id="{{ relation.id }}"  data-toggle='modal' class="white remediation"><i class="fa fa-life-ring"></i></a></span> 
+            <!-- Appel des compétences -->
+            <span class="white horizontalmargin5">{{ relation.exercise.supportfile.code }}</span>  
+            <!-- Appel des compétences -->
+            <span class="white select_skills horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="skill{{relation.id}}"><i class="fa fa-cogs"></i> </span>             
+            <!-- Appel des situations et durée -->
+            <span class="white select_details horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="clock{{relation.id}}"><!-- l'id permet de modifier après ajax le temps -->
+                <i class="fa fa-clock-o"></i> {{ relation.duration }} min. 
             </span>
-
-            <span class="white select_details horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="save{{relation.id}}">
+            <!-- Appel des situations et durée -->
+            <span class="white select_details horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="save{{relation.id}}"><!-- l'id permet de modifier après ajax le nombre de situation -->
                 <i class="fa fa-save"></i> {{ relation.situation}}  
             </span>
-
+            <!-- Appel de partage  -->
             <span  class="white sharer horizontalmargin5" data-relationship_id="{{ relation.id }}">
                <i class="fa fa-share-square"></i>
-            </span>                                         
-
+            </span>                                     
+            <!-- Suppression de l'exercice dans ce parcours  -->
             <a href="{% url 'delete_relationship' relation.id %}" class="white horizontalmargin5"    onclick="return TestDelete('cet exercice de ce parcours')"  >
                 <i class="fa fa-trash"></i> 
             </a>
@@ -120,10 +139,7 @@
                 <i class="fa fa-calendar-check"> </i> <span style="font-size:12px">Date de publication ?</span>  
             </span>
             {% endif %}
-
-
-
-
         </div>
     </div>
+    <!-- Partie sur laquelle est posée l'image  -->   
 </div> 

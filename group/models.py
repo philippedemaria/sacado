@@ -109,7 +109,7 @@ class Group(models.Model):
             for parcours in parcourses :
                 if parcours.id not in parcours_tab :
                     parcours_tab.append(parcours.id)
-        nb_parcours  = len(parcours_tab)  
+        nb_parcours  = len(parcours_tab) 
         return nb_parcours  
 
        

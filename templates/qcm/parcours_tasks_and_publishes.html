@@ -29,23 +29,18 @@
     <li>
         <a href="#" class="no_button" data-target="#section_div" data-toggle='modal'><i class="fa fa-indent"></i>  Créer une section</a>
     </li>
-    <li> 
-        <a href="{% url 'peuplate_parcours'  parcours.id %}"   class="no_button" style="font-size:18px;margin-left:5px;"><i class="fa fa-tasks"></i> Sélectionner les exercices</a> 
- 
-    </li>
-    <li>
-        <a href="{% url 'parcours' %}"   class="no_button" style="font-size:18px"> Mes parcours</a>
-    </li>
 
 
-    <li>
+    {% include 'qcm/submenu_parcours.html' %}
+
     <li>
         <span class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" style="cursor:default">  
           {% if parcours.is_publish %} Parcours publié  {% else %} Parcours dépublié {% endif  %} 
         </span>
  
     </li>
-    </li>
+
+
     
 
 {% endblock %}
