@@ -104,9 +104,10 @@ def include_students(liste,group):
                 send_mail("Inscription SacAdo", "Bonjour "+fname+", \n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : "+username+"\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , "saca_do_not_reply@sacado.fr" , [email]) 
             except:
                 email = ""
-            user = User.objects.create(last_name=str(lname), first_name=str(fname),username=username, password=password, email=email,user_type=0)
-            code = str(uuid.uuid4())[:8]
-            student = Student.objects.create(user=user,level=group.level,code=code)
+            user = User.objects.create(last_name=str(lname), first_name=str(fname), username=username,
+                                       password=password, email=email, user_type=0)
+
+            student = Student.objects.create(user=user,level=group.level)
             group.students.add(student)  
             
             parcours_tab = []
@@ -658,8 +659,8 @@ def enroll(request,slug): # Inscription des élèves via le lien donné par l'en
                 password  =  request.POST.get("password1")
                 user.set_password(password)
                 user.save()
-                code = str(uuid.uuid4())[:8]
-                student = Student.objects.create(user=user,level=group.level,code=code)
+
+                student = Student.objects.create(user=user,level=group.level)
                 group.students.add(student)
                 parcourses  = Parcours.objects.filter(teacher = group.teacher,level = group.level )
                 for parcours in parcourses :

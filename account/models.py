@@ -1,14 +1,33 @@
+import uuid
 from django.db import models
 from datetime import date
 from django.contrib.auth.models import AbstractUser
 from django.apps import apps
 from socle.models import Level, Knowledge,Skill
+
+
 import pytz
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
 
- 
+def generate_code():
+    '''
+    Fonction qui génère un code pour les modèles suivantes :
+    - Parcours
+    - Groupe
+    '''
+    return str(uuid.uuid4())[:8]
+
+
+class ModelWithCode(models.Model):
+    '''
+    Ajoute un champ code à un modèle
+    '''
+    code = models.CharField(max_length=100, unique=True, blank=True, default=generate_code, verbose_name="Code du parcours*")
+
+    class Meta:
+        abstract = True
 
 
 class User(AbstractUser):
@@ -52,14 +71,14 @@ class User(AbstractUser):
 
 
 
-class Student(models.Model):
+class Student(ModelWithCode):
     """
     Modèle représentant un élève.
     """
     user = models.OneToOneField(User, blank=True,  related_name="user_student",  on_delete=models.CASCADE, primary_key=True)
     level = models.ForeignKey(Level, blank=True, related_name = "level_student", default='' , on_delete=models.PROTECT,    verbose_name="Niveau") 
     task_post = models.BooleanField( default=1 ,    verbose_name="Notification de tache ?") 
-    code = models.CharField(max_length=100, unique=True, blank=True, default='', editable= False)
+
 
     def __str__(self):
         lname  = self.user.last_name.capitalize() 

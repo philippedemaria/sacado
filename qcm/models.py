@@ -2,7 +2,7 @@ import uuid
 from django.db import models
 from datetime import date, datetime, timedelta
 from django.utils import timezone
-from account.models import Student, Teacher
+from account.models import Student, Teacher, ModelWithCode, generate_code
 from socle.models import  Knowledge, Level , Theme, Skill
 from django.apps import apps
 from ckeditor_uploader.fields import RichTextUploadingField
@@ -41,23 +41,7 @@ def convert_time(duree) :
 
 
 
-def generate_code():
-    '''
-    Fonction qui génère un code pour les modèles suivantes :
-    - Parcours
-    - Groupe
-    '''
-    return str(uuid.uuid4())[:8]
 
-
-class ModelWithCode(models.Model):
-    '''
-    Ajoute un champ code à un modèle
-    '''
-    code = models.CharField(max_length=100, unique=True, blank=True, default=generate_code, verbose_name="Code du parcours*")
-
-    class Meta:
-        abstract = True
 
 ########################################################################################################
 ########################################################################################################

@@ -1,7 +1,8 @@
 from django.db import models
 from datetime import date
-from account.models import Student, Teacher
-from socle.models import Level 
+
+from account.models import Student, Teacher, ModelWithCode, generate_code
+from socle.models import Level
 from qcm.models import Parcours, ModelWithCode
 from django.apps import apps
 from django.utils import   timezone

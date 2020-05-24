@@ -262,8 +262,7 @@ def register_student(request):
                 password = request.POST.get("password1") 
                 user.set_password(password)
                 user.save()
-                code = str(uuid.uuid4())[:8]
-                student = Student.objects.create(user=user,level=group.level,code=code)
+                student = Student.objects.create(user=user,level=group.level)
                 group.students.add(student)
                 parcours = Parcours.objects.get(id=group.parcours.id)
                 parcours.students.add(student)
