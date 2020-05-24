@@ -15,7 +15,9 @@ def generate_code():
     '''
     Fonction qui génère un code pour les modèles suivantes :
     - Parcours
-    - Groupe
+    - Group
+    - Student
+    - Supportfile
     '''
     return str(uuid.uuid4())[:8]
 
