@@ -3,7 +3,8 @@ from datetime import date
 
 from account.models import Student, Teacher, ModelWithCode, generate_code
 from socle.models import Level
-from qcm.models import Parcours, ModelWithCode
+from qcm.models import Parcours
+from account.models import ModelWithCode
 from django.apps import apps
 from django.utils import   timezone
 from django.db.models import Q
@@ -45,42 +46,37 @@ class Group(ModelWithCode):
         Exercise = apps.get_model('qcm', 'Exercise')
         nb = Exercise.objects.filter(level=self.level).count()
         return nb
- 
+
+
     def all_selected_exercices(self):
         Exercise = apps.get_model('qcm', 'Exercise')
         nb_group = self.parcours.exercises.count()
         nb = Exercise.objects.filter(level=self.level).count()
-        if nb_group == nb :
-            ok = True
-        else :
-            ok = False
-        return ok
- 
+        return nb_group == nb
+
 
     def is_task_exists(self):
         Relationship = apps.get_model('qcm', 'Relationship')
         today = timezone.now()
         test = False
         students = self.students.all()
-        for student in students :
-            if Relationship.objects.filter(exercise__students = student, date_limit__gte = today).count() > 0:
+        for student in students:
+            if Relationship.objects.filter(exercise__students=student, date_limit__gte=today).count() > 0:
                 test = True
                 break
 
-        return test 
-
+        return test
 
     def nb_parcours(self):
-
         students = self.students.all()
         parcours_tab = []
-        for student in students :
+        for student in students:
             parcourses = student.students_to_parcours.all()
-            for parcours in parcourses :
-                if parcours.id not in parcours_tab :
+            for parcours in parcourses:
+                if parcours.id not in parcours_tab:
                     parcours_tab.append(parcours.id)
-        nb_parcours  = len(parcours_tab)  
-        return nb_parcours 
+        nb_parcours = len(parcours_tab)
+        return nb_parcours
 
 
 
@@ -95,7 +91,7 @@ class Group(ModelWithCode):
             for parcours in parcourses :
                 if parcours.id not in parcours_tab :
                     parcours_tab.append(parcours.id)
-        nb_parcours  = len(parcours_tab)  
+        nb_parcours  = len(parcours_tab)
         return nb_parcours 
 
 
