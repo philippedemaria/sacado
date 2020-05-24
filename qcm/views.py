@@ -182,7 +182,7 @@ def associate_parcours(request,id):
 #######################################################################################################################################################################
 
 
-
+"""
 @login_required
 @user_is_group_teacher
 def populate_parcours(request,id):
@@ -216,7 +216,7 @@ def populate_parcours(request,id):
 
     return render(request, 'qcm/form_populate_parcours.html', context)
 
-
+"""
 
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_populate(request):  

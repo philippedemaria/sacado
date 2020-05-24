@@ -156,11 +156,8 @@
                         {{ form.vignette.errors }}
                 {% if   parcours %} 
                     <div style="height:20px"></div>
-                    {% if parcours.parcours_group.id %}
-                    <a href="{% url 'populate_parcours' parcours.parcours_group.id   %}" class="btn btn-{% if parcours.exercises.all|length > 0 %}default{% else %}danger{% endif %}" ><i class="fa fa-tasks"></i> Selectionner les exercices </a>   
-                    {% elif parcours.id %}
-                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-{% if parcours.exercises.all|length > 0 %}default{% else %}danger{% endif %}" ><i class="fa fa-tasks"></i> Selectionner les exercices</a>   
-                    {% endif %}
+
+                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-{% if parcours.exercises.all|length > 0 %}default{% else %}danger{% endif %}" ><i class="fa fa-tasks"></i> Sélectionner les exercices</a>   
                 {% endif %}   
                 </div>
 

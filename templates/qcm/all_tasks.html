@@ -61,21 +61,12 @@
                                 </a>
                             </td>
                             <td>
-                                {% if r.parcours.linked %} 
-                                    {% get_nb_task_done  r.exercise  r.parcours.parcours_group as nb_task_done %}
-                                    {% get_who_are_done  r.exercise p.grouper.parcours_group as who_are %}
-                                {% else %} 
+
                                     {% get_nb_task_parcours_done  r.exercise  r.parcours as nb_task_done %}
                                     {% get_who_are_done_parcours  r.exercise  p.grouper  as who_are  %}
-                                {% endif %}
 
-
-
-                                {% if r.parcours.linked %} 
-                                    {{ nb_task_done}}/{{ r.parcours.parcours_group.students.count  }}
-                                {% else %} 
                                     {{ nb_task_done}}/{{ r.parcours.students.count  }} 
-                                {% endif %}<br/>
+                                <br/>
                                 
                                 {%  for s in who_are %} 
                                 <small>{{ s.student.user.last_name|lower|capfirst }}{% if not forloop.last %}, {% endif %} </small>
@@ -83,13 +74,8 @@
                             </td>
 
 
-                     
-
-                        {% if r.parcours.linked %} 
-                            <td>{{ r.date_limit }} <br/><br/><a href="{% url 'detail_task'  p.grouper.parcours_group.id  r.exercise.id   %}" class="btn btn-sacado">En détails</a></td>
-                        {% else %}
                             <td>{{ r.date_limit }} <br/><br/><a href="{% url 'detail_task'  p.grouper.id  r.exercise.id   %}" class="btn btn-sacado">En détails</a></td>
-                        {% endif %}
+
 
                         </tr>
                     {% endfor %}
