@@ -1,9 +1,8 @@
+
 define(['jquery', 'bootstrap','moment', 'fullcalendar'], function ($) {
     $(document).ready(function () {
         console.log("chargement JS ajax-schedule-group.js OK");
-
-
-
+ 
 
 				$(".calendar").fullCalendar({
 	                header: {
@@ -28,15 +27,14 @@ define(['jquery', 'bootstrap','moment', 'fullcalendar'], function ($) {
 	                      week:     'Semaine',
 	                      day:      'Jour'
 	                  },
-      				events: '/group/events_json_group',
-				}) ;
 
+      				events:  {
+				                url :'/schedule/events_json_group',
+				                data : {group_id : $('#group_id').val() }
+				            },
 
-
-
-				
-	}); 
-
+					}); 
+			}); 
 })
 
 			
