@@ -26,20 +26,28 @@
 {% block page_menu_right %}
 
 
-    <li><a href="{%  url 'result_group_skill'  group.id %}"  class="no_button" > Compétences </a></li>
+    <li><a href="{%  url 'result_group_skill'  group.id %}"  class="no_button {% if  'result_group_skill' in request.path %} active {% endif %}" > Compétences </a></li>
     <li class="dropdown">
-      <a href="#" class="dropdown-toggle no_button" data-toggle="dropdown"> Exercices par thème <b class="caret"></b></a> 
+      <a href="#" class="dropdown-toggle no_button {% if 'result_group_exercise' in request.path or 'group_theme_exercise' in request.path %} active {% endif %}" data-toggle="dropdown"> Suivi par exercice  <b class="caret"></b></a> 
         <ul class="dropdown-menu">
-            {% for theme in group.level.themes.all|dictsort:"id" %}
-            <li class="dropdown dropdown-submenu"><a href="{% url 'result_group_theme_exercise'  group.id   theme.id %}"  > {{ theme }} </a></li>
+            <li class="dropdown dropdown-submenu {% if 'result_group_exercise' in request.path %} active {% endif %}"><a href="{% url 'result_group_exercise'  group.id %}"  >Tous les exercices proposés </a></li>
+            <li class="divider"></li>
+            {% for thm in group.level.themes.all|dictsort:"id" %}
+            <li class="dropdown dropdown-submenu {% if thm.id == theme.id  and 'group_theme_exercise' in request.path  %} active {% endif %}">
+                    <a href="{% url 'result_group_theme_exercise'  group.id   thm.id %}"  > {{ thm }} </a>
+            </li>
             {% endfor %}
         </ul>
     </li>
     <li class="dropdown">
-      <a href="#" class="dropdown-toggle no_button" data-toggle="dropdown"> Savoir faire par thème <b class="caret"></b></a> 
+      <a href="#" class="dropdown-toggle no_button {% if  'result/' in request.path or  'group_theme/' in request.path %} active {% endif %}" data-toggle="dropdown"> Suivi par savoir faire <b class="caret"></b></a> 
         <ul class="dropdown-menu">
-            {% for theme in group.level.themes.all|dictsort:"id" %}
-            <li class="dropdown dropdown-submenu"><a href="{% url 'result_group_theme'  group.id theme.id %}"  > {{ theme }} </a></li>
+            <li class="dropdown dropdown-submenu {% if 'result/' in request.path and not 'result_group_exercise' in request.path %} active {% endif %}"><a href="{% url 'result_group'  group.id %}"  >Tous les savoir faire proposés </a></li>
+            <li class="divider"></li>
+            {% for thm in group.level.themes.all|dictsort:"id" %}
+            <li class="dropdown dropdown-submenu {% if thm.id == theme.id and 'group_theme/' in request.path %} active {% endif %}">
+                    <a href="{% url 'result_group_theme'  group.id thm.id %}"  > {{ thm }} </a>
+            </li>
             {% endfor %}
         </ul>
     </li>
@@ -101,7 +109,7 @@
                                     </form>
                                 {% endfor %}
                             {% else %}
-                                    Suivis des savoir faire
+                                    Suivis des savoir faire publiés
                             {% endif %} 
                             {% endblock %} 
                         </td>

@@ -8,6 +8,8 @@
                 <div class="col-lg-4 col-md-6  col-xs-6">
                     <!-- small box -->
                     <div class="small-box" style="background-color:{{ group.color }}">
+
+                        <!-- modal qui affiche la liste des élèves -->
                         <div class="group_show  group_show{{group.id }}"> 
                             <form action="" method="POST">
                             {% csrf_token %}
@@ -25,19 +27,16 @@
                             <div style="clear:both"></div>
                         </div>
 
+                        <!-- Titre de la small-box -->
 
                         <div class="inner" style="color:white;opacity:0.9">
                             <h3>{{ group.name }} </h3>  
-                            <p>
-                                <a href="{% url 'update_group' group.id %}" class="white" >{{ group.students.count }} élève{{ group.students.count|pluralize }}</a>
-                            </p> 
-                                 
+ 
                             <p><i class="fa fa-barcode"></i> {{ group.code }}</p> 
-                            <p style="font-size: 13px">{{ group.nb_parcours }} parcours dont {{ group.nb_parcours_visible }} publié{{ group.nb_parcours_visible|pluralize }} et {{ group.nb_parcours_favorite }} en favori </p> 
-                            
                         </div>
+
                         <div class="icon">
-                              <i class="fa fa-users"></i> 
+                             <i class="fa fa-users"></i> 
                         </div>
 
                         <div class="small-box-footer">
@@ -59,18 +58,19 @@
 
 
                             {% else  %}
-                                <div class="row">                              
+                                <div class="row">  
                                     <div class="col-lg-3 col-xs-3" style="padding-right:0px">
-                                         <a href="{% url 'list_parcours_group' group.id  %}" class="label_small_box"><i class="fa fa-map"></i><span class="small_displayer"> Parcours</span> </a>   
-                                    </div>
+                                        <a href="{% url 'update_group' group.id %}" class="label_small_box"> <i class="fa fa-cogs"  ></i><span class="small_displayer"> Config.</span></a>    
+                                    </div>                                                            
                                     <div class="col-lg-3 col-xs-3" style="padding-right:0px">
                                         <a href="{% url 'show_group' group.id  %}" class="label_small_box"><i class="fa fa-arrow-circle-right"></i><span class="small_displayer"> Détails </span></a>    
                                     </div>
-                                    <div class="col-lg-3 col-xs-3" style="padding-right:0px">
-                                        <a href="{% url 'update_group' group.id %}" class="label_small_box"> <i class="fa fa-cogs"  ></i><span class="small_displayer"> Config.</span></a>    
-                                    </div>
-                                    <div class="col-lg-3 col-xs-3" style="padding-right:0px">
-                                        <a href="{% url 'stat_group' group.id   %}" class="label_small_box" ><i class="fa fa-bar-chart"></i><span class="small_displayer"> Stats</span> </a>
+
+                                    <div class="col-lg-6 col-xs-6" style="padding-right:0px">
+                                         <a href="{% url 'list_parcours_group' group.id  %}" class="label_small_box"><i class="fa fa-map"></i><span class="small_displayer"> 
+                                            {{ group.nb_parcours }} parcours {{ group.nb_parcours_visible }} publié{{ group.nb_parcours_visible|pluralize }}, {{ group.nb_parcours_favorite }} favori </span>  
+                                        </a>
+
                                     </div> 
                                 </div>
                                 <div class="row">  
@@ -78,11 +78,6 @@
                                         <a  href="{% url 'result_group_exercise'  group.id %}"  class="label_small_box" ><i class="fa fa-mortar-board"></i><span class="small_displayer"> Suivis</span></a>   
                                     </div> 
                                     <div class="col-lg-3 col-xs-3" style="padding-right:0px">
-                                        <a href="{% url 'result_group'  group.id %}" class="label_small_box" ><i class="fa fa-trophy"></i><span class="small_displayer"> Suivis</span> </a>      
-                                    </div>
-                                    <div class="col-lg-3 col-xs-3" style="padding-right:0px">
-     
-
                                         {% if group.is_task_exists %}
                                             <a  href="{% url 'all_my_tasks'  %}"  class="label_small_box">
                                                 <i class="fa fa-calendar-check"></i> 
@@ -93,8 +88,17 @@
                                                 <span class="small_displayer">Tâches</span>
                                             </a> 
                                     </div> 
+
                                     <div class="col-lg-3 col-xs-3" style="padding-right:0px">
-                                        <a  href="#"  class="label_small_box group_shower" data-group_id="{{group.id }}"><i class="fa fa-users"></i><span class="small_displayer"> Elèves</span> </a>   
+                                        <a href="{% url 'stat_group' group.id   %}" class="label_small_box" ><i class="fa fa-bar-chart"></i><span class="small_displayer"> Stats</span> </a>
+                                    </div>
+<!--                                     <div class="col-lg-3 col-xs-3" style="padding-right:0px">
+                                        <a href="{% url 'result_group'  group.id %}" class="label_small_box" ><i class="fa fa-trophy"></i><span class="small_displayer"> Suivis</span> </a>      
+                                    </div> -->
+
+
+                                    <div class="col-lg-3 col-xs-3" style="padding-right:0px">
+                                        <a  href="#"  class="label_small_box group_shower" data-group_id="{{group.id }}"><i class="fa fa-users"></i><span class="small_displayer"> {{ group.students.count }}</span> </a>   
                                     </div>
                                 </div>
 

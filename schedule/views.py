@@ -122,8 +122,7 @@ def events_json(request):
                     'color' : relationship.parcours.color,
                     })
 
-    return http.HttpResponse(json.dumps(event_list),
-                                 content_type='application/json')
+    return http.HttpResponse(json.dumps(event_list), content_type='application/json')
 
 
 def calendar_initialize(request):
@@ -146,10 +145,9 @@ def calendar_initialize(request):
         relationships = Relationship.objects.filter(parcours__teacher = teacher, date_limit__gte=today).exclude(date_limit = None) 
         parcourses = Parcours.objects.filter(teacher = teacher)
         calendars = Calendar.objects.filter(user = request.user) 
-
-     
         form = EventForm(user, request.POST or None)
-        context = { 'form' : form ,'hours' : hours ,    'relationships' : relationships ,        'parcourses' : parcourses  ,        'calendars' : calendars    } 
+        context = { 'form' : form ,'hours' : hours , 'relationships' : relationships,  'parcourses' : parcourses  ,  'calendars' : calendars    } 
+    
     else :
         student = Student.objects.get(user=request.user.id)
 
@@ -180,12 +178,9 @@ def calendar_initialize(request):
             ratio = 0
 
         ratiowidth = int(0.9*ratio)
-
         student = Student.objects.get(user=request.user)
         parcours = Parcours.objects.filter(students = student)
- 
         context = {'student' : student , 'hours' : hours ,     'relationships' : relationships ,    'ratio' : ratio ,  'ratiowidth' : ratiowidth ,       'relationships_in_late' : relationships_in_late ,    } 
-
 
     return render(request, "schedule/base.html" , context )
 
@@ -197,6 +192,7 @@ def calendar_show(request,id):
     context = { 'user_shown' : user_shown ,   }  
 
     return render(request, template , context )
+
 
 def events_show(request,id):
 
@@ -254,7 +250,6 @@ def create_calendar(request):
 
 def update_calendar(request,id):
 
-    
     if request.method =='POST' : 
 
         calendar = Calendar.objects.get(pk=id)
@@ -351,7 +346,6 @@ def create_event(request):
         for user_id in tab_users_id :
             receiver = User.objects.get(pk = user_id)
             insert_in_calendar(receiver,new_form.title,date_of_event,date_of_event,new_form.comment, request.POST.get("type_of_event"),0)
-
 
     else:
         print(form.errors)

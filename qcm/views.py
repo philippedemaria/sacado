@@ -182,7 +182,7 @@ def associate_parcours(request,id):
 #######################################################################################################################################################################
 
 
-
+"""
 @login_required
 @user_is_group_teacher
 def populate_parcours(request,id):
@@ -216,7 +216,7 @@ def populate_parcours(request,id):
 
     return render(request, 'qcm/form_populate_parcours.html', context)
 
-
+"""
 
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_populate(request):  
@@ -642,9 +642,9 @@ def result_parcours(request, id):
     parcours = Parcours.objects.get(id=id)
     students = students_from_p_or_g(request,parcours)
 
-    if request.session["group_id"] :
+    try :
         group_id = request.session["group_id"]
-    else :
+    except :
         group_id = None
 
     relationships = Relationship.objects.filter(parcours= parcours,exercise__supportfile__is_title=0).order_by("order")
@@ -675,9 +675,9 @@ def result_parcours_theme(request, id, idt):
     parcours = Parcours.objects.get(id=id)
     students = students_from_p_or_g(request,parcours)
 
-    if request.session["group_id"] :
+    try :
         group_id = request.session["group_id"]
-    else :
+    except :
         group_id = None
 
 
@@ -714,10 +714,10 @@ def result_parcours_knowledge(request, id):
 
     exercises = parcours.exercises.all()
     exercise_knowledges = []
-
-    if request.session["group_id"] :
+    
+    try :
         group_id = request.session["group_id"]
-    else :
+    except :
         group_id = None
  
     for e  in exercises :

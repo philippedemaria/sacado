@@ -117,10 +117,9 @@
                     <div class="alert alert-danger">  
                         Ce parcours ne contient aucun exercice. 
                             {% if parcours.group.id %}
-                                <a href="{% url 'populate_parcours'  parcours.parcours_group.id %}"   class="no_button"> Sélectionner les exercices</a> 
-                            {% else  %}
+
                                 <a href="{% url 'peuplate_parcours'  parcours.id %}"   class="no_button"> Sélectionner les exercices</a> 
-                            {% endif  %}
+   
                     </div>
                 </div>
 

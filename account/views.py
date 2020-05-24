@@ -356,18 +356,15 @@ def newpassword_student(request, id,idg):
 
 
 
-def knowledges_of_a_student(student):
+def knowledges_of_a_student(student,theme):
 
-    parcourses_tab = []
-    parcourses_student_tab, exercise_tab = [] ,  []
+    exercise_tab = [] 
+
     parcourses = student.students_to_parcours.all() 
-    parcourses_student_tab.append(parcourses)
-    for parcours in parcourses :
-        if not parcours in parcourses_tab :
-            parcourses_tab.append(parcours)
 
-    for parcours in parcourses_tab :
-        exercises = parcours.exercises.order_by("theme")
+
+    for parcours in parcourses :
+        exercises = parcours.exercises.filter( theme = theme)
         for exercise in exercises:
             if not exercise in exercise_tab :
                 exercise_tab.append(exercise)
@@ -425,7 +422,6 @@ def detail_student(request, id):
     return render(request, 'account/detail_student.html', context)
 
 
-
 @login_required
 @who_can_read_details
 def detail_student_theme(request, id,idt):
@@ -435,41 +431,28 @@ def detail_student_theme(request, id,idt):
     parcourses_publish = Parcours.objects.filter(students = student,is_publish=1)
 
     theme = Theme.objects.get(pk=idt)
+
     themes = student.level.themes.all()
     datas =[]
 
-    knowledges = knowledges_of_a_student(student)
- 
-    relationships = Relationship.objects.filter(exercise__knowledge__in = knowledges , exercise__theme = theme, students= student )
-    exercises = []
-    for r in relationships :
-        exercises.append(r.exercise) 
-
-    for exercise in exercises:
-        knowledge_dict={}
-
-        knowledge_dict["name"]= exercise.knowledge
-        relations = Relationship.objects.filter(parcours__in = parcourses, exercise  = exercise, students= student)
-        exercises_tab = []
-        for relation in relations :
-            exo = {}
-            exo["name"] = relation
-            stas = Studentanswer.objects.filter( exercise= relation.exercise , student = student ).order_by("date")
-            scores_tab = []
-            for sta in stas :
-                scores_tab.append(sta) 
-            exo["scores"] = scores_tab         
-            exercises_tab.append(exo) 
-        knowledge_dict["exercises"]  = exercises_tab
-        datas.append(knowledge_dict)
+    knowledges = knowledges_of_a_student(student, theme)
 
     for k in knowledges:
         knowledge_dict={}
         if Relationship.objects.filter(parcours__in = parcourses, exercise__knowledge = k, students= student).count() > 1 : 
             knowledge_dict["name"]= k
-            relations = Relationship.objects.filter(parcours__in = parcourses, exercise__knowledge = k, students= student)
+            # liste des exercices du parcours qui correspondent aux savoir faire k mais un même exercice peut être donné sur deux parcours 
+            # différents donc deux relationships pour un même exercice
+            relationships = Relationship.objects.filter(parcours__in = parcourses, exercise__knowledge = k, students= student)
+            # merge les relationships identiques
+            relations_tab , relations_tab_code = [], []
+            for rel in relationships :
+                if rel.exercise.supportfile.code not in relations_tab_code:
+                    relations_tab_code.append(rel.exercise.supportfile.code)
+                    relations_tab.append(rel)
+            # merge les relationships identiques
             exercises_tab = []
-            for relation in relations :
+            for relation in relations_tab :
                 exo = {}
                 exo["name"] = relation
                 stas = Studentanswer.objects.filter( exercise= relation.exercise , student = student ).order_by("date")
@@ -481,6 +464,8 @@ def detail_student_theme(request, id,idt):
             knowledge_dict["exercises"]  = exercises_tab
             datas.append(knowledge_dict)
 
+
+ 
     if request.user.user_type == 2 :
         teacher = Teacher.objects.get(user=request.user)
         group = Group.objects.get(students = student, teacher = teacher)

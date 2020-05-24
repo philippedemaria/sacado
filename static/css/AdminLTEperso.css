@@ -1576,15 +1576,15 @@ a:focus {
 }
 
 
-.navbar-right > li > a.no_button:active,.navbar-right > li > a.no_button:focus,.navbar-right > li > a.no_button:visited {
+.navbar-right > li > a.no_button:visited {
     color : #777;
 }
 
-.navbar-right > li > a.no_button:hover{
-    color : #007bff;
+.navbar-right > li > a.no_button:focus,.navbar-right > li > a.active,.navbar-right > li > a.no_button:hover{
+    color : #007bff!important;
 }
 
-
+ 
 
 .layout-top-nav .main-header .navbar {
   margin-left: 0;

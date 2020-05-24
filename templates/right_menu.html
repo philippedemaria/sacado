@@ -9,15 +9,11 @@
             {% for relationship in relationships|dictsort:"date_limit" %}
             <li class="sans_puce"><i class="fa fa-square" style="color: {{ relationship.parcours.color }}"></i> 
               {{ relationship.date_limit|date:"d.m.y" }} :
-                  {% if relationship.parcours.parcours_group %}
-                      <a href="{% url 'detail_task'  relationship.parcours.parcours_group.id  relationship.exercise.id   %}" class="parcours_displayer"> 
-                       {% if relationship.exercise.supportfile.annoncement  %} {{ relationship.exercise.supportfile.annoncement|cleanhtml }}{% else %}{{ relationship.exercise.knowledge.name }}{% endif %}
-                      </a>
-                  {% else %}
+
                       <a href="{% url 'detail_task_parcours' relationship.parcours.id relationship.exercise.id   %}" class="parcours_displayer"> 
                         {% if relationship.exercise.supportfile.annoncement  %} {{ relationship.exercise.supportfile.annoncement|cleanhtml }}{% else %}{{ relationship.exercise.knowledge.name }}{% endif %}
                       </a>        
-                  {% endif %}
+       
 
             </li>
             {% endfor %}

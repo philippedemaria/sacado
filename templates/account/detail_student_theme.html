@@ -18,7 +18,7 @@
                     <tbody>
                     {% for d in datas   %}   
                         <tr style="color:#FFF;background-color: {{ group.color }}; opacity : 0.5;">
-                            <td>{{ d.name.name }}</td>
+                            <td>{{ d.name.name|capfirst }}</td>
                             <td style="width:370px"></td>
                         </tr>
                         {% for relation in d.exercises  %}   

@@ -52,31 +52,5 @@
  {% endif  %}
 </div> 
 
-
-<div class="modal fade" id="new_event" tabindex="-1" role="dialog" aria-labelledby="new_event" aria-hidden="true" >
-  <div class="modal-dialog" role="document">
-    <form  action="{% url 'create_event' %}" method="POST">
-      {% csrf_token %}  
-         {% include 'schedule/form.html' %}
-    </form>
-  </div>
-</div>
-
-
-
-<div class="modal fade" id="show_event" tabindex="-1" role="dialog" aria-labelledby="show_event" aria-hidden="true"  data-focus-on="input:first">
-  <div class="modal-dialog" role="document">
-         <div id='formulaire'></div>
-    </form>
-  </div>
-</div>
-
-
-
-
-    
-
-
-
-     
+   
 {% endblock %}

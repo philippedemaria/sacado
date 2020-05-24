@@ -27,7 +27,7 @@
 {% endblock %}
 
 {% block page_menu_right %}
-    <li style="margin-right:15px;"><a href="{% url 'detail_task' group.id 0 %}" style="padding-left:15px;padding-right:15px"  class="no_button" > Calendrier des tâches prévues</a></li> 
+    <li style="margin-right:15px;"><a href="{% url 'schedule_task_group' group.id  %}" style="padding-left:15px;padding-right:15px"  class="no_button" > Calendrier des tâches prévues</a></li> 
     <li><a href="javascript:history.back()"  class="no_button" > Mes groupes</a></li> 
 {% endblock %}
 
