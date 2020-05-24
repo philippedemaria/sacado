@@ -32,31 +32,15 @@ def menu(request):
 			today = timezone.now()
 		one_week =  today +timedelta(days=7)
   
-		if request.user.is_superuser  : #admin
-			this_user = User.objects.get(pk=request.user.id)
 
-			return {   
-			'this_user' : this_user , 
- 			'today' : today,
-				}
-
-		elif  request.user.user_type == 2 :  #teacher
-			this_user = User.objects.get(pk=request.user.id)
-			teacher = Teacher.objects.get(user=request.user.id)
-			parcourses = Parcours.objects.filter(teacher = teacher,linked=0)
-			return {   
-			'this_user' : this_user , 
-			'teacher' : teacher ,  
- 			'today' : today,
- 			'parcourses' : parcourses , 
-				}
+		if  request.user.user_type == 2 :  #teacher
+			return {   'today' : today, }
  
 
 		elif  request.user.user_type == 0 : #student
 
-			this_user = User.objects.get(pk=request.user.id)
-			student = Student.objects.get(user=request.user.id)
-			groups = student.students_to_group.filter(parcours__linked=0)
+ 
+ 
  
 			last_exercises_done = Studentanswer.objects.filter(student=student).order_by("-date")[:10]
 

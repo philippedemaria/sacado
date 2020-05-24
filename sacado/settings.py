@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'qcm',
     'sendmail',
     'schedule',
-    'debug_toolbar',
+    "django_cron",
     ]
 #'social_django',
 
@@ -51,9 +51,6 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -63,7 +60,9 @@ MIDDLEWARE = [
 #     'social_core.backends.google.GoogleOAuth2',
 #     'django.contrib.auth.backends.ModelBackend',
 # )
-
+CRON_CLASSES = [
+    "setup.cron.MyCronJob",
+]
 # LOGIN_URL = '/auth/login/google-oauth2/'
 # SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '721627486504-fhn3s93bqrdanqbmq303d6lk7p6g2po6.apps.googleusercontent.com'
 # SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'qxoZeMvCnZf9_azto3_90n-j'

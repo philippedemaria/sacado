@@ -21,7 +21,7 @@ import uuid
 def index(request): 
         
     today = timezone.now()
-    Parcours.objects.filter(stop__lt=today).update(is_publish=0)
+
 
     if request.user.is_authenticated:
         if request.user.time_zone:
@@ -96,6 +96,9 @@ def index(request):
             for studentanswer in studentanswers:
                 if not studentanswer.exercise in exercises:
                     exercises.append(studentanswer.exercise)
+
+            nb_exercise_done = len(exercises)
+            percent = int(nb_exercise_done * 100/nb_exercise)
 
 
             relationships_in_late = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, is_evaluation=0, date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
