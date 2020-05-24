@@ -21,8 +21,7 @@ import uuid
 def index(request): 
         
     today = timezone.now()
-
-
+  
     if request.user.is_authenticated:
         if request.user.time_zone:
             time_zome = request.user.time_zone
@@ -32,11 +31,9 @@ def index(request):
         else:
             today = timezone.now()
 
-        user = request.user
-        user.last_login = today
-        user.save()
-
-
+        if request.user.last_login.date() != today.date() :
+            request.user.last_login = today
+            request.user.save()
 
 
         if request.user.user_type == 2  :
@@ -44,18 +41,18 @@ def index(request):
             teacher = Teacher.objects.get(user = request.user)
             groups = Group.objects.filter(teacher  = teacher)
             this_user =  request.user 
+            nb_teacher_level = teacher.levels.count()
 
+            relationships = Relationship.objects.values('id','date_limit','parcours','exercise').filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("parcours")
+            parcourses = Parcours.objects.values('id','color','is_publish','students','exercises','title').filter(teacher  = teacher)
 
-            relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("parcours")
-            parcourses = Parcours.objects.filter(teacher  = teacher)
-
-            communications = Communication.objects.filter(active = 1)
+            communications = Communication.objects.values('id','subject','texte').filter(active = 1)
 
 
             parcours_tab = Parcours.objects.filter(students=None,teacher = teacher,is_favorite = 1)
 
             context = {   'this_user' : this_user , 'teacher' : teacher ,  'groups' : groups ,   'parcourses' : parcourses ,   'relationships' : relationships ,  \
-             'communications' : communications , 'parcours_tab' : parcours_tab , }
+             'communications' : communications , 'parcours_tab' : parcours_tab , 'nb_teacher_level' : nb_teacher_level }
 
             
         elif request.user.user_type ==   0: ## student
