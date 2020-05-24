@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from datetime import date, datetime, timedelta
 from django.utils import timezone
@@ -37,6 +38,27 @@ def convert_time(duree) :
         return str(m)+"min "+str(s)+"s"
     else :
         return  "td" #temps dépassé
+
+
+
+def generate_code():
+    '''
+    Fonction qui génère un code pour les modèles suivantes :
+    - Parcours
+    - Groupe
+    '''
+    return str(uuid.uuid4())[:8]
+
+
+class ModelWithCode(models.Model):
+    '''
+    Ajoute un champ code à un modèle
+    '''
+    code = models.CharField(max_length=100, unique=True, blank=True, default=generate_code, verbose_name="Code du parcours*")
+
+    class Meta:
+        abstract = True
+
 ########################################################################################################
 ########################################################################################################
 
@@ -343,7 +365,7 @@ class Exercise(models.Model):
 
 
  
-class Parcours(models.Model):
+class Parcours(ModelWithCode):
 
     title = models.CharField(max_length=255, verbose_name="Titre")
     color = models.CharField(max_length=255, default='#00819F', verbose_name="Couleur")
@@ -354,7 +376,7 @@ class Parcours(models.Model):
     students = models.ManyToManyField(Student, blank=True,  related_name='students_to_parcours', verbose_name="Elèves de ce parcours")
     is_share = models.BooleanField( default = 1 ,  verbose_name="Partagé ?")
     is_publish = models.BooleanField( default = 0,  verbose_name="Publié ?" )    
-    code = models.CharField(max_length=100, unique=True, blank=True, default='', verbose_name="Code du parcours*") 
+
 
     level = models.ForeignKey(Level, related_name = "level_parcours", on_delete=models.PROTECT,  default='', blank=True, null= True,  editable=False)
     linked  = models.BooleanField( default = 0 ,  editable=False)

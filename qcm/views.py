@@ -157,9 +157,8 @@ def associate_parcours(request,id):
     group = Group.objects.get(pk = id)
     theme_theme_ids = request.POST.getlist("themes")
     for theme_id in theme_theme_ids :
-        code = str(uuid.uuid4())[:8]
         theme = Theme.objects.get(pk = int(theme_id))
-        parcours, created = Parcours.objects.get_or_create(title=theme.name, color=group.color, author=teacher, teacher=teacher, level=group.level,  is_favorite = 1,  is_share = 0, linked = 1, defaults={ 'code' : code}) 
+        parcours, created = Parcours.objects.get_or_create(title=theme.name, color=group.color, author=teacher, teacher=teacher, level=group.level,  is_favorite = 1,  is_share = 0, linked = 1)
         exercises = Exercise.objects.filter(level= group.level,theme = theme, supportfile__is_title=0)
         parcours.students.set(group.students.all())
         i  = 0
@@ -445,7 +444,7 @@ def all_parcourses(request):
 @user_passes_test(user_can_create)
 def create_parcours(request):
 
-    code = str(uuid.uuid4())[:8]
+
     teacher = Teacher.objects.get(user_id = request.user.id)
     levels =  teacher.levels.all()    
     form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher)
@@ -458,21 +457,21 @@ def create_parcours(request):
 
 
     groups = Group.objects.filter(teacher  = teacher).order_by("level")
- 
 
     if form.is_valid():
-        nf =  form.save(commit = False)
-        nf.code = code
+        nf = form.save(commit=False)
         nf.author = teacher
         nf.teacher = teacher
         nf.save()
         nf.students.set(form.cleaned_data.get('students'))
         i = 0
         for exercise in form.cleaned_data.get('exercises'):
-            exercise = Exercise.objects.get(pk = exercise.id)
-            relationship = Relationship.objects.create(parcours = nf , exercise = exercise ,  order =  i, duration =  exercise.supportfile.duration, situation =  exercise.supportfile.situation)
+            exercise = Exercise.objects.get(pk=exercise.id)
+            relationship = Relationship.objects.create(parcours=nf, exercise=exercise, order=i,
+                                                       duration=exercise.supportfile.duration,
+                                                       situation=exercise.supportfile.situation)
             relationship.students.set(form.cleaned_data.get('students'))
-            i+=1
+            i += 1
 
         return redirect('parcours')
     else:
