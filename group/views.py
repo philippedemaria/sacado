@@ -95,16 +95,16 @@ def include_students(liste,group):
     for student_tab in students_tab :
         details = student_tab.split(";")
         try:
-            fname = cleanhtml(details[0].replace(" ",""))
-            lname = cleanhtml(details[1].replace(" ",""))
+            fname = str(cleanhtml(details[0].replace(" ",""))).strip()
+            lname = str(cleanhtml(details[1].replace(" ",""))).strip()
             password = make_password("sacado2020")
-            username = str(lname).strip()+str(fname).strip()
+            username = lname + fname
             try:
                 email = cleanhtml(details[2])
-                send_mail("Inscription SacAdo", "Bonjour "+fname+", \n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : "+username+"\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , "saca_do_not_reply@sacado.fr" , [email]) 
+                send_mail("Inscription SacAdo", f"Bonjour {fname},\n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : {username}\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , "saca_do_not_reply@sacado.fr" , [email])
             except:
                 email = ""
-            user = User.objects.create(last_name=str(lname), first_name=str(fname), username=username,
+            user = User.objects.create(last_name=lname, first_name=fname, username=username,
                                        password=password, email=email, user_type=0)
 
             student = Student.objects.create(user=user,level=group.level)
