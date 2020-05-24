@@ -200,24 +200,25 @@ def events_json_group(request):
     group = Group.objects.get(pk = idg)
     students = group.students.all()
 
+
+    ## Gestion des taches
     ### Détermine la liste des parcours du groupe
-    parcours_tab = []
+    parcours_tab , evaluation_tab = [] , []
     for student in students :
-        parcours = Parcours.objects.filter(students = student, teacher = teacher)
+        parcours = Parcours.objects.filter(students = student, teacher = teacher,is_evaluation=0)
         for p in parcours:
             if p not in parcours_tab :
                 parcours_tab.append(p) ### parcours_tab = liste des parcours du groupe
 
 
-
     relationships = Relationship.objects.filter(is_publish = 1, parcours__in=parcours_tab).exclude(date_limit=None)  
  
-    # Create the fullcalendar json events list
+ 
     event_list = []
 
     for relationship in relationships:
         # On récupère les dates dans le bon fuseau horaire
-        relationship_start = relationship.date_limit
+        relationship_start = relationship.date_limit 
         if relationship.exercise.supportfile.annoncement :
             title =  cleanhtml(unescape_html(relationship.exercise.supportfile.annoncement ))
         else :
@@ -228,11 +229,36 @@ def events_json_group(request):
                     'start': relationship_start.strftime('%Y-%m-%d %H:%M:%S'),
                     'end': relationship_start.strftime('%Y-%m-%d %H:%M:%S'),
                     'title': title,
-                    'allDay': False,
+                    'allDay': True,
                     'description': title,
                     'color' : relationship.parcours.color,
                     })
+
+    ## Gestion des parcours d'évaluation
+    for student in students :
+        evaluations = Parcours.objects.filter(students = student, teacher = teacher,is_evaluation=1)
+        for e in evaluations:
+            if e not in evaluation_tab :
+                evaluation_tab.append(e) ### evaluation_tab = liste des evaluations du groupe
+
+    for evaluation in evaluation_tab : # evaluation est un parcours
+
  
+        evaluation_start =  datetime.combine(evaluation.start,  evaluation.starter) 
+        evaluation_stop =  datetime.combine(evaluation.stop,  evaluation.stopper)  
+
+
+        event_list.append({
+                    'id': evaluation.id,
+                    'start': evaluation_start.strftime('%Y-%m-%d %H:%M:%S'),
+                    'end': evaluation_stop.strftime('%Y-%m-%d %H:%M:%S'),
+                    'title': evaluation.title,
+                    'allDay': False,
+                    'description': evaluation.title,
+                    'color' : evaluation.color,
+                    })        
+
+
     return http.HttpResponse(json.dumps(event_list), content_type='application/json')
 
 
