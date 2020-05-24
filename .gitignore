@@ -10,3 +10,4 @@ media
 env
 .idea
 sacado/settings_prod
+settings.py

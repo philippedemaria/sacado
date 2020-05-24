@@ -175,14 +175,14 @@
                                     data-is_name="2" 
                                     class="updateStudent"  
                                     value="{{ student.user.email }}" 
-                                    style="background: transparent; border: none;width:200px" /> </td>
+                                    style="background: transparent; border: none;width:220px" /> </td>
                         <td><input  type="text" 
                                     id="studentUsername{{ student.user.id }}" 
                                     data-student_id="{{ student.user.id }}" 
                                     data-is_name="3" 
                                     class="updateStudent"  
                                     value="{{ student.user.username }}" 
-                                    style="background: transparent; border: none;width:140px" />
+                                    style="background: transparent; border: none;width:120px" />
  
                             <a  href="{% url 'delete_student' student.user.id  group.id %}"  class="pull-right"
                                 onclick="return TestDelete('cet élève')" style="font-size:14px"  >

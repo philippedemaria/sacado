@@ -347,6 +347,7 @@ def newpassword_student(request, id,idg):
     user = student.user
     user.set_password("sacado2020")
     user.save()  
+    send_mail('Réinitialisation de mot de passe Sacado', "Bonjour, votre mot de passe est réinitialisé. Il est générique. Votre mot de passe est : sacado2020.\n\n  Pour plus de sécurité, vous devez le modifier dès votre connexion.\n\n Pour vous connecter, redirigez-vous vers http://parcours.erlm.tn.\n Ceci est un mail automatique. Ne pas répondre.", 'SacAdo_contact@erlm.tn', [user.email])
     return redirect('update_group', idg )
 
 
