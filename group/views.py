@@ -176,22 +176,18 @@ def list_groups(request):
 @login_required
 @user_passes_test(user_can_create)
 def create_group(request):
-
-
-    code = str(uuid.uuid4())[:8]
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = Teacher.objects.get(user_id=request.user.id)
     form = GroupForm(request.POST or None)
 
     if form.is_valid():
-        nf = form.save(commit = False)
+        nf = form.save(commit=False)
         nf.teacher = teacher
-        nf.code = code
         nf.save()
         stdts = request.POST.get("students")
 
         if len(stdts) > 0 :
             include_students(stdts,nf)
-        
+
         if  teacher.teacher_to_group.count() == 1 :
             messages.success(request, "Félicitations... Votre compte sacado est maintenant configuré et votre premier groupe créé !")
 

@@ -2,7 +2,7 @@ from django.db import models
 from datetime import date
 from account.models import Student, Teacher
 from socle.models import Level 
-from qcm.models import Parcours 
+from qcm.models import Parcours, ModelWithCode
 from django.apps import apps
 from django.utils import   timezone
 from django.db.models import Q
@@ -10,12 +10,12 @@ from django.db.models import Q
 # from account.models import User
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
 
+
  
-class Group(models.Model):
+class Group(ModelWithCode):
     """ Group est une classe d'élèves coté enseignant -- Ce qui permet de faire un groupe avec une ou plusieurs divisions """
     name = models.CharField(max_length=255, verbose_name="Nom*")
     color = models.CharField(max_length=255, default='#46119c', verbose_name="Couleur*")
-    code = models.CharField(max_length=100, unique=True, blank=True, default='', verbose_name="Code du groupe*")
     students = models.ManyToManyField(Student, related_name="students_to_group",  blank=True,verbose_name="Élèves*")
     teacher = models.ForeignKey(Teacher, blank=True, null=True, on_delete=models.CASCADE, related_name="teacher_to_group", verbose_name="Enseignant*")
     level = models.ForeignKey(Level,  on_delete=models.PROTECT, related_name="level_to_group", verbose_name="Niveau*")
