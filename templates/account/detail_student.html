@@ -49,17 +49,12 @@
     {% endif %}
 
 
-
-
-
-
-
-
         <li class="dropdown {% if 'result' not in request.url %} select_item {% endif %}"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"  style="font-size:18px;{% if 'detail_student_theme' in request.path %}color:#007EE2{% endif %}"> Suivi par thème </a>
             <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-                <li><a href="{% url 'detail_student'  student.user.id  %}" ><i class="fa fa-caret-right"></i> Général</a></li>
-                {% for theme in themes %}
-                     <li><a href="{% url 'detail_student_theme'  student.user.id  theme.id  %}" ><i class="fa fa-caret-right"></i> {{ theme }}</a></li>
+                <li {% if 'detail_student/' in request.path %} class="active" {% endif %} ><a href="{% url 'detail_student'  student.user.id  %}" > Général</a></li>
+                <li class="divider"></li>
+                {% for thm in themes %}
+                     <li {% if 'detail_student_theme/' in request.path and thm.id == theme.id %}  class="active" {% endif %}><a href="{% url 'detail_student_theme'  student.user.id  thm.id  %}" > {{ thm }}</a></li>
                 {% endfor %}
             </ul>
         </li>
@@ -67,10 +62,10 @@
 
         <li class="dropdown {% if 'result' not in request.url %} select_item {% endif %}"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"  style="font-size:18px;{% if 'detail_student_parcours' in request.path %}color:#007EE2{% endif %}"> Suivi par Parcours </a>
             <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-                {% for parcours in parcourses|dictsortreversed:"is_publish" %}
-                    <li >
-                        <a href="{% url 'detail_student_parcours'  student.user.id  parcours.id  %}" {% if not parcours.is_publish %}style="color:#BBB"{% endif %} >
-                            <i class="fa fa-caret-right"></i> {{ parcours.title }}    
+                {% for prcrs in parcourses|dictsortreversed:"is_publish" %} <!-- prcrs permet de comparer parcours avec prcrs et d'activer la classe active si affiché -->
+                    <li {% if 'detail_student_parcours/' in request.path and prcrs.id == parcours.id %}  class="active" {% endif %}>
+                        <a href="{% url 'detail_student_parcours'  student.user.id  prcrs.id  %}" {% if not prcrs.is_publish %} style="color:#BBB" {% endif %} >
+                            <i class="fa fa-caret-right"></i> {{ prcrs.title }}    
                         </a>
                     </li>
                 {% endfor %}

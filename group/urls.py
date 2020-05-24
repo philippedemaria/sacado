@@ -14,6 +14,7 @@ urlpatterns = [
     path('result/<int:id>/', result_group, name='result_group'),
     path('result_group_exercise/<int:id>/', result_group_exercise, name='result_group_exercise'),
     path('result_group_skill/<int:id>/', result_group_skill, name='result_group_skill'),
+    path('schedule_task_group/<int:id>/', schedule_task_group, name='schedule_task_group'),
 
     path('stats/<int:id>/', stat_group, name='stat_group'),
     path('print_statistiques/<int:group_id>/<int:student_id>/', print_statistiques, name='print_statistiques'),
@@ -37,7 +38,9 @@ urlpatterns = [
     path('aggregate_group',  aggregate_group, name='aggregate_group'), 
 
 
-    path('<slug:slug>', enroll , name='enroll'), 
+    path('<slug:slug>', enroll , name='enroll'),
 
+    path('events_json_group', events_json_group, name='events_json_group'),
+     
 ]
  

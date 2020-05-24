@@ -1,0 +1,47 @@
+
+
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+{% block page_title %}
+        <i class="fa fa-calendar"></i> Calendrier des taches <img src="{% static 'img/angle-right.png' %}" /> {{ group }} 
+{% endblock %}
+
+ 
+
+
+
+{% block require %}
+ 
+<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-for-calendar3.js' %}"></script>
+<script>
+    require(['script/ajax-schedule-group']);
+</script>
+
+{% endblock %} 
+
+
+
+
+{% block body  %} 
+
+    <link href="{% static 'schedule/fullcalendar/fullcalendar.min.css' %}" rel='stylesheet' />
+    <link href="{% static 'schedule/fullcalendar/fullcalendar.print.min.css' %}" rel='stylesheet' media='print' />
+
+
+<div class="col-xs-12 col-lg-12">   
+    <section class="paragraph">  
+      <form  action="" method="POST">
+          {% csrf_token %}  
+          <div class='calendar'></div>
+      </form>
+    </section>
+</div>
+
+ 
+
+     
+{% endblock %}
