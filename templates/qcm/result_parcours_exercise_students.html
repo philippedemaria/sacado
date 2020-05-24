@@ -55,7 +55,7 @@
                           <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
                         {% endif  %}  <br>                        
 
-                        {% get_details relationship.exercise   relationship.parcours   group   as   details     %} 
+                        {% get_details relationship.exercise   relationship.parcours  as   details     %} 
                         <div class="circle pull-right" style="padding:15px">    
                             {{ details.avg }} %<br><span style="font-size:12px"> {{ details.min }} - {{ details.max }}</span>
                         </div>   
@@ -72,9 +72,9 @@
                     </div> 
                     <div  class="col-sm-12 col-md-7">
 
-                        {% get_parcours_group_students_count relationship.parcours group as parcours_group_students %}
 
-                        {%  for s in  parcours_group_students.students|dictsort:"user.last_name" %}
+
+                        {%  for s in  parcours.students.all|dictsort:"user.last_name" %}
 
                             {% get_score  relationship.exercise   s   as   score %}
                             <a href="{%  url 'detail_student_parcours' s.user.id  relationship.parcours.id %}" class="btn btn-{% if score > 90  %}darkgreen{% elif score > 70  %}success{% elif score > 40  %}warning{% elif score > 0  %}danger{% else  %}default{% endif  %}" style="min-width:175px; margin:1px" target="_blank" />{{ s.user }} <font style="font-size:10px">{{ score }}{% if score %}%{% endif  %}</font></a>

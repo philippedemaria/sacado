@@ -33,11 +33,13 @@
 
 
 
-{% block page_menu_right %}    
-
+{% block page_menu_right %} 
+    {% if parcours %}
+        {% include 'qcm/submenu_parcours.html' %}
+    {% endif %}
 {% endblock %}
 
-  <li> <a href="{% url 'all_parcourses' %}"   class="no_button"> Tous les parcours</a></li>
+ 
 
 
 

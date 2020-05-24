@@ -276,9 +276,9 @@ def get_parcours_group_students_count(obj, group):
     return obj.parcours_group_students_count(group)
 
 
-@register.simple_tag ## donne le score par knowledge 
-def get_details(obj,  parcours,group): 
-    return obj.details(parcours,group)
+@register.simple_tag ## 
+def get_details(obj,  parcours): 
+    return obj.details(parcours)
 
 
 

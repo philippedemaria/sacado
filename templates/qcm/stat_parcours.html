@@ -22,11 +22,9 @@
 {% endblock %}
 
 {% block page_menu_right %}
-    {% if group_id %}
-    <li><a href="{% url 'result_parcours_exercise_students' parcours.id  group_id %}"  class="no_button" >Suivi par élève </a> </li> 
-    {% endif %}
-    <li><a href="{% url 'result_parcours' parcours.id %}"  class="no_button" > Suivi par exercice</a></li> 
-    <li><a href="javascript:history.back()"  class="no_button" > Mes parcours</a></li> 
+  
+  {% include 'qcm/submenu_parcours.html' %}
+ 
 {% endblock %}
 
             

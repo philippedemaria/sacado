@@ -22,15 +22,7 @@
 
 {% block page_menu_right %}
 
-    <li>
-        <a href="{% url 'list_parcours_group' group.id %}" class="no_button">Groupe {{ group }}</a>
-    </li>
- 
-    <li>
-        <span class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" style="cursor:default" >  
-          {% if parcours.is_publish %} Parcours publié  {% else %} Parcours dépublié {% endif  %} 
-        </span>
-    </li>
+    {% include 'qcm/submenu_parcours.html' %} 
 
 
 {% endblock %}
@@ -77,7 +69,7 @@
                         <span id="loading{{ relationship.exercise.id }}" class="pull-right"></span>
                             <br>
               
-                            <a href="{% url 'delete_relationship_by_individualise' relationship.id  relationship.parcours.id   group.id %}" class="btn btn-danger" onclick="return TestDelete('cet exercice de ce parcours')"  >
+                            <a href="{% url 'delete_relationship_by_individualise' relationship.id  relationship.parcours.id    %}" class="btn btn-danger" onclick="return TestDelete('cet exercice de ce parcours')"  >
                                 <i class="fa fa-trash"></i> Supprimer cet exercice du parcours
                             </a>
             
@@ -112,9 +104,9 @@
                             </span>
 
 
-                        {% get_parcours_group_students_count relationship.parcours group as parcours_group_students %}
+ 
 
-                        {%  for s in  parcours_group_students.students|dictsort:"user.last_name" %}
+                        {%  for s in  parcours.students.all|dictsort:"user.last_name" %}
 
                             {% get_exercise s relationship as has_it %}
                             <span class="btn btn-{% if has_it %}success{% else  %}danger{% endif  %} select_student selected_student{{relationship.exercise.id}}" 

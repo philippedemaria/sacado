@@ -16,7 +16,7 @@ urlpatterns = [
 
     # Résultats d'un parcours
     path('parcours_result/<int:id>/', result_parcours, name='result_parcours'), 
-    path('parcours_result_theme/<int:id>/<int:idt>/', result_parcours_theme, name='result_parcours_theme'), 
+    path('parcours_result_theme/<int:id>/<int:idt>/', result_parcours_theme, name='result_parcours_theme'),  # Je ne sais pas si cette route est utilisée ?????
     path('parcours_result_knowledge/<int:id>/', result_parcours_knowledge, name='result_parcours_knowledge'), 
     path('parcours_stat/<int:id>/', stat_parcours, name='stat_parcours'), 
     path('parcours_detail_task/<int:id>/<int:s>/', detail_task_parcours, name='detail_task_parcours'), #modif idp en id pour la sécurité
@@ -32,11 +32,11 @@ urlpatterns = [
     path('parcours_group/<int:id>/', list_parcours_group, name='list_parcours_group'), # parcours d'un groupe
 
     path('parcours_peuplate/<int:id>/', peuplate_parcours, name='peuplate_parcours'),
-    path('parcours_individualise/<int:id>/<int:idg>/', individualise_parcours, name='individualise_parcours'),#modif idp en id pour la sécurité
+    path('parcours_individualise/<int:id>/', individualise_parcours, name='individualise_parcours'),#modif idp en id pour la sécurité
     path('ajax_populate', ajax_populate, name='ajax_populate'),
     path('ajax_individualise', ajax_individualise , name='ajax_individualise'),
 
-    path('result_parcours_exercise_students/<int:id>/<int:idg>/', result_parcours_exercise_students, name='result_parcours_exercise_students'),#modif idp en id pour la sécurité
+    path('result_parcours_exercise_students/<int:id>/', result_parcours_exercise_students, name='result_parcours_exercise_students'),#modif idp en id pour la sécurité
 
     #####################################  Modifie les relations par parcours et exercices  ##############################################################
     path('create_evaluation/<int:id>/<int:ide>/', create_evaluation, name='create_evaluation'),   
@@ -78,7 +78,7 @@ urlpatterns = [
     path('relation_is_done/<int:id>/', relation_is_done , name='relation_is_done'), 
 
     path('delete_relationship/<int:idr>/', delete_relationship, name='delete_relationship'),
-    path('delete_relationship_by_individualise/<int:idr>/<int:id>/<int:idg>/', delete_relationship_by_individualise, name='delete_relationship_by_individualise'),#modif idp en id pour la sécurité
+    path('delete_relationship_by_individualise/<int:idr>/<int:id>/', delete_relationship_by_individualise, name='delete_relationship_by_individualise'),#modif idp en id pour la sécurité
 
     path('create_remediation/<int:idr>/', create_remediation, name='create_remediation'),
     path('update_remediation/<int:idr>/<int:id>/', update_remediation, name='update_remediation'),

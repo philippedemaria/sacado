@@ -36,7 +36,7 @@
 
  
 
-<li  class='dropdown {% if '/parcours' in request.path    %}active{% endif %}'>
+<li  class='dropdown {% if 'parcours' in request.path    %}active{% endif %}'>
     <a href="{% url 'parcours' %}"  >
         <i class="fa fa-map fa-2x" aria-hidden="true"></i> 
         <div class="captionmenu">Parcours</div>
@@ -51,7 +51,7 @@
   
  
 {% if request.user.is_superuser %}
- <li  class='dropdown {% if 'exercise' in request.path %}active{% endif %}'>
+ <li  class='dropdown {% if '/exercise' in request.path %}active{% endif %}'>
     <a href="{% url 'exercises' %}"  >
         <i class="fa fa-laptop fa-2x" aria-hidden="true"></i> 
         <div class="captionmenu">Exercices</div>

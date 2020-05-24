@@ -273,7 +273,7 @@ def peuplate_parcours(request,id):
  
     parcours = Parcours.objects.get(id=id)
     form = UpdateParcoursForm(request.POST or None , instance=parcours, teacher = teacher  )
-
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
     """ affiche le parcours existant avant la modif en ajax""" 
     exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme")
     """ fin """
@@ -313,8 +313,13 @@ def peuplate_parcours(request,id):
                 i+=1
             except :
                 pass
+
+    try :
+        group_id = request.session.get("group_id")
+    except :
+        group_id = None
         # fin ---- modifie les exercices sélectionnés
-    context = {'form': form, 'parcours': parcours,       'teacher': teacher, 'exercises': exercises , 'levels': levels , 'themes' : themes_tab , 'user': request.user   }
+    context = {'form': form, 'parcours': parcours,       'teacher': teacher, 'exercises': exercises , 'levels': levels , 'themes' : themes_tab , 'user': request.user , 'group_id' : group_id , 'relationships' :relationships  }
 
     return render(request, 'qcm/form_peuplate_parcours.html', context)
 
@@ -331,7 +336,7 @@ def individualise_parcours(request,id,idg):
     group = Group.objects.get(pk = idg)
     relationships = Relationship.objects.filter(parcours = parcours) 
 
-    return render(request, 'qcm/form_individualise_parcours.html', { 'relationships': relationships , 'parcours': parcours , 'group': group , })
+    return render(request, 'qcm/form_individualise_parcours.html', { 'relationships': relationships , 'parcours': parcours , 'group': group , 'group_id': group.id ,  })
 
 
 
@@ -500,6 +505,7 @@ def update_parcours(request, id, idg=0 ):
                 themes_tab.append(theme)
 
     groups = Group.objects.filter(teacher=teacher).prefetch_related('students').order_by("level")
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
 
     if request.method == "POST":
         if form.is_valid():
@@ -522,9 +528,16 @@ def update_parcours(request, id, idg=0 ):
             else:
                 return redirect('list_parcours_group', idg)
 
+    if idg > 0 and idg < 99999999999 :
+        group_id = idg
+        request.session["group_id"] = idg
+    else :
+        group_id = None
+
+
     students_checked = parcours.students.count()  # nombre d'étudiant dans le parcours
 
-    context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher,
+    context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'relationships': relationships, 
                'exercises': exercises, 'levels': levels, 'themes': themes_tab, 'students_checked': students_checked}
 
     return render(request, 'qcm/form_parcours.html', context)
@@ -640,7 +653,7 @@ def result_parcours(request, id):
 
     parcours = Parcours.objects.get(id=id)
     students = students_from_p_or_g(request,parcours)
-
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
     try :
         group_id = request.session["group_id"]
     except :
@@ -661,7 +674,7 @@ def result_parcours(request, id):
     form = EmailForm(request.POST or None )
 
 
-    context = {  'relationships': relationships, 'parcours': parcours, 'students': students, 'themes': themes_tab, 'form': form,  'group_id' : group_id  }
+    context = {  'relationships': relationships, 'parcours': parcours, 'students': students, 'themes': themes_tab, 'form': form,  'group_id' : group_id , 'relationships' : relationships  }
 
     return render(request, 'qcm/result_parcours.html', context )
 
@@ -734,7 +747,7 @@ def result_parcours_knowledge(request, id):
 def stat_parcours(request, id):
     parcours = Parcours.objects.get(id=id)
     exercises = parcours.exercises.all()
-
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
     parcours_duration = parcours.duration #durée prévue pour le téléchargement
     for e in exercises :
         r = Relationship.objects.get(exercise = e, parcours = parcours)
@@ -824,7 +837,7 @@ def stat_parcours(request, id):
             student["percent"] = ""
         stats.append(student)
 
-    context = {  'parcours': parcours, 'form': form, 'stats':stats , 'group_id':group_id }
+    context = {  'parcours': parcours, 'form': form, 'stats':stats , 'group_id':group_id , 'relationships':relationships }
 
     return render(request, 'qcm/stat_parcours.html', context )
 
@@ -911,11 +924,14 @@ def parcours_tasks_and_publishes(request, id):
     parcours = Parcours.objects.get(id=id)
     teacher = Teacher.objects.get(user=request.user)
  
-
+    try :
+        group_id = request.session.get("group_id")
+    except :
+        group_id = None
  
  
     relationships = Relationship.objects.filter(parcours=parcours).order_by("exercise__theme")
-    context = {'relationships': relationships,  'parcours': parcours, 'teacher': teacher  , 'today' : today }
+    context = {'relationships': relationships,  'parcours': parcours, 'teacher': teacher  , 'today' : today , 'group_id' : group_id }
     return render(request, 'qcm/parcours_tasks_and_publishes.html', context)
  
 
@@ -924,13 +940,17 @@ def parcours_tasks_and_publishes(request, id):
  
 @login_required
 @user_is_parcours_teacher
-def result_parcours_exercise_students(request,id,idg):
+def result_parcours_exercise_students(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcours = Parcours.objects.get(pk = id)
-    group = Group.objects.get(pk = idg)
+    try :
+        group_id = request.session.get("group_id")
+    except :
+        group_id = None
+ 
     relationships = Relationship.objects.filter(parcours = parcours) 
 
-    return render(request, 'qcm/result_parcours_exercise_students.html', { 'relationships': relationships , 'parcours': parcours , 'group_id': group.id , 'group': group , })
+    return render(request, 'qcm/result_parcours_exercise_students.html', { 'relationships': relationships , 'parcours': parcours , 'group_id': group_id ,   })
 
 
 
@@ -1261,13 +1281,13 @@ def delete_relationship(request,idr):
     return redirect("show_parcours" , relation.parcours.id ) 
     
 
-def delete_relationship_by_individualise(request,idr, id , idg):
+def delete_relationship_by_individualise(request,idr, id):
 
     relation = Relationship.objects.get(pk = idr) 
     if relation.parcours.teacher.user == request.user  :
         relation.delete()
 
-    return redirect("individualise_parcours" , relation.parcours.id , idg ) 
+    return redirect("individualise_parcours" , relation.parcours.id   ) 
 
 
 

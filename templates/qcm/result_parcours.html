@@ -20,42 +20,16 @@
 {% block page_menu_right %}  
 
 
-    <li class="dropdown">
-      <a href="#" class="dropdown-toggle no_button {% if 'parcours_result/' in request.path or 'result_parcours_exercise_students/' in request.path or  'parcours_result_knowledge/' in request.path %}  active {% endif %}" data-toggle="dropdown"> Suivi des acquisitions <b class="caret"></b></a> 
-        <ul class="dropdown-menu"> 
-            <li {% if 'parcours_result/' in request.path %} class="active" {% endif %}><a href="{% url 'result_parcours' parcours.id  %}"  class="no_button" >Suivi par élève </a> </li> 
-            {% if group_id %}
-            <li {% if 'result_parcours_exercise_students/' in request.path %} class="active" {% endif %}><a href="{% url 'result_parcours_exercise_students' parcours.id  group_id %}"  class="no_button" >Suivi par exercice </a> </li>
-            {% endif %}
-            <li {% if 'parcours_result_knowledge/' in request.path %} class="active" {% endif %}><a href="{% url 'result_parcours_knowledge' parcours.id %}"  class="no_button" >Suivi par savoir faire </a> </li> 
+ 
 
-        </ul>
-    </li>
+
+
+    {% include 'qcm/submenu_parcours.html' %}
 
 
 
 
-    <li class="dropdown">
-      <a href="#" class="dropdown-toggle no_button" data-toggle="dropdown"> Export <b class="caret"></b></a> 
-        <ul class="dropdown-menu">
-            {% if request.user.is_extra %}
-            <form action="{% url 'export_knowledge' parcours.id  %}" method="POST" enctype='multipart/form-data'>     {% csrf_token %}
-                <div class="col-md-12 col-lg-12 col-xs-12" style="padding-left:5px">
-                    <button href="#" class="btn btn-primary exportation_de_note" type="submit" data-parcours_id="{{parcours.id }}"  data-group_id="{{group.id }}"  > Export CSV</button>
-                </div>
-            </form>
-            {% else %}
-                <span style="color:red;font-size: 14px">Action non permise</span>
-            {% endif %}
-        </ul>
-    </li>
-
-
-
-
-
-
-    <a href="javascript:history.back()"  class="btn btn-default" >Retour </a>
+ 
 {% endblock %}
 
 

@@ -19,16 +19,14 @@
 
 
 {% block page_title %}
-    <span style="color:{{ parcours.color }}"><i class="fa fa-map"></i> {{ parcours }}    </span> <img src="{% static 'img/angle-right.png' %}"/>   <small> {% if parcours %} Modification <img src="{% static 'img/angle-right.png' %}"/> <a href="{% url 'show_parcours' parcours.id %}" style="font-size:14px" /><i class="fa fa-th"></i> </a>{% else %}Nouveau {% endif %}</small>  
+    <span style="color:{{ parcours.color }}"><i class="fa fa-map"></i> {{ parcours }}    </span> <img src="{% static 'img/angle-right.png' %}"/>   <small> {% if parcours %} Modification <img src="{% static 'img/angle-right.png' %}"/>  {% else %}Nouveau {% endif %}</small>  
 {% endblock %}
 
 {% block page_menu_right %}
 
      {% include 'qcm/submenu_parcours.html' %}  
 
-    <li>
-        <span class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" style="cursor:none">  {% if parcours.is_publish %} Parcours publié  {% else %} Parcours dépublié {% endif  %}</span> 
-    </li>
+
 
 
 {% endblock %}

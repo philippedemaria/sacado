@@ -158,11 +158,11 @@ class Exercise(models.Model):
 
 
 
-    def details(self, parcours,group):
+    def details(self, parcours):
 
         details, tab = {}, []
         somme = 0
-        for student in group.students.all() :
+        for student in parcours.students.all() :
             try :
                 studentanswer =  Studentanswer.objects.filter(student = student,exercise = self,parcours=parcours).last()
                 somme += studentanswer.point
