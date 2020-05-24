@@ -223,8 +223,6 @@ def update_group(request, id):
 
         include_students(stdts,group)
         
- 
-
 
         return redirect('index')
     else:
@@ -349,7 +347,6 @@ def result_group(request, id):
 
     #knowledges = Knowledge.objects.filter(level = group.level).order_by("theme")
     form = EmailForm(request.POST or None )
- 
     context = {  'group': group,'form': form, "knowledges" : knowledges, }
 
     return render(request, 'group/result_group.html', context )
@@ -359,12 +356,9 @@ def result_group(request, id):
 @user_is_group_teacher
 def result_group_theme(request, id, idt):
 
-
     group = Group.objects.get(id=id)
     form = EmailForm(request.POST or None )
     theme = Theme.objects.get(id=idt)
- 
-
     knowledges = Knowledge.objects.filter(level = group.level,theme = theme).order_by("theme")
     context = {  'group': group, 'form': form, 'theme': theme,  "knowledges" : knowledges, "slug" : theme.slug, }
 
@@ -387,7 +381,6 @@ def result_group_exercise(request, id):
 def result_group_skill(request, id):
 
     skills = Skill.objects.all()
-
     group = Group.objects.get(id=id)
     form = EmailForm(request.POST or None )
     context = {  'group': group,'form': form,'skills': skills,}
@@ -590,7 +583,7 @@ def sending_message_student(request):
 
 
 
-def enroll(request,slug):
+def enroll(request,slug): # Inscription des élèves via le lien donné par l'enseignant
     
     if request.method == 'POST':
         user_form = UserForm(request.POST)            
