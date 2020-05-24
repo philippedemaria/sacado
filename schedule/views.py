@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.shortcuts import render, redirect
 from schedule.models import Calendar, Event, Automatic
 from schedule.forms import CalendarForm, EventForm
+from group.models import Group
 from account.models import User, Teacher , Student
 from datetime import datetime,timedelta
 from django.template.loader import render_to_string
@@ -12,6 +13,12 @@ from django.core import serializers
 from django.core.mail import send_mail
 from qcm.models import  Relationship, Parcours, Studentanswer
 from django.db.models import Count, Q
+
+ 
+from django.contrib.auth.decorators import login_required 
+from group.decorators import  user_is_group_teacher
+
+
 import pytz
 import re
 import html
@@ -80,6 +87,11 @@ def delete_in_calendar(user,type_of_event,link):
     event.delete()
 
 
+##################################################################################################################################
+##################################################################################################################################
+##                     Affichage du calendrier des taches via calendar_initialize
+##################################################################################################################################
+##################################################################################################################################
 
 
 def events_json(request):
@@ -126,19 +138,7 @@ def events_json(request):
 
 
 def calendar_initialize(request):
-    user = User.objects.get(pk = request.user.id)
-    hours = []
-    hour, minute = 7,0
-    for i in range(12) :
-        for j in range(4) :
-            minute = 15*j
-            if minute == 0:
-                minute = "00"
-            time = str(hour)+":"+str(minute)
-            hours.append(time)
-        hour=hour+1
-
-    schools = []
+ 
     today = time_zone_user(request.user)
     if request.user.user_type == 2 :
         teacher = Teacher.objects.get(user=request.user)
@@ -183,6 +183,80 @@ def calendar_initialize(request):
         context = {'student' : student , 'hours' : hours ,     'relationships' : relationships ,    'ratio' : ratio ,  'ratiowidth' : ratiowidth ,       'relationships_in_late' : relationships_in_late ,    } 
 
     return render(request, "schedule/base.html" , context )
+
+
+##################################################################################################################################
+##################################################################################################################################
+##                     AFichage du calendrier à partir d'un groupe
+##################################################################################################################################
+##################################################################################################################################
+
+def events_json_group(request):
+ 
+    user = User.objects.get(pk = request.user.id)
+    teacher = Teacher.objects.get(user = user)
+ 
+    idg = request.GET.get("group_id")
+    group = Group.objects.get(pk = idg)
+    students = group.students.all()
+
+    ### Détermine la liste des parcours du groupe
+    parcours_tab = []
+    for student in students :
+        parcours = Parcours.objects.filter(students = student, teacher = teacher)
+        for p in parcours:
+            if p not in parcours_tab :
+                parcours_tab.append(p) ### parcours_tab = liste des parcours du groupe
+
+
+
+    relationships = Relationship.objects.filter(is_publish = 1, parcours__in=parcours_tab).exclude(date_limit=None)  
+ 
+    # Create the fullcalendar json events list
+    event_list = []
+
+    for relationship in relationships:
+        # On récupère les dates dans le bon fuseau horaire
+        relationship_start = relationship.date_limit
+        if relationship.exercise.supportfile.annoncement :
+            title =  cleanhtml(unescape_html(relationship.exercise.supportfile.annoncement ))
+        else :
+            title =  unescape_html(relationship.exercise.knowledge.name)
+        
+        event_list.append({
+                    'id': relationship.id,
+                    'start': relationship_start.strftime('%Y-%m-%d %H:%M:%S'),
+                    'end': relationship_start.strftime('%Y-%m-%d %H:%M:%S'),
+                    'title': title,
+                    'allDay': False,
+                    'description': title,
+                    'color' : relationship.parcours.color,
+                    })
+ 
+    return http.HttpResponse(json.dumps(event_list), content_type='application/json')
+
+
+ 
+@login_required
+@user_is_group_teacher
+def schedule_task_group(request, id):
+    group = Group.objects.get(id=id)
+    teacher =  Teacher.objects.get(user= request.user)
+    request.session["group_id"] = group.id   
+
+    relationships = Relationship.objects.filter(parcours__teacher = teacher).exclude(date_limit = None) 
+
+    context = {  'group': group, 'relationships' : relationships ,   }
+
+    return render(request, 'schedule/base_group.html', context )
+
+
+
+##################################################################################################################################
+##################################################################################################################################
+##                    FIN 
+##################################################################################################################################
+##################################################################################################################################
 
 
 def calendar_show(request,id):

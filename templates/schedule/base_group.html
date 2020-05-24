@@ -10,8 +10,9 @@
         <i class="fa fa-calendar"></i> Calendrier des taches <img src="{% static 'img/angle-right.png' %}" /> {{ group }} 
 {% endblock %}
 
- 
-
+{% block page_menu_right %}
+    <li><a href="{% url 'index' %}"  class="no_button" > Mes groupes</a></li> 
+{% endblock %}
 
 
 {% block require %}
@@ -35,6 +36,7 @@
 <div class="col-xs-12 col-lg-12">   
     <section class="paragraph">  
       <form  action="" method="POST">
+          <input type="hidden" id="group_id" value="{{group.id}}" />
           {% csrf_token %}  
           <div class='calendar'></div>
       </form>

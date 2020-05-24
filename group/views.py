@@ -8,7 +8,7 @@ from group.forms import  GroupForm
 from sendmail.models import  Email
 from sendmail.forms import  EmailForm
 from django.contrib.auth import login, authenticate
-from django.http import JsonResponse 
+from django.http import JsonResponse  
 from django.core import serializers
 from django.template.loader import render_to_string
 from django.contrib import messages
@@ -470,68 +470,7 @@ def stat_group(request, id):
 
 
 
-def events_json_group(request):
-    # Get all events - Pas encore terminé
-    user = User.objects.get(pk = request.user.id)
-    today = time_zone_user(request.user)
-
-    group_id =  request.session.get("group_id")
-    group = Group.objects.get(pk = group_id)
-    students = group.students.all()
-  
-
-    parcours_tab = []
-    for student in students :
-        parcours = Parcours.objets.filter(students = student)
-        if parcours not in parcours_tab :
-            parcours_tab.append(parcours)
-
-    print(parcours_tab)
-
-    relationships = Relationship.objects.filter(is_publish = 1, parcours__in=parcours_tab).exclude(date_limit=None)  
  
- 
-    # Create the fullcalendar json events list
-    event_list = []
-
-    for relationship in relationships:
-        # On récupère les dates dans le bon fuseau horaire
-        relationship_start = relationship.date_limit
-        if relationship.exercise.supportfile.annoncement :
-            title =  cleanhtml(unescape_html(relationship.exercise.supportfile.annoncement ))
-        else :
-            title =  unescape_html(relationship.exercise.knowledge.name)
-        
-        event_list.append({
-                    'id': relationship.id,
-                    'start': relationship_start.strftime('%Y-%m-%d %H:%M:%S'),
-                    'end': relationship_start.strftime('%Y-%m-%d %H:%M:%S'),
-                    'title': title,
-                    'allDay': False,
-                    'description': title,
-                    'color' : relationship.parcours.color,
-                    })
-
-    return http.HttpResponse(json.dumps(event_list), content_type='application/json')
-
-
-
-
-
-
-
-@login_required
-@user_is_group_teacher
-def schedule_task_group(request, id):
-    group = Group.objects.get(id=id)
-
-    request.session["group_id"] = group.id    
-
-    context = {  'group': group,   }
-
-    return render(request, 'schedule/base_group.html', context )
-
-
 
 @login_required
 @user_is_group_teacher

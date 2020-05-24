@@ -6,7 +6,11 @@ from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     path('', calendar_initialize, name='calendar_initialize'),
-    path('events_json', events_json, name='events_json'), 
+    path('events_json', events_json, name='events_json'),
+
+    path('schedule_task_group/<int:id>/', schedule_task_group, name='schedule_task_group'),
+    path('events_json_group', events_json_group, name='events_json_group'),
+     
     path('create_calendar', create_calendar, name='create_calendar'),
     path('update_calendar/<int:id>/', update_calendar, name='update_calendar'),
     path('delete_calendar/<int:id>/', delete_calendar, name='delete_calendar'),
