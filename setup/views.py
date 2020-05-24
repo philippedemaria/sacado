@@ -22,26 +22,24 @@ def index(request):
         
     today = timezone.now()
     Parcours.objects.filter(stop__lt=today).update(is_publish=0)
- 
-    if request.user.is_authenticated  : 
-        if request.user.time_zone :
+
+    if request.user.is_authenticated:
+        if request.user.time_zone:
             time_zome = request.user.time_zone
             timezone.activate(pytz.timezone(time_zome))
             current_tz = timezone.get_current_timezone()
             today = timezone.localtime(timezone.now())
-        else :
+        else:
             today = timezone.now()
 
-
-        user = User.objects.get(id = request.user.id)
-        user.last_login =  today
+        user = request.user
+        user.last_login = today
         user.save()
 
 
 
 
         if request.user.user_type == 2  :
-
 
             teacher = Teacher.objects.get(user = request.user)
             groups = Group.objects.filter(teacher  = teacher)
@@ -103,13 +101,15 @@ def index(request):
             relationships_in_late = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, is_evaluation=0, date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
             relationships_in_tasks = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).exclude(exercise__in=exercises).order_by("date_limit")
 
-            context = {   'student_id' : student.user.id,  'student' : student, 'relationships' : relationships , 'evaluations' : evaluations ,  'ratio' : ratio , \
-                         'ratiowidth' : ratiowidth , 'relationships_in_late' : relationships_in_late, 'relationships_in_tasks' : relationships_in_tasks   }
-          
-        elif request.user.user_type ==   1: ## parent
-            parent = Parent.objects.get(user= request.user)
+            context = {'student_id': student.user.id, 'student': student, 'relationships': relationships,
+                       'evaluations': evaluations, 'ratio': ratio, \
+                       'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late,
+                       'relationships_in_tasks': relationships_in_tasks}
+
+        elif request.user.user_type == 1:  ## parent
+            parent = Parent.objects.get(user=request.user)
             students = parent.students.order_by("user__first_name")
-            context = {    'parent' : parent , 'students' : students, }
+            context = {'parent': parent, 'students': students, }
 
         return render(request, 'dashboard.html', context)
 
