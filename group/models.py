@@ -3,7 +3,8 @@ from datetime import date
 
 from account.models import Student, Teacher, ModelWithCode, generate_code
 from socle.models import Level
-from qcm.models import Parcours, ModelWithCode
+from qcm.models import Parcours
+from account.models import ModelWithCode
 from django.apps import apps
 from django.utils import   timezone
 from django.db.models import Q
