@@ -485,48 +485,48 @@ def create_parcours(request):
 
 @user_is_parcours_teacher 
 def update_parcours(request, id, idg=0 ):
+    teacher = Teacher.objects.get(user_id=request.user.id)
+    levels = teacher.levels.all()
 
-    teacher = Teacher.objects.get(user_id = request.user.id)
-    levels =  teacher.levels.all() 
- 
     parcours = Parcours.objects.get(id=id)
-    form = UpdateParcoursForm(request.POST or None, request.FILES or None , instance=parcours, teacher = teacher  )
+    form = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher)
 
-    """ affiche le parcours existant avant la modif en ajax""" 
+    """ affiche le parcours existant avant la modif en ajax"""
     exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme")
     """ fin """
     themes_tab = []
-    for level in levels :
+    for level in levels:
         for theme in level.themes.all():
             if not theme in themes_tab:
                 themes_tab.append(theme)
 
-    groups = Group.objects.filter(teacher  = teacher).order_by("level") 
-    if request.method == "POST" :
+    groups = Group.objects.filter(teacher=teacher).prefetch_related('students').order_by("level")
+
+    if request.method == "POST":
         if form.is_valid():
-            nf =  form.save(commit = False)
+            nf = form.save(commit=False)
             nf.author = teacher
             nf.teacher = teacher
             nf.save()
             nf.students.set(form.cleaned_data.get('students'))
-            try :
-                for exercise in parcours.exercises.all() :
-                    relationship = Relationship.objects.get(parcours = nf , exercise = exercise)
+            try:
+                for exercise in parcours.exercises.all():
+                    relationship = Relationship.objects.get(parcours=nf, exercise=exercise)
                     relationship.students.set(form.cleaned_data.get('students'))
-            except :
+            except:
                 pass
 
-
-            if idg==99999999999:
+            if idg == 99999999999:
                 return redirect('index')
-            elif idg==0:
+            elif idg == 0:
                 return redirect('parcours')
-            else :
+            else:
                 return redirect('list_parcours_group', idg)
 
-    students_checked =  parcours.students.count() # nombre d'étudiant dans le parcours
+    students_checked = parcours.students.count()  # nombre d'étudiant dans le parcours
 
-    context = {'form': form, 'parcours': parcours,  'groups': groups,  'idg' : idg ,    'teacher': teacher, 'exercises': exercises , 'levels': levels , 'themes' : themes_tab , 'students_checked':students_checked }
+    context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher,
+               'exercises': exercises, 'levels': levels, 'themes': themes_tab, 'students_checked': students_checked}
 
     return render(request, 'qcm/form_parcours.html', context)
 
