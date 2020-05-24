@@ -97,7 +97,7 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
                         <div class="form-group">
-                            <label>Elèves <small>(Optionnel)<em> L'adresse mail est facultative.</em> <span style="color:#cb2131">1 élève par ligne. <br/>Le mot de passe par défaut est : sacado2020</span></small></label> <br> 
+                            <label>Elèves <small>(Optionnel)<em> L'adresse mail est facultative.</em> <br><span style="color:#cb2131">1 élève par ligne. <br/>Le mot de passe par défaut est : sacado2020</span></small></label> <br> 
                             <textarea name="students" id="students_id"  style="border:1px #CCC solid" class="form-control" rows="10" placeholder="Alan;Turing;alan.turing@enigma.com"></textarea>
                         </div>
                     </div>
@@ -134,15 +134,15 @@
                     <th>Nom <span data-container="body"
                                     data-toggle="popover"
                                     data-trigger="hover"
-                                    data-content="Pour modifier le nom, le prénom, le courriel, l'identifiant, écrire directement à la place souhaitée. Enregistrement automatique.">
+                                    data-content="Pour modifier le nom, le prénom, le courriel, l'identifiant, écrire directement à la place souhaitée. Enregistrement automatique. Attention, ils peuvent être tronqués.">
                                     <i class="fa fa-question-circle"></i>
                             </span>
                     </th>
                     <th>
-                        Prénom
+                        Prénom <small><small>(Peut être tronqué)</small></small>
                     </th>
                     <th>
-                        Courriel 
+                        Courriel <small><small>(Peut être tronqué)</small></small>
                     </th>
                     <th>
                         Identifiant  
@@ -167,7 +167,7 @@
                                     data-is_name="0" 
                                     class="updateStudent"  
                                     value="{{ student.user.first_name|lower|title }}" 
-                                    style="background: transparent; border: none;width:140px" /> 
+                                    style="background: transparent; border: none;width:120px" /> 
                         </td>
                         <td><input  type="text" 
                                     id="studentEmail{{ student.user.id }}" 
@@ -175,7 +175,7 @@
                                     data-is_name="2" 
                                     class="updateStudent"  
                                     value="{{ student.user.email }}" 
-                                    style="background: transparent; border: none;width:220px" /> </td>
+                                    style="background: transparent; border: none;width:240px" /> </td>
                         <td><input  type="text" 
                                     id="studentUsername{{ student.user.id }}" 
                                     data-student_id="{{ student.user.id }}" 

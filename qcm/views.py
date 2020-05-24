@@ -930,7 +930,7 @@ def result_parcours_exercise_students(request,id,idg):
     group = Group.objects.get(pk = idg)
     relationships = Relationship.objects.filter(parcours = parcours) 
 
-    return render(request, 'qcm/result_parcours_exercise_students.html', { 'relationships': relationships , 'parcours': parcours , 'group': group , })
+    return render(request, 'qcm/result_parcours_exercise_students.html', { 'relationships': relationships , 'parcours': parcours , 'group_id': group.id , 'group': group , })
 
 
 
@@ -2070,7 +2070,7 @@ def detail_task(request,id,s):
                 details["date"]= studentanswer.date 
                 details["secondes"]= convert_seconds_in_time(int(studentanswer.secondes))
             except :
-                details["point"]= ""
+                details["point"]= ""                      
                 details["numexo"]=  ""
                 details["date"]= ""
                 details["secondes"]= ""

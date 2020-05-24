@@ -1,4 +1,4 @@
-{% extends 'dashboard.html' %}
+{% extends 'qcm/result_parcours.html' %}
 {% load widget_tweaks %}
 {% load static %}
 {% load item_tags %}
@@ -17,23 +17,9 @@
 
 
 {% block page_title %}
-    <span style="color:{{ parcours.color }}"><i class="fa fa-map"></i> {{ parcours }}    </span> <img src="{% static 'img/angle-right.png' %}"/>   <small> Statistique par exercices</small> 
+    <span style="color:{{ parcours.color }}"><i class="fa fa-map"></i> {{ parcours }}    </span> <img src="{% static 'img/angle-right.png' %}"/>   <small> Suivi par exercices</small> 
 {% endblock %}
-
-{% block page_menu_right %}
-
-    <li>
-        <a href="{% url 'list_parcours_group' group.id %}" class="no_button">Groupe {{ group }}</a>
-    </li>
  
-    <li>
-        <span class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" style="cursor:default" >  
-          {% if parcours.is_publish %} Parcours publié  {% else %} Parcours dépublié {% endif  %} 
-        </span>
-    </li>
-
-
-{% endblock %}
 
 
 {% block body %}
@@ -116,10 +102,10 @@
                 <div  class="col-sm-12 col-md-12">
                     <div class="alert alert-danger">  
                         Ce parcours ne contient aucun exercice. 
-                            {% if parcours.group.id %}
+         
 
                                 <a href="{% url 'peuplate_parcours'  parcours.id %}"   class="no_button"> Sélectionner les exercices</a> 
-   
+ 
                     </div>
                 </div>
 

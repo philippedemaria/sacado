@@ -22,9 +22,9 @@
 {% endblock %}
 
 {% block page_menu_right %}
-  <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   class="no_button"  > Parcours par défaut</a></li>
-  <li> <a href="{% url 'all_parcourses' %}"   class="no_button"> Parcours mutualisés</a></li>
-  <li> <a href="{% url 'create_parcours' %}"   class="btn btn-new" ><img width="15px" src="{% static 'img/plus.png' %}"/> Nouveau parcours</a> </li>  
+  <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"  class="btn btn-new" style="margin-right:5px" > Parcours par défaut</a></li>
+  <li> <a href="{% url 'all_parcourses' %}"   class="btn btn-new" style="margin-right:5px"> Parcours mutualisés</a></li>
+  <li> <a href="{% url 'create_parcours' %}"   class="btn btn-new" > Nouveau parcours</a> </li>  
 {% endblock %}
 
 {% block css_files %}
@@ -151,15 +151,14 @@
                 </div>
             </div>
             <div class="box-footer">
-                <div class="row extend">                              
+                <div class="row extend">  
+                    <div class="col-lg-4 col-xs-4">
+                        <a href="{% url 'update_parcours' parcours.id  group.id  %}"  class="edit"><i class="fa fa-cogs"></i> <span class="label_icon">Config.</span> </a> 
+                    </div>                   
                     <div class="col-lg-4 col-xs-4">
                         <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit"><i class="fa fa-laptop"></i> <span class="label_icon">Sélect.</span>
                         </a>  
-                    </div>
-                    <div class="col-lg-4 col-xs-4">
-                        <a href="{% url 'show_parcours' parcours.id %}"  class="edit" ><i class="fa fa-th"></i> <span class="label_icon">Gérer</span>
-                        </a> 
-                    </div>
+                    </div>              
                     <div class="col-lg-4 col-xs-4">
                         <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"  class="edit"><i class="fa fa-tasks"></i> <span class="label_icon">Gérer</span> </a> 
                     </div>  
