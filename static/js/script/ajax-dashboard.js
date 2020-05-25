@@ -327,10 +327,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         // ====================================================================================================================
         // ====================================================================================================================
 
-
-
-
-
         $('#closeAdmin').click(function(event) {
           if ($('#notification-admin').hasClass('selected')) {
             $('#notification-admin').removeClass('selected').addClass('dismiss');
@@ -365,9 +361,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     type: "POST",
                     dataType: "json",
                     success: function (data) {
-
                         $("#search_result").html("").html(data["html"]);
-     
                     }
                 });
             }
@@ -441,7 +435,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
         // ====================================================================================================================
         // ====================================================================================================================
-        // ============================================  Organisation du parcours  ============================================ 
+        // ===================================== Organisation du parcours et tri   ============================================ 
         // ====================================================================================================================
         // ====================================================================================================================
         $('#closeOrganiser').click(function(event) {
@@ -482,8 +476,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             });
 
  
-     
-     
+    
         $('.exercise_sortable').sortable({
             cursor: "move",
             swap: true,    
@@ -516,6 +509,12 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             });
  
 
+
+        // =================================================================================================================
+        // =================================================================================================================           
+        // ===========================================  Les sections  ======================================================
+        // ================================================================================================================= 
+        // =================================================================================================================
 
         $('#create_section').click(function(event) {   
 
@@ -640,10 +639,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
- 
-
-
-
 
             // Affiche dans la modal la liste des élèves du groupe sélectionné
             $('.select_group').on('click', function (event) {
@@ -706,21 +701,16 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
             function publisher_parcours($actionner,$target,$targetStatut){
 
-
-  
                 $actionner.on('click', function (event) {
                 let parcours_id = $(this).attr("data-parcours_id");
                 let statut = $(this).attr("data-statut");
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
                 let from = $(this).attr("data-from");
 
-
-
                 if( from == "2")  { url_from = "../../ajax/publish_parcours" ; } 
                 else if (from == "0") {  url_from = "../../../ajax/publish_parcours" ;} 
                 else  { url_from = "ajax/publish_parcours" ;} 
 
- 
                 $.ajax(
                     {
                         type: "POST",
@@ -750,75 +740,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
             publisher_parcours( $('.publisher') , '#parcours_publisher' ,'#parcours_statut' ) ;
  
-
  
-
-/*
-            // Publie ou dépublie un parcours à partir de la liste des parcours
-            $('.publisher').on('click', function (event) {
-                let parcours_id = $(this).attr("data-parcours_id");
-                let statut = $(this).attr("data-statut");
-                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-                let from = $(this).attr("data-from");
-
-                if( from ==2) { url_from = "../../ajax/publish_parcours" ; } else {url_from = "ajax/publish_parcours" ; }
-                $.ajax(
-                    {
-                        type: "POST",
-                        dataType: "json",
-                        data: {
-                            'parcours_id': parcours_id,
-                            'statut': statut,
-                            'from': from,
-                            csrfmiddlewaretoken: csrf_token
-                        },
-                        url: url_from ,
-                        success: function (data) {
-                            $('#parcours_publisher'+parcours_id).attr("data-statut",data.statut);                  
-                            $('#parcours_publisher'+parcours_id).html("").html(data.publish);
-                            $('#parcours_publisher'+parcours_id).removeClass(data.noclass);
-                            $('#parcours_publisher'+parcours_id).addClass(data.class);
-                            if( from ==2) { 
-                            $('.disc'+parcours_id).css("background-color",data.style); 
-                            }                         
-                        }
-                    }
-                )
-                }); 
-
-
-            // Publie ou dépublie un parcours à partir du sous menu barre haute des parcours  Bouton double
-            $('#parcours_publisher').on('click', function (event) {
-                let parcours_id = $(this).attr("data-parcours_id");
-                let statut = $(this).attr("data-statut");
-                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-                let from = $(this).attr("data-from");
-                if (from == 0) {  url_from = "../../../ajax/publish_parcours" ;} else { url_from = "../../ajax/publish_parcours" ;} 
-
-                $.ajax(
-                    {
-                        type: "POST",
-                        dataType: "json",
-                        data: {
-                            'parcours_id': parcours_id,
-                            'statut': statut,
-                            'from': from,
-                            csrfmiddlewaretoken: csrf_token
-                        },
-                        url: url_from ,
-                        success: function (data) {
-                            $('#parcours_publisher').attr("data-statut",data.statut);                  
-                            $('#parcours_publisher').html("").html(data.publish);
-                            $('#parcours_statut').removeClass(data.noclass);
-                            $('#parcours_statut').addClass(data.class);
-                            $('#parcours_statut').html("").html(data.label);
-
-                        }
-                    }
-                )
-                });  
-
-*/
         // ==================================================================================================
         // ==================================================================================================
         // ============= Affiche une fenetre modale personnalisée

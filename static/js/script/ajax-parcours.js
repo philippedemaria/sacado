@@ -21,7 +21,7 @@ define(['jquery','bootstrap'], function ($) {
             });
 
 
-    function ajax_choice(param0, param1){
+            function ajax_choice(param0, param1){
 
             let is_parcours = $("#is_parcours").val();
             let level_id = param0.val();
