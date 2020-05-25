@@ -37,7 +37,7 @@
 
         <form action="" method="POST" enctype='multipart/form-data'> 
             {% csrf_token %} 
-            {% for relationship in relationships|dictsort:"order" %} 
+            {% for relationship in relationships  %} 
                 <div class="row" style="margin-top:8px; padding-top: 8px; border-top: 1px solid #CCC;  border-top: 1px solid #CCC" id="relationship{{ relationship.id }}" >                        
                     <div  class="col-sm-12 col-md-12">
                         {% if not relationship.exercise.supportfile.is_title %}
@@ -104,9 +104,7 @@
                             </span>
 
 
- 
-
-                        {%  for s in  parcours.students.all|dictsort:"user.last_name" %}
+                        {%  for s in  students %}
 
                             {% get_exercise s relationship as has_it %}
                             <span class="btn btn-{% if has_it %}success{% else  %}danger{% endif  %} select_student selected_student{{relationship.exercise.id}}" 

@@ -145,7 +145,8 @@ def students_from_p_or_g(request,parcours) :
         students_parcours = parcours.students.order_by("user__last_name")
         students = [student for student in students_parcours if student   in students_group] # Intersection des listes
     except :
-        students = parcours.students.order_by("user__lastname")
+        students = list(parcours.students.order_by("user__last_name"))
+
 
     return students
 
@@ -332,13 +333,12 @@ def peuplate_parcours(request,id):
 
 @login_required
 @user_is_parcours_teacher
-def individualise_parcours(request,id,idg):
+def individualise_parcours(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcours = Parcours.objects.get(pk = id)
-    group = Group.objects.get(pk = idg)
-    relationships = Relationship.objects.filter(parcours = parcours) 
-
-    return render(request, 'qcm/form_individualise_parcours.html', { 'relationships': relationships , 'parcours': parcours , 'group': group , 'group_id': group.id ,  })
+    relationships = Relationship.objects.filter(parcours = parcours).order_by("order")
+    students = parcours.students.all().order_by("user__last_name")
+    return render(request, 'qcm/form_individualise_parcours.html', { 'relationships': relationships , 'parcours': parcours , 'students': students  })
 
 
 
@@ -561,15 +561,13 @@ def show_parcours(request, id):
     teacher = Teacher.objects.get(user=user)
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
     nb_exo_only, nb_exo_visible = [], []
-    i = 0
+    i ,j = 0, 0
     for r in relationships:
         if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle:
             i = 0
         else:
             i += 1
         nb_exo_only.append(i)
-    j = 0
-    for r in relationships:
         if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle or r.is_publish == 0:
             j = 0
         else:
@@ -581,11 +579,13 @@ def show_parcours(request, id):
     except:
         group_id = None
 
-    skills = Skill.objects.all()
+    students_p_or_g = students_from_p_or_g(request,parcours)
 
+    skills = Skill.objects.all()
+    
     nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count()
-    context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills,
-               'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible, 'nb_exo_only': nb_exo_only,
+    context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'students_from_p_or_g': students_p_or_g,  
+               'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible, 'nb_exo_only': nb_exo_only, 
                'group_id': group_id}
 
     return render(request, 'qcm/show_parcours.html', context)
@@ -1029,6 +1029,7 @@ def ajax_publish_parcours(request):
         data["noclass"] = "btn-danger"
         data["label"] = "Publié"
         parcours = Parcours.objects.get(pk = int(parcours_id) )
+        print(data)
 
     Parcours.objects.filter(pk = int(parcours_id)).update(is_publish = statut)
  

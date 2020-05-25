@@ -25,11 +25,12 @@
 
 {% block page_menu_right %}
     
+
                 {% if group %}
-                        <i class="fa fa-warning" style="float: left;padding-right: 10px"></i>
-                        <div style="float: left;font-size: 16px">
-                            Les élèves peuvent rejoindre ce groupe dès que vous leur avez communiqué cette URL : <strong>http://parcours.erlm.tn/group/{{ group.code }}</strong>. <br>Ils peuvent aussi s’inscrire à l’adresse <strong>http://parcours.erlm.tn/#students</strong> et utiliser le code suivant : <strong>{{ group.code }}</strong>
-                        </div>
+
+
+                    {% include 'group/submenu_group.html'  %}
+
                 {% endif %}
 
 
@@ -128,6 +129,16 @@
             </form>
         </div>
         <div class="col-sm-12 col-md-9">
+            {% if group %}
+            <div class="alert alert-info">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div style="font-size: 16px"><i class="fa fa-question-circle"></i>
+                    Les élèves peuvent rejoindre ce groupe via cette URL à leur donner : <strong>http://parcours.erlm.tn/group/{{ group.code }}</strong> <br>Ils peuvent aussi s’inscrire à l’adresse <strong>http://parcours.erlm.tn/#students</strong> et utiliser le code suivant : <strong>{{ group.code }}</strong>
+                </div>
+            </div>
+            {% endif %}
             <table class="table table-striped table-hover display50">
                 <thead> 
                 <tr>

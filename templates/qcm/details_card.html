@@ -11,11 +11,9 @@
           </a>
                        
           <div class="card-score">
-              {% if request.session.group_id %} 
-              {%  get_percent_student_done_parcours_exercice   relation.exercise    parcours   request.session.group_id   as    data %}
-              {% else %} 
-              {%  get_percent_student_done_parcours_exercice   relation.exercise    parcours   0   as    data %}
-              {% endif %}
+ 
+              {%  get_percent_student_done_parcours_exercice   relation.exercise    parcours   students_from_p_or_g   as    data %}
+ 
  
               <div class="progress">
                 <div class="progress-bar bg-success" role="progressbar" style="width: {{ data.percent }}%;{% if not relation.is_publish %}color: #F5F5F5{% endif %};background-color: {{relation.parcours.color }};" aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100">{{ data.percent }}%</div>

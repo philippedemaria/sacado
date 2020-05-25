@@ -22,6 +22,10 @@
 {% endblock %}
 
 {% block page_menu_right %}
+
+
+{% include 'group/submenu_group.html' %}
+
   <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"  class="btn btn-new" style="margin-right:5px" > Parcours par défaut</a></li>
   <li> <a href="{% url 'all_parcourses' %}"   class="btn btn-new" style="margin-right:5px"> Parcours mutualisés</a></li>
   <li> <a href="{% url 'create_parcours' %}"   class="btn btn-new" > Nouveau parcours</a> </li>  
@@ -65,29 +69,33 @@
                 </a> 
 
 
-                <!-- Fenetre accessible par le disc et les 3 points -->
+                <!-- Fenetre accessible par le disc   -->
 
-                <div class="overlay  overlay_show{{parcours.id }}" style="height:70px"> 
+                <div class="overlay  overlay_show{{parcours.id }}" style="height:100px"> 
                     <div class="overlay_expand">
-                        <form action="#" method="POST" enctype='multipart/form-data'>    
+                        <a href="#" data-parcours_id="{{parcours.id }}" class="overlay_show pull-right">
+                                <i class="fa fa-times"></i>
+                        </a>
+                        <form action="" method="POST" enctype='multipart/form-data'>     
                             {% csrf_token %}
-                            <div class="btn-group">
-                                <a href="#" class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %} publisher" data-from="2"
-                                    id="parcours_publisher{{parcours.id}}" 
+                            <div class="btn-group"  style="padding:0px;margin:0px;">
+                                <a href="#" class="btn btn-default publisher"  data-from="2" id="parcours_publisher{{parcours.id}}" 
                                     data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
-                                  {% if parcours.is_publish %} Publié {% else %} Non publié {% endif  %} 
-                                </a> 
+                                    <i class="fa fa-circle-o-notch"></i>
+                                </a><span class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" id="parcours_statut{{parcours.id}}" style="cursor:auto" >  
+                                  {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
+                                </span>
                             </div>
-                                 <br>
-                            <span class="label_icon" style="color:{{ parcours.color }};">
-                                {% if parcours.is_evaluation %}
-                                    {{  parcours.start|date:"d N Y"  }},  {{  parcours.starter  }} 
-                                    {% if parcours.stop %}
-                                       - {{  parcours.stop|date:"d N Y"  }}{% if parcours.stopper %}, {{  parcours.stopper  }} {% endif %}    
-                                    {% endif %}                                
-                                {% endif %}
-                            </span>
-                        </form>     
+                        </form>
+                        <br>
+                        <span class="label_icon" style="color:{{ parcours.color }};">
+                            {% if parcours.is_evaluation %}
+                                {{  parcours.start|date:"d N Y"  }},  {{  parcours.starter  }} 
+                                {% if parcours.stop %}
+                                   - {{  parcours.stop|date:"d N Y"  }}{% if parcours.stopper %}, {{  parcours.stopper  }} {% endif %}    
+                                {% endif %}                                
+                            {% endif %}
+                        </span>
                     </div>
 
 
@@ -181,7 +189,7 @@
                         </a>  
                     </div>  
                     <div class="col-lg-4 col-xs-4">
-                        <a  href="{% url 'result_parcours_knowledge' parcours.id  %}" class="edit"><i class="fa fa-trophy"></i> <span class="label_icon">Suivi</span>
+                        <a  href="{% url 'result_parcours_knowledge' parcours.id  %}" class="edit"><i class="fa fa-mortar-board"></i> <span class="label_icon">Suivis</span>
                         </a>   
                     </div>
 
@@ -207,7 +215,7 @@
                         </a>   
                     </div>
                     <div class="col-lg-4 col-xs-4">
-                        <a href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-users"></i>  <span class="label_icon">Groupe</span>
+                        <a href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-users"></i>  <span class="label_icon">Elèves</span>
                         </a>
                     </div> 
                 </div>

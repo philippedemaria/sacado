@@ -181,7 +181,6 @@ class Student(ModelWithCode):
         return test
 
     def has_exercise(self, relationship):
-
         if self in relationship.students.all() :
             test =  True
         else :

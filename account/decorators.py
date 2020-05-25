@@ -13,7 +13,6 @@ def user_is_superuser(user):
 
 def decide(this_student, role, asker) :
     test = False
-    print(this_student, role, asker)
     if role == 0 : # role = request.user.user_type
     	if this_student.user == asker : # asker = request.user
     		test = True

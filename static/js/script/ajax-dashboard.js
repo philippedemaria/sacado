@@ -698,17 +698,69 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 )
                 });   
 
+        // ==================================================================================================
+        // ==================================================================================================
+        // ============= Publication de parcours
+        // ==================================================================================================
+        // ==================================================================================================
+
+            function publisher_parcours($actionner,$target,$targetStatut){
 
 
-                 // Publie ou dépublie un parcours à partir de la liste des parcours
-            $('.publisher').on('click', function (event) {
+  
+                $actionner.on('click', function (event) {
                 let parcours_id = $(this).attr("data-parcours_id");
                 let statut = $(this).attr("data-statut");
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
                 let from = $(this).attr("data-from");
 
 
-                console.log(from);
+
+                if( from == "2")  { url_from = "../../ajax/publish_parcours" ; } 
+                else if (from == "0") {  url_from = "../../../ajax/publish_parcours" ;} 
+                else  { url_from = "ajax/publish_parcours" ;} 
+
+ 
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            'parcours_id': parcours_id,
+                            'statut': statut,
+                            'from': from,
+                            csrfmiddlewaretoken: csrf_token
+                        },
+                        url: url_from ,
+                        success: function (data) {
+                            $($target+parcours_id).attr("data-statut",data.statut);                  
+                            $($targetStatut+parcours_id).removeClass(data.noclass);
+                            $($targetStatut+parcours_id).addClass(data.class);
+                            $($targetStatut+parcours_id).html("").html(data.label);
+
+                            if( from =="2") { 
+                            $('.disc'+parcours_id).css("background-color",data.style); 
+                            }  
+                        }
+                    }
+                )
+
+                }); 
+            } ;
+
+            publisher_parcours( $('.publisher') , '#parcours_publisher' ,'#parcours_statut' ) ;
+ 
+
+ 
+
+/*
+            // Publie ou dépublie un parcours à partir de la liste des parcours
+            $('.publisher').on('click', function (event) {
+                let parcours_id = $(this).attr("data-parcours_id");
+                let statut = $(this).attr("data-statut");
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                let from = $(this).attr("data-from");
+
                 if( from ==2) { url_from = "../../ajax/publish_parcours" ; } else {url_from = "ajax/publish_parcours" ; }
                 $.ajax(
                     {
@@ -735,17 +787,12 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 }); 
 
 
-
-
-
-
-                 // Publie ou dépublie un parcours à partir de la page d'un seul parcours
+            // Publie ou dépublie un parcours à partir du sous menu barre haute des parcours  Bouton double
             $('#parcours_publisher').on('click', function (event) {
                 let parcours_id = $(this).attr("data-parcours_id");
                 let statut = $(this).attr("data-statut");
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
                 let from = $(this).attr("data-from");
-
                 if (from == 0) {  url_from = "../../../ajax/publish_parcours" ;} else { url_from = "../../ajax/publish_parcours" ;} 
 
                 $.ajax(
@@ -771,74 +818,48 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 )
                 });  
 
-
-
-                  // Publie ou dépublie un exercice
-            $('.action_task').on('click', function (event) {
-                let relationship_id = $(this).attr("data-relationship_id");
-                    $("#task_detail"+relationship_id).toggle();
-                });
-   
-
-
+*/
+        // ==================================================================================================
+        // ==================================================================================================
+        // ============= Affiche une fenetre modale personnalisée
+        // ==================================================================================================
+        // ==================================================================================================
             $(".card-dateur").hide();
-            $('.select_task').on('click', function (event) {
-                let relationship_id = $(this).attr("data-relationship_id");
-                $("#detail_dateur"+relationship_id).toggle();
-                $("#detail_dateur"+relationship_id).focus();
-            });
-            $('.select_task_close').on('click', function (event) {
-                let relationship_id = $(this).attr("data-relationship_id");
-                $("#detail_dateur"+relationship_id).hide();
-            });
-
-            $('.select_publish').on('click', function (event) {
-                let relationship_id = $(this).attr("data-relationship_id");
-                $("#detail_pub"+relationship_id).toggle();
-                $("#detail_pub"+relationship_id).focus();
-            });
-
-            $('.select_publish_close').on('click', function (event) {
-                let relationship_id = $(this).attr("data-relationship_id");
-                $("#detail_pub"+relationship_id).hide();
-            });
-
-
-
-            $('.select_details').on('click', function (event) {
-                let relationship_id = $(this).attr("data-relationship_id");
-                $("#details"+relationship_id).toggle();
-                $("#details"+relationship_id).focus();
-            }); 
-
-            $('.select_details_close').on('click', function (event) {
-                let relationship_id = $(this).attr("data-relationship_id");
-                $('#details'+relationship_id).toggle();
-            });
-
-
-
-            $('.sharer').on('click', function (event) {
-                let relationship_id = $(this).attr("data-relationship_id");
-                $("#share"+relationship_id).toggle();
-            });
-            $('.select_share_close').on('click', function (event) {
-                let relationship_id = $(this).attr("data-relationship_id");
-                $("#share"+relationship_id).hide();
-            });
-
-
             $(".card-skill").hide();
-            $('.select_skills').on('click', function (event) {
-                let relationship_id = $(this).attr("data-relationship_id");
-                $("#skill"+relationship_id).toggle();
-            });
-            $('.select_skill_close').on('click', function (event) {
-                let relationship_id = $(this).attr("data-relationship_id");
-                $("#skill"+relationship_id).hide();
-            });
- 
- 
+
+            function display_custom_modal($actionner,$target){
+  
+
+                $actionner.on('click', function (event) {
+                    let relationship_id = $(this).attr("data-relationship_id");
+                    $($target+relationship_id).toggle();
+                    $($target+relationship_id).focus();
+                });
+
+            } ;
+
+            display_custom_modal($('.action_task'),"#task_detail");
+            display_custom_modal($('.select_task'),"#detail_dateur");
+            display_custom_modal($('.select_publish'),"#detail_pub");
+            display_custom_modal($('.select_details'),"#details");
+            display_custom_modal($('.sharer'),"#share");
+            display_custom_modal($('.select_skills'),"#skill");
+
+  
+            display_custom_modal($('.select_task_close'),"#detail_dateur");
+            display_custom_modal($('.select_publish_close'),"#detail_pub");
+            display_custom_modal($('.select_details_close'),"#details");
+            display_custom_modal($('.select_share_close'),"#share");
+            display_custom_modal($('.select_skill_close'),"#skill");
+
+
+        // ==================================================================================================
+        // ==================================================================================================
+        // =============  FIN des modales
+        // ==================================================================================================
+        // ==================================================================================================
+
+
             $('.skill_selector').on('click', function (event) {
                 let relationship_id = $(this).attr("data-relationship_id");
                 let skill_id = $(this).val();
@@ -861,12 +882,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 )
 
                 });    
-
-
-
-
-
-
 
 
             $(".copy").on("click", function() {

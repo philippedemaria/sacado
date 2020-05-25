@@ -22,9 +22,9 @@
 {% endblock %}
 
 {% block page_menu_right %}
-  <li> <a href="{% url 'index' %}"    class="no_button"  > Parcours par défaut  via mes groupes</a></li>
-  <li> <a href="{% url 'all_parcourses' %}"   class="no_button"> Parcours mutualisés</a></li>
-  <li> <a href="{% url 'create_parcours' %}"   class="btn btn-new" ><img width="15px" src="{% static 'img/plus.png' %}"/> Nouveau parcours</a> </li>  
+  <li> <a href="{% url 'index' %}"    class="btn btn-new" style="margin-right:5px"  > Parcours par défaut </a></li>
+  <li> <a href="{% url 'all_parcourses' %}"   class="btn btn-new" style="margin-right:5px" > Parcours mutualisés</a></li>
+  <li> <a href="{% url 'create_parcours' %}"   class="btn btn-new" >  Nouveau parcours</a> </li>  
 {% endblock %}
 
 
@@ -99,24 +99,26 @@ body{
                             </form>
                         </td>
                         <td>
-                            <form action="#" method="POST" enctype='multipart/form-data'>     {% csrf_token %}
-                                <a href="#groupe_name_anchor{{ group.name.id }}" class="btn btn-{% if parcours.is_publish %}success{% else  %}danger{% endif  %} publisher" style="padding:7px;font-size:12px;font-weight: 100" id="parcours_publisher{{parcours.id}}"  data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}" data-from=1  > 
-                                {% if parcours.is_evaluation %}
-                                    {% if parcours.is_publish %} Evaluation publiée  {% else %} Evaluation non publiée {% endif  %} 
-                                {% else %}
-                                    {% if parcours.is_publish %} Parcours publié  {% else %} Parcours non publié {% endif  %}  
-                                {% endif %}
-                                </a>
-                                
-                                <font style="font-size:12px">
-                                    {% if parcours.is_evaluation %}
-                                    Du {{  parcours.start|date:"d N Y"  }}, {{  parcours.starter  }} 
-                                        {% if parcours.stop %}
-                                            au {{  parcours.stop|date:"d N Y"  }} {% if parcours.stopper %}, {{  parcours.stopper  }} {% endif %}    
-                                        {% endif %}                                
-                                    {% endif %}
-                                </font>
-                            </form>
+                        <form action="" method="POST" enctype='multipart/form-data'>     
+                            {% csrf_token %}
+                            <div class="btn-group"  style="padding:0px;margin:0px;">
+                                <a href="#" class="btn btn-default publisher"  data-from="1" id="parcours_publisher{{parcours.id}}" 
+                                    data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
+                                    <i class="fa fa-circle-o-notch"></i>
+                                </a><span class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" id="parcours_statut{{parcours.id}}" style="cursor:auto" >  
+                                  {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
+                                </span>
+                            </div>
+                        </form>
+                        <br>
+                        <span class="label_icon" style="color:{{ parcours.color }};">
+                            {% if parcours.is_evaluation %}
+                                {{  parcours.start|date:"d N Y"  }},  {{  parcours.starter  }} 
+                                {% if parcours.stop %}
+                                   - {{  parcours.stop|date:"d N Y"  }}{% if parcours.stopper %}, {{  parcours.stopper  }} {% endif %}    
+                                {% endif %}                                
+                            {% endif %}
+                        </span>
                         </td>
                     </tr>
             {% endfor  %} 

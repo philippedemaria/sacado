@@ -307,27 +307,14 @@ class Exercise(models.Model):
 
 
 
-    def percent_student_done_parcours_exercice(self,parcours,group_id):
+    def percent_student_done_parcours_exercice(self,parcours,students_from_p_or_g):
 
-        Group = apps.get_model("group","Group")
-        if group_id == 0 :
-            students = parcours.students.all()
-        else :
-            students_parcours = parcours.students.all()
-            group = Group.objects.get(pk=group_id)
-            students_group = group.students.all()
-            students = list(set(students_parcours)&set(students_group))
-
-
+        students = students_from_p_or_g
         nb_student = len(students)
         exercise_done = []
-        for s  in students :
-            if Studentanswer.objects.filter(student=s, parcours= parcours, exercise = self).exists():
-                st = Studentanswer.objects.filter(student=s, parcours= parcours, exercise = self)
-                if st not in exercise_done:
-                    exercise_done.append(st)
-            
-        nb_exercise_done = len(exercise_done) 
+
+        nb_exercise_done = Studentanswer.objects.filter(student__in= students, parcours= parcours, exercise = self).values_list("student",flat= True).order_by("student").distinct().count()
+ 
         try :
             percent = int(nb_exercise_done * 100/nb_student)
         except : 

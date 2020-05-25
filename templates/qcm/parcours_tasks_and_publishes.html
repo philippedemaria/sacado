@@ -12,31 +12,17 @@
  
 
 {% block page_title %}
-    <i class="fa fa-cogs" style="color:{{ parcours.color }}"></i> <span style="color:{{ parcours.color }}">{{ parcours.title }} </span> <img src="{% static 'img/angle-right.png' %}"/> 
-    <small>
-      {% if  'parcours_task_and_publish' in request.path %}
-      Tâches et publications
-      {% else %}
-      Ordonner les exercices
-      {% endif %}
-      </small>
-
+    <i class="fa fa-indent" style="color:{{ parcours.color }}"></i> <span style="color:{{ parcours.color }}">{{ parcours.title }} </span>  
 {% endblock %}
 
 {% block page_menu_right %}
 
 
     <li>
-        <a href="#" class="no_button" data-target="#section_div" data-toggle='modal'><i class="fa fa-indent"></i>  Créer une section</a>
+        <a href="#" class="no_button" data-target="#section_div" data-toggle='modal'> Créer une section</a>
     </li>
 
-
     {% include 'qcm/submenu_parcours.html' %}
-
- 
-
-
-    
 
 {% endblock %}
 
