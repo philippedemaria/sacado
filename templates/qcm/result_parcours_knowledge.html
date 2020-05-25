@@ -22,10 +22,17 @@
  
 	{% for knowledge in exercise_knowledges %}
         <td>
-		{% get_score_student_parcours  knowledge  student parcours as score %}
+		{% get_scorek  knowledge  student  as score %}
+
+
+		<!-- Requête moins rapide de 2 secondes mais plus précise puis que sélection sur le parcours
+		Rajouter les accolades et pourcentages ! au cas où !
+		 get_score_student_parcours  knowledge  student parcours as score 
+
+		 -->
 
 			{% if score != "" %}
-			    <a class="markdown
+			    <span class="markdown
 			            {% if score < 30 %}
 			             red 
 			            {% elif score < 60 %}
@@ -34,18 +41,13 @@
 			            green
 			            {% else %}
 			            darkgreen
-			            {% endif %}" style="cursor:help">
-				        {{ score }}
-					<div class="details_exos">{{ knowledge }}</div>
-			        
-			    </a>
+			            {% endif %}"  >
+				        {{ score }} 
+			    </span>
 			{% else %}
-			    <a class="markdown" data-container="body" style="cursor:help"
-                                         data-toggle="popover"
-                                         data-trigger="hover"
-                                         data-content=" {{ knowledge }}"> 
-			          {{ score }}<div class="details_exos" >{{ knowledge }}</div>
-			    </a> 
+			    <span class="markdown"> 
+			          {{ score }} 
+			    </span> 
 			{% endif %}
 		</td>
 	{% endfor %}

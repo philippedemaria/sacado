@@ -129,7 +129,8 @@ class Exercise(models.Model):
             score ="" 
         return score
 
-
+    #############################################
+    # non utilisée ?????? 
     def send_scores(self,student_id):
         score = ""
         student = Student.objects.get(pk=student_id)
@@ -138,6 +139,7 @@ class Exercise(models.Model):
             for studentanswer in studentanswers :
                 score = score+str(studentanswer.point)+" - " 
         return score
+    ############################################# 
 
 
     def score_and_time(self,student_id):

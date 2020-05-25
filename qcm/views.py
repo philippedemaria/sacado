@@ -133,17 +133,19 @@ def send_to_teachers(level) : # envoie d'une notification au enseignant du nivea
 
 
 def students_from_p_or_g(request,parcours) :
-
+    """
+    Si un groupe est en session, renvoie la liste des élèves du groupe et du parcours
+    Sinon les élèves du parcours
+    Classés par ordre alphabétique
+    """
     try :
         group_id = request.session["group_id"]
         group = Group.objects.get(id = group_id) 
-        students_group = group.students.order_by("user__last_name")
+        students_group = group.students.all()
         students_parcours = parcours.students.order_by("user__last_name")
-        #students = list(set(students_group)&set(students_parcours))
-
-        students = [student for student in students_parcours if student   in students_group]
+        students = [student for student in students_parcours if student   in students_group] # Intersection des listes
     except :
-        students = parcours.students.order_by("user__last_name")
+        students = parcours.students.order_by("user__lastname")
 
     return students
 
@@ -643,34 +645,38 @@ def show_parcours_visual(request, id):
 def result_parcours(request, id):
 
     parcours = Parcours.objects.get(id=id)
-    students = students_from_p_or_g(request,parcours)
-    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
+    students = students_from_p_or_g(request,parcours) # liste des élèves d'un parcours donné 
+
     try :
         group_id = request.session["group_id"]
     except :
         group_id = None
 
-    relationships = Relationship.objects.filter(parcours= parcours,exercise__supportfile__is_title=0).order_by("order")
-
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise').order_by("order")
     themes_tab, historic = [],  []
     for relationship in relationships:
         theme = {}
-        thm = relationship.exercise.theme
-        if not thm  in historic :
-            historic.append(thm)
-            theme["id"] = thm.id
-            theme["name"]= thm.name
-            themes_tab.append(theme)
+        # on devrait mettre la condition dans la requète 
+        # mais le relationships ci-dessus doit être envoyé dans le template
+        # alors on enlève les titres du supportfile
+        if not relationship.exercise.supportfile.is_title :
+            thm = relationship.exercise.theme
+            if not thm  in historic :
+                historic.append(thm)
+                theme["id"] = thm.id
+                theme["name"]= thm.name
+                themes_tab.append(theme)
 
     form = EmailForm(request.POST or None )
 
 
-    context = {  'relationships': relationships, 'parcours': parcours, 'students': students, 'themes': themes_tab, 'form': form,  'group_id' : group_id , 'relationships' : relationships  }
+    context = {  'relationships': relationships, 'parcours': parcours, 'students': students, 'themes': themes_tab, 'form': form,  'group_id' : group_id    }
 
     return render(request, 'qcm/result_parcours.html', context )
 
 
- 
+
+ ########## Sans doute pus utilisée ???? 
 @user_is_parcours_teacher 
 def result_parcours_theme(request, id, idt):
 
@@ -702,7 +708,7 @@ def result_parcours_theme(request, id, idt):
     context = {  'relationships': relationships, 'parcours': parcours, 'students': students,  'themes': themes_tab,'form': form, 'group_id' : group_id }
 
     return render(request, 'qcm/result_parcours.html', context )
-
+ 
 
 
 
@@ -715,20 +721,19 @@ def result_parcours_knowledge(request, id):
 
     form = EmailForm(request.POST or None)
 
-    exercises = parcours.exercises.all()
-    exercise_knowledges = []
+
+    knowledges = []
     
     try :
         group_id = request.session["group_id"]
     except :
         group_id = None
- 
-    for e  in exercises :
-        k = e.knowledge
-        if k not in exercise_knowledges:
-            exercise_knowledges.append(k)
+    
+    knowledge_ids = parcours.exercises.values_list("knowledge",flat=True).order_by("knowledge").distinct()
+    for k_id in knowledge_ids : 
+        knowledges.append(Knowledge.objects.get(pk = k_id))
 
-    context = {  'students': students, 'parcours': parcours,  'form': form, 'exercise_knowledges' : exercise_knowledges, 'group_id' : group_id }
+    context = {  'students': students, 'parcours': parcours,  'form': form, 'exercise_knowledges' : knowledges, 'group_id' : group_id }
 
     return render(request, 'qcm/result_parcours_knowledge.html', context )
 

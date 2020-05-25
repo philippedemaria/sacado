@@ -19,17 +19,8 @@
 
 {% block page_menu_right %}  
 
-
- 
-
-
-
     {% include 'qcm/submenu_parcours.html' %}
 
-
-
-
- 
 {% endblock %}
 
 
@@ -69,7 +60,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                        {% for student in  students|dictsort:"user.last_name" %}
+                        {% for student in  students %}
                             <tr class="no_padding">
                                 <td style="width:200px">
  

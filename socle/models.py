@@ -156,7 +156,6 @@ class Knowledge(models.Model):
 
     def exercices_by_knowledge(self,student,group):
 
-        Studentanswer = apps.get_model('qcm', 'Exercise')
         Exercise = apps.get_model('qcm', 'Exercise')
         exercises = Exercise.objects.filter(knowledge=self)
         return exercises
@@ -165,11 +164,7 @@ class Knowledge(models.Model):
     def score_student_parcours(self,student,parcours):
 
         Studentanswer = apps.get_model('qcm', 'Studentanswer')
-        Exercise = apps.get_model('qcm', 'Exercise')
-
-        exercises = parcours.exercises.filter(knowledge = self)
-
-        r = Studentanswer.objects.filter(student = student, exercise__in = exercises).aggregate(Avg('point'))
+        r = Studentanswer.objects.filter(student = student, parcours = parcours , exercise__knowledge = self).aggregate(Avg('point'))
         if r["point__avg"] :
             score = int(r["point__avg"])
         else :

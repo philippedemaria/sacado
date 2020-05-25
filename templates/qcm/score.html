@@ -2,7 +2,7 @@
 {% load item_tags %}
 
  
-{% get_scores  relationship.exercise  student as scores %}
+ 
 
 {% get_score  relationship.exercise  student as score %}
 
@@ -20,7 +20,6 @@
           href="{% url 'show_this_exercise'  relationship.exercise.id   %}" data-container="body"
           data-toggle="popover" style="border : 1px solid {{student.get_exercises.parcours.color }}"
           data-trigger="hover" data-placement="top"
-          title="Exercice : {{ scores }}"
           data-content="{{ relationship.exercise.knowledge.name }}">
         {{ score }}
     </a>

@@ -1,52 +1,47 @@
-    {% load static %}
-
-    <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"> Options du parcours <b class="caret"></b> </a>
-        <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-
-            <li {% if 'parcours_show/' in request.path %} class="active" {% endif %}><a href="{% url 'show_parcours' parcours.id   %}"><i class="fa fa-eye"></i> Voir le parcours</a>   </li>   
-            {% if group_id %}
-            <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_parcours' parcours.id group_id  %}"><i class="fa fa-cogs"></i> Configurer le parcours</a>   </li>
-            {% endif %}  
-            <li {% if 'parcours_peuplate/' in request.path %} class="active" {% endif %}><a href="{% url 'peuplate_parcours' parcours.id   %}"><i class="fa fa-laptop"></i> Sélectionner les exercices</a>   </li>
-            <li><a href="#"  class="no_button" id="handler_order_exercises" ><img src="{% static 'img/order_handler.png' %}" style="margin-right:10px; margin-left:3px"/> Organiser les exercices </a> </li>  
-            <li {% if 'parcours_tasks_and_publishes/' in request.path %} class="active" {% endif %}><a href="{% url 'parcours_tasks_and_publishes' parcours.id %}" ><i class="fa fa-tasks"></i> Gérer les sections</a></li>  
-
-            {% if group_id %}
-            <li {% if 'parcours_individualise/' in request.path %} class="active" {% endif %}><a href="{% url 'individualise_parcours' parcours.id  %}" ><i class="fa fa-user"></i> Individualiser les exercices</a> </li> 
-            {% endif %} 
-
-            <li {% if 'parcours_result/' in request.path %} class="active" {% endif %}><a href="{% url 'result_parcours' parcours.id  %}"  class="no_button" ><i class="fa fa-mortar-board"></i> Lire le suivi par élève </a> </li> 
-            <li {% if 'parcours_result_knowledge/' in request.path %} class="active" {% endif %}><a href="{% url 'result_parcours_knowledge' parcours.id %}"  class="no_button" ><i class="fa fa-trophy"></i> Lire le suivi par savoir faire </a> </li>             
-            
-            {% if group_id %}
-            <li {% if 'result_parcours_exercise_students/' in request.path %} class="active" {% endif %}><a href="{% url 'result_parcours_exercise_students' parcours.id    %}"  class="no_button" ><i class="fa fa-database"></i> Lire le suivi par exercice </a> </li>
-            {% endif %}
-
-
- 
- 
-            <li {% if 'parcours_stat/' in request.path %} class="active" {% endif %}><a href="{% url 'stat_parcours' parcours.id %}" ><i class="fa fa-bar-chart"></i> Lire les {% if parcours.is_evaluation %}résultats{% else  %}stats {% endif %} du parcours </a>   </li>
-            
+{% load static %}
 
 
 
+<li class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if 'parcours_result/' in request.path or  'parcours_result_knowledge/' in request.path  or 'result_parcours_exercise_students/' in request.path %} active {% endif %}"> Suivis d'acquisition <b class="caret"></b> </a>
 
+    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+        <li {% if 'parcours_result/' in request.path %} class="active" {% endif %}><a href="{% url 'result_parcours' parcours.id  %}"  class="no_button" ><i class="fa fa-mortar-board"></i> Lire le suivi par élève </a> </li> 
+        <li {% if 'parcours_result_knowledge/' in request.path %} class="active" {% endif %}><a href="{% url 'result_parcours_knowledge' parcours.id %}"  class="no_button" ><i class="fa fa-trophy"></i> Lire le suivi par savoir faire </a> </li>             
+        
+        {% if group_id %}
+        <li {% if 'result_parcours_exercise_students/' in request.path %} class="active" {% endif %}><a href="{% url 'result_parcours_exercise_students' parcours.id    %}"  class="no_button" ><i class="fa fa-database"></i> Lire le suivi par exercice </a> </li>
+        {% endif %}
+    </ul>
+</li>    
+<li class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if 'parcours_show/' in request.path or 'parcours_update/' in request.path or 'parcours_peuplate/' in request.path or 'parcours_tasks_and_publishes/' in request.path  or 'parcours_individualise/' in request.path  or 'parcours_stat/' in request.path   %} active{% endif %}"> Options du parcours <b class="caret"></b> </a>
+    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+        <li {% if 'parcours_show/' in request.path %} class="active" {% endif %}><a href="{% url 'show_parcours' parcours.id   %}"><i class="fa fa-eye"></i> Voir le parcours</a>   </li>   
+        {% if group_id %}
+        <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_parcours' parcours.id group_id  %}"><i class="fa fa-cogs"></i> Configurer le parcours</a>   </li>
+        {% endif %}  
+        <li {% if 'parcours_peuplate/' in request.path %} class="active" {% endif %}><a href="{% url 'peuplate_parcours' parcours.id   %}"><i class="fa fa-laptop"></i> Sélectionner les exercices</a>   </li>
+        <li><a href="#"  class="no_button" id="handler_order_exercises" ><img src="{% static 'img/order_handler.png' %}" style="margin-right:10px; margin-left:3px"/> Organiser les exercices </a> </li>  
+        <li {% if 'parcours_tasks_and_publishes/' in request.path %} class="active" {% endif %}><a href="{% url 'parcours_tasks_and_publishes' parcours.id %}" ><i class="fa fa-tasks"></i> Gérer les sections</a></li>  
 
-        </ul>
-    </li>    
- 
-
-        <li>
-        <form action="" method="POST" enctype='multipart/form-data'>     
-            {% csrf_token %}
-            <div class="btn-group"  style="padding:0px;margin:0px;">
-                <a href="#" class="btn btn-default" 
-                    id="parcours_publisher"   
-                    data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
-                  {% if parcours.is_publish %} Dépublier  {% else %} Publier {% endif  %} 
-                </a><span class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" id="parcours_statut"  >  
-                  {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
-                </span>
-            </div>
-        </form>
-    </li>
+        {% if group_id %}
+        <li {% if 'parcours_individualise/' in request.path %} class="active" {% endif %}><a href="{% url 'individualise_parcours' parcours.id  %}" ><i class="fa fa-user"></i> Individualiser les exercices</a> </li> 
+        {% endif %} 
+        <li {% if 'parcours_stat/' in request.path %} class="active" {% endif %}><a href="{% url 'stat_parcours' parcours.id %}" ><i class="fa fa-bar-chart"></i> Lire les {% if parcours.is_evaluation %}résultats{% else  %}stats {% endif %} du parcours </a>   </li>
+    </ul>
+</li>    
+<li>
+    <form action="" method="POST" enctype='multipart/form-data'>     
+        {% csrf_token %}
+        <div class="btn-group"  style="padding:0px;margin:0px;">
+            <a href="#" class="btn btn-default" 
+                id="parcours_publisher"   
+                data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
+              {% if parcours.is_publish %} Dépublier  {% else %} Publier {% endif  %} 
+            </a><span class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" id="parcours_statut"  >  
+              {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
+            </span>
+        </div>
+    </form>
+</li>
