@@ -418,16 +418,8 @@ def list_parcours_group(request,id):
     group_tab = []
     data = {}
     parcours_tab = []
-    try :
-        p = group.parcours
-        if p.is_favorite :
-            parcours_tab = [group.parcours]
-        else :
-            parcours_tab = []  
-    except :
-        parcours_tab = []
-    students = group.students
-    for student in students.all() :
+    students = group.students.all()
+    for student in students :
         pcs = Parcours.objects.filter(students= student,is_favorite=1).order_by("-is_publish")
         for parcours in pcs : 
             if parcours not in parcours_tab :
