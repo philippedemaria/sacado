@@ -50,7 +50,7 @@
                                     {% for theme in theme_list  %}
                                         <span class="open_details btn btn-subsacado">{{ theme.grouper.name }} 
                                             <div class="details_exos">
-                                            {% for e in theme.list|dictsort:"theme.name"   %} 
+                                            {% for e in theme.list %}
                                                 {% ifchanged  %}
                                                     <span style="color:#444">{{ e|truncatechars:76 }}</span><br/>
                                                 {% endifchanged  %}

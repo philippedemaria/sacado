@@ -438,10 +438,9 @@ def list_parcours_group(request,id):
 
 @login_required
 def all_parcourses(request):
-
-    teacher = Teacher.objects.get(user = request.user)
-    parcourses = Parcours.objects.exclude(Q(author=None)|Q( author=teacher),teacher = teacher).filter(linked=0).order_by("author")
- 
+    teacher = Teacher.objects.get(user=request.user)
+    parcourses = Parcours.objects.exclude(Q(author=None) | Q(author=teacher), teacher=teacher).filter(linked=0).order_by("author").prefetch_related('exercises__knowledge__theme')
+    #parcourses = parcourses[:15] #limite pour le debuggage
     return render(request, 'qcm/all_parcourses.html', {'parcourses': parcourses})
 
 
