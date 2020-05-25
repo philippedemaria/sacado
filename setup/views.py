@@ -94,15 +94,11 @@ def index(request):
                 if not studentanswer.exercise in exercises:
                     exercises.append(studentanswer.exercise)
 
-            nb_exercise_done = len(exercises)
-            percent = int(nb_exercise_done * 100/nb_exercise)
-
-
             relationships_in_late = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, is_evaluation=0, date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
             relationships_in_tasks = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).exclude(exercise__in=exercises).order_by("date_limit")
 
             context = {'student_id': student.user.id, 'student': student, 'relationships': relationships,
-                       'evaluations': evaluations, 'ratio': ratio, \
+                       'evaluations': evaluations, 'ratio': ratio,  
                        'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late,
                        'relationships_in_tasks': relationships_in_tasks}
 

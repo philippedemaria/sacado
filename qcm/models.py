@@ -391,18 +391,14 @@ class Parcours(ModelWithCode):
 
 
     def is_percent(self,student):
-
-        nb_exercise = self.exercises.count()
-        exercises = self.exercises.all()
-        exercise_done = []
-        for e  in exercises :
-            if Studentanswer.objects.filter(student=student, exercise = e).exists():
-                if e not in exercise_done:
-                    exercise_done.append(e)
-            
-        nb_exercise_done = len(exercise_done) 
+        ## Nombre de relationships dans le parcours => nbre  d'exercices
+        nb_relationships =  Relationship.objects.filter(students = student, parcours=self,is_publish=1).count()
+        ## Nombre de réponse avec exercice unique du parcours
+        studentanswers = Studentanswer.objects.filter(student=student, parcours=self).values_list("exercise",flat=True).order_by("exercise").distinct()
+           
+        nb_exercise_done = len(studentanswers) 
         try :
-            percent = int(nb_exercise_done * 100/nb_exercise)
+            percent = int(nb_exercise_done * 100/nb_relationships)
         except :
             percent = 0
         return percent

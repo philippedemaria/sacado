@@ -39,8 +39,8 @@ def menu(request):
 
 		elif  request.user.user_type == 0 : #student
 
- 
- 
+			student = Student.objects.get(user = request.user)
+			 
  
 			last_exercises_done = Studentanswer.objects.filter(student=student).order_by("-date")[:10]
 
@@ -48,25 +48,16 @@ def menu(request):
 			parcours = Parcours.objects.filter(is_publish = 1 , exercises__level=student.level).exclude(author=None)
 			parcourses = Parcours.objects.filter(is_publish = 1 , is_evaluation = 0 , students=student) # tous les parcours attribués à cet élève
 			studentanswers = Studentanswer.objects.filter(student=student) 
-			ned = []
-			for s in studentanswers :
-				if not s.exercise.id in ned :
-					ned.append(s.exercise.id)
-			nb_exercise_done = len(ned)
-
-			percent = int(nb_exercise_done * 100/nb_exercise)
+ 
+ 
 
 			return {   
-			'this_user' : this_user , 
+
 			'student' : student ,  
-			'groups' : groups ,
 			'parcourses' : parcourses,  
 			'parcours' : parcours,  
 			'last_exercises_done' : last_exercises_done,   
-			'nb_exercise' : nb_exercise,
-			'nb_exercise_done' : nb_exercise_done,
-			'percent' : percent,
- 			'today' : today,
+
 			}
 
 

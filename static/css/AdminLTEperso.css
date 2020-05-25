@@ -3709,19 +3709,19 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 }
 
 .btn-new  {
-  color : #dd4b39!important;
+  color : #007bff!important;
   border-radius: 20px; /*radius des boutons*/
-  border: 1px solid #dd4b39;
+  border: 1px solid #007bff;
 }
 .btn-new:hover,
 .btn-new:active,
 .btn-new.hover {
-  background-color: #dd4b39!important;
+  background-color: #007bff!important;/*   #dd4b39!important;*/
   color: white!important;
 }
 
 
-.btn-sacado {
+.btn-sacado { 
   background-color: #007bff   ;/* #364e61  */
   border-color: #007bff  ;  /* #364e61  */
   color:#FFF;
