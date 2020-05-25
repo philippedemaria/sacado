@@ -44,12 +44,13 @@ def index(request):
             nb_teacher_level = teacher.levels.count()
 
             relationships = Relationship.objects.values('id','date_limit','parcours','exercise').filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("parcours")
-            parcourses = Parcours.objects.values('id','color','is_publish','students','exercises','title').filter(teacher  = teacher)
+            parcourses = Parcours.objects.filter(teacher  = teacher)
 
             communications = Communication.objects.values('id','subject','texte').filter(active = 1)
 
 
             parcours_tab = Parcours.objects.filter(students=None,teacher = teacher,is_favorite = 1)
+            print(parcours_tab)
 
             context = {   'this_user' : this_user , 'teacher' : teacher ,  'groups' : groups ,   'parcourses' : parcourses ,   'relationships' : relationships ,  \
              'communications' : communications , 'parcours_tab' : parcours_tab , 'nb_teacher_level' : nb_teacher_level }

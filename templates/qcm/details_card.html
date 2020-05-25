@@ -123,9 +123,9 @@
                 <i class="fa fa-save"></i> {{ relation.situation}}  
             </span>
             <!-- Appel de partage  -->
-            <span  class="white sharer horizontalmargin5" data-relationship_id="{{ relation.id }}">
-               <i class="fa fa-share-square"></i>
-            </span>                                     
+            <span  class="sharer horizontalmargin5" data-relationship_id="{{ relation.id }}" >
+                <img src="{% static 'img/external-link.png' %}" width="15px" /><i class="fa fa-trash"></i> 
+            </span>                                    
             <!-- Suppression de l'exercice dans ce parcours  -->
             <a href="{% url 'delete_relationship' relation.id %}" class="white horizontalmargin5"    onclick="return TestDelete('cet exercice de ce parcours')"  >
                 <i class="fa fa-trash"></i> 
