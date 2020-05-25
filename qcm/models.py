@@ -425,7 +425,7 @@ class Parcours(ModelWithCode):
 
 
     def exercises_only(self):
-        exercises = self.exercises.filter(supportfile__is_title=0) 
+        exercises = self.exercises.filter(supportfile__is_title=0).prefetch_related('level')
         return exercises 
 
 
