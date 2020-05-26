@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required, permission_required,u
 from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group 
-from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation
+from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Contraint
 from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm 
 from socle.models import  Theme, Knowledge , Level , Skill
 from django.http import JsonResponse 
@@ -2239,6 +2239,89 @@ def ajax_remediation_viewer(request): # student_view
     data['html'] = html       
 
     return JsonResponse(data)
+
+
+
+
+
+#######################################################################################################################################################################
+#######################################################################################################################################################################
+#################   contraint
+#######################################################################################################################################################################
+#######################################################################################################################################################################
+
+
+
+@csrf_exempt  
+def ajax_infoExo(request):
+    code = request.POST.get("codeExo")
+    data={}
+    print(code)
+    if Relationship.objects.filter(exercise__supportfile__code = code ).exists() or code == "all" :
+        html = "<i class='fa fa-check text-success'></i>"
+        test = 1
+    else :
+        html = "ERREUR"
+        test = 0
+
+    data["html"] = html 
+    data["test"] = test
+    return JsonResponse(data)
+
+
+@csrf_exempt  
+def ajax_create_contraint(request):
+
+    relationship_id = int(request.POST.get("relationship_id"))
+
+    this_relationship = Relationship.objects.get(pk = relationship_id)
+    code = request.POST.get("codeExo") 
+    score = request.POST.get("scoreMin")
+
+    print(relationship_id , code, score )
+    data = {}
+    if code == "all" : # si tous les exercices précédents sont cochés
+        parcours_id = int(request.POST.get("parcours_id"))
+        
+        relationships = Relationship.objects.filter(parcours_id = parcours_id, order__lt= this_relationship.order)
+        for relationship in relationships :
+            Contraint.objects.get_or_create(code = relationship.exercise.supportfile.code, relationship = this_relationship, defaults={"scoremin" : score , } )
+        data["html"] = "<div id='contraint_saving0'><i class='fa fa-minus-circle'></i> Tous les exercices à "+score+"% <a href='#'  class='pull-right delete_contraint' data-relationship_id='"+str(relationship_id)+"' data-is_all=1 ><i class='fa fa-trash'></i> </a></div>"
+        data["all"] = 1
+    else :
+        contraint, created = Contraint.objects.get_or_create(code = code, relationship = this_relationship, defaults={"scoremin" : score , } )
+        data["html"] = "<div id='contraint_saving'"+str(contraint.id)+"><i class='fa fa-minus-circle'></i> Exercice "+code+" à "+score+"% <a href='#'  class='pull-right delete_contraint' data-contraint_id='"+str(contraint.id)+"' data-relationship_id='"+str(relationship_id)+"' data-is_all=0 ><i class='fa fa-trash'></i> </a></div>"
+        data["all"] = 0
+ 
+    return JsonResponse(data)
+ 
+
+@csrf_exempt  
+def ajax_delete_contraint(request):
+
+    data={}
+    is_all  = int(request.POST.get("is_all"))
+    if is_all == 1 :
+        relationship_id = int(request.POST.get("relationship_id"))   
+        contraints = Contraint.objects.filter(relationship_id = relationship_id)
+        for c in contraints :
+            c.delete()
+        data["html"] = 0
+    else : 
+        contraint_id = int(request.POST.get("contraint_id"))     
+        contraint = Contraint.objects.get(id = contraint_id )
+        code = contraint.code
+        data["html"] = code
+        contraint.delete()
+
+    return JsonResponse(data)
+
+ 
+
+
+
+
+
 
 
 #######################################################################################################################################################################

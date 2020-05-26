@@ -20,15 +20,9 @@ urlpatterns = [
     path('parcours_result_knowledge/<int:id>/', result_parcours_knowledge, name='result_parcours_knowledge'), 
     path('parcours_stat/<int:id>/', stat_parcours, name='stat_parcours'), 
     path('parcours_detail_task/<int:id>/<int:s>/', detail_task_parcours, name='detail_task_parcours'), #modif idp en id pour la sécurité
-
-
-
-
     path('parcours_exercises/<int:id>/', parcours_exercises, name='parcours_exercises'),  # student_list_exercises
     path('parcourses_all/', all_parcourses, name='all_parcourses'),
-
     path('parcours_clone/<int:id>/', clone_parcours, name='clone_parcours'),
-
     path('parcours_group/<int:id>/', list_parcours_group, name='list_parcours_group'), # parcours d'un groupe
 
     path('parcours_peuplate/<int:id>/', peuplate_parcours, name='peuplate_parcours'),
@@ -58,9 +52,6 @@ urlpatterns = [
     path('admin_supportfiles', admin_list_supportfiles, name='admin_supportfiles'),
     path('admin_associations', admin_list_associations, name='admin_associations'),
     path('ajax_update_association', ajax_update_association, name='ajax_update_association'),
-    
-
-
     path('create_supportfile', create_supportfile, name='create_supportfile'),
     path('admin/<int:id>', create_supportfile_knowledge, name='create_supportfile_knowledge'),
     path('update_supportfile/<int:id>/', update_supportfile, name='update_supportfile'),
@@ -90,7 +81,6 @@ urlpatterns = [
 
     path('detail_task/<int:id>/<int:s>/', detail_task, name='detail_task'), #modif idg en id pour la sécurité
     path('tasks', all_my_tasks, name='all_my_tasks'),
-
 
     path('admin_tdb', admin_tdb, name='admin_tdb'),  
     path('advises', advises, name='advises'),   
@@ -123,4 +113,8 @@ urlpatterns = [
     path('json_create_remediation/<int:idr>', json_create_remediation, name='json_create_remediation'),  # création via la modal sans rechargement de la page
     path('json_delete_remediation/<int:id>', json_delete_remediation, name='json_delete_remediation'),   # suppression via la modal sans rechargement de la page    
 
+
+    path('ajax/contraint_create', ajax_create_contraint, name='ajax_create_contraint'),
+    path('ajax/contraint_delete', ajax_delete_contraint, name='ajax_delete_contraint'), 
+    path('ajax/infoExo', ajax_infoExo, name='ajax_infoExo'),
  ]

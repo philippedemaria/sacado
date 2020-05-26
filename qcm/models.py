@@ -492,6 +492,8 @@ class Relationship(models.Model):
     skills = models.ManyToManyField(Skill,  blank=True,  related_name='skills_relationship',  editable= False) 
     students = models.ManyToManyField(Student, blank=True,  related_name='students_relationship',  editable= False) 
 
+
+
     def __str__(self):        
         return "{} : {}".format(self.parcours, self.exercise)
 
@@ -556,9 +558,6 @@ class Resultexercise(models.Model): # Last result
 ########################################################################################################################################### 
 
  
-
-
-
 class Remediation(models.Model):
 
     title = models.CharField(max_length=255, default='',  blank=True,verbose_name="Titre")
@@ -570,4 +569,13 @@ class Remediation(models.Model):
 
     def __str__(self):        
         return "title {}".format(self.title)
+
  
+class Contraint(models.Model):
+
+    code = models.CharField(max_length=8, default='', editable=False)
+    relationship = models.ForeignKey(Relationship, on_delete=models.CASCADE, default='',   blank=True, related_name='relationship_contraint') 
+    scoremin = models.PositiveIntegerField(  default=80, editable=False)  
+
+    def __str__(self):        
+        return "{} à {}%".format(self.code , self.scoremin)

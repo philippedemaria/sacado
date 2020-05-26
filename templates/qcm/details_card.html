@@ -40,43 +40,159 @@
               <span id="loading{{ relation.id }}"></span>{% if  relation.date_limit %}{{relation.date_limit }}{% else %}Tâche ?{% endif %}
           </div>
 
+          <!-- Contraint  -->
+          <div class="btn btn-{% if  relation.relationship_contraint.all|length > 0 %}danger{% else %}default{% endif %} select_contraint"  
+                style="position: absolute; right : 0px; top:150px;" 
+                id="contraint{{relation.id}}" 
+                data-relationship_id="{{relation.id}}">   
+              <i class="fa fa-minus-circle"></i>
+          </div>
+
+          <!--  
+          =============================================================================================================
+          =============================================================================================================
+                Pop up de la date de la tache d'un exercice  
+          =============================================================================================================
+          =============================================================================================================-->
+
+
 
           <!-- Pop up de la date de la tache d'un exercice  -->
           <div id="detail_dateur{{relation.id}}" class="card-dateur"  > 
-                Pour le ? <span href="#card{{relation.id}}" class="select_task_close" data-relationship_id="{{relation.id}}"><i class="fa fa-times pull-right"></i></span><br/>
+              <div class="row">
+                    <div class="col-sm-12 col-md-12 title">     
+                        <span href="#card{{relation.id}}" class="select_task_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>  
+                         Programmation de tâche  
+                    </div>
+               </div> 
+              <hr style="padding:0px; margin:10px 0px"/> 
+                <label  style="font-size: 10px;">Date de publication ?</label><br>
                 <input type="type" name="dateur" data-relationship_id="{{relation.id}}" data-type ="1" value="{{ relation.date_limit|date:"Y-m-d" }}" class="datepicker dateur pull-right" />
           </div>
 
           <!-- Pop up de la date de publication d'un exercice  -->
-          <div id="detail_pub{{relation.id}}" class="card-dateur"  > 
-                Date de publication ? <span href="#card{{relation.id}}" class="select_publish_close" data-relationship_id="{{relation.id}}"><i class="fa fa-times pull-right"></i></span><br/>
+          <div id="detail_pub{{relation.id}}" class="card-dateur"  >
                 <input type="type" name="start" data-relationship_id="{{relation.id}}" data-type ="0" value="{{ relation.date_limit|date:"Y-m-d" }}" class="datepicker dateur pull-right" />
           </div>
 
+          <!-- Pop up de la contrainte  -->
+          <div id="detail_contraint{{relation.id}}" class="card-dateur"> 
+
+              <div class="row">
+                    <div class="col-sm-12 col-md-12 title">  
+                        <span href="#card{{relation.id}}" class="select_contraint_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>  
+                       Contraintes 
+                    </div>
+               </div> 
+              <hr style="padding:0px; margin:10px 0px"/>
+
+               <div class="row">
+                    <div class="col-sm-12 col-md-12">               
+                        <span class="explain">  Pour accéder à cet exercice, il faut réaliser le score minimum à l'exercice associé ou à tous les précédents.</span>  
+                    </div>
+               </div> 
+
+               <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                        <label  style="font-size: 10px;">Code Exo</label> <span id="is_exist{{relation.id}}" class="text-danger"></span><br>
+                        <input type="type"  
+                                id="codeExo{{relation.id}}"  
+                                data-relationship_id="{{relation.id}}"  
+                                maxlength="8"  
+                                style="width:80px" 
+                                placeholder="bm4p8r31" 
+                                class="codeExo details_relation"  /> 
+                    </div>
+                    <div class="col-sm-6 col-md-1">
+                        <label  style="font-size: 10px;">Tous</label><br>
+                        <input type="checkbox"  id="all_of_them{{relation.id}}" data-relationship_id="{{relation.id}}" class="all_of_them"     /> 
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <label  style="font-size: 10px;">Score min.</label><br>
+                        <input type="number"  id="scoreMin{{relation.id}}"  maxlength="3"    size="3" value="80"  class="details_relation"  />%
+                    </div>
+                    <div class="col-sm-6 col-md-2">
+                        <a href="#" data-parcours_id="{{relation.parcours.id}}"  data-relationship_id="{{relation.id}}" id="save_contraint{{relation.id}}" class="save_contraint btn btn-danger">OK</a>
+                    </div>
+
+                </div> 
+                <hr style="padding:0px; margin:10px 0px"/> 
+
+                {% if relation.relationship_contraint.all|length == forloop.counter0 %} 
+
+
+                  <span class="text-red"  style="font-size: 11px;"><i class="fa fa-minus-circle"></i> Tous les exercices précédents</span>
+                      <a href="#"  onclick="return TestDelete('cette contrainte ')" 
+                          class="pull-right delete_contraint" 
+                          data-contraint_id="{{contraint.id}}" 
+                          data-relationship_id="{{relation.id}}"
+                          data-is_all=1 >
+                          <i class="fa fa-trash"></i> 
+                      </a>
+
+
+                {% else %}   
+
+                  {% for contraint in relation.relationship_contraint.all %}
+                      <span class="text-red"  style="font-size: 11px;"><i class="fa fa-minus-circle"></i> {{ contraint }}</span>
+                      <a href="#" onclick="return TestDelete('cette contrainte ')"
+                                  class="pull-right delete_contraint"  
+                                  data-contraint_id="{{contraint.id}}" 
+                                  data-relationship_id="{{relation.id}}"
+                                  data-is_all=0  >
+                          <i class="fa fa-trash"></i> 
+                      </a>
+                      {% if not forloop.last %}<br>{% endif %}
+                  {% empty %}
+                        Aucune contrainte appliquée
+                  {% endfor %}
+
+                {% endif %}   
+                <div id="new_contraint{{relation.id}}" class="text-danger"></div>
+          </div>
+
+ 
+
+
           <!-- Pop up de la durée et du nombre de situation d'un exercice  -->
           <div id="details{{relation.id}}" class="card-dateur"  > 
-                <span href="#card{{relation.id}}" class="select_details_close" data-relationship_id="{{relation.id}}"><i class="fa fa-times pull-right"></i></span><br/>
-               <div class="row">
-                    <div class="col-sm-2 col-md-1">
-                        <i class="fa fa-clock-o"></i>
+              <div class="row">
+                    <div class="col-sm-12 col-md-12 title">
+                    <span href="#card{{relation.id}}" class="select_details_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>               
+                        Contexte 
                     </div>
-                    <div class="col-sm-4 col-md-5">
+               </div> 
+              <hr style="padding:0px; margin:10px 0px"/> 
+
+               <div class="row">
+                    <div class="col-sm-6 col-md-6">
+                        <label  style="font-size: 12px;"><i class="fa fa-clock-o"></i> Durée estimée </label><br>
                         <input type="type" name="duration" data-relationship_id="{{relation.id}}" id="duration{{relation.id}}"  data-type ="2"  value="{{ relation.duration }}" class="details_relation" /> min.
                     </div>
-                    <div class="col-sm-1 col-md-1">
-                        <i class="fa fa-save"></i>
-                    </div>
-                    <div class="col-sm-4 col-md-4">
+                    <div class="col-sm-6 col-md-6">
+                        <label  style="font-size: 12px;"><i class="fa fa-save"></i> Situations </label><br>
                         <input type="type" name="situation" data-relationship_id="{{relation.id}}" id="situation{{relation.id}}"   data-type ="2"  value="{{ relation.situation  }}" class="details_relation" />
+                        <label  style="font-size: 10px;"> Nombre mini requis  </label>
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <span class="select_details_close btn btn-xs btn-primary" data-relationship_id="{{relation.id}}">Valider</span>
                     </div>
                 </div> 
           </div>
 
           <!-- Pop up de partage d'un exercice  -->
           <div id="share{{ relation.id }}" class="card-dateur"  > 
-                <span href="#card{{relation.id}}" class="select_share_close" data-relationship_id="{{relation.id}}"><i class="fa fa-times pull-right"></i></span><br/>
-                <a href="http://parcours.erlm.tn/qcm/show_this_exercise/{{ relation.exercise.id }}/" target="_blank" style="font-size:11px"><i class="fa fa-eye"></i> Vers l'exercice</a><br>
-                <span href="#card{{relation.id}}" class="copy" data-exercise_id="{{ relation.exercise.id}}" data-relationship_id="{{ relation.id}}"  data-parcours_id="{{ relation.parcours.id}}" style="font-size:11px"><i class="fa fa-clipboard"></i> Copier pour coller dans une autre page</span>
+              <div class="row">
+                    <div class="col-sm-12 col-md-12   title">  
+                      <span href="#card{{relation.id}}" class="select_share_close" data-relationship_id="{{relation.id}}"><i class="fa fa-times pull-right"></i></span>           
+                         Redirections & Liens
+                    </div>
+               </div> 
+              <hr style="padding:0px; margin:10px 0px"/><br> 
+                <a href="http://parcours.erlm.tn/qcm/show_this_exercise/{{ relation.exercise.id }}/" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice</a>
+                <br><br>                <a href="#card{{relation.id}}" class="copy" data-exercise_id="{{ relation.exercise.id}}" data-relationship_id="{{ relation.id}}"  data-parcours_id="{{ relation.parcours.id}}" style="font-size:14px"><i class="fa fa-clipboard fa-fw"></i> Copier pour coller dans une autre page</a> 
           </div>
 
           <!-- Pop up des compétences d'un exercice  -->
@@ -88,7 +204,6 @@
                       {{ skill }}
                       </label>{% if not forloop.last %}<br>{% endif %}
                 {% endfor %}
- 
           </div>
 
 
@@ -107,11 +222,14 @@
             <!-- Appel de la fenetre remédiation 
                   Appel ajax vers la modale qui est dans la page dashboard : id="remediation"
             -->
-
             <span style="font-size:9px">{{  relation.relationship_remediation.all|length }}</span>
-            <span class="white horizontalmargin5"><a href="#" data-target="#remediation" data-relationship_id="{{ relation.id }}"  data-toggle='modal' class="white remediation"><i class="fa fa-life-ring"></i></a></span> 
+            <span class="white horizontalmargin5">
+                <span style="cursor:pointer" data-target="#remediation" data-relationship_id="{{ relation.id }}"  data-toggle='modal' class="white remediation">
+                        <i class="fa fa-life-ring"></i>
+                </span>
+            </span> 
             <!-- Appel des compétences -->
-            <span class="white horizontalmargin5">{{ relation.exercise.supportfile.code }}</span>  
+            <span class="white horizontalmargin5"><a href="#" style="font-size:14px" class="copy_link white" data-code="{{ relation.exercise.supportfile.code}}">{{ relation.exercise.supportfile.code }}</a></span>  
             <!-- Appel des compétences -->
             <span class="white select_skills horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="skill{{relation.id}}"><i class="fa fa-cogs"></i> </span>             
             <!-- Appel des situations et durée -->
@@ -123,9 +241,9 @@
                 <i class="fa fa-save"></i> {{ relation.situation}}  
             </span>
             <!-- Appel de partage  -->
-            <span  class="sharer horizontalmargin5" data-relationship_id="{{ relation.id }}" >
-                <img src="{% static 'img/external-link.png' %}" width="15px" /><i class="fa fa-trash"></i> 
-            </span>                                    
+            <span  class="white sharer horizontalmargin5" data-relationship_id="{{ relation.id }}">
+               <i class="fa fa-share-square"></i>
+            </span>                                   
             <!-- Suppression de l'exercice dans ce parcours  -->
             <a href="{% url 'delete_relationship' relation.id %}" class="white horizontalmargin5"    onclick="return TestDelete('cet exercice de ce parcours')"  >
                 <i class="fa fa-trash"></i> 

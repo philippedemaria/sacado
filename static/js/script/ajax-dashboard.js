@@ -766,21 +766,139 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             display_custom_modal($('.select_details'),"#details");
             display_custom_modal($('.sharer'),"#share");
             display_custom_modal($('.select_skills'),"#skill");
-
+            display_custom_modal($('.select_contraint'),"#detail_contraint");
   
             display_custom_modal($('.select_task_close'),"#detail_dateur");
             display_custom_modal($('.select_publish_close'),"#detail_pub");
             display_custom_modal($('.select_details_close'),"#details");
             display_custom_modal($('.select_share_close'),"#share");
             display_custom_modal($('.select_skill_close'),"#skill");
+            display_custom_modal($('.select_contraint_close'),"#detail_contraint");
+
+        // ==================================================================================================
+        // ==================================================================================================
+        // =============  Contraint
+        // ==================================================================================================
+        // ==================================================================================================
+        $(".save_contraint").hide(); // On cache la div pour interdire si le code n'est pas bon
+        // ==================================================================================================
+        // ==  Si tous est cliqué, le code devient all
+        // ==================================================================================================
+        $(".all_of_them").on('click', function () {  
+            let relationship_id = $(this).attr("data-relationship_id");
+            if ( $(this).is(":checked") )
+                {   
+                    $("#codeExo"+relationship_id).val("all"); 
+                    $("#save_contraint"+relationship_id).show(); 
+                    $("#is_exist"+relationship_id).html("<i class='fa fa-check text-success'></i>");
+                }
+            else 
+                {   
+                    $("#codeExo"+relationship_id).val("");  
+                    $("#save_contraint"+relationship_id).hide(); 
+                    $("#is_exist"+relationship_id).html("");
+                }
+            });
+
+
+        // ==================================================================================================
+        // ==  Vérifie qu'il existe un exercice avec ce code -> Permet l'enregistrement si succès
+        // ==================================================================================================
+
+        $(".codeExo").on('keyup', function () { 
+            let codeExo = $(this).val();
+            let relationship_id = $(this).attr("data-relationship_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            if (codeExo.length  == 8) { 
+                            console.log(codeExo);
+                            $.ajax({
+                                url: '../../ajax/infoExo',
+                                type: "POST",
+                                data: {
+                                    'codeExo': codeExo,
+                                    csrfmiddlewaretoken: csrf_token,    
+                                },
+                                dataType: 'json',
+                                success: function (data) {
+                                    $("#is_exist"+relationship_id).html(data["html"]);
+
+                                    if (data.test  == 1 )  { $("#save_contraint"+relationship_id).show();  }
+                                    else { $("#save_contraint"+relationship_id).hide(); }
+                                }
+                            });
+                }
+            else {  $("#is_exist"+relationship_id).html(""); $("#save_contraint"+relationship_id).hide();  }
+        });
+
+        // ==================================================================================================
+        // ==  Sauvegarde de la contrainte
+        // ==================================================================================================
+
+        $('.save_contraint').on('click', function (event) {  
+                let relationship_id = $(this).attr("data-relationship_id");
+                let parcours_id = $(this).attr("data-parcours_id");
+                let codeExo = $("#codeExo"+relationship_id).val();
+                let scoreMin = $("#scoreMin"+relationship_id).val();
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            'relationship_id': relationship_id,
+                            'parcours_id': parcours_id,                            
+                            'codeExo': codeExo,
+                            'scoreMin': scoreMin,
+                            csrfmiddlewaretoken: csrf_token
+                        },
+                        url: "../../ajax/contraint_create" ,
+                        success: function (data) {
+                            if (data.all == 1) {   $("#new_contraint"+relationship_id).html("").html(data.html);   }
+                            else { $("#new_contraint"+relationship_id).html(data.html); }
+               
+                        }
+                    }
+                ) 
+                });   
+        // ==================================================================================================
+        // ==  Sauvegarde de la contrainte
+        // ==================================================================================================
+
+
+        $('.delete_contraint').on('click', function (event) {
+                let contraint_id = $(this).attr("data-contraint_id");
+                let relationship_id = $(this).attr("data-relationship_id");
+                let is_all = $(this).attr("data-is_all");
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+alert();
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            'relationship_id': relationship_id,
+                            'contraint_id': contraint_id,
+                            'is_all': is_all,                            
+                            csrfmiddlewaretoken: csrf_token
+                        },
+                        url: "../../ajax/contraint_delete" ,
+                        success: function (data) {
+ 
+                            $("#new_contraint"+relationship_id + " #contraint_saving"+data.html).html(""); // Suppression de la ligne dans la div new_contraint
+                        }
+                    }
+                ) 
+                });  
+
+
 
 
         // ==================================================================================================
         // ==================================================================================================
-        // =============  FIN des modales
+        // =============  Skill
         // ==================================================================================================
         // ==================================================================================================
-
 
             $('.skill_selector').on('click', function (event) {
                 let relationship_id = $(this).attr("data-relationship_id");
@@ -806,20 +924,37 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 });    
 
 
+
+        // ==================================================================================================
+        // ==================================================================================================
+        // =============  Copie le code, l'adresse d'un exercice
+        // ==================================================================================================
+        // ==================================================================================================
             $(".copy").on("click", function() {
 
                 let parcours_id = $(this).attr("data-parcours_id");
                 let exercise_id = $(this).attr("data-exercise_id");  
                 let relationship_id = $(this).attr("data-relationship_id");  
  
-                  if (!confirm("Pour coller dans une page, sélectionner et copier (CTRL+C) :                    http://parcours.erlm.tn/qcm/"+parcours_id+"/"+exercise_id+"/")) return false;
+                if (!confirm("Pour coller dans une page, sélectionner et copier (CTRL+C) :                    http://parcours.erlm.tn/qcm/"+parcours_id+"/"+exercise_id+"/")) return false;
                     $("#share"+relationship_id).toggle();
-
-
                 }
 
                 );
 
+
+            $(".copy_link").on("click", function() {
+                let code = $(this).attr("data-code");
+                alert("Double-cliquer sur le code de l'exercice et copier :  "+ code)
+                });
+
+
+
+        // ==================================================================================================
+        // ==================================================================================================
+        // =============  Date et détais relationship
+        // ==================================================================================================
+        // ==================================================================================================
 
             $('.dates').on('change', function (event) {
                 let relationship_id = $(this).attr("data-relationship_id");
