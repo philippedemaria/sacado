@@ -766,21 +766,21 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             display_custom_modal($('.select_details'),"#details");
             display_custom_modal($('.sharer'),"#share");
             display_custom_modal($('.select_skills'),"#skill");
-            display_custom_modal($('.select_contraint'),"#detail_contraint");
+            display_custom_modal($('.select_constraint'),"#detail_constraint");
   
             display_custom_modal($('.select_task_close'),"#detail_dateur");
             display_custom_modal($('.select_publish_close'),"#detail_pub");
             display_custom_modal($('.select_details_close'),"#details");
             display_custom_modal($('.select_share_close'),"#share");
             display_custom_modal($('.select_skill_close'),"#skill");
-            display_custom_modal($('.select_contraint_close'),"#detail_contraint");
+            display_custom_modal($('.select_constraint_close'),"#detail_constraint");
 
         // ==================================================================================================
         // ==================================================================================================
-        // =============  Contraint
+        // =============  Constraint
         // ==================================================================================================
         // ==================================================================================================
-        $(".save_contraint").hide(); // On cache la div pour interdire si le code n'est pas bon
+        $(".save_constraint").hide(); // On cache la div pour interdire si le code n'est pas bon
         // ==================================================================================================
         // ==  Si tous est cliqué, le code devient all
         // ==================================================================================================
@@ -789,13 +789,13 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             if ( $(this).is(":checked") )
                 {   
                     $("#codeExo"+relationship_id).val("all"); 
-                    $("#save_contraint"+relationship_id).show(); 
+                    $("#save_constraint"+relationship_id).show(); 
                     $("#is_exist"+relationship_id).html("<i class='fa fa-check text-success'></i>");
                 }
             else 
                 {   
                     $("#codeExo"+relationship_id).val("");  
-                    $("#save_contraint"+relationship_id).hide(); 
+                    $("#save_constraint"+relationship_id).hide(); 
                     $("#is_exist"+relationship_id).html("");
                 }
             });
@@ -823,19 +823,19 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                                 success: function (data) {
                                     $("#is_exist"+relationship_id).html(data["html"]);
 
-                                    if (data.test  == 1 )  { $("#save_contraint"+relationship_id).show();  }
-                                    else { $("#save_contraint"+relationship_id).hide(); }
+                                    if (data.test  == 1 )  { $("#save_constraint"+relationship_id).show();  }
+                                    else { $("#save_constraint"+relationship_id).hide(); }
                                 }
                             });
                 }
-            else {  $("#is_exist"+relationship_id).html(""); $("#save_contraint"+relationship_id).hide();  }
+            else {  $("#is_exist"+relationship_id).html(""); $("#save_constraint"+relationship_id).hide();  }
         });
 
         // ==================================================================================================
-        // ==  Sauvegarde de la contrainte
+        // ==  Sauvegarde de la constrainte
         // ==================================================================================================
 
-        $('.save_contraint').on('click', function (event) {  
+        $('.save_constraint').on('click', function (event) {  
                 let relationship_id = $(this).attr("data-relationship_id");
                 let parcours_id = $(this).attr("data-parcours_id");
                 let codeExo = $("#codeExo"+relationship_id).val();
@@ -852,40 +852,50 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                             'scoreMin': scoreMin,
                             csrfmiddlewaretoken: csrf_token
                         },
-                        url: "../../ajax/contraint_create" ,
+                        url: "../../ajax/constraint_create" ,
                         success: function (data) {
-                            if (data.all == 1) {   $("#new_contraint"+relationship_id).html("").html(data.html);   }
-                            else { $("#new_contraint"+relationship_id).html(data.html); }
-               
+                            if (data.all == 1) {   $("#new_constraint"+relationship_id).html("").html(data.html);   }
+                            else { $("#new_constraint"+relationship_id).html(data.html); }
+                            
+                            $("#constraint"+relationship_id).removeClass("btn-danger");
+                            $("#constraint"+relationship_id).addClass("btn-success");
                         }
                     }
                 ) 
                 });   
         // ==================================================================================================
-        // ==  Sauvegarde de la contrainte
+        // ==  Sauvegarde de la constrainte
         // ==================================================================================================
 
 
-        $('.delete_contraint').on('click', function (event) {
-                let contraint_id = $(this).attr("data-contraint_id");
+        $('.delete_constraint').on('click', function (event) {
+                let constraint_id = $(this).attr("data-constraint_id");
                 let relationship_id = $(this).attr("data-relationship_id");
                 let is_all = $(this).attr("data-is_all");
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-alert();
+
                 $.ajax(
                     {
                         type: "POST",
                         dataType: "json",
                         data: {
                             'relationship_id': relationship_id,
-                            'contraint_id': contraint_id,
+                            'constraint_id': constraint_id,
                             'is_all': is_all,                            
                             csrfmiddlewaretoken: csrf_token
                         },
-                        url: "../../ajax/contraint_delete" ,
+                        url: "../../ajax/constraint_delete" ,
                         success: function (data) {
  
-                            $("#new_contraint"+relationship_id + " #contraint_saving"+data.html).html(""); // Suppression de la ligne dans la div new_contraint
+                            $("#new_constraint"+relationship_id + " #constraint_saving"+data.html).html(""); // Suppression de la ligne dans la div new_constraint
+
+                            if (data.nbre == 0) { 
+                            $("#constraint"+relationship_id).removeClass("btn-danger");
+                            $("#constraint"+relationship_id).addClass("btn-default");
+                            }
+
+
+
                         }
                     }
                 ) 

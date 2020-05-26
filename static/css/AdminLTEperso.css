@@ -1151,6 +1151,55 @@ table.table-bordered.dataTable {
     border : 1px solid #e6e2dd;
 }
 
+.under_constraint{
+    position:absolute;
+    top:0px;
+    left:0px;
+    width:290px;
+    height:235px;
+    border : 1px solid #e6e2dd;
+    background-color: #FFF;
+    z-index : 1500;
+    opacity:0.94;
+
+}
+.label_under_constraint{
+    position:absolute;
+    top:50px;
+    width:290px;
+    font-size: 14px;
+    z-index : 1501;   
+}
+.date_under_constraint{
+    position:absolute;
+    top:5px;
+    width:290px;
+    z-index : 1501;
+    text-align: center;    
+}
+.interdit_under_constraint{
+    position:absolute;
+    top:10px;
+    left:10px;
+    width:70px;
+    z-index : 1501;
+    text-align: center;    
+}
+.text_under_constraint{
+    position:absolute;
+    top:5px;
+    left:85px;
+    width:200px;
+    z-index : 1501;   
+}
+.clear_under_constraint{
+    position:absolute;
+    top:70px;
+    left:5px;
+    width:290px;
+    z-index : 1501;   
+}
+
 
 .card-body{
   text-align: center;

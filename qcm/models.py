@@ -516,6 +516,22 @@ class Relationship(models.Model):
         return done
 
 
+
+    def constraint_to_this_relationship(self,student): # Contrainte. 
+    
+        under_score = True # On suppose que l'élève n'a pas obtenu le score minimum dans les exercices puisqu'il ne les a pas fait. 
+        constraints = Constraint.objects.filter(relationship = self).select_related("relationship__exercise")
+        somme = 0
+        for constraint in constraints : # On étudie si les contraignants ont un score supérieur à score Min
+            exercises = Exercise.objects.filter(supportfile__code = constraint.code)
+            if Studentanswer.objects.filter(student=student, exercise__in = exercises, parcours= self.parcours, point__gte= constraint.scoremin ).exists():
+                somme += 1
+        if somme == len(constraints): # Si l'élève a obtenu les minima à chaque exercice
+            under_score = False # under_score devient False
+
+        return under_score  
+
+
 ########################################################################################################################################### 
 ########################################################################################################################################### 
 ######################################################### FIN  Types de question ########################################################## 
@@ -571,10 +587,10 @@ class Remediation(models.Model):
         return "title {}".format(self.title)
 
  
-class Contraint(models.Model):
+class Constraint(models.Model):
 
-    code = models.CharField(max_length=8, default='', editable=False)
-    relationship = models.ForeignKey(Relationship, on_delete=models.CASCADE, default='',   blank=True, related_name='relationship_contraint') 
+    code = models.CharField(max_length=8, default='', editable=False)# code de l'exo qui constraint
+    relationship = models.ForeignKey(Relationship, on_delete=models.CASCADE, default='',   blank=True, related_name='relationship_constraint') 
     scoremin = models.PositiveIntegerField(  default=80, editable=False)  
 
     def __str__(self):        

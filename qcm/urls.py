@@ -114,7 +114,7 @@ urlpatterns = [
     path('json_delete_remediation/<int:id>', json_delete_remediation, name='json_delete_remediation'),   # suppression via la modal sans rechargement de la page    
 
 
-    path('ajax/contraint_create', ajax_create_contraint, name='ajax_create_contraint'),
-    path('ajax/contraint_delete', ajax_delete_contraint, name='ajax_delete_contraint'), 
+    path('ajax/constraint_create', ajax_create_constraint, name='ajax_create_constraint'),
+    path('ajax/constraint_delete', ajax_delete_constraint, name='ajax_delete_constraint'), 
     path('ajax/infoExo', ajax_infoExo, name='ajax_infoExo'),
  ]

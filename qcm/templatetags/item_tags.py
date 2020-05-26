@@ -267,6 +267,13 @@ def get_score_student_for_this(obj, student):
     return obj.score_student_for_this(student)
 
 
+
+@register.simple_tag ## teste si la relationship est sous constrainte pour cet élève
+def get_constraint_to_this_relationship(obj, student): 
+    return obj.constraint_to_this_relationship(student)
+
+
+
 @register.simple_tag ## donne le score par relation
 def get_an_association_knowledge_supportfile(obj, supportfile): 
     return obj.association_knowledge_supportfile(supportfile)

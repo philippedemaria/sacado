@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required, permission_required,u
 from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group 
-from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Contraint
+from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint
 from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm 
 from socle.models import  Theme, Knowledge , Level , Skill
 from django.http import JsonResponse 
@@ -602,6 +602,7 @@ def show_parcours_student(request, id):
     relationships = Relationship.objects.filter(parcours=parcours, students=student, is_publish=1 ).order_by("order")
     nb_exo_only = [] 
     i=0
+
     for r in relationships :
         if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle:
             i=0
@@ -612,7 +613,7 @@ def show_parcours_student(request, id):
     today = time_zone_user(request.user)
 
     nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count()
-    context = {'relationships': relationships,  'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only, 'today': today ,   }
+    context = {'relationships': relationships,  'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only, 'today': today ,  }
  
     return render(request, 'qcm/show_parcours_student.html', context)
 
@@ -2246,7 +2247,7 @@ def ajax_remediation_viewer(request): # student_view
 
 #######################################################################################################################################################################
 #######################################################################################################################################################################
-#################   contraint
+#################   constraint
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 
@@ -2270,7 +2271,7 @@ def ajax_infoExo(request):
 
 
 @csrf_exempt  
-def ajax_create_contraint(request):
+def ajax_create_constraint(request):
 
     relationship_id = int(request.POST.get("relationship_id"))
 
@@ -2285,35 +2286,37 @@ def ajax_create_contraint(request):
         
         relationships = Relationship.objects.filter(parcours_id = parcours_id, order__lt= this_relationship.order)
         for relationship in relationships :
-            Contraint.objects.get_or_create(code = relationship.exercise.supportfile.code, relationship = this_relationship, defaults={"scoremin" : score , } )
-        data["html"] = "<div id='contraint_saving0'><i class='fa fa-minus-circle'></i> Tous les exercices à "+score+"% <a href='#'  class='pull-right delete_contraint' data-relationship_id='"+str(relationship_id)+"' data-is_all=1 ><i class='fa fa-trash'></i> </a></div>"
+            Constraint.objects.get_or_create(code = relationship.exercise.supportfile.code, relationship = this_relationship, defaults={"scoremin" : score , } )
+        data["html"] = "<div id='constraint_saving0'><i class='fa fa-minus-circle'></i> Tous les exercices à "+score+"% <a href='#'  class='pull-right delete_constraint' data-relationship_id='"+str(relationship_id)+"' data-is_all=1 ><i class='fa fa-trash'></i> </a></div>"
         data["all"] = 1
     else :
-        contraint, created = Contraint.objects.get_or_create(code = code, relationship = this_relationship, defaults={"scoremin" : score , } )
-        data["html"] = "<div id='contraint_saving'"+str(contraint.id)+"><i class='fa fa-minus-circle'></i> Exercice "+code+" à "+score+"% <a href='#'  class='pull-right delete_contraint' data-contraint_id='"+str(contraint.id)+"' data-relationship_id='"+str(relationship_id)+"' data-is_all=0 ><i class='fa fa-trash'></i> </a></div>"
+        constraint, created = Constraint.objects.get_or_create(code = code, relationship = this_relationship, defaults={"scoremin" : score , } )
+        data["html"] = "<div id='constraint_saving'"+str(constraint.id)+"><i class='fa fa-minus-circle'></i> Exercice "+code+" à "+score+"% <a href='#'  class='pull-right delete_constraint' data-constraint_id='"+str(constraint.id)+"' data-relationship_id='"+str(relationship_id)+"' data-is_all=0 ><i class='fa fa-trash'></i> </a></div>"
         data["all"] = 0
  
     return JsonResponse(data)
  
 
 @csrf_exempt  
-def ajax_delete_contraint(request):
+def ajax_delete_constraint(request):
 
     data={}
     is_all  = int(request.POST.get("is_all"))
+    relationship_id = int(request.POST.get("relationship_id")) 
     if is_all == 1 :
-        relationship_id = int(request.POST.get("relationship_id"))   
-        contraints = Contraint.objects.filter(relationship_id = relationship_id)
-        for c in contraints :
+        constraints = Constraint.objects.filter(relationship_id = relationship_id)
+        for c in constraints :
             c.delete()
         data["html"] = 0
-    else : 
-        contraint_id = int(request.POST.get("contraint_id"))     
-        contraint = Contraint.objects.get(id = contraint_id )
-        code = contraint.code
+        data["nbre"] = 0
+    else :
+        constraint_id = int(request.POST.get("constraint_id"))     
+        constraint = Constraint.objects.get(id = constraint_id )
+        code = constraint.code
         data["html"] = code
-        contraint.delete()
-
+        constraint.delete()
+        nbre = Constraint.objects.filter(relationship_id = relationship_id).count() 
+        data["nbre"] = nbre
     return JsonResponse(data)
 
  

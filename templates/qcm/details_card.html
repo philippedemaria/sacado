@@ -40,10 +40,10 @@
               <span id="loading{{ relation.id }}"></span>{% if  relation.date_limit %}{{relation.date_limit }}{% else %}Tâche ?{% endif %}
           </div>
 
-          <!-- Contraint  -->
-          <div class="btn btn-{% if  relation.relationship_contraint.all|length > 0 %}danger{% else %}default{% endif %} select_contraint"  
+          <!-- Constraint  -->
+          <div class="btn btn-{% if  relation.relationship_constraint.all|length > 0 %}danger{% else %}default{% endif %} select_constraint"  
                 style="position: absolute; right : 0px; top:150px;" 
-                id="contraint{{relation.id}}" 
+                id="constraint{{relation.id}}" 
                 data-relationship_id="{{relation.id}}">   
               <i class="fa fa-minus-circle"></i>
           </div>
@@ -75,12 +75,12 @@
                 <input type="type" name="start" data-relationship_id="{{relation.id}}" data-type ="0" value="{{ relation.date_limit|date:"Y-m-d" }}" class="datepicker dateur pull-right" />
           </div>
 
-          <!-- Pop up de la contrainte  -->
-          <div id="detail_contraint{{relation.id}}" class="card-dateur"> 
+          <!-- Pop up de la constrainte  -->
+          <div id="detail_constraint{{relation.id}}" class="card-dateur"> 
 
               <div class="row">
                     <div class="col-sm-12 col-md-12 title">  
-                        <span href="#card{{relation.id}}" class="select_contraint_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>  
+                      <span href="#card{{relation.id}}" class="select_constraint_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>  
                        Contraintes 
                     </div>
                </div> 
@@ -112,43 +112,45 @@
                         <input type="number"  id="scoreMin{{relation.id}}"  maxlength="3"    size="3" value="80"  class="details_relation"  />%
                     </div>
                     <div class="col-sm-6 col-md-2">
-                        <a href="#" data-parcours_id="{{relation.parcours.id}}"  data-relationship_id="{{relation.id}}" id="save_contraint{{relation.id}}" class="save_contraint btn btn-danger">OK</a>
+                        <a href="#" data-parcours_id="{{relation.parcours.id}}"  data-relationship_id="{{relation.id}}" id="save_constraint{{relation.id}}" class="save_constraint btn btn-danger">OK</a>
                     </div>
 
                 </div> 
                 <hr style="padding:0px; margin:10px 0px"/> 
+                <div id="new_constraint{{relation.id}}" class="text-danger">
+                {% if relation.relationship_constraint.all|length == forloop.counter0 %} 
 
-                {% if relation.relationship_contraint.all|length == forloop.counter0 %} 
-
-
-                  <span class="text-red"  style="font-size: 11px;"><i class="fa fa-minus-circle"></i> Tous les exercices précédents</span>
-                      <a href="#"  onclick="return TestDelete('cette contrainte ')" 
-                          class="pull-right delete_contraint" 
-                          data-contraint_id="{{contraint.id}}" 
+                  <div id="constraint_saving0">
+                      <span class="text-red"  style="font-size: 11px;"><i class="fa fa-minus-circle"></i> Tous les exercices précédents</span>
+                      <a href="#"  onclick="return TestDelete('cette constrainte ')"  
+                          class="pull-right delete_constraint" 
+                          data-constraint_id="0" 
                           data-relationship_id="{{relation.id}}"
                           data-is_all=1 >
                           <i class="fa fa-trash"></i> 
                       </a>
-
+                    </div>
 
                 {% else %}   
 
-                  {% for contraint in relation.relationship_contraint.all %}
-                      <span class="text-red"  style="font-size: 11px;"><i class="fa fa-minus-circle"></i> {{ contraint }}</span>
-                      <a href="#" onclick="return TestDelete('cette contrainte ')"
-                                  class="pull-right delete_contraint"  
-                                  data-contraint_id="{{contraint.id}}" 
-                                  data-relationship_id="{{relation.id}}"
-                                  data-is_all=0  >
-                          <i class="fa fa-trash"></i> 
-                      </a>
+                  {% for constraint in relation.relationship_constraint.all %}
+                      <div  id="constraint_saving{{constraint.id}}">
+                        <span class="text-red"  style="font-size: 11px;"><i class="fa fa-minus-circle"></i> {{ constraint }}</span>
+                        <a href="#" onclick="return TestDelete('cette constrainte ')" 
+                                    class="pull-right delete_constraint"  
+                                    data-constraint_id="{{constraint.id}}" 
+                                    data-relationship_id="{{relation.id}}"
+                                    data-is_all=0  >
+                            <i class="fa fa-trash"></i> 
+                        </a>
+                      </div>
                       {% if not forloop.last %}<br>{% endif %}
                   {% empty %}
-                        Aucune contrainte appliquée
+                        Aucune constrainte appliquée
                   {% endfor %}
 
                 {% endif %}   
-                <div id="new_contraint{{relation.id}}" class="text-danger"></div>
+               </div>
           </div>
 
  
