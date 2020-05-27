@@ -852,7 +852,7 @@ def my_profile(request):
 
         return render(request,'account/teacher_form.html', {'teacher_form':teacher_form, 'user_form':user_form, 'teacher':teacher})
 
-    elif request.user.user_type == 1 :
+    elif request.user.user_type == 0 :
 
         student = Student.objects.get(user=user)
         form = StudentForm(request.POST or None, request.FILES or None, instance=student)
