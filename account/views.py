@@ -527,7 +527,7 @@ def detail_student_all_views(request, id):
             parcourses_tab.append(parcours)
 
     for parcours in parcourses_tab :
-        exercises = parcours.exercises.order_by("theme")
+        exercises = parcours.exercises.order_by("theme").prefetch_related('knowledge')
         for exercise in exercises:
             if not exercise in exercise_tab :
                 exercise_tab.append(exercise)
