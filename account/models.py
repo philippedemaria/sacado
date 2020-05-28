@@ -98,7 +98,7 @@ class Student(ModelWithCode):
 
     def resultexercises(self):
         Resultexercise = apps.get_model("qcm","Resultexercise")
-        resultexercises = Resultexercise.objects.filter(student = self )
+        resultexercises = Resultexercise.objects.filter(student = self ).select_related('exercise')
         return resultexercises
 
 
