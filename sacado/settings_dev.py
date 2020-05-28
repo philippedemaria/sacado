@@ -39,3 +39,35 @@ DEBUG_TOOLBAR_CONFIG = {
 INTERNAL_IPS = [
      '127.0.0.1',
 ]
+
+
+cache = 0
+
+if cache == 1:
+    print('memcached activé')
+
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': '127.0.0.1:11211',
+        }
+    }
+    MIDDLEWARE += [
+        'django.middleware.cache.UpdateCacheMiddleware',
+        'django.middleware.common.CommonMiddleware',
+        'django.middleware.cache.FetchFromCacheMiddleware',
+    ]
+elif cache == 2:
+    print('cache db activé')
+    #SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+            'LOCATION': 'my_cache_table',
+        }
+    }
+    MIDDLEWARE += [
+        'django.middleware.cache.UpdateCacheMiddleware',
+        'django.middleware.common.CommonMiddleware',
+        'django.middleware.cache.FetchFromCacheMiddleware',
+    ]
