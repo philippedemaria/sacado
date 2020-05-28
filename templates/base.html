@@ -18,6 +18,9 @@
 
   <!-- Bootstrap CSS File -->
   <link href="{% static 'index/lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{% static 'plugins/select2/select2.min.css' %}">
+
 
   <!-- Libraries CSS Files -->
   <link href="{% static 'index/lib/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
@@ -218,6 +221,8 @@
   <script src="{% static 'index/js/main.js' %}"></script> 
     {% block general_js %}
   <script src="{% static 'js/script/accueil.js' %}"></script> 
+  <script src="{% static 'js/lib/select2.full.min.js' %}"></script>      
+  <script src="{% static 'js/script/config-select2-accueil.js' %}"></script> 
     {% endblock %} 
 </body>
 </html>

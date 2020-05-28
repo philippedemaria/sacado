@@ -211,6 +211,48 @@
             });
 
 
+        $("#join_alone").hide();
+        $("#parcours_div").hide();
+        $('#level_selected').toggle(500); 
+
+
+        $("#choose_alone").click(function(){
+
+                $('#level_choose').toggle(500);
+                $('#level_selected').toggle(500); 
+                $('#join_alone').toggle(500);
+                $('#join_group').toggle(500); 
+                $('#id_group').toggle(500); 
+
+                if ($(this).is(":checked") && (sommeS == 1)) {    
+     
+                $('#send_alone').prop('disabled', false);
+                } 
+                else{
+                $('#send_alone').prop('disabled', true);
+                }
+
+            });
+
+
+
+        $("#send_alone").click(function(){
+
+
+            level_selector = $('#level_selector').val(); 
+            
+            if (level_selector == "") {
+                alert('Vous devez sélectionner au moins un niveau');
+                return false;
+            }
+
+        });
+
+
+
+
+
+
 	});
 
  

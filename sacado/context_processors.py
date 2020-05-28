@@ -40,32 +40,23 @@ def menu(request):
 		elif  request.user.user_type == 0 : #student
 
 			student = Student.objects.get(user = request.user)
-			 
- 
 			last_exercises_done = Studentanswer.objects.filter(student=student).order_by("-date")[:10]
-
 			nb_exercise = Exercise.objects.filter(level=student.level).count()  
 			parcours = Parcours.objects.filter(is_publish = 1 , exercises__level=student.level).exclude(author=None)
 			parcourses = Parcours.objects.filter(is_publish = 1 , is_evaluation = 0 , students=student) # tous les parcours attribués à cet élève
 			studentanswers = Studentanswer.objects.filter(student=student) 
  
- 
-
 			return {   
-
 			'student' : student ,  
 			'parcourses' : parcourses,  
 			'parcours' : parcours,  
 			'last_exercises_done' : last_exercises_done,   
-
 			}
 
 
 		elif  request.user.user_type == 1 : #student
-
 			this_user = User.objects.get(pk=request.user.id)
  
-
 			return {   
 			'this_user' : this_user , 
  

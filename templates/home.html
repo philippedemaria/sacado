@@ -254,11 +254,12 @@
                     {% include 'student_form.html' %}
                     <div style="height: 40px"></div>
                     <div class="row">
-        
                         <div class="col-lg-6 col-xs-6">   
-                            <div class="form-group"><input name="envoi" type="submit" class="btn btn-primary sendit"  disabled value="Rejoindre mon groupe" /></div>
+                            <div class="form-group"><input name="envoi" id="join_group" type="submit" class="btn btn-primary sendit"  disabled value="Rejoindre mon groupe" /></div>
                         </div> 
-        
+                        <div class="col-lg-6 col-xs-6" id="join_alone">   
+                            <div class="form-group"><input name="send_alone" type="submit" class="btn btn-primary" id='send_alone'  disabled value="S'inscrire individuellement" /></div>
+                        </div> 
                     </div> 
                 </form> 
           </div>
