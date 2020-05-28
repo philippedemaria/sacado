@@ -113,10 +113,7 @@ class Knowledge(models.Model):
     name = models.CharField(max_length=10000, verbose_name="Nom")
  
     def __str__(self):
-        Exercise = apps.get_model('qcm', 'Exercise')
-        nb = Exercise.objects.filter(knowledge=self).count()
-
-        return "{} [{}]".format(self.name,nb)
+        return self.name
 
  
     def used(self):

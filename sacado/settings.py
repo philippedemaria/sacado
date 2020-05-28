@@ -220,5 +220,3 @@ CKEDITOR_CONFIGS = {
 # EMAIL_HOST_USER = 'mem@erlm.tn'
 # EMAIL_HOST_PASSWORD = 'zHPT6NhgXn7nfPj'
 # EMAIL_USE_TLS = True
-
-
