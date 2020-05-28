@@ -149,26 +149,16 @@ class Student(ModelWithCode):
     def nb_knowledge_worked(self, group):
 
         Resultknowledge = apps.get_model('account', 'Resultknowledge')
-        try :
-            exercises = group.parcours.exercises.all()
-        except :
-            Relationship = apps.get_model('qcm', 'Relationship')
-            relationships = Relationship.objects.filter(students = self)
-            exercises = []
-            for r in relationships:
-                exercises.append(r.exercise) 
-            
-        historic = []
-        i=0
-        for e in exercises :
-            if not e.knowledge.id in historic :
-                i+=1
-            historic.append(e.knowledge.id)
+        Relationship = apps.get_model('qcm', 'Relationship')
 
+        relationships = Relationship.objects.filter(students = self).values_list("exercise__knowledge__id").order_by("exercise__knowledge__id").distinct()
+            
+        n = relationships.count()
         knowledges = group.level.level_knowledge.all()
+
         nb = Resultknowledge.objects.filter(student = self, knowledge__in=knowledges).count()
 
-        return  str(nb)+"/"+str(i) 
+        return  str(nb)+"/"+str(n) 
 
 
     def is_in_parcours(self, parcours):

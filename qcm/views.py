@@ -184,41 +184,7 @@ def associate_parcours(request,id):
 #######################################################################################################################################################################
 
 
-"""
-@login_required
-@user_is_group_teacher
-def populate_parcours(request,id):
-    teacher = Teacher.objects.get(user_id=request.user.id)
-    group = Group.objects.get(id=id)
-    parcours = group.parcours
-    # Récolte des id des anciens exercices.
-    old_exercice_ids = Relationship.objects.values_list("exercise_id", flat=True).filter(parcours=parcours,
-                                                                                         exercise__supportfile__is_title=0)
-
-    data = []
-    level = group.level
-    themes = level.themes.order_by("id")
-    for theme in themes:
-        themes_dict = {}
-        themes_dict["name"] = theme.name
-        knowlegdes = Knowledge.objects.filter(theme=theme, level=level).order_by("theme")
-        knowledges_tab = []
-        for knowledge in knowlegdes:
-            knowledges_dict = {}
-            knowledges_dict["name"] = knowledge
-            exercises = Exercise.objects.filter(knowledge=knowledge).order_by("theme")
-            exercises_tab = list(exercises)
-
-            knowledges_dict["exercises"] = exercises_tab
-            knowledges_tab.append(knowledges_dict)
-        themes_dict["knowledges"] = knowledges_tab
-        data.append(themes_dict)  # Tous les exercices du niveau...
-
-    context = {'data': data, 'parcours': parcours, 'group': group, 'user': request.user}
-
-    return render(request, 'qcm/form_populate_parcours.html', context)
-
-"""
+ 
 
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_populate(request):  

@@ -50,7 +50,7 @@ def index(request):
 
 
             parcours_tab = Parcours.objects.filter(students=None,teacher = teacher,is_favorite = 1)
-            print(parcours_tab)
+
 
             context = {   'this_user' : this_user , 'teacher' : teacher ,  'groups' : groups ,   'parcourses' : parcourses ,   'relationships' : relationships ,  \
              'communications' : communications , 'parcours_tab' : parcours_tab , 'nb_teacher_level' : nb_teacher_level }

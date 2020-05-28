@@ -239,13 +239,7 @@ def delete_group(request, id):
         if Group.objects.filter(students=student).exclude(pk=group.id) == 0 :
             student.student_user.delete()
             student.delete()
-    """
-    parcours = group.parcours
-    relationships = Relationship.objects.filter(parcours=parcours)
-    for r in relationships:
-        r.delete()
-    parcours.delete() 
-    """
+
     group.delete()
     return redirect('index')
 
@@ -532,21 +526,23 @@ def associate_exercise_by_parcours(request,id,idt):
     theme = Theme.objects.get(id = idt)
     knowledge_id = request.POST.get("knowledge_id_modal") 
     knowledge = Knowledge.objects.get(id=int(knowledge_id))
-    parcours = group.parcours
+    teacher = Teacher.objects.get(user=request.user)
+    parcourses = Parcours.objects.filter(teacher = teacher, level = group.level)
 
-    old_exercice_ids =  Relationship.objects.values_list("exercise_id",flat=True).filter(parcours = parcours, exercise__knowledge = knowledge, exercise__supportfile__is_title = 0)
-    #Suppression des anciens.
-    ex_ids = request.POST.getlist('exercises')        
-    for old_exercice_id in old_exercice_ids :
-        if old_exercice_id not in ex_ids :
-            Relationship.objects.get(parcours = parcours , exercise_id = old_exercice_id).delete()
-    i=0
-    es = Exercise.objects.values_list("id",flat=True).filter(level = group.level) # liste des exercices existants dans ce parcours
-    # enregistrement des exercices nouvellement choisis y compris les anciens !
-    for ex_id in ex_ids :
-        exo = Exercise.objects.get(id=ex_id)
-        Relationship.objects.get_or_create(parcours = parcours , exercise = exo , defaults={"order" :  i, "is_publish": 1 , "start": None , "date_limit": None })
-        i+=1
+    for parcours in parcourses : 
+        old_exercice_ids =  Relationship.objects.values_list("exercise_id", flat=True).filter(parcours = parcours, exercise__knowledge = knowledge, exercise__supportfile__is_title = 0)
+        #Suppression des anciens.
+        ex_ids = request.POST.getlist('exercises')        
+        for old_exercice_id in old_exercice_ids :
+            if old_exercice_id not in ex_ids :
+                Relationship.objects.get(parcours = parcours , exercise_id = old_exercice_id).delete()
+        i=0
+        es = Exercise.objects.values_list("id",flat=True).filter(level = group.level) # liste des exercices existants dans ce parcours
+        # enregistrement des exercices nouvellement choisis y compris les anciens !
+        for ex_id in ex_ids :
+            exo = Exercise.objects.get(id=ex_id)
+            Relationship.objects.get_or_create(parcours = parcours , exercise = exo , defaults={"order" :  i, "is_publish": 1 , "start": None , "date_limit": None })
+            i+=1
 
  
     return redirect('result_group_theme', group.id, theme.id)
