@@ -7,23 +7,23 @@
 
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
         <li {% if 'parcours_group/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'list_parcours_group' group.id  %}" ><i class="fa fa-map"></i> Accéder à ses parcours
+            <a href="{% url 'list_parcours_group' group.id  %}" ><i class="fa fa-th fa-fw"></i> Accéder à ses parcours
             </a>
         </li> 
         <li {% if 'group/update/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'update_group' group.id %}"  > <i class="fa fa-cogs"  ></i><span class="small_displayer"> Configurer</span></a>    
+            <a href="{% url 'update_group' group.id %}"  > <i class="fa fa-cogs fa-fw"  ></i><span class="small_displayer"> Configurer</span></a>    
         </li>             
         
         <li {% if 'group/show/' in request.path %} class="active" {% endif %}>
-             <a href="{% url 'show_group' group.id  %}" ><i class="fa fa-arrow-circle-right"></i>  Lire les détails </a>
+             <a href="{% url 'show_group' group.id  %}" ><i class="fa fa-arrow-circle-right fa-fw fa-fw"></i>  Lire les détails </a>
         </li>     
         <li {% if 'result_group_exercise/' in request.path %} class="active" {% endif %}>
-            <a  href="{% url 'result_group_exercise'  group.id %}"  ><i class="fa fa-mortar-board"></i> Lire le suivi des acquisitions </a> 
+            <a  href="{% url 'result_group_exercise'  group.id %}"  ><i class="fa fa-mortar-board fa-fw"></i> Lire le suivi des acquisitions </a> 
         </li>  
         <li {% if 'task_group/' in request.path %} class="active" {% endif %}>
 
         <li {% if 'schedule_task_group/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'schedule_task_group' group.id  %}"  > <i class="fa fa-calendar-check-o"></i> Lire le calendrier des tâches</a>
+            <a href="{% url 'schedule_task_group' group.id  %}"  > <i class="fa fa-calendar-check-o fa-fw"></i> Lire le calendrier des tâches</a>
         </li> 
 
 
@@ -32,20 +32,20 @@
         <li {% if 'task_group/' in request.path %} class="active" {% endif %}>
             {% if group.is_task_exists %}
                 <a  href="{% url 'all_my_tasks'  %}"  >
-                    <i class="fa fa-calendar-check"></i> 
+                    <i class="fa fa-calendar-check fa-fw"></i> 
             {% else %}
                 <a  href="{% url 'task_group' group.id   %}"  >
-                    <i class="fa fa-calendar"></i>  
+                    <i class="fa fa-calendar fa-fw"></i>  
             {% endif %}
-                    <span class="small_displayer">Lire le suivi des tâches</span>
+                     Lire le suivi des tâches
                 </a> 
         </li>    
         <li {% if 'group/stats/' in request.path %} class="active" {% endif %}>
-             <a href="{% url 'stat_group' group.id   %}"   ><i class="fa fa-bar-chart"></i> Lire les stats</a>
+             <a href="{% url 'stat_group' group.id   %}"   ><i class="fa fa-bar-chart fa-fw"></i> Lire les stats</a>
         </li> 
         <li class="divider"></li>
         <li>
-             <a href="{% url 'index'   %}"   ><i class="fa fa-th"></i> Accéder à mes groupes</a>
+             <a href="{% url 'index'   %}"   ><i class="fa fa-users fa-fw"></i> Accéder à mes groupes</a>
         </li> 
 
 

@@ -18,7 +18,7 @@
  
 
 {% block page_title %}
-       <span style="color:{{ group.color }}"><i class="fa fa-map"></i> {{ group }}    <img width="25px" src="{% static 'img/angle-right.png' %}"/> Parcours </span>  
+       <span style="color:{{ group.color }}"><i class="fa fa-th"></i> Parcours de {{ group }}       </span>  
 {% endblock %}
 
 {% block page_menu_right %}
@@ -173,19 +173,19 @@
             <div class="box-footer">
                 <div class="row extend"> 
                     <div class="col-lg-4 col-xs-4">
-                        <a href="{% url 'show_parcours' parcours.id   %}"  class="edit"><i class="fa fa-th"></i> <span class="label_icon">Vignettes </span> </a> 
+                        <a href="{% url 'show_parcours' parcours.id   %}"  class="edit"><i class="fa fa-laptop"></i> <span class="label_icon">Exercices </span> </a> 
                     </div>   
                     <div class="col-lg-4 col-xs-4">
                         <a href="{% url 'update_parcours' parcours.id  group.id  %}"  class="edit"><i class="fa fa-cogs"></i> <span class="label_icon">Config.</span> </a> 
                     </div>                   
             
                     <div class="col-lg-4 col-xs-4">
-                        <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"  class="edit"><i class="fa fa-tasks"></i> <span class="label_icon">Section.</span> </a> 
+                        <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"  class="edit"><i class="fa fa-indent"></i> <span class="label_icon">Section.</span> </a> 
                     </div>  
                 </div>
                 <div class="row extend">                              
                     <div class="col-lg-4 col-xs-4">
-                        <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit"><i class="fa fa-laptop"></i> <span class="label_icon">Exercices</span>
+                        <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit"><i class="fa fa-cloud"></i> <span class="label_icon">Sélect.</span>
                         </a>  
                     </div>  
                     <div class="col-lg-4 col-xs-4">

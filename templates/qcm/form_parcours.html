@@ -23,9 +23,10 @@
 
 {% block page_title %}
     {% if parcours %}
-        <span style="color:{{ parcours.color }}"><i class="fa fa-map"></i> {{ parcours }}    </span>   <small><img src="{% static 'img/angle-right.png' %}"/> Modification</small>   
+        <span style="color:{{ parcours.color }}"><i class="fa fa-cogs
+        "></i> {{ parcours }}    </span>   <small><img src="{% static 'img/angle-right.png' %}"/> Modification</small>   
     {% else %}
-       <i class="fa fa-map"></i> Nouveau parcours   
+       <i class="fa fa-th"></i> Nouveau parcours   
     {% endif %}
 
 {% endblock %}
@@ -57,7 +58,7 @@
                 <div class="col-sm-12 col-md-12">
                     <div class="alert alert-info">
                         <i class="fa fa-warning"></i> Pour associer un parcours à un groupe, tout ou partie, il faut cocher <strong>au moins</strong> un élève de ce groupe. Une fois le parcours créé, vous pourrez choisir ses exercices via l'interface du parcours depuis l'un des groupes associés. 
-                        <br>Si le parcours ne contient aucun élève, il n'est accessible que depuis la rubrique <i class="fa fa-map"></i> Parcours, dans le menu vertical à gauche.
+                        <br>Si le parcours ne contient aucun élève, il n'est accessible que depuis la rubrique <i class="fa fa-th"></i> Parcours, dans le menu vertical à gauche.
                     </div>
                 </div>
             </div> 
@@ -248,7 +249,7 @@
                         <div class="help_menu_left_bar">
                            <br><i class="fa fa-user"></i> Compte : Déconnexion/Mon profil/Changer mon mot de passe/Clôturer mon compte/Notifications
                            <br><i class="fa fa-tachometer-alt"></i> Tableau de bord : Vers le tableau de bord, cette page
-                           <br><i class="fa fa-map"></i> Parcours : Liste de tous mes parcours pour leur configuration.
+                           <br><i class="fa fa-th"></i> Parcours : Liste de tous mes parcours pour leur configuration.
                            <br><i class="fa fa-inbox"></i>  Messages : Messagerie succinte vers les membres de sacado et mes groupes.
                         </div>
                     </div>

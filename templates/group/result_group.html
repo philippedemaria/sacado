@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block page_title %}
-    {% if 'exercise' in request.path %} <i class='fa fa-mortar-board'></i> {% else %}<i class='fa fa-trophy'></i> {% endif %}  {{ group.name }}  
+    <i class='fa fa-mortar-board'></i>  {{ group.name }}  
     <img src="{% static 'img/angle-right.png' %}" width="15px"/> {% if 'exercise' in request.path %} Exercices {% elif 'skill' in request.path %}  Compétences {% else %}  Savoir faire{% endif %} 
     {% if theme %} <img src="{% static 'img/angle-right.png' %}" width="15px"/> <small>{{ theme }}</small>  {% endif %} 
 
@@ -51,8 +51,6 @@
             {% endfor %}
         </ul>
     </li>
-    <li><a href="{%  url 'index' %}"  class="no_button" > Mes groupes </a></li>
-
 
     {% if request.user.is_extra %}
     <a href="{% url 'print_statistiques' group.id 0 %}"  class="btn btn-xs btn-default" id="print_stats" ><span id="loading_stats"></span> Export <img src="{% static 'img/pdf.png' %}" width="15px"/></a>
