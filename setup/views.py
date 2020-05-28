@@ -39,7 +39,7 @@ def index(request):
         if request.user.user_type == 2  :
 
             teacher = Teacher.objects.get(user = request.user)
-            groups = Group.objects.filter(teacher  = teacher)
+            groups = Group.objects.filter(teacher  = teacher).prefetch_related('students')
             this_user =  request.user 
             nb_teacher_level = teacher.levels.count()
 
