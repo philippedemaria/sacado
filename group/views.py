@@ -347,11 +347,12 @@ def result_group(request, id):
 @user_is_group_teacher
 def result_group_theme(request, id, idt):
 
+    teacher = Teacher.objects.get(user=request.user)
     group = Group.objects.get(id=id)
     form = EmailForm(request.POST or None )
     theme = Theme.objects.get(id=idt)
     knowledges = Knowledge.objects.filter(level = group.level,theme = theme).order_by("theme")
-    context = {  'group': group, 'form': form, 'theme': theme,  "knowledges" : knowledges, "slug" : theme.slug, }
+    context = {  'group': group, 'form': form, 'theme': theme,  "knowledges" : knowledges, "teacher" : teacher, "slug" : theme.slug, }
 
     return render(request, 'group/result_group.html', context )
 

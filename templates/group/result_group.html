@@ -101,7 +101,7 @@
                                     <a class="marklegend" data-toggle='modal' href="#"
                                                           data-target='#knowledge_details' data-group_id ="{{ group.id }}"
                                                           data-knowledge_id="{{ knowledge.id }}" >
-                                          {% get_exercise_used knowledge group as nb_exercise_used %}
+                                          {% get_exercise_used knowledge group teacher  theme as nb_exercise_used %}
                                            {{ nb_exercise_used }}/{{ knowledge.nb_exercise }}
                                     </a>  
                                     </form>

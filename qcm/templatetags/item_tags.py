@@ -188,8 +188,8 @@ def get_exercises_by_knowledge(obj,student,group): ##
 
 
 @register.simple_tag ##  teste si un exerice est uitlisé dans un groupe
-def get_exercise_used(obj,group): 
-    return obj.nb_exercise_used(group)
+def get_exercise_used(obj,group,teacher,theme): 
+    return obj.nb_exercise_used(group,teacher,theme)
 
 
 @register.simple_tag  ##  retourne le score par thème d'un groupe par élève
