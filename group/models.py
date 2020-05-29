@@ -59,7 +59,7 @@ class Group(ModelWithCode):
         Relationship = apps.get_model('qcm', 'Relationship')
         today = timezone.now()
         test = False
-        students = self.students.all()
+        students = self.students.prefetch_related("students_relationship")
         for student in students:
             if Relationship.objects.filter(exercise__students=student, date_limit__gte=today).count() > 0:
                 test = True
@@ -67,39 +67,39 @@ class Group(ModelWithCode):
 
         return test
 
-    def nb_parcours(self):
-        students = self.students.prefetch_related('parcours').all()
+
+
+    def parcours_counter(self):
+        """
+        Donne le nombre total de parcours, le nombre de visibles et de publiés du groupe
+        """
+ 
+        students = self.students.order_by("user__last_name")
+        number_of_parcours_of_this_level_by_this_teacher = self.teacher.teacher_parcours.filter(level = self.level).count()
         parcours_tab = []
+        parcours_id_tab = [] 
+
         for student in students:
             parcourses = student.students_to_parcours.all()
-            for parcours in parcourses:
-                if parcours.id not in parcours_tab:
-                    parcours_tab.append(parcours.id)
-        nb_parcours = len(parcours_tab)
-        return nb_parcours
+            parcours_tab = [parcours for parcours in  parcourses if  parcours.id not in parcours_id_tab]
+            if len(parcours_tab) == number_of_parcours_of_this_level_by_this_teacher :
+                break
+
+        data , nbf, nbp  = {} , 0 , 0
+        for parcours in parcours_tab :
+            if parcours.is_favorite :
+                nbf +=1
+            if parcours.is_publish :
+                nbp +=1
+
+        data["count_students"] = students.values("user").count()
+        data["students"] = students.values("user__id", "user__last_name","user__first_name")
+        data["nb_parcours"] = len(parcours_tab)
+        data["nb_parcours_visible"] = nbp
+        data["nb_parcours_favorite"] = nbf  
+        return data
+
+ 
 
 
-    def nb_parcours_visible(self):
-
-        students = self.students.prefetch_related('parcours').all()
-        parcours_tab = []
-        for student in students:
-            parcourses = student.students_to_parcours.filter(is_publish=1)
-            for parcours in parcourses:
-                if parcours.id not in parcours_tab:
-                    parcours_tab.append(parcours.id)
-        nb_parcours = len(parcours_tab)
-        return nb_parcours
-
-
-    def nb_parcours_favorite(self):
-
-        students = self.students.prefetch_related('parcours').all()
-        parcours_tab = []
-        for student in students:
-            parcourses = student.students_to_parcours.filter(is_favorite=1)
-            for parcours in parcourses:
-                if parcours.id not in parcours_tab:
-                    parcours_tab.append(parcours.id)
-        nb_parcours = len(parcours_tab)
-        return nb_parcours
+ 

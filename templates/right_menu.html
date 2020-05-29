@@ -6,7 +6,7 @@
 <div class="events {% if relationships|length > 6  %}  div_events{% endif %}" >
 
  
-            {% for relationship in relationships|dictsort:"date_limit" %}
+            {% for relationship in relationships %}
             <li class="sans_puce"><i class="fa fa-square" style="color: {{ relationship.parcours.color }}"></i> 
               {{ relationship.date_limit|date:"d.m.y" }} :
 
@@ -35,7 +35,7 @@
 <hr>
 <div {% if parcourses|length > 8  %} class="div_accordion" {% endif %}>
     <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
-    {% for parcours in parcourses|dictsortreversed:"is_publish" %}
+    {% for parcours in parcourses  %}
     <div class="btn btn-default full_width" style="text-align: left; font-size:15px; margin-bottom: 5px">
 
             <span data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}" class="parcours_displayer" >
@@ -47,12 +47,18 @@
                 <table class="table" style="margin-bottom: 0px;font-size:14px;color : {{  parcours.color }}">
                     <tr>
                         <td>
-                            <a href="{% url 'show_parcours' parcours.id   %}"  style="color : {{  parcours.color }}">{{ parcours.exercises.count }} exercice{{ parcours.exercises.count|pluralize }}</a> 
+                            <a href="{% url 'show_parcours' parcours.id   %}"  style="color : {{  parcours.color }}">
+                                    {% with  parcours.exercises.count as cot %}
+                                        {{ cot }} exercice{{ cot|pluralize }}
+                                    {% endwith %}
+                            </a> 
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            {{ parcours.students.count }} élève{{ parcours.students.count|pluralize }}
+                        {% with  parcours.students.count as ct %}
+                            {{ ct }} élève{{ ct|pluralize }}
+                        {% endwith %}
                         </td>
                     </tr>
                     <tr>
@@ -85,7 +91,9 @@ Aucun parcours
 <div class="btn btn-default full_width" style="text-align: left; font-size:15px; margin-bottom: 5px">
 
         <span data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}">
-            {{ nb_teacher_level }} niveau{{ nb_teacher_level|pluralize:"x" }}  préféré{{  nb_teacher_level|pluralize }}  <i class="fa fa-caret-down pull-right"></i>
+         {% with  nb_teacher_level as nbteacherlevel %}
+            {{ nbteacherlevel }} niveau{{ nbteacherlevel|pluralize:"x" }}  préféré{{  nbteacherlevel|pluralize }}  <i class="fa fa-caret-down pull-right"></i>
+         {% endwith %}
         </span>
 
     <div id="collapse{{ forloop.counter }}" class="collapse">
@@ -113,9 +121,11 @@ Aucun parcours
 
 
 {% if user.user_type == 2 %}
-    <a href="#" data-toggle='modal' data-target='#nouveaute'   class="btn btn-{% if communications|length > 0 %}danger{% else %}default{% endif %} full_width" >
-        {% if communications|length > 0 %}Lire {% endif %}Les nouveautés 
+    {% with  communications|length as communications_length %}
+    <a href="#" data-toggle='modal' data-target='#nouveaute'   class="btn btn-{% if communications_length > 0 %}danger{% else %}default{% endif %} full_width" >
+        {% if communications_length > 0 %}Lire {% endif %}Les nouveautés 
     </a>
+    {% endwith %}
 {% endif %}
 
 {% endif %}

@@ -5,6 +5,7 @@
     <div class="col-xs-12 col-md-10 col-lg-10" style="margin-top:20px">
         <div class="row">
             {% for group in groups %}
+                {% with group.parcours_counter as data %}
                 <div class="col-lg-4 col-md-6  col-xs-6">
                     <!-- small box -->
                     <div class="small-box" style="background-color:{{ group.color }}">
@@ -13,11 +14,11 @@
                             <form action="" method="POST">
                             {% csrf_token %}
                             <a href="#" class="vue menuaction" data-toggle='modal' style="float:left; margin-right:10px"
-                               data-group_name='{{ group.name }}' data-group_id='{{ group.id }}' data-target='#exampleModal'> <span class="label label-default"> {{ group.students.count }}<i class="fa fa-users"></i></span></a>
+                               data-group_name='{{ group.name }}' data-group_id='{{ group.id }}' data-target='#exampleModal'> <span class="label label-default"> {{ data.count_students }}<i class="fa fa-users"></i></span></a>
                             </form>
                             <font style="font-size:12px; color:#CCC">
-                                {% for s in group.students.all|dictsort:"user.last_name" %} 
-                                    <a href="{% url 'detail_student_all_views'  s.user.id   %}" class="small_users"> {{s}} </a>{% if not forloop.last %}, {% endif %}
+                                {% for s in data.students %} 
+                                    <a href="{% url 'detail_student_all_views'  s.user__id   %}" class="small_users"> {{s.user__last_name|capfirst}} {{s.user__first_name|capfirst}}</a>{% if not forloop.last %}, {% endif %}
                                 {% empty %}
                                     Aucun élève 
                                 {% endfor %}
@@ -31,13 +32,14 @@
                         <div class="inner" style="color:white;opacity:0.9">
                             <span style="color:white;font-size: 35px">{{ group.name }} </span> <br>
                              <span style="color:white;font-size: 16px"><i class="fa fa-barcode"></i> {{ group.code }}</span></h3> 
-                            {% if group.nb_parcours > 0 %}
+
+                            {% if data.nb_parcours > 0 %}
                             <h4><br>
                                 <a href="{% url 'list_parcours_group' group.id  %}" class="white"> <i class="fa fa-th" style="color:white;font-size: 26px"></i>
-                                    <span style="color:white;font-size: 16px">{{ group.nb_parcours }} parcours dont {{ group.nb_parcours_visible }} publié{{ group.nb_parcours_visible|pluralize }}, {{ group.nb_parcours_favorite }} favori{{ group.nb_parcours_favorite|pluralize }} </span>
+                                    <span style="color:white;font-size: 16px">{{ data.nb_parcours }} parcours dont {{ data.nb_parcours_visible }} publié{{ data.nb_parcours_visible|pluralize }}, {{ data.nb_parcours_favorite }} favori{{ data.nb_parcours_favorite|pluralize }} </span>
                                 </a>
                             </h4>
-                            {% endif  %}
+                            {% endif  %} 
                         </div>
                         <!-- Icon de la small-box -->
                         <div class="icon">
@@ -47,7 +49,7 @@
                         <!-- Menu de la small-box -->
 
                         <div class="small-box-footer">
-                            {% if group.nb_parcours == 0 %}
+                            {% if data.nb_parcours == 0 %}
                                 <div class="row">                              
                                     <div class="col-lg-6 col-xs-3" style="padding-right:0px">
                                          <a href="{% url 'list_parcours_group' group.id  %}" class="label_small_box"><i class="fa fa-th"></i><span class="small_displayer"> Cloner, créer un parcours</span> </a>   
@@ -106,6 +108,7 @@
                         </div>
                     </div>
                 </div>
+                {% endwith %}
             {% endfor %}
 
             {% if nb_teacher_level == 0 %} 
@@ -163,13 +166,13 @@
                             <a href="{% url 'show_parcours'  parcours.id  %}" style="color:{{ parcours.color|contrast_color }};"> {{ parcours.title|truncatechars:"18" }}
                                 <span style="font-size:12px"> 
                                     {% if parcours.linked %}({{ parcours.level}}){% endif %}
-                                    {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}
-                                    {% if not parcours.linked %}, 
-                                        {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }} {% endif %}min.
-                                    {% endif %}
-                                </span>
+                                    {% with parcours.nb_exercises as nb_p_exercises %}
+                                        {{ nb_p_exercises }} exercice{{ nb_p_exercises|pluralize }}
+                                    {% endwith %}
+                                    {{  parcours.duration_overall|int_minutes }}min.
+                                 </span>
                             </a>
-                            {% if parcours.group_list|length > 1 %}
+                            {% if parcours.parcours_shared %}
                             <span class="shared" style="color:{{ parcours.color }};">Parcours partagé</span>
                             {% endif %} 
                         </div>

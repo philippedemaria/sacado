@@ -421,21 +421,14 @@ class Parcours(ModelWithCode):
                 exercises_level_tab.append(e.level)
         return exercises_level_tab
 
+
     def duration_overall(self):
         som = self.duration
-        for e in self.exercises.all().prefetch_related('supportfile'):
-            som += e.supportfile.duration
+        for d in self.parcours_relationship.values_list('duration',flat=True):
+            som += d
         return som 
 
-
-
-    def evaluation_duration(self):
-
-        relationships = Relationship.objects.filter(parcours= self)
-        som = self.duration
-        for r in relationships : 
-            som += r.duration
-        return som 
+ 
 
 
     def group_list(self):
@@ -450,6 +443,15 @@ class Parcours(ModelWithCode):
 
         return group_tab 
 
+    def parcours_shared(self):
+
+        students = self.students.all() #Elève d'un parcours
+        shared = False
+        for s  in students :
+            if len(s.students_to_group.all()) > 1 :
+                shared = True
+                break
+        return shared
 
 
 
