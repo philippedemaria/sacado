@@ -4,6 +4,7 @@ from django.apps import apps
 from django.db.models import Avg
 from datetime import datetime
 from django.utils import timezone
+from django.core.exceptions import ObjectDoesNotExist
 
 
 today = timezone.now().date()
@@ -128,24 +129,22 @@ class Knowledge(models.Model):
     def nb_exercise_used(self, group, teacher, theme):
 
         Parcours = apps.get_model('qcm', 'Parcours')
-        parcourses = Parcours.objects.filter(teacher = teacher, exercise__level = group.level, , exercise__theme = theme )
+        parcourses = Parcours.objects.filter(teacher = teacher, exercise__level = group.level , exercise__theme = theme )
         try :
             nb = group.parcours.exercises.filter(knowledge=self).count()
         except :
-            
-        Exercise = apps.get_model('qcm', 'Exercise')
+            Exercise = apps.get_model('qcm', 'Exercise')
         nb = Exercise.objects.filter(knowledge=self, level = group.level).count()
         return nb 
 
 
     def send_scorek(self,student):
- 
-        Resultknowledge = apps.get_model('account', 'Resultknowledge')
-        try :
-            r = Resultknowledge.objects.get(student = student, knowledge = self)
-            score = int(r.point)
-        except :
-            score ="" 
+
+        try:
+            r = self.results_k.get(student=student)
+            score = r.point
+        except ObjectDoesNotExist:
+            score = ""
 
         return score
 

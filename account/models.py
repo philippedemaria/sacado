@@ -229,13 +229,12 @@ class Teacher(models.Model):
 
 
 class Resultknowledge(models.Model):
-    student = models.ForeignKey(Student,   related_name = "student_resultknowledge", default="", on_delete=models.CASCADE, editable=False)
-    knowledge = models.ForeignKey(Knowledge,   related_name = "knowledge_resultknowledge", on_delete=models.CASCADE, editable=False)
-    point  = models.PositiveIntegerField(default=0 ) 
+    student = models.ForeignKey(Student, related_name="results_k", default="", on_delete=models.CASCADE, editable=False)
+    knowledge = models.ForeignKey(Knowledge, related_name="results_k", on_delete=models.CASCADE, editable=False)
+    point = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return "{}".format(self.point)  
-
+        return "{}".format(self.point)
 
     class Meta:
         unique_together = ['student', 'knowledge']
