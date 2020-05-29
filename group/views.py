@@ -351,8 +351,17 @@ def result_group_theme(request, id, idt):
     group = Group.objects.get(id=id)
     form = EmailForm(request.POST or None )
     theme = Theme.objects.get(id=idt)
-    knowledges = Knowledge.objects.filter(level = group.level,theme = theme).order_by("theme")
-    context = {  'group': group, 'form': form, 'theme': theme,  "knowledges" : knowledges, "teacher" : teacher, "slug" : theme.slug, }
+    knowledges = Knowledge.objects.filter(level = group.level,theme = theme) 
+
+    number_of_parcours_of_this_level_by_this_teacher = group.teacher.teacher_parcours.filter(level = group.level).count()
+    parcours_id_tab , parcours_tab = [] , []
+    for student in group.students.all():
+        parcourses = student.students_to_parcours.all()
+        parcours_tab = [parcours for parcours in  parcourses if  parcours.id not in parcours_id_tab]
+        if len(parcours_tab) == number_of_parcours_of_this_level_by_this_teacher :
+            break
+
+    context = {  'group': group, 'form': form, 'theme': theme,  "knowledges" : knowledges, "teacher" : teacher, "slug" : theme.slug, 'parcours_tab' : parcours_tab , }
 
     return render(request, 'group/result_group.html', context )
 
@@ -509,12 +518,12 @@ def select_exercise_by_knowledge(request):
     data={}
     group_id = request.POST.get("group_id") 
     group = Group.objects.get(id = int(group_id))
-
+    teacher = Teacher.objects.get(user = request.user)
     knowledge_id = request.POST.get("knowledge_id") 
     knowledge = Knowledge.objects.get(id=int(knowledge_id))
     exercises = Exercise.objects.filter(knowledge = knowledge)
 
-    data['html'] = render_to_string('qcm/select_exercise_by_knowledge.html', {  'exercises':exercises, 'knowledge' : knowledge, 'group' : group,   })
+    data['html'] = render_to_string('qcm/select_exercise_by_knowledge.html', {  'exercises':exercises, 'knowledge' : knowledge, 'group' : group, 'teacher' : teacher  })
     return JsonResponse(data)
 
 
@@ -529,7 +538,7 @@ def associate_exercise_by_parcours(request,id,idt):
     knowledge = Knowledge.objects.get(id=int(knowledge_id))
     teacher = Teacher.objects.get(user=request.user)
     parcourses = Parcours.objects.filter(teacher = teacher, level = group.level)
-
+    """
     for parcours in parcourses : 
         old_exercice_ids =  Relationship.objects.values_list("exercise_id", flat=True).filter(parcours = parcours, exercise__knowledge = knowledge, exercise__supportfile__is_title = 0)
         #Suppression des anciens.
@@ -545,7 +554,7 @@ def associate_exercise_by_parcours(request,id,idt):
             Relationship.objects.get_or_create(parcours = parcours , exercise = exo , defaults={"order" :  i, "is_publish": 1 , "start": None , "date_limit": None })
             i+=1
 
- 
+    """
     return redirect('result_group_theme', group.id, theme.id)
 
 

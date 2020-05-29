@@ -822,8 +822,8 @@ width:100%;
 
 .marklegend{
   list-style: none;
-  background-color: #e6e2dd;
-  border:solid 1px #4f4942;
+  background-color: #FFF;
+  border:solid 1px #0063cc;
   font-size: 12px;
   padding: 8px 7px;
   /*border-radius: 10px;*/
@@ -832,11 +832,12 @@ width:100%;
   text-align: center; 
   float: left;
   height:35px;
-  color:#4f4942;
+  color:#007bff;
+  font-weight: 600;
 }
 .marklegend:hover{
-  background-color: #4f4942;
-  color:#e6e2dd;
+  background-color: #007bff;
+  color:#FFF;
 }
 
 

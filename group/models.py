@@ -61,7 +61,7 @@ class Group(ModelWithCode):
         test = False
         students = self.students.prefetch_related("students_relationship")
         for student in students:
-            if Relationship.objects.filter(exercise__students=student, date_limit__gte=today).count() > 0:
+            if Relationship.objects.filter(students=student, date_limit__gte=today).count() > 0:
                 test = True
                 break
 

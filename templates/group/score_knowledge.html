@@ -19,7 +19,7 @@
             darkgreen
             {% endif %}"
           href=" " data-container="body"
-          data-toggle="popover"  style="border : 2px solid {{student.get_exercises.parcours.color }}"
+          data-toggle="popover"  style="border : 2px solid #CCC"
           data-trigger="hover" data-placement="top"
           data-content="{{ knowledge.name }}"> 
         {{ score }}
@@ -27,7 +27,7 @@
 {% else %}
     <a class="markdown"                                                   
           href="  " data-container="body"
-          data-toggle="popover"   style="border : 2px solid {{student.get_exercises.parcours.color }}"
+          data-toggle="popover"   style="border : 2px solid #CCC"
           data-trigger="hover"
            data-placement="top" 
           data-content="{{ knowledge.name }}"> 

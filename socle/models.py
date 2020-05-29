@@ -116,15 +116,14 @@ class Knowledge(models.Model):
 
 
 
-    def nb_exercise_used(self, group, teacher, theme):
+    def nb_exercise_used(self,  parcours_tab): # parcours du groupe
 
-        Parcours = apps.get_model('qcm', 'Parcours')
-        parcourses = Parcours.objects.filter(teacher = teacher, exercise__level = group.level , exercise__theme = theme )
-        try :
-            nb = group.parcours.exercises.filter(knowledge=self).count()
-        except :
-            Exercise = apps.get_model('qcm', 'Exercise')
-        nb = Exercise.objects.filter(knowledge=self, level = group.level).count()
+        Relationship = apps.get_model('qcm', 'Relationship') 
+        nb = 0
+        relationships = Relationship.objects.filter(exercise__knowledge=self , parcours__in = parcours_tab).order_by("exercise").distinct()
+        print("===================")
+        print(relationships)
+        print("===================")        
         return nb 
 
 
