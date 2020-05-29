@@ -117,17 +117,11 @@ class Knowledge(models.Model):
 
  
     def used(self):
-        used = False
-        Exercise = apps.get_model('qcm', 'Exercise')
-        if Exercise.objects.filter(knowledge=self).count()>0 :
-            used = True
-        return used 
+        return self.nb_exercise() > 0
 
  
     def nb_exercise(self):
-        Exercise = apps.get_model('qcm', 'Exercise')
-        nb = Exercise.objects.filter(knowledge=self).count()
-        return nb 
+        return self.exercises.count()
 
 
 
