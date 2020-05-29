@@ -68,7 +68,7 @@ class Group(ModelWithCode):
         return test
 
     def nb_parcours(self):
-        students = self.students.all()
+        students = self.students.prefetch_related('parcours').all()
         parcours_tab = []
         for student in students:
             parcourses = student.students_to_parcours.all()
@@ -79,34 +79,27 @@ class Group(ModelWithCode):
         return nb_parcours
 
 
-
-
-
     def nb_parcours_visible(self):
 
-        students = self.students.all()
+        students = self.students.prefetch_related('parcours').all()
         parcours_tab = []
-        for student in students :
+        for student in students:
             parcourses = student.students_to_parcours.filter(is_publish=1)
-            for parcours in parcourses :
-                if parcours.id not in parcours_tab :
+            for parcours in parcourses:
+                if parcours.id not in parcours_tab:
                     parcours_tab.append(parcours.id)
-        nb_parcours  = len(parcours_tab)
-        return nb_parcours 
-
-
+        nb_parcours = len(parcours_tab)
+        return nb_parcours
 
 
     def nb_parcours_favorite(self):
- 
-        students = self.students.all()
-        parcours_tab = []
-        for student in students :
-            parcourses = student.students_to_parcours.filter(is_favorite=1)
-            for parcours in parcourses :
-                if parcours.id not in parcours_tab :
-                    parcours_tab.append(parcours.id)
-        nb_parcours  = len(parcours_tab) 
-        return nb_parcours  
 
-       
+        students = self.students.prefetch_related('parcours').all()
+        parcours_tab = []
+        for student in students:
+            parcourses = student.students_to_parcours.filter(is_favorite=1)
+            for parcours in parcourses:
+                if parcours.id not in parcours_tab:
+                    parcours_tab.append(parcours.id)
+        nb_parcours = len(parcours_tab)
+        return nb_parcours
