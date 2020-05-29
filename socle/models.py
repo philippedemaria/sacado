@@ -88,10 +88,7 @@ class Level(models.Model):
         return nb 
 
     def exotot(self):
-        nb = 0 
-        Exercise = apps.get_model('qcm', 'Exercise')
-        nb = Exercise.objects.filter(level=self,supportfile__is_title=0).count()
-        return nb
+        return self.exercises.filter(supportfile__is_title=0).count()
 
     def notexo(self):
         nb, m  = 0 , 0

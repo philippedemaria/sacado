@@ -106,7 +106,7 @@ class Exercise(models.Model):
 
     knowledge = models.ForeignKey(Knowledge, on_delete=models.PROTECT,  related_name='exercises', verbose_name="Savoir faire associé - Titre")
     students = models.ManyToManyField(Student, blank=True,  related_name='exercises', verbose_name="Travail fait")
-    level = models.ForeignKey(Level, related_name = "level_exercise", on_delete=models.PROTECT,    verbose_name="Niveau") 
+    level = models.ForeignKey(Level, related_name = "exercises", on_delete=models.PROTECT,    verbose_name="Niveau")
     theme = models.ForeignKey(Theme,    related_name = "theme_exercise", on_delete=models.PROTECT,  verbose_name="Thème") 
     supportfile = models.ForeignKey(Supportfile, blank=True,  default=1,  related_name = "supportfile_exercise", on_delete=models.PROTECT,  verbose_name="Fichier Géogebra") 
  
@@ -179,7 +179,6 @@ class Exercise(models.Model):
             details["max"] = tab[-1]
             details["avg"] = int(avg)
         except : 
-            avg = 0
             details["min"] = 0
             details["max"] = 0
             details["avg"] = 0
@@ -311,7 +310,6 @@ class Exercise(models.Model):
 
         students = students_from_p_or_g
         nb_student = len(students)
-        exercise_done = []
 
         nb_exercise_done = Studentanswer.objects.filter(student__in= students, parcours= parcours, exercise = self).values_list("student",flat= True).order_by("student").distinct().count()
  
@@ -365,7 +363,7 @@ class Parcours(ModelWithCode):
     vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Image du parcours", blank=True, default ="")
 
 
-    def __str__(self):        
+    def __str__(self):
         return "{}".format(self.title)
 
 
