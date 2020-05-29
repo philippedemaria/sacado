@@ -145,8 +145,8 @@ def calendar_initialize(request):
         relationships = Relationship.objects.filter(parcours__teacher = teacher, date_limit__gte=today).exclude(date_limit = None) 
         parcourses = Parcours.objects.filter(teacher = teacher)
         calendars = Calendar.objects.filter(user = request.user) 
-        form = EventForm(user, request.POST or None)
-        context = { 'form' : form ,'hours' : hours , 'relationships' : relationships,  'parcourses' : parcourses  ,  'calendars' : calendars    } 
+        form = EventForm(request.user, request.POST or None)
+        context = { 'form' : form , 'relationships' : relationships,  'parcourses' : parcourses  ,  'calendars' : calendars  ,  'teacher' : teacher    } 
     
     else :
         student = Student.objects.get(user=request.user.id)
@@ -180,7 +180,7 @@ def calendar_initialize(request):
         ratiowidth = int(0.9*ratio)
         student = Student.objects.get(user=request.user)
         parcours = Parcours.objects.filter(students = student)
-        context = {'student' : student , 'hours' : hours ,     'relationships' : relationships ,    'ratio' : ratio ,  'ratiowidth' : ratiowidth ,       'relationships_in_late' : relationships_in_late ,    } 
+        context = {'student' : student ,     'relationships' : relationships ,    'ratio' : ratio ,  'ratiowidth' : ratiowidth ,       'relationships_in_late' : relationships_in_late ,    } 
 
     return render(request, "schedule/base.html" , context )
 

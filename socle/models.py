@@ -115,7 +115,7 @@ class Knowledge(models.Model):
         return self.exercises.count()
 
 
-
+    ### plus utilisée -----
     def nb_exercise_used(self,  parcours_tab): # parcours du groupe
 
         Relationship = apps.get_model('qcm', 'Relationship') 

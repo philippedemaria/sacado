@@ -38,7 +38,7 @@
     {% for parcours in parcourses  %}
     <div class="btn btn-default full_width" style="text-align: left; font-size:15px; margin-bottom: 5px">
 
-            <span data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}" class="parcours_displayer" >
+            <span data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}" class="parcours_displayer" style="color : {{  parcours.color }}" >
                {% if parcours.is_publish %} <i class="fa fa-check-circle text-success pull-right pull-right_top"></i>  {% else %} <i class="fa fa-ban pull-right pull-right_top"></i>{% endif  %}  {{ parcours.title|truncatechars:"22" }} 
             </span>
 

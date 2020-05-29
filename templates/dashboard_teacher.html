@@ -36,7 +36,7 @@
                             {% if data.nb_parcours > 0 %}
                             <h4><br>
                                 <a href="{% url 'list_parcours_group' group.id  %}" class="white"> <i class="fa fa-th" style="color:white;font-size: 26px"></i>
-                                    <span style="color:white;font-size: 16px">{{ data.nb_parcours }} parcours dont {{ data.nb_parcours_visible }} publié{{ data.nb_parcours_visible|pluralize }}, {{ data.nb_parcours_favorite }} favori{{ data.nb_parcours_favorite|pluralize }} </span>
+                                    <span style="color:white;font-size: 18px">{{ data.nb_parcours }} parcours dont {{ data.nb_parcours_visible }} publié{{ data.nb_parcours_visible|pluralize }}, {{ data.nb_parcours_favorite }} favori{{ data.nb_parcours_favorite|pluralize }} </span>
                                 </a>
                             </h4>
                             {% endif  %} 
