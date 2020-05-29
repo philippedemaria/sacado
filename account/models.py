@@ -108,15 +108,19 @@ class Student(ModelWithCode):
         return resultexercises
 
     def resultknowledge(self):
-        Resultknowledge = apps.get_model("account","Resultknowledge")
-        resultknowledges = Resultknowledge.objects.filter(students = self )
-        return resultknowledges
+        ''' résultats de l'étudiant aux évaluations de savoirs-faire '''
+        return self.results_k.all()
 
+    def resultknowledgedict(self):
+        ''' dictionnaire des résultats de l'étudiant aux évaluations de savoirs-faire
+        cle : knowledge_id
+        valeur : score de l'étudiant pour ce savoir faire
+        '''
+        return {knowledge_id: score for knowledge_id, score in self.results_k.values_list('knowledge_id', 'point')}
 
-    def resultknowledge_by_theme(self,theme):
-        Resultknowledge = apps.get_model("account","Resultknowledge")
-        resultknowledges = Resultknowledge.objects.filter(students = self, knowledge__theme= theme )
-        return resultknowledges
+    def resultknowledge_by_theme(self, theme):
+        ''' résultats de l'étudiant pour les évaluations de savoirs-faire d'un thème donné'''
+        return self.results_k.filter(knowledge__theme=theme)
 
 
 
@@ -124,7 +128,7 @@ class Student(ModelWithCode):
  
         Resultskill = apps.get_model("account","Resultskill")
         resultskills = Resultskill.objects.filter(student = self, skill = skill ).order_by("-id")[:5]
- 
+
         return resultskills
 
 

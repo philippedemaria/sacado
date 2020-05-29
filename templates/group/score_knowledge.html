@@ -2,9 +2,9 @@
 {% load item_tags %}
 
 
- 
 
-{% get_scorek knowledge student as score %}
+
+{% get_scorek2 results knowledge.pk  as score %}
 
 
 {% if score != "" %}
@@ -25,12 +25,10 @@
         {{ score }}
     </a>
 {% else %}
-    <a class="markdown"                                                   
-          href="  " data-container="body"
-          data-toggle="popover"   style="border : 1px solid #CCC"
-          data-trigger="hover"
-           data-placement="top" 
-          data-content="{{ knowledge.name }}"> 
-          {{ score }}
+<a class="markdown" href="  " data-container="body"
+   data-toggle="popover" style="border : 1px solid #CCC"
+   data-trigger="hover" data-placement="top"
+   data-content="{{ knowledge.name }}">{{score}}
+
     </a>
 {% endif %}

@@ -180,6 +180,11 @@ def get_scorek(obj,student):
     return obj.send_scorek(student)
 
 
+@register.simple_tag ##  résultat d'un savoir faire
+def get_scorek2(results, id):
+    return results.get(id, '')
+
+
 
 @register.simple_tag  
 def get_exercises_by_knowledge(obj,student,group): ##  
