@@ -22,7 +22,7 @@ class Theme(models.Model):
     def as_score_by_theme(self, student, group):
 
         Resultknowledge = apps.get_model('account', 'Resultknowledge')
-        knowledges = self.theme_knowledge.filter(level=group.level)  
+        knowledges = self.knowledges.filter(level=group.level)
         resultknowledges = Resultknowledge.objects.filter(student = student, knowledge__in=knowledges)
         nb = len(resultknowledges)
         somme = 0
@@ -82,10 +82,7 @@ class Level(models.Model):
             return "#FFFFFF"
 
     def nbknowlegde(self):
-        nb = 0 
-        Knowledge = apps.get_model('socle', 'Knowledge')
-        nb = Knowledge.objects.filter(level=self).count()
-        return nb 
+        return self.knowledges.filter(level=self).count()
 
     def exotot(self):
         return self.exercises.filter(supportfile__is_title=0).count()
@@ -100,24 +97,20 @@ class Level(models.Model):
                 m+=1
 
         nb = n - m
-        return nb 
-
-
+        return nb
 
 
 class Knowledge(models.Model):
-    level = models.ForeignKey(Level,   related_name = "level_knowledge", default="", on_delete=models.PROTECT, verbose_name="Niveau")
-    theme = models.ForeignKey(Theme,   related_name = "theme_knowledge", on_delete=models.PROTECT, verbose_name="Thème")
+    level = models.ForeignKey(Level, related_name="knowledges", default="", on_delete=models.PROTECT, verbose_name="Niveau")
+    theme = models.ForeignKey(Theme, related_name="knowledges", on_delete=models.PROTECT, verbose_name="Thème")
     name = models.CharField(max_length=10000, verbose_name="Nom")
- 
+
     def __str__(self):
         return self.name
 
- 
     def used(self):
         return self.nb_exercise() > 0
 
- 
     def nb_exercise(self):
         return self.exercises.count()
 

@@ -56,7 +56,7 @@
 			    	 <a href="{% url 'exercises_level'  level.id  %}" style="color:#FFF;">{{ level.shortname }}</a>
 			  	</div>
 			  	<div class="card-bottom">
-			  		{{ level.level_exercise.count }} exercice{{ level.shortname|pluralize }}
+			  		{{ level.exercises.count }} exercice{{ level.shortname|pluralize }}
 			  	</div>
 			</div>
 		</div>

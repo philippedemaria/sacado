@@ -132,7 +132,7 @@ class Student(ModelWithCode):
     def knowledge_average(self, group):
 
         Resultknowledge = apps.get_model('account', 'Resultknowledge')
-        knowledges = group.level.level_knowledge.all()
+        knowledges = group.level.knowledges.all()
         resultknowledges = Resultknowledge.objects.filter(student = self, knowledge__in=knowledges) 
         nb = len(resultknowledges)
         somme = 0
@@ -154,7 +154,7 @@ class Student(ModelWithCode):
         relationships = Relationship.objects.filter(students = self).values_list("exercise__knowledge__id").order_by("exercise__knowledge__id").distinct()
             
         n = relationships.count()
-        knowledges = group.level.level_knowledge.all()
+        knowledges = group.level.knowledges.all()
 
         nb = Resultknowledge.objects.filter(student = self, knowledge__in=knowledges).count()
 

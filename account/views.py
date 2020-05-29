@@ -991,7 +991,7 @@ def ajax_detail_student(request):
 
     if theme_id > 0 :
         theme = Theme.objects.get(pk = theme_id)
-        knowledges = group.level.level_knowledge.filter(theme=theme)
+        knowledges = group.level.knowledges.filter(theme=theme)
         context = { 'student': student , 'theme':theme , 'group' : group , 'knowledges' : knowledges }
     else :
         themes = []
