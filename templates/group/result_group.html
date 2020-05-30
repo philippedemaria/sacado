@@ -147,8 +147,8 @@
                                         </form>    
                                     </td>
                                     {% block skill_result %}
-                                    {% with student.resultknowledgedict as results %}
                                     <td>{% block result %}
+                                        {% with student.resultknowledgedict as results %}
                                          {% for knowledge in knowledges %}
                                              {% include 'group/score_knowledge.html' %}
                                         {% endfor %}
