@@ -560,20 +560,21 @@ class Studentanswer(models.Model):
         return "{}".format(self.exercise.knowledge.name)
 
 
+class Resultexercise(models.Model):  # Last result
 
-
- 
-class Resultexercise(models.Model): # Last result
-
-    student = models.ForeignKey(Student,   related_name = "student_resultexercise", default="", on_delete=models.CASCADE, editable=False)
-    exercise = models.ForeignKey(Exercise,   related_name = "knowledge_resultexercise", on_delete=models.PROTECT, editable=False)
-    point  = models.PositiveIntegerField(default=0 ) 
+    student = models.ForeignKey(Student, related_name="results_e", default="",
+                                on_delete=models.CASCADE, editable=False)
+    exercise = models.ForeignKey(Exercise, related_name="results_e",
+                                 on_delete=models.PROTECT, editable=False)
+    point = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return "{}".format(self.point)  
+        return "{}".format(self.point)
 
     class Meta:
         unique_together = ['student', 'exercise']
+
+
 ########################################################################################################################################### 
 ########################################################################################################################################### 
 ######################################################### FIN  Types de question ########################################################## 

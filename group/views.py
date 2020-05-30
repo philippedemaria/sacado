@@ -369,12 +369,11 @@ def result_group_theme(request, id, idt):
 @login_required
 @user_is_group_teacher
 def result_group_exercise(request, id):
-
     group = Group.objects.get(id=id)
-    form = EmailForm(request.POST or None )
-    context = {  'group': group,'form': form,}
+    form = EmailForm(request.POST or None)
+    context = {'group': group, 'form': form}
 
-    return render(request, 'group/result_group_exercise.html', context )
+    return render(request, 'group/result_group_exercise.html', context)
 
 
 @login_required

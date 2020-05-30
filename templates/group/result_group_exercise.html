@@ -7,14 +7,12 @@ Suivis des exercices publiés
 {% endblock %}
 
  
-
-{% block result %} 
-
-     {% for r in student.resultexercises %}
-     	{%  with  r.exercise as  exercise %}  
-            {% include 'group/score.html' %}  
-        {%  endwith %}                                          
-    {% endfor %}                                                                    
+{% block result %}
+    {% for r in student.resultexercises %}
+        {% with  r.exercise as  exercise %}
+            {% include 'group/score.html' %}
+        {% endwith %}
+    {% endfor %}
 {% endblock %}
 
 
