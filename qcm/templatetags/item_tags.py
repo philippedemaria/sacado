@@ -21,6 +21,23 @@ def get_score(obj,student):
     """
     return obj.send_score(student) 
 
+@register.simple_tag
+def get_score(obj,student):
+    """
+    retourne le  score d'un même exercice par élève.
+    """
+    return obj.send_score(student)
+
+
+@register.simple_tag
+def get_score2(results, id):
+    """
+    regarde si l'id est dans le dictionnaire results et renvoie le score associé ( ou '' dans le cas contraire)
+    """
+    return results.get(id, '')
+
+
+
 @register.simple_tag 
 def get_scores(obj,student):
     """
@@ -224,14 +241,6 @@ def get_scorek(obj,student):
     résultats d'un savoir faire par élève
     """
     return obj.send_scorek(student)
-
-
-@register.simple_tag  
-def get_scorek2(results, id):
-    """
-    résultat d'un savoir faire
-    """
-    return results.get(id, '')
 
 
 

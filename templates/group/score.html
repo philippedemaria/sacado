@@ -2,7 +2,8 @@
 {% load item_tags %}
 
 
-{% get_score exercise student as score %} 
+
+{% get_score2 results exercise.pk  as score %}
 
 {% if score %}
     <a class="markdown

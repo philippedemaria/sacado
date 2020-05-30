@@ -8,12 +8,12 @@ Suivis des exercices publiés
 
  
 {% block result %}
-    {% for r in student.resultexercises %}
-        {% with  r.exercise as  exercise %}
-            {% include 'group/score.html' %}
-        {% endwith %}
-    {% endfor %}
+    {% with student.resultexercisesdict as results %}
+        {% for r in student.resultexercises %}
+            {% with  r.exercise as exercise %}
+                {% include 'group/score.html' %}
+            {% endwith %}
+        {% endfor %}
+    {% endwith %}
 {% endblock %}
-
-
  

@@ -97,12 +97,17 @@ class Student(ModelWithCode):
 
 
     def resultexercises(self):
-        return self.results_e.all().select_related('exercise')
+        return self.results_e.all().select_related('exercise__knowledge')
+
+    def resultexercisesdict(self):
+        return {exercise_id: score for exercise_id, score in self.results_e.values_list('exercise_id', 'point')}
 
 
     def resultexercises_by_theme(self,theme):
-        
+
         return self.results_e.filter(exercise__theme=theme).select_related('exercise')
+
+
 
     def resultknowledge(self):
         ''' résultats de l'étudiant aux évaluations de savoirs-faire '''
