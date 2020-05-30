@@ -148,13 +148,14 @@
                                     </td>
                                     {% block skill_result %}
                                     <td>{% block result %}
-                                        {% with student.resultknowledgedict as results %}
-                                         {% for knowledge in knowledges %}
-                                             {% include 'group/score_knowledge.html' %}
-                                        {% endfor %}
+                                            {% with student.resultknowledgedict as results %}
+                                                {% for knowledge in knowledges %}
+                                                     {% include 'group/score_knowledge.html' %}
+                                                {% endfor %}
+                                            {% endwith %}
                                         {% endblock %}                                     
                                     </td>
-                                    {% endwith %}
+
                                     {% endblock %}  
                                 </tr>
 
