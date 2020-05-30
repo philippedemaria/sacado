@@ -124,12 +124,9 @@ class Student(ModelWithCode):
 
 
 
-    def result_skills(self,skill):
- 
-        Resultskill = apps.get_model("account","Resultskill")
-        resultskills = Resultskill.objects.filter(student = self, skill = skill ).order_by("-id")[:5]
-
-        return resultskills
+    def result_skills(self, skill):
+        ''' résultats de l'étudiants aux 5 dernières évaluations de compétences de la compétence en paramètre'''
+        return self.results_s.filter(skill=skill).order_by("-id")[:5]
 
 
 
@@ -246,12 +243,12 @@ class Resultknowledge(models.Model):
 
 
 class Resultskill(models.Model): # Pour récupérer tous les scores des compétences
-    student = models.ForeignKey(Student,   related_name = "student_resultskills", default="", on_delete=models.CASCADE, editable=False)
-    skill = models.ForeignKey(Skill,   related_name = "skill_resultskills", on_delete=models.CASCADE, editable=False)
-    point  = models.PositiveIntegerField(default=0 ) 
+    student = models.ForeignKey(Student, related_name="results_s", default="", on_delete=models.CASCADE, editable=False)
+    skill = models.ForeignKey(Skill, related_name="results_s", on_delete=models.CASCADE, editable=False)
+    point = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return "{} : {}".format(self.skill, self.point)  
+        return f"{self.skill} : {self.point}"
 
 
 
