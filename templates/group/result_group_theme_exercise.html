@@ -22,12 +22,12 @@
 
 
 {% block result %}
-     {%  get_resultexercises_by_theme student theme as resultexercises %}   
-        
-     {% for r in  resultexercises %}
-     	{%  with  r.exercise as  exercise %}  
-            {% include 'group/score.html' %}  
-        {%  endwith %}                                          
-    {% endfor %}      
-
+    {% get_resultexercises_by_theme student theme as resultexercises %}
+    {% with student.resultexercisesdict as results %}
+        {% for r in  resultexercises %}
+            {% with  r.exercise as  exercise %}
+                {% include 'group/score.html' %}
+            {% endwith %}
+        {% endfor %}
+    {% endwith %}
 {% endblock %}
