@@ -100,20 +100,25 @@ def  advises(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
     return render(request, 'advises.html', {'teacher': teacher})
 
- 
 
 def convert_seconds_in_time(secondes):
-    if secondes < 60 :
+    if secondes < 60:
         return "{}s".format(secondes)
-    elif secondes < 3600 :
-        minutes = secondes//60
-        sec = secondes%60
-        return "{}:{}".format(minutes,sec)
-    else :
-        hours = secondes//3600 
-        minutes = (secondes%3600)//60
-        sec = (secondes%3600)%60
-        return "{}:{}:{}".format(hours,minutes,sec)
+    elif secondes < 3600:
+        minutes = secondes // 60
+        sec = secondes % 60
+        if sec < 10:
+            sec = f'0{sec}'
+        return "{}:{}".format(minutes, sec)
+    else:
+        hours = secondes // 3600
+        minutes = (secondes % 3600) // 60
+        sec = (secondes % 3600) % 60
+        if sec < 10:
+            sec = f'0{sec}'
+        if minutes < 10:
+            minutes = f'0{minutes}'
+        return "{}:{}:{}".format(hours, minutes, sec)
 
 
 def send_to_teachers(level) : # envoie d'une notification au enseignant du niveau coché lorsqu'un exercice est posté

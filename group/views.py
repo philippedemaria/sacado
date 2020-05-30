@@ -148,21 +148,27 @@ def include_students_in_a_model(liste,model):
             student = Student.objects.create(user=user,level=group.level,code=code)
             model.students.add(student)  
         except:
-            pass 
+            pass
 
- 
+
 def convert_seconds_in_time(secondes):
-    if secondes < 60 :
-        return "{}s.".format(secondes)
-    elif secondes < 3600 :
-        minutes = secondes//60
-        sec = secondes%60
-        return "{}h. {} min.".format(minutes,sec)
-    else :
-        hours = secondes//3600 
-        minutes = (secondes%3600)//60
-        sec = (secondes%3600)%60
-        return "{}h. {} min. {} s.".format(hours,minutes,sec)
+    if secondes < 60:
+        return "{}s".format(secondes)
+    elif secondes < 3600:
+        minutes = secondes // 60
+        sec = secondes % 60
+        if sec < 10:
+            sec = f'0{sec}'
+        return "{}:{}".format(minutes, sec)
+    else:
+        hours = secondes // 3600
+        minutes = (secondes % 3600) // 60
+        sec = (secondes % 3600) % 60
+        if sec < 10:
+            sec = f'0{sec}'
+        if minutes < 10:
+            minutes = f'0{minutes}'
+        return "{}:{}:{}".format(hours, minutes, sec)
 
 
 
@@ -451,7 +457,7 @@ def stat_group(request, id):
                 else:
                     med = tab[(len(tab)-1)//2+1]
                 student["median"] = int(med)
-            else :
+            else:
                 average_score = int(score)
                 student["duration"] = duration
                 student["average_score"] = int(score)
@@ -467,7 +473,7 @@ def stat_group(request, id):
         stats.append(student)
 
     context = {  'group': group, 'form': form, 'stats':stats ,  }
-
+    print(stats)
     return render(request, 'group/stat_group.html', context )
 
 
