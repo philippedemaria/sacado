@@ -17,9 +17,20 @@
 </ul>
 {% endif %}
 
+
+
+
+ {% if form.errors %} 
+<div class="container alert alert-danger" role="alert" style="top:100px">
+    <i class="fa fa-warning"></i> Votre connexion a échouée. Vérifier votre identifiant et/ou votre mot de passe.
+</div>
+{% endif %}
+
      <!--==========================
     Intro Section
   ============================-->
+
+
   <section id="intro" class="clearfix">
     <div class="container d-flex h-100">
       <div class="row justify-content-center align-self-center">

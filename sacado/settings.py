@@ -12,9 +12,12 @@ SECRET_KEY = '85umr_$zf2bd58xl)nzf)i*jh)o5h*dp%*3e@pqg+ijem=t1xq'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# REDIRECT_URL
+
+
+# REDIRECT_URL 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = '/' 
 # Application definition
 
 #ALLOWED_HOSTS = ["*"]
