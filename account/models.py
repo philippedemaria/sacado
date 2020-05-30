@@ -97,15 +97,12 @@ class Student(ModelWithCode):
 
 
     def resultexercises(self):
-        Resultexercise = apps.get_model("qcm","Resultexercise")
-        resultexercises = Resultexercise.objects.filter(student = self ).select_related('exercise')
-        return resultexercises
+        return self.results_e.all().select_related('exercise')
 
 
     def resultexercises_by_theme(self,theme):
-        Resultexercise = apps.get_model("qcm","Resultexercise")
-        resultexercises = Resultexercise.objects.filter(student = self, exercise__theme= theme )
-        return resultexercises
+        
+        return self.results_e.filter(exercise__theme=theme).select_related('exercise')
 
     def resultknowledge(self):
         ''' résultats de l'étudiant aux évaluations de savoirs-faire '''
