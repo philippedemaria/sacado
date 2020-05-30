@@ -125,11 +125,10 @@
                                             </label>
                                         </td>
                                         <td>
-                                                {% get_parcours_from_this_exercise e teacher as  my_parcours_container   %}
+                                                        {% get_parcours_from_this_exercise e teacher as  my_parcours_container   %}
                                                         {% for p in my_parcours_container %}
-                                                            {{ p.title }} {% if not forloop.last %}<br>{% endif %}
-                                                        {% endfor %}  
-
+                                                            <div class="btn btn-info"  style="font-size: 10px">{{ p.title }} </div>
+                                                        {% endfor %}
                                         </td>
                                     </tr>
                                 {% endfor %}
