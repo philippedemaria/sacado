@@ -5,7 +5,7 @@
 
 
  
-		{% for data in datas %}   
+		{% for data in datas %} 
             <div class="row">
                 <div class="col-sm-12 col-md-12">
                     <table class="table  table-hover display100" style="width:100%">
@@ -41,14 +41,6 @@
                                                                 {% if e_is_selected %}checked{% endif  %} 
                                                                 class="selector_e" /><span class="checkmark"></span>
                                                         </label>
-                                        
-                                                        <!--
-                                                        <a href="#selector_e{{ e.id }}" class="btn btn-{% if e_is_selected %}success{% else  %}danger{% endif  %} selector_e" id="selector_e{{ e.id }}" data-exercise_id="{{ e.id }}" data-parcours_id="{{ parcours.id }}" data-statut="{{ e_is_selected }}" >  
-                                                            <div id="is_selected{{ e.id }}"><i class="fa fa-{% if e_is_selected %}check-circle fa-2x{% else  %}times{% endif  %}"></i></div> 
-                                                        </a>
-                                                        -->
-                                                    
-
                                                     </td>
                                                     <td> 
                                                         <label for="selector_e{{ e.id }}"  class="label_select_checkbox">
@@ -90,15 +82,11 @@
                                                         </label>
                                                     </td>
                                                     <td>
-                                                        {% for r in e.exercise_remediation.all %}
-                                                            <a href="../../{{ r.mediation }}" target="_blank">
-                                                                {% if r.mstyle %} 
-                                                                    <img src="{% static 'img/ggb.png' %}" width="20px" />
-                                                                {% else %}
-                                                                    <img src="{% static 'img/pdf.png' %}" width="20px" />
-                                                                {% endif %}
-                                                             </a>
+                                                        {% get_parcours_from_this_exercise e teacher as  my_parcours_container   %}
+                                                        {% for p in my_parcours_container %}
+                                                            {{ p.title }} {% if not forloop.last %}<br>{% endif %}
                                                         {% endfor %}
+
                                                         {% if request.user.is_superuser  and '/admin' in request.path %}
                                                             <a href="{% url 'create_remediation'  e.id   %}" class="pull-right edit" style="margin-left:5px; font-size: 10px"> 
                                                                 <i class="fa fa-plus thin"></i>   

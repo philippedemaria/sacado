@@ -222,7 +222,7 @@ def get_who_are_done(obj,group):
     return obj.who_are_done(group)
 
 
-@register.simple_tag ##  retroune le nombre de taches données par parcours
+@register.simple_tag ##  retourne le nombre de taches données par parcours
 def get_nb_task_parcours_done(obj,parcours): 
     return obj.nb_task_parcours_done(parcours)
 
@@ -283,8 +283,11 @@ def get_constraint_to_this_relationship(obj, student):
 def get_an_association_knowledge_supportfile(obj, supportfile): 
     return obj.association_knowledge_supportfile(supportfile)
 
-@register.simple_tag ## donne le score par relation
-def get_parcours_group_students_count(obj, group): 
+@register.simple_tag 
+def get_parcours_group_students_count(obj, group):
+    """
+    renvoie le score par relation
+    """ 
     return obj.parcours_group_students_count(group)
 
 
@@ -294,12 +297,25 @@ def get_details(obj,  parcours):
 
 
 
-@register.simple_tag ## donne le score par knowledge 
+@register.simple_tag 
 def get_tasks(obj,  parcours): 
+    """
+    renvoie le score par knowledge 
+    """
     return obj.is_task_exists(parcours)
 
 
 
-@register.simple_tag ## donne le score par knowledge 
+@register.simple_tag  
 def get_result_skills(obj,  skill): 
+    """
+    renvoie le score par knowledge 
+    """
     return obj.result_skills(skill)
+
+@register.simple_tag 
+def get_parcours_from_this_exercise(obj,  teacher):
+    """
+    renvoie les parcours d'un enseignant donné liés à un exercice
+    """
+    return obj.my_parcours_container(teacher)

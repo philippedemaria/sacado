@@ -76,7 +76,7 @@
                         <table class="table">
                         {% regroup  exercises by theme.name as theme_list %}  
                             {% for theme in theme_list %}
-                                <tr style="background:#e6e2dd"><td></td><td>{{ theme.grouper }}</td><td></td></tr>
+                                <tr style="background:#e6e2dd"><td></td><td>{{ theme.grouper }}</td><td>Parcours</td></tr>
                                 {% for e in theme.list %}
                                     <tr>
                                         <td> 
@@ -125,15 +125,11 @@
                                             </label>
                                         </td>
                                         <td>
-                                            {% for r in e.exercise_remediation.all %}
-                                            <a href="../../../{{ r.mediation }}" target="_blank">
-                                                {% if r.mstyle %} 
-                                                    <img src="{% static 'img/ggb.png' %}" width="20px" />
-                                                {% else %}
-                                                    <img src="{% static 'img/pdf.png' %}" width="20px" />
-                                                {% endif %}
-                                             </a>
-                                            {% endfor %}
+                                                {% get_parcours_from_this_exercise e teacher as  my_parcours_container   %}
+                                                        {% for p in my_parcours_container %}
+                                                            {{ p.title }} {% if not forloop.last %}<br>{% endif %}
+                                                        {% endfor %}  
+
                                         </td>
                                     </tr>
                                 {% endfor %}

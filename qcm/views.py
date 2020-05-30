@@ -1809,6 +1809,7 @@ def ajax_theme_exercice(request):
 
 def ajax_level_exercise(request):
 
+    teacher = Teacher.objects.get(user= request.user)
     data = {} 
     level_ids = request.POST.getlist('level_id')
     theme_ids = request.POST.getlist('theme_id')
@@ -1860,7 +1861,7 @@ def ajax_level_exercise(request):
         levels_dict["themes"]=themes_tab
         datas.append(levels_dict)
 
-    data['html'] = render_to_string('qcm/ajax_list_exercises.html', { 'datas': datas , "parcours" : parcours, "ajax" : ajax   })
+    data['html'] = render_to_string('qcm/ajax_list_exercises.html', { 'datas': datas , "parcours" : parcours, "ajax" : ajax, "teacher" : teacher    })
  
     return JsonResponse(data)
 

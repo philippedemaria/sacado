@@ -129,6 +129,9 @@ class Exercise(models.Model):
             score ="" 
         return score
 
+
+
+
     #############################################
     # non utilisée ?????? 
     def send_scores(self,student_id):
@@ -330,6 +333,10 @@ class Exercise(models.Model):
         return exercises
 
 
+    def my_parcours_container(self,teacher):
+
+        parcours = self.exercises_parcours.filter(teacher = teacher)
+        return parcours
 
 
 
