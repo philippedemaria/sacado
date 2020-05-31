@@ -178,7 +178,7 @@ def associate_parcours(request,id):
     if len(parcours.students.all())>0 :
         return redirect("list_parcours_group" , group.id )
     else :
-        return redirect("parcours") 
+        return redirect("index") 
 
 
 
