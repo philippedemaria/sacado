@@ -1292,7 +1292,7 @@ def all_datas(user, status):
             for knowledge in knowlegdes :
                 knowledges_dict  =   {}  
                 knowledges_dict["name"]=knowledge 
-                exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).order_by("theme")
+                exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).select_related('supportfile').order_by("theme")
                 exercises_tab    =   []
                 for exercise in exercises :
                     exercises_tab.append(exercise)
