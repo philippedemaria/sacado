@@ -286,7 +286,7 @@ def register_student(request):
             user = authenticate(username=username, password = password)
             login(request, user)
             messages.success(request, "Inscription réalisée avec succès !")               
-            if user_form.cleaned_data['email'] :.all()
+            if user_form.cleaned_data['email'] : 
                send_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers http://parcours.erlm.tn.\n Ceci est un mail automatique. Ne pas répondre.', 'SacAdo_contact@erlm.tn', [request.POST.get("email")])
         
         else :
