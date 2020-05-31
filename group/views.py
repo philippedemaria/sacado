@@ -615,9 +615,9 @@ def enroll(request,slug): # Inscription des élèves via le lien donné par l'en
                 parcourses  = Parcours.objects.filter(teacher = group.teacher,level = group.level )
                 for parcours in parcourses :
                     parcours.students.add(student)
-                relationships = Relationship.objects.filter(parcours__in = parcourses)
-                for relationship in relationships : 
-                    relationship.students.add(student)
+                    relationships = parcours.parcours_relationship.all()
+                    for r in relationships :
+                        r.students.add(student)
 
 
                 user = authenticate(username=username, password = password)
@@ -637,6 +637,7 @@ def enroll(request,slug): # Inscription des élèves via le lien donné par l'en
         context =  { "u_form":user_form, "slug":slug, "group":group,}
 
         return render(request, 'group/enroll.html', context )
+
 
 
 
