@@ -31,6 +31,7 @@
          </div>
         {% endif %}
         <div class="row">
+
             {% for parcours in parcourses %}
             <div class="col-md-4 col-lg-3 col-sm-6">
                 <!-- small box -->{% get_percent parcours student as pc %}{% get_done parcours student as is_done %} {% get_affect parcours student as nb_affect %}
@@ -53,11 +54,19 @@
                     </div>
                 </div>
             </div>
-            {% empty  %} 
+         
+
+            {% empty  %}   
             <div class="col-md-12 col-lg-12 col-sm-12" style="text-align: center">
-                    <img src="{% static 'img/dashboard_empty.jpg' %}" />
+                <div class="alert alert-info">
+                    <h1 class="thin"> Votre enseignant n'a pas encore publié de parcours.</h1>
+                    <div style="border-radius: 50%;width:250px;height:250px; margin-right: auto; margin-left: auto; background-color: #FFF;text-align: center">
+                        <img src="{% static 'img/sacado_color.png' %}"   />  
+                    </div>
+                </div>
             </div>
-            {% endfor  %} 
+            {% endfor  %}   
+
         </div> 
 
 

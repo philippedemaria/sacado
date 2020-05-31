@@ -105,7 +105,7 @@ WSGI_APPLICATION = 'sacado.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',   # Backends disponibles : 'postgresql', 'mysql', 'sqlite3' et 'oracle'.
-        'NAME': 'new_sacado_clone',             # Nom de la base de données
+        'NAME': 'sacado',             # Nom de la base de données   new_sacado_clone
         'USER': 'root',
         'PASSWORD': 'root',        
         'HOST': 'localhost',                    # Utile si votre base de données est sur une autre machine

@@ -147,8 +147,7 @@ def create_communication(request): # id du concours
 				rcv = []
 				for u in users : 
 					rcv.append(u.email)
-					
-				send_mail(new_f.subject, cleanhtml(unescape_html(new_f.texte)), "communication_sacado", rcv )
+				send_mail(new_f.subject, cleanhtml(unescape_html(new_f.texte)), "communication_sacado@erlm.tn", rcv )
 			except :
 				pass
 
