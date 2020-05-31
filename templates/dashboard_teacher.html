@@ -6,7 +6,7 @@
         <div class="row">
             {% for group in groups %}
                 {% with group.parcours_counter as data %}
-                <div class="col-lg-4 col-md-6  col-xs-6">
+                <div class="col-lg-4 col-md-6  col-xs-12">
                     <!-- small box -->
                     <div class="small-box" style="background-color:{{ group.color }}">
                         <!-- modal qui affiche la liste des élèves -->
@@ -52,7 +52,7 @@
                             {% if data.nb_parcours == 0 %}
                                 <div class="row">                              
                                     <div class="col-lg-6 col-xs-3" style="padding-right:0px">
-                                         <a href="{% url 'list_parcours_group' group.id  %}" class="label_small_box"><i class="fa fa-th"></i><span class="small_displayer"> Cloner, créer un parcours</span> </a>   
+                                         <a href="{% url 'list_parcours_group' group.id  %}" class="label_small_box"><i class="fa fa-th"></i><span class="small_displayer"> Créer un parcours</span> </a>   
                                     </div>
                                     <div class="col-lg-6 col-xs-3" style="padding-right:0px">
                                         <a href="{% url 'update_group' group.id  %}" class="label_small_box"><i class="fa fa-cogs"></i><span class="small_displayer"> Configurer </span></a>    

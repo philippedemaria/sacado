@@ -252,45 +252,42 @@ def register_student(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST)
         if user_form.is_valid():
-
-            if request.POST.get("alone") :
-                username  = user_form.cleaned_data['last_name']+user_form.cleaned_data['first_name']
+            username  = user_form.cleaned_data['last_name']+user_form.cleaned_data['first_name']
+            user = user_form.save(commit=False)
+            user.username  = username
+            user.user_type = 0
+            password = request.POST.get("password1")                     
+            print("req : ", request.POST.get("choose_alone"))
+            ######################### Choix du groupe  ###########################################
+            if request.POST.get("choose_alone") : # groupe sans prof
+                print("choose_alone")
                 # l'élève rejoint le groupe par défaut sur le niveau choisi
-                teacher = Teacher.objects.get(user_id = 2480)
+                teacher = Teacher.objects.get(user_id = 2)#2480
                 group = Group.objects.get(teacher = teacher, level_id = int(request.POST.get("level_selector")))
-                user = user_form.save(commit=False)
-                user.username  = username
-                user.user_type = 0
-                password = request.POST.get("password1") 
-                user.set_password(password)
-                user.save()
-                student = Student.objects.create(user=user,level=group.level)
-                group.students.add(student)
-                for p in parcours :
-                    p.students.add(student)
-                
-            else :
-                code_group = request.POST.get("group") # code du groupe
+                parcours = Parcours.objects.filter(teacher=teacher, level = group.level)
+
+            else :     # groupe du prof  de l'élève        
+                print("code_group")
+                code_group = request.POST.get("group")  
                 if Group.objects.filter(code = code_group).exists() :
-                    username  = user_form.cleaned_data['last_name']+user_form.cleaned_data['first_name']
                     group = Group.objects.get(code = code_group)
-                    user = user_form.save(commit=False)
-                    user.username  = username
-                    user.user_type = 0
-                    password = request.POST.get("password1") 
-                    user.set_password(password)
-                    user.save()
-                    student = Student.objects.create(user=user,level=group.level)
-                    group.students.add(student)
-                    parcours = Parcours.objects.filter(teacher=teacher, level = group.level)
-                    for p in parcours :
-                        p.students.add(student)
+                    parcours = Parcours.objects.filter(teacher=group.teacher, level = group.level)
+            #######################################################################################      
+            user.save()
+            student = Student.objects.create(user=user,level=group.level) 
+            group.students.add(student)
+            
+            for p in parcours :
+                p.students.add(student)
+                relationships = p.parcours_relationship.all()
+                for r in relationships :
+                    r.students.add(student)
                     
             user = authenticate(username=username, password = password)
             login(request, user)
             messages.success(request, "Inscription réalisée avec succès !")               
-            if user_form.cleaned_data['email'] :
-                send_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers http://parcours.erlm.tn.\n Ceci est un mail automatique. Ne pas répondre.', 'SacAdo_contact@erlm.tn', [request.POST.get("email")])
+            #if user_form.cleaned_data['email'] :.all()
+            #   send_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers http://parcours.erlm.tn.\n Ceci est un mail automatique. Ne pas répondre.', 'SacAdo_contact@erlm.tn', [request.POST.get("email")])
         
         else :
             messages.error(request, "Erreur lors de l'enregistrement. Reprendre l'inscription...")

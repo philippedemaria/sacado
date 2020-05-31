@@ -148,7 +148,7 @@
                             </div>
                         {% endif %}    
                     {% endif %}   
-                    <div class="card-text" style="background-color:{{ parcours.color }}">
+                    <div class="card-text" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">
                         <i class="fa fa-barcode"></i> {{ relation.exercise.supportfile.code }}  
                         <i class="fa fa-clock-o"></i> {{ relation.duration }} min.
                         <i class="fa fa-save"></i> {{ relation.situation}}

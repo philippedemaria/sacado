@@ -220,30 +220,30 @@
           {% endif %}
 
         <!--  Barre d'outil de la card  -->
-        <div class="card-text" style="background-color:{{ parcours.color }}; text-align:center">
+        <div class="card-text" style="background-color:{{ parcours.color }}; text-align:center;color:{{ parcours.color|contrast_color }}">
             <!-- Appel de la fenetre remédiation 
                   Appel ajax vers la modale qui est dans la page dashboard : id="remediation"
             -->
             <span style="font-size:9px">{{  relation.relationship_remediation.all|length }}</span>
-            <span class="white horizontalmargin5">
+            <span class="horizontalmargin5">
                 <span style="cursor:pointer" data-target="#remediation" data-relationship_id="{{ relation.id }}"  data-toggle='modal' class="white remediation">
                         <i class="fa fa-life-ring"></i>
                 </span>
             </span> 
             <!-- Appel des compétences -->
-            <span class="white horizontalmargin5"><a href="#" style="font-size:14px" class="copy_link white" data-code="{{ relation.exercise.supportfile.code}}">{{ relation.exercise.supportfile.code }}</a></span>  
+            <span class="horizontalmargin5"><a href="#" style="font-size:14px" class="copy_link white" data-code="{{ relation.exercise.supportfile.code}}">{{ relation.exercise.supportfile.code }}</a></span>  
             <!-- Appel des compétences -->
-            <span class="white select_skills horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="skill{{relation.id}}"><i class="fa fa-cogs"></i> </span>             
+            <span class="select_skills horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="skill{{relation.id}}"><i class="fa fa-cogs"></i> </span>             
             <!-- Appel des situations et durée -->
-            <span class="white select_details horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="clock{{relation.id}}"><!-- l'id permet de modifier après ajax le temps -->
+            <span class="select_details horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="clock{{relation.id}}"><!-- l'id permet de modifier après ajax le temps -->
                 <i class="fa fa-clock-o"></i> {{ relation.duration }} min. 
             </span>
             <!-- Appel des situations et durée -->
-            <span class="white select_details horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="save{{relation.id}}"><!-- l'id permet de modifier après ajax le nombre de situation -->
+            <span class="select_details horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="save{{relation.id}}"><!-- l'id permet de modifier après ajax le nombre de situation -->
                 <i class="fa fa-save"></i> {{ relation.situation}}  
             </span>
             <!-- Appel de partage  -->
-            <span  class="white sharer horizontalmargin5" data-relationship_id="{{ relation.id }}">
+            <span  class="sharer horizontalmargin5" data-relationship_id="{{ relation.id }}">
                <i class="fa fa-share-square"></i>
             </span>                                   
             <!-- Suppression de l'exercice dans ce parcours  -->
