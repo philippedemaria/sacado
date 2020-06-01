@@ -73,7 +73,7 @@ def delete_theme(request, id):
 
 def list_knowledges(request):
  
-    knowledges = Knowledge.objects.all()
+    knowledges = Knowledge.objects.all().select_related('theme', 'level').prefetch_related('exercises')
 
     return render(request, 'socle/list_knowledges.html', {'knowledges': knowledges})
 
