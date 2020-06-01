@@ -21,7 +21,7 @@
  
 
 {% block page_title %}
-<span  style="color:{{ parcours.color }}"> <i class="fa fa-laptop"></i>    {{ parcours }} </a> 
+<span  style="color:{{ parcours.color|contrast_color_title }}"> <i class="fa fa-laptop"></i>    {{ parcours }} </a> 
  
  
 <img src="{% static 'img/angle-right.png' %}"/> 

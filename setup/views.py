@@ -38,6 +38,12 @@ def index(request):
 
         if request.user.user_type == 2  :
 
+
+
+
+
+
+
             teacher = Teacher.objects.get(user=request.user)
             groups = Group.objects.filter(teacher=teacher)
             this_user = request.user

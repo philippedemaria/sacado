@@ -15,7 +15,7 @@
 
   
 {% block page_title %}
-    <span style="color:{{ parcours.color }}"><i class="fa fa-calendar-check-o"></i> {{ exercise }}</span>
+    <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-calendar-check-o"></i> {{ exercise }}</span>
 {% endblock %}
 
 {% block page_menu_right %}

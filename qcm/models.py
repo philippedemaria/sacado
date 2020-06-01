@@ -601,5 +601,6 @@ class Constraint(models.Model):
     relationship = models.ForeignKey(Relationship, on_delete=models.CASCADE, default='',   blank=True, related_name='relationship_constraint') 
     scoremin = models.PositiveIntegerField(  default=80, editable=False)  
 
+
     def __str__(self):        
         return "{} à {}%".format(self.code , self.scoremin)

@@ -13,7 +13,7 @@
 
 
 {% block page_title %}
-    <span style="color:{{ parcours.color }}">
+    <span style="color:{{ parcours.color|contrast_color_title }}">
             <i class="fa fa-bar-chart"></i>  Statistiques 
             <img src="{% static 'img/angle-right.png' %}"/>  {{ parcours }}
             <img src="{% static 'img/angle-right.png' %}"/> <small>{{ parcours.exercises.count }} exercice{{ parcours.exercises.count|pluralize }}{% if  parcours.is_evaluation %}

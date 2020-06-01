@@ -19,8 +19,12 @@
     <i class="fa fa-th"></i> Tous les parcours  
 {% endblock %}
 
+
 {% block page_menu_right %}
-     <li  ><a href="{% url 'create_parcours' %}"   class="no_button"><img width="25px" src="{% static 'img/plus.png' %}"/> Nouveau parcours</a></li>
+
+  <li> <a href="{% url 'index' %}"  class="btn btn-new" style="margin-right:5px" > Parcours par défaut</a></li>
+  <li> <a href="{% url 'all_parcourses' %}"   class="btn btn-new white" style="margin-right:5px;background-color: #007bff; color:#FFF!important; "> Parcours mutualisés</a></li>
+  <li> <a href="{% url 'create_parcours' %}"   class="btn btn-new" > Nouveau parcours</a> </li>  
 {% endblock %}
 
 
@@ -48,7 +52,7 @@
                                 <td style="font-size:10px">
                                     {% regroup parcours.exercises.all  by  knowledge.theme as theme_list %} 
                                     {% for theme in theme_list  %}
-                                        <span class="open_details btn btn-subsacado">{{ theme.grouper.name }} 
+                                        <span class="open_details btn btn-default" style="margin:2px">{{ theme.grouper.name }} 
                                             <div class="details_exos">
                                             {% for e in theme.list %}
                                                 {% ifchanged  %}

@@ -23,7 +23,7 @@
 
 {% block page_title %}
     {% if parcours %}
-        <span style="color:{{ parcours.color }}"><i class="fa fa-cogs
+        <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-cogs
         "></i> {{ parcours }}    </span>   <small><img src="{% static 'img/angle-right.png' %}"/> Modification</small>   
     {% else %}
        <i class="fa fa-th"></i> Nouveau parcours   
@@ -37,7 +37,10 @@
 {% block page_menu_right %} 
     {% if parcours %}
         {% include 'qcm/submenu_parcours.html' %}
-    {% endif %}
+    {% endif %} 
+
+  
+
 {% endblock %}
 
  
@@ -58,7 +61,7 @@
                 <div class="col-sm-12 col-md-12">
                     <div class="alert alert-info">
                         <i class="fa fa-warning"></i> Pour associer un parcours à un groupe, tout ou partie, il faut cocher <strong>au moins</strong> un élève de ce groupe. Une fois le parcours créé, vous pourrez choisir ses exercices via l'interface du parcours depuis l'un des groupes associés. 
-                        <br>Si le parcours ne contient aucun élève, il n'est accessible que depuis la rubrique <i class="fa fa-th"></i> Parcours, dans le menu vertical à gauche.
+                        <br>Si le parcours ne contient aucun élève, il est accessible depuis la rubrique <i class="fa fa-th"></i> Parcours ou via le taleau de bord : Mes parcours non affectés.
                     </div>
                 </div>
             </div> 

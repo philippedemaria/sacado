@@ -1,7 +1,7 @@
 {% extends 'dashboard.html' %}
 {% load widget_tweaks %}
 {% load static %}
-
+{% load item_tags %}
 
 {% block require %}
  
@@ -20,7 +20,7 @@
 
 
 {% block page_title %}  
-    <i class='fa fa-cogs'></i>  {% if group %}<span style="color:{{group.color }}" > {{ group }} <img src="{% static 'img/angle-right.png' %}"/> <small> Configuration</small> </span> {% else %} Groupe    <img src="{% static 'img/angle-right.png' %}"/> <small>Nouveau groupe</small> {% endif %}  
+    <i class='fa fa-cogs'></i>  {% if group %}<span style="color:{{group.color|contrast_color_title }}" > {{ group }} <img src="{% static 'img/angle-right.png' %}"/> <small> Configuration</small> </span> {% else %} Groupe    <img src="{% static 'img/angle-right.png' %}"/> <small>Nouveau groupe</small> {% endif %}  
 {% endblock %}
 
 {% block page_menu_right %}

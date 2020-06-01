@@ -140,6 +140,28 @@ def contrast_color(color):
         return "#FFFFFF"
 
 
+@register.filter
+def contrast_color_title(color):
+    """
+    Renvoie la couleur N/B en contraste
+    """
+    try :
+        color_test = 0.299 * int(color[1:3],16) + 0.587 * int(color[3:5],16) + 0.114 * int(color[5:7],16)
+    except :
+        try :
+            if 'rgba' in color :
+                color_tab = color[5:].split(",")
+                color_test = 0.299 * int(color[0]) + 0.587 * int(color[1]) + 0.114 * int(color[2])
+            else :
+                color_test = 10
+        except :
+            color_test = 10
+    if color_test > 200 :
+        return "#271942"
+    else :
+        return color
+
+
 
 @register.filter
 def cleanhtml(arg):

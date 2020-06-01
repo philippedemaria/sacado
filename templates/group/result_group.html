@@ -12,10 +12,10 @@
 {% endblock %}
 
 {% block page_title %}
-    <i class='fa fa-mortar-board'></i>  {{ group.name }}  
+    <span style="color:{{ group.color|contrast_color_title }}"><i class='fa fa-mortar-board'></i>  {{ group.name }}
     <img src="{% static 'img/angle-right.png' %}" width="15px"/> {% if 'exercise' in request.path %} Exercices {% elif 'skill' in request.path %}  Compétences {% else %}  Savoir faire{% endif %} 
     {% if theme %} <img src="{% static 'img/angle-right.png' %}" width="15px"/> <small>{{ theme }}</small>  {% endif %} 
-
+    </span>  
 
 {% endblock %}
 

@@ -209,7 +209,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         // ====================================================================================================================
         // ====================================================================================================================
 
-        $('#handler_order_exercises').click(function(event) {  
+        $('#handler_order_exercises').click(function(event) { 
           if ( show%2 == 0 ) 
             {
                 $('#order_exercises').removeClass('dismissR').addClass('selectedR').show();
