@@ -91,7 +91,7 @@ def count_unique(datas) :
 def include_students(liste,group):
  
     students_tab = liste.split("\r")
- 
+
     for student_tab in students_tab :
         details = student_tab.split(";")
         try:
@@ -99,31 +99,38 @@ def include_students(liste,group):
             lname = str(cleanhtml(details[1].replace(" ",""))).strip()
             password = make_password("sacado2020")
             username = lname + fname
+
             try:
                 email = cleanhtml(details[2])
-                send_mail("Inscription SacAdo", f"Bonjour {fname},\n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : {username}\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , "saca_do_not_reply@sacado.fr" , [email])
+                send_mail("Inscription SacAdo", "Bonjour {fname},\n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : {username}\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , "saca_do_not_reply@sacado.fr" , [email])
+
             except:
                 email = ""
-            user = User.objects.create(last_name=lname, first_name=fname, username=username,
-                                       password=password, email=email, user_type=0)
 
-            student = Student.objects.create(user=user,level=group.level)
-            group.students.add(student)  
-            
-            parcours_tab = []
-            for student in group.students.all():
-                parcourses = student.students_to_parcours.all()
-                for parcours in parcourses :
-                    if not parcours in parcours_tab :
-                        parcours_tab.append(parcours)
+            user, created = User.objects.get_or_create(username=username, defaults = { "last_name" : lname, "first_name" : fname, "password" : password, "email" : email, "user_type" : 0 })
 
-            for p in parcours_tab :
-                p.students.add(student)
-                relationships = Relationship.objects.filter(parcours=p)
-                for relationship in relationships:
-                    relationship.students.add(student)  
+            if created :
+                student = Student.objects.create(user=user,level=group.level)
+                group.students.add(student)  
+
+                parcours_tab = []
+                for student in group.students.all():
+                    parcourses = student.students_to_parcours.all()
+                    for parcours in parcourses :
+                        if not parcours in parcours_tab :
+                            parcours_tab.append(parcours)
+
+                for p in parcours_tab :
+                    p.students.add(student)
+                    relationships = Relationship.objects.filter(parcours=p)
+                    for relationship in relationships:
+                        relationship.students.add(student) 
+                return True
+
+            else :
+                return False
         except:
-            pass 
+            return False 
 
 
 
@@ -138,6 +145,8 @@ def include_students_in_a_model(liste,model):
             lname = cleanhtml(details[1].replace(" ",""))
             password = make_password("sacado2020")
             username = str(lname).strip()+str(fname).strip()
+
+ 
             try:
                 email = cleanhtml(details[2])
                 send_mail("Inscription SacAdo", "Bonjour "+fname+", \n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : "+username+"\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , "saca_do_not_reply@sacado.fr" , [email]) 
@@ -193,7 +202,9 @@ def create_group(request):
         stdts = request.POST.get("students")
 
         if len(stdts) > 0 :
-            include_students(stdts,nf)
+            tested = include_students(stdts,nf)
+            if not tested :
+                messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
 
         if  teacher.teacher_to_group.count() == 1 :
             messages.success(request, "Félicitations... Votre compte sacado est maintenant configuré et votre premier groupe créé !")
@@ -224,9 +235,11 @@ def update_group(request, id):
         nf.save()
         stdts = request.POST.get("students")
 
-        include_students(stdts,group)
+        if len(stdts) > 0 :
+            tested = include_students(stdts,group)
+            if not tested :
+                messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
         
-
         return redirect('index')
     else:
         print(form.errors)

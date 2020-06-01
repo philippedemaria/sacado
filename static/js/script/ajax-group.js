@@ -185,7 +185,5 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
-
-
     });
 });

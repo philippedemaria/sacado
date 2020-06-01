@@ -33,7 +33,7 @@
 </style>
  
 
- 
+{% if knowledges|length > 0 %}
 <div class="row">
     <div class="row">
         <div class="col-sm-12 col-md-12">
@@ -182,8 +182,21 @@
         </div>
     </div>
 </div>
+{% else %}
+<div class="row">
+    <div class="row">
 
+            <div class="col-md-12 col-lg-12 col-sm-12" style="text-align: center">
+                <div class="alert alert-info">
+                    <h1 class="thin"> Aucun exercice n'est proposé à cet élève.</h1>
+                    <div style="border-radius: 50%;width:250px;height:250px; margin-right: auto; margin-left: auto; background-color: #FFF;text-align: center">
+                        <img src="{% static 'img/sacado_color.png' %}"   />  
+                    </div>
+                </div>
+            </div>
 
-    
+    </div>
+</div>
+{% endif  %}   
 
 {% endblock %}

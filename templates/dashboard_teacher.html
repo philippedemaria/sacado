@@ -9,6 +9,8 @@
                 <div class="col-lg-4 col-md-6  col-xs-12">
                     <!-- small box -->
                     <div class="small-box" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}">
+                        
+
                         <!-- modal qui affiche la liste des élèves -->
                         <div class="group_show  group_show{{group.id }}"> 
                             <form action="" method="POST">
@@ -28,7 +30,6 @@
 
 
                         <!-- Legende de la small-box -->
-
                         <div class="inner" style="color:white;opacity:0.9">
                             <span style="color:{{ group.color|contrast_color }};font-size: 35px">{{ group.name }} </span> <br>
                              <span style="color:{{ group.color|contrast_color }};font-size: 16px"><i class="fa fa-barcode"></i> {{ group.code }}</span></h3> 
@@ -59,9 +60,20 @@
                                     </div>
                                 </div>
                                 <div class="row">                              
-                                    <div class="col-lg-12 col-xs-12" style="padding-right:0px; font-size: 15px" >
+                                    <div class="col-lg-10 col-md-10 col-xs-10" style="padding-right:0px; font-size: 15px" >
                                         <span class="small_displayer" style="color:{{ group.color|contrast_color }};"> Lien de connexion à donner aux élèves : http://parcours.erlm.tn/group/{{ group.code }}</span> 
                                     </div>
+
+
+ 
+
+                                    <div class="col-lg-2 col-md-2 col-xs-2" style="padding-right:0px"><br>
+                                        <a  href="#"  class="label_small_box group_shower" data-group_id="{{group.id }}" style="color:{{ group.color|contrast_color }};"><i class="fa fa-users"></i><span class="small_displayer"> {{ group.students.count }}</span> </a>   
+                                    </div>
+
+
+ 
+
                                 </div>
 
 
