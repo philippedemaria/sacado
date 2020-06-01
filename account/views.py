@@ -12,6 +12,7 @@ from .forms import   UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentF
 from account.models import User, Teacher, Student, Resultknowledge, Parent
 from group.models import Group
 import uuid  
+from django.views.decorators.csrf import csrf_exempt
 from socle.models import Theme, Knowledge
 from sendmail.models import Communication
 from qcm.models import Exercise, Studentanswer, Parcours, Relationship, Resultexercise, Studentanswer
@@ -317,7 +318,7 @@ def update_student(request, pk):
 
 
 
-
+@csrf_exempt
 def update_student_by_ajax(request):
 
     student_id =  int(request.POST.get("student_id"))
