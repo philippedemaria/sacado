@@ -498,50 +498,48 @@ def stat_group(request, id):
 @user_is_group_teacher
 def task_group(request, id):
     group = Group.objects.get(id=id)
-    form = EmailForm(request.POST or None )
     stats = []
-    for s in group.students.order_by("user__last_name") :
+    for s in group.students.order_by("user__last_name"):
         student = {}
-        student["name"] = s 
+        student["name"] = s
         parcours = Parcours.objects.filter(students=s)
-        student["parcours"] = parcours 
-        relationships = Relationship.objects.filter(parcours__in = parcours).exclude(date_limit=None)
-        exercises = []
-        done, late, no_done = 0 , 0 , 0 
-        for relationship in relationships :
-            nb_ontime = Studentanswer.objects.filter(student=s, exercise = relationship.exercise ).count()
-            nb = Studentanswer.objects.filter(student=s, exercise = relationship.exercise, date__lte= relationship.date_limit ).count()
-            if nb_ontime == 0 :
+        student["parcours"] = parcours
+        relationships = Relationship.objects.filter(parcours__in=parcours).exclude(date_limit=None).select_related('exercise')
+        done, late, no_done = 0, 0, 0
+        for relationship in relationships:
+            nb_ontime = Studentanswer.objects.filter(student=s, exercise=relationship.exercise).count()
+            nb = Studentanswer.objects.filter(student=s, exercise=relationship.exercise, date__lte=relationship.date_limit).count()
+            if nb_ontime == 0:
                 no_done += 1
-            elif nb > 0 :
+            elif nb > 0:
                 done += 1
-            else :
-                late += 1 
+            else:
+                late += 1
         student["nb"] = no_done + done + late
         student["no_done"] = no_done
         student["done"] = done
         student["late"] = late
         stats.append(student)
 
-    context = {  'group': group,   'stats':stats ,  }
+    context = {'group': group, 'stats': stats, }
 
-    return render(request, 'group/task_group.html', context )
-
+    return render(request, 'group/task_group.html', context)
 
 
 
 
 def select_exercise_by_knowledge(request):
-
-    data={}
-    group_id = request.POST.get("group_id") 
-    group = Group.objects.get(id = int(group_id))
-    teacher = Teacher.objects.get(user = request.user)
-    knowledge_id = request.POST.get("knowledge_id") 
+    data = {}
+    group_id = request.POST.get("group_id")
+    group = Group.objects.get(id=int(group_id))
+    teacher = Teacher.objects.get(user=request.user)
+    knowledge_id = request.POST.get("knowledge_id")
     knowledge = Knowledge.objects.get(id=int(knowledge_id))
-    exercises = Exercise.objects.filter(knowledge = knowledge)
+    exercises = Exercise.objects.filter(knowledge=knowledge)
 
-    data['html'] = render_to_string('qcm/select_exercise_by_knowledge.html', {  'exercises':exercises, 'knowledge' : knowledge, 'group' : group, 'teacher' : teacher  })
+    data['html'] = render_to_string('qcm/select_exercise_by_knowledge.html',
+                                    {'exercises': exercises, 'knowledge': knowledge, 'group': group,
+                                     'teacher': teacher})
     return JsonResponse(data)
 
 
