@@ -48,9 +48,12 @@
                         </td>
                     </tr>    
                     <tr>
-                        <td colspan="2"> 
+                        <td colspan="2">
+                            {% with student.resultknowledge_dict as results %}
+
                             {% for knowledge in knowledges %}
-                                {% get_scorek knowledge student as score %}
+                                {% get_score2 results knowledge.pk  as score %}
+
                                 {% if score != "" %}
                                     <a class="markdown
                                             {% if score < 30 %}
@@ -79,7 +82,8 @@
                                           {{ score }}
                                     </a>
                                 {% endif %}
-                            {% endfor %}                                  
+                            {% endfor %}
+                            {% endwith %}
                         </td>
                     </tr>
                     <tr class="no_padding">
