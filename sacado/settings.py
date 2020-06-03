@@ -21,7 +21,7 @@ LOGIN_URL = '/'
 # Application definition
 
 #ALLOWED_HOSTS = ["*"]
-ALLOWED_HOSTS = ['127.0.0.1','localhost']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','sacado.xyz']
 
 
 # Application definition
@@ -101,7 +101,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'sacado.wsgi.application'
 
-
+ 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',   # Backends disponibles : 'postgresql', 'mysql', 'sqlite3' et 'oracle'.
@@ -118,7 +118,9 @@ DATABASES = {
 
 
 }
+ 
 
+ 
 
 AUTH_USER_MODEL = 'account.User'
 
