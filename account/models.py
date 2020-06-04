@@ -97,15 +97,21 @@ class Student(ModelWithCode):
 
 
     def resultexercises(self):
+        ''' résultats de l'étudiant aux exercices '''
         return self.results_e.all().select_related('exercise__knowledge')
 
-    def resultexercisesdict(self):
-        return {exercise_id: score for exercise_id, score in self.results_e.values_list('exercise_id', 'point')}
+    def resultexercises_dict(self):
+        ''' dictionnaire des résultats de l'étudiant aux exercices
+        cle : exercise_id
+        valeur : score de l'étudiant à cet exercice
+        '''
+        return {exercise_id: point for exercise_id, point in self.results_e.values_list('exercise_id', 'point')}
 
-
-    def resultexercises_by_theme(self,theme):
-
+    def resultexercises_by_theme(self, theme):
+        ''' résultats de l'étudiant pour les évaluations de savoirs-faire d'un thème donné'''
         return self.results_e.filter(exercise__theme=theme).select_related('exercise')
+
+
 
 
 
@@ -113,12 +119,12 @@ class Student(ModelWithCode):
         ''' résultats de l'étudiant aux évaluations de savoirs-faire '''
         return self.results_k.all()
 
-    def resultknowledgedict(self):
+    def resultknowledge_dict(self):
         ''' dictionnaire des résultats de l'étudiant aux évaluations de savoirs-faire
         cle : knowledge_id
         valeur : score de l'étudiant pour ce savoir faire
         '''
-        return {knowledge_id: score for knowledge_id, score in self.results_k.values_list('knowledge_id', 'point')}
+        return {knowledge_id: point for knowledge_id, point in self.results_k.values_list('knowledge_id', 'point')}
 
     def resultknowledge_by_theme(self, theme):
         ''' résultats de l'étudiant pour les évaluations de savoirs-faire d'un thème donné'''

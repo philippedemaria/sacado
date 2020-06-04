@@ -8,7 +8,7 @@ Suivis des exercices publiés
 
  
 {% block result %}
-    {% with student.resultexercisesdict as results %}
+    {% with student.resultexercises_dict as results %}
         {% for r in student.resultexercises %}
             {% with  r.exercise as exercise %}
                 {% include 'group/score.html' %}

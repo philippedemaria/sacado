@@ -29,9 +29,10 @@ from django.core.exceptions import ValidationError
 
 from account.decorators import user_can_read_details, who_can_read_details
 import csv
+from statistics import median, StatisticsError
 from datetime import date, datetime
 from django.apps import apps
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Avg, Sum
 from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.decorators import login_required 
 from django.utils import formats, timezone
@@ -530,15 +531,16 @@ def detail_student_parcours(request, id,idp):
 @user_can_read_details
 def detail_student_all_views(request, id):
 
- 
     user = User.objects.get(pk=id)
     student = Student.objects.get(user=user)
+    studentanswers = student.answers.all()
     themes = student.level.themes.all()
 
 
     parcourses_tab = []
     parcourses_student_tab, exercise_tab = [] ,  []
-    parcourses = student.students_to_parcours.all() 
+    parcourses = student.students_to_parcours.all()
+
     parcourses_student_tab.append(parcourses)
     for parcours in parcourses :
         if not parcours in parcourses_tab :
@@ -551,13 +553,14 @@ def detail_student_all_views(request, id):
                 exercise_tab.append(exercise)
     
     knowledges = []
+
     for exercise in exercise_tab :
         if not exercise.knowledge in knowledges:
             knowledges.append(exercise.knowledge)
 
 
 
-    std = {}
+
     parcourses = Parcours.objects.filter(students=student)
     relationships = Relationship.objects.filter(parcours__in = parcourses).exclude(date_limit=None)
  
@@ -565,57 +568,48 @@ def detail_student_all_views(request, id):
     for relationship in relationships :
         nb_ontime = Studentanswer.objects.filter(student=student, exercise = relationship.exercise ).count()
         nb = Studentanswer.objects.filter(student=student, exercise = relationship.exercise, date__lte= relationship.date_limit ).count()
-        if nb_ontime == 0 :
+        if nb_ontime == 0:
             no_done += 1
-        elif nb > 0 :
+        elif nb > 0:
             done += 1
-        else :
-            late += 1 
-    std["nb"] = no_done + done + late
-    std["no_done"] = no_done
-    std["done"] = done
-    std["late"] = late
+        else:
+            late += 1
 
-    studentanswers = Studentanswer.objects.filter(student=student)
-    nb_exo = studentanswers.count()
-    std["nb_exo"] = nb_exo
-    duration, score = 0, 0
-    tab, tab_date = [], []
-    for studentanswer in  studentanswers : 
-        duration += int(studentanswer.secondes)
-        score += int(studentanswer.point)
-        tab.append(studentanswer.point)
-        tab_date.append(studentanswer.date)
-        tab_date.sort()
-    try :
-        if len(studentanswers)>1 :
-            average_score = int(score/len(studentanswers))
-            std["duration"] = duration
-            std["average_score"] = int(average_score)
-            tab.sort()
-            if len(tab)%2 == 0 :
-                med = (tab[(len(tab)-1)//2]+tab[(len(tab)-1)//2+1])/2 ### len(tab)-1 , ce -1 est causÃ© par le rang 0 du tableau
-            else:
-                med = tab[(len(tab)-1)//2+1]
-            std["median"] = int(med)
-        else :
-            average_score = int(score)
-            std["duration"] = duration
-            std["average_score"] = int(score)
-            std["median"] = int(score)
-    except :
-        std["duration"] = 0
-        std["average_score"] = 0
-        std["median"] = 0
+    std = {
+        "nb": no_done + done + late,
+        "no_done": no_done,
+        "done": done,
+        "late": late,
+        "nb_exo": studentanswers.count(),
+    }
+
+    std.update(studentanswers.aggregate(duration=Sum('secondes'), average_score=Avg('point')))
+
+    if std['duration'] is None:
+        std['duration'] = 0
+    else:
+        std['duration'] = int(std['duration'])
+
+    if std['average_score'] is None:
+        std['average_score'] = 0
+    else:
+        std['average_score'] = int(std['average_score'])
+
+    try:
+        std['median'] = int(median(studentanswers.values_list('point', flat=True)))
+    except StatisticsError:
+        std['median'] = 0
 
 
-    if request.user.user_type == 2 :
+    # import pdb; pdb.set_trace()
+    if request.user.user_type == 2:
         teacher = Teacher.objects.get(user=request.user)
-        group = Group.objects.get(students = student, teacher = teacher)
-        nav = navigation(group,id)
-        context = { 'knowledges': knowledges ,  'parcourses': parcourses , 'std' : std , 'themes' : themes ,  'student': student ,  'sprev_id' :  nav[0]  ,'snext_id' : nav[1]  }
-    else :
-        context = { 'knowledges': knowledges ,  'parcourses': parcourses , 'std' : std , 'themes' : themes ,  'student': student}
+        group = Group.objects.get(students=student, teacher=teacher)
+        nav = navigation(group, id)
+        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'student': student,
+                   'sprev_id': nav[0], 'snext_id': nav[1]}
+    else:
+        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'student': student}
 
     return render(request, 'account/detail_student_all_views.html', context)
 

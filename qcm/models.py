@@ -352,8 +352,8 @@ class Parcours(ModelWithCode):
  
     exercises = models.ManyToManyField(Exercise,   blank=True, through="Relationship", related_name = "exercises_parcours" )   
     students = models.ManyToManyField(Student, blank=True,  related_name='students_to_parcours', verbose_name="Elèves de ce parcours")
-    is_share = models.BooleanField( default = 1 ,  verbose_name="Partagé ?")
-    is_publish = models.BooleanField( default = 0,  verbose_name="Publié ?" )    
+    is_share = models.BooleanField(default=1, verbose_name="Partagé ?")
+    is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
 
 
     level = models.ForeignKey(Level, related_name = "level_parcours", on_delete=models.PROTECT,  default='', blank=True, null= True,  editable=False)
@@ -486,29 +486,25 @@ class Parcours(ModelWithCode):
 
 
 class Relationship(models.Model):
-    exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.PROTECT,  editable= False) 
-    parcours = models.ForeignKey(Parcours, on_delete=models.PROTECT,  related_name='parcours_relationship',  editable= False) 
-    order = models.PositiveIntegerField( default=0,  editable= False) 
-    is_publish = models.BooleanField( default = 1 )
-    start = models.DateField( null=True, blank=True, verbose_name="A partir de")
-    date_limit = models.DateField( null=True, blank=True, verbose_name="Date limite du rendu")
-    is_evaluation = models.BooleanField( default = 0 )  
-    duration = models.PositiveIntegerField(  default=15,   verbose_name="Durée estimée en minutes")   
-    situation = models.PositiveIntegerField(default = 10, verbose_name="Nombre minimal de situations", help_text="Pour valider le qcm")  
-    beginner = models.TimeField( null=True, blank=True, verbose_name="Heure du début")
-    skills = models.ManyToManyField(Skill,  blank=True,  related_name='skills_relationship',  editable= False) 
-    students = models.ManyToManyField(Student, blank=True,  related_name='students_relationship',  editable= False) 
+    exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.PROTECT,  editable= False)
+    parcours = models.ForeignKey(Parcours, on_delete=models.PROTECT,  related_name='parcours_relationship',  editable= False)
+    order = models.PositiveIntegerField(default=0, editable=False)
+    is_publish = models.BooleanField(default=1)
+    start = models.DateField(null=True, blank=True, verbose_name="A partir de")
+    date_limit = models.DateField(null=True, blank=True, verbose_name="Date limite du rendu")
+    is_evaluation = models.BooleanField(default=0)
+    duration = models.PositiveIntegerField(default=15, verbose_name="Durée estimée en minutes")
+    situation = models.PositiveIntegerField(default=10, verbose_name="Nombre minimal de situations", help_text="Pour valider le qcm")
+    beginner = models.TimeField(null=True, blank=True, verbose_name="Heure du début")
+    skills = models.ManyToManyField(Skill, blank=True, related_name='skills_relationship', editable=False)
+    students = models.ManyToManyField(Student, blank=True, related_name='students_relationship', editable=False)
 
-
-
-    def __str__(self):        
+    def __str__(self):
         return "{} : {}".format(self.parcours, self.exercise)
-
 
     class Meta:
         unique_together = ('exercise', 'parcours')
 
- 
 
     def score_student_for_this(self,student):
         studentanswer = Studentanswer.objects.filter(student=student, parcours= self.parcours , exercise = self.exercise ).last()
@@ -548,9 +544,9 @@ class Relationship(models.Model):
 
 class Studentanswer(models.Model):
 
-    parcours = models.ForeignKey(Parcours,  on_delete=models.PROTECT, blank=True, null=True,  related_name='parcours_studentanswer', editable=False) 
+    parcours = models.ForeignKey(Parcours,  on_delete=models.PROTECT, blank=True, null=True,  related_name='answers', editable=False)
     exercise = models.ForeignKey(Exercise,  on_delete=models.PROTECT, blank=True,  related_name='ggbfile_studentanswer', editable=False) 
-    student = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='student_studentanswer', editable=False)
+    student = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='answers', editable=False)
     point  = models.PositiveIntegerField(default=0 )  
     numexo  = models.PositiveIntegerField(default=10 )  
     date = models.DateTimeField(auto_now_add=True)
