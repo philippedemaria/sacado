@@ -243,12 +243,10 @@ class Exercise(models.Model):
 
 
     def is_used(self):
-
-        if Parcours.objects.filter(exercises = self).count() > 0 :
-            test = True
-        else :
-            test = False
-        return test
+        '''
+        Vérifie si l'exercice a été associé à un parcours
+        '''
+        return Relationship.objects.filter(exercise=self).exists()
 
 
 
