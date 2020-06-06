@@ -1404,21 +1404,26 @@ def admin_list_supportfiles(request):
                 knowlegdes = Knowledge.objects.filter(theme=theme,level=level).order_by("theme")
                 knowledges_tab  =  []
                 for knowledge in knowlegdes :
-                    knowledges_dict  =   {}  
-                    knowledges_dict["name"]=knowledge 
+
                     supportfiles = Supportfile.objects.filter(knowledge=knowledge,is_title=0).order_by("theme")
                     supportfiles_tab    =   []
                     for supportfile in supportfiles :
                         supportfiles_tab.append(supportfile)
-                    knowledges_dict["supportfiles"]=supportfiles_tab
+
 
                     exercises = Exercise.objects.filter(knowledge=knowledge,level=level,theme=theme ).exclude(supportfile__in =supportfiles).order_by("theme")
                     exercises_tab  =  []
                     for exercise in exercises :
                         exercises_tab.append(exercise)
-                    knowledges_dict["exercises"]=exercises_tab
+
                     
-                    knowledges_tab.append(knowledges_dict)
+                    knowledges_tab.append(
+                        {
+                            "name": knowledge,
+                            "exercises": exercises_tab,
+                            "supportfiles": supportfiles_tab,
+                        }
+                    )
 
                 themes_dict["knowledges"]=knowledges_tab
                 themes_tab.append(themes_dict)
