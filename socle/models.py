@@ -170,6 +170,7 @@ class Knowledge(models.Model):
                 if Parcours.objects.filter(exercises=exercise):
                     som += 1
             boolean = som > 0
+
         else:
             test = False
             boolean = False
