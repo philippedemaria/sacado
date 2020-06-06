@@ -157,29 +157,24 @@ class Knowledge(models.Model):
         return score
 
 
-
-    def association_knowledge_supportfile(self,supportfile):
+    def association_knowledge_supportfile(self, supportfile):
 
         Exercise = apps.get_model('qcm', 'Exercise')
         Parcours = apps.get_model('qcm', 'Parcours')
-        data = {}
-        if Exercise.objects.filter(supportfile=supportfile, knowledge=self).count()>0 :
+
+        if Exercise.objects.filter(supportfile=supportfile, knowledge=self).count() > 0:
             test = True
             exercises = Exercise.objects.filter(supportfile=supportfile, knowledge=self)
             som = 0
-            for exercise in exercises : 
-                if Parcours.objects.filter(exercises = exercise):
-                    som +=1
-            if som > 0 : 
-                boolean = True
-            else :
-                boolean = False            
-        else :
+            for exercise in exercises:
+                if Parcours.objects.filter(exercises=exercise):
+                    som += 1
+            boolean = som > 0
+        else:
             test = False
             boolean = False
-        data["exercise"] = test 
-        data["parcours"] = boolean 
-        return data
+
+        return {"exercise": test, "parcours": boolean}
 
 
 
