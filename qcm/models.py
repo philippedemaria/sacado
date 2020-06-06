@@ -92,7 +92,6 @@ class Supportfile(models.Model):
 
 
     def levels_used(self):
-
         exercises = Exercise.objects.filter(supportfile = self)
         return exercises
 
@@ -108,7 +107,7 @@ class Exercise(models.Model):
     students = models.ManyToManyField(Student, blank=True,  related_name='exercises', verbose_name="Travail fait")
     level = models.ForeignKey(Level, related_name = "exercises", on_delete=models.PROTECT,    verbose_name="Niveau")
     theme = models.ForeignKey(Theme,    related_name = "theme_exercise", on_delete=models.PROTECT,  verbose_name="Thème") 
-    supportfile = models.ForeignKey(Supportfile, blank=True,  default=1,  related_name = "supportfile_exercise", on_delete=models.PROTECT,  verbose_name="Fichier Géogebra") 
+    supportfile = models.ForeignKey(Supportfile, blank=True,  default=1,  related_name = "exercises", on_delete=models.PROTECT,  verbose_name="Fichier Géogebra")
  
    
     def __str__(self):        
