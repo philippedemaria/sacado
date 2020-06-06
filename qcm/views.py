@@ -1570,45 +1570,42 @@ def show_this_supportfile(request, id):
 
 @login_required
 @user_passes_test(user_is_superuser)
-def create_exercise(request,supportfile_id):
-
-    teacher = Teacher.objects.get(user_id = request.user.id)
-    knowledges = Knowledge.objects.all().order_by("level")
+def create_exercise(request, supportfile_id):
+    teacher = Teacher.objects.get(user_id=request.user.id)
+    knowledges = Knowledge.objects.all().order_by("level").select_related('level')
     supportfile = Supportfile.objects.get(id=supportfile_id)
 
-    if request.user.is_superuser :
-        if request.method == "POST" :
+    if request.user.is_superuser:
+        if request.method == "POST":
             knowledges_id = request.POST.getlist("choice_knowledges")
             knowledges_id_tab = []
-            for k_id in knowledges_id :
+            for k_id in knowledges_id:
                 knowledges_id_tab.append(int(k_id))
 
-
             # les exercices déjà référencés sur le même support par leur knowledge
-            exercises = Exercise.objects.filter(supportfile = supportfile)
-            exercises_Kno_tab  = []
-            for exercise in exercises :
-                if exercise.knowledge.id not in exercises_Kno_tab :
+            exercises = Exercise.objects.filter(supportfile=supportfile)
+            exercises_Kno_tab = []
+            for exercise in exercises:
+                if exercise.knowledge.id not in exercises_Kno_tab:
                     exercises_Kno_tab.append(int(exercise.knowledge.id))
 
             delete_list = [value for value in exercises_Kno_tab if value not in knowledges_id_tab]
 
+            for knowledge_id in knowledges_id_tab:
+                knowledge = Knowledge.objects.get(pk=knowledge_id)
+                exercise, result = Exercise.objects.get_or_create(supportfile=supportfile, knowledge=knowledge,
+                                                                  level=knowledge.level, theme=knowledge.theme)
 
-            for knowledge_id in knowledges_id_tab : 
-                knowledge = Knowledge.objects.get(pk = knowledge_id)
-                exercise, result = Exercise.objects.get_or_create(supportfile = supportfile, knowledge = knowledge, level = knowledge.level, theme = knowledge.theme)
-              
-            for kn_id in delete_list :
-                knowledge = Knowledge.objects.get(pk = kn_id)
-                exercise = Exercise.objects.get(supportfile = supportfile, knowledge = knowledge)
+            for kn_id in delete_list:
+                knowledge = Knowledge.objects.get(pk=kn_id)
+                exercise = Exercise.objects.get(supportfile=supportfile, knowledge=knowledge)
 
-                if Relationship.objects.filter(exercise = exercise).count() == 0 :
-                    exercise.delete() # efface les existants sur le niveau sélectionné
+                if Relationship.objects.filter(exercise=exercise).count() == 0:
+                    exercise.delete()  # efface les existants sur le niveau sélectionné
 
- 
             return redirect('admin_supportfiles')
 
-    context = {  'teacher': teacher,   'knowledges': knowledges, 'supportfile':supportfile  }
+    context = {'teacher': teacher, 'knowledges': knowledges, 'supportfile': supportfile}
 
     return render(request, 'qcm/form_exercise.html', context)
 
