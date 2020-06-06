@@ -51,7 +51,7 @@ def convert_time(duree) :
 
 class Supportfile(models.Model):
 
-    knowledge = models.ForeignKey(Knowledge, on_delete=models.PROTECT,  related_name='knowledge_ggbfile', verbose_name="Savoir faire associé - Titre")   
+    knowledge = models.ForeignKey(Knowledge, on_delete=models.PROTECT,  related_name='supportfiles', verbose_name="Savoir faire associé - Titre")
     annoncement = models.TextField( verbose_name="Précision sur le savoir faire") 
     author = models.ForeignKey(Teacher, related_name = "author_ggbfile", on_delete=models.PROTECT,  editable=False)
 
@@ -92,7 +92,7 @@ class Supportfile(models.Model):
 
 
     def levels_used(self):
-        exercises = Exercise.objects.filter(supportfile = self)
+        exercises = Exercise.objects.filter(supportfile = self).select_related('level')
         return exercises
 
 

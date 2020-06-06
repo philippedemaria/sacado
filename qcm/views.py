@@ -1384,50 +1384,40 @@ def ajax_update_association(request):
 def admin_list_supportfiles(request):
     user = request.user
     teacher = Teacher.objects.get(user=user)
-    if user.is_superuser   :  # admin and more
- 
+    if user.is_superuser:  # admin and more
+
         teacher = Teacher.objects.get(user=user)
         datas = []
-        levels_tab,knowledges_tab, exercises_tab    =   [],  [],  []
 
         levels = Level.objects.all().order_by("id")
-        levels = levels[6:8]
-        for level in levels :
+        #levels = levels[6:8]
+        for level in levels:
             levels_dict = {}
-            levels_dict["name"]=level 
+            levels_dict["name"] = level
 
             themes = level.themes.all().order_by("id")
-            themes_tab =   []
-            for theme in themes :
-                themes_dict =  {}                
-                themes_dict["name"]=theme.name 
-                knowlegdes = Knowledge.objects.filter(theme=theme,level=level).order_by("theme")
-                knowledges_tab  =  []
-                for knowledge in knowlegdes :
+            themes_tab = []
+            for theme in themes:
+                themes_dict = {}
+                themes_dict["name"] = theme.name
+                knowlegdes = Knowledge.objects.filter(theme=theme, level=level).order_by("theme")
+                knowledges_tab = []
+                for knowledge in knowlegdes:
+                    supportfiles = knowledge.supportfiles.filter(is_title=0).order_by("theme")
+                    exercises = Exercise.objects.filter(knowledge=knowledge, level=level, theme=theme).exclude(
+                        supportfile__in=supportfiles).order_by("theme")
 
-                    supportfiles = Supportfile.objects.filter(knowledge=knowledge,is_title=0).order_by("theme")
-                    supportfiles_tab    =   []
-                    for supportfile in supportfiles :
-                        supportfiles_tab.append(supportfile)
-
-
-                    exercises = Exercise.objects.filter(knowledge=knowledge,level=level,theme=theme ).exclude(supportfile__in =supportfiles).order_by("theme")
-                    exercises_tab  =  []
-                    for exercise in exercises :
-                        exercises_tab.append(exercise)
-
-                    
                     knowledges_tab.append(
                         {
                             "name": knowledge,
-                            "exercises": exercises_tab,
-                            "supportfiles": supportfiles_tab,
+                            "exercises": exercises,
+                            "supportfiles": supportfiles,
                         }
                     )
 
-                themes_dict["knowledges"]=knowledges_tab
+                themes_dict["knowledges"] = knowledges_tab
                 themes_tab.append(themes_dict)
-            levels_dict["themes"]=themes_tab
+            levels_dict["themes"] = themes_tab
             datas.append(levels_dict)
 
 
