@@ -49,7 +49,7 @@ def index(request):
             this_user = request.user
             nb_teacher_level = teacher.levels.count()
 
-            relationships = Relationship.objects.values('id','date_limit','parcours','exercise').filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("date_limit").order_by("parcours")
+            relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("date_limit").order_by("parcours")
             
             parcourses = teacher.teacher_parcours.order_by("-is_publish")
 

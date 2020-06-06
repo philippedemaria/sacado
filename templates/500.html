@@ -12,213 +12,79 @@
   <!-- Favicons -->
   <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}" />   
  
-     {% include 'librariesCSS.html' %}
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,500,600,700,700i|Montserrat:300,400,500,600,700" rel="stylesheet">
-
-  <!-- Bootstrap CSS File -->
-  <link href="{% static 'index/lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-
-  <!-- Libraries CSS Files -->
-  <link href="{% static 'index/lib/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
-  <link href="{% static 'index/lib/animate/animate.min.css' %}" rel="stylesheet">
-  <link href="{% static 'index/lib/ionicons/css/ionicons.min.css' %}" rel="stylesheet">
  
-  <link href="{% static 'index/lib/lightbox/css/lightbox.min.css' %}" rel="stylesheet">
+<style>
 
-  <!-- Main Stylesheet File -->
-  <link href="{% static 'index/css/style.css' %}" rel="stylesheet">
 
+body {
+    font-size: 22px;
+    font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+    color: #271942;
+}
+
+a.sacado{
+  text-decoration: none;
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+  color: #0056b3;
+}
+
+a.back{
+  text-decoration: none;
+  font-size: 12px;
+  color: #007bff;
+}
+a.back:hover{
+  color: #271942;
+}
+
+
+section{
+  max-width: 1000px;
+  margin: auto;
+}
+
+
+</style>
 </head>
 
 <body>
- 
-  <header id="header">
 
- 
-    <div class="container">
+<section>
 
-      <div class="logo float-left">
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <a class="navbar-brand" href="{% url 'dashboard' %}"><img src="{% static 'img/sacadoA1.png' %}"/></a>
-        <!-- <a href="#header" class="scrollto"><img src="img/logo.png" alt="" class="img-fluid"></a> -->
-      </div>
+      <a class="navbar-brand sacado" href="{% url 'index' %}"><img src="{% static 'img/sacadoA1.png' %}" style="vertical-align: middle;"/>   SACADO </a>
 
-      <nav class="main-nav float-right d-none d-lg-block">
-        <ul>
-          <li class="active"><a href="#intro">Accueil</a></li>
-          <li><a href="#exercises">Exercices</a></li>
-          <li><a href="#teachers">Enseignants</a></li>
-          <li><a href="#students">Elèves</a></li>
-          <li><a href="#about">A propos</a></li>
-          <li><a href="#footer">Contact</a></li>
-        </ul>
-      </nav><!-- .main-nav -->
-      
-    </div>
-  </header><!-- #header -->
 
-    {% block body %} 
 
+    <div class="row" style="text-align: center;">
+
+
+
+    <p style="font-size:200px;">SORRY...<span style="font-weight: 100; font-size:40px;">La page que vous appelez ne vous semble pas destinée...</span></p>
  
 
-    {% endblock %}
- 
+    <div class="row" style="text-align: center;">
+       <div class="col-xs-12" style="text-align: center;background: #271942;padding:50px;">     
+    
+            <div style="text-align: center;background-color: #FFF; border-radius: 50%; padding:10px;height:250px;width:250px;">
 
-  <!-- JavaScript Libraries -->
- 
-<div class="modal fade" id="connexion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" >
-            <div class="modal-header">
-                <h1  class='sacado'  >Se connecter</h1>
+                <img src="{% static 'img/sacado_color.png' %}" />
+
             </div>
-            <div class="modal-body">
-                   
-                <form action="{%  url 'login' %}" method="POST"  > 
-                        {% csrf_token %} 
-                    <div class="row">
-                        <div class="col-lg-12 col-xs-12">
-                            <div class="form-group">
-                            <label class='white'>{{ form.username.label_tag }} </label>   
-                            {{ form.username |add_class:"form-control" }}
-                            {{ form.username.errors }}
-                            </div>
-                        </div> 
-                    </div> 
-                    <div class="row">
-                        <div class="col-lg-12 col-xs-12">
-                            <div class="form-group">   
-                            <label class='white'>{{ form.password.label_tag }} </label>   
-                            {{ form.password |add_class:"form-control"  }}
-                            {{ form.password.errors }}
-                            </div>
-                        </div> 
-                                {% if request.GET.next %}
-                                 <input type="hidden" name="next" value="{{ request.GET.next }}">
-                                {% endif %}
-                    </div> 
-                    <div class="row">
-                        <div class="col-lg-5 col-xs-12">  
-                            <div class="form-group">   
-                                <a href="#"  data-toggle='modal' data-target='#lostpasswordModal' style="font-size:12px; color : #ef635c;">Identifiants oubliés ?</a>  
-                            </div>        
-                        </div>
-                        <div class="col-lg-4 col-xs-12">  
-                            <div class="form-group">   
-                                <input name="envoi" type="submit" class="btn btn-sacado" value="Connexion" />
-                            </div>        
-                        </div>
-                        <div class="col-lg-3 col-xs-12">  
-                            <div class="form-group">   
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>  
-                            </div>        
-                        </div>
-                    </div>
-                </form> 
-            </div>
+
         </div>
     </div>
-</div>
-<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" >
-            <div class="modal-header">
-                <h1  class='sacado'  >Créer son compte</h1>
-            </div>
-            <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-6 col-xs-6">   
-                            <a  href="#" data-toggle='modal' data-target='#myModal4' ><img src="{% static 'img/teacher.png' %}" border=0 /></a>       
-                        </div>  
-                        <div class="col-lg-1 col-xs-1">    </div>                 
-                        <div class="col-lg-5 col-xs-5">   
-                            <a   href="#" data-toggle='modal' data-target='#myModal3' ><img src="{% static 'img/student.png' %}" border=0  /></a>
-                        </div>   
-                    </div> 
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class='sacado'  >Enseignant </h2>
-            </div>
-            <div class="modal-body">
-                <form action="{%  url 'register_teacher' %}" method="POST" id="teacher_form"  > 
-                {% csrf_token %}
-                    {% include 'user_form.html' %}
-
-                    <div class="row">
-                        <div class="col-lg-6 col-xs-6">   
-                            <div class="form-group"><input name="envoi" type="submit" class="btn btn-sacado sendit" value="S'inscrire" /></div>
-                        </div>        
-                        <div class="col-lg-6 col-xs-6">   
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button> 
-                        </div>             
-                    </div> 
-                </form> 
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="lostpasswordModal" tabindex="-1" role="dialog" aria-labelledby="lostpasswordModal" aria-hidden="true" >
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class='sacado'  >Mot de passe oublié</h4>
-            </div>
-            <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-12 col-xs-12">   
-                            <small>Pour des raisons de sécurité, il n'est pas possible de récupérer votre mot de passe. Vous devez en générer un autre. Vous pourrez le modifier une fois connecté.e dans votre espace personnel.</small>
-                        </div>        
-                    </div> 
-                    <hr>
 
 
-                <form action="{%  url 'lost_password' %}" method="POST"  > 
-                {% csrf_token %}
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <input type="text" placeholder="Renseigner votre courriel" name="email" id="id_email" required class="form-control" />
-                            </div>
-                        </div>
-                    </div>  
-                    <div class="row">
-                        <div class="col-lg-6 col-xs-12">   
-                            <div class="form-group"><input name="envoi" type="submit" class="btn btn-sacado" value="Nouveau mot de passe" /></div>
-                        </div> 
-                    </div> 
-                </form>                
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-            </div>          
-        </div>          
+
 
 
     </div>
-</div>
-  <script src="{% static 'index/lib/jquery/jquery.min.js' %}"></script>
-  <script src="{% static 'index/lib/jquery/jquery-migrate.min.js' %}"></script>
-  <script src="{% static 'index/lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-  <script src="{% static 'index/lib/easing/easing.min.js' %}"></script>
-  <script src="{% static 'index/lib/mobile-nav/mobile-nav.js' %}"></script>
- 
-  <script src="{% static 'index/lib/waypoints/waypoints.min.js' %}"></script>
-  <script src="{% static 'index/lib/counterup/counterup.min.js' %}"></script>
-  <script src="{% static 'index/lib/wow/wow.min.js' %}"></script>
-  <script src="{% static 'index/lib/isotope/isotope.pkgd.min.js' %}"></script>
-  <script src="{% static 'index/lib/lightbox/js/lightbox.min.js' %}"></script>
- 
-  <script src="{% static 'index/contactform/contactform.js' %}"></script>
-  <script src="{% static 'index/js/main.js' %}"></script> 
-    {% block general_js %}
-  <script src="{% static 'js/script/accueil.js' %}"></script> 
-    {% endblock %} 
+    <div class="row" style="text-align: right;">
+     L'équipe sacado. <a href="javascript:history.back()" class="back">Retour</a>
+    </div>
+
+
+</section>
 </body>
 </html>

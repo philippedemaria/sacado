@@ -1337,8 +1337,6 @@ table.table-bordered.dataTable {
   transition: all 0.5s linear; 
   margin:5px;     
 }
-
-
 .image_parcours:hover{
   width:500px;
 }
@@ -5117,4 +5115,3 @@ a.crud{
     white-space: normal !important;
   }
 }
-

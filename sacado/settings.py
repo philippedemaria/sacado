@@ -21,7 +21,7 @@ LOGIN_URL = '/'
 # Application definition
 
 #ALLOWED_HOSTS = ["*"]
-ALLOWED_HOSTS = ['127.0.0.1','localhost','sacado.xyz']
+ALLOWED_HOSTS = ['127.0.0.1','localhost']
 
 
 # Application definition
@@ -59,17 +59,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# AUTHENTICATION_BACKENDS = (
-#     'social_core.backends.google.GoogleOAuth2',
-#     'django.contrib.auth.backends.ModelBackend',
-# )
+ 
 CRON_CLASSES = [
     "setup.cron.MyCronJob",
 ]
-# LOGIN_URL = '/auth/login/google-oauth2/'
-# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '721627486504-fhn3s93bqrdanqbmq303d6lk7p6g2po6.apps.googleusercontent.com'
-# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'qxoZeMvCnZf9_azto3_90n-j'
-# SOCIAL_AUTH_URL_NAMESPACE = 'social'
+ 
 
 ROOT_URLCONF = 'sacado.urls'
 
@@ -78,8 +72,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates', 
         'DIRS': [
         os.path.join(BASE_DIR, 'templates'),
-#        os.path.dirname(os.path.join(BASE_DIR, 'templates')),         
-#        os.path.dirname(os.path.dirname(os.path.join(BASE_DIR, 'templates'))),      
+    
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -90,9 +83,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',       
             ],
-            # 'loaders': [
-            #     'django.template.loaders.app_directories.Loader'
-            # ]
+ 
         },
     },
 ]
@@ -159,21 +150,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
  
-########################################### Security
- 
-# SESSION_COOKIE_SECURE  = True
-# CSRF_COOKIE_SECURE   = True
-# SECURE_BROWSER_XSS_FILTER   = True
-# SECURE_CONTENT_TYPE_NOSNIFF   = True
-# X_FRAME_OPTIONS = 'DENY'
-# SECURE_HSTS_SECONDS = 31536000
-# SECURE_SSL_REDIRECT  = True
-# SECURE_HSTS_INCLUDE_SUBDOMAINS =  True
-# SECURE_HSTS_PRELOAD   = True
-########################################### Static files (CSS, JavaScript, Images)
- 
-
 STATIC_URL = '/static/'
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static') 
 
 STATICFILES_DIRS = (  os.path.join(BASE_DIR, 'static'),)
 
