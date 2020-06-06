@@ -1384,45 +1384,40 @@ def ajax_update_association(request):
 def admin_list_supportfiles(request):
     user = request.user
     teacher = Teacher.objects.get(user=user)
-    if user.is_superuser   :  # admin and more
- 
+    if user.is_superuser:  # admin and more
+
         teacher = Teacher.objects.get(user=user)
         datas = []
-        levels_tab,knowledges_tab, exercises_tab    =   [],  [],  []
 
         levels = Level.objects.all().order_by("id")
-
-        for level in levels :
+        levels = levels[9:10]
+        for level in levels:
             levels_dict = {}
-            levels_dict["name"]=level 
+            levels_dict["name"] = level
 
             themes = level.themes.all().order_by("id")
-            themes_tab =   []
-            for theme in themes :
-                themes_dict =  {}                
-                themes_dict["name"]=theme.name 
-                knowlegdes = Knowledge.objects.filter(theme=theme,level=level).order_by("theme")
-                knowledges_tab  =  []
-                for knowledge in knowlegdes :
-                    knowledges_dict  =   {}  
-                    knowledges_dict["name"]=knowledge 
-                    supportfiles = Supportfile.objects.filter(knowledge=knowledge,is_title=0).order_by("theme")
-                    supportfiles_tab    =   []
-                    for supportfile in supportfiles :
-                        supportfiles_tab.append(supportfile)
-                    knowledges_dict["supportfiles"]=supportfiles_tab
+            themes_tab = []
+            for theme in themes:
+                themes_dict = {}
+                themes_dict["name"] = theme.name
+                knowlegdes = Knowledge.objects.filter(theme=theme, level=level).order_by("theme")
+                knowledges_tab = []
+                for knowledge in knowlegdes:
+                    supportfiles = knowledge.supportfiles.filter(is_title=0).order_by("theme")
+                    exercises = Exercise.objects.filter(knowledge=knowledge, level=level, theme=theme).exclude(
+                        supportfile__in=supportfiles).order_by("theme")
 
-                    exercises = Exercise.objects.filter(knowledge=knowledge,level=level,theme=theme ).exclude(supportfile__in =supportfiles).order_by("theme")
-                    exercises_tab  =  []
-                    for exercise in exercises :
-                        exercises_tab.append(exercise)
-                    knowledges_dict["exercises"]=exercises_tab
-                    
-                    knowledges_tab.append(knowledges_dict)
+                    knowledges_tab.append(
+                        {
+                            "name": knowledge,
+                            "exercises": exercises,
+                            "supportfiles": supportfiles,
+                        }
+                    )
 
-                themes_dict["knowledges"]=knowledges_tab
+                themes_dict["knowledges"] = knowledges_tab
                 themes_tab.append(themes_dict)
-            levels_dict["themes"]=themes_tab
+            levels_dict["themes"] = themes_tab
             datas.append(levels_dict)
 
 
@@ -1575,45 +1570,42 @@ def show_this_supportfile(request, id):
 
 @login_required
 @user_passes_test(user_is_superuser)
-def create_exercise(request,supportfile_id):
-
-    teacher = Teacher.objects.get(user_id = request.user.id)
-    knowledges = Knowledge.objects.all().order_by("level")
+def create_exercise(request, supportfile_id):
+    teacher = Teacher.objects.get(user_id=request.user.id)
+    knowledges = Knowledge.objects.all().order_by("level").select_related('level')
     supportfile = Supportfile.objects.get(id=supportfile_id)
 
-    if request.user.is_superuser :
-        if request.method == "POST" :
+    if request.user.is_superuser:
+        if request.method == "POST":
             knowledges_id = request.POST.getlist("choice_knowledges")
             knowledges_id_tab = []
-            for k_id in knowledges_id :
+            for k_id in knowledges_id:
                 knowledges_id_tab.append(int(k_id))
 
-
             # les exercices déjà référencés sur le même support par leur knowledge
-            exercises = Exercise.objects.filter(supportfile = supportfile)
-            exercises_Kno_tab  = []
-            for exercise in exercises :
-                if exercise.knowledge.id not in exercises_Kno_tab :
+            exercises = Exercise.objects.filter(supportfile=supportfile)
+            exercises_Kno_tab = []
+            for exercise in exercises:
+                if exercise.knowledge.id not in exercises_Kno_tab:
                     exercises_Kno_tab.append(int(exercise.knowledge.id))
 
             delete_list = [value for value in exercises_Kno_tab if value not in knowledges_id_tab]
 
+            for knowledge_id in knowledges_id_tab:
+                knowledge = Knowledge.objects.get(pk=knowledge_id)
+                exercise, result = Exercise.objects.get_or_create(supportfile=supportfile, knowledge=knowledge,
+                                                                  level=knowledge.level, theme=knowledge.theme)
 
-            for knowledge_id in knowledges_id_tab : 
-                knowledge = Knowledge.objects.get(pk = knowledge_id)
-                exercise, result = Exercise.objects.get_or_create(supportfile = supportfile, knowledge = knowledge, level = knowledge.level, theme = knowledge.theme)
-              
-            for kn_id in delete_list :
-                knowledge = Knowledge.objects.get(pk = kn_id)
-                exercise = Exercise.objects.get(supportfile = supportfile, knowledge = knowledge)
+            for kn_id in delete_list:
+                knowledge = Knowledge.objects.get(pk=kn_id)
+                exercise = Exercise.objects.get(supportfile=supportfile, knowledge=knowledge)
 
-                if Relationship.objects.filter(exercise = exercise).count() == 0 :
-                    exercise.delete() # efface les existants sur le niveau sélectionné
+                if Relationship.objects.filter(exercise=exercise).count() == 0:
+                    exercise.delete()  # efface les existants sur le niveau sélectionné
 
- 
             return redirect('admin_supportfiles')
 
-    context = {  'teacher': teacher,   'knowledges': knowledges, 'supportfile':supportfile  }
+    context = {'teacher': teacher, 'knowledges': knowledges, 'supportfile': supportfile}
 
     return render(request, 'qcm/form_exercise.html', context)
 

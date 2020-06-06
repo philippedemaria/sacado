@@ -267,7 +267,8 @@ def get_scorek(obj,student):
 
 
 @register.simple_tag  
-def get_exercises_by_knowledge(obj,student,group):  
+def get_exercises_by_knowledge(obj,student,group):
+    print("#########")
     return obj.exercices_by_knowledge(student,group)
 
 

@@ -70,7 +70,7 @@
                                                         <td>
                                                             <div class="pull-right" > 
 
-                                                            {% for e in supportfile.levels_used %}  
+                                                            {% for e in supportfile.levels_used %}
                                                                 <span class="subtitle">{{ e.level.name }}</span>{% if not forloop.last %}<br>{% endif %}
                                                             {% empty %}
                                                                 <a href="{% url 'show_this_supportfile' supportfile.id  %}"  class="btn btn-danger" target="_blank" >Non utilisé</a>

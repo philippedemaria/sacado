@@ -883,7 +883,6 @@ def my_profile(request):
 
     else :
 
-
         parent = Parent.objects.get(user=user)
         form = ParentForm(request.POST or None, request.FILES or None, instance=parent)
         if request.method == "POST" :
@@ -900,71 +899,59 @@ def my_profile(request):
         return render(request,'account/parent_form.html', {'form':form, 'user_form':user_form, 'student':student, })
 
 
-
-
-
 def ajax_userinfo(request):
-
     username = request.POST.get("username")
- 
-    data = {}    
-    try : 
-        nb_user = User.objects.filter(username = username).count()
-        if  nb_user > 0 :
+
+    data = {}
+    try:
+        nb_user = User.objects.filter(username=username).count()
+        if nb_user > 0:
             data['html'] = "<br><i class='fa fa-times text-danger'></i> Identifiant déjà utilisé."
             data['test'] = False
-        else :
-            data['html'] = "<br><i class='fa fa-check text-success'></i>" 
+        else:
+            data['html'] = "<br><i class='fa fa-check text-success'></i>"
             data['test'] = True
-    except :
-        data['html'] = "<br><i class='fa fa-times text-danger'></i> Identifiant déjà utilisé." 
+    except:
+        data['html'] = "<br><i class='fa fa-times text-danger'></i> Identifiant déjà utilisé."
         data['test'] = False
 
     return JsonResponse(data)
 
 
 def ajax_courseinfo(request):
-
-    groupe_code =  request.POST.get("groupe_code")
-    data = {}    
-    try : 
-        nb_group = Group.objects.filter(code = groupe_code).count()
- 
-        if  nb_group == 1 :
-
-            data['htmlg'] = "<br><i class='fa fa-check text-success'></i>" 
- 
-        else :
+    groupe_code = request.POST.get("groupe_code")
+    data = {}
+    try:
+        nb_group = Group.objects.filter(code=groupe_code).count()
+        if nb_group == 1:
+            data['htmlg'] = "<br><i class='fa fa-check text-success'></i>"
+        else:
             data['htmlg'] = "<br><i class='fa fa-times text-danger'></i> Groupe inconnu."
- 
-    except :
-            data['htmlg'] = "<br><i class='fa fa-times text-danger'></i> Groupe inconnu."
- 
+    except:
+        data['htmlg'] = "<br><i class='fa fa-times text-danger'></i> Groupe inconnu."
 
- 
     return JsonResponse(data)
 
 
-
 def ajax_control_code_student(request):
-
-    data = {}    
-    try : 
+    data = {}
+    try:
         code_student = request.POST.get("code_student")
-        nb_user = Student.objects.filter(code = code_student).count()
+        nb_user = Student.objects.filter(code=code_student).count()
 
-        if  nb_user == 1 :
-            student = Student.objects.get(code = code_student)
-            data['html'] = "<br><i class='fa fa-check text-success'></i> Paire avec "+ student.user.first_name +" en "+student.level.name 
+        if nb_user == 1:
+            student = Student.objects.get(code=code_student)
+            data[
+                'html'] = "<br><i class='fa fa-check text-success'></i> Paire avec " + student.user.first_name + " en " + student.level.name
             data['test'] = True
 
-        else :            
+        else:
             data['html'] = "<br><i class='fa fa-times text-danger'></i> Identifiant déjà utilisé."
             data['test'] = False
 
-    except :
-        data['html'] = "<br><i class='fa fa-times text-danger'></i> Identifiant déjà utilisé." 
-        data['test'] = False 
+    except:
+        data['html'] = "<br><i class='fa fa-times text-danger'></i> Identifiant déjà utilisé."
+        data['test'] = False
 
     return JsonResponse(data)
 
@@ -972,28 +959,23 @@ def ajax_control_code_student(request):
 
 @login_required
 def ajax_detail_student(request):
+    student_id = int(request.POST.get("student_id"))
+    theme_id = int(request.POST.get("theme_id"))
+    group_id = int(request.POST.get("group_id"))
 
-    student_id =  int(request.POST.get("student_id"))
-    theme_id =  int(request.POST.get("theme_id"))
-    group_id =  int(request.POST.get("group_id"))
+    user = User.objects.get(pk=student_id)
+    group = Group.objects.get(pk=group_id)
+    student = Student.objects.get(user=user)
 
-    user = User.objects.get(pk = student_id)
-    group = Group.objects.get(pk = group_id)
-    student = Student.objects.get(user = user)
-
-    if theme_id > 0 :
-        theme = Theme.objects.get(pk = theme_id)
+    if theme_id > 0:
+        theme = Theme.objects.get(pk=theme_id)
         knowledges = group.level.knowledges.filter(theme=theme)
-        context = { 'student': student , 'theme':theme , 'group' : group , 'knowledges' : knowledges }
-    else :
-        themes = []
+        context = {'student': student, 'theme': theme, 'group': group, 'knowledges': knowledges}
+    else:
         themes = group.level.themes.all()
-
-        context = { 'student': student , 'themes':themes , 'group' : group  }
+        context = {'student': student, 'themes': themes, 'group': group}
 
     data = {}
-
- 
     data['html'] = render_to_string('account/ajax_detail_student.html', context)
  
     return JsonResponse(data)
@@ -1001,46 +983,37 @@ def ajax_detail_student(request):
 
 @login_required
 def ajax_detail_student_exercise(request):
+    student_id = int(request.POST.get("student_id"))
+    parcours_id = int(request.POST.get("parcours_id"))
 
-    student_id =  int(request.POST.get("student_id"))
-    parcours_id =  int(request.POST.get("parcours_id"))
-    parcours = Parcours.objects.get(pk = parcours_id)
-    student = Student.objects.get(user_id = student_id)
+    parcours = Parcours.objects.get(pk=parcours_id)
+    student = Student.objects.get(user_id=student_id)
 
-    relationships = Relationship.objects.filter(parcours=parcours,students=student).order_by("order")
-    studentanswers = Studentanswer.objects.filter(student = student, parcours = parcours).order_by("exercise")
+    relationships = Relationship.objects.filter(parcours=parcours, students=student).order_by("order")
+    studentanswers = Studentanswer.objects.filter(student=student, parcours=parcours).order_by("exercise")
 
-    context = { 'student': student ,  'parcours' : parcours,    'studentanswers' : studentanswers,   'relationships' : relationships    }
+    context = {'student': student, 'parcours': parcours, 'studentanswers': studentanswers,
+               'relationships': relationships}
 
     data = {}
-
- 
     data['html'] = render_to_string('account/ajax_detail_student_exercise.html', context)
- 
+
     return JsonResponse(data)
 
 
 @login_required
 def ajax_detail_student_parcours(request):
-
-
     student_id = int(request.POST.get("student_id"))
     parcours_id = int(request.POST.get("parcours_id"))
 
     student = Student.objects.get(user_id=student_id)
     parcours = Parcours.objects.get(pk=parcours_id)
 
-    relationships = Relationship.objects.filter(parcours = parcours).order_by("order")
+    relationships = Relationship.objects.filter(parcours=parcours).order_by("order")
 
-    context = { 'student': student ,   'relationships' : relationships  }
+    context = {'student': student, 'relationships': relationships}
 
     data = {}
-
     data['html'] = render_to_string('account/ajax_detail_student_parcours.html', context)
- 
+
     return JsonResponse(data)
-
-
-
-
-
