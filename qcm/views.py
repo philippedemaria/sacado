@@ -1391,7 +1391,7 @@ def admin_list_supportfiles(request):
         levels_tab,knowledges_tab, exercises_tab    =   [],  [],  []
 
         levels = Level.objects.all().order_by("id")
-
+        levels = levels[6:8]
         for level in levels :
             levels_dict = {}
             levels_dict["name"]=level 
