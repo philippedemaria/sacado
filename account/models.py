@@ -207,7 +207,7 @@ class Student(ModelWithCode):
     def is_task_exists(self,parcours):
         Studentanswer = apps.get_model('qcm', 'Studentanswer')
         Relationship = apps.get_model('qcm', 'Relationship')
-        relationships = Relationship.objects.filter(exercise__students = self, parcours = parcours).exclude(date_limit = None)
+        relationships = Relationship.objects.filter(students = self, parcours = parcours).exclude(date_limit = None)
 
         test =  False # Aucune tache.
         for relationship in relationships :

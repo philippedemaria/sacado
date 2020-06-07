@@ -61,18 +61,11 @@ body{
                             </span>
                         </td>  
                         <td>
-                            <a href="{% url 'update_parcours' parcours.id 0 %}" > {{ parcours.title }} {% if parcours.linked %}(Par défaut){% endif %} <i class="fa fa-pencil-square pull-right" aria-hidden="true"></i></a>
+                            <a href="{% url 'show_parcours' parcours.id %}" > {{ parcours.title }} {% if parcours.linked %}(Par défaut){% endif %} <i class="fa fa-pencil-square pull-right" aria-hidden="true"></i></a>
                              <div style="font-size:14px;margin-top:-5px;">
                                 {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }} - {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }} {% endif %}min. 
-                                <div><a href="{% url 'peuplate_parcours' parcours.id %}" style="font-size: 12px;"><i class="fa fa-laptop"></i> Sélectionner les exercices</a> </div>
 
-                                <div><a href="{% url 'show_parcours' parcours.id   %}"  style="font-size: 12px;"><i class="fa fa-th"></i> Gérer  le parcours</a></div>
 
-                                <div><a href="{% url 'detail_task_parcours' parcours.id 0  %}" style="font-size: 12px;"><i class="fa fa-calendar-check-o"></i> Voir les taches  </a>  </div>
-                                {% if request.session.group_id %}
-                                <div><a href="{% url 'result_parcours' parcours.id  %}" style="font-size: 12px;"><i class="fa fa-mortar-board"></i> Suivi du parcours par élève</a></div> 
-                                <div><a href="{% url 'result_parcours_knowledge' parcours.id   %}" style="font-size: 12px;"><i class="fa fa-trophy" style="font-size: 12px"></i> Suivi du parcours par savoir faire </a></div>
-                                {% endif %}
                             </div>
                         </td> 
                         <td>

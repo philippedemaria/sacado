@@ -20,6 +20,10 @@
         <li {% if 'parcours_show/' in request.path %} class="active" {% endif %}><a href="{% url 'show_parcours' parcours.id   %}"><i class="fa fa-th fa-fw"></i> Voir le parcours</a>   </li>   
         {% if group_id %}
         <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_parcours' parcours.id group_id  %}"><i class="fa fa-cogs fa-fw"></i> Configurer le parcours</a>   </li>
+
+        {% else %}  
+        <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_parcours' parcours.id 0 %}"><i class="fa fa-cogs fa-fw"></i> Configurer le parcours</a>   </li>
+
         {% endif %}  
         <li {% if 'parcours_peuplate/' in request.path %} class="active" {% endif %}><a href="{% url 'peuplate_parcours' parcours.id   %}"><i class="fa fa-laptop fa-fw"></i> Sélectionner les exercices</a>   </li>
         <li><a href="#"  class="no_button" id="handler_order_exercises" ><img src="{% static 'img/order_handler.png' %}" style="margin-right:10px; margin-left:3px"/> Organiser les exercices </a> </li>  

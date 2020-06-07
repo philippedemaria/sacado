@@ -510,7 +510,7 @@ def detail_student_parcours(request, id,idp):
 
 
 
-    relationships = Relationship.objects.filter(parcours = parcours, exercise__students = student, is_publish = 1).order_by("order")
+    relationships = Relationship.objects.filter(parcours = parcours, students = student, is_publish = 1).order_by("order")
 
  
     if request.user.user_type == 2 :
