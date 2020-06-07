@@ -64,7 +64,7 @@
                                                     </td>
                                                 </tr>
 
-
+ 
                                                 {% for supportfile in knowledge.supportfiles  %} 
                                                     <tr>
                                                         <td>
@@ -78,7 +78,6 @@
                                                                <br><a href="{% url 'create_exercise' supportfile.id %}" class="btn btn-primary"  >Associer/Dissocier un savoir faire à ce support</a>
                                                             </div>
 
-
                                                                 <a href="{% url 'show_this_supportfile' supportfile.id   %}" target="_blank"   >  
                                                                     <img src="../../static/uploads/{{ supportfile.imagefile }}" class="imagefile">
                                                                 </a>
@@ -86,14 +85,16 @@
 
                                                                 <a href="{% url 'update_supportfile'  supportfile.id   %}" class="listing" style="font-size: 18px">
                                                                     {{ supportfile.annoncement|cleanhtml|capfirst }} 
-                                                                </a> 
+                                                                </a>  
 
 
                                                                 {% if supportfile.calculator %}
                                                                   <img src="{% static 'img/calculator.png' %}" width="30px" />
                                                                 {% else %}
                                                                   <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
-                                                                {% endif  %}   
+                                                                {% endif  %}
+
+
                                                                  <br>
                                                                 <small>   
                                                                     <i class="fa fa-barcode"></i> {{ supportfile.code }}  {% if supportfile.annoncement|make_list|length < 120 %}<br>{% endif %} 
@@ -104,34 +105,7 @@
                                                     </tr>
                                                 {% endfor %} 
 
-
-                                                {% for exercise in knowledge.exercises  %} 
-                                                    <tr>
-                                                        <td>
-                                                            <div class="pull-right" > 
-
-                                                                {{ exercise.supportfile.knowledge.level.name }}
-
-                                                            </div>
-
-
-                                                                <a href="{% url 'show_this_supportfile' exercise.supportfile.id   %}" target="_blank"   >  
-                                                                    <!--<img src="../../static/uploads/{{ exercise.supportfile.imagefile }}" class="imagefile">-->
-                                                                </a>
-                                                                {% if exercise.supportfile.calculator %}
-                                                                  <img src="{% static 'img/calculator.png' %}" width="30px" />
-                                                                {% else %}
-                                                                  <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
-                                                                {% endif  %}   
-                                                                 <br>
-                                                                <small>   
-                                                                    <i class="fa fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %} 
-                                                                    <i class="fa fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
-                                                                    <i class="fa fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum
-                                                                </small>   
-                                                       </td>
-                                                    </tr>
-                                                {% endfor %} 
+ 
 
 
 
@@ -139,7 +113,7 @@
                                         {% else %} 
                                                 <tr> 
                                                     <td>
-                                                        {{ knowledge.name }} 
+                                                        {{ knowledge.name }}  
                                                         {% if request.user.is_superuser and '/admin' in request.path %}
                                                         <a href="{% url 'create_supportfile_knowledge' knowledge.name.id %}" class="edit"><i class='fa fa-plus pull-right' style="font-size: 10px; margin-right:20px"></i></a>
                                                         {% endif %}

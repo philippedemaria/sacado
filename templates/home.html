@@ -31,11 +31,11 @@
   ============================-->
 
 
-  <section id="intro" class="clearfix">
+  <section id="intro" class="clearfix" >
     <div class="container d-flex h-100">
-      <div class="row justify-content-center align-self-center">
-        <div class="col-xs-12 col-lg-4 intro-info order-md-first order-last">
-          <div class="title">S'entraîner. Progresser. <br>S'auto-évaluer.</div>
+      <div class="row justify-content-center align-self-center" style="padding-bottom:30px">
+        <div class="col-xs-12 col-lg-6 intro-info order-md-first order-last">
+          <div class="title">S'entraîner. <br>Progresser. <br>S'auto-évaluer.</div>
 			    <div class="subtitle marginbottom50">  {{ nb_exercise }} exercice{{  nb_exercise|pluralize }} interactif{{ nb_exercise|pluralize }} corrigé{{  nb_exercise|pluralize }} du CP à la Terminale</div>
           <a href="#" data-toggle='modal' data-target='#connexion'  class="btn btn-primary"> Se connecter </a><br>
           <div style="color:#cb2131;margin-top: 50px">
@@ -43,85 +43,26 @@
             <img src="{% static 'img/firefox.jpg' %}" width="35px" />          
             <img src="{% static 'img/chrome.jpg' %}" width="35px"  />
             <img src="{% static 'img/safari.jpg' %}" width="35px" /><br>
-          <i class="fa fa-apple"></i> <a href="https://java.com/fr/download/help/mac_install.xml" target="_blank" style="color:#cb2131; border-bottom: 1px #cb2131 dashed">Pour safari, installer Java si nécessaire.</a></div> 
+            <i class="fa fa-apple"></i> <a href="https://java.com/fr/download/help/mac_install.xml" target="_blank" style="color:#cb2131; border-bottom: 1px #cb2131 dashed">
+            Pour safari, installer Java si nécessaire.</a>
+          </div> 
+        </div>
+        <div class="col-xs-12 col-lg-6 intro-info order-md-first order-last"  >
+
+            <div  style="position: relative;">
 
 
+              <a href="{% url 'show_exercise'   exercise.id     %}" target="_blank">
+                  <img src="{% if 'logout' in request.path %}../../{% endif %}static/uploads/{{ exercise.supportfile.imagefile }}" width="400" style="position: absolute; top :40px; left:133px;z-index:-1" /> 
+                  <img src="{% static 'img/mains_ip.png' %}" height="490" width="610" style=" z-index: 999" />
+              </a> 
+
+            </div>
 
 
         </div>
 
-
-        <div class="col-xs-12 col-lg-8">
-          <div style="height:30px"></div><div id="loader_index"></div>
-            <div class='justify-content-center' style="position: relative;">                
-                <div class = 'col-auto' id='ggb_applet_container'></div>
-            </div>  
-
-        <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script>
-
-
-         {% if 'logout' in request.path %}
-            <script type="text/javascript">         
-                var parameters = {
-                      "appname":"classic",
-                      "id":"ggb_applet_container",
-                      "prerelease":false,
-                      "width":750,
-                      "height":550,
-                      "showToolBar":false,
-                      "borderColor":"#f5f8fd",
-                      "showMenuBar":false,
-                      "showfullscreenbutton":true,
-                      "showAlgebraInput":false,
-                      "showResetIcon":false,
-                      "enableLabelDrags":false,
-                      "enableShiftDragZoom":true,
-                      "enableRightClick":false,
-                      "capturingThreshold":null,
-                      "showToolBarHelp":false,
-                      "errorDialogsActive":false,
-                      "useBrowserForJS":false,
  
-                   "filename":"../../static/uploads/ggbfiles/10/accueil0000.ggb"
-                };
-                var applet = new GGBApplet('5.0', parameters);
-                // Geogebra applet creation
-                  applet.inject('ggb_applet_container', 'preferHTML5'); 
-
-              </script>
-          {% else %}            
-
-            <script type="text/javascript">
-                  // parameters of the geogebra app
-                var parameters = {
-                      "appname":"classic",
-                      "id":"ggb_applet_container",
-                      "prerelease":false,
-                      "width":{{exercise.supportfile.width}},
-                      "height":{{exercise.supportfile.height}},
-                      "showToolBar":false,
-                      "borderColor":"#f5f8fd",
-                      "showMenuBar":false,
-                      "showAlgebraInput":false,
-                      "showResetIcon":false,
-                      "enableLabelDrags":false,
-                      "enableShiftDragZoom":true,
-                      "enableRightClick":false,
-                      "capturingThreshold":null,
-                      "showToolBarHelp":false,
-                      "errorDialogsActive":false,
-                      "useBrowserForJS":false,
-                          "langage":"en",
-                  "filename":"static/uploads/{{ exercise.supportfile.ggbfile }}" 
-                };
-                var applet = new GGBApplet('5.0', parameters);
-                // Geogebra applet creation
-                  applet.inject('ggb_applet_container', 'preferHTML5'); 
-
-              </script>
-          {% endif %}
-
-        </div>
       </div>
 
     </div>
@@ -181,10 +122,12 @@
         <div class="row">
 
           <div class="col-lg-6 col-xs-12">
-                <h1 class="thin">Suivi des compétences</h1>
-                <h1 class="thin">Suivi des savoir faire</h1>
-                <h1 class="thin">Suivi des acquisitions</h1>
-                <h1 class="thin">Exercices personnalisés</h1>
+              <div class="teachers-img">
+                <img src="{% static 'img/teacher.jpg' %}" width="500" class="img-fluid">
+              </div>
+              <div class="features wow bounceInUp clearfix" style="text-align: center">
+                <h4 class="thin">Proposer des parcours individualisés,<br>suivre les acquisitions de savoir faire,<br> de compétences en quelques clics</h4>
+              </div>
           </div>
           <div class="col-lg-6 col-xs-12">
             <div class="teachers-content">
@@ -420,7 +363,11 @@
                     <h3>SACADO</h3>
                     <p>Deux enseignants, un même projet, une rencontre. Des amis passionnés complètent l'équipe. SACADO est un créateur de parcours d'apprentissage construits à partir d'exercices à variables aléatoires. <br>Les élèves travaillent leurs savoir faire mathématiques. <br>Les enseignants suivent leurs acquisitions. Les résultats s'exportent au format CSV, selon condition.<br>Les parents peuvent accéder aux résultats de leurs enfants.  </p>
                   </div>
-
+                    <h4>Contact</h4>
+                    <p>
+                      Bruno Serres - Nicaragua <br>  
+                      Philippe Demaria - Tunisie <br>                         
+                    </p>
                 </div>
 
                 <div class="col-sm-6">
@@ -436,11 +383,13 @@
                   </div>
 
                   <div class="footer-links">
-                    <h4>Contact</h4>
+                    <h4>Exercices</h4>
                     <p>
+                      Bruno Serres - Nicaragua <br> 
+                      Philippe Demaria - Tunisie <br>                                             
                       Mehdi Boulifa - Tunisie <br> 
-                      Philippe Demaria - Tunisie <br>                         
-                      Bruno Serres - Nicaragua <br>   
+                        
+
              
                     </p>
 

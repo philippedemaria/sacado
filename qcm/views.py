@@ -1405,8 +1405,7 @@ def admin_list_supportfiles(request):
                 knowledges_tab = []
                 for knowledge in knowlegdes:
                     supportfiles = knowledge.supportfiles.filter(is_title=0).order_by("theme")
-                    exercises = Exercise.objects.filter(knowledge=knowledge, level=level, theme=theme).exclude(
-                        supportfile__in=supportfiles).order_by("theme")
+                    exercises = Exercise.objects.filter(knowledge=knowledge, level=level, theme=theme,supportfile__in=supportfiles).order_by("theme")
 
                     knowledges_tab.append(
                         {
