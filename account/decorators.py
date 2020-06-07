@@ -4,7 +4,7 @@ from group.models import Group
 
 
 def user_can_create(user):
-    return user.user_type == 2
+    return user.user_type == User.TEACHER
 
 
 def user_is_superuser(user):

@@ -52,6 +52,7 @@ class User(AbstractUser):
  
     #### user_type = 0 for student, 2 for teacher, 2 + is_superuser for admin,  5 for superuser
 
+    STUDENT, PARENT, TEACHER = 0, 1, 2
 
     CIVILITIES = (
         ('Mme', 'Mme'),
