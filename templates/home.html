@@ -119,7 +119,6 @@
                   applet.inject('ggb_applet_container', 'preferHTML5'); 
 
               </script>
-
           {% endif %}
 
         </div>
@@ -192,12 +191,13 @@
               <div class="features wow bounceInUp clearfix">
                 <h4>Utiliser <span class="sacado">SACADO</span>.</h4>
                 <p>Vous souhaitez suivre les progrès de vos élèves et leur proposer un parcours adapté à leur apprentissage. Bénéficiez d'un tableau de bord personnalisé.</p>
+                 <p>Une interface pour créer vos groupes, gérer vos élèves, leur attribuer des exercices,  des parcours de maitrise, des tâches et suivre leurs progrès. 
+                <p>     <a  href="#" data-toggle='modal' data-target='#myModal4'  class="btn btn-primary"> Inscription gratuite</a> </p>
               </div>
               <div class="features wow bounceInUp clearfix">
-                <h4>Gérer ses classes.</h4>
-                <p>Une interface pour créer vos groupes, gérer vos élèves, leur attribuer des exercices,  des parcours de maitrise, des tâches et suivre leurs progrès. 
-                <br>Des exercices pré-définis sur les niveaux de vos classes directement utilisables, des parcours individualisés construits en quelques clics. </p>
-                <p>     <a  href="#" data-toggle='modal' data-target='#myModal4'  class="btn btn-primary"> Inscription gratuite</a> </p>
+                <h4>Version établissement.</h4>
+                <p>Pour une plus grande rapidité de débit avec des imports/exports en CSV, passer par la version établissement. </p>
+                <p><a href="#footer" class="btn btn-info">Demande d'information</a> </p>
               </div>
             </div>
           </div>
@@ -205,7 +205,7 @@
 
       </div>
 
-      <div class="container">
+<!--       <div class="container">
         <div class="row counters">
           <div class="col-lg-3 col-6 text-center">
             <span data-toggle="counter-up">{{ nb_exercise }}</span>
@@ -227,8 +227,7 @@
             <p>Groupes</p>
           </div>
         </div>
-
-      </div>
+      </div> -->
     </section>
 
     <!--==========================
@@ -419,7 +418,7 @@
 
                   <div class="footer-info">
                     <h3>SACADO</h3>
-                    <p>Deux enseignants B&P, un même projet, une rencontre. Des amis, passionnés complètent notre équipe. SACADO un créateur de parcours d'apprentissage construits à partir d'exercices à variables aléatoires. <br>Les élèves travaillent leur technique mathématique de base. <br>Les enseignants suivent leurs acquisitions. Les résultats au format csv permettent d'exporter les données.<br>Les parents peuvent accéder aux résultats de leurs enfants. </p>
+                    <p>Deux enseignants, un même projet, une rencontre. Des amis passionnés complètent l'équipe. SACADO est un créateur de parcours d'apprentissage construits à partir d'exercices à variables aléatoires. <br>Les élèves travaillent leurs savoir faire mathématiques. <br>Les enseignants suivent leurs acquisitions. Les résultats s'exportent au format CSV, selon condition.<br>Les parents peuvent accéder aux résultats de leurs enfants.  </p>
                   </div>
 
                 </div>
@@ -455,9 +454,9 @@
 
 
 
-                    <h4>Illustration</h4>
+                    <h4>Illustrations</h4>
                     <p>
-                      Ilhiam Kervarrec
+                      Ilhiam Kervarrec <br><a href="https://www.freepik.com/free-photos-vectors/school"  style="color:#535074" target="_blank">freepik - www.freepik.com</a>
                     </p>
 
 
@@ -476,7 +475,7 @@
             <div class="form">
               
               <h4>Envoyez un message</h4>
-              <p>Vous souhaitez devenir administrateur, obtenir des infos, laisser un message. Utiliser cet espace.</p>
+              <p>Vous souhaitez obtenir des infos, utiliser SACADO dans votre établissement, laisser un message. Utiliser cet espace.</p>
               <form action="{% url 'send_message' %}" method="post" >
                   {% csrf_token %}
                 <div class="form-group">
