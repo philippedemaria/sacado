@@ -107,50 +107,45 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
         today = time_zone_user(this_user)
         relationships = Relationship.objects.filter(is_publish = 0,start__lte=today)
         for r in relationships :
-            Relationship.objects.filter(id=r.id).update(is_publish = 1) 
+            Relationship.objects.filter(id=r.id).update(is_publish = 1)
 
-        if self.request.user.is_authenticated  : 
-            if self.request.user.user_type == 2 : # Teacher
+        if self.request.user.is_authenticated  :
+            if self.request.user.user_type == User.TEACHER:  # Teacher
                 teacher = Teacher.objects.get(user=self.request.user.id)
                 groups = Group.objects.filter(teacher = teacher)
- 
-                relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("parcours") 
-                parcourses = Parcours.objects.filter(teacher = teacher,linked=0) # parcours non liés à un groupe
 
-                communications = Communication.objects.filter(active = 1)
+                relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("parcours")
+                parcourses = Parcours.objects.filter(teacher=teacher, linked=0)  # parcours non liés à un groupe
 
-                parcours_tab = Parcours.objects.filter(students=None,teacher = teacher)
+                communications = Communication.objects.filter(active=1)
+                parcours_tab = Parcours.objects.filter(students=None, teacher=teacher)
 
-
-
-
-                context = {  'this_user' : this_user , 'teacher' : teacher , 'relationships' : relationships ,  'parcourses' : parcourses ,   'groups' : groups ,  'parcours_tab' : parcours_tab ,     'communications' : communications ,    }
+                context = {'this_user': this_user, 'teacher': teacher, 'relationships': relationships,
+                           'parcourses': parcourses, 'groups': groups, 'parcours_tab': parcours_tab,
+                           'communications': communications, }
 
 
-            elif self.request.user.user_type == 0 :  # Student
-                student = Student.objects.get(user= self.request.user.id)
+            elif self.request.user.user_type == User.STUDENT :  # Student
+                student = Student.objects.get(user=self.request.user.id)
 
-                parcourses = Parcours.objects.filter(students = student,linked=0, is_evaluation = 0, is_publish = 1)
+                parcourses = Parcours.objects.filter(students=student, linked=0, is_evaluation=0, is_publish=1)
                 groups = student.students_to_group.all()
 
-
                 parcours = []
-                for p in parcourses :
+                for p in parcourses:
                     parcours.append(p)
-                for g in groups :
+                for g in groups:
                     parcours.append(g.parcours)
 
-   
- 
-                relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, is_evaluation=0, date_limit__gte=today).order_by("date_limit")
+                relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in=parcours, is_evaluation=0, date_limit__gte=today).order_by("date_limit")
                 exercise_tab = []
                 for r in relationships:
                     if r not in exercise_tab:
                         exercise_tab.append(r.exercise)
 
                 num = 0
-                for e in exercise_tab :
-                    if Studentanswer.objects.filter(student=student, exercise = e).count() > 0 :
+                for e in exercise_tab:
+                    if Studentanswer.objects.filter(student=student, exercise=e).count() > 0:
                         num += 1
 
                 nb_relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).count()
@@ -173,30 +168,32 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
 
                 relationships_in_late = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, is_evaluation=0, date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
 
- 
-                context = {   'student_id' : student.user.id,  'student' : student, 'relationships' : relationships , 'ratio' : ratio ,  'evaluations' : evaluations ,  'ratiowidth' : ratiowidth , 'relationships_in_late' : relationships_in_late }
+                context = {'student_id': student.user.id, 'student': student, 'relationships': relationships,
+                           'ratio': ratio, 'evaluations': evaluations, 'ratiowidth': ratiowidth,
+                           'relationships_in_late': relationships_in_late}
             
-            elif self.request.user.user_type == 1 :  # Parent
+            elif self.request.user.user_type == User.PARENT:  # Parent
 
-                parent = Parent.objects.get(user= self.request.user)
+                parent = Parent.objects.get(user=self.request.user)
                 students = parent.students.order_by("user__first_name")
-                context = {    'parent' : parent , 'students' : students, }
+                context = {'parent': parent, 'students': students, }
 
         else: ## Anonymous
 
-            form = AuthenticationForm()  
+            form = AuthenticationForm()
             u_form = UserForm()
-            t_form = TeacherForm() 
-            s_form = StudentForm() 
+            t_form = TeacherForm()
+            s_form = StudentForm()
             levels = Level.objects.all()
             exercise_nb = Exercise.objects.filter(is_title=0).count()
 
             exercises = Exercise.objects.filter(is_title=0)
-            
-            i = random.randint(1,len(exercises))
+
+            i = random.randint(1, len(exercises))
             exercise = exercises[i]
 
-            context =  { 'form' : form , 'u_form' : u_form , 't_form' : t_form , 's_form' : s_form ,  'levels' : levels , 'exercise_nb' : exercise_nb , 'exercise' : exercise , }
+            context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form,
+                       'levels': levels, 'exercise_nb': exercise_nb, 'exercise': exercise, }
  
         return context
 
@@ -413,30 +410,31 @@ def detail_student(request, id):
         theme={}
         theme["name"]= t
         relationships = Relationship.objects.filter( students=student,  exercise__theme = t,exercise__supportfile__is_title=0).order_by("exercise__knowledge") # Tous les exercices du niveau de l'élève, classé par thème
- 
-        exercises_tab = [] 
-        for r in relationships :
+
+        exercises_tab = []
+        for r in relationships:
             exo = {}
             exo["name"] = r.exercise
             exo["is_publish"] = r.is_publish
-            stas = Studentanswer.objects.filter( exercise = r.exercise , student= student ).order_by("date")
+            stas = Studentanswer.objects.filter(exercise=r.exercise, student=student).order_by("date")
             scores_tab = []
-            for sta in stas :
-                scores_tab.append(sta) 
-            exo["scores"] = scores_tab         
-            exercises_tab.append(exo) 
-        theme["exercises"]  = exercises_tab
+            for sta in stas:
+                scores_tab.append(sta)
+            exo["scores"] = scores_tab
+            exercises_tab.append(exo)
+        theme["exercises"] = exercises_tab
 
         datas.append(theme)
 
-    if request.user.user_type == 2 :
+    if request.user.user_type == User.TEACHER:
         teacher = Teacher.objects.get(user=request.user)
-        group = Group.objects.get(students = student, teacher = teacher)
-        nav = navigation(group,id)
-        context = { 'datas': datas,  'parcourses':parcourses, 'group':group,  'sprev_id' :  nav[0]  ,'snext_id' : nav[1]  ,   'themes':themes,   'student': student}
-    else :
-        group = Group.objects.filter(students = student).first()
-        context = { 'datas': datas,  'parcourses':parcourses, 'group':group,     'themes':themes,   'student': student}
+        group = Group.objects.get(students=student, teacher=teacher)
+        nav = navigation(group, id)
+        context = {'datas': datas, 'parcourses': parcourses, 'group': group, 'sprev_id': nav[0], 'snext_id': nav[1],
+                   'themes': themes, 'student': student}
+    else:
+        group = Group.objects.filter(students=student).first()
+        context = {'datas': datas, 'parcourses': parcourses, 'group': group, 'themes': themes, 'student': student}
 
     return render(request, 'account/detail_student.html', context)
 
@@ -485,7 +483,7 @@ def detail_student_theme(request, id,idt):
 
 
  
-    if request.user.user_type == 2 :
+    if request.user.user_type == User.TEACHER :
         teacher = Teacher.objects.get(user=request.user)
         group = Group.objects.get(students = student, teacher = teacher)
         nav = navigation(group,id)
@@ -502,24 +500,22 @@ def detail_student_theme(request, id,idt):
 @login_required
 @who_can_read_details
 def detail_student_parcours(request, id,idp):
-
     student = Student.objects.get(user_id=id)
     parcours = Parcours.objects.get(pk=idp)
-    parcourses = Parcours.objects.filter(students = student)  
+    parcourses = Parcours.objects.filter(students=student)
     themes = student.level.themes.all()
 
+    relationships = Relationship.objects.filter(parcours=parcours, exercise__students=student, is_publish=1).order_by("order")
 
-
-    relationships = Relationship.objects.filter(parcours = parcours, exercise__students = student, is_publish = 1).order_by("order")
-
- 
-    if request.user.user_type == 2 :
+    if request.user.user_type == User.TEACHER:
         teacher = Teacher.objects.get(user=request.user)
-        group = Group.objects.get(students = student, teacher = teacher)
-        nav = navigation(group,id)
-        context = {  'relationships':relationships, 'parcours': parcours ,  'themes' : themes ,   'sprev_id' :  nav[0]  ,'snext_id' : nav[1]  ,  'parcourses':parcourses,   'student': student}
-    else :
-        context = {  'relationships':relationships, 'parcours': parcours ,  'themes' : themes ,  'parcourses':parcourses,   'student': student}
+        group = Group.objects.get(students=student, teacher=teacher)
+        nav = navigation(group, id)
+        context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'sprev_id': nav[0],
+                   'snext_id': nav[1], 'parcourses': parcourses, 'student': student}
+    else:
+        context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'parcourses': parcourses,
+                   'student': student}
 
     return render(request, 'account/detail_student_parcours.html', context)
 
@@ -530,31 +526,29 @@ def detail_student_parcours(request, id,idp):
 @login_required
 @user_can_read_details
 def detail_student_all_views(request, id):
-
     user = User.objects.get(pk=id)
     student = Student.objects.get(user=user)
     studentanswers = student.answers.all()
     themes = student.level.themes.all()
 
-
     parcourses_tab = []
-    parcourses_student_tab, exercise_tab = [] ,  []
+    parcourses_student_tab, exercise_tab = [], []
     parcourses = student.students_to_parcours.all()
 
     parcourses_student_tab.append(parcourses)
-    for parcours in parcourses :
-        if not parcours in parcourses_tab :
+    for parcours in parcourses:
+        if not parcours in parcourses_tab:
             parcourses_tab.append(parcours)
 
-    for parcours in parcourses_tab :
+    for parcours in parcourses_tab:
         exercises = parcours.exercises.order_by("theme").prefetch_related('knowledge')
         for exercise in exercises:
-            if not exercise in exercise_tab :
+            if not exercise in exercise_tab:
                 exercise_tab.append(exercise)
-    
+
     knowledges = []
 
-    for exercise in exercise_tab :
+    for exercise in exercise_tab:
         if not exercise.knowledge in knowledges:
             knowledges.append(exercise.knowledge)
 
@@ -602,7 +596,7 @@ def detail_student_all_views(request, id):
 
 
     # import pdb; pdb.set_trace()
-    if request.user.user_type == 2:
+    if request.user.user_type == User.TEACHER:
         teacher = Teacher.objects.get(user=request.user)
         group = Group.objects.get(students=student, teacher=teacher)
         nav = navigation(group, id)
@@ -839,37 +833,37 @@ def my_profile(request):
 
     user = User.objects.get(id=request.user.id)
     user_form = UserUpdateForm(request.POST or None, request.FILES or None, instance=user)
- 
 
-    if request.user.user_type == 2 :
+    if request.user.user_type == User.TEACHER:
         
         teacher = Teacher.objects.get(user=user)
-        
+
         teacher_form = TeacherForm(request.POST or None, request.FILES or None, instance=teacher)
-        if request.method == "POST" :
-            if  all((user_form.is_valid(), teacher_form.is_valid())):
+        if request.method == "POST":
+            if all((user_form.is_valid(), teacher_form.is_valid())):
                 teacher = teacher_form.save(commit=False)
                 teacher.user = user
                 teacher.save()
                 teacher_form.save_m2m()
                 user_form.save()
                 messages.success(request, 'Votre profil a été changé avec succès !')
-                if teacher.teacher_to_group.count() == 0 :
-                    return redirect ('index')
-                else :
+                if teacher.teacher_to_group.count() == 0:
+                    return redirect('index')
+                else:
                     return redirect('profile')
-            else :
+            else:
                 print(user_form.errors)
                 print(teacher_form.errors)
 
-        return render(request,'account/teacher_form.html', {'teacher_form':teacher_form, 'user_form':user_form, 'teacher':teacher})
+        return render(request, 'account/teacher_form.html',
+                      {'teacher_form': teacher_form, 'user_form': user_form, 'teacher': teacher})
 
-    elif request.user.user_type == 0 :
+    elif request.user.user_type == User.STUDENT:
 
         student = Student.objects.get(user=user)
         form = StudentForm(request.POST or None, request.FILES or None, instance=student)
-        if request.method == "POST" :
-            if  all((user_form.is_valid(), form.is_valid())):
+        if request.method == "POST":
+            if all((user_form.is_valid(), form.is_valid())):
                 user_form.save()
                 student_f = form.save(commit=False)
                 student_f.user = user
@@ -877,16 +871,17 @@ def my_profile(request):
                 messages.success(request, 'Votre profil a été changé avec succès !')
                 return redirect('profile')
 
-            else :
+            else:
                 print(form.errors)
-        return render(request,'account/student_form.html', {'form':form, 'user_form':user_form, 'student':student, })
+        return render(request, 'account/student_form.html',
+                      {'form': form, 'user_form': user_form, 'student': student, })
 
-    else :
+    else:
 
         parent = Parent.objects.get(user=user)
         form = ParentForm(request.POST or None, request.FILES or None, instance=parent)
-        if request.method == "POST" :
-            if  all((user_form.is_valid(), form.is_valid())):
+        if request.method == "POST":
+            if all((user_form.is_valid(), form.is_valid())):
                 user_form.save()
                 parent_f = form.save(commit=False)
                 parent_f.user = user
@@ -894,9 +889,9 @@ def my_profile(request):
                 messages.success(request, 'Votre profil a été changé avec succès !')
                 return redirect('profile')
 
-            else :
+            else:
                 print(form.errors)
-        return render(request,'account/parent_form.html', {'form':form, 'user_form':user_form, 'student':student, })
+        return render(request, 'account/parent_form.html', {'form': form, 'user_form': user_form, 'student': student, })
 
 
 def ajax_userinfo(request):

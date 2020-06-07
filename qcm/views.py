@@ -1308,22 +1308,23 @@ def all_datas(user, status):
  
 def list_exercises(request):
     user = request.user
-    if user.user_type == 2 : # teacher
+    if user.user_type == User.TEACHER : # teacher
         teacher = Teacher.objects.get(user=user)
-        datas =  all_datas(user, 0)
+        datas = all_datas(user, 0)
 
-        return render(request, 'qcm/list_exercises.html', {'datas': datas, 'teacher':teacher})
+        return render(request, 'qcm/list_exercises.html', {'datas': datas, 'teacher': teacher})
     
-    elif user.user_type == 0 : # student
+    elif user.user_type == User.STUDENT: # student
         student = Student.objects.get(user=user)
         parcourses = student.students_to_parcours.all()
 
         nb_exercises = Relationship.objects.filter(parcours__in=parcourses,is_publish=1,exercise__supportfile__is_title=0).count()
         relationships = Relationship.objects.filter(parcours__in=parcourses,is_publish=1,exercise__supportfile__is_title=0).order_by("exercise__theme")
 
-        return render(request, 'qcm/student_list_exercises.html', {'relationships': relationships, 'nb_exercises': nb_exercises,   })
+        return render(request, 'qcm/student_list_exercises.html',
+                      {'relationships': relationships, 'nb_exercises': nb_exercises, })
 
-    else :  
+    else:
         exercises = Exercise.objects.all().order_by("level")
         return render(request, 'qcm/list_exercises.html', {'exercises': exercises})
 
@@ -1333,11 +1334,11 @@ def list_exercises(request):
 @user_passes_test(user_is_superuser)
 def admin_list_associations(request):
     user = request.user
-    if user.user_type == 2 : # teacher
+    if user.user_type == User.TEACHER : # teacher
         teacher = Teacher.objects.get(user=user)
-        datas =  all_datas(user, 1)
+        datas = all_datas(user, 1)
 
-        return render(request, 'qcm/list_associations.html', {'datas': datas, 'teacher':teacher})
+        return render(request, 'qcm/list_associations.html', {'datas': datas, 'teacher': teacher})
 
 
 @login_required
@@ -1555,14 +1556,14 @@ def delete_supportfile(request, id):
 @user_passes_test(user_is_superuser)
 def show_this_supportfile(request, id):
 
-    if request.user.user_type == 2:
-        teacher = Teacher.objects.get(user = request.user)
-        parcours = Parcours.objects.filter(teacher = teacher)
+    if request.user.user_type == User.TEACHER:
+        teacher = Teacher.objects.get(user=request.user)
+        parcours = Parcours.objects.filter(teacher=teacher)
 
     supportfile = Supportfile.objects.get(id=id)
     request.session['level_id'] = supportfile.level.id
-    start_time =  time.time()
-    context = {'supportfile': supportfile,  'start_time' : start_time,  'parcours' : parcours }
+    start_time = time.time()
+    context = {'supportfile': supportfile, 'start_time': start_time, 'parcours': parcours}
 
     return render(request, 'qcm/show_supportfile.html', context)
 
@@ -1627,18 +1628,18 @@ def show_exercise(request, id):
 
 def show_this_exercise(request, id):
 
-    if request.user.user_type == 2:
-        teacher = Teacher.objects.get(user = request.user)
-        parcours = Parcours.objects.filter(teacher = teacher)
+    if request.user.user_type == User.TEACHER:
+        teacher = Teacher.objects.get(user=request.user)
+        parcours = Parcours.objects.filter(teacher=teacher)
 
-    else :
-        student = Student.objects.get(user = request.user) 
+    else:
+        student = Student.objects.get(user=request.user)
         parcours = None
 
     exercise = Exercise.objects.get(id=id)
     request.session['level_id'] = exercise.level.id
-    start_time =  time.time()
-    context = {'exercise': exercise,  'start_time' : start_time,  'parcours' : parcours }
+    start_time = time.time()
+    context = {'exercise': exercise, 'start_time': start_time, 'parcours': parcours}
     return render(request, 'qcm/show_exercise.html', context)
 
 

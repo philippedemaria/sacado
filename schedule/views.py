@@ -96,23 +96,24 @@ def delete_in_calendar(user,type_of_event,link):
 
 def events_json(request):
     # Get all events - Pas encore terminé
-    user = User.objects.get(pk = request.user.id)
+    user = User.objects.get(pk=request.user.id)
     today = time_zone_user(request.user)
 
-    if request.user.user_type == 2 :
-        teacher = Teacher.objects.get(user =  user )
-        relationships = Relationship.objects.filter(parcours__teacher = teacher).exclude(date_limit=None)  
-    else :
+    if request.user.user_type == User.TEACHER:
+        teacher = Teacher.objects.get(user=user)
+        relationships = Relationship.objects.filter(parcours__teacher=teacher).exclude(date_limit=None)
+    else:
         student = Student.objects.get(user=request.user.id)
-        parcourses = Parcours.objects.filter(students = student,is_evaluation = 0, is_publish = 1, linked=0)
+        parcourses = Parcours.objects.filter(students=student, is_evaluation=0, is_publish=1, linked=0)
         groups = student.students_to_group.all()
         parcours = []
-        for p in parcourses :
+        for p in parcourses:
             parcours.append(p)
-        for g in groups :
+        for g in groups:
             parcours.append(g.parcours)
 
-        relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours).exclude(date_limit=None)    
+        relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today),
+                                                    parcours__in=parcours).exclude(date_limit=None)
  
     # Create the fullcalendar json events list
     event_list = []
@@ -140,15 +141,16 @@ def events_json(request):
 def calendar_initialize(request):
  
     today = time_zone_user(request.user)
-    if request.user.user_type == 2 :
+    if request.user.user_type == User.TEACHER:
         teacher = Teacher.objects.get(user=request.user)
-        relationships = Relationship.objects.filter(parcours__teacher = teacher, date_limit__gte=today).exclude(date_limit = None) 
-        parcourses = Parcours.objects.filter(teacher = teacher)
-        calendars = Calendar.objects.filter(user = request.user) 
+        relationships = Relationship.objects.filter(parcours__teacher=teacher, date_limit__gte=today).exclude(date_limit=None)
+        parcourses = Parcours.objects.filter(teacher=teacher)
+        calendars = Calendar.objects.filter(user=request.user)
         form = EventForm(request.user, request.POST or None)
-        context = { 'form' : form , 'relationships' : relationships,  'parcourses' : parcourses  ,  'calendars' : calendars  ,  'teacher' : teacher    } 
-    
-    else :
+        context = {'form': form, 'relationships': relationships, 'parcourses': parcourses, 'calendars': calendars,
+                   'teacher': teacher}
+
+    else:
         student = Student.objects.get(user=request.user.id)
 
  

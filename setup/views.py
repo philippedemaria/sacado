@@ -20,8 +20,6 @@ import uuid
 
 def index(request):
 
-    today = timezone.now()
-
     if request.user.is_authenticated:
         if request.user.time_zone:
             time_zome = request.user.time_zone
@@ -35,14 +33,7 @@ def index(request):
             request.user.last_login = today
             request.user.save()
 
-
-        if request.user.user_type == 2  :
-
-
-
-
-
-
+        if request.user.user_type == User.TEACHER:
 
             teacher = Teacher.objects.get(user=request.user)
             groups = Group.objects.filter(teacher=teacher)
@@ -62,38 +53,37 @@ def index(request):
                        'nb_teacher_level': nb_teacher_level}
 
 
-        elif request.user.user_type ==   0: ## student
+        elif request.user.user_type == User.STUDENT: ## student
             student = Student.objects.get(user=request.user.id)
-
-            parcourses = Parcours.objects.filter(students = student,is_evaluation = 0, is_publish = 1)
-            groups = student.students_to_group.all()
+            parcourses = Parcours.objects.filter(students=student, is_evaluation=0, is_publish=1)
 
             parcours = []
-            for p in parcourses :
+
+            for p in parcourses:
                 parcours.append(p)
 
-            relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).order_by("date_limit")
+            relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).order_by("date_limit")
 
             exercise_tab = []
             for r in relationships:
                 if r not in exercise_tab:
                     exercise_tab.append(r.exercise)
             num = 0
-            for e in exercise_tab :
-                if Studentanswer.objects.filter(student=student, exercise = e).count() > 0 :
+            for e in exercise_tab:
+                if Studentanswer.objects.filter(student=student, exercise=e).count() > 0:
                     num += 1
 
-            nb_relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).count()
-            try :
-                ratio = int(num/nb_relationships*100)
-            except :
+            nb_relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).count()
+            try:
+                ratio = int(num / nb_relationships * 100)
+            except:
                 ratio = 0
 
             ratiowidth = int(0.9*ratio)
 
             timer = timezone.now().time()
 
-            evaluations = Parcours.objects.filter(start__lte=today,stop__gte=today, students = student, is_evaluation=1)
+            evaluations = Parcours.objects.filter(start__lte=today, stop__gte=today, students=student, is_evaluation=1)
 
             exercises = []
             studentanswers = Studentanswer.objects.filter(student = student)
@@ -109,7 +99,7 @@ def index(request):
                        'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late,
                        'relationships_in_tasks': relationships_in_tasks}
 
-        elif request.user.user_type == 1:  ## parent
+        elif request.user.user_type == User.PARENT:  ## parent
             parent = Parent.objects.get(user=request.user)
             students = parent.students.order_by("user__first_name")
             context = {'parent': parent, 'students': students, }
@@ -117,32 +107,29 @@ def index(request):
         return render(request, 'dashboard.html', context)
 
 
-    else: ## Anonymous
+    else:  ## Anonymous
         form = AuthenticationForm()
         u_form = UserForm()
         t_form = TeacherForm()
         s_form = StudentForm()
         levels = Level.objects.all()
-        exercise_nb = Exercise.objects.filter(supportfile__is_title=0).count()
 
+        exercise_nb = Exercise.objects.filter(supportfile__is_title=0).count()
         exercises = Exercise.objects.filter(supportfile__is_title=0)
 
-        i = random.randint(1,len(exercises))
+        i = random.randint(1, len(exercises))
         exercise = exercises[i]
 
-        context =  { 'form' : form , 'u_form' : u_form , 't_form' : t_form , 's_form' : s_form ,  'levels' : levels , 'exercise_nb' : exercise_nb , 'exercise' : exercise , }
-        return render(request, 'home.html', context )
-
-
+        context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels,
+                   'exercise_nb': exercise_nb, 'exercise': exercise, }
+        return render(request, 'home.html', context)
 
 
 def logout_view(request):
-
-
-    try :
+    try:
         connexion = Connexion.objects.get(user=user)
         connexion.delete()
-    except :
+    except:
         pass
 
     form = AuthenticationForm()
@@ -151,12 +138,8 @@ def logout_view(request):
     s_form = StudentForm()
     logout(request)
     levels = Level.objects.all()
-    context =  { 'form' : form , 'u_form' : u_form , 't_form' : t_form , 's_form' : s_form ,  'levels' : levels ,  }
-    return render(request, 'home.html', context )
-
-
-
-
+    context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, }
+    return render(request, 'home.html', context)
 
 
 

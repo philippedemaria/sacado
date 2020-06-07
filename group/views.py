@@ -78,56 +78,61 @@ def knowledges_of_a_student(student):
         if not exercise.knowledge in knowledges:
             knowledges.append(exercise.knowledge)
 
-    return knowledges 
+    return knowledges
 
-def count_unique(datas) :
-    tab, nb  = [] , 0
-    for d in datas :
-        if not d in tab :
+
+def count_unique(datas):
+    tab, nb = [], 0
+    for d in datas:
+        if not d in tab:
             nb += 1
             tab.append(d)
     return nb
 
-def include_students(liste,group):
+def include_students(liste, group):
  
     students_tab = liste.split("\r")
 
     for student_tab in students_tab :
         details = student_tab.split(";")
         try:
-            fname = str(cleanhtml(details[0].replace(" ",""))).strip()
-            lname = str(cleanhtml(details[1].replace(" ",""))).strip()
+            fname = str(cleanhtml(details[0].replace(" ", ""))).strip()
+            lname = str(cleanhtml(details[1].replace(" ", ""))).strip()
             password = make_password("sacado2020")
             username = lname + fname
 
             try:
                 email = cleanhtml(details[2])
-                send_mail("Inscription SacAdo", "Bonjour {fname},\n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : {username}\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , "saca_do_not_reply@sacado.fr" , [email])
+                send_mail("Inscription SacAdo",
+                          f"Bonjour {fname},\n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : {username}\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci.",
+                          "saca_do_not_reply@sacado.fr", [email])
 
             except:
                 email = ""
 
-            user, created = User.objects.get_or_create(username=username, defaults = { "last_name" : lname, "first_name" : fname, "password" : password, "email" : email, "user_type" : 0 })
+            user, created = User.objects.get_or_create(username=username,
+                                                       defaults={"last_name": lname, "first_name": fname,
+                                                                 "password": password, "email": email, "user_type": 0})
 
-            if created :
-                student = Student.objects.create(user=user,level=group.level)
-                group.students.add(student)  
+            if created:
+                student = Student.objects.create(user=user, level=group.level)
+                group.students.add(student)
 
                 parcours_tab = []
                 for student in group.students.all():
                     parcourses = student.students_to_parcours.all()
-                    for parcours in parcourses :
-                        if not parcours in parcours_tab :
+                    for parcours in parcourses:
+                        if not parcours in parcours_tab:
                             parcours_tab.append(parcours)
 
-                for p in parcours_tab :
+                for p in parcours_tab:
                     p.students.add(student)
                     relationships = Relationship.objects.filter(parcours=p)
                     for relationship in relationships:
-                        relationship.students.add(student) 
+                        relationship.students.add(student)
                 return True
 
-            else :
+            else:
                 return False
         except:
             return False 
