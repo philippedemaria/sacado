@@ -1,5 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300,400,600,700,300italic,400italic,600italic);
-@import url(https://fonts.googleapis.com/css?family=Pacifico);
+ 
  
 /*--------------------------------------------------------------
 # General
@@ -8,7 +8,6 @@
 body {
   background: #fff;
   color: #444;
-  font-family: "Open Sans", sans-serif;
 }
 
 a {
@@ -767,7 +766,7 @@ table.table-bordered.dataTable {
   font-weight: 700;
   margin-bottom: 15px;
   font-size: 26px;
-  font-family:  'Pacifico',  Helvetica, Arial, sans-serif ; 
+  font-family:  'Roboto',  Helvetica, Arial, sans-serif ; 
 }
 
 #exercises .title a {

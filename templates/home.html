@@ -54,7 +54,15 @@
 
               <a href="{% url 'show_exercise'   exercise.id     %}" target="_blank">
                   <img src="{% if 'logout' in request.path %}../../{% endif %}static/uploads/{{ exercise.supportfile.imagefile }}" width="400" style="position: absolute; top :40px; left:133px;z-index:-1" /> 
+
+                  {% if  exercise.id|divisibleby:"3" %}
                   <img src="{% static 'img/mains_ip.png' %}" height="490" width="610" style=" z-index: 999" />
+                  {% elif  exercise.id|divisibleby:"4" %}
+                  <img src="{% static 'img/ordinateur.png' %}" height="490" style=" z-index: 999" />
+                  {% else %}
+                  <img src="{% static 'img/ordi_portable.png' %}" height="490"   style="  z-index: 999" />
+                  {% endif %}
+
               </a> 
 
             </div>
