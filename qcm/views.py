@@ -1391,7 +1391,6 @@ def admin_list_supportfiles(request):
         datas = []
 
         levels = Level.objects.all().order_by("id")
-        levels = levels[9:10]
         for level in levels:
             levels_dict = {}
             levels_dict["name"] = level
@@ -1423,6 +1422,10 @@ def admin_list_supportfiles(request):
 
 
     return render(request, 'qcm/list_supportfiles.html', {'datas': datas, 'teacher':teacher  })
+
+
+ 
+
 
 
 
