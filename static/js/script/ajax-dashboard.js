@@ -946,7 +946,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 let exercise_id = $(this).attr("data-exercise_id");  
                 let relationship_id = $(this).attr("data-relationship_id");  
  
-                if (!confirm("Pour coller dans une page, sélectionner et copier (CTRL+C) :                    http://parcours.erlm.tn/qcm/"+parcours_id+"/"+exercise_id+"/")) return false;
+                if (!confirm("Pour coller dans une page, sélectionner et copier (CTRL+C) :                    https://sacado.xyz/qcm/"+parcours_id+"/"+exercise_id+"/")) return false;
                     $("#share"+relationship_id).toggle();
                 }
 

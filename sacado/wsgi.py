@@ -11,6 +11,20 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
+"""
+Whitenoise
+"""
+from whitenoise import WhiteNoise
+
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sacado.settings')
 
 application = get_wsgi_application()
+
+
+
+"""
+Whitenoise
+"""
+application = WhiteNoise(application, root='/static/')
+ 

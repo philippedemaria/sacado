@@ -286,7 +286,7 @@ def register_student(request):
             login(request, user)
             messages.success(request, "Inscription réalisée avec succès !")               
             if user_form.cleaned_data['email'] : 
-               send_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers http://parcours.erlm.tn.\n Ceci est un mail automatique. Ne pas répondre.', 'SacAdo_contact@erlm.tn', [request.POST.get("email")])
+               send_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.', 'info@sacado.xyz', [request.POST.get("email")])
         
         else :
             messages.error(request, "Erreur lors de l'enregistrement. Reprendre l'inscription...")
@@ -363,7 +363,7 @@ def newpassword_student(request, id,idg):
     user = student.user
     user.set_password("sacado2020")
     user.save()  
-    send_mail('Réinitialisation de mot de passe Sacado', "Bonjour, votre mot de passe est réinitialisé. Il est générique. Votre mot de passe est : sacado2020.\n\n  Pour plus de sécurité, vous devez le modifier dès votre connexion.\n\n Pour vous connecter, redirigez-vous vers http://parcours.erlm.tn.\n Ceci est un mail automatique. Ne pas répondre.", 'SacAdo_contact@erlm.tn', [user.email])
+    send_mail('Réinitialisation de mot de passe Sacado', "Bonjour, votre mot de passe est réinitialisé. Il est générique. Votre mot de passe est : sacado2020.\n\n  Pour plus de sécurité, vous devez le modifier dès votre connexion.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.", 'info@sacado.xyz', [user.email])
     return redirect('update_group', idg )
 
 
@@ -668,7 +668,7 @@ def register_teacher(request):
 
 
             if user_form.cleaned_data['email'] :
-                send_mail('Création de compte sur Sacado', 'Bonjour, votre compte Sacado est maintenant disponible. \n\n Votre identifiant est '+str(request.POST.get("username")) +".\n Votre mot de passe est "+ str(password)+ ".\n\n  Pour vous connecter, redirigez-vous vers http://parcours.erlm.tn.\n Ceci est un mail automatique. Ne pas répondre.", 'SacAdo_contact@erlm.tn', [request.POST.get("email")])
+                send_mail('Création de compte sur Sacado', 'Bonjour, votre compte Sacado est maintenant disponible. \n\n Votre identifiant est '+str(request.POST.get("username")) +".\n Votre mot de passe est "+ str(password)+ ".\n\n  Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.", 'info@sacado.xyz', [request.POST.get("email")])
             
             users = User.objects.filter(is_superuser=1)
             receivers =[]
@@ -739,7 +739,7 @@ def lost_password(request):
                 emails.append(u.email)
             
         messages.success(request, 'Votre mot de passe a été changé avec succès !')       
-        send_mail('Récupération du mot de passe sur sacado', 'Bonjour, \n\n votre identifiant est '+str(u.username)+' \n votre mot de passe sacado est '+str(password)+'.\n\n Vous pourrez le mdifier une fois connecté. Pour vous connecter, redirigez-vous vers http://parcours.erlm.tn .', 'SacAdo_contact@erlm.tn', emails )
+        send_mail('Récupération du mot de passe sur sacado', 'Bonjour, \n\n votre identifiant est '+str(u.username)+' \n votre mot de passe sacado est '+str(password)+'.\n\n Vous pourrez le mdifier une fois connecté. Pour vous connecter, redirigez-vous vers https://sacado.xyz .', 'info@sacado.xyz', emails )
 
 
     except : 
@@ -757,7 +757,7 @@ def updatepassword(request):
             userport = form.save()
             update_session_auth_hash(request, userport) # Important!
             messages.success(request, 'Votre mot de passe a été modifié avec succès !')
-            send_mail('Changement de mot de passe sur sacAdo', 'Bonjour, votre nouveau mot de passe sacAdo est '+str(request.POST.get("new_password1"))+'. Pour vous connecter, redirigez-vous vers http://parcours.erlm.tn .', 'sacado_not_reply@erlm.tn', [request.user.email])
+            send_mail('Changement de mot de passe sur sacAdo', 'Bonjour, votre nouveau mot de passe sacado est '+str(request.POST.get("new_password1"))+'. Pour vous connecter, redirigez-vous vers https://sacado.xyz .', 'info@sacado.xyz', [request.user.email])
             return redirect('logout')
         else :
             print(form.errors)  
@@ -796,7 +796,7 @@ def register_parent(request):
                 login(request, user)
                 messages.success(request, "Inscription réalisée avec succès !")               
                 if user_form.cleaned_data['email'] :
-                    send_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers http://parcours.erlm.tn.\n Ceci est un mail automatique. Ne pas répondre.', 'SacAdo_contact@erlm.tn', [request.POST.get("email")])
+                    send_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.', 'info@sacado.xyz', [request.POST.get("email")])
         else :
             messages.error(request, "Erreur lors de l'enregistrement. Reprendre l'inscription...")
     return redirect('index')

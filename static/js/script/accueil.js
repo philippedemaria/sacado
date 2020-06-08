@@ -102,7 +102,6 @@
                 let firstname = $("#student_form .id_first_name").val().toLowerCase();
  
                 $("#student_form .username").val(lastname+firstname) ;
-                $("#student_form .email").val(firstname+"."+lastname+"@") ;
 
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
               

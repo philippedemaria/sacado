@@ -131,7 +131,7 @@ def send_to_teachers(level) : # envoie d'une notification au enseignant du nivea
 
     msg = "Un nouvel exercice vient d'être publié sur SacAdo sur le niveau "+str(level)
     try :
-        send_mail("Nouvel exercice SacAdo",  msg , "sacado_Tache@erlm.tn" , rcv)
+        send_mail("Nouvel exercice SacAdo",  msg , "info@sacado.xyz" , rcv)
     except :
         pass
 
@@ -876,7 +876,7 @@ def ajax_exercise_error(request):
     if request.user :
         usr = request.user.email
     else :
-        usr = "sacado_bug_exercise@erlm.tn"
+        usr = "info@sacado.xyz"
 
     msg = "L'exercice dont l'id est -- "+exercise_id+" --  décrit ci-dessous : \n Savoir faire visé : "+exercise.knowledge.name+ " \n Niveau : "+exercise.level.name+  "  \n Thème : "+exercise.theme.name +" comporte un problème. \n  S'il est identifié par l'utilisateur, voici la description :  \n" + message   
 
@@ -1035,7 +1035,7 @@ def ajax_dates(request):
                 r = Relationship.objects.get(pk = int(relationship_id))
                 data["class"] = "btn-success"
                 data["noclass"] = "btn-default"
-                msg = "Pour le "+str(date)+": \n Faire l'exercice : http://parcours.erlm.tn/qcm/show_this_exercise/"+str(r.exercise.id)+" : " +str(r.exercise)+" \n. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
+                msg = "Pour le "+str(date)+": \n Faire l'exercice : https://sacado.xyz/qcm/show_this_exercise/"+str(r.exercise.id)+" : " +str(r.exercise)+" \n. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
                 data["dateur"] = date 
                 students = r.parcours.students.all()
                 rec = []
@@ -1044,15 +1044,15 @@ def ajax_dates(request):
                         if  s.user.email :                  
                             rec.append(s.user.email)
 
-                send_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "sacado_Tache@erlm.tn" , rec ) 
-                send_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "sacado_Tache@erlm.tn" , [r.parcours.teacher.user.email] )   
+                send_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "info@sacado.xyz" , rec ) 
+                send_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "info@sacado.xyz" , [r.parcours.teacher.user.email] )   
 
             else :
                 Relationship.objects.filter(pk = int(relationship_id)).update(date_limit = None)
                 r = Relationship.objects.get(pk = int(relationship_id))
                 data["class"] = "btn-default"
                 data["noclass"] = "btn-success"
-                msg = "L'exercice http://parcours.erlm.tn/qcm/show_this_exercise/"+str(r.exercise.id)+" : "+str(r.exercise)+" n'est plus une tâche \n. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
+                msg = "L'exercice https://sacado.xyz/qcm/show_this_exercise/"+str(r.exercise.id)+" : "+str(r.exercise)+" n'est plus une tâche \n. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
                 date = "Tâche ?"          
                 data["dateur"] = date 
          
@@ -1062,15 +1062,15 @@ def ajax_dates(request):
                     if s.task_post : 
                         if  s.user.email :                  
                             rec.append(s.user.email)
-                send_mail("SacAdo. Annulation de tâche à effectuer",  msg , "sacado_Tache@erlm.tn" , rec ) 
-                send_mail("SacAdo. Annulation de tâche à effectuer",  msg , "sacado_Tache@erlm.tn" , [r.parcours.teacher.user.email] ) 
+                send_mail("SacAdo. Annulation de tâche à effectuer",  msg , "info@sacado.xyz" , rec ) 
+                send_mail("SacAdo. Annulation de tâche à effectuer",  msg , "info@sacado.xyz" , [r.parcours.teacher.user.email] ) 
 
         else :
             Relationship.objects.filter(pk = int(relationship_id)).update(date_limit = date)
             r = Relationship.objects.get(pk = int(relationship_id))
             data["class"] = "btn-success"
             data["noclass"] = "btn-default"
-            msg = "Pour le "+str(date)+": \n Faire l'exercice : http://parcours.erlm.tn/qcm/show_this_exercise/"+str(r.exercise.id)+" : " +str(r.exercise)+" \n. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
+            msg = "Pour le "+str(date)+": \n Faire l'exercice : https://sacado.xyz/qcm/show_this_exercise/"+str(r.exercise.id)+" : " +str(r.exercise)+" \n. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
             
             students = r.parcours.students.all()
             rec = []
@@ -1079,8 +1079,8 @@ def ajax_dates(request):
                     if  s.user.email :                  
                         rec.append(s.user.email)
 
-            send_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "sacado_Tache@erlm.tn" , rec ) 
-            send_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "sacado_Tache@erlm.tn" , [r.parcours.teacher.user.email] ) 
+            send_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "info@sacado.xyz" , rec ) 
+            send_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "info@sacado.xyz" , [r.parcours.teacher.user.email] ) 
 
 
             data["dateur"] = date  
@@ -1716,7 +1716,7 @@ def store_the_score_ajax(request):
                     if not g.teacher.user.email in rec : 
                         rec.append(g.teacher.user.email)
                 if g.teacher.notification :
-                    send_mail("SacAdo Exercice posté",  msg , "sacado_Exo@erlm.tn" , rec )
+                    send_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , rec )
             except:
                 pass
     return JsonResponse(data)
@@ -1783,7 +1783,7 @@ def store_the_score_relation_ajax(request):
                         rec.append(g.teacher.user.email)
  
                 if g.teacher.notification :
-                    send_mail("SacAdo Exercice posté",  msg , "sacado_Exo@erlm.tn" , rec )
+                    send_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , rec )
 
             except:
                 pass
@@ -1953,8 +1953,8 @@ def create_evaluation(request,id, ide):
                 if s.user.email:
                     rcv.append(s.user.email)
 
-            msg = "Une évaluation est annoncée le {} à {}. Connectez vous à votre interface sacAdo le {} à {}. http://parcours.erlm.tn".format(relationship.start, relationship.beginner,relationship.start, relationship.beginner)
-            send_mail("SacAdo Evaluation prévue",  msg , "SacAdo_Evaluation@erlm.tn" , rcv )
+            msg = "Une évaluation est annoncée le {} à {}. Connectez vous à votre interface sacAdo le {} à {}. https://sacado.xyz".format(relationship.start, relationship.beginner,relationship.start, relationship.beginner)
+            send_mail("SacAdo Evaluation prévue",  msg , "info@sacado.xyz" , rcv )
             return redirect("show_parcours" , parcours.id )
         else :
             messages.errors(request,"Erreur de création.")

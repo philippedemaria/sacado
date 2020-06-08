@@ -10,7 +10,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '85umr_$zf2bd58xl)nzf)i*jh)o5h*dp%*3e@pqg+ijem=t1xq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+
 
 
 
@@ -32,7 +33,10 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles',  
+      
+    'whitenoise.runserver_nostatic',
+
     'django_bootstrap_breadcrumbs',  
     'widget_tweaks',
     'ckeditor',   
@@ -51,6 +55,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -58,7 +63,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
  
 CRON_CLASSES = [
     "setup.cron.MyCronJob",
@@ -151,15 +156,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
  
 STATIC_URL = '/static/'
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static') 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static') 
 
-STATICFILES_DIRS = (  os.path.join(BASE_DIR, 'static'),)
+STATICFILES_DIRS = (  os.path.join(BASE_DIR, 'staticfiles'),)
 
 FILE_UPLOAD_PERMISSIONS = 0o775
 
 MEDIA_URL = 'static/uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/uploads')
- 
+
+## For whiteNoise
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' 
 
 #################################################################################################################################
  
@@ -198,8 +205,8 @@ CKEDITOR_CONFIGS = {
 
  
 
-# EMAIL_HOST = 'osmtp.erlm.tn'
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'mem@erlm.tn'
-# EMAIL_HOST_PASSWORD = 'zHPT6NhgXn7nfPj'
-# EMAIL_USE_TLS = True
+EMAIL_HOST = 'mail.sacado.xyz'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'info@sacado.xyz'
+EMAIL_HOST_PASSWORD = 'VT92KLv;orDN'
+EMAIL_USE_TLS = True

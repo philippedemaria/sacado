@@ -640,7 +640,7 @@ def enroll(request,slug): # Inscription des élèves via le lien donné par l'en
                 login(request, user)
                 messages.success(request, "Inscription réalisée avec succès !")               
                 if user_form.cleaned_data['email'] :
-                    send_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers http://sacado.erlm.tn.\n Ceci est un mail automatique. Ne pas répondre.', 'SacAdo_contact@erlm.tn', [request.POST.get("email")])
+                    send_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers http://sacado.erlm.tn.\n Ceci est un mail automatique. Ne pas répondre.', 'info@sacado.xyz', [request.POST.get("email")])
         else :
             messages.error(request, "Erreur lors de l'enregistrement. Reprendre l'inscription...")
         return redirect('index')
@@ -725,7 +725,7 @@ def print_statistiques(request, group_id, student_id):
 
     for student in students :
         #logo = Image('D:/uwamp/www/sacado/static/img/sacadoA1.png')
-        logo = Image('http://parcours.erlm.tn/static/img/sacadoA1.png')
+        logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
         logo_tab = [[logo, "SACADO \nSuivi des acquisitions de savoir faire" ]]
         logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
         logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))

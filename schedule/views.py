@@ -441,9 +441,9 @@ def create_event(request):
 
             directors = Director.objects.filter(user__school_id = int(place) )
             for director in directors :
-                send_mail("INFO : Visite  croisée  MEM le"+ str(date_of_event), "Une visite de classe est programmée dans votre établissement le "+ str(date_of_event)+" à "+str(start_hour)+" entre "+str(neo)+" et "+str(former)+".", "no_reply@erlm.tn", [str(director.user.email)]) # CE
-            send_mail("Visite croisée  MEM le"+ str(date_of_event), "Une visite de classe est programmée le "+ str(date_of_event)+" à "+str(start_hour)+" entre vous et "+str(former)+". Connectez-vous à votre espace MEM https://mem.erlm.tn", "no_reply@erlm.tn", [str(neo.user.email)]) # neo
-            send_mail("Visite croisée  MEM le"+ str(date_of_event), "Une visite de classe est programmée le "+ str(date_of_event)+" à "+str(start_hour)+" entre vous et "+str(former)+". Connectez-vous à votre espace MEM https://mem.erlm.tn", "no_reply@erlm.tn", [str(former.user.email)]) # neo
+                send_mail("INFO : Visite  croisée  MEM le"+ str(date_of_event), "Une visite de classe est programmée dans votre établissement le "+ str(date_of_event)+" à "+str(start_hour)+" entre "+str(neo)+" et "+str(former)+".", "info@sacado.xyz", [str(director.user.email)]) # CE
+            send_mail("Visite croisée  MEM le"+ str(date_of_event), "Une visite de classe est programmée le "+ str(date_of_event)+" à "+str(start_hour)+" entre vous et "+str(former)+". Connectez-vous à votre espace MEM https://mem.erlm.tn", "info@sacado.xyz", [str(neo.user.email)]) # neo
+            send_mail("Visite croisée  MEM le"+ str(date_of_event), "Une visite de classe est programmée le "+ str(date_of_event)+" à "+str(start_hour)+" entre vous et "+str(former)+". Connectez-vous à votre espace MEM https://mem.erlm.tn", "info@sacado.xyz", [str(former.user.email)]) # neo
 
         for user_id in tab_users_id :
             receiver = User.objects.get(pk = user_id)

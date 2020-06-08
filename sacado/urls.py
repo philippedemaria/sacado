@@ -17,7 +17,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import  path, include, re_path  
 from django.conf.urls.static import static
-from django.views.static import serve 
+ 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,9 +38,10 @@ urlpatterns = [
 # handler404 = myapp_views.handler404
 # handler500 = myapp_views.handler500
 
-
+"""
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
+"""
