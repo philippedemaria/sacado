@@ -15,4 +15,4 @@ settings.py
 static/uploads/
 static/admin/
 static/ckeditor
-staticfiles/*
+
