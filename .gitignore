@@ -12,7 +12,6 @@ env
 sacado/settings_prod
 sacado/settings.py
 settings.py
-static/uploads/
-static/admin/
-static/ckeditor
+static/
+
 

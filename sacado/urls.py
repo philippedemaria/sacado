@@ -20,7 +20,7 @@ from django.conf.urls.static import static
  
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+
     path('', include('setup.urls')),
     path('account/', include('account.urls')),     
     path('group/', include('group.urls')), 
@@ -29,7 +29,7 @@ urlpatterns = [
     path('sendmail/', include('sendmail.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('schedule/', include('schedule.urls')), 
-
+    path('school/', include('school.urls')), 
  
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 

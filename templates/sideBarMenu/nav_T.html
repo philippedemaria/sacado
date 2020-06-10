@@ -64,6 +64,18 @@
     </a>
 </li>
 {% endif  %}
+
+
+{% if request.user.is_manager and not request.user.is_superuser  %} 
+<li  class='dropdown  {% if '/admin' in request.path %} active{% endif %}'>
+    <a href="#"   id="admin" >
+        <i class="fa fa-cloud fa-2x"></i> 
+        <div class="captionmenu">Admin</div>
+    </a>
+</li>
+{% endif  %}
+
+
  
  {% if not  '/exercise' in request.path  and      '/sendmail'  not in request.path  and   '/account' not in request.path   %}
  <li  class='dropdown'>

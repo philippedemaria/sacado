@@ -14,7 +14,7 @@
 
 {% block page_title %}
     <a href="#" id='buttonToggle'><i class="fa fa-bars"></i></a> 
-              Messages
+              Messages & Notifications
 {% endblock %}
  
 {% block page_menu_right %}
@@ -37,6 +37,18 @@
     margin-left: auto;
     margin-right: auto ;
 }
+.tab-pane {
+    padding: 15px;
+    background-color: #FFF;
+    border-left: 0px solid #FFF;
+    border-right: 0px solid #FFF;
+    border-bottom: 0px solid #FFF;
+}
+.nav > li > a:hover, .nav > li > a:focus {
+    text-decoration: none;
+    color: #007EE2;
+    text-decoration-style: underline;
+}
 </style>
 <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
 <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script> 
@@ -55,9 +67,12 @@
                     <li><a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Réception <span class="pull-right">({{ emails|length }})</span></a> </li>
                     <li ><a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Envoi <span class="pull-right"> ({{ sent_emails|length }})</span></a> </li>
    
+                <hr>
+
+
+                <li ><a class="nav-link" id="v-pills-notification-tab" data-toggle="pill" href="#v-pills-notification" role="tab" aria-controls="v-pills-notification" aria-selected="false">Notifications <span class="pull-right"> ({{ sent_emails|length }})</span></a> </li>
 
                 </ul>
-
 
 
             </div>
@@ -148,6 +163,53 @@
                         </div>
                       </div>
                   </div>
+
+
+                  <div class="tab-pane fade" id="v-pills-notification" role="tabpanel" aria-labelledby="v-pills-notification-tab" style="position:absolute;width:95%">
+                      <div class="row"> 
+                        <div class="col-sm-12 col-md-12">
+                          {% if sent_emails|length > 0 %}
+                          <form  action="" method="POST">
+                            {% csrf_token %} 
+ 
+                                <table class="table table-striped table-hover display">
+                                  <thead>
+                                      <tr>
+                                        <th>Destinataires </th>
+                                        <th>Objet </th>         
+                                        <th>Date </th>                    
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                        {% for e in sent_emails %}
+                                        <tr> 
+                                          <td  style="width:40%"><a href="{% url 'delete_email'  e.id %}" class="delete pull-right" onclick="return TestDelete('ce message')"><small><i class="fa fa-trash"></i> </small></a>
+                                                  <a href="#" class="show_email" {% if e.author == user %} style="color:#000;"{% endif  %}  data-toggle='modal' data-target='#showEmail'  data-email_id="{{ e.id }}">
+                                                        {% for r in e.receivers.all %} 
+                                                            {{ r }}{% if not forloop.last %}, {% endif %} 
+                                                        {% endfor %} 
+                                                        {% for g in e.groups.all %} 
+                                                            {{ g }}{% if not forloop.last %}, {% endif %} 
+                                                        {% endfor %} 
+                                                  </a>
+                                           </td> 
+                                            <td>
+                                                <a href="#" class="show_email" {% if e.author == user %} style="color:#000;"{% endif  %}  data-toggle='modal' data-target='#showEmail'  data-email_id="{{ e.id }}"> {{ e.subject|truncatechars:30 }} </a>
+                                            </td>  
+                                            <td style="width:20%"><small>{{ e.today|date:"d b. Y" }}</small></td>  
+                                        </tr>
+                                        {% endfor %}
+                                  </tbody>
+                            </table>
+                            </form>
+                            {% else %}
+                              <div class="alert alert-danger">Aucun message</div>
+                            {% endif %}
+                        </div>
+                      </div>
+                  </div>
+
+
  
             </div>
         </div>

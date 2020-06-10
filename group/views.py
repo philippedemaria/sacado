@@ -976,3 +976,6 @@ def print_statistiques(request, group_id, student_id):
     doc.build(elements)
 
     return response
+
+
+ 

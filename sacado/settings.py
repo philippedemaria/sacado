@@ -2,6 +2,7 @@ import os
 from PIL import Image
 from django.urls import reverse_lazy
 from django.conf import global_settings
+ 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -14,7 +15,6 @@ DEBUG = True
 
 
 
-
 # REDIRECT_URL 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
@@ -24,11 +24,10 @@ LOGIN_URL = '/'
 #ALLOWED_HOSTS = ["*"]
 ALLOWED_HOSTS = ['127.0.0.1','localhost']
 
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -47,11 +46,13 @@ INSTALLED_APPS = [
     'qcm',
     'sendmail',
     'schedule',
+    'school',
     "django_cron",
     ]
 #'social_django',
 
 MIDDLEWARE = [
+
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -61,8 +62,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+
  
+
+
 CRON_CLASSES = [
     "setup.cron.MyCronJob",
 ]
@@ -162,9 +167,7 @@ FILE_UPLOAD_PERMISSIONS = 0o775
 
 MEDIA_URL = 'static/uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/uploads')
-
-## For whiteNoise
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' 
+ 
 
 #################################################################################################################################
  

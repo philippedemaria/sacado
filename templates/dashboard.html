@@ -326,11 +326,6 @@
     <hr>
     <div class="row">
         <div class="col-lg-12 col-xs-12"> 
-            <h3 class="thin">Socle</h3>
-        </div>  
-    </div>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12"> 
             <a href="{% url 'levels' %}">Niveaux</a>
         </div>  
     </div>
@@ -359,8 +354,26 @@
         <div class="col-lg-12 col-xs-12"> 
             <a href="{% url 'advises' %}">Modèles et aides </a>
         </div>  
-    </div>            
+    </div> 
     <hr>
+    <h4 class="thin">Etablissement</h4>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12"> 
+            <a href="{% url 'school_teachers' %}">Enseignants</a>
+        </div>  
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12"> 
+            <a href="{% url 'school_groups' %}">Groupes</a>
+        </div>  
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12"> 
+            <a href="{% url 'school_students' %}">Elèves</a>
+        </div>  
+    </div>
+    <hr>
+    <h4 class="thin">SacAdo</h4>
     <div class="row">
         <div class="col-lg-12 col-xs-12"> 
             <a href="{% url 'list_teacher' %}">Enseignants </a>
@@ -377,8 +390,46 @@
         </div>  
     </div>
 </div>
+{%  elif user.is_manager  %}
+    <hr>
+        <h4 class="thin">Etablissement</h4>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12"> 
+            <a href="{% url 'school_teachers' %}">Enseignants</a>
+        </div>  
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12"> 
+            <a href="{% url 'school_groups' %}">Groupes</a>
+        </div>  
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12"> 
+            <a href="{% url 'school_students' %}">Elèves</a>
+        </div>  
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12"> 
+            <a href="{% url 'list_teacher' %}">Enseignants </a>
+        </div>  
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12"> 
+            <a href="{% url 'communications' %}">Communications </a>
+        </div>  
+    </div>
+
 
 {% endif %}
+
+
+
+
+
+
+
 
 
 {% block require %}

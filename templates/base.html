@@ -32,32 +32,28 @@
 </head>
 
 <body>
- 
-  <header id="header">
+    <header id="header">
+        <div class="container">
+          <div class="logo float-left">
+            <!-- Uncomment below if you prefer to use an image logo -->
+            <a class="navbar-brand sacado" href="{% url 'index' %}"><img src="{% static 'img/sacadoA1.png' %}"/>   SACADO </a>
+            <!-- <a href="#header" class="scrollto"><img src="img/logo.png" alt="" class="img-fluid"></a> -->
+          </div>
 
- 
-    <div class="container">
-
-      <div class="logo float-left">
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <a class="navbar-brand sacado" href="{% url 'index' %}"><img src="{% static 'img/sacadoA1.png' %}"/>   SACADO </a>
-        <!-- <a href="#header" class="scrollto"><img src="img/logo.png" alt="" class="img-fluid"></a> -->
-      </div>
-
-      <nav class="main-nav float-right d-none d-lg-block">
-        <ul>
-          <li class="active"><a href="#intro">Accueil</a></li>
-          <li><a href="#exercises">Exercices</a></li>
-          <li><a href="#teachers">Enseignants</a></li>
-          <li><a href="#students">Élèves</a></li>
-          <li><a href="#parents">Parents</a></li>
-          <li><a href="#about">À propos</a></li>
-          <li><a href="#footer">Contact</a></li>
-        </ul>
-      </nav><!-- .main-nav -->
-      
-    </div>
-  </header><!-- #header -->
+          <nav class="main-nav float-right d-none d-lg-block">
+            <ul>
+              <li class="active"><a href="#intro">Accueil</a></li>
+              <li><a href="#exercises">Exercices</a></li>
+              <li><a href="#teachers">Enseignants</a></li>
+              <li><a href="#students">Élèves</a></li>
+              <li><a href="#parents">Parents</a></li>
+              <li><a href="#about">À propos</a></li>
+              <li><a href="#footer">Contact</a></li>
+            </ul>
+          </nav><!-- .main-nav -->
+          
+        </div>
+    </header><!-- #header -->
 
     {% block body %} 
     {% endblock %}
@@ -118,26 +114,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" >
-            <div class="modal-header">
-                <h1  class='thin'  >Créer son compte</h1>
-            </div>
-            <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-6 col-xs-6">   
-                            <a  href="#" data-toggle='modal' data-target='#myModal4' ><img src="{% static 'img/teacher.png' %}" border=0 /></a>       
-                        </div>  
-                        <div class="col-lg-1 col-xs-1">    </div>                 
-                        <div class="col-lg-5 col-xs-5">   
-                            <a   href="#" data-toggle='modal' data-target='#myModal3' ><img src="{% static 'img/student.png' %}" border=0  /></a>
-                        </div>   
-                    </div> 
-            </div>
-        </div>
-    </div>
-</div>
+
 <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

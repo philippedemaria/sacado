@@ -122,7 +122,11 @@ def index(request):
 
         context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels,
                    'exercise_nb': exercise_nb, 'exercise': exercise, }
+
+
+
         return render(request, 'home.html', context)
+
 
 
 def logout_view(request):

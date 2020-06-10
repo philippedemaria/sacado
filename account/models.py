@@ -67,6 +67,8 @@ class User(AbstractUser):
     civilite = models.CharField(max_length=10, default='M.', blank=True,  choices=CIVILITIES, verbose_name="Civilité")
     time_zone = models.CharField(max_length=100, null=True, blank=True,  choices=TZ_SET, verbose_name="Fuseau horaire")
     is_extra = models.BooleanField( default=0 , editable=0)
+    is_manager = models.BooleanField( default=0 )
+    school_id = models.PositiveSmallIntegerField(editable=False,default = 0)
 
 
     def __str__(self):

@@ -1,5 +1,5 @@
 ﻿/**
- * Copyright (c) 2003-2018, CKSource - Frederico Knabben. All rights reserved.
+ * Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -13,7 +13,7 @@
 // ignore it. Otherwise it is strongly recommended to customize this file to match your
 // website requirements and design properly.
 //
-// For more information refer to: https://docs.ckeditor.com/ckeditor4/docs/#!/guide/dev_styles-section-style-rules
+// For more information refer to: https://ckeditor.com/docs/ckeditor4/latest/guide/dev_styles.html#style-rules
 
 CKEDITOR.stylesSet.add( 'default', [
 	/* Block styles */
@@ -35,89 +35,6 @@ CKEDITOR.stylesSet.add( 'default', [
 
 	{ name: 'Italic Title',		element: 'h2', styles: { 'font-style': 'italic' } },
 	{ name: 'Subtitle',			element: 'h3', styles: { 'color': '#aaa', 'font-style': 'italic' } },
-	{ name: 'paragraphe',		element: 'h1', styles: { 'color': '#064c5c', 'font-size': '20px' } },
-	{
-		name: 'Compétences',
-		element: 'div',
-		styles: {			
-			color: '#FFF',
-			padding: '5px 10px',
-			background: '#07889B',
-		}
-	},
-	{
-		name: 'Définition B',
-		element: 'div',
-		styles: {
-			color: '#FFF',
-			padding: '5px 10px',
-			background: '#457b9d',
-			border: '1px solid #1d3557'
-		}
-	},
-	{
-		name: 'Définition',
-		element: 'div',
-		styles: {
-			padding: '5px 10px',
-			background: '#7CDBD5',
-			border: '1px solid #02C8A7'
-		}
-	},
-	{
-		name: 'Théorème',
-		element: 'div',
-		styles: {
-			padding: '5px 10px',			
-			background: '#83b5d4',
-			border: '1px double #457b9d'
-		}
-	},
-	{
-		name: 'Contour',
-		element: 'div',
-		styles: {
-			padding: '5px 10px',
-			border: '1px double #88b3ad'
-		}
-	},
-	{
-		name: 'Remarque',
-		element: 'div',
-		styles: {
-			padding: '5px 10px',
-			background: '#fffce8',
-			border: '1px dashed #F9BE02'
-		}
-	},
-	{
-		name: 'Remarque L',
-		element: 'div',
-		styles: {
-			padding: '5px 10px',
-			background: '#f2faef',
-			border: '1px dashed #c6cdc3'
-		}
-	},
-	{
-		name: 'Notation',
-		element: 'div',
-		styles: {
-			display: "inline-block" ,
-			padding: '5px 10px',
-			background: '#ffd6d9',
-			border: '1px solid #F53240'
-		}
-	},
-	{
-		name: 'Contour R',
-		element: 'div',
-		styles: {
-			display: "inline-block" , 
-			padding: '5px 10px',
-			border: '1px double #d23440'
-		}
-	},
 	{
 		name: 'Special Container',
 		element: 'div',
@@ -127,24 +44,6 @@ CKEDITOR.stylesSet.add( 'default', [
 			border: '1px solid #ccc'
 		}
 	},
-	{
-		name: 'Consigne',
-		element: 'div',
-		styles: {
-			'font-size': '18px',
-			'font-weight': '100',
-			padding: '15px',
-			background: '#F7F7F7',
-			'margin-bottom': '20px',
-			border: '1px solid #ccc',
-  			'border-left' : '5px solid #00819F',
-		}
-	},
-
-
- 
-
-
 
 	/* Inline styles */
 
