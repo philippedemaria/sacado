@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from account.models import User, Teacher,Student
+from qcm.models import Studentanswer, Relationship
 from group.models import Group
 from sendmail.models import Email, Communication 
 from sendmail.forms import EmailForm , CommunicationForm 
@@ -34,7 +35,7 @@ def list_emails(request):
 	user = User.objects.get(pk = request.user.id)
 	users = []
 
-	if user.user_type > 0 :
+	if user.user_type > 1 :
 		teacher = Teacher.objects.get(user = user)
 		groups = Group.objects.filter(teacher=teacher)
 
@@ -42,18 +43,25 @@ def list_emails(request):
 			for s in group.students.filter() : 
 				users.append(s.user)
 
+		studentanswers = Studentanswer.objects.filter(student__user__in =  users).order_by("-date")[:50]
+		tasks = Relationship.objects.filter(exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")[:50] 
+		sent_emails = Email.objects.distinct().filter(author = user).order_by("-today")
+		emails = Email.objects.distinct().filter(receivers =  user).order_by("-today")
+		form = EmailForm(request.POST or None,request.FILES or None)
+
+		return render(request,'sendmail/list.html', {'emails':emails , 'sent_emails':sent_emails ,  'form':form ,  'users':users  ,'groups':groups  , 'studentanswers':studentanswers,'tasks':tasks } )
+
 	else :
 		student = Student.objects.get(user = user)
 		groups = student.students_to_group.all() 
 		for group in groups:
 			users.append(group.teacher.user)
+		sent_emails = Email.objects.distinct().filter(author = user).order_by("-today")
+		emails = Email.objects.distinct().filter(receivers =  user).order_by("-today")
+		form = EmailForm(request.POST or None,request.FILES or None)
 
-	#emails = Email.objects.filter(receivers =  user).order_by("-today")
-	sent_emails = Email.objects.distinct().filter(author = user).order_by("-today")
-	emails = Email.objects.distinct().filter(receivers =  user).order_by("-today")
-	form = EmailForm(request.POST or None,request.FILES or None)
 
-	return render(request,'sendmail/list.html', {'emails':emails , 'sent_emails':sent_emails ,  'form':form ,  'users':users  ,'groups':groups } )
+		return render(request,'sendmail/list.html', {'emails':emails , 'sent_emails':sent_emails ,  'form':form ,  'users':users  ,'groups':groups } )
 
 
  
