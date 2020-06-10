@@ -5,7 +5,7 @@
 </div>
 <div class="events {% if relationships|length > 6  %}  div_events{% endif %}" >
 
- 
+    {% if relationships|length < 4 %} 
             {% for relationship in relationships %}
             <li class="sans_puce"><i class="fa fa-square" style="color: {{ relationship.parcours.color }}"></i> 
               {{ relationship.date_limit|date:"d.m.y" }} :
@@ -19,8 +19,21 @@
             {% empty %}
                 <li class="sans_puce">Aucune tâche proposée</li>
             {% endfor %}
+    {% else %}
 
- 
+        {% regroup relationships by parcours as parcours_list %}
+
+            {% for parcours in parcours_list %}
+            <li class="sans_puce"><i class="fa fa-square" style="color: {{ parcours.grouper.color }}"></i> 
+                <a href="{% url 'detail_task_parcours' parcours.grouper.id 0 %}" class="parcours_displayer"> 
+                    {{ parcours.grouper.title }}
+                </a>        
+            </li>
+            {% endfor %}
+
+
+
+    {% endif %} 
 </div>
 
 
