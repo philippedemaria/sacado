@@ -8,21 +8,51 @@ from django.conf import global_settings
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-SECRET_KEY = '85umr_$zf2bd58xl)nzf)i*jh)o5h*dp%*3e@pqg+ijem=t1xq'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 
+PRODUCTION = os.environ.get('PRODUCTION')
 
-# REDIRECT_URL 
+if PRODUCTION:
+    # configuration production
+    DEBUG = os.environ.get('DEBUG')
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    ALLOWED_HOSTS = ['sacado.xyz']
+
+    # configuation bdd
+    MYSQL_DATABASE = os.environ.get('MYSQL_DATABASE')
+    MYSQL_USER = os.environ.get('MYSQL_USER')
+    MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD')
+    MYSQL_PORT = os.environ.get('MYSQL_PORT')
+
+    # configuration email
+    EMAIL_HOST = os.environ.get('EMAIL_HOST')
+    EMAIL_PORT = os.environ.get('EMAIL_PORT')
+    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+    EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
+else:
+    # configuration dévellopement
+    DEBUG = True
+    ALLOWED_HOSTS = ["*"]
+    SECRET_KEY = '85umr_$zf2bd58xl)nzf)i*jh)o5h*dp%*3e@pqg+ijem=t1xq'
+
+    # configuation bdd
+    MYSQL_DATABASE = 'sacado'
+    MYSQL_USER = 'root'
+    MYSQL_PASSWORD = 'root'
+    MYSQL_PORT = 3306
+
+    # configuration email : affichés dans la console
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+# REDIRECT_URL
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/' 
+
 # Application definition
 
-#ALLOWED_HOSTS = ["*"]
-ALLOWED_HOSTS = ['127.0.0.1','localhost']
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' 
 # Application definition
@@ -32,16 +62,15 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'whitenoise.runserver_nostatic', 
-    'django.contrib.staticfiles',  
-    'django_bootstrap_breadcrumbs',  
+    'django.contrib.staticfiles',
+    'django_bootstrap_breadcrumbs',
     'widget_tweaks',
-    'ckeditor',   
-    'ckeditor_uploader' ,
-    'bootstrap3',          
+    'ckeditor',
+    'ckeditor_uploader',
+    'bootstrap3',
     'setup',
     'account',
-    'group',    
+    'group',
     'socle',
     'qcm',
     'sendmail',
@@ -49,10 +78,9 @@ INSTALLED_APPS = [
     'school',
     "django_cron",
     ]
-#'social_django',
+
 
 MIDDLEWARE = [
-
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -64,23 +92,44 @@ MIDDLEWARE = [
 ]
 
 
+if PRODUCTION:
+    INSTALLED_APPS = ['whitenoise.runserver_nostatic', ] + INSTALLED_APPS
+else:
+    INSTALLED_APPS += ['debug_toolbar', ]
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware', ]
+    INTERNAL_IPS = ['127.0.0.1', ]
 
- 
+    DEBUG_TOOLBAR_PANELS = [
+        'debug_toolbar.panels.versions.VersionsPanel',
+        'debug_toolbar.panels.timer.TimerPanel',
+        'debug_toolbar.panels.settings.SettingsPanel',
+        'debug_toolbar.panels.headers.HeadersPanel',
+        'debug_toolbar.panels.request.RequestPanel',
+        'debug_toolbar.panels.sql.SQLPanel',
+        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+        'debug_toolbar.panels.templates.TemplatesPanel',
+        'debug_toolbar.panels.cache.CachePanel',
+        'debug_toolbar.panels.signals.SignalsPanel',
+        'debug_toolbar.panels.logging.LoggingPanel',
+        'debug_toolbar.panels.redirects.RedirectsPanel',
+    ]
 
+    DEBUG_TOOLBAR_CONFIG = {
+        'INTERCEPT_REDIRECTS': False,
+    }
 
 CRON_CLASSES = [
     "setup.cron.MyCronJob",
 ]
- 
 
 ROOT_URLCONF = 'sacado.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates', 
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-        os.path.join(BASE_DIR, 'templates'),
-    
+            os.path.join(BASE_DIR, 'templates'),
+
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -89,9 +138,9 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',       
+                'django.contrib.messages.context_processors.messages',
             ],
- 
+
         },
     },
 ]
@@ -100,26 +149,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'sacado.wsgi.application'
 
- 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',   # Backends disponibles : 'postgresql', 'mysql', 'sqlite3' et 'oracle'.
-        'NAME': 'sacado',             # Nom de la base de données   new_sacado_clone
-        'USER': 'root',
-        'PASSWORD': 'root',        
-        'HOST': 'localhost',                    # Utile si votre base de données est sur une autre machine
-        'PORT': '3306',                         # ... et si elle utilise un autre port que celui par défaut
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': MYSQL_DATABASE,
+        'USER': MYSQL_USER,
+        'PASSWORD': MYSQL_PASSWORD,
+        'HOST': 'localhost',
+        'PORT': MYSQL_PORT,
         'OPTIONS': {
             'sql_mode': 'traditional',
             'init_command': 'SET default_storage_engine=INNODB',
         }
     },
-
-
 }
- 
-
- 
 
 AUTH_USER_MODEL = 'account.User'
 
@@ -159,9 +203,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
  
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static') 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATICFILES_DIRS = (  os.path.join(BASE_DIR, 'staticfiles'),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'staticfiles'),)
 
 FILE_UPLOAD_PERMISSIONS = 0o775
 
@@ -170,9 +214,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/uploads')
  
 
 #################################################################################################################################
- 
-CKEDITOR_UPLOAD_PATH =  ''
- 
+
+CKEDITOR_UPLOAD_PATH = ''
+
 CKEDITOR_CONFIGS = {
     'default': {
         'height': 200,
@@ -206,8 +250,4 @@ CKEDITOR_CONFIGS = {
 
  
 
-EMAIL_HOST = 'mail.sacado.xyz'
-EMAIL_PORT = 465
-EMAIL_HOST_USER = 'info@sacado.xyz'
-EMAIL_HOST_PASSWORD = 'VT92KLv;orDN'
-EMAIL_USE_TLS = True
+
