@@ -38,7 +38,10 @@
                             {% if data.nb_parcours > 0 %}
                             <h4><br><br>
                                 <a href="{% url 'list_parcours_group' group.id  %}" class="white"> <i class="fa fa-th" style="color:{{ group.color|contrast_color }};font-size: 26px"></i>
-                                    <span class="parcours_in_group">{{ data.nb_parcours }} parcours dont {{ data.nb_parcours_visible }} publié{{ data.nb_parcours_visible|pluralize }}, {{ data.nb_parcours_favorite }} favori{{ data.nb_parcours_favorite|pluralize }} </span>
+                                    <span class="parcours_in_group">{{ data.nb_parcours }} parcours dont {{ data.nb_parcours_visible }} publié{{ data.nb_parcours_visible|pluralize }}, {{ data.nb_parcours_favorite }} favori{{ data.nb_parcours_favorite|pluralize }} </span><br>
+
+                                    <span class="parcours_in_group">{{ data.nb_parcours_evaluation }} évaluation{{ data.nb_parcours_evaluation|pluralize  }}   </span>
+
                                 </a>
                             </h4>
                             {% endif  %} 

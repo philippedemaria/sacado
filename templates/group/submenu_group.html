@@ -3,7 +3,7 @@
 
 
 <li class="dropdown">
-        <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if 'parcours_group/' in request.path or 'task_group/' in request.path  or 'result_group_exercise/' in request.path  or   'group/update/' in request.path or 'group/stats/' in request.path or 'group/show/' in request.path %} active {% endif %}"> Options du groupe <b class="caret"></b> </a>
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if 'parcours_group/' in request.path or 'task_group/' in request.path  or 'result_group_exercise/' in request.path  or   'group/update/' in request.path or 'group/stats/' in request.path or 'group/show/' in request.path %} active {% endif %}"> Configuration du groupe <b class="caret"></b> </a>
 
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
         <li {% if 'parcours_group/' in request.path %} class="active" {% endif %}>
@@ -11,7 +11,7 @@
             </a>
         </li> 
         <li {% if 'group/update/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'update_group' group.id %}"  > <i class="fa fa-cogs fa-fw"  ></i><span class="small_displayer"> Configurer</span></a>    
+            <a href="{% url 'update_group' group.id %}"  > <i class="fa fa-cogs fa-fw"  ></i><span class="small_displayer"> Modifier</span></a>    
         </li>             
         
         <li {% if 'group/show/' in request.path %} class="active" {% endif %}>

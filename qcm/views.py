@@ -2026,7 +2026,7 @@ def create_evaluation(request):
         if request.POST.get("save_and_choose") :
             return redirect('peuplate_parcours', nf.id)
         else :
-            return redirect('parcours')   
+            return redirect('evaluations')   
     else:
         print(form.errors)
 
@@ -2075,7 +2075,7 @@ def update_evaluation(request, id, idg=0 ):
             elif idg == 99999999999:
                 return redirect('index')
             elif idg == 0:
-                return redirect('parcours')
+                return redirect('evaluations')
             else:
                 return redirect('list_parcours_group', idg)
 
