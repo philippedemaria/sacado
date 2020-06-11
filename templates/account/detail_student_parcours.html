@@ -19,7 +19,7 @@
                     {% for relation in relationships  %}   
                         {% if relation.exercise.supportfile.is_title %}    
                             <tr class="no_padding" style="background-color: {{ parcours.color }};color:#eee;opacity:0.6">
-                                <td>{{ relation.exercise.id }}{{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}</td>
+                                <td>{{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}</td>
                                 <td></td>
                             </tr>
                         {% else %}    
