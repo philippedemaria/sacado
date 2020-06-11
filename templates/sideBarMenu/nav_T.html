@@ -49,14 +49,14 @@
     </a>
 </li>
   
- 
-{% if request.user.is_superuser %}
  <li  class='dropdown {% if '/exercise' in request.path %}active{% endif %}'>
     <a href="{% url 'exercises' %}"  >
         <i class="fa fa-laptop fa-2x" aria-hidden="true"></i> 
         <div class="captionmenu">Exercices</div>
     </a>
-</li> 
+</li>  
+{% if request.user.is_superuser %}
+
 <li  class='dropdown  {% if '/admin' in request.path %} active{% endif %}'>
     <a href="#"   id="admin" >
         <i class="fa fa-cloud fa-2x"></i> 

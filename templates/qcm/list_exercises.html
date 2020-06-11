@@ -50,15 +50,13 @@
                             <thead> 
                                 <tr>
                                     <td></td>
-                                    <td>
-                                    </td>
                                 </tr>
                             </thead> 
                             <tbody>
                                 {% for theme in data.themes  %} 
                                     <tr style="background:#e6e2dd">
                                         <td style="width:85%">{{theme.name}}</td> 
-                                        <td>Bonus</td>
+                            
                                     </tr> 
                                     {% for knowledge in theme.knowledges  %} 
                                         {% if knowledge.exercises|length > 0 %}
@@ -69,7 +67,7 @@
                                                             <a href="{% url 'create_supportfile_knowledge' knowledge.name.id %}" class="pull-right edit"><i class='fa fa-plus' style="margin-left:10px;font-size: 10px"></i></a>
                                                         {% endif %}
                                                     </td>
-                                                    <td></td>
+                                    
                                                 </tr>
                                                 {% for exercise in knowledge.exercises  %} 
                                                     <tr>
@@ -85,7 +83,7 @@
 
 
                                                             {% if request.user.is_superuser %}
-                                                                <a href="{% url 'show_this_exercise' exercise.supportfile.id   %}"   >  
+                                                                <a href="{% url 'show_this_exercise' exercise.supportfile.id   %}"  target="_blank"  >  
                                                                     <img src="../../static/uploads/{{ exercise.supportfile.imagefile }}" class="imagefile">
                                                                 </a>
 
@@ -95,10 +93,10 @@
                                                                 </a> 
 
                                                             {%  else %}
-                                                                <a href="{% url 'show_this_exercise' exercise.supportfile.id  %}" >
+                                                                <a href="{% url 'show_this_exercise' exercise.supportfile.id  %}" target="_blank" >
                                                                     <img src="../../static/uploads/{{ exercise.supportfile.imagefile }}" class="imagefile">
                                                                 </a> 
-                                                                <a href="{% url 'update_supportfile'  exercise.supportfile.id   %}" class="listing" style="font-size: 18px">        
+                                                                <a href="{% url 'show_this_exercise'  exercise.supportfile.id   %}" class="listing" style="font-size: 18px">        
                                                                     {{ exercise.supportfile.annoncement|cleanhtml|capfirst }} 
                                                                 </a> 
                                                             {% endif %}
@@ -109,7 +107,7 @@
                                                             {% endif  %}   
                                                                  <br>
                                                             {% if request.user.is_superuser %}
-                                                                    <a  href="{% url 'update_supportfile'  exercise.supportfile.id  %}" class="sublisting"> <small>   
+                                                                    <a  href="{% url 'update_supportfile'  exercise.supportfile.id  %}" class="sublisting"  target="_blank"> <small>   
                                                                         <i class="fa fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %} 
                                                                         <i class="fa fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
                                                                         <i class="fa fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum</small>
@@ -122,15 +120,7 @@
                                                                     </small> 
                                                             {% endif %}
                                                         </td>
-                                                        <td>
-                                                            {% include "qcm/remediation_viewer.html" %}
-
-                                                            {% if request.user.is_superuser  and '/admin' in request.path %}
-                                                            <a href="{% url 'create_remediation'  exercise.id  %}" class="pull-right edit" style="margin-left:5px; font-size: 10px"> 
-                                                                    <i class="fa fa-plus thin"></i>   
-                                                            </a> 
-                                                            {% endif %}                                                
-                                                        </td>
+    
                                                     </tr>
                                                 {% endfor %} 
                                         {% else %} 
@@ -138,11 +128,10 @@
                                                     <td>
                                                          {{ knowledge.name }} 
                                                         {% if request.user.is_superuser and '/admin' in request.path %}
-                                                        <a href="{% url 'create_supportfile_knowledge' knowledge.name.id %}" class="edit"><i class='fa fa-plus pull-right' style="font-size: 10px"></i></a>
+                                                        <a href="{% url 'create_supportfile_knowledge' knowledge.name.id %}" class="edit"  target="_blank"><i class='fa fa-plus pull-right' style="font-size: 10px"></i></a>
                                                         {% endif %}
                                                     </td>
-                                                    <td>
-                                                    </td>
+                                           
                                                 </tr>
                                         {% endif %}
                                     {% endfor %}
