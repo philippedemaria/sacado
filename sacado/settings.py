@@ -14,7 +14,7 @@ PRODUCTION = os.environ.get('PRODUCTION')
 
 if PRODUCTION:
     # configuration production
-    DEBUG = os.environ.get('DEBUG')
+    DEBUG = os.environ.get('DEBUG') == 'True'
     SECRET_KEY = os.environ.get('SECRET_KEY')
     ALLOWED_HOSTS = ['sacado.xyz']
 
