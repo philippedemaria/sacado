@@ -40,12 +40,8 @@ urlpatterns = [
 
     path('associate_parcours/<int:id>/', associate_parcours, name='associate_parcours'),  # id est l'id du groupe auquel le parcours est associé
  
-
-
     path('parcours_aggregate',  aggregate_parcours, name='aggregate_parcours'), 
     path('ajax_parcoursinfo/', ajax_parcoursinfo, name='ajax_parcoursinfo'),    
-
-
     path('exercises', list_exercises, name='exercises'),
 
 
