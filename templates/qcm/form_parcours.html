@@ -178,7 +178,7 @@
 
             {% block save_evaluation %}
             <div class="row" style="margin-top:40px">
-                <div class="col-sm-12 col-md-12">
+                <div class="col-sm-12 col-md-8">
                     <div class="form-group">
                         <input value="Enregistrer ce parcours" type="submit" class="btn btn-primary"/>
 
@@ -187,9 +187,8 @@
                                                                    class="btn btn-default "/></a>
                     </div>
                 </div> 
-            </div>   
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
+ 
+                <div class="col-sm-12 col-md-4">
                 {% if parcours %}
  
                         <a href="{% url 'delete_parcours' parcours.id  idg  %}" class="btn btn-danger"  onclick="return TestDelete('ce parcours')"> 
