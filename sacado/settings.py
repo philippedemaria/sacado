@@ -33,6 +33,7 @@ if PRODUCTION:
 
     SESSION_COOKIE_SECURE = True
     SECURE_SSL_REDIRECT = True
+    CSRF_COOKIE_SECURE = True
 else:
     # configuration dévellopement
     DEBUG = True
