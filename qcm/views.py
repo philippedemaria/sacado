@@ -371,7 +371,7 @@ def ajax_individualise(request):
 @login_required
 def list_parcours(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
-    parcourses = Parcours.objects.filter(teacher = teacher).order_by("-is_favorite")     
+    parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=0).order_by("-is_favorite")     
 
     try :
         del request.session["group_id"]
@@ -379,6 +379,22 @@ def list_parcours(request):
         pass  
 
     return render(request, 'qcm/list_parcours.html', { 'parcourses' : parcourses})
+
+
+
+@login_required
+def list_evaluations(request):
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=1).order_by("-is_favorite")     
+
+    try :
+        del request.session["group_id"]
+    except:
+        pass  
+
+    return render(request, 'qcm/list_evaluations.html', { 'parcourses' : parcourses})
+
+
 
 
 

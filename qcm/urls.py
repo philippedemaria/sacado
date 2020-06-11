@@ -6,6 +6,8 @@ urlpatterns = [
 
 
     path('parcours', list_parcours, name='parcours'),
+    path('evaluations', list_evaluations, name='evaluations'),
+
     path('parcours_create', create_parcours, name='create_parcours'),
     path('parcours_create_evaluation', create_evaluation, name='create_evaluation'),
     path('parcours_evaluation_update/<int:id>/<int:idg>/', update_evaluation, name='update_evaluation'),

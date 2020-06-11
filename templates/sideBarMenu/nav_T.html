@@ -36,12 +36,26 @@
 
  
 
-<li  class='dropdown {% if 'parcours' in request.path    %}active{% endif %}'>
+<li  class='dropdown {% if '/parcours' in request.path    %}active{% endif %}'>
     <a href="{% url 'parcours' %}"  >
         <i class="fa fa-th fa-2x" aria-hidden="true"></i> 
         <div class="captionmenu">Parcours</div>
     </a>
 </li>
+<li  class='dropdown {% if 'evaluation' in request.path    %}active{% endif %}'>
+    <a href="{% url 'evaluations' %}"  >
+        <i class="fa fa-th fa-trophy fa-2x" aria-hidden="true"></i> 
+        <div class="captionmenu">Evaluations</div>
+    </a>
+</li>
+
+ <li  class='dropdown {% if '/exercise' in request.path %}active{% endif %}'>
+    <a href="{% url 'exercises' %}"  >
+        <i class="fa fa-laptop fa-2x" aria-hidden="true"></i> 
+        <div class="captionmenu">Exercices</div>
+    </a>
+</li> 
+
 <li  class='dropdown  {% if '/sendmail' in request.path %} active{% endif %}'>
     <a href="{% url 'emails' %}">
         <i class="fa fa-inbox fa-2x"></i> 
@@ -49,12 +63,8 @@
     </a>
 </li>
   
- <li  class='dropdown {% if '/exercise' in request.path %}active{% endif %}'>
-    <a href="{% url 'exercises' %}"  >
-        <i class="fa fa-laptop fa-2x" aria-hidden="true"></i> 
-        <div class="captionmenu">Exercices</div>
-    </a>
-</li>  
+
+
 {% if request.user.is_superuser %}
 
 <li  class='dropdown  {% if '/admin' in request.path %} active{% endif %}'>
@@ -66,7 +76,7 @@
 {% endif  %}
 
 
-{% if request.user.is_manager and not request.user.is_superuser  %} 
+{% if request.user.is_manager and not request.user.is_superuser  %} <!-- manager dans un établissement -->
 <li  class='dropdown  {% if '/admin' in request.path %} active{% endif %}'>
     <a href="#"   id="admin" >
         <i class="fa fa-cloud fa-2x"></i> 
