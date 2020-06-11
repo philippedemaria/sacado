@@ -432,6 +432,7 @@ def create_parcours(request):
         nf = form.save(commit=False)
         nf.author = teacher
         nf.teacher = teacher
+        nf.is_evaluation = 0 
         nf.save()
         nf.students.set(form.cleaned_data.get('students'))
         i = 0
@@ -443,7 +444,10 @@ def create_parcours(request):
             relationship.students.set(form.cleaned_data.get('students'))
             i += 1
 
-        return redirect('parcours')
+        if request.POST.get("save_and_choose") :
+            return redirect('peuplate_parcours', nf.id)
+        else:
+            return redirect('parcours')
     else:
         print(form.errors)
 
@@ -477,6 +481,7 @@ def update_parcours(request, id, idg=0 ):
             nf = form.save(commit=False)
             nf.author = teacher
             nf.teacher = teacher
+            nf.is_evaluation = 0 
             nf.save()
             nf.students.set(form.cleaned_data.get('students'))
             try:
@@ -486,7 +491,9 @@ def update_parcours(request, id, idg=0 ):
             except:
                 pass
 
-            if idg == 99999999999:
+            if request.POST.get("save_and_choose") :
+                return redirect('peuplate_parcours', nf.id)
+            elif idg == 99999999999:
                 return redirect('index')
             elif idg == 0:
                 return redirect('parcours')
@@ -1939,10 +1946,10 @@ def ajax_search_exercise(request):
 
     return JsonResponse(data)
 
-
+"""
 @login_required
 @user_is_parcours_teacher
-def create_evaluation(request,id, ide):
+def create_evaluation(request,id, ide):# associe un exercice à une évaluation existante depuis le parcours
 
     parcours = Parcours.objects.get(id= id)
     exercise = Exercise.objects.get(id= ide)
@@ -1964,6 +1971,115 @@ def create_evaluation(request,id, ide):
 
     context = {'form': form,  'relationship' : relationship,  }
     return render(request, 'qcm/form_evaluation.html', context)
+"""
+
+
+@login_required
+@user_passes_test(user_can_create)
+def create_evaluation(request):
+
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    levels =  teacher.levels.all()    
+    form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher)
+
+    themes_tab = []
+    for level in levels :
+        for theme in level.themes.all():
+            if not theme in themes_tab:
+                themes_tab.append(theme)
+
+
+    groups = Group.objects.filter(teacher  = teacher).order_by("level")
+
+    if form.is_valid():
+        nf = form.save(commit=False)
+        nf.author = teacher
+        nf.teacher = teacher
+        nf.is_evaluation = 1    
+        nf.save()
+        nf.students.set(form.cleaned_data.get('students'))
+        i = 0
+        for exercise in form.cleaned_data.get('exercises'):
+            exercise = Exercise.objects.get(pk=exercise.id)
+            relationship = Relationship.objects.create(parcours=nf, exercise=exercise, order=i,
+                                                       duration=exercise.supportfile.duration,
+                                                       situation=exercise.supportfile.situation)
+            relationship.students.set(form.cleaned_data.get('students'))
+            i += 1
+
+        if request.POST.get("save_and_choose") :
+            return redirect('peuplate_parcours', nf.id)
+        else :
+            return redirect('parcours')   
+    else:
+        print(form.errors)
+
+    context = {'form': form,   'teacher': teacher,  'groups': groups,  'levels': levels,    'themes' : themes_tab  }
+
+    return render(request, 'qcm/form_evaluation.html', context)
+
+
+@user_is_parcours_teacher 
+def update_evaluation(request, id, idg=0 ):
+    teacher = Teacher.objects.get(user_id=request.user.id)
+    levels = teacher.levels.all()
+
+    parcours = Parcours.objects.get(id=id)
+    form = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher)
+
+    """ affiche le parcours existant avant la modif en ajax"""
+    exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme")
+    """ fin """
+    themes_tab = []
+    for level in levels:
+        for theme in level.themes.all():
+            if not theme in themes_tab:
+                themes_tab.append(theme)
+
+    groups = Group.objects.filter(teacher=teacher).prefetch_related('students').order_by("level")
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
+
+    if request.method == "POST":
+        if form.is_valid():
+            nf = form.save(commit=False)
+            nf.author = teacher
+            nf.teacher = teacher
+            nf.is_evaluation = 1 
+            nf.save()
+            nf.students.set(form.cleaned_data.get('students'))
+            try:
+                for exercise in parcours.exercises.all():
+                    relationship = Relationship.objects.get(parcours=nf, exercise=exercise)
+                    relationship.students.set(form.cleaned_data.get('students'))
+            except:
+                pass
+
+            if request.POST.get("save_and_choose") :
+                return redirect('peuplate_parcours', nf.id)
+            elif idg == 99999999999:
+                return redirect('index')
+            elif idg == 0:
+                return redirect('parcours')
+            else:
+                return redirect('list_parcours_group', idg)
+
+    if idg > 0 and idg < 99999999999 :
+        group_id = idg
+        request.session["group_id"] = idg
+    else :
+        group_id = None
+
+
+    students_checked = parcours.students.count()  # nombre d'étudiant dans le parcours
+
+    context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'relationships': relationships, 
+               'exercises': exercises, 'levels': levels, 'themes': themes_tab, 'students_checked': students_checked}
+
+    return render(request, 'qcm/form_evaluation.html', context)
+
+
+
+
 
 
 

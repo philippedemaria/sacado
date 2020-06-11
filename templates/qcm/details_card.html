@@ -214,10 +214,8 @@
           <a href="#card{{relation.id}}" class="detail_parcours"  data-exercise_id="{{ relation.exercise.id }}"  data-num_exo="{{ forloop.counter}}" data-parcours_id="{% if group.id %}{{ group.id}}{% else %}{{ parcours.id }}{% endif %}">
                <img src="../../../static/uploads/{{ relation.exercise.supportfile.imagefile }}"  class="image_parcours_order"  >
           </a> 
+ 
 
-          {% if  relation.is_evaluation %}
-          <a href="{% url 'create_evaluation' relation.parcours.id  relation.exercise.id  %}" class="btn btn-info"  style="position: absolute; right : 0px; top:150px;"><i class="fa fa-graduation-cap"></i> {{ relation.start }}, {{ relation.beginner }}   </a>
-          {% endif %}
 
         <!--  Barre d'outil de la card  -->
         <div class="card-text" style="background-color:{{ parcours.color }}; text-align:center;color:{{ parcours.color|contrast_color }}">

@@ -5,7 +5,7 @@
 </div>
 <div class="events {% if relationships|length > 6  %}  div_events{% endif %}" >
 
-    {% if relationships|length < 4 %} 
+    {% if relationships|length < 3 %} 
             {% for relationship in relationships %}
             <li class="sans_puce"><i class="fa fa-square" style="color: {{ relationship.parcours.color }}"></i> 
               {{ relationship.date_limit|date:"d.m.y" }} :
@@ -40,9 +40,12 @@
 
 
 
-<li class="sans_puce"><a href="{% url 'create_group' %}" class="btn btn-primary full_width">Créer un nouveau groupe</a> </li>
+<li class="sans_puce"><a href="{% url 'create_group' %}" class="btn btn-primary full_width">Créer un groupe</a> </li>
 
-<li class="sans_puce"><a href="{% url 'create_parcours' %}" class="btn btn-primary full_width">Créer un nouveau parcours</a> </li>                    
+<li class="sans_puce"><a href="{% url 'create_parcours' %}" class="btn btn-primary full_width">Créer un parcours</a> </li> 
+
+<li class="sans_puce"><a href="{% url 'create_evaluation' %}" class="btn btn-primary full_width">Créer une évaluation</a> </li> 
+
  
 
 <hr>

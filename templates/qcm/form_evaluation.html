@@ -1,116 +1,112 @@
-{% extends 'dashboard.html' %}
+{% extends 'qcm/form_parcours.html' %}
 {% load widget_tweaks %}
 {% load static %}
 {% load item_tags %}
- 
 
 {% block require %}
  
-
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common5.js' %}"></script>
-
+    {% if parcours %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
 
     <script>
         require(['script/ajax-parcours']);
     </script> 
 
+
 {% endblock %} 
 
 
 {% block page_title %}
-    <span style="color:{{ relationship.parcours.color }}"><i class="fa fa-th"></i> {{ relationship.parcours }}    </span> <img src="{% static 'img/angle-right.png' %}"/>   <small>Evaluation</small>  
- 
+    {% if parcours %}
+        <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-trophy"></i> {{ parcours }}    </span>   <small><img src="{% static 'img/angle-right.png' %}"/> Modification</small>   
+    {% else %}
+       <i class="fa fa-trophy"></i> Nouvelle évaluation
+    {% endif %}
+
 {% endblock %}
 
-{% block page_menu_right %}
-    <li> <a href="{% url 'parcours' %}"   class="no_button" />Mes parcours</a></li>
+
+{% block info %} 
+<div class="row" style="font-size: 20px">
+    <div class="col-sm-12 col-md-12">
+        <div class="alert alert-info">
+            <i class="fa fa-warning"></i> Pour associer une évaluation à un groupe, tout ou partie, il faut cocher <strong>au moins</strong> un élève de ce groupe. Une fois l'évaluation créée, vous pourrez choisir ses exercices via l'interface de l'évaluation depuis l'un des groupes associés. 
+            <br>Si l'évaluation ne contient aucun élève, elle est accessible depuis la rubrique <i class="fa fa-th"></i> Parcours ou via le taleau de bord : Mes parcours et évaluations non affectés.
+        </div>
+    </div>
+</div> 
 {% endblock %}
 
 
-{% block body %}
+
+
+{% block evaluation %}
  
-  
-     
-<section class="content_main">
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <div class="alert alert-danger">
-                    En cours de création
-                </div>      
-            </div>
+ 
+            <table class="table">
+                <tr>
+                    <td>{{ form.duration.label_tag }} </td>
+                    <td>{{ form.duration |add_class:"form-control"|attr:"placeHolder:15:00"|attr:"required"}}</td>
+                    <td>{{ form.duration.errors}}</td>
+                </tr>
+                <tr>
+                    <td>Date de passation</td>
+                    <td>{{ form.start|add_class:"form-control datepicker"|attr:"required"}}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>{{ form.starter.label_tag }} </td>
+                    <td>{{ form.starter |add_class:"form-control"|attr:"placeHolder:15:00"|attr:"required"}}</td>
+                    <td>{{ form.starter.errors}}</td>
+                </tr>
+                <tr>
+                    <td colspan="3"><small>Pour dépublier, compléter les champs suivants</small></td>
+                </tr>
+                <tr>
+                    <td>{{ form.stop.label_tag }}</td>
+                    <td>{{ form.stop|add_class:"form-control datepicker"|attr:"required"}}</td>
+                    <td>{{ form.stop.errors}}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.stopper.label_tag }} </td>
+                    <td>{{ form.stopper  |add_class:"form-control"|attr:"placeHolder:16:00"|attr:"required"}}</td>
+                    <td>{{ form.stopper.errors}}</td>
+                </tr>
+            </table>
+ 
+
+        <div class="alert alert-info" {% if not  parcours.is_evaluation %} id="explain_evaluation" {% endif %} >
+            La durée de l'évaluation est la somme des durées de chaque exercice + le temps de chargement (à renseigner en minutes)
         </div>
 
-
-        <form action="" method="POST" enctype='multipart/form-data'> 
-            {% csrf_token %}
-            <div class="row">
-                <div class="col-sm-12 col-md-5">
-                    <img src="../../../../../static/uploads/{{ relationship.exercise.supportfile.imagefile }}" width="550px">
-                </div>
-                <div class="col-sm-12 col-md-7">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-10">
-                            <table class="table">
-                                <tr>
-                                    <td>Cet exercice est publié ?</td>
-                                    <td>{{ form.is_publish  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>Cet exercice est une évaluation ?</td>
-                                    <td>{{ form.is_evaluation  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
-                                    </td><td>
-                                </tr>
-                                <tr>
-                                    <td>Date de passation</td>
-                                    <td>{{ form.start |add_class:"form-control datepicker"}}</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>{{ form.situation.label_tag }} </td>
-                                    <td>{{ form.situation  |add_class:"form-control"|attr:"placeHolder:10"}}</td>
-                                    <td>{{ form.situation.errors}}</td>
-                                </tr>
-                                <tr>
-                                    <td>Heure de passation (HH:mm)</td>
-                                    <td>{{ form.beginner |add_class:"form-control"|attr:"placeHolder:15:00"}}</td>
-                                    <td>{{ form.beginner.errors}}</td>
-                                </tr>
-                                <tr>
-                                    <td>{{ form.duration.label_tag }} </td>
-                                    <td>{{ form.duration  |add_class:"form-control"|attr:"placeHolder:30"}}</td>
-                                    <td>{{ form.duration.errors}}</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-5">
-                            <input value="Enregistrer cette évaluation" type="submit" class="btn btn-sacado"/>
-                        </div>
-                        <div class="col-sm-12 col-md-3">
-                            <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>         
-                        </div>
-                    {% if relationship.is_evaluation %}                    
-                        <div class="col-sm-12 col-md-4">
-                            <div class="form-group">
-                                <a href="{% url 'delete_evaluation' relationship.id  %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('cette évaluation')"> 
-                                    <i class="fa fa-trash"> </i>   Supprimer  
-                                </a>
-                            </div>
-                        </div>
-                    {% endif %}  
-                    </div>                    
-                </div>            
-            </div>   
-        </form>
-    </div>   
-</section>   
 {% endblock %}
 
+
+      
  
- 
- 
-       
- 
- 
+{% block save_evaluation %}
+<div class="row" style="margin-top:40px">
+    <div class="col-sm-12 col-md-12">
+        <div class="form-group">
+            <input value="Enregistrer cette évaluation" type="submit" class="btn btn-primary"/>
+
+            <input value="Enregistrer cette évaluation et choisir les exercices" type="submit" name="save_and_choose" class="btn btn-primary"/>
+
+            <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                       class="btn btn-default "/></a>
+        </div>
+    </div> 
+</div>   
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+    {% if parcours %}
+            <a href="{% url 'delete_parcours' parcours.id  idg  %}" class="btn btn-danger"  onclick="return TestDelete('cette évaluation')"> 
+                <i class="fa fa-trash"> </i>   Supprimer
+            </a>
+    {% endif %}  
+    </div>
+</div>  
+{% endblock %}

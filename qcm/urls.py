@@ -7,6 +7,9 @@ urlpatterns = [
 
     path('parcours', list_parcours, name='parcours'),
     path('parcours_create', create_parcours, name='create_parcours'),
+    path('parcours_create_evaluation', create_evaluation, name='create_evaluation'),
+    path('parcours_evaluation_update/<int:id>/<int:idg>/', update_evaluation, name='update_evaluation'),
+
     path('parcours_update/<int:id>/<int:idg>/', update_parcours, name='update_parcours'),
     path('parcours_delete/<int:id>/<int:idg>/', delete_parcours, name='delete_parcours'),  
     path('parcours_show/<int:id>/', show_parcours, name='show_parcours'), 
@@ -32,8 +35,7 @@ urlpatterns = [
 
     path('result_parcours_exercise_students/<int:id>/', result_parcours_exercise_students, name='result_parcours_exercise_students'),#modif idp en id pour la sécurité
 
-    #####################################  Modifie les relations par parcours et exercices  ##############################################################
-    path('create_evaluation/<int:id>/<int:ide>/', create_evaluation, name='create_evaluation'),   
+    #####################################  Modifie les relations par parcours et exercices  ##############################################################  
     path('<int:idp>/<int:ide>/', execute_exercise, name='execute_exercise'),#modif idp en id pour la sécurité 
     path('delete_evaluation/<int:id>/', delete_evaluation, name='delete_evaluation'), 
     ######################################################################################################################################################

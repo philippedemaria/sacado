@@ -1,0 +1,11 @@
+<li> <a href="{% url 'create_evaluation' %}" class="btn btn-new" style="margin-right:5px" > Créer une évaluation</a></li>
+
+<li class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new {% if 'parcours_result/' in request.path or  'parcours_result_knowledge/' in request.path  or 'result_parcours_exercise_students/' in request.path %} active {% endif %}"> Créer un parcours <b class="caret"></b> </a>
+
+    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+  		<li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"  > Parcours par défaut</a></li>
+         <li> <a href="{% url 'all_parcourses' %}" > Parcours mutualisés</a></li>
+         <li> <a href="{% url 'create_parcours' %}" > Nouveau parcours</a> </li>  
+    </ul>
+</li>   

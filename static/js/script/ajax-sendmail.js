@@ -3,27 +3,6 @@ define(['jquery', 'bootstrap'], function ($) {
         console.log("chargement JS ajax-sendmail.js OK");
 
 
-
- 
-    var navItems = $('.admin-menu li > a');
-    var navListItems = $('.admin-menu li');
-    var allWells = $('.admin-content');
-    var allWellsExceptFirst = $('.admin-content:not(:first)');
-    
-    allWellsExceptFirst.hide();
-    navItems.click(function(e)
-    {
-        e.preventDefault();
-        navListItems.removeClass('active');
-        $(this).closest('li').addClass('active');
-        
-        allWells.hide();
-        var target = $(this).attr('data-target-id');
-        $('#' + target).show();
-    });
-
-
-
         $('#test_not_empty').on('click', function () {
 
             f1 = document.getElementById('id_groups');
