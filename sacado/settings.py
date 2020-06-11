@@ -32,6 +32,7 @@ if PRODUCTION:
     EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
 
     SESSION_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
 else:
     # configuration dévellopement
     DEBUG = True
