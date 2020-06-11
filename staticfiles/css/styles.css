@@ -75,14 +75,7 @@ padding:5px;
 .ul_etab a{ color: #FFF; } 
 .ul_etab a:hover{ color: #00819F; }
 
-.bgblue{
-	color:#fff;
-	background: url(../../static/img/fondGeneriqueBlue2.jpg) no-repeat center ;
-	background-color:#00819F; 
-	height:450px;
-	margin-top:0px;
-}
-
+ 
 .bgmotarde{
 	background-color:#00819F;	
 	color:#fff;
@@ -356,10 +349,7 @@ label{
 	background-color: transparent;
 }
 
-.navbar-default {
-	background: url(../../public/img/sophy2.jpg) no-repeat center ; 
-}
-
+ 
 .nav > li.left  {
 	border-left: solid 1px #89d0de;
 	padding:15px;
@@ -568,28 +558,7 @@ background-size: 100% auto;
 	background-color:rgba(0,179,254,.9);
 	text-align:center;
 }
-
-/* Testimonials Wrap */
-#twrap {
-	background: url(../img/t-back.jpg) no-repeat center top;
-	margin-top: 0px;
-	padding-top:60px;
-	text-align:center;
-	background-attachment: relative;
-	background-position: center center;
-	min-height: 450px;
-	width: 100%;
-	
-    -webkit-background-size: 100%;
-    -moz-background-size: 100%;
-    -o-background-size: 100%;
-    background-size: 100%;
-
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-}
+ 
 
 #twrap i {
 	font-size: 50px;
@@ -687,27 +656,7 @@ background-size: 100% auto;
 	background: #00b3fe;
 }
 
-/* Contact Page */
-#contactwrap {
-	background: url(../img/contact.jpg) no-repeat center top;
-	margin-top: -60px;
-	padding-top:0px;
-	text-align:center;
-	background-attachment: relative;
-	background-position: center center;
-	min-height: 400px;
-	width: 100%;
-	
-    -webkit-background-size: 100%;
-    -moz-background-size: 100%;
-    -o-background-size: 100%;
-    background-size: 100%;
-
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-}
+ 
 
 /* Blog Page */
 .popular-posts { 
