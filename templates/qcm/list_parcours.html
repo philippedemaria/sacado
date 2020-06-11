@@ -22,9 +22,10 @@
 {% endblock %}
 
 {% block page_menu_right %}
-  <li> <a href="{% url 'index' %}"    class="btn btn-new" style="margin-right:5px"  > Parcours par défaut </a></li>
-  <li> <a href="{% url 'all_parcourses' %}"   class="btn btn-new" style="margin-right:5px" > Parcours mutualisés</a></li>
-  <li> <a href="{% url 'create_parcours' %}"   class="btn btn-new" >  Nouveau parcours</a> </li>  
+ 
+ 
+{% include 'qcm/submenu_creation_parcours.html' %} 
+
 {% endblock %}
 
 
@@ -61,7 +62,14 @@ body{
                             </span>
                         </td>  
                         <td>
-                            <a href="{% url 'show_parcours' parcours.id %}" > {{ parcours.title }} {% if parcours.linked %}(Par défaut){% endif %} <i class="fa fa-pencil-square pull-right" aria-hidden="true"></i></a>
+                            <a href="{% url 'show_parcours' parcours.id %}" > {{ parcours.title }} {% if parcours.linked %}(Par défaut){% endif %} </a>
+
+                            {% if parcours.is_evaluation %}
+                            <a href="{% url 'update_evaluation' parcours.id 0 %}" class="pull-right"> 
+                            {% else %}
+                            <a href="{% url 'update_parcours' parcours.id 0 %}" class="pull-right">
+                            {% endif %}
+                            <i class="fa fa-pencil-square" aria-hidden="true"></i></a>
                              <div style="font-size:14px;margin-top:-5px;">
                                 {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }} - {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }} {% endif %}min. 
 
@@ -103,7 +111,6 @@ body{
                                 </span>
                             </div>
                         </form>
-                        <br>
                         <span class="label_icon" style="color:{{ parcours.color   }};">
                             {% if parcours.is_evaluation %}
                                 {{  parcours.start|date:"d N Y"  }},  {{  parcours.starter  }} 

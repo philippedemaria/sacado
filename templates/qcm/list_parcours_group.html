@@ -26,9 +26,9 @@
 
 {% include 'group/submenu_group.html' %}
 
-  <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"  class="btn btn-new" style="margin-right:5px" > Parcours par défaut</a></li>
-  <li> <a href="{% url 'all_parcourses' %}"   class="btn btn-new" style="margin-right:5px"> Parcours mutualisés</a></li>
-  <li> <a href="{% url 'create_parcours' %}"   class="btn btn-new" > Nouveau parcours</a> </li>  
+{% include 'qcm/submenu_creation_parcours.html' %}   
+
+  
 {% endblock %}
 
 {% block css_files %}

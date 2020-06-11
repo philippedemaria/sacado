@@ -3993,7 +3993,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
-  background: #271942;
+  background: #005e74;
 }
 .nav-pills > li.active > a {
   font-weight: 600;
@@ -4006,7 +4006,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 }
 .nav-stacked > li.active > a,
 .nav-stacked > li.active > a:hover {
-  background: #271942;
+  background: #005e74;
   color: #FFF;
   border-top: 0;
   border-radius:5px;

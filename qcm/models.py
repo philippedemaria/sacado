@@ -333,8 +333,8 @@ class Parcours(ModelWithCode):
     linked  = models.BooleanField( default = 0 ,  editable=False)
     is_favorite  = models.BooleanField( default = 1  ,  verbose_name="Favori ?" )
 
-    is_evaluation = models.BooleanField( default = 0,   verbose_name="Evaluation ?" )  
-    duration = models.PositiveIntegerField(  default=0,   verbose_name="Temps de chargement (min.)")   
+    is_evaluation = models.BooleanField( default = 0,  editable=False )  
+    duration = models.PositiveIntegerField(  default=2,   blank=True,  verbose_name="Temps de chargement (min.)")   
     start =  models.DateField( null=True, blank=True, verbose_name="Date de début de publication")
     starter = models.TimeField( null=True, blank=True,  verbose_name="Heure de début de publication")
     stop =  models.DateField( null=True, blank=True, verbose_name="Date de fin de publication")

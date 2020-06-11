@@ -42,13 +42,13 @@
                     <div  class="col-sm-12 col-md-12">
                         {% if not relationship.exercise.supportfile.is_title %}
                         <div class="header_exercise"  style="clear:both" >
-                            <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" class="listing" >  {{ relationship.exercise.knowledge.name|capfirst }}</a>
+                            <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" class="listing" target="_blank">  {{ relationship.exercise.knowledge.name|capfirst }}</a>
                         </div> 
                     </div>
                 </div>
                 <div class="row" style="margin-bottom:8px; padding-bottom: 8px; ">
                     <div class="col-sm-12 col-md-5">        
-                        <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" >  
+                        <a href="{% url 'show_this_exercise' relationship.exercise.id   %}"  target="_blank">  
                         <img src="../../../../static/uploads/{{ relationship.exercise.supportfile.imagefile }}" class="imagefile"></a>
                                                             
                          {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}          
