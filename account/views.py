@@ -857,7 +857,7 @@ def register_parent(request):
                 user.set_password(password)
                 user.save()
                 parent,result = Parent.objects.get_or_create(user=user)
-                student = Student.objects.get(pk = code_student)
+                student = Student.objects.get(code=code_student)
                 parent.students.add(student)
             
                 user = authenticate(username=username, password = password)
