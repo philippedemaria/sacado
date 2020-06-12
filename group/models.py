@@ -57,16 +57,28 @@ class Group(ModelWithCode):
 
     def is_task_exists(self):
         Relationship = apps.get_model('qcm', 'Relationship')
-        today = timezone.now()
+        today = timezone.now().date()
         test = False
         students = self.students.prefetch_related("students_relationship")
         for student in students:
             if Relationship.objects.filter(students=student, date_limit__gte=today).count() > 0:
                 test = True
                 break
-
         return test
 
+
+    def nb_task_in_progress(self):
+        Relationship = apps.get_model('qcm', 'Relationship')
+        today = timezone.now().date()
+        test = False
+        students = self.students.prefetch_related("students_parcours")
+        for student in students :
+            parcours = Parcours.objects.filter(students = student, teacher = teacher,is_evaluation=0)
+            for p in parcours:
+                if p not in parcours_tab :
+                    parcours_tab.append(p) ### parcours_tab = liste des parcours du groupe
+            nb = Relationship.objects.filter(parcours__in= parcours_tab, date_limit__gte=today).count() 
+        return test
 
 
     def parcours_counter(self):

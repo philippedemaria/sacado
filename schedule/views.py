@@ -101,20 +101,12 @@ def events_json(request):
 
     if request.user.user_type == User.TEACHER:
         teacher = Teacher.objects.get(user=user)
-        relationships = Relationship.objects.filter(parcours__teacher=teacher).exclude(date_limit=None)
+        relationships = Relationship.objects.filter(is_publish=1, parcours__teacher=teacher).exclude(date_limit=None, students=None)
+
     else:
         student = Student.objects.get(user=request.user.id)
-        parcourses = Parcours.objects.filter(students=student, is_evaluation=0, is_publish=1, linked=0)
-        groups = student.students_to_group.all()
-        parcours = []
-        for p in parcourses:
-            parcours.append(p)
-        for g in groups:
-            parcours.append(g.parcours)
+        relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), is_evaluation=0, students=student).exclude(date_limit=None)
 
-        relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today),
-                                                    parcours__in=parcours).exclude(date_limit=None)
- 
     # Create the fullcalendar json events list
     event_list = []
 
@@ -213,7 +205,7 @@ def events_json_group(request):
                 parcours_tab.append(p) ### parcours_tab = liste des parcours du groupe
 
 
-    relationships = Relationship.objects.filter(is_publish = 1, parcours__in=parcours_tab).exclude(date_limit=None)  
+    relationships = Relationship.objects.filter(is_publish = 1, parcours__in=parcours_tab).exclude(date_limit=None, students=None) 
  
  
     event_list = []

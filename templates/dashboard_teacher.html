@@ -34,8 +34,6 @@
                         <div class="inner" style="color:white;opacity:0.9">
                             <span style="color:{{ group.color|contrast_color }};font-size: 35px">{{ group.name }} </span> <br>
                              <span style="color:{{ group.color|contrast_color }};font-size: 16px"><i class="fa fa-barcode"></i> {{ group.code }}</span></h3> 
-
-                            {% if data.nb_parcours > 0 or data.nb_parcours_evaluation > 0 %}
                             <br><br>
                             <h4>
                                 <a href="{% url 'list_parcours_group' group.id  %}" class="white"> 
@@ -43,12 +41,17 @@
                                 <i class="fa fa-th fa-2x" style="color:{{ group.color|contrast_color }};  float:left; margin-right: 5px"></i>
                                     <span class="parcours_in_group">{{ data.nb_parcours }} parcours dont {{ data.nb_parcours_visible }} publié{{ data.nb_parcours_visible|pluralize }}, {{ data.nb_parcours_favorite }} favori{{ data.nb_parcours_favorite|pluralize }} </span><br>
 
-                                    <span class="parcours_in_group">{{ data.nb_parcours_evaluation }} évaluation{{ data.nb_parcours_evaluation|pluralize  }}   </span>
+                                    <span class="parcours_in_group">{{ data.nb_parcours_evaluation }} évaluation{{ data.nb_parcours_evaluation|pluralize  }},  </span>
 
                                 </a>
-
+                                {% if group.is_task_exists %}
+                                    <a  href="{% url 'schedule_task_group' group.id %}" style="color:{{ group.color|contrast_color }}; font-size:16px"> Tâche en cours <i class="fa fa-calendar"></i></a>
+                                {% endif %}
                             </h4>
-                            {% endif  %} 
+              
+
+
+
                         </div>
                         <!-- Icon de la small-box -->
                         <div class="icon">
@@ -150,23 +153,28 @@
             <div class="row"></div><hr style="margin-top: 0px">             
                 {% for parcours in parcours_sort.list %}  
                     <div  class="box box-widget widget-user-2"  
-                          style="opacity:0.5;{% if parcours.vignette %}background-image: url('/static/uploads/{{ parcours.vignette }}'); background-size: cover; {% else %} background-color:{{parcours.color }}{% endif %};"> 
+                          style="opacity:0.7;{% if parcours.vignette %}background-image: url('/static/uploads/{{ parcours.vignette }}'); background-size: cover; {% else %} background-color:{{parcours.color }}{% endif %};"> 
                           <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="handler widget-user-header">
+ 
+                      
 
-                            <!-- Fenetre accessible par le disc et les 3 points -->
-
-
-                            <!-- Fin de la fenetre  -->
                             {% if parcours.is_evaluation %}   
                                 <div class="icon_evaluation">
                                     <i class="fa fa-bullseye"></i> 
                                 </div>
                             {% endif %}
 
-                                   <a href="{% url 'update_parcours' parcours.id 0 %}" class="edit" > <i class="fa fa-users"></i> <span class="label_icon">Affecter</span> </a><br>
-                                    </a> 
+                                <a href="{% url 'delete_parcours' parcours.id 0 %}" class="pull-right btn btn-danger btn-xs"  onclick="return TestDelete('ce parcours')">
+                                        <i class="fa fa-trash"></i>
+                                </a>
+                                   
 
+                                <a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-info btn-xs" >   Affecter à un groupe</a><br>
+                           
+                 
+                                    
+                          
 
                             {% if parcours.vignette %}                
                                 <div class="box_title_underlay_vignette" style="background-color:{{ parcours.color }};">
@@ -189,28 +197,16 @@
                         </div>
                         <div class="box-footer">
                             <div class="row extend">                              
-                                <div class="col-lg-4 col-xs-4">
-                                    <a href="{% url 'update_parcours' parcours.id 0 %}" class="edit" > <i class="fa fa-users"></i> <span class="label_icon">Affecter</span> </a><br>
-                                    </a>  
-                                </div>
+
                                 <div class="col-lg-4 col-xs-4">
                                     <a href="{% url 'update_parcours' parcours.id 0 %}" class="edit" > <i class="fa fa-edit"></i> <span class="label_icon">Modifier</span> </a><br>
                                     </a> 
-                                </div>
-                                <div class="col-lg-4 col-xs-4">
-                                    <a href="{% url 'delete_parcours' parcours.id 0 %}" class="edit" onclick="return TestDelete('ce parcours')"><i class="fa fa-trash"></i>  <span class="label_icon">Supprimer</span></a>
-                                </div>  
-                            </div>
-                            <div class="row extend">                              
+                                </div>                             
                                 <div class="col-lg-4 col-xs-4">
                                     <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit"><i class="fa fa-laptop"></i> <span class="label_icon">Sélect.</span>
                                     </a>  
                                 </div>
-                                <div class="col-lg-4 col-xs-4">
-                                    <a href="{% url 'show_parcours' parcours.id %}"  class="edit" ><i class="fa fa-th"></i> <span class="label_icon">Gérer</span>
-                                    </a> 
-                                </div>
-                                <div class="col-lg-4 col-xs-4">
+                                 <div class="col-lg-4 col-xs-4">
                                     <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"  class="edit"><i class="fa fa-tasks"></i> <span class="label_icon">Gérer</span> </a> 
                                 </div>  
                             </div>
