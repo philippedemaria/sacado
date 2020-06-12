@@ -85,23 +85,33 @@ def delete_country(request,id):
 @login_required
 @is_manager_of_this_school
 def school_teachers(request):
-	school_id = request.user.school_id
-	teachers = User.objects.filter(school_id = school_id, user_type=2) 
+	if request.session.get("school_id") :
+		school_id = request.session.get("school_id")
+	else :
+		school_id = request.user.school.id
+	teachers = User.objects.filter(school_id = school_id, user_type=2)
+ 
 
 	return render(request,'school/list_teachers.html', {'teachers':teachers})
 
 @login_required
 @is_manager_of_this_school
-def school_groups(request,id):
-	school_id = request.user.school_id
+def school_groups(request):
+	if request.session.get("school_id") :
+		school_id = request.session.get("school_id")
+	else :
+		school_id = request.user.school.id
 	groups = Group.objects.filter(teacher__school_id = school_id) 
 
 	return render(request,'school/list_groups.html', {'groups':groups})
 
 @login_required
 @is_manager_of_this_school
-def school_students(request,id):
-	school_id = request.user.school_id
+def school_students(request):
+	if request.session.get("school_id") :
+		school_id = request.session.get("school_id")
+	else :
+		school_id = request.user.school.id
 	students = User.objects.filter(school_id = school_id, user_type=0) 
 
 	return render(request,'school/list_students.html', {'students':students})

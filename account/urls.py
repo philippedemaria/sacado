@@ -10,7 +10,7 @@ urlpatterns = [
     path('logout', LogoutView.as_view(template_name='home.html'), name='logout'),  
     path('dashboard', view=DashboardView.as_view(), name='dashboard'),  
 
-    path('update_teacher/<int:id>/', update_teacher , name='update_teacher'),
+    path('update_teacher/<int:pk>/', update_teacher , name='update_teacher'),
     path('delete_teacher/<int:id>/', delete_teacher , name='delete_teacher'),
 
     path('list_teacher', list_teacher , name='list_teacher'),
@@ -41,6 +41,9 @@ urlpatterns = [
     path('message_to_teachers_sent', message_to_teachers_sent , name='message_to_teachers_sent'),
  
     path('register_teacher', register_teacher , name='register_teacher'),
+    path('register_teacher_from_admin', register_teacher_from_admin , name='register_teacher_from_admin'),
+    path('register_teacher_csv', register_teacher_csv , name='register_teacher_csv'),
+
     path('profile', my_profile , name='profile'),
 
     path('ajax/userinfo/', ajax_userinfo , name='ajax_userinfo'),

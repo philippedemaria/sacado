@@ -25,7 +25,7 @@ class School(models.Model):
 
     
     def __str__(self):
-        return "{0} - {1}".format(self.name, self.town)
+        return "{} - {} - {}".format(self.name, self.town, self.country.name)
 
 
  

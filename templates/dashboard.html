@@ -304,81 +304,74 @@
     </div>
 </div>
 
-{%  if user.is_superuser  %}
-<div class="notification-container dismiss"  id="notification-admin">
-    <div class="row">
-        <div class="col-lg-12 col-xs-12"> 
-            <a href="#" id="closeAdmin" class="pull-right"> <i class="fa fa-times"></i></a>
-            <h1  class='sacado'  >Administration</h1> 
-        </div>
-    </div>
-    <hr>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12"> 
-            <a href="{% url 'admin_tdb' %}">Tableau de bord </a>
-        </div>  
-    </div>
-    <hr>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12"> 
-            <a href="{% url 'levels' %}">Niveaux</a>
-        </div>  
-    </div>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12"> 
-            <a href="{% url 'themes' %}">Thèmes</a>
-        </div>  
-    </div>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12"> 
-            <a href="{% url 'knowledges' %}">Savoir faire</a>
-        </div>  
-    </div>
-    <hr>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12"> 
-            <a href="{% url 'admin_supportfiles' %}">Fichiers support <img src="{% static 'img/ggb.png' %}" width="20px"></a> 
-        </div>  
-    </div>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12"> 
-            <a href="{% url 'admin_associations' %}">Exercices <img src="{% static 'img/ggb.png' %}" width="20px"></a> 
-        </div>  
-    </div>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12"> 
-            <a href="{% url 'advises' %}">Modèles et aides </a>
-        </div>  
-    </div> 
-    <hr>
-    <h4 class="thin">SacAdo</h4>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12"> 
-            <a href="{% url 'schools' %}">Etablissements </a>
-        </div>  
-    </div>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12"> 
-            <a href="{% url 'list_teacher' %}">Enseignants </a>
-        </div>  
-    </div>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12"> 
-            <a href="{% url 'communications' %}">Communications </a>
-        </div>  
-    </div>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12"> 
-            <a href="{% url 'send_to_teachers' %}">Contacts </a>
-        </div>  
-    </div>
-</div>
-
-{% endif %}
 
 {%  if user.is_manager  %}
-    <hr>
-    <h4 class="thin">Etablissement {% if user.school.id  %}<a href="{% url 'update_school' user.school.id %}" class="pull-right" ><i class="fa fa-square-pencil"></i></a>{% endif %}</h4>
+    <div class="notification-container dismiss"  id="notification-admin">
+
+        <div class="row">
+            <div class="col-lg-12 col-xs-12"> 
+                <a href="{% url 'update_school' user.school.id %}">{{ user.school.name }}</a>
+            </div>  
+        </div>
+        <hr>
+
+    {%  if user.is_superuser  %}
+        <div class="row">
+            <div class="col-lg-12 col-xs-12"> 
+                <a href="{% url 'levels' %}">Niveaux</a>
+            </div>  
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-xs-12"> 
+                <a href="{% url 'themes' %}">Thèmes</a>
+            </div>  
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-xs-12"> 
+                <a href="{% url 'knowledges' %}">Savoir faire</a>
+            </div>  
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-lg-12 col-xs-12"> 
+                <a href="{% url 'admin_supportfiles' %}">Fichiers support <img src="{% static 'img/ggb.png' %}" width="20px"></a> 
+            </div>  
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-xs-12"> 
+                <a href="{% url 'admin_associations' %}">Exercices <img src="{% static 'img/ggb.png' %}" width="20px"></a> 
+            </div>  
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-xs-12"> 
+                <a href="{% url 'advises' %}">Modèles et aides </a>
+            </div>  
+        </div> 
+        <hr>
+        <h4 class="thin">SacAdo</h4>
+        <div class="row">
+            <div class="col-lg-12 col-xs-12"> 
+                <a href="{% url 'schools' %}">Etablissements </a>
+            </div>  
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-xs-12"> 
+                <a href="{% url 'list_teacher' %}">Enseignants </a>
+            </div>  
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-xs-12"> 
+                <a href="{% url 'communications' %}">Communications </a>
+            </div>  
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-xs-12"> 
+                <a href="{% url 'send_to_teachers' %}">Contacts </a>
+            </div>  
+        </div>
+            <hr>
+    {% endif %}
+    <h3 class="thin"> {% if user.school.id  %}<a href="{% url 'update_school' user.school.id %}" > Etablissement</a>{% endif %}</h3>
     <div class="row">
         <div class="col-lg-12 col-xs-12"> 
             <a href="{% url 'school_teachers' %}">Enseignants</a>
@@ -394,20 +387,11 @@
             <a href="{% url 'school_students' %}">Elèves</a>
         </div>  
     </div>
-    <hr>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12"> 
-            <a href="{% url 'list_teacher' %}">Enseignants </a>
-        </div>  
-    </div>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12"> 
-            <a href="{% url 'communications' %}">Communications </a>
-        </div>  
-    </div>
-
+</div>
 
 {% endif %}
+
+
 
  
  

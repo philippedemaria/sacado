@@ -1,0 +1,62 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+ 
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-accueil.js' %}"></script> 
+    <script>
+        require(['script/ajax-group']);    
+        require(['script/ajax-dashboard']);
+    </script>
+{% endblock %}
+
+
+ 
+ 
+{% block page_title %}
+    <i class='fa fa-users'></i> {{ request.user.school.name}} <img src="{% static 'img/angle-right.png' %}"/> Nouveaux enseignants par csv
+{% endblock %}
+ 
+
+
+ 
+{% block page_menu_right %}
+
+   <li> <a href="{% url 'register_teacher_from_admin' %}" class="btn btn-new"  > + Nouvel.le enseignant.e</a></li>
+{% endblock %}
+
+
+
+
+{% block body %}
+ 
+ 
+ 
+<section class="content_main"> 
+    <form action="{% url 'register_teacher_csv' %}" method="POST" enctype="multipart/form-data" >  
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="name" >Fichier CSV : </label>
+                         <input type="file" name="csv_file" id="csv_file" required="True" class="btn btn-default">
+                 
+                </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12 " style="margin-bottom:10px;">
+
+                <div class="form-group">                    
+
+                         <button class="btn btn-primary"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span> Téléverser </button>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+
+
+{% endblock %}

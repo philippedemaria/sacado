@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.views.generic import CreateView, UpdateView
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import PasswordChangeForm
-from .forms import   UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm
+from .forms import   UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ManagerUpdateForm, NewUserTForm, NewUserSForm
 from account.models import User, Teacher, Student, Resultknowledge, Parent
 from group.models import Group
 import uuid  
@@ -26,8 +26,7 @@ from django.http import JsonResponse
 from socle.models import Level
 from django.core import serializers
 from django.core.exceptions import ValidationError
-
-from account.decorators import user_can_read_details, who_can_read_details
+from account.decorators import user_can_read_details, who_can_read_details, can_register,is_manager_of_this_school
 import csv
 from statistics import median, StatisticsError
 from datetime import date, datetime
@@ -643,7 +642,7 @@ def close_my_account(request, id):
     return redirect('index')
 
 #########################################Teacher #######################################################################
-
+ 
 def register_teacher(request):
     if request.method == 'POST':
 
@@ -670,17 +669,23 @@ def register_teacher(request):
 
 
 @login_required
+@can_register
+@is_manager_of_this_school
 def update_teacher(request, pk):
     user = get_object_or_404(User, pk=pk)
     teacher = get_object_or_404(Teacher, user=user)
-    user_form = UserUpdateForm(request.POST or None, instance=user)
+    user_form = ManagerUpdateForm(request.POST or None, instance=user)
     teacher_form = TeacherForm(request.POST or None, instance=teacher)
 
     if all((user_form.is_valid(), teacher_form.is_valid())):
+        teacher = teacher_form.save(commit=False)
+        teacher.user = user
+        teacher.save()
+        teacher_form.save_m2m()
         user_form.save()
-        teacher_form.save()
+
         messages.success(request, "Actualisation réussie !")
-        return redirect('login')
+        return redirect('list_teacher')
 
     return render(request, 'account/teacher_form.html',
                   {'user_form': user_form,
@@ -689,18 +694,96 @@ def update_teacher(request, pk):
 
 
 @login_required
+@can_register
+@is_manager_of_this_school
 def delete_teacher(request, pk):
     if request.POST:
         teacher = get_object_or_404(Teacher, user_id=pk)
         teacher.user.delete()
-    return redirect('login')
+    return redirect('list_teacher')
+
+
+
+@login_required
+@can_register
+@is_manager_of_this_school
+def register_teacher_from_admin(request):
+
+    user_form = NewUserTForm(request.POST or None)
+    teacher_form = TeacherForm(request.POST or None)
+    new = False
+    if request.method == 'POST':
+        if all(user_form.is_valid(),teacher_form.is_valid()):
+            user_form.save()
+            teacher = teacher_form.save(commit=False)
+            teacher.user = user_form
+            teacher.save()
+            teacher_form.save_m2m()
+
+            teacher.notify_registration()
+
+        else:
+            messages.error(request, user_form.errors)
+    else :
+        new = True
+
+    return render(request, 'account/teacher_form.html',
+                  {'user_form': user_form,
+                   'teacher_form': teacher_form,
+                   'new':new ,})
+
 
  
+
+@login_required
+@can_register
+@is_manager_of_this_school
+def register_teacher_csv(request):
+
+    if request.method == " POST" :
+        try:
+            csv_file = request.FILES["csv_file"]
+            if not csv_file.name.endswith('.csv'):
+                messages.error(request,"Le fichier n'est pas format CSV")
+                return HttpResponseRedirect(reverse("register_teacher_csv"))
+            #if file is too large, return
+            if csv_file.multiple_chunks():
+                messages.error(request,"Le fichier est trop lourd (%.2f MB)." % (csv_file.size/(1000*1000),))
+                return HttpResponseRedirect(reverse("register_teacher_csv"))
+
+            file_data = csv_file.read().decode("utf-8")     
+
+            lines = file_data.split("\n")
+            #loop over the lines and save them in db. If error , store as string and then display
+            for line in lines:                      
+                fields = line.split(",")
+                data_dict = {}
+                data_dict["last_name"] = fields[0]
+                data_dict["first_name"] = fields[1]
+                data_dict["civilite"] = fields[2]
+                data_dict["notes"] = fields[3]
+                try:
+                    form = EventsForm(data_dict)
+                    if form.is_valid():
+                        form.save()                 
+                    else:
+                        logging.getLogger("error_logger").error(form.errors.as_json())                                              
+                except Exception as e:
+                    logging.getLogger("error_logger").error(repr(e))                    
+                    pass
+
+        except Exception as e:
+            messages.error(request,"Echec de téléversement. "+repr(e))
+
+        return redirect('school_teachers')
+    else :
+        return render(request, 'account/csv_teachers.html',{                     })
+
+  
 #########################################Lost password #################################################################
 
 def lost_password(request):
     this_email = request.POST.get("email")
-    print(this_email)
 
     caracteres = "azertyuiopqsdfghjklmwxcvbn@@@_____AZERTYUIOPQSDFGHJKLMWXCVBN0123456789@-_"
     lenght = len(caracteres)-1

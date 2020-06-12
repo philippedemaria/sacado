@@ -70,7 +70,7 @@ class User(AbstractUser):
     time_zone = models.CharField(max_length=100, null=True, blank=True,  choices=TZ_SET, verbose_name="Fuseau horaire")
     is_extra = models.BooleanField( default=0 , editable=0)
     is_manager = models.BooleanField( default=0 )
-    school = models.ForeignKey(School, blank=True, null= True, related_name = "user", default= None , on_delete=models.PROTECT, editable= False) 
+    school = models.ForeignKey(School, blank=True, null= True, related_name = "user", default= None , on_delete=models.PROTECT) 
 
     def __str__(self):
         return "{} {}".format(self.last_name, self.first_name)

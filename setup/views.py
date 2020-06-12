@@ -35,6 +35,9 @@ def index(request):
 
         if request.user.user_type == User.TEACHER:
 
+            if request.user.is_manager and request.user.school :
+                request.session["school_id"] = request.user.school.id 
+
             teacher = Teacher.objects.get(user=request.user)
             groups = Group.objects.filter(teacher=teacher)
             this_user = request.user

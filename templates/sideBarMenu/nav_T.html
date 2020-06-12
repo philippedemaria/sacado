@@ -18,7 +18,7 @@
     </a>
 </li>
 
-<li class='dropdown {% if not '/account'  in request.path and not '/parcours'  in request.path and not '/parcours'  in request.path and not '/sendmail'  in request.path and not '/qcm'  in request.path  %}active{% endif %}'>
+<li class='dropdown {% if not '/account'  in request.path and not '/parcours'  in request.path and not '/school'  in request.path and not '/sendmail'  in request.path and not '/qcm'  in request.path  %}active{% endif %}'>
     <a href="{% url 'index' %}" >
         <i class="fa fa-tachometer-alt fa-2x"></i> 
         <div class="captionmenu">Tableau de bord</div>
@@ -70,7 +70,7 @@
 
 {% if request.user.is_superuser %}
 
-<li  class='dropdown  {% if '/admin' in request.path %} active{% endif %}'>
+<li  class='dropdown  {% if '/admin' in request.path  or '/school' in request.path  %} active{% endif %}'>
     <a href="#"   id="admin" >
         <i class="fa fa-cloud fa-2x"></i> 
         <div class="captionmenu">Admin</div>
@@ -80,7 +80,7 @@
 
 
 {% if request.user.is_manager and not request.user.is_superuser  %} <!-- manager dans un établissement -->
-<li  class='dropdown  {% if '/admin' in request.path %} active{% endif %}'>
+<li  class='dropdown  {% if '/admin' in request.path or '/school' in request.path  %} active{% endif %}'>
     <a href="#"   id="admin" >
         <i class="fa fa-cloud fa-2x"></i> 
         <div class="captionmenu">Admin</div>
