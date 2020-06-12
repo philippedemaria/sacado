@@ -1,12 +1,14 @@
 import uuid
-from django.db import models
-from datetime import date
-from django.contrib.auth.models import AbstractUser
-from django.apps import apps
-from socle.models import Level, Knowledge,Skill
-
 
 import pytz
+from django.apps import apps
+from django.contrib.auth.models import AbstractUser
+from django.core.mail import send_mail
+from django.db import models
+
+from socle.models import Level, Knowledge, Skill
+
+
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
@@ -228,15 +230,40 @@ class Teacher(models.Model):
     """
     Modèle représentant un enseignant.
     """
-    user = models.OneToOneField(User, blank=True, related_name="user_teacher", on_delete=models.CASCADE, primary_key=True)
-    levels = models.ManyToManyField(Level, related_name="levels_to_group", blank=True,  verbose_name="Niveaux préférés")
-    notification = models.BooleanField( default=1 ,    verbose_name="Notification ?") 
-    exercise_post = models.BooleanField( default=1 ,    verbose_name="Notification de création d'exercice ?") 
-
-
+    user = models.OneToOneField(User, blank=True, related_name="user_teacher", on_delete=models.CASCADE,
+                                primary_key=True)
+    levels = models.ManyToManyField(Level, related_name="levels_to_group", blank=True, verbose_name="Niveaux préférés")
+    notification = models.BooleanField(default=1, verbose_name="Notification ?")
+    exercise_post = models.BooleanField(default=1, verbose_name="Notification de création d'exercice ?")
 
     def __str__(self):
-        return "{} - {} {}".format(self.user.username  , self.user.first_name.capitalize() , self.user.last_name.capitalize() )
+        return f"{self.user.username} - {self.user.first_name.capitalize()} {self.user.last_name.capitalize()}"
+
+    def notify_registration(self):
+        """
+        Envoie un email l'enseignant l'informant de la réussite de son inscription
+        """
+        if self.user.email != '':
+            send_mail('Création de compte sur Sacado',
+                      f'Bonjour, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {self.user.username}.\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
+                      'info@sacado.xyz',
+                      [self.user.email, ])
+
+
+    def notify_registration_to_admins(self):
+        """
+        Envoie un email aux administrateurs informant de l'inscription d'un nouvel enseignant
+        """
+        admins = User.objects.filter(is_superuser=1)
+        admins_emails = list(admins.values_list('email', flat=True))
+        send_mail("SacAdo",
+                  f"Un enseignant - {self.user.last_name} {self.user.first_name} - vient de s'inscrire sur SacAdo.",
+                  "SacAdo",
+                  admins_emails)
+
+
+
+
 
 
 

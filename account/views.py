@@ -628,74 +628,59 @@ def detail_student_all_views(request, id):
 ##    Close an account
 ##
 ############################################################################################################## 
+
 @login_required
 def close_an_account(request):
-
     user = request.user
 
-    return render(request, 'account/close_my_account.html', {  'user':user,})
+    return render(request, 'account/close_my_account.html', {'user': user, })
 
 
 @login_required
 def close_my_account(request, id):
-
     user = get_object_or_404(User, user_id=id)
     user.delete()
     return redirect('index')
 
-
-#########################################Teacher #####################################################################
+#########################################Teacher #######################################################################
 
 def register_teacher(request):
- 
-
     if request.method == 'POST':
- 
+
         user_form = UserForm(request.POST)
+
         if user_form.is_valid():
- 
             user = user_form.save(commit=False)
-            user.is_staff = 1
-            user.user_type=2
+            user.is_staff = True
+            user.user_type = User.TEACHER
             user.set_password(user_form.cleaned_data["password1"])
             user.save()
-            username  = user_form.cleaned_data['username']
-            password  = user_form.cleaned_data['password1']
-            user = authenticate(username=username, password = password)
+            username = user_form.cleaned_data['username']
+            password = user_form.cleaned_data['password1']
+            user = authenticate(username=username, password=password)
             login(request, user)
-            Teacher.objects.create(user=user)
+            teacher = Teacher.objects.create(user=user)
 
-
-
-            if user_form.cleaned_data['email'] :
-                send_mail('Création de compte sur Sacado', 'Bonjour, votre compte Sacado est maintenant disponible. \n\n Votre identifiant est '+str(request.POST.get("username")) +".\n Votre mot de passe est "+ str(password)+ ".\n\n  Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.", 'info@sacado.xyz', [request.POST.get("email")])
-            
-            users = User.objects.filter(is_superuser=1)
-            receivers =[]
-            for u in users :
-                receivers.append(u.email)            
-
-            send_mail("SacAdo", "Un enseignant - "+str(user_form.cleaned_data['last_name'])+" "+str(user_form.cleaned_data['first_name'])+" - vient de s'inscrire sur SacAdo.", "SacAdo",  receivers ) 
-        else :
+            teacher.notify_registration()
+            teacher.notify_registration_to_admins()
+        else:
             messages.error(request, user_form.errors)
 
     return redirect("index")
 
 
-@login_required 
+@login_required
 def update_teacher(request, pk):
     user = get_object_or_404(User, pk=pk)
     teacher = get_object_or_404(Teacher, user=user)
     user_form = UserUpdateForm(request.POST or None, instance=user)
     teacher_form = TeacherForm(request.POST or None, instance=teacher)
+
     if all((user_form.is_valid(), teacher_form.is_valid())):
         user_form.save()
         teacher_form.save()
-
         messages.success(request, "Actualisation réussie !")
         return redirect('login')
-
-        
 
     return render(request, 'account/teacher_form.html',
                   {'user_form': user_form,
@@ -711,8 +696,8 @@ def delete_teacher(request, pk):
     return redirect('login')
 
  
-#########################################Lost password #####################################################################
-import random
+#########################################Lost password #################################################################
+
 def lost_password(request):
     this_email = request.POST.get("email")
     print(this_email)
