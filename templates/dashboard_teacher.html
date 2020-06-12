@@ -41,11 +41,11 @@
                                 <i class="fa fa-th fa-2x" style="color:{{ group.color|contrast_color }};  float:left; margin-right: 5px"></i>
                                     <span class="parcours_in_group">{{ data.nb_parcours }} parcours dont {{ data.nb_parcours_visible }} publié{{ data.nb_parcours_visible|pluralize }}, {{ data.nb_parcours_favorite }} favori{{ data.nb_parcours_favorite|pluralize }} </span><br>
 
-                                    <span class="parcours_in_group">{{ data.nb_parcours_evaluation }} évaluation{{ data.nb_parcours_evaluation|pluralize  }},  </span>
+                                    <span class="parcours_in_group">{{ data.nb_parcours_evaluation }} évaluation{{ data.nb_parcours_evaluation|pluralize  }} </span>
 
                                 </a>
-                                {% if group.is_task_exists %}
-                                    <a  href="{% url 'schedule_task_group' group.id %}" style="color:{{ group.color|contrast_color }}; font-size:16px"> Tâche en cours <i class="fa fa-calendar"></i></a>
+                                {% if group.is_task_exists %}<span class="parcours_in_group">, </span>
+                                    <a  href="{% url 'schedule_task_group' group.id %}" style="color:{{ group.color|contrast_color }}; font-size:18px"> Tâche en cours <i class="fa fa-calendar"></i></a>
                                 {% endif %}
                             </h4>
               
