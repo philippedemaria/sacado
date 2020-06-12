@@ -36,7 +36,7 @@
 
  
 
-<li  class='dropdown {% if '/parcours' in request.path    %}active{% endif %}'>
+<li  class='dropdown {% if '/parcours' in request.path and not 'evaluation' in request.path %}active{% endif %}'>
     <a href="{% url 'parcours' %}"  >
         <i class="fa fa-th fa-2x" aria-hidden="true"></i> 
         <div class="captionmenu">Parcours</div>

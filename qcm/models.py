@@ -456,7 +456,11 @@ class Parcours(ModelWithCode):
             test = True
         return test 
 
+    def nb_task(self):
 
+        today = timezone.now()
+        nb = self.parcours_relationship.filter(date_limit__gte = today).count()
+        return nb
 
 class Relationship(models.Model):
     exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.PROTECT,  editable= False)

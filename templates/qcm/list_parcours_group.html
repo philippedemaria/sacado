@@ -18,7 +18,7 @@
  
 
 {% block page_title %}
-       <span style="color:{{ group.color|contrast_color_title }}"><i class="fa fa-th"></i> Parcours de {{ group }}       </span>  
+       <span style="color:{{ group.color|contrast_color_title }}"><i class="fa fa-th"></i> {{ group }}       </span>  
 {% endblock %}
 
 {% block page_menu_right %}
@@ -26,11 +26,28 @@
 
 {% include 'group/submenu_group.html' %}
 
-<li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal" class="btn btn-new" style="margin-right:5px">+ Parcours par défaut</a></li>
-<li> <a href="{% url 'all_parcourses' %}" class="btn btn-new" style="margin-right:5px"> + Parcours mutualisés</a></li>
-<li> <a href="{% url 'create_parcours' %}" class="btn btn-new" > + Nouveau parcours</a> </li> 
 
-  
+{% include 'qcm/submenu_creation_evaluation.html' %}
+
+
+<li class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> + Nouveau Parcours <b class="caret"></b> </a>
+
+    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+ 
+ 
+
+        <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   > Parcours par défaut</a></li>
+        <li> <a href="{% url 'all_parcourses' %}"   > Parcours mutualisés</a></li>
+        <li> <a href="{% url 'create_parcours' %}"  >  Parcours personnalisé</a> </li>  
+    </ul>
+</li>  
+
+
+
+ 
+
+
 {% endblock %}
 
 {% block css_files %}
@@ -40,7 +57,13 @@
 
 {% block body  %}
 <section class="content_main" id="principal_section"> 
-    {% for parcours in parcours_tab %}  
+
+
+
+    {% for parcours in parcours_tab %} 
+
+
+
         <div  class="box box-widget widget-user-2"  
               style="{% if parcours.vignette %}background-image: url('../../../../static/uploads/{{ parcours.vignette }}'); background-size: cover; {% else %} background-color:{{parcours.color }}{% endif %};"> 
               <!-- Add the bg color to the header using any of the bg-* classes -->
@@ -223,6 +246,8 @@
                 </div>
             </div>
         </div>   
+
+
     {% empty %}
 
     <div class="row"> 

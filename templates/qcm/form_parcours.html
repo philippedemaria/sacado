@@ -122,7 +122,7 @@
                         <a data-toggle="collapse" data-target="#demo{{ forloop.counter }}" style="color:{{ group.color}};cursor:pointer">
                             {{ group.name }} <small><i class="fa fa-caret-down"></i></small> </a> 
                             {% if group.students.count > 0 %}<label class="pull-right"><input type="checkbox" value="{{ forloop.counter }}" 
-                                                                                                {% if group.students.count == students_checked %}checked {% endif %}
+                                                                                                {% if group.students.count == students_checked or request.session.group_id == group.id %}checked {% endif %}
                                                                                                 class="select_all" /><small> tous </small> </label>{% endif %}<br>
 
                           <div id="demo{{ forloop.counter }}" class="collapse" >
@@ -134,9 +134,12 @@
                                                     class="selector" 
                                                     name="students" 
                                                     value="{{ s.user.id}}"
+
                                                     {% if parcours %}
                                                      {% get_in_parcours  s parcours  as bool  %}
-                                                        {% if bool %} checked {% endif %}
+                                                        {% if bool or request.session.group_id == group.id %} checked {% endif %}
+                                                    {% else %}
+                                                        {% if request.session.group_id == group.id %} checked {% endif %}
                                                     {% endif %} > 
                                                     {{ s.user|title}}
                                         </label><br>
