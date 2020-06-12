@@ -550,6 +550,7 @@ def delete_parcours(request, id, idg=0):
 
 
 @login_required
+@user_is_parcours_teacher 
 def show_parcours(request, id):
     parcours = Parcours.objects.get(id=id)
     user = User.objects.get(pk=request.user.id)
