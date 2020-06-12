@@ -43,6 +43,7 @@
                     <tr>
                         <th>Nom Prénom</th>
                         <th>Courriel</th>
+                        <th>Manager</th>
                         <th>Admin</th>
                         <th>Extra</th>
                         <th>Inscription</th>
@@ -57,6 +58,14 @@
                                 </td>
                                 <td>
                                     {{ teacher.email }}   
+                                </td>
+                                <td>
+                                    {% if teacher.is_manager %} 
+                                        <span style="font-size: 8px"> oui</span> 
+                                        <i class="fa fa-check-circle text-success"></i>{% else %} 
+                                        <span style="font-size: 8px"> non</span>  
+                                        <i class="fa fa-ban text-danger"></i> 
+                                    {% endif %}
                                 </td>
                                 <td>
                                     {% if teacher.is_superuser %} 

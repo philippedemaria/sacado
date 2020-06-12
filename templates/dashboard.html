@@ -351,24 +351,12 @@
         </div>  
     </div> 
     <hr>
-    <h4 class="thin">Etablissement</h4>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12"> 
-            <a href="{% url 'school_teachers' %}">Enseignants</a>
-        </div>  
-    </div>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12"> 
-            <a href="{% url 'school_groups' %}">Groupes</a>
-        </div>  
-    </div>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12"> 
-            <a href="{% url 'school_students' %}">Elèves</a>
-        </div>  
-    </div>
-    <hr>
     <h4 class="thin">SacAdo</h4>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12"> 
+            <a href="{% url 'schools' %}">Etablissements </a>
+        </div>  
+    </div>
     <div class="row">
         <div class="col-lg-12 col-xs-12"> 
             <a href="{% url 'list_teacher' %}">Enseignants </a>
@@ -385,10 +373,12 @@
         </div>  
     </div>
 </div>
-{%  elif user.is_manager  %}
+
+{% endif %}
+
+{%  if user.is_manager  %}
     <hr>
-        <h4 class="thin">Etablissement</h4>
-    <hr>
+    <h4 class="thin">Etablissement {% if user.school.id  %}<a href="{% url 'update_school' user.school.id %}" class="pull-right" ><i class="fa fa-square-pencil"></i></a>{% endif %}</h4>
     <div class="row">
         <div class="col-lg-12 col-xs-12"> 
             <a href="{% url 'school_teachers' %}">Enseignants</a>
@@ -419,8 +409,8 @@
 
 {% endif %}
 
-
-
+ 
+ 
 
 
 

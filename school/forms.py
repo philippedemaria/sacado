@@ -6,6 +6,7 @@ from .models import School, Country
 
 
 class SchoolForm(forms.ModelForm):
+    country = forms.ModelChoiceField(queryset=Country.objects.all().order_by("name") )
 
 
     class Meta:

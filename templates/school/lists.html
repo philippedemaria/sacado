@@ -1,0 +1,62 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+ 
+{% block page_title %}
+    <i class="fa fa-university"></i> Etablissements  
+{% endblock %}
+
+
+
+{% block page_menu_right %}
+    <li><a href="{% url 'create_school' %}"  class="btn btn-new">+ Nouvel établissement</a> </li>
+
+ 
+{% endblock %}
+
+
+
+
+
+
+
+{% block body  %}    
+ 
+<section class="content_main">
+ 
+ 
+  <div class="row"> 
+    <div class="col-sm-12 col-md-12">
+        <table  class="table table-bordered table-hover standard_tab_sort" style="width:100%">
+              <thead>
+                  <tr>
+                    <th width="100px">Pays</th>                  
+                    <th>Nom</th> 
+                    <th>Ville</th>   
+                    <th>Nombre d'enseignants</th>                                                         
+                  </tr>
+              </thead>
+              <tbody>
+                    {% for school in schools %}
+                    <tr> 
+                      <td> {{ school.country.name }}</td>                    
+                      <td><a href="{% url 'update_school'  school.id %}" > {{ school.name }}</a> <a href="{% url 'delete_school'  school.id %}" class="pull-right" onclick="return TestDelete('{{ school.name }}')"><i class="fa fa-trash"></i> </a></td>
+                      <td>
+                          {{ school.town }}
+                      </td>
+
+                      <td>
+                          {{ school.user.count }}
+                      </td>
+
+
+                      
+                    </tr>
+                    {% endfor %}
+              </tbody>
+        </table>
+    </div>
+  </div>
+</section> 
+{% endblock %}

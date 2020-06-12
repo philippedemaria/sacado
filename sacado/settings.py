@@ -41,7 +41,7 @@ else:
     SECRET_KEY = '85umr_$zf2bd58xl)nzf)i*jh)o5h*dp%*3e@pqg+ijem=t1xq'
 
     # configuation bdd
-    MYSQL_DATABASE = 'sacado'
+    MYSQL_DATABASE = 'new_sacado_clone'
     MYSQL_USER = 'root'
     MYSQL_PASSWORD = 'root'
     MYSQL_PORT = 3306

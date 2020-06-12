@@ -1,0 +1,45 @@
+ {% extends 'layout.html' %}
+{% load static %}
+
+
+{% block title_page %} 
+  La zone
+{% endblock  %}
+
+{% block body  %}    
+<section class="content_bgwhite">
+  <div id="result"></div>
+  <div class="row "> 
+    <div class="col-sm-12 col-md-12"> 
+      <a href="{% url 'create_country' %}"  class="btn btn-xs btn-danger"><i class="fa fa-plus"></i> Nouveau pays</a>
+    </div>       
+  </div> 
+  <div class='clear'></div> 
+  <div class="row"> 
+    <div class="col-sm-12 col-md-12">
+        <table id="standard_tab" class="table table-bordered table-hover"  class="display" style="width:100%">
+              <thead>
+                  <tr>
+                    <th>Nom</th>                  
+                    <th>Drapeau</th>                      
+                    <th>Code</th>  
+                    <th>Indicatif</th> 
+                    <th>Zone</th>                
+                  </tr>
+              </thead>
+              <tbody>
+                    {% for c in countries %}
+                    <tr> 
+                      <td><a href="{% url 'update_country' c.id %}" >{{ c.name }}</a></td>                    
+                      <td>{% if  c.flag %}<img src="../uploads/{{ c.flag }}" height="25px" width="40px" />{% endif %}</td>                   
+                      <td>{{ c.code }} </td>
+                      <td>{{ c.indicatif }} </td>
+                      <td>{{ c.zone.name }} </td>
+                    </tr>
+                    {% endfor %}
+              </tbody>
+        </table>
+    </div>
+  </div>
+</section> 
+{% endblock %}

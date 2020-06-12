@@ -1,0 +1,82 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block page_title %} 
+  <i class="fa fa-university"></i> Nouvel établissement
+{% endblock  %}
+
+
+{% block require %}
+{% if school %}
+<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-action2.js' %}"></script>
+{% else %}
+<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-index.js' %}"></script>
+{% endif %}
+{% endblock %} 
+
+
+{% block page_menu_right %}
+
+{% endblock %}
+
+
+
+
+
+{% block body  %}    
+ 
+<section class="content_main">
+
+    <form  action="" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                    <label>{{ form.name.label_tag }}</label>
+                    {{ form.name |add_class:"form-control" }}
+                    {{ form.name.errors }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                    <label>{{ form.country.label_tag }}</label>
+                    {{ form.country |add_class:"form-control select2" }}
+                    {{ form.country.errors }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">                
+                    <label>{{ form.town.label_tag }}</label>
+                    {{ form.town |add_class:"form-control" }}
+                    {{ form.town.errors }}
+                </div>
+            </div>
+        </div>     
+        <div class="row">
+            <div class="col-sm-9 col-md-9">
+                <div class="form-group">
+                    <input value="Enregistrer" type="submit" class="btn btn-primary"/>            
+                    <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                </div>
+            </div>
+ 
+   
+            {% if school %}
+        
+                <div class="col-sm-3 col-md-3">
+                    <div class="form-group">
+                        <a href="{% url 'delete_school'  school.id %}"  class="btn btn-danger"  onclick="return TestDelete(' cet établissement ')">Supprimer</a>
+                    </div>           
+                </div>
+            
+            {% endif %} 
+        </div>
+    </form>
+   
+</section>
+{% endblock  %}
