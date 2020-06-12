@@ -58,6 +58,9 @@
 
 <li  class='dropdown  {% if '/sendmail' in request.path %} active{% endif %}'>
     <a href="{% url 'emails' %}">
+        {% if nb_not > 0 %}
+        <span class="label label-warning notifications">{{nb_not}}</span>
+        {% endif %}
         <i class="fa fa-inbox fa-2x"></i> 
         <div class="captionmenu">Messages</div>
     </a>

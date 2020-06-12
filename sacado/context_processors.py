@@ -3,6 +3,7 @@ from account.models import Teacher, Student, User
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from group.models import Group
 from qcm.models import Parcours, Studentanswer, Exercise, Relationship
+from sendmail.models import Email
 from django.db.models import Q
 from datetime import datetime, timedelta
 import time
@@ -25,7 +26,13 @@ def menu(request):
         one_week = today + timedelta(days=7)
 
         if request.user.user_type == User.TEACHER:  # teacher
-            return {'today': today, }
+
+            teacher = request.user.user_teacher
+            nbs = Studentanswer.objects.filter(parcours__teacher =  teacher, date =today).count()
+            nbe = Email.objects.distinct().filter(receivers =  request.user, today =today).count()
+            nb_not = nbs + nbe
+
+            return {'today': today, 'nb_not': nb_not, }
 
 
         elif request.user.user_type == User.STUDENT:  # student
@@ -38,11 +45,13 @@ def menu(request):
                                                  students=student)  # tous les parcours attribués à cet élève
             studentanswers = Studentanswer.objects.filter(student=student)
 
+
             return {
                 'student': student,
                 'parcourses': parcourses,
                 'parcours': parcours,
                 'last_exercises_done': last_exercises_done,
+
             }
 
 

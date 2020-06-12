@@ -496,8 +496,6 @@ text-align: right;
 }
 
 
-/*************************************************************************************************/
-
 
 .sanspuce{
   list-style: none;
@@ -4139,59 +4137,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 .pagination.pagination-flat > li > a {
   border-radius: 0 !important;
 }
-/*
- * Component: Products List
- * ------------------------
- */
-.products-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.products-list > .item {
-  border-radius: 3px;
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-  padding: 10px 0;
-  background: #fff;
-}
-.products-list > .item:before,
-.products-list > .item:after {
-  content: " ";
-  display: table;
-}
-.products-list > .item:after {
-  clear: both;
-}
-.products-list .product-img {
-  float: left;
-}
-.products-list .product-img img {
-  width: 50px;
-  height: 50px;
-}
-.products-list .product-info {
-  margin-left: 60px;
-}
-.products-list .product-title {
-  font-weight: 600;
-}
-.products-list .product-description {
-  display: block;
-  color: #999;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.product-list-in-box > .item {
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  border-radius: 0;
-  border-bottom: 1px solid #f4f4f4;
-}
-.product-list-in-box > .item:last-of-type {
-  border-bottom-width: 0;
-}
+ 
 /*
  * Component: Table
  * ----------------
@@ -4300,7 +4246,7 @@ table.text-center th {
   border-color: #c23321;
 }
 /*
- * Component: Social Widgets
+ * Style des widgets de parcours
  * -------------------------
  */
 .box-widget {
