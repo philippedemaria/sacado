@@ -1,0 +1,129 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+    {% if group %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+
+    <script>
+        require(['script/ajax-group-many']);
+    </script>
+ 
+ 
+{% endblock %}
+
+
+{% block page_title %}  
+    <i class='fa fa-users'></i> {{ school.name}}    <img src="{% static 'img/angle-right.png' %}"/> <small>Nouveaux groupes</small>  
+{% endblock %}
+
+
+
+{% block page_menu_right %}
+       
+{% endblock %}
+
+
+ 
+     
+{% block body %}
+
+    {{ formset.management_form }}
+        <!-- Les formulaires du formset -->
+
+
+
+
+<div class="content_main">
+ 
+ 
+            <form action="" method="POST">
+            {% csrf_token %}
+ 
+
+                <div id="formsetZone">
+                    <div class="row" id="duplicate" style="display:none">  
+                        <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    <label>{{ formset.empty_form.level.label_tag }}</label><br/>
+                                    {{ formset.empty_form.level |add_class:"form-control select2" }}
+                                    {{ formset.empty_form.level.errors }}
+                                </div> 
+
+                         </div>                              
+                        <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    <label>{{ formset.empty_form.name.label_tag }}</label> <br/>
+                                    {{ formset.empty_form.name  |add_class:"form-control"  }}
+                                </div>
+                        </div>
+                        <div class="col-sm-12 col-md-3">
+                                <div class="form-group">
+                                    <label>{{ formset.empty_form.teacher.label_tag }}</label><br/>
+                                    {{ formset.empty_form.teacher |add_class:"form-control select2" }}
+                                    {{ formset.empty_form.teacher.errors }}
+                                </div>  
+                        </div>
+                        <div class="col-sm-12 col-md-1">
+                            <div class="form-group" >
+                               <div class="delete_button"></div>
+                            </div> 
+                        </div>
+
+
+
+                    </div>
+                    {% for form in formset %}
+                    <div class="row" id="duplicate{{ forloop.counter0 }}">  
+                        <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    <label>{{ form.level.label_tag }}</label><br/>
+                                    {{ form.level |add_class:"form-control select2"  }}
+                                    {{ form.level.errors }}
+                                </div>  
+                        </div>                              
+                        <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    <label>{{ form.name.label_tag }}</label> <br/>
+                                    {{ form.name |add_class:"form-control"   }}
+                                </div>
+                        </div>
+                        <div class="col-sm-12 col-md-3">
+                                <div class="form-group">
+                                    <label>{{ form.teacher.label_tag }}</label><br/>
+                                    {{ form.teacher |add_class:"form-control select2"  }}
+                                    {{ form.teacher.errors }}
+                                </div>  
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div> 
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 controls">
+                            <a href="#" id="new_item" class="btn btn-info add_more" >+ Ajouter un groupe</a>
+                    </div>
+                    <div class="col-sm-6 col-md-6">
+                           <button class="btn btn-primary" type="submit"> Enregistrer les groupes</button>
+
+                           <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                    </div>
+                </div>
+ 
+            </form>
+   
+ 
+ 
+</div>
+
+
+
+{% endblock %}
+
+ 

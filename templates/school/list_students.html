@@ -1,0 +1,108 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+ 
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-accueil.js' %}"></script> 
+    <script>
+        require(['script/ajax-group']);    
+        require(['script/ajax-dashboard']);
+    </script>
+{% endblock %}
+
+
+ 
+ 
+{% block page_title %}
+    <i class='fa fa-users'></i> {{ request.user.school.name}} <img src="{% static 'img/angle-right.png' %}"/> Elèves
+{% endblock %}
+ 
+
+
+ 
+{% block page_menu_right %}
+ {% endblock %}
+
+
+
+
+{% block body %}
+ 
+ 
+ 
+    <section class="content_main"> 
+ 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table class="table table-bordered table-hover standard_tab_sort">
+                    <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>                        
+                        <th>Courriel</th>
+                        <th>Groupe</th>
+                        <th>Dernière connexion</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'update_student' student.user.id %}">{{ student.user.last_name }} </a>   
+                                </td>
+                                <td>
+                                    <a href="{% url 'update_student' student.user.id %}"> {{ student.user.first_name }}</a>   
+                                </td>
+
+
+                                <td>
+                                    {{ student.email }}   
+                                </td>
+ 
+                                <td>
+                                    {% for g in student.students_to_group.all %} 
+                                        {{ g }} ({{ g.teacher.last_name }} {{ g.teacher.first_name }}){% if not forloop.last%}<br> {% endif %}
+
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {{ student.last_login|date:"Y N d à H:i" }}   
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">     
+                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+            </div>
+        </div>
+    </section>
+   
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>                
+                    <h5 class="modal-title" id="exampleModalLabel">Liste des élèves - <span id="modal_group_name"></span></h5>
+                </div>
+                <div class="modal-body">
+                    <div id="list_students"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

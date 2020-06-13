@@ -1,0 +1,89 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block page_title %} 
+ <i class="fa fa-user"></i> {{ group }} <img src="{% static 'img/angle-right.png' %}"/> Nouvel élève
+{% endblock  %}
+
+
+{% block require %}
+{% if school %}
+<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-action2.js' %}"></script>
+{% else %}
+<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+{% endif %}
+{% endblock %} 
+
+
+{% block page_menu_right %}
+
+{% endblock %}
+
+
+
+
+
+{% block body  %}    
+ 
+ 
+
+<section class="content_main">
+    <form action="{% url 'register_student' %}" method="POST">
+        {% csrf_token %}
+ 
+        <input type="hidden" name="group" value="{{ group.code }}" />
+ 
+        <div class="row">
+            <div class="col-sm-12 col-md-2">
+                <div class="form-group">
+                    <label>{{ user_form.civilite.label_tag }}</label>
+                    {{ user_form.civilite  |add_class:"form-control select2" }}
+                    {{ user_form.civilite.errors }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                    <label>{{ user_form.last_name.label_tag }}</label>
+                    {{ user_form.last_name  |add_class:"form-control" }}
+                    {{ user_form.last_name.errors }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                    <label>{{ user_form.first_name.label_tag }}</label>
+                    {{ user_form.first_name  |add_class:"form-control" }}
+                    {{ user_form.first_name.errors }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                    <label>{{ user_form.email.label_tag }} <em>Optionnel</em></label>
+                    {{ user_form.email  |add_class:"form-control" }}
+                    {{ user_form.email.errors }}
+                </div>
+            </div>
+
+        </div>   
+        <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+                        <a href="javascript:history.back()">
+                            <input type="button" value="Annuler"
+                                   class="btn btn-default "/>
+                        </a>
+                    </div>   
+                </div>
+        </div>
+    </form>
+</section>
+   
+ 
+{% endblock  %}

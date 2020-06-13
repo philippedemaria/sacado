@@ -236,7 +236,7 @@ class Teacher(models.Model):
     exercise_post = models.BooleanField(default=1, verbose_name="Notification de création d'exercice ?")
 
     def __str__(self):
-        return f"{self.user.username} - {self.user.first_name.capitalize()} {self.user.last_name.capitalize()}"
+        return f"{self.user.last_name.capitalize()} {self.user.first_name.capitalize()}"
 
     def notify_registration(self):
         """

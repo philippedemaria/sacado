@@ -255,17 +255,15 @@ def register_student(request):
             user.username  = username
             user.user_type = 0
             password = request.POST.get("password1")                     
-            print("req : ", request.POST.get("choose_alone"))
+ 
             ######################### Choix du groupe  ###########################################
             if request.POST.get("choose_alone") : # groupe sans prof
-                print("choose_alone")
                 # l'élève rejoint le groupe par défaut sur le niveau choisi
                 teacher = Teacher.objects.get(user_id = 2)#2480
                 group = Group.objects.get(teacher = teacher, level_id = int(request.POST.get("level_selector")))
                 parcours = Parcours.objects.filter(teacher=teacher, level = group.level)
 
             else :     # groupe du prof  de l'élève        
-                print("code_group")
                 code_group = request.POST.get("group")  
                 if Group.objects.filter(code = code_group).exists() :
                     group = Group.objects.get(code = code_group)
@@ -295,23 +293,32 @@ def register_student(request):
  
 
 
-
-def update_student(request, pk):
-    user = get_object_or_404(User, pk=pk)
-    student = get_object_or_404(Student, pk=pk)
-    user_form = UserUpdateForm(request.POST or None, instance=user)
-    student_form = StudentUpdateForm(request.POST or None, instance=student)
-    if all((user_form.is_valid(), student_form.is_valid())):
-        user_form.save()
-        student_f = student_form.save(commit=False)
-        student_f.user = user
-        student_f.save()
-        parcours = Parcours.objects.get(id=student_f.level.id)
-        parcours.students.add(student_f)
-        return redirect('students')
+@login_required
+@can_register
+@is_manager_of_this_school
+def update_student(request, id,idg=0):  
+    """
+    Upadta par un admin d'un établissement
+    """
+    user = get_object_or_404(User, pk=id)
+    student = user.user_student
+    student = Student.objects.get(user=user)
+    user_form = UserUpdateForm(request.POST or None, request.FILES or None, instance=user)
+    student_form = StudentForm(request.POST or None, request.FILES or None, instance=student)
+    if request.method == "POST":
+        if all((user_form.is_valid(), student_form.is_valid())):
+            user_form.save()
+            student_f = student_form.save(commit=False)
+            student_f.user = user
+            student_f.save()
+            messages.success(request, 'Le profil a été changé avec succès !')
+        if idg == 0 :
+            return redirect('school_students')
+        else :    
+            return redirect('school_groups')
 
     return render(request, 'account/student_form.html',
-                  {'user_form': user_form, 'student_form': student_form, 'student': student})
+                  {'user_form': user_form, 'form': student_form, 'student': student, 'idg': idg})
 
 
 
@@ -613,7 +620,7 @@ def detail_student_all_views(request, id):
 
 
 
-
+ 
 
  
 
@@ -738,7 +745,7 @@ def register_teacher_from_admin(request):
 @login_required
 @can_register
 @is_manager_of_this_school
-def register_by_csv(request,key):
+def register_by_csv(request,key,idg=0):
     """
     Enregistrement par csv : key est le code du user_type : 0 pour student, 2 pour teacher
     """
@@ -800,6 +807,10 @@ def register_by_csv(request,key):
                         teacher_or_student.save()
                         if key == 2 :
                             teacher_or_student.save_m2m()
+                        else :
+                            group = Group.objects.get(pk = idg)
+                            group.students.add(teacher_or_student)                            
+
                         try :
                             teacher_or_student.notify_registration()
                         except :
@@ -818,7 +829,7 @@ def register_by_csv(request,key):
         else :
             return redirect('school_students')            
     else :
-        return render(request, 'account/csv_teachers_or_students.html',{'key' : key})
+        return render(request, 'account/csv_teachers_or_students.html',{'key' : key, 'idg' : idg})
 
   
 #########################################Lost password #################################################################

@@ -1,0 +1,135 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+    {% if group %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+
+ 
+{% endblock %}
+
+
+{% block page_title %}  
+    <i class='fa fa-users'></i> {{ school.name }}    <img src="{% static 'img/angle-right.png' %}"/> <small>Nouveau groupe</small>  
+{% endblock %}
+
+{% block page_menu_right %}
+    
+
+ 
+
+
+    
+{% endblock %}
+
+
+ 
+
+
+ 
+     
+{% block body %}     
+<div class="content_main">
+<form action="" method="POST">
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <form action="" method="POST">
+            {% csrf_token %}
+                <div class="row">
+                    <div class="col-sm-12 col-md-7">
+                        <div class="form-group">
+                            {{ form.name.label_tag }} <font style="font-size:12px">18 lettres max.</font>
+                            {{ form.name |add_class:"form-control" }}
+                            {{ form.name.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-5">
+                        <div class="form-group">
+                            {{ form.level.label_tag }}
+                            {{ form.level |add_class:"form-control select2" }}
+                            {{ form.level.errors }}
+                        </div>
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="col-sm-12 col-lg-4">
+                          {{ form.color.label_tag }}
+                          <div id="color-picker-component" class="input-group colorpicker-component">
+                              {{ form.color.as_hidden }}
+                              <span class="input-group-addon"><i></i></span>
+                          </div>
+                    </div>
+                     <div class="col-sm-12 col-md-2">
+                           <label>Suivi parent?</label> <br>
+                            {{ form.suiviparent  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                    </div>
+                     <div class="col-sm-12 col-md-6">
+                        <small>   Un code est généré par élève pour donner un accès aux résultats des acquisitions de leurs enfants. </small>
+                    </div>
+                    
+                </div> 
+                <div class="row"> 
+                    <div class="col-sm-12 col-lg-12">
+                        <div class="form-group">
+                            <label>Enseignant</label>
+                            {{ form.teacher |add_class:"form-control select2" }}
+                            {{ form.teacher.errors }}
+                        </div>
+                    </div>
+                </div> 
+                <div class="row">
+
+
+                </div>
+
+
+
+ 
+
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <div class="form-group">
+                            <input value="Enregistrer" type="submit" class="btn btn-sacado"  id="test_students"  />
+                            <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                                       class="btn btn-default "/></a>
+                        </div>
+                    </div>
+                
+
+
+                {% if group %}
+
+                    <div class="col-sm-12 col-md-4">
+                        <div class="form-group">
+                            <a href="{% url 'delete_group' group.id %}" class="btn btn-danger" onclick="return TestDelete('ce groupe')">Supprimer ce groupe</a>
+                        </div>
+                    </div>
+
+                {% endif %}
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <label>Elèves <small>(Optionnel)<em> L'adresse mail est facultative.</em> <br><span style="color:#cb2131">1 élève par ligne. <br/>Le mot de passe par défaut est : sacado2020</span></small></label> <br> 
+                        <textarea name="students" id="students_id"  style="border:1px #CCC solid" class="form-control" rows="20" placeholder="Alan;Turing;alan.turing@enigma.com"></textarea>
+                    </div>
+                </div>
+            </div> 
+ 
+        </div>
+    </div>
+
+</form>
+</div> 
+        
+{% endblock %}

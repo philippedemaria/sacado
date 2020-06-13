@@ -1,9 +1,13 @@
 from django.shortcuts import render, redirect
 from .models import School, Country  
-from .forms import SchoolForm, CountryForm
+from .forms import SchoolForm, CountryForm, GroupForm
+from group.models import Group
 from django.contrib.auth.decorators import login_required, permission_required,user_passes_test
 from account.decorators import is_manager_of_this_school 
 from account.models import User
+from account.forms import UserForm , StudentForm ,NewUserSForm
+from django.forms import formset_factory
+
 
 @login_required
 def list_schools(request):
@@ -99,9 +103,13 @@ def school_teachers(request):
 def school_groups(request):
 	if request.session.get("school_id") :
 		school_id = request.session.get("school_id")
+		school = School.objects.get(pk = school_id)
 	else :
-		school_id = request.user.school.id
-	groups = Group.objects.filter(teacher__school_id = school_id) 
+		school = request.user.school
+
+	users = school.user.all()
+
+	groups = Group.objects.filter(teacher__user__in = users) 
 
 	return render(request,'school/list_groups.html', {'groups':groups})
 
@@ -117,14 +125,47 @@ def school_students(request):
 	return render(request,'school/list_students.html', {'students':students})
 
 
+@login_required
+@is_manager_of_this_school
+def new_student(request,slug):
+    group = Group.objects.get(code=slug)
+    user_form = NewUserSForm()
+    form = StudentForm()
+    return render(request,'school/student_form.html', {'group':group, 'user_form' : user_form, 'form' : form })
 
 
-def csv_teachers():
-	pass
 
-def csv_students():
-	pass
+@login_required
+@is_manager_of_this_school
+def new_group(request):
+	school = request.user.school
+	form = GroupForm(request.POST or None, school = school)
 
-def csv_groups():
+	if request.method == "POST" :
+		if form.is_valid():
+			form.save()
+			return redirect('school_groups')
 
-	pass
+	return render(request,'school/group_form.html', { 'school' : school ,  'form' : form })
+
+
+@login_required
+@is_manager_of_this_school
+def new_group_many(request):
+
+	school = request.user.school
+	GroupFormSet = formset_factory(GroupForm , extra=2) 
+	formset  = GroupFormSet(request.POST or None,form_kwargs={'school': school})
+	if request.method == "POST" :
+		
+		for form in formset:
+			if form.is_valid():
+				form.save()
+		return redirect('school_groups')
+
+	return render(request,'school/many_group_form.html', {'formset' : formset , 'school': school})
+
+ 
+
+
+

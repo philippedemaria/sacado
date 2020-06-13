@@ -3,7 +3,12 @@
 {% load static %}
 
 {% block require %}
+    {% if idg %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3.js' %}"></script> 
+    {% else %}
     <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-index.js' %}"></script> 
+    {% endif %}
+
     <script>
        require(['script/ajax-dashboard']);
     </script> 

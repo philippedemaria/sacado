@@ -1,0 +1,110 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+ 
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-accueil.js' %}"></script> 
+    <script>
+        require(['script/ajax-dashboard']);
+        require(['script/ajax-group']);
+    </script>
+{% endblock %}
+
+
+
+{% block page_title %}
+    <i class='fa fa-users'></i> {{ request.user.school.name}} <img src="{% static 'img/angle-right.png' %}"/> Groupes 
+{% endblock %}
+
+{% block page_menu_right %}
+
+    <a href="{% url 'new_group_many' %}" class="btn btn-new">+ Plusieurs groupes</a>  
+    <a href="{% url 'new_group' %}" class="btn btn-new">+ Nouveau groupe </a> 
+{% endblock %}
+
+
+
+
+{% block body %}
+    <section class="content_main"> 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table class="table table-bordered table-hover display">
+                    <thead>
+                        <tr>
+                            <td>Code</td>
+                            <td>Nom</td>
+                            <td>Participants </td>
+                            <td style="width:40px"> </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for group in groups %}
+                            <tr>
+                                <td style="width:90px;border-left:5px solid {{group.color}}">
+                                    <span style="color:{{group.color}}">{{ group.code }}</span> 
+                                </td>
+                                <td style="width:150px">
+                                     <a href="{% url 'update_group'  group.id %}" style="color:{{group.color}}">{{ group.name }} </a> <br><br><div style="font-size: 12px">( <a href="{% url 'update_teacher' group.teacher.user.id %}">{{ group.teacher.user.civilite }} {{ group.teacher.user.first_name }} {{ group.teacher.user.last_name }}</a>)</div>
+                                </td>
+
+                                <td>
+          
+                                    <span class="label label-primary"> {{ group.students.count }}<i class="fa fa-users"></i></span>
+                          
+                                    
+                                        {% for s in group.students.all|dictsort:"user.last_name" %} 
+                                           <font style="font-size:14px">    <a  href="{% url 'update_student'  s.user.id group.id  %}"> {{s}} </a>{% if not forloop.last %}, {% endif %} </font>
+                                        {% empty %}
+                                        {% if group %}<br>
+                                            <div class="alert alert-danger">
+                                            Les élèves peuvent rejoindre ce groupe en utilisant cette URL : <strong>https://sacado.xyz/group/{{ group.code }}</strong>. 
+                                            </div>
+                                        {% endif %}
+                                        {% endfor %} 
+                                </td> 
+
+                                <td>
+                                    <a href="{% url 'new_student' group.code %}" class="label label-primary"> + <i class="fa fa-user"></i></a>
+                                    <a href="{% url 'register_by_csv' 0 group.id %}" class="label label-success"> + <i class="fa fa-users"></i> csv</a>
+                                </td> 
+
+                            </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">     
+                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+            </div>
+        </div>
+    </section>
+    </div>
+
+    <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>                
+                    <h5 class="modal-title" id="exampleModalLabel">Liste des élèves - <span id="modal_group_name"></span></h5>
+                </div>
+                <div class="modal-body">
+                    <div id="list_students"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
