@@ -1674,6 +1674,10 @@ a:focus {
   float: right;
 }
 
+
+ a.small_users{
+  font-size: 0.8em!important;
+ }
  
 
 @media (max-width: 991px) {

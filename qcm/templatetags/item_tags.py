@@ -135,7 +135,7 @@ def contrast_color(color):
         except :
             color_test = 10
     if color_test > 200 :
-        return "#271942"
+        return "#20123a"
     else :
         return "#FFFFFF"
 
@@ -157,7 +157,7 @@ def contrast_color_title(color):
         except :
             color_test = 10
     if color_test > 200 :
-        return "#271942"
+        return "#20123a"
     else :
         return color
 

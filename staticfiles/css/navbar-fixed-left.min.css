@@ -1,7 +1,7 @@
 .navbarLeft {
     left:0px;
     width : 95px;
-    background-color: #271942 ;
+    background-color: #20123a  ;   /* #271942*/
     text-align:center;
     z-index:1000;
     background-repeat:no-repeat;
@@ -17,7 +17,7 @@
 
 .navbarLeft-nav > li > a:hover  
    {
-    color: #271942 ;
+    color: #20123a ;
     background-color: #f4f6f9;	
     width : 95px;
     border-radius: 0px;

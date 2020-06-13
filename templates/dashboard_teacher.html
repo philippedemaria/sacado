@@ -26,7 +26,9 @@
                                 {% endfor %}
                             </font>
                             <div style="clear:both"></div>
-                            <span style="color:{{ group.color }};font-size:9px"> Lien d'inscription à donner aux élèves  : https://sacado.xyz/group/{{ group.code }}</span> 
+                            <span style="color:{{ group.color }};font-size:9px"><a href="{% url 'update_group' group.id %}" style="background-color:{{ group.color }}; color:{{ group.color|contrast_color }}; padding :1px 5px; border-radius: 50%">+</a> ou lien d'inscription à donner aux élèves  : https://sacado.xyz/group/{{ group.code }}   
+                                  
+                            </span> 
                         </div>
 
 
@@ -63,30 +65,23 @@
                         <div class="small-box-footer">
                             {% if data.nb_parcours == 0 %}
                                 <div class="row">                              
+
+                                                 
                                     <div class="col-lg-6 col-xs-6" style="padding-right:0px">
-                                         <a href="{% url 'list_parcours_group' group.id  %}" class="label_small_box" style="color:{{ group.color|contrast_color }};"><i class="fa fa-th"></i><span class="small_displayer"> Créer un parcours</span> </a>   
-                                    </div>
-                                    <div class="col-lg-6 col-xs-6" style="padding-right:0px">
-                                        <a href="{% url 'update_group' group.id  %}" class="label_small_box" style="color:{{ group.color|contrast_color }};"><i class="fa fa-cogs"></i><span class="small_displayer"> Configurer </span></a>    
-                                    </div>
-                                </div>
-                                <div class="row">                              
-                                    <div class="col-lg-10 col-md-10 col-xs-10" style="padding-right:0px; font-size: 15px" >
-                                        <span class="small_displayer" style="color:{{ group.color|contrast_color }};"> Lien d'inscription direct à donner aux élèves : https://sacado.xyz/group/{{ group.code }}</span> 
+                                        <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:20px; color:{{ group.color|contrast_color }};"><i class="fa fa-arrow-circle-right"></i><span class="small_displayer"> Détails </span></a>    
                                     </div>
 
 
  
 
-                                    <div class="col-lg-2 col-md-2 col-xs-2" style="padding-right:0px; padding-top:15px;">
-                                        <a  href="#"  class="label_small_box group_shower" data-group_id="{{group.id }}" style="color:{{ group.color|contrast_color }};"><i class="fa fa-users"></i><span class="small_displayer"> {{ group.students.count }}</span> </a>   
+                                    <div class="col-lg-6 col-xs-6" style="padding-right:0px">
+                                        <a  href="#"  class="label_small_box group_shower" data-group_id="{{group.id }}" style="font-size:20px; color:{{ group.color|contrast_color }};"><i class="fa fa-users"></i><span class="small_displayer"> {{ group.students.count }} élève{{ group.students.count|pluralize }}</span> </a>   
                                     </div>
 
-
  
-
                                 </div>
 
+                 
 
 
                             {% else  %}
