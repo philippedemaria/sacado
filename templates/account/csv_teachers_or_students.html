@@ -6,18 +6,15 @@
 
 
 {% block require %}
-    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-accueil.js' %}"></script> 
-    <script>
-        require(['script/ajax-group']);    
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3.js' %}"></script> 
+    <script>   
         require(['script/ajax-dashboard']);
     </script>
 {% endblock %}
-
-
  
  
 {% block page_title %}
-    <i class='fa fa-users'></i> {{ request.user.school.name}} <img src="{% static 'img/angle-right.png' %}"/> Nouveaux enseignants par csv
+    <i class='fa fa-users'></i> {{ request.user.school.name}} <img src="{% static 'img/angle-right.png' %}"/> Enseignant.e.s par csv
 {% endblock %}
  
 
@@ -36,6 +33,29 @@
  
  
 <section class="content_main"> 
+
+
+    <div class="alert alert-danger alert-dismissible" role="alert">
+      <strong>Attention !</strong> Votre fichier csv doit vérifier le format demandé. Les données doivent être séparées d'un <strong>point virgule (;)</strong>. 3 champs sont demandés :
+            <ul style="margin:10px">
+                <li>Nom</li>
+                <li>Prénom</li>                
+                <li>Courriel, renseigner votre adresse professionnelle si vous en avez une.</li>
+            </ul> 
+            Ces trois données s'écrivent sur une seule ligne par personnel.<br>
+            <pre style="font-size:20px">Turing;Alan;alan.turing@enigma.edu<br>Agnesi;Maria;maria.agnesi@curves.edu<br>Chasles;Michel;michel.chasles@vector.edu<br>de Fermat;Pierre;pierre.fermat@rsa.edu</pre>
+            
+
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+
+
+
+
+
     <form action="{% url 'register_by_csv' 2 %}" method="POST" enctype="multipart/form-data" >  
         <div class="row">
             <div class="col-sm-12 col-md-12">

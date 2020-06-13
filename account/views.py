@@ -738,9 +738,12 @@ def register_teacher_from_admin(request):
 @login_required
 @can_register
 @is_manager_of_this_school
-def register_teacher_csv(request):
+def register_by_csv(request,key):
+    """
+    Enregistrement par csv : key est le code du user_type : 0 pour student, 2 pour teacher
+    """
 
-    if request.method == " POST" :
+    if request.method == "POST" :
         try:
             csv_file = request.FILES["csv_file"]
             if not csv_file.name.endswith('.csv'):
@@ -755,17 +758,53 @@ def register_teacher_csv(request):
 
             lines = file_data.split("\n")
             #loop over the lines and save them in db. If error , store as string and then display
+ 
+
             for line in lines:                      
-                fields = line.split(",")
-                data_dict = {}
+                fields = line.split(";")
+                data_dict , data_teacher_or_student_dict = {} , {} 
+                data_dict["civilite"] = "M/Mme"               
                 data_dict["last_name"] = fields[0]
                 data_dict["first_name"] = fields[1]
-                data_dict["civilite"] = fields[2]
-                data_dict["notes"] = fields[3]
+                data_dict["user_type"] = key
+                data_dict["time_zone"] =  request.user.time_zone
+                data_dict["is_manager"] = 0
+                data_dict["school"] =  request.user.school  
+                              
+                if key == 2 : # Enseignant
+                    data_dict["email"] = fields[2]
+                    data_dict["is_extra"] = 1
+                    data_teacher_or_student_dict["notification"] = 1
+                    data_teacher_or_student_dict["exercise_post"] = 1 
+                    form = TeacherForm(data_teacher_or_student_dict)
+                else : # Student
+                    if data_dict["email"] != "" :
+                        data_dict["email"] = fields[2]
+                    else :
+                        data_dict["email"] = ""  
+                    data_dict["is_extra"] = 0 
+
+                    data_teacher_or_student_dict["task_post"] = 1
+                    form = StudentForm(data_teacher_or_student_dict)
+ 
+
                 try:
-                    form = EventsForm(data_dict)
-                    if form.is_valid():
-                        form.save()                 
+                    user_form = UserForm(data_dict)
+                                        
+                    if all(user_form.is_valid(), form.is_valid()):
+                        user = user_form.save(commit=False)
+                        user.set_password("")
+                        user_form.save()
+                        teacher_or_student = form.save(commit=False)
+                        teacher_or_student.user = user_form
+                        teacher_or_student.save()
+                        if key == 2 :
+                            teacher_or_student.save_m2m()
+                        try :
+                            teacher_or_student.notify_registration()
+                        except :
+                            pass
+
                     else:
                         logging.getLogger("error_logger").error(form.errors.as_json())                                              
                 except Exception as e:
@@ -774,10 +813,12 @@ def register_teacher_csv(request):
 
         except Exception as e:
             messages.error(request,"Echec de téléversement. "+repr(e))
-
-        return redirect('school_teachers')
+        if key == 2 :
+            return redirect('school_teachers')
+        else :
+            return redirect('school_students')            
     else :
-        return render(request, 'account/csv_teachers.html',{                     })
+        return render(request, 'account/csv_teachers_or_students.html',{'key' : key})
 
   
 #########################################Lost password #################################################################

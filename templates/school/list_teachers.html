@@ -17,14 +17,14 @@
  
  
 {% block page_title %}
-    <i class='fa fa-users'></i> {{ request.user.school.name}} <img src="{% static 'img/angle-right.png' %}"/> Enseignants
+    <i class='fa fa-users'></i> {{ request.user.school.name}} <img src="{% static 'img/angle-right.png' %}"/> Enseignant.e.s
 {% endblock %}
  
 
 
  
 {% block page_menu_right %}
-    <li> <a href="{% url 'register_teacher_csv' %}" class="btn btn-new"  > Nouveaux par csv</a></li>
+    <li> <a href="{% url 'register_by_csv' 2 %}" class="btn btn-new"  > Enseignant.e.s par csv</a></li>
    <li> <a href="{% url 'register_teacher_from_admin' %}" class="btn btn-new"  > + Nouvel.le enseignant.e</a></li>
 {% endblock %}
 
@@ -62,25 +62,25 @@
                                 </td>
                                 <td>
                                     {% if teacher.is_manager %} 
-                                        <span style="font-size: 8px"> oui</span> 
+                                        <span style="font-size: 10px;color:#FFF"> oui</span> 
                                         <i class="fa fa-check-circle text-success"></i>{% else %} 
-                                        <span style="font-size: 8px"> non</span>  
+                                        <span style="font-size: 10px;color:#FFF"> non</span>  
                                         <i class="fa fa-ban text-danger"></i> 
                                     {% endif %}
                                 </td>
                                 <td>
                                     {% if teacher.is_superuser %} 
-                                        <span style="font-size: 8px"> oui</span> 
+                                        <span style="font-size: 10px;color:#FFF"> oui</span> 
                                         <i class="fa fa-check-circle text-success"></i>{% else %} 
-                                        <span style="font-size: 8px"> non</span>  
+                                        <span style="font-size: 10px;color:#FFF"> non</span>  
                                         <i class="fa fa-ban text-danger"></i> 
                                     {% endif %}
                                 </td>
                                 <td>
                                     {% if teacher.is_extra %} 
-                                        <span style="font-size: 8px"> oui</span> 
+                                        <span style="font-size: 10px;color:#FFF"> oui</span> 
                                         <i class="fa fa-check-circle text-success"></i>{% else %} 
-                                        <span style="font-size: 8px"> non</span>  
+                                        <span style="font-size: 10px;color:#FFF"> non</span>  
                                         <i class="fa fa-ban text-danger"></i> 
                                     {% endif %}
                                 </td>
