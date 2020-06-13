@@ -21,7 +21,6 @@ class Group(ModelWithCode):
     students = models.ManyToManyField(Student, related_name="students_to_group",  blank=True,verbose_name="Élèves*")
     teacher = models.ForeignKey(Teacher, blank=True, null=True, on_delete=models.CASCADE, related_name="teacher_to_group", verbose_name="Enseignant*")
     level = models.ForeignKey(Level,  on_delete=models.PROTECT, related_name="level_to_group", verbose_name="Niveau*")
-    parcours = models.OneToOneField(Parcours, related_name="parcours_group", default='', blank=True, on_delete=models.SET_DEFAULT) 
     assign = models.BooleanField( default = 1 )
     suiviparent = models.BooleanField( default = 0 )
 

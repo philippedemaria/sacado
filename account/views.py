@@ -710,25 +710,50 @@ def delete_teacher(request, pk):
     return redirect('list_teacher')
 
 
+"""
+retourne un username
+"""
+def get_username( ln, fn ) :
+    ok = True
+    i = 0
+    un = str(ln)+"."+str(fn)[0]
+    while ok :
+        if User.objects.filter(username = un).count() == 0 :
+            ok = False
+        else :
+            i+=1
+            un = un + str(i)
+    return un
 
 @login_required
 @can_register
 @is_manager_of_this_school
 def register_teacher_from_admin(request):
+    """"
+    Enregistre un enseignant depuis la console admin d'un établissement
+    """
 
     user_form = NewUserTForm(request.POST or None)
     teacher_form = TeacherForm(request.POST or None)
+ 
+
     new = False
     if request.method == 'POST':
-        if all(user_form.is_valid(),teacher_form.is_valid()):
-            user_form.save()
+        print('teacher_form', teacher_form.is_valid())
+        print('user_form', user_form.is_valid())
+        if all((user_form.is_valid(),teacher_form.is_valid())):
+            u_form = user_form.save(commit=False)
+            u_form.password =  make_password("sacado_2020")
+            u_form.user_type = 2
+            u_form.school = request.user.school
+            u_form.username = get_username(u_form.last_name, u_form.first_name)
+            u_form.save()
             teacher = teacher_form.save(commit=False)
-            teacher.user = user_form
+            teacher.user = u_form
             teacher.save()
             teacher_form.save_m2m()
-
             teacher.notify_registration()
-
+            return redirect('school_teachers')
         else:
             messages.error(request, user_form.errors)
     else :

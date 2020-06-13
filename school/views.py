@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
+from django.forms import formset_factory
+from django.contrib.auth.decorators import login_required, permission_required,user_passes_test
+from django.contrib import messages
 from .models import School, Country  
 from .forms import SchoolForm, CountryForm, GroupForm
+from group.views import include_students
 from group.models import Group
-from django.contrib.auth.decorators import login_required, permission_required,user_passes_test
 from account.decorators import is_manager_of_this_school 
-from account.models import User
+from account.models import User, Teacher, Student
 from account.forms import UserForm , StudentForm ,NewUserSForm
-from django.forms import formset_factory
 
 
 @login_required
@@ -93,7 +95,7 @@ def school_teachers(request):
 		school_id = request.session.get("school_id")
 	else :
 		school_id = request.user.school.id
-	teachers = User.objects.filter(school_id = school_id, user_type=2)
+	teachers = User.objects.filter(school_id = school_id, user_type=2).order_by("last_name")  
  
 
 	return render(request,'school/list_teachers.html', {'teachers':teachers})
@@ -109,20 +111,40 @@ def school_groups(request):
 
 	users = school.user.all()
 
-	groups = Group.objects.filter(teacher__user__in = users) 
+	groups = Group.objects.filter(teacher__user__in = users).order_by("level")  
 
 	return render(request,'school/list_groups.html', {'groups':groups})
+
+
+@login_required
+@is_manager_of_this_school
+def school_level_groups(request):
+	if request.session.get("school_id") :
+		school_id = request.session.get("school_id")
+		school = School.objects.get(pk = school_id)
+	else :
+		school = request.user.school
+
+	users = school.user.all()
+
+	groups = Group.objects.filter(teacher__user__in = users).order_by("level") 
+
+	return render(request,'school/list_level_groups.html', {'groups':groups})
+
+
+
 
 @login_required
 @is_manager_of_this_school
 def school_students(request):
 	if request.session.get("school_id") :
 		school_id = request.session.get("school_id")
+		school = School.objects.get(pk = school_id)
 	else :
-		school_id = request.user.school.id
-	students = User.objects.filter(school_id = school_id, user_type=0) 
+		school = request.user.school
+	users = User.objects.filter(school = school, user_type=0).order_by("last_name")  
 
-	return render(request,'school/list_students.html', {'students':students})
+	return render(request,'school/list_students.html', {'users':users})
 
 
 @login_required
@@ -135,6 +157,31 @@ def new_student(request,slug):
 
 
 
+
+@login_required
+@is_manager_of_this_school
+def get_school_students(request):
+
+	school = request.user.school
+	teachers = Teacher.objects.filter(user__school = school)
+	groups = Group.objects.filter(teacher__in = teachers)
+	group_tab = []
+	for group in groups :
+		for student in group.students.filter(user__school=None, user__user_type=0): # ce sont les élèves de l'établissement pas encore assigné
+			usr = student.user
+			usr.school = school
+			usr.save()
+ 
+	messages.success(request, "Scan terminé avec succès. Les élèves trouvés sont importés.")
+
+	return redirect('school_students')
+
+
+ 
+
+
+
+
 @login_required
 @is_manager_of_this_school
 def new_group(request):
@@ -144,7 +191,16 @@ def new_group(request):
 	if request.method == "POST" :
 		if form.is_valid():
 			form.save()
+			stdts = request.POST.get("students")
+
+			if len(stdts) > 0 :
+				tested = include_students(stdts,form)
+				if not tested :
+					messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
+
 			return redirect('school_groups')
+		else :
+			print(form.errors)
 
 	return render(request,'school/group_form.html', { 'school' : school ,  'form' : form })
 
@@ -158,10 +214,10 @@ def new_group_many(request):
 	formset  = GroupFormSet(request.POST or None,form_kwargs={'school': school})
 	if request.method == "POST" :
 		
-		for form in formset:
-			if form.is_valid():
-				form.save()
-		return redirect('school_groups')
+		if formset.is_valid():
+			formset.save()
+			messages.success(request, "Groupes créés avec succès.")
+			return redirect('school_groups')
 
 	return render(request,'school/many_group_form.html', {'formset' : formset , 'school': school})
 

@@ -34,8 +34,7 @@
      
 {% block body %}
 
-    {{ formset.management_form }}
-        <!-- Les formulaires du formset -->
+
 
 
 
@@ -43,10 +42,11 @@
 <div class="content_main">
  
  
-            <form action="" method="POST">
+            <form action="{% url 'new_group_many' %}" method="POST">
             {% csrf_token %}
- 
-
+         
+            {{ formset.management_form }}
+                <!-- Les formulaires du formset -->
                 <div id="formsetZone">
                     <div class="row" id="duplicate" style="display:none">  
                         <div class="col-sm-12 col-md-4">

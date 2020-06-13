@@ -45,8 +45,6 @@
                         <th>Nom Prénom</th>
                         <th>Courriel</th>
                         <th>Manager</th>
-                        <th>Admin</th>
-                        <th>Extra</th>
                         <th>Inscription</th>
                         <th>Dernière connexion</th>
                     </tr>
@@ -68,22 +66,7 @@
                                         <i class="fa fa-ban text-danger"></i> 
                                     {% endif %}
                                 </td>
-                                <td>
-                                    {% if teacher.is_superuser %} 
-                                        <span style="font-size: 10px;color:#FFF"> oui</span> 
-                                        <i class="fa fa-check-circle text-success"></i>{% else %} 
-                                        <span style="font-size: 10px;color:#FFF"> non</span>  
-                                        <i class="fa fa-ban text-danger"></i> 
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if teacher.is_extra %} 
-                                        <span style="font-size: 10px;color:#FFF"> oui</span> 
-                                        <i class="fa fa-check-circle text-success"></i>{% else %} 
-                                        <span style="font-size: 10px;color:#FFF"> non</span>  
-                                        <i class="fa fa-ban text-danger"></i> 
-                                    {% endif %}
-                                </td>
+
 
                                 <td>
                                     {{ teacher.date_joined|date:"d N Y" }}   

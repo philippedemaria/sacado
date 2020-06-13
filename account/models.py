@@ -244,7 +244,7 @@ class Teacher(models.Model):
         """
         if self.user.email != '':
             send_mail('Création de compte sur Sacado',
-                      f'Bonjour, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {self.user.username}.\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
+                      f'Bonjour, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {self.user.username} \r\n\r\nVotre mot de passe est : sacado_2020. Vous devez le changer dès que possible.\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
                       'info@sacado.xyz',
                       [self.user.email, ])
 

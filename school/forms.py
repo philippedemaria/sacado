@@ -30,6 +30,7 @@ class GroupForm(forms.ModelForm):
 	class Meta:
 		model = Group
 		fields = '__all__'
+		exclude = ('students',)
 
 	def __init__(self, *args, school, **kwargs):
 		self.school = school

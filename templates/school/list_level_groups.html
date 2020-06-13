@@ -1,0 +1,99 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+ 
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-accueil.js' %}"></script> 
+    <script>
+        require(['script/ajax-dashboard']);
+        require(['script/ajax-group']);
+    </script>
+{% endblock %}
+
+
+
+{% block page_title %}
+    <i class='fa fa-users'></i> {{ request.user.school.name}} <img src="{% static 'img/angle-right.png' %}"/> Groupes 
+{% endblock %}
+
+{% block page_menu_right %}
+
+    <a href="{% url 'new_group_many' %}" class="btn btn-new">+ Plusieurs groupes</a>  
+    <a href="{% url 'new_group' %}" class="btn btn-new">+ Nouveau groupe </a> 
+{% endblock %}
+
+
+
+
+{% block body %}
+    <section class="content_main"> 
+
+
+        <ul  class="nav nav-tabs">
+            {% regroup groups by level as level_list  %}
+
+                {% for level in level_list %}
+            <li {% if forloop.first %}class="active"{% endif %}><a  href="#{{ forloop.counter}}a" data-toggle="tab">{{ level.grouper.name }} </a></li>
+                {% endfor  %}
+
+        </ul>
+
+
+        <div class="tab-content clearfix">
+            {% for level in level_list %} 
+            <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ forloop.counter}}a">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                         <table class="table table-bordered table-hover standard_tab_sort">
+                            <thead>
+                                <tr>
+                                    <td>Nom</td>
+                                    <td>Participants </td>
+                                    <td style="width:40px"> </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for group in level.list %}
+                                    <tr>
+         
+                                        <td style="width:150px ; border-left:5px solid {{group.color}}">
+                                             <a href="{% url 'update_group'  group.id %}" style="color:{{group.color}}">{{ group.name }} </a> <br><span style="color:{{group.color}}; font-size: 14px">{{ group.code }}</span> <br><div style="font-size: 12px"> <a href="{% url 'update_teacher' group.teacher.user.id %}">{{ group.teacher.user.civilite }} {{ group.teacher.user.first_name }} {{ group.teacher.user.last_name }}</a></div>
+                                        </td>
+
+                                        <td>
+                  
+                                            <span class="label label-primary"> {{ group.students.count }}<i class="fa fa-users"></i></span>
+                                  
+                                            
+                                                {% for s in group.students.all|dictsort:"user.last_name" %} 
+                                                   <font style="font-size:14px">    <a  href="{% url 'update_student'  s.user.id group.id  %}"> {{s}} </a>{% if not forloop.last %}, {% endif %} </font>
+                                                {% empty %}
+                                                {% if group %}<br>
+                                                    <div class="alert alert-danger">
+                                                    Les élèves peuvent rejoindre ce groupe en utilisant cette URL : <strong>https://sacado.xyz/group/{{ group.code }}</strong>. 
+                                                    </div>
+                                                {% endif %}
+                                                {% endfor %} 
+                                        </td> 
+
+                                        <td>
+                                            <a href="{% url 'new_student' group.code %}" class="label label-primary"> + <i class="fa fa-user"></i></a>
+                                            <a href="{% url 'register_by_csv' 0 group.id %}" class="label label-success"> + <i class="fa fa-users"></i> csv</a>
+                                        </td> 
+
+                                    </tr>
+
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endfor  %}
+        </div>
+    </section>
+
+{% endblock %}

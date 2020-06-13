@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import Teacher, User , Student , Parent
 from django.db import transaction
-
+from django.contrib.auth.hashers import make_password
 
 class UserForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
@@ -53,17 +53,22 @@ class ManagerUpdateForm(forms.ModelForm):
 
 
 class NewUserTForm(forms.ModelForm):
+
+ 
+
     class Meta:
         model = User
         fields = '__all__'
-        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined',  'username', 'user_type', 'school','is_manager','time_zone']
+        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined',  'username', 'user_type','time_zone', 'password']
 
+
+ 
 
 class NewUserSForm(forms.ModelForm):
     class Meta:
         model = User
         fields = '__all__'
-        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined',   'username','user_type','is_manager','time_zone']
+        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined',   'username','user_type','is_manager','time_zone', 'password']
 
 
 

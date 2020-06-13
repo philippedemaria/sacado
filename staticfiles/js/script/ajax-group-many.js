@@ -20,7 +20,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
         tr_object.appendTo("#formsetZone");
 
-        $(tr_object).find('.delete_button').html('<a href="javascript:void(0)" class="btn btn-danger remove_more" style="margin-top: 12px">Supprimer</a>'); 
+        $(tr_object).find('.delete_button').html('<a href="javascript:void(0)" class="btn btn-danger remove_more" >Supprimer</a>'); 
 
         total_form.val(totalForms+1)
 
