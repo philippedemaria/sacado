@@ -10,4 +10,5 @@ urlpatterns = [
     re_path('send_message', send_message, name='send_message'),
 
     path('ajax/change_color_account', ajax_changecoloraccount , name='ajax_changecoloraccount'), 
+    path('admin_tdb', admin_tdb, name='admin_tdb'),  
 ]

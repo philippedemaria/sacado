@@ -5,6 +5,7 @@ from django.contrib.auth import   logout
 from account.models import  User, Teacher, Student  ,Parent
 from qcm.models import Parcours, Exercise,Relationship,Studentanswer
 from group.models import Group
+from school.models import Stage
 from sendmail.models import Communication
 from socle.models import Level
 from django.http import JsonResponse
@@ -220,9 +221,25 @@ def change_color(filename,color,code):
         file.write(filedata)
 
 
+ 
 
-# def handler404(request):
-#     return render(request, '404.html', status=404)
 
-# def handler500(request):
-#     return render(request, '500.html', status=500)
+
+
+def  admin_tdb(request):
+
+    school = request.user.school   
+    nb_teachers = User.objects.filter(school = school, user_type=2).count()  
+    nb_students = User.objects.filter(school = school, user_type=0).count()    
+    nb_groups = Group.objects.filter(teacher__user__school = school).count()  
+    stage = Stage.objects.get(school= school)
+  
+    levels = Level.objects.all()
+    
+    eca, ac , dep = stage.medium - stage.low ,  stage.up - stage.medium ,  100 - stage.up
+
+    return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers , 'nb_students': nb_students , 
+                                                    'nb_groups': nb_groups, 'school': school, 'stage': stage, 'levels': levels,
+                                                     'eca' : eca, 'ac' : ac , 'dep' : dep
+                                                     })
+

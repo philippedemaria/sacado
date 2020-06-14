@@ -89,13 +89,6 @@ def get_time(s,e):
 
 
 
-def  admin_tdb(request):
-    teacher = Teacher.objects.get(user_id = request.user.id)
-    levels = Level.objects.all()
-    return render(request, 'dashboard_admin.html', {'teacher': teacher , 'levels': levels })
-
-
-
 
 def  advises(request):
     teacher = Teacher.objects.get(user_id = request.user.id)

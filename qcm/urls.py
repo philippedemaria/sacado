@@ -82,7 +82,7 @@ urlpatterns = [
     path('detail_task/<int:id>/<int:s>/', detail_task, name='detail_task'), #modif idg en id pour la sécurité
     path('tasks', all_my_tasks, name='all_my_tasks'),
 
-    path('admin_tdb', admin_tdb, name='admin_tdb'),  
+ 
     path('advises', advises, name='advises'),   
 
     path('ajax/exercise_error', ajax_exercise_error, name='exercise_error'),

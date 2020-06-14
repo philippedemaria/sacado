@@ -12,18 +12,113 @@
 
 
 {% block page_title %}
-            <i class="fa fa-laptop"></i> Tableau de bord administrateur</a>
+    <i class="fa fa-cloud"></i> Tableau de bord administrateur</a>
 {% endblock %} 
 
 {% block page_menu_right %}
-
+    <p>{{ school.name }}</p>
 {% endblock %}
 
 
 {% block body %}
-    {% if request.user.is_superuser %}
-    <section class="content_main">  
-     
+<section class="content_main"> 
+    {% if request.user.is_manager %}
+ 
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-purple">
+                <div class="inner">
+                     <span style="font-size: 35px">Enseignants </span>
+                    
+                </div>
+                <div class="icon">
+                    {{ nb_teachers }} 
+                </div>
+                <a href="{% url 'school_teachers' %}" class="small-box-footer"><i
+                        class="fa fa-arrow-circle-right"></i> En détails </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-xs-6">
+            <div class="small-box bg-purple">
+                <div class="inner">
+                     <span style="font-size: 35px">Élèves </span>
+ 
+                </div>
+                <div class="icon">
+                    {{ nb_students }}  
+                </div>
+                <a href="{% url 'school_students' %}" class="small-box-footer"><i
+                        class="fa fa-arrow-circle-right"></i> En détails </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-xs-6">
+            <div class="small-box bg-purple">
+                <div class="inner">
+                     <span style="font-size: 35px">Groupes </span>
+                </div>
+                <div class="icon">
+                    {{ nb_groups }} 
+                </div>
+                <a href="{% url 'school_groups' %}" class="small-box-footer"><i
+                        class="fa fa-arrow-circle-right"></i> En détails </a>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-md-4 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-purple">
+                <div class="inner">
+                     <span style="font-size: 35px">Établissement </span>
+                 </div>
+                 <p style="padding-left:5px">{{ school }}</p>
+                <a href="{% url 'update_school' request.user.school.id %}" class="small-box-footer"><i
+                        class="fa fa-arrow-circle-right"></i> En détails </a>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12 ">
+            <h2 class="thin">Seuils d'acquisition des savoir faire et compétences</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12 ">
+            {% if stage %}
+            <div class="progress">
+                <div class="progress-bar progress-bar-danger" role="progressbar" style="width:{{ stage.low   }}%">
+                    Maitrise insuffisante < {{ stage.low }}%
+                </div>
+                <div class="progress-bar progress-bar-warning" role="progressbar" style="width:{{ eca }}%">
+                    Maitrise fragile  < {{ stage.medium }}%
+                </div>
+                <div class="progress-bar progress-bar-success" role="progressbar" style="width:{{ ac }}%">
+                    Bonne maitrise < {{ stage.up }}%
+                </div>
+                <div class="progress-bar progress-bar-primary" role="progressbar" style="width:{{ dep }}%">
+                    Très bonne maitrise
+                </div>
+            </div>
+            {% else %}
+                <div class="alert alert-danger">
+                    Seuils non renseignés
+                </div>
+            {% endif %}
+
+
+        </div>
+    </div>
+    {% endif %} 
+
+
+    {% if request.user.is_manager %}
+        <div class="row">
+            <div class="col-sm-12 col-md-12 ">
+                <h2 class="thin">Répartitions des savoir et fichiers support</h2>
+            </div>
+        </div>    
         <div class="row"> 
             <div class="col-sm-12 col-md-12">
                  <div class="form-group">
@@ -33,7 +128,7 @@
                         </tr>
                         {% for l in levels %}
                         <tr>
-                            <td><a href="{% url 'admin_exercises' %}" class="listing">{{ l.name }}</a></td>
+                            <td>{{ l.name }}</td>
                             <td style="text-align: center;">{{ l.nbknowlegde }}</td>
                             <td style="text-align: center;">{{ l.exotot }}</td>
                             <td style="text-align: center;"><span class="{% if l.notexo == 0 %}text-green{%endif %}">{{ l.notexo }}</span></td>
@@ -46,7 +141,7 @@
 
         <div class="row"> 
             <div class="col-lg-2 col-md-2  col-xs-12">
-                <p><a href="{% url 'create_exercise' %}" class="btn btn-subsacado  btn-large"><i class="fa fa-plus"></i> Créer un exercice </a></p>
+                <p><a href="{% url 'create_supportfile' %}" class="btn btn-subsacado  btn-large"><i class="fa fa-plus"></i> Créer un support </a></p>
             </div>
             <div class="col-lg-10 col-md-10  col-xs-12">
                 <div class="row">
@@ -60,7 +155,7 @@
                 </div> 
             </div>
         </div> 
-    </section>
+
     {% endif %} 
- 
+</section> 
 {% endblock %}
