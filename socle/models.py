@@ -121,9 +121,7 @@ class Knowledge(models.Model):
         Relationship = apps.get_model('qcm', 'Relationship') 
         nb = 0
         relationships = Relationship.objects.filter(exercise__knowledge=self , parcours__in = parcours_tab).order_by("exercise").distinct()
-        print("===================")
-        print(relationships)
-        print("===================")        
+      
         return nb 
 
 

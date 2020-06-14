@@ -971,8 +971,6 @@ def ajax_sort_exercice(request):
     exercise_tab = exercise_ids.split("-") 
     
     parcours = request.POST.get("parcours")
-    print(parcours)
-    print(exercise_tab)
 
     for i in range(len(exercise_tab)-1):
         Relationship.objects.filter(parcours = parcours , exercise_id = exercise_tab[i]).update(order = i)
@@ -1040,7 +1038,6 @@ def ajax_publish_parcours(request):
         data["noclass"] = "btn-danger"
         data["label"] = "Publié"
         parcours = Parcours.objects.get(pk = int(parcours_id) )
-        print(data)
 
     Parcours.objects.filter(pk = int(parcours_id)).update(is_publish = statut)
  
@@ -2372,7 +2369,6 @@ def ajax_remediation_viewer(request): # student_view
 def ajax_infoExo(request):
     code = request.POST.get("codeExo")
     data={}
-    print(code)
     if Relationship.objects.filter(exercise__supportfile__code = code ).exists() or code == "all" :
         html = "<i class='fa fa-check text-success'></i>"
         test = 1
@@ -2394,7 +2390,6 @@ def ajax_create_constraint(request):
     code = request.POST.get("codeExo") 
     score = request.POST.get("scoreMin")
 
-    print(relationship_id , code, score )
     data = {}
     if code == "all" : # si tous les exercices précédents sont cochés
         parcours_id = int(request.POST.get("parcours_id"))

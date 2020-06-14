@@ -739,8 +739,6 @@ def register_teacher_from_admin(request):
 
     new = False
     if request.method == 'POST':
-        print('teacher_form', teacher_form.is_valid())
-        print('user_form', user_form.is_valid())
         if all((user_form.is_valid(),teacher_form.is_valid())):
             u_form = user_form.save(commit=False)
             u_form.password =  make_password("sacado_2020")
@@ -1001,9 +999,6 @@ def my_profile(request):
                     return redirect('index')
                 else:
                     return redirect('profile')
-            else:
-                print(user_form.errors)
-                print(teacher_form.errors)
 
         return render(request, 'account/teacher_form.html',
                       {'teacher_form': teacher_form, 'user_form': user_form, 'teacher': teacher})
