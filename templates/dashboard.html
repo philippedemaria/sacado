@@ -382,20 +382,22 @@
             <a href="{% url 'school_groups' %}">Groupes</a>
         </div>  
     </div>
-
-    <div class="row">
-        <div class="col-lg-12 col-xs-12"> 
-            <a href="{% url 'school_level_groups' %}">Groupes par niveau</a>
-        </div>  
-    </div>
-
-
-
     <div class="row">
         <div class="col-lg-12 col-xs-12"> 
             <a href="{% url 'school_students' %}">Elèves</a>
         </div>  
     </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12"> 
+            <a href="{% url 'school_level_groups' %}">Groupes par niveau</a>
+        </div>  
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12"> 
+            <a href="{% url 'manage_stage' %}">Seuils d'acquisition</a>
+        </div>  
+    </div>
+
 </div>
 
 {% endif %}

@@ -1,5 +1,5 @@
 from django import forms
-from .models import School, Country 
+from .models import School, Country , Stage
 from group.models import Group
 from account.models import User, Teacher
 
@@ -41,4 +41,11 @@ class GroupForm(forms.ModelForm):
 			self.fields['teacher']	 = forms.ModelChoiceField(queryset= teachers) 
 
 
-        
+
+
+
+class StageForm(forms.ModelForm):
+
+	class Meta:
+		model = Stage
+		fields = '__all__'        

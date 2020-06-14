@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.forms import formset_factory
 from django.contrib.auth.decorators import login_required, permission_required,user_passes_test
 from django.contrib import messages
-from .models import School, Country  
-from .forms import SchoolForm, CountryForm, GroupForm
+from .models import School, Country  , Stage
+from .forms import SchoolForm, CountryForm, GroupForm, StageForm
 from group.views import include_students
 from group.models import Group
 from account.decorators import is_manager_of_this_school 
@@ -223,5 +223,44 @@ def new_group_many(request):
 
  
 
+###############################################################################################
+###############################################################################################
+######  Niveau d'acquisition par établissement 
+###############################################################################################
+###############################################################################################
 
 
+
+@login_required
+@is_manager_of_this_school
+def manage_stage(request):
+
+	school = request.user.school
+
+	try : 
+		stage = Stage.objects.get(school = school)
+		stage_form = StageForm(request.POST or None, instance = stage)
+
+		if request.method == "POST" :
+			if stage_form.is_valid():
+				nf = stage_form.save(commit = False) 
+				nf.school = school
+				nf.save()
+
+			eca, ac , dep = stage.medium - stage.low ,  stage.up - stage.medium ,  100 - stage.up
+
+		context =  {'stage_form': stage_form , 'stage': stage , 'eca': eca , 'ac': ac , 'dep': dep}  
+
+	except : 
+		stage  = None
+		stage_form = StageForm(request.POST or None)
+		if request.method == "POST" :
+			if stage_form.is_valid():
+				nf = stage_form.save(commit = False) 
+				nf.school = school
+				nf.save() 
+
+		context =  {'stage_form': stage_form , 'stage': stage}
+
+
+	return render(request, 'school/stage.html', context )
