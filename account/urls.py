@@ -5,7 +5,7 @@ from django.urls import path
 from account.views import *
 
 urlpatterns = [
-    path('login', view=LoginView.as_view(template_name='home.html', redirect_authenticated_user=True), name='login'),
+    path('login', view=LoginView.as_view(template_name='registration/login.html', redirect_authenticated_user=True), name='login'),
     path('logout', LogoutView.as_view(template_name='home.html'), name='logout'),
     path('dashboard', view=DashboardView.as_view(), name='dashboard'),
 
