@@ -30,6 +30,7 @@ if PRODUCTION:
     EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
     EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
     EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
+    DEFAULT_FROM_EMAIL = 'SacAdo < info@sacado.xyz >'
 
     SESSION_COOKIE_SECURE = True
     SECURE_SSL_REDIRECT = True
