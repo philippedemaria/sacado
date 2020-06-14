@@ -315,15 +315,14 @@
         </div>
         <hr>
 
-
-
+        {% if request.user.school %}
         <div class="row">
             <div class="col-lg-12 col-xs-12"> 
                 <a href="{% url 'update_school' user.school.id %}">{{ user.school.name }}</a>
             </div>  
-        </div>
+        </div>     
         <hr>
- 
+        {% endif %}
     <div class="row">
         <div class="col-lg-12 col-xs-12"> 
             <a href="{% url 'school_teachers' %}">Enseignants</a>
