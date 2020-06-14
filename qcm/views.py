@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required, permission_required,u
 from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group 
+from school.models import Stage
 from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint
 from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm 
 from socle.models import  Theme, Knowledge , Level , Skill
@@ -151,9 +152,24 @@ def students_from_p_or_g(request,parcours) :
         students = [student for student in students_parcours if student   in students_group] # Intersection des listes
     except :
         students = list(parcours.students.order_by("user__last_name"))
-
-
     return students
+
+
+
+
+def get_stage(parcours):
+
+    teacher = parcours.teacher
+
+    if teacher.user.school :
+        school = teacher.user.school
+        stage = Stage.objects.get(school = school)
+    else : 
+        stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
+
+    return stage
+
+
 
 #######################################################################################################################################################################
 #######################################################################################################################################################################
@@ -666,8 +682,10 @@ def result_parcours(request, id):
 
     form = EmailForm(request.POST or None )
 
+    stage = get_stage(parcours)
 
-    context = {  'relationships': relationships, 'parcours': parcours, 'students': students, 'themes': themes_tab, 'form': form,  'group_id' : group_id    }
+
+    context = {  'relationships': relationships, 'parcours': parcours, 'students': students, 'themes': themes_tab, 'form': form,  'group_id' : group_id  , 'stage' : stage  }
 
     return render(request, 'qcm/result_parcours.html', context )
 
@@ -700,9 +718,11 @@ def result_parcours_theme(request, id, idt):
             theme["id"] = thm.id
             theme["name"]= thm.name
             themes_tab.append(theme)
- 
+
+    stage = get_stage(parcours) 
     form = EmailForm(request.POST or None)
-    context = {  'relationships': relationships, 'parcours': parcours, 'students': students,  'themes': themes_tab,'form': form, 'group_id' : group_id }
+
+    context = {  'relationships': relationships, 'parcours': parcours, 'students': students,  'themes': themes_tab,'form': form, 'group_id' : group_id , 'stage' : stage  }
 
     return render(request, 'qcm/result_parcours.html', context )
  
@@ -730,7 +750,8 @@ def result_parcours_knowledge(request, id):
     for k_id in knowledge_ids : 
         knowledges.append(Knowledge.objects.get(pk = k_id))
 
-    context = {  'students': students, 'parcours': parcours,  'form': form, 'exercise_knowledges' : knowledges, 'group_id' : group_id }
+    stage = get_stage(parcours) 
+    context = {  'students': students, 'parcours': parcours,  'form': form, 'exercise_knowledges' : knowledges, 'group_id' : group_id, 'stage' : stage  }
 
     return render(request, 'qcm/result_parcours_knowledge.html', context )
 

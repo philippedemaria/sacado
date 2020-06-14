@@ -7,6 +7,7 @@ from qcm.models import  Exercise, Parcours, Relationship, Studentanswer, Resulte
 from group.forms import  GroupForm 
 from sendmail.models import  Email
 from sendmail.forms import  EmailForm
+from school.models import  Stage
 from django.contrib.auth import login, authenticate
 from django.http import JsonResponse  
 from django.core import serializers
@@ -186,6 +187,26 @@ def convert_seconds_in_time(secondes):
 
 
 
+def get_stage(group):
+
+    teacher = group.teacher
+
+    if teacher.user.school :
+        school = teacher.user.school
+        stage = Stage.objects.get(school = school)
+    else : 
+        stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
+
+    return stage
+
+
+#####################################################################################################################################
+#####################################################################################################################################
+####    Group
+#####################################################################################################################################
+#####################################################################################################################################
+
+
 @login_required
 def list_groups(request):
     groups = Group.objects.filter(teacher__user_id = request.user.id)
@@ -359,10 +380,11 @@ def result_group(request, id):
         if not exercise.knowledge in knowledges:
             knowledges.append(exercise.knowledge)
 
+    stage = get_stage(group)
 
-    #knowledges = Knowledge.objects.filter(level = group.level).order_by("theme")
+ 
     form = EmailForm(request.POST or None )
-    context = {  'group': group,'form': form, "knowledges" : knowledges, }
+    context = {  'group': group,'form': form, "knowledges" : knowledges, 'stage' : stage }
 
     return render(request, 'group/result_group.html', context )
 
@@ -384,8 +406,8 @@ def result_group_theme(request, id, idt):
         parcours_tab = [parcours for parcours in  parcourses if  parcours.id not in parcours_id_tab]
         if len(parcours_tab) == number_of_parcours_of_this_level_by_this_teacher :
             break
-
-    context = {  'group': group, 'form': form, 'theme': theme,  "knowledges" : knowledges, "teacher" : teacher, "slug" : theme.slug, 'parcours_tab' : parcours_tab , }
+    stage = get_stage(group)
+    context = {  'group': group, 'form': form, 'theme': theme,  "knowledges" : knowledges, "teacher" : teacher, "slug" : theme.slug, 'parcours_tab' : parcours_tab , 'stage' : stage  }
 
     return render(request, 'group/result_group.html', context )
 
@@ -395,7 +417,9 @@ def result_group_theme(request, id, idt):
 def result_group_exercise(request, id):
     group = Group.objects.get(id=id)
     form = EmailForm(request.POST or None)
-    context = {'group': group, 'form': form}
+    stage = get_stage(group)
+
+    context = {'group': group, 'form': form , 'stage' : stage  }
 
     return render(request, 'group/result_group_exercise.html', context)
 
@@ -407,7 +431,9 @@ def result_group_skill(request, id):
     skills = Skill.objects.all()
     group = Group.objects.get(id=id)
     form = EmailForm(request.POST or None )
-    context = {  'group': group,'form': form,'skills': skills,}
+    stage = get_stage(group)
+
+    context = {  'group': group,'form': form,'skills': skills , 'stage' : stage  }
 
     return render(request, 'group/result_group_skill.html', context )
 
@@ -419,8 +445,10 @@ def result_group_theme_exercise(request, id, idt):
     group = Group.objects.get(id=id)
     form = EmailForm(request.POST or None )
     theme = Theme.objects.get(id=idt)
+    stage = get_stage(group)
 
-    context = {  'group': group, 'form': form, 'theme': theme, "slug" : theme.slug, }
+
+    context = {  'group': group, 'form': form, 'theme': theme, "slug" : theme.slug , 'stage' : stage  }
 
     return render(request, 'group/result_group_theme_exercise.html', context )
 
@@ -491,7 +519,7 @@ def stat_group(request, id):
         stats.append(student)
 
     context = {  'group': group, 'form': form, 'stats':stats ,  }
-    print(stats)
+ 
     return render(request, 'group/stat_group.html', context )
 
 

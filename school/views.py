@@ -10,11 +10,14 @@ from account.decorators import is_manager_of_this_school
 from account.models import User, Teacher, Student
 from account.forms import UserForm , StudentForm ,NewUserSForm
 
+ 
 
+ 
 @login_required
 def list_schools(request):
 	schools = School.objects.all()
 	return render(request,'school/lists.html', {'schools':schools})
+
 
 
 @login_required
@@ -264,3 +267,6 @@ def manage_stage(request):
 
 
 	return render(request, 'school/stage.html', context )
+
+
+ 

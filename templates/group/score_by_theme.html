@@ -5,11 +5,11 @@
 
 {% if score != "" %}
     <a class="markdown
-            {% if score < 30 %}
+            {% if score < stage.low %}
              red 
-            {% elif score < 60 %}
+            {% elif score < stage.mediun %}
             orange
-            {% elif score < 80 %}
+            {% elif score < stage.up %}
             green
             {% else %}
             darkgreen
