@@ -166,6 +166,7 @@ def new_student(request,slug):
 def get_school_students(request):
 
 	school = request.user.school
+	time_zone = request.user.time_zone
 	teachers = Teacher.objects.filter(user__school = school)
 	groups = Group.objects.filter(teacher__in = teachers)
 	group_tab = []
@@ -173,6 +174,7 @@ def get_school_students(request):
 		for student in group.students.filter(user__school=None, user__user_type=0): # ce sont les élèves de l'établissement pas encore assigné
 			usr = student.user
 			usr.school = school
+			usr.time_zone = time_zone
 			usr.save()
  
 	messages.success(request, "Scan terminé avec succès. Les élèves trouvés sont importés.")
