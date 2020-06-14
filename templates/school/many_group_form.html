@@ -20,7 +20,7 @@
 
 
 {% block page_title %}  
-    <i class='fa fa-users'></i> {{ school.name}}    <img src="{% static 'img/angle-right.png' %}"/> <small>Nouveaux groupes</small>  
+    <a href="{% url 'admin_tdb' %}"> <i class="fa fa-cloud"></i></a> {{ school.name}}    <img src="{% static 'img/angle-right.png' %}"/> <small>Nouveaux groupes</small>  
 {% endblock %}
 
 

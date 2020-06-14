@@ -3,7 +3,7 @@
 {% load widget_tweaks %}
 
 {% block page_title %} 
- <i class="fa fa-user"></i> {{ group }} <img src="{% static 'img/angle-right.png' %}"/> Nouvel élève
+  <a href="{% url 'admin_tdb' %}"> <i class="fa fa-cloud"></i></a> {{ group }} <img src="{% static 'img/angle-right.png' %}"/> Nouvel élève
 {% endblock  %}
 
 

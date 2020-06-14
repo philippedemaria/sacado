@@ -17,7 +17,7 @@
  
  
 {% block page_title %}
-    <i class='fa fa-users'></i> {{ request.user.school.name}} <img src="{% static 'img/angle-right.png' %}"/> Elèves
+     <a href="{% url 'admin_tdb' %}"> <i class="fa fa-cloud"></i></a> {{ request.user.school.name}} <img src="{% static 'img/angle-right.png' %}"/> Elèves
 {% endblock %}
  
 
