@@ -229,7 +229,6 @@ def  admin_tdb(request):
     nb_teachers = User.objects.filter(school = school, user_type=2).count()  
     nb_students = User.objects.filter(school = school, user_type=0).count()    
     nb_groups = Group.objects.filter(teacher__user__school = school).count()  
-    stage = Stage.objects.get(school= school)
   
     levels = []
     q_levels = Level.objects.all()
@@ -242,6 +241,11 @@ def  admin_tdb(request):
         nb = nbk - m
         levels.append({ 'name' : level.name , 'nbknowlegde': nbk , 'exotot' : nbe , 'notexo' : nb })
     
+    try :
+        stage = Stage.objects.get(school= school)
+    except : 
+        stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
+
     eca, ac , dep = stage.medium - stage.low ,  stage.up - stage.medium ,  100 - stage.up
 
     return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers , 'nb_students': nb_students , 
