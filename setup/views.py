@@ -243,7 +243,11 @@ def  admin_tdb(request):
     
     try :
         stage = Stage.objects.get(school= school)
-        eca, ac , dep = stage.medium - stage.low ,  stage.up - stage.medium ,  100 - stage.up
+        if stage :
+            eca, ac , dep = stage.medium - stage.low ,  stage.up - stage.medium ,  100 - stage.up
+        else :
+            eca, ac , dep = 20 , 15 ,  15           
+
     except : 
         stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
         eca, ac , dep = 20 , 15 ,  15
