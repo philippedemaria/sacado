@@ -305,7 +305,7 @@
 </div>
 
 
-{%  if user.is_manager  %}
+{%  if user.is_manager or user.is_superuser %}
     <div class="notification-container dismiss"  id="notification-admin">
 
         <div class="row">
