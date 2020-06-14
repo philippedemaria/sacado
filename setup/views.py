@@ -243,10 +243,10 @@ def  admin_tdb(request):
     
     try :
         stage = Stage.objects.get(school= school)
+        eca, ac , dep = stage.medium - stage.low ,  stage.up - stage.medium ,  100 - stage.up
     except : 
         stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
-
-    eca, ac , dep = stage.medium - stage.low ,  stage.up - stage.medium ,  100 - stage.up
+        eca, ac , dep = 20 , 15 ,  15
 
     return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers , 'nb_students': nb_students , 
                                                     'nb_groups': nb_groups, 'school': school, 'stage': stage, 'levels': levels,
