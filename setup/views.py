@@ -231,7 +231,16 @@ def  admin_tdb(request):
     nb_groups = Group.objects.filter(teacher__user__school = school).count()  
     stage = Stage.objects.get(school= school)
   
-    levels = Level.objects.all()
+    levels = []
+    q_levels = Level.objects.all()
+    for level in q_levels :
+        query_lk = level.knowledges.all()
+
+        nbk = query_lk.count() # nombre de savoir faire listés sur le niveau
+        nbe = level.exercises.filter(supportfile__is_title=0).count() # nombre d'exercices sur le niveau
+        m = level.exercises.filter(knowledge__in = query_lk).count()
+        nb = nbk - m
+        levels.append({ 'name' : level.name , 'nbknowlegde': nbk , 'exotot' : nbe , 'notexo' : nb })
     
     eca, ac , dep = stage.medium - stage.low ,  stage.up - stage.medium ,  100 - stage.up
 
