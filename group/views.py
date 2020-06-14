@@ -280,10 +280,17 @@ def update_group(request, id):
 @user_is_group_teacher
 def delete_group(request, id):
     group = Group.objects.get(id=id)
-    for student in group.students.all():
-        if Group.objects.filter(students=student).exclude(pk=group.id) == 0 :
-            student.student_user.delete()
-            student.delete()
+
+    # Si le prof n'appartient pas à un établissement
+    teacher = group.teacher
+    if not teacher.user.school :
+        # Si les élèves n'appartiennent pas à un établissement
+        for student in group.students.all():
+            if not student.user.school :
+                if Group.objects.filter(students=student).exclude(pk=group.id) == 0 : 
+                    #Si les élèves n'appartiennent pas à un autre groupe
+                    student.student_user.delete()
+                    student.delete() # alors on les supprime
 
     group.delete()
     return redirect('index')
