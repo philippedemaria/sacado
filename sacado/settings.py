@@ -42,11 +42,11 @@ else:
     SECRET_KEY = '85umr_$zf2bd58xl)nzf)i*jh)o5h*dp%*3e@pqg+ijem=t1xq'
 
     # configuation bdd
-    MYSQL_DATABASE = 'new_sacado_clone'
+    MYSQL_DATABASE = 'sacado'
     MYSQL_USER = 'root'
     MYSQL_PASSWORD = 'root'
     MYSQL_PORT = 3306
-
+    DEFAULT_FROM_EMAIL = 'SacAdo < info@sacado.xyz >'
     # configuration email : affichés dans la console
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
@@ -54,7 +54,8 @@ else:
 # REDIRECT_URL
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-LOGIN_URL = '/' 
+#LOGIN_URL = reverse_lazy('login')
+LOGIN_URL = '/'
 
 # Application definition
 
