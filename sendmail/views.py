@@ -44,7 +44,9 @@ def list_emails(request):
 				users.append(s.user)
 
 		studentanswers = Studentanswer.objects.filter(student__user__in =  users).order_by("-date")[:50]
-		tasks = Relationship.objects.filter(exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")[:50] 
+		tasks = Relationship.objects.filter(parcours__teacher = teacher,  exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")[:50] 
+
+
 		sent_emails = Email.objects.distinct().filter(author = user).order_by("-today")
 		emails = Email.objects.distinct().filter(receivers =  user).order_by("-today")
 		form = EmailForm(request.POST or None,request.FILES or None)
