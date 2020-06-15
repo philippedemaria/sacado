@@ -225,8 +225,7 @@ def ajax_populate(request):
 
             students = parcours.students.all()
             for student in students :
-                for e in parcours.exercises.all():
-                    e.students.remove(student)
+                r.students.remove(student)
 
         else:
             statut = 1
@@ -236,8 +235,8 @@ def ajax_populate(request):
 
             students = parcours.students.all()
             for student in students :
-                for e in parcours.exercises.all():
-                    e.students.add(student)
+                relation.students.add(student)
+                
             data["statut"] = "True"
             data["class"] = "btn btn-success"
             data["noclass"] = "btn btn-danger"
