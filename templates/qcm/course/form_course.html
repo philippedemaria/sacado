@@ -32,9 +32,6 @@
 
 
 {% block body %}
-
- 
-
 <section class="content_main"> 
     <form action="" method="POST">
 
@@ -89,10 +86,11 @@
  
                 <div class="div_links">                
                 {% for relationship in relationships %}
-                    <div style="font-size: 12px"> 
+                    <div style="font-size: 16px;margin-top: 5px"> 
 
+                        
+                            <img src="{% static 'uploads/' %}{{  relationship.exercise.supportfile.imagefile }}" width="180px" height="100px"  style="float:left;margin-right: 5px">
 
-                            <img src="{% static 'uploads/' %}{{  relationship.exercise.supportfile.imagefile }}" width="180px" style="float:left">
                                 {% if relationship.exercise.supportfile.annoncement %}
                                     {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}
                                 {% else %}
@@ -111,9 +109,10 @@
                                  <br>
                                 <small>   
                                     <i class="fa fa-barcode"></i> {{ relationship.exercise.supportfile.code }}  
-                                    <i class="fa fa-clock-o"></i> {{ relationship.exercise.supportfile.duration }} minutes  
+                                    <i class="fa fa-clock-o"></i> {{ relationship.exercise.supportfile.duration }} minutes <br> 
                                     <i class="fa fa-save"></i> {{ relationship.exercise.supportfile.situation}} situation{{ relationship.exercise.supportfile.situation|pluralize}}
-                                </small>   
+                                </small>
+                        <div style="clear:both"> </div>   
 
                     </div>
 
@@ -131,10 +130,6 @@
 
             </div>
         </div>
-
-
-
-
     </form>  
 </section>
 {% endblock %} 

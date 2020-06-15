@@ -375,11 +375,11 @@ def ajax_individualise(request):
 
     return JsonResponse(data) 
 
-
+import os
 @login_required
 def list_parcours(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
-    parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=0).order_by("-is_favorite")     
+    parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=0).order_by("-is_favorite")  
 
     try :
         del request.session["group_id"]
@@ -2506,7 +2506,7 @@ def export_knowledge(request,idp):
 def list_courses(request):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
-    courses = Course.objects.filter(author = teacher)
+    courses = Course.objects.filter(teacher = teacher)
 
     return render(request, 'qcm/course/list_course.html', {'courses': courses,  })
 
@@ -2524,8 +2524,11 @@ def create_course(request, idc , id ):
     if request.method == "POST" :
         if form.is_valid():
             nf =  form.save(commit = False)
-            nf.author = teacher
+            nf.parcours = parcours
+            nf.teacher = teacher
             nf.save()
+
+            print("ici")
            
             return redirect('list_parcours_group' , request.session.get("group_id"))
         else:
@@ -2543,7 +2546,7 @@ def update_course(request, idc , id ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     parcours = Parcours.objects.get(pk =  id)
-    course = Course.objects.get(id=id)
+    course = Course.objects.get(id=idc)
     course_form = CourseForm(request.POST or None, instance=course, )
     relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("order")
 
@@ -2567,7 +2570,7 @@ def delete_course(request, idc , id  ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     parcours = Parcours.objects.get(pk =  id)
-    course = Course.objects.get(id=id)
+    course = Course.objects.get(id=idc)
     course.delete()
     if redirection == 0 :
         return redirect('index')
@@ -2581,7 +2584,7 @@ def show_course(request, idc , id ):
     """
     parcours = Parcours.objects.get(pk =  id)
     try :
-        course = Course.objects.get(id=id)
+        course = Course.objects.get(id=idc)
         user = User.objects.get(pk = request.user.id)
         teacher = Teacher.objects.get(user = user)
 

@@ -3584,7 +3584,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
  
 
 .div_links{
-  height:300px;
+  height:340px;
   overflow-y: auto;
   scrollbar-width: none;
   padding-right: 5px;
