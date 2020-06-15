@@ -1,0 +1,140 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script>
+        require(['script/ajax-parcours']);
+    </script> 
+<script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>    
+{% endblock %}
+
+ 
+
+{% block page_title %}
+       <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-th"></i> {{ parcours }} <img src="{% static 'img/angle-right.png' %}"/>    Cours   </span>  
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+{% endblock %}
+
+
+
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}
+
+ 
+
+<section class="content_main"> 
+    <form action="" method="POST">
+
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-sm-12 col-lg-8">
+ 
+                <div class="form-group">
+                    {{ form.annoncement.label_tag }}<br>
+                    {{ form.annoncement|add_class:"form-control"   }}
+                    {{ form.annoncement.errors }} <br>
+                    <small>Astuce : Cliquez sur <img src="{% static 'img/full_screen.png' %}" width="15px" /> dans la barre d'outils pour agrandir en plein écran.</small> 
+                </div>
+ 
+                
+
+                <div class="row">
+                    <div class="col-sm-12 col-lg-8">
+                        <div class="form-group">
+                            <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+                            <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                                       class="btn btn-default "/></a>
+                        </div>
+                    </div>
+                {% if content %}
+                        <div class="col-sm-12 col-md-4">
+                            <div class="form-group">
+                                <a href="{% url 'delete_content' course.id  section.id content.id %}" class="btn btn-danger"  onclick="return TestDelete('ce contenu')">Supprimer ce cours</a>
+                            </div>
+                        </div>
+                
+                {% endif %}
+                </div>
+
+
+            </div>
+
+
+
+
+
+
+            <div class="col-sm-12 col-lg-4">
+
+                <h4 class="thin">Détails</h4>
+                {% include 'qcm/course/content_details.html' %}
+
+
+                <h4 class="thin">Liens vers</h4>
+
+ 
+                <div class="div_links">                
+                {% for relationship in relationships %}
+                    <div style="font-size: 12px"> 
+
+
+                            <img src="{% static 'uploads/' %}{{  relationship.exercise.supportfile.imagefile }}" width="180px" style="float:left">
+                                {% if relationship.exercise.supportfile.annoncement %}
+                                    {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}
+                                {% else %}
+                                    {{ relationship.exercise.knowledge.name }}
+                                {% endif %}
+              
+
+
+                                {% if supportfile.calculator %}
+                                  <img src="{% static 'img/calculator.png' %}" width="20px" />
+                                {% else %}
+                                  <img src="{% static 'img/no_calculator.png' %}"  width="0px" />
+                                {% endif  %}
+
+
+                                 <br>
+                                <small>   
+                                    <i class="fa fa-barcode"></i> {{ relationship.exercise.supportfile.code }}  
+                                    <i class="fa fa-clock-o"></i> {{ relationship.exercise.supportfile.duration }} minutes  
+                                    <i class="fa fa-save"></i> {{ relationship.exercise.supportfile.situation}} situation{{ relationship.exercise.supportfile.situation|pluralize}}
+                                </small>   
+
+                    </div>
+
+
+
+
+
+
+
+
+                {% endfor %}                
+                </div>
+        <!--/panel-group-->
+
+
+            </div>
+        </div>
+
+
+
+
+    </form>  
+</section>
+{% endblock %} 

@@ -1,0 +1,21 @@
+{% load static %} 
+{% load widget_tweaks %}
+{% load item_tags %}
+
+ 
+<div class="row"> 
+    <div class="col-sm-12 col-md-12"> 
+    {% if content %} 
+        {% if content.annoncement  %}  
+          {{ content.annoncement|decode|safe }}
+        {% else %}  
+          <div class="alert alert-danger">Aucun contenu</div>
+        {% endif %}
+    {% else %} s ss 
+        <div class="alert alert-danger">Aucun contenu</div>
+    {% endif %}
+    </div>
+
+
+
+</div>

@@ -1,5 +1,5 @@
 from django import forms
-from .models import  Parcours, Exercise, Remediation,Relationship,Supportfile
+from .models import  Parcours, Exercise, Remediation, Relationship, Supportfile, Course
 from account.models import  Student
 from socle.models import  Knowledge , Skill
 from group.models import  Group 
@@ -91,34 +91,6 @@ class RelationshipForm(forms.ModelForm):
   
  
 
-#	def __init__(self, *args, **kwargs):
-#		self.parcours = kwargs.pop('parcours')
-#		super(RelationshipForm, self).__init__(*args, **kwargs)
- 
-
-# NON UTILISE MAIS A GARDER POUR PUS TARD
-# BaseRelationshipSet = modelformset_factory(Relationship, form=RelationshipForm)
-
-# class RelationshipFormSet(BaseRelationshipSet):
-
-
-
-#     def __init__(self, *args, **kwargs):
-#         #  create a user attribute and take it out from kwargs
-#         # so it doesn't messes up with the other formset kwargs
-#         self.parcours = kwargs.pop('parcours')
-#         super(RelationshipFormSet, self).__init__(*args, **kwargs)
-#         for form in self.forms:
-#             form.empty_permitted = False
-
-#     def _construct_form(self, *args, **kwargs):
-#         # inject user in each form on the formset
-#         kwargs['parcours'] = self.parcours
-#         return super(RelationshipFormSet, self)._construct_form(*args, **kwargs)
-
-
-
-
 class RemediationForm(forms.ModelForm):
 
     class Meta:
@@ -159,3 +131,12 @@ class UpdateSupportfileForm(forms.ModelForm):
 	class Meta:
 		model = Supportfile 
 		fields = '__all__'
+
+
+
+class CourseForm(forms.ModelForm):
+
+    class Meta:
+        model = Course 
+        fields = '__all__' 
+

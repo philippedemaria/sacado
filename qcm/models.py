@@ -577,3 +577,41 @@ class Constraint(models.Model):
 
     def __str__(self):        
         return "{} à {}%".format(self.code , self.scoremin)
+
+
+########################################################################################################################################### 
+########################################################################################################################################### 
+################################################################   Cours    ############################################################### 
+########################################################################################################################################### 
+########################################################################################################################################### 
+
+class Course(models.Model): # pour les 
+
+    parcours = models.ForeignKey(Parcours,  on_delete=models.PROTECT, blank=True, null=True,  related_name='course', editable=False) 
+    annoncement = RichTextUploadingField( blank=True, verbose_name="Texte*") 
+    teacher = models.ForeignKey(Teacher, related_name = "course", on_delete=models.PROTECT, editable=False )
+    duration = models.PositiveIntegerField(  default=15,  blank=True,  verbose_name="Durée estimée de lecture")  
+
+    is_publish = models.BooleanField( default= 0, verbose_name="Publié ?")
+    publish_start = models.DateField(default=timezone.now,  blank=True, max_length=255, verbose_name="Début à", help_text="Changer les dates des cours peut remplacer les réglages de leur durée de disponibilité et leur placement dans les pages de cours ou le tableau de bord. Veuillez confirmer les dates d’échéance avant de modifier les dates des cours. ")
+    publish_end = models.DateField( blank=True, null=True,  max_length=255, verbose_name="Se termine à")
+
+    
+    is_task = models.BooleanField( default=0,    verbose_name="Tache à rendre ?") 
+    is_paired = models.BooleanField( default=0,    verbose_name="Révision par les pairs ?") 
+    is_active = models.BooleanField( default=0,  verbose_name="Contenu en cours")  
+
+ 
+    date_limit = models.DateTimeField( null=True, blank=True, verbose_name="Date limite du rendu")
+
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date de création")
+    date_modified = models.DateTimeField(auto_now=True, verbose_name="Date de modification") 
+
+    notification = models.BooleanField( default=0,  verbose_name="Informer des modifications ?", help_text="Envoie un message aux participants." )     
+ 
+    students = models.ManyToManyField(Student, blank=True,  related_name='students_course', verbose_name="Attribuer à/au")
+    creators = models.ManyToManyField(Student, blank=True,  related_name='creators_course', verbose_name="Co auteurs élève") 
+
+ 
+    def __str__(self):
+        return self.parcours.title 

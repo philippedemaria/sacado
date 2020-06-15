@@ -82,6 +82,20 @@ urlpatterns = [
     path('detail_task/<int:id>/<int:s>/', detail_task, name='detail_task'), #modif idg en id pour la sécurité
     path('tasks', all_my_tasks, name='all_my_tasks'),
 
+
+    #################################### Les cours dans les parcours ###########################################
+
+    path('', list_courses, name='courses'),
+    path('create_course/<int:idc>/<int:id>', create_course, name='create_course'),
+    path('update_course/<int:idc>/<int:id>', update_course, name='update_course'),
+    path('delete_course/<int:idc>/<int:id>', delete_course, name='delete_course'),
+    path('show_course/<int:idc>/<int:id>', show_course, name='show_course'),
+
+    ############################################################################################################  
+
+
+
+
  
     path('advises', advises, name='advises'),   
 

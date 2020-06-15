@@ -8,8 +8,8 @@ from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group 
 from school.models import Stage
-from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint
-from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm 
+from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint, Course
+from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, CourseForm 
 from socle.models import  Theme, Knowledge , Level , Skill
 from django.http import JsonResponse 
 from django.core import serializers
@@ -2494,4 +2494,102 @@ def export_knowledge(request,idp):
             pass
     return response
 
+
  
+#######################################################################################################################################################################
+#######################################################################################################################################################################
+##################    Course     
+#######################################################################################################################################################################
+#######################################################################################################################################################################
+
+
+@login_required
+def list_courses(request):
+
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    courses = Course.objects.filter(author = teacher)
+
+    return render(request, 'qcm/course/list_course.html', {'courses': courses,  })
+
+
+
+@user_is_parcours_teacher
+def create_course(request, idc , id ):
+    """
+    idc : course_id et id = parcours_id pour correspondre avec le decorateur
+    """
+    parcours = Parcours.objects.get(pk =  id)
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    form = CourseForm(request.POST or None  )
+    relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("order")
+    if request.method == "POST" :
+        if form.is_valid():
+            nf =  form.save(commit = False)
+            nf.author = teacher
+            nf.save()
+           
+            return redirect('list_parcours_group' , request.session.get("group_id"))
+        else:
+            print(form.errors)
+
+    context = {'form': form,   'teacher': teacher, 'parcours': parcours , 'relationships': relationships , }
+
+    return render(request, 'qcm/course/form_course.html', context)
+
+
+
+@user_is_parcours_teacher
+def update_course(request, idc , id ):
+    """
+    idc : course_id et id = parcours_id pour correspondre avec le decorateur
+    """
+    parcours = Parcours.objects.get(pk =  id)
+    course = Course.objects.get(id=id)
+    course_form = CourseForm(request.POST or None, instance=course, )
+    relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("order")
+
+    if reques.method == "POST" :
+        if course_form.is_valid():
+            course_form.save()
+            course_form.save_m2m()
+            mestsages.success(request, 'Le cours a été modifié avec succès !')
+            return redirect('index')
+        else:
+            print(course_form.errors)
+
+    context = {'form': course_form,  'course': course, 'teacher': teacher , 'parcours': parcours  , 'relationships': relationships , }
+
+    return render(request, 'qcm/course/form_course.html', context )
+
+
+@user_is_parcours_teacher
+def delete_course(request, idc , id  ):
+    """
+    idc : course_id et id = parcours_id pour correspondre avec le decorateur
+    """
+    parcours = Parcours.objects.get(pk =  id)
+    course = Course.objects.get(id=id)
+    course.delete()
+    if redirection == 0 :
+        return redirect('index')
+    else :
+        return redirect('courses') 
+
+@user_is_parcours_teacher
+def show_course(request, idc , id ):
+    """
+    idc : course_id et id = parcours_id pour correspondre avec le decorateur
+    """
+    parcours = Parcours.objects.get(pk =  id)
+    try :
+        course = Course.objects.get(id=id)
+        user = User.objects.get(pk = request.user.id)
+        teacher = Teacher.objects.get(user = user)
+
+        context = {  'course': course, 'teacher': teacher , 'parcours': parcours , }
+ 
+        return render(request, 'qcm/course/show_course.html', context)
+
+    except :
+        return redirect('create_course', idc , id )
+
