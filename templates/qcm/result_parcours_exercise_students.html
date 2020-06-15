@@ -43,7 +43,7 @@
                 <div class="row" style="margin-bottom:8px; padding-bottom: 8px; ">
                     <div class="col-sm-12 col-md-5">        
                         <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" >  
-                        <img src="../../../../static/uploads/{{ relationship.exercise.supportfile.imagefile }}" class="imagefile"></a>
+                        <img src="{% static 'uploads/' %}{{ relationship.exercise.supportfile.imagefile }}" class="imagefile"></a>
                                                             
                          {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}   
 

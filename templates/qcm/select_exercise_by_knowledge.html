@@ -23,7 +23,7 @@
                                    
                             <a href="{% url 'show_this_exercise' exercise.id   %}" class="listing" target="_blank">  {{ exercise.supportfile.annoncement|cleanhtml|capfirst }}<br>
                                    
-                                <img src="../../../../static/uploads/{{ exercise.supportfile.imagefile }}" width="200px" style="float:left">
+                                <img src="{% static 'uploads/' %}{{ exercise.supportfile.imagefile }}" width="200px" style="float:left">
                                 
                                 <span style="font-size:16px;">                                  
                                 {% if exercise.supportfile.calculator %}

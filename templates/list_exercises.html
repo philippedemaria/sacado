@@ -46,7 +46,7 @@
                                 <tr> 
                                     <td >
                                         <a href="{% url 'show_exercise' exercise.id %}" class="sublisting">
-                                            <img src="../../../../static/uploads/{{ exercise.supportfile.imagefile }}" class="imagefile">
+                                            <img src="{% static 'uploads/' %}{{ exercise.supportfile.imagefile }}" class="imagefile">
                                                     
                                             {{ exercise.supportfile.annoncement|cleanhtml|capfirst  }} 
                                                         {% if exercise.supportfile.calculator %}

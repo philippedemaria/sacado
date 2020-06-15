@@ -45,7 +45,7 @@
             {% csrf_token %}
             <div class="row">
                 <div class="col-sm-12 col-md-5">
-                    <img src="../../../../../static/uploads/{{ relationship.exercise.supportfile.imagefile }}" width="550px">
+                    <img src="../{% static 'uploads/' %}{{ relationship.exercise.supportfile.imagefile }}" width="550px">
                 </div>
                 <div class="col-sm-12 col-md-7">
                     <div class="row">

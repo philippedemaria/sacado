@@ -3,7 +3,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>QCM NSI</title>
+    <title>SacAdo</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.8.1/css/bulma.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
           integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -11,7 +11,13 @@
 
 <body>
 <section class="hero is-fullheight">
-    {{form.errors}}
+
+
+    <div class="alert alert-danger">
+        {{form.errors}}
+    </div>
+
+
     <div class="container has-text-centered column is-4 is-offset-4">
         <h3 class="title has-text-grey">Connexion</h3>
         <p class="subtitle has-text-grey">Vous avez déja un compte.</p>

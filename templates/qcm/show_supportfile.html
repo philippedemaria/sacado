@@ -136,7 +136,7 @@
               "errorDialogsActive":false,
               "useBrowserForJS":true,
                   "langage":"en",
-              "filename":"../../../../static/uploads/{{ supportfile.ggbfile }}",
+              "filename":"{% static 'uploads/' %}{{ supportfile.ggbfile }}",
                "appletOnLoad" :  function(applet) {  
                         applet.setValue("situation",{{ supportfile.situation }});
                 }

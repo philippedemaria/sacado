@@ -47,7 +47,7 @@
               "errorDialogsActive":false,
               "useBrowserForJS":false,
                   "langage":"en",
-              "filename":"../../../../static/uploads/{{ remediation.mediation }}"
+              "filename":"{% static 'uploads/' %}{{ remediation.mediation }}"
             };
             var applet = new GGBApplet('5.0', parameters);
             // Geogebra applet creation
@@ -55,7 +55,7 @@
         </script>
    {% else %}
         {% if remediation.mediation != "" %}
-            <iframe width="{{ remediation.width }}" height="{{ remediation.height }}" src="../../../../static/uploads/{{ remediation.mediation }}"></iframe>
+            <iframe width="{{ remediation.width }}" height="{{ remediation.height }}" src="{% static 'uploads/' %}{{ remediation.mediation }}"></iframe>
         {% else %}
             <div class="alert alert-danger">
                   Aucun document n'est accessible.

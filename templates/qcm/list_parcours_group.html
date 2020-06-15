@@ -65,7 +65,7 @@
 
 
         <div  class="box box-widget widget-user-2"  
-              style="{% if parcours.vignette %}background-image: url('../../../../static/uploads/{{ parcours.vignette }}'); background-size: cover; {% else %} background-color:{{parcours.color }}{% endif %};"> 
+              style="{% if parcours.vignette %}background-image: url('{% static 'uploads/' %}{{ parcours.vignette }}'); background-size: cover; {% else %} background-color:{{parcours.color }}{% endif %};"> 
               <!-- Add the bg color to the header using any of the bg-* classes -->
             <div class="handler widget-user-header">
 

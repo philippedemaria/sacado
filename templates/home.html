@@ -51,16 +51,8 @@
 
             <div  style="position: relative;">
  
-              {% if 'login' in request.path %}
-              <a href="../../static/uploads/ggbfiles/10/accueil0000.ggb" target="_blank">
-                  <img src="{% static 'img/levels/accueil0000.png' %}" width="400" style="position: absolute; top :40px; left:133px;z-index:-1" /> 
-
-                  <img src="{% static 'img/mains_ip.png' %}" height="490" width="610" style=" z-index: 999" />
-              </a>
-              {% else %}
-
               <a href="{% url 'show_exercise'   exercise.id     %}" target="_blank">
-                  <img src="static/uploads/{{ exercise.supportfile.imagefile }}" width="400" style="position: absolute; top :40px; left:133px;z-index:-1" /> 
+                  <img src="{% static 'uploads/' %}{{ exercise.supportfile.imagefile }}" width="400" style="position: absolute; top :40px; left:133px;z-index:-1" /> 
 
                   {% if  exercise.id|divisibleby:"3" %}
                   <img src="{% static 'img/mains_ip.png' %}" height="490" width="610" style=" z-index: 999" />
@@ -71,8 +63,7 @@
                   {% endif %}
 
               </a>
-
-              {% endif %}
+ 
             </div>
 
 

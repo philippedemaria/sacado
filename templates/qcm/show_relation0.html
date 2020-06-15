@@ -189,7 +189,7 @@
               "errorDialogsActive":false,
               "useBrowserForJS":true,
                   "langage":"en",
-              "filename":"../../../../static/uploads/{{ relation.exercise.supportfile.ggbfile }}",
+              "filename":"{% static 'uploads/' %}{{ relation.exercise.supportfile.ggbfile }}",
                "appletOnLoad" :  function(applet) {  
                         applet.setValue("situation",{{ relation.situation }});
                 }
