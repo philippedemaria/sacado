@@ -1,0 +1,84 @@
+ 
+.container {
+    width:400px;
+}
+.is-large.input, .is-large.textarea {
+    font-size: 1.5rem;
+    margin: 10px;
+}
+.has-text-centered {
+    text-align: center !important;
+}
+.column.is-offset-4, .column.is-offset-4-tablet {
+    margin-left: 33.33%;
+}
+.box {
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
+    color: #4a4a4a;
+    display: block;
+    padding: 1.25rem;
+    margin-bottom: 30px;
+}
+.button.is-info {
+    background-color: #3298dc;
+    border-color: transparent;
+    color: #fff;
+}
+.button {
+    background-color: white;
+    border-color: #dbdbdb;
+    border-width: 1px;
+    color: #363636;
+    cursor: pointer;
+    justify-content: center;
+    padding-bottom: calc(0.5em - 1px);
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: calc(0.5em - 1px);
+    text-align: center;
+    white-space: nowrap;
+    width: 100%;
+}
+.button, .input, .textarea, .select select, .file-cta, .file-name, .pagination-previous, .pagination-next, .pagination-link, .pagination-ellipsis {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    align-items: center;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    box-shadow: none;
+    display: inline-flex;
+    font-size: 1rem;
+    height: 1em;
+    line-height: 1.5;
+    padding-bottom: calc(0.5em - 1px);
+    padding-left: calc(0.75em - 1px);
+    padding-right: calc(0.75em - 1px);
+    padding-top: calc(0.5em - 1px);
+    position: relative;
+    vertical-align: top;
+}
+a.back{
+  text-decoration: none;
+  font-size: 12px;
+  color: #007bff;
+}
+a.back:hover{
+  color: #271942;
+}
+
+.is_forget{
+    font-size:14px;  
+    text-decoration: none!important;
+}
+section{
+  max-width: 1000px;
+  margin: auto;
+  margin-top:20px;
+}
+
+.alert{
+    margin-top: 30px
+}
+ 
