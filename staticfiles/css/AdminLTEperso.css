@@ -3046,8 +3046,11 @@ li .list_no_indent{
   display: block;
   margin-bottom: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  height: 220px;
-  border-radius: 4px;
+  height: 320px;
+  width : 300px;
+  border-radius: 3px;
+  float: left;
+  margin-right: 36px;
 }
 
 .small-box-student {
@@ -3175,7 +3178,6 @@ li .list_no_indent{
   background-color:#FFF;
   box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2);
   z-index:60;
-  height: 190px;
 }
 
 
@@ -3479,7 +3481,7 @@ li .list_no_indent{
   background: #ffffff;
   border-top: 0px solid #d2d6de;
   padding:0px;
-  width: 272px;
+  width: 300px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
   float:left;
   margin: 0px 36px  36px 0px ;
@@ -3718,75 +3720,25 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   display: block;
 }
 /*****************************************************  Bouton sacado *************/
-.btn-plus {
-  background-color: #007bff ; /* #deeaea*/
-  color:#FFF;  /* #657574*/
+
+.btn-accueil  {
+  background-color: #FFF ; /* #deeaea*/
+  color:#007bff;  /* #657574*/
   margin : 5px;
+  min-width: 220px;
+  border-radius: 20px;
+  opacity: 0.9;
 }
 
-.btn-subsacado {
-  margin : 5px;
-  min-width: 170px;
-  background-color: #f4f4f4; /* #deeaea*/
-  color: #444;/* #657574*/ 
-  border-color: #ddd;
-}
-.alignLeft {
-  text-align:left;
+ 
+.btn-accueil:hover,
+.btn-accueil:active,
+.btn-accueil.hover {
+  background-color: transparent!important;
+  color:#FFF!important;
+  border-radius: 20px;
 }
  
-.btn-default:hover,
-.btn-default:active,
-.btn-default.hover {
-  background-color: #e7e7e7;
-}
-
-.btn-plus:hover,
-.btn-subsacado:hover,
-.btn-subsacado:active,
-.btn-subsacado.hover {
-  background-color: #007bff!important;
-  color:#FFF!important;
-}
-.btn-gestsacado  {
-  min-width: 210px;
-  margin : 5px;
-  background-color: #f4f4f4; /* #e6e2dd*/
-  color: #444;/* #4f4942*/ 
-  border-color: #ddd;
-  text-align: left;
-}
-
-.btn-gestsacado-no_width  {
-  margin : 5px;
-  background-color: #f4f4f4; /* #e6e2dd*/
-  color: #444;/* #4f4942*/ 
-  border-color: #ddd;
-  text-align: left;
-}
-
-
-
-.btn-gestsacado:hover,
-.btn-gestsacado:active,
-.btn-gestsacado.hover {
-  background-color: #007bff!important;
-  color:#FFF!important;
-}
-
-.btn-gestsacadoDark  {
-  background-color: #4f4942;
-  color:#F2F1F0;
-  min-width: 170px;
-  text-align: left;
-}
-.btn-gestsacadoDark:hover,
-.btn-gestsacadoDark:active,
-.btn-gestsacadoDark.hover {
-  /*background-color: #e6e2dd!important;
-  color:#4f4942!important;*/
-  background-color: #e7e7e7!important;
-}
 
 .btn-new  {
   color : #007bff!important;
@@ -3815,21 +3767,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 }
 
 
-
-
-.btn-sacado { 
-  background-color: #007bff   ;/* #364e61  */
-  border-color: #007bff  ;  /* #364e61  */
-  color:#FFF;
-}
-
-.btn-sacado:hover,
-.btn-sacado:active,
-.btn-sacado.hover {
-  background-color: #d7e3e9;
-  color:#657574;
-}
-
+ 
 .size18 {
     font-size : 18px !important;
 }

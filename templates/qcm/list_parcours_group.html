@@ -59,11 +59,14 @@
 <section class="content_main" id="principal_section"> 
 
 
+ 
+    {% regroup parcours_tab by is_evaluation as list_parcours %} 
 
-    {% for parcours in parcours_tab %} 
-
-
-
+    {% for parcours_sort in list_parcours %}  
+    <div class="row"></div>
+    {% if parcours_sort.grouper %}<h1 class="thin" id="evaluation">Evaluations</h1>{% else %}<h1 class="thin"> Parcours</h1>{% endif %}
+        {% for parcours in parcours_sort.list %}  
+  
         <div  class="box box-widget widget-user-2"  
               style="{% if parcours.vignette %}background-image: url('{% static 'uploads/' %}{{ parcours.vignette }}'); background-size: cover; {% else %} background-color:{{parcours.color }}{% endif %};"> 
               <!-- Add the bg color to the header using any of the bg-* classes -->
@@ -183,11 +186,9 @@
                 <div class="box_title_vignette"> 
                     <a href="{% url 'show_parcours'  parcours.id  %}" style="color:{{ parcours.color|contrast_color }};"> {{ parcours.title|truncatechars:"18" }}
                         <span style="font-size:12px"> 
-                            {% if parcours.linked %}({{parcours.level}}){% endif %}
-                            {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}
-                            {% if not parcours.linked %}, 
+                            {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}, 
                                 {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }} {% endif %}min.
-                            {% endif %}
+
                         </span>
                     </a>
                     {% if parcours.group_list|length > 1 %}
@@ -245,8 +246,8 @@
                 </div>
             </div>
         </div>   
-
-
+        {% endfor %}
+     
     {% empty %}
 
     <div class="row"> 
@@ -270,7 +271,9 @@
 
         </div>
     </div>
+
     {% endfor %}
+
 
   
 </section>

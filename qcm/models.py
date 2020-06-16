@@ -462,6 +462,21 @@ class Parcours(ModelWithCode):
         nb = self.parcours_relationship.filter(date_limit__gte = today).count()
         return nb
 
+
+    def evaluation_duration(self):
+
+        relationships = self.parcours_relationship.all()
+        som = self.duration
+        for r in relationships : 
+            som += r.duration
+        return som 
+
+
+
+
+
+
+
 class Relationship(models.Model):
     exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.PROTECT,  editable= False)
     parcours = models.ForeignKey(Parcours, on_delete=models.PROTECT,  related_name='parcours_relationship',  editable= False)
