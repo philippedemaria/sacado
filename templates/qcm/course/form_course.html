@@ -89,6 +89,9 @@
                     <div style="font-size: 16px;margin-top: 5px"> 
 
                         
+
+                        <a href="https://sacado.xyz/qcm/show_this_exercise/{{ relationship.exercise.id }}/" target="_blank" > 
+
                             <img src="{% static 'uploads/' %}{{  relationship.exercise.supportfile.imagefile }}" width="180px" height="100px"  style="float:left;margin-right: 5px">
 
                                 {% if relationship.exercise.supportfile.annoncement %}
@@ -112,6 +115,9 @@
                                     <i class="fa fa-clock-o"></i> {{ relationship.exercise.supportfile.duration }} minutes <br> 
                                     <i class="fa fa-save"></i> {{ relationship.exercise.supportfile.situation}} situation{{ relationship.exercise.supportfile.situation|pluralize}}
                                 </small>
+
+                            </a>
+
                         <div style="clear:both"> </div>   
 
                     </div>
