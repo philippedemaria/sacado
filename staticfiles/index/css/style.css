@@ -196,6 +196,19 @@ table.table-bordered.dataTable {
 }
 
 
+.btn-index{
+  border-radius: 4px;
+  border : solid 1px #FFB400;
+  color:#2a4c5e;
+  background: #FFB400;
+}
+
+.btn-index:hover{ 
+  color:#FFF;
+  background: #2a4c5e;
+  border-radius: 4px;
+  border : solid 1px #2a4c5e;   
+}
 /* Back to top button */
 
 .back-to-top {

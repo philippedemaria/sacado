@@ -225,31 +225,10 @@ a:focus {
 }
 
 
-.btn-outline-blue{
-	border-radius: 4px;
-	border : solid 1px #00819F;
-	color:#00819F;
-	background: transparent;
-}
 
-.btn-outline-blue:hover{	
-	color:#fff;
-	background: #00819F;
-	border-radius: 4px;
-	border : solid 1px #00819F;		
-}
+ 
 
-.blue{
-color: #00819F;
-}
-
-.bleu{
-	color: #006f89;
-	font-size:1.2em; 	
-}
-.orange{
-	color: #ff9c00;
-}
+ 
 
 .pull-right {
   float: right !important;

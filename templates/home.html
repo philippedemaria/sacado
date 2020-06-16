@@ -17,7 +17,7 @@
 </ul>
 {% endif %}
 
-
+ 
 
 
 {% if form.errors %} 
@@ -29,11 +29,21 @@
      <!--==========================
     Intro Section
   ============================-->
-
+ 
 
   <section id="intro" class="clearfix" >
     <div class="container d-flex h-100">
-      <div class="row justify-content-center align-self-center" style="padding-bottom:30px">
+
+
+
+      <div class="row justify-content-center align-self-center" style="padding-bottom:30px">  
+
+      <div class="col-xs-12"  style="position: absolute; top:110px;z-index:1000" >
+
+          <a href="#footer" class="btn btn-index"> En version établissement GRATUITE  </a>
+
+      </div>
+
         <div class="col-xs-12 col-lg-6 intro-info order-md-first order-last">
           <div class="title">S'entraîner. <br>Progresser. <br>S'auto-évaluer.</div>
 			    <div class="subtitle marginbottom50">  {{ nb_exercise }} exercice{{  nb_exercise|pluralize }} interactif{{ nb_exercise|pluralize }} corrigé{{  nb_exercise|pluralize }} du CP à la Terminale</div>
