@@ -5,7 +5,13 @@ define(['jquery','bootstrap'], function ($) {
         $(".is_evaluation").attr("checked",false);
  
         $('select[name=theme]').on('change', function (event) {
-            ajax_choice($('select[name=level]'),$('select[name=theme]')) ;
+
+            if ($('select[name=level]').val())
+            {
+                ajax_choice($('select[name=level]'),$('select[name=theme]')) ;
+            }
+            else 
+            {   alert("Vous devez choisir un niveau."); return false;}
         }); 
 
 
