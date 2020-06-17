@@ -1540,6 +1540,26 @@ body.hold-transition .main-header .logo {
   overflow-x: hidden;
 }
 
+
+
+.content_list::-webkit-scrollbar {
+  width: 0px;
+  height: 20px;
+}
+.content_list::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 10px;
+}
+.content_list::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+
+
+
+
+
 .content_title_no_indent {
   margin-left: 0;  
   margin-bottom: 15px;

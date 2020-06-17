@@ -107,7 +107,7 @@
     </div>
         
     {%  block body %}
-        <div class="content_main" id="search_result">
+        <div class="content_list" id="search_result">
         {% if user.is_authenticated %}
             {% if user.user_type == 0 %} 
                 {% include 'dashboard_student.html' %}
