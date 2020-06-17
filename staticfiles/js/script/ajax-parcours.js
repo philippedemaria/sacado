@@ -56,8 +56,6 @@ define(['jquery','bootstrap'], function ($) {
                     },
                     url: url,
                     success: function (data) {
-
-                        console.log(data.html) ; 
  
                         $('#content_exercises').html("").html(data.html);
                         $("#loader").html("").hide(); 
@@ -114,10 +112,6 @@ define(['jquery','bootstrap'], function ($) {
             let exercise_id = $(this).attr("data-exercise_id"); 
             let statut = $(this).attr("data-statut"); 
 
-            console.log(parcours_id) ;
-            console.log(exercise_id) ;
-            console.log(statut) ;
-
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
             $.ajax(
@@ -152,8 +146,6 @@ define(['jquery','bootstrap'], function ($) {
             let statut = $(this).attr("data-statut"); 
             let student_id = $(this).attr("data-student_id");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
- 
-            console.log(" student_id "+student_id+"- parcours_id "+parcours_id+"- data-exercise_id "+exercise_id+"- statut"+statut ) ;
 
             if (student_id != 0)
             {    
