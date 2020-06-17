@@ -22,7 +22,6 @@ urlpatterns = [
     path('close_an_account', close_an_account, name='close_an_account'),
     path('close_my_account/<int:id>', close_my_account, name='close_my_account'),
 
-    path('lost_password', lost_password, name='lost_password'),
     path('updatepassword', updatepassword, name='updatepassword'),
 
     path('register_student', register_student, name='register_student'),
