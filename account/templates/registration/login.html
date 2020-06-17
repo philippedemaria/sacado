@@ -2,35 +2,28 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
- <head>
+<head>
     <meta charset="UTF-8">
     <title>SacAdo</title>
- 
 
-  <!-- Favicons -->
-  <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}" />   
-     <link href="{% static 'index/css/style_layout.css' %}" rel="stylesheet">
-     <link href="{% static 'index/css/style_reset.css' %}" rel="stylesheet">
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}"/>
+    <link href="{% static 'index/css/style_layout.css' %}" rel="stylesheet">
+    <link href="{% static 'index/css/style_reset.css' %}" rel="stylesheet">
 </head>
  
 
 <body>
 
 <section>
-
-
     <a class="navbar-brand sacado" href="{% url 'index' %}"><img src="{% static 'img/sacadoA1.png' %}" height="30px" style="vertical-align: middle;"/>   SACADO </a>
- 
 {% block alert %}
-
     <div class="alert alert-danger">
-
- 
-           Saisissez un nom d’utilisateur et un mot de passe valides. Remarquez que chacun de ces champs est sensible à la casse (différenciation des majuscules/minuscules).
- 
+        Saisissez un nom d’utilisateur et un mot de passe valides. Remarquez que chacun de ces champs est sensible à la
+        casse (différenciation des majuscules/minuscules).
     </div>
 {% endblock  %}
-</section>
+
 {% block reset %}
     <div class="container has-text-centered column is-4 is-offset-4">
         <h3 class="title has-text-grey">Connexion</h3>
@@ -38,30 +31,24 @@
         <div class="box">
             <form method="post">
                 {% csrf_token %}
- 
- 
                         <input class="input is-large" name="username" type="text" placeholder="Nom d'utilisateur"
                                autofocus="">
- 
+
                         <input class="input is-large" name="password" type="password" placeholder="Mot de passe">
  
                         <input class="btn btn-primary full_width" type="submit" value="Se connecter" />
-         
- 
             </form>
         </div>
- 
-            <a href="{% url 'password_reset' %}" class="is_forget">Mot de passe oublié ?</a>
- 
+        <a href="{% url 'password_reset' %}" class="is_forget">Mot de passe oublié ?</a>
     </div>
 
 {% endblock  %}
-<section> 
+</section>
+
+<section>
     <div class="row" style="text-align: right;">
-      <a href="javascript:history.back()" style="color:#FFF; font-size:20px">Retour</a>
+        <a href="javascript:history.back()" style="color:#FFF; font-size:20px">Retour</a>
     </div>
-
-
 </section>
 </body>
 </html>

@@ -857,40 +857,6 @@ def register_by_csv(request,key,idg=0):
   
 #########################################Lost password #################################################################
 
-def lost_password(request):
-    this_email = request.POST.get("email")
-
-    caracteres = "azertyuiopqsdfghjklmwxcvbn@@@_____AZERTYUIOPQSDFGHJKLMWXCVBN0123456789@-_"
-    lenght = len(caracteres)-1
-    longueur = 8 
-    password = "" 
-    compteur = 0 
-     
-    while compteur < longueur:
-        lettre = caracteres[random.randint(0,lenght)]  
-        password += lettre  
-        compteur += 1 
-
-    try :
-        emails = []
-        users = User.objects.filter(email=this_email)
-        for u in users :
-            user_password = make_password(password)
-            u.password = user_password
-            u.save()
-            if u.email not in emails :
-                emails.append(u.email)
-            
-        messages.success(request, 'Votre mot de passe a été changé avec succès !')       
-        send_mail('Récupération du mot de passe sur sacado', 'Bonjour, \n\n votre identifiant est '+str(u.username)+' \n votre mot de passe sacado est '+str(password)+'.\n\n Vous pourrez le mdifier une fois connecté. Pour vous connecter, redirigez-vous vers https://sacado.xyz .', 'info@sacado.xyz', emails )
-
-
-    except : 
-        messages.error(request, "Votre mot de passe n'a pas été changé. Vérifier votre adresse de courriel !")
-
-    return redirect('index')
-
-
 import random
 def updatepassword(request):
  

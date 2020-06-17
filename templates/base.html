@@ -144,14 +144,17 @@
             </div>
             <div class="modal-body">
                     <div class="row">
-                        <div class="col-lg-12 col-xs-12">   
-                            <small>Pour des raisons de sécurité, il n'est pas possible de récupérer votre mot de passe. Vous devez en générer un autre. Vous pourrez le modifier une fois connecté.e dans votre espace personnel.</small>
+                        <div class="col-lg-12 col-xs-12">
+                            <small>Pour des raisons de sécurité, il n'est pas possible de récupérer votre mot de passe.
+                                Vous allez recevoir un courrier électronique contenant un lien permettant de
+                                réinitialiser votre mot de passe.
+                            </small>
                         </div>        
                     </div> 
                     <hr>
 
 
-                <form action="{%  url 'lost_password' %}" method="POST"  > 
+                <form action="{%  url 'password_reset' %}" method="POST"  >
                 {% csrf_token %}
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
