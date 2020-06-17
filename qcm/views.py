@@ -197,18 +197,25 @@ def associate_parcours(request,id):
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 @csrf_exempt 
-def chargethemes(request):
+def ajax_chargethemes(request):
 
-    id_level = int(request.POST.get("id_level"))
-    data = {}
-    themes =  Theme.objects.filter(level_id = id_level)
-   
-    data['themes'] = themes
+    ids_level =  request.POST.get("id_level") 
  
+    data = {}
+    level =  Level.objects.get(pk = ids_level)
+    print(level)
+
+    thms = level.themes.values_list('id', 'name')
+    print(thms)
+    data['themes'] = list(thms)
  
     return JsonResponse(data)
 
  
+
+
+
+
 
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_populate(request):  

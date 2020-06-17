@@ -11,16 +11,18 @@ define(['jquery','bootstrap'], function ($) {
         $('#id_level').on('change', function (event) {
             let id_level = $(this).val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            console.log(id_level) ; 
  
             $.ajax(
                 {
                     type: "POST",
                     dataType: "json",
+                    traditional: true,
                     data: {
                         'id_level': id_level,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url= "../../ajax_level_exercise" ,
+                    url : "../../ajax/chargethemes",
                     success: function (data) {
 
                         let themes = JSON.parse(data["themes"]);
@@ -28,7 +30,7 @@ define(['jquery','bootstrap'], function ($) {
                         if (themes.length >0)
 
                         { for (let i = 0; i < themes.length; i++) {
-
+                                    $('select[name=theme]').append("");
                                     let themes_id = themes[i].id;
                                     let themes_name =  themes[i].title  ;
                                     let option = $("<option>", {
