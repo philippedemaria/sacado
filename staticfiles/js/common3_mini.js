@@ -2,8 +2,7 @@ requirejs.config({
     baseUrl: "../../../static/js", 
     waitSeconds: 90,
     paths: {
-        jquery: ['//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min', 'lib/jquery-2.2.4.min'],
-        jquery19: ['//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min'],  
+        jquery: ['lib/jquery-2.2.4.min'],
         select2: "lib/select2.full.min",
         ui: "lib/jquery-ui.min",
         ui_draggable: "script/ui-draggable",
