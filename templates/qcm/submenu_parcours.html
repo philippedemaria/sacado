@@ -43,17 +43,24 @@
         {% endif %} 
         <li {% if 'parcours_stat/' in request.path %} class="active" {% endif %}><a href="{% url 'stat_parcours' parcours.id %}" ><i class="fa fa-bar-chart fa-fw"></i> Lire les {% if parcours.is_evaluation %}résultats de l'évaluation{% else  %}stats du parcours {% endif %} </a>   </li>
     </ul>
-</li>    
+</li> 
+
+
+
+{% if not 'parcours_update' in request.path  %}
 <li>
     <form action="" method="POST" enctype='multipart/form-data'>     
         {% csrf_token %}
         <div class="btn-group"  style="padding:0px;margin:0px;">
-            <a href="#" class="btn btn-default publisher"  data-from="2" id="parcours_publisher{{parcours.id}}" 
-                data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
+
+            <a href="#" class="btn btn-default publisher"  data-from="2" id="parcours_publisher{{parcours.id}}" data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
                 <i class="fa fa-circle-o-notch"></i>
-            </a><span class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" id="parcours_statut{{parcours.id}}" style="cursor:auto" >  
+            </a><span class="legend-btn legend-btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" id="parcours_statut{{parcours.id}}" style="cursor:auto"  >  
               {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
             </span>
+
         </div>
     </form>
 </li>
+{% endif %} 
+

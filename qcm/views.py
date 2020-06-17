@@ -991,14 +991,14 @@ def ajax_publish(request):
         statut = 0
         data["statut"] = "false"
         data["publish"] = "Dépublié"
-        data["class"] = "btn btn-danger"
-        data["noclass"] = "btn btn-success"
+        data["class"] = "legend-btn-danger"
+        data["noclass"] = "legend-btn-success"
     else:
         statut = 1
         data["statut"] = "true"
         data["publish"] = "Publié"
-        data["class"] = "btn btn-success"
-        data["noclass"] = "btn btn-danger"
+        data["class"] = "legend-btn-success"
+        data["noclass"] = "legend-btn-danger"
 
     Relationship.objects.filter(pk = int(relationship_id)).update(is_publish = statut)
     return JsonResponse(data) 
@@ -1020,8 +1020,8 @@ def ajax_publish_parcours(request):
         else :
             data["publish"] = "Dépublier"
         data["style"] = "#dd4b39"
-        data["class"] = "btn-danger"
-        data["noclass"] = "btn-success"
+        data["class"] = "legend-btn-danger"
+        data["noclass"] = "legend-btn-success"
         data["label"] = "Non publié"
     else:
         statut = 1
@@ -1033,8 +1033,8 @@ def ajax_publish_parcours(request):
         else :
             data["publish"] = "Dépublier"
         data["style"] = "#00a65a"
-        data["class"] = "btn-success"
-        data["noclass"] = "btn-danger"
+        data["class"] = "legend-btn-success"
+        data["noclass"] = "legend-btn-danger"
         data["label"] = "Publié"
         parcours = Parcours.objects.get(pk = int(parcours_id) )
 
