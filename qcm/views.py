@@ -196,7 +196,17 @@ def associate_parcours(request,id):
 #################   parcours
 #######################################################################################################################################################################
 #######################################################################################################################################################################
+@csrf_exempt 
+def chargethemes(request):
 
+    id_level = int(request.POST.get("id_level"))
+    data = {}
+    themes =  Theme.objects.filter(level_id = id_level)
+   
+    data['themes'] = themes
+ 
+ 
+    return JsonResponse(data)
 
  
 

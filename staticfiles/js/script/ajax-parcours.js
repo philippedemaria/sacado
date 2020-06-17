@@ -3,6 +3,59 @@ define(['jquery','bootstrap'], function ($) {
         console.log("chargement JS ajax-parcours.js OK");
 
         $(".is_evaluation").attr("checked",false);
+
+
+ 
+
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('#id_level').on('change', function (event) {
+            let id_level = $(this).val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+ 
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'id_level': id_level,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url= "../../ajax_level_exercise" ,
+                    success: function (data) {
+
+                        let themes = JSON.parse(data["themes"]);
+
+                        if (themes.length >0)
+
+                        { for (let i = 0; i < themes.length; i++) {
+
+                                    let themes_id = themes[i].id;
+                                    let themes_name =  themes[i].title  ;
+                                    let option = $("<option>", {
+                                        'value': Number(themes_id),
+                                        'html': themes_name
+                                    });
+                                    $('select[name=theme]').append(option);
+                                }
+                        }
+                        else
+                        {
+                                    let option = $("<option>", {
+                                        'value': 0,
+                                        'html': "Aucun contenu disponible"
+                                    });
+                            $('select[name=theme]').append(option);
+                        }
+
+
+                    }
+                }
+            )
+        });
+
+
+
+
  
         $('select[name=theme]').on('change', function (event) {
 

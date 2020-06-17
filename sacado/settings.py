@@ -260,25 +260,25 @@ CKEDITOR_CONFIGS = {
 
 
 ########################################################################################################################
+if PRODUCTION :
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'file': {
+                'level': 'DEBUG',
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': 'logs/debug.log',
+                'backupCount': 10,  # keep at most 10 log files
+                'maxBytes': 5242880,  # 5*1024*1024 bytes (5MB)
+            },
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'logs/debug.log',
-            'backupCount': 10,  # keep at most 10 log files
-            'maxBytes': 5242880,  # 5*1024*1024 bytes (5MB)
         },
-
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
+        'loggers': {
+            'django': {
+                'handlers': ['file'],
+                'level': 'DEBUG',
+                'propagate': True,
+            },
         },
-    },
-}
+    }
