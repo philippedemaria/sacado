@@ -25,16 +25,13 @@ define(['jquery', 'bootstrap'], function ($) {
 
         $('#test_not_empty').on('click', function () {
 
-            f1 = document.getElementById('id_groups');
-            f2 = document.getElementById('id_receivers');
+            f1 = $('#id_groups').val();
+            f2 = $('#id_receivers').val();
  
             if (f1.value == "" && f2.value == "") {
                 alert('Vous devez choisir un destinataire');
                 return false;
-            }
-
-            
-            
+            }  
         });
 
 
