@@ -25,14 +25,16 @@ define(['jquery','bootstrap'], function ($) {
                     url : "../../ajax/chargethemes",
                     success: function (data) {
 
-                        let themes = JSON.parse(data["themes"]);
-
+                        themes = data["themes"]
+ $('select[name=theme]').empty("");
                         if (themes.length >0)
 
                         { for (let i = 0; i < themes.length; i++) {
-                                    $('select[name=theme]').append("");
-                                    let themes_id = themes[i].id;
-                                    let themes_name =  themes[i].title  ;
+                                    
+
+                                    console.log(themes[i]);
+                                    let themes_id = themes[i][0];
+                                    let themes_name =  themes[i][1]  ;
                                     let option = $("<option>", {
                                         'value': Number(themes_id),
                                         'html': themes_name
