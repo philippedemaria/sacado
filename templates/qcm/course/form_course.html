@@ -9,8 +9,8 @@
     <script>
         require(['script/ajax-parcours']);
     </script> 
-<script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
-<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>    
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>    
 {% endblock %}
 
  
@@ -57,7 +57,7 @@
                                                                        class="btn btn-default "/></a>
                         </div>
                     </div>
-                {% if content %}
+                {% if course %}
                         <div class="col-sm-12 col-md-4">
                             <div class="form-group">
                                 <a href="{% url 'delete_content' course.id  section.id content.id %}" class="btn btn-danger"  onclick="return TestDelete('ce contenu')">Supprimer ce cours</a>

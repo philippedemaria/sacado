@@ -2562,7 +2562,7 @@ def create_course(request, idc , id ):
         else:
             print(form.errors)
 
-    context = {'form': form,   'teacher': teacher, 'parcours': parcours , 'relationships': relationships , }
+    context = {'form': form,   'teacher': teacher, 'parcours': parcours , 'relationships': relationships , 'course': None , }
 
     return render(request, 'qcm/course/form_course.html', context)
 
