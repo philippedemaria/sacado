@@ -1936,18 +1936,29 @@ def ajax_knowledge_exercice(request):
  
 
 def ajax_create_title_parcours(request):
-
-    teacher = Teacher.objects.get(user = request.user)
+    ''' Création d'une section ou d'une sous-section dans un parcours '''
+    teacher = Teacher.objects.get(user=request.user)
     value = request.POST.get('value', None)
     parcours_id = int(request.POST.get('parcours_id', None))
     subtitle = int(request.POST.get('subtitle', None))
     code = str(uuid.uuid4())[:8]
     data = {}
-    supportfile = Supportfile.objects.create(knowledge_id=1, annoncement=value, author=teacher, code=code, level_id=1, theme_id=1, is_title=1, is_subtitle=subtitle )
-    exe = Exercise.objects.create(knowledge_id=1, level_id=1, theme_id=1, supportfile =supportfile )
-    Relationship.objects.create(exercise=exe, parcours_id=parcours_id, order=0 )
+    supportfile = Supportfile.objects.create(knowledge_id=1, annoncement=value, author=teacher, code=code, level_id=1,
+                                             theme_id=1, is_title=1, is_subtitle=subtitle)
+    exe = Exercise.objects.create(knowledge_id=1, level_id=1, theme_id=1, supportfile=supportfile)
+    Relationship.objects.create(exercise=exe, parcours_id=parcours_id, order=0)
 
-    data["html"] = "<div style='line-height: 30px; background-color : #F2F1F0;   padding:10px; border-bottom:1px dashed #CCC;' id='new_title"+str(exe.id)+"'><a href='#' style='cursor:move;' class='move_inside'><img src='../../../static/img/move_publish.png' width='22px'  /></a><h3>"+str(value)+"</h3><input type='hidden' class='div_exercise_id' value='"+str(exe.id)+"' name='input_exercise_id'/> <a href='#' data-exercise_id='"+str(exe.id)+"'  data-parcours_id='"+str(parcours_id)+"' class='pull-right erase_title'><i class='fa fa-trash'></i></div>"
+    data["html"] = f'''<div class="panel-body separation_dashed" style="line-height: 30px;  border-top-right-radius:5px; border-top-left-radius:5px; background-color : #F2F1F0;id='new_title{exe.id}'">
+    <a href='#' style='cursor:move;' class='move_inside'>
+        <i class="fas fa-grip-vertical fa-xs" style="color:MediumSeaGreen;vertical-align: text-top;padding-right:5px;"></i>
+    </a>
+    <input type='hidden' class='div_exercise_id' value='{exe.id}' name='input_exercise_id' />
+        <h3>{value}
+            <a href='#' data-exercise_id='{exe.id}' data-parcours_id='{parcours_id}' class='pull-right erase_title'>
+                <i class='fa fa-times text-danger'></i>
+            </a>
+        </h3>
+    </div>'''
 
     return JsonResponse(data)
 
