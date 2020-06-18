@@ -4,7 +4,7 @@
 
 
 {% block require %}
-    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common2.js' %}"></script> 
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common_accueil.js' %}"></script> 
     <script>
        require(['script/ajax-dashboard']); 
        require(['script/ajax-sendmail']);
@@ -13,8 +13,7 @@
 
 
 {% block page_title %}
-    <a href="#" id='buttonToggle'><i class="fa fa-bars"></i></a> 
-              Messages & notifications
+    <a href="#" id='buttonToggle'><i class="fa fa-bars"></i></a> Messages & notifications
 {% endblock %}
  
 {% block page_menu_right %}
@@ -62,17 +61,8 @@
   font-size: 12px
 }
 </style>
-<script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
-<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script> 
-
- 
- 
-    
- 
- 
 
 
- 
         <div class="content_main">
             <div class="col-md-2" id="sub_menu_left">
  

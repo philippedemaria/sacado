@@ -34,6 +34,8 @@ requirejs.config({
         fonctions_jquery: "script/fonctions-jquery",
         fonctions: "script/fonctions",
         bootstrapjs: "bootstrap",
+ 
+
     },
     shim: {
         "bootstrap": {

@@ -9,8 +9,6 @@ requirejs.config({
         ui_draggable: "script/ui-draggable",
         ui_sortable: "script/ui-sortable",
         jquery_sortable: "lib/jquery-sortable",
- 
- 
         bootstrap: "lib/bootstrap.min",
         popoverx: "lib/bootstrap-popover-x.min",
         ckeditor: "../ckeditor/ckeditor/ckeditor",
