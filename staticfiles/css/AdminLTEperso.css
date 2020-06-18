@@ -3722,7 +3722,9 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   font-size: 13px!important;
 }
 
-
+.size15{
+  font-size: 15px!important;
+}
 
 .btn {
   border-radius: 4px;

@@ -270,7 +270,7 @@ if PRODUCTION :
                 'class': 'logging.handlers.RotatingFileHandler',
                 'filename': 'logs/debug.log',
                 'backupCount': 10,  # keep at most 10 log files
-                'maxBytes': 5242880,  # 5*1024*1024 bytes (5MB)
+                'maxBytes': 1048576,  # 1*1024*1024 bytes (1MB)
             },
 
         },
