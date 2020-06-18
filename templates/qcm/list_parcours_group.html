@@ -288,61 +288,6 @@
     </div>
 
 
-    <div class="modal fade bd-example-modal-lg" id="help"  tabindex="-1" role="dialog" aria-labelledby="help" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document" style="margin:0px!important">
  
-            {% if user.user_type == 2 %}
-                <div class="modal-content help" >
- 
-                    <div class="helpdiv_help_title_page"  style="left:500px;">
-                        titre de page
-                    </div>
-                    <div class="helpdiv_help_groupe"   style="top:{% if parcours_tab|length > 0 %}360px{% else %}100px{% endif %}">
-                        {% if parcours_tab|length > 0 %}<img src="{% static 'img/fleche_up_left.png' %}" width="40px" />{% endif %}
-                        <div class="help_groupe" style="float:left;width:800px" >
-                            {% if parcours_tab|length > 0 %}
-                               <br><i class="fa fa-laptop"></i> Sélect. : Sélectionner les exercices à placer dans le parcours
-                               <br><i class="fa fa-th"></i> Gérer : Gestion des exercices, tâches, publications du parcours avec une vue en carte
-                               <br><i class="fa fa-tasks"></i> Gérer : Gestion des exercices, tâches, publications du parcours avec une vue en liste. Creéation de sections, sous sections pour structurer le parcours.
-                               <br><i class="fa fa-mortar-board"></i> Suivis : Suivis par élève et par exercice du parcours
-                               <br><i class="fa fa-trophy"></i> Suivis : Suivis par élève et par savoir faire du parcours
-                               <br><i class="fa fa-calendar"></i> Tâches : vers la liste des tâches en cours. Si une tâche est donnée, il y a une coche sur l'icone.
-                               <br><i class="fa fa-user"></i> Individual. : ouvre une fenêtre avec la liste des élèves. Lorsqu'un élève est cliqué, on obient ses résultats.
-                               <br><i class="fa fa-trophy"></i> Suivis : Suivis par élève et par savoir faire
-                               <br><i class="fa fa-calendar"></i> Stats : vers la liste des tâches en cours
-                               <br><i class="fa fa-users"></i> Groupe : ouvre une fenetre avec la liste des élèves de ce parcours. Lorsqu'un élève est cliqué, on obtient ses résultats.
-                            {% else %}
-                                <h2>Corps de page</h2> 
-                                <br>Renseignez vos niveaux préférés, puis créer un premier groupe avec le bouton ci-dessus.
-                                <br> Les groupes créés s'affichent ici.
-                            {% endif %}
-                        </div>
-                    </div>
-
-
-                    <div class="helpdiv_help_acces"  style="top:50px;right:50px;">
-                        Création d'un nouveau parcours |<img src="{% static 'img/fleche_up_right.png' %}" width="40px" style="vertical-align:bottom" />
-                    </div>
-
-
-                    {% if parcours_tab|length > 0 %}
-                    <div class="helpdiv_help_disc">
-                        <div class="help_disc" >
-
-                              Modifier, supprimer, publier un parcours
-
-                                <br><br><br>
-                                Voir le parcours  
-                        </div><br><img src="{% static 'img/fleche_up_right.png' %}" width="40px" /><br><br><img src="{% static 'img/fleche_bottom_right.png' %}" width="30px" style="vertical-align:middle;"/>
-
-                    </div>
-                    {% endif %}
-
-
-                </div>
-            {% endif %}
-        </div>
-    </div>
-
 
 {% endblock  %}   
