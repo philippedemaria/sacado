@@ -49,7 +49,7 @@ body{
                     <th>Niveau</th>
                     <th>Groupes affectés</th>
                     <th>Elèves</th>
-                    <th>Publication</th>                    
+                    <th style="width:120px">Publication</th>                    
                 </tr> 
             </thead>
             <tbody>
@@ -106,7 +106,7 @@ body{
                                 <a href="#" class="btn btn-default publisher"  data-from="1" id="parcours_publisher{{parcours.id}}" 
                                     data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
                                     <i class="fa fa-circle-o-notch"></i>
-                                </a><span class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" id="parcours_statut{{parcours.id}}" style="cursor:auto" >  
+                                </a><span class="legend-btn  legend-btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %} size13" id="parcours_statut{{parcours.id}}"  >  
                                   {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
                                 </span>
                             </div>

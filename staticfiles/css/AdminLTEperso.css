@@ -3718,7 +3718,9 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 }
  
 
-
+.size13{
+  font-size: 13px!important;
+}
 
 
 
