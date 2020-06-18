@@ -13,7 +13,7 @@ sacado/settings_prod
 sacado/settings.py
 settings.py
 static/
-
+staticfiles/ckeditor/
 staticfiles/uploads/
  
 logs/

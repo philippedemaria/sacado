@@ -104,17 +104,25 @@
                         <a href="#" data-parcours_id="{{parcours.id }}" class="overlay_show pull-right">
                                 <i class="fa fa-times"></i>
                         </a>
+
                         <form action="" method="POST" enctype='multipart/form-data'>     
                             {% csrf_token %}
                             <div class="btn-group"  style="padding:0px;margin:0px;">
                                 <a href="#" class="btn btn-default publisher"  data-from="2" id="parcours_publisher{{parcours.id}}" 
                                     data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
                                     <i class="fa fa-circle-o-notch"></i>
-                                </a><span class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" id="parcours_statut{{parcours.id}}" style="cursor:auto" >  
+                                </a><span class="legend-btn legend-btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" id="parcours_statut{{parcours.id}}" style="cursor:auto" >  
                                   {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
                                 </span>
                             </div>
                         </form>
+
+
+
+
+
+
+
                         <br>
                         <span class="label_icon" style="color:{{ parcours.color }};">
                             {% if parcours.is_evaluation %}
