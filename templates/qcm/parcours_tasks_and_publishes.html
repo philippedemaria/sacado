@@ -17,22 +17,21 @@
 
 {% block page_menu_right %}
 
+<li>
+    <a href="#" class="no_button" data-target="#section_div" data-toggle='modal'>
+        <i class="fa fa-indent"></i> Créer une section
+    </a>
+</li>
 
-    <li>
-        <a href="#" class="no_button" data-target="#section_div" data-toggle='modal'> <i class="fa fa-indent"  ></i> Créer une section</a>
-    </li>
-
- 
-<li>                
-    <a href="javascript:history.back()"  style="padding:12px; "><input type="button" value="Retour" class="btn btn-default "/></a>
+<li>
+    <a href="javascript:history.back()" style="padding:12px; ">
+        <input type="button" value="Retour" class="btn btn-default "/>
+    </a>
 </li>
 
 {% endblock %}
 
-
-
-
-{% block body %} 
+{% block body %}
 <style>
 .panel {
     background-color: #fff;
@@ -84,7 +83,7 @@
                                 </div>          
                                 <div id="collapside{{ forloop.counter}}" class="collapse" style="clear:both">  
 
-                                        <div class="pull-right"  style="margin-top:20px"> 
+                                        <div class="pull-right"  style="margin-top:20px">
                                               <div id="starter{{relationship.id}}" style="display:{% if relationship.is_publish %}none{% else %}block{% endif  %} " >
                                               A partir de ?<br/>
                                               <input type="type" name="starter" data-relationship_id="{{relationship.id}}" data-type ="0" value="{{ relationship.start|date:"Y-m-d" }}" class="datepicker dates" />
@@ -110,18 +109,17 @@
                                         </span>
                                 </div>   
                                 {% else %}
+                                <a href="" style="cursor:move;" class="move_inside">
+                                    {% if relationship.is_publish %}
+                                    <i class="fas fa-grip-vertical fa-xs"
+                                       style="color:MediumSeaGreen;vertical-align: text-top;padding-right:5px;"></i>
+                                    {% else %}
+                                    <i class="fas fa-grip-vertical fa-xs"
+                                       style="color:SlateGrey;vertical-align: text-bottom;padding-right:5px;"></i>
+                                    {% endif %}
+                                </a>
 
-                                    <div style="float:left;width:30px">
-                                        <a href="" style="cursor:move;" class="move_inside">
-                                        {% if relationship.is_publish %}
-                                            <img src="{% static 'img/move_publish.png' %}" width="22px"  /> 
-                                        {% else %}
-                                            <img src="{% static 'img/move.png' %}" width="22px"  />
-                                        {% endif %}
-                                        </a>
-                                    </div>
-
-                                    {% if relationship.exercise.supportfile.is_subtitle %}
+                                {% if relationship.exercise.supportfile.is_subtitle %}
                                     <h3>{{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }} <a href='#'  data-exercise_id='{{ relationship.exercise.id }}'  data-parcours_id='{{parcours.id}}' class='pull-right erase_title'><i class='fa fa-times text-danger'></i></a></h3>
                                     {% else %}
                                     <h2>{{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }} <a href='#'  data-exercise_id='{{ relationship.exercise.id }}'  data-parcours_id='{{parcours.id}}' class='pull-right erase_title'><i class='fa fa-times text-danger'></i></a></h2>
@@ -174,15 +172,15 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6 col-xs-12">   
+                        <div class="col-lg-6 col-xs-12">
                             <div class="form-group"><a href="#" class="btn btn-sacado"  id="create_section">Valider</a></div>
-                        </div> 
-                    </div>    
-                </div> 
+                        </div>
+                    </div>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 </div>
-            </form>          
+            </form>
         </div>
     </div>
 </div>
