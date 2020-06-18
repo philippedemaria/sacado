@@ -111,18 +111,11 @@
                                 <a href="#" class="btn btn-default publisher"  data-from="2" id="parcours_publisher{{parcours.id}}" 
                                     data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
                                     <i class="fa fa-circle-o-notch"></i>
-                                </a><span class="legend-btn legend-btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" id="parcours_statut{{parcours.id}}" style="cursor:auto" >  
+                                </a><span class="legend-btn legend-btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %} size15" id="parcours_statut{{parcours.id}}" style="cursor:auto" >  
                                   {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
                                 </span>
                             </div>
                         </form>
-
-
-
-
-
-
-
                         <br>
                         <span class="label_icon" style="color:{{ parcours.color }};">
                             {% if parcours.is_evaluation %}
@@ -133,23 +126,6 @@
                             {% endif %}
                         </span>
                     </div>
-
-
-                    <!-- optionnel
-                    <hr>  
-                    <div class="overlay_expand">
-                        <div class="col-md-6 col-lg-6 col-xs-6">
-                            <a href="{% url 'update_parcours' parcours.id group.id %}" class="edit" > <i class="fa fa-edit"></i> <span class="label_icon">Modifier</span> </a><br>
-                        </div>
- 
-                        <div class="col-lg-6 col-md-6 col-xs-6">
-                            <a href="{% url 'delete_parcours' parcours.id group.id %}" class="trash" onclick="return TestDelete('ce parcours')"><i class="fa fa-trash"></i>  <span class="label_icon">Supprimer</span></a>
-                        </div> 
- 
-                    </div> 
-                    -->
-
-
                 </div>
                 <!-- Fin de la fenetre  -->
                 <!--EXPORTATION  -->
@@ -174,19 +150,11 @@
                     </div> 
                 </div>
                 <!-- Fin de la fenetre  -->
-
-
-
-
                 {% if parcours.is_evaluation %}   
                     <div class="icon_evaluation">
                         <i class="fa fa-bullseye"></i> 
                     </div>
                 {% endif %}
-
-
-
-
                 {% if parcours.vignette %}                
                     <div class="box_title_underlay_vignette" style="background-color:{{ parcours.color }};">
                     </div> 
@@ -258,27 +226,27 @@
      
     {% empty %}
 
-    <div class="row"> 
-        <div class="col-sm-12 col-md-12">
-            <div class="alert alert-danger">Aucun parcours n'est affecté à ce groupe. Tant qu'un groupe ne contient pas d'élève, <strong>vous ne pouvez pas lui attribuer de parcours</strong>. Lorsque vos parcours sont créés, les élèves les rejoignent directement dès leur inscrition via le lien <span style="color:#271942">https://sacado.xyz/group/{{ group.code }}</span><br>
-            <i class="fa fa-bullhorn"></i> <strong>Préparer</strong> maintenant vos parcours, <strong>publier</strong>.  
+        <div class="row"> 
+            <div class="col-sm-12 col-md-12">
+                <div class="alert alert-danger">Aucun parcours n'est affecté à ce groupe. Tant qu'un groupe ne contient pas d'élève, <strong>vous ne pouvez pas lui attribuer de parcours</strong>. Lorsque vos parcours sont créés, les élèves les rejoignent directement dès leur inscrition via le lien <span style="color:#271942">https://sacado.xyz/group/{{ group.code }}</span><br>
+                <i class="fa fa-bullhorn"></i> <strong>Préparer</strong> maintenant vos parcours, <strong>publier</strong>.  
+                </div>
             </div>
         </div>
-    </div>
-    
-    <div class="row"> 
-        <div class="col-sm-12 col-md-12">
-            <h2 class='thin'><i class="fa fa-recycle"></i> 3 façons de disposer de parcours avec <span class="sacado">sacado</span></h2>  
-                
+        
+        <div class="row"> 
+            <div class="col-sm-12 col-md-12">
+                <h2 class='thin'><i class="fa fa-recycle"></i> 3 façons de disposer de parcours avec <span class="sacado">sacado</span></h2>  
+                    
 
-                    <ol><i class="fa fa-hand-o-right"></i> Les parcours par défaut (Recommandé pour une première utilisation) <p> Ces parcours contiennent tous les exercices  de  {{ group.level}} proposés par <span class="sacado">sacado</span>, classés par le thème. Vous pouvez les utiliser directement, leur ajouter, leur supprimer des exercices.<br>Choisir le parcours souhaité <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   ><i class="fa fa-caret-right"></i>  Parcours par défaut</a><p></ol>
-                    <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés <p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier un fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur <a href="{% url 'all_parcourses' %}"   ><i class="fa fa-caret-right"></i> Parcours mutualisés</a></p></ol>
-                    <ol><i class="fa fa-hand-o-right"></i>  Les parcours personnalisés <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br>  Créer votre parcours personnalisé dans un premier temps puis sélectionner les exercices de votre choix. <a href="{% url 'create_parcours' %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a></p></ol>
-
+                        <ol><i class="fa fa-hand-o-right"></i> Les parcours par défaut (Recommandé pour une première utilisation) <p> Ces parcours contiennent tous les exercices  de  {{ group.level}} proposés par <span class="sacado">sacado</span>, classés par le thème. Vous pouvez les utiliser directement, leur ajouter, leur supprimer des exercices.<br>Choisir le parcours souhaité <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   ><i class="fa fa-caret-right"></i>  Parcours par défaut</a><p></ol>
+                        <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés <p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier un fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur <a href="{% url 'all_parcourses' %}"   ><i class="fa fa-caret-right"></i> Parcours mutualisés</a></p></ol>
+                        <ol><i class="fa fa-hand-o-right"></i>  Les parcours personnalisés <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br>  Créer votre parcours personnalisé dans un premier temps puis sélectionner les exercices de votre choix. <a href="{% url 'create_parcours' %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a></p></ol>
 
 
+
+            </div>
         </div>
-    </div>
 
     {% endfor %}
 

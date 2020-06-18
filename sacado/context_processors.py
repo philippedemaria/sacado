@@ -23,7 +23,7 @@ def menu(request):
 
         else:
             today = timezone.now()
-        one_week = today + timedelta(days=7)
+ 
 
         if request.user.user_type == User.TEACHER:  # teacher
 

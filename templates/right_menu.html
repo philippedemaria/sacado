@@ -23,10 +23,10 @@
 
         {% regroup relationships by parcours as parcours_list %}
 
-            {% for parcours in parcours_list %}
-            <li class="sans_puce"><span class="label" style="background-color: {{ parcours.grouper.color }};border-radius: 50%">{{ parcours.grouper.nb_task }}</span> 
-                <a href="{% url 'detail_task_parcours' parcours.grouper.id 0 %}" class="parcours_displayer"> 
-                    {{ parcours.grouper.title }}
+            {% for pcs in parcours_list %}
+            <li class="sans_puce"><span class="label" style="background-color: {{ pcs.grouper.color }};border-radius: 50%">{{ pcs.grouper.nb_task }}</span> 
+                <a href="{% url 'detail_task_parcours' pcs.grouper.id 0 %}" class="parcours_displayer"> 
+                    {{ pcs.grouper.title }}
                 </a>        
             </li>
             {% endfor %}
