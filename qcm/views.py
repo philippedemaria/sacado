@@ -427,6 +427,7 @@ def list_evaluations(request):
 @user_is_group_teacher
 def list_parcours_group(request,id):
 
+    teacher = Teacher.objects.get(user_id = request.user.id)
     group = Group.objects.get(pk = id)
     request.session["group_id"] = group.id
     group_tab = []
@@ -434,10 +435,16 @@ def list_parcours_group(request,id):
     parcours_tab = []
     students = group.students.all()
     for student in students :
-        pcs = Parcours.objects.filter(students= student,is_favorite=1).order_by("-is_publish")
-        for parcours in pcs : 
-            if parcours not in parcours_tab :
-                parcours_tab.append(parcours)
+        pcs = Parcours.objects.filter(students= student,is_favorite=1).order_by("is_evaluation")
+        if len(parcours_tab) == teacher.teacher_parcours.count() :
+            break  
+        else :    
+            for parcours in pcs : 
+                if parcours not in parcours_tab :
+                    parcours_tab.append(parcours)
+                if len(parcours_tab) == teacher.teacher_parcours.count() :
+                    break 
+
 
     return render(request, 'qcm/list_parcours_group.html', {'parcours_tab': parcours_tab , 'group': group })
 
@@ -492,7 +499,16 @@ def create_parcours(request):
     else:
         print(form.errors)
 
-    context = {'form': form,   'teacher': teacher,  'groups': groups,  'levels': levels,    'themes' : themes_tab  }
+
+    try :
+        group_id = request.session.get["group_id"]
+    except :
+        group_id = None
+
+
+    context = {'form': form,   'teacher': teacher,  'groups': groups,  'levels': levels, 'idg': 0,   'themes' : themes_tab, 'group_id': group_id , 'parcours': None,  'relationships': [], 
+               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0}
+
 
     return render(request, 'qcm/form_parcours.html', context)
 
@@ -1518,9 +1534,9 @@ def create_supportfile(request):
             Exercise.objects.create(supportfile = nf, knowledge = nf.knowledge, level = nf.level, theme = nf.theme )
 
 
-        return redirect('admin_supportfiles')
+            return redirect('admin_supportfiles' , nf.level.id )
 
-    context = {'form': form,   'teacher': teacher}
+    context = {'form': form,   'teacher': teacher, 'knowledge': None,  'knowledges': [],     'supportfiles': [],   'levels': []}
 
     return render(request, 'qcm/form_supportfile.html', context)
 
@@ -1547,7 +1563,7 @@ def create_supportfile_knowledge(request,id):
             nf.save()
             # le support GGB est placé comme exercice par défaut.
             Exercise.objects.create(supportfile = nf, knowledge = nf.knowledge, level = nf.level, theme = nf.theme )
-            return redirect('admin_supportfiles')
+            return redirect('admin_supportfiles' , nf.level.id )
         else :
             print(form.errors)
 
@@ -1561,6 +1577,7 @@ def create_supportfile_knowledge(request,id):
 @user_passes_test(user_is_superuser)
 def update_supportfile(request, id, redirection = 0):
 
+    teacher = Teacher.objects.get(user_id = request.user.id)
     if request.user.is_superuser :  
         supportfile = Supportfile.objects.get(id=id)
         supportfile_form = UpdateSupportfileForm(request.POST or None, request.FILES or None, instance=supportfile )
@@ -1577,9 +1594,9 @@ def update_supportfile(request, id, redirection = 0):
                 messages.success(request, "L'exercice a été modifié avec succès !")
 
                 
-                return redirect('admin_supportfiles') 
+                return redirect('admin_supportfiles', supportfile.level.id )
 
-        context = {'form': supportfile_form,  'supportfile': supportfile,  'knowledges': knowledges,    'supportfiles': supportfiles,   'levels': levels}
+        context = {'form': supportfile_form,   'teacher': teacher,  'supportfile': supportfile,  'knowledges': knowledges,    'supportfiles': supportfiles,   'levels': levels}
 
         return render(request, 'qcm/form_supportfile.html', context )
 
@@ -1597,7 +1614,7 @@ def delete_supportfile(request, id):
         else :
             messages.error(request," Des parcours utilisent ce support GGB. Il n'est pas possible de le supprimer.")
 
-    return redirect('admin_supportfiles') 
+    return redirect('admin_supportfiles' , supportfile.level.id )
 
 
 @login_required
@@ -1620,7 +1637,7 @@ def show_this_supportfile(request, id):
 @login_required
 @user_passes_test(user_is_superuser)
 def create_exercise(request, supportfile_id):
-    teacher = Teacher.objects.get(user_id=request.user.id)
+ 
     knowledges = Knowledge.objects.all().order_by("level").select_related('level')
     supportfile = Supportfile.objects.get(id=supportfile_id)
 
@@ -1652,9 +1669,9 @@ def create_exercise(request, supportfile_id):
                 if Relationship.objects.filter(exercise=exercise).count() == 0:
                     exercise.delete()  # efface les existants sur le niveau sélectionné
 
-            return redirect('admin_supportfiles')
+            return redirect('admin_supportfiles' , supportfile.level.id )
 
-    context = {'teacher': teacher, 'knowledges': knowledges, 'supportfile': supportfile}
+    context = {  'knowledges': knowledges, 'supportfile': supportfile}
 
     return render(request, 'qcm/form_exercise.html', context)
 
@@ -1996,32 +2013,7 @@ def ajax_search_exercise(request):
 
     return JsonResponse(data)
 
-"""
-@login_required
-@user_is_parcours_teacher
-def create_evaluation(request,id, ide):# associe un exercice à une évaluation existante depuis le parcours
-
-    parcours = Parcours.objects.get(id= id)
-    exercise = Exercise.objects.get(id= ide)
-    relationship = Relationship.objects.get(parcours  = parcours , exercise  = exercise)
-    form =  RelationshipForm(request.POST or None , instance = relationship )
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            rcv = []
-            for s in parcours.students.all() :
-                if s.user.email:
-                    rcv.append(s.user.email)
-
-            msg = "Une évaluation est annoncée le {} à {}. Connectez vous à votre interface sacAdo le {} à {}. https://sacado.xyz".format(relationship.start, relationship.beginner,relationship.start, relationship.beginner)
-            send_mail("SacAdo Evaluation prévue",  msg , "info@sacado.xyz" , rcv )
-            return redirect("show_parcours" , parcours.id )
-        else :
-            messages.errors(request,"Erreur de création.")
-
-    context = {'form': form,  'relationship' : relationship,  }
-    return render(request, 'qcm/form_evaluation.html', context)
-"""
+ 
 
 
 @login_required
@@ -2064,7 +2056,15 @@ def create_evaluation(request):
     else:
         print(form.errors)
 
-    context = {'form': form,   'teacher': teacher,  'groups': groups,  'levels': levels,    'themes' : themes_tab  }
+    try :
+        group_id = request.session.get("group_id")
+    except :
+        group_id = None
+
+    context = {'form': form, 'teacher': teacher, 'parcours': None, 'groups': groups, 'idg': 0,  'group_id': group_id ,  'relationships': [], 
+               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0}
+
+
 
     return render(request, 'qcm/form_evaluation.html', context)
 

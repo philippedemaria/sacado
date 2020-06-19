@@ -47,7 +47,7 @@
 
 
 
-{% if not 'parcours_update' in request.path  %}
+{% if not '_update' in request.path  %}
 <li>
     <form action="" method="POST" enctype='multipart/form-data'>     
         {% csrf_token %}

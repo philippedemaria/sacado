@@ -62,9 +62,11 @@
  
     {% regroup parcours_tab by is_evaluation as list_parcours %} 
 
+
     {% for parcours_sort in list_parcours %}  
     <div class="row"></div>
-    {% if parcours_sort.grouper %}<h1 class="thin" id="evaluation">Evaluations</h1>{% else %}<h1 class="thin"> Parcours</h1>{% endif %}
+   {% if  parcours_sort.grouper %}<h1 class="thin" id="evaluation">Evaluations</h1>{% else %}<h1 class="thin"> Parcours</h1>{% endif %}  
+
         {% for parcours in parcours_sort.list %}  
   
         <div  class="box box-widget widget-user-2"  
@@ -175,7 +177,11 @@
             <div class="box-footer">
                 <div class="row extend"> 
                     <div class="col-lg-4 col-xs-4">
+                    {% if parcours.is_evaluation %}
+                        <a href="{% url 'update_evaluation' parcours.id  group.id  %}"  class="edit"><i class="fa fa-cogs"></i> <span class="label_icon">Config.</span> </a> 
+                    {% else  %}
                         <a href="{% url 'update_parcours' parcours.id  group.id  %}"  class="edit"><i class="fa fa-cogs"></i> <span class="label_icon">Config.</span> </a> 
+                    {% endif  %}
                     </div>                      
                     <div class="col-lg-4 col-xs-4">
                         <a href="{% url 'show_course' 0 parcours.id   %}"  class="edit"><i class="fa fa-desktop"></i> <span class="label_icon">Cours </span> </a> 

@@ -40,7 +40,7 @@ def create_theme(request):
     else:
         print(form.errors)
 
-    context = {'form': form, }
+    context = {'form': form, 'theme': None  }
 
     return render(request, 'socle/form_theme.html', context)
 
@@ -89,7 +89,7 @@ def create_knowledge(request):
     else:
         print(form.errors)
 
-    context = {'form': form, }
+    context = {'form': form,  'knowledge': None  }
 
     return render(request, 'socle/form_knowledge.html', context)
 
@@ -111,7 +111,7 @@ def create_multi_knowledge(request):
         else:
             print(form.errors)
 
-    context = {'form': form, }
+    context = {'form': form,  'knowledge': None   }
 
     return render(request, 'socle/form_knowledge.html', context)
 
@@ -130,7 +130,7 @@ def update_knowledge(request, id):
         else:
             print(knowledge_form.errors)
 
-    context = {'form': knowledge_form,  'knowledge': knowledge,  'form': knowledge_form }
+    context = {'form': knowledge_form,  'knowledge': knowledge,   }
 
     return render(request, 'socle/form_knowledge.html', context )
 
@@ -152,7 +152,7 @@ def list_levels(request):
 def create_level(request):
 
     form = LevelForm(request.POST or None  )
-
+    teacher = Teacher.objects.get(user=request.user)
     if form.is_valid():
         form.save()
         messages.success(request, 'Le savoir faire a été créé avec succès !')
@@ -160,7 +160,7 @@ def create_level(request):
     else:
         print(form.errors)
 
-    context = {'form': form, }
+    context = {'form': form,  'level': None , 'teacher': teacher }
 
     return render(request, 'socle/form_level.html', context)
 
@@ -178,7 +178,7 @@ def update_level(request, id):
         else:
             print(level_form.errors)
 
-    context = {'form': level_form,  'level': level, 'teacher': teacher , 'form': level_form }
+    context = {'form': level_form,  'level': level, 'teacher': teacher  }
 
     return render(request, 'socle/form_level.html', context )
 

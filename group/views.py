@@ -239,7 +239,7 @@ def create_group(request):
     else:
         print(form.errors)
 
-    context = {'form': form, 'teacher': teacher}
+    context = {'form': form, 'teacher': teacher, 'group': None}
 
     return render(request, 'group/form_group.html', context)
 
