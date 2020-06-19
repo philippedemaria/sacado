@@ -23,7 +23,7 @@ define(['jquery', 'bootstrap'], function ($) {
                         'action': action,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: "ajax_update_association",
+                    url: "../ajax_update_association",
                     success: function (data) {
 
                         $("#row"+exercise_id).append(data.html) ;
@@ -61,7 +61,7 @@ define(['jquery', 'bootstrap'], function ($) {
                         'action': action,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: "ajax_update_association",
+                    url: "../ajax_update_association",
                     success: function (data) {
 
                         $("#association"+exercise_id).html("").append(data.html) ;
@@ -100,7 +100,7 @@ define(['jquery', 'bootstrap'], function ($) {
                         'action': action,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: "ajax_update_association",
+                    url: "../ajax_update_association",
                     success: function (data) {
 
                         $("#new_exercice"+exercise_id).remove() ;
