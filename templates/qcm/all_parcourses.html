@@ -59,7 +59,7 @@
                                                     <span style="color:#444">{{ e|truncatechars:76 }}</span><br/>
                                                 {% endifchanged  %}
 
-                                                <em>{{ e.annoncement|cleanhtml|truncatechars:76 }}</em> 
+                                                <em>{{ e.supportfile.annoncement|cleanhtml|truncatechars:76 }}</em> 
                                                 {% if not forloop.last %} <br/>{% endif %}
                                             {% endfor %}
                                             </div>
@@ -74,9 +74,7 @@
                                     {% endfor %}
                                 </td>
                                 <td>
-                                    
-                                      {{ parcours.author.user.get_full_name|truncatechars:20 }} 
-                                    
+                                    {{ parcours.author.user.get_full_name|truncatechars:20 }} 
                                 </td>
                             </tr>
                             {% empty %}
