@@ -87,14 +87,14 @@ body{
                                 <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
 
                             {% empty %}
-                                <i class="fa fa-warning"></i> <span style="font-size:12px;color:#c70000;">Non affecté </span><a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-xs btn-danger">{{ p.students.count }}<i class="fa fa-users"></i> Affecter des élèves à {% if p.is_evaluation %}cette évaluation{% else %}ce parcours{% endif %}</a> 
+                                <i class="fa fa-warning"></i> <span style="font-size:12px;color:#c70000;">Non affecté </span><a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-xs btn-danger">{{ parcours.students.count }}<i class="fa fa-users"></i> Affecter des élèves à {% if parcours.is_evaluation %}cette évaluation{% else %}ce parcours{% endif %}</a> 
                             {% endfor %}
                         </td>
                         <td>
                             <form action="#" method="POST">
                                 {% csrf_token %}
-                                <a  href="#groupe_name_anchor{{ group.name.id }}" class="vue menuactionparcours" data-toggle='modal' style="float:left; margin-right:10px"  
-                                    data-group_name='{{ group.name }}' data-parcours_id='{{ parcours.id }}' data-target='#listing'> 
+                                <a  href="#groupe_name_anchor" class="vue menuactionparcours" data-toggle='modal' style="float:left; margin-right:10px"  
+                                    data-parcours_id='{{ parcours.id }}' data-target='#listing'> 
                                     <span class="label label-default"> {{ parcours.students.count }}<i class="fa fa-users"></i></span>
                                 </a>
                             </form>

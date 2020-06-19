@@ -395,6 +395,7 @@ def ajax_individualise(request):
 import os
 @login_required
 def list_parcours(request):
+
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=0).order_by("-is_favorite")  
 
@@ -403,7 +404,7 @@ def list_parcours(request):
     except:
         pass  
 
-    return render(request, 'qcm/list_parcours.html', { 'parcourses' : parcourses})
+    return render(request, 'qcm/list_parcours.html', { 'parcourses' : parcourses , 'parcours' : None})
 
 
 
@@ -417,7 +418,7 @@ def list_evaluations(request):
     except:
         pass  
 
-    return render(request, 'qcm/list_evaluations.html', { 'parcourses' : parcourses})
+    return render(request, 'qcm/list_evaluations.html', { 'parcourses' : parcourses, 'parcours' : None})
 
 
 
@@ -451,9 +452,8 @@ def list_parcours_group(request,id):
 
 @login_required
 def all_parcourses(request):
-    teacher = Teacher.objects.get(user=request.user)
-    parcourses = Parcours.objects.exclude(Q(author=None) | Q(author=teacher), teacher=teacher).filter(
-        linked=0).order_by("author").prefetch_related('exercises__knowledge__theme').select_related('author')
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    parcourses = Parcours.objects.exclude(teacher=teacher).order_by("author").prefetch_related('exercises__knowledge__theme').select_related('author')
     # parcourses = parcourses[:15] #limite pour le debuggage
     return render(request, 'qcm/all_parcourses.html', {'parcourses': parcourses})
 
@@ -461,7 +461,6 @@ def all_parcourses(request):
 @login_required
 @user_passes_test(user_can_create)
 def create_parcours(request):
-
 
     teacher = Teacher.objects.get(user_id = request.user.id)
     levels =  teacher.levels.all()    

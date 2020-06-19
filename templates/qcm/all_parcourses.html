@@ -23,8 +23,8 @@
 {% block page_menu_right %}
 
   <li> <a href="{% url 'index' %}"  class="btn btn-new" style="margin-right:5px" > Parcours par défaut</a></li>
-  <li> <a href="{% url 'all_parcourses' %}"   class="btn btn-new white" style="margin-right:5px;background-color: #007bff; color:#FFF!important; "> Parcours mutualisés</a></li>
-  <li> <a href="{% url 'create_parcours' %}"   class="btn btn-new" > Nouveau parcours</a> </li>  
+  <li> <a href="{% url 'all_parcourses' %}" class="btn btn-new white" style="margin-right:5px;background-color: #007bff; color:#FFF!important; "> Parcours mutualisés</a></li>
+  <li> <a href="{% url 'create_parcours' %}"  class="btn btn-new" > Nouveau parcours</a> </li>  
 {% endblock %}
 
 
@@ -34,10 +34,10 @@
      
      
             
-                <table class="table table-bordered table-hover display"  style="width:100%">
+                <table class="table table-bordered table-hover standard_tab_sort"  style="width:100%">
                       <thead>
                           <tr>
-                            <th  style="width:290px">Titre</th>   
+                            <th style="width:290px">Titre</th>   
                             <th>Thèmes et Exercices</th>                                        
                             <th>Niveau</th> 
                             <th  style="width:150px">Auteur</th> 
@@ -58,7 +58,6 @@
                                                 {% ifchanged  %}
                                                     <span style="color:#444">{{ e|truncatechars:76 }}</span><br/>
                                                 {% endifchanged  %}
-
                                                 <em>{{ e.supportfile.annoncement|cleanhtml|truncatechars:76 }}</em> 
                                                 {% if not forloop.last %} <br/>{% endif %}
                                             {% endfor %}
