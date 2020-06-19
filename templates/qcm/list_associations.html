@@ -27,27 +27,8 @@
 
 {% block body %}
 <section class="content_container">  
-    {% if datas %} 
-
-        <ul  class="nav nav-tabs">
-     
-                {% for data in datas %}
-            <li {% if forloop.first %}class="active"{% endif %}><a  href="#{{ forloop.counter}}a" data-toggle="tab">{{ data.name.shortname }}</a></li>
-                {% endfor  %}
-
-
-            {% if not '/admin' in request.path %}
-            <li> <a href="{% url 'profile' %}" class="thin">+</a></li>
-            {% endif %}
-
-
-
-
-        </ul>
-        <div class="tab-content clearfix">
-
-            {% for data in datas %} 
-            <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ forloop.counter}}a">
+ 
+ 
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
                         <form action="" method="POST" enctype='multipart/form-data'> 
@@ -114,20 +95,9 @@
                         </form>
                     </div>
                 </div>
-            </div>
-            {% endfor  %}
-        </div>
-    {% else %}
-
-    <div class="row">
-        <div class="col-xs-12 col-md-12">
-            <div class="alert alert-danger">
-                Avant de visiter les exercices par niveau, vous devez choisir vos <a href="{% url 'profile' %}">niveaux préférés</a>.
-            </div>
-        </div>
-    </div>
-
-    {% endif %}
+ 
+ 
+ 
 
 </section>
 

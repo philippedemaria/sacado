@@ -50,8 +50,12 @@ urlpatterns = [
     
     path('ajax/chargethemes', ajax_chargethemes, name='ajax_chargethemes'),
 
-    path('admin_supportfiles', admin_list_supportfiles, name='admin_supportfiles'),
-    path('admin_associations', admin_list_associations, name='admin_associations'),
+    path('admin_supportfiles/<int:id>', admin_list_supportfiles, name='admin_supportfiles'),
+    path('admin_associations/<int:id>', admin_list_associations, name='admin_associations'),
+
+
+
+    
     path('ajax_update_association', ajax_update_association, name='ajax_update_association'),
     path('create_supportfile', create_supportfile, name='create_supportfile'),
     path('admin/<int:id>', create_supportfile_knowledge, name='create_supportfile_knowledge'),

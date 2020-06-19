@@ -1319,41 +1319,36 @@ def delete_relationship_by_individualise(request,idr, id):
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 
-def all_datas(user, status):
+def all_datas(user, status,level):
     teacher = Teacher.objects.get(user=user)
     datas = []
     levels_tab,knowledges_tab, exercises_tab    =   [],  [],  []
 
-    if status == 0 : 
-        levels = teacher.levels.all()
-    elif status == 1 : 
-        levels = Level.objects.all().order_by("id")
 
-    for level in levels :
-        levels_dict = {}
-        levels_dict["name"]=level 
+    levels_dict = {}
+    levels_dict["name"]=level 
 
-        themes = level.themes.all().order_by("id")
-        themes_tab =   []
-        for theme in themes :
-            themes_dict =  {}                
-            themes_dict["name"]=theme.name 
-            knowlegdes = Knowledge.objects.filter(theme=theme,level=level).order_by("theme")
-            knowledges_tab  =  []
-            for knowledge in knowlegdes :
-                knowledges_dict  =   {}  
-                knowledges_dict["name"]=knowledge 
-                exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).select_related('supportfile').order_by("theme")
-                exercises_tab    =   []
-                for exercise in exercises :
-                    exercises_tab.append(exercise)
-                knowledges_dict["exercises"]=exercises_tab
-                knowledges_tab.append(knowledges_dict)
-            themes_dict["knowledges"]=knowledges_tab
-            themes_tab.append(themes_dict)
-        levels_dict["themes"]=themes_tab
-        datas.append(levels_dict)
-    return datas
+    themes = level.themes.all().order_by("id")
+    themes_tab =   []
+    for theme in themes :
+        themes_dict =  {}                
+        themes_dict["name"]=theme.name 
+        knowlegdes = Knowledge.objects.filter(theme=theme,level=level).order_by("theme")
+        knowledges_tab  =  []
+        for knowledge in knowlegdes :
+            knowledges_dict  =   {}  
+            knowledges_dict["name"]=knowledge 
+            exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).select_related('supportfile').order_by("theme")
+            exercises_tab    =   []
+            for exercise in exercises :
+                exercises_tab.append(exercise)
+            knowledges_dict["exercises"]=exercises_tab
+            knowledges_tab.append(knowledges_dict)
+        themes_dict["knowledges"]=knowledges_tab
+        themes_tab.append(themes_dict)
+    levels_dict["themes"]=themes_tab
+
+    return levels_dict
 
 
  
@@ -1361,7 +1356,7 @@ def list_exercises(request):
     user = request.user
     if user.user_type == User.TEACHER : # teacher
         teacher = Teacher.objects.get(user=user)
-        datas = all_datas(user, 0)
+        datas = all_datas(user, 0,level)
 
         return render(request, 'qcm/list_exercises.html', {'datas': datas, 'teacher': teacher})
     
@@ -1383,13 +1378,14 @@ def list_exercises(request):
 
 @login_required
 @user_passes_test(user_is_superuser)
-def admin_list_associations(request):
+def admin_list_associations(request,id):
+    level = Level.objects.get(pk = id)
     user = request.user
     if user.user_type == User.TEACHER : # teacher
         teacher = Teacher.objects.get(user=user)
-        datas = all_datas(user, 1)
+        data = all_datas(user, 1,level)
 
-        return render(request, 'qcm/list_associations.html', {'datas': datas, 'teacher': teacher})
+        return render(request, 'qcm/list_associations.html', {'data': data, 'teacher': teacher})
 
 
 @login_required
@@ -1433,7 +1429,7 @@ def ajax_update_association(request):
 
 @login_required
 @user_passes_test(user_is_superuser)
-def admin_list_supportfiles(request):
+def admin_list_supportfiles(request,id):
     user = request.user
     teacher = Teacher.objects.get(user=user)
     if user.is_superuser:  # admin and more
@@ -1441,38 +1437,37 @@ def admin_list_supportfiles(request):
         teacher = Teacher.objects.get(user=user)
         datas = []
 
-        levels = Level.objects.all().order_by("id")
-        for level in levels:
-            levels_dict = {}
-            levels_dict["name"] = level
+        level = Level.objects.get(pk=id)
+        levels_dict = {}
+        levels_dict["name"] = level
 
-            themes = level.themes.all().order_by("id")
-            themes_tab = []
-            for theme in themes:
-                themes_dict = {}
-                themes_dict["name"] = theme.name
-                knowlegdes = Knowledge.objects.filter(theme=theme, level=level).order_by("theme")
-                knowledges_tab = []
-                for knowledge in knowlegdes:
-                    supportfiles = knowledge.supportfiles.filter(is_title=0).order_by("theme")
-                    exercises = Exercise.objects.filter(knowledge=knowledge, level=level, theme=theme,supportfile__in=supportfiles).order_by("theme")
+        themes = level.themes.all().order_by("id")
+        themes_tab = []
+        for theme in themes:
+            themes_dict = {}
+            themes_dict["name"] = theme.name
+            knowlegdes = Knowledge.objects.filter(theme=theme, level=level).order_by("theme")
+            knowledges_tab = []
+            for knowledge in knowlegdes:
+                supportfiles = knowledge.supportfiles.filter(is_title=0).order_by("theme")
+                exercises = Exercise.objects.filter(knowledge=knowledge, level=level, theme=theme,supportfile__in=supportfiles).order_by("theme")
 
-                    knowledges_tab.append(
-                        {
-                            "name": knowledge,
-                            "exercises": exercises,
-                            "supportfiles": supportfiles,
-                        }
-                    )
+                knowledges_tab.append(
+                    {
+                        "name": knowledge,
+                        "exercises": exercises,
+                        "supportfiles": supportfiles,
+                    }
+                )
 
-                themes_dict["knowledges"] = knowledges_tab
-                themes_tab.append(themes_dict)
-            levels_dict["themes"] = themes_tab
-            datas.append(levels_dict)
-
+            themes_dict["knowledges"] = knowledges_tab
+            themes_tab.append(themes_dict)
+        levels_dict["themes"] = themes_tab
+ 
 
 
-    return render(request, 'qcm/list_supportfiles.html', {'datas': datas, 'teacher':teacher  })
+
+    return render(request, 'qcm/list_supportfiles.html', {'levels_dict': levels_dict, 'teacher':teacher , 'level':level })
 
 
  

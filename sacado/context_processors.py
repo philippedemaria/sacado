@@ -1,5 +1,6 @@
 from django.conf import settings
 from account.models import Teacher, Student, User
+from socle.models import Level
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from group.models import Group
 from qcm.models import Parcours, Studentanswer, Exercise, Relationship
@@ -31,8 +32,9 @@ def menu(request):
             nbs = Studentanswer.objects.filter(parcours__teacher =  teacher, date =today).count()
             nbe = Email.objects.distinct().filter(receivers =  request.user, today =today).count()
             nb_not = nbs + nbe
+            levels = Level.objects.all()
 
-            return {'today': today, 'nb_not': nb_not, }
+            return {'today': today, 'nb_not': nb_not,  'levels': levels, }
 
 
         elif request.user.user_type == User.STUDENT:  # student
