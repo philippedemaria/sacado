@@ -15,5 +15,5 @@ settings.py
 static/
 staticfiles/ckeditor/
 staticfiles/uploads/
- 
+staticfiles/img/img_psd 
 logs/
