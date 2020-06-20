@@ -71,7 +71,9 @@
                     <tr>
                         <td style="color : {{  parcours.color }}">
                             {% for g in  parcours.group_list %}
-                                <div> <i class="fa fa-users"  ></i>  {{ g }}</div>  
+                                <div> <i class="fa fa-users"  ></i>  {{ g.name }}</div> 
+                            {% empty %}
+                                <div> <i class="fa fa-ban"  ></i>  Non attribué</div> 
                             {% endfor %}
                         </td>
                     </tr>                                  

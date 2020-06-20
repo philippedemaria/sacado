@@ -30,9 +30,9 @@
 
 {% block result %}
  
-     {%  get_resultexercises_by_theme student theme as resultexercises %}   
+    {%  get_resultexercises_by_theme student theme as resultexercises %}   
         
-     {% for r in  resultexercises %}
+    {% for r in  resultexercises %}
      	{%  with  r.exercise as  exercise %}  
             {% include 'group/score.html' %}  
         {%  endwith %}                                          

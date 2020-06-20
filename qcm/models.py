@@ -412,15 +412,13 @@ class Parcours(ModelWithCode):
 
 
     def group_list(self):
-        Group = apps.get_model('group', 'Group')
         students = self.students.all() 
         group_tab = []
         for s  in students :
-            groups = Group.objects.filter(students = s)
+            groups = s.students_to_group.all()
             for group  in groups :
                 if group not in group_tab:
                     group_tab.append(group)       
-
         return group_tab 
 
     def parcours_shared(self):

@@ -391,7 +391,7 @@ def result_group(request, id):
 
  
     form = EmailForm(request.POST or None )
-    context = { 'group': group,'form': form, "knowledges" : knowledges, 'stage' : stage, 'theme': None }
+    context = { 'group': group,'form': form, "knowledges" : knowledges, 'stage' : stage, 'theme': None , 'communications' : None, 'relationships': None  }
 
     return render(request, 'group/result_group.html', context )
 
@@ -414,7 +414,7 @@ def result_group_theme(request, id, idt):
         if len(parcours_tab) == number_of_parcours_of_this_level_by_this_teacher :
             break
     stage = get_stage(group)
-    context = {  'group': group, 'form': form, 'theme': theme,  "knowledges" : knowledges, "teacher" : teacher, "slug" : theme.slug, 'parcours_tab' : parcours_tab , 'stage' : stage  }
+    context = {  'group': group, 'form': form, 'theme': theme,  "knowledges" : knowledges, "teacher" : teacher, "slug" : theme.slug, 'parcours_tab' : parcours_tab , 'stage' : stage  , 'communications' : None, 'relationships': None  }
 
     return render(request, 'group/result_group.html', context )
 
@@ -426,7 +426,7 @@ def result_group_exercise(request, id):
     form = EmailForm(request.POST or None)
     stage = get_stage(group)
 
-    context = {'group': group, 'form': form , 'stage' : stage  , 'theme' : None }
+    context = {'group': group, 'form': form , 'stage' : stage  , 'theme' : None  , 'communications' : None, 'relationships': None  }
 
     return render(request, 'group/result_group_exercise.html', context)
 
@@ -440,7 +440,7 @@ def result_group_skill(request, id):
     form = EmailForm(request.POST or None )
     stage = get_stage(group)
 
-    context = {  'group': group,'form': form,'skills': skills , 'stage' : stage  }
+    context = {  'group': group,'form': form,'skills': skills , 'stage' : stage   , 'communications' : None, 'relationships': None  }
 
     return render(request, 'group/result_group_skill.html', context )
 
@@ -594,23 +594,7 @@ def associate_exercise_by_parcours(request,id,idt):
     knowledge = Knowledge.objects.get(id=int(knowledge_id))
     teacher = Teacher.objects.get(user=request.user)
     parcourses = Parcours.objects.filter(teacher = teacher, level = group.level)
-    """
-    for parcours in parcourses : 
-        old_exercice_ids =  Relationship.objects.values_list("exercise_id", flat=True).filter(parcours = parcours, exercise__knowledge = knowledge, exercise__supportfile__is_title = 0)
-        #Suppression des anciens.
-        ex_ids = request.POST.getlist('exercises')        
-        for old_exercice_id in old_exercice_ids :
-            if old_exercice_id not in ex_ids :
-                Relationship.objects.get(parcours = parcours , exercise_id = old_exercice_id).delete()
-        i=0
-        es = Exercise.objects.values_list("id",flat=True).filter(level = group.level) # liste des exercices existants dans ce parcours
-        # enregistrement des exercices nouvellement choisis y compris les anciens !
-        for ex_id in ex_ids :
-            exo = Exercise.objects.get(id=ex_id)
-            Relationship.objects.get_or_create(parcours = parcours , exercise = exo , defaults={"order" :  i, "is_publish": 1 , "start": None , "date_limit": None })
-            i+=1
-
-    """
+ 
     return redirect('result_group_theme', group.id, theme.id)
 
 
