@@ -26,7 +26,7 @@ define(['jquery','bootstrap'], function ($) {
                     success: function (data) {
 
                         themes = data["themes"]
- $('select[name=theme]').empty("");
+                        $('select[name=theme]').empty("");
                         if (themes.length >0)
 
                         { for (let i = 0; i < themes.length; i++) {
@@ -211,8 +211,10 @@ define(['jquery','bootstrap'], function ($) {
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
             if (student_id != 0)
-            {    
-                if (!confirm('Vous souhaitez dissocier un élève à un exercice ?')) return false;
+            {  
+                if (statut == "True") {
+                    if (!confirm('Vous souhaitez dissocier un élève à un exercice ?')) return false;                    
+                }
             }
             else
             {    
@@ -233,7 +235,7 @@ define(['jquery','bootstrap'], function ($) {
                         'statut': statut,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: "../../../ajax_individualise",
+                    url: "../../ajax_individualise",
                     success: function (data) {
 
                     if (student_id != 0)
