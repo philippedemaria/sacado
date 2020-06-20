@@ -761,7 +761,7 @@ def result_parcours_knowledge(request, id):
     students = students_from_p_or_g(request,parcours)
 
     form = EmailForm(request.POST or None)
-
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
 
     knowledges = []
     
@@ -775,7 +775,7 @@ def result_parcours_knowledge(request, id):
         knowledges.append(Knowledge.objects.get(pk = k_id))
 
     stage = get_stage(parcours) 
-    context = {  'students': students, 'parcours': parcours,  'form': form, 'exercise_knowledges' : knowledges, 'group_id' : group_id, 'stage' : stage  }
+    context = {  'relationships': relationships,  'students': students, 'parcours': parcours,  'form': form, 'exercise_knowledges' : knowledges, 'group_id' : group_id, 'stage' : stage  }
 
     return render(request, 'qcm/result_parcours_knowledge.html', context )
 
