@@ -525,7 +525,7 @@ def stat_group(request, id):
             student["median"] = ""
         stats.append(student)
 
-    context = {  'group': group, 'form': form, 'stats':stats ,  }
+    context = {  'group': group, 'form': form, 'stats':stats , 'parcours' : None }
  
     return render(request, 'group/stat_group.html', context )
 

@@ -178,9 +178,9 @@
     {%  endif  %}
 
 
- 
-    {% include 'qcm/order_list.html' %}
- 
+    {% if 'qcm/' in request.path %}
+        {% include 'qcm/order_list.html' %}
+    {%  endif  %} 
 
 
 {%  endif  %}
