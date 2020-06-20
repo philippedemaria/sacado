@@ -1958,7 +1958,7 @@ def ajax_level_exercise(request):
         levels_dict["themes"]=themes_tab
         datas.append(levels_dict)
 
-    data['html'] = render_to_string('qcm/ajax_list_exercises.html', { 'datas': datas , "parcours" : parcours, "ajax" : ajax, "teacher" : teacher    })
+    data['html'] = render_to_string('qcm/ajax_list_exercises.html', { 'datas': datas , "parcours" : parcours, "ajax" : ajax, "teacher" : teacher , "request" : request    })
  
     return JsonResponse(data)
 
