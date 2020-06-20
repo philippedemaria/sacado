@@ -6,7 +6,7 @@ from account.models import Student, Teacher, ModelWithCode, generate_code
 from socle.models import  Knowledge, Level , Theme, Skill
 from django.apps import apps
 from ckeditor_uploader.fields import RichTextUploadingField
-from django.utils import   timezone
+ 
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User 
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
@@ -471,10 +471,6 @@ class Parcours(ModelWithCode):
 
 
 
-
-
-
-
 class Relationship(models.Model):
     exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.PROTECT,  editable= False)
     parcours = models.ForeignKey(Parcours, on_delete=models.PROTECT,  related_name='parcours_relationship',  editable= False)
@@ -507,6 +503,14 @@ class Relationship(models.Model):
         if Studentanswer.objects.filter(student=student, exercise = self.exercise, parcours= self.parcours ).exists():
             done = True
         return done
+
+
+    def is_task(self):
+        task = False
+        today = timezone.now().date()
+        if self.date_limit >= today:
+            task = True
+        return task
 
 
 

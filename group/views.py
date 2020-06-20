@@ -391,7 +391,7 @@ def result_group(request, id):
 
  
     form = EmailForm(request.POST or None )
-    context = { 'group': group,'form': form, "knowledges" : knowledges, 'stage' : stage, 'theme': None , 'communications' : None, 'relationships': None  }
+    context = { 'group': group,'form': form, "knowledges" : knowledges, 'stage' : stage, 'theme': None , 'communications' : [] , 'relationships': []  , 'parcours_tab' : [] , 'parcours' : None }
 
     return render(request, 'group/result_group.html', context )
 
@@ -414,7 +414,7 @@ def result_group_theme(request, id, idt):
         if len(parcours_tab) == number_of_parcours_of_this_level_by_this_teacher :
             break
     stage = get_stage(group)
-    context = {  'group': group, 'form': form, 'theme': theme,  "knowledges" : knowledges, "teacher" : teacher, "slug" : theme.slug, 'parcours_tab' : parcours_tab , 'stage' : stage  , 'communications' : None, 'relationships': None  }
+    context = {  'group': group, 'form': form, 'theme': theme,  'stage' : stage  , "knowledges" : knowledges, "teacher" : teacher,  'parcours_tab' : parcours_tab, 'parcours' : None  , 'communications' :  [] , 'relationships':  []   }
 
     return render(request, 'group/result_group.html', context )
 
@@ -426,7 +426,7 @@ def result_group_exercise(request, id):
     form = EmailForm(request.POST or None)
     stage = get_stage(group)
 
-    context = {'group': group, 'form': form , 'stage' : stage  , 'theme' : None  , 'communications' : None, 'relationships': None  }
+    context = {'group': group, 'form': form , 'stage' : stage  , 'theme' : None  , 'communications' : [], 'relationships': [] , 'parcours_tab' : [] , 'parcours' : None  }
 
     return render(request, 'group/result_group_exercise.html', context)
 
@@ -440,7 +440,7 @@ def result_group_skill(request, id):
     form = EmailForm(request.POST or None )
     stage = get_stage(group)
 
-    context = {  'group': group,'form': form,'skills': skills , 'stage' : stage   , 'communications' : None, 'relationships': None  }
+    context = {  'group': group,'form': form,'skills': skills , 'stage' : stage   , 'communications' : [], 'relationships': [] , 'parcours' : None  }
 
     return render(request, 'group/result_group_skill.html', context )
 
@@ -455,7 +455,7 @@ def result_group_theme_exercise(request, id, idt):
     stage = get_stage(group)
 
 
-    context = {  'group': group, 'form': form, 'theme': theme, "slug" : theme.slug , 'stage' : stage  }
+    context = {  'group': group, 'form': form, 'theme': theme, "slug" : theme.slug , 'stage' : stage   , 'communications' : [], 'relationships': [] , 'parcours': None  }
 
     return render(request, 'group/result_group_theme_exercise.html', context )
 

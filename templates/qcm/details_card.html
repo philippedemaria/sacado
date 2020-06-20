@@ -16,7 +16,7 @@
  
  
               <div class="progress">
-                <div class="progress-bar bg-success" role="progressbar" style="width: {{ data.percent }}%;{% if not relation.is_publish %}color: #F5F5F5{% endif %};background-color: {{relation.parcours.color }};" aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100">{{ data.percent }}%</div>
+                <div class="progress-bar bg-success" role="progressbar" style="width: {{ data.percent }}%;{% if not relation.is_publish %}color: #F5F5F5{% endif %};background-color: {{relation.parcours.color }};" aria-valuenow="{{ data.percent }}" aria-valuemin="0" aria-valuemax="100">{{ data.percent }}%</div>
               </div>
           </div>
           <span class="label_progress_bar" style="color:{{relation.parcours.color }}">{{ data.nb_done }}/{{ data.nb }}</span> 
