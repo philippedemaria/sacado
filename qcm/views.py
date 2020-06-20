@@ -1365,13 +1365,48 @@ def all_datas(user, status,level):
 
     return levels_dict
 
+def all_levels(user, status):
+    teacher = Teacher.objects.get(user=user)
+    datas = []
+    levels_tab,knowledges_tab, exercises_tab    =   [],  [],  []
 
+    if status == 0 : 
+        levels = teacher.levels.all()
+    elif status == 1 : 
+        levels = Level.objects.all().order_by("id")
+
+    for level in levels :
+        levels_dict = {}
+        levels_dict["name"]=level 
+
+        themes = level.themes.all().order_by("id")
+        themes_tab =   []
+        for theme in themes :
+            themes_dict =  {}                
+            themes_dict["name"]=theme.name 
+            knowlegdes = Knowledge.objects.filter(theme=theme,level=level).order_by("theme")
+            knowledges_tab  =  []
+            for knowledge in knowlegdes :
+                knowledges_dict  =   {}  
+                knowledges_dict["name"]=knowledge 
+                exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).order_by("theme")
+                exercises_tab    =   []
+                for exercise in exercises :
+                    exercises_tab.append(exercise)
+                knowledges_dict["exercises"]=exercises_tab
+                knowledges_tab.append(knowledges_dict)
+            themes_dict["knowledges"]=knowledges_tab
+            themes_tab.append(themes_dict)
+        levels_dict["themes"]=themes_tab
+        datas.append(levels_dict)
+    return datas
  
 def list_exercises(request):
+    
     user = request.user
     if user.user_type == User.TEACHER : # teacher
         teacher = Teacher.objects.get(user=user)
-        datas = all_datas(user, 0,level)
+        datas = all_levels(user, 0)
 
         return render(request, 'qcm/list_exercises.html', {'datas': datas, 'teacher': teacher})
     
