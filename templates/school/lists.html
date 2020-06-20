@@ -34,7 +34,7 @@
                     <th width="100px">Pays</th>                  
                     <th>Nom</th> 
                     <th>Ville</th>   
-                    <th>Nombre d'enseignants</th>                                                         
+                    <th>Nombre d'utilisateurs</th>                                                         
                   </tr>
               </thead>
               <tbody>
@@ -47,7 +47,9 @@
                       </td>
 
                       <td>
-                          {{ school.user.count }}
+                          {%  with school.student_and_teacher as data %}
+                            {{ school.user.count }} <small>({{ data.nbt }} enseignant{{ data.nbt|pluralize }} - {{ data.nbs }} élève{{ data.nbs|pluralize }})</small>
+                          {%  endwith  %}
                       </td>
 
 

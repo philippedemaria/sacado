@@ -47,7 +47,7 @@
                         <th>Admin</th>
                         <th>Extra</th>
                         <th>Inscription</th>
-                        <th>Dernière connexion</th>
+                        <th>Etablissement</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -61,25 +61,25 @@
                                 </td>
                                 <td>
                                     {% if teacher.is_manager %} 
-                                        <span style="font-size: 8px"> oui</span> 
+                                        <span style="font-size: 8px;color:#FFF"> oui</span> 
                                         <i class="fa fa-check-circle text-success"></i>{% else %} 
-                                        <span style="font-size: 8px"> non</span>  
+                                        <span style="font-size: 8px;color:#FFF"> non</span>  
                                         <i class="fa fa-ban text-danger"></i> 
                                     {% endif %}
                                 </td>
                                 <td>
                                     {% if teacher.is_superuser %} 
-                                        <span style="font-size: 8px"> oui</span> 
+                                        <span style="font-size: 8px;color:#FFF"> oui</span> 
                                         <i class="fa fa-check-circle text-success"></i>{% else %} 
-                                        <span style="font-size: 8px"> non</span>  
+                                        <span style="font-size: 8px;color:#FFF"> non</span>  
                                         <i class="fa fa-ban text-danger"></i> 
                                     {% endif %}
                                 </td>
                                 <td>
                                     {% if teacher.is_extra %} 
-                                        <span style="font-size: 8px"> oui</span> 
+                                        <span style="font-size: 8px;color:#FFF"> oui</span> 
                                         <i class="fa fa-check-circle text-success"></i>{% else %} 
-                                        <span style="font-size: 8px"> non</span>  
+                                        <span style="font-size: 8px;color:#FFF"> non</span>  
                                         <i class="fa fa-ban text-danger"></i> 
                                     {% endif %}
                                 </td>
@@ -88,7 +88,7 @@
                                     {{ teacher.date_joined|date:"d N Y" }}   
                                 </td>
                                 <td>
-                                    {{ teacher.last_login|date:"Y N d à H:i" }}   
+                                    {% if teacher.school %}<i class="fa fa-university"></i>{{ teacher.school.country }}{% else %} isolé{% endif %}   
                                 </td>
                             </tr>
                         {% endfor %}

@@ -23,6 +23,20 @@ class School(models.Model):
         return "{} - {} - {}".format(self.name, self.town, self.country.name)
 
 
+    def student_and_teacher(self):
+        nbt, nbs = 0 , 0
+        for u in self.user.all():
+            if  u.user_type == 2 :
+                nbt +=1
+            elif  u.user_type == 0 :
+                nbs +=1 
+        nb = {"nbt" : nbt, "nbs" : nbs}
+        return nb
+
+
+
+
+
 # Niveau d'aquisition 
 class Stage(models.Model):
     school = models.ForeignKey(School, on_delete=models.PROTECT, related_name='aptitude',  editable=False)

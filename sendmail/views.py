@@ -63,7 +63,7 @@ def list_emails(request):
 		form = EmailForm(request.POST or None,request.FILES or None)
 
 
-		return render(request,'sendmail/list.html', {'emails':emails , 'sent_emails':sent_emails ,  'form':form ,  'users':users  ,'groups':groups } )
+		return render(request,'sendmail/list.html', {'emails':emails , 'sent_emails':sent_emails ,  'form':form ,  'users':users  ,'groups':groups, 'studentanswers':[],'tasks':[]  } )
 
 
  
@@ -108,7 +108,7 @@ def create_email(request):
 		print(form.errors)
 		messages.errors(request, "Le corps de message est obligatoire !")
 
-	return render(request,'sendmail/list.html', {'form':form})
+	return render(request,'sendmail/list.html',   {'emails': [] , 'sent_emails': [] ,  'form':form ,  'users': []  ,'groups': [], 'studentanswers':[],'tasks':[]  } )
 
 
  
