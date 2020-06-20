@@ -1408,7 +1408,7 @@ def list_exercises(request):
         teacher = Teacher.objects.get(user=user)
         datas = all_levels(user, 0)
 
-        return render(request, 'qcm/list_exercises.html', {'datas': datas, 'teacher': teacher})
+        return render(request, 'qcm/list_exercises.html', {'datas': datas, 'teacher': teacher , 'parcours': None, 'relationships' : [] , 'teacher': teacher})
     
     elif user.user_type == User.STUDENT: # student
         student = Student.objects.get(user=user)
@@ -1420,9 +1420,9 @@ def list_exercises(request):
         return render(request, 'qcm/student_list_exercises.html',
                       {'relationships': relationships, 'nb_exercises': nb_exercises, })
 
-    else:
+    else: # non utilisé
         exercises = Exercise.objects.all().order_by("level")
-        return render(request, 'qcm/list_exercises.html', {'exercises': exercises})
+        return render(request, 'qcm/list_exercises.html', {'exercises': exercises , })
 
 
 
@@ -1435,7 +1435,7 @@ def admin_list_associations(request,id):
         teacher = Teacher.objects.get(user=user)
         data = all_datas(user, 1,level)
 
-        return render(request, 'qcm/list_associations.html', {'data': data, 'teacher': teacher})
+        return render(request, 'qcm/list_associations.html', {'data': data, 'teacher': teacher , 'parcours': None, 'relationships' : [] , 'teacher': teacher})
 
 
 @login_required

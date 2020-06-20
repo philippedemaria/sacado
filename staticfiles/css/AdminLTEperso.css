@@ -4,7 +4,7 @@
 @import url(https://fonts.googleapis.com/css?family=Pacifico);
 @import url('https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap');
 /********************************************* bleu :  #005e74 ************************************/
-/********************************************* bleu foncé:  #005e74 ************************************/
+/********************************************* violet hover :  #5d4391 ************************************/
 /********************************************* vert : #1bc074 *******************************************/
 /********************************************* orange: #ffb400 ***************************************/
 /********************************************* rouge: #cb2131 ***************************************/
@@ -1564,7 +1564,7 @@ body.hold-transition .main-header .logo {
   margin-left: 0;  
   margin-bottom: 15px;
   margin-right: 0px;
-  border-bottom : solid #005e74 1px;
+  border-bottom : solid #5d4391 1px;
 }
 .content_body {
   min-height: 450px;
@@ -4024,7 +4024,8 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
-  background: #005e74;
+  background: #5d4391;
+  color: #FFF!important;
 }
 .nav-pills > li.active > a {
   font-weight: 600;
@@ -4037,10 +4038,10 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 }
 .nav-stacked > li.active > a,
 .nav-stacked > li.active > a:hover {
-  background: #005e74;
-  color: #FFF;
+  background:  #5d4391 ;
+  color: #FFF!important;
   border-top: 0;
-  border-radius:5px;
+  border-radius:2px;
 }
 .nav-stacked > li.header {
   border-bottom: 1px solid #ddd;
@@ -4581,15 +4582,11 @@ a.crud{
 }
 
 .bg-bleu {
-  background-color: #005e74 !important;
+  background-color: #5d4391 !important;
 }
-.bg-blue {
-  background-color: #005e74 !important; /* celui là est plus clair */
-}
-.bg-blue:hover {
-    color:#222;
-  background-color: #03a1c6 !important; /* celui là est plus clair */
-}
+ 
+ 
+
 .bg-fuchsia {
   background-color: #f012be !important;
 }
@@ -4691,7 +4688,7 @@ a.crud{
   color: #0073b7 !important;
 }
 .text-blue1 {
-  color: #005e74 !important;
+  color: #5d4391!important;
 }
 .text-black {
   color: #111111 !important;
