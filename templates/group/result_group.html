@@ -16,19 +16,13 @@
     <img src="{% static 'img/angle-right.png' %}" width="15px"/> {% if 'exercise' in request.path %} Exercices {% elif 'skill' in request.path %}  Compétences {% else %}  Savoir faire{% endif %} 
     {% if theme %} <img src="{% static 'img/angle-right.png' %}" width="15px"/> <small>{{ theme }}</small>  {% endif %} 
     </span>  
-
 {% endblock %}
 
 
 
 
-
 {% block page_menu_right %}
-
-
     <li><a href="{%  url 'result_group_skill'  group.id %}"  class="no_button {% if  'result_group_skill' in request.path %} active {% endif %}" > Compétences </a></li>
-
-
     <li class="dropdown">
       <a href="#" class="dropdown-toggle no_button {% if 'result_group_exercise' in request.path or 'group_theme_exercise' in request.path %} active {% endif %}" data-toggle="dropdown"> Suivi par exercice  <b class="caret"></b></a> 
         <ul class="dropdown-menu">
@@ -53,187 +47,166 @@
             {% endfor %}
         </ul>
     </li>
-
     {% if request.user.is_extra %}
     <a href="{% url 'print_statistiques' group.id 0 %}"  class="btn btn-xs btn-default" id="print_stats" ><span id="loading_stats"></span> Export <img src="{% static 'img/pdf.png' %}" width="15px"/></a>
     {% else %}
     <a href="#"  class="btn btn-xs btn-default" style="cursor:not-allowed" title="Vous n'avez pas l'accès à cette option" > Export <img src="{% static 'img/pdf.png' %}" width="15px"/></a>
     {% endif %}
-
-
 {% endblock %}
 
  
 {% block body %} 
 <style>
-
 .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
     padding: 5px;
     line-height: 1.42857143;
     border-top: 1px solid #ddd;
 }
-
 .body{
     overflow: hidden
 }
-
 </style>
  
-    <div class="content_list"> 
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-
-
-
-            </div>
-        </div> 
- 
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <table id="standard_tab" class="table table-bordered table-hover">
-                    <thead>
-                    <tr>
-                        <td>Nom et prénom</td>
-                        {% block skill_block %} 
-                        <td>{% block legend %} 
-                            {% if theme %} 
-                                 {% for knowledge in knowledges %}
-                                    <form  action="" method="POST">
-                                    {% csrf_token %} 
-                                    <a class="marklegend" data-toggle='modal' href="#"
-                                                          data-target='#knowledge_details' data-group_id ="{{ group.id }}"
-                                                          data-knowledge_id="{{ knowledge.id }}" >
-                                          {{ knowledge.nb_exercise }}
-                                    </a>  
-                                    </form>
-                                {% endfor %}
-                            {% else %}
-                                    Suivis des savoir faire publiés
-                            {% endif %} 
-                            {% endblock %} 
-                        </td>
-                        {% endblock %} 
-                    </tr>
-                    </thead>
-                    <tbody>
-                        
-                            {% for student in group.students.all|dictsort:"user.last_name" %}
-
-                                <tr class="no_padding">
-                                    <td style="width:200px">
-                                        <form  action="" method="POST">{% csrf_token %} 
-                                        <a href="#" class="detail_student"  data-student_id="{{ student.user.id }}"  
-                                            data-group_id="{{ group.id }}" data-theme_id="{% if theme %}{{ theme.id }}{% else %}0{% endif %}" >  <!-- {% url 'detail_student' student.user.id %} -->
-                                            {{ student |truncatechars:"30" }}
-                                        </a> 
-                                        <div class="pull-right"> 
-                                                <a href="#" data-toggle='modal'
-                                                    data-target='#writer' 
-                                                    class="send_message"   data-student_name="{{ student.user }}"
-                                                    data-student_email="{{ student.user.email }}">  
-
-                                                    {% if student.user.email  %}                                      
-                                                    <i class="fa fa-inbox" style="font-size:14px"></i> 
-                                                    {% else %}
-
-                                                    <span class="icon-stack">
-                                                      <i class="icon-inbox"></i>
-                                                      <i class="icon-ban-circle icon-stack-base text-error"></i>
-                                                    </span>
-
-                                                    {% endif %}
-                                                </a>                                         
-                                        </div>  
-                                        </form>    
-                                    </td>
-                                    {% block skill_result %}
-                                    <td>{% block result %}
-                                            {% with student.resultknowledge_dict as results %}
-                                                {% for knowledge in knowledges %}
-                                                     {% include 'group/score_knowledge.html' %}
-                                                {% endfor %}
-                                            {% endwith %}
-                                        {% endblock %}                                     
-                                    </td>
-
-                                    {% endblock %}  
-                                </tr>
-
-                            {% endfor %}
-                        
-                    </tbody>
-                </table>
-            </div>
+<div class="content_list"> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
         </div>
+    </div> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table id="standard_tab" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <td>Nom et prénom</td>
+                    {% block skill_block %} 
+                    <td>{% block legend %} 
+                        {% if theme %} 
+                             {% for knowledge in knowledges %}
+                                <form  action="" method="POST">
+                                {% csrf_token %} 
+                                <a class="marklegend" data-toggle='modal' href="#"
+                                                      data-target='#knowledge_details' data-group_id ="{{ group.id }}"
+                                                      data-knowledge_id="{{ knowledge.id }}" >
+                                      {{ knowledge.nb_exercise }}
+                                </a>  
+                                </form>
+                            {% endfor %}
+                        {% else %}
+                                Suivis des savoir faire publiés
+                        {% endif %} 
+                        {% endblock %} 
+                    </td>
+                    {% endblock %} 
+                </tr>
+                </thead>
+                <tbody> 
+                    {% for student in group.students.all|dictsort:"user.last_name" %}
+                        <tr class="no_padding">
+                            <td style="width:200px">
+                                <form  action="" method="POST">{% csrf_token %} 
+                                <a href="#" class="detail_student"  data-student_id="{{ student.user.id }}"  
+                                    data-group_id="{{ group.id }}" data-theme_id="{% if theme %}{{ theme.id }}{% else %}0{% endif %}" >  <!-- {% url 'detail_student' student.user.id %} -->
+                                    {{ student |truncatechars:"30" }}
+                                </a> 
+                                <div class="pull-right"> 
+                                        <a href="#" data-toggle='modal'
+                                            data-target='#writer' 
+                                            class="send_message"   data-student_name="{{ student.user }}"
+                                            data-student_email="{{ student.user.email }}">  
 
+                                            {% if student.user.email  %}                                      
+                                            <i class="fa fa-inbox" style="font-size:14px"></i> 
+                                            {% else %}
 
-        <div class="row">
-            <div class="col-sm-12 col-md-12">     
-                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
-            </div>
+                                            <span class="icon-stack">
+                                              <i class="icon-inbox"></i>
+                                              <i class="icon-ban-circle icon-stack-base text-error"></i>
+                                            </span>
+
+                                            {% endif %}
+                                        </a>                                         
+                                </div>  
+                                </form>    
+                            </td>
+                            {% block skill_result %}
+                            <td>{% block result %}
+                                    {% with student.resultknowledge_dict as results %}
+                                        {% for knowledge in knowledges %}
+                                             {% include 'group/score_knowledge.html' %}
+                                        {% endfor %}
+                                    {% endwith %}
+                                {% endblock %}                                     
+                            </td>
+                            {% endblock %}  
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12">     
+            <a href="javascript:history.back()" class="btn btn-default" >Retour </a>
         </div>
     </div>
 </div>
 
-    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
-    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
-
-    <div class="modal fade" id="writer" tabindex="-1" role="dialog" aria-labelledby="writer" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>                
-                    <h5 class="modal-title" >Ecrire un message à  <span id="modal_student_name"></span></h5>
-                </div>
-                <div class="modal-body">
-                    <form action="" method="post" > 
-                          {% csrf_token %}
-                        <div class="form-group"><input type="hidden" name="student_id" class="form-control" id="student_id"/>
-                          <input type="text" name="name" class="form-control" id="name" placeholder="Nom" />
-                        </div>
-                        <div class="form-group">
-                          <input type="email" class="form-control" name="email" id="email" placeholder="Email"  />
-                        </div>
-                        <div class="form-group">
-                            {{ form.subject|add_class:"form-control"|attr:"placeholder:Objet"|attr:"required" }}
-                        </div>
-                        <div class="form-group">
-                            {{ form.texte  }}
-                        </div>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-sacado" id="sender_message">Envoyer</button>   
-                            <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Retour</a>
-                        </div>
-                    </form>
-                </div>
+<div class="modal fade" id="writer" tabindex="-1" role="dialog" aria-labelledby="writer" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                
+                <h5 class="modal-title" >Ecrire un message à  <span id="modal_student_name"></span></h5>
             </div>
-        </div>
-    </div>  
-
-    {% if theme %}
-    <div class="modal fade" id="knowledge_details" tabindex="-1" role="dialog" aria-labelledby="knowledge_details" aria-hidden="true" >
-      <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <form  action="{% url 'associate_exercise_by_parcours' group.id  theme.id %}" method="POST">
-
-                {% csrf_token %}
-                    <div class="modal-body">
-                        <div id="select_exercises"></div>
-                        <div class="row">
-                            <div class="col-sm-12 col-md-12">
-                                <div class="form-group"><input type="hidden" id="knowledge_id_modal" name="knowledge_id_modal" />
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                                </div>
-                            </div>                
-                        </div>
+            <div class="modal-body">
+                <form action="" method="post" > 
+                      {% csrf_token %}
+                    <div class="form-group"><input type="hidden" name="student_id" class="form-control" id="student_id"/>
+                      <input type="text" name="name" class="form-control" id="name" placeholder="Nom" />
+                    </div>
+                    <div class="form-group">
+                      <input type="email" class="form-control" name="email" id="email" placeholder="Email"  />
+                    </div>
+                    <div class="form-group">
+                        {{ form.subject|add_class:"form-control"|attr:"placeholder:Objet"|attr:"required" }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.texte  }}
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-sacado" id="sender_message">Envoyer</button>   
+                        <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Retour</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    {% endif %}
+</div>  
+
+{% if theme %}
+<div class="modal fade" id="knowledge_details" tabindex="-1" role="dialog" aria-labelledby="knowledge_details" aria-hidden="true" >
+  <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form  action="{% url 'associate_exercise_by_parcours' group.id  theme.id %}" method="POST">
+
+            {% csrf_token %}
+                <div class="modal-body">
+                    <div id="select_exercises"></div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group"><input type="hidden" id="knowledge_id_modal" name="knowledge_id_modal" />
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                            </div>
+                        </div>                
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 
 {% endblock %}

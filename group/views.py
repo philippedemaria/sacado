@@ -391,7 +391,7 @@ def result_group(request, id):
 
  
     form = EmailForm(request.POST or None )
-    context = {  'group': group,'form': form, "knowledges" : knowledges, 'stage' : stage }
+    context = { 'group': group,'form': form, "knowledges" : knowledges, 'stage' : stage, 'theme': None }
 
     return render(request, 'group/result_group.html', context )
 
@@ -426,7 +426,7 @@ def result_group_exercise(request, id):
     form = EmailForm(request.POST or None)
     stage = get_stage(group)
 
-    context = {'group': group, 'form': form , 'stage' : stage  }
+    context = {'group': group, 'form': form , 'stage' : stage  , 'theme' : None }
 
     return render(request, 'group/result_group_exercise.html', context)
 
