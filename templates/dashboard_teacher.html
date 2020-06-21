@@ -206,17 +206,19 @@
                         </div>
                         <div class="box-footer">
                             <div class="row extend">                              
-
-                                <div class="col-lg-4 col-xs-4">
-                                    <a href="{% url 'update_parcours' parcours.id 0 %}" class="edit" > <i class="fa fa-edit"></i> <span class="label_icon">Modifier</span> </a><br>
+                                <div class="col-lg-3 col-xs-3">
+                                    <a href="{% url 'update_parcours' parcours.id 0 %}" class="edit" > <i class="fa fa-edit"></i><span class="label_icon">Modif<span> </a><br>
                                     </a> 
                                 </div>                             
-                                <div class="col-lg-4 col-xs-4">
-                                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit"><i class="fa fa-laptop"></i> <span class="label_icon">Sélect.</span>
+                                <div class="col-lg-3 col-xs-3">
+                                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit"><i class="fa fa-cloud"></i><span class="label_icon"> Sélec</span>
                                     </a>  
-                                </div>
-                                 <div class="col-lg-4 col-xs-4">
-                                    <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"  class="edit"><i class="fa fa-tasks"></i> <span class="label_icon">Gérer</span> </a> 
+                                </div>    
+                                <div class="col-lg-3 col-xs-3">
+                                     <a href="{% url 'show_course' 0 parcours.id   %}"  class="edit"><i class="fa fa-desktop"></i><span class="label_icon"> Cours </span> </a> 
+                                </div>  
+                                <div class="col-lg-3 col-xs-3">
+                                    <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"  class="edit"><i class="fa fa-tasks"></i><span class="label_icon"> Gérer</span> </a> 
                                 </div>  
                             </div>
                         </div>
