@@ -28,18 +28,12 @@
 
         <ul  class="nav nav-tabs">
      
-                {% for data in datas %}
+            {% for data in datas %}
             <li {% if forloop.first %}class="active"{% endif %}><a  href="#{{ forloop.counter}}a" data-toggle="tab">{{ data.name.shortname }}</a></li>
-                {% endfor  %}
-
-
+            {% endfor  %}
             {% if not '/admin' in request.path %}
             <li> <a href="{% url 'profile' %}" class="thin">+</a></li>
             {% endif %}
-
-
-
-
         </ul>
         <div class="tab-content clearfix">
             {% for data in datas %} 
@@ -56,7 +50,6 @@
                                 {% for theme in data.themes  %} 
                                     <tr style="background:#e6e2dd">
                                         <td style="width:85%">{{theme.name}}</td> 
-                            
                                     </tr> 
                                     {% for knowledge in theme.knowledges  %} 
                                         {% if knowledge.exercises|length > 0 %}
@@ -134,15 +127,9 @@
                                                 </tr>
                                         {% endif %}
                                     {% endfor %}
-                                    
                                 {% endfor %}
-
                             </tbody>
-              
                         </table>
-
-
-
                     </div>
                 </div>
             </div>

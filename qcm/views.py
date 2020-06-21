@@ -447,7 +447,7 @@ def list_parcours_group(request,id):
                     break 
 
 
-    return render(request, 'qcm/list_parcours_group.html', {'parcours_tab': parcours_tab , 'group': group })
+    return render(request, 'qcm/list_parcours_group.html', {'parcours_tab': parcours_tab , 'group': group,  'parcours' : None })
 
 
 @login_required
@@ -1418,11 +1418,11 @@ def list_exercises(request):
         relationships = Relationship.objects.filter(parcours__in=parcourses,is_publish=1,exercise__supportfile__is_title=0).order_by("exercise__theme")
 
         return render(request, 'qcm/student_list_exercises.html',
-                      {'relationships': relationships, 'nb_exercises': nb_exercises, })
+                      {'relationships': relationships, 'nb_exercises': nb_exercises   })
 
     else: # non utilisé
         exercises = Exercise.objects.all().order_by("level")
-        return render(request, 'qcm/list_exercises.html', {'exercises': exercises , })
+        return render(request, 'qcm/list_exercises.html', {'exercises': exercises  , 'parcours' : None })
 
 
 
