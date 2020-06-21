@@ -231,11 +231,11 @@
         </div> 
         <div class="row">
             <div class="col-lg-12 col-xs-12"   style=" padding-top: 5px;" >   
-                 <a href="#" id="aggregate_groupe" class="pull-right btn btn-primary"><small>Rejoindre un groupe</small></a>
+                 <a href="#" id="aggregate_groupe"><small> Rejoindre un groupe</small> </a>
             </div>  
         </div>
         <div id="aggregate_form">
-            <form action="{%  url 'aggregate_group' %}" method="POST"  > 
+            <form action="{%  url 'aggregate_group' %}" method="POST"> 
                   {% csrf_token %} 
                 <div class="row">
                     <div class="col-lg-12 col-xs-12"   style=" padding-top: 10px;" >   

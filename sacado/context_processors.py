@@ -46,14 +46,14 @@ def menu(request):
             parcourses = Parcours.objects.filter(is_publish=1, is_evaluation=0,
                                                  students=student)  # tous les parcours attribués à cet élève
             studentanswers = Studentanswer.objects.filter(student=student)
-
+            groups = student.students_to_group.all()
 
             return {
                 'student': student,
                 'parcourses': parcourses,
                 'parcours': parcours,
                 'last_exercises_done': last_exercises_done,
-
+                'groups': groups,                
             }
 
 

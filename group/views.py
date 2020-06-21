@@ -313,8 +313,6 @@ def aggregate_group(request):
     code_groupe = request.POST.get("groupe")
     student = Student.objects.get(user=request.user)
 
-
-    
     if Group.objects.exclude(students = student).filter(code = code_groupe).exists()  :    
         group = Group.objects.get(code = code_groupe)
         group.students.add(student)
