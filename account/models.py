@@ -202,21 +202,25 @@ class Student(ModelWithCode):
 
 
     def last_exercise(self):
-        Studentanswer = apps.get_model('qcm', 'Studentanswer')
-        studentanswer = Studentanswer.objects.filter(student=self).order_by("id").last()
+        studentanswer = self.students_relationship.order_by("id").last()
         return studentanswer
 
 
 
     def is_task_exists(self,parcours):
-        Studentanswer = apps.get_model('qcm', 'Studentanswer')
-        Relationship = apps.get_model('qcm', 'Relationship')
-        relationships = Relationship.objects.filter(students = self, parcours = parcours).exclude(date_limit = None)
 
-        test =  False # Aucune tache.
+        relationships = self.students_relationship.filter(parcours = parcours).exclude(date_limit = None)
+
+        if len(relationships) == 0 :
+            test = False #Aucune tache créée.
+        else :
+            test =  True #Tache créée.
+        som = 0
         for relationship in relationships :
-            if Studentanswer.objects.filter(student=self, exercise = relationship.exercise).count()== 0:
-                test = True 
+            if self.answers.filter(exercise = relationship.exercise).count()> 0:#Tache effectuée.
+                som  +=1
+        if len(relationships) == som :
+            test = False
  
         return test
 

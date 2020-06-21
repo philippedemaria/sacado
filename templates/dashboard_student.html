@@ -30,44 +30,77 @@
                 </div>
          </div>
         {% endif %}
-        <div class="row">
+   
 
             {% for parcours in parcourses %}
-            <div class="col-md-4 col-lg-3 col-sm-6">
-                <!-- small box -->{% get_percent parcours student as pc %}{% get_done parcours student as is_done %} {% get_affect parcours student as nb_affect %}
-                <div class="small-box-student" style="{% if parcours.vignette %}background-image: url('../../static/uploads/{{ parcours.vignette }}'); background-size: 100% 100%; {% else %} background-color:{{parcours.color }}{% endif %};">
+            
+
+                {% if parcours.vignette %}
+                <!-- small box -->
+                {% get_percent parcours student as pc %}{% get_done parcours student as is_done %} {% get_affect parcours student as nb_affect %}
+                <div class="small-box-student" style="background-image: url('{%static 'uploads/' %}{{ parcours.vignette }}'); background-size: 100% 100%;">
+                    <div class="icon-student">
+                         {{ pc }}% 
+                    </div>
+                    <div class="small-box-footer-max" style="background-color:{{parcours.color }};color:{{parcours.color|contrast_color }};"  >
+                        <h2 class="white thin"> {{ parcours.title|truncatechars:"24" }} </h2>
+                        <br> 
+                        <div style="text-align: center">
+                        <a href="{% url 'show_parcours_student' parcours.id %}" class="btn btn-default btn-accueil"> {% get_tasks student parcours  as is_task_exists %} 
+                                {%  if is_task_exists %}
+                                    <i class="fa fa-calendar-check"></i>
+                                {% endif %} Accéder aux exercices</a>
+                        </div>
+                        <div  class="student_vignette_subtitle">    
+                                {{ is_done }}/{{ nb_affect }} exercice{{ nb_affect|pluralize }} étudié{{ nb_affect|pluralize }}
+                        </div>
+                    </div>
+                </div>
+
+                {% else %}
+
+                {% get_percent parcours student as pc %}{% get_done parcours student as is_done %} {% get_affect parcours student as nb_affect %}
+                <div class="small-box-student" style="background-color:{{parcours.color }}">
 
                     <div class="icon-student">
                          {{ pc }}% 
                     </div>
-                    <div class="small-box-footer-max" style="{% if parcours.vignette %}background-color:{{parcours.color }};color:{{parcours.color|contrast_color }};{% endif %}"  >
-                      <a href="{% url 'show_parcours_student' parcours.id %}" class="student_vignette_title"> {{ parcours.title|truncatechars:"24" }} </a> 
-                      <a href="{% url 'show_parcours_student' parcours.id %}" class="pull-right white"><i class="fa fa-calendar-check  fa-2x"></i></a>
-                      <br>
-                        <span  class="student_vignette_subtitle">
-                                {% get_tasks student parcours  as is_task_exists %} 
+                    <div class="small-box-footer-max">
+                        <h2 class="white thin"> {{ parcours.title|truncatechars:"24" }} </h2>
+                        <br> 
+                        <div style="text-align: center">
+                        <a href="{% url 'show_parcours_student' parcours.id %}" class="btn btn-default btn-accueil"> {% get_tasks student parcours  as is_task_exists %} 
                                 {%  if is_task_exists %}
-                               
-                                {% endif %}   
+                                    <i class="fa fa-calendar-check"></i>
+                                {% endif %} Accéder aux exercices</a>
+                        </div>
+                        <div  class="student_vignette_subtitle">    
                                 {{ is_done }}/{{ nb_affect }} exercice{{ nb_affect|pluralize }} étudié{{ nb_affect|pluralize }}
-                        </span>
+                        </div>
                     </div>
                 </div>
-            </div>
+
+
+
+
+                {% endif %}
+            
          
 
-            {% empty  %}   
-            <div class="col-md-12 col-lg-12 col-sm-12" style="text-align: center">
-                <div class="alert alert-info">
-                    <h1 class="thin"> Votre enseignant n'a pas encore publié de parcours.</h1>
-                    <div style="border-radius: 50%;width:250px;height:250px; margin-right: auto; margin-left: auto; background-color: #FFF;text-align: center">
-                        <img src="{% static 'img/sacado_color.png' %}"   />  
+            {% empty  %}  
+            <div class="row">  
+                <div class="col-md-12 col-lg-12 col-sm-12" style="text-align: center">
+                    <div class="alert alert-info">
+                        <h1 class="thin"> Votre enseignant n'a pas encore publié de parcours.</h1>
+                        <div style="border-radius: 50%;width:250px;height:250px; margin-right: auto; margin-left: auto; background-color: #FFF;text-align: center">
+                            <img src="{% static 'img/sacado_color.png' %}"   />  
+                        </div>
                     </div>
                 </div>
-            </div>
+            </div> 
             {% endfor  %}   
 
-        </div> 
+        
 
 
 

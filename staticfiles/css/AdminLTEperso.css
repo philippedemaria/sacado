@@ -3074,13 +3074,16 @@ li .list_no_indent{
 }
 
 .small-box-student {
-  /*border-radius: 2px;*/
+ /*border-radius: 2px;*/
   position: relative;
   display: block;
   margin-bottom: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  height: 180px;
-  border-radius: 4px;
+  height: 285px;
+  width : 300px;
+  border-radius: 3px;
+  float: left;
+  margin-right: 36px;
 }
 
 .small-box > .inner {
@@ -3160,7 +3163,7 @@ li .list_no_indent{
   -o-transition: all 0.3s linear;
   transition: all 0.3s linear;
   position: absolute;
-  top:39px;
+  top:49px;
   right: 0px;
   z-index: 0;
   font-size: 90px;
@@ -3209,8 +3212,8 @@ li .list_no_indent{
   z-index: 10;
   background: rgba(0, 0, 0, 0.3);
   text-decoration: none;
-  top: 125px;
-  height:55px;
+  top: 135px;
+  height:150px;
   width:100%;
   opacity: 0.95;
   font-size: 16px;  
@@ -3218,9 +3221,7 @@ li .list_no_indent{
   border-bottom-left-radius:4px;
 }
 
-.small-box-student   .small-box-footer-max h3 {
-  font-size: 26px;
-  font-weight: normal;
+.small-box-student   .small-box-footer-max h2 {
   padding: 0px;
   margin: 0px;
 }
@@ -3412,6 +3413,7 @@ li .list_no_indent{
         }
 
       .student_vignette_subtitle{
+        margin-top: 20px;
         margin-right: 30px;
         font-size:18px;  
         color:#FFF; 
@@ -3436,6 +3438,7 @@ li .list_no_indent{
         }
 
       .student_vignette_subtitle{
+        margin-top: 20px;
         margin-right: 30px;
         font-size:14px;  
         color:#FFF; 
@@ -3459,6 +3462,7 @@ li .list_no_indent{
         }
 
       .student_vignette_subtitle{
+        margin-top: 20px;
         margin-right: 30px;
         font-size:12px;  
         color:#FFF; 
@@ -3481,6 +3485,7 @@ li .list_no_indent{
         }
 
       .student_vignette_subtitle{
+        margin-top: 20px;
         margin-right: 30px;
         font-size:18px;  
         color:#FFF; 
@@ -4008,7 +4013,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 /* NAV PILLS */
 
 .select_item {
-  background: #271942;
+  background: #5d4391;
 }
 .select_item > a {
   color:#FFF !important ;
@@ -4038,7 +4043,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 }
 .nav-stacked > li.active > a,
 .nav-stacked > li.active > a:hover {
-  background:  #5d4391 ;
+  background:  #5d4391!important;
   color: #FFF!important;
   border-top: 0;
   border-radius:2px;

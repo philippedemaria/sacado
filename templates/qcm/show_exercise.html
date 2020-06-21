@@ -100,7 +100,7 @@
      
                 <div class="form-group">
                   {% if user.user_type == 0 %}
-                    <button class="btn btn-sacado" data-exercice_id="{{ exercise.id }}"   data-situation="{{ exercise.supportfile.situation }}"   data-start_time="{{ start_time }}" type="submit" id="submit_button" {% if user.user_type != 0 %} disabled {% endif %}> Enregistrer le score</button>
+                    <button class="btn btn-primary" data-exercice_id="{{ exercise.id }}"   data-situation="{{ exercise.supportfile.situation }}"   data-start_time="{{ start_time }}" type="submit" id="submit_button" {% if user.user_type != 0 %} disabled {% endif %}> Enregistrer le score</button>
                   {% endif %}   
                     <a href="javascript:history.back()"><input type="button" value="Annuler"
                                                                class="btn btn-default "/></a>
