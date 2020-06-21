@@ -34,6 +34,7 @@ def menu(request):
             nb_not = nbs + nbe
             levels = Level.objects.all()
 
+
             return {'today': today, 'nb_not': nb_not,  'levels': levels, }
 
 

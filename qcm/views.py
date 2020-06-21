@@ -1431,11 +1431,32 @@ def list_exercises(request):
 def admin_list_associations(request,id):
     level = Level.objects.get(pk = id)
     user = request.user
-    if user.user_type == User.TEACHER : # teacher
-        teacher = Teacher.objects.get(user=user)
-        data = all_datas(user, 1,level)
 
-        return render(request, 'qcm/list_associations.html', {'data': data, 'teacher': teacher , 'parcours': None, 'relationships' : [] , 'teacher': teacher})
+    teacher = Teacher.objects.get(user=user)
+    data = all_datas(user, 1,level)
+
+    return render(request, 'qcm/list_associations.html', {'data': data, 'teacher': teacher , 'parcours': None, 'relationships' : []  })
+ 
+
+@login_required
+@user_passes_test(user_is_superuser)
+def gestion_supportfiles(request):
+  
+    lvls = []
+    q_levels = Level.objects.all()
+    for level in q_levels :
+        query_lk = level.knowledges.all()
+
+        nbk = query_lk.count() # nombre de savoir faire listés sur le niveau
+        nbe = level.exercises.filter(supportfile__is_title=0).count() # nombre d'exercices sur le niveau
+        m = level.exercises.filter(knowledge__in = query_lk).count()
+        nb = nbk - m
+        lvls.append({ 'name' : level.name , 'nbknowlegde': nbk , 'exotot' : nbe , 'notexo' : nb }) 
+
+    return render(request, 'qcm/gestion_supportfiles.html', {'lvls': lvls, })
+
+
+
 
 
 @login_required

@@ -1,0 +1,73 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+{% endblock %} 
+
+
+{% block page_title %}
+    <i class="fa fa-cloud"></i> Stats des fichiers supports</a>
+{% endblock %} 
+
+{% block page_menu_right %}
+    <p>{{ school.name }}</p>
+{% endblock %}
+
+
+{% block body %}
+<section class="content_list"> 
+ 
+
+
+    {% if request.user.is_superuser %}
+        <div class="row">
+            <div class="col-sm-12 col-md-12 ">
+                <h2 class="thin">Répartitions des savoir et fichiers support</h2>
+            </div>
+        </div>    
+        <div class="row"> 
+            <div class="col-sm-12 col-md-12">
+                 <div class="form-group">
+                    <table class="table">
+                        <tr>
+                            <td>Niveau</td><td style="text-align: center;">Nb de savoir faire listés</td><td style="text-align: center;">Nb total d'exercices</td><td style="text-align: center;">Nb de savoir faire sans exercice</td>
+                        </tr>
+                        {% for l in lvls %}
+                        <tr>
+                            <td>{{ l.name }}</td>
+                            <td style="text-align: center;">{{ l.nbknowlegde }}</td>
+                            <td style="text-align: center;">{{ l.exotot }}</td>
+                            <td style="text-align: center;"><span class="{% if l.notexo == 0 %}text-green{%endif %}">{{ l.notexo }}</span></td>
+                        </tr>
+                        {% endfor %}           
+                    </table>
+                </div> 
+            </div>
+        </div> 
+
+        <div class="row"> 
+            <div class="col-lg-2 col-md-2  col-xs-12">
+                <p><a href="{% url 'create_supportfile' %}" class="btn btn-subsacado  btn-large"><i class="fa fa-plus"></i> Créer un support </a></p>
+            </div>
+            <div class="col-lg-10 col-md-10  col-xs-12">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                         <div class="form-group">
+                            <div class="alert alert-danger">
+                            Pour enregistrer un score, le fichier Geogebra doit OBLIGATOIREMENT utiliser le nom des variables <strong>grade</strong> (compte le nombre de réponse justes) et <strong>numexo</strong> (compte le nombre total de situations effectuées.             
+                            </div>
+                        </div> 
+                    </div>
+                </div> 
+            </div>
+        </div> 
+
+    {% endif %} 
+</section> 
+{% endblock %}

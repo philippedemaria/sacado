@@ -229,17 +229,7 @@ def  admin_tdb(request):
     nb_teachers = User.objects.filter(school = school, user_type=2).count()  
     nb_students = User.objects.filter(school = school, user_type=0).count()    
     nb_groups = Group.objects.filter(teacher__user__school = school).count()  
-  
-    levels = []
-    q_levels = Level.objects.all()
-    for level in q_levels :
-        query_lk = level.knowledges.all()
-
-        nbk = query_lk.count() # nombre de savoir faire listés sur le niveau
-        nbe = level.exercises.filter(supportfile__is_title=0).count() # nombre d'exercices sur le niveau
-        m = level.exercises.filter(knowledge__in = query_lk).count()
-        nb = nbk - m
-        levels.append({ 'name' : level.name , 'nbknowlegde': nbk , 'exotot' : nbe , 'notexo' : nb })
+ 
     
     try :
         stage = Stage.objects.get(school= school)
@@ -253,7 +243,7 @@ def  admin_tdb(request):
         eca, ac , dep = 20 , 15 ,  15
 
     return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers , 'nb_students': nb_students , 
-                                                    'nb_groups': nb_groups, 'school': school, 'stage': stage, 'levels': levels,
+                                                    'nb_groups': nb_groups, 'school': school, 'stage': stage,  
                                                      'eca' : eca, 'ac' : ac , 'dep' : dep
                                                      })
 
