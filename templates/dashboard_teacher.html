@@ -47,27 +47,21 @@
                         <!-- Menu de la small-box -->
 
                         <div class="small-box-footer">
-
-<br>
-                         
+                            <br>
                                 <a href="{% url 'list_parcours_group' group.id  %}#parcours" class="btn btn-default btn-accueil"> 
                                 <small>   <i class="fa fa-th"></i> </small>
                                
                                      Les parcours 
                                 <small> {{ data.nb_parcours_visible }} publié{{ data.nb_parcours_visible|pluralize }}   {{ data.nb_parcours_favorite }} favori{{ data.nb_parcours_favorite|pluralize }}</small>
                                 </a>
-
-
-<br>
-
-
+                            <br>
                                 <a href="{% url 'list_parcours_group' group.id  %}#evaluation" class="btn btn-default btn-accueil"> 
                                   <small>   <i class="fa fa-trophy"></i> </small>
                                
                                      Evaluation{{ data.nb_parcours_evaluation|pluralize  }}  ({{ data.nb_parcours_evaluation  }})
                                 </a>
 
-<br><br>
+                            <br><br>
 
                                 {% if group.is_task_exists %}<span class="parcours_in_group">, </span>
                                     <a  href="{% url 'schedule_task_group' group.id %}" style="color:{{ group.color|contrast_color }}; font-size:18px"> Tâche en cours <i class="fa fa-calendar"></i></a>
@@ -150,9 +144,7 @@
 
  
         {% if parcours_tab|length > 0 %}
-           <!-- Add the bg color to the header using any of the bg-* classes -->
-
-
+  
 
             {% regroup parcours_tab by is_evaluation as list_parcours %} 
 
@@ -181,8 +173,17 @@
 
                                 <a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-info btn-xs" >   Affecter à un groupe</a><br>
                            
-                 
-                                    
+
+
+                                <div class="icon" style="opacity:0.9;top:80px">
+
+
+                                    {% if parcours.level %}                
+                                        {{ parcours.level.shortname }} 
+                                    {% else %}                
+                                        {{ parcours.level_by_exercises }} 
+                                    {% endif  %}                 
+                                </div>                                    
                           
 
                             {% if parcours.vignette %}                
@@ -192,7 +193,6 @@
                             <div class="box_title_vignette"> 
                                 <a href="{% url 'show_parcours'  parcours.id  %}" style="color:{{ parcours.color|contrast_color }};"> {{ parcours.title|truncatechars:"18" }}
                                     <span style="font-size:12px"> 
-                                        {% if parcours.linked %}({{ parcours.level}}){% endif %}
                                         {% with parcours.nb_exercises as nb_p_exercises %}
                                             {{ nb_p_exercises }} exercice{{ nb_p_exercises|pluralize }}
                                         {% endwith %}

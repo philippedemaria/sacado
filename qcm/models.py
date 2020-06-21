@@ -408,7 +408,18 @@ class Parcours(ModelWithCode):
             som += d
         return som 
 
- 
+    def level_by_exercises(self):
+        
+        exercises = self.exercises.filter(supportfile__is_title=0).prefetch_related("level").order_by("level")
+        dct , tab =  {} , [] 
+        for l in Level.objects.all():
+            dct[l.shortname] = 0
+        for e  in exercises :
+            dct[e.level.shortname] +=1
+        tab = []
+        for k, v in sorted(dct.items(), key=lambda x: x[1]):
+            name = k
+        return name
 
 
     def group_list(self):
