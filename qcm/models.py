@@ -508,8 +508,11 @@ class Relationship(models.Model):
     def is_task(self):
         task = False
         today = timezone.now().date()
-        if self.date_limit >= today:
-            task = True
+        try :
+            if self.date_limit >= today:
+                task = True
+        except :
+            task = False
         return task
 
 
