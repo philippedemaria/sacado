@@ -261,7 +261,7 @@ class Teacher(models.Model):
         admins_emails = list(admins.values_list('email', flat=True))
         send_mail("SacAdo",
                   f"Un enseignant - {self.user.last_name} {self.user.first_name} - vient de s'inscrire sur SacAdo.",
-                  "SacAdo",
+                  "info@sacado.xyz",
                   admins_emails)
 
 
