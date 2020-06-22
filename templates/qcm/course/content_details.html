@@ -3,7 +3,7 @@
 
 <table class="table">
     <tr>
-      <td>{{ form.is_publish.label_tag }} <br/><small>{{ form.is_mark.help_text }}</small> </td>
+      <td>{{ form.is_publish.label_tag }} <br/>  </td>
       <td>{{ form.is_publish|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
       <td> {{ form.is_publish.errors }}</td>
     </tr>
@@ -14,19 +14,19 @@
     </tr>
  
     <tr>
-      <td>{{ form.is_task.label_tag }} <span id="task_date"> {{ form.date_limit|add_class:"form-control datepicker"|attr:"placeholder:Pour le"   }}</span><br/><small>{{ form.is_task.help_text }}</small> </td>
+      <td>{{ form.is_task.label_tag }} <span id="task_date"> {{ form.date_limit|add_class:"form-control datepicker"|attr:"placeholder:Pour le"   }}</span>  </td>
       <td>{{ form.is_task|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
       <td> {{ form.is_task.errors }}</td>
     </tr>
     <tr>
-      <td>{{ form.is_paired.label_tag }}<br/> <small>{{ form.is_paired.help_text }}</small> </td>
+      <td>{{ form.is_paired.label_tag }}<br/>   </td>
       <td>{{ form.is_paired|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
       <td> {{ form.is_paired.errors }}</td>
     </tr>
 
  
     <tr>
-      <td>{{ form.notification.label_tag }} <br/><small>{{ form.modification.help_text }}</small></td>
+      <td>{{ form.notification.label_tag  </td>
       <td>{{ form.notification|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
       <td>{{ form.notification.errors }}</td>
     </tr> 
