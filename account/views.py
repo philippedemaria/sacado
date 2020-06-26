@@ -961,7 +961,7 @@ def my_profile(request):
                 teacher_form.save_m2m()
                 user_form.save()
                 messages.success(request, 'Votre profil a été changé avec succès !')
-                if teacher.teacher_to_group.count() == 0:
+                if teacher.groups.count() == 0:
                     return redirect('index')
                 else:
                     return redirect('profile')

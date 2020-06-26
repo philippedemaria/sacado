@@ -232,7 +232,7 @@ def create_group(request):
             if not tested :
                 messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
 
-        if  teacher.teacher_to_group.count() == 1 :
+        if  teacher.groups.count() == 1 :
             messages.success(request, "Félicitations... Votre compte sacado est maintenant configuré et votre premier groupe créé !")
 
         return redirect('index')

@@ -18,12 +18,11 @@ class Group(ModelWithCode):
     """ Group est une classe d'élèves coté enseignant -- Ce qui permet de faire un groupe avec une ou plusieurs divisions """
     name = models.CharField(max_length=255, verbose_name="Nom*")
     color = models.CharField(max_length=255, default='#46119c', verbose_name="Couleur*")
-    students = models.ManyToManyField(Student, related_name="students_to_group",  blank=True,verbose_name="Élèves*")
-    teacher = models.ForeignKey(Teacher, blank=True, null=True, on_delete=models.CASCADE, related_name="teacher_to_group", verbose_name="Enseignant*")
-    level = models.ForeignKey(Level,  on_delete=models.PROTECT, related_name="level_to_group", verbose_name="Niveau*")
-    assign = models.BooleanField( default = 1 )
-    suiviparent = models.BooleanField( default = 0 )
-
+    students = models.ManyToManyField(Student, related_name="students_to_group", blank=True, verbose_name="Élèves*")
+    teacher = models.ForeignKey(Teacher, blank=True, null=True, on_delete=models.CASCADE, related_name="groups", verbose_name="Enseignant*")
+    level = models.ForeignKey(Level, on_delete=models.PROTECT, related_name="groups", verbose_name="Niveau*")
+    assign = models.BooleanField(default=1)
+    suiviparent = models.BooleanField(default=0)
 
     class Meta:
         ordering = ['name']
@@ -75,32 +74,30 @@ class Group(ModelWithCode):
         students = self.students.order_by("user__last_name")
         number_of_parcours_of_this_level_by_this_teacher = self.teacher.teacher_parcours.filter(level = self.level).count()
         parcours_tab = []
-        parcours_id_tab = [] 
+        parcours_id_tab = []
 
         for student in students:
             parcourses = student.students_to_parcours.all()
-            parcours_tab = [parcours for parcours in  parcourses if  parcours.id not in parcours_id_tab]
-            if len(parcours_tab) == number_of_parcours_of_this_level_by_this_teacher :
+            parcours_tab = [parcours for parcours in parcourses if parcours.id not in parcours_id_tab]
+            if len(parcours_tab) == number_of_parcours_of_this_level_by_this_teacher:
                 break
 
-        data , nb ,  nbf, nbp, nbe   = {} , 0 , 0, 0, 0
-        for parcours in parcours_tab :
-            if parcours.is_favorite :
-                nbf +=1
-            if parcours.is_publish :
-                nbp +=1
-            if parcours.is_evaluation :
-                nbe +=1
-            if not parcours.is_evaluation :
-                nb +=1
-
-
+        data, nb, nbf, nbp, nbe = {}, 0, 0, 0, 0
+        for parcours in parcours_tab:
+            if parcours.is_favorite:
+                nbf += 1
+            if parcours.is_publish:
+                nbp += 1
+            if parcours.is_evaluation:
+                nbe += 1
+            if not parcours.is_evaluation:
+                nb += 1
 
         data["count_students"] = students.values("user").count()
-        data["students"] = students.values("user__id", "user__last_name","user__first_name")
+        data["students"] = students.values("user__id", "user__last_name", "user__first_name")
         data["nb_parcours"] = nb
         data["nb_parcours_visible"] = nbp
-        data["nb_parcours_favorite"] = nbf 
+        data["nb_parcours_favorite"] = nbf
         data["nb_parcours_evaluation"] = nbe 
 
         return data
