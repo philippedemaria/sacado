@@ -16,14 +16,14 @@
 active
 {% endif %} 
 '>
-    <a href="#"  id="account">
+    <a href="#" class="main" id="account">
         <i class="fa fa-user fa-2x"></i> 
         <div class="captionmenu">Compte</div>
     </a>
 </li>
 
 <li class='dropdown'>
-    <a href="{% url 'index' %}" >
+    <a href="{% url 'index' %}" class="main" >
         <i class="fa fa-tachometer-alt fa-2x"></i> 
         <div class="captionmenu">Tableau de bord</div>
     </a>
@@ -33,7 +33,7 @@ active
 active
 {% endif %} 
 '>
-    <a href="{% url 'detail_student_all_views' user.id %}" >
+    <a href="{% url 'detail_student_all_views' user.id %}" class="main" >
         <i class="fa fa-trophy fa-2x"></i>
         <div class="captionmenu">Suivis</div>
     </a>
@@ -53,7 +53,7 @@ active
 
 
 <li  class='dropdown  {% if '/sendmail' in request.path %} active{% endif %}'>
-    <a href="{% url 'emails' %}">
+    <a href="{% url 'emails' %}" class="main" >
         <i class="fa fa-inbox fa-2x"></i> 
         <div class="captionmenu">Messages</div>
     </a>

@@ -91,7 +91,7 @@ urlpatterns = [
     #################################### Les cours dans les parcours ###########################################
 
     path('', list_courses, name='courses'),
-    path('create_course/<int:idc>/<int:id>', create_course, name='create_course'),
+    path('create_course/<int:idc>/<int:id>', create_course, name='create_course'), # id = id du parcours, idc = id du cours
     path('update_course/<int:idc>/<int:id>', update_course, name='update_course'),
     path('delete_course/<int:idc>/<int:id>', delete_course, name='delete_course'),
     path('show_course/<int:idc>/<int:id>', show_course, name='show_course'),

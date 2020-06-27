@@ -619,6 +619,7 @@ class Constraint(models.Model):
 class Course(models.Model): # pour les 
 
     parcours = models.ForeignKey(Parcours,  on_delete=models.PROTECT, blank=True, null=True,  related_name='course', editable=False) 
+    title = models.CharField(max_length=50, default='',  blank=True, verbose_name="Titre")    
     annoncement = RichTextUploadingField( blank=True, verbose_name="Texte*") 
     teacher = models.ForeignKey(Teacher, related_name = "course", on_delete=models.PROTECT, editable=False )
     duration = models.PositiveIntegerField(  default=15,  blank=True,  verbose_name="Durée estimée de lecture")  

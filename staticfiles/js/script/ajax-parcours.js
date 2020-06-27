@@ -4,8 +4,24 @@ define(['jquery','bootstrap'], function ($) {
 
         $(".is_evaluation").attr("checked",false);
 
-
- 
+        // ================================================================ 
+        // Parcours menu vertical pour les cours
+        var navItems = $('.admin-menu li > a');
+        var navListItems = $('.admin-menu li');
+        var allWells = $('.admin-content');
+        var allWellsExceptFirst = $('.admin-content:not(:first)');
+        allWellsExceptFirst.hide();
+        navItems.click(function(e)
+        {
+            e.preventDefault();
+            navListItems.removeClass('active');
+            $(this).closest('li').addClass('active');
+            
+            allWells.hide();
+            var target = $(this).attr('data-target-id');
+            $('#' + target).show();
+        });
+        // ================================ FIN ============================ 
 
         // Affiche dans la modal la liste des élèves du groupe sélectionné
         $('#id_level').on('change', function (event) {

@@ -1,21 +1,71 @@
-{% load static %} 
+{% extends 'dashboard.html' %}
+{% load static %}
 {% load widget_tweaks %}
 {% load item_tags %}
 
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    <script>
+        require(['script/ajax-parcours']);
+    </script> 
+    
+{% endblock %}
+
  
-<div class="row"> 
-    <div class="col-sm-12 col-md-12"> 
-    {% if content %} 
-        {% if content.annoncement  %}  
-          {{ content.annoncement|decode|safe }}
-        {% else %}  
-          <div class="alert alert-danger">Aucun contenu</div>
-        {% endif %}
-    {% else %} s ss 
-        <div class="alert alert-danger">Aucun contenu</div>
+
+{% block page_title %}
+       <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-th"></i> {{ parcours }} <img src="{% static 'img/angle-right.png' %}"/>    Cours   </span>  
+{% endblock %}
+
+
+{% block page_menu_right %}
+    {% if request.user.user_type == 2 %}
+        {% include 'qcm/submenu_parcours.html' %}
     {% endif %}
+{% endblock %}
+
+
+
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main">  
+
+
+
+    <div class="row">
+        <div class="col-md-4 col-xs-12 col-lg-3">
+            {% if request.user.user_type == 2 %}
+            <a href="{%  url 'create_course' 0 parcours.id %}" class="btn btn-danger full_width"> Créer un nouveau cours </a>
+            <hr>
+            {% endif %}
+
+            <ul class="nav nav-pills nav-stacked admin-menu">
+                {% for course in courses %}
+                    <li class="{% if forloop.first %}active{% endif %}"><a href="#" data-target-id="course{{forloop.counter0}}"> {{ course.title }}</a></li>
+                {% endfor %}
+
+            </ul>
+        </div>
+
+
+
+
+        {% for course in courses %}
+            <div class="col-md-8 col-xs-12 col-lg-9  admin-content" id="course{{forloop.counter0}}">
+                {{ course.annoncement|decode|safe }} 
+            </div>
+        {% endfor %}
+  
+         
     </div>
 
 
 
-</div>
+
+</section>
+{% endblock %} 

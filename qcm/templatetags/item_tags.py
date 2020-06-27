@@ -4,7 +4,11 @@ import html
 from django import template
 register = template.Library()
 
-
+@register.filter
+def decode(arg):
+        '''HTML entity decode'''
+        string = html.unescape(arg)
+        return string
 
 @register.filter
 def index(sequence, position):

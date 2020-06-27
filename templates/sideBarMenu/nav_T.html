@@ -12,14 +12,14 @@
 
 
 <li class='dropdown {% if '/account' in request.path  %}active{% endif %}'>
-    <a href="#"  id="account">
+    <a href="#" class="main"  id="account">
         <i class="fa fa-user fa-2x"></i> 
         <div class="captionmenu">Compte</div>
     </a>
 </li>
 
 <li class='dropdown {% if not '/account'  in request.path and not '/parcours'  in request.path and not '/school'  in request.path and not '/sendmail'  in request.path and not '/qcm'  in request.path  %}active{% endif %}'>
-    <a href="{% url 'index' %}" >
+    <a href="{% url 'index' %}" class="main" >
         <i class="fa fa-tachometer-alt fa-2x"></i> 
         <div class="captionmenu">Tableau de bord</div>
     </a>
@@ -37,27 +37,27 @@
  
 
 <li  class='dropdown {% if '/parcours' in request.path and not 'evaluation' in request.path %}active{% endif %}'>
-    <a href="{% url 'parcours' %}"  >
+    <a href="{% url 'parcours' %}" class="main" >
         <i class="fa fa-th fa-2x" aria-hidden="true"></i> 
         <div class="captionmenu">Parcours</div>
     </a>
 </li>
 <li  class='dropdown {% if 'evaluation' in request.path    %}active{% endif %}'>
-    <a href="{% url 'evaluations' %}"  >
+    <a href="{% url 'evaluations' %}" class="main" >
         <i class="fa fa-th fa-trophy fa-2x" aria-hidden="true"></i> 
         <div class="captionmenu">Evaluations</div>
     </a>
 </li>
 
  <li  class='dropdown {% if '/exercise' in request.path %}active{% endif %}'>
-    <a href="{% url 'exercises' %}"  >
+    <a href="{% url 'exercises' %}" class="main" >
         <i class="fa fa-laptop fa-2x" aria-hidden="true"></i> 
         <div class="captionmenu">Exercices</div>
     </a>
 </li> 
 
 <li  class='dropdown  {% if '/sendmail' in request.path %} active{% endif %}'>
-    <a href="{% url 'emails' %}">
+    <a href="{% url 'emails' %}" class="main" >
         {% if nb_not > 0 %}
         <span class="label label-warning notifications">{{nb_not}}</span>
         {% endif %}
@@ -71,7 +71,7 @@
 {% if request.user.is_superuser %}
 
 <li  class='dropdown  {% if '/admin' in request.path  or '/school' in request.path  %} active{% endif %}'>
-    <a href="#"   id="admin" >
+    <a href="#"   id="admin" class="main">
         <i class="fa fa-cloud fa-2x"></i> 
         <div class="captionmenu">Admin</div>
     </a>
@@ -81,7 +81,7 @@
 
 {% if request.user.is_manager and not request.user.is_superuser  %} <!-- manager dans un établissement -->
 <li  class='dropdown  {% if '/admin' in request.path or '/school' in request.path  %} active{% endif %}'>
-    <a href="{% url 'admin_tdb' %}" >
+    <a href="{% url 'admin_tdb' %}" class="main" >
         <i class="fa fa-cloud fa-2x"></i> 
         <div class="captionmenu">Admin</div>
     </a>

@@ -2606,9 +2606,11 @@ def create_course(request, idc , id ):
             nf.teacher = teacher
             nf.save()
 
-            print("ici")
-           
-            return redirect('list_parcours_group' , request.session.get("group_id"))
+            try :
+                return redirect('list_parcours_group' , request.session.get("group_id"))
+            except :
+                return redirect('dashboard')
+
         else:
             print(form.errors)
 
@@ -2661,15 +2663,13 @@ def show_course(request, idc , id ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     parcours = Parcours.objects.get(pk =  id)
-    try :
-        course = Course.objects.get(id=idc)
+    courses = parcours.course.all() 
+       
+    if len(courses) > 0 :
         user = User.objects.get(pk = request.user.id)
         teacher = Teacher.objects.get(user = user)
-
-        context = {  'course': course, 'teacher': teacher , 'parcours': parcours , }
- 
+        context = {  'courses': courses, 'teacher': teacher , 'parcours': parcours , }
         return render(request, 'qcm/course/show_course.html', context)
-
-    except :
+    else :
         return redirect('create_course', idc , id )
 
