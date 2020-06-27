@@ -2633,8 +2633,7 @@ def update_course(request, idc , id ):
     if request.method == "POST" :
         if course_form.is_valid():
             course_form.save()
-            course_form.save_m2m()
-            mestsages.success(request, 'Le cours a été modifié avec succès !')
+            messages.success(request, 'Le cours a été modifié avec succès !')
             return redirect('index')
         else:
             print(course_form.errors)
