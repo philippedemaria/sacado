@@ -46,7 +46,10 @@
 
             <ul class="nav nav-pills nav-stacked admin-menu">
                 {% for course in courses %}
-                    <li class="{% if forloop.first %}active{% endif %}"><a href="#" data-target-id="course{{forloop.counter0}}"> {{ course.title }}</a></li>
+                    <li class="{% if forloop.first %}active{% endif %}">
+                        <a href="#" data-target-id="course{{forloop.counter0}}"> {{ course.title }}</a>
+                         
+                    </li>
                 {% endfor %}
 
             </ul>
@@ -57,6 +60,7 @@
 
         {% for course in courses %}
             <div class="col-md-8 col-xs-12 col-lg-9  admin-content" id="course{{forloop.counter0}}">
+                <a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 12px" class="pull-right">Modifier ce cours</a><br>
                 {{ course.annoncement|decode|safe }} 
             </div>
         {% endfor %}

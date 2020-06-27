@@ -66,7 +66,7 @@
                 {% if course %}
                         <div class="col-sm-12 col-md-4">
                             <div class="form-group">
-                                <a href="{% url 'delete_content' course.id  section.id content.id %}" class="btn btn-danger"  onclick="return TestDelete('ce contenu')">Supprimer ce cours</a>
+                                <a href="{% url 'delete_course' course.id  parcours.id %}" class="btn btn-danger"  onclick="return TestDelete('ce contenu')">Supprimer ce cours</a>
                             </div>
                         </div>
                 
@@ -127,11 +127,6 @@
                         <div style="clear:both"> </div>   
 
                     </div>
-
-
-
-
-
 
 
 

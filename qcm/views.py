@@ -2629,8 +2629,8 @@ def update_course(request, idc , id ):
     course = Course.objects.get(id=idc)
     course_form = CourseForm(request.POST or None, instance=course, )
     relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("order")
-
-    if reques.method == "POST" :
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    if request.method == "POST" :
         if course_form.is_valid():
             course_form.save()
             course_form.save_m2m()
@@ -2664,7 +2664,7 @@ def show_course(request, idc , id ):
     """
     parcours = Parcours.objects.get(pk =  id)
     courses = parcours.course.all() 
-       
+
     if len(courses) > 0 :
         user = User.objects.get(pk = request.user.id)
         teacher = Teacher.objects.get(user = user)
