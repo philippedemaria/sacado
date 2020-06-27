@@ -4041,9 +4041,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   background: #5d4391;
   color: #FFF!important;
 }
-.nav-pills > li.active > a {
-  font-weight: 600;
-}
+ 
 /* NAV STACKED */
 .nav-stacked > li > a {
   border-radius: 0;
