@@ -211,7 +211,7 @@
 
 
           <!--  Image de la card  -->
-          <a href="#card{{relation.id}}" class="detail_parcours"  data-exercise_id="{{ relation.exercise.id }}"  data-num_exo="{{ forloop.counter}}" data-parcours_id="{% if group.id %}{{ group.id}}{% else %}{{ parcours.id }}{% endif %}">
+          <a href="#card{{relation.id}}" class="detail_parcours"  data-exercise_id="{{ relation.exercise.id }}"  data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}">
                <img src="{% static 'uploads/'%}{{ relation.exercise.supportfile.imagefile }}"  class="image_parcours_order"  >
           </a> 
  

@@ -612,6 +612,7 @@ def show_parcours(request, id):
 
     try:
         group_id = request.session["group_id"]
+
     except:
         group_id = None
 
@@ -622,7 +623,7 @@ def show_parcours(request, id):
     nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count()
     context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'students_from_p_or_g': students_p_or_g,  
                'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible, 'nb_exo_only': nb_exo_only, 
-               'group_id': group_id}
+               'group_id': group_id,       }
 
     return render(request, 'qcm/show_parcours.html', context)
 
@@ -1739,7 +1740,7 @@ def show_exercise(request, id):
     request.session['level_id'] = exercise.level.id
     form = AuthenticationForm() 
 
-    context = {'exercise': exercise,   'form': form  }
+    context = {'exercise': exercise,   'form': form , 'u_form' : None , 'levels' : [],   }
  
     return render(request, 'show_exercise.html', context)
 
