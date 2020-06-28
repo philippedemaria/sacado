@@ -2643,10 +2643,7 @@ def update_course(request, idc, id  ):
                 course.students.add(student)
 
             messages.success(request, 'Le cours a été modifié avec succès !')
-            try :
-                return redirect('list_parcours_group' , request.session.get("group_id"))
-            except :
-                return redirect('dashboard')        
+        
         else :
             print(course_form.errors)
 
