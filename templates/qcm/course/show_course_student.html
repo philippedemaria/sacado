@@ -22,7 +22,9 @@
 {% block page_menu_right %}
     {% if request.user.user_type == 2 %}
         {% include 'qcm/submenu_parcours.html' %}
-    {% endif %}
+    {% elif request.user.user_type == 0 %}
+        <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
+   {% endif %}
 {% endblock %}
 
 
@@ -59,8 +61,10 @@
 
 
         {% for course in courses %}
+
             <div class="col-md-8 col-xs-12 col-lg-9  admin-content" id="course{{forloop.counter0}}">
-                <h1 class="thin">  {{ course.title }}   <a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 12px" class="pull-right">Modifier ce cours</a></h1><hr>
+                <h1 class="thin">  {{ course.title }}  {% if course.is_paired %}  <a href="{%  url 'update_course' course.id parcours.id %}" class="btn btn-danger pull-right"> Contribuer à ce cours </a> {% endif %}</h1>
+                <hr>
 
                 {{ course.annoncement|decode|safe }} 
             </div>

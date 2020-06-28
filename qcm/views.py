@@ -26,7 +26,7 @@ from django.db.models import Q
 from django.core.mail import send_mail
 
 from group.decorators import user_is_group_teacher 
-from qcm.decorators import user_is_parcours_teacher
+from qcm.decorators import user_is_parcours_teacher, user_can_modify_this_course, student_can_show_this_course
 from account.decorators import user_can_create, user_is_superuser
 ##############bibliothèques pour les impressions pdf  #########################
 import os
@@ -2621,8 +2621,8 @@ def create_course(request, idc , id ):
 
 
 
-@user_is_parcours_teacher
-def update_course(request, idc , id ):
+@user_can_modify_this_course
+def update_course(request, idc, id  ):
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
@@ -2630,18 +2630,34 @@ def update_course(request, idc , id ):
     course = Course.objects.get(id=idc)
     course_form = CourseForm(request.POST or None, instance=course, )
     relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("order")
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    if request.user.user_type == 2 :
+        teacher = Teacher.objects.get(user_id = request.user.id)
+    else :
+        teacher = None
+
     if request.method == "POST" :
         if course_form.is_valid():
             course_form.save()
+            if request.user.user_type == 0 :
+                student = Student.objects.get(user = request.user )
+                course.students.add(student)
+
             messages.success(request, 'Le cours a été modifié avec succès !')
-            return redirect('index')
-        else:
+            try :
+                return redirect('list_parcours_group' , request.session.get("group_id"))
+            except :
+                return redirect('dashboard')        
+        else :
             print(course_form.errors)
 
     context = {'form': course_form,  'course': course, 'teacher': teacher , 'parcours': parcours  , 'relationships': relationships , }
 
     return render(request, 'qcm/course/form_course.html', context )
+
+
+
+
+
 
 
 @user_is_parcours_teacher
@@ -2652,10 +2668,12 @@ def delete_course(request, idc , id  ):
     parcours = Parcours.objects.get(pk =  id)
     course = Course.objects.get(id=idc)
     course.delete()
-    if redirection == 0 :
-        return redirect('index')
-    else :
-        return redirect('courses') 
+    try :
+        return redirect('list_parcours_group' , request.session.get("group_id"))
+    except :
+        return redirect('dashboard')  
+
+
 
 @user_is_parcours_teacher
 def show_course(request, idc , id ):
@@ -2668,8 +2686,21 @@ def show_course(request, idc , id ):
     if len(courses) > 0 :
         user = User.objects.get(pk = request.user.id)
         teacher = Teacher.objects.get(user = user)
-        context = {  'courses': courses, 'teacher': teacher , 'parcours': parcours , }
+        context = {  'courses': courses, 'teacher': teacher , 'parcours': parcours , 'group_id' : None, 'communications' : []}
         return render(request, 'qcm/course/show_course.html', context)
     else :
         return redirect('create_course', idc , id )
 
+
+@student_can_show_this_course
+def show_course_student(request, idc , id ):
+    """
+    idc : course_id et id = parcours_id pour correspondre avec le decorateur
+    """
+    parcours = Parcours.objects.get(pk =  id)
+    courses = parcours.course.all() 
+    print("ici")
+
+    context = {  'courses': courses, 'parcours': parcours , 'group_id' : None, 'communications' : []}
+    return render(request, 'qcm/course/show_course_student.html', context)
+ 

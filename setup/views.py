@@ -52,7 +52,7 @@ def index(request):
 
             parcours_tab = Parcours.objects.filter(students=None, teacher=teacher, is_favorite=1) ## Parcours favoris non affectés
 
-            context = {'this_user': this_user, 'teacher': teacher, 'groups': groups, 'parcourses': parcourses,
+            context = {'this_user': this_user, 'teacher': teacher, 'groups': groups, 'parcourses': parcourses, 'parcours': None,
                        'relationships': relationships, 'communications': communications, 'parcours_tab': parcours_tab,
                        'nb_teacher_level': nb_teacher_level}
 

@@ -52,7 +52,14 @@
                                 {% endif %} Accéder aux exercices</a>
                         </div>
                         <div  class="student_vignette_subtitle">    
-                                {{ is_done }}/{{ nb_affect }} exercice{{ nb_affect|pluralize }} étudié{{ nb_affect|pluralize }}
+                            {{ is_done }}/{{ nb_affect }} exercice{{ nb_affect|pluralize }} étudié{{ nb_affect|pluralize }} 
+
+                            {% if parcours.course.all|length > 0 %}  
+                            <a href="{% url 'show_course_student' 0 parcours.id %}" class="pull-right white">
+                                <i class="fa fa-desktop"></i> Le cours
+                            </a>
+                            {% endif  %}
+
                         </div>
                     </div>
                 </div>
@@ -76,6 +83,12 @@
                         </div>
                         <div  class="student_vignette_subtitle">    
                                 {{ is_done }}/{{ nb_affect }} exercice{{ nb_affect|pluralize }} étudié{{ nb_affect|pluralize }}
+
+                            {% if parcours.course.all|length > 0 %}  
+                            <a href="{% url 'show_course_student' 0 parcours.id %}" class="pull-right white">
+                                <i class="fa fa-desktop"></i> Le cours
+                            </a>
+                            {% endif  %}
                         </div>
                     </div>
                 </div>
@@ -101,7 +114,7 @@
             {% endfor  %}   
 
         
-
+        <div class="row"></div>
 
 
         {% if relationships_in_tasks|length > 0 %}

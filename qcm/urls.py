@@ -95,7 +95,7 @@ urlpatterns = [
     path('update_course/<int:idc>/<int:id>', update_course, name='update_course'),
     path('delete_course/<int:idc>/<int:id>', delete_course, name='delete_course'),
     path('show_course/<int:idc>/<int:id>', show_course, name='show_course'),
-
+    path('show_course_student/<int:idc>/<int:id>', show_course_student, name='show_course_student'),
     ############################################################################################################  
 
 

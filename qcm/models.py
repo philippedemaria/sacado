@@ -630,7 +630,7 @@ class Course(models.Model): # pour les
 
     
     is_task = models.BooleanField( default=0,    verbose_name="Tache à rendre ?") 
-    is_paired = models.BooleanField( default=0,    verbose_name="Révision par les pairs ?") 
+    is_paired = models.BooleanField( default=0,    verbose_name="Elèves créateurs ?") 
     is_active = models.BooleanField( default=0,  verbose_name="Contenu en cours")  
 
  

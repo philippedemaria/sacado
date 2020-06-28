@@ -63,7 +63,7 @@
                                                                        class="btn btn-default "/></a>
                         </div>
                     </div>
-                {% if course %}
+                {% if course and request.user.user_type == 2 %}
                         <div class="col-sm-12 col-md-4">
                             <div class="form-group">
                                 <a href="{% url 'delete_course' course.id  parcours.id %}" class="btn btn-danger"  onclick="return TestDelete('ce contenu')">Supprimer ce cours</a>
@@ -82,10 +82,10 @@
 
 
             <div class="col-sm-12 col-lg-4">
-
+                {% if request.user.user_type == 2 %}
                 <h4 class="thin">Détails</h4>
                 {% include 'qcm/course/content_details.html' %}
-
+                {% endif %}
 
                 <h4 class="thin">Liens vers</h4>
 
