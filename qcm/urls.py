@@ -90,12 +90,12 @@ urlpatterns = [
 
     #################################### Les cours dans les parcours ###########################################
 
-    path('', list_courses, name='courses'),
-    path('create_course/<int:idc>/<int:id>', create_course, name='create_course'), # id = id du parcours, idc = id du cours
-    path('update_course/<int:idc>/<int:id>', update_course, name='update_course'),
-    path('delete_course/<int:idc>/<int:id>', delete_course, name='delete_course'),
-    path('show_course/<int:idc>/<int:id>', show_course, name='show_course'),
-    path('show_course_student/<int:idc>/<int:id>', show_course_student, name='show_course_student'),
+    path('parcours_courses', list_courses, name='courses'),
+    path('parcours_create_course/<int:idc>/<int:id>', create_course, name='create_course'), # id = id du parcours, idc = id du cours
+    path('parcours_update_course/<int:idc>/<int:id>', update_course, name='update_course'),
+    path('parcours_delete_course/<int:idc>/<int:id>', delete_course, name='delete_course'),
+    path('parcours_show_course/<int:idc>/<int:id>', show_course, name='show_course'),
+    path('parcours_show_course_student/<int:idc>/<int:id>', show_course_student, name='show_course_student'),
     ############################################################################################################  
 
 
