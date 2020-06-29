@@ -64,11 +64,13 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'django_bootstrap_breadcrumbs',
     'widget_tweaks',
     'ckeditor',
@@ -83,6 +85,11 @@ INSTALLED_APPS = [
     'schedule',
     'school',
     "django_cron",
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
     ]
 
 
@@ -145,6 +152,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
 
         },

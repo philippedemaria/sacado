@@ -29,7 +29,10 @@ urlpatterns = [
     path('sendmail/', include('sendmail.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('schedule/', include('schedule.urls')), 
-    path('school/', include('school.urls')), 
+    path('school/', include('school.urls')),
+
+    path('admin/', admin.site.urls),
+
  
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
