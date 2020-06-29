@@ -77,7 +77,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'bootstrap3',
     'setup',
-    'account',
+
     'group',
     'socle',
     'qcm',
@@ -90,6 +90,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
+'account.apps.AccountConfig',
     ]
 
 
@@ -179,7 +180,7 @@ DATABASES = {
     },
 }
 
-AUTH_USER_MODEL = 'account.User'
+AUTH_USER_MODEL = 'account_sacado.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
