@@ -33,6 +33,7 @@ def get_score(obj,student):
     return obj.send_score(student)
 
 
+
 @register.simple_tag
 def get_score2(results, id):
     """

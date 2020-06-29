@@ -37,6 +37,10 @@ urlpatterns = [
     path('update_student_by_ajax', update_student_by_ajax, name='update_student_by_ajax'),
     path('delete_student/<int:id>/<int:idg>', delete_student, name='delete_student'),
 
+    path('update_student_by_admin/<int:id>', update_student_by_admin, name='update_student_by_admin'),
+
+
+
     path('send_to_teachers', send_to_teachers, name='send_to_teachers'),
     path('message_to_teachers_sent', message_to_teachers_sent, name='message_to_teachers_sent'),
 

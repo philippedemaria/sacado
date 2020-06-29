@@ -52,10 +52,10 @@
                         {% for user in users %}
                             <tr>
                                 <td>
-                                    <a href="{% url 'update_student' user.id 0 %}">{{ user.last_name }} </a>   
+                                    <a href="{% url 'update_student_by_admin' user.id  %}">{{ user.last_name }} </a>   
                                 </td>
                                 <td>
-                                    <a href="{% url 'update_student' user.id 0 %}"> {{ user.first_name }}</a>   
+                                    <a href="{% url 'update_student_by_admin' user.id  %}"> {{ user.first_name }}</a>   
                                 </td>
                                 <td>
                                     {{ user.email }}   

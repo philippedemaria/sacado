@@ -1,13 +1,13 @@
 {% extends 'dashboard.html' %}
 {% load widget_tweaks %}
 {% load static %}
+{% load item_tags %}
+
 
 {% block require %}
-    {% if idg %}
+
     <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3.js' %}"></script> 
-    {% else %}
-    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-index.js' %}"></script> 
-    {% endif %}
+
 
     <script>
        require(['script/ajax-dashboard']);
@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block page_title %}
-    <i class="fa fa-user"></i> Mon profil
+    <i class="fa fa-user"></i> Profil de {{ student.user.get_full_name }}
 {% endblock %}
  
 {% block page_menu_right %}
@@ -83,6 +83,19 @@
                     {{ form.level.errors }}
                 </div>
             </div>
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                    <label>Groupe affecté</label>
+                    <select name="group_ids" id="group_ids" multiple class="select2">
+                        {% for group in groups %}
+                            <option value="{{ group.id }}" {% if student in group.students.all %} selected {% endif %}>{{ group.name }}</option>
+                         {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+
+
         </div>     
 
             <div class="row">

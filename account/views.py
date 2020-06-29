@@ -322,6 +322,47 @@ def update_student(request, id,idg=0):
 
 
 
+
+@login_required
+@can_register
+@is_manager_of_this_school
+def update_student_by_admin(request, id):  
+    """
+    Upadta par un admin d'un établissement
+    """
+    school = request.user.school
+    user = get_object_or_404(User, pk=id)
+    student = user.user_student
+    student = Student.objects.get(user=user)
+    user_form = UserUpdateForm(request.POST or None, request.FILES or None, instance=user)
+    student_form = StudentForm(request.POST or None, request.FILES or None, instance=student)
+    groups = Group.objects.filter(teacher__user__school = school).order_by("name")
+    if request.method == "POST":
+        if all((user_form.is_valid(), student_form.is_valid())):
+            user_form.save()
+            student_f = student_form.save(commit=False)
+            student_f.user = user
+            student_f.save()
+            messages.success(request, 'Le profil a été changé avec succès !')
+            
+            group_ids = request.POST.getlist("group_ids")
+            these_groups = student.students_to_group.all()
+            for g in these_groups:
+                g.students.remove(student_f)
+            for group_id in group_ids:
+                group = Group.objects.get(pk = group_id)
+                group.students.add(student_f)
+
+            return redirect('school_students')
+
+
+    return render(request, 'account/student_form_by_admin.html',
+                  {'user_form': user_form, 'form': student_form, 'student': student, 'groups': groups})
+
+
+
+
+
 @csrf_exempt
 def update_student_by_ajax(request):
 
