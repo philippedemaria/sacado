@@ -226,6 +226,8 @@ FILE_UPLOAD_PERMISSIONS = 0o775
 MEDIA_URL = 'static/uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/uploads')
  
+# Sites pour allauth
+SITE_ID = 1
 
 ########################################################################################################################
 
