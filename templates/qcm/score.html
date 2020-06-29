@@ -18,7 +18,7 @@
             darkgreen
             {% endif %}"
           href="{% url 'show_this_exercise'  relationship.exercise.id   %}" data-container="body"
-          data-toggle="popover" style="border : 1px solid {{student.get_exercises.parcours.color }}"
+          data-toggle="popover" 
           data-trigger="hover" data-placement="top"
           data-content="{{ relationship.exercise.knowledge.name }}">
         {{ score }}
@@ -26,7 +26,7 @@
 {% else %}
     <a class="markdown"                                                   
           href="{% url 'show_this_exercise' relationship.exercise.id %}" data-container="body"
-          data-toggle="popover" style="border : 1px solid {{student.get_exercises.parcours.color }}"
+          data-toggle="popover"  
           data-trigger="hover"
           title="Exercice" data-placement="top"
           data-content="{{ relationship.exercise.knowledge.name }}"> 

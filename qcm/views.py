@@ -187,7 +187,7 @@ def associate_parcours(request,id):
     if len(parcours.students.all())>0 :
         return redirect("list_parcours_group" , group.id )
     else :
-        return redirect("index") 
+        return redirect("dashboard") 
 
 
 
@@ -318,7 +318,7 @@ def peuplate_parcours(request,id):
     except :
         group_id = None
         # fin ---- modifie les exercices sélectionnés
-    context = {'form': form, 'parcours': parcours,       'teacher': teacher, 'exercises': exercises , 'levels': levels , 'themes' : themes_tab , 'user': request.user , 'group_id' : group_id , 'relationships' :relationships  }
+    context = {'form': form, 'parcours': parcours,     'communications':[],     'teacher': teacher, 'exercises': exercises , 'levels': levels , 'themes' : themes_tab , 'user': request.user , 'group_id' : group_id , 'relationships' :relationships  }
 
     return render(request, 'qcm/form_peuplate_parcours.html', context)
 
@@ -334,7 +334,16 @@ def individualise_parcours(request,id):
     parcours = Parcours.objects.get(pk = id)
     relationships = Relationship.objects.filter(parcours = parcours).order_by("order")
     students = parcours.students.all().order_by("user__last_name")
-    return render(request, 'qcm/form_individualise_parcours.html', { 'relationships': relationships , 'parcours': parcours , 'students': students  })
+
+    context = {'relationships': relationships, 'parcours': parcours,     'communications':[],     'students': students,  'form': None,  
+                    'teacher': teacher,
+                  'exercises': None , 
+                  'levels': None , 
+                  'themes' : None ,
+                   'user': request.user , 
+                   'group_id' : None ,}
+
+    return render(request, 'qcm/form_individualise_parcours.html', context )
 
 
 
@@ -506,7 +515,7 @@ def create_parcours(request):
 
 
     context = {'form': form,   'teacher': teacher,  'groups': groups,  'levels': levels, 'idg': 0,   'themes' : themes_tab, 'group_id': group_id , 'parcours': None,  'relationships': [], 
-               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0}
+               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'communications' : None,}
 
 
     return render(request, 'qcm/form_parcours.html', context)
@@ -566,7 +575,7 @@ def update_parcours(request, id, idg=0 ):
     students_checked = parcours.students.count()  # nombre d'étudiant dans le parcours
 
     context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'relationships': relationships, 
-               'exercises': exercises, 'levels': levels, 'themes': themes_tab, 'students_checked': students_checked}
+               'exercises': exercises, 'levels': levels, 'themes': themes_tab, 'students_checked': students_checked, 'communications' : None, }
 
     return render(request, 'qcm/form_parcours.html', context)
 
@@ -710,13 +719,13 @@ def result_parcours(request, id):
     stage = get_stage(parcours)
 
 
-    context = {  'relationships': relationships, 'parcours': parcours, 'students': students, 'themes': themes_tab, 'form': form,  'group_id' : group_id  , 'stage' : stage  }
+    context = {  'relationships': relationships, 'parcours': parcours, 'students': students, 'themes': themes_tab, 'form': form,  'group_id' : group_id  , 'stage' : stage, 'communications' : [] }
 
     return render(request, 'qcm/result_parcours.html', context )
 
 
 
- ########## Sans doute pus utilisée ???? 
+ ########## Sans doute plus utilisée ???? 
 @user_is_parcours_teacher 
 def result_parcours_theme(request, id, idt):
 
@@ -747,7 +756,7 @@ def result_parcours_theme(request, id, idt):
     stage = get_stage(parcours) 
     form = EmailForm(request.POST or None)
 
-    context = {  'relationships': relationships, 'parcours': parcours, 'students': students,  'themes': themes_tab,'form': form, 'group_id' : group_id , 'stage' : stage  }
+    context = {  'relationships': relationships, 'parcours': parcours, 'students': students,  'themes': themes_tab,'form': form, 'group_id' : group_id , 'stage' : stage, 'communications' : [] }
 
     return render(request, 'qcm/result_parcours.html', context )
  
@@ -776,7 +785,7 @@ def result_parcours_knowledge(request, id):
         knowledges.append(Knowledge.objects.get(pk = k_id))
 
     stage = get_stage(parcours) 
-    context = {  'relationships': relationships,  'students': students, 'parcours': parcours,  'form': form, 'exercise_knowledges' : knowledges, 'group_id' : group_id, 'stage' : stage  }
+    context = {  'relationships': relationships,  'students': students, 'parcours': parcours,  'form': form, 'exercise_knowledges' : knowledges, 'group_id' : group_id, 'stage' : stage , 'communications' : []  }
 
     return render(request, 'qcm/result_parcours_knowledge.html', context )
 
@@ -2703,4 +2712,7 @@ def show_course_student(request, idc , id ):
 
     context = {  'courses': courses, 'parcours': parcours , 'group_id' : None, 'communications' : []}
     return render(request, 'qcm/course/show_course_student.html', context)
+ 
+
+
  

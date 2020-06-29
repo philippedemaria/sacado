@@ -66,13 +66,13 @@
                     </div>
                </div> 
               <hr style="padding:0px; margin:10px 0px"/> 
-                <label  style="font-size: 10px;">Date de publication ?</label><br>
-                <input type="type" name="dateur" data-relationship_id="{{relation.id}}" data-type ="1" value="{{ relation.date_limit|date:"Y-m-d" }}" class="datepicker dateur pull-right" />
+                <label  style="font-size: 10px;">Date limite de rendu ?</label><br>
+                <input type="type" name="dateur" data-relationship_id="{{relation.id}}" data-type ="1" value='{{ relation.date_limit|date:"Y-m-d" }}' class="datepicker dateur pull-right" />
           </div>
 
           <!-- Pop up de la date de publication d'un exercice  -->
           <div id="detail_pub{{relation.id}}" class="card-dateur"  >
-                <input type="type" name="start" data-relationship_id="{{relation.id}}" data-type ="0" value="{{ relation.date_limit|date:"Y-m-d" }}" class="datepicker dateur pull-right" />
+                <input type="type" name="start" data-relationship_id="{{relation.id}}" data-type ="0" value='{{ relation.date_limit|date:"Y-m-d" }}' class="datepicker dateur pull-right" />
           </div>
 
           <!-- Pop up de la constrainte  -->
@@ -105,11 +105,11 @@
                     </div>
                     <div class="col-sm-6 col-md-1">
                         <label  style="font-size: 10px;">Tous</label><br>
-                        <input type="checkbox"  id="all_of_them{{relation.id}}" data-relationship_id="{{relation.id}}" class="all_of_them"     /> 
+                        <input type="checkbox"  id="all_of_them{{relation.id}}" data-relationship_id="{{relation.id}}" class="all_of_them" /> 
                     </div>
                     <div class="col-sm-6 col-md-4">
                         <label  style="font-size: 10px;">Score min.</label><br>
-                        <input type="number"  id="scoreMin{{relation.id}}"  maxlength="3"    size="3" value="80"  class="details_relation"  />%
+                        <input type="number"  id="scoreMin{{relation.id}}"  maxlength="3"  size="3" value="80"  class="details_relation" />%
                     </div>
                     <div class="col-sm-6 col-md-2">
                         <a href="#" data-parcours_id="{{relation.parcours.id}}"  data-relationship_id="{{relation.id}}" id="save_constraint{{relation.id}}" class="save_constraint btn btn-danger">OK</a>
@@ -119,7 +119,6 @@
                 <hr style="padding:0px; margin:10px 0px"/> 
                 <div id="new_constraint{{relation.id}}" class="text-danger">
                 {% if relation.relationship_constraint.all|length == forloop.counter0 %} 
-
                   <div id="constraint_saving0">
                       <span class="text-red"  style="font-size: 11px;"><i class="fa fa-minus-circle"></i> Tous les exercices précédents</span>
                       <a href="#"  onclick="return TestDelete('cette constrainte ')"  
@@ -130,9 +129,7 @@
                           <i class="fa fa-trash"></i> 
                       </a>
                     </div>
-
                 {% else %}   
-
                   {% for constraint in relation.relationship_constraint.all %}
                       <div  id="constraint_saving{{constraint.id}}">
                         <span class="text-red"  style="font-size: 11px;"><i class="fa fa-minus-circle"></i> {{ constraint }}</span>
@@ -148,7 +145,6 @@
                   {% empty %}
                         Aucune constrainte appliquée
                   {% endfor %}
-
                 {% endif %}   
                </div>
           </div>

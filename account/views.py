@@ -436,11 +436,11 @@ def detail_student(request, id):
         teacher = Teacher.objects.get(user=request.user)
         group = Group.objects.get(students=student, teacher=teacher)
         nav = navigation(group, id)
-        context = {'datas': datas, 'parcourses': parcourses, 'group': group, 'sprev_id': nav[0], 'snext_id': nav[1],
+        context = {'datas': datas, 'parcourses': parcourses, 'group': group, 'sprev_id': nav[0], 'snext_id': nav[1], 'parcours' : None, 
                    'themes': themes, 'student': student}
     else:
         group = Group.objects.filter(students=student).first()
-        context = {'datas': datas, 'parcourses': parcourses, 'group': group, 'themes': themes, 'student': student}
+        context = {'datas': datas, 'parcourses': parcourses, 'group': group, 'themes': themes, 'student': student , 'communications' : [] , 'parcours' : None,  }
 
     return render(request, 'account/detail_student.html', context)
 
@@ -493,11 +493,11 @@ def detail_student_theme(request, id,idt):
         teacher = Teacher.objects.get(user=request.user)
         group = Group.objects.get(students = student, teacher = teacher)
         nav = navigation(group,id)
-        context = { 'datas': datas,  'student': student , 'theme' : theme,  'group' : group ,  'sprev_id' :  nav[0]  ,'snext_id' : nav[1]  ,   'parcourses':parcourses, 'themes' : themes }
+        context = { 'datas': datas,  'student': student , 'theme' : theme,  'group' : group , 'parcours' : None,  'sprev_id' :  nav[0]  ,'snext_id' : nav[1]  , 'communications' : [] ,   'parcourses':parcourses, 'themes' : themes }
     
     else :
         group = Group.objects.filter(students = student).first() 
-        context = { 'datas': datas,  'student': student , 'theme' : theme,  'group' : group ,   'parcourses':parcourses, 'themes' : themes }
+        context = { 'datas': datas,  'student': student , 'theme' : theme,  'group' : group , 'parcours' : None,  'communications' : [] ,  'parcourses':parcourses, 'themes' : themes , 'sprev_id' :  None  ,'snext_id' : None , }
     return render(request, 'account/detail_student_theme.html',  context )
 
 
@@ -522,11 +522,11 @@ def detail_student_parcours(request, id,idp):
         teacher = Teacher.objects.get(user=request.user)
         group = Group.objects.get(students=student, teacher=teacher)
         nav = navigation(group, id)
-        context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'sprev_id': nav[0],
+        context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'sprev_id': nav[0],  
                    'snext_id': nav[1], 'parcourses': parcourses, 'student': student}
     else:
-        context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'parcourses': parcourses,
-                   'student': student}
+        context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'parcourses': parcourses,  'sprev_id': None ,
+                   'snext_id': None, 'student': student}
 
     return render(request, 'account/detail_student_parcours.html', context)
 
@@ -611,10 +611,11 @@ def detail_student_all_views(request, id):
         teacher = Teacher.objects.get(user=request.user)
         group = Group.objects.get(students=student, teacher=teacher)
         nav = navigation(group, id)
-        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'student': student,
+        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'student': student, 'parcours' : None, 
                    'sprev_id': nav[0], 'snext_id': nav[1]}
     else:
-        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'student': student}
+        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'student': student, 'parcours' : None, 
+                    'sprev_id': None , 'snext_id': None }
 
     return render(request, 'account/detail_student_all_views.html', context)
 
