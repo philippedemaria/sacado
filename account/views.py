@@ -751,7 +751,10 @@ def register_teacher_from_admin(request):
             teacher.user = u_form
             teacher.save()
             teacher_form.save_m2m()
-            teacher.notify_registration()
+            send_mail('Création de compte sur Sacado',
+                      f'Bonjour, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {u_form.username} \r\n\r\n.\r\n\r\nVotre mot de passe est : sacado_2020 \r\n\r\nVous pourrez le modifier une fois connecter à vorte espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
+                      'info@sacado.xyz',
+                      [u_form.email, ])
             return redirect('school_teachers')
         else:
             messages.error(request, user_form.errors)
@@ -906,7 +909,7 @@ def register_parent(request):
                 login(request, user)
                 messages.success(request, "Inscription réalisée avec succès !")               
                 if user_form.cleaned_data['email'] :
-                    send_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.', 'info@sacado.xyz', [request.POST.get("email")])
+                    send_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n\n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.', 'info@sacado.xyz', [request.POST.get("email")])
         else :
             messages.error(request, "Erreur lors de l'enregistrement. Reprendre l'inscription...")
     return redirect('index')
