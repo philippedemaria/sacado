@@ -11,4 +11,7 @@ urlpatterns = [
 
     path('ajax/change_color_account', ajax_changecoloraccount , name='ajax_changecoloraccount'), 
     path('admin_tdb', admin_tdb, name='admin_tdb'),  
+
+    path('gestion_files', gestion_files, name='gestion_files'),  
+
 ]

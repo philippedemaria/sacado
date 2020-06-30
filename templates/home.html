@@ -47,7 +47,10 @@
         <div class="col-xs-12 col-lg-6 intro-info order-md-first order-last">
           <div class="title">S'entraîner. <br>Progresser. <br>S'auto-évaluer.</div>
 			    <div class="subtitle marginbottom50">  {{ nb_exercise }} exercice{{  nb_exercise|pluralize }} interactif{{ nb_exercise|pluralize }} corrigé{{  nb_exercise|pluralize }} du CP à la Terminale</div>
-          <a href="#" data-toggle='modal' data-target='#connexion'  class="btn btn-primary"> Se connecter </a><br>
+          <a href="#" data-toggle='modal' data-target='#connexion'  class="btn btn-primary"> Se connecter </a>
+          <a href="#" class="btn btn-primary"> Se connecter avec <img src="{% static 'img/facebook.png' %}" height="15" /> </a>
+          <a href="#" class="btn btn-primary"> Se connecter avec <img src="{% static 'img/Googlelogo.png' %}" height="15" /> </a>
+          <br>
           <div style="color:#cb2131;margin-top: 50px">
             <img src="{% static 'img/edge.png' %}" width="35px" />          
             <img src="{% static 'img/firefox.png' %}" width="35px" />          

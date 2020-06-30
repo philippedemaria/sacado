@@ -3,7 +3,7 @@ from django.contrib.auth.forms import  UserCreationForm,  AuthenticationForm
 from account.forms import  UserForm, TeacherForm, StudentForm
 from django.contrib.auth import   logout
 from account.models import  User, Teacher, Student  ,Parent
-from qcm.models import Parcours, Exercise,Relationship,Studentanswer
+from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile
 from group.models import Group
 from school.models import Stage
 from sendmail.models import Communication
@@ -16,7 +16,7 @@ from django.utils import formats, timezone
 import random
 import pytz
 import uuid
-
+import os
 
 
 def index(request):
@@ -52,9 +52,12 @@ def index(request):
 
             parcours_tab = Parcours.objects.filter(students=None, teacher=teacher, is_favorite=1) ## Parcours favoris non affectés
 
+
             context = {'this_user': this_user, 'teacher': teacher, 'groups': groups, 'parcourses': parcourses, 'parcours': None,
                        'relationships': relationships, 'communications': communications, 'parcours_tab': parcours_tab,
                        'nb_teacher_level': nb_teacher_level}
+
+
 
 
         elif request.user.user_type == User.STUDENT: ## student
@@ -247,3 +250,74 @@ def  admin_tdb(request):
                                                      'eca' : eca, 'ac' : ac , 'dep' : dep
                                                      })
 
+
+ 
+def  gestion_files(request):
+
+
+    if request.method == "POST" :
+
+        level_id = request.POST.get("level")
+
+        syms = ["ggbimages",'ggbfiles']  
+        tabs = ["imagefile",'ggbfile']
+
+        level = Level.objects.get(pk=level_id) 
+        error_files = []
+
+
+        total  = 0
+        supportfiles = Supportfile.objects.filter(level_id=level_id,is_title=0)
+        nb_sup = supportfiles.count()
+
+        if PRODUCTION :
+            folder_path_ggbimages = "../static/uploads/"   
+            folder_path_ggbfiles = "../static/uploads/"  
+        else :
+            folder_path_ggbimages = "D:/uwamp/www/sacadogit/sacado/staticfiles/uploads/"   
+            folder_path_ggbfiles = "D:/uwamp/www/sacadogit/sacado/staticfiles/uploads/"
+
+
+        for supportfile in supportfiles :
+            if os.path.exists(folder_path_ggbfiles+str(supportfile.ggbfile)) :
+
+                if os.path.exists(folder_path_ggbimages+str(supportfile.imagefile)):
+                    pass
+            else :
+                error_files.append(supportfile)       
+
+        support_files = Supportfile.objects.values_list('ggbfile', flat=True).filter(level_id=level_id,is_title=0).all()
+        supp_tab = []
+        for path, dirs, files in os.walk(folder_path_ggbfiles+"ggbfiles/"+str(level_id)+"/"):
+
+            for filename in files:
+                string = "ggbfiles/"+str(level_id)+"/"+filename
+                
+                if string not in support_files :
+                    supp_tab.append(str(filename))
+                    
+                    if request.POST.get("clear") :
+                        os.remove("D:/uwamp/www/sacadogit/sacado/staticfiles/uploads/ggbfiles/"+str(level_id)+"/"+str(filename))
+                    if PRODUCTION :
+ 
+                        if request.POST.get("clear") :
+                            os.remove("../static/uploads/ggbfiles/"+str(level_id)+"/"+str(filename))
+
+                    else :
+                        os.remove("D:/uwamp/www/sacadogit/sacado/staticfiles/uploads/ggbfiles/"+str(level_id)+"/"+str(filename))
+
+
+    else :
+        total = None
+        level = None
+        support_files  = []
+        supp_tab  = []
+        error_files = []
+
+
+    levels = Level.objects.all()
+
+
+    context =  {'levels': levels ,  'level': level , 'total' : total , 'error_files' : error_files , 'files' : files ,  'supp_tab' : supp_tab }
+
+    return render(request, 'setup/gestion_files.html', context )

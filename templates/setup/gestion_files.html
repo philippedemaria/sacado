@@ -1,0 +1,105 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-accueil.js' %}"></script>
+{% endblock %} 
+
+
+{% block page_title %}
+        Gestion des fichiers sur le niveau de {{ level }}
+{% endblock %}
+
+
+
+
+{% block page_menu_right %} 
+
+{% endblock %}
+
+
+
+{% block body %}  
+<section class="content_main">
+    <div class="col-sm-12 col-md-12">
+
+        <form action="{% url 'gestion_files' %}" method="POST" enctype='multipart/form-data'> 
+       
+
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <select name="level" class="select2">
+                            {% for l in levels %}
+                                <option value='{{ l.id }}'>{{ l.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                        <input value="Lancer le test" type="submit" name="launch" class="btn btn-primary"/>
+                    </div>
+                </div> 
+
+
+            </div> 
+ 
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                     <table class="table display_no_details20">
+                        <thead> 
+                            <tr> 
+                                <th>Image ou fichier ggb absents</th>                                   
+                            </tr> 
+                        </thead>
+                        <tbody>
+                            {% for r in error_files %}
+                                <tr><td>#{{ r.id }}. </td></tr>
+                            {% empty %}
+                                <tr><td>Tout va bien !!!</td></tr>
+                            {% endfor %}
+                        </tbody>
+                     </table>
+                </div>
+            </div> 
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                     <table class="table display_no_details20">
+                        <thead> 
+                            <tr> 
+                                <th>Adressage dans la table mais absent physiquement ... à supprimer</th>                                   
+                            </tr> 
+                        </thead>
+                        <tbody>
+                            {% for supp in supp_tab %}
+                                <tr><td>{{ supp }}  </td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div> 
+
+            <div class="row" style="margin-top:40px">
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <input value="Nettoyer" type="submit" name="clear" class="btn btn-danger"/>
+                    </div>
+                </div> 
+            </div> 
+        </form>
+ 
+     
+    </div>   
+</section>   
+
+
+{% endblock %}
+
+
+      
+ 
+ 
