@@ -44,44 +44,8 @@
                         <input value="Lancer le test" type="submit" name="launch" class="btn btn-primary"/>
                     </div>
                 </div> 
-
-
             </div> 
  
-            <div class="row">
-                <div class="col-sm-12 col-md-12 col-lg-12">
-                     <table class="table display_no_details20">
-                        <thead> 
-                            <tr> 
-                                <th>Image ou fichier ggb absents</th>                                   
-                            </tr> 
-                        </thead>
-                        <tbody>
-                            {% for r in error_files %}
-                                <tr><td>#{{ r.id }}. </td></tr>
-                            {% empty %}
-                                <tr><td>Tout va bien !!!</td></tr>
-                            {% endfor %}
-                        </tbody>
-                     </table>
-                </div>
-            </div> 
-            <div class="row">
-                <div class="col-sm-12 col-md-12 col-lg-12">
-                     <table class="table display_no_details20">
-                        <thead> 
-                            <tr> 
-                                <th>Adressage dans la table mais absent physiquement ... à supprimer</th>                                   
-                            </tr> 
-                        </thead>
-                        <tbody>
-                            {% for supp in supp_tab %}
-                                <tr><td>{{ supp }}  </td></tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div> 
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-lg-12">
                      <table class="table display_no_details20">
@@ -92,12 +56,16 @@
                         </thead>
                         <tbody>
                             {% for supportfile in supportfiles %}
-                                <tr><td>{{ supportfile.ggbfile }}  </td><td>{{ supportfile.imagefile }}  </td></tr>
+                                <tr>
+                                    <td>{{ supportfile.ggbfile }} {% if  supportfile.in_folder.file_in_folder %} <i class="fa fa-check text-success"></i>{% else %} <i class="fa fa-times text-danger"></i>{% endif %}</td>
+                                    <td>{{ supportfile.imagefile }} {% if  supportfile.in_folder.image_in_folder %}<i class="fa fa-check text-success"></i> {% else %} <i class="fa fa-times text-danger"></i>{% endif %}</td>
+                                </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div> 
+ 
             <div class="row" style="margin-top:40px">
                 <div class="col-sm-12 col-md-4">
                     <div class="form-group">

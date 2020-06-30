@@ -6,7 +6,7 @@ from account.models import Student, Teacher, ModelWithCode, generate_code
 from socle.models import  Knowledge, Level , Theme, Skill
 from django.apps import apps
 from ckeditor_uploader.fields import RichTextUploadingField
- 
+import os.path
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User 
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
@@ -96,6 +96,23 @@ class Supportfile(models.Model):
 
 
  
+    def in_folder(self) :
+
+        folder_path_ggbfiles = "/home/c1398844c/staticfiles/uploads/" 
+        data = {}
+        #folder_path  = "D:/uwamp/www/sacadogit/sacado/staticfiles/uploads/"   
+
+        if os.path.isfile(folder_path+str(self.ggbfile)):
+            data["file_in_folder"] = True
+        else:
+            data["file_in_folder"] = False
+
+        if os.path.isfile(folder_path+str(self.imagefile)):
+            data["image_in_folder"] = True
+        else:
+            data["image_in_folder"] = False
+        return data
+
 
 
 

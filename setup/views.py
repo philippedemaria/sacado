@@ -254,65 +254,17 @@ def  admin_tdb(request):
  
 def  gestion_files(request):
 
-
+    levels = Level.objects.all()
     if request.method == "POST" :
 
         level_id = request.POST.get("level")
-
-        syms = ["ggbimages",'ggbfiles']  
-        tabs = ["imagefile",'ggbfile']
-
         level = Level.objects.get(pk=level_id) 
-        error_files = []
-
-
-        total  = 0
         supportfiles = Supportfile.objects.filter(level_id=level_id,is_title=0) 
-        nb_sup = supportfiles.count()
-
- 
-        folder_path_ggbimages = "../static/uploads/"   
-        folder_path_ggbfiles = "../static/uploads/"  
-
-        #    folder_path_ggbimages = "D:/uwamp/www/sacadogit/sacado/staticfiles/uploads/"   
-        #    folder_path_ggbfiles = "D:/uwamp/www/sacadogit/sacado/staticfiles/uploads/"
-
-
-        for supportfile in supportfiles :
-            if os.path.exists(folder_path_ggbfiles+str(supportfile.ggbfile)) :
-
-                if os.path.exists(folder_path_ggbimages+str(supportfile.imagefile)):
-                    pass
-            else :
-                error_files.append(supportfile)       
-
-        support_files = Supportfile.objects.values_list('ggbfile', flat=True).filter(level_id=level_id,is_title=0).all()
-        supp_tab = []
-        for path, dirs, files in os.walk(folder_path_ggbfiles+"ggbfiles/"+str(level_id)+"/"):
-
-            for filename in files:
-                string = "ggbfiles/"+str(level_id)+"/"+filename
-                
-                if string not in support_files :
-                    supp_tab.append(str(filename))
-                    
-                    if request.POST.get("clear") :
-                        # production
-                        os.remove("../static/uploads/ggbfiles/"+str(level_id)+"/"+str(filename))
-                        #else :
-                        #   os.remove("D:/uwamp/www/sacadogit/sacado/staticfiles/uploads/ggbfiles/"+str(level_id)+"/"+str(filename))
-
-
     else :
-        total = None
-        level = None
-        supp_tab  = []
-        error_files = []
+        level, level_id = None , None
         supportfiles  = []
 
-    levels = Level.objects.all()
 
-
-    context =  {'levels': levels ,  'level': level , 'total' : total , 'error_files' : error_files ,    'supp_tab' : supp_tab, 'supportfiles' : supportfiles }
+    context =  {'levels': levels ,  'level': level ,  'level_id' : level_id ,    'supportfiles' : supportfiles }
 
     return render(request, 'setup/gestion_files.html', context )
