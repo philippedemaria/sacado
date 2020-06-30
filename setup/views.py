@@ -267,15 +267,15 @@ def  gestion_files(request):
 
 
         total  = 0
-        supportfiles = Supportfile.objects.filter(level_id=level_id,is_title=0)
+        supportfiles = Supportfile.objects.filter(level_id=level_id,is_title=0) 
         nb_sup = supportfiles.count()
 
-        if PRODUCTION :
-            folder_path_ggbimages = "../static/uploads/"   
-            folder_path_ggbfiles = "../static/uploads/"  
-        else :
-            folder_path_ggbimages = "D:/uwamp/www/sacadogit/sacado/staticfiles/uploads/"   
-            folder_path_ggbfiles = "D:/uwamp/www/sacadogit/sacado/staticfiles/uploads/"
+ 
+        folder_path_ggbimages = "../static/uploads/"   
+        folder_path_ggbfiles = "../static/uploads/"  
+
+        #    folder_path_ggbimages = "D:/uwamp/www/sacadogit/sacado/staticfiles/uploads/"   
+        #    folder_path_ggbfiles = "D:/uwamp/www/sacadogit/sacado/staticfiles/uploads/"
 
 
         for supportfile in supportfiles :
