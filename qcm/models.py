@@ -98,7 +98,7 @@ class Supportfile(models.Model):
  
     def in_folder(self) :
 
-        folder_path_ggbfiles = "/home/c1398844c/staticfiles/uploads/" 
+        folder_path = "/home/c1398844c/sacado/staticfiles/uploads/" 
         data = {}
         #folder_path  = "D:/uwamp/www/sacadogit/sacado/staticfiles/uploads/"   
 

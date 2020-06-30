@@ -51,12 +51,13 @@
                      <table class="table display_no_details20">
                         <thead> 
                             <tr> 
-                                <th>GGBfile dans la table</th>  <th>ImageFile dans la table</th>                                   
+                                <th>id</th><th>GGBfile dans la table</th>  <th>ImageFile dans la table</th>                                   
                             </tr> 
                         </thead>
                         <tbody>
                             {% for supportfile in supportfiles %}
                                 <tr>
+                                    <td>{{ supportfile.id }}</td>
                                     <td>{{ supportfile.ggbfile }} {% if  supportfile.in_folder.file_in_folder %} <i class="fa fa-check text-success"></i>{% else %} <i class="fa fa-times text-danger"></i>{% endif %}</td>
                                     <td>{{ supportfile.imagefile }} {% if  supportfile.in_folder.image_in_folder %}<i class="fa fa-check text-success"></i> {% else %} <i class="fa fa-times text-danger"></i>{% endif %}</td>
                                 </tr>
