@@ -27,8 +27,8 @@ class Migration(migrations.Migration):
                 ('suiviparent', models.BooleanField(default=0)),
                 ('level', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='level_to_group', to='socle.Level', verbose_name='Niveau*')),
                 ('parcours', models.OneToOneField(blank=True, default='', on_delete=django.db.models.deletion.SET_DEFAULT, related_name='parcours_group', to='qcm.Parcours')),
-                ('students', models.ManyToManyField(blank=True, related_name='students_to_group', to='account.Student', verbose_name='Élèves*')),
-                ('teacher', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='teacher_to_group', to='account.Teacher', verbose_name='Enseignant*')),
+                ('students', models.ManyToManyField(blank=True, related_name='students_to_group', to='account_sacado.Student', verbose_name='Élèves*')),
+                ('teacher', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='teacher_to_group', to='account_sacado.Teacher', verbose_name='Enseignant*')),
             ],
             options={
                 'ordering': ['name'],

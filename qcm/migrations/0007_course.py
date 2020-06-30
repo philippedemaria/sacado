@@ -27,10 +27,10 @@ class Migration(migrations.Migration):
                 ('date_created', models.DateTimeField(auto_now_add=True, verbose_name='Date de création')),
                 ('date_modified', models.DateTimeField(auto_now=True, verbose_name='Date de modification')),
                 ('notification', models.BooleanField(default=0, help_text='Envoie un message aux participants.', verbose_name='Informer des modifications ?')),
-                ('creators', models.ManyToManyField(blank=True, related_name='creators_course', to='account.Student', verbose_name='Co auteurs élève')),
+                ('creators', models.ManyToManyField(blank=True, related_name='creators_course', to='account_sacado.Student', verbose_name='Co auteurs élève')),
                 ('parcours', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='course', to='qcm.Parcours')),
-                ('students', models.ManyToManyField(blank=True, related_name='students_course', to='account.Student', verbose_name='Attribuer à/au')),
-                ('teacher', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.PROTECT, related_name='course', to='account.Teacher')),
+                ('students', models.ManyToManyField(blank=True, related_name='students_course', to='account_sacado.Student', verbose_name='Attribuer à/au')),
+                ('teacher', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.PROTECT, related_name='course', to='account_sacado.Teacher')),
             ],
         ),
     ]

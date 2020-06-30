@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('knowledge', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='exercises', to='socle.Knowledge', verbose_name='Savoir faire associé - Titre')),
                 ('level', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='exercises', to='socle.Level', verbose_name='Niveau')),
-                ('students', models.ManyToManyField(blank=True, related_name='exercises', to='account.Student', verbose_name='Travail fait')),
+                ('students', models.ManyToManyField(blank=True, related_name='exercises', to='account_sacado.Student', verbose_name='Travail fait')),
             ],
         ),
         migrations.CreateModel(
@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
                 ('stop', models.DateField(blank=True, null=True, verbose_name='Date de fin de publication')),
                 ('stopper', models.TimeField(blank=True, null=True, verbose_name='Heure de fin de publication')),
                 ('vignette', models.ImageField(blank=True, default='', upload_to=qcm.models.vignette_directory_path, verbose_name='Image du parcours')),
-                ('author', models.ForeignKey(blank=True, default='', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='author_parcours', to='account.Teacher', verbose_name='Auteur')),
+                ('author', models.ForeignKey(blank=True, default='', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='author_parcours', to='account_sacado.Teacher', verbose_name='Auteur')),
             ],
             options={
                 'abstract': False,
@@ -64,7 +64,7 @@ class Migration(migrations.Migration):
                 ('exercise', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='exercise_relationship', to='qcm.Exercise')),
                 ('parcours', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.PROTECT, related_name='parcours_relationship', to='qcm.Parcours')),
                 ('skills', models.ManyToManyField(blank=True, editable=False, related_name='skills_relationship', to='socle.Skill')),
-                ('students', models.ManyToManyField(blank=True, editable=False, related_name='students_relationship', to='account.Student')),
+                ('students', models.ManyToManyField(blank=True, editable=False, related_name='students_relationship', to='account_sacado.Student')),
             ],
             options={
                 'unique_together': {('exercise', 'parcours')},
@@ -92,7 +92,7 @@ class Migration(migrations.Migration):
                 ('is_title', models.BooleanField(default=0, editable=False, verbose_name="titre pour l'organisation des parcours")),
                 ('is_subtitle', models.BooleanField(default=0, editable=False, verbose_name="sous-titre pour l'organisation des parcours")),
                 ('duration', models.PositiveIntegerField(blank=True, default=15, verbose_name='Durée estimée - en minutes')),
-                ('author', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.PROTECT, related_name='author_ggbfile', to='account.Teacher')),
+                ('author', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.PROTECT, related_name='author_ggbfile', to='account_sacado.Teacher')),
                 ('knowledge', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='knowledge_ggbfile', to='socle.Knowledge', verbose_name='Savoir faire associé - Titre')),
                 ('level', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='level_ggbfile', to='socle.Level', verbose_name='Niveau')),
                 ('skills', models.ManyToManyField(blank=True, related_name='skills_supportfile', to='socle.Skill', verbose_name='Compétences ciblées')),
@@ -109,7 +109,7 @@ class Migration(migrations.Migration):
                 ('secondes', models.CharField(editable=False, max_length=255)),
                 ('exercise', models.ForeignKey(blank=True, editable=False, on_delete=django.db.models.deletion.PROTECT, related_name='ggbfile_studentanswer', to='qcm.Exercise')),
                 ('parcours', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='parcours_studentanswer', to='qcm.Parcours')),
-                ('student', models.ForeignKey(blank=True, editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='student_studentanswer', to='account.Student')),
+                ('student', models.ForeignKey(blank=True, editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='student_studentanswer', to='account_sacado.Student')),
             ],
         ),
         migrations.CreateModel(
@@ -137,12 +137,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='parcours',
             name='students',
-            field=models.ManyToManyField(blank=True, related_name='students_to_parcours', to='account.Student', verbose_name='Elèves de ce parcours'),
+            field=models.ManyToManyField(blank=True, related_name='students_to_parcours', to='account_sacado.Student', verbose_name='Elèves de ce parcours'),
         ),
         migrations.AddField(
             model_name='parcours',
             name='teacher',
-            field=models.ForeignKey(blank=True, default='', editable=False, on_delete=django.db.models.deletion.PROTECT, related_name='teacher_parcours', to='account.Teacher'),
+            field=models.ForeignKey(blank=True, default='', editable=False, on_delete=django.db.models.deletion.PROTECT, related_name='teacher_parcours', to='account_sacado.Teacher'),
         ),
         migrations.AddField(
             model_name='exercise',
@@ -169,7 +169,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('point', models.PositiveIntegerField(default=0)),
                 ('exercise', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.PROTECT, related_name='results_e', to='qcm.Exercise')),
-                ('student', models.ForeignKey(default='', editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='results_e', to='account.Student')),
+                ('student', models.ForeignKey(default='', editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='results_e', to='account_sacado.Student')),
             ],
             options={
                 'unique_together': {('student', 'exercise')},

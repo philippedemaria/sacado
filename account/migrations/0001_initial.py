@@ -76,7 +76,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('point', models.PositiveIntegerField(default=0)),
                 ('skill', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='results_s', to='socle.Skill')),
-                ('student', models.ForeignKey(default='', editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='results_s', to='account.Student')),
+                ('student', models.ForeignKey(default='', editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='results_s', to='account_sacado.Student')),
             ],
         ),
         migrations.CreateModel(
@@ -84,7 +84,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('user', models.OneToOneField(blank=True, on_delete=django.db.models.deletion.CASCADE, primary_key=True, related_name='user_parent', serialize=False, to=settings.AUTH_USER_MODEL)),
                 ('task_post', models.BooleanField(default=1, verbose_name='Notification de tache ?')),
-                ('students', models.ManyToManyField(editable=False, related_name='students_parent', to='account.Student')),
+                ('students', models.ManyToManyField(editable=False, related_name='students_parent', to='account_sacado.Student')),
             ],
         ),
         migrations.CreateModel(
@@ -93,7 +93,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('point', models.PositiveIntegerField(default=0)),
                 ('skill', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='student_resultskill', to='socle.Skill')),
-                ('student', models.ForeignKey(default='', editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='student_resultskill', to='account.Student')),
+                ('student', models.ForeignKey(default='', editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='student_resultskill', to='account_sacado.Student')),
             ],
             options={
                 'unique_together': {('student', 'skill')},
@@ -105,7 +105,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('point', models.PositiveIntegerField(default=0)),
                 ('knowledge', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='results_k', to='socle.Knowledge')),
-                ('student', models.ForeignKey(default='', editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='results_k', to='account.Student')),
+                ('student', models.ForeignKey(default='', editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='results_k', to='account_sacado.Student')),
             ],
             options={
                 'unique_together': {('student', 'knowledge')},
