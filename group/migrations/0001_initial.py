@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('socle', '0001_initial'),
         ('qcm', '0001_initial'),
-        ('account', '0001_initial'),
+        ('account_sacado', '0001_initial'),
     ]
 
     operations = [
