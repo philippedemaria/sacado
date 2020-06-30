@@ -441,4 +441,3 @@ def get_parcours_from_this_exercise(obj,  teacher):
     renvoie les parcours d'un enseignant donné liés à un exercice
     """
     return obj.my_parcours_container(teacher)
-
