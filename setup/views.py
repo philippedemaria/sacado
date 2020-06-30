@@ -297,12 +297,10 @@ def  gestion_files(request):
                     supp_tab.append(str(filename))
                     
                     if request.POST.get("clear") :
- 
-                        if request.POST.get("clear") :
-                            os.remove("../static/uploads/ggbfiles/"+str(level_id)+"/"+str(filename))
-
-                        else :
-                            os.remove("D:/uwamp/www/sacadogit/sacado/staticfiles/uploads/ggbfiles/"+str(level_id)+"/"+str(filename))
+                        # production
+                        os.remove("../static/uploads/ggbfiles/"+str(level_id)+"/"+str(filename))
+                        #else :
+                        #   os.remove("D:/uwamp/www/sacadogit/sacado/staticfiles/uploads/ggbfiles/"+str(level_id)+"/"+str(filename))
 
 
     else :
