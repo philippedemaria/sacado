@@ -310,14 +310,13 @@ def  gestion_files(request):
     else :
         total = None
         level = None
-        support_files  = []
         supp_tab  = []
         error_files = []
-
+        supportfiles  = []
 
     levels = Level.objects.all()
 
 
-    context =  {'levels': levels ,  'level': level , 'total' : total , 'error_files' : error_files , 'files' : files ,  'supp_tab' : supp_tab }
+    context =  {'levels': levels ,  'level': level , 'total' : total , 'error_files' : error_files , 'files' : files ,  'supp_tab' : supp_tab, 'supportfiles' : supportfiles }
 
     return render(request, 'setup/gestion_files.html', context )

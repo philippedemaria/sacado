@@ -82,7 +82,22 @@
                     </table>
                 </div>
             </div> 
-
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                     <table class="table display_no_details20">
+                        <thead> 
+                            <tr> 
+                                <th>GGBfile dans la table</th>  <th>ImageFile dans la table</th>                                   
+                            </tr> 
+                        </thead>
+                        <tbody>
+                            {% for supportfile in supportfiles %}
+                                <tr><td>{{ supportfile.ggbfile }}  </td><td>{{ supportfile.imagefile }}  </td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div> 
             <div class="row" style="margin-top:40px">
                 <div class="col-sm-12 col-md-4">
                     <div class="form-group">
