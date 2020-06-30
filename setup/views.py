@@ -317,6 +317,6 @@ def  gestion_files(request):
     levels = Level.objects.all()
 
 
-    context =  {'levels': levels ,  'level': level , 'total' : total , 'error_files' : error_files , 'files' : files ,  'supp_tab' : supp_tab, 'supportfiles' : supportfiles }
+    context =  {'levels': levels ,  'level': level , 'total' : total , 'error_files' : error_files ,    'supp_tab' : supp_tab, 'supportfiles' : supportfiles }
 
     return render(request, 'setup/gestion_files.html', context )
