@@ -9,8 +9,7 @@ from django.forms.models import modelformset_factory
 
 class ParcoursForm(forms.ModelForm):
 
-	class Meta
-	:
+	class Meta:
 	    model = Parcours 
 	    fields = '__all__'
 
