@@ -34,7 +34,7 @@
                     <div class="form-group">
                         <select name="level" class="select2">
                             {% for l in levels %}
-                                <option value='{{ l.id }}'>{{ l.name }}</option>
+                                <option value='{{ l.id }}' {% if l.id == level_id %} selected {% endif %}>{{ l.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -66,14 +66,7 @@
                     </table>
                 </div>
             </div> 
- 
-            <div class="row" style="margin-top:40px">
-                <div class="col-sm-12 col-md-4">
-                    <div class="form-group">
-                        <input value="Nettoyer" type="submit" name="clear" class="btn btn-danger"/>
-                    </div>
-                </div> 
-            </div> 
+
         </form>
  
      

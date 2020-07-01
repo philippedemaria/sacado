@@ -5,10 +5,12 @@ from socle.models import  Knowledge , Skill
 from group.models import  Group 
 from django.db.models import Q
 from django.forms.models import modelformset_factory
+ 
 
 class ParcoursForm(forms.ModelForm):
 
-	class Meta:
+	class Meta
+	:
 	    model = Parcours 
 	    fields = '__all__'
 
@@ -115,6 +117,8 @@ class SupportfileForm(forms.ModelForm):
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
 
 
+
+
 class SupportfileKForm(forms.ModelForm):
 
 	skills  = forms.ModelMultipleChoiceField(queryset= Skill.objects.all(), widget=forms.CheckboxSelectMultiple, required=False)    
@@ -127,13 +131,21 @@ class SupportfileKForm(forms.ModelForm):
 
 
 class UpdateSupportfileForm(forms.ModelForm):
-	skills  = forms.ModelMultipleChoiceField(queryset= Skill.objects.all(), widget=forms.CheckboxSelectMultiple, required=False)    
+	skills  = forms.ModelMultipleChoiceField(queryset= Skill.objects.all(), widget=forms.CheckboxSelectMultiple, required=False)  
+
+
 	class Meta:
 		model = Supportfile 
 		fields = '__all__'
 
 
+	def __init__(self, *args, **kwargs):
+		super(UpdateSupportfileForm, self).__init__(*args, **kwargs)
+		instance  = kwargs.pop('instance')
+		knowledges = Knowledge.objects.filter(id  = 0)
 
+     
+ 
 class CourseForm(forms.ModelForm):
 
     class Meta:

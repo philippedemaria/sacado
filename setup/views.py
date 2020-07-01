@@ -261,10 +261,10 @@ def  gestion_files(request):
         level = Level.objects.get(pk=level_id) 
         supportfiles = Supportfile.objects.filter(level_id=level_id,is_title=0) 
     else :
-        level, level_id = None , None
+        level, level_id = None , 0
         supportfiles  = []
 
 
-    context =  {'levels': levels ,  'level': level ,  'level_id' : level_id ,    'supportfiles' : supportfiles }
+    context =  {'levels': levels ,  'level': level ,  'level_id' : level_id , 'level_id' : level_id ,  'supportfiles' : supportfiles }
 
     return render(request, 'setup/gestion_files.html', context )
