@@ -24,6 +24,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='studentanswer',
             name='student',
-            field=models.ForeignKey(blank=True, editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='answers', to='account.Student'),
+            field=models.ForeignKey(blank=True, editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='answers', to='account_sacado.Student'),
         ),
     ]

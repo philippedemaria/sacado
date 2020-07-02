@@ -1,8 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Teacher, User , Student , Parent
-from django.db import transaction
-from django.contrib.auth.hashers import make_password
+from .models import Teacher, User, Student, Parent
 
 class UserForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
@@ -13,7 +11,20 @@ class UserForm(UserCreationForm):
         super(UserForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.pop("autofocus", None)
 
-        
+
+
+class UserFormAllAuth(UserForm):
+    user_type = forms.IntegerField(widget=forms.HiddenInput(), initial=User.STUDENT)
+
+
+    def save(self, request):
+        user = super(UserFormAllAuth, self).save(request)
+        user.user_type = self.cleaned_data['user_type']
+        user.save()
+
+        return user
+
+
 
 class StudentForm(forms.ModelForm):
     class Meta:

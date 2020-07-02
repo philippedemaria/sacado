@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='supportfile',
             name='author',
-            field=models.ForeignKey(editable=False, on_delete=django.db.models.deletion.PROTECT, related_name='supportfiles', to='account.Teacher'),
+            field=models.ForeignKey(editable=False, on_delete=django.db.models.deletion.PROTECT, related_name='supportfiles', to='account_sacado.Teacher'),
         ),
         migrations.AlterField(
             model_name='supportfile',

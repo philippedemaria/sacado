@@ -181,7 +181,12 @@ DATABASES = {
 }
 
 AUTH_USER_MODEL = 'account_sacado.User'
-
+ACCOUNT_SIGNUP_FORM_CLASS = 'account.forms.UserFormAllAuth'
+ACCOUNT_FORMS = {'signup': 'account.forms.UserFormAllAuth'}
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
