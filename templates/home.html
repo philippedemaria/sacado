@@ -17,7 +17,34 @@
 </ul>
 {% endif %}
 
- 
+ {% if cookie == None %} 
+<div class="alert alert-cookie">
+
+    <header id="header">
+        <div class="container">
+          <div class="logo float-left">
+            <a class="navbar-brand sacado" href="{% url 'index' %}"><img src="{% static 'img/sacadoA1.png' %}"/>   SACADO </a>
+          </div>
+
+          <div style="clear:both;margin-top: 30px;">
+
+          <div class="row">
+              <div class="col-xs-12 col-md-7">
+                   Ce site .....
+               </div> 
+          </div>  
+          <div class="row">
+                <div class="col-xs-12 col-md-9">
+                    <a href="#"  data-toggle='modal' data-target='#cgu' class="btn btn-default"> Je souhaite lire les conditions générales d'utilisation</a>
+                </div>
+                <div class="col-xs-12 col-md-3">
+                    <a href="{% url 'get_cookie' %}" class="btn btn-default"> J'ai lu et compris </a>  
+                </div>
+          </div>
+    </header><!-- #header -->
+</div>
+{% endif %}
+
 
 
 {% if form.errors %} 
@@ -165,7 +192,7 @@
 
       </div>
 
-<!--       <div class="container">
+       <div class="container">
         <div class="row counters">
           <div class="col-lg-3 col-6 text-center">
             <span data-toggle="counter-up">{{ nb_exercise }}</span>
@@ -187,7 +214,7 @@
             <p>Groupes</p>
           </div>
         </div>
-      </div> -->
+      </div>
     </section>
 
     <!--==========================
@@ -378,8 +405,11 @@
 
                   <div class="footer-info">
                     <h3>SACADO</h3>
-                    <p>Deux enseignants, un même projet, une rencontre. Des amis passionnés complètent l'équipe. SACADO est un créateur de parcours d'apprentissage construits à partir d'exercices à variables aléatoires. <br>Les élèves travaillent leurs savoir faire mathématiques. <br>Les enseignants suivent leurs acquisitions. Les résultats s'exportent au format CSV, selon condition.<br>Les parents peuvent accéder aux résultats de leurs enfants.  </p>
+                    <p>SACADO est un créateur de parcours d'apprentissage construits à partir d'exercices à variables aléatoires. <br>Les élèves travaillent leurs savoir faire mathématiques en totale autonomie ou sous la supervision de leur enseignants. <br>Les enseignants suivent leurs acquisitions. Les résultats s'exportent au format CSV, selon condition.<br>Les parents peuvent accéder aux résultats de leurs enfants.  </p>
                   </div>
+
+                    <h4> <a href="#"  data-toggle='modal' data-target='#cgu'  style="color:#535074" >CGU & RGPD</a></h4>
+
                     <h4>Contact</h4>
                     <p>
                       Bruno Serres - Nicaragua <br>  

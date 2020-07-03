@@ -1120,7 +1120,8 @@ input.form-control {
     z-index: 1000;
     width: 92%;
 }
- 
+
+
 table.table-bordered.dataTable {
   border-collapse: collapse !important;
 }

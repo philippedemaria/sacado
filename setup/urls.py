@@ -6,6 +6,8 @@ urlpatterns = [
 
     re_path(r'^$', index, name='index'),
 
+    re_path('get_cookie', get_cookie , name='get_cookie'),
+
 
     re_path('send_message', send_message, name='send_message'),
 

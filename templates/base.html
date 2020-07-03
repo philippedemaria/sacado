@@ -180,6 +180,25 @@
 
     </div>
 </div>
+
+<div class="modal fade" id="cgu" tabindex="-1" role="dialog" aria-labelledby="cgu">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class='thin'  >Conditions générales d'utilisation </h1>
+            </div>
+            <div class="modal-body">
+                {% include 'setup\rgpd.html' %}
+            </div>
+            <div class="modal-footer">    
+                <div class="col-lg-6 col-xs-6">   
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button> 
+                </div>             
+            </div> 
+        </div>
+    </div>
+</div>
+
   <script src="{% static 'index/lib/jquery/jquery.min.js' %}"></script>
   <script src="{% static 'index/lib/jquery/jquery-migrate.min.js' %}"></script>
 

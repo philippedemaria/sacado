@@ -1355,56 +1355,17 @@ margin-bottom: 20px;
 #pricing .card .btn:hover {
   background: #0a98c0;
 }
-
-/* Frequently Asked Questions Section
---------------------------------*/
-
-#faq {
-  padding: 60px 0;
-  overflow: hidden;
-}
-
-#faq #faq-list {
-  padding: 0;
-  list-style: none;
-}
-
-#faq #faq-list li {
-  border-bottom: 1px solid #ebebeb;
-}
-
-#faq #faq-list a {
-  padding: 22px 0;
-  display: block;
-  position: relative;
-  font-family: "Montserrat", sans-serif;
-  font-size: 20px;
-  line-height: 1;
-  font-weight: 400;
-  padding-right: 20px;
-}
-
-#faq #faq-list i {
-  font-size: 24px;
+/*--------------------------------------------------------------
+# Cookies
+--------------------------------------------------------------*/
+.alert-cookie{
+  height:250px;
   position: absolute;
-  right: 0;
-  top: 20px;
-}
+  width:100%;
+  z-index: 1001;
+  background-color:#271942;
+  color : #F0F0F0;
 
-#faq #faq-list p {
-  margin-bottom: 20px;
-}
-
-#faq #faq-list a.collapse {
-  color: #2a4c5e;
-}
-
-#faq #faq-list a.collapsed {
-  color: #000;
-}
-
-#faq #faq-list a.collapsed i::before {
-  content: "\f2c7" !important;
 }
 
 /*--------------------------------------------------------------

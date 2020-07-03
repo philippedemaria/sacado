@@ -119,7 +119,14 @@ def index(request):
         u_form = UserForm()
         t_form = TeacherForm()
         s_form = StudentForm()
-        levels = Level.objects.all()
+        levels = Level.objects.all() 
+        try :
+            cookie = request.session.get("cookie")
+        except :
+            pass
+
+        print('cookie ===================> ' , request.session.get("cookie"))
+
 
         exercise_nb = Exercise.objects.filter(supportfile__is_title=0).count()
         exercises = Exercise.objects.filter(supportfile__is_title=0)
@@ -127,7 +134,7 @@ def index(request):
         i = random.randint(1, len(exercises))
         exercise = exercises[i]
 
-        context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels,
+        context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 'cookie' : cookie , 
                    'exercise_nb': exercise_nb, 'exercise': exercise, }
 
 
@@ -149,7 +156,7 @@ def logout_view(request):
     s_form = StudentForm()
     logout(request)
     levels = Level.objects.all()
-    context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, }
+    context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 'cookie' : False }
     return render(request, 'home.html', context)
 
 
@@ -268,3 +275,9 @@ def  gestion_files(request):
     context =  {'levels': levels ,  'level': level ,  'level_id' : level_id , 'level_id' : level_id ,  'supportfiles' : supportfiles }
 
     return render(request, 'setup/gestion_files.html', context )
+
+
+def get_cookie(request):
+
+    request.session["cookie"] = "accept"
+    return redirect ('index')    
