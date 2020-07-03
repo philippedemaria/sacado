@@ -21,7 +21,7 @@ class UserFormAllAuth(UserForm):
         user = super(UserFormAllAuth, self).save(request)
         user.user_type = self.cleaned_data['user_type']
         user.save()
-
+        Student.objects.create(user=user, level_id=12)
         return user
 
 
