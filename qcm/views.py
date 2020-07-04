@@ -427,7 +427,7 @@ def list_evaluations(request):
     except:
         pass  
 
-    return render(request, 'qcm/list_evaluations.html', { 'parcourses' : parcourses, 'parcours' : None})
+    return render(request, 'qcm/list_evaluations.html', { 'parcourses' : parcourses, 'parcours' : None , 'communications' : [] , 'relationships' : []   })
 
 
 

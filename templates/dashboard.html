@@ -64,10 +64,10 @@
 
 <nav class="navbarLeft navbarLeft-fixed-left">
     <ul class="nav navbarLeft-nav">
-        {% if user.is_authenticated %}
-            {% if user.user_type == 2 %}
+        {% if request.user.is_authenticated %}
+            {% if request.user.user_type == 2 %}
                 {% include 'sideBarMenu/nav_T.html' %}
-            {% elif user.user_type == 1 %}
+            {% elif request.user.user_type == 1 %}
                 {% include 'sideBarMenu/nav_P.html' %}
             {% else  %}
                 {% include 'sideBarMenu/nav_S.html' %}
@@ -103,10 +103,10 @@
         
     {%  block body %}
         <div class="content_list" id="search_result">
-        {% if user.is_authenticated %}
-            {% if user.user_type == 0 %} 
+        {% if request.user.is_authenticated %}
+            {% if request.user.user_type == 0 %} 
                 {% include 'dashboard_student.html' %}
-            {%  elif user.user_type == 1 %} 
+            {%  elif request.user.user_type == 1 %} 
                 {% include 'dashboard_parent.html' %}
             {%  else   %} 
                 {% include 'dashboard_teacher.html' %}
@@ -300,7 +300,7 @@
     </div>
 </div>
 
-{%  if user.is_superuser %}
+{%  if request.user.is_superuser %}
 <div class="notification-container dismiss"  id="notification-admin">
     {%  if user.is_manager  %}
         <div class="row">
