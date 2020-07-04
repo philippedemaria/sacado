@@ -16,34 +16,7 @@
     {% endfor %}
 </ul>
 {% endif %}
-
- {% if cookie == None %} 
-<div class="alert alert-cookie">
-
-    <header id="header">
-        <div class="container">
-          <div class="logo float-left">
-            <a class="navbar-brand sacado" href="{% url 'index' %}"><img src="{% static 'img/sacadoA1.png' %}"/>   SACADO </a>
-          </div>
-
-          <div style="clear:both;margin-top: 30px;">
-
-          <div class="row">
-              <div class="col-xs-12 col-md-7">
-                   Ce site .....
-               </div> 
-          </div>  
-          <div class="row">
-                <div class="col-xs-12 col-md-9">
-                    <a href="#"  data-toggle='modal' data-target='#cgu' class="btn btn-default"> Je souhaite lire les conditions générales d'utilisation</a>
-                </div>
-                <div class="col-xs-12 col-md-3">
-                    <a href="{% url 'get_cookie' %}" class="btn btn-default"> J'ai lu et compris </a>  
-                </div>
-          </div>
-    </header><!-- #header -->
-</div>
-{% endif %}
+ 
 
 
 
