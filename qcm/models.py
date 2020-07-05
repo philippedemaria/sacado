@@ -645,6 +645,8 @@ class Course(models.Model): # pour les
     publish_start = models.DateField(default=timezone.now,  blank=True, max_length=255, verbose_name="Début à", help_text="Changer les dates des cours peut remplacer les réglages de leur durée de disponibilité et leur placement dans les pages de cours ou le tableau de bord. Veuillez confirmer les dates d’échéance avant de modifier les dates des cours. ")
     publish_end = models.DateField( blank=True, null=True,  max_length=255, verbose_name="Se termine à")
 
+
+    ranking = models.PositiveIntegerField(  default=1,  blank=True, null=True,  verbose_name="Ordre") 
     
     is_task = models.BooleanField( default=0,    verbose_name="Tache à rendre ?") 
     is_paired = models.BooleanField( default=0,    verbose_name="Elèves créateurs ?") 

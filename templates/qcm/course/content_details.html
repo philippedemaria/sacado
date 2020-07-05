@@ -30,7 +30,16 @@
       <td>{{ form.notification|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
       <td>{{ form.notification.errors }}</td>
     </tr> 
-
+    <tr>
+      <td>{{ form.duration.label_tag }} </td>
+      <td>{{ form.duration|add_class:"form-control"}}</td>
+      <td>{{ form.duration.errors }}</td>
+    </tr> 
+    <tr>
+      <td>{{ form.ranking.label_tag }} (en minutes)</td>
+      <td>{{ form.ranking|add_class:"form-control"}}</td>
+      <td>{{ form.ranking.errors }}</td>
+    </tr> 
 </table>
 
  
