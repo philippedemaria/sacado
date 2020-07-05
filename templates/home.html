@@ -33,58 +33,63 @@
 
   <section id="intro" class="clearfix" >
     <div class="container d-flex h-100">
-
-
-
       <div class="row justify-content-center align-self-center" style="padding-bottom:30px">  
-
-      <div class="col-xs-12"  style="position: absolute; top:110px;z-index:1000" >
-
-          <a href="#footer" class="btn btn-index"> En version établissement </a>
-
-      </div>
-
         <div class="col-xs-12 col-lg-6 intro-info order-md-first order-last">
-          <div class="title">S'entraîner. <br>Progresser. <br>S'auto-évaluer.</div>
-			    <div class="subtitle marginbottom50">  {{ nb_exercise }} exercice{{  nb_exercise|pluralize }} interactif{{ nb_exercise|pluralize }} corrigé{{  nb_exercise|pluralize }} du CP à la Terminale</div>
-          <a href="#" data-toggle='modal' data-target='#connexion'  class="btn btn-primary"> Se connecter </a>
-          <a href="#" class="btn btn-primary"> Se connecter avec <img src="{% static 'img/facebook.png' %}" height="15" /> </a>
-          <a href="#" class="btn btn-primary"> Se connecter avec <img src="{% static 'img/Googlelogo.png' %}" height="15" /> </a>
-          <br>
-          <div style="color:#cb2131;margin-top: 50px">
-            <img src="{% static 'img/edge.png' %}" width="35px" />          
-            <img src="{% static 'img/firefox.png' %}" width="35px" />          
-            <img src="{% static 'img/chrome.png' %}" width="35px"  />
-            <img src="{% static 'img/safari.png' %}" width="35px" /><br>
-            <i class="fa fa-apple"></i> <a href="https://java.com/fr/download/help/mac_install.xml" target="_blank" style="color:#cb2131; border-bottom: 1px #cb2131 dashed">
-            Pour safari, installer Java si nécessaire.</a>
-          </div> 
-        </div>
-        <div class="col-xs-12 col-lg-6 intro-info order-md-first order-last"  >
+            <div class="title">S'entraîner. <br>Progresser. <br>S'auto-évaluer.</div>
+  			    <div class="subtitle marginbottom50">  <span class="exo">{{ nb_exercise }}</span> exercice{{  nb_exercise|pluralize }} interactif{{ nb_exercise|pluralize }} corrigé{{  nb_exercise|pluralize }} du CP à la Terminale</div>
+            <a href="#" data-toggle='modal' data-target='#connexion'  class="btn btn-primary"> Se connecter </a>
+            <a href="#" class="btn btn-primary"> Se connecter avec <img src="{% static 'img/facebook.png' %}" height="15" /> </a>
+            <a href="#" class="btn btn-primary"> Se connecter avec <img src="{% static 'img/Googlelogo.png' %}" height="15" /> </a>
+            <br>
+            <div style="color:#cb2131;margin-top: 50px">
+              <img src="{% static 'img/edge.png' %}" width="35px" />          
+              <img src="{% static 'img/firefox.png' %}" width="35px" />          
+              <img src="{% static 'img/chrome.png' %}" width="35px"  />
+              <img src="{% static 'img/safari.png' %}" width="35px" />
+              <i class="fa fa-apple"></i> <a href="https://java.com/fr/download/help/mac_install.xml" target="_blank" style="color:#cb2131; border-bottom: 1px #cb2131 dashed">
+              Pour safari, installer Java si nécessaire.</a>
+            </div> 
 
-            <div  style="position: relative;">
+
+          <div class="row counters">
  
-              <a href="{% url 'show_exercise'   exercise.id     %}" target="_blank">
-                  <img src="{% static 'uploads/' %}{{ exercise.supportfile.imagefile }}" width="400" style="position: absolute; top :40px; left:133px;z-index:-1" /> 
-
-                  {% if  exercise.id|divisibleby:"3" %}
-                  <img src="{% static 'img/mains_ip.png' %}" height="490" width="610" style=" z-index: 999" />
-                  {% elif  exercise.id|divisibleby:"4" %}
-                  <img src="{% static 'img/ordinateur.png' %}" height="490" style=" z-index: 999" />
-                  {% else %}
-                  <img src="{% static 'img/ordi_portable.png' %}" height="490"   style="  z-index: 999" />
-                  {% endif %}
-
-              </a>
- 
+            <div class="col-lg-4 col-4 text-center">
+              <span data-toggle="counter-up">{{ nb_teacher }}</span>
+              <p>Enseignants</p>
             </div>
 
+            <div class="col-lg-4 col-4 text-center">
+              <span data-toggle="counter-up">{{ nb_student }}</span>
+              <p>Elèves</p>
+            </div>
 
+            <div class="col-lg-4 col-4 text-center">
+              <span data-toggle="counter-up">{{ nb_group }}</span>
+              <p>Groupes</p>
+            </div>
+          </div>
         </div>
+        <div class="col-xs-12 col-lg-6 intro-info order-md-first order-last" style="text-align:center"  >
+              <div  style="position: relative;">
+                <a href="{% url 'show_exercise'   exercise.id     %}" target="_blank">
+                    <img src="{% static 'uploads/' %}{{ exercise.supportfile.imagefile }}" width="400" style="position: absolute; top :40px; left:133px;z-index:-1" /> 
 
- 
+                    {% if  exercise.id|divisibleby:"3" %}
+                    <img src="{% static 'img/mains_ip.png' %}" height="490" width="610" style=" z-index: 999" />
+                    {% elif  exercise.id|divisibleby:"4" %}
+                    <img src="{% static 'img/ordinateur.png' %}" height="490" style=" z-index: 999" />
+                    {% else %}
+                    <img src="{% static 'img/ordi_portable.png' %}" height="490"   style="  z-index: 999" />
+                    {% endif %}
+
+                </a>
+   
+              </div>
+              <div class="col-xs-12"    >
+                  <a href="#footer" class="btn btn-index"> SACADO en Version établissement </a>
+              </div>
+        </div>
       </div>
-
     </div>
   </section><!-- #intro -->
 
@@ -165,29 +170,7 @@
 
       </div>
 
-       <div class="container">
-        <div class="row counters">
-          <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">{{ nb_exercise }}</span>
-            <p>Exercices</p>
-          </div>
-
-          <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">{{ nb_teacher }}</span>
-            <p>Enseignants</p>
-          </div>
-
-          <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">{{ nb_student }}</span>
-            <p>Elèves</p>
-          </div>
-
-          <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">{{ nb_group }}</span>
-            <p>Groupes</p>
-          </div>
-        </div>
-      </div>
+      
     </section>
 
     <!--==========================

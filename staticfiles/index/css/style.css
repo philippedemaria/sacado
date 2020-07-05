@@ -863,11 +863,11 @@ margin-bottom: 20px;
   color: #2a4c5e;
 }
 
-#teachers .counters {
-  padding-top: 0px;
+#intro .counters {
+  padding-top: 30px;
 }
 
-#teachers .counters span {
+#intro .counters span {
   font-family: "Montserrat", sans-serif;
   font-weight: bold;
   font-size: 48px;
@@ -875,13 +875,20 @@ margin-bottom: 20px;
   color: #2a4c5e;
 }
 
-#teachers .counters p {
+#intro .counters p {
   padding: 0;
   margin: 0 0 20px 0;
   font-family: "Montserrat", sans-serif;
   font-size: 14px;
-  color: #8a87b6;
 }
+#intro .exo  {
+ 
+  font-family: "Montserrat", sans-serif;
+  font-size: 40px;
+
+}
+
+
 
 /* Call To Action Section
 --------------------------------*/
