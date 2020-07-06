@@ -1445,7 +1445,7 @@ def admin_list_associations(request,id):
     teacher = Teacher.objects.get(user=user)
     data = all_datas(user, 1,level)
 
-    return render(request, 'qcm/list_associations.html', {'data': data, 'teacher': teacher , 'parcours': None, 'relationships' : []  })
+    return render(request, 'qcm/list_associations.html', {'data': data, 'teacher': teacher , 'parcours': None, 'relationships' : [] , 'communications' : []   })
  
 
 @login_required
@@ -1463,7 +1463,7 @@ def gestion_supportfiles(request):
         nb = nbk - m
         lvls.append({ 'name' : level.name , 'nbknowlegde': nbk , 'exotot' : nbe , 'notexo' : nb }) 
 
-    return render(request, 'qcm/gestion_supportfiles.html', {'lvls': lvls, })
+    return render(request, 'qcm/gestion_supportfiles.html', {'lvls': lvls, 'parcours': None, 'relationships' : [] , 'communications' : [] })
 
 
 
