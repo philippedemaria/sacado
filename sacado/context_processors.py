@@ -70,13 +70,13 @@ def menu(request):
         nb_teacher = Teacher.objects.all().count()
         nb_exercise = Exercise.objects.all().count()
         nb_student = Student.objects.all().count()
-        nb_group = Group.objects.all().count()
+        nb_parcours = Parcours.objects.all().count()
         contributeurs = User.objects.filter(is_superuser=1)
 
         return {
             'nb_teacher': nb_teacher,
             'nb_exercise': nb_exercise,
             'nb_student': nb_student,
-            'nb_group': nb_group,
+            'nb_parcours': nb_parcours,
             'contributeurs': contributeurs,
         }

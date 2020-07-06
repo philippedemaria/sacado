@@ -125,7 +125,7 @@ def index(request):
         except :
             pass
 
-        print('cookie ===================> ' , request.session.get("cookie"))
+ 
 
 
         exercise_nb = Exercise.objects.filter(supportfile__is_title=0).count()
