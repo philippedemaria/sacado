@@ -15,24 +15,22 @@ Including another URLconf
 """
 from django.conf import settings
 from django.contrib import admin
-from django.urls import  path, include, re_path  
+from django.urls import  path, include, re_path
 from django.conf.urls.static import static
- 
+
 
 urlpatterns = [
-
     path('', include('setup.urls')),
-    path('account/', include('account.urls')),     
-    path('group/', include('group.urls')), 
-    path('socle/', include('socle.urls')), 
+    path('account/', include('account.urls')),
+    path('group/', include('group.urls')),
+    path('socle/', include('socle.urls')),
     path('qcm/', include('qcm.urls')),
     path('sendmail/', include('sendmail.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
-    path('schedule/', include('schedule.urls')), 
-    path('school/', include('school.urls')), 
- 
-
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
+    path('schedule/', include('schedule.urls')),
+    path('school/', include('school.urls')),
+    path('oauth/', include('social_django.urls')),
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 # handler404 = myapp_views.handler404
