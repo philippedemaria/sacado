@@ -65,7 +65,7 @@ class User(AbstractUser):
         TZ_SET.append((tz,tz))
  
 
-    user_type = models.PositiveSmallIntegerField(editable=False)
+    user_type = models.PositiveSmallIntegerField(editable=False, null=True)
     civilite = models.CharField(max_length=10, default='M.', blank=True,  choices=CIVILITIES, verbose_name="Civilité")
     time_zone = models.CharField(max_length=100, null=True, blank=True,  choices=TZ_SET, verbose_name="Fuseau horaire")
     is_extra = models.BooleanField( default=0 , editable=0)
