@@ -1467,8 +1467,6 @@ def gestion_supportfiles(request):
 
 
 
-
-
 @login_required
 @user_passes_test(user_is_superuser)
 def ajax_update_association(request):
@@ -1575,7 +1573,7 @@ def exercises_level(request, id):
     themes =  level.themes.all()
     form = AuthenticationForm() 
 
-    return render(request, 'list_exercises.html', {'exercises': exercises, 'level':level, 'themes':themes, 'form':form, })
+    return render(request, 'list_exercises.html', {'exercises': exercises, 'level':level, 'themes':themes, 'form':form,  })
 
 
 
@@ -1748,8 +1746,11 @@ def show_exercise(request, id):
 
     request.session['level_id'] = exercise.level.id
     form = AuthenticationForm() 
+    u_form = UserForm()
+    t_form = TeacherForm()
+    s_form = StudentForm()
 
-    context = {'exercise': exercise,   'form': form , 'u_form' : None , 'levels' : [],   }
+    context = {'exercise': exercise,   'form': form , 'u_form' : u_form , 's_form' : s_form , 't_form' : t_form , 'levels' : [],   }
  
     return render(request, 'show_exercise.html', context)
 
