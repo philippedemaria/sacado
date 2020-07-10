@@ -212,6 +212,54 @@ def new_group(request):
 
 @login_required
 @is_manager_of_this_school
+def update_group_school(request,id):
+	school = request.user.school
+	group = Group.objects.get(id=id)
+	form = GroupForm(request.POST or None, school = school, instance = group)
+
+	if request.method == "POST" :
+		if form.is_valid():
+			form.save()
+			stdts = request.POST.get("students")
+
+			if len(stdts) > 0 :
+				tested = include_students(stdts,form)
+				if not tested :
+					messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
+
+			return redirect('school_groups')
+		else :
+			print(form.errors)
+
+	return render(request,'school/group_form.html', { 'school' : school , 'group' : group ,  'form' : form })
+
+
+
+@login_required
+@is_manager_of_this_school
+def delete_student_group(request,id,ids):
+	school = request.user.school
+	group = Group.objects.get(id=id)
+	student = Student.objects.get(user_id=ids)
+	form = GroupForm(request.POST or None, school = school, instance = group)
+	group.students.remove(student)
+	return redirect('update_group_school', group.id)
+
+
+
+@login_required
+@is_manager_of_this_school
+def delete_all_students_group(request,id):
+	school = request.user.school
+	group = Group.objects.get(id=id)
+	form = GroupForm(request.POST or None, school = school, instance = group)
+	group.students.clear()
+	return redirect('update_group_school', group.id)
+
+
+
+@login_required
+@is_manager_of_this_school
 def new_group_many(request):
 
 	school = request.user.school

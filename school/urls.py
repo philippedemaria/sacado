@@ -24,9 +24,12 @@ urlpatterns = [
 
     path('new_student/<slug:slug>', new_student , name='new_student'),
 
-
     path('new_group', new_group , name='new_group'),
+    path('update_group_school/<int:id>', update_group_school , name='update_group_school'),
     path('new_group_many', new_group_many, name='new_group_many'),
+
+    path('delete_student_group/<int:id>/<int:ids>', delete_student_group , name='delete_student_group'),
+    path('delete_all_students_group/<int:id>', delete_all_students_group , name='delete_all_students_group'),
 
     path('get_school_students', get_school_students , name='get_school_students'),
 

@@ -16,15 +16,19 @@
 
 
 {% block page_title %}  
-    <a href="{% url 'admin_tdb' %}"> <i class="fa fa-cloud"></i></a> {{ school.name }}    <img src="{% static 'img/angle-right.png' %}"/> <small>Nouveau groupe</small>  
+    <a href="{% url 'admin_tdb' %}"> <i class="fa fa-cloud"></i></a> {{ school.name }}    <img src="{% static 'img/angle-right.png' %}"/>
+
+ 
+    {% if group %}
+         <small>{{ group.name }}    <img src="{% static 'img/angle-right.png' %}"/> {{ group.students.count }} élèves</small> 
+    {% else %}
+         <small>Nouveau groupe</small> 
+    {% endif %}
+
+
 {% endblock %}
 
 {% block page_menu_right %}
-    
-
- 
-
-
     
 {% endblock %}
 
@@ -84,35 +88,77 @@
                     </div>
                 </div> 
                 <div class="row">
-
+ 
 
                 </div>
 
 
-
- 
 
                 <div class="row">
                     <div class="col-sm-12 col-md-8">
                         <div class="form-group">
-                            <input value="Enregistrer" type="submit" class="btn btn-sacado"  id="test_students"  />
+                            <input value="Enregistrer" type="submit" class="btn btn-primary"  id="test_students"  />
                             <a href="javascript:history.back()"><input type="button" value="Annuler"
                                                                        class="btn btn-default "/></a>
                         </div>
+
+
+
+                       <div class="form-group">
+                            <table class="table">
+                            {% for s in group.students.all|dictsort:"user.last_name"  %}
+                                <tr><td>
+                                        {{ s }}
+                                    </td>
+                                    <td>
+                                        <a  href="{% url 'delete_student_group'  group.id s.user.id  %}"
+                                            onclick="return TestDelete('cet élève')" style="font-size:11px"  >
+                                            Supprimer
+                                        </a>                                         
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </table>
+                        </div>
+
+
+
+
+
+
                     </div>
-                
-
-
-                {% if group %}
-
+                    {% if group %}
                     <div class="col-sm-12 col-md-4">
+                        {% if group.students.all|length > 0 %}
+                        <div class="form-group" style="margin-top: 250px">
+                            <a href="{% url 'delete_all_students_group' group.id %}" class="btn btn-danger" onclick="return TestDelete('tous les élèves de ce groupe')">Dissocier tous les élèves de ce groupe</a>
+                        </div>
+                        {% else %}
                         <div class="form-group">
                             <a href="{% url 'delete_group' group.id %}" class="btn btn-danger" onclick="return TestDelete('ce groupe')">Supprimer ce groupe</a>
                         </div>
-                    </div>
 
-                {% endif %}
+
+                        <div class="form-group" style="margin-top: 50px">
+                            Aucun élève associé à ce groupe
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
                 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
             </form>
         </div>
         <div class="col-sm-12 col-md-6">
