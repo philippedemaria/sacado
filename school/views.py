@@ -231,7 +231,7 @@ def update_group_school(request,id):
 		else :
 			print(form.errors)
 
-	return render(request,'school/group_form.html', { 'school' : school , 'group' : group ,  'form' : form })
+	return render(request,'school/group_form.html', { 'school' : school , 'group' : group ,  'form' : form , 'communications' : []  })
 
 
 
