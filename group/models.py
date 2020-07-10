@@ -17,7 +17,7 @@ from django.db.models import Q
 class Group(ModelWithCode):
     """ Group est une classe d'élèves coté enseignant -- Ce qui permet de faire un groupe avec une ou plusieurs divisions """
     name = models.CharField(max_length=255, verbose_name="Nom*")
-    color = models.CharField(max_length=255, default='#46119c', verbose_name="Couleur*")
+    color = models.CharField(max_length=255, default='#46119c', blank=True, null=True, verbose_name="Couleur*")
     students = models.ManyToManyField(Student, related_name="students_to_group", blank=True, verbose_name="Élèves*")
     teacher = models.ForeignKey(Teacher, blank=True, null=True, on_delete=models.CASCADE, related_name="groups", verbose_name="Enseignant*")
     level = models.ForeignKey(Level, on_delete=models.PROTECT, related_name="groups", verbose_name="Niveau*")

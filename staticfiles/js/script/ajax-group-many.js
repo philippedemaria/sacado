@@ -6,12 +6,12 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
         var total_form = $('#id_form-TOTAL_FORMS') ;
-        var totalForms = parseInt(total_form.value)  ;
+        var totalForms = parseInt(total_form.val())  ;
         var FormToDuplicate = totalForms - 1 ;
           
     $('.add_more').on('click', function (event) {
 
-
+console.log(totalForms); 
  
         var tr_object = $('#duplicate').clone();
         tr_object.attr("id","duplicate"+totalForms) 
@@ -20,6 +20,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
         tr_object.appendTo("#formsetZone");
 
+ 
         $(tr_object).find('.delete_button').html('<a href="javascript:void(0)" class="btn btn-danger remove_more" >Supprimer</a>'); 
 
         total_form.val(totalForms+1)
@@ -28,7 +29,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
         $(document).on('click', '.remove_more', function () {
  
-            $('#duplicate'+FormToDuplicate).remove();
+            $('#duplicate'+totalForms).remove();
             total_form.val(FormToDuplicate)
         });
                 
@@ -37,4 +38,9 @@ define(['jquery', 'bootstrap'], function ($) {
 });
  
 
+ 
+ 
+
+ 
+ 
  

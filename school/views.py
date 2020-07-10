@@ -3,7 +3,7 @@ from django.forms import formset_factory
 from django.contrib.auth.decorators import login_required, permission_required,user_passes_test
 from django.contrib import messages
 from .models import School, Country  , Stage
-from .forms import SchoolForm, CountryForm, GroupForm, StageForm
+from school.forms import SchoolForm, CountryForm, GroupForm, StageForm
 from group.views import include_students
 from group.models import Group
 from account.decorators import is_manager_of_this_school 
@@ -264,15 +264,19 @@ def new_group_many(request):
 
 	school = request.user.school
 	GroupFormSet = formset_factory(GroupForm , extra=2) 
-	formset  = GroupFormSet(request.POST or None,form_kwargs={'school': school})
+	group_formset  = GroupFormSet(request.POST or None, form_kwargs={'school': school, })
+
 	if request.method == "POST" :
-		
-		if formset.is_valid():
-			formset.save()
+		if group_formset.is_valid():
+			for f in group_formset :
+				f.save()
 			messages.success(request, "Groupes créés avec succès.")
 			return redirect('school_groups')
 
-	return render(request,'school/many_group_form.html', {'formset' : formset , 'school': school})
+		else :
+			print(group_formset.errors)
+
+	return render(request,'school/many_group_form.html', {'formset' : group_formset , 'school': school})
 
  
 
