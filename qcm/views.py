@@ -1572,8 +1572,10 @@ def exercises_level(request, id):
     level = Level.objects.get(pk=id)
     themes =  level.themes.all()
     form = AuthenticationForm() 
-
-    return render(request, 'list_exercises.html', {'exercises': exercises, 'level':level, 'themes':themes, 'form':form,  })
+    u_form = UserForm()
+    t_form = TeacherForm()
+    s_form = StudentForm()
+    return render(request, 'list_exercises.html', {'exercises': exercises, 'level':level, 'themes':themes, 'form':form, 'u_form':u_form, 's_form': s_form, 't_form':t_form,})
 
 
 
