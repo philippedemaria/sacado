@@ -6,7 +6,7 @@
 
 
 {% if request.user.is_superuser %}
-    <a href="{% url 'show_this_exercise' exercise.supportfile.id   %}"  target="_blank"  >  
+    <a href="{% url 'show_this_exercise' exercise.id   %}"  target="_blank"  >  
        <img src="{% static '/uploads/' %}{{ exercise.supportfile.imagefile }}" class="imagefile">
     </a>
 
@@ -16,7 +16,7 @@
     </a> 
 
 {%  else %}
-    <a href="{% url 'show_this_exercise' exercise.supportfile.id  %}" target="_blank" >
+    <a href="{% url 'show_this_exercise' exercise.id  %}" target="_blank" >
          <img src="{% static '/uploads/' %}{{ exercise.supportfile.imagefile }}" class="imagefile">
     </a> 
      
