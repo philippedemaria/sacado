@@ -14,7 +14,7 @@
  
  
 {% block page_title %}
-    <i class='fa fa-users'></i> {{ request.user.school.name}} <img src="{% static 'img/angle-right.png' %}"/>     {% if idg > 0  %}Elèves  {% else %}Enseignant.e.s     {% endif %}par csv
+    <i class='fa fa-users'></i> {{ request.user.school.name}} <img src="{% static 'img/angle-right.png' %}"/>     {% if key == 0  %}Elèves  {% else %}Enseignant.e.s     {% endif %}par csv
 {% endblock %}
  
 
@@ -38,14 +38,21 @@
 <section class="content_main"> 
 
 
+    {% if key == 0 %}
+        <h1 class="thin">Classe de {{ group.name }}</h1>
+    {% endif %}
+
+
     <div class="alert alert-danger alert-dismissible" role="alert">
-      <strong>Attention !</strong> Votre fichier csv doit vérifier le format demandé. Les données doivent être séparées d'un <strong>point virgule (;)</strong>. 3 champs sont demandés :
+        <strong>Avant de lancer votre fichier csv, assurez-vous que tous les élèves ont été supprimés de la base de données.</strong> <br>
+
+        <strong>Attention !</strong> Votre fichier csv doit vérifier le format demandé. Les données doivent être séparées d'un <strong>point virgule (;)</strong>. 3 champs sont demandés :
             <ul style="margin:10px">
                 <li>Nom</li>
                 <li>Prénom</li>                
                 <li>Courriel, {% if idg > 0  %}optionnel mais préférable.{% else %}renseigner votre adresse professionnelle si vous en avez une.{% endif %}</li>
             </ul> 
-            Ces trois données s'écrivent sur une seule ligne par personnel.<br>
+            Ces trois données s'écrivent sur une seule ligne. Dans l'exemple ci-dessous, 4 personnes sont enregistrées.<br>
             <pre style="font-size:20px">Turing;Alan{% if idg == 0  %};alan.turing@enigma.edu{% endif  %}<br>Agnesi;Maria;maria.agnesi@curves.edu<br>Chasles;Michel{% if idg == 0  %};michel.chasles@vector.edu {% endif %}<br>de Fermat;Pierre;pierre.fermat@rsa.edu</pre>
             
 

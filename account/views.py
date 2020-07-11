@@ -897,7 +897,12 @@ def register_by_csv(request,key,idg=0):
         else :
             return redirect('school_students')            
     else :
-        return render(request, 'account/csv_teachers_or_students.html',{'key' : key, 'idg' : idg})
+        if key == 2 :
+            group = None
+        else :
+            group = Group.objects.get(pk = idg)
+         
+        return render(request, 'account/csv_teachers_or_students.html',{'key' : key, 'idg' : idg , 'group' : group })
 
   
 #########################################Lost password #################################################################

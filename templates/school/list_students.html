@@ -24,7 +24,9 @@
 
  
 {% block page_menu_right %}
-    <a href="{% url 'get_school_students' %}" class="btn btn-new">Associer nos élèves</a>
+    <a href="{% url 'delete_school_students' %}" class="btn btn-new" onclick="return deleteAllStudents()">Supprimer tous les élèves</a>
+
+    <a href="{% url 'get_school_students' %}" class="btn btn-new" onclick="return getAllStudents()">Récupérer tous les comptes élèves</a>
 {% endblock %}
 
 

@@ -9,7 +9,22 @@ from group.models import Group
 from account.decorators import is_manager_of_this_school 
 from account.models import User, Teacher, Student
 from account.forms import UserForm , StudentForm ,NewUserSForm
-
+############### bibliothèques pour les impressions pdf  #########################
+import os
+from django.utils import formats
+from io import BytesIO, StringIO
+from django.http import  HttpResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4, inch, landscape , letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image , PageBreak,Frame , PageTemplate
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.colors import yellow, red, black, white, blue
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.lib.utils import ImageReader
+from cgi import escape
+cm = 2.54
+#################################################################################
  
 
  
@@ -260,6 +275,19 @@ def delete_all_students_group(request,id):
 
 @login_required
 @is_manager_of_this_school
+def delete_school_students(request):
+	school = request.user.school
+	students = Student.objects.filter(user__school = school, user_type = 0)
+	for s in students :
+		s.delete()
+	return redirect('admin_tdb')
+
+
+
+
+
+@login_required
+@is_manager_of_this_school
 def new_group_many(request):
 
 	school = request.user.school
@@ -324,3 +352,77 @@ def manage_stage(request):
 
 
  
+###############################################################################################
+###############################################################################################
+######  Compte
+###############################################################################################
+###############################################################################################
+
+
+@login_required
+@is_manager_of_this_school
+def send_account(request,id):	
+	rcv = []
+	if id == 0 :
+		school = request.user.school
+		for u in school.user :
+			rcv.append(u.email)
+	else :
+		user = User.objects.get(id=id)
+		rcv.append(user.email)
+	send_mail('Compte   Sacado',
+	f'Bonjour, votre compte Sacado est disponible.\r\n\r\nVotre identifiant est {u.username} \r\n\r\n\Votre mot de passe est secret. Pour une première connexion, le mot de passe est : sacado2020 . Il faut le modifier lors de la première connexion.\r\n\r\n Dans le cas contraire, utilisez votre mot de passe habituel ou si il est perdu, demandez-en un autre.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
+	'info@sacado.xyz',
+	rcv)
+
+
+
+@login_required
+@is_manager_of_this_school
+def pdf_account(request,id):
+
+	response = HttpResponse(content_type='application/pdf')
+	response['Content-Disposition'] = 'attachment; filename="compte_sacado.pdf"'
+	p = canvas.Canvas(response)
+	teachers = []
+	school = request.user.school
+	if id == 0 :
+		for u in school.user.filter(user_type = 2) :
+			teachers.append(u)
+	else :
+		user = User.objects.get(id=id)
+		teachers.append(user)
+
+	for u in teachers :
+		p.setFont("Helvetica-Bold", 12)
+		p.drawString(50, 800, u.school.name)
+		p.setFont("Helvetica-Bold", 12)
+		p.drawString(50, 785, u.school.town)
+		p.setFont("Helvetica-Bold", 12)
+		p.drawString(50, 770, u.school.country.name)
+
+		p.setFont("Helvetica-Bold", 14)
+		p.drawString(50, 710, str(u.civilite) + " " + str(u.first_name) + " " + str(u.last_name))
+
+		p.setFont("Helvetica-Bold", 16)
+		p.drawString(200, 650, "COMPTE SACADO")
+		p.setFont("Helvetica", 12)
+		p.drawString(50, 550, "Votre compte SACADO est actif. Votre identifiant est : " + u.username)
+		p.setFont("Helvetica", 12)
+		p.drawString(50, 535, "Pour une première connexion, le mot de passe est : sacado2020 ")
+		p.setFont("Helvetica", 12)
+		p.drawString(50, 520, "Il faut le modifier lors de la première connexion.")
+		p.setFont("Helvetica", 12)
+		p.drawString(50, 505, "Votre mot de passe est secret.")
+		p.setFont("Helvetica", 12)
+		p.drawString(50, 490, "Si vous avez déjà un compte, utilisez votre mot de passe habituel.")
+		p.setFont("Helvetica", 12)
+		p.drawString(50, 475, "S'il est perdu, demandez-en un autre.")
+		p.setFont("Helvetica", 12)
+		p.drawString(50, 460, "Pour vous connecter, redirigez-vous vers https://sacado.xyz.")
+		p.showPage()
+	p.save()
+ 
+
+	return response 
+

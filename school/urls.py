@@ -28,11 +28,14 @@ urlpatterns = [
     path('update_group_school/<int:id>', update_group_school , name='update_group_school'),
     path('new_group_many', new_group_many, name='new_group_many'),
 
+    path('send_account/<int:id>', send_account, name='send_account'),
+    path('pdf_account/<int:id>', pdf_account, name='pdf_account'),    
+
     path('delete_student_group/<int:id>/<int:ids>', delete_student_group , name='delete_student_group'),
     path('delete_all_students_group/<int:id>', delete_all_students_group , name='delete_all_students_group'),
+    path('delete_school_students', delete_school_students , name='delete_school_students'),
 
     path('get_school_students', get_school_students , name='get_school_students'),
-
     path('manage_stage', manage_stage, name='manage_stage'),
  
 ]
