@@ -1168,3 +1168,10 @@ def ajax_detail_student_parcours(request):
     data['html'] = render_to_string('account/ajax_detail_student_parcours.html', context)
 
     return JsonResponse(data)
+
+
+########## oauth social ###################
+
+def ask_usertype(request):
+    return render(request, 'account/oauth_usertype.html')
+

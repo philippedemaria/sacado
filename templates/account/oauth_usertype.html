@@ -1,0 +1,40 @@
+{% load widget_tweaks %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>SacAdo</title>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.png' %}"/>
+    <link href="{% static 'index/css/style_layout.css' %}" rel="stylesheet">
+    <link href="{% static 'index/css/style_reset.css' %}" rel="stylesheet">
+</head>
+<body>
+<section>
+    <div class="container has-text-centered column is-4 is-offset-4">
+        <h3 class="title has-text-grey"><a class="navbar-brand sacado" href="{% url 'index' %}"><img
+                src="{% static 'img/sacadoA1.png' %}" height="30px" style="vertical-align: middle;"/> SACADO </a></h3>
+        <p class="subtitle has-text-grey">Choisir votre type de compte.</p>
+        <div class="box">
+            <form action="/oauth/complete/google-oauth2/" method="post">
+                <input type="hidden" name="usertype" value="0">
+                <input value="Elève" type="submit" style="width:150px;" class="btn btn-primary"/>
+            </form>
+            <br>
+            <form action="/oauth/complete/google-oauth2/" method="post">
+                <input type="hidden" name="usertype" value="1">
+                <input value="Parent" type="submit" style="width:150px;" class="btn btn-primary"/>
+            </form>
+            <br>
+            <form action="/oauth/complete/google-oauth2/" method="post">
+
+                <input type="hidden" name="usertype" value="2">
+                <button type="submit" class="btn btn-primary" style="width:150px;">Enseignant</button>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>
