@@ -38,12 +38,21 @@
                   <a href="#footer" class="btn btn-index"> <span class="sacado">SACADO </span><br>Établissement<br>Nous contacter </a>
               </div>
 
-      <div class="row justify-content-center align-self-center" style="padding-bottom:30px">  
-        <div class="col-xs-12 col-lg-6 intro-info order-md-first order-last">
+      <div class="row justify-content-center align-self-center intro-info order-md-first order-last" style="padding-bottom:30px">  
+        <div class="col-xs-12 col-md-12 col-lg-6">
             <div class="title">S'entraîner. <br>Progresser. <br>S'auto-évaluer.</div>
-  			    <div class="subtitle marginbottom50">  <span class="exo">{{ nb_exercise }}</span> exercice{{  nb_exercise|pluralize }} interactif{{ nb_exercise|pluralize }} corrigé{{  nb_exercise|pluralize }} du CP à la Terminale</div>
-            <a href="#" data-toggle='modal' data-target='#connexion'  class="btn btn-primary"> Se connecter </a>
-            <a href="#" class="btn btn-danger" style="margin-left: 100px"> Se connecter avec  <img src="{% static 'img/Googlelogo.png' %}" height="15" style="margin-left: 5px; vertical-align: baseline" /> </a>
+  			    <div class="subtitle marginbottom50">  <span class="exo">{{ nb_exercise }}</span> exercice{{  nb_exercise|pluralize }} mathématique{{ nb_exercise|pluralize }} interactif{{ nb_exercise|pluralize }} et corrigé{{  nb_exercise|pluralize }} du CP à la Terminale.</div>
+            <div class="row">
+                <div class="col-xs-12 col-md-12 col-lg-6">
+                    <a href="#" data-toggle='modal' data-target='#connexion'  class="btn btn-primary"> Se connecter </a>
+                </div>
+                <div class="col-xs-12 col-md-12 col-lg-6">
+                    <a href="#" class="btn btn-danger index_size"> 
+                      Se connecter avec  <img src="{% static 'img/Googlelogo.png' %}" height="15" style="margin-left: 5px; vertical-align: baseline" /> 
+                    </a>
+                </div>
+            </div>
+
             <br>
             <div style="color:#cb2131;margin-top: 50px">
               <img src="{% static 'img/edge.png' %}" width="35px" />          
@@ -73,7 +82,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xs-12 col-lg-6 intro-info order-md-first order-last" style="text-align:center"  >
+        <div class="col-xs-12 col-md-12 col-lg-6" style="text-align:center"  >
               <div  style="position: relative;">
                 <a href="{% url 'show_exercise'   exercise.id     %}" target="_blank">
                     <img src="{% static 'uploads/' %}{{ exercise.supportfile.imagefile }}" width="400" style="position: absolute; top :40px; left:133px;z-index:-1" /> 
@@ -94,8 +103,8 @@
     </div>
   </section><!-- #intro -->
 
+ 
   <main id="main">
-
     <!--==========================
       Exercises exercises
     ============================-->
@@ -459,7 +468,7 @@
   </footer><!-- #footer -->
 
   <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
-
-  </main> 
+  </main>
+    
 
 {% endblock %}

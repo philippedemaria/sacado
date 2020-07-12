@@ -16,13 +16,12 @@
   <link href="{% static 'index/lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
   <!-- Select2 
   <link rel="stylesheet" href="{% static 'plugins/select2/select2.min.css' %}">
-
 -->
 
-  <!-- Libraries CSS Files
+  <!-- Libraries CSS Files -->
   <link href="{% static 'index/lib/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
   <link href="{% static 'index/lib/animate/animate.min.css' %}" rel="stylesheet">
- -->
+
   <!--   
   <link href="{% static 'index/lib/ionicons/css/ionicons.min.css' %}" rel="stylesheet"> 
   <link href="{% static 'index/lib/lightbox/css/lightbox.min.css' %}" rel="stylesheet">
@@ -138,6 +137,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="lostpasswordModal" tabindex="-1" role="dialog" aria-labelledby="lostpasswordModal" aria-hidden="true" >
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -348,25 +348,26 @@
     </div>
 </div>
 
-  <script src="{% static 'index/lib/jquery/jquery.min.js' %}"></script>
-  <script src="{% static 'index/lib/jquery/jquery-migrate.min.js' %}"></script>
+<script src="{% static 'index/lib/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'index/lib/jquery/jquery-migrate.min.js' %}"></script>
+<script src="{% static 'index/lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script> 
+<script src="{% static 'index/lib/easing/easing.min.js' %}"></script>
+<script src="{% static 'index/lib/mobile-nav/mobile-nav.js' %}"></script> 
+<script src="{% static 'index/lib/waypoints/waypoints.min.js' %}"></script>  
 
-  <script src="{% static 'index/lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-  <script src="{% static 'index/lib/easing/easing.min.js' %}"></script>
-  <script src="{% static 'index/lib/mobile-nav/mobile-nav.js' %}"></script>
+<script src="{% static 'index/lib/wow/wow.min.js' %}"></script>   
+<script src="{% static 'index/lib/counterup/counterup.min.js' %}"></script>   
+
  
- 
-  <script src="{% static 'index/lib/counterup/counterup.min.js' %}"></script>
-  <script src="{% static 'index/lib/wow/wow.min.js' %}"></script>
- 
- 
- 
-  <script src="{% static 'index/contactform/contactform.js' %}"></script>
-  <script src="{% static 'index/js/main.js' %}"></script> 
-    {% block general_js %}
-  <script src="{% static 'js/script/accueil.js' %}"></script> 
-  <script src="{% static 'js/lib/select2.min.js' %}"></script>      
-  <script src="{% static 'js/script/config-select2-accueil.js' %}"></script> 
-    {% endblock %} 
+<script src="{% static 'index/js/main.js' %}"></script> 
+
+{% block general_js %}
+<script src="{% static 'js/script/accueil.js' %}"></script> 
+<script src="{% static 'js/lib/select2.min.js' %}"></script>      
+<script src="{% static 'js/script/config-select2-accueil.js' %}"></script> 
+{% endblock %}
+
 </body>
 </html>
+
+ 

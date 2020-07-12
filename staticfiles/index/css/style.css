@@ -219,6 +219,76 @@ table.table-bordered.dataTable {
   border : solid 1px #2a4c5e;   
   border-radius: 50%;
 }
+
+@media (max-width:990px){
+
+  .btn-index{
+    border-radius: 4px;
+    border : solid 1px #FFB400;
+    color:#2a4c5e;
+    background: #FFB400;
+    border-radius: 50%;
+    width : 150px;
+    height: 150px;
+    position: absolute;
+    top :75px;
+    left: 50%;
+    padding-top: 35px;
+    cursor: pointer;
+    z-index: 1000;
+  }
+
+  .btn-index:hover{ 
+    color:#FFF;
+    background: #2a4c5e;
+    border-radius: 4px;
+    border : solid 1px #2a4c5e;   
+    border-radius: 50%;
+  }
+
+
+  .index_size{
+    margin-top: 20px;
+  }
+
+}
+
+
+@media (max-width:770px){
+
+  .btn-index{
+    border-radius: 4px;
+    border : solid 1px #FFB400;
+    color:#2a4c5e;
+    background: #FFB400;
+    border-radius: 50%;
+    width : 140px;
+    height: 140px;
+    position: absolute;
+    top :75px;
+    left: 55%;
+    padding-top: 30px;
+    cursor: pointer;
+    z-index: 1000;
+  }
+
+  .btn-index:hover{ 
+    color:#FFF;
+    background: #2a4c5e;
+    border-radius: 4px;
+    border : solid 1px #2a4c5e;   
+    border-radius: 50%;
+  }
+
+
+  .index_size{
+    margin-top: 20px;
+  }
+
+}
+
+
+
 /* Back to top button */
 
 .back-to-top {
@@ -426,7 +496,9 @@ table.table-bordered.dataTable {
 /*--------------------------------------------------------------
 # Navigation Menu
 --------------------------------------------------------------*/
-
+#main{
+  clear: both;
+}
 /* Desktop Navigation */
 
 .main-nav {
@@ -594,11 +666,11 @@ table.table-bordered.dataTable {
 
 .mobile-nav-toggle {
   position: fixed;
-  right: 0;
-  top: 0;
+  right: 0px;
+  top: 0px;
   z-index: 9998;
   border: 0;
-  background: none;
+  background: none !important;
   font-size: 24px;
   transition: all 0.4s;
   outline: none !important;
@@ -608,8 +680,8 @@ table.table-bordered.dataTable {
 }
 
 .mobile-nav-toggle i {
-  margin: 18px 18px 0 0;
-  color: #065e77;
+  margin: 28px 28px 0 0;
+  color: #5d4391;
 }
 
 .mobile-nav-overly {
@@ -752,7 +824,7 @@ table.table-bordered.dataTable {
 --------------------------------*/
 
 #exercises {
-  padding: 40px 0 40px 0;
+  /*padding: 40px 0 40px 0;*/
 }
 
 #exercises .box {
@@ -806,24 +878,34 @@ table.table-bordered.dataTable {
   color:#a8a4b0;
 }
 
+@media (min-width: 775px) {
+  .imagebox{
+  float:left; 
+  margin-right: 20px;
+  position: relative;
+  margin-bottom: 20px;
+  }
 
-.imagebox{
-float:left; 
-margin-right: 20px;
-position: relative;
-margin-bottom: 20px;
+  .imagebox:hover {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+    box-shadow: 0px 6px 6px 0px #CCC;
+  }
 }
+@media (max-width: 775px) {
 
-.imagebox:hover {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
-  box-shadow: 0px 6px 6px 0px #CCC;
+  .imagebox{
+  text-align: center;
+  margin-right: 20px;
+  position: relative;
+  margin-bottom: 20px;
+  }
+
 }
 
 .c2{
   background-color: #670064;
   position: absolute ;
-  right:0;
 }
 .c3{
   background-color: #28a745;
@@ -1695,10 +1777,8 @@ margin-bottom: 20px;
   }
 }
 
-@media (max-width: 767px) {
-  #intro {
+   #intro {
     height: auto;
-    padding: 80px 0 60px 0;
   }
 
   #intro .container {
@@ -1710,7 +1790,7 @@ margin-bottom: 20px;
   }
 
   #intro .intro-info {
-    text-align: center;
+ 
     padding-top: 40px;
   }
 
@@ -1737,7 +1817,7 @@ margin-bottom: 20px;
   #testimonials .testimonial-item p {
     margin-left: 0;
   }
-}
+ 
 
 @media (max-width: 574px) {
   #footer .footer-top .social-links a {
