@@ -16,18 +16,28 @@
     {% if request.user.user_type == 2 %}
         {% if 'detail_student_theme' in request.path %}
             {% if sprev_id %}<a href="{% url 'detail_student_theme' sprev_id theme.id %}"  class="btn btn-default"> Elève précédent </a>{% endif  %}
+            <select name="select_sudent" id="select_student" class="select2">
+                <option value="{{ student.user.id}}">
+                    {{ student.user.last_name }} {{ student.user.first_name }}
+                </option>
+            </select>
+
             {% if snext_id %}<a href="{% url 'detail_student_theme' snext_id theme.id %}"  class="btn btn-default"> Elève suivant</a>{% endif  %}
 
         {% elif 'detail_student_parcours' in request.path %}
             {% if sprev_id %}<a href="{% url 'detail_student_parcours' sprev_id  parcours.id %}"  class="btn btn-default"> Elève précédent </a>{% endif  %}
+
             {% if snext_id %}<a href="{% url 'detail_student_parcours' snext_id  parcours.id %}"  class="btn btn-default"> Elève suivant</a>{% endif  %}
 
         {% elif 'detail_student_all_views' in request.path %}
             {% if sprev_id %}<a href="{% url 'detail_student_all_views' sprev_id  %}"  class="btn btn-default"> Elève précédent </a>{% endif  %}
+
             {% if snext_id %}<a href="{% url 'detail_student_all_views' snext_id  %}"  class="btn btn-default"> Elève suivant</a>{% endif  %}
 
         {% else %}
             {% if sprev_id %}<a href="{% url 'detail_student' sprev_id  %}"  class="btn btn-default"> Elève précédent </a>{% endif  %}
+
+
             {% if snext_id %}<a href="{% url 'detail_student' snext_id  %}"  class="btn btn-default"> Elève suivant</a>{% endif  %}
         {% endif %}
     {% else %}

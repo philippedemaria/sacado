@@ -158,9 +158,9 @@ font-family: "Montserrat", sans-serif;
 }
 
 .title {
-    color : #000;
+    color : #2a4c5e;
     font-size:40px;
-    font-family:  'Roboto',  Helvetica, Arial, sans-serif ; 
+    font-weight: 100;
 }
 .subtitle {
     font-family:  'Roboto',  Helvetica, Arial, sans-serif; 
