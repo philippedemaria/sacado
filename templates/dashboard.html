@@ -341,11 +341,11 @@
  
                   
   
-            <div class="col-lg-7 col-xs-12"> 
+            <div class="col-lg-7 col-xs-7"> 
                 {{ level.shortname }} <a href="{% url 'admin_supportfiles' level.id %}">Fichiers support</a>  
             </div>  
-            <div class="col-lg-5 col-xs-12"> 
-                  <img src="{% static 'img/ggb.png' %}" width="15px">  <a href="{% url 'admin_associations'  level.id  %}">Exercices  </a> 
+            <div class="col-lg-5 col-xs-5"> 
+                    <img src="{% static 'img/ggb.png' %}" width="15px"> <a href="{% url 'admin_associations'  level.id  %}">Exercices   </a> 
             </div>      
         </div>
         {% endfor %}
