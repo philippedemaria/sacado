@@ -6,16 +6,22 @@ from account.models import User, Student, Parent, Teacher
 
 def complete_user(**kwargs):
 
-    user = kwargs['user']
-    usertype = int(kwargs['details']['usertype'])
-    import pdb
-    pdb.set_trace()
-    if usertype == User.STUDENT:
-        Student.objects.create(user_id=user.pk, level_id=1)
-    elif usertype == User.PARENT:
-        Parent.objects.create(user_id=user.pk)
-    elif usertype == User.TEACHER:
-        Teacher.objects.create(user_id=user.pk)
+    if kwargs['is_new']:
+        user = kwargs['user']
+        usertype = int(kwargs['details']['usertype'])
+
+        if usertype == User.STUDENT:
+            user.user_type = User.STUDENT
+            user.save()
+            Student.objects.create(user_id=user.pk, level_id=1)
+        elif usertype == User.PARENT:
+            user.user_type = User.PARENT
+            user.save()
+            Parent.objects.create(user_id=user.pk)
+        elif usertype == User.TEACHER:
+            user.user_type = User.TEACHER
+            user.save()
+            Teacher.objects.create(user_id=user.pk)
     return kwargs
 
 
