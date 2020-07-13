@@ -10,31 +10,60 @@
     <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.png' %}"/>
     <link href="{% static 'index/css/style_layout.css' %}" rel="stylesheet">
     <link href="{% static 'index/css/style_reset.css' %}" rel="stylesheet">
+
 </head>
 <body>
 <section>
-    <div class="container has-text-centered column is-4 is-offset-4">
+    <div class="container has-text-centered column is-4 is-offset-4" id="usertype_panel">
         <h3 class="title has-text-grey"><a class="navbar-brand sacado" href="{% url 'index' %}"><img
                 src="{% static 'img/sacadoA1.png' %}" height="30px" style="vertical-align: middle;"/> SACADO </a></h3>
         <p class="subtitle has-text-grey">Choisir votre type de compte.</p>
         <div class="box">
-            <form action="/oauth/complete/google-oauth2/" method="post">
-                <input type="hidden" name="usertype" value="0">
-                <input value="Elève" type="submit" style="width:150px;" class="btn btn-primary"/>
-            </form>
-            <br>
+
+            <input value="Elève" style="width:150px;margin:10px;" class="btn btn-primary" id="student_button"
+                   onclick="student_step2()" type="button"/>
+
+
             <form action="/oauth/complete/google-oauth2/" method="post">
                 <input type="hidden" name="usertype" value="1">
-                <input value="Parent" type="submit" style="width:150px;" class="btn btn-primary"/>
+                <input value="Parent" type="submit" style="width:150px;margin:10px;" class="btn btn-primary"/>
             </form>
-            <br>
+
             <form action="/oauth/complete/google-oauth2/" method="post">
 
                 <input type="hidden" name="usertype" value="2">
-                <button type="submit" class="btn btn-primary" style="width:150px;">Enseignant</button>
+                <button type="submit" class="btn btn-primary" style="width:150px;margin:10px;">Enseignant</button>
             </form>
+        </div>
+    </div>
+
+    <div class="container has-text-centered column is-4 is-offset-4" style="display:none;" id="level_panel">
+        <h3 class="title has-text-grey"><a class="navbar-brand sacado" href="{% url 'index' %}"><img
+                src="{% static 'img/sacadoA1.png' %}" height="30px" style="vertical-align: middle;"/> SACADO </a></h3>
+        <p class="subtitle has-text-grey">Choisir votre niveau.</p>
+        <div class="box">
+            <form action="/oauth/complete/google-oauth2/" method="post">
+                <input type="hidden" name="usertype" value="0">
+                <select name="level" class="form-control select2" id="level">
+                    {% for level in levels %}
+                    <option value="{{ level.id}}">{{ level.name }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <br>
+
+                <input value="Confirmer" type="submit" style="width:150px;" class="btn btn-primary"/>
+            </form>
+
         </div>
     </div>
 </section>
 </body>
+<script>
+    function student_step2() {
+        document.getElementById("usertype_panel").style.display = "none";
+        document.getElementById("level_panel").style.display = "";
+    }
+
+</script>
 </html>

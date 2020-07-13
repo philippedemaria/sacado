@@ -13,7 +13,8 @@ def complete_user(**kwargs):
         if usertype == User.STUDENT:
             user.user_type = User.STUDENT
             user.save()
-            Student.objects.create(user_id=user.pk, level_id=1)
+            level_id = int(kwargs['details']['level'])
+            Student.objects.create(user_id=user.pk, level_id=level_id)
         elif usertype == User.PARENT:
             user.user_type = User.PARENT
             user.save()
@@ -26,8 +27,6 @@ def complete_user(**kwargs):
 
 
 
-#################### Oauth
-
 @partial
 def get_usertype(strategy, details, user=None, is_new=False, *args, **kwargs):
 
@@ -35,8 +34,23 @@ def get_usertype(strategy, details, user=None, is_new=False, *args, **kwargs):
         return
     elif is_new and not details.get('usertype'):
         usertype = strategy.request_data().get('usertype')
-        if usertype:
+        level = strategy.request_data().get('level')
+        if usertype :
             details['usertype'] = usertype
+            details['level'] = level
         else:
             return redirect('ask_usertype')
 
+
+
+@partial
+def get_level(strategy, details, user=None, is_new=False, *args, **kwargs):
+    if user:
+        return
+    elif is_new and not details.get('level'):
+        level = strategy.request_data().get('level')
+        if level:
+            details['level'] = level
+        else:
+            import pdb; pdb.set_trace() #kwargs['request'].session.get('partial_pipeline_token')
+            return redirect('ask_level')

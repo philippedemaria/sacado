@@ -188,6 +188,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
     'sacado.pipeline.get_usertype',
+    #'sacado.pipeline.get_level',
     'social_core.pipeline.user.create_user',
     'sacado.pipeline.complete_user',
     'social_core.pipeline.social_auth.associate_user',

@@ -1173,5 +1173,10 @@ def ajax_detail_student_parcours(request):
 ########## oauth social ###################
 
 def ask_usertype(request):
-    return render(request, 'account/oauth_usertype.html')
+    levels = Level.objects.all()
+    return render(request, 'account/oauth_usertype.html', {'levels': levels})
 
+
+def ask_level(request):
+    levels = Level.objects.all()
+    return render(request, 'account/oauth_level.html', {'levels': levels})
