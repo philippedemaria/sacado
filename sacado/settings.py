@@ -32,6 +32,10 @@ if PRODUCTION:
     EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
     DEFAULT_FROM_EMAIL = 'SacAdo < info@sacado.xyz >'
 
+    # social_django
+    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+
     SESSION_COOKIE_SECURE = True
     SECURE_SSL_REDIRECT = True
     CSRF_COOKIE_SECURE = True
@@ -188,7 +192,6 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
     'sacado.pipeline.get_usertype',
-    #'sacado.pipeline.get_level',
     'social_core.pipeline.user.create_user',
     'sacado.pipeline.complete_user',
     'social_core.pipeline.social_auth.associate_user',
