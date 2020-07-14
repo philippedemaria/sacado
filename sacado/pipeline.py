@@ -5,11 +5,9 @@ from account.models import User, Student, Parent, Teacher
 
 
 def complete_user(**kwargs):
-
     if kwargs['is_new']:
         user = kwargs['user']
         usertype = int(kwargs['details']['usertype'])
-
         if usertype == User.STUDENT:
             user.user_type = User.STUDENT
             user.save()
@@ -26,31 +24,15 @@ def complete_user(**kwargs):
     return kwargs
 
 
-
 @partial
 def get_usertype(strategy, details, user=None, is_new=False, *args, **kwargs):
-
     if user:
         return
     elif is_new and not details.get('usertype'):
         usertype = strategy.request_data().get('usertype')
         level = strategy.request_data().get('level')
-        if usertype :
+        if usertype:
             details['usertype'] = usertype
             details['level'] = level
         else:
             return redirect('ask_usertype')
-
-
-
-@partial
-def get_level(strategy, details, user=None, is_new=False, *args, **kwargs):
-    if user:
-        return
-    elif is_new and not details.get('level'):
-        level = strategy.request_data().get('level')
-        if level:
-            details['level'] = level
-        else:
-            import pdb; pdb.set_trace() #kwargs['request'].session.get('partial_pipeline_token')
-            return redirect('ask_level')
