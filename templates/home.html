@@ -35,8 +35,8 @@ Intro Section -
     <div class="container h-100">
 
         <div class="col-xs-12">
-            <a href="#footer" class="btn btn-index"> <span class="sacado">SACADO </span><br>Établissement<br>Nous
-                contacter </a>
+            <a href="#footer" class="btn btn-index">
+                <span class="sacado">SACADO </span><br>Établissement<br>Nous contacter</a>
         </div>
 
         <div class="row justify-content-center align-self-center intro-info order-md-first order-last"
@@ -48,13 +48,13 @@ Intro Section -
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-md-12 col-lg-6">
-                        <a href="#" data-toggle='modal' data-target='#connexion' class="btn btn-primary"> Se
-                            connecter </a>
+                        <a href="#" data-toggle='modal' data-target='#connexion' class="btn btn-primary">
+                            Se connecter
+                        </a>
                     </div>
                     <div class="col-xs-12 col-md-12 col-lg-6">
                         <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-danger index_size">
-                            Se connecter avec <img src="{% static 'img/Googlelogo.png' %}" height="15"
-                                                   style="margin-left: 5px; vertical-align: baseline"/>
+                            Se connecter avec <img src="{% static 'img/Googlelogo.png' %}" height="15" style="margin-left: 5px; vertical-align: baseline"/>
                         </a>
                     </div>
                 </div>
@@ -72,42 +72,43 @@ Intro Section -
                 </div>
 
 
-          <div class="row counters">
+                <div class="row counters">
 
-            <div class="col-lg-4 col-4 text-center">
-              <span data-toggle="counter-up">{{ nb_teacher }}</span>
-              <p>Enseignants</p>
-            </div>
+                    <div class="col-lg-4 col-4 text-center">
+                        <span data-toggle="counter-up">{{ nb_teacher }}</span>
+                        <p>Enseignants</p>
+                    </div>
 
-            <div class="col-lg-4 col-4 text-center">
-              <span data-toggle="counter-up">{{ nb_student }}</span>
-              <p>Elèves</p>
-            </div>
+                    <div class="col-lg-4 col-4 text-center">
+                        <span data-toggle="counter-up">{{ nb_student }}</span>
+                        <p>Elèves</p>
+                    </div>
 
-            <div class="col-lg-4 col-4 text-center">
-              <span data-toggle="counter-up">{{ nb_parcours }}</span>
-              <p>Parcours</p>
+                    <div class="col-lg-4 col-4 text-center">
+                        <span data-toggle="counter-up">{{ nb_parcours }}</span>
+                        <p>Parcours</p>
+                    </div>
+                </div>
             </div>
-          </div>
+            <div class="col-xs-12 col-md-12 col-lg-6" style="text-align:center">
+                <div style="position: relative;">
+                    <a href="{% url 'show_exercise'   exercise.id     %}" target="_blank">
+                        <img src="{% static 'uploads/' %}{{ exercise.supportfile.imagefile }}" width="400"
+                             style="position: absolute; top :40px; left:133px;z-index:-1"/>
+
+                        {% if exercise.id|divisibleby:"3" %}
+                        <img src="{% static 'img/mains_ip.png' %}" height="490" width="610" style=" z-index: 999"/>
+                        {% elif exercise.id|divisibleby:"4" %}
+                        <img src="{% static 'img/ordinateur.png' %}" height="490" style=" z-index: 999"/>
+                        {% else %}
+                        <img src="{% static 'img/ordi_portable.png' %}" height="490" style="  z-index: 999"/>
+                        {% endif %}
+
+                    </a>
+
+                </div>
+            </div>
         </div>
-        <div class="col-xs-12 col-md-12 col-lg-6" style="text-align:center"  >
-              <div  style="position: relative;">
-                <a href="{% url 'show_exercise'   exercise.id     %}" target="_blank">
-                    <img src="{% static 'uploads/' %}{{ exercise.supportfile.imagefile }}" width="400" style="position: absolute; top :40px; left:133px;z-index:-1" />
-
-                    {% if  exercise.id|divisibleby:"3" %}
-                    <img src="{% static 'img/mains_ip.png' %}" height="490" width="610" style=" z-index: 999" />
-                    {% elif  exercise.id|divisibleby:"4" %}
-                    <img src="{% static 'img/ordinateur.png' %}" height="490" style=" z-index: 999" />
-                    {% else %}
-                    <img src="{% static 'img/ordi_portable.png' %}" height="490"   style="  z-index: 999" />
-                    {% endif %}
-
-                </a>
-
-              </div>
-        </div>
-      </div>
     </div>
   </section><!-- #intro -->
 
@@ -329,32 +330,33 @@ Intro Section -
 
           </div>
 
-          <div class="col-lg-6 col-md-6">
-          <header class="section-header">
-          <h3>A propos</h3>
-        </header>
-            <div class="about-content">
+            <div class="col-lg-6 col-md-6">
+                <header class="section-header">
+                    <h3>A propos</h3>
+                </header>
+                <div class="about-content">
 
-              <h3>Les attendus et savoir faire des exercices sont issus des programmes officiels de l'éducation nationale.</h3>
-              <p>En aucun cas, ces exercices se substituent aux attentes des enseignants mais sont un complément pour un travail en autonomie.</p>
+                    <h3>Les attendus et savoir faire des exercices sont issus des programmes officiels de l'éducation
+                        nationale.</h3>
+                    <p>En aucun cas, ces exercices se substituent aux attentes des enseignants mais sont un complément
+                        pour un travail en autonomie.</p>
 
-              <h3>Les contributeurs SacAdo</h3>
-                <p>
-                    Bruno, Mehdi, Philippe ..... Surtout Bruno
-                </p>
-              <h3>Le code </h3>
-                <p>
-                    Raphaël, Philippe
-                </p>
-              <h3>La veille SacAdo</h3>
-                <p>
-                    Julie, David, Jannick ...<br> Yera, Alajandra, Emna, Abdu, Sara, Ines, Nour...
-                </p>
+                    <h3>Les contributeurs SacAdo</h3>
+                    <p>
+                        Bruno, Mehdi, Philippe ..... Surtout Bruno
+                    </p>
+                    <h3>Le code </h3>
+                    <p>
+                        Raphaël, Philippe
+                    </p>
+                    <h3>La veille SacAdo</h3>
+                    <p>
+                        Julie, David, Jannick ...<br> Yera, Alajandra, Emna, Abdu, Sara, Ines, Nour...
+                    </p>
 
 
-
+                </div>
             </div>
-          </div>
         </div>
       </div>
 
