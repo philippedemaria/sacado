@@ -47,7 +47,7 @@
                     <a href="#" data-toggle='modal' data-target='#connexion'  class="btn btn-primary"> Se connecter </a>
                 </div>
                 <div class="col-xs-12 col-md-12 col-lg-6">
-                    <a href="#" class="btn btn-danger index_size"> 
+                    <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-danger index_size">
                       Se connecter avec  <img src="{% static 'img/Googlelogo.png' %}" height="15" style="margin-left: 5px; vertical-align: baseline" /> 
                     </a>
                 </div>
