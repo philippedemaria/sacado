@@ -32,6 +32,10 @@ if PRODUCTION:
     EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
     DEFAULT_FROM_EMAIL = 'SacAdo < info@sacado.xyz >'
 
+    # social_django
+    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+
     SESSION_COOKIE_SECURE = True
     SECURE_SSL_REDIRECT = True
     CSRF_COOKIE_SECURE = True
@@ -75,6 +79,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'bootstrap3',
     'setup',
+    'social_django',
     'account',
     'group',
     'socle',
@@ -95,6 +100,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 
@@ -145,8 +151,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
-
         },
     },
 ]
@@ -172,6 +179,26 @@ DATABASES = {
 }
 
 AUTH_USER_MODEL = 'account.User'
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'sacado.pipeline.get_usertype',
+    'social_core.pipeline.user.create_user',
+    'sacado.pipeline.complete_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators

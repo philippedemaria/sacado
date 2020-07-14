@@ -9,97 +9,99 @@
 {% block body %}
 
 
-{% if messages %} 
+{% if messages %}
 <ul class="messages">
     {% for message in messages %}
     <li>{{ message }}</li>
     {% endfor %}
 </ul>
 {% endif %}
- 
 
 
 
-{% if form.errors %} 
+
+{% if form.errors %}
 <div class="container alert alert-danger" role="alert" style="top:100px">
     <i class="fa fa-warning"></i> Votre connexion a échoué. Vérifier votre identifiant et/ou votre mot de passe.
 </div>
 {% endif %}
 
-     <!--==========================
-    Intro Section
-  ============================-->
- 
+<!--==========================
+Intro Section -
+============================-->
 
-  <section id="intro" class="clearfix" >
+
+<section id="intro" class="clearfix">
     <div class="container h-100">
-
-              <div class="col-xs-12"    >
-                  <a href="#footer" class="btn btn-index"> <span class="sacado">SACADO </span><br>en établissement<br>Nous contacter </a>
-              </div>
-
       <div class="row justify-content-center align-self-center intro-info order-md-first order-last" style="padding-bottom:30px">  
         <div class="col-xs-12 col-md-12 col-lg-6">
-            <div class="title marginbottom50"> <span class="exo">{{ nb_exercise }}</span> exercice{{  nb_exercise|pluralize }} <br>  
-  			       mathématique{{ nb_exercise|pluralize }}<br> interactif{{ nb_exercise|pluralize }} et corrigé{{  nb_exercise|pluralize }}<br> du CP à la Terminale.</div>
-            <div class="row">
-                <div class="col-xs-12 col-md-12 col-lg-6">
-                    <a href="#" data-toggle='modal' data-target='#connexion'  class="btn btn-primary"> Se connecter </a>
+                <div class="title marginbottom50"> <span class="exo">{{ nb_exercise }}</span> exercice{{  nb_exercise|pluralize }} <br>  
+      			       mathématique{{ nb_exercise|pluralize }}<br> interactif{{ nb_exercise|pluralize }} et corrigé{{  nb_exercise|pluralize }}<br> du CP à la Terminale.
                 </div>
-                <div class="col-xs-12 col-md-12 col-lg-6">
-                    <a href="#" class="btn btn-danger index_size"> 
-                      Se connecter avec  <img src="{% static 'img/Googlelogo.png' %}" height="15" style="margin-left: 5px; vertical-align: baseline" /> 
-                    </a>
-                </div>
-            </div>
+                <div class="row">
+                        <div class="col-xs-12 col-md-12 col-lg-6">
+                            <a href="#" data-toggle='modal' data-target='#connexion' class="btn btn-primary">
+                                Se connecter
+                            </a>
+                        </div>
+                        <div class="col-xs-12 col-md-12 col-lg-6">
+                            <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-danger index_size">
+                                Se connecter avec <img src="{% static 'img/Googlelogo.png' %}" height="15" style="margin-left: 5px; vertical-align: baseline"/>
+                            </a>
+                        </div>
+                    </div>
 
-            <br>
-            <div style="color:#cb2131;margin-top: 50px">
-              <img src="{% static 'img/edge.png' %}" width="35px" />          
-              <img src="{% static 'img/firefox.png' %}" width="35px" />          
-              <img src="{% static 'img/chrome.png' %}" width="35px"  />
-              <img src="{% static 'img/safari.png' %}" width="35px" />
-              <i class="fa fa-apple"></i> <a href="https://java.com/fr/download/help/mac_install.xml" target="_blank" style="color:#cb2131; border-bottom: 1px #cb2131 dashed">
-              Pour safari, installer Java si nécessaire.</a>
-            </div> 
+                    <br>
+                    <div style="color:#cb2131;margin-top: 50px">
+                        <img src="{% static 'img/edge.png' %}" width="35px"/>
+                        <img src="{% static 'img/firefox.png' %}" width="35px"/>
+                        <img src="{% static 'img/chrome.png' %}" width="35px"/>
+                        <img src="{% static 'img/safari.png' %}" width="35px"/>
+                        <i class="fa fa-apple"></i> <a href="https://java.com/fr/download/help/mac_install.xml"
+                                                       target="_blank"
+                                                       style="color:#cb2131; border-bottom: 1px #cb2131 dashed">
+                        Pour safari, installer Java si nécessaire.</a>
+                    </div>
 
 
-          <div class="row counters">
+                    <div class="row counters">
+
+                        <div class="col-lg-4 col-4 text-center">
+                            <span data-toggle="counter-up">{{ nb_teacher }}</span>
+                            <p>Enseignants</p>
+                        </div>
+
+                        <div class="col-lg-4 col-4 text-center">
+                            <span data-toggle="counter-up">{{ nb_student }}</span>
+                            <p>Elèves</p>
+                        </div>
+
+                        <div class="col-lg-4 col-4 text-center">
+                            <span data-toggle="counter-up">{{ nb_parcours }}</span>
+                            <p>Parcours</p>
+                        </div>
+                    </div>
  
-            <div class="col-lg-4 col-4 text-center">
-              <span data-toggle="counter-up">{{ nb_teacher }}</span>
-              <p>Enseignants</p>
             </div>
+            <div class="col-xs-12 col-md-12 col-lg-6" style="text-align:center">
+                <div style="position: relative;">
+                    <a href="{% url 'show_exercise'   exercise.id     %}" target="_blank">
+                        <img src="{% static 'uploads/' %}{{ exercise.supportfile.imagefile }}" width="400"
+                             style="position: absolute; top :40px; left:133px;z-index:-1"/>
 
-            <div class="col-lg-4 col-4 text-center">
-              <span data-toggle="counter-up">{{ nb_student }}</span>
-              <p>Elèves</p>
-            </div>
+                        {% if exercise.id|divisibleby:"3" %}
+                        <img src="{% static 'img/mains_ip.png' %}" height="490" width="610" style=" z-index: 999"/>
+                        {% elif exercise.id|divisibleby:"4" %}
+                        <img src="{% static 'img/ordinateur.png' %}" height="490" style=" z-index: 999"/>
+                        {% else %}
+                        <img src="{% static 'img/ordi_portable.png' %}" height="490" style="  z-index: 999"/>
+                        {% endif %}
 
-            <div class="col-lg-4 col-4 text-center">
-              <span data-toggle="counter-up">{{ nb_parcours }}</span>
-              <p>Parcours</p>
+                    </a>
+
+                </div>
             </div>
-          </div>
         </div>
-        <div class="col-xs-12 col-md-12 col-lg-6" style="text-align:center"  >
-              <div  style="position: relative;">
-                <a href="{% url 'show_exercise'   exercise.id     %}" target="_blank">
-                    <img src="{% static 'uploads/' %}{{ exercise.supportfile.imagefile }}" width="400" style="position: absolute; top :40px; left:133px;z-index:-1" /> 
-
-                    {% if  exercise.id|divisibleby:"3" %}
-                    <img src="{% static 'img/mains_ip.png' %}" height="490" width="610" style=" z-index: 999" />
-                    {% elif  exercise.id|divisibleby:"4" %}
-                    <img src="{% static 'img/ordinateur.png' %}" height="490" style=" z-index: 999" />
-                    {% else %}
-                    <img src="{% static 'img/ordi_portable.png' %}" height="490"   style="  z-index: 999" />
-                    {% endif %}
-
-                </a>
-   
-              </div>
-        </div>
-      </div>
     </div>
   </section><!-- #intro -->
 
@@ -131,7 +133,7 @@
           </div>
           {% endwith %}
         {% endfor %}
- 
+
         <div style="height: 100px"></div>
 
 
@@ -145,12 +147,12 @@
     ============================-->
     <section id="teachers" class="wow fadeIn">
       <div class="container">
-        
+
         <header class="section-header">
           <h3>Enseignants</h3>
         </header>
 
-            
+
         <div class="row">
 
           <div class="col-lg-6 col-xs-12">
@@ -180,7 +182,7 @@
 
       </div>
 
-      
+
     </section>
 
     <!--==========================
@@ -211,26 +213,26 @@
           </div>
 
           <div class="col-lg-6">
-             
-                <form action="{%  url 'register_student' %}" method="POST" id="student_form"  > 
-                {% csrf_token %} 
+
+                <form action="{%  url 'register_student' %}" method="POST" id="student_form"  >
+                {% csrf_token %}
                     {% include 'student_form.html' %}
                     <div style="height: 40px"></div>
                     <div class="row">
-                        <div class="col-lg-6 col-xs-6">   
+                        <div class="col-lg-6 col-xs-6">
                             <div class="form-group"><input name="envoi" id="join_group" type="submit" class="btn btn-primary sendit"  disabled value="Rejoindre mon groupe" /></div>
-                        </div> 
-                        <div class="col-lg-6 col-xs-6" id="join_alone">   
+                        </div>
+                        <div class="col-lg-6 col-xs-6" id="join_alone">
                             <div class="form-group"><input name="send_alone" type="submit" class="btn btn-primary" id='send_alone'  disabled value="S'inscrire individuellement" /></div>
-                        </div> 
-                    </div> 
-                </form> 
+                        </div>
+                    </div>
+                </form>
           </div>
         </div>
 
         <div style="height: 100px"></div>
       </div>
-    </section> 
+    </section>
 
       <!--==========================
       Parent  Section
@@ -260,25 +262,25 @@
           </div>
 
           <div class="col-lg-6">
-             
-                <form action="{%  url 'register_parent' %}" method="POST" id="parent_form"  > 
-                {% csrf_token %} 
+
+                <form action="{%  url 'register_parent' %}" method="POST" id="parent_form"  >
+                {% csrf_token %}
                     {% include 'parent_form.html' %}
                     <div style="height: 40px"></div>
                     <div class="row">
-        
-                        <div class="col-lg-6 col-xs-6">   
+
+                        <div class="col-lg-6 col-xs-6">
                             <div class="form-group"><input name="envoi" type="submit" class="btn btn-primary is_child_exist" value="Valider" /></div>
-                        </div> 
-        
-                    </div> 
-                </form> 
+                        </div>
+
+                    </div>
+                </form>
           </div>
         </div>
 
         <div style="height: 100px"></div>
       </div>
-    </section> 
+    </section>
     <!--==========================
       About  Section
     ============================-->
@@ -290,68 +292,69 @@
           <h3>Progressivité et Programmes </h3>
 
       <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/2/02-Maths-CP-attendus-eduscol_1114732.pdf" target="_blank"> CP - Repère de progressivité</a></li>
- 
+
       <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/4/04-Maths-CE1-attendus-eduscol_1114734.pdf" target="_blank"> CE1 - Repère de progressivité</a></li>
- 
+
       <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/6/06-Maths-CE2-attendus-eduscol_1114736.pdf" target="_blank"> CE2 - Repère de progressivité</a></li>
- 
+
 
       <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/8/08-Maths-CM1-attendus-eduscol_1114738.pdf" target="_blank">CM1 - Repère de progressivité</a></li>
- 
+
       <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/0/10-Maths-CM2-attendus-eduscol_1114740.pdf" target="_blank">CM2 - Repère de progressivité</a></li>
- 
+
       <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/2/12-Maths-6e-attendus-eduscol_1114742.pdf" target="_blank">6<sup>ème</sup> - Repère de progressivité</a> </li>
- 
+
 
       <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/4/14-Maths-5e-attendus-eduscol_1114744.pdf" target="_blank">5<sup>ème</sup> - Repère de progressivité</a> </li>
- 
+
       <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/6/16-Maths-4e-attendus-eduscol_1114746.pdf" target="_blank">4<sup>ème</sup> - Repère de progressivité </a></li>
- 
+
       <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/8/18-Maths-3e-attendus-eduscol_1114748.pdf" target="_blank">3<sup>ème</sup> - Repère de progressivité </a></li>
-  
+
       <li class="sanspuce"><a href="https://cache.media.education.gouv.fr/file/SP1-MEN-22-1-2019/95/7/spe631_annexe_1062957.pdf" target="_blank">2<sup>nde</sup> - Programme </a></li>
- 
+
       <li class="sanspuce"><a href="https://cache.media.education.gouv.fr/file/SP1-MEN-22-1-2019/16/8/spe632_annexe_1063168.pdf" target="_blank">1<sup>ère</sup> - Programme </a></li>
- 
+
       <li class="sanspuce"><a href="https://cache.media.education.gouv.fr/file/SPE8_MENJ_25_7_2019/90/7/spe246_annexe_1158907.pdf" target="_blank">T<sup>ale</sup> - Programme </a> </li>
- 
+
 
          <img src="{% static 'img/logo-france.jpg' %}" width="150px" class="img-fluid"/>
 
 
           </div>
 
-          <div class="col-lg-6 col-md-6">         
-          <header class="section-header">
-          <h3>A propos</h3>
-        </header>
-            <div class="about-content">
- 
-              <h3>Les attendus et savoir faire des exercices sont issus des programmes officiels de l'éducation nationale.</h3>
-              <p>En aucun cas, ces exercices se substituent aux attentes des enseignants mais sont un complément pour un travail en autonomie.</p>
+            <div class="col-lg-6 col-md-6">
+                <header class="section-header">
+                    <h3>A propos</h3>
+                </header>
+                <div class="about-content">
 
-              <h3>Les contributeurs SacAdo</h3>
-                <p>
-                    Bruno, Mehdi, Philippe ..... Surtout Bruno 
-                </p>
-              <h3>Le code </h3>
-                <p>
-                    Raphaël, Philippe
-                </p>
-              <h3>La veille SacAdo</h3>
-                <p>
-                    Julie, David, Jannick ...<br> Yera, Alajandra, Emna, Abdu, Sara, Ines, Nour...
-                </p>
+                    <h3>Les attendus et savoir faire des exercices sont issus des programmes officiels de l'éducation
+                        nationale.</h3>
+                    <p>En aucun cas, ces exercices se substituent aux attentes des enseignants mais sont un complément
+                        pour un travail en autonomie.</p>
 
- 
+                    <h3>Les contributeurs SacAdo</h3>
+                    <p>
+                        Bruno, Mehdi, Philippe ..... Surtout Bruno
+                    </p>
+                    <h3>Le code </h3>
+                    <p>
+                        Raphaël, Philippe
+                    </p>
+                    <h3>La veille SacAdo</h3>
+                    <p>
+                        Julie, David, Jannick ...<br> Yera, Alajandra, Emna, Abdu, Sara, Ines, Nour...
+                    </p>
 
+
+                </div>
             </div>
-          </div>
         </div>
       </div>
 
-    </section> 
- 
+    </section>
+
 
 
   <!--==========================
@@ -378,8 +381,8 @@
 
                     <h4>Contact</h4>
                     <p>
-                      Bruno Serres - Nicaragua <br>  
-                      Philippe Demaria - Tunisie <br>                         
+                      Bruno Serres - Nicaragua <br>
+                      Philippe Demaria - Tunisie <br>
                     </p>
                 </div>
 
@@ -392,27 +395,27 @@
                          <a href="#students" style="color:#535074">Elèves</a><br>
                         <a href="#about" style="color:#535074">A propos</a><br>
                         <a href="#footer" style="color:#535074">Contact</a>
- 
+
                   </div>
 
                   <div class="footer-links">
                     <h4>Exercices</h4>
                     <p>
-                      Bruno Serres - Nicaragua <br> 
-                      Philippe Demaria - Tunisie <br>                                             
-                      Mehdi Boulifa - Tunisie <br> 
-                        
+                      Bruno Serres - Nicaragua <br>
+                      Philippe Demaria - Tunisie <br>
+                      Mehdi Boulifa - Tunisie <br>
 
-             
+
+
                     </p>
 
- 
+
                     <h4>Codeurs</h4>
                     <p>
-                      Raphaël Chay - Bogota <br> 
-                      Philippe Demaria - Tunisie <br>                         
+                      Raphaël Chay - Bogota <br>
+                      Philippe Demaria - Tunisie <br>
                     </p>
- 
+
 
 
 
@@ -424,7 +427,7 @@
 
 
                   </div>
- 
+
 
                 </div>
 
@@ -435,7 +438,7 @@
           <div class="col-lg-6">
 
             <div class="form">
-              
+
               <h4>Envoyez un message</h4>
               <p>Vous souhaitez obtenir des infos, utiliser SACADO dans votre établissement, laisser un message. Utiliser cet espace.</p>
               <form action="{% url 'send_message' %}" method="post" >
@@ -452,8 +455,8 @@
                 <div class="form-group">
                   <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Ecrire votre message" placeholder="Message"></textarea>
                 </div>
- 
- 
+
+
 
                 <div class="text-center"><button type="submit" class="btn btn-sacado">Envoyer</button></div>
               </form>
