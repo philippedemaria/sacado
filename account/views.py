@@ -1173,3 +1173,16 @@ def ajax_detail_student_parcours(request):
     data['html'] = render_to_string('account/ajax_detail_student_parcours.html', context)
 
     return JsonResponse(data)
+
+
+########## oauth social ###################
+
+def ask_usertype(request):
+    """
+    Authentification avec google et social_django, demande d'informations complémentaires comme
+    le type de l'utilisateur ou la classe afin de compléter le profil
+    """
+    levels = Level.objects.all()
+    return render(request, 'account/oauth_usertype.html', {'levels': levels})
+
+

@@ -62,4 +62,6 @@ urlpatterns = [
     path('update_parent/<int:id>', update_parent, name='update_parent'),
     path('delete_parent/<int:id>', delete_parent, name='delete_parent'),
 
+    path('usertype/', ask_usertype, name='ask_usertype'),
+
 ]
