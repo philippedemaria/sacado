@@ -118,7 +118,7 @@
                                         {% else %} 
                                                 <tr> 
                                                     <td>
-                                                         {{ knowledge.name }} 
+                                                         {{ knowledge.name }} <em class="text text-danger">Exercice en cours de création</em>
                                                         {% if request.user.is_superuser and '/admin' in request.path %}
                                                         <a href="{% url 'create_supportfile_knowledge' knowledge.name.id %}" class="edit"  target="_blank"><i class='fa fa-plus pull-right' style="font-size: 10px"></i></a>
                                                         {% endif %}
