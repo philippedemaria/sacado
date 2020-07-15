@@ -38,7 +38,6 @@
           <div class="logo float-left">
             <a class="navbar-brand sacado" href="{% url 'index' %}"><img src="{% static 'img/sacadoA1.png' %}"/>   SACADO </a>
           </div>
-
           <nav class="main-nav float-right d-none d-lg-block">
             <ul>
               <li class="active"><a href="#intro">Accueil</a></li>
@@ -50,7 +49,6 @@
               <li><a href="#footer">Contact</a></li>
             </ul>
           </nav><!-- .main-nav -->
-          
         </div>
     </header><!-- #header -->
 
@@ -154,8 +152,6 @@
                         </div>        
                     </div> 
                     <hr>
-
-
                 <form action="{%  url 'password_reset' %}" method="POST"  >
                 {% csrf_token %}
                     <div class="row">
@@ -176,8 +172,6 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
             </div>          
         </div>          
-
-
     </div>
 </div>
 
@@ -353,12 +347,9 @@
 <script src="{% static 'index/lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script> 
 <script src="{% static 'index/lib/easing/easing.min.js' %}"></script>
 <script src="{% static 'index/lib/mobile-nav/mobile-nav.js' %}"></script> 
-<script src="{% static 'index/lib/waypoints/waypoints.min.js' %}"></script>  
-
+<script src="{% static 'index/lib/waypoints/waypoints.min.js' %}"></script> 
 <script src="{% static 'index/lib/wow/wow.min.js' %}"></script>   
 <script src="{% static 'index/lib/counterup/counterup.min.js' %}"></script>   
-
- 
 <script src="{% static 'index/js/main.js' %}"></script> 
 
 {% block general_js %}

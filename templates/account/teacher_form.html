@@ -22,7 +22,11 @@
 {% endblock %}
  
 {% block page_menu_right %}
+
+    {% if request.user.is_manager %}
     <li> <a href="{% url 'register_by_csv' 2 0 %}" class="btn btn-new"  > + Enseignant.e.s par csv</a></li>
+    {% endif %}
+
 {% endblock %}
 
 
