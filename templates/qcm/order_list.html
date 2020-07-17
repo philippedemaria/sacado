@@ -13,7 +13,7 @@
     </div>
     <div class="row">
         <form action="#" method="POST">  
-        <input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
+        <input type="hidden" value="{% if parcours %}{{ parcours.id }}{% endif %}" name="parcours" id="parcours"/>
         <div class="col-lg-12 col-xs-12"> 
             <ul id="exercise_sortable_list">
                 {% for relation in relationships|dictsort:"order" %} 
