@@ -1307,7 +1307,7 @@ def ajax_detail_parcours(request):
             student["nb"] = 0  
         stats.append(student)
 
-    context = {  'parcours': parcours,  'exercise':exercise ,'stats':stats ,  'num_exo':num_exo, }
+    context = {  'parcours': parcours,  'exercise':exercise ,'stats':stats ,  'num_exo':num_exo, 'communications' : [] , }
 
     data = {}
 
@@ -1601,7 +1601,7 @@ def create_supportfile(request):
 
             return redirect('admin_supportfiles' , nf.level.id )
 
-    context = {'form': form,   'teacher': teacher, 'knowledge': None,  'knowledges': [],     'supportfiles': [],   'levels': []}
+    context = {'form': form,   'teacher': teacher, 'knowledge': None,  'knowledges': [],     'supportfiles': [],   'levels': [], 'parcours': None, }
 
     return render(request, 'qcm/form_supportfile.html', context)
 
@@ -1633,7 +1633,7 @@ def create_supportfile_knowledge(request,id):
             print(form.errors)
 
 
-    context = {'form': form,   'teacher': teacher,  'knowledges': knowledges,  'knowledge': knowledge,   'supportfiles': supportfiles,   'levels': levels}
+    context = {'form': form,   'teacher': teacher,  'knowledges': knowledges,  'knowledge': knowledge,   'supportfiles': supportfiles,   'levels': levels , 'parcours': None,  }
 
     return render(request, 'qcm/form_supportfile.html', context)
 
@@ -1661,7 +1661,7 @@ def update_supportfile(request, id, redirection = 0):
                 
                 return redirect('admin_supportfiles', supportfile.level.id )
 
-        context = {'form': supportfile_form,   'teacher': teacher,  'supportfile': supportfile,  'knowledges': knowledges,    'supportfiles': supportfiles,   'levels': levels}
+        context = {'form': supportfile_form,   'teacher': teacher,  'supportfile': supportfile,  'knowledges': knowledges,    'supportfiles': supportfiles,   'levels': levels , 'parcours': None, }
 
         return render(request, 'qcm/form_supportfile.html', context )
 
@@ -1736,7 +1736,7 @@ def create_exercise(request, supportfile_id):
 
             return redirect('admin_supportfiles' , supportfile.level.id )
 
-    context = {  'knowledges': knowledges, 'supportfile': supportfile}
+    context = {  'knowledges': knowledges, 'supportfile': supportfile , 'parcours': None, }
 
     return render(request, 'qcm/form_exercise.html', context)
 
@@ -2310,7 +2310,7 @@ def all_my_tasks(request):
     teacher = Teacher.objects.get(user = request.user) 
     parcourses = Parcours.objects.filter(is_publish=  1,teacher=teacher )       
     relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today,exercise__supportfile__is_title=0).order_by("parcours") 
-    context = {'relationships': relationships, 'parcourses': parcourses,  }
+    context = {'relationships': relationships, 'parcourses': parcourses, 'parcours': None,  }
     return render(request, 'qcm/all_tasks.html', context)
 
 
