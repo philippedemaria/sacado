@@ -17,36 +17,34 @@ def menu(request):
     if request.user.is_authenticated:
 
         if request.user.time_zone:
-            time_zome = request.user.time_zone
-            timezone.activate(pytz.timezone(time_zome))
-            current_tz = timezone.get_current_timezone()
+            time_zone = request.user.time_zone
+            timezone.activate(pytz.timezone(time_zone))
             today = timezone.localtime(timezone.now())
-
         else:
             today = timezone.now()
- 
 
-        if request.user.user_type == User.TEACHER:  # teacher
+        if request.user.user_type == User.TEACHER:
 
             teacher = request.user.user_teacher
-            nbs = Studentanswer.objects.filter(parcours__teacher =  teacher, date =today).count()
-            nbe = Email.objects.distinct().filter(receivers =  request.user, today =today).count()
+            nbs = Studentanswer.objects.filter(parcours__teacher=teacher, date=today).count()
+            nbe = Email.objects.distinct().filter(receivers=request.user, today=today).count()
             nb_not = nbs + nbe
             levels = Level.objects.all()
 
+            return {
+                'today': today,
+                'nb_not': nb_not,
+                'levels': levels,
+            }
 
-            return {'today': today, 'nb_not': nb_not,  'levels': levels, }
-
-
-        elif request.user.user_type == User.STUDENT:  # student
+        elif request.user.user_type == User.STUDENT:
 
             student = Student.objects.get(user=request.user)
             last_exercises_done = Studentanswer.objects.filter(student=student).order_by("-date")[:10]
-            nb_exercise = Exercise.objects.filter(level=student.level).count()
             parcours = Parcours.objects.filter(is_publish=1, exercises__level=student.level).exclude(author=None)
-            parcourses = Parcours.objects.filter(is_publish=1, is_evaluation=0,
+            parcourses = Parcours.objects.filter(is_publish=1,
+                                                 is_evaluation=0,
                                                  students=student)  # tous les parcours attribués à cet élève
-            studentanswers = Studentanswer.objects.filter(student=student)
             groups = student.students_to_group.all()
 
             return {
@@ -54,17 +52,17 @@ def menu(request):
                 'parcourses': parcourses,
                 'parcours': parcours,
                 'last_exercises_done': last_exercises_done,
-                'groups': groups,                
+                'groups': groups,
+                'today': today,
             }
 
-
-        elif request.user.user_type == 1:  # student
+        elif request.user.user_type == User.PARENT:
             this_user = User.objects.get(pk=request.user.id)
 
             return {
                 'this_user': this_user,
+                'today': today,
             }
-
 
     else:
         nb_teacher = Teacher.objects.all().count()
