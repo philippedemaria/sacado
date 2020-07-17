@@ -386,10 +386,10 @@ def pdf_account(request,id):
 	p = canvas.Canvas(response)
 	teachers = []
 	school = request.user.school
-	if id == 0 :
-		for u in school.user.filter(user_type = 2) :
+	if id == 0:
+		for u in school.user.filter(user_type=2):
 			teachers.append(u)
-	else :
+	else:
 		user = User.objects.get(id=id)
 		teachers.append(user)
 

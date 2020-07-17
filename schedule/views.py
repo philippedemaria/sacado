@@ -99,7 +99,7 @@ def events_json(request):
     user = User.objects.get(pk=request.user.id)
     today = time_zone_user(request.user)
 
-    if request.user.user_type == User.TEACHER:
+    if request.user.is_teacher:
         teacher = Teacher.objects.get(user=user)
         relationships = Relationship.objects.filter(is_publish=1, parcours__teacher=teacher).exclude(date_limit=None, students=None)
 
@@ -133,7 +133,7 @@ def events_json(request):
 def calendar_initialize(request):
  
     today = time_zone_user(request.user)
-    if request.user.user_type == User.TEACHER:
+    if request.user.is_teacher:
         teacher = Teacher.objects.get(user=request.user)
         relationships = Relationship.objects.filter(parcours__teacher=teacher, date_limit__gte=today).exclude(date_limit=None)
         parcourses = Parcours.objects.filter(teacher=teacher)

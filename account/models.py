@@ -71,22 +71,25 @@ class User(AbstractUser):
         TZ_SET.append((tz,tz))
 
     user_type = models.PositiveSmallIntegerField(editable=False, null=True, choices=USER_TYPES)
-    civilite = models.CharField(max_length=10, default='M.', blank=True,  choices=CIVILITIES, verbose_name="Civilité")
-    time_zone = models.CharField(max_length=100, null=True, blank=True,  choices=TZ_SET, verbose_name="Fuseau horaire")
-    is_extra = models.BooleanField( default=0 , editable=0)
-    is_manager = models.BooleanField( default=0 )
-    school = models.ForeignKey(School, blank=True, null= True, related_name = "user", default= None , on_delete=models.PROTECT) 
-    cgu  = models.BooleanField( default=0 )
+    civilite = models.CharField(max_length=10, default='M.', blank=True, choices=CIVILITIES, verbose_name="Civilité")
+    time_zone = models.CharField(max_length=100, null=True, blank=True, choices=TZ_SET, verbose_name="Fuseau horaire")
+    is_extra = models.BooleanField(default=0, editable=0)
+    is_manager = models.BooleanField(default=0)
+    school = models.ForeignKey(School, blank=True, null=True, related_name="user", default=None, on_delete=models.PROTECT)
+    cgu = models.BooleanField(default=0)
     
     def __str__(self):
         return "{} {}".format(self.last_name, self.first_name)
 
+    @property
     def is_student(self):
         return self.user_type == self.STUDENT
 
+    @property
     def is_parent(self):
         return self.user_type == self.PARENT
 
+    @property
     def is_teacher(self):
         return self.user_type == self.TEACHER
 

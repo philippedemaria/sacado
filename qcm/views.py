@@ -1414,13 +1414,13 @@ def all_levels(user, status):
 def list_exercises(request):
     
     user = request.user
-    if user.user_type == User.TEACHER : # teacher
+    if user.is_teacher:  # teacher
         teacher = Teacher.objects.get(user=user)
         datas = all_levels(user, 0)
 
         return render(request, 'qcm/list_exercises.html', {'datas': datas, 'teacher': teacher , 'parcours': None, 'relationships' : [] , 'teacher': teacher})
     
-    elif user.user_type == User.STUDENT: # student
+    elif user.is_student: # student
         student = Student.objects.get(user=user)
         parcourses = student.students_to_parcours.all()
 
@@ -1640,30 +1640,30 @@ def create_supportfile_knowledge(request,id):
 
 @login_required
 @user_passes_test(user_is_superuser)
-def update_supportfile(request, id, redirection = 0):
+def update_supportfile(request, id, redirection=0):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
-    if request.user.is_superuser :  
+    if request.user.is_superuser:
         supportfile = Supportfile.objects.get(id=id)
-        supportfile_form = UpdateSupportfileForm(request.POST or None, request.FILES or None, instance=supportfile )
+        supportfile_form = UpdateSupportfileForm(request.POST or None, request.FILES or None, instance=supportfile)
         levels = Level.objects.all()
         supportfiles = Supportfile.objects.filter(is_title=0).order_by("level")
         knowledges = Knowledge.objects.all().order_by("level")
 
-        if request.method == "POST" :
+        if request.method == "POST":
             if supportfile_form.is_valid():
-                nf =  supportfile_form.save(commit = False)
+                nf = supportfile_form.save(commit=False)
                 nf.code = supportfile.code
                 nf.save()
                 supportfile_form.save_m2m()
                 messages.success(request, "L'exercice a été modifié avec succès !")
 
-                
-                return redirect('admin_supportfiles', supportfile.level.id )
+                return redirect('admin_supportfiles', supportfile.level.id)
 
-        context = {'form': supportfile_form,   'teacher': teacher,  'supportfile': supportfile,  'knowledges': knowledges,    'supportfiles': supportfiles,   'levels': levels , 'parcours': None, }
+        context = {'form': supportfile_form, 'teacher': teacher, 'supportfile': supportfile, 'knowledges': knowledges,
+                   'supportfiles': supportfiles, 'levels': levels, 'parcours': None, }
 
-        return render(request, 'qcm/form_supportfile.html', context )
+        return render(request, 'qcm/form_supportfile.html', context)
 
  
 
@@ -1671,22 +1671,22 @@ def update_supportfile(request, id, redirection = 0):
 @login_required
 @user_passes_test(user_is_superuser)
 def delete_supportfile(request, id):
-    if request.user.is_superuser : 
+    if request.user.is_superuser:
         supportfile = Supportfile.objects.get(id=id)
-        if Relationship.objects.filter(exercise__supportfile = supportfile).count() == 0 :
+        if Relationship.objects.filter(exercise__supportfile=supportfile).count() == 0:
             supportfile.delete()
             messages.success(request, "Le support GGB a été supprimé avec succès !")
-        else :
-            messages.error(request," Des parcours utilisent ce support GGB. Il n'est pas possible de le supprimer.")
+        else:
+            messages.error(request, " Des parcours utilisent ce support GGB. Il n'est pas possible de le supprimer.")
 
-    return redirect('admin_supportfiles' , supportfile.level.id )
+    return redirect('admin_supportfiles', supportfile.level.id)
 
 
 @login_required
 @user_passes_test(user_is_superuser)
 def show_this_supportfile(request, id):
 
-    if request.user.user_type == User.TEACHER:
+    if request.user.is_teacher:
         teacher = Teacher.objects.get(user=request.user)
         parcours = Parcours.objects.filter(teacher=teacher)
 
@@ -1761,7 +1761,7 @@ def show_exercise(request, id):
 
 def show_this_exercise(request, id):
 
-    if request.user.user_type == User.TEACHER:
+    if request.user.is_teacher:
         teacher = Teacher.objects.get(user=request.user)
         parcours = Parcours.objects.filter(teacher=teacher)
 

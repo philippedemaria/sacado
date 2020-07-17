@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.apps import apps
 from datetime import datetime , timedelta
+from account.models import User
 
 
  
@@ -15,23 +16,26 @@ class Country(models.Model):
 
 
 class School(models.Model):
-    name = models.CharField(max_length=255, verbose_name="nom") 
-    country = models.ForeignKey(Country, default='',  blank=True, related_name='school', related_query_name="school", on_delete=models.PROTECT ,  verbose_name="Pays") 
-    town = models.CharField(max_length=255, default='',   verbose_name="ville")  
+    name = models.CharField(max_length=255, verbose_name="nom")
+    country = models.ForeignKey(Country, default='', blank=True, related_name='school', related_query_name="school",
+                                on_delete=models.PROTECT, verbose_name="Pays")
+    town = models.CharField(max_length=255, default='', verbose_name="ville")
    
     def __str__(self):
         return "{} - {} - {}".format(self.name, self.town, self.country.name)
 
-
     def student_and_teacher(self):
-        nbt, nbs = 0 , 0
+        nbt, nbs = 0, 0
         for u in self.user.all():
-            if  u.user_type == 2 :
-                nbt +=1
-            elif  u.user_type == 0 :
-                nbs +=1 
-        nb = {"nbt" : nbt, "nbs" : nbs}
+            if u.is_teacher:
+                nbt += 1
+            elif u.is_student:
+                nbs += 1
+        nb = {"nbt": nbt, "nbs": nbs}
         return nb
+
+
+
 
 
 
