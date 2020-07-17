@@ -287,7 +287,7 @@ CKEDITOR_CONFIGS = {
  
 
 ########################################################################################################################
-if True :
+if PRODUCTION :
     LOGGING = {
         'version': 1,
         'disable_existing_loggers': False,

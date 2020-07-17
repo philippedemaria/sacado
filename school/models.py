@@ -2,17 +2,13 @@ from django.db import models
 from django.utils import timezone
 from django.apps import apps
 from datetime import datetime , timedelta
-from account.models import User
 
-
- 
 
 class Country(models.Model):
     name = models.CharField(max_length=255, verbose_name="Nom") 
  
     def __str__(self):
-        return  self.name 
-
+        return self.name
 
 
 class School(models.Model):
@@ -26,7 +22,7 @@ class School(models.Model):
 
     def student_and_teacher(self):
         nbt, nbs = 0, 0
-        for u in self.user.all():
+        for u in self.users.all():
             if u.is_teacher:
                 nbt += 1
             elif u.is_student:
@@ -36,17 +32,12 @@ class School(models.Model):
 
 
 
-
-
-
-
-
 # Niveau d'aquisition 
 class Stage(models.Model):
-    school = models.ForeignKey(School, on_delete=models.PROTECT, related_name='aptitude',  editable=False)
-    low = models.PositiveIntegerField(default = 50,  verbose_name="Seuil 1 : NA à ECA")
-    medium = models.PositiveIntegerField(default = 70 , verbose_name="Seuil 2 : ACE à acquis")
-    up = models.PositiveIntegerField( default = 85 ,  verbose_name="Seuil 3 : acquis à dépassé")
+    school = models.ForeignKey(School, on_delete=models.PROTECT, related_name='aptitude', editable=False)
+    low = models.PositiveIntegerField(default=50, verbose_name="Seuil 1 : NA à ECA")
+    medium = models.PositiveIntegerField(default=70, verbose_name="Seuil 2 : ACE à acquis")
+    up = models.PositiveIntegerField(default=85, verbose_name="Seuil 3 : acquis à dépassé")
 
     def __str__(self):
         return "seuils d'aquisition {}".format(self.school.name)
