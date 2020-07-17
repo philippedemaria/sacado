@@ -65,9 +65,9 @@
 <nav class="navbarLeft navbarLeft-fixed-left">
     <ul class="nav navbarLeft-nav">
         {% if request.user.is_authenticated %}
-            {% if request.user.user_type == 2 %}
+            {% if request.user.user_type == user.TEACHER %}
                 {% include 'sideBarMenu/nav_T.html' %}
-            {% elif request.user.user_type == 1 %}
+            {% elif request.user.user_type == user.PARENT %}
                 {% include 'sideBarMenu/nav_P.html' %}
             {% else  %}
                 {% include 'sideBarMenu/nav_S.html' %}
@@ -104,13 +104,13 @@
     {%  block body %}
         <div class="content_list" id="search_result">
         {% if request.user.is_authenticated %}
-            {% if request.user.user_type == 0 %} 
-                {% include 'dashboard_student.html' %}
-            {%  elif request.user.user_type == 1 %} 
-                {% include 'dashboard_parent.html' %}
-            {%  else   %} 
+            {% if request.user.user_type == user.TEACHER %}
                 {% include 'dashboard_teacher.html' %}
-            {% endif %}   
+            {% elif request.user.user_type == user.PARENT %}
+                {% include 'dashboard_parent.html' %}
+            {% else %}
+                {% include 'dashboard_student.html' %}
+            {% endif %}
         {% endif %} 
         </div>
     {% endblock %}
