@@ -14,14 +14,13 @@
     <script>
         require(['script/ajax-exercise']);
     </script> 
- <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
-<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
 {% endblock %}
 
  
 
 {% block page_title %}
-
 <div id="new_style">
     <img src="{% static 'img/ggb.png' %}" width="25px"> Fichier GGB 
     {% if knowledge  %}
@@ -32,11 +31,10 @@
 </div>
 {% endblock %}
 
+
 {% block page_menu_right %}
  
 {% endblock %}
-
-
 
 
 {% block body %}
@@ -45,20 +43,13 @@ ul#id_skills li{
     list-style: none;
 }
 </style>
-        
+
 <div class="content_main">
-         
-
-
-    <div class="col-xs-12 col-md-12" >  
-        
-
-        <form action="" method="POST" enctype='multipart/form-data'> 
+    <div class="col-xs-12 col-md-12">
+        <form action="" method="POST" enctype='multipart/form-data'>
             {% csrf_token %}
- 
             <div class="row" id="standard_layer">
-
-                {% if knowledge %}
+            {% if knowledge %}
                         <input value="{{ knowledge.level.id }}" name="level" id="id_level" type="hidden" />
                         <input value="{{ knowledge.theme.id }}" name="theme" id="id_theme" type="hidden" />
                         <input value="{{ knowledge.id }}" name="knowledge" id="id_knowledge" type="hidden" />
@@ -252,16 +243,8 @@ ul#id_skills li{
                     </div>
                     {% endif %}
                 {% endif %}
-            </div> 
+            </div>
         </form>
- 
-
-    </div> 
-
-
-
-</div>    
-
-
-
+    </div>
+</div>
 {% endblock %}
