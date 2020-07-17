@@ -42,7 +42,7 @@ def time_zone_user(user):
  
 
 def list_teacher(request):
-    teachers = User.objects.filter(user_type=User.TEACHER)
+    teachers = User.teachers.all()
     return render(request, 'account/list_teacher.html', {'teachers': teachers})
 
 

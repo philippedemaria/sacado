@@ -34,6 +34,22 @@ class ModelWithCode(models.Model):
         abstract = True
 
 
+class TeacherManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(user_type=User.TEACHER)
+
+
+class StudentManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(user_type=User.STUDENT)
+
+
+class ParentManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(user_type=User.PARENT)
+
+
+
 class User(AbstractUser):
     """
     Modèle représentant un utilisateur. Possède les champs suivants hérités de la classe AbstractUser :
@@ -75,9 +91,13 @@ class User(AbstractUser):
     time_zone = models.CharField(max_length=100, null=True, blank=True, choices=TZ_SET, verbose_name="Fuseau horaire")
     is_extra = models.BooleanField(default=0, editable=0)
     is_manager = models.BooleanField(default=0)
-    school = models.ForeignKey(School, blank=True, null=True, related_name="user", default=None, on_delete=models.PROTECT)
+    school = models.ForeignKey(School, blank=True, null=True, related_name="users", default=None, on_delete=models.PROTECT)
     cgu = models.BooleanField(default=0)
-    
+
+    teachers = TeacherManager()
+    students = StudentManager()
+    parents = ParentManager()
+
     def __str__(self):
         return "{} {}".format(self.last_name, self.first_name)
 
