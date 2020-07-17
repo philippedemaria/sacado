@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{% block titlepage %}SacAdo - Interface {% if user.user_type == 0 %} élève {% elif user.user_type == 1 %} parent {% else %} enseignant {% endif %} {% endblock %}</title>
+    <title>{% block titlepage %}SacAdo - Interface {{user.get_user_type_display}} {% endblock %}</title>
     {% load bootstrap3 %}
     {% load widget_tweaks %}
     {% bootstrap_messages %}
