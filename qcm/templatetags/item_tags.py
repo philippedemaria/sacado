@@ -210,7 +210,7 @@ def time_done(arg):
             r = m+"min. "+s +"s"          
             return r
         else :
-            h = int(arg/3660)
+            h = int(arg/3600)
             if h<10 :
                 h = "0"+str(h)
             else :
