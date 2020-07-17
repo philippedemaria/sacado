@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{% block titlepage %}SacAdo - Interface {% if user.user_type == 0 %} élève {% elif user.user_type == 1 %} parent {% else %} enseignant {% endif %} {% endblock %}</title>
+    <title>{% block titlepage %}SacAdo - Interface {{user.get_user_type_display}} {% endblock %}</title>
     {% load bootstrap3 %}
     {% load widget_tweaks %}
     {% bootstrap_messages %}
@@ -65,11 +65,11 @@
 <nav class="navbarLeft navbarLeft-fixed-left">
     <ul class="nav navbarLeft-nav">
         {% if request.user.is_authenticated %}
-            {% if request.user.user_type == 2 %}
+            {% if user.is_teacher %}
                 {% include 'sideBarMenu/nav_T.html' %}
-            {% elif request.user.user_type == 1 %}
+            {% elif user.is_parent %}
                 {% include 'sideBarMenu/nav_P.html' %}
-            {% else  %}
+            {% else %}
                 {% include 'sideBarMenu/nav_S.html' %}
             {% endif %}
         {% endif %}
@@ -104,14 +104,14 @@
     {%  block body %}
         <div class="content_list" id="search_result">
         {% if request.user.is_authenticated %}
-            {% if request.user.user_type == 0 %} 
-                {% include 'dashboard_student.html' %}
-            {%  elif request.user.user_type == 1 %} 
-                {% include 'dashboard_parent.html' %}
-            {%  else   %} 
+            {% if user.is_teacher %}
                 {% include 'dashboard_teacher.html' %}
-            {% endif %}   
-        {% endif %} 
+            {% elif user.is_parent %}
+                {% include 'dashboard_parent.html' %}
+            {% else %}
+                {% include 'dashboard_student.html' %}
+            {% endif %}
+        {% endif %}
         </div>
     {% endblock %}
 </div>
@@ -127,8 +127,8 @@
                 <h2  class='sacado'  >Ajouter un fichier, une vidéo, une méthode,...</h2>
             </div>
             <div class="modal-body">
-                    <div id="remediation_form"> 
-                    </div> 
+                    <div id="remediation_form">
+                    </div>
             </div>
         </div>
     </div>
@@ -150,8 +150,8 @@
     </div>
 </div>
 
-{%  if request.user.user_type == 2  %}
- 
+{%  if user.is_teacher %}
+
     {%  if communications|length > 0  %}
     <div class="modal fade" id="nouveaute" tabindex="-1" role="dialog" aria-labelledby="nouveaute" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -159,16 +159,16 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
-                    </button>                
+                    </button>
                     <h2 class="sacado" >Nouveautés</h2>
                 </div>
                 <div class="modal-body">
                     {% for c in communications %}
                         <h5> {{ c.subject }}</h5>
-                        {{ c.texte|safe }}    
+                        {{ c.texte|safe }}
                         <hr>
                     {% endfor %}
-                    <div class="text-center"> 
+                    <div class="text-center">
                         <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
                     </div>
                 </div>
@@ -177,125 +177,125 @@
     </div>
     {%  endif  %}
 
-
     {% if 'qcm/' in request.path %}
         {% include 'qcm/order_list.html' %}
-    {%  endif  %} 
-
+    {%  endif  %}
 
 {%  endif  %}
 
 <div class="notification-container dismiss" id="notification-account">
+    <div class="row">
+        <div class="col-lg-12 col-xs-12" style="text-align:center;">
+            <a href="#" id="closeAccount" class="pull-right"> <i class="fa fa-times"></i></a>
+            <h1 class='sacado'>Mon compte</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12" style="text-align:center;">
+            <p style="font-size:20px; padding-bottom: 20px;">{{ user.get_full_name|title }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12" style="text-align:center;">
+            <a href="{% url 'logout' %}" class="btn btn-default">Se déconnecter</a>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
+            <a href="{% url 'profile' %}">Profil & Notification</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
+            <a href="{% url 'updatepassword' %}">Changer mon mot de passe</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
+            <a href="{% url 'close_an_account' %}">Clôturer mon compte</a>
+        </div>
+    </div>
+
+    {%  if user.is_student %}
+        <hr>
         <div class="row">
-            <div class="col-lg-12 col-xs-12"    style="text-align:center;"> 
-                <a href="#" id="closeAccount" class="pull-right"> <i class="fa fa-times"></i></a>
-                <h1  class='sacado'  >Mon compte</h1> 
+            <div class="col-lg-12 col-xs-12" style=" padding-top: 10px;">
+                {% for g in groups %}
+                <li class="sanspuce"><i class="fa fa-square" style="color:{{ g.color }}"></i> {{ g }}</li>
+                {% endfor %}
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-12 col-xs-12"    style="text-align:center;">   
-                 <p style="font-size:20px; padding-bottom: 20px;">{{ user.get_full_name|title }}</p>
-            </div>  
-        </div>
-        <div class="row">
-            <div class="col-lg-12 col-xs-12"   style="text-align:center;" >   
-                <a href="{% url 'logout' %}" class="btn btn-default">Se déconnecter</a>
-            </div>  
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-lg-12 col-xs-12"   style="padding-top: 10px;" > 
-                 <a href="{% url 'profile' %}">Profil & Notification</a>
-            </div>  
-        </div>
-        <div class="row">
-            <div class="col-lg-12 col-xs-12"   style="padding-top: 10px;" > 
-                 <a href="{% url 'updatepassword' %}">Changer mon mot de passe</a>
-            </div>  
-        </div>
-        <div class="row">
-            <div class="col-lg-12 col-xs-12"   style="padding-top: 10px;" >   
-                <a href="{% url 'close_an_account' %}">Clôturer mon compte</a>
-            </div>  
-        </div> 
-        {%  if user.user_type == 0 %}
- 
-
-        <hr>
-        <div class="row">
-            <div class="col-lg-12 col-xs-12"   style=" padding-top: 10px;" >    
-            {% for g in groups %}    
-                <li class="sanspuce"><i class="fa fa-square" style="color:{{ g.color }}"></i> {{ g }}</li>
-            {% endfor %}  
-            </div>  
-        </div> 
-        <div class="row">
-            <div class="col-lg-12 col-xs-12"   style=" padding-top: 5px;" >   
-                 <a href="#" id="aggregate_groupe"><small> Rejoindre un groupe</small> </a>
-            </div>  
+            <div class="col-lg-12 col-xs-12" style=" padding-top: 5px;">
+                <a href="#" id="aggregate_groupe">
+                    <small> Rejoindre un groupe</small>
+                </a>
+            </div>
         </div>
         <div id="aggregate_form">
-            <form action="{%  url 'aggregate_group' %}" method="POST"> 
-                  {% csrf_token %} 
+            <form action="{%  url 'aggregate_group' %}" method="POST">
+                {% csrf_token %}
                 <div class="row">
-                    <div class="col-lg-12 col-xs-12"   style=" padding-top: 10px;" >   
-                          <input type="text" class="form-control" placeholder="Code du groupe" name="groupe" id="id_groupe"/>
-                    </div>  
+                    <div class="col-lg-12 col-xs-12" style=" padding-top: 10px;">
+                        <input type="text" class="form-control" placeholder="Code du groupe" name="groupe" id="id_groupe"/>
+                    </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-8 col-xs-8"   style=" padding-top: 10px;" >   
-                        <input type="submit" class="btn btn-primary" value="Associer"  /> 
-                    </div>  
-                    <div class="col-lg-4 col-xs-4"   style=" padding-top: 10px;" >   
-                        <span class="verif_course"></span> 
-                    </div>  
+                    <div class="col-lg-8 col-xs-8" style=" padding-top: 10px;">
+                        <input type="submit" class="btn btn-primary" value="Associer"/>
+                    </div>
+                    <div class="col-lg-4 col-xs-4" style=" padding-top: 10px;">
+                        <span class="verif_course"></span>
+                    </div>
                 </div>
             </form>
         </div>
         <hr>
         <div class="row">
-            <div class="col-lg-12 col-xs-12"   style=" padding-top: 10px;" >   
-                 <a href="#" id="aggregate_parcours">Rejoindre un parcours</a>
-            </div>  
+            <div class="col-lg-12 col-xs-12" style=" padding-top: 10px;">
+                <a href="#" id="aggregate_parcours">Rejoindre un parcours</a>
+            </div>
         </div>
         <div id="aggregate_parcours_form">
-            <form action="{%  url 'aggregate_parcours' %}" method="POST"  > 
-                  {% csrf_token %} 
+            <form action="{%  url 'aggregate_parcours' %}" method="POST">
+                {% csrf_token %}
                 <div class="row">
-                    <div class="col-lg-12 col-xs-12"   style=" padding-top: 10px;" >   
-                          <input type="text" class="form-control" placeholder="Code du parcours" name="parcours" id="id_parcours"/>
-                    </div>  
+                    <div class="col-lg-12 col-xs-12" style=" padding-top: 10px;">
+                        <input type="text" class="form-control" placeholder="Code du parcours" name="parcours"
+                               id="id_parcours"/>
+                    </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-8 col-xs-8"   style=" padding-top: 10px;" >   
-                        <input type="submit" class="btn btn-primary" value="Associer"  /> 
-                    </div>  
-                    <div class="col-lg-4 col-xs-4"   style=" padding-top: 10px;" >   
-                        <span class="verif_parcours"></span> 
-                    </div>  
+                    <div class="col-lg-8 col-xs-8" style=" padding-top: 10px;">
+                        <input type="submit" class="btn btn-primary" value="Associer"/>
+                    </div>
+                    <div class="col-lg-4 col-xs-4" style=" padding-top: 10px;">
+                        <span class="verif_parcours"></span>
+                    </div>
                 </div>
             </form>
         </div>
-        {%  else %}
+    {% else %}
         <div class="row">
-            <div class="col-lg-12 col-xs-12"   style="padding-top: 10px;" > 
-                 <a href="{% url 'profile' %}">Notifications</a>
-            </div>  
+            <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
+                <a href="{% url 'profile' %}">Notifications</a>
+            </div>
         </div>
-        {% endif %}
-        <hr>
-        <div class="row">
-            <div class="col-lg-12 col-xs-12"   style="text-align: center" >   
-                {{ today|date:"d N Y" }}, {{ today|date:"H:i:s" }}
-            </div>  
-        </div> 
-        <hr> 
+    {% endif %}
+
+    <hr>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12" style="text-align: center">
+            {{ today|date:"d N Y" }}, {{ today|date:"H:i:s" }}
+        </div>
+    </div>
+    <hr>
 </div>
 
 <div class="notification-container-right dismissR" id="notification-perso">
     <div class="row">
-        <div class="col-lg-12 col-xs-12" id="detail_of_student"> 
- 
+        <div class="col-lg-12 col-xs-12" id="detail_of_student">
         </div>
     </div>
 </div>
@@ -311,77 +311,74 @@
         <hr>
     {% endif %}
 
- 
+
         <h2 class="thin">Gestion SACADO </h2>
         <hr>
         <div class="row">
-            <div class="col-lg-12 col-xs-12"> 
+            <div class="col-lg-12 col-xs-12">
                 <a href="{% url 'levels' %}">Niveaux</a>
-            </div>  
+            </div>
         </div>
         <div class="row">
-            <div class="col-lg-12 col-xs-12"> 
+            <div class="col-lg-12 col-xs-12">
                 <a href="{% url 'themes' %}">Thèmes</a>
-            </div>  
+            </div>
         </div>
         <div class="row">
-            <div class="col-lg-12 col-xs-12"> 
+            <div class="col-lg-12 col-xs-12">
                 <a href="{% url 'knowledges' %}">Savoir faire</a>
-            </div>  
+            </div>
         </div>
         <hr>
         <div class="row" style="margin-bottom: 10px">
-            <div class="col-lg-12 col-xs-12"> 
+            <div class="col-lg-12 col-xs-12">
                 <a href="{% url 'gestion_supportfiles' %}">Supports et exercices</a>
-            </div>  
-        </div> 
+            </div>
+        </div>
 
-        {% for level in levels %}
+    {% for level in levels %}
         <div class="row" style="font-size: 12px">
- 
-                  
-  
-            <div class="col-lg-7 col-xs-7"> 
+            <div class="col-lg-7 col-xs-7">
                 {{ level.shortname }} <a href="{% url 'admin_supportfiles' level.id %}">Fichiers support</a>  
             </div>  
             <div class="col-lg-5 col-xs-5"> 
                     <img src="{% static 'img/ggb.png' %}" width="15px"> <a href="{% url 'admin_associations'  level.id  %}">Exercices   </a> 
             </div>      
         </div>
-        {% endfor %}
-        <hr>
-        <div class="row">
-            <div class="col-lg-12 col-xs-12"> 
-                <a href="{% url 'advises' %}">Modèles et aides </a>
-            </div>  
-        </div> 
-        <hr>
-        <div class="row">
-            <div class="col-lg-12 col-xs-12"> 
-                <a href="{% url 'schools' %}">Etablissements </a>
-            </div>  
+    {% endfor %}
+    <hr>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'advises' %}">Modèles et aides </a>
         </div>
-        <div class="row">
-            <div class="col-lg-12 col-xs-12"> 
-                <a href="{% url 'list_teacher' %}">Enseignants </a>
-            </div>  
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'schools' %}">Etablissements </a>
         </div>
-        <div class="row">
-            <div class="col-lg-12 col-xs-12"> 
-                <a href="{% url 'communications' %}">Communications </a>
-            </div>  
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'list_teacher' %}">Enseignants </a>
         </div>
-        <div class="row">
-            <div class="col-lg-12 col-xs-12"> 
-                <a href="{% url 'send_to_teachers' %}">Contacts </a>
-            </div>  
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'communications' %}">Communications </a>
         </div>
-        <div class="row">
-            <div class="col-lg-12 col-xs-12"> 
-                <a href="{% url 'gestion_files' %}">Gestions des fichiers </a>
-            </div>  
-        </div>             
- </div>  
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'send_to_teachers' %}">Contacts </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'gestion_files' %}">Gestions des fichiers </a>
+        </div>
+    </div>
+</div>
 {% endif %}
 
 

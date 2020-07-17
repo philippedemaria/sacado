@@ -55,27 +55,43 @@ class User(AbstractUser):
     #### user_type = 0 for student, 2 for teacher, 2 + is_superuser for admin,  5 for superuser
 
     STUDENT, PARENT, TEACHER = 0, 1, 2
+    USER_TYPES = (
+        (STUDENT, "Élève"),
+        (PARENT, "Parent"),
+        (TEACHER, "Enseignant"),
+    )
 
     CIVILITIES = (
         ('Mme', 'Mme'),
         ('M.', 'M.'),
     )
-    TZ_SET = []
-    for tz in pytz.common_timezones :
-        TZ_SET.append((tz,tz))
- 
 
-    user_type = models.PositiveSmallIntegerField(editable=False, null=True)
-    civilite = models.CharField(max_length=10, default='M.', blank=True,  choices=CIVILITIES, verbose_name="Civilité")
-    time_zone = models.CharField(max_length=100, null=True, blank=True,  choices=TZ_SET, verbose_name="Fuseau horaire")
-    is_extra = models.BooleanField( default=0 , editable=0)
-    is_manager = models.BooleanField( default=0 )
-    school = models.ForeignKey(School, blank=True, null= True, related_name = "user", default= None , on_delete=models.PROTECT) 
-    cgu  = models.BooleanField( default=0 )
+    TZ_SET = []
+    for tz in pytz.common_timezones:
+        TZ_SET.append((tz,tz))
+
+    user_type = models.PositiveSmallIntegerField(editable=False, null=True, choices=USER_TYPES)
+    civilite = models.CharField(max_length=10, default='M.', blank=True, choices=CIVILITIES, verbose_name="Civilité")
+    time_zone = models.CharField(max_length=100, null=True, blank=True, choices=TZ_SET, verbose_name="Fuseau horaire")
+    is_extra = models.BooleanField(default=0, editable=0)
+    is_manager = models.BooleanField(default=0)
+    school = models.ForeignKey(School, blank=True, null=True, related_name="user", default=None, on_delete=models.PROTECT)
+    cgu = models.BooleanField(default=0)
     
     def __str__(self):
         return "{} {}".format(self.last_name, self.first_name)
 
+    @property
+    def is_student(self):
+        return self.user_type == self.STUDENT
+
+    @property
+    def is_parent(self):
+        return self.user_type == self.PARENT
+
+    @property
+    def is_teacher(self):
+        return self.user_type == self.TEACHER
 
 
 class Student(ModelWithCode):

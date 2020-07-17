@@ -34,7 +34,7 @@ def index(request):
             request.user.last_login = today
             request.user.save()
 
-        if request.user.user_type == User.TEACHER:
+        if request.user.is_teacher:
 
             if request.user.is_manager and request.user.school :
                 request.session["school_id"] = request.user.school.id 
@@ -60,7 +60,7 @@ def index(request):
 
 
 
-        elif request.user.user_type == User.STUDENT: ## student
+        elif request.user.is_student: ## student
             student = Student.objects.get(user=request.user.id)
             parcourses = Parcours.objects.filter(students=student, is_evaluation=0, is_publish=1)
 
@@ -106,7 +106,7 @@ def index(request):
                        'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late,
                        'relationships_in_tasks': relationships_in_tasks}
 
-        elif request.user.user_type == User.PARENT:  ## parent
+        elif request.user.is_parent:  ## parent
             parent = Parent.objects.get(user=request.user)
             students = parent.students.order_by("user__first_name")
             context = {'parent': parent, 'students': students, }
@@ -119,14 +119,11 @@ def index(request):
         u_form = UserForm()
         t_form = TeacherForm()
         s_form = StudentForm()
-        levels = Level.objects.all() 
-        try :
+        levels = Level.objects.all()
+        try:
             cookie = request.session.get("cookie")
-        except :
+        except:
             pass
-
- 
-
 
         exercise_nb = Exercise.objects.filter(supportfile__is_title=0).count()
         exercises = Exercise.objects.filter(supportfile__is_title=0)
@@ -134,13 +131,12 @@ def index(request):
         i = random.randint(1, len(exercises))
         exercise = exercises[i]
 
-        context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 'cookie' : cookie , 
-                   'exercise_nb': exercise_nb, 'exercise': exercise, }
+        context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels,
+                   'cookie': cookie, 'exercise_nb': exercise_nb, 'exercise': exercise, }
 
 
 
         return render(request, 'home.html', context)
-
 
 
 def logout_view(request):
@@ -156,10 +152,8 @@ def logout_view(request):
     s_form = StudentForm()
     logout(request)
     levels = Level.objects.all()
-    context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 'cookie' : False }
+    context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 'cookie': False}
     return render(request, 'home.html', context)
-
-
 
 
 def send_message(request):
@@ -170,25 +164,26 @@ def send_message(request):
     message = request.POST.get("message")
     token = request.POST.get("token")
 
-    if message :
-        send_mail(subject, "Bonjour, vous venez d'envoyer le message suivant :\n\n"+message+" \n\n Ceci est un mail automatique. Ne pas répondre.", 'sacado.sas@gmail.com', [email])
-        send_mail(subject,  message , email , ["philippe.demaria-lgf@erlm.tn","brunoserres33@gmail.com","sacado.sas@gmail.com"])
+    if message:
+        send_mail(subject,
+                  "Bonjour, vous venez d'envoyer le message suivant :\n\n" + message + " \n\n Ceci est un mail automatique. Ne pas répondre.",
+                  'sacado.sas@gmail.com',
+                  [email])
+        send_mail(subject,
+                  message,
+                  email,
+                  ["philippe.demaria-lgf@erlm.tn", "brunoserres33@gmail.com", "sacado.sas@gmail.com"])
     return redirect("index")
 
 
-
 def inscription(request):
-
-    context =  {  }
-    return render(request, 'setup/register.html', context )
-
-
+    context = {}
+    return render(request, 'setup/register.html', context)
 
 
 def test_display(request):
-
-    context =  {  }
-    return render(request, 'setup/test_display.html', context )
+    context = {}
+    return render(request, 'setup/test_display.html', context)
 
 
 
@@ -204,80 +199,69 @@ def ajax_changecoloraccount(request):
     if request.user.is_authenticated:
         code = request.POST.get('code')
 
-    color  = request.user.color
+    color = request.user.color
     filename1 = "static/css/navbar-fixed-left.min.css"
     filename2 = "static/css/AdminLTEperso.css"
 
     User.objects.filter(pk=request.user.id).update(color=code)
 
-    change_color(filename1,color,code)
-    change_color(filename2,color,code)
+    change_color(filename1, color, code)
+    change_color(filename2, color, code)
 
     return redirect("index")
 
 
-
-def change_color(filename,color,code):
-        # Read in the file
-    with open(filename, 'r') as file :
-      filedata = file.read()
+def change_color(filename, color, code):
+    # Read in the file
+    with open(filename, 'r') as file:
+        filedata = file.read()
     # Replace the target string
-    filedata = filedata.replace(color,code)
+    filedata = filedata.replace(color, code)
     # Write the file out again
     with open(filename, 'w') as file:
         file.write(filedata)
 
 
- 
+def admin_tdb(request):
+    school = request.user.school
+    nb_teachers = User.objects.filter(school=school, user_type=2).count()
+    nb_students = User.objects.filter(school=school, user_type=0).count()
+    nb_groups = Group.objects.filter(teacher__user__school=school).count()
+
+    try:
+        stage = Stage.objects.get(school=school)
+        if stage:
+            eca, ac, dep = stage.medium - stage.low, stage.up - stage.medium, 100 - stage.up
+        else:
+            eca, ac, dep = 20, 15, 15
+
+    except:
+        stage = {"low": 50, "medium": 70, "up": 85}
+        eca, ac, dep = 20, 15, 15
+
+    return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers, 'nb_students': nb_students,
+                                                    'nb_groups': nb_groups, 'school': school, 'stage': stage,
+                                                    'eca': eca, 'ac': ac, 'dep': dep
+                                                    })
 
 
-
-
-def  admin_tdb(request):
-
-    school = request.user.school   
-    nb_teachers = User.objects.filter(school = school, user_type=2).count()  
-    nb_students = User.objects.filter(school = school, user_type=0).count()    
-    nb_groups = Group.objects.filter(teacher__user__school = school).count()  
- 
-    
-    try :
-        stage = Stage.objects.get(school= school)
-        if stage :
-            eca, ac , dep = stage.medium - stage.low ,  stage.up - stage.medium ,  100 - stage.up
-        else :
-            eca, ac , dep = 20 , 15 ,  15           
-
-    except : 
-        stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
-        eca, ac , dep = 20 , 15 ,  15
-
-    return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers , 'nb_students': nb_students , 
-                                                    'nb_groups': nb_groups, 'school': school, 'stage': stage,  
-                                                     'eca' : eca, 'ac' : ac , 'dep' : dep
-                                                     })
-
-
- 
-def  gestion_files(request):
-
+def gestion_files(request):
     levels = Level.objects.all()
-    if request.method == "POST" :
+    if request.method == "POST":
 
         level_id = request.POST.get("level")
-        level = Level.objects.get(pk=level_id) 
-        supportfiles = Supportfile.objects.filter(level_id=level_id,is_title=0) 
-    else :
-        level, level_id = None , 0
-        supportfiles  = []
+        level = Level.objects.get(pk=level_id)
+        supportfiles = Supportfile.objects.filter(level_id=level_id, is_title=0)
+    else:
+        level, level_id = None, 0
+        supportfiles = []
 
-
-    context =  {'levels': levels ,  'level': level ,  'level_id' : level_id , 'level_id' : level_id ,  'supportfiles' : supportfiles }
+    context = {'levels': levels, 'level': level, 'level_id': level_id, 'level_id': level_id,
+               'supportfiles': supportfiles}
 
     return render(request, 'setup/gestion_files.html', context )
 
 
 def get_cookie(request):
-
     request.session["cookie"] = "accept"
-    return redirect ('index')    
+    return redirect('index')

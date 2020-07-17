@@ -184,49 +184,27 @@ def time_done(arg):
     """
     convertit 1 entier donné  (en secondes) en durée h:m:s
     """
-    if arg == "" :
+    def pad(number):
+        """" ajoute un zéro devant un entier inférieur à 10 """
+        if number < 10:
+            return "0" + str(number)
+        else:
+            return str(number)
+
+    if arg == "":
         return arg
-    else :
+    else:
         arg = int(arg)
-        if arg < 60 :
-            s = arg
-            if s < 10 :
-                s = "0"+str(s)
-            else :
-                s = str(s)
-            r = s +"s"          
-            return r
-        if arg < 3600 :
-            m = int(arg/60)
-            if m<10 :
-                m = "0"+str(m)
-            else :
-                m = str(m)
-            s = arg%60
-            if s < 10 :
-                s = "0"+str(s)
-            else :
-                s = str(s)
-            r = m+"min. "+s +"s"          
-            return r
-        else :
-            h = int(arg/3660)
-            if h<10 :
-                h = "0"+str(h)
-            else :
-                h = str(h)
-            m = int(arg%60 /60)
-            if m<10 :
-                m = "0"+str(m)
-            else :
-                m = str(m)
-            s = int((int(arg%3600) - int(arg%60))/100)
-            if s < 10 :
-                s = "0"+str(s)
-            else :
-                s = str(s)
-            r = str(h)+"h. "+m+"min. "+s +"s"     
-            return r
+        s = pad(arg % 60)
+        m = pad(arg // 60 % 60)
+        h = pad(arg // 3600)
+        
+        if arg < 60:
+            return f"{s}s"
+        if arg < 3600:
+            return f"{m}min. {s}s"
+        else:
+            return f"{h}h. {m}min. {s}s"
 
 
 

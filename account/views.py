@@ -1,85 +1,70 @@
+import html
+import random
+import re
+from statistics import median, StatisticsError
 
-from django.conf import settings
-from django.shortcuts import render, redirect
-from django.views.generic import TemplateView
-from django.contrib.auth import login, REDIRECT_FIELD_NAME, authenticate
-from django.contrib.auth.forms import UserCreationForm,  AuthenticationForm
+import pytz
 from django.contrib import messages
-from django.views.generic import CreateView, UpdateView
-from django.contrib.auth import views as auth_views
+from django.contrib.auth import login, authenticate
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import PasswordChangeForm
-from .forms import   UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ManagerUpdateForm, NewUserTForm, NewUserSForm
+from django.contrib.auth.hashers import make_password
+from django.core.mail import send_mail
+from django.db.models import Q, Avg, Sum
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, reverse
+from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import TemplateView
+
+from account.decorators import user_can_read_details, who_can_read_details, can_register, is_manager_of_this_school
 from account.models import User, Teacher, Student, Resultknowledge, Parent
 from group.models import Group
-import uuid  
-from django.views.decorators.csrf import csrf_exempt
-from socle.models import Theme, Knowledge
+from qcm.models import Exercise, Parcours, Relationship, Resultexercise, Studentanswer
 from sendmail.models import Communication
-from qcm.models import Exercise, Studentanswer, Parcours, Relationship, Resultexercise, Studentanswer
-from django.http import HttpResponse, Http404
-from django.shortcuts import get_object_or_404, reverse
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
-from django.contrib.auth.signals import user_logged_in
-from django.dispatch import receiver
-from django.http import JsonResponse
 from socle.models import Level
-from django.core import serializers
-from django.core.exceptions import ValidationError
-from account.decorators import user_can_read_details, who_can_read_details, can_register,is_manager_of_this_school
-import csv
-from statistics import median, StatisticsError
-from datetime import date, datetime
-from django.apps import apps
-from django.db.models import Count, Q, Avg, Sum
-from django.core.files.storage import FileSystemStorage
-from django.contrib.auth.decorators import login_required 
-from django.utils import formats, timezone
-from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.hashers import make_password, check_password
-import pytz
-import re
-import html
- 
+from socle.models import Theme
+from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ParentUpdateForm, ManagerUpdateForm, NewUserTForm
+
 
 def time_zone_user(user):
     if user.time_zone :
         time_zome = user.time_zone
         timezone.activate(pytz.timezone(time_zome))
-        current_tz = timezone.get_current_timezone()
         today = timezone.localtime(timezone.now())
-        
-    else :
+    else:
         today = timezone.now()
     return today
  
 
 def list_teacher(request):
-    teachers = User.objects.filter(user_type = 2)
+    teachers = User.objects.filter(user_type=User.TEACHER)
     return render(request, 'account/list_teacher.html', {'teachers': teachers})
 
 
-def navigation(group,id):  
- 
-    students_ids = group.students.values_list('user__id',flat=True).order_by("user__last_name") 
+def navigation(group, id):
+    students_ids = group.students.values_list('user__id', flat=True).order_by("user__last_name")
     index = list(students_ids).index(id)
 
-    if len(students_ids) > 1 :
-        if index == 0 :
+    if len(students_ids) > 1:
+        if index == 0:
             sprev_id = False
             snext_id = students_ids[1]
-        elif index == len(students_ids)-1 :
-            sprev_id = students_ids[index-1]
+        elif index == len(students_ids) - 1:
+            sprev_id = students_ids[index - 1]
             snext_id = False
-        else :
-            sprev_id = students_ids[index-1]
-            snext_id = students_ids[index+1]
-    else :
+        else:
+            sprev_id = students_ids[index - 1]
+            snext_id = students_ids[index + 1]
+    else:
         sprev_id = False
         snext_id = False
- 
 
-    return(sprev_id,snext_id)
+    return sprev_id, snext_id
 
 
 def cleanhtml(raw_html): #nettoie le code des balises HTML
@@ -89,9 +74,9 @@ def cleanhtml(raw_html): #nettoie le code des balises HTML
 
 
 def unescape_html(string):
-        '''HTML entity decode'''
-        string = html.unescape(string)
-        return string 
+    '''HTML entity decode'''
+    string = html.unescape(string)
+    return string
 
 
 class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter.
@@ -108,8 +93,8 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
         for r in relationships :
             Relationship.objects.filter(id=r.id).update(is_publish = 1)
 
-        if self.request.user.is_authenticated  :
-            if self.request.user.user_type == User.TEACHER:  # Teacher
+        if self.request.user.is_authenticated:
+            if self.request.user.is_teacher:  # Teacher
                 teacher = Teacher.objects.get(user=self.request.user.id)
                 groups = Group.objects.filter(teacher = teacher)
 
@@ -124,7 +109,7 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
                            'communications': communications, }
 
 
-            elif self.request.user.user_type == User.STUDENT :  # Student
+            elif self.request.user.is_student:  # Student
                 student = Student.objects.get(user=self.request.user.id)
 
                 parcourses = Parcours.objects.filter(students=student, linked=0, is_evaluation=0, is_publish=1)
@@ -148,30 +133,30 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
                         num += 1
 
                 nb_relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).count()
-                try :
-                    ratio = int(num/nb_relationships*100)
-                except :
+                try:
+                    ratio = int(num / nb_relationships * 100)
+                except:
                     ratio = 0
 
                 ratiowidth = int(0.9*ratio)
-                timer = timezone.now().time()
 
-                evaluations = Parcours.objects.filter(start__lte=today,stop__gte=today, students = student, is_evaluation=1)
-                studentanswers = Studentanswer.objects.filter(student = student)
-
+                evaluations = Parcours.objects.filter(start__lte=today, stop__gte=today, students=student, is_evaluation=1)
+                studentanswers = Studentanswer.objects.filter(student=student)
 
                 exercises = []
                 for studentanswer in studentanswers:
                     if not studentanswer.exercise in exercises:
                         exercises.append(studentanswer.exercise)
 
-                relationships_in_late = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, is_evaluation=0, date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
+                relationships_in_late = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today),
+                                                                    parcours__in=parcours, is_evaluation=0,
+                                                                    date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
 
                 context = {'student_id': student.user.id, 'student': student, 'relationships': relationships,
                            'ratio': ratio, 'evaluations': evaluations, 'ratiowidth': ratiowidth,
                            'relationships_in_late': relationships_in_late}
             
-            elif self.request.user.user_type == User.PARENT:  # Parent
+            elif self.request.user.is_parent:  # Parent
 
                 parent = Parent.objects.get(user=self.request.user)
                 students = parent.students.order_by("user__first_name")
@@ -203,7 +188,7 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
 
 def myaccount(request):
  
-    if request.user.user_type == User.TEACHER:
+    if request.user.is_teacher:
         teacher = Teacher.objects.get(user_id=request.session.get('user_id'))
         context = {'teacher': teacher, }
         return render(request, 'account/teacher_account.html', context)
@@ -226,19 +211,18 @@ def send_to_teachers(request):
 
 @login_required
 def message_to_teachers_sent(request):
-
-    subject = request.POST.get("subject") 
-    message = request.POST.get("message")  
-    users = request.POST.getlist("users")  
+    subject = request.POST.get("subject")
+    message = request.POST.get("message")
+    users = request.POST.getlist("users")
 
     rcv = []
-    for u_id in users :
+    for u_id in users:
         u = User.objects.get(pk=u_id)
         if u.email:
             rcv.append(u.email)
 
-    send_mail(subject, cleanhtml(unescape_html(message)) , 'sacado.sas@gmail.com', rcv )
-    messages.success(request,'message envoyé')
+    send_mail(subject, cleanhtml(unescape_html(message)), 'sacado.sas@gmail.com', rcv)
+    messages.success(request, 'message envoyé')
 
     return redirect("dashboard")  
 
@@ -250,10 +234,10 @@ def register_student(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST)
         if user_form.is_valid():
-            username  = user_form.cleaned_data['last_name']+user_form.cleaned_data['first_name']
+            username = user_form.cleaned_data['last_name'] + user_form.cleaned_data['first_name']
             user = user_form.save(commit=False)
-            user.username  = username
-            user.user_type = 0
+            user.username = username
+            user.user_type = User.STUDENT
             password = request.POST.get("password1")                     
  
             ######################### Choix du groupe  ###########################################
@@ -263,7 +247,7 @@ def register_student(request):
                 group = Group.objects.get(teacher = teacher, level_id = int(request.POST.get("level_selector")))
                 parcours = Parcours.objects.filter(teacher=teacher, level = group.level)
 
-            else :     # groupe du prof  de l'élève        
+            else:  # groupe du prof  de l'élève
                 code_group = request.POST.get("group")  
                 if Group.objects.filter(code = code_group).exists() :
                     group = Group.objects.get(code = code_group)
@@ -272,20 +256,19 @@ def register_student(request):
             user.save()
             student = Student.objects.create(user=user,level=group.level) 
             group.students.add(student)
-            
-            for p in parcours :
+
+            for p in parcours:
                 p.students.add(student)
                 relationships = p.parcours_relationship.all()
-                for r in relationships :
+                for r in relationships:
                     r.students.add(student)
                     
             user = authenticate(username=username, password = password)
             login(request, user)
             messages.success(request, "Inscription réalisée avec succès !")               
-            if user_form.cleaned_data['email'] : 
-               send_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.', 'info@sacado.xyz', [request.POST.get("email")])
-        
-        else :
+            if user_form.cleaned_data['email']:
+                send_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.', 'info@sacado.xyz', [request.POST.get("email")])
+        else:
             messages.error(request, "Erreur lors de l'enregistrement. Reprendre l'inscription...")
     return redirect('index')
 
@@ -301,7 +284,6 @@ def update_student(request, id,idg=0):
     Upadta par un admin d'un établissement
     """
     user = get_object_or_404(User, pk=id)
-    student = user.user_student
     student = Student.objects.get(user=user)
     user_form = UserUpdateForm(request.POST or None, request.FILES or None, instance=user)
     student_form = StudentForm(request.POST or None, request.FILES or None, instance=student)
@@ -314,7 +296,7 @@ def update_student(request, id,idg=0):
             messages.success(request, 'Le profil a été changé avec succès !')
         if idg == 0 :
             return redirect('school_students')
-        else :    
+        else:
             return redirect('school_groups')
 
     return render(request, 'account/student_form.html',
@@ -332,7 +314,6 @@ def update_student_by_admin(request, id):
     """
     school = request.user.school
     user = get_object_or_404(User, pk=id)
-    student = user.user_student
     student = Student.objects.get(user=user)
     user_form = UserUpdateForm(request.POST or None, request.FILES or None, instance=user)
     student_form = StudentForm(request.POST or None, request.FILES or None, instance=student)
@@ -355,7 +336,6 @@ def update_student_by_admin(request, id):
 
             return redirect('school_students')
 
-
     return render(request, 'account/student_form_by_admin.html',
                   {'user_form': user_form, 'form': student_form, 'student': student, 'groups': groups})
 
@@ -365,22 +345,20 @@ def update_student_by_admin(request, id):
 
 @csrf_exempt
 def update_student_by_ajax(request):
-
-    student_id =  int(request.POST.get("student_id"))
+    student_id = int(request.POST.get("student_id"))
     is_name = int(request.POST.get("is_name"))
-    value= request.POST.get("value")
-    if is_name== 0 :
-        User.objects.filter(id=int(student_id)).update(first_name = value)
-    elif is_name== 1 :
-        User.objects.filter(id=int(student_id)).update(last_name = value) 
-    elif is_name== 2 :
-        User.objects.filter(id=int(student_id)).update(email = value)
-    else :
-        User.objects.filter(id=int(student_id)).update(username = value) 
+    value = request.POST.get("value")
+    if is_name == 0:
+        User.objects.filter(id=int(student_id)).update(first_name=value)
+    elif is_name == 1:
+        User.objects.filter(id=int(student_id)).update(last_name=value)
+    elif is_name == 2:
+        User.objects.filter(id=int(student_id)).update(email=value)
+    else:
+        User.objects.filter(id=int(student_id)).update(username=value)
 
-    data = {}
-    data['html'] = value
- 
+    data = {'html': value}
+
     return JsonResponse(data)
 
 
@@ -414,26 +392,18 @@ def newpassword_student(request, id,idg):
     return redirect('update_group', idg )
 
 
- 
+def knowledges_of_a_student(student, theme):
+    exercise_tab = []
+    parcourses = student.students_to_parcours.all()
 
-
-
-
-def knowledges_of_a_student(student,theme):
-
-    exercise_tab = [] 
-
-    parcourses = student.students_to_parcours.all() 
-
-
-    for parcours in parcourses :
-        exercises = parcours.exercises.filter( theme = theme)
+    for parcours in parcourses:
+        exercises = parcours.exercises.filter(theme=theme)
         for exercise in exercises:
-            if not exercise in exercise_tab :
+            if not exercise in exercise_tab:
                 exercise_tab.append(exercise)
-    
+
     knowledges = []
-    for exercise in exercise_tab :
+    for exercise in exercise_tab:
         if not exercise.knowledge in knowledges:
             knowledges.append(exercise.knowledge)
 
@@ -473,7 +443,7 @@ def detail_student(request, id):
 
         datas.append(theme)
 
-    if request.user.user_type == User.TEACHER:
+    if request.user.is_teacher:
         teacher = Teacher.objects.get(user=request.user)
         group = Group.objects.get(students=student, teacher=teacher)
         nav = navigation(group, id)
@@ -489,57 +459,58 @@ def detail_student(request, id):
 @login_required
 @who_can_read_details
 def detail_student_theme(request, id,idt):
-
     student = Student.objects.get(user_id=id)
-    parcourses = Parcours.objects.filter(students = student)
-    parcourses_publish = Parcours.objects.filter(students = student,is_publish=1)
+    parcourses = Parcours.objects.filter(students=student)
+    parcourses_publish = Parcours.objects.filter(students=student, is_publish=1)
 
     theme = Theme.objects.get(pk=idt)
 
     themes = student.level.themes.all()
-    datas =[]
+    datas = []
 
     knowledges = knowledges_of_a_student(student, theme)
 
     for k in knowledges:
-        knowledge_dict={}
-        if Relationship.objects.filter(parcours__in = parcourses, exercise__knowledge = k, students= student).count() > 1 : 
-            knowledge_dict["name"]= k
+        knowledge_dict = {}
+        if Relationship.objects.filter(parcours__in = parcourses, exercise__knowledge = k, students= student).count() > 1 :
+            knowledge_dict["name"] = k
             # liste des exercices du parcours qui correspondent aux savoir faire k mais un même exercice peut être donné sur deux parcours 
             # différents donc deux relationships pour un même exercice
             relationships = Relationship.objects.filter(parcours__in = parcourses, exercise__knowledge = k, students= student)
             # merge les relationships identiques
-            relations_tab , relations_tab_code = [], []
-            for rel in relationships :
+            relations_tab, relations_tab_code = [], []
+            for rel in relationships:
                 if rel.exercise.supportfile.code not in relations_tab_code:
                     relations_tab_code.append(rel.exercise.supportfile.code)
                     relations_tab.append(rel)
             # merge les relationships identiques
             exercises_tab = []
-            for relation in relations_tab :
+            for relation in relations_tab:
                 exo = {}
                 exo["name"] = relation
                 stas = Studentanswer.objects.filter( exercise= relation.exercise , student = student ).order_by("date")
                 scores_tab = []
-                for sta in stas :
+                for sta in stas:
                     scores_tab.append(sta) 
                 exo["scores"] = scores_tab         
-                exercises_tab.append(exo) 
-            knowledge_dict["exercises"]  = exercises_tab
+                exercises_tab.append(exo)
+            knowledge_dict["exercises"] = exercises_tab
             datas.append(knowledge_dict)
 
-
- 
-    if request.user.user_type == User.TEACHER :
+    if request.user.is_teacher:
         teacher = Teacher.objects.get(user=request.user)
-        group = Group.objects.get(students = student, teacher = teacher)
-        nav = navigation(group,id)
-        context = { 'datas': datas,  'student': student , 'theme' : theme,  'group' : group , 'parcours' : None,  'sprev_id' :  nav[0]  ,'snext_id' : nav[1]  , 'communications' : [] ,   'parcourses':parcourses, 'themes' : themes }
-    
-    else :
-        group = Group.objects.filter(students = student).first() 
-        context = { 'datas': datas,  'student': student , 'theme' : theme,  'group' : group , 'parcours' : None,  'communications' : [] ,  'parcourses':parcourses, 'themes' : themes , 'sprev_id' :  None  ,'snext_id' : None , }
-    return render(request, 'account/detail_student_theme.html',  context )
+        group = Group.objects.get(students=student, teacher=teacher)
+        nav = navigation(group, id)
+        context = {'datas': datas, 'student': student, 'theme': theme, 'group': group, 'parcours': None,
+                   'sprev_id': nav[0], 'snext_id': nav[1], 'communications': [], 'parcourses': parcourses,
+                   'themes': themes}
+
+    else:
+        group = Group.objects.filter(students=student).first()
+        context = {'datas': datas, 'student': student, 'theme': theme, 'group': group, 'parcours': None,
+                   'communications': [], 'parcourses': parcourses, 'themes': themes, 'sprev_id': None,
+                   'snext_id': None, }
+    return render(request, 'account/detail_student_theme.html', context)
 
 
 
@@ -551,19 +522,13 @@ def detail_student_parcours(request, id,idp):
     parcours = Parcours.objects.get(pk=idp)
     parcourses = Parcours.objects.filter(students=student)
     themes = student.level.themes.all()
-
- 
-
     relationships = Relationship.objects.filter(parcours = parcours, students = student, is_publish = 1).order_by("order")
 
- 
- 
-    if request.user.user_type == User.TEACHER:
- 
+    if request.user.is_teacher:
         teacher = Teacher.objects.get(user=request.user)
         group = Group.objects.get(students=student, teacher=teacher)
         nav = navigation(group, id)
-        context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'sprev_id': nav[0],  
+        context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'sprev_id': nav[0],
                    'snext_id': nav[1], 'parcourses': parcourses, 'student': student}
     else:
         context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'parcourses': parcourses,  'sprev_id': None ,
@@ -601,16 +566,13 @@ def detail_student_all_views(request, id):
     knowledges = []
 
     for exercise in exercise_tab:
-        if not exercise.knowledge in knowledges:
+        if exercise.knowledge not in knowledges:
             knowledges.append(exercise.knowledge)
 
-
-
-
     parcourses = Parcours.objects.filter(students=student)
-    relationships = Relationship.objects.filter(parcours__in = parcourses).exclude(date_limit=None)
- 
-    done, late, no_done = 0 , 0 , 0 
+    relationships = Relationship.objects.filter(parcours__in=parcourses).exclude(date_limit=None)
+
+    done, late, no_done = 0, 0, 0
     for relationship in relationships :
         nb_ontime = Studentanswer.objects.filter(student=student, exercise = relationship.exercise ).count()
         nb = Studentanswer.objects.filter(student=student, exercise = relationship.exercise, date__lte= relationship.date_limit ).count()
@@ -646,25 +608,18 @@ def detail_student_all_views(request, id):
     except StatisticsError:
         std['median'] = 0
 
-
-    # import pdb; pdb.set_trace()
-    if request.user.user_type == User.TEACHER:
+    if request.user.is_teacher:
         teacher = Teacher.objects.get(user=request.user)
         group = Group.objects.get(students=student, teacher=teacher)
         nav = navigation(group, id)
-        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'student': student, 'parcours' : None, 
-                   'sprev_id': nav[0], 'snext_id': nav[1]}
+        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes,
+                   'student': student, 'parcours': None, 'sprev_id': nav[0], 'snext_id': nav[1]}
     else:
-        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'student': student, 'parcours' : None, 
-                    'sprev_id': None , 'snext_id': None }
+        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes,
+                   'student': student, 'parcours': None, 'sprev_id': None, 'snext_id': None}
 
     return render(request, 'account/detail_student_all_views.html', context)
 
-
-
- 
-
- 
 
 
 
@@ -752,18 +707,21 @@ def delete_teacher(request, pk):
     return redirect('list_teacher')
 
 
-"""
-retourne un username
-"""
-def get_username( ln, fn ) :
+
+
+def get_username(ln, fn):
+    """
+    retourne un username
+    """
+
     ok = True
     i = 0
-    un = str(ln)+"."+str(fn)[0]
-    while ok :
-        if User.objects.filter(username = un).count() == 0 :
+    un = str(ln) + "." + str(fn)[0]
+    while ok:
+        if User.objects.filter(username=un).count() == 0:
             ok = False
-        else :
-            i+=1
+        else:
+            i += 1
             un = un + str(i)
     return un
 
@@ -778,13 +736,12 @@ def register_teacher_from_admin(request):
     user_form = NewUserTForm(request.POST or None)
     teacher_form = TeacherForm(request.POST or None)
  
-
     new = False
     if request.method == 'POST':
         if all((user_form.is_valid(),teacher_form.is_valid())):
             u_form = user_form.save(commit=False)
-            u_form.password =  make_password("sacado_2020")
-            u_form.user_type = 2
+            u_form.password = make_password("sacado_2020")
+            u_form.user_type = User.TEACHER
             u_form.school = request.user.school
             u_form.username = get_username(u_form.last_name, u_form.first_name)
             u_form.save()
@@ -799,13 +756,13 @@ def register_teacher_from_admin(request):
             return redirect('school_teachers')
         else:
             messages.error(request, user_form.errors)
-    else :
+    else:
         new = True
 
     return render(request, 'account/teacher_form.html',
                   {'user_form': user_form,
                    'teacher_form': teacher_form,
-                   'new':new ,})
+                   'new': new, })
 
 
  
@@ -813,7 +770,7 @@ def register_teacher_from_admin(request):
 @login_required
 @can_register
 @is_manager_of_this_school
-def register_by_csv(request,key,idg=0):
+def register_by_csv(request, key, idg=0):
     """
     Enregistrement par csv : key est le code du user_type : 0 pour student, 2 pour teacher
     """
@@ -833,11 +790,10 @@ def register_by_csv(request,key,idg=0):
 
             lines = file_data.split("\n")
             #loop over the lines and save them in db. If error , store as string and then display
- 
 
             for line in lines:                      
                 fields = line.split(";")
-                data_dict , data_teacher_or_student_dict = {} , {} 
+                data_dict, data_teacher_or_student_dict = {}, {}
                 data_dict["civilite"] = "M/Mme"               
                 data_dict["last_name"] = fields[0]
                 data_dict["first_name"] = fields[1]
@@ -846,23 +802,22 @@ def register_by_csv(request,key,idg=0):
                 data_dict["is_manager"] = 0
                 data_dict["school"] =  request.user.school  
                               
-                if key == 2 : # Enseignant
+                if key == 2:  # Enseignant
                     data_dict["email"] = fields[2]
                     data_dict["is_extra"] = 1
                     data_teacher_or_student_dict["notification"] = 1
                     data_teacher_or_student_dict["exercise_post"] = 1 
                     form = TeacherForm(data_teacher_or_student_dict)
-                else : # Student
-                    if data_dict["email"] != "" :
+                else:  # Student
+                    if data_dict["email"] != "":
                         data_dict["email"] = fields[2]
-                    else :
+                    else:
                         data_dict["email"] = ""  
                     data_dict["is_extra"] = 0 
 
                     data_teacher_or_student_dict["task_post"] = 1
                     form = StudentForm(data_teacher_or_student_dict)
  
-
                 try:
                     user_form = UserForm(data_dict)
                                         
@@ -901,13 +856,13 @@ def register_by_csv(request,key,idg=0):
             group = None
         else :
             group = Group.objects.get(pk = idg)
-         
-        return render(request, 'account/csv_teachers_or_students.html',{'key' : key, 'idg' : idg , 'group' : group })
+
+        return render(request, 'account/csv_teachers_or_students.html', {'key': key, 'idg': idg, 'group': group})
 
   
 #########################################Lost password #################################################################
 
-import random
+
 def updatepassword(request):
  
     if request.method == 'POST':
@@ -938,16 +893,16 @@ def register_parent(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST)
         if user_form.is_valid():
-            code_student = request.POST.get("code_student")  
-            if Student.objects.filter(code = code_student).exists() :
-                username  = user_form.cleaned_data['last_name']+user_form.cleaned_data['first_name']
+            code_student = request.POST.get("code_student")
+            if Student.objects.filter(code=code_student).exists():
+                username = user_form.cleaned_data['last_name'] + user_form.cleaned_data['first_name']
                 user = user_form.save(commit=False)
-                user.username  = username
-                user.user_type = 1
-                password = request.POST.get("password1") 
+                user.username = username
+                user.user_type = User.PARENT
+                password = request.POST.get("password1")
                 user.set_password(password)
                 user.save()
-                parent,result = Parent.objects.get_or_create(user=user)
+                parent, result = Parent.objects.get_or_create(user=user)
                 student = Student.objects.get(code=code_student)
                 parent.students.add(student)
             
@@ -956,7 +911,7 @@ def register_parent(request):
                 messages.success(request, "Inscription réalisée avec succès !")               
                 if user_form.cleaned_data['email'] :
                     send_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n\n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.', 'info@sacado.xyz', [request.POST.get("email")])
-        else :
+        else:
             messages.error(request, "Erreur lors de l'enregistrement. Reprendre l'inscription...")
     return redirect('index')
 
@@ -978,15 +933,11 @@ def update_parent(request, id):
                   {'user_form': user_form, 'parent_form': parent_form, 'parent': parent})
 
 
- 
 def delete_parent(request, id):
-
     parent = get_object_or_404(Parent, user_id=id)
     parent.delete()
- 
     return redirect('index')
 
- 
 
 
 
@@ -998,8 +949,7 @@ def my_profile(request):
     user = User.objects.get(id=request.user.id)
     user_form = UserUpdateForm(request.POST or None, request.FILES or None, instance=user)
 
-    if request.user.user_type == User.TEACHER:
-        
+    if request.user.is_teacher:
         teacher = Teacher.objects.get(user=user)
 
         teacher_form = TeacherForm(request.POST or None, request.FILES or None, instance=teacher)
@@ -1019,7 +969,7 @@ def my_profile(request):
         return render(request, 'account/teacher_form.html',
                       {'teacher_form': teacher_form, 'user_form': user_form, 'teacher': teacher})
 
-    elif request.user.user_type == User.STUDENT:
+    elif request.user.is_student:
 
         student = Student.objects.get(user=user)
         form = StudentForm(request.POST or None, request.FILES or None, instance=student)
@@ -1038,7 +988,6 @@ def my_profile(request):
                       {'form': form, 'user_form': user_form, 'student': student, })
 
     else:
-
         parent = Parent.objects.get(user=user)
         form = ParentForm(request.POST or None, request.FILES or None, instance=parent)
         if request.method == "POST":
