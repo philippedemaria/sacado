@@ -2,12 +2,14 @@ import uuid
 
 import pytz
 from django.apps import apps
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
+
 from django.core.mail import send_mail
 from django.db import models
 
 from socle.models import Level, Knowledge, Skill
 from school.models import School
+
 
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User
@@ -34,17 +36,17 @@ class ModelWithCode(models.Model):
         abstract = True
 
 
-class TeacherManager(models.Manager):
+class TeacherManager(UserManager):
     def get_queryset(self):
         return super().get_queryset().filter(user_type=User.TEACHER)
 
 
-class StudentManager(models.Manager):
+class StudentManager(UserManager):
     def get_queryset(self):
         return super().get_queryset().filter(user_type=User.STUDENT)
 
 
-class ParentManager(models.Manager):
+class ParentManager(UserManager):
     def get_queryset(self):
         return super().get_queryset().filter(user_type=User.PARENT)
 
@@ -94,6 +96,7 @@ class User(AbstractUser):
     school = models.ForeignKey(School, blank=True, null=True, related_name="users", default=None, on_delete=models.PROTECT)
     cgu = models.BooleanField(default=0)
 
+    objects = UserManager()
     teachers = TeacherManager()
     students = StudentManager()
     parents = ParentManager()
