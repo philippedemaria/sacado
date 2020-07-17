@@ -659,7 +659,7 @@ def show_parcours_student(request, id):
     today = time_zone_user(request.user)
 
     nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count()
-    context = {'relationships': relationships,  'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only, 'today': today ,  }
+    context = {'relationships': relationships,  'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only, 'today': today ,   }
  
     return render(request, 'qcm/show_parcours_student.html', context)
 

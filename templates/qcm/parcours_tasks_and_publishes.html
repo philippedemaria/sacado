@@ -54,7 +54,7 @@
                                   style="line-height: 30px; {% if not forloop.first %} border-bottom-right-radius:5px; border-bottom-left-radius:5px;{% endif %} 
                                                             {% if not forloop.last %} border-top-right-radius:5px; border-top-left-radius:5px;{% endif %}
                                                             {% if relationships|length == 1 %} border-radius:5px; {% endif %}
-                                                            {% if relationship.exercise.is_publish %} border-left: #1fd14c solid 2px; {% endif %} 
+                                                            {% if relationship.is_publish %} border-left: #1fd14c solid 2px; {% endif %} 
                                                             {% if relationship.exercise.supportfile.is_title  %} background-color : #F2F1F0;{% endif %}" 
                                   id="new_title{{ relationship.exercise.id }}" >
                                 <input type="hidden" value="{{ relationship.exercise.id }}" name="input_exercise_id" class="div_exercise_id"/><!--  sert à classer les thèmes  -->

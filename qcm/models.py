@@ -203,6 +203,9 @@ class Exercise(models.Model):
             studentanswer = Studentanswer.objects.filter(student=student, exercise=self.pk, parcours=parcours).last()
             scores_times["score"] = studentanswer.point
             scores_times["time"] = convert_time(studentanswer.secondes)
+        else :
+            scores_times["score"] = ""
+            scores_times["time"] = ""
         return scores_times
 
 
