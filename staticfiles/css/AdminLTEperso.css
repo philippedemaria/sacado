@@ -2498,7 +2498,7 @@ li .list_no_indent{
 
 .dropdown-menu > li > a {
   padding-top : 7px;
-  color: #271942;
+  color:#5d4391 ; /* #271942;*/
 }
 
 .dropdown-menu > li > a.edit {
@@ -2536,7 +2536,7 @@ li .list_no_indent{
   margin-right: 10px;
 }
 .dropdown-menu > li > a:hover {
-  background-color: #271942;
+  background-color: #5d4391;
   color: #EEE;
 }
 .dropdown-menu > .divider {
@@ -2544,7 +2544,7 @@ li .list_no_indent{
 }
 
 .dropdown-menu > li:hover {
-  background-color: #271942;
+  background-color: #5d4391;
   color: #EEE;
 }
 .navbar-nav > .notifications-menu > .dropdown-menu,

@@ -127,7 +127,7 @@ def school_groups(request):
 	else :
 		school = request.user.school
 
-	users = school.users.all()
+	users = school.user.all()
 
 	groups = Group.objects.filter(teacher__user__in = users).order_by("level")  
 

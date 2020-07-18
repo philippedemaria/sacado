@@ -48,7 +48,7 @@
                                      <a href="{% url 'update_group_school'  group.id %}" style="color:{{group.color}}">{{ group.name }} </a> <br><span style="color:{{group.color}}; font-size: 14px">{{ group.code }}</span> <br><div style="font-size: 12px"> <a href="{% url 'update_teacher' group.teacher.user.id %}">{{ group.teacher.user.civilite }} {{ group.teacher.user.first_name }} {{ group.teacher.user.last_name }}</a></div>
                                 </td>
                                 <td>
-                                    <span class="label label-primary"> {{ group.students.count }}<i class="fa fa-users"></i></span>
+                                    <span class="label label-default"> {{ group.students.count }}<i class="fa fa-users"></i></span>
                                         {% for s in group.students.all|dictsort:"user.last_name" %} 
                                            <font style="font-size:14px">    <a  href="{% url 'update_student'  s.user.id group.id  %}"> {{s}} </a>{% if not forloop.last %}, {% endif %} </font>
                                         {% empty %}
@@ -60,7 +60,7 @@
                                         {% endfor %} 
                                 </td> 
                                 <td>
-                                    <a href="{% url 'new_student' group.code %}" class="label label-primary"> + <i class="fa fa-user"></i></a>
+                                    <a href="{% url 'new_student' group.code %}" class="label label-danger"> + <i class="fa fa-user"></i></a>
                                     <a href="{% url 'register_by_csv' 0 group.id %}" class="label label-success"> + <i class="fa fa-users"></i> csv</a>
                                 </td> 
 
