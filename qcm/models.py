@@ -91,8 +91,8 @@ class Supportfile(models.Model):
         return "{} > {} > {}".format(self.level.name, self.theme.name, knowledge)
 
     def levels_used(self):
-        exercises = Exercise.objects.filter(supportfile=self).select_related('level')
-        return exercises
+        return self.exercises.select_related('level')
+
 
 
  
