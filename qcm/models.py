@@ -92,6 +92,8 @@ class Supportfile(models.Model):
 
     def levels_used(self):
         exercises = Exercise.objects.filter(supportfile=self).select_related('level')
+
+        return self.exercises.select_related('level')
         return exercises
 
 
@@ -322,7 +324,6 @@ class Exercise(models.Model):
 
 
     def levels_used(self):
-
         exercises = Exercise.objects.filter(level=self.supportfile)
         return exercises
 

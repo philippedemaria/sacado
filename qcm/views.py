@@ -1508,13 +1508,12 @@ def ajax_update_association(request):
 
 @login_required
 @user_passes_test(user_is_superuser)
-def admin_list_supportfiles(request,id):
+def admin_list_supportfiles(request, id):
     user = request.user
     teacher = Teacher.objects.get(user=user)
     if user.is_superuser:  # admin and more
 
         teacher = Teacher.objects.get(user=user)
-        datas = []
 
         level = Level.objects.get(pk=id)
         levels_dict = {}
@@ -1525,10 +1524,11 @@ def admin_list_supportfiles(request,id):
         for theme in themes:
             themes_dict = {}
             themes_dict["name"] = theme.name
-            knowlegdes = Knowledge.objects.filter(theme=theme, level=level).order_by("theme")
+            knowlegdes = Knowledge.objects.filter(theme=theme, level=level).order_by("theme").prefetch_related('supportfiles__exercises')
             knowledges_tab = []
             for knowledge in knowlegdes:
                 supportfiles = knowledge.supportfiles.filter(is_title=0).order_by("theme")
+
                 exercises = Exercise.objects.filter(knowledge=knowledge, level=level, theme=theme,supportfile__in=supportfiles).order_by("theme")
 
                 knowledges_tab.append(
@@ -1538,15 +1538,12 @@ def admin_list_supportfiles(request,id):
                         "supportfiles": supportfiles,
                     }
                 )
-
             themes_dict["knowledges"] = knowledges_tab
             themes_tab.append(themes_dict)
         levels_dict["themes"] = themes_tab
- 
 
-
-
-    return render(request, 'qcm/list_supportfiles.html', {'levels_dict': levels_dict, 'teacher':teacher , 'level':level })
+    return render(request, 'qcm/list_supportfiles.html',
+                  {'levels_dict': levels_dict, 'teacher': teacher, 'level': level})
 
 
  

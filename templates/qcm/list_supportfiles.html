@@ -42,7 +42,6 @@
                             {% if knowledge.supportfiles|length > 0 %}
                                     <tr> 
                                         <td class="listingtd">
-                                            
                                             {{ knowledge.name.name|capfirst }} 
                                             {% if request.user.is_superuser and '/admin' in request.path %}                                                       
                                             <a href="{% url 'create_supportfile_knowledge' knowledge.name.id %}" class="edit"><i class='fa fa-plus pull-right' style="font-size: 10px; margin-right:20px"></i></a>
@@ -51,12 +50,12 @@
                                     </tr>
 
 
-                                    {% for supportfile in knowledge.supportfiles  %} 
+                                    {% for supportfile in knowledge.supportfiles  %}
                                         <tr>
                                             <td>
                                                 <div class="pull-right" > 
 
-                                                {% for e in supportfile.levels_used %}
+                                                {% for e in supportfile.exercices.all %}
                                                     <span class="subtitle">{{ e.level.name }}</span>{% if not forloop.last %}<br>{% endif %}
                                                 {% empty %}
                                                     <a href="{% url 'show_this_supportfile' supportfile.id  %}"  class="btn btn-danger" target="_blank" >Non utilisé</a>
@@ -80,8 +79,7 @@
                                                       <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
                                                     {% endif  %}
 
-
-                                                     <br>
+                                                    <br>
                                                     <small>   
                                                         <i class="fa fa-barcode"></i> {{ supportfile.code }}  {% if supportfile.annoncement|make_list|length < 120 %}<br>{% endif %} 
                                                         <i class="fa fa-clock-o"></i> {{ supportfile.duration }} minutes {% if supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
@@ -90,11 +88,6 @@
                                            </td>
                                         </tr>
                                     {% endfor %} 
-
-
-
-
-
 
                             {% else %} 
                                     <tr> 
