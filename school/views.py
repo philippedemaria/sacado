@@ -25,13 +25,12 @@ from reportlab.lib.utils import ImageReader
 from cgi import escape
 cm = 2.54
 #################################################################################
- 
 
- 
+
 @login_required
 def list_schools(request):
 	schools = School.objects.all()
-	return render(request,'school/lists.html', {'schools':schools})
+	return render(request, 'school/lists.html', {'schools': schools})
 
 
 
