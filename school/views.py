@@ -117,20 +117,20 @@ def school_teachers(request):
 
 	return render(request,'school/list_teachers.html', {'teachers':teachers})
 
+
 @login_required
 @is_manager_of_this_school
 def school_groups(request):
-	if request.session.get("school_id") :
+	if request.session.get("school_id"):
 		school_id = request.session.get("school_id")
-		school = School.objects.get(pk = school_id)
-	else :
+		school = School.objects.get(pk=school_id)
+	else:
 		school = request.user.school
 
-	users = school.user.all()
+	users = school.users.all()
+	groups = Group.objects.filter(teacher__user__in=users).order_by("level")
 
-	groups = Group.objects.filter(teacher__user__in = users).order_by("level")  
-
-	return render(request,'school/list_groups.html', {'groups':groups})
+	return render(request, 'school/list_groups.html', {'groups': groups})
 
 
 @login_required
@@ -360,13 +360,13 @@ def manage_stage(request):
 
 @login_required
 @is_manager_of_this_school
-def send_account(request,id):	
+def send_account(request, id):
 	rcv = []
-	if id == 0 :
+	if id == 0:
 		school = request.user.school
-		for u in school.user :
+		for u in school.users.all():
 			rcv.append(u.email)
-	else :
+	else:
 		user = User.objects.get(id=id)
 		rcv.append(user.email)
 	send_mail('Compte   Sacado',

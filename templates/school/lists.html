@@ -48,7 +48,7 @@
 
                       <td>
                           {%  with school.student_and_teacher as data %}
-                            {{ school.user.count }} <small>({{ data.nbt }} enseignant{{ data.nbt|pluralize }} - {{ data.nbs }} élève{{ data.nbs|pluralize }})</small>
+                            {{ school.users.count }} <small>({{ data.nbt }} enseignant{{ data.nbt|pluralize }} - {{ data.nbs }} élève{{ data.nbs|pluralize }})</small>
                           {%  endwith  %}
                       </td>
 
