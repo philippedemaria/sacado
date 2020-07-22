@@ -18,3 +18,5 @@ staticfiles/ckeditor/
 staticfiles/uploads/
 staticfiles/img/img_psd 
 logs/
+
+media/uploads/
