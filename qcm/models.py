@@ -98,10 +98,10 @@ class Supportfile(models.Model):
  
     def in_folder(self) :
 
-        folder_path = "/home/c1398844c/sacado/staticfiles/uploads/" 
+        folder_path = "/home/c1398844c/sacado/media/"
         data = {}
-        #folder_path  = "D:/uwamp/www/sacadogit/sacado/staticfiles/uploads/"   
-
+        #folder_path  = "D:/uwamp/www/sacadogit/sacado/media/"
+        
         if os.path.isfile(folder_path+str(self.ggbfile)):
             data["file_in_folder"] = True
         else:
