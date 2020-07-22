@@ -65,7 +65,7 @@
                                                 </div>
 
                                                     <a href="{% url 'show_this_supportfile' supportfile.id   %}" target="_blank"   >  
-                                                        <img src="../../static/uploads/{{ supportfile.imagefile }}" class="imagefile">
+                                                        <img src="{{ supportfile.imagefile.url }}" class="imagefile">
                                                     </a>
 
 
