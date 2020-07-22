@@ -9,7 +9,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 
-
 PRODUCTION = os.environ.get('PRODUCTION')
 
 if PRODUCTION:
@@ -93,13 +92,15 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+
+    #'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
     'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
@@ -242,9 +243,9 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'staticfiles'),)
 
 FILE_UPLOAD_PERMISSIONS = 0o775
 
-MEDIA_URL = 'media/uploads/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/uploads')
- 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+print(BASE_DIR, MEDIA_ROOT)
 
 ########################################################################################################################
 

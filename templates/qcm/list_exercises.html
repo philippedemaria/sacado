@@ -5,12 +5,12 @@
 {% load item_tags %}
 
 
-   
+
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
-{% endblock %} 
+{% endblock %}
 
-  
+
 {% block page_title %}
     <i class="fa fa-laptop"></i> Les exercices
 {% endblock %}
@@ -23,51 +23,53 @@
 
 
 {% block body %}
-<section class="content_container">  
-    {% if datas %} 
+<section class="content_container">
+    {% if datas %}
 
         <ul  class="nav nav-tabs">
-     
+
             {% for data in datas %}
-            <li {% if forloop.first %}class="active"{% endif %}><a  href="#{{ forloop.counter}}a" data-toggle="tab">{{ data.name.shortname }}</a></li>
+            <li {% if forloop.first %}class="active"{% endif %}>
+                <a  href="#{{ forloop.counter}}a" data-toggle="tab">{{ data.name.shortname }}</a>
+            </li>
             {% endfor  %}
             {% if not '/admin' in request.path %}
             <li> <a href="{% url 'profile' %}" class="thin">+</a></li>
             {% endif %}
         </ul>
         <div class="tab-content clearfix">
-            {% for data in datas %} 
+            {% for data in datas %}
             <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ forloop.counter}}a">
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
                         <table class="table  table-hover display100" style="width:100%">
-                            <thead> 
+                            <thead>
                                 <tr>
                                     <td></td>
                                 </tr>
-                            </thead> 
+                            </thead>
                             <tbody>
-                                {% for theme in data.themes  %} 
+                                {% for theme in data.themes  %}
                                     <tr style="background:#e6e2dd">
-                                        <td style="width:85%">{{theme.name}}</td> 
-                                    </tr> 
-                                    {% for knowledge in theme.knowledges  %} 
+                                        <td style="width:85%">{{theme.name}}</td>
+                                    </tr>
+                                    {% for knowledge in theme.knowledges  %}
                                         {% if knowledge.exercises|length > 0 %}
-                                                <tr> 
+                                                <tr>
                                                     <td class="listingtd">
-                                                        {{ knowledge.name.name|capfirst }} 
+                                                        {{ knowledge.name.name|capfirst }}
                                                         {% if request.user.is_superuser and '/admin' in request.path %}
                                                             <a href="{% url 'create_supportfile_knowledge' knowledge.name.id %}" class="pull-right edit"><i class='fa fa-plus' style="margin-left:10px;font-size: 10px"></i></a>
                                                         {% endif %}
                                                     </td>
-                                    
+
                                                 </tr>
-                                                {% for exercise in knowledge.exercises  %} 
+                                                {% for exercise in knowledge.exercises  %}
                                                     <tr>
                                                         <td>
-                                                            <div class="pull-right" > 
-                                                            {% get_used_in_parcours exercise teacher as uparcours  %} 
-                                                            {% for p in uparcours %}  
+                                                            <div class="pull-right" >
+                                                            {% get_used_in_parcours exercise teacher as uparcours  %}
+                                                            {% for p in uparcours %}
                                                                  <span class="subtitle">{{ p }}</span>{% if not forloop.last %}<br>{% endif %}
                                                             {% empty %}
                                                                 <a href="{% url 'show_this_exercise' exercise.id  %}"  class="btn btn-danger" >Non utilisé</a>
@@ -75,55 +77,55 @@
                                                             </div>
 
 
-                                                            {% if request.user.is_superuser %}
-                                                                <a href="{% url 'show_this_exercise' exercise.id   %}"  target="_blank"  >  
-                                                                    <img src="{% static '/uploads/' %}{{ exercise.supportfile.imagefile }}" class="imagefile">
+                                                            {% if request.user.is_superuser %}{{ exercise.supportfile.imagefile.url }}
+                                                                <a href="{% url 'show_this_exercise' exercise.id   %}"  target="_blank"  >
+                                                                    <img src="{{ exercise.supportfile.imagefile.url }}" class="imagefile">
                                                                 </a>
                                                                 <a href="{% url 'update_supportfile'  exercise.supportfile.id   %}" class="listing" style="font-size: 18px">
-                                                                    {{ exercise.supportfile.annoncement|cleanhtml|capfirst }} 
-                                                                </a> 
+                                                                    {{ exercise.supportfile.annoncement|cleanhtml|capfirst }}
+                                                                </a>
 
                                                             {%  else %}
                                                                 <a href="{% url 'show_this_exercise' exercise.id  %}" target="_blank" >
-                                                                    <img src="{% static '/uploads/' %}{{ exercise.supportfile.imagefile }}" class="imagefile">
-                                                                </a> 
-                                                                <a href="{% url 'show_this_exercise'  exercise.id   %}" class="listing" style="font-size: 18px">        
-                                                                    {{ exercise.supportfile.annoncement|cleanhtml|capfirst }} 
-                                                                </a> 
+                                                                    <img src="{{ exercise.supportfile.imagefile.url }}" class="imagefile">
+                                                                </a>
+                                                                <a href="{% url 'show_this_exercise'  exercise.id   %}" class="listing" style="font-size: 18px">
+                                                                    {{ exercise.supportfile.annoncement|cleanhtml|capfirst }}
+                                                                </a>
                                                             {% endif %}
                                                             {% if exercise.supportfile.calculator %}
                                                               <img src="{% static 'img/calculator.png' %}" width="30px" />
                                                             {% else %}
                                                               <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
-                                                            {% endif  %}   
+                                                            {% endif  %}
                                                                  <br>
                                                             {% if request.user.is_superuser %}
-                                                                    <a  href="{% url 'update_supportfile'  exercise.supportfile.id  %}" class="sublisting"  target="_blank"> <small>   
-                                                                        <i class="fa fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %} 
+                                                                    <a  href="{% url 'update_supportfile'  exercise.supportfile.id  %}" class="sublisting"  target="_blank"> <small>
+                                                                        <i class="fa fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
                                                                         <i class="fa fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
                                                                         <i class="fa fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum</small>
-                                                                    </a> 
+                                                                    </a>
                                                             {% else %}
-                                                                    <small>   
-                                                                        <i class="fa fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %} 
+                                                                    <small>
+                                                                        <i class="fa fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
                                                                         <i class="fa fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
                                                                         <i class="fa fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum
-                                                                    </small> 
+                                                                    </small>
                                                             {% endif %}
 
                                                         </td>
-    
+
                                                     </tr>
-                                                {% endfor %} 
-                                        {% else %} 
-                                                <tr> 
+                                                {% endfor %}
+                                        {% else %}
+                                                <tr>
                                                     <td>
                                                          {{ knowledge.name }} <em class="text text-danger">Exercice en cours de création</em>
                                                         {% if request.user.is_superuser and '/admin' in request.path %}
                                                         <a href="{% url 'create_supportfile_knowledge' knowledge.name.id %}" class="edit"  target="_blank"><i class='fa fa-plus pull-right' style="font-size: 10px"></i></a>
                                                         {% endif %}
                                                     </td>
-                                           
+
                                                 </tr>
                                         {% endif %}
                                     {% endfor %}

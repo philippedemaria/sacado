@@ -34,52 +34,51 @@ Intro Section -
 <section id="intro" class="clearfix">
     <div class="container h-100">
 
-      <div class="col-xs-12"    >
+        <div class="col-xs-12"    >
           <a href="#footer" class="btn btn-index"> <span class="sacado">SACADO </span><br>Établissement<br>Nous contacter </a>
-      </div>
-      <div class="row justify-content-center align-self-center intro-info order-md-first order-last" style="padding-bottom:30px">  
-        <div class="col-xs-12 col-md-12 col-lg-6">
-                <div class="title marginbottom50"> <span class="exo">{{ nb_exercise }}</span> exercice{{  nb_exercise|pluralize }} <br>  
+        </div>
+        <div class="row justify-content-center align-self-center intro-info order-md-first order-last" style="padding-bottom:30px">
+            <div class="col-xs-12 col-md-12 col-lg-6">
+                <div class="title marginbottom50">
+                    <span class="exo">{{ nb_exercise }}</span> exercice{{  nb_exercise|pluralize }} <br>
       			       mathématique{{ nb_exercise|pluralize }}<br> interactif{{ nb_exercise|pluralize }} et corrigé{{  nb_exercise|pluralize }}<br> du CP à la Terminale.
-                </div>
+                    </div>
                 <div class="row">
-                        <div class="col-xs-12 col-md-12 col-lg-6">
-                            <a href="#" data-toggle='modal' data-target='#connexion' class="btn btn-primary">
-                                Se connecter
-                            </a>
-                        </div>
-                        <div class="col-xs-12 col-md-12 col-lg-6">
-                            <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-danger index_size">
-                                Se connecter avec <img src="{% static 'img/Googlelogo.png' %}" height="15" style="margin-left: 5px; vertical-align: baseline"/>
-                            </a>
-                        </div>
+                    <div class="col-xs-12 col-md-12 col-lg-6">
+                        <a href="#" data-toggle='modal' data-target='#connexion' class="btn btn-primary">
+                            Se connecter
+                        </a>
                     </div>
-
-                    <br>
-                    <div style="color:#cb2131;margin-top: 50px">
-                        <img src="{% static 'img/edge.png' %}" width="35px"/>
-                        <img src="{% static 'img/firefox.png' %}" width="35px"/>
-                        <img src="{% static 'img/chrome.png' %}" width="35px"/>
-                        <img src="{% static 'img/safari.png' %}" width="35px"/>
-                        <i class="fa fa-apple"></i> <a href="https://java.com/fr/download/help/mac_install.xml"
-                                                       target="_blank"
-                                                       style="color:#cb2131; border-bottom: 1px #cb2131 dashed">
-                        Pour safari, installer Java si nécessaire.</a>
+                    <div class="col-xs-12 col-md-12 col-lg-6">
+                        <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-danger index_size">
+                            Se connecter avec <img src="{% static 'img/Googlelogo.png' %}" height="15"
+                                                   style="margin-left: 5px; vertical-align: baseline"/>
+                        </a>
                     </div>
+                </div>
 
+                <br>
+                <div style="color:#cb2131;margin-top: 50px">
+                    <img src="{% static 'img/edge.png' %}" width="35px"/>
+                    <img src="{% static 'img/firefox.png' %}" width="35px"/>
+                    <img src="{% static 'img/chrome.png' %}" width="35px"/>
+                    <img src="{% static 'img/safari.png' %}" width="35px"/>
+                    <i class="fa fa-apple"></i>
+                    <a href="https://java.com/fr/download/help/mac_install.xml"
+                       target="_blank" style="color:#cb2131; border-bottom: 1px #cb2131 dashed">
+                        Pour safari, installer Java si nécessaire.
+                    </a>
+                </div>
 
                     <div class="row counters">
-
                         <div class="col-lg-4 col-4 text-center">
                             <span data-toggle="counter-up">{{ nb_teacher }}</span>
                             <p>Enseignants</p>
                         </div>
-
                         <div class="col-lg-4 col-4 text-center">
                             <span data-toggle="counter-up">{{ nb_student }}</span>
                             <p>Elèves</p>
                         </div>
-
                         <div class="col-lg-4 col-4 text-center">
                             <span data-toggle="counter-up">{{ nb_parcours }}</span>
                             <p>Parcours</p>
@@ -90,7 +89,7 @@ Intro Section -
             <div class="col-xs-12 col-md-12 col-lg-6" style="text-align:center">
                 <div style="position: relative;">
                     <a href="{% url 'show_exercise'   exercise.id     %}" target="_blank">
-                        <img src="{% static 'uploads/' %}{{ exercise.supportfile.imagefile }}" width="400"
+                        <img src="{{ exercise.supportfile.imagefile.url }}" width="400"
                              style="position: absolute; top :40px; left:133px;z-index:-1"/>
 
                         {% if exercise.id|divisibleby:"3" %}
