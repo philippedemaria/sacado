@@ -38,7 +38,7 @@
                 {% if parcours.vignette %}
                 <!-- small box -->
                 {% get_percent parcours student as pc %}{% get_done parcours student as is_done %} {% get_affect parcours student as nb_affect %}
-                <div class="small-box-student" style="background-image: url('{%static 'uploads/' %}{{ parcours.vignette }}'); background-size: 100% 100%;">
+                <div class="small-box-student" style="background-image: '{{parcours.vignette.url }}'); background-size: 100% 100%;">
                     <div class="icon-student">
                          {{ pc }}% 
                     </div>

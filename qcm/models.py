@@ -333,32 +333,28 @@ class Exercise(models.Model):
         return parcours
 
 
-
-
- 
 class Parcours(ModelWithCode):
 
     title = models.CharField(max_length=255, verbose_name="Titre")
     color = models.CharField(max_length=255, default='#00819F', verbose_name="Couleur")
-    author = models.ForeignKey(Teacher, related_name = "author_parcours", on_delete=models.PROTECT, default='', blank=True,  null= True,  verbose_name="Auteur")
-    teacher = models.ForeignKey(Teacher, related_name = "teacher_parcours", on_delete=models.PROTECT,  default='', blank=True,  editable=False)
- 
-    exercises = models.ManyToManyField(Exercise,   blank=True, through="Relationship", related_name = "exercises_parcours" )   
-    students = models.ManyToManyField(Student, blank=True,  related_name='students_to_parcours', verbose_name="Elèves de ce parcours")
+    author = models.ForeignKey(Teacher, related_name="author_parcours", on_delete=models.PROTECT, default='', blank=True, null=True, verbose_name="Auteur")
+    teacher = models.ForeignKey(Teacher, related_name="teacher_parcours", on_delete=models.PROTECT, default='', blank=True, editable=False)
+
+    exercises = models.ManyToManyField(Exercise, blank=True, through="Relationship", related_name="exercises_parcours")
+    students = models.ManyToManyField(Student, blank=True, related_name='students_to_parcours', verbose_name="Elèves de ce parcours")
     is_share = models.BooleanField(default=1, verbose_name="Partagé ?")
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
 
+    level = models.ForeignKey(Level, related_name="level_parcours", on_delete=models.PROTECT, default='', blank=True, null=True, editable=False)
+    linked = models.BooleanField(default=0, editable=False)
+    is_favorite = models.BooleanField(default=1, verbose_name="Favori ?")
 
-    level = models.ForeignKey(Level, related_name = "level_parcours", on_delete=models.PROTECT,  default='', blank=True, null= True,  editable=False)
-    linked  = models.BooleanField( default = 0 ,  editable=False)
-    is_favorite  = models.BooleanField( default = 1  ,  verbose_name="Favori ?" )
-
-    is_evaluation = models.BooleanField( default = 0,  editable=False )  
-    duration = models.PositiveIntegerField(  default=2,   blank=True,  verbose_name="Temps de chargement (min.)")   
-    start =  models.DateField( null=True, blank=True, verbose_name="Date de début de publication")
-    starter = models.TimeField( null=True, blank=True,  verbose_name="Heure de début de publication")
-    stop =  models.DateField( null=True, blank=True, verbose_name="Date de fin de publication")
-    stopper = models.TimeField( null=True, blank=True,verbose_name="Heure de fin de publication")
+    is_evaluation = models.BooleanField(default=0, editable=False)
+    duration = models.PositiveIntegerField(default=2, blank=True, verbose_name="Temps de chargement (min.)")
+    start = models.DateField(null=True, blank=True, verbose_name="Date de début de publication")
+    starter = models.TimeField(null=True, blank=True, verbose_name="Heure de début de publication")
+    stop = models.DateField(null=True, blank=True, verbose_name="Date de fin de publication")
+    stopper = models.TimeField(null=True, blank=True, verbose_name="Heure de fin de publication")
 
     vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Image du parcours", blank=True, default ="")
 
@@ -367,22 +363,20 @@ class Parcours(ModelWithCode):
         return "{}".format(self.title)
 
 
-
     def is_done(self,student):
         Studentanswer = apps.get_model('qcm', 'Studentanswer')
         exercises = self.exercises.all()
         n = 0
         exercise_done = []
-        for e  in exercises :
+        for e in exercises:
             if not e in exercise_done:
-                if Studentanswer.objects.filter(student=student, exercise = e).exists():
-                    n +=1
+                if Studentanswer.objects.filter(student=student, exercise=e).exists():
+                    n += 1
         return n
 
-
-    def is_affect(self,student):
-
-        nb_relationships = Relationship.objects.filter(parcours=self,exercise__supportfile__is_title=0,students = student,is_publish=1).count()
+    def is_affect(self, student):
+        nb_relationships = Relationship.objects.filter(parcours=self, exercise__supportfile__is_title=0,
+                                                       students=student, is_publish=1).count()
         return nb_relationships
 
 
