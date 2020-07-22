@@ -628,11 +628,11 @@ def show_parcours(request, id):
     students_p_or_g = students_from_p_or_g(request,parcours)
 
     skills = Skill.objects.all()
-    
+
     nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count()
-    context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'students_from_p_or_g': students_p_or_g,  
-               'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible, 'nb_exo_only': nb_exo_only, 
-               'group_id': group_id,       }
+    context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills,
+               'students_from_p_or_g': students_p_or_g, 'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible,
+               'nb_exo_only': nb_exo_only, 'group_id': group_id, }
 
     return render(request, 'qcm/show_parcours.html', context)
 

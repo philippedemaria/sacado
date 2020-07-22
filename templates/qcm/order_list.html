@@ -2,39 +2,45 @@
 {% load item_tags %}
 {% load widget_tweaks %}
 
-
-
 <div class="notification-container-right dismissR" id="order_exercises">
     <div class="row">
-        <div class="col-lg-12 col-xs-12"    style="text-align:center;"> 
+        <div class="col-lg-12 col-xs-12" style="text-align:center;">
             <a href="#" id="closeOrganiser" class="pull-right"> <i class="fa fa-times"></i></a>
-            <h1  class='sacado'  >Organiser les exercices</h1> 
+            <h1 class='sacado'>Organiser les exercices</h1>
         </div>
     </div>
     <div class="row">
-        <form action="#" method="POST">  
-        <input type="hidden" value="{% if parcours %}{{ parcours.id }}{% endif %}" name="parcours" id="parcours"/>
-        <div class="col-lg-12 col-xs-12"> 
-            <ul id="exercise_sortable_list">
-                {% for relation in relationships|dictsort:"order" %} 
+        <form action="#" method="POST">
+            <input type="hidden" value="{% if parcours %}{{ parcours.id }}{% endif %}" name="parcours" id="parcours"/>
+            <div class="col-lg-12 col-xs-12">
+                <ul id="exercise_sortable_list">
+                    {% for relation in relationships|dictsort:"order" %}
                     <li class="sorted_list">
-                            <table>
+                        <table>
                             <tr>
-                                <td style="width:20px"><img src="{% static 'img/order_handler.png' %}"/><br><br>{{forloop.counter }}.</td>
-                                <td style="width:210px"><img src="{{ relation.exercise.supportfile.imagefile.url }}"  width="200px" ></td>
-
-                                <td>  {% if relation.exercise.supportfile.annoncement %} {{ relation.exercise.supportfile.annoncement|cleanhtml }}{% else %} {{ relation.exercise.supportfile.knowledge.name }}{% endif %}<input type="hidden" value="{{ relation.exercise.id }}" class="sorted_exercise_id"/></td>
-
-
+                                <td style="width:20px">
+                                    <img src="{% static 'img/order_handler.png' %}"/><br><br>{{forloop.counter }}.
+                                </td>
+                                {% if relation.exercise.supportfile.imagefile %}
+                                <td style="width:210px">
+                                    <img src="{{ relation.exercise.supportfile.imagefile.url }}" width="200px">
+                                </td>
+                                {% endif %}
+                                <td>
+                                    {% if relation.exercise.supportfile.annoncement %}
+                                    {{ relation.exercise.supportfile.annoncement|cleanhtml }}
+                                    {% else %}
+                                    {{ relation.exercise.supportfile.knowledge.name }}
+                                    {% endif %}
+                                    <input type="hidden" value="{{ relation.exercise.id }}" class="sorted_exercise_id"/>
+                                </td>
                             </tr>
-                            </table>
-
+                        </table>
                     </li>
-
-                {% endfor %}
-            </ul>
-        </div>
+                    {% endfor %}
+                </ul>
+            </div>
         </form>
     </div>
 </div>
- 
+
