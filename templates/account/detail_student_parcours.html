@@ -27,7 +27,7 @@
                                 <td {% if relation.is_publish %} style="padding:0px"{% endif %}"> 
                                     <div {% if relation.is_publish %} style="border-left: 4px solid #00AC18; padding:10px"{% endif %}">
                                         <a href="{% url 'show_this_exercise' relation.exercise.id   %}" >  
-                                            <img src="{% static '/uploads/' %}{{ relation.exercise.supportfile.imagefile }}" class="imagefile">
+                                            <img src="{{ relation.exercise.supportfile.imagefile.url }}" class="imagefile">
                                         </a>
                                                                    
                                         <em>{% if relation.exercise.supportfile.annoncement %}{{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}{% else %} {{relation.exercise.knowledge.name|capfirst }}  {% endif %}</em>   

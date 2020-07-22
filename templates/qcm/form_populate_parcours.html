@@ -79,7 +79,7 @@
                                                         <label for="selector_e{{ e.id }}" class="label_select_checkbox">  
                                                         {% if user.is_superuser and '/admin' in request.path %}
                                                             <a href="{% url 'show_this_exercise'  e.id   %}"   >  
-                                                                <img src="{% static 'uploads/' %}{{ e.supportfile.imagefile }}" class="imagefile">
+                                                                <img src="{{ e.supportfile.imagefile.url }}" class="imagefile">
                                                             </a>
 
 
@@ -89,7 +89,7 @@
 
                                                         {%  else %}
                                                             <a href="{% url 'show_this_exercise'  e.id   %}" >
-                                                            <img src="{% static 'uploads/' %}{{ e.supportfile.imagefile }}" class="imagefile">
+                                                            <img src="{{ e.supportfile.imagefile.url }}" class="imagefile">
                                                             </a> 
                                                           
                                                                 {{ e.supportfile.annoncement|cleanhtml|capfirst }} 
