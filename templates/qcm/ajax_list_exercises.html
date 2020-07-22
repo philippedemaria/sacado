@@ -47,9 +47,9 @@
                                                         {% if request.user.is_superuser and '/admin' in request.path %}
                                                             <a href="{% url 'show_this_exercise'  e.id   %}"  target="_blank" >  
                                                                {% if ajax %}
-                                                                <img src="/static/uploads/{{ e.supportfile.imagefile }}" class="imagefile"> 
+                                                                <img src="{{ e.supportfile.imagefile.url }}" class="imagefile">
                                                                 {% else %}
-                                                                <img src="../../static/uploads/{{ e.supportfile.imagefile }}" class="imagefile">                                                     
+                                                                <img src="{{ e.supportfile.imagefile.url }}" class="imagefile">
                                                                 {% endif %}
                                                             </a>
 
@@ -61,9 +61,9 @@
                                                         {%  else %}
                                                             <a href="{% url 'show_this_exercise'  e.id   %}"  target="_blank" >
                                                                {% if ajax %}
-                                                                <img src="/static/uploads/{{ e.supportfile.imagefile }}" class="imagefile"> 
+                                                                <img src="{{ e.supportfile.imagefile.url }}" class="imagefile">
                                                                 {% else %}
-                                                                <img src="../../static/uploads/{{ e.supportfile.imagefile }}" class="imagefile">                                                     
+                                                                <img src="{{ e.supportfile.imagefile.url }}" class="imagefile">
                                                                 {% endif %}
                                                             </a> 
                                                               {{ e.supportfile.annoncement|cleanhtml|capfirst }} 

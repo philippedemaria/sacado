@@ -23,7 +23,7 @@
 			 		{% if remediation.sort %}
 			 			<a href="https://www.youtube.com/watch?v={{ remediation.video }}"  target="_blank"><img src="{%  static 'img/video.png' %}" width="15px" /> {{ remediation.title }} </a>
 	 		 		{% else %}
-			 			<a href="../../../static/uploads/{{ remediation.mediation }}"  target="_blank"><img src="{%  static 'img/pdf.png' %}" width="15px" /> {{ remediation.title }} </a>			 			
+			 			<a href="{{ remediation.mediation.url }}"  target="_blank"><img src="{%  static 'img/pdf.png' %}" width="15px" /> {{ remediation.title }} </a>
 			 		{% endif  %}
 			 		<a href="{%  url 'json_delete_remediation' remediation.id %}"  onclick="return TestDelete('cette ressource ')"  class="pull-right"><i class="fa fa-trash"></i></a>
 			 </div>

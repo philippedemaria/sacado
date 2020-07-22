@@ -2,11 +2,9 @@
 Durée estimée : {{ remediation.duration  }} minutes
 </p>
 {% if remediation.sort %}
-
-	<iframe width="100%" height="800px"  src="https://www.youtube.com/embed/{{ remediation.video }}?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="100%" height="800px"  src="https://www.youtube.com/embed/{{ remediation.video }}?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 {% else %}
- 
-	<iframe src="../../../static/uploads/{{ remediation.mediation  }}" width="100%" height="800px"></iframe>
 
+<iframe src="{{ remediation.mediation.url  }}" width="100%" height="800px"></iframe>
 
 {% endif  %}

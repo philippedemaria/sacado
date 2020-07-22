@@ -59,7 +59,7 @@
                                       <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
                                     {% endif  %}   <br>
                                             <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" >  
-                                            <img src="../../../static/uploads/{{ relationship.exercise.supportfile.imagefile }}" class="imagefile"></a>
+                                            <img src="{{ relationship.exercise.supportfile.imagefile.url }}" class="imagefile"></a>
                                                                         
                                     {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }} <br>
                                     <span style="font-size:16px;">    

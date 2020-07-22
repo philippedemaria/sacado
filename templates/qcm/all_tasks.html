@@ -46,7 +46,7 @@
                                 <a href="{% url 'show_this_exercise' r.exercise.id %}" target="_blank">
 
                                 
-                                    <img src="../../static/uploads/{{ r.exercise.supportfile.imagefile }}" class="imagefile">
+                                    <img src="{{ r.exercise.supportfile.imagefile.url }}" class="imagefile">
 
 
                                     {{ r.exercise.supportfile.annoncement|cleanhtml|capfirst  }} 

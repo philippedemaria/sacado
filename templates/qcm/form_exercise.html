@@ -63,7 +63,7 @@
                 <i class="fa fa-save"></i> {{ supportfile.situation}} situation{{ supportfile.situation|pluralize}}</small>
             </a>  <br>                                     
             <a href="{% url 'show_this_supportfile' supportfile.id   %}"   >  
-                <img src="../../../static/uploads/{{ supportfile.imagefile }}" height="400px">
+                <img src="{{ supportfile.imagefile.url }}" height="400px">
             </a>
  
             <div class="form-group">
