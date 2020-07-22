@@ -64,7 +64,7 @@
               "errorDialogsActive":false,
               "useBrowserForJS":false,
                   "langage":"en",
-          "filename":"{% static 'uploads/' %}{{ exercise.supportfile.ggbfile }}"
+          "filename":"{{ exercise.supportfile.ggbfile.url }}"
         };
 
         var applet = new GGBApplet('5.0', parameters,true);

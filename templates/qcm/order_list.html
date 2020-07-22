@@ -21,7 +21,7 @@
                             <table>
                             <tr>
                                 <td style="width:20px"><img src="{% static 'img/order_handler.png' %}"/><br><br>{{forloop.counter }}.</td>
-                                <td style="width:210px"><img src="{% static 'uploads/' %}{{ relation.exercise.supportfile.imagefile }}"  width="200px" ></td>
+                                <td style="width:210px"><img src="{{ relation.exercise.supportfile.imagefile.url }}"  width="200px" ></td>
 
                                 <td>  {% if relation.exercise.supportfile.annoncement %} {{ relation.exercise.supportfile.annoncement|cleanhtml }}{% else %} {{ relation.exercise.supportfile.knowledge.name }}{% endif %}<input type="hidden" value="{{ relation.exercise.id }}" class="sorted_exercise_id"/></td>
 

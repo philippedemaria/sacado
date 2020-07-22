@@ -92,7 +92,7 @@
                                             </div>
                                              
                                             <a href="{% url 'show_this_exercise' relationship.exercise.id   %}"  target="_blank" >  
-                                            <img src="{% static 'uploads/' %}{{ relationship.exercise.supportfile.imagefile }}" class="imagefile"></a>
+                                            <img src="{{ relationship.exercise.supportfile.imagefile.url }}" class="imagefile"></a>
                                                                                 
                                              {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}          
                                         

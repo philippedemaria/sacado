@@ -98,7 +98,7 @@
 
                         <a href="https://sacado.xyz/qcm/show_this_exercise/{{ relationship.exercise.id }}/" target="_blank" > 
 
-                            <img src="{% static 'uploads/' %}{{  relationship.exercise.supportfile.imagefile }}" width="180px" height="100px"  style="float:left;margin-right: 5px">
+                            <img src="{{ relationship.exercise.supportfile.imagefile.url }}" width="180px" height="100px"  style="float:left;margin-right: 5px">
 
                                 {% if relationship.exercise.supportfile.annoncement %}
                                     {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}
