@@ -245,7 +245,7 @@ FILE_UPLOAD_PERMISSIONS = 0o775
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-print(BASE_DIR, MEDIA_ROOT)
+
 
 ########################################################################################################################
 
