@@ -106,7 +106,8 @@ MIDDLEWARE = [
 
 
 if PRODUCTION:
-    INSTALLED_APPS = ['whitenoise.runserver_nostatic', ] + INSTALLED_APPS
+    pass
+    #INSTALLED_APPS = ['whitenoise.runserver_nostatic', ] + INSTALLED_APPS
 else:
     INSTALLED_APPS += ['debug_toolbar', ]
     MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware', ]
