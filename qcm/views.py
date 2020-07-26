@@ -1918,17 +1918,17 @@ def store_the_score_relation_ajax(request):
     return JsonResponse(data)
 
 
-
 def ajax_theme_exercice(request):
     level_id = request.POST.get('level_id', None)
-    data = {}
-    level = Level.objects.get(id=level_id)
-    themes = level.themes.all()
-    data = {'themes': serializers.serialize('json', themes)}
+
+    if level_id.isdigit():
+        level = Level.objects.get(id=level_id)
+        themes = level.themes.all()
+        data = {'themes': serializers.serialize('json', themes)}
+    else:
+        data = {}
 
     return JsonResponse(data)
-
-
 
 
 def ajax_level_exercise(request):
