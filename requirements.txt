@@ -15,6 +15,7 @@ django-js-asset==1.2.2
 django-multiselectfield==0.1.12
 django-role-permissions==2.2.1
 django-slack==5.14.3
+django-storages==1.9.1
 django-widget-tweaks==1.4.8
 et-xmlfile==1.0.1
 idna==2.9
