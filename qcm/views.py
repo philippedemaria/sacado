@@ -196,28 +196,21 @@ def associate_parcours(request,id):
 #################   parcours
 #######################################################################################################################################################################
 #######################################################################################################################################################################
-@csrf_exempt 
+
+
+@csrf_exempt
 def ajax_chargethemes(request):
-
-    ids_level =  request.POST.get("id_level") 
- 
+    id_level = request.POST.get("id_level")
     data = {}
-    level =  Level.objects.get(pk = ids_level)
-    print(level)
+    if id_level.isdigit():
+        level = Level.objects.get(pk=id_level)
+        themes = level.themes.values_list('id', 'name')
+        data['themes'] = list(themes)
 
-    thms = level.themes.values_list('id', 'name')
-    print(thms)
-    data['themes'] = list(thms)
- 
     return JsonResponse(data)
 
- 
 
-
-
-
-
-@csrf_exempt # PublieDépublie un exercice depuis organize_parcours
+@csrf_exempt  # PublieDépublie un exercice depuis organize_parcours
 def ajax_populate(request):  
 
     exercise_id = int(request.POST.get("exercise_id"))
