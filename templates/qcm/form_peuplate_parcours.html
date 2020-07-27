@@ -63,7 +63,20 @@
             {% if parcours %}<input type="hidden" id="is_parcours" value="1" name="is_parcours" /><input type="hidden" id="id_parcours" value="{{ parcours.id }}" name="id_parcours" />{% endif %}
         {% csrf_token %}
             <div class="row">
-                <div class="col-sm-12 col-md-2 col-lg-4">
+                <div class="col-sm-12 col-md-4 col-lg-3">
+                    <div class="form-group">
+                        <label>Enseignements</label>
+                        <select id="id_subject" name="subject" class="form-control select2">
+                            {% for s in teacher.subjects.all %}
+                                <option value="{{s.id}}">{{ s.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+
+
+                <div class="col-sm-12 col-md-4 col-lg-3">
                     <div class="form-group">
                         <label>Niveaux des exercices</label>
                         <select id="id_level" name="level" class="form-control select2" >
@@ -74,7 +87,11 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-4 col-lg-8">
+
+
+
+
+                <div class="col-sm-12 col-md-4 col-lg-6">
                     <div class="form-group">
                         <label>Thèmes</label>
                         <select id="id_theme" name="theme" class="form-control select2" multiple>

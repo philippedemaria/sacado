@@ -103,35 +103,40 @@ class RemediationForm(forms.ModelForm):
 
 class SupportfileForm(forms.ModelForm):
 
-	skills  = forms.ModelMultipleChoiceField(queryset= Skill.objects.all(), widget=forms.CheckboxSelectMultiple, required=False)   
 	class Meta:
 		model = Supportfile 
 		fields = '__all__'
 
 
-
 	def __init__(self, *args, **kwargs):
+		teacher  = kwargs.pop('teacher')		
 		super(SupportfileForm, self).__init__(*args, **kwargs)
-		knowledges = Knowledge.objects.filter(id  = 0)
-		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
 
+		subjects = teacher.subjects.all()
+		knowledges = Knowledge.objects.filter(theme__subject__in= subjects)
+		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
+		skills  = forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject__in= subjects), widget=forms.CheckboxSelectMultiple, required=False)
 
 
 
 class SupportfileKForm(forms.ModelForm):
 
-	skills  = forms.ModelMultipleChoiceField(queryset= Skill.objects.all(), widget=forms.CheckboxSelectMultiple, required=False)    
+ 
+
 	class Meta:
 		model = Supportfile 
 		fields = '__all__'
 		exclude = ('knowledge',)
  
-
+	def __init__(self, *args, **kwargs):
+		knowledge = kwargs.pop('knowledge')
+		super(SupportfileKForm, self).__init__(*args, **kwargs)
+		subject = knowledge.theme.subject 
+		knowledges = Knowledge.objects.filter(theme__subject= subject)
+		skills  = forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject= subject), widget=forms.CheckboxSelectMultiple, required=False)
 
 
 class UpdateSupportfileForm(forms.ModelForm):
-	skills  = forms.ModelMultipleChoiceField(queryset= Skill.objects.all(), widget=forms.CheckboxSelectMultiple, required=False)  
-
 
 	class Meta:
 		model = Supportfile 
@@ -139,9 +144,14 @@ class UpdateSupportfileForm(forms.ModelForm):
 
 
 	def __init__(self, *args, **kwargs):
+		knowledge = kwargs.pop('knowledge')
+		subject = knowledge.theme.subject	
 		super(UpdateSupportfileForm, self).__init__(*args, **kwargs)
 		instance  = kwargs.pop('instance')
-		knowledges = Knowledge.objects.filter(id  = 0)
+		knowledges = Knowledge.objects.filter(theme__subject= subject)
+		skills  = forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject= subject), widget=forms.CheckboxSelectMultiple, required=False)
+
+
 
      
  

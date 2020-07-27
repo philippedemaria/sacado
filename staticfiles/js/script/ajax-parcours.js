@@ -26,9 +26,11 @@ define(['jquery','bootstrap'], function ($) {
         // Affiche dans la modal la liste des élèves du groupe sélectionné
         $('#id_level').on('change', function (event) {
             let id_level = $(this).val();
+            let id_subject = $("#id_subject").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
             console.log(id_level) ; 
- 
+            console.log(id_subject) ;
+
             $.ajax(
                 {
                     type: "POST",
@@ -36,6 +38,7 @@ define(['jquery','bootstrap'], function ($) {
                     traditional: true,
                     data: {
                         'id_level': id_level,
+                        'id_subject': id_subject,                        
                         csrfmiddlewaretoken: csrf_token
                     },
                     url : "../../ajax/chargethemes",

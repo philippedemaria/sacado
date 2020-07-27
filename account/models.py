@@ -6,7 +6,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.mail import send_mail
 from django.db import models
 
-from socle.models import Level, Knowledge, Skill
+from socle.models import Level, Knowledge, Skill, Subject
 from school.models import School
 
 # Pour créer un superuser, il faut depuis le shell taper :
@@ -252,6 +252,8 @@ class Teacher(models.Model):
     levels = models.ManyToManyField(Level, related_name="levels_to_group", blank=True, verbose_name="Niveaux préférés")
     notification = models.BooleanField(default=1, verbose_name="Notification ?")
     exercise_post = models.BooleanField(default=1, verbose_name="Notification de création d'exercice ?")
+    subjects  = models.ManyToManyField(Subject, related_name="teacher", verbose_name="Enseignements" )
+
 
     def __str__(self):
         return f"{self.user.last_name.capitalize()} {self.user.first_name.capitalize()}"
