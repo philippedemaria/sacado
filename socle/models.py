@@ -9,9 +9,22 @@ from django.core.exceptions import ObjectDoesNotExist
 
 today = timezone.now().date()
 
+
+
+class Subject(models.Model):
+    name = models.CharField(max_length=255, verbose_name="Nom")
+    color = models.CharField(max_length=255, default ="" , editable=False)
+    shortname = models.CharField(max_length=10, default ="" , verbose_name="Abréviation")
+ 
+    def __str__(self):
+        return "{}".format(self.name)
+
+
+
 class Theme(models.Model):
     name = models.CharField(max_length=255, verbose_name="Nom")
     slug = models.CharField(max_length=255, default ="" , editable=False)
+    subject  = models.ForeignKey(Subject, related_name="theme", default="",  null = True , on_delete=models.PROTECT, verbose_name="Enseignement")
 
     def __str__(self):
         return "{}".format(self.name)
@@ -179,6 +192,7 @@ class Knowledge(models.Model):
 
 class Skill(models.Model): 
     name = models.CharField(max_length=50 , verbose_name="Nom")
+    subject  = models.ForeignKey(Subject, related_name="skill", default="", on_delete=models.PROTECT, null = True ,  verbose_name="Enseignement")
 
     def __str__(self):
         return "{}".format(self.name )

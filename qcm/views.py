@@ -197,16 +197,15 @@ def associate_parcours(request,id):
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 
+    ids_level =  request.POST.get("id_level") 
+    id_subject =  request.POST.get("id_subject")
 
-@csrf_exempt
-def ajax_chargethemes(request):
-    id_level = request.POST.get("id_level")
     data = {}
-    if id_level.isdigit():
-        level = Level.objects.get(pk=id_level)
-        themes = level.themes.values_list('id', 'name')
-        data['themes'] = list(themes)
+    level =  Level.objects.get(pk = ids_level)
 
+    thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject)
+    data['themes'] = list(thms)
+ 
     return JsonResponse(data)
 
 
@@ -1513,7 +1512,7 @@ def admin_list_supportfiles(request,id):
         levels_dict = {}
         levels_dict["name"] = level
 
-        themes = level.themes.all().order_by("id")
+        themes = level.themes.filter(subject__in=teacher.subjects.all()).order_by("id")
         themes_tab = []
         for theme in themes:
             themes_dict = {}
@@ -1580,7 +1579,7 @@ def create_supportfile(request):
 
     code = str(uuid.uuid4())[:8]
     teacher = Teacher.objects.get(user_id = request.user.id)
-    form = SupportfileForm(request.POST or None,request.FILES or None)
+    form = SupportfileForm(request.POST or None,request.FILES or None,teacher = teaher)
     if request.user.is_superuser :
         if form.is_valid():
             nf =  form.save(commit = False)
@@ -1606,7 +1605,7 @@ def create_supportfile_knowledge(request,id):
     code = str(uuid.uuid4())[:8]
     knowledge = Knowledge.objects.get(id = id)
     teacher = Teacher.objects.get(user_id = request.user.id)
-    form = SupportfileKForm(request.POST or None,request.FILES or None)
+    form = SupportfileKForm(request.POST or None,request.FILES or None, knowledge = knowledge )
     levels = Level.objects.all()
     supportfiles = Supportfile.objects.filter(is_title=0).order_by("level")
     knowledges = Knowledge.objects.all().order_by("level")
@@ -1638,7 +1637,7 @@ def update_supportfile(request, id, redirection=0):
     teacher = Teacher.objects.get(user_id = request.user.id)
     if request.user.is_superuser:
         supportfile = Supportfile.objects.get(id=id)
-        supportfile_form = UpdateSupportfileForm(request.POST or None, request.FILES or None, instance=supportfile)
+        supportfile_form = UpdateSupportfileForm(request.POST or None, request.FILES or None, instance=supportfile, knowledge = knowledge)
         levels = Level.objects.all()
         supportfiles = Supportfile.objects.filter(is_title=0).order_by("level")
         knowledges = Knowledge.objects.all().order_by("level")
@@ -2197,9 +2196,9 @@ def update_evaluation(request, id, idg=0 ):
 @login_required
 def delete_evaluation(request,id):
 
+    relationship = Relationship.objects.get(pk=id)
     teacher = Teacher.objects.get(user=request.user)
     if relationship.parcours.teacher == teacher :
-        relationship = Relationship.objects.get(pk=id)
         Relationship.objects.filter(pk=id).update(is_evaluation=0)
         Relationship.objects.filter(pk=id).update(situation=0)
         Relationship.objects.filter(pk=id).update(beginner=None)
