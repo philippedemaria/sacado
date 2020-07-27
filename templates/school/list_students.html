@@ -84,7 +84,7 @@
                                     {{ user.email }}   
                                 </td>
                                 <td>  
-                                    {% for g in user.user_student.students_to_group.all %} 
+                                    {% for g in user.student.students_to_group.all %}
                                         {{ g }} <small>({{ g.teacher.user.last_name }} {{ g.teacher.user.first_name }})</small>{% if not forloop.last%}<br> {% endif %}
                                     {% endfor %} 
                                </td>

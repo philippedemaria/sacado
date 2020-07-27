@@ -32,42 +32,47 @@ def unescape_html(string):
 
 @login_required
 def list_emails(request):
-	user = request.user
-	users = []
+    user = request.user
+    users = []
 
-	if user.is_teacher:
-		teacher = user.teacher
-		groups = Group.objects.filter(teacher=teacher)
+    if user.is_teacher:
+        teacher = user.teacher
 
-		for group in groups:
-			for student in group.students.filter():
-				users.append(student.user)
+        for group in teacher.groups.all():
+            for student in group.students.filter():
+                users.append(student.user)
 
-		studentanswers = Studentanswer.objects.filter(student__user__in =  users).order_by("-date")[:50]
-		tasks = Relationship.objects.filter(parcours__teacher = teacher,  exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")[:50] 
+        studentanswers = Studentanswer.objects.filter(student__user__in =  users).order_by("-date")[:50]
+        tasks = Relationship.objects.filter(parcours__teacher = teacher,  exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")[:50] 
 
-		#import pdb;pdb.set_trace()
-		sent_emails = Email.objects.distinct().filter(author=user).order_by("-today")
-		emails = Email.objects.distinct().filter(receivers=user).order_by("-today")
-		form = EmailForm(request.POST or None, request.FILES or None)
+        #import pdb;pdb.set_trace()
+        sent_emails = Email.objects.distinct().filter(author=user).order_by("-today")
+        emails = Email.objects.distinct().filter(receivers=user).order_by("-today")
+        form = EmailForm(request.POST or None, request.FILES or None)
 
-		return render(request,'sendmail/list.html', {'emails':emails , 'sent_emails':sent_emails ,  'form':form ,  'users':users  ,'groups':groups  , 'studentanswers':studentanswers,'tasks':tasks } )
+        return render(request,
+                      'sendmail/list.html',
+                      {'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups,
+                       'studentanswers': studentanswers, 'tasks': tasks})
 
-	elif user.is_student:
-		student = Student.objects.get(user=user)
-		groups = student.students_to_group.all()
-		for group in groups:
-			users.append(group.teacher.user)
-		sent_emails = Email.objects.distinct().filter(author=user).order_by("-today")
-		emails = Email.objects.distinct().filter(receivers=user).order_by("-today")
-		form = EmailForm(request.POST or None, request.FILES or None)
+    elif user.is_student:
+        student = Student.objects.get(user=user)
+        groups = student.students_to_group.all()
+        for group in groups:
+            users.append(group.teacher.user)
+
+        sent_emails = Email.objects.distinct().filter(author=user).order_by("-today")
+        emails = Email.objects.distinct().filter(receivers=user).order_by("-today")
+        form = EmailForm(request.POST or None, request.FILES or None)
+
+        return render(request,
+                      'sendmail/list.html',
+                      {'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups,
+                       'studentanswers': [], 'tasks': []})
+    else:
+        raise PermissionDenied
 
 
-		return render(request,'sendmail/list.html', {'emails':emails , 'sent_emails':sent_emails ,  'form':form ,  'users':users  ,'groups':groups, 'studentanswers':[],'tasks':[]  } )
-	else:
-		raise PermissionDenied
-
- 
 @login_required
 def create_email(request):
 	form = EmailForm(request.POST or None,request.FILES or None)

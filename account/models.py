@@ -98,24 +98,19 @@ class Student(ModelWithCode):
     """
     Modèle représentant un élève.
     """
-    user = models.OneToOneField(User, blank=True,  related_name="user_student",  on_delete=models.CASCADE, primary_key=True)
-    level = models.ForeignKey(Level, blank=True, related_name = "level_student", default='' , on_delete=models.PROTECT,    verbose_name="Niveau") 
-    task_post = models.BooleanField( default=1 ,    verbose_name="Notification de tache ?") 
-
+    user = models.OneToOneField(User, blank=True, related_name="student", on_delete=models.CASCADE, primary_key=True)
+    level = models.ForeignKey(Level, blank=True, related_name="level_student", default='', on_delete=models.PROTECT, verbose_name="Niveau")
+    task_post = models.BooleanField(default=True, verbose_name="Notification de tache ?")
 
     def __str__(self):
-        lname  = self.user.last_name.capitalize() 
-        fname  = self.user.first_name.capitalize() 
+        lname = self.user.last_name.capitalize()
+        fname = self.user.first_name.capitalize()
 
         return "{} {}".format(lname, fname)
 
- 
     def nb_parcours(self):
-
-        nb =  self.students_to_parcours.all().count()
+        nb = self.students_to_parcours.all().count()
         return nb
- 
-
 
     def resultexercises(self):
         ''' résultats de l'étudiant aux exercices '''
@@ -242,7 +237,6 @@ class Student(ModelWithCode):
         return test
 
 
-
 class Teacher(models.Model):
     """
     Modèle représentant un enseignant.
@@ -279,11 +273,6 @@ class Teacher(models.Model):
                   admins_emails)
 
 
-
-
-
-
-
 class Resultknowledge(models.Model):
     student = models.ForeignKey(Student, related_name="results_k", default="", on_delete=models.CASCADE, editable=False)
     knowledge = models.ForeignKey(Knowledge, related_name="results_k", on_delete=models.CASCADE, editable=False)
@@ -296,7 +285,6 @@ class Resultknowledge(models.Model):
         unique_together = ['student', 'knowledge']
 
 
-
 class Resultskill(models.Model): # Pour récupérer tous les scores des compétences
     student = models.ForeignKey(Student, related_name="results_s", default="", on_delete=models.CASCADE, editable=False)
     skill = models.ForeignKey(Skill, related_name="results_s", on_delete=models.CASCADE, editable=False)
@@ -304,8 +292,6 @@ class Resultskill(models.Model): # Pour récupérer tous les scores des compéte
 
     def __str__(self):
         return f"{self.skill} : {self.point}"
-
-
 
 
 class Resultlastskill(models.Model): # Pour récupérer la moyenne des 10 derniers score des compétences
@@ -316,29 +302,24 @@ class Resultlastskill(models.Model): # Pour récupérer la moyenne des 10 dernie
     def __str__(self):
         return "{} : {}".format(self.skill, self.point)  
 
-
     class Meta:
         unique_together = ['student', 'skill']
  
-
-
 
 class Parent(models.Model):
     """
     Modèle représentant un parent.
     """
-    user = models.OneToOneField(User, blank=True,  related_name="user_parent", on_delete=models.CASCADE, primary_key=True)
-    students = models.ManyToManyField(Student, related_name="students_parent", editable = False)
-    task_post = models.BooleanField( default=1 ,    verbose_name="Notification de tache ?") 
+    user = models.OneToOneField(User, blank=True, related_name="parent", on_delete=models.CASCADE, primary_key=True)
+    students = models.ManyToManyField(Student, related_name="students_parent", editable=False)
+    task_post = models.BooleanField(default=1, verbose_name="Notification de tache ?")
 
     def __str__(self):
-        lname  = self.user.last_name.capitalize() 
-        fname  = self.user.first_name.capitalize()
+        lname = self.user.last_name.capitalize()
+        fname = self.user.first_name.capitalize()
 
         child = ""
         for s in self.students.all():
-            child += s.user.last_name+" "+s.user.first_name+ "-" 
+            child += s.user.last_name + " " + s.user.first_name + "-"
 
         return "{} {} - {}".format(lname, fname, child)
-
- 
