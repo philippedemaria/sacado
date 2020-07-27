@@ -1,16 +1,17 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
-from account.models import User, Teacher,Student
+from account.models import User, Teacher, Student
 from qcm.models import Studentanswer, Relationship
 from group.models import Group
-from sendmail.models import Email, Communication 
-from sendmail.forms import EmailForm , CommunicationForm 
-from django.http import JsonResponse 
+from sendmail.models import Email, Communication
+from sendmail.forms import EmailForm, CommunicationForm
+from django.http import JsonResponse
 from django.core import serializers
+from django.core.exceptions import PermissionDenied
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required 
+from django.contrib.auth.decorators import login_required
 from sendmail.decorators import user_is_email_teacher
 from django.views.decorators.csrf import csrf_exempt
 import re
@@ -26,45 +27,45 @@ def cleanhtml(raw_html): #nettoie le code des balises HTML
 def unescape_html(string):
         '''HTML entity decode'''
         string = html.unescape(string)
-        return string 
+        return string
 
 
 @login_required
 def list_emails(request):
-
-	user = User.objects.get(pk = request.user.id)
+	user = request.user
 	users = []
 
-	if user.user_type > 1 :
-		teacher = Teacher.objects.get(user = user)
+	if user.is_teacher:
+		teacher = user.teacher
 		groups = Group.objects.filter(teacher=teacher)
 
 		for group in groups:
-			for s in group.students.filter() : 
-				users.append(s.user)
+			for student in group.students.filter():
+				users.append(student.user)
 
 		studentanswers = Studentanswer.objects.filter(student__user__in =  users).order_by("-date")[:50]
 		tasks = Relationship.objects.filter(parcours__teacher = teacher,  exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")[:50] 
 
-
-		sent_emails = Email.objects.distinct().filter(author = user).order_by("-today")
-		emails = Email.objects.distinct().filter(receivers =  user).order_by("-today")
-		form = EmailForm(request.POST or None,request.FILES or None)
+		#import pdb;pdb.set_trace()
+		sent_emails = Email.objects.distinct().filter(author=user).order_by("-today")
+		emails = Email.objects.distinct().filter(receivers=user).order_by("-today")
+		form = EmailForm(request.POST or None, request.FILES or None)
 
 		return render(request,'sendmail/list.html', {'emails':emails , 'sent_emails':sent_emails ,  'form':form ,  'users':users  ,'groups':groups  , 'studentanswers':studentanswers,'tasks':tasks } )
 
-	else :
-		student = Student.objects.get(user = user)
-		groups = student.students_to_group.all() 
+	elif user.is_student:
+		student = Student.objects.get(user=user)
+		groups = student.students_to_group.all()
 		for group in groups:
 			users.append(group.teacher.user)
-		sent_emails = Email.objects.distinct().filter(author = user).order_by("-today")
-		emails = Email.objects.distinct().filter(receivers =  user).order_by("-today")
-		form = EmailForm(request.POST or None,request.FILES or None)
+		sent_emails = Email.objects.distinct().filter(author=user).order_by("-today")
+		emails = Email.objects.distinct().filter(receivers=user).order_by("-today")
+		form = EmailForm(request.POST or None, request.FILES or None)
 
 
 		return render(request,'sendmail/list.html', {'emails':emails , 'sent_emails':sent_emails ,  'form':form ,  'users':users  ,'groups':groups, 'studentanswers':[],'tasks':[]  } )
-
+	else:
+		raise PermissionDenied
 
  
 @login_required

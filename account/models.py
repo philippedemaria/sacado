@@ -247,7 +247,7 @@ class Teacher(models.Model):
     """
     Modèle représentant un enseignant.
     """
-    user = models.OneToOneField(User, blank=True, related_name="user_teacher", on_delete=models.CASCADE,
+    user = models.OneToOneField(User, blank=True, related_name="teacher", on_delete=models.CASCADE,
                                 primary_key=True)
     levels = models.ManyToManyField(Level, related_name="levels_to_group", blank=True, verbose_name="Niveaux préférés")
     notification = models.BooleanField(default=1, verbose_name="Notification ?")

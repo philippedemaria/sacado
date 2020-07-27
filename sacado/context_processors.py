@@ -18,7 +18,7 @@ def menu(request):
             today = timezone.now()
  
         if request.user.is_teacher:
-            teacher = request.user.user_teacher
+            teacher = request.user.teacher
             nbs = Studentanswer.objects.filter(parcours__teacher=teacher, date=today).count()
             nbe = Email.objects.distinct().filter(receivers=request.user, today=today).count()
             nb_not = nbs + nbe
