@@ -108,12 +108,13 @@ def include_students(liste, group):
                           f"Bonjour {fname},\n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : {username}\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci.",
                           "saca_do_not_reply@sacado.fr", [email])
 
-            except:
+            except IndexError:
                 email = ""
 
             user, created = User.objects.get_or_create(username=username,
                                                        defaults={"last_name": lname, "first_name": fname,
-                                                                 "password": password, "email": email, "user_type": 0})
+                                                                 "password": password, "email": email,
+                                                                 "user_type": User.STUDENT})
 
             if created:
                 student = Student.objects.create(user=user, level=group.level)

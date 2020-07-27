@@ -31,7 +31,6 @@
 
 
 {% block body %}
- 
     <section class="content_main">
         <form action="" method="POST">
             {% csrf_token %}
@@ -86,6 +85,22 @@
             </div>
             <div class="row">
                 <div class="col-sm-12 col-md-6">
+                    <div class="{% if teacher.subjects.all.count == 0 %} alert alert-danger{% else %}form-group{% endif %}">
+                        <label>{{ teacher_form.subjects.label_tag }} {% if teacher.subjects.count == 0 %} <i class="fa fa-warning"></i> Renseigner{% endif %} </label>
+                        {{ teacher_form.subjects  |add_class:"form-control select2" }}
+                        {{ teacher_form.subjects.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                        <div class="alert alert-info">
+                             <small>Choisir votre ou vos enseignement pour sélectionner les exercices correspondants.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>              
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
                     <div class="{% if teacher.levels.all.count == 0 %} alert alert-danger{% else %}form-group{% endif %}">
                         <label>{{ teacher_form.levels.label_tag }} {% if teacher.levels.count == 0 %} <i class="fa fa-warning"></i> Renseigner{% endif %} </label>
                         {{ teacher_form.levels  |add_class:"form-control select2" }}
@@ -99,9 +114,7 @@
                         </div>
                     </div>
                 </div>
-
             </div> 
- 
             <div class="row">
                 <div class="col-sm-12 col-md-6">
                     <div class="form-group">
@@ -129,7 +142,6 @@
                 <div class="col-sm-12 col-md-6">                 
                     <div class="alert alert-danger"> 
                         <h4 cLass="thin">Partie admin</h4>
-
                         <div class="form-group">
                             <label>Administrateur établissement ?</label>
                             {{ user_form.is_manager |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"  }}
@@ -142,32 +154,21 @@
                         </div>
                     </div>
                 </div>
-                {% endif  %}
-
-
-
-
-
-
- 
+                {% endif  %} 
             </div>
- 
-
             <div class="row" style="margin-top:40px">
-                    <div class="col-sm-12 col-md-8">
-                        <div class="form-group">
-                            <input value="Enregistrer" type="submit" class="btn btn-primary"/>
-                            <a href="javascript:history.back()">
-                                <input type="button" value="Annuler"
-                                       class="btn btn-default "/>
-                            </a>
-                        </div>   
-                    </div>
+                <div class="col-sm-12 col-md-8">
+                    <div class="form-group">
+                        <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+                        <a href="javascript:history.back()">
+                            <input type="button" value="Annuler"
+                                   class="btn btn-default "/>
+                        </a>
+                    </div>   
+                </div>
             </div>
-
         </form>
     </section>
- 
 {% endblock %}
 
  
