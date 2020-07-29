@@ -1,15 +1,15 @@
-from django.shortcuts import render, redirect
-from account.models import  Student, Teacher, User , Resultknowledge, Resultlastskill
-from account.forms import  UserForm 
-from group.models import  Group
-from socle.models import  Knowledge , Theme, Level, Skill
-from qcm.models import  Exercise, Parcours, Relationship, Studentanswer, Resultexercise
-from group.forms import  GroupForm 
-from sendmail.models import  Email
-from sendmail.forms import  EmailForm
-from school.models import  Stage
+from django.shortcuts import render, redirect, get_object_or_404
+from account.models import Student, Teacher, User, Resultknowledge, Resultlastskill
+from account.forms import UserForm
+from group.models import Group
+from socle.models import Knowledge, Theme, Level, Skill
+from qcm.models import Exercise, Parcours, Relationship, Studentanswer, Resultexercise
+from group.forms import GroupForm
+from sendmail.models import Email
+from sendmail.forms import EmailForm
+from school.models import Stage
 from django.contrib.auth import login, authenticate
-from django.http import JsonResponse  
+from django.http import JsonResponse
 from django.core import serializers
 from django.template.loader import render_to_string
 from django.contrib import messages
@@ -17,10 +17,11 @@ from django.core.mail import send_mail
 import uuid
 from django.contrib.auth.hashers import make_password
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required 
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
-from group.decorators import  user_is_group_teacher
-from account.decorators import user_can_create 
+from group.decorators import user_is_group_teacher
+from account.decorators import user_can_create
+
 ############### bibliothèques pour les impressions pdf  #########################
 import os
 from django.utils import formats, timezone
@@ -628,49 +629,43 @@ def sending_message_student(request):
     return JsonResponse(data)
 
 
-
-def enroll(request,slug): # Inscription des élèves via le lien donné par l'enseignant
-    
+def enroll(request, slug):
+    '''
+    Création d'un compte élève et inscription à un groupe via le lien donné par l'enseignant
+    '''
+    group = get_object_or_404(Group, code=slug)
     if request.method == 'POST':
-        user_form = UserForm(request.POST)            
-        if Group.objects.filter(code = slug).exists() :
-            group = Group.objects.get(code = slug)
-            if user_form.is_valid():
-                username  = user_form.cleaned_data['last_name']+user_form.cleaned_data['first_name']
-                user = user_form.save(commit=False)
-                user.username  = username
-                user.user_type = 0
-                password  =  request.POST.get("password1")
-                user.set_password(password)
-                user.save()
+        user_form = UserForm(request.POST)
+        if user_form.is_valid():
+            username = user_form.cleaned_data['last_name'] + user_form.cleaned_data['first_name']
+            user = user_form.save(commit=False)
+            user.username = username
+            user.user_type = User.STUDENT
+            password = request.POST.get("password1")
+            user.set_password(password)
+            user.save()
 
-                student = Student.objects.create(user=user,level=group.level)
-                group.students.add(student)
-                parcourses  = Parcours.objects.filter(teacher = group.teacher,level = group.level )
-                for parcours in parcourses :
-                    parcours.students.add(student)
-                    relationships = parcours.parcours_relationship.all()
-                    for r in relationships :
-                        r.students.add(student)
+            student = Student.objects.create(user=user, level=group.level)
+            group.students.add(student)
+            parcourses = Parcours.objects.filter(teacher=group.teacher, level=group.level)
+            for parcours in parcourses:
+                parcours.students.add(student)
+                relationships = parcours.parcours_relationship.all()
+                for r in relationships:
+                    r.students.add(student)
 
-
-                user = authenticate(username=username, password = password)
-                login(request, user)
-                messages.success(request, "Inscription réalisée avec succès !")               
-                if user_form.cleaned_data['email'] :
-                    send_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers http://sacado.erlm.tn.\n Ceci est un mail automatique. Ne pas répondre.', 'info@sacado.xyz', [request.POST.get("email")])
-        else :
-            messages.error(request, "Erreur lors de l'enregistrement. Reprendre l'inscription...")
-        return redirect('index')
-    else :
-        try :
-            group = Group.objects.get(code = slug)
-        except :
-            group = None
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            messages.success(request, "Inscription réalisée avec succès !")
+            if user_form.cleaned_data['email']:
+                send_mail('Création de compte sur Sacado',
+                          'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers http://sacado.erlm.tn.\n Ceci est un mail automatique. Ne pas répondre.',
+                          'info@sacado.xyz',
+                          [request.POST.get("email")])
+    else:
         user_form = UserForm(request.POST or None)
-        context =  { "u_form":user_form, "slug":slug, "group":group,}
 
-        return render(request, 'group/enroll.html', context )
+    return render(request, 'group/enroll.html', {"u_form": user_form, "slug": slug, "group": group, })
 
 
 
