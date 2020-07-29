@@ -287,6 +287,38 @@ table.table-bordered.dataTable {
 
 }
 
+@media (max-width:500px){
+
+  .btn-index{
+    border-radius: 4px;
+    border : solid 1px #FFB400;
+    color:#2a4c5e;
+    background: #FFB400;
+    border-radius: 50%;
+    width : 140px;
+    height: 140px;
+    position: absolute;
+    top :75px;
+    left:  90%;
+    padding-top: 30px;
+    cursor: pointer;
+    z-index: 1000;
+  }
+
+  .btn-index:hover{ 
+    color:#FFF;
+    background: #2a4c5e;
+    border-radius: 4px;
+    border : solid 1px #2a4c5e;   
+    border-radius: 50%;
+  }
+
+
+  .index_size{
+    margin-top: 20px;
+  }
+
+}
 
 
 /* Back to top button */
