@@ -15,7 +15,7 @@ if PRODUCTION:
     # configuration production
     DEBUG = os.environ.get('DEBUG') == 'True'
     SECRET_KEY = os.environ.get('SECRET_KEY')
-    ALLOWED_HOSTS = ['sacado.xyz']
+    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS')
 
     # configuation bdd
     MYSQL_DATABASE = os.environ.get('MYSQL_DATABASE')
@@ -245,7 +245,11 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'staticfiles'),)
 FILE_UPLOAD_PERMISSIONS = 0o775
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+if PRODUCTION:
+    MEDIA_ROOT = os.environ.get('MEDIA_ROOT')
+else:
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 ########################################################################################################################
