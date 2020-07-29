@@ -2,7 +2,7 @@ import pytz
 from django.utils import timezone
 
 from account.models import Teacher, Student, User
-from qcm.models import Parcours, Studentanswer, Exercise
+from qcm.models import Parcours, Studentanswer, Exercise, Demand
 from sendmail.models import Email
 from socle.models import Level
 
@@ -23,7 +23,8 @@ def menu(request):
             nbe = Email.objects.distinct().filter(receivers=request.user, today=today).count()
             nb_not = nbs + nbe
             levels = Level.objects.all()
-            return {'today': today, 'nb_not': nb_not, 'levels': levels, }
+            nb_demand = Demand.objects.filter(done=0).count()
+            return {'today': today, 'nb_not': nb_not, 'levels': levels,  'nb_demand' : nb_demand }
 
         elif request.user.is_student:
             student = Student.objects.get(user=request.user)
