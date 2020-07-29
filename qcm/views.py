@@ -8,8 +8,8 @@ from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group 
 from school.models import Stage
-from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint, Course
-from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, CourseForm 
+from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint, Course, Demand
+from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, CourseForm , DemandForm
 from socle.models import  Theme, Knowledge , Level , Skill
 from django.http import JsonResponse 
 from django.core import serializers
@@ -2720,4 +2720,111 @@ def show_course_student(request, idc , id ):
  
 
 
+#######################################################################################################################################################################
+#######################################################################################################################################################################
+##################    Demand     
+#######################################################################################################################################################################
+#######################################################################################################################################################################
+
+
+@login_required
+def list_demands(request):
+
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    demands = Demand.objects.filter(teacher = teacher).order_by("done")
+
+    return render(request, 'qcm/demand/show_demand.html', {'demands': demands,  })
+
+
+
+@login_required
+def create_demand(request):
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    form = DemandForm(request.POST or None  )
+    if request.method == "POST" :
+        if form.is_valid():
+            nf =  form.save(commit = False)
+            nf.teacher = teacher
+            nf.save()
+            messages.success(request, 'La demande a été envoyée avec succès !')
+            return redirect('dashboard')
+
+        else:
+            print(form.errors)
+
+    context = {'form': form,   'teacher': teacher, 'parcours': None , 'relationships': None , 'course': None , }
+
+    return render(request, 'qcm/demand/form_demand.html', context)
+
+
+
+@login_required
+def update_demand(request, id):
  
+    demand = Demand.objects.get(id=id)
+    demand_form = DemandForm(request.POST or None, instance=demand, )
+
+
+    if request.method == "POST" :
+        if demand_form.is_valid():
+            nf =  form.save(commit = False)
+            nf.teacher = teacher
+            nf.save()
+
+            messages.success(request, 'La demande a été modifiée avec succès !')
+            return redirect('dashboard')
+        else :
+            print(demand_form.errors)
+
+    context = {'form': demand_form,  'demand': demand, 'teacher': teacher , 'parcours': None  , 'relationships': relationships , }
+
+    return render(request, 'qcm/demand/form_demand.html', context )
+
+
+
+@login_required
+def delete_demand(request, id  ):
+    """
+    idc : demand_id et id = parcours_id pour correspondre avec le decorateur
+    """
+    demand = Demand.objects.get(id=idc)
+    demand.delete()
+    return redirect('dashboard')  
+
+
+
+@login_required
+def show_demand(request, id ):
+    """
+    idc : demand_id et id = parcours_id pour correspondre avec le decorateur
+    """
+    demand = Demand.objects.get(pk =  id)
+
+    user = User.objects.get(pk = request.user.id)
+    teacher = Teacher.objects.get(user = user)
+    context = {  'demands': demands, 'teacher': teacher , 'parcours': None , 'group_id' : None, 'communications' : []}
+    return render(request, 'qcm/demand/show_demand.html', context)
+
+ 
+@csrf_exempt
+def ajax_chargeknowledges(request):
+    id_theme =  request.POST.get("id_theme")
+    theme = Theme.objects.get(id=id_theme)
+ 
+    data = {}
+    ks = Knowledge.objects.values_list('id', 'name').filter(theme=theme)
+    data['knowledges'] = list(ks)
+ 
+    return JsonResponse(data)
+
+
+@csrf_exempt
+def ajax_demand_done(request) :
+
+    id =  request.POST.get("id")
+    Demand.objects.filter(id=id).update(done=1)
+ 
+    data = {}
+ 
+ 
+    return JsonResponse(data)    

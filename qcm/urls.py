@@ -49,6 +49,8 @@ urlpatterns = [
     path('exercises', list_exercises, name='exercises'),
     
     path('ajax/chargethemes', ajax_chargethemes, name='ajax_chargethemes'),
+    path('ajax/chargeknowledges', ajax_chargeknowledges, name='ajax_chargeknowledges'),
+
 
     path('admin_supportfiles/<int:id>', admin_list_supportfiles, name='admin_supportfiles'),
     path('admin_associations/<int:id>', admin_list_associations, name='admin_associations'),
@@ -100,6 +102,15 @@ urlpatterns = [
 
 
 
+    ####################################     Les demandes d'exercice  ##########################################
+
+    path('parcours_demands', list_demands, name='demands'),
+    path('parcours_create_demand', create_demand, name='create_demand'),  
+    path('parcours_update_demand/<int:id>', update_demand, name='update_demand'),
+    path('parcours_delete_demand/<int:id>', delete_demand, name='delete_demand'),
+    path('parcours_show_demand/<int:id>', show_demand, name='show_demand'),
+    ############################################################################################################  
+
 
  
     path('advises', advises, name='advises'),   
@@ -111,6 +122,7 @@ urlpatterns = [
     path('ajax_search_exercise', ajax_search_exercise, name='ajax_search_exercise'),
     path('store_the_score_relation_ajax/', store_the_score_relation_ajax, name='store_the_score_relation_ajax'),
     #path('store_the_score_ajax/', store_the_score_ajax, name='store_the_score_ajax'),
+    path('ajax/demand_done', ajax_demand_done, name='ajax_demand_done'),
 
     path('ajax/create_title_parcours', ajax_create_title_parcours, name='ajax_create_title_parcours'),
     path('ajax/erase_title', ajax_erase_title, name='ajax_erase_title'),
