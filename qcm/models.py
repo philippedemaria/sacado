@@ -3,7 +3,7 @@ from django.db import models
 from datetime import date, datetime, timedelta
 from django.utils import timezone
 from account.models import Student, Teacher, ModelWithCode, generate_code
-from socle.models import  Knowledge, Level , Theme, Skill
+from socle.models import  Knowledge, Level , Theme, Skill 
 from django.apps import apps
 from ckeditor_uploader.fields import RichTextUploadingField
 import os.path
@@ -27,6 +27,14 @@ def vignette_directory_path(instance, filename):
 
 def file_directory_path(instance, filename):
     return "files/{}/{}".format(instance.relationship.parcours.teacher.user.id, filename)
+
+
+ 
+def directory_path(instance, filename):
+    return "demandfiles/{}/{}".format(instance.level.id, filename)
+
+
+
 
 def convert_time(duree) :
     d = int(duree)
@@ -663,3 +671,25 @@ class Course(models.Model): # pour les
  
     def __str__(self):
         return self.parcours.title 
+
+
+
+########################################################################################################################################### 
+########################################################################################################################################### 
+########################################################   Demande d'exo    ############################################################### 
+########################################################################################################################################### 
+########################################################################################################################################### 
+
+
+class Demand(models.Model):
+    level = models.ForeignKey(Level, related_name="demand", on_delete=models.PROTECT, verbose_name="Niveau")
+    theme = models.ForeignKey(Theme, related_name="demand", on_delete=models.PROTECT, verbose_name="Thème")
+    knowledge = models.ForeignKey(Knowledge, on_delete=models.PROTECT, related_name='demand', verbose_name="Savoir faire associé - Titre")
+    demand = models.TextField(blank=True, verbose_name="Votre demande explicitée*")
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date de création")
+    file = models.FileField(upload_to= directory_path, verbose_name="Exercice souhaité", default="", null = True, blank= True) 
+    teacher = models.ForeignKey(Teacher, related_name = "demand", on_delete=models.PROTECT, editable=False, default="" )    
+    done = models.BooleanField( default=0,  verbose_name="Fait", null = True, blank= True) 
+
+    def __str__(self):
+        return "{}".format(self.demand)

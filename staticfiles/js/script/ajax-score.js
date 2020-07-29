@@ -20,7 +20,7 @@ define(['jquery', 'bootstrap'], function ($) {
  
 
    // Publier un cours via le menu droit
-        $('#submit_button').on('click', function (event) {
+ /*       $('#submit_button').on('click', function (event) {
           var grade = ggb_applet_container.getValue("grade");
           var numexo = ggb_applet_container.getValue("numexo");
           score = grade/(numexo-1) ;
@@ -49,14 +49,12 @@ define(['jquery', 'bootstrap'], function ($) {
                 }
             );
  
-        }); 
+        }); */
 
 
  
   // Publier un cours via le menu droit
         $('#submit_button_relation').on('click', function (event) {
-
-         console.log('#submit_button_relation on');
 
           var grade = ggb_applet_container.getValue("grade");
           var numexo = ggb_applet_container.getValue("numexo");

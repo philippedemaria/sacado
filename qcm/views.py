@@ -8,8 +8,8 @@ from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group 
 from school.models import Stage
-from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint, Course
-from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, CourseForm 
+from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint, Course, Demand
+from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, CourseForm , DemandForm
 from socle.models import  Theme, Knowledge , Level , Skill
 from django.http import JsonResponse 
 from django.core import serializers
@@ -1755,13 +1755,19 @@ def show_exercise(request, id):
 
 def show_this_exercise(request, id):
 
-    if request.user.is_teacher:
-        teacher = Teacher.objects.get(user=request.user)
-        parcours = Parcours.objects.filter(teacher=teacher)
-
-    else:
-        student = Student.objects.get(user=request.user)
-        parcours = None
+    if request.user.is_authenticated:
+        if request.user.is_teacher:
+            teacher = Teacher.objects.get(user=request.user)
+            parcours = Parcours.objects.filter(teacher=teacher)
+        elif request.user.is_student :
+            student = Student.objects.get(user=request.user)
+            parcours = None
+        else :
+            student = None
+            parcours = None
+    else :
+        student = None
+        parcours = None        
 
     exercise = Exercise.objects.get(id=id)
     request.session['level_id'] = exercise.level.id
@@ -1782,72 +1788,73 @@ def execute_exercise(request, ide,idp):
     context = {'exercise': exercise,  'start_time' : start_time,  'parcours' : parcours,  'relation' : relation }
     return render(request, 'qcm/show_relation.html', context)
 
-@login_required
-def store_the_score_ajax(request):
-    this_time = request.POST.get("start_time").split(",")[0]
-    end_time = str(time.time())
-    timer = get_time(this_time,end_time)
-    exercise_id = int(request.POST.get("exercise_id"))
-    exercise = Exercise.objects.get(pk = exercise_id)    
-    if request.POST.get("parcours_id") :
-        parcours_id = int(request.POST.get("parcours_id"))
-        parcours = Parcours.objects.get(pk = parcours_id)
-    else :           
-        parcours = None
-    data = {}
-    student = Student.objects.get(user=request.user)
-    numexo = int(request.POST.get("numexo"))
-    if request.method == 'POST':
-        score = round(float(request.POST.get("score")),2)*100
-        if score > 100 :
-            score = 100
-        if exercise.supportfile.situation <= numexo+2:
-            Studentanswer.objects.create(exercise  = exercise , parcours  = parcours , student  = student , numexo= numexo,  point= score, secondes = timer)
-            result, created = Resultexercise.objects.get_or_create(exercise  = exercise , student  = student , defaults = { "point" : score , })
-            if not created :
-                Resultexercise.objects.filter(exercise  = exercise , student  = student).update(point= score)
-            # Moyenne des scores obtenus par savoir faire enregistré dans Resultknowledge
-            knowledge = exercise.knowledge
+# @login_required
+# def store_the_score_ajax(request):
+#     this_time = request.POST.get("start_time").split(",")[0]
+#     end_time = str(time.time())
+#     timer = get_time(this_time,end_time)
+#     exercise_id = int(request.POST.get("exercise_id"))
+#     exercise = Exercise.objects.get(pk = exercise_id)    
+#     if request.POST.get("parcours_id") :
+#         parcours_id = int(request.POST.get("parcours_id"))
+#         parcours = Parcours.objects.get(pk = parcours_id)
+#     else :           
+#         parcours = None
+#     data = {}
+#     student = Student.objects.get(user=request.user)
+#     numexo = int(request.POST.get("numexo"))
+#     if request.method == 'POST':
+#         score = round(float(request.POST.get("score")),2)*100
+#         if score > 100 :
+#             score = 100
+#         if exercise.supportfile.situation <= numexo+2:
+#             Studentanswer.objects.create(exercise  = exercise , parcours  = parcours , student  = student , numexo= numexo,  point= score, secondes = timer)
+#             result, created = Resultexercise.objects.get_or_create(exercise  = exercise , student  = student , defaults = { "point" : score , })
+#             if not created :
+#                 Resultexercise.objects.filter(exercise  = exercise , student  = student).update(point= score)
+#             # Moyenne des scores obtenus par savoir faire enregistré dans Resultknowledge
+#             knowledge = exercise.knowledge
 
-            scored = 0
-            studentanswers = Studentanswer.objects.filter(student = student,exercise__knowledge = knowledge) 
-            for studentanswer in studentanswers:
-                scored +=  studentanswer.point 
-            try :
-                scored = scored/len(studentanswers)
-            except :
-                scored = 0
+#             scored = 0
+#             studentanswers = Studentanswer.objects.filter(student = student,exercise__knowledge = knowledge) 
+#             for studentanswer in studentanswers:
+#                 scored +=  studentanswer.point 
+#             try :
+#                 scored = scored/len(studentanswers)
+#             except :
+#                 scored = 0
 
-            result, created = Resultknowledge.objects.get_or_create(knowledge  = exercise.knowledge , student  = student , defaults = { "point" : scored , })
-            if not created :
-                Resultknowledge.objects.filter(knowledge  = exercise.knowledge , student  = student).update(point= scored)
+#             result, created = Resultknowledge.objects.get_or_create(knowledge  = exercise.knowledge , student  = student , defaults = { "point" : scored , })
+#             if not created :
+#                 Resultknowledge.objects.filter(knowledge  = exercise.knowledge , student  = student).update(point= scored)
 
-            # Moyenne des scores obtenus par compétences enregistrées dans Resultskill
-            skills = relation.skills.all()
-            for skill in skills :
-                Resultskill.objects.create(student = student, skill = skill, point = score) 
-                resultskills = Resultskill.objects.filter(student = student, skill = skill).order_by("-id")[0:10]
-                sco = 0
-                for resultskill in resultskills :
-                    sco += resultskill.point
-                    try :
-                        sco_avg = sco/len(resultskills)
-                    except :
-                        sco_avg = 0
-                result, created = Resultlastskill.objects.get_or_create(student = student, skill = skill, defaults = { "point" : sco_avg , })
-                Resultlastskill.objects.filter(student = student, skill = skill).update(point = sco_avg) 
+#             # Moyenne des scores obtenus par compétences enregistrées dans Resultskill
+#             skills = exercise.supportfile.skills.all()
+#             for skill in skills :
+#                 Resultskill.objects.create(student = student, skill = skill, point = score) 
+#                 resultskills = Resultskill.objects.filter(student = student, skill = skill).order_by("-id")[0:10]
+#                 sco = 0
+#                 for resultskill in resultskills :
+#                     sco += resultskill.point
+#                     try :
+#                         sco_avg = sco/len(resultskills)
+#                     except :
+#                         sco_avg = 0
+#                 result, created = Resultlastskill.objects.get_or_create(student = student, skill = skill, defaults = { "point" : sco_avg , })
+#                 if not created :
+#                     Resultlastskill.objects.filter(student = student, skill = skill).update(point = sco_avg) 
 
-            try :
-                msg = "Exercice : "+str(exercise.knowledge.name)+"\n Fait par : "+str(student.user)+"\n Nombre de situations : "+str(numexo)+"\n Score : "+str(score)+"%"+"\n Temps : "+convert_seconds_in_time(timer)+" "
-                rec = []
-                for g in student.students_to_group.all():
-                    if not g.teacher.user.email in rec : 
-                        rec.append(g.teacher.user.email)
-                if g.teacher.notification :
-                    send_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , rec )
-            except:
-                pass
-    return JsonResponse(data)
+#             try :
+#                 msg = "Exercice : "+str(exercise.knowledge.name)+"\n Fait par : "+str(student.user)+"\n Nombre de situations : "+str(numexo)+"\n Score : "+str(score)+"%"+"\n Temps : "+convert_seconds_in_time(timer)+" "
+#                 rec = []
+#                 for g in student.students_to_group.all():
+#                     if not g.teacher.user.email in rec : 
+#                         rec.append(g.teacher.user.email)
+#                 if g.teacher.notification :
+#                     send_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , rec )
+#             except:
+#                 pass
+#     return JsonResponse(data)
 
 
 @login_required
@@ -1885,7 +1892,8 @@ def store_the_score_relation_ajax(request):
             except :
                 scored = 0
             result, created = Resultknowledge.objects.get_or_create(knowledge  = relation.exercise.knowledge , student  = student , defaults = { "point" : scored , })
-            Resultknowledge.objects.filter(knowledge  = relation.exercise.knowledge , student  = student).update(point= scored)
+            if not created :
+                Resultknowledge.objects.filter(knowledge  = relation.exercise.knowledge , student  = student).update(point= scored)
             
 
             # Moyenne des scores obtenus par compétences enregistrées dans Resultskill
@@ -2712,4 +2720,111 @@ def show_course_student(request, idc , id ):
  
 
 
+#######################################################################################################################################################################
+#######################################################################################################################################################################
+##################    Demand     
+#######################################################################################################################################################################
+#######################################################################################################################################################################
+
+
+@login_required
+def list_demands(request):
+
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    demands = Demand.objects.filter(teacher = teacher).order_by("done")
+
+    return render(request, 'qcm/demand/show_demand.html', {'demands': demands,  })
+
+
+
+@login_required
+def create_demand(request):
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    form = DemandForm(request.POST or None  )
+    if request.method == "POST" :
+        if form.is_valid():
+            nf =  form.save(commit = False)
+            nf.teacher = teacher
+            nf.save()
+            messages.success(request, 'La demande a été envoyée avec succès !')
+            return redirect('dashboard')
+
+        else:
+            print(form.errors)
+
+    context = {'form': form,   'teacher': teacher, 'parcours': None , 'relationships': None , 'course': None , }
+
+    return render(request, 'qcm/demand/form_demand.html', context)
+
+
+
+@login_required
+def update_demand(request, id):
  
+    demand = Demand.objects.get(id=id)
+    demand_form = DemandForm(request.POST or None, instance=demand, )
+
+
+    if request.method == "POST" :
+        if demand_form.is_valid():
+            nf =  form.save(commit = False)
+            nf.teacher = teacher
+            nf.save()
+
+            messages.success(request, 'La demande a été modifiée avec succès !')
+            return redirect('dashboard')
+        else :
+            print(demand_form.errors)
+
+    context = {'form': demand_form,  'demand': demand, 'teacher': teacher , 'parcours': None  , 'relationships': relationships , }
+
+    return render(request, 'qcm/demand/form_demand.html', context )
+
+
+
+@login_required
+def delete_demand(request, id  ):
+    """
+    idc : demand_id et id = parcours_id pour correspondre avec le decorateur
+    """
+    demand = Demand.objects.get(id=idc)
+    demand.delete()
+    return redirect('dashboard')  
+
+
+
+@login_required
+def show_demand(request, id ):
+    """
+    idc : demand_id et id = parcours_id pour correspondre avec le decorateur
+    """
+    demand = Demand.objects.get(pk =  id)
+
+    user = User.objects.get(pk = request.user.id)
+    teacher = Teacher.objects.get(user = user)
+    context = {  'demands': demands, 'teacher': teacher , 'parcours': None , 'group_id' : None, 'communications' : []}
+    return render(request, 'qcm/demand/show_demand.html', context)
+
+ 
+@csrf_exempt
+def ajax_chargeknowledges(request):
+    id_theme =  request.POST.get("id_theme")
+    theme = Theme.objects.get(id=id_theme)
+ 
+    data = {}
+    ks = Knowledge.objects.values_list('id', 'name').filter(theme=theme)
+    data['knowledges'] = list(ks)
+ 
+    return JsonResponse(data)
+
+
+@csrf_exempt
+def ajax_demand_done(request) :
+
+    id =  request.POST.get("id")
+    Demand.objects.filter(id=id).update(done=1)
+ 
+    data = {}
+ 
+ 
+    return JsonResponse(data)    

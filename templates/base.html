@@ -112,30 +112,7 @@
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class='thin'  >Enseignant </h2>
-            </div>
-            <div class="modal-body">
-                <form action="{%  url 'register_teacher' %}" method="POST" id="teacher_form"  > 
-                {% csrf_token %}
-                    {% include 'user_form.html' %}
-                    <div class="row">
-                        <div class="col-lg-6 col-xs-6">   
-                            <div class="form-group"><input name="envoi" type="submit" class="btn btn-primary sendit" value="S'inscrire" /></div>
-                        </div>        
-                        <div class="col-lg-6 col-xs-6">   
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button> 
-                        </div>             
-                    </div> 
-                </form> 
-            </div>
-        </div>
-    </div>
-</div>
+ 
 
 <div class="modal fade" id="lostpasswordModal" tabindex="-1" role="dialog" aria-labelledby="lostpasswordModal" aria-hidden="true" >
     <div class="modal-dialog" role="document">

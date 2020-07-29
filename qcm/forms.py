@@ -1,5 +1,5 @@
 from django import forms
-from .models import  Parcours, Exercise, Remediation, Relationship, Supportfile, Course
+from .models import  Parcours, Exercise, Remediation, Relationship, Supportfile, Course, Demand
 from account.models import  Student
 from socle.models import  Knowledge , Skill
 from group.models import  Group 
@@ -161,3 +161,9 @@ class CourseForm(forms.ModelForm):
         model = Course 
         fields = '__all__' 
 
+ 
+class DemandForm(forms.ModelForm):
+
+    class Meta:
+        model = Demand 
+        fields = '__all__' 

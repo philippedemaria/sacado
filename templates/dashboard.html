@@ -378,6 +378,12 @@
             <a href="{% url 'gestion_files' %}">Gestions des fichiers </a>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'demands' %}">Demandes d'exercices {% if nb_demand > 0 %} <i class="fa fa-circle text-danger" style="font-size:10px"></i> {% endif %} </a>
+        </div>
+    </div>
+
 </div>
 {% endif %}
 

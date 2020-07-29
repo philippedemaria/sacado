@@ -167,19 +167,21 @@ Intro Section -
               </div>
           </div>
           <div class="col-lg-6 col-xs-12">
-            <div class="teachers-content">
               <div class="features wow bounceInUp clearfix">
-                <h4>Utiliser <span class="sacado">SACADO</span>.</h4>
-                <p>Vous souhaitez suivre les progrès de vos élèves et leur proposer un parcours adapté à leur apprentissage. Bénéficiez d'un tableau de bord personnalisé.</p>
-                 <p>Une interface pour créer vos groupes, gérer vos élèves, leur attribuer des exercices via des parcours, des tâches, suivre leurs progrès, leur proposer des fiches de cours, des vidéos. 
-                <p>     <a  href="#" data-toggle='modal' data-target='#myModal4'  class="btn btn-primary"> Inscription gratuite</a> </p>
+                <h4>Devenir membre  <span class="sacado">SACADO</span></h4>
+                <form action="{%  url 'register_teacher' %}" method="POST" id="teacher_form"  > 
+                {% csrf_token %}
+                    {% include 'user_form.html' %}
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-6">   
+                            <div class="form-group"><input name="envoi" type="submit" class="btn btn-primary sendit" value="S'inscrire" /></div>
+                        </div>        
+                        <div class="col-lg-6 col-xs-6">   
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button> 
+                        </div>             
+                    </div> 
+                </form>            
               </div>
-              <div class="features wow bounceInUp clearfix">
-                <h4>Version établissement.</h4>
-                <p>Pour une plus grande rapidité de débit avec des imports/exports en CSV, passer par la version établissement. </p>
-                <p><a href="#footer" class="btn btn-info">Demande d'information</a> </p>
-              </div>
-            </div>
           </div>
         </div>
 
