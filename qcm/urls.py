@@ -110,7 +110,7 @@ urlpatterns = [
     path('show_remediation/<int:id>/', show_remediation, name='show_remediation'),       #from index   
     path('ajax_search_exercise', ajax_search_exercise, name='ajax_search_exercise'),
     path('store_the_score_relation_ajax/', store_the_score_relation_ajax, name='store_the_score_relation_ajax'),
-    path('store_the_score_ajax/', store_the_score_ajax, name='store_the_score_ajax'),
+    #path('store_the_score_ajax/', store_the_score_ajax, name='store_the_score_ajax'),
 
     path('ajax/create_title_parcours', ajax_create_title_parcours, name='ajax_create_title_parcours'),
     path('ajax/erase_title', ajax_erase_title, name='ajax_erase_title'),
