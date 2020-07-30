@@ -4,7 +4,7 @@ from .settings import *
 DEBUG = os.environ.get('DEBUG')
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-ALLOWED_HOSTS = ['sacado.xyz']
+ALLOWED_HOSTS = ['sacado.xyz', 'ressources.sacado.xyz']
 
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_PORT = os.environ.get('EMAIL_PORT')
