@@ -244,8 +244,8 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'staticfiles'),)
 
 FILE_UPLOAD_PERMISSIONS = 0o775
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = 'https://ressources.sacado.xyz/'
+MEDIA_ROOT = os.environ.get('MEDIA_ROOT')
 
 
 ########################################################################################################################
