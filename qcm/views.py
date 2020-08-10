@@ -2747,6 +2747,8 @@ def create_demand(request):
             nf.teacher = teacher
             nf.save()
             messages.success(request, 'La demande a été envoyée avec succès !')
+            rec = ['brunoserres33@gmal.com', 'philippe.demaria83@gmal.com', ]
+            send_mail("SacAdo Demande d'exercice",  "Demande d'exercice.... voir dans Demande d'exercices sur https://sacado.xyz" , "info@sacado.xyz" , rec )
             return redirect('dashboard')
 
         else:
@@ -2770,8 +2772,7 @@ def update_demand(request, id):
             nf =  form.save(commit = False)
             nf.teacher = teacher
             nf.save()
-            rec = ['brunoserres33@gmal.com', 'philippe.demaria83@gmal.com', ]
-            send_mail("SacAdo Demande d'exercice",  "Demande d'exercice.... voir dans Demande d'exercices sur https://sacado.xyz" , "info@sacado.xyz" , rec )
+ 
 
             messages.success(request, 'La demande a été modifiée avec succès !')
             return redirect('dashboard')
