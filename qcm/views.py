@@ -2714,7 +2714,7 @@ def show_course_student(request, idc , id ):
     """
     parcours = Parcours.objects.get(pk =  id)
     courses = parcours.course.all() 
-    print("ici")
+ 
 
     context = {  'courses': courses, 'parcours': parcours , 'group_id' : None, 'communications' : []}
     return render(request, 'qcm/course/show_course_student.html', context)
@@ -2770,6 +2770,8 @@ def update_demand(request, id):
             nf =  form.save(commit = False)
             nf.teacher = teacher
             nf.save()
+            rec = ['brunoserres33@gmal.com', 'philippe.demaria83@gmal.com', ]
+            send_mail("SacAdo Demande d'exercice",  "Demande d'exercice.... voir dans Demande d'exercices sur https://sacado.xyz" , "info@sacado.xyz" , rec )
 
             messages.success(request, 'La demande a été modifiée avec succès !')
             return redirect('dashboard')
