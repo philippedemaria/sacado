@@ -130,19 +130,19 @@
                                         <td class="listingtd"> 
                                             <label for="selector_e{{ e.id }}"  class="label_select_checkbox">{{ e.knowledge.name }} <br>
                                             {% if user.is_superuser and '/admin' in request.path %}
-                                                <a href="{% url 'show_this_exercise'  e.id   %}"   >  
+                                                <a href="{% url 'show_this_exercise'  e.id   %}" target="_blank"   >  
                                                     <img src="{{ e.supportfile.imagefile.url }}" class="imagefile">
                                                 </a>
 
 
-                                                <a href="{% url 'update_supportfile'  e.supportfile.id   %}" class="listing" style="font-size: 18px">
+                                                <a href="{% url 'update_supportfile'  e.supportfile.id   %}" target="_blank"  class="listing" style="font-size: 18px">
                                                     {{ e.supportfile.annoncement|cleanhtml|capfirst }} 
                                                 </a> 
 
                                             {%  else %}
 
 
-                                                <a href="{% url 'show_this_exercise'  e.id   %}" class="listing" style="font-size: 18px">     
+                                                <a href="{% url 'show_this_exercise'  e.id   %}" target="_blank" class="listing" style="font-size: 18px">     
                                                     <img src="{{ e.supportfile.imagefile.url }}" class="imagefile">
                                  
 
