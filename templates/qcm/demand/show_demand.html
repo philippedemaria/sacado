@@ -57,7 +57,7 @@
                                     <tr {% if demand.done %} style="background:#e6e2dd"{% endif %} >
                                         <td>{% if  not demand.done %} <input type="checkbox" name="done" id="id_done{{ demand.id }}" data-id="{{ demand.id }}"  class="select_done"/>{% endif %} {{demand.demand|safe}}</td>
                                         <td>{{demand.date_created|date:"d-m-Y" }}</td>
-                                        <td>{% if demand.file %} <a href="{{ demand.file.url  }}" target="_blank" > Lire </a>{% endif %}</td>
+                                        <td>{% if demand.file %} <a href="{{ demand.file.url  }}" target="_blank" > voir </a>{% endif %}</td>
                                         <td>{{demand.knowledge.name}}</td>
                                         <td>{{demand.theme.name}}</td>
                                         <td>{{demand.level.shortname}}</td>  

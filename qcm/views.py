@@ -2730,8 +2730,7 @@ def show_course_student(request, idc , id ):
 @login_required
 def list_demands(request):
 
-    teacher = Teacher.objects.get(user_id = request.user.id)
-    demands = Demand.objects.filter(teacher = teacher).order_by("done")
+    demands = Demand.objects.order_by("done")
 
     return render(request, 'qcm/demand/show_demand.html', {'demands': demands,  })
 

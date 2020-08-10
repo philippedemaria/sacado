@@ -37,8 +37,8 @@ def list_emails(request):
 
     if user.is_teacher:
         teacher = user.teacher
-
-        for group in teacher.groups.all():
+        groups = teacher.groups.all()
+        for group in groups:
             for student in group.students.filter():
                 users.append(student.user)
 
