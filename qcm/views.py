@@ -1639,6 +1639,7 @@ def update_supportfile(request, id, redirection=0):
     teacher = Teacher.objects.get(user_id = request.user.id)
     if request.user.is_superuser:
         supportfile = Supportfile.objects.get(id=id)
+        knowledge = supportfile.knowledge
         supportfile_form = UpdateSupportfileForm(request.POST or None, request.FILES or None, instance=supportfile, knowledge = knowledge)
         levels = Level.objects.all()
         supportfiles = Supportfile.objects.filter(is_title=0).order_by("level")
