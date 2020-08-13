@@ -44,8 +44,6 @@
 
 
 {% block evaluation %}
- 
- 
             <table class="table">
                 <tr>
                     <td>{{ form.duration.label_tag }} </td>
@@ -53,7 +51,7 @@
                     <td>{{ form.duration.errors}}</td>
                 </tr>
                 <tr>
-                    <td>Date de passation</td>
+                    <td>Date de publication</td>
                     <td>{{ form.start|add_class:"form-control datepicker"|attr:"required"}}</td>
                     <td></td>
                 </tr>
@@ -76,12 +74,9 @@
                     <td>{{ form.stopper.errors}}</td>
                 </tr>
             </table>
- 
-
         <div class="alert alert-info" {% if not  parcours.is_evaluation %} id="explain_evaluation" {% endif %} >
             La durée de l'évaluation est la somme des durées de chaque exercice + le temps de chargement (à renseigner en minutes)
         </div>
-
 {% endblock %}
 
 

@@ -350,7 +350,7 @@ class Parcours(ModelWithCode):
 
     exercises = models.ManyToManyField(Exercise, blank=True, through="Relationship", related_name="exercises_parcours")
     students = models.ManyToManyField(Student, blank=True, related_name='students_to_parcours', verbose_name="Elèves de ce parcours")
-    is_share = models.BooleanField(default=1, verbose_name="Partagé ?")
+    is_share = models.BooleanField(default=1, verbose_name="Mutualisé ?")
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
 
     level = models.ForeignKey(Level, related_name="level_parcours", on_delete=models.PROTECT, default='', blank=True, null=True, editable=False)
@@ -690,6 +690,7 @@ class Demand(models.Model):
     file = models.FileField(upload_to= directory_path, verbose_name="Exercice souhaité", default="", null = True, blank= True) 
     teacher = models.ForeignKey(Teacher, related_name = "demand", on_delete=models.PROTECT, editable=False, default="" )    
     done = models.BooleanField( default=0,  verbose_name="Fait", null = True, blank= True) 
+    code = models.CharField(max_length=10, default='',  blank=True, null=True,  verbose_name="id de l'exercice créé")    
 
     def __str__(self):
         return "{}".format(self.demand)

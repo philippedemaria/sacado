@@ -193,12 +193,14 @@ def get_stage(group):
 
     teacher = group.teacher
 
-    if teacher.user.school :
-        school = teacher.user.school
-        stage = Stage.objects.get(school = school)
-    else : 
-        stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
-
+    try :
+        if teacher.user.school :
+            school = teacher.user.school
+            stage = Stage.objects.get(school = school)
+        else : 
+            stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
+    except :
+            stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }        
     return stage
 
 

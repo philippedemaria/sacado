@@ -38,7 +38,7 @@
     <div class="row">
         <div class="col-md-12 col-xs-12 col-lg-12">
             <form action="" method="POST" enctype='multipart/form-data'> 
-                {% csrf_token %}
+            {% csrf_token %}
                         <table class="table  table-hover display100" style="width:100%">
                                <thead>
                                 <tr>
@@ -53,9 +53,12 @@
                             </thead>
                             <tbody>
                                 {% for demand in demands %}
+                                    
+                                    <tr {% if demand.done %} style="background:#e6e2dd"{% endif %} id="tr{{ demand.id }}"   >
+                                        <td><input type="text" size="6" maxlength="8" id="code{{ demand.id }}"  name="code{{ demand.id }}" {% if  demand.done %} value="{{ demand.code }}"  {% endif %} /><a href="#"  data-id="{{ demand.id }}"    class="btn btn-primary select_done" />+</a>
 
-                                    <tr {% if demand.done %} style="background:#e6e2dd"{% endif %} >
-                                        <td>{% if  not demand.done %} <input type="checkbox" name="done" id="id_done{{ demand.id }}" data-id="{{ demand.id }}"  class="select_done"/>{% endif %} {{demand.demand|safe}}</td>
+                                         {{demand.demand|safe}}</td>
+
                                         <td>{{demand.date_created|date:"d-m-Y" }}</td>
                                         <td>{% if demand.file %} <a href="{{ demand.file.url  }}" target="_blank" > voir </a>{% endif %}</td>
                                         <td>{{demand.knowledge.name}}</td>
@@ -63,11 +66,11 @@
                                         <td>{{demand.level.shortname}}</td>  
                                         <td>{{demand.teacher.user.get_full_name}}</td>
                                     </tr>
-
+                                  
                                 {% endfor %}
                             </tbody>
                         </table>
-            </form>
+              </form>            
        </div>                  
 </section>
 {% endblock %} 

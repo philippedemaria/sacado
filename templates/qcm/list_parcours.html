@@ -47,7 +47,7 @@ body{
             </thead>
             <tbody>
             {% for parcours in parcourses %}
-                <tr style="{% if not parcours.is_publish %}background-color:#F4F4F4;{% endif  %}">
+                <tr {% if not parcours.is_publish %} style="background-color:#F4F4F4;" {% endif  %}>
                     <td style="text-align:center">
                         <span class="fa-stack">
                           <i class="fa fa-{% if parcours.is_evaluation %}bullseye{% else %}square{% endif  %} fa-2x" style="color: {{ parcours.color }} ;"></i>

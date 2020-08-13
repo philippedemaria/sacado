@@ -114,8 +114,8 @@ define(['jquery','bootstrap'], function ($) {
         $('.select_done').on('click', function (event) {
             let id = $(this).attr("data-id");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let code = $("#code"+id).val();
 
-console.log(id);
 
             $.ajax(
                 {
@@ -123,10 +123,13 @@ console.log(id);
                     dataType: "json",
                     data: {
                         'id': id,
+                        'code': code,
                         csrfmiddlewaretoken: csrf_token
                     },
                     url: "ajax/demand_done",
                     success: function (data) {
+
+                       $("#tr"+id).css("background","#e6e2dd") ;
  
                     }
                 }

@@ -955,7 +955,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
             $(".copy_link").on("click", function() {
                 let code = $(this).attr("data-code");
-                alert("Double-cliquer sur le code de l'exercice et copier :  "+ code)
+                alert("Double-cliquer sur le code suivant et copier (CTRL+C)  :  "+ code)
                 });
 
 

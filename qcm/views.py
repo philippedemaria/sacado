@@ -2749,6 +2749,11 @@ def create_demand(request):
             messages.success(request, 'La demande a été envoyée avec succès !')
             rec = ['brunoserres33@gmal.com', 'philippe.demaria83@gmal.com', ]
             send_mail("SacAdo Demande d'exercice",  "Demande d'exercice.... voir dans Demande d'exercices sur https://sacado.xyz" , "info@sacado.xyz" , rec )
+
+            sender = [teacher.user.email,]
+            send_mail("SacAdo Demande d'exercice",  "Votre demande d'exercice est en cours de traitement." , "info@sacado.xyz" , sender )
+
+
             return redirect('dashboard')
 
         else:
@@ -2824,10 +2829,16 @@ def ajax_chargeknowledges(request):
 @csrf_exempt
 def ajax_demand_done(request) :
 
+    code = request.POST.get("code") #id de l'e
     id =  request.POST.get("id")
+
     Demand.objects.filter(id=id).update(done=1)
- 
-    data = {}
- 
- 
-    return JsonResponse(data)    
+    Demand.objects.filter(id=id).update(code=code)
+
+    demand = Demand.objects.get(id=id)
+
+    rec = [demand.teacher.user.email]
+
+    send_mail("SacAdo Demande d'exercice",  "Bonjour " + str(demand.teacher.user.get_full_name())+ ", \n\n Votre exercice est créé. \n\n Pour tester votre exercice, https://sacado.xyz/qcm/show_exercise/"+str(code)  +"\n\n Bonne utilisation de sacado." , "info@sacado.xyz" , rec )
+    data={}
+    return JsonResponse(data)
