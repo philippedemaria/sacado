@@ -47,19 +47,18 @@
                         -->
                         <!-- Menu de la small-box -->
 
-                        <div class="small-box-footer">
+                        <div class="small-box-footer" >
                             <br>
                                 <a href="{% url 'list_parcours_group' group.id  %}#parcours" class="btn btn-default btn-accueil"> 
                                 <small>   <i class="fa fa-th"></i> </small>
                                
-                                     Les parcours 
-                                <small> {{ data.nb_parcours_visible }} publié{{ data.nb_parcours_visible|pluralize }}   {{ data.nb_parcours_favorite }} favori{{ data.nb_parcours_favorite|pluralize }}</small>
+                                  {{ data.nb_parcours_favorite }}  Parcours favoris
+                                <small>   {{ data.nb_parcours_visible }} publié{{ data.nb_parcours_visible|pluralize }}  </small>
                                 </a>
                             <br>
                                 <a href="{% url 'list_parcours_group' group.id  %}#evaluation" class="btn btn-default btn-accueil"> 
                                   <small>   <i class="fa fa-trophy"></i> </small>
-                               
-                                     Evaluation{{ data.nb_parcours_evaluation|pluralize  }}  ({{ data.nb_parcours_evaluation  }})
+                                    {{ data.nb_parcours_evaluation }}  Evaluation{{ data.nb_parcours_evaluation|pluralize  }}  favorite{{ data.nb_parcours_evaluation|pluralize }}
                                 </a>
 
                             <br><br>
