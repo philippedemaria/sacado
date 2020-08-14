@@ -209,7 +209,7 @@ table.table-bordered.dataTable {
   left: 35%;
   padding-top: 35px;
   cursor: pointer;
-  z-index: 1000;
+  z-index: 50;
 }
 
 .btn-index:hover{ 
