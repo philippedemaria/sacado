@@ -14,23 +14,23 @@
         </tr>
     </thead>
     <tbody>
-        {% for exercise in exercises  %} 
+        {% for relationship in relationships  %} 
         <tr>
             <td>
-                <a href="{% url 'show_this_exercise'  exercise.id   %}">
-                    <img src="{{ exercise.supportfile.imagefile.ulr }}" class="imagefile">
+                <a href="{% url  'execute_exercise'  relationship.parcours.id  relationship.exercise.id   %}">
+                    <img src="{{ relationship.exercise.supportfile.imagefile.url }}" class="imagefile">
                 </a> 
-                <a href="{% url 'show_this_exercise'  exercise.id   %}" class="listing" style="font-size: 18px"> {{ exercise.supportfile.annoncement|cleanhtml|capfirst }} </a> 
-                {% if exercise.supportfile.calculator %}
+                <a href="{% url  'execute_exercise'  relationship.parcours.id relationship.exercise.id   %}" class="listing" style="font-size: 18px"> {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }} </a> 
+                {% if relationship.exercise.supportfile.calculator %}
                   <img src="{% static 'img/calculator.png' %}" width="30px" />
                 {% else %}
                   <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
                 {% endif  %}   
                 <br>
-                <a href="{% url 'show_this_exercise'  exercise.id   %}" class="sublisting"> <small>   
-                    <i class="fa fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %} 
-                    <i class="fa fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
-                    <i class="fa fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum</small>
+                <a href="{% url  'execute_exercise'  relationship.parcours.id relationship.exercise.id   %}" class="sublisting"> <small>   
+                    <i class="fa fa-barcode"></i> {{ relationship.exercise.supportfile.code }}  {% if relationship.exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %} 
+                    <i class="fa fa-clock-o"></i> {{ relationship.exercise.supportfile.duration }} minutes {% if relationship.exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                    <i class="fa fa-save"></i> {{ relationship.exercise.supportfile.situation}} situation{{ relationship.exercise.supportfile.situation|pluralize}} minimum</small>
                 </a> 
             </td>
         </tr>

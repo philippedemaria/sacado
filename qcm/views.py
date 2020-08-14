@@ -2074,17 +2074,46 @@ def content_is_done(request, id ): #id  = id_content
 
 
 
+# def ajax_search_exercise(request):
+
+#     code =  request.POST.get("search") 
+#     knowledges = Knowledge.objects.filter(name__contains= code)
+#     exercises = Exercise.objects.filter(Q(knowledge__in = knowledges)|Q(supportfile__annoncement__contains= code)|Q(supportfile__code__contains= code)).filter(supportfile__is_title=0)
+#     data = {}
+#     html = render_to_string('qcm/search_exercises.html',{ 'exercises' : exercises  })
+ 
+#     data['html'] = html       
+
+#     return JsonResponse(data)
+
+
+
 def ajax_search_exercise(request):
 
     code =  request.POST.get("search") 
     knowledges = Knowledge.objects.filter(name__contains= code)
-    exercises = Exercise.objects.filter(Q(knowledge__in = knowledges)|Q(supportfile__annoncement__contains= code)|Q(supportfile__code__contains= code)).filter(supportfile__is_title=0)
+
+    if request.user.user_type == 2 :
+        teacher = Teacher.objects.get(user_id = request.user.id)
+        parcours = parcours.teacher_parcours.all()
+
+    elif request.user.user_type == 0 :
+        student = Student.objects.get(user_id = request.user.id)
+        parcours = student.students_to_parcours.all()
+    else :
+        parcours = None 
+ 
+    print(parcours)
+
+    relationships = Relationship.objects.filter(Q(exercise__knowledge__in = knowledges)|Q(exercise__supportfile__annoncement__contains= code)|Q(exercise__supportfile__code__contains= code)).filter(exercise__supportfile__is_title=0, parcours__in = parcours)
     data = {}
-    html = render_to_string('qcm/search_exercises.html',{ 'exercises' : exercises  })
+    html = render_to_string('qcm/search_exercises.html',{ 'relationships' : relationships  })
  
     data['html'] = html       
 
     return JsonResponse(data)
+
+
 
  
 
