@@ -209,6 +209,9 @@
             var changedValue = ggbApplet.getValue(objName);        //  ggbApplet est super important !      
 
             situation = document.getElementById("situation").value  ;
+
+            console.log(situation) ;
+            console.log(changedValue);
  
               if(changedValue>situation) {
                     document.getElementById("submit_button_relation").disabled = false;
