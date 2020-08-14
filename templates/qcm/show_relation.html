@@ -203,6 +203,8 @@
                         applet.setValue("situation",{{ relation.situation }});
                         applet.registerObjectUpdateListener("numexo", "getNumexo");
 
+                        console.log("situation appletOnLoad " + {{ relation.situation }} ) ;
+
                 }
 
         };
@@ -224,7 +226,7 @@
           }
 
 
-            console.log("Après la fonction getNumexo");
+   
 
 
         var applet = new GGBApplet('5.0', parameters,true);
