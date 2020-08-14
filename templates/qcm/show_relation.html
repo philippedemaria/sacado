@@ -198,7 +198,8 @@
               "useBrowserForJS":false,
               "langage":"en",
               "filename":"{{ exercise.supportfile.ggbfile.url }}",
-               "appletOnLoad" :  function(applet) {  
+               "appletOnLoad" :  function(applet) { 
+
                         applet.setValue("situation",{{ relation.situation }});
                         applet.registerObjectUpdateListener("numexo", "getNumexo");
 
@@ -206,7 +207,7 @@
 
         };
 
-
+ 
  
           function getNumexo(objName) {
                 // get value from applet1 and set value in applet2   
@@ -214,14 +215,16 @@
 
             situation = document.getElementById("situation").value  ;
 
-            console.log(situation) ;
-            console.log(changedValue);
+            console.log("situation " + situation) ;
+            console.log("changedValue " + changedValue);
  
               if(changedValue>situation) {
                     document.getElementById("submit_button_relation").disabled = false;
                 }
           }
- 
+
+
+            console.log("Après la fonction getNumexo");
 
 
         var applet = new GGBApplet('5.0', parameters,true);
