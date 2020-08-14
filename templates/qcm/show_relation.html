@@ -99,7 +99,7 @@
      
                 <div class="form-group">
                   {% if user.user_type == 0 %}
-                    <input  class="btn btn-primary" data-relation_id="{{ relation.id }}"  data-situation="{{ relation.situation }}"  data-start_time="{{ start_time }}" type="submit" id="submit_button_relation"    value="Enregistrer le résultat"  />
+                    <input  class="btn btn-primary" data-relation_id="{{ relation.id }}"  data-situation="{{ relation.situation }}"  data-start_time="{{ start_time }}" type="submit" id="submit_button_relation"  disabled value="Enregistrer le résultat"  />
                   {% endif %}   
                     <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
 
@@ -167,10 +167,16 @@
             </div> 
     </div>  
 
-    <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script>
 
+    <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script>
+                  <!-- Additional Javascript for Geogebra exercises -->
+    <!-- <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script> -->
     <script type="text/javascript">
           // parameters of the geogebra app
+
+        console.log("ouverture de JS");
+
+
         var parameters = {
                 "appname":"classic",
                 "id":"ggb_applet_container",
@@ -190,16 +196,26 @@
               "showToolBarHelp":false,
               "errorDialogsActive":false,
               "useBrowserForJS":false,
-                  "langage":"en",
-          "filename":"{{ exercise.supportfile.ggbfile.url }}"
+              "langage":"en",
+              "filename":"{{ exercise.supportfile.ggbfile.url }}",
+               "appletOnLoad" :  function(applet) { 
+
+                        applet.setValue("situation",{{ relation.situation }});
+
+                }
+
         };
+
+ 
+
+
+
 
         var applet = new GGBApplet('5.0', parameters,true);
         // Geogebra applet creation
-          applet.inject('ggb_applet_container', 'preferHTML5');  
+        applet.inject('ggb_applet_container', 'preferHTML5');  
  
 
-   
     </script>
     
     <div style="height:20px"></div>
