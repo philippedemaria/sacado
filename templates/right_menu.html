@@ -152,9 +152,11 @@ Aucun parcours
 
 {% if user.user_type == 2 %}
     {% with  communications|length as communications_length %}
-    <a href="#" data-toggle='modal' data-target='#nouveaute'   class="btn btn-{% if communications_length > 0 %}danger{% else %}default{% endif %} full_width" >
-        {% if communications_length > 0 %}Lire {% endif %}Les nouveautés 
-    </a>
+        {% if communications_length > 0 %}
+        <a href="#" data-toggle='modal' data-target='#nouveaute'   class="btn btn-{% if communications_length > 0 %}danger{% else %}default{% endif %} full_width" >
+            Lire Les nouveautés 
+        </a>
+        {% endif %}
     {% endwith %}
 {% endif %}
 
