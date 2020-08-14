@@ -1684,6 +1684,8 @@ def show_this_supportfile(request, id):
     if request.user.is_teacher:
         teacher = Teacher.objects.get(user=request.user)
         parcours = Parcours.objects.filter(teacher=teacher)
+    else :
+        parcours = None
 
     supportfile = Supportfile.objects.get(id=id)
     request.session['level_id'] = supportfile.level.id
