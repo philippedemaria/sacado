@@ -83,9 +83,9 @@
 
                                                      <br>
                                                     <small>   
-                                                        <i class="fa fa-barcode"></i> {{ supportfile.code }}  {% if supportfile.annoncement|make_list|length < 120 %}<br>{% endif %} 
-                                                        <i class="fa fa-clock-o"></i> {{ supportfile.duration }} minutes {% if supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
-                                                        <i class="fa fa-save"></i> {{ supportfile.situation}} situation{{ supportfile.situation|pluralize}} minimum
+                                                        <i class="fa fa-fw fa-barcode"></i> {{ supportfile.code }}  {% if supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                                                        <i class="fa fa-fw fa-clock-o"></i> {{ supportfile.duration }} minutes {% if supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                                                        <i class="fa fa-fw fa-save"></i> {{ supportfile.situation}} situation{{ supportfile.situation|pluralize}} minimum
                                                     </small>   
                                            </td>
                                         </tr>

@@ -31,9 +31,9 @@
                                 {% else %}
                                   <img src="{% static 'img/no_calculator.png' %}"  width="30px" class="pull-right"  />
                                 {% endif  %}     
-                                    <i class="fa fa-barcode"></i> {{ exercise.supportfile.code }} {% if exercise.knowledge.name|make_list|length < 140 %}<br>{% endif %}
-                                    <i class="fa fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.knowledge.name|make_list|length < 140 %}<br>{% endif %}
-                                    <i class="fa fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}}  minimum
+                                    <i class="fa fa-fw fa-barcode"></i> {{ exercise.supportfile.code }} {% if exercise.knowledge.name|make_list|length < 140 %}<br>{% endif %}
+                                    <i class="fa fa-fw fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.knowledge.name|make_list|length < 140 %}<br>{% endif %}
+                                    <i class="fa fa-fw fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}}  minimum
                                 </span>
                             </a>
                         </td>
