@@ -33,14 +33,14 @@ class ParcoursForm(forms.ModelForm):
 
 		start_date = cleaned_data.get("start")
 		start_time = cleaned_data.get("starter")
-		start = datetime.datetime.combine(start_date, start_time)
-
 		stop_date = cleaned_data.get("stop")
 		stop_time = cleaned_data.get("stopper")
-		stop = datetime.datetime.combine(stop_date, stop_time)
 
-		if stop <= start:
-			raise forms.ValidationError("La fin de l'évaluation ne peut pas être antérieure à son début.")
+		if start_date and start_time and stop_date and stop_time:
+			stop = datetime.datetime.combine(stop_date, stop_time)
+			start = datetime.datetime.combine(start_date, start_time)
+			if stop <= start:
+				raise forms.ValidationError("La fin de l'évaluation ne peut pas être antérieure à son début.")
 
 
 class UpdateParcoursForm(forms.ModelForm):
