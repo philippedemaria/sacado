@@ -22,7 +22,7 @@
 {% block page_title %}
     <i class="fa fa-square" style="color:{{ group.color }}"></i> {{ group.name }}  <img src="{% static 'img/angle-right.png' %}"/><small>  {{ group.code }} <img src="{% static 'img/angle-right.png' %}"/> {{ group.level.name }} </small>
 
-             <a href="{% url 'print_ids' group.id  %}" class="btn btn-default"><i class="fa fa-print fa-fw fa-fw"></i>  Imprimer les identifiants</a>
+             <a href="{% url 'print_ids' group.id  %}" class="btn btn-default"><img src="{% static 'img/pdf.png' %}" width="18px" >  Télécharger les identifiants</a>
 
 {% endblock %}
 

@@ -21,7 +21,7 @@
         </li>
 
         <li {% if 'group/print_ids/' in request.path %} class="active" {% endif %}>
-             <a href="{% url 'print_ids' group.id  %}" ><i class="fa fa-print fa-fw fa-fw"></i>  Imprimer les identifiants </a>
+             <a href="{% url 'print_ids' group.id  %}" ><img src="{% static 'img/pdf.png' %}" width="15px" style="margin-right:11px"> Télécharger les identifiants </a>
         </li>
 
 
