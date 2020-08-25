@@ -136,10 +136,9 @@ define(['jquery', 'bootstrap'], function ($) {
 
             let students_id =  $('#students_id').val(); 
 
-            console.log(students_id) ;
-
+          
                 if ( students_id != "") {  
-                    alert("Vous inscrivez des élèves, chacun de vos parcours et leurs exercices leur seront affectés. Pour individualiser, il faut utiliser l'icone ad'hoc.")  ;  
+                    alert("Vous inscrivez des élèves. Chacun de vos parcours et leurs exercices leur sont affectés. Il sera possible d'individualiser les exercices dans un parcours favori.")  ;  
                     }  
             });
 

@@ -15,7 +15,7 @@
     </ul>
 </li>    
 <li class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if 'parcours_show/' in request.path or 'parcours_update/' in request.path or 'parcours_peuplate/' in request.path or 'parcours_tasks_and_publishes/' in request.path  or 'parcours_individualise/' in request.path  or 'parcours_stat/' in request.path   %} active{% endif %}"> Configuration {% if parcours.is_evaluation %}  de l'évaluation {% else %} du parcours {% endif %} <b class="caret"></b> </a>
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if 'parcours_show/' in request.path or 'parcours_update/' in request.path or 'parcours_peuplate/' in request.path or 'parcours_tasks_and_publishes/' in request.path  or 'parcours_individualise/' in request.path  or 'parcours_stat/' in request.path   %} active{% endif %}"> Paramètres {% if parcours.is_evaluation %}  de l'évaluation {% else %} du parcours {% endif %} <b class="caret"></b> </a>
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
         <li {% if 'parcours_show/' in request.path %} class="active" {% endif %}><a href="{% url 'show_parcours' parcours.id   %}"><i class="fa fa-th fa-fw"></i> Voir {% if parcours.is_evaluation %}  l'évaluation {% else %} le parcours {% endif %}</a>   </li>   
         {% if group_id %}
