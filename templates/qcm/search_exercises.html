@@ -27,7 +27,7 @@
                   <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
                 {% endif  %}   
                 <br>
-                <a href="{% url  'execute_exercise'  relationship.parcours.id relationship.exercise.id   %}" class="sublisting"> <small>   
+                <a href="{% url  'execute_exercise'  relationship.parcours.id   relationship.exercise.id   %}" class="sublisting"> <small>   
                     <i class="fa fa-barcode"></i> {{ relationship.exercise.supportfile.code }}  {% if relationship.exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %} 
                     <i class="fa fa-clock-o"></i> {{ relationship.exercise.supportfile.duration }} minutes {% if relationship.exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
                     <i class="fa fa-save"></i> {{ relationship.exercise.supportfile.situation}} situation{{ relationship.exercise.supportfile.situation|pluralize}} minimum</small>

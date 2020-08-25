@@ -96,12 +96,21 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
                         <div class="form-group">
-                            <label>Elèves <small>(Optionnel)<em> L'adresse mail est facultative.</em> <br><span style="color:#cb2131">1 élève par ligne. <br/>Le mot de passe par défaut est : sacado2020</span></small></label> <br> 
+                            <label>Possibilité d'inscrire les élèves par leur nom et prénom.<small><em> L'adresse mail est facultative.</em> <br><span style="color:#cb2131">Respecter le format donné : 1 élève par ligne, informations séparées par un ;  <br/>Le mot de passe par défaut est : sacado2020</span></small></label> <br> 
                             <textarea name="students" id="students_id"  style="border:1px #CCC solid" class="form-control" rows="10" placeholder="Alan;Turing;alan.turing@enigma.com"></textarea>
                         </div>
                     </div>
                 </div> 
- 
+
+                <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div style="font-size: 16px"><i class="fa fa-question-circle"></i>
+                        Les élèves accèdent à leur compte à l'aide de leur identifiant généré une fois le groupe créé. 
+                    </div>
+                </div>
+
 
                 <div class="row">
                     <div class="col-sm-12 col-md-8">
@@ -133,7 +142,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <div style="font-size: 16px"><i class="fa fa-question-circle"></i>
-                        Les élèves peuvent rejoindre ce groupe via cette URL à leur donner : <strong>https://sacado.xyz/group/{{ group.code }}</strong> <br>Ils peuvent aussi s’inscrire à l’adresse <strong>https://sacado.xyz/#students</strong> et utiliser le code suivant : <strong>{{ group.code }}</strong>
+                        Les élèves peuvent aussi rejoindre ce groupe via cette URL à leur donner : <strong>https://sacado.xyz/group/{{ group.code }}</strong> <br>Ils peuvent aussi s’inscrire à l’adresse <strong>https://sacado.xyz/#students</strong> et utiliser le code suivant : <strong>{{ group.code }}</strong>
                     </div>
                 </div>
                 <table class="table table-striped table-hover display50">

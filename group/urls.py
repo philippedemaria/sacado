@@ -17,6 +17,8 @@ urlpatterns = [
 
     path('stats/<int:id>/', stat_group, name='stat_group'),
     path('print_statistiques/<int:group_id>/<int:student_id>/', print_statistiques, name='print_statistiques'),
+    
+    path('print_ids/<int:id>/', print_ids, name='print_ids'),
 
 
     path('task_group/<int:id>/', task_group, name='task_group'),

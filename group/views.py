@@ -92,12 +92,12 @@ def count_unique(datas):
     return nb
 
 def include_students(liste, group):
- 
+
     students_tab = liste.split("\r")
 
     for student_tab in students_tab :
-        details = student_tab.split(";")
-        try:
+        try :
+            details = student_tab.split(";")
             fname = str(cleanhtml(details[0].replace(" ", ""))).strip()
             lname = str(cleanhtml(details[1].replace(" ", ""))).strip()
             password = make_password("sacado2020")
@@ -117,7 +117,9 @@ def include_students(liste, group):
                                                                  "password": password, "email": email,
                                                                  "user_type": User.STUDENT})
 
+
             if created:
+                print("ici")
                 student = Student.objects.create(user=user, level=group.level)
                 group.students.add(student)
 
@@ -133,12 +135,14 @@ def include_students(liste, group):
                     relationships = Relationship.objects.filter(parcours=p)
                     for relationship in relationships:
                         relationship.students.add(student)
-                return True
 
-            else:
-                return False
-        except:
-            return False 
+            else :
+                print("là")
+                messages.error(request, "Erreur lors de l'enregistrement. L'identifiant {} est déjà utilisé. Modifier le prénom ou le nom.".format(username))
+                break
+        except :
+            pass
+
 
 
 
@@ -232,9 +236,8 @@ def create_group(request):
         stdts = request.POST.get("students")
 
         if len(stdts) > 0 :
-            tested = include_students(stdts,nf)
-            if not tested :
-                messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
+            include_students(stdts,nf)
+
 
         if  teacher.groups.count() == 1 :
             messages.success(request, "Félicitations... Votre compte sacado est maintenant configuré et votre premier groupe créé !")
@@ -993,4 +996,33 @@ def print_statistiques(request, group_id, student_id):
     return response
 
 
+
+
+
+def print_ids(request, id):
+    group = Group.objects.get(id=id)
  
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="identifiants_groupe'+group.name+'.pdf"'
+    p = canvas.Canvas(response)
+    i = 1
+    for student in group.students.all() :
+
+    # Create the HttpResponse object with the appropriate PDF headers.
+        string0 = "Bonjour {} {},".format(student.user.first_name, student.user.last_name) 
+        string1 = "Vous êtes élève en {} et le code du groupe est {}".format(group.name, group.code)  
+        string2 = "votre identifiant est {} et votre mot de passe est sacado2020".format(student.user.username)
+        p.setFont("Helvetica", 12)
+
+        p.drawString(75, 900-100*i, string0)
+        p.drawString(75, 880-100*i, string1)
+        p.drawString(75, 860-100*i, string2)
+        p.line(75, 830-100*i,550,830-100*i)
+        if i%8 == 0 :
+            i = 1
+            p.showPage()
+        else : 
+            i +=1
+ 
+    p.save()
+    return response 
