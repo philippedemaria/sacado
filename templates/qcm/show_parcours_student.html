@@ -149,9 +149,9 @@
                         {% endif %}    
                     {% endif %}   
                     <div class="card-text" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">
-                        <i class="fa fa-barcode"></i> {{ relation.exercise.supportfile.code }}  
-                        <i class="fa fa-clock-o"></i> {{ relation.duration }} min.
-                        <i class="fa fa-save"></i> {{ relation.situation}}
+                        <i class="fa fa-fw fa-barcode"></i> {{ relation.exercise.supportfile.code }}
+                        <i class="fa fa-fw fa-clock-o"></i> {{ relation.duration }} min.
+                        <i class="fa fa-fw fa-save"></i> {{ relation.situation}}
                         {% for remediation in relation.relationship_remediation.all %}
                             <a href="#" data-target="#remediation_viewer" data-remediation_id="{{ remediation.id }}"  data-toggle='modal' class="white remediation_viewer pull-right">
                                 {% if remediation.sort %}

@@ -37,9 +37,9 @@
                                               <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
                                             {% endif  %}  <br>
                                         <span style="font-size:16px;">    
-                                            <i class="fa fa-barcode"></i> {{ relation.exercise.supportfile.code }} {% if knowledge.name|make_list|length < 140 %}<br>{% endif %}
-                                            <i class="fa fa-clock-o"></i> {{ relation.exercise.supportfile.duration }} minutes {% if knowledge.name|make_list|length < 140 %}<br>{% endif %}
-                                            <i class="fa fa-save"></i> {{ relation.exercise.supportfile.situation}} situation{{ relation.exercise.supportfile.situation|pluralize}}  
+                                            <i class="fa fa-fw fa-barcode"></i> {{ relation.exercise.supportfile.code }} {% if knowledge.name|make_list|length < 140 %}<br>{% endif %}
+                                            <i class="fa fa-fw fa-clock-o"></i> {{ relation.exercise.supportfile.duration }} minutes {% if knowledge.name|make_list|length < 140 %}<br>{% endif %}
+                                            <i class="fa fa-fw fa-save"></i> {{ relation.exercise.supportfile.situation}} situation{{ relation.exercise.supportfile.situation|pluralize}}
                                         </span>
                                     </div>     
                                 </td>

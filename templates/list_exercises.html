@@ -54,9 +54,9 @@
                                                         {% else %}
                                                           <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
                                                         {% endif  %}   <br>
-                                            <i class="fa fa-barcode"></i> {{ exercise.supportfile.code }}      <br>                                 
-                                            <i class="fa fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes<br>
-                                            <i class="fa fa-save"></i> {{ exercise.supportfile.situation }}  situation{{ exercise.supportfile.situation|pluralize }}
+                                            <i class="fa fa-fw fa-barcode"></i>{{ exercise.supportfile.code }}<br>
+                                            <i class="fa fa-fw fa-clock-o"></i>{{ exercise.supportfile.duration }} minutes<br>
+                                            <i class="fa fa-fw fa-save"></i>{{ exercise.supportfile.situation }} situation{{ exercise.supportfile.situation|pluralize }}
 
                                         </a>
                                     </td>

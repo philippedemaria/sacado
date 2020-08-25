@@ -58,9 +58,9 @@
             {% endif  %}   
              <br>
             <a  href="{% url 'update_supportfile'  supportfile.id  %}" class="sublisting"> <small>   
-                <i class="fa fa-barcode"></i> {{ supportfile.code }}  {% if supportfile.annoncement|make_list|length < 120 %}{% endif %} 
-                <i class="fa fa-clock-o"></i> {{ supportfile.duration }} minutes {% if supportfile.annoncement|make_list|length < 120 %}{% endif %}
-                <i class="fa fa-save"></i> {{ supportfile.situation}} situation{{ supportfile.situation|pluralize}}</small>
+                <i class="fa fa-fw fa-barcode"></i> {{ supportfile.code }}  {% if supportfile.annoncement|make_list|length < 120 %}{% endif %}
+                <i class="fa fa-fw fa-clock-o"></i> {{ supportfile.duration }} minutes {% if supportfile.annoncement|make_list|length < 120 %}{% endif %}
+                <i class="fa fa-fw fa-save"></i> {{ supportfile.situation}} situation{{ supportfile.situation|pluralize}}</small>
             </a>  <br>                                     
             <a href="{% url 'show_this_supportfile' supportfile.id   %}"   >  
                 <img src="{{ supportfile.imagefile.url }}" height="400px">

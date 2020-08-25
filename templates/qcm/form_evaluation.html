@@ -66,7 +66,9 @@
                 <tr>
                     <td>{{ form.stop.label_tag }}</td>
                     <td>{{ form.stop|add_class:"form-control datepicker"|attr:"required"}}</td>
-                    <td>{{ form.stop.errors}}</td>
+                    <td>{{ form.stop.errors}}{% for error in form.non_field_errors %}
+                            <p class="alert alert-danger">{{error}}</p>
+                        {% endfor %}</td>
                 </tr>
                 <tr>
                     <td>{{ form.stopper.label_tag }} </td>

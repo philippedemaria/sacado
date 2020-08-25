@@ -31,14 +31,14 @@
      <br>
 {% if request.user.is_superuser %}
         <a  href="{% url 'update_supportfile'  exercise.supportfile.id  %}" class="sublisting" target="_blank"> <small>   
-            <i class="fa fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %} 
-            <i class="fa fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
-            <i class="fa fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum</small>
+            <i class="fa fa-fw fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+            <i class="fa fa-fw fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+            <i class="fa fa-fw fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum</small>
         </a> 
 {% else %}
         <small>   
-            <i class="fa fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %} 
-            <i class="fa fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
-            <i class="fa fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum
+            <i class="fa fa-fw fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+            <i class="fa fa-fw fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+            <i class="fa fa-fw fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum
         </small> 
 {% endif %}

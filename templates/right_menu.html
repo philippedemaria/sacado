@@ -75,9 +75,9 @@
                     <tr>
                         <td style="color : {{  parcours.color }}">
                             {% for g in  parcours.group_list %}
-                                <div> <i class="fa fa-users"  ></i>  {{ g.name }}</div> 
+                                <div> <i class="fa fa-fw fa-users"  ></i>  {{ g.name }}</div>
                             {% empty %}
-                                <div> <i class="fa fa-ban"  ></i>  Non attribué</div> 
+                                <div> <i class="fa fa-fw fa-ban"  ></i> Non attribué</div>
                             {% endfor %}
                         </td>
                     </tr>                                  
@@ -93,17 +93,17 @@
 
                     <tr>
                         <td>
-                             <a href="{% url 'update_parcours' parcours.id 99999999999 %}"  style="color : {{  parcours.color }}"> <i class="fa fa-cogs"  ></i> Configurer</a> 
+                             <a href="{% url 'update_parcours' parcours.id 99999999999 %}"  style="color : {{  parcours.color }}"> <i class="fa fa-fw fa-cogs"  ></i> Configurer</a>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                          <a href="{% url 'stat_parcours' parcours.id  %}"   style="color : {{  parcours.color }}"><i class="fa fa-trophy"></i> Suivis </a>
+                          <a href="{% url 'stat_parcours' parcours.id  %}"   style="color : {{  parcours.color }}"><i class="fa fa-fw fa-trophy"></i> Suivis </a>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <a href="{% url 'show_parcours' parcours.id  %}"  style="color : {{  parcours.color }}"><i class="fa fa-arrow-circle-right"></i> En détails </a>
+                            <a href="{% url 'show_parcours' parcours.id  %}"  style="color : {{  parcours.color }}"><i class="fa fa-fw fa-arrow-circle-right"></i> En détails </a>
                         </td>
                     </tr>
                 </table>
