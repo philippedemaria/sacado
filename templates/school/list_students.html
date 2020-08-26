@@ -25,7 +25,6 @@
  
 {% block page_menu_right %}
 
-
 <li class="dropdown">
     <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Gestion des élèves <b class="caret"></b> </a>
 
@@ -33,6 +32,8 @@
         <li> <a href="{% url 'school_groups' %}"  >Enregistrer un élève (passer par sa classe) </a></li> 
         <li> <a href="{% url 'school_groups' %}"  >Enregistrer plusieurs élèves(passer par leur classe) </a></li> 
         <li> <a href="{% url 'delete_school_students' %}"  onclick="return deleteAllStudents()">Supprimer tous les élèves</a></li>
+
+
         <li class="divider">  </li>         
         <li>  <a href="{% url 'get_school_students' %}"  onclick="return getAllStudents()">Récupérer les comptes élèves déjà existants</a> </li>
 
@@ -57,8 +58,12 @@
  
  
  
-    <section class="content_list"> 
- 
+<section class="content_list"> 
+    <form action="{% url 'delete_selected_students' %}"  method="POST">            
+    {% csrf_token %}
+
+        <input type="submit" value="Supprimer les élèves sélectionnés" class="btn btn-danger" onclick="return deleteSelectedStudents()"/>
+
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 <table class="table table-bordered table-hover standard_tab_sort">
@@ -74,7 +79,7 @@
                     <tbody> 
                         {% for user in users %}
                             <tr>
-                                <td>
+                                <td><input type="checkbox" name="user_ids" value="{{ user.id }}" />
                                     <a href="{% url 'update_student_by_admin' user.id  %}">{{ user.last_name }} </a>   
                                 </td>
                                 <td>
@@ -104,8 +109,9 @@
                     <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
             </div>
         </div>
-    </section>
-   
+    </form>           
+</section>
+
 
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">

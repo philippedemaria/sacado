@@ -283,6 +283,17 @@ def delete_school_students(request):
 
 
 
+@login_required
+@is_manager_of_this_school
+def delete_selected_students(request):
+	user_ids = request.POST.getlist("user_ids")
+	for user_id in user_ids :
+		user = User.objects.get(pk=user_id)
+		student = Student.objects.get(user=user)
+		user.delete()
+		student.delete()
+	return redirect('school_students')
+
 
 
 @login_required

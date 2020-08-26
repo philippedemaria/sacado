@@ -29,11 +29,15 @@ function testPassword(f1, f2) {
 
 
 function deleteAllStudents() {
-    if (!confirm('Vous souhaitez supprimer tous les élèves de votre établissement ? Toutes leurs données actuelles seront perdues. Cette action est irréversible si vous cliquer sur OK.')) return false;
+    if (!confirm('Vous souhaitez supprimer tous les élèves de votre établissement ? Toutes leurs données actuelles seront perdues. Cette action est irréversible si vous cliquez sur OK.')) return false;
 }
 
 
  
 function getAllStudents() {
     if (!confirm('Vous souhaitez récupérer tous les élèves de votre établissement existant dans la base de données SACADO ? Tous les élèves associés à un enseignant de votre établissement seront associés à votre établissement.')) return false;
+}
+
+function deleteSelectedStudents() {
+    if (!confirm('Vous souhaitez supprimer tous les élèves sélectionnés ? Toutes leurs données actuelles seront perdues. Cette action est irréversible si vous cliquez sur OK.')) return false;
 }

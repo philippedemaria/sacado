@@ -34,6 +34,7 @@ urlpatterns = [
     path('delete_student_group/<int:id>/<int:ids>', delete_student_group , name='delete_student_group'),
     path('delete_all_students_group/<int:id>', delete_all_students_group , name='delete_all_students_group'),
     path('delete_school_students', delete_school_students , name='delete_school_students'),
+    path('delete_selected_students', delete_selected_students , name='delete_selected_students'),
 
     path('get_school_students', get_school_students , name='get_school_students'),
     path('manage_stage', manage_stage, name='manage_stage'),
