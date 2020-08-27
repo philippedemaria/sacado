@@ -830,8 +830,10 @@ def register_by_csv(request, key, idg=0):
                                                                defaults={'username': username, 'password': password,
                                                                          'is_extra': 0})
                     student, creator = Student.objects.get_or_create(user=user, level=group.level, task_post=1)
-                    if creator:
-                        group.students.add(student)
+                    if not creator : #Si l'élève n'est pas créé alors il existe dans des groupes. On l'efface de ses anciens groupes pour l'inscrire à nouveau !
+                        for g in student.student_group.all():
+                            g.students.remove(student)
+                    group.students.add(student)
             except:
                 pass
 

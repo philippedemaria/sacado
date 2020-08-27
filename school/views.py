@@ -105,6 +105,23 @@ def delete_country(request,id):
 ###############################################################################################
 
 
+def clear_detail_student(student):
+	try : 
+		for p in student.students_to_parcours.all():
+			p.students.remove(student)
+		for g in student.students_to_group.all():
+			g.students.remove(student)
+		for r in student.students_relationship.all():
+			r.students.remove(student)
+		for c in student.students_course.all() :
+			c.students.remove(student)
+		for a in student.answers.all() :
+			a.students.remove(student)	
+	except :
+		pass
+
+
+
 @login_required
 @is_manager_of_this_school
 def school_teachers(request):
@@ -256,7 +273,7 @@ def delete_student_group(request,id,ids):
 	group = Group.objects.get(id=id)
 	student = Student.objects.get(user_id=ids)
 	form = GroupForm(request.POST or None, school = school, instance = group)
-	group.students.remove(student)
+	clear_detail_student(student)
 	return redirect('update_group_school', group.id)
 
 
@@ -267,6 +284,8 @@ def delete_all_students_group(request,id):
 	school = request.user.school
 	group = Group.objects.get(id=id)
 	form = GroupForm(request.POST or None, school = school, instance = group)
+	for student in group.students.all() :
+		clear_detail_student(student)
 	group.students.clear()
 	return redirect('update_group_school', group.id)
 
@@ -278,6 +297,7 @@ def delete_school_students(request):
 	school = request.user.school
 	students = Student.objects.filter(user__school = school, user_type = 0)
 	for s in students :
+		clear_detail_student(s)
 		s.delete()
 	return redirect('admin_tdb')
 
@@ -291,6 +311,7 @@ def delete_selected_students(request):
 		user = User.objects.get(pk=user_id)
 		student = Student.objects.get(user=user)
 		user.delete()
+		clear_detail_student(student)
 		student.delete()
 	return redirect('school_students')
 
@@ -303,17 +324,23 @@ def new_group_many(request):
 	school = request.user.school
 	GroupFormSet = formset_factory(GroupForm , extra=2) 
 	group_formset  = GroupFormSet(request.POST or None, form_kwargs={'school': school, })
-
+	print("essai ici")
 	if request.method == "POST" :
+		print(len(group_formset.errors))
+		print(group_formset.total_error_count())
+		print(group_formset.has_changed( ))		
 		if group_formset.is_valid():
+			print("ici")
 			for f in group_formset :
+				print("formset")
 				f.save()
 			messages.success(request, "Groupes créés avec succès.")
 			return redirect('school_groups')
 
 		else :
 			print(group_formset.errors)
-
+	else :
+		print("no post")
 	return render(request,'school/many_group_form.html', {'formset' : group_formset , 'school': school})
 
  

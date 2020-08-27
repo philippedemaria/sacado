@@ -1010,8 +1010,8 @@ def print_ids(request, id):
 
     # Create the HttpResponse object with the appropriate PDF headers.
         string0 = "Bonjour {} {},".format(student.user.first_name, student.user.last_name) 
-        string1 = "Vous êtes élève en {} et le code du groupe est {}".format(group.name, group.code)  
-        string2 = "votre identifiant est {} et votre mot de passe est sacado2020".format(student.user.username)
+        string1 = "vous êtes élève en {} et le code du groupe est {}".format(group.name, group.code)  
+        string2 = "Votre identifiant est : {}    . Votre mot de passe est :    sacado2020".format(student.user.username)
         p.setFont("Helvetica", 12)
 
         p.drawString(75, 900-100*i, string0)
