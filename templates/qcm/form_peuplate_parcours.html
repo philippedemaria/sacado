@@ -25,11 +25,12 @@
 {% block page_menu_right %}
 
 <li>                
-    <a href="javascript:history.back()"  style="padding:12px; "><input type="button" value="Valider" class="btn btn-primary"/></a>
+    <a href="javascript:history.back()"  style="padding:12px; "><input type="button" value="Retour" class="btn btn-default "/></a>
 </li>
+<li>                
 
-
- 
+    <a href="{% url 'parcours' %}"  style="padding:12px; "><input type="button" value="Valider" class="btn btn-primary"/></a>
+</li>
 <li>
     <form action="" method="POST" enctype='multipart/form-data'>     
         {% csrf_token %}
