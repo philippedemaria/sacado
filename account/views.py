@@ -13,7 +13,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.hashers import make_password
 from django.core.mail import send_mail
 from django.db.models import Q, Avg, Sum
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, reverse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -779,60 +779,71 @@ def register_by_csv(request, key, idg=0):
     """
     Enregistrement par csv : key est le code du user_type : 0 pour student, 2 pour teacher
     """
-    if idg > 0 :
-        group = Group.objects.get(pk = idg)    
-    if request.method == "POST" :
-        #try:
+    if idg > 0:
+        group = Group.objects.get(pk=idg)
+    if request.method == "POST":
+        # try:
         csv_file = request.FILES["csv_file"]
         if not csv_file.name.endswith('.csv'):
-            messages.error(request,"Le fichier n'est pas format CSV")
+            messages.error(request, "Le fichier n'est pas format CSV")
             return HttpResponseRedirect(reverse("register_teacher_csv"))
-        #if file is too large, return
+        # if file is too large, return
         if csv_file.multiple_chunks():
-            messages.error(request,"Le fichier est trop lourd (%.2f MB)." % (csv_file.size/(1000*1000),))
+            messages.error(request, "Le fichier est trop lourd (%.2f MB)." % (csv_file.size / (1000 * 1000),))
             return HttpResponseRedirect(reverse("register_teacher_csv"))
 
-        file_data = csv_file.read().decode("utf-8")     
+        try:
+            file_data = csv_file.read().decode("utf-8")
+        except UnicodeDecodeError:
+            return HttpResponse('Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
 
         lines = file_data.split("\r\n")
-        #loop over the lines and save them in db. If error , store as string and then display
-        for line in lines: 
-            try :
-                #loop over the lines and save them in db. If error , store as string and then display
+        # loop over the lines and save them in db. If error , store as string and then display
+        for line in lines:
+            try:
+                # loop over the lines and save them in db. If error , store as string and then display
                 fields = line.split(";")
-                ln = str(fields[0]).replace(' ','').replace('\ufeff','').lower().capitalize()   
-                fn = str(fields[1]).lower().capitalize()            
-                username = get_username(ln , fn)
+                ln = str(fields[0]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
+                fn = str(fields[1]).lower().capitalize()
+                username = get_username(ln, fn)
                 password = make_password("sacado_2020")
-                try :
-                    if fields[2] !=  "" :                    
+                try:
+                    if fields[2] != "":
                         email = fields[2]
-                    else :
-                        email = "" 
-                except :
+                    else:
+                        email = ""
+                except:
                     email = "" 
 
-                if key == 2:  # Enseignant
-                    user = User.objects.get_or_create(last_name = ln , first_name = fn , email = email , user_type = 2  ,  school  =  request.user.school ,   time_zone =  request.user.time_zone , is_manager = 0 , defaults= {'username' : username , 'password' : password ,  'is_extra' : 1 } )
-                    Teacher.objects.get_or_create(user = user , notification = 1 , exercise_post = 1)
+                if key == User.TEACHER:  # Enseignant
+                    user = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,
+                                                      school=request.user.school, time_zone=request.user.time_zone,
+                                                      is_manager=0,
+                                                      defaults={'username': username, 'password': password,
+                                                                'is_extra': 1})
+                    Teacher.objects.get_or_create(user=user, notification=1, exercise_post=1)
                     group = None
                 else:  # Student
-                    user , created = User.objects.get_or_create(last_name = ln , first_name = fn , email = email , user_type = 0  , school  =  request.user.school ,   time_zone =  request.user.time_zone , is_manager = 0 , defaults= {'username' : username , 'password' : password ,  'is_extra' : 0 } ) 
-                    student, creator = Student.objects.get_or_create(user = user , level = group.level , task_post = 1 )
-                    if creator :
+                    user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=0,
+                                                               school=request.user.school,
+                                                               time_zone=request.user.time_zone, is_manager=0,
+                                                               defaults={'username': username, 'password': password,
+                                                                         'is_extra': 0})
+                    student, creator = Student.objects.get_or_create(user=user, level=group.level, task_post=1)
+                    if creator:
                         group.students.add(student)
-            except :
+            except:
                 pass
 
-        if key == 2 :
+        if key == User.TEACHER:
             return redirect('school_teachers')
-        else :
-            return redirect('school_groups')            
-    else :
-        if key == 2 :
+        else:
+            return redirect('school_groups')
+    else:
+        if key == User.TEACHER:
             group = None
-        else :
-            group = Group.objects.get(pk = idg)
+        else:
+            group = Group.objects.get(pk=idg)
 
         return render(request, 'account/csv_teachers_or_students.html', {'key': key, 'idg': idg, 'group': group})
 
