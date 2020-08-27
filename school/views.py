@@ -399,7 +399,7 @@ def send_account(request, id):
 		user = User.objects.get(id=id)
 		rcv.append(user.email)
 	send_mail('Compte   Sacado',
-	f'Bonjour, votre compte Sacado est disponible.\r\n\r\nVotre identifiant est {u.username} \r\n\r\n\Votre mot de passe est secret. Pour une première connexion, le mot de passe est : sacado2020 . Il faut le modifier lors de la première connexion.\r\n\r\n Dans le cas contraire, utilisez votre mot de passe habituel ou si il est perdu, demandez-en un autre.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
+	f'Bonjour, votre compte Sacado est disponible.\r\n\r\nVotre identifiant est {u.username} \r\n\r\n\Votre mot de passe est secret. Pour une première connexion, le mot de passe est : sacado2020 . Il faut le modifier lors de la première connexion.\r\n\r\n Dans le cas contraire, utilisez votre mot de passe habituel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
 	'info@sacado.xyz',
 	rcv)
 
@@ -444,8 +444,6 @@ def pdf_account(request,id):
 		p.drawString(50, 505, "Votre mot de passe est secret.")
 		p.setFont("Helvetica", 12)
 		p.drawString(50, 490, "Si vous avez déjà un compte, utilisez votre mot de passe habituel.")
-		p.setFont("Helvetica", 12)
-		p.drawString(50, 475, "S'il est perdu, demandez-en un autre.")
 		p.setFont("Helvetica", 12)
 		p.drawString(50, 460, "Pour vous connecter, redirigez-vous vers https://sacado.xyz.")
 		p.showPage()
