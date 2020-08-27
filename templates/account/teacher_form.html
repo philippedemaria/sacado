@@ -141,7 +141,7 @@
                 {% if request.user.is_superuser %}
                 <div class="col-sm-12 col-md-6">                 
                     <div class="alert alert-danger"> 
-                        <h4 cLass="thin">Partie admin</h4>
+                        <h4 cLass="thin">Attribution des droits d'administrateur d'un établissement</h4>
                         <div class="form-group">
                             <label>Administrateur établissement ?</label>
                             {{ user_form.is_manager |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"  }}

@@ -324,23 +324,14 @@ def new_group_many(request):
 	school = request.user.school
 	GroupFormSet = formset_factory(GroupForm , extra=2) 
 	group_formset  = GroupFormSet(request.POST or None, form_kwargs={'school': school, })
-	print("essai ici")
-	if request.method == "POST" :
-		print(len(group_formset.errors))
-		print(group_formset.total_error_count())
-		print(group_formset.has_changed( ))		
+	if request.method == "POST" :	
 		if group_formset.is_valid():
 			print("ici")
 			for f in group_formset :
-				print("formset")
 				f.save()
 			messages.success(request, "Groupes créés avec succès.")
 			return redirect('school_groups')
-
-		else :
-			print(group_formset.errors)
-	else :
-		print("no post")
+ 
 	return render(request,'school/many_group_form.html', {'formset' : group_formset , 'school': school})
 
  
