@@ -121,8 +121,6 @@ define(['jquery', 'bootstrap'], function ($) {
                             else 
                             {$('#studentUsername'+student_id).val(value);}
 
-                            alert("Modification enregistrée") ;
-
                         }
                     }
                 )

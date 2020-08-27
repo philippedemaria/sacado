@@ -13,11 +13,11 @@
                 <li class="divider"></li>
 
         <li {% if 'group/update/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'update_group' group.id %}"  > <i class="fa fa-cogs fa-fw"  ></i><span class="small_displayer"> Modifier/Ajouter des élèves</span></a>    
+            <a href="{% url 'update_group' group.id %}"  > <i class="fa fa-cogs fa-fw"  ></i><span class="small_displayer"> Modifier le groupe/Ajouter des élèves</span></a>    
         </li>             
         
         <li {% if 'group/show/' in request.path %} class="active" {% endif %}>
-             <a href="{% url 'show_group' group.id  %}" ><i class="fa fa-arrow-circle-right fa-fw fa-fw"></i>  Lire les détails </a>
+             <a href="{% url 'show_group' group.id  %}" ><i class="fa fa-arrow-circle-right fa-fw fa-fw"></i>  Lire les détails/Modifier les élèves </a>
         </li>
 
         <li {% if 'group/print_ids/' in request.path %} class="active" {% endif %}>

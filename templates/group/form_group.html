@@ -121,16 +121,20 @@
                         </div>
                     </div>
                 
-
-
+ 
                 {% if group %}
+
+                    {% if not group.teacher.user.school.name    %}
 
                     <div class="col-sm-12 col-md-4">
                         <div class="form-group">
                             <a href="{% url 'delete_group' group.id %}" class="btn btn-danger" onclick="return TestDelete('ce groupe')">Supprimer ce groupe</a>
                         </div>
                     </div>
+                    {% else %}
+                    Contacter l'administrateur pour supprimer ce groupe.
 
+                    {% endif %}
                 {% endif %}
                 </div>
             </form>
