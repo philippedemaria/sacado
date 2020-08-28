@@ -185,6 +185,29 @@ define(['jquery','bootstrap'], function ($) {
         });
 
 
+        // Met en favori un parcours
+        $('.selector_favorite').on('click' ,function () {
+            let parcours_id = $(this).attr("data-parcours_id"); 
+            let statut = $(this).attr("data-fav"); 
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'parcours_id': parcours_id,
+                        'statut': statut,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "ajax_is_favorite",
+                    success: function (data) {
+                        $('#is_favorite_id'+parcours_id).html(data.statut);
+                        $('#selector_favorite'+parcours_id).attr("data-fav",data.fav);      
+                    }
+                }
+            )
+        });
+
 
 
         // Affiche dans la modal la liste des élèves du groupe sélectionné

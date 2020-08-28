@@ -1030,6 +1030,43 @@ def result_parcours_exercise_students(request,id):
 
 
 
+
+
+@csrf_exempt # PublieDépublie un exercice depuis organize_parcours
+def ajax_is_favorite(request):  
+
+    parcours_id = int(request.POST.get("parcours_id"))
+    statut = int(request.POST.get("statut"))
+    data = {}
+    if statut :
+        Parcours.objects.filter(pk = parcours_id).update(is_favorite = 0)
+        data["statut"] = ""
+        data["fav"] = 0
+    else :
+        Parcours.objects.filter(pk = parcours_id).update(is_favorite = 1)  
+        data["statut"] = "<i class='fa fa-star fa-stack-1x' style='font-size: 12px; color:#FFF' ></i>"
+        data["fav"] = 1
+    return JsonResponse(data) 
+
+
+
+
+@csrf_exempt # PublieDépublie un exercice depuis organize_parcours
+def ajax_ordering(request):  
+
+    exercise_ids = request.POST.get("valeurs")
+    exercise_tab = exercise_ids.split("-") 
+    
+    parcours = request.POST.get("parcours")
+
+    for i in range(len(exercise_tab)-1):
+        Course.objects.filter(parcours = parcours , exercise_id = exercise_tab[i]).update(order = i)
+
+    data = {}
+    return JsonResponse(data) 
+
+
+
  
 
 @csrf_exempt
