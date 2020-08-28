@@ -677,7 +677,7 @@ def enroll(request, slug):
 
 def print_statistiques(request, group_id, student_id):
 
-    themes = []
+    themes, subjects = [], []
     if student_id == 0  :
         group = Group.objects.get(pk = group_id)
         students = group.students.order_by("user__last_name")
@@ -698,7 +698,9 @@ def print_statistiques(request, group_id, student_id):
         for know in knows :
             if not know.theme in themes :
                 themes.append(know.theme)
-
+    
+    for thm in themes :
+        subjects.append(thm.subject)
 
 
     elements = []        
@@ -801,6 +803,7 @@ def print_statistiques(request, group_id, student_id):
                 if not exercise.knowledge in knowledges:
                     knowledges.append(exercise.knowledge)
 
+
             nb_k_p = len(knowledges)
             knows_ids = Studentanswer.objects.values_list("id",flat=True).filter(exercise__knowledge__in = knows, exercise__in= exercises , student=student)
             nb_k = count_unique(knows_ids)
@@ -853,7 +856,7 @@ def print_statistiques(request, group_id, student_id):
         labels = [str(student.user.last_name)+" "+str(student.user.first_name), str(student.level)+", année scolaire "+scolar_year,"Temps de connexion : "+convert_seconds_in_time(duration), "Score moyen : "+str(average_score)+"%" , "Score médian : "+str(median)+"%" , \
                 "Les savoir faire  ", "Nombre de savoir faire étudiés : "+str(nb_k)+complement, "Nombre de savoir faire proposés : "+str(nb_k_p), "Taux d'étude : "+str(p_k)+"%",\
                  "Les exercices ", "Nombre d'exercices différents étudiés : "+str(nb_exo)+complt, "Nombre d'exercices proposés : "+str(nb_p), "Taux d'étude : "+str(p_e)+"%",\
-                 "Les tâches ", "Tâches proposées : "+str(t_r),  "Tâches remises en temps : "+str(done), "Tâches remises en retard : "+str(late), "Tâches remises non remises : "+str(no_done),\
+                 "Les tâches ", "Tâches proposées : "+str(t_r),  "Tâches remises en temps : "+str(done), "Tâches remises en retard : "+str(late), "Tâches non remises : "+str(no_done),\
                  "Suivi par compétences ",]
 
         spacers , titles,subtitles = [1,4, 5,8,12,17] ,[0],[ 5,9,13,18]
@@ -880,7 +883,7 @@ def print_statistiques(request, group_id, student_id):
         #### Gestion des compétences
         ##########################################################################
         sk_tab = []
-        skills = Skill.objects.all()
+        skills = Skill.objects.filter(subject__in= subjects)
         for skill  in skills :
             try :
                 resultlastskill  = Resultlastskill.objects.get(student = student, skill= skill )
