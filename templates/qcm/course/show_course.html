@@ -43,16 +43,18 @@
             <a href="{%  url 'create_course' 0 parcours.id %}" class="btn btn-danger full_width"> Créer un nouveau cours </a>
             <hr>
             {% endif %}
-
-            <ul class="nav nav-pills nav-stacked admin-menu">
+            <form action="" method="POST"> 
+            {% csrf_token %}
+            <ul class="nav nav-pills nav-stacked admin-menu" id="course_sortable">
+                <input type="hidden" value="{{ parcours.id }}" name="parcours_id" id="parcours_id"/>
                 {% for course in courses %}
-                    <li class="{% if forloop.first %}active{% endif %}">
-                        <a href="#" data-target-id="course{{forloop.counter0}}"> {{ course.title }}</a>
-                         
+                    <li class="{% if forloop.first %}active{% endif %} menu_course">
+                        <a href="#" data-target-id="course{{forloop.counter0}}"> {{ course.title }}<img src="{% static 'img/order_handler_white.png' %}" class="pull-right"/></a>
+                        <input type="hidden" value="{{ course.id }}" class="course_sort" /> 
                     </li>
                 {% endfor %}
-
             </ul>
+            </form>
         </div>
 
 

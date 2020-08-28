@@ -131,8 +131,7 @@ urlpatterns = [
     path('get_parcours_default/', get_parcours_default , name='get_parcours_default'),
 
     path('ajax_is_favorite', ajax_is_favorite, name='ajax_is_favorite'),
-    path('ajax_ordering', ajax_ordering, name='ajax_ordering'),
-
+    path('ajax/course_sorter', ajax_course_sorter, name='ajax_course_sorter'),
 
     path('parcours_show_student/<int:id>/', show_parcours_student, name='show_parcours_student'),     
     

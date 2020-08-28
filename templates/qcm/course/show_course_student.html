@@ -48,7 +48,7 @@
 
             <ul class="nav nav-pills nav-stacked admin-menu">
                 {% for course in courses %}
-                    <li class="{% if forloop.first %}active{% endif %}">
+                    <li class="{% if forloop.first %}active{% endif %} menu_course">
                         <a href="#" data-target-id="course{{forloop.counter0}}"> {{ course.title }}</a>
                          
                     </li>

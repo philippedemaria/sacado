@@ -1052,15 +1052,14 @@ def ajax_is_favorite(request):
 
 
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
-def ajax_ordering(request):  
+def ajax_course_sorter(request):  
 
-    exercise_ids = request.POST.get("valeurs")
-    exercise_tab = exercise_ids.split("-") 
-    
-    parcours = request.POST.get("parcours")
+    course_ids = request.POST.get("valeurs")
+    course_tab = course_ids.split("-") 
+    parcours_id = int(request.POST.get("parcours_id"))
 
-    for i in range(len(exercise_tab)-1):
-        Course.objects.filter(parcours = parcours , exercise_id = exercise_tab[i]).update(order = i)
+    for i in range(len(course_tab)-1):
+        Course.objects.filter(parcours_id = parcours_id , pk = course_tab[i]).update(ranking = i)
 
     data = {}
     return JsonResponse(data) 
@@ -2797,7 +2796,7 @@ def show_course(request, idc , id ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     parcours = Parcours.objects.get(pk =  id)
-    courses = parcours.course.all() 
+    courses = parcours.course.all().order_by("ranking") 
 
     if len(courses) > 0 :
         user = User.objects.get(pk = request.user.id)
@@ -2814,7 +2813,8 @@ def show_course_student(request, idc , id ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     parcours = Parcours.objects.get(pk =  id)
-    courses = parcours.course.all() 
+    today = time_zone_user(this_user)
+    courses = parcours.course.filter(Q(is_publish=1)|Q(publish_start__lte=today),Q(is_publish=1)|Q(publish_end__gte=today)).order_by("ranking")  
  
 
     context = {  'courses': courses, 'parcours': parcours , 'group_id' : None, 'communications' : []}

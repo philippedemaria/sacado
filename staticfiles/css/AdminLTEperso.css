@@ -236,6 +236,21 @@ li.sorted_list_handle{
 }
 
 
+li.menu_course{
+  list-style-type: none;
+  background-color: #dbcdf7;
+  color:#FFF;
+}
+
+li.menu_course > a {
+  font-size: 16px;
+  color: #5d4391;
+ 
+}
+
+
+
+
  /****************************************** help *******************************************************/
  
 .help{
