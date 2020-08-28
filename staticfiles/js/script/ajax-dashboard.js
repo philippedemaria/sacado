@@ -539,7 +539,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
-         $('.course_sortable').sortable({
+         $('#course_sortable').sortable({
             start: function( event, ui ) { 
                    $(ui.item).css("box-shadow", "2px 1px 2px gray").css("background-color", "#271942").css("color", "#FFF"); 
                },
