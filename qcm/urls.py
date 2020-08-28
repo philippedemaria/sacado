@@ -127,6 +127,9 @@ urlpatterns = [
     path('ajax/create_title_parcours', ajax_create_title_parcours, name='ajax_create_title_parcours'),
     path('ajax/erase_title', ajax_erase_title, name='ajax_erase_title'),
 
+    path('ajax/parcours_default', ajax_parcours_default , name='ajax_parcours_default'),
+    path('get_parcours_default/', get_parcours_default , name='get_parcours_default'),
+
 
     path('parcours_show_student/<int:id>/', show_parcours_student, name='show_parcours_student'),     
     

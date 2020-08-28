@@ -42,7 +42,36 @@
 
 <li class="sans_puce"><a href="{% url 'create_group' %}" class="btn btn-primary full_width">Créer un groupe</a> </li>
 
-<li class="sans_puce"><a href="{% url 'create_parcours' %}" class="btn btn-primary full_width">Créer un parcours</a> </li> 
+<li class="sans_puce"> 
+<div class="btn btn-primary full_width">
+
+        <span data-toggle="collapse" data-parent="#accordion"  href="#collapser">
+         Créer un parcours 
+        </span>
+
+    <div id="collapser" class="collapse">
+        <div class="panel-body" style="padding:0px">
+            <table class="table" style="margin-bottom: 0px;font-size:14px">
+                <tr>
+                    <td>
+                         <a href="{% url 'create_parcours' %}"><i class="fa fa-caret-right"></i> + Nouveau parcours</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="{% url 'all_parcourses' %}"><i class="fa fa-caret-right"></i> Parcours mutualisés</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   > <i class="fa fa-caret-right"></i> Parcours par défaut</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</li>
 
 <li class="sans_puce"><a href="{% url 'create_evaluation' %}" class="btn btn-primary full_width">Créer une évaluation</a> </li> 
 

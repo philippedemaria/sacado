@@ -187,9 +187,42 @@ def associate_parcours(request,id):
     if len(parcours.students.all())>0 :
         return redirect("list_parcours_group" , group.id )
     else :
-        return redirect("dashboard") 
+        return redirect("index") 
 
 
+
+
+@csrf_exempt
+def ajax_parcours_default(request):
+    data = {}
+    level_id =  request.POST.get("level_selected_id")    
+    level =  Level.objects.get(pk = level_id)
+    context = {  'level': level,   }
+    data['html'] = render_to_string('qcm/parcours_default_popup.html', context)
+ 
+    return JsonResponse(data)
+
+ 
+
+def get_parcours_default(request):
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    level_id = request.POST.get("level_selected_id")
+    theme_ids = request.POST.getlist("themes")
+    n = 0
+    for theme_id in theme_ids :
+        theme = Theme.objects.get(pk = int(theme_id))
+        parcours, created = Parcours.objects.get_or_create(title=theme.name, color="#5d4391", author=teacher, teacher=teacher, level_id=level_id,  is_favorite = 1,  is_share = 0, linked = 0)
+        exercises = Exercise.objects.filter(level_id=level_id,theme = theme, supportfile__is_title=0)
+        i  = 0
+        for e in exercises:
+            relationship, created = Relationship.objects.get_or_create(parcours = parcours, exercise=e, order = i)
+            i+=1
+        n +=1
+    if n > 1 :
+        messages.info(request, "Les parcours sont créés avec succès. Penser à leur attribuer des élèves et les à publier.")
+    else :
+        messages.info(request, "Le parcours est créé avec succès. Penser à lui attribuer des élèves et le à publier.")
+    return redirect("index") 
 
 #######################################################################################################################################################################
 #######################################################################################################################################################################
@@ -407,7 +440,7 @@ def list_parcours(request):
     except:
         pass  
 
-    return render(request, 'qcm/list_parcours.html', { 'parcourses' : parcourses , 'parcours' : None})
+    return render(request, 'qcm/list_parcours.html', { 'parcourses' : parcourses , 'parcours' : None , 'teacher' : teacher , })
 
 
 

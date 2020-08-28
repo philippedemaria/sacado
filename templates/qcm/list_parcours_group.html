@@ -31,15 +31,16 @@
 
 
 <li class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> + Nouveau Parcours <b class="caret"></b> </a>
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Créer un parcours <b class="caret"></b> </a>
 
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
  
  
-
+        <li> <a href="{% url 'create_parcours' %}"  >  + Nouveau Parcours</a> </li> 
+        <li> <a href="{% url 'all_parcourses' %}"   > Parcours mutualisés</a></li>         
         <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   > Parcours par défaut</a></li>
-        <li> <a href="{% url 'all_parcourses' %}"   > Parcours mutualisés</a></li>
-        <li> <a href="{% url 'create_parcours' %}"  >  Parcours personnalisé</a> </li>  
+
+
     </ul>
 </li>  
 

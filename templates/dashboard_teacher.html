@@ -270,3 +270,33 @@
 
 
 
+<div class="modal fade" id="parcours_default_modal" tabindex="-1" role="dialog" aria-labelledby="parcours_default_modal">
+    <div class="modal-dialog" role="document" style="width:70%">
+        <div class="modal-content" >
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2 class="thin sacado">Les parcours par défaut</h2>
+                <p>Ces parcours contiennent tous les exercices proposés par <span class="sacado">sacado</span> dans le thème proposé. </p>
+                <form action="{% url 'get_parcours_default'  %}" method="POST" enctype='multipart/form-data'>   
+                    {% csrf_token %}
+                    <p><span class="label label-primary">1</span> Sélectionner le niveau souhaité.</p>
+
+
+                    <p><select name="level_selected_id" id="level_selected_id"  data-url="yes" class="form-control select2" required>
+                            <option value=" ">Sélectionner un niveau</option>
+                            {% for level in teacher.levels.all %}
+                            <option value="{{ level.id }}">{{level.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </p>
+
+                    <div id="parcours_shower"> 
+             
+                    </div>  
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

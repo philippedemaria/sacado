@@ -1,0 +1,27 @@
+
+ 	
+
+    <p><span class="label label-primary">2</span> Sélectionner le ou les parcours.</p>
+
+
+    <table style="margin: 10px">
+	    {% for theme in level.themes.all %}
+	    <tr>                            
+	        <td><label><input type="checkbox"  value="{{ theme.id }}" name="themes" /> parcours {{theme}}</label></td>
+	    </tr>
+	    {% endfor   %}
+	</table>
+    
+    <div class="row" >
+        <div class="col-sm-12 col-md-12">
+            <div class="form-group">
+                <input value="Récupérer le ou les parcours sélectionnés" type="submit" class="btn btn-primary"/>
+                <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">
+                    Fermer
+                </button> 
+            </div>
+        </div> 
+    </div>   
+
+
+ 
