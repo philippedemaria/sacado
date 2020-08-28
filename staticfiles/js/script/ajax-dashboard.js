@@ -537,6 +537,37 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
  
 
 
+
+
+         $('.course_sortable').sortable({
+            start: function( event, ui ) { 
+                   $(ui.item).css("box-shadow", "2px 1px 2px gray").css("background-color", "#271942").css("color", "#FFF"); 
+               },
+            stop: function (event, ui) {
+
+
+                let parcours_id = $("#parcours_id").val();
+                var valeurs = "";
+                         
+                $(".course_sort").each(function() {
+                    let this_chapter_id = $(this).val();
+                    valeurs = valeurs + this_chapter_id +"-";
+                });
+
+                console.log(valeurs);
+                console.log(parcours_id);
+                $(ui.item).css("box-shadow", "0px 0px 0px transparent").css("background-color", "#dbcdf7").css("color", "#271942"); 
+
+                $.ajax({
+                        data:   { 'valeurs': valeurs , 'parcours_id' : parcours_id,  } ,   
+                        type: "POST",
+                        dataType: "json",
+                        url: "../../ajax/course_sorter" 
+                    }); 
+                }
+            });
+
+
         // =================================================================================================================
         // =================================================================================================================           
         // ===========================================  Les sections  ======================================================
