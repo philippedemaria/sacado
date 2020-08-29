@@ -433,7 +433,7 @@ import os
 def list_parcours(request):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
-    parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=0).order_by("-is_favorite")  
+    parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=0,is_archive=0).order_by("-is_favorite")  
     nb_archive =  Parcours.objects.filter(teacher = teacher,is_evaluation=0,is_archive=1).count()  
     try :
         del request.session["group_id"]
