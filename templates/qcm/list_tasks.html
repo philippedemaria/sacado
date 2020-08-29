@@ -13,7 +13,7 @@
   
 
 {% block page_title %}
-    <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-calendar-check-o"></i> Tâches <img src="{% static 'img/angle-right.png' %}"/> {{ parcours }}</span>
+    <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-calendar-check"></i>  {{ parcours }} </span>   <small><img src="{% static 'img/angle-right.png' %}"/> Tâches</small>   
 {% endblock %}
 
 
@@ -22,7 +22,7 @@
 
    {% include 'qcm/submenu_parcours.html' %}    
 
-   <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
+
 {% endblock %}
 
 {% block body %}
@@ -82,6 +82,6 @@
 
     </div>
 </div> 
- 
+    <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
 </section>
 {% endblock %}
