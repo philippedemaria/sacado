@@ -434,29 +434,55 @@ def list_parcours(request):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=0).order_by("-is_favorite")  
-
+    nb_archive =  Parcours.objects.filter(teacher = teacher,is_evaluation=0,is_archive=1).count()  
     try :
         del request.session["group_id"]
     except:
         pass  
 
-    return render(request, 'qcm/list_parcours.html', { 'parcourses' : parcourses , 'parcours' : None , 'teacher' : teacher , })
+    return render(request, 'qcm/list_parcours.html', { 'parcourses' : parcourses , 'parcours' : None , 'teacher' : teacher , 'nb_archive' : nb_archive })
+
+
+@login_required
+def list_archives(request):
+
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=0,is_archive=1).order_by("level")  
+ 
+    try :
+        del request.session["group_id"]
+    except:
+        pass   
+
+    return render(request, 'qcm/list_archives.html', { 'parcourses' : parcourses , 'parcours' : None , 'teacher' : teacher , })
 
 
 
 @login_required
 def list_evaluations(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
-    parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=1).order_by("-is_favorite")     
+    parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=1,is_archive=0).order_by("-is_favorite")     
+    nb_archive = Parcours.objects.filter(teacher = teacher,is_evaluation=1,is_archive=1).count()  
+    try :
+        del request.session["group_id"]
+    except:
+        pass  
+
+    return render(request, 'qcm/list_evaluations.html', { 'parcourses' : parcourses, 'parcours' : None , 'communications' : [] , 'relationships' : []   , 'nb_archive' : nb_archive })
+
+
+
+@login_required
+def list_evaluations_archives(request):
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=1,is_archive=1).order_by("level")    
 
     try :
         del request.session["group_id"]
     except:
         pass  
 
-    return render(request, 'qcm/list_evaluations.html', { 'parcourses' : parcourses, 'parcours' : None , 'communications' : [] , 'relationships' : []   })
-
-
+    return render(request, 'qcm/list_evaluations_archives.html', { 'parcourses' : parcourses, 'parcours' : None , 'communications' : [] , 'relationships' : []   })
 
 
 
@@ -1098,12 +1124,15 @@ def ajax_publish(request):
         data["publish"] = "Dépublié"
         data["class"] = "legend-btn-danger"
         data["noclass"] = "legend-btn-success"
+        data["removeclass"] = "btn-success"
+
     else:
         statut = 1
         data["statut"] = "true"
         data["publish"] = "Publié"
         data["class"] = "legend-btn-success"
         data["noclass"] = "legend-btn-danger"
+        data["removeclass"] = "btn-danger"
 
     Relationship.objects.filter(pk = int(relationship_id)).update(is_publish = statut)
     return JsonResponse(data) 
@@ -2093,12 +2122,13 @@ def ajax_create_title_parcours(request):
     ''' Création d'une section ou d'une sous-section dans un parcours '''
     teacher = Teacher.objects.get(user=request.user)
     value = request.POST.get('value', None)
-    parcours_id = int(request.POST.get('parcours_id', None))
-    subtitle = int(request.POST.get('subtitle', None))
+    parcours_id = int(request.POST.get('parcours_id', 0))
+    subtitle = int(request.POST.get('subtitle', 0))
     code = str(uuid.uuid4())[:8]
     data = {}
-    supportfile = Supportfile.objects.create(knowledge_id=1, annoncement=value, author=teacher, code=code, level_id=1,
-                                             theme_id=1, is_title=1, is_subtitle=subtitle)
+
+    supportfile = Supportfile.objects.create(knowledge_id=1, annoncement=value, author=teacher, code=code, level_id=1, theme_id=1, is_title=1, is_subtitle=subtitle)
+
     exe = Exercise.objects.create(knowledge_id=1, level_id=1, theme_id=1, supportfile=supportfile)
     Relationship.objects.create(exercise=exe, parcours_id=parcours_id, order=0)
 
@@ -2116,7 +2146,7 @@ def ajax_create_title_parcours(request):
 
     return JsonResponse(data)
 
- 
+
 
 def ajax_erase_title(request):
 

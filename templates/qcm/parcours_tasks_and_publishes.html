@@ -12,7 +12,7 @@
  
 
 {% block page_title %}
-    <i class="fa fa-th" style="color:{{ parcours.color|contrast_color_title }}"></i> <span style="color:{{ parcours.color }}">{{ parcours.title }} </span>  
+    <i class="fa fa-tasks" style="color:{{ parcours.color|contrast_color_title }}"></i> <span style="color:{{ parcours.color }}">{{ parcours.title }} <img src="{% static 'img/angle-right.png' %}"/> Gérer </span>  
 {% endblock %}
 
 {% block page_menu_right %}
@@ -61,7 +61,7 @@
                                 {% if not relationship.exercise.supportfile.is_title %}
                                     <div class="header_exercise">
                                         <div class="pull-right"> 
-                                              <a href="#" class="btn btn-{% if not relationship.is_publish %}default{% else  %}success{% endif  %} action_content" style="margin-left:5px;" id="publisher{{relationship.id}}"  data-relationship_id="{{relationship.id}}" data-statut="{{relationship.is_publish }}" >  
+                                              <a href="#" class="btn btn-{% if not relationship.is_publish %}danger{% else  %}success{% endif  %} action_content" style="margin-left:5px;" id="publisher{{relationship.id}}"  data-relationship_id="{{relationship.id}}" data-statut="{{relationship.is_publish }}" >  
                                              {% if relationship.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
                                               </a>
                                               <a href="#collapside{{ forloop.counter}}" class="btn btn-default" style="margin-left:5px;" id="date_limit{{relationship.id}}" data-toggle="collapse"  >  
@@ -172,7 +172,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-6 col-xs-12">
-                            <div class="form-group"><a href="#" class="btn btn-sacado"  id="create_section">Valider</a></div>
+                            <div class="form-group"><a href="#" class="btn btn-primary"  id="create_section">Valider</a></div>
                         </div>
                     </div>
                 </div>

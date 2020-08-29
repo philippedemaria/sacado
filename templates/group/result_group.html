@@ -12,8 +12,8 @@
 {% endblock %}
 
 {% block page_title %}
-    <span style="color:{{ group.color|contrast_color_title }}"><i class='fa fa-mortar-board'></i>  {{ group.name }}
-    <img src="{% static 'img/angle-right.png' %}" width="15px"/> {% if 'exercise' in request.path %} Exercices {% elif 'skill' in request.path %}  Compétences {% else %}  Savoir faire{% endif %} 
+    <span style="color:{{ group.color }}"><i class='fa fa-mortar-board'></i> {{ group.name }}  <img src="{% static 'img/angle-right.png' %}" width="15px"/> Suivis
+    
     {% if theme %} <img src="{% static 'img/angle-right.png' %}" width="15px"/> <small>{{ theme }}</small>  {% endif %} 
     </span>  
 {% endblock %}

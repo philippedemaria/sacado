@@ -746,6 +746,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                             $('#publisher'+relationship_id).html("").html(data.publish);
                             $('#publisher'+relationship_id).removeClass(data.noclass);
                             $('#publisher'+relationship_id).addClass(data.class);
+                            $('#publisher'+relationship_id).removeClass(data.removeclass);
                         }
                     }
                 )

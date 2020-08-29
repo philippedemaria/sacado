@@ -2,7 +2,7 @@
 {% load item_tags %} 
 
 <div class="row" id ="principal_section"> 
-    <div class="col-xs-12 col-md-10 col-lg-10" style="margin-top:20px">
+    <div class="col-xs-12 col-md-10 col-lg-10" style="margin-top:0px">
             <h2 class="thin">Mes groupes</h2>
             <div class="row"></div><hr style="margin-top: 0px">   
             {% for group in groups %}
@@ -49,16 +49,16 @@
 
                         <div class="small-box-footer" >
                             <br>
-                                <a href="{% url 'list_parcours_group' group.id  %}#parcours" class="btn btn-default btn-accueil"> 
+                                <a href="{% url 'list_parcours_group' group.id  %}#parcours" class="btn btn-default btn-accueil" style="width:95%"> 
                                 <small>   <i class="fa fa-th"></i> </small>
                                
                                    Parcours favoris  <small> ({{ data.nb_parcours_favorite }}) - 
                                  {{ data.nb_parcours_visible }} publié{{ data.nb_parcours_visible|pluralize }}  </small>
                                 </a>
                             <br>
-                                <a href="{% url 'list_parcours_group' group.id  %}#evaluation" class="btn btn-default btn-accueil"> 
+                                <a href="{% url 'list_parcours_group' group.id  %}#evaluation" class="btn btn-default btn-accueil" style="width:95%"> 
                                   <small>   <i class="fa fa-trophy"></i> </small>
-                                    Evaluation{{ data.nb_parcours_evaluation|pluralize }}  ({{ data.nb_parcours_evaluation }}) 
+                                    Evaluation{{ data.nb_parcours_evaluation|pluralize }} favorite{{ data.nb_parcours_evaluation|pluralize }} <small> ({{ data.nb_parcours_evaluation }}) - 0 créée{{ data.nb_parcours_evaluation|pluralize }}</small>
                                 </a>
 
                             <br><br>
@@ -207,11 +207,11 @@
                         <div class="box-footer">
                             <div class="row extend">                              
                                 <div class="col-lg-3 col-xs-3">
-                                    <a href="{% url 'update_parcours' parcours.id 0 %}" class="edit" > <i class="fa fa-edit"></i><span class="label_icon">Modif<span> </a><br>
+                                    <a href="{% url 'update_parcours' parcours.id 0 %}" class="edit" > <i class="fa fa-edit"></i><span class="label_icon">Modif.<span> </a><br>
                                     </a> 
                                 </div>                             
                                 <div class="col-lg-3 col-xs-3">
-                                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit"><i class="fa fa-cloud"></i><span class="label_icon"> Sélec</span>
+                                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit"><i class="fa fa-cloud"></i><span class="label_icon"> Sélec.</span>
                                     </a>  
                                 </div>    
                                 <div class="col-lg-3 col-xs-3">

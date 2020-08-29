@@ -74,7 +74,6 @@
               style="{% if parcours.vignette %}background-image: url('{{ parcours.vignette.url }}'); background-size: cover; {% else %} background-color:{{parcours.color }}{% endif %};">
               <!-- Add the bg color to the header using any of the bg-* classes -->
             <div class="handler widget-user-header">
-
                 <div class="group_show  group_show{{parcours.id }}"> 
                     <form action="#" method="POST">
                                 {% csrf_token %}

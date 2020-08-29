@@ -18,7 +18,7 @@
  
 
 {% block page_title %}
-    <i class="fa fa-trophy"></i> Mes évaluations 
+    <i class="fa fa-trophy"></i> Mes évaluations archivées 
 {% endblock %}
 
 {% block page_menu_right %}
@@ -38,7 +38,7 @@ body{
 }
 </style> 
 <section class="content_list"> 
- 
+{% if parcourses %}
 <div class="row">    
    <div class="col-sm-12 col-md-12">
         <table class="table table-hovered standard_tab_sort"  style="width:100%">
@@ -131,7 +131,16 @@ body{
  
 
 
-
+{% else %}
+    
+<div class="row"> 
+    <div class="col-sm-12 col-md-12">
+        <div class="alert alert-danger">
+            Aucune évaluation archivée trouvée.
+        </div>
+    </div>
+</div>
+{% endif  %}
 
 
 

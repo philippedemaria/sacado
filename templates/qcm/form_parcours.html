@@ -77,15 +77,13 @@
                         {{ form.is_share.errors }}
                     </div>
                 </div>
-                <div class="col-sm-4  col-md-4  col-lg-2">
+                <div class="col-sm-4  col-md-4  col-lg-1">
                     <div class="form-group">
-                        {{ form.is_evaluation.label_tag }}<br>
-                        {% if parcours.is_evaluation %} 
-                        {{ form.is_evaluation |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}} 
-                        {% else %} 
-                        {{ form.is_evaluation|add_class:"is_evaluation" |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}} 
-                        {% endif %} 
-                        {{ form.is_evaluation.errors }}
+                
+                            {{ form.is_archive.label_tag }}<br>
+                            {{ form.is_archive |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-off:Non"|attr:"data-on:Oui"}} 
+                            {{ form.is_archive.errors }}
+
                     </div>
                 </div>
                 <div class="col-sm-4  col-md-4  col-lg-2">

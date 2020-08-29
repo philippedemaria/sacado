@@ -7,6 +7,8 @@ urlpatterns = [
 
     path('parcours', list_parcours, name='parcours'),
     path('evaluations', list_evaluations, name='evaluations'),
+    path('archives', list_archives, name='archives'),
+    path('evaluations_archives', list_evaluations_archives, name='evaluations_archives'),
 
     path('parcours_create', create_parcours, name='create_parcours'),
     path('parcours_create_evaluation', create_evaluation, name='create_evaluation'),

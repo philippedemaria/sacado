@@ -81,7 +81,7 @@
 <li class="sans_puce"><a href="{% url 'create_demand' %}" class="btn btn-default full_width">Demander un exercice</a> </li> 
 
 <hr>
-
+<p style="margin-top:-15px"><strong>Tous mes parcours</strong></p>
 <div {% if parcourses|length > 8  %} class="div_accordion" {% endif %}>
     <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
     {% for parcours in parcourses  %}

@@ -14,10 +14,15 @@
  
 
 {% block page_title %}
-    <i class="fa fa-th"></i> Mes parcours  <img width="25px" src="{% static 'img/angle-right.png' %}"/>   
+    <i class="fa fa-th"></i> Mes parcours   
+
 {% endblock %}
 
 {% block page_menu_right %}
+
+    <li><a href="{% url 'archives' %}"  class="no_button"><i class="fa fa-archive"></i> Parcours archivé{{ nb_archive|pluralize }} ({{ nb_archive }})</a></li>
+
+
     <li class="dropdown">
         <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Créer un parcours <b class="caret"></b> </a>
 
@@ -52,7 +57,8 @@ body{
                 <thead> 
                     <tr> 
                         <th style="width:2px"></th>                  
-                        <th>Nom</th>
+                        <th style="width:300px">Nom</th>
+                        <th>Modif.</th>
                         <th>Niveau</th>
                         <th>Groupes affectés</th>
                         <th>Elèves</th>
@@ -70,16 +76,17 @@ body{
                         </td>  
                         <td>
                             <a href="{% url 'show_parcours' parcours.id %}" > {{ parcours.title }} {% if parcours.linked %}(Par défaut){% endif %} </a>
-
-                            {% if parcours.is_evaluation %}
-                            <a href="{% url 'update_evaluation' parcours.id 0 %}" class="pull-right"> 
-                            {% else %}
-                            <a href="{% url 'update_parcours' parcours.id 0 %}" class="pull-right">
-                            {% endif %}
-                            <i class="fa fa-pencil-square" aria-hidden="true"></i></a>
                              <div style="font-size:14px;margin-top:-5px;">
                                 {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }} - {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }} {% endif %}min. 
-                            </div>
+                            </div>                            
+                        </td>  
+                        <td>
+                            {% if parcours.is_evaluation %}
+                            <a href="{% url 'update_evaluation' parcours.id 0 %}"> 
+                            {% else %}
+                            <a href="{% url 'update_parcours' parcours.id 0 %}" >
+                            {% endif %}
+                            <i class="fa fa-edit" aria-hidden="true"></i></a> 
                         </td> 
                         <td>
                             {% for l in  parcours.level_list  %}

@@ -349,9 +349,10 @@ class Parcours(ModelWithCode):
     teacher = models.ForeignKey(Teacher, related_name="teacher_parcours", on_delete=models.PROTECT, default='', blank=True, editable=False)
 
     exercises = models.ManyToManyField(Exercise, blank=True, through="Relationship", related_name="exercises_parcours")
-    students = models.ManyToManyField(Student, blank=True, related_name='students_to_parcours', verbose_name="Elèves de ce parcours")
-    is_share = models.BooleanField(default=1, verbose_name="Mutualisé ?")
+    students = models.ManyToManyField(Student, blank=True, related_name='students_to_parcours', verbose_name="Elèves")
+    is_share = models.BooleanField(default=0, verbose_name="Mutualisé ?")
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
+    is_archive = models.BooleanField(default=0, verbose_name="Archivé ?")
 
     level = models.ForeignKey(Level, related_name="level_parcours", on_delete=models.PROTECT, default='', blank=True, null=True, editable=False)
     linked = models.BooleanField(default=0, editable=False)
@@ -364,7 +365,7 @@ class Parcours(ModelWithCode):
     stop = models.DateField(null=True, blank=True, verbose_name="Date de fin de publication")
     stopper = models.TimeField(null=True, blank=True, verbose_name="Heure de fin de publication")
 
-    vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Image du parcours", blank=True, default ="")
+    vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Vignette d'accueil", blank=True, default ="")
 
 
     def __str__(self):
