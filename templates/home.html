@@ -132,7 +132,7 @@ Intro Section -
           <div class="col-md-6 col-lg-3 wow bounceInUp" data-wow-duration="1.4s">
           	<a href="{% url 'exercises_level'  level.id  %}" style="color:#FFF;">
 	            <div class="imagebox">
-	              <div class="icon {{ level.cycle }}" ><span class="sacado" > {{ level.name }}</span> <br>{{ nb_exo}} exercice{{ nb_exo|pluralize }}</div>
+	              <div class="icon {{ level.cycle }}" > {{ level.name }}<br>{{ nb_exo}} exercice{{ nb_exo|pluralize }}</div>
                 <img src="../../static/img/levels/level{{ forloop.counter }}.png" width="250" />
 	              <p class="description"></p>
 	            </div>
