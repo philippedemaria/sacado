@@ -366,7 +366,7 @@ class Parcours(ModelWithCode):
     stopper = models.TimeField(null=True, blank=True, verbose_name="Heure de fin de publication")
 
     vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Vignette d'accueil", blank=True, default ="")
-
+    ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
 
     def __str__(self):
         return "{}".format(self.title)

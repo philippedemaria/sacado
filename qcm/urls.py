@@ -134,7 +134,8 @@ urlpatterns = [
 
     path('ajax_is_favorite', ajax_is_favorite, name='ajax_is_favorite'),
     path('ajax/course_sorter', ajax_course_sorter, name='ajax_course_sorter'),
-
+    path('ajax/parcours_sorter', ajax_parcours_sorter, name='ajax_parcours_sorter'),
+    
     path('parcours_show_student/<int:id>/', show_parcours_student, name='show_parcours_student'),     
     
     path('ajax_search_exercise', ajax_search_exercise, name='ajax_search_exercise'),

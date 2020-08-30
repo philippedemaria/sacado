@@ -539,6 +539,34 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
+         $('#parcours_sortable').sortable({
+            start: function( event, ui ) { 
+                   $(ui.item).css("box-shadow", "4px 2px 4px gray");
+               }, 
+            stop: function (event, ui) {
+                var valeurs = "";
+                $(".div_sorter").each(function() {
+                    let parcours_id = $(this).attr("data-parcours_id"); 
+                    valeurs = valeurs + parcours_id +"-";
+                });
+                $(ui.item).css("box-shadow",  "2px 1px 2px gray");
+
+                console.log(valeurs) ; 
+                $.ajax({
+                        data:   { 'valeurs': valeurs    } ,   
+                        type: "POST",
+                        dataType: "json",
+                        url: "../../ajax/parcours_sorter" 
+                    }); 
+                }
+            });
+
+
+
+
+
+
+
          $('#course_sortable').sortable({
             start: function( event, ui ) { 
                    $(ui.item).css("box-shadow", "2px 1px 2px gray").css("background-color", "#271942").css("color", "#FFF"); 

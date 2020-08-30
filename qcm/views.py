@@ -498,7 +498,7 @@ def list_parcours_group(request,id):
     parcours_tab = []
     students = group.students.all()
     for student in students :
-        pcs = Parcours.objects.filter(students= student,is_favorite=1).order_by("is_evaluation")
+        pcs = Parcours.objects.filter(students= student,is_favorite=1).order_by("is_evaluation", "ranking")
         if len(parcours_tab) == teacher.teacher_parcours.count() :
             break  
         else :    
@@ -1090,7 +1090,18 @@ def ajax_course_sorter(request):
     data = {}
     return JsonResponse(data) 
 
+@csrf_exempt # PublieDépublie un exercice depuis organize_parcours
+def ajax_parcours_sorter(request):  
 
+    course_ids = request.POST.get("valeurs")
+    course_tab = course_ids.split("-") 
+ 
+
+    for i in range(len(course_tab)-1):
+        Parcours.objects.filter( pk = course_tab[i]).update(ranking = i)
+
+    data = {}
+    return JsonResponse(data) 
 
  
 

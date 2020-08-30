@@ -59,7 +59,7 @@
 {% block body  %}
 <section class="content_list" id="principal_section"> 
 
-
+ <form action="" methode="POST" >  
  
     {% regroup parcours_tab by is_evaluation as list_parcours %} 
 
@@ -67,11 +67,12 @@
     {% for parcours_sort in list_parcours %}  
     <div class="row"></div>
    {% if  parcours_sort.grouper %}<h1 class="thin" id="evaluation">Evaluations favorites</h1>{% else %}<h1 class="thin"> Parcours favoris</h1>{% endif %}  
-
+        <div id="parcours_sortable">
         {% for parcours in parcours_sort.list %}  
   
-        <div  class="box box-widget widget-user-2"  
-              style="{% if parcours.vignette %}background-image: url('{{ parcours.vignette.url }}'); background-size: cover; {% else %} background-color:{{parcours.color }}{% endif %};">
+        <div  class="box box-widget widget-user-2 div_sorter"  {% if not parcours_sort.grouper %} data-parcours_id ="{{parcours.id}}" {% endif %} 
+              style="cursor: move;{% if parcours.vignette %}background-image: url('{{ parcours.vignette.url }}'); background-size: cover; {% else %} background-color:{{parcours.color }}{% endif %};">
+ 
               <!-- Add the bg color to the header using any of the bg-* classes -->
             <div class="handler widget-user-header">
                 <div class="group_show  group_show{{parcours.id }}"> 
@@ -229,7 +230,7 @@
             </div>
         </div>   
         {% endfor %}
-     
+        </div>
     {% empty %}
 
         <div class="row"> 
@@ -256,7 +257,7 @@
 
     {% endfor %}
 
-
+</form>
   
 </section>
 
