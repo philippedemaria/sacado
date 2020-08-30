@@ -35,14 +35,14 @@ Intro Section -
     <div class="container h-100">
 
         <div class="col-xs-12"    >
-          <a href="#footer" class="btn btn-index"> <span class="sacado">SACADO </span><br>Établissement<br>Nous contacter </a>
+          <a href="#" data-toggle='modal' data-target='#sacadopopup'  class="btn btn-index"> <span class="sacado">SACADO </span><br>Version<br>Établissement  </a>
         </div>
         <div class="row justify-content-center align-self-center intro-info order-md-first order-last" style="padding-bottom:30px">
             <div class="col-xs-12 col-md-12 col-lg-6">
                 <div class="title marginbottom50">
                     <span class="exo">{{ nb_exercise }}</span> exercice{{  nb_exercise|pluralize }} <br>
       			       mathématique{{ nb_exercise|pluralize }}<br> interactif{{ nb_exercise|pluralize }} et corrigé{{  nb_exercise|pluralize }}<br> du CP à la Terminale.
-                    </div>
+                </div>
                 <div class="row">
                     <div class="col-xs-12 col-md-12 col-lg-6">
                         <a href="#" data-toggle='modal' data-target='#connexion' class="btn btn-primary">
@@ -56,7 +56,6 @@ Intro Section -
                         </a>
                     </div>
                 </div>
-
                 <br>
                 <div style="color:#cb2131;margin-top: 50px">
                     <img src="{% static 'img/edge.png' %}" width="35px"/>
@@ -71,23 +70,27 @@ Intro Section -
                 </div>
 
                     <div class="row counters">
-                        <div class="col-lg-4 col-4 text-center">
+                        <div class="col-lg-3 col-3 text-center">
                             <span data-toggle="counter-up">{{ nb_teacher }}</span>
                             <p>Enseignants</p>
                         </div>
-                        <div class="col-lg-4 col-4 text-center">
+                        <div class="col-lg-3 col-3 text-center">
                             <span data-toggle="counter-up">{{ nb_student }}</span>
                             <p>Elèves</p>
                         </div>
-                        <div class="col-lg-4 col-4 text-center">
+                        <div class="col-lg-3 col-3 text-center">
                             <span data-toggle="counter-up">{{ nb_parcours }}</span>
                             <p>Parcours</p>
+                        </div>
+                        <div class="col-lg-3 col-3 text-center">
+                            <span data-toggle="counter-up">{{ nb_school }}</span>
+                            <p>Etablissements</p>
                         </div>
                     </div>
  
             </div>
-            <div class="col-xs-12 col-md-12 col-lg-6" style="text-align:center">
-                <div style="position: relative;">
+            <div class="col-xs-12 col-md-12 col-lg-6" >
+                <div style="position: relative;text-align:center">
                     <a href="{% url 'show_exercise'   exercise.id     %}" target="_blank">
                         <img src="{{ exercise.supportfile.imagefile.url }}" width="400"
                              style="position: absolute; top :40px; left:133px;z-index:-1"/>
@@ -101,9 +104,10 @@ Intro Section -
                         {% endif %}
 
                     </a>
-
                 </div>
             </div>
+
+
         </div>
     </div>
   </section><!-- #intro -->
@@ -158,13 +162,18 @@ Intro Section -
 
         <div class="row">
 
-          <div class="col-lg-6 col-xs-12">
+          <div class="col-lg-5 col-xs-12">
               <div class="teachers-img">
-                <img src="{% static 'img/teacher.jpg' %}" width="500" class="img-fluid">
+                
+                <iframe width="480" height="275" src="https://www.youtube.com/embed/aWvFUkF-oAc?rel=0&start=2" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
               </div>
-              <div class="features wow bounceInUp clearfix" style="text-align: center">
+              <div class="features wow bounceInUp clearfix" style="text-align: center;margin-top:50px">
                 <h4 class="thin">Proposer des parcours individualisés,<br>suivre les acquisitions de savoir faire,<br> de compétences en quelques clics</h4>
               </div>
+          </div>
+          <div class="col-lg-1 col-xs-12">
           </div>
           <div class="col-lg-6 col-xs-12">
               <div class="features wow bounceInUp clearfix">

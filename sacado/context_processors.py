@@ -5,7 +5,7 @@ from account.models import Teacher, Student, User
 from qcm.models import Parcours, Studentanswer, Exercise, Demand
 from sendmail.models import Email
 from socle.models import Level
-
+from school.models import School
 
 def menu(request):
     if request.user.is_authenticated:
@@ -55,11 +55,14 @@ def menu(request):
         nb_student = Student.objects.all().count()
         nb_parcours = Parcours.objects.all().count()
         contributeurs = User.objects.filter(is_superuser=1)
-
+        nb_school = School.objects.all().count()
+        schools = School.objects.all()
         return {
             'nb_teacher': nb_teacher,
             'nb_exercise': nb_exercise,
             'nb_student': nb_student,
             'nb_parcours': nb_parcours,
             'contributeurs': contributeurs,
+            'nb_school' : nb_school,
+            'schools' : schools,
         }

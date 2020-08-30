@@ -32,6 +32,14 @@ class School(models.Model):
 
 
 
+    def admin(self):
+        User = apps.get_model('account', 'User')
+
+        users = User.objects.filter(school_id = self.pk, is_manager = 1)
+        return users
+
+
+
 # Niveau d'aquisition 
 class Stage(models.Model):
     school = models.ForeignKey(School, on_delete=models.PROTECT, related_name='aptitude', editable=False)
