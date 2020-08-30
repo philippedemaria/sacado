@@ -29,9 +29,9 @@ def menu(request):
         elif request.user.is_student:
             student = Student.objects.get(user=request.user)
             last_exercises_done = Studentanswer.objects.filter(student=student).order_by("-date")[:10]
-            parcours = Parcours.objects.filter(is_publish=1, exercises__level=student.level).exclude(author=None)
+            parcours = Parcours.objects.filter(is_publish=1, exercises__level=student.level).exclude(author=None).order_by("ranking")
             parcourses = Parcours.objects.filter(is_publish=1, is_evaluation=0,
-                                                 students=student)  # tous les parcours attribués à cet élève
+                                                 students=student).order_by("ranking")  # tous les parcours attribués à cet élève
             groups = student.students_to_group.all()
 
             return {
