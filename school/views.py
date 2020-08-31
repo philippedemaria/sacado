@@ -400,7 +400,7 @@ def send_account(request, id):
 		user = User.objects.get(id=id)
 		rcv.append(user.email)
 	send_mail('Compte   Sacado',
-	f'Bonjour, votre compte Sacado est disponible.\r\n\r\nVotre identifiant est {u.username} \r\n\r\n\Votre mot de passe est secret. Pour une première connexion, le mot de passe est : sacado2020 . Il faut le modifier lors de la première connexion.\r\n\r\n Dans le cas contraire, utilisez votre mot de passe habituel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
+	f'Bonjour, votre compte Sacado est disponible.\r\n\r\nVotre identifiant est {user.username} \r\n\r\n\Votre mot de passe est secret. Pour une première connexion, le mot de passe est : sacado2020 . Il faut le modifier lors de la première connexion.\r\n\r\n Dans le cas contraire, utilisez votre mot de passe habituel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
 	'info@sacado.xyz',
 	rcv)
 
