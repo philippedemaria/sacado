@@ -29,11 +29,11 @@
  
 
 <section class="content_main">
-    <form action="{% url 'register_student' %}" method="POST">
+    <form action="{% url 'register_student_from_admin' %}" method="POST">
         {% csrf_token %}
  
-        <input type="hidden" name="group" value="{{ group.code }}" />
- 
+        <input type="hidden" name="group" value="{{ group.id }}" />
+
         <div class="row">
             <div class="col-sm-12 col-md-2">
                 <div class="form-group">

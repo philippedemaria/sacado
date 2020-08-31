@@ -229,6 +229,42 @@ def message_to_teachers_sent(request):
 
 #########################################Student #####################################################################
 
+@login_required
+@can_register
+@is_manager_of_this_school
+def register_student_from_admin(request):
+    """"
+    Enregistre un enseignant depuis la console admin d'un établissement
+    """
+    group_id = request.POST.get("group")  
+    group = Group.objects.get(pk = group_id)
+
+    user_form = NewUserTForm(request.POST or None) 
+    if request.method == 'POST':
+        if user_form.is_valid() :
+            u_form = user_form.save(commit=False)
+            u_form.password = make_password("sacado_2020")
+            u_form.user_type = User.STUDENT
+            u_form.school = request.user.school
+            u_form.username = get_username(u_form.last_name, u_form.first_name)
+            u_form.save()
+
+            student = Student.objects.create(user=u_form,level=group.level,task_post=1)
+            group.students.add(student)
+
+            send_mail('Création de compte sur Sacado',
+                      f'Bonjour, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {u_form.username} \r\n\r\n.\r\n\r\nVotre mot de passe est : sacado_2020 \r\n\r\nVous pourrez le modifier une fois connecter à vorte espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
+                      'info@sacado.xyz',
+                      [u_form.email, ])
+            return redirect('school_groups')
+        else:
+            messages.error(request, user_form.errors)
+ 
+    return redirect('index')
+
+
+
+
 
 def register_student(request):
     if request.method == 'POST':
@@ -238,8 +274,7 @@ def register_student(request):
             user = user_form.save(commit=False)
             user.username = username
             user.user_type = User.STUDENT
-            password = request.POST.get("password1")                     
- 
+            password = request.POST.get("password1")   
             ######################### Choix du groupe  ###########################################
             if request.POST.get("choose_alone") : # groupe sans prof
                 # l'élève rejoint le groupe par défaut sur le niveau choisi

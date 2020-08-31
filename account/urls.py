@@ -64,4 +64,6 @@ urlpatterns = [
 
     path('usertype/', ask_usertype, name='ask_usertype'),
 
+    path('register_student_from_admin/', register_student_from_admin, name='register_student_from_admin'), 
+
 ]

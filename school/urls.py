@@ -38,5 +38,5 @@ urlpatterns = [
 
     path('get_school_students', get_school_students , name='get_school_students'),
     path('manage_stage', manage_stage, name='manage_stage'),
- 
+
 ]
