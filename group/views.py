@@ -284,7 +284,6 @@ def update_group(request, id):
 
 
 @login_required
-@user_is_group_teacher
 def delete_group(request, id):
     group = Group.objects.get(id=id)
 
@@ -299,8 +298,12 @@ def delete_group(request, id):
                     student.student_user.delete()
                     student.delete() # alors on les supprime
 
-    group.delete()
-    return redirect('index')
+        group.delete()
+        return redirect('index')
+    else :
+
+        group.delete()
+        return redirect('school_groups')        
 
 
 @login_required
