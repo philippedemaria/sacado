@@ -9,6 +9,7 @@ from group.models import Group
 from account.decorators import is_manager_of_this_school 
 from account.models import User, Teacher, Student
 from account.forms import UserForm , StudentForm ,NewUserSForm
+from django.core.mail import send_mail
 ############### bibliothèques pour les impressions pdf  #########################
 import os
 from django.utils import formats
@@ -402,6 +403,9 @@ def send_account(request, id):
 	f'Bonjour, votre compte Sacado est disponible.\r\n\r\nVotre identifiant est {u.username} \r\n\r\n\Votre mot de passe est secret. Pour une première connexion, le mot de passe est : sacado2020 . Il faut le modifier lors de la première connexion.\r\n\r\n Dans le cas contraire, utilisez votre mot de passe habituel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
 	'info@sacado.xyz',
 	rcv)
+
+	return redirect('school_teachers') 
+
 
 
 
