@@ -515,9 +515,18 @@ def list_parcours_group(request,id):
 @login_required
 def all_parcourses(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
-    parcourses = Parcours.objects.exclude(teacher=teacher).order_by("author").prefetch_related('exercises__knowledge__theme').select_related('author')
-    # parcourses = parcourses[:15] #limite pour le debuggage
-    return render(request, 'qcm/all_parcourses.html', {'parcourses': parcourses})
+    parcourses = Parcours.objects.exclude(exercises=None ).exclude(teacher=teacher).exclude(teacher__user__school= None).order_by("author").prefetch_related('exercises__knowledge__theme').select_related('author')
+    #parcourses = parcourses[:15] #limite pour le debuggage
+
+    for parcours in parcourses :
+        print(parcours.teacher, parcours.teacher.user.school, parcours.exercises.count())
+
+    if request.user.school != None :
+        inside = True
+    else :
+        inside = False
+
+    return render(request, 'qcm/all_parcourses.html', {'parcourses': parcourses , 'inside' : inside })
 
 
 @login_required

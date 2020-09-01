@@ -33,7 +33,7 @@
     <section class="content_main"> 
      
      
-            
+        {% if inside %}    
                 <table class="table table-bordered table-hover standard_tab_sort"  style="width:100%">
                       <thead>
                           <tr>
@@ -86,6 +86,14 @@
                             {% endfor %}
                       </tbody>
                 </table>
+        {% else %} 
+
+            <div class="alert alert-danger">      
+                <i class="fa fa-warning"></i> Pour récupérer un parcours mutualisé, vous devez souscrire la version établisssement.
+            </div>
+
+
+        {% endif %}    
     </section>
 {% endblock  %}   
 
