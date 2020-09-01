@@ -216,6 +216,34 @@ def get_school_students(request):
 
  
 
+@login_required
+@is_manager_of_this_school
+def new_student_list(request,slug):
+    group = Group.objects.get(code=slug)
+    students = group.students.all()
+    p_students = Student.objects.all()
+    pending_students = []
+    for student in p_students :
+    	if student.students_to_group.all().count() == 0 :
+    		pending_students.append(student)
+    return render(request,'school/new_student_list.html', {'group':group, 'students' : students, 'pending_students' : pending_students })
+
+ 
+
+@login_required
+@is_manager_of_this_school
+def push_student_group(request):
+	group_id = request.POST.get("group_id")
+	group = Group.objects.get(pk=group_id)
+
+	student_ids = request.POST.getlist("student_ids")  
+
+	print(student_ids) 
+
+	for student_id in student_ids :
+		student = Student.objects.get(pk=student_id)	
+		group.students.add(student)
+	return redirect('school_groups')
 
 
 

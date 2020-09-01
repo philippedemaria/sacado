@@ -1,0 +1,99 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+ 
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-accueil.js' %}"></script> 
+    <script>
+        require(['script/ajax-dashboard']);
+        require(['script/ajax-group']);
+    </script>
+{% endblock %}
+
+
+
+{% block page_title %}
+     <a href="{% url 'admin_tdb' %}"> <i class="fa fa-cloud"></i></a> {{ request.user.school.name}} <img src="{% static 'img/angle-right.png' %}"/> Elèves par liste 
+{% endblock %}
+
+{% block page_menu_right %}
+
+    <a href="{% url 'new_group_many' %}" class="btn btn-new">+ Plusieurs groupes</a>  
+    <a href="{% url 'new_group' %}" class="btn btn-new">+ Nouveau groupe </a> 
+{% endblock %}
+
+
+
+
+{% block body %}
+<form action="{% url 'push_student_group' %}" method="POST">
+    {% csrf_token %}
+    <input value="{{ group.id }}" name="group_id"  type="hidden" />
+    <section class="content_list"> 
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <h2>Elève de la classe de {{group }}</h2>
+                <table class="table table-bordered table-hover standard_tab_sort">
+                    <thead>
+                        <tr>
+                            <td>Nom</td>
+                            <td>Prénom </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                            <tr>
+ 
+                                <td>
+                                     {{ student.user.last_name }} 
+                                </td>
+                                <td>
+                                    {{ student.user.first_name }} 
+                                </td> 
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+               <div class="col-sm-12 col-md-1">
+                    <input type="submit"  class="btn btn-primary" value="Assigner" />
+               </div>
+               <div class="col-sm-12 col-md-5 content_list pull-right">
+                <h2>Elèves à choisir</h2>
+                <table class="table table-bordered table-hover standard_tab_sort300">
+                    <thead>
+                        <tr>
+                            <td>Nom</td>
+                            <td>Prénom </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in pending_students %}
+                            <tr>
+ 
+                                <td >
+                                    <label>   <input type="checkbox" value="{{ student.user.id }}" name ="student_ids" /> {{ student.user.last_name }} </label>
+                                </td>
+                                <td>
+                                   {{ student.user.first_name }} 
+                                </td> 
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">     
+                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+            </div>
+        </div>
+    </section>
+</form>
+{% endblock %}
