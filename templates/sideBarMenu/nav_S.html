@@ -1,6 +1,6 @@
 {% load static %}
 <li  class='dropdown'>
-    <a><img src="{% static 'img/sacadoLogo.png' %}" style="vertical-align: text-bottom;" width="35px"/>
+    <a href="{% url 'logout' %}"><img src="{% static 'img/sacadoLogo.png' %}" style="vertical-align: text-bottom;" width="35px"/>
 
         <div class="captionmenu sacado_menu white">
          SACADO
@@ -9,13 +9,7 @@
 
 </li>
 
-
-
-<li class='dropdown 
-{% if '/myaccount' in request.path %}
-active
-{% endif %} 
-'>
+<li class='dropdown {% if '/myaccount' in request.path %}active{% endif %}'>
     <a href="#" class="main" id="account">
         <i class="fa fa-user fa-2x"></i> 
         <div class="captionmenu">Compte</div>
