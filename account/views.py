@@ -243,7 +243,7 @@ def register_student_from_admin(request):
     if request.method == 'POST':
         if user_form.is_valid() :
             u_form = user_form.save(commit=False)
-            u_form.password = make_password("sacado_2020")
+            u_form.password = make_password("sacado2020")
             u_form.user_type = User.STUDENT
             u_form.school = request.user.school
             u_form.username = get_username(u_form.last_name, u_form.first_name)
@@ -253,7 +253,7 @@ def register_student_from_admin(request):
             group.students.add(student)
 
             send_mail('Création de compte sur Sacado',
-                      f'Bonjour, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {u_form.username} \r\n\r\n.\r\n\r\nVotre mot de passe est : sacado_2020 \r\n\r\nVous pourrez le modifier une fois connecter à vorte espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
+                      f'Bonjour, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {u_form.username} \r\n\r\n.\r\n\r\nVotre mot de passe est : sacado2020 \r\n\r\nVous pourrez le modifier une fois connecter à vorte espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
                       'info@sacado.xyz',
                       [u_form.email, ])
             return redirect('school_groups')
@@ -780,7 +780,7 @@ def register_teacher_from_admin(request):
     if request.method == 'POST':
         if all((user_form.is_valid(),teacher_form.is_valid())):
             u_form = user_form.save(commit=False)
-            u_form.password = make_password("sacado_2020")
+            u_form.password = make_password("sacado2020")
             u_form.user_type = User.TEACHER
             u_form.school = request.user.school
             u_form.username = get_username(u_form.last_name, u_form.first_name)
@@ -790,7 +790,7 @@ def register_teacher_from_admin(request):
             teacher.save()
             teacher_form.save_m2m()
             send_mail('Création de compte sur Sacado',
-                      f'Bonjour, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {u_form.username} \r\n\r\n.\r\n\r\nVotre mot de passe est : sacado_2020 \r\n\r\nVous pourrez le modifier une fois connecter à vorte espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
+                      f'Bonjour, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {u_form.username} \r\n\r\n.\r\n\r\nVotre mot de passe est : sacado2020 \r\n\r\nVous pourrez le modifier une fois connecter à vorte espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
                       'info@sacado.xyz',
                       [u_form.email, ])
             return redirect('school_teachers')
@@ -804,8 +804,8 @@ def register_teacher_from_admin(request):
                    'teacher_form': teacher_form,
                    'new': new, })
 
-
  
+
 
 @login_required
 @can_register
@@ -841,7 +841,7 @@ def register_by_csv(request, key, idg=0):
                 ln = str(fields[0]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
                 fn = str(fields[1]).lower().capitalize()
                 username = get_username(ln, fn)
-                password = make_password("sacado_2020")
+                password = make_password("sacado2020")
                 try:
                     if fields[2] != "":
                         email = fields[2]
