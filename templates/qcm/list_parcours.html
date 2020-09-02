@@ -140,28 +140,29 @@ body{
 </div>
 {% else %}
 
-<div class="row"> 
-    <div class="col-sm-12 col-md-12">
-        <h2 class='thin'><i class="fa fa-th"></i> Les parcours  <span class="sacado">sacado</span></h2>  
-            <ol><i class="fa fa-hand-o-right"></i> Un même parcours à plusieurs groupes. <p>Si vous avez plusieurs classes de même niveau, vous pouvez créer un seul parcours et l'attribuer à chaque classe. <i class="fa fa-warning"></i> Les données du parcours seront partagées aux deux groupes et seront indissociables. Pour individualiser les exercices par élève, il faudra utiliser l'icone <i class="fa fa-user"></i> du parcours.</p></ol>
-            <ol><i class="fa fa-hand-o-right"></i> Un parcours par groupe. <p>Cette option vous permet plus de flexibilité.</p></ol>
-                
-            <div class="alert alert-danger">Tant qu'un groupe ne contient pas d'élève, vous ne pouvez pas lui attribuer de parcours. Les parcours sont rattachés au groupe par leurs élèves.<i class="fa fa-bullhorn"></i>  <strong>Commencez à le préparer et assignez-le ensuite à vos élèves.</strong></div>
-    </div>
-</div>    
-<div class="row"> 
-    <div class="col-sm-12 col-md-12">
-        <h2 class='thin'><i class="fa fa-recycle"></i> 3 façons de disposer de parcours avec <span class="sacado">sacado</span></h2>  
-            
 
-                <ol><i class="fa fa-hand-o-right"></i> Les parcours par défaut (Recommandé pour une première utilisation) <p> Ces parcours contiennent tous les exercices proposés par <span class="sacado">sacado</span>, classés par le thème dans le niveau du groupe. Vous pouvez les utiliser comme proposés, leur ajouter, supprimer des exercices.<br>Ces parcours dépendent du niveau du groupe. Pour les créer, il faut se passer par un groupe <a href="{% url 'index' %}"  ><i class="fa fa-caret-right"></i>  Parcours par défaut</a><p></ol>
-                <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés <p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier un fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur <a href="{% url 'all_parcourses' %}"   ><i class="fa fa-caret-right"></i> Parcours mutualisés</a></p></ol>
-                <ol><i class="fa fa-hand-o-right"></i>  Les parcours personnalisés <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br>  Créer votre parcours personnalisé <a href="{% url 'create_parcours' %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a></p></ol>
+        <div class="row"> 
+            <div class="col-sm-12 col-md-12">
+                <div class="alert alert-danger">Aucun parcours n'est affecté à ce groupe. Si un groupe ne contient pas d'élève, <strong>vous ne pouvez pas lui attribuer de parcours</strong>. Lorsque vos parcours sont créés, les élèves les rejoignent directement dès leur inscrition via le lien <span style="color:#271942">https://sacado.xyz/group/{{ group.code }}</span><br>
+                <i class="fa fa-bullhorn"></i> <strong>Préparer</strong> maintenant vos parcours, <strong>publier</strong>.  
+                </div>
+            </div>
+        </div>
+        
+        <div class="row"> 
+            <div class="col-sm-12 col-md-12">
+                <h2 class='thin'><i class="fa fa-recycle"></i> 3 façons de disposer de parcours avec <span class="sacado">sacado</span></h2>  
+                    
+
+                        <ol><i class="fa fa-hand-o-right"></i> Les parcours par défaut (Recommandé pour une première utilisation) <p> Ces parcours contiennent tous les exercices  de  {{ group.level}} proposés par <span class="sacado">sacado</span>, classés par le thème. Vous pouvez les utiliser directement, leur ajouter, leur supprimer des exercices.<br>Choisir le parcours souhaité <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   ><i class="fa fa-caret-right"></i>  Parcours par défaut</a><p></ol>
+                        <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés <p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier un fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur <a href="{% url 'all_parcourses' %}"   ><i class="fa fa-caret-right"></i> Parcours mutualisés</a></p></ol>
+                        <ol><i class="fa fa-hand-o-right"></i>  Les parcours personnalisés <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br>  Créer votre parcours personnalisé dans un premier temps puis sélectionner les exercices de votre choix. <a href="{% url 'create_parcours' %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a></p></ol>
 
 
 
-    </div>
-</div>
+            </div>
+        </div>
+
 {% endif  %}
 </section>
 
