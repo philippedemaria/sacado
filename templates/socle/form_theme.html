@@ -52,12 +52,14 @@
               <div class="row">
                   <div class="col-sm-12 col-md-8">
                       <div class="form-group">
-                          <label>{{ form.level.label_tag }}</label>
-                          {{ form.level |add_class:"form-control select2" }}
-                          {{ form.level.errors }}
+                          <label>{{ form.subject.label_tag }}</label>
+                          {{ form.subject |add_class:"form-control select2" }}
+                          {{ form.subject.errors }}
                       </div>
                   </div>
               </div>
+ 
+
               <div class="row">
                   <div class="col-sm-12 col-md-12">
                       {% if theme %}
