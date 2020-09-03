@@ -70,7 +70,6 @@ class Group(ModelWithCode):
         """
         Donne le nombre total de parcours, le nombre de visibles et de publiés du groupe
         """
- 
         students = self.students.order_by("user__last_name")
         number_of_parcours_of_this_level_by_this_teacher = self.teacher.teacher_parcours.filter(level = self.level).count()
         parcours_tab = []

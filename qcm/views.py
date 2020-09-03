@@ -2682,7 +2682,7 @@ def ajax_delete_constraint(request):
 
 #######################################################################################################################################################################
 #######################################################################################################################################################################
-#################   exports
+#################   exports PRONOTE ou autre
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 
@@ -2715,29 +2715,56 @@ def export_note(request,idg,idp):
     return response
 
 
-
-
  
 def export_knowledge(request,idp):
 
     parcours = Parcours.objects.get(pk=idp)
-
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment;' + 'filename=Notes_{}.csv'.format(parcours.title)
+    response['Content-Disposition'] = 'attachment;' + 'filename=Savoir_faire_{}.csv'.format(parcours.title)
     writer = csv.writer(response)
-    fieldnames = ("Eleves", "Compétences", "Scores")
+    fieldnames = ("Elèves", "Savoir faire", "Scores")
     writer.writerow(fieldnames)
+    kns = []
+    exercises = parcours.exercises.filter(supportfile__is_title=0)
+    for e in exercises :
+        if e.knowledge not in kns :
+            kns.append(e.knowledge)
+
     for student in parcours.students.all() :
         full_name = str(student.user.last_name) +" "+ str(student.user.first_name)  
         try :
-            resultknowledges = Resultknowledge.objects.filter(student=student, parcours=parcours).last() 
+            resultknowledges = Resultknowledge.objects.filter(student=student, knowledge__in=kns).last() 
             for r in resultknowledges : 
-                writer.writerow ({"Eleves": full_name, "Compétences": r.knowledge.name , "Scores": score  })
+                writer.writerow ({"Eleves": full_name, "Savoir faire": r.knowledge.name , "Scores": r.point  })
         except :
             pass
     return response
 
+ 
+def export_skill(request,idp):
 
+    parcours = Parcours.objects.get(pk=idp)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment;' + 'filename=Competences_{}.csv'.format(parcours.title)
+    writer = csv.writer(response)
+    fieldnames = ("Elèves", "Compétences", "Scores")
+    writer.writerow(fieldnames)
+    sks = []
+    exercises = parcours.exercises.filter(supportfile__is_title=0)
+    for e in exercises :
+        for s in e.supportfile.skills.all() :
+            if s not in sks :
+                sks.append(s)
+
+    for student in parcours.students.all() :
+        full_name = str(student.user.last_name) +" "+ str(student.user.first_name)  
+        try :
+            resultlastskills = Resultlastskill.objects.filter(student=student, skills_in=sks).last() 
+            for r in resultlastskills : 
+                writer.writerow ({"Eleves": full_name, "Compétences": r.skill.name , "Scores": r.point  })
+        except :
+            pass
+    return response
  
 #######################################################################################################################################################################
 #######################################################################################################################################################################

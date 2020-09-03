@@ -48,9 +48,9 @@
         </ul>
     </li>
     {% if request.user.is_extra %}
-    <a href="{% url 'print_statistiques' group.id 0 %}"  class="btn btn-xs btn-default" id="print_stats" ><span id="loading_stats"></span> Export <img src="{% static 'img/pdf.png' %}" width="15px"/></a>
+    <a href="{% url 'print_statistiques' group.id 0 %}"  class="btn btn-xs btn-default" id="print_stats" ><span id="loading_stats"></span> Statistiques <img src="{% static 'img/pdf.png' %}" width="15px"/></a>
     {% else %}
-    <a href="#"  class="btn btn-xs btn-default" style="cursor:not-allowed" title="Vous n'avez pas l'accès à cette option" > Export <img src="{% static 'img/pdf.png' %}" width="15px"/></a>
+    <a href="#"  class="btn btn-xs btn-default" style="cursor:not-allowed" title="Vous n'avez pas l'accès à cette option" > Statistiques <img src="{% static 'img/pdf.png' %}" width="15px"/></a>
     {% endif %}
 {% endblock %}
 

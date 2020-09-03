@@ -83,10 +83,12 @@ urlpatterns = [
     path('create_remediation/<int:idr>/', create_remediation, name='create_remediation'),
     path('update_remediation/<int:idr>/<int:id>/', update_remediation, name='update_remediation'),
     path('delete_remediation/<int:id>/', delete_remediation, name='delete_remediation'),  
+
+    ####################################### Export Pronote #####################################################
  
     path('export_knowledge/<int:idp>/', export_knowledge, name='export_knowledge'),  
     path('export_note/<int:idg>/<int:idp>/', export_note, name='export_note'),  
-
+    path('export_skill/<int:idp>/', export_skill, name='export_skill'),  
 
     path('detail_task/<int:id>/<int:s>/', detail_task, name='detail_task'), #modif idg en id pour la sécurité
     path('tasks', all_my_tasks, name='all_my_tasks'),

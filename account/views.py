@@ -884,6 +884,79 @@ def register_by_csv(request, key, idg=0):
 
         return render(request, 'account/csv_teachers_or_students.html', {'key': key, 'idg': idg, 'group': group})
 
+
+
+
+
+
+@login_required
+@can_register
+@is_manager_of_this_school
+def register_users_by_csv(request,key):
+    """
+    Enregistrement par csv : key est le code du user_type : 0 pour student, 2 pour teacher
+    """
+    if request.method == "POST":
+        # try:
+        csv_file = request.FILES["csv_file"]
+        if not csv_file.name.endswith('.csv'):
+            messages.error(request, "Le fichier n'est pas format CSV")
+            return HttpResponseRedirect(reverse("register_teacher_csv"))
+        # if file is too large, return
+        if csv_file.multiple_chunks():
+            messages.error(request, "Le fichier est trop lourd (%.2f MB)." % (csv_file.size / (1000 * 1000),))
+            return HttpResponseRedirect(reverse("register_teacher_csv"))
+
+        try:
+            file_data = csv_file.read().decode("utf-8")
+        except UnicodeDecodeError:
+            return HttpResponse('Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
+
+        lines = file_data.split("\r\n")
+        # loop over the lines and save them in db. If error , store as string and then display
+        for line in lines:
+            try:
+                # loop over the lines and save them in db. If error , store as string and then display
+                fields = line.split(";")
+                ln = str(fields[0]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
+                fn = str(fields[1]).lower().capitalize()
+                username = get_username(ln, fn)
+                password = make_password("sacado2020")
+                try:
+                    if fields[2] != "":
+                        email = fields[2]
+                    else:
+                        email = ""
+                except:
+                    email = "" 
+
+                if key == User.TEACHER:  # Enseignant
+                    user = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,
+                                                      school=request.user.school, time_zone=request.user.time_zone,
+                                                      is_manager=0,
+                                                      defaults={'username': username, 'password': password,
+                                                                'is_extra': 1})
+                    Teacher.objects.get_or_create(user=user, notification=1, exercise_post=1)
+                else:  # Student
+                    user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=0,
+                                                               school=request.user.school,
+                                                               time_zone=request.user.time_zone, is_manager=0,
+                                                               defaults={'username': username, 'password': password,
+                                                                         'is_extra': 0})
+                    student, creator = Student.objects.get_or_create(user=user, level=group.level, task_post=1)
+
+            except:
+                pass
+
+        if key == User.TEACHER:
+            return redirect('school_teachers')
+        else:
+            return redirect('school_students')
+
+    else :
+
+        return render(request, 'account/csv_all_teachers_or_students.html', {'key': key ,})
+
   
 #########################################Lost password #################################################################
 

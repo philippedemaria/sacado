@@ -47,6 +47,7 @@ urlpatterns = [
     path('register_teacher', register_teacher, name='register_teacher'),
     path('register_teacher_from_admin', register_teacher_from_admin, name='register_teacher_from_admin'),
     path('register_by_csv/<int:key>/<int:idg>', register_by_csv, name='register_by_csv'),
+    path('register_users_by_csv/<int:key>', register_users_by_csv, name='register_users_by_csv'),
 
     path('profile', my_profile, name='profile'),
 

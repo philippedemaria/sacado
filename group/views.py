@@ -443,8 +443,9 @@ def result_group_exercise(request, id):
 @user_is_group_teacher
 def result_group_skill(request, id):
 
-    skills = Skill.objects.all()
     group = Group.objects.get(id=id)
+    skills = Skill.objects.filter(subject__in=group.teacher.subjects.all())
+
     form = EmailForm(request.POST or None )
     stage = get_stage(group)
 

@@ -1,0 +1,89 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+ 
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common2.js' %}"></script> 
+    <script>   
+        require(['script/ajax-dashboard']);
+    </script>
+{% endblock %}
+ 
+ 
+{% block page_title %}
+    <i class='fa fa-users'></i> {{ request.user.school.name}} <img src="{% static 'img/angle-right.png' %}"/>     {% if key == 0  %}Elèves  {% else %}Enseignant.e.s     {% endif %}par csv
+{% endblock %}
+ 
+
+
+ 
+{% block page_menu_right %}
+    {% if idg == 0  %}
+ 
+        <li> <a href="{% url 'register_teacher_from_admin' %}" class="btn btn-new"  > + Nouvel.le enseignant.e</a></li>        
+    {% endif %}
+
+{% endblock %}
+
+
+
+
+{% block body %}
+ 
+ 
+ 
+<section class="content_main"> 
+
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <strong>Avant de lancer votre fichier csv, assurez-vous que tous les élèves ont été supprimés de la base de données.</strong> <br>
+
+        <i class="fa fa-warning fa-2x"></i> Votre fichier csv doit être <strong>encodé en utf-8</strong> et les données doivent vérifier le format imposé (comme exemple). Ces données doivent être séparées d'un <strong>point virgule (;)</strong>.  3 champs sont demandés :
+            <ul style="margin:10px">
+                <li>Nom</li>
+                <li>Prénom</li>                
+                <li>Courriel, optionnel mais préférable pour la correspondance et les notifications.</li>
+            </ul> 
+            Ces trois données s'écrivent sur une seule ligne. Dans l'exemple ci-dessous, 4 personnes sont enregistrées.<br>
+            <pre style="font-size:20px">Turing;Alan{% if idg == 0  %};alan.turing@enigma.edu{% endif  %}<br>Agnesi;Maria;maria.agnesi@curves.edu<br>Chasles;Michel{% if idg == 0  %};michel.chasles@vector.edu {% endif %}<br>de Fermat;Pierre;pierre.fermat@rsa.edu</pre>
+
+
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+
+
+ 
+
+    {% if key > 0  %}
+    <form action="{% url 'register_users_by_csv' 2  %}" method="POST" enctype="multipart/form-data" > 
+    {% else %}
+    <form action="{% url 'register_users_by_csv' 0 %}" method="POST" enctype="multipart/form-data" > 
+ 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="name" >Fichier CSV : </label>
+                         <input type="file" name="csv_file" id="csv_file" required="True" class="btn btn-default">
+                 
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12" style="margin-bottom:10px;">
+                <div class="form-group">                    
+                    <button class="btn btn-primary"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span> Téléverser </button>
+                    <a href="javascript:history.back()"  class="btn btn-default" > Annuler</a>
+                </div> 
+            </div>
+        </div>
+    </form>
+</section>
+
+
+{% endblock %}
