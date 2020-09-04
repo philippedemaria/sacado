@@ -198,7 +198,7 @@
               <span   class="select_skill_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>
                 {% for skill in skills %}
                       <label style="font-size:10px">
-                      <input type="checkbox" name="skills" data-relationship_id="{{relation.id}}" value="{{skill.id}}" class="skill_selector" {% if skill in relation.skills %} checked {% endif %}  />
+                      <input type="checkbox" name="skills" data-relationship_id="{{relation.id}}" value="{{skill.id}}" class="skill_selector" {% if skill in relation.skills.all %} checked {% endif %}  />
                       {{ skill }}
                       </label>{% if not forloop.last %}<br>{% endif %}
                 {% endfor %}
