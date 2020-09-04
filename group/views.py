@@ -98,7 +98,7 @@ def include_students(liste, group):
 
     students_tab = liste.split("\r")
 
-    for student_tab in students_tab :
+    for student_tab in students_tab:
         try:
             details = student_tab.split(";")
             fname = str(cleanhtml(details[0].replace(" ", ""))).strip()
@@ -108,14 +108,15 @@ def include_students(liste, group):
 
             try:
                 email = cleanhtml(details[2])
+            except IndexError:
+                email = ""
+
+            if email != "":
                 send_templated_mail(
                     template_name="student_registration_by_teacher",
                     from_email="info@sacado.xyz",
                     recipient_list=[email],
                     context={"last_name": lname, "first_name": fname, "username": username}, )
-
-            except IndexError:
-                email = ""
 
             user, created = User.objects.get_or_create(username=username,
                                                        defaults={"last_name": lname, "first_name": fname,
@@ -161,7 +162,7 @@ def include_students_in_a_model(liste,model):
             try:
                 email = cleanhtml(details[2])
                 send_mail("Inscription SacAdo", "Bonjour "+fname+", \n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : "+username+"\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , "saca_do_not_reply@sacado.xyz" , [email])
-            except:
+            except IndexError:
                 email = ""
             user = User.objects.create(last_name=str(lname), first_name=str(fname), username=username, password=password, email=email,user_type=0)
             code = str(uuid.uuid4())[:8] # code pour la relation avec les parents
