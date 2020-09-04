@@ -2,15 +2,14 @@
 
 
 {% block html %}
-Bonjour {{teacher.first_name}} {{teacher.last_name}},
+Bonjour {{teacher.first_name}} {{teacher.last_name}},<br>
+<br>
 
+Votre compte Sacado est maintenant disponible.<br>
 
-Votre compte Sacado est maintenant disponible.
+Votre identifiant est : {{teacher.username}}.<br>
 
-Votre identifiant est {{teacher.username}}.
-
-Pour vous connecter, redirigez-vous vers <a href="https://sacado.xyz" >https://sacado.xyz</a>.
-
+Pour vous connecter, redirigez-vous vers <a href="https://sacado.xyz" >https://sacado.xyz</a>.<br>
 
 Ceci est un mail automatique. Merci de ne pas répondre.
 

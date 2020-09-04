@@ -2,8 +2,8 @@
 
 
 {% block html %}
-Bonjour,
-
+Bonjour,<br>
+<br>
 Un enseignant vient de rejoindre SacAdo : {{teacher.last_name}}, {{teacher.first_name}}
 
 
