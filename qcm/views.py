@@ -2798,12 +2798,10 @@ def create_course(request, idc , id ):
             nf.parcours = parcours
             nf.teacher = teacher
             nf.save()
-
             try :
-                return redirect('list_parcours_group' , request.session.get("group_id"))
+                return redirect('show_course' , 0 , id)
             except :
                 return redirect('dashboard')
-
         else:
             print(form.errors)
 
@@ -2836,7 +2834,7 @@ def update_course(request, idc, id  ):
 
             messages.success(request, 'Le cours a été modifié avec succès !')
             try :
-                return redirect('list_parcours_group' , request.session.get("group_id"))
+                return redirect('show_course' , 0 , id)
             except :
                 return redirect('dashboard')
         else :

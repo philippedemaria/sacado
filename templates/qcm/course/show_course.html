@@ -49,7 +49,7 @@
                 <input type="hidden" value="{{ parcours.id }}" name="parcours_id" id="parcours_id"/>
                 {% for course in courses %}
                     <li class="{% if forloop.first %}active{% endif %} menu_course">
-                        <a href="#" data-target-id="course{{forloop.counter0}}"> {{ course.title }}<img src="{% static 'img/order_handler_white.png' %}" class="pull-right"/></a>
+                        <a href="#" data-target-id="course{{forloop.counter0}}">  <i class="{% if course.is_publish %}fa fa-eye{% else %}fa fa-eye-slash{% endif %}  " style="font-size: 12px"></i>  {{ course.title }}<img src="{% static 'img/order_handler_white.png' %}" class="pull-right"/></a>
                         <input type="hidden" value="{{ course.id }}" class="course_sort" /> 
                     </li>
                 {% endfor %}
