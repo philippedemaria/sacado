@@ -29,7 +29,7 @@ from sendmail.models import Communication
 from socle.models import Level
 from socle.models import Theme
 from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ParentUpdateForm, ManagerUpdateForm, NewUserTForm
-
+from templated_email import send_templated_mail
 
 def time_zone_user(user):
     if user.time_zone :
@@ -236,12 +236,12 @@ def register_student_from_admin(request):
     """"
     Enregistre un enseignant depuis la console admin d'un établissement
     """
-    group_id = request.POST.get("group")  
-    group = Group.objects.get(pk = group_id)
+    group_id = request.POST.get("group")
+    group = Group.objects.get(pk=group_id)
 
     user_form = NewUserTForm(request.POST or None) 
     if request.method == 'POST':
-        if user_form.is_valid() :
+        if user_form.is_valid():
             u_form = user_form.save(commit=False)
             u_form.password = make_password("sacado2020")
             u_form.user_type = User.STUDENT
@@ -249,13 +249,15 @@ def register_student_from_admin(request):
             u_form.username = get_username(u_form.last_name, u_form.first_name)
             u_form.save()
 
-            student = Student.objects.create(user=u_form,level=group.level,task_post=1)
+            student = Student.objects.create(user=u_form, level=group.level, task_post=1)
             group.students.add(student)
 
-            send_mail('Création de compte sur Sacado',
-                      f'Bonjour, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {u_form.username} \r\n\r\n.\r\n\r\nVotre mot de passe est : sacado2020 \r\n\r\nVous pourrez le modifier une fois connecter à vorte espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
-                      'info@sacado.xyz',
-                      [u_form.email, ])
+            send_templated_mail(
+                template_name="student_registration",
+                from_email="info@sacado.xyz",
+                recipient_list=[u_form.email, ],
+                context={"student": u_form, }, )
+
             return redirect('school_groups')
         else:
             messages.error(request, user_form.errors)
@@ -274,22 +276,22 @@ def register_student(request):
             user = user_form.save(commit=False)
             user.username = username
             user.user_type = User.STUDENT
-            password = request.POST.get("password1")   
+            password = request.POST.get("password1")
             ######################### Choix du groupe  ###########################################
-            if request.POST.get("choose_alone") : # groupe sans prof
+            if request.POST.get("choose_alone"):  # groupe sans prof
                 # l'élève rejoint le groupe par défaut sur le niveau choisi
-                teacher = Teacher.objects.get(user_id = 2)#2480
-                group = Group.objects.get(teacher = teacher, level_id = int(request.POST.get("level_selector")))
-                parcours = Parcours.objects.filter(teacher=teacher, level = group.level)
+                teacher = Teacher.objects.get(user_id=2)  # 2480
+                group = Group.objects.get(teacher=teacher, level_id=int(request.POST.get("level_selector")))
+                parcours = Parcours.objects.filter(teacher=teacher, level=group.level)
 
             else:  # groupe du prof  de l'élève
-                code_group = request.POST.get("group")  
-                if Group.objects.filter(code = code_group).exists() :
-                    group = Group.objects.get(code = code_group)
-                    parcours = Parcours.objects.filter(teacher=group.teacher, level = group.level)
-            #######################################################################################      
+                code_group = request.POST.get("group")
+                if Group.objects.filter(code=code_group).exists():
+                    group = Group.objects.get(code=code_group)
+                    parcours = Parcours.objects.filter(teacher=group.teacher, level=group.level)
+            #######################################################################################
             user.save()
-            student = Student.objects.create(user=user,level=group.level) 
+            student = Student.objects.create(user=user, level=group.level)
             group.students.add(student)
 
             for p in parcours:
@@ -297,12 +299,17 @@ def register_student(request):
                 relationships = p.parcours_relationship.all()
                 for r in relationships:
                     r.students.add(student)
-                    
-            user = authenticate(username=username, password = password)
+
+            user = authenticate(username=username, password=password)
             login(request, user)
             messages.success(request, "Inscription réalisée avec succès !")               
             if user_form.cleaned_data['email']:
-                send_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.', 'info@sacado.xyz', [request.POST.get("email")])
+                send_templated_mail(
+                    template_name="student_registration",
+                    from_email="info@sacado.xyz",
+                    recipient_list=[user_form.cleaned_data['email'], ],
+                    context={"student": user, }, )
+
         else:
             messages.error(request, "Erreur lors de l'enregistrement. Reprendre l'inscription...")
     return redirect('index')

@@ -260,7 +260,7 @@ class Teacher(models.Model):
         """
         if self.user.email != '':
             send_templated_mail(
-                template_name="notify_registration",
+                template_name="teacher_registration",
                 from_email="info@sacado.xyz",
                 recipient_list=[self.user.email, ],
                 context={"teacher": self.user, }, )
@@ -273,7 +273,7 @@ class Teacher(models.Model):
         admins = User.objects.filter(is_superuser=1)
         admins_emails = list(admins.values_list('email', flat=True))
         send_templated_mail(
-            template_name="notify_registration_to_admins",
+            template_name="teacher_registration_notify_admins",
             from_email="info@sacado.xyz",
             recipient_list=admins_emails,
             context={"teacher": self.user,}, )

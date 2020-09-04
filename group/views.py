@@ -21,6 +21,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from group.decorators import user_is_group_teacher
 from account.decorators import user_can_create
+from templated_email import send_templated_mail
+
 
 ############### bibliothèques pour les impressions pdf  #########################
 import os
@@ -91,12 +93,13 @@ def count_unique(datas):
             tab.append(d)
     return nb
 
+
 def include_students(liste, group):
 
     students_tab = liste.split("\r")
 
     for student_tab in students_tab :
-        try :
+        try:
             details = student_tab.split(";")
             fname = str(cleanhtml(details[0].replace(" ", ""))).strip()
             lname = str(cleanhtml(details[1].replace(" ", ""))).strip()
@@ -105,9 +108,11 @@ def include_students(liste, group):
 
             try:
                 email = cleanhtml(details[2])
-                send_mail("Inscription SacAdo",
-                          f"Bonjour {fname},\n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : {username}\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci.",
-                          "saca_do_not_reply@sacado.fr", [email])
+                send_templated_mail(
+                    template_name="student_registration_by_teacher",
+                    from_email="info@sacado.xyz",
+                    recipient_list=[email],
+                    context={"last_name": lname, "first_name": fname, "username": username}, )
 
             except IndexError:
                 email = ""
@@ -117,12 +122,9 @@ def include_students(liste, group):
                                                                  "password": password, "email": email,
                                                                  "user_type": User.STUDENT})
 
-
             if created:
-                print("ici")
                 student = Student.objects.create(user=user, level=group.level)
                 group.students.add(student)
-
                 parcours_tab = []
                 for student in group.students.all():
                     parcourses = student.students_to_parcours.all()
@@ -135,12 +137,10 @@ def include_students(liste, group):
                     relationships = Relationship.objects.filter(parcours=p)
                     for relationship in relationships:
                         relationship.students.add(student)
-
-            else :
-                print("là")
+            else:
                 messages.error(request, "Erreur lors de l'enregistrement. L'identifiant {} est déjà utilisé. Modifier le prénom ou le nom.".format(username))
                 break
-        except :
+        except:
             pass
 
 
@@ -153,20 +153,19 @@ def include_students_in_a_model(liste,model):
     for student_tab in students_tab :
         details = student_tab.split(";")
         try:
-            fname = cleanhtml(details[0].replace(" ",""))
-            lname = cleanhtml(details[1].replace(" ",""))
+            fname = cleanhtml(details[0].replace(" ", ""))
+            lname = cleanhtml(details[1].replace(" ", ""))
             password = make_password("sacado2020")
             username = str(lname).strip()+str(fname).strip()
 
- 
             try:
                 email = cleanhtml(details[2])
-                send_mail("Inscription SacAdo", "Bonjour "+fname+", \n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : "+username+"\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , "saca_do_not_reply@sacado.fr" , [email]) 
+                send_mail("Inscription SacAdo", "Bonjour "+fname+", \n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : "+username+"\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , "saca_do_not_reply@sacado.xyz" , [email])
             except:
                 email = ""
-            user = User.objects.create(last_name=str(lname), first_name=str(fname),username=username, password=password, email=email,user_type=0)
+            user = User.objects.create(last_name=str(lname), first_name=str(fname), username=username, password=password, email=email,user_type=0)
             code = str(uuid.uuid4())[:8] # code pour la relation avec les parents
-            student = Student.objects.create(user=user,level=group.level,code=code)
+            student = Student.objects.create(user=user, level=group.level, code=code)
             model.students.add(student)  
         except:
             pass
