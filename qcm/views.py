@@ -274,7 +274,7 @@ def ajax_populate(request):
         else:
             statut = 1
 
-            relation = Relationship.objects.create(parcours_id=parcours_id, exercise_id = exercise_id, order = 100, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration)  
+            relation = Relationship.objects.create(parcours_id=parcours_id, exercise_id = exercise_id, order = 100, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration, skills = exercise.supportfile.skills)  
             relation.skills.set(exercise.supportfile.skills.all()) 
 
             students = parcours.students.all()
@@ -557,6 +557,7 @@ def create_parcours(request):
         for exercise in form.cleaned_data.get('exercises'):
             exercise = Exercise.objects.get(pk=exercise.id)
             relationship = Relationship.objects.create(parcours=nf, exercise=exercise, order=i,
+                                                        skills = exercise.supportfile.skills , 
                                                        duration=exercise.supportfile.duration,
                                                        situation=exercise.supportfile.situation)
             relationship.students.set(form.cleaned_data.get('students'))
@@ -982,7 +983,7 @@ def add_exercice_in_a_parcours(request):
         except :
             r = 0
 
-        Relationship.objects.create(parcours = parcours , exercise = exercise , order=  r, is_publish= 1 , start= None , date_limit= None, duration= exercise.supportfile.duration, situation= exercise.supportfile.situation   )    
+        Relationship.objects.create(parcours = parcours , exercise = exercise , order=  r, is_publish= 1 , start= None , date_limit= None, duration= exercise.supportfile.duration, situation= exercise.supportfile.situation, skills= exercise.supportfile.skills )    
         i +=1
 
     return redirect('exercises')
@@ -2264,7 +2265,7 @@ def create_evaluation(request):
         i = 0
         for exercise in form.cleaned_data.get('exercises'):
             exercise = Exercise.objects.get(pk=exercise.id)
-            relationship = Relationship.objects.create(parcours=nf, exercise=exercise, order=i,
+            relationship = Relationship.objects.create(parcours=nf, exercise=exercise, order=i, skills = exercise.supportfile.skills , 
                                                        duration=exercise.supportfile.duration,
                                                        situation=exercise.supportfile.situation)
             relationship.students.set(form.cleaned_data.get('students'))
