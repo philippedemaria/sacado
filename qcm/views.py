@@ -2888,6 +2888,7 @@ def show_course_student(request, idc , id ):
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
+    this_user = request.user
     parcours = Parcours.objects.get(pk =  id)
     today = time_zone_user(this_user)
     courses = parcours.course.filter(Q(is_publish=1)|Q(publish_start__lte=today),Q(is_publish=1)|Q(publish_end__gte=today)).order_by("ranking")  
