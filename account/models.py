@@ -9,6 +9,8 @@ from django.db import models
 from socle.models import Level, Knowledge, Skill, Subject
 from school.models import School
 
+from templated_email import send_templated_mail
+
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
@@ -246,7 +248,7 @@ class Teacher(models.Model):
     levels = models.ManyToManyField(Level, related_name="levels_to_group", blank=True, verbose_name="Niveaux préférés")
     notification = models.BooleanField(default=1, verbose_name="Notification ?")
     exercise_post = models.BooleanField(default=1, verbose_name="Notification de création d'exercice ?")
-    subjects  = models.ManyToManyField(Subject, related_name="teacher", verbose_name="Enseignements" )
+    subjects = models.ManyToManyField(Subject, related_name="teacher", verbose_name="Enseignements")
 
 
     def __str__(self):
@@ -254,13 +256,14 @@ class Teacher(models.Model):
 
     def notify_registration(self):
         """
-        Envoie un email l'enseignant l'informant de la réussite de son inscription
+        Envoie un email à l'enseignant l'informant de la réussite de son inscription
         """
         if self.user.email != '':
-            send_mail('Création de compte sur Sacado',
-                      f'Bonjour, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {self.user.username} \r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
-                      'info@sacado.xyz',
-                      [self.user.email, ])
+            send_templated_mail(
+                template_name="teacher_registration",
+                from_email="info@sacado.xyz",
+                recipient_list=[self.user.email, ],
+                context={"teacher": self.user, }, )
 
 
     def notify_registration_to_admins(self):
@@ -269,10 +272,12 @@ class Teacher(models.Model):
         """
         admins = User.objects.filter(is_superuser=1)
         admins_emails = list(admins.values_list('email', flat=True))
-        send_mail("SacAdo",
-                  f"Un enseignant - {self.user.last_name} {self.user.first_name} - vient de s'inscrire sur SacAdo.",
-                  "info@sacado.xyz",
-                  admins_emails)
+        send_templated_mail(
+            template_name="teacher_registration_notify_admins",
+            from_email="info@sacado.xyz",
+            recipient_list=admins_emails,
+            context={"teacher": self.user,}, )
+
 
 
 class Resultknowledge(models.Model):

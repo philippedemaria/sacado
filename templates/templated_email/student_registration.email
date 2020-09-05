@@ -1,0 +1,19 @@
+{% block subject %}Création de compte sur Sacado{% endblock %}
+
+
+{% block html %}
+Bonjour {{student.first_name}} {{student.last_name}},<br>
+<br>
+
+Vos identifiants sont :<br>
+Identifiant : {{student.username}}<br>
+Mot de passe : sacado2020<br>
+<br>
+Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.<br>
+
+Pour vous connecter, redirigez-vous vers <a href="https://sacado.xyz" >https://sacado.xyz</a>.
+<br><br>
+
+Ceci est un mail automatique. Merci de ne pas répondre.
+
+{% endblock %}

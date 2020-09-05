@@ -1,0 +1,10 @@
+{% block subject %}SacAdo - Inscription Enseignant{% endblock %}
+
+
+{% block html %}
+Bonjour,<br>
+<br>
+Un enseignant vient de rejoindre SacAdo : {{teacher.last_name}}, {{teacher.first_name}}
+
+
+{% endblock %}
