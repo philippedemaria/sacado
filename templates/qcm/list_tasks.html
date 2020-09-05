@@ -18,8 +18,9 @@
 
 
 {% block page_menu_right %}
+{% if today %}
     <li style="font-size:14px; position: absolute;right:0px; top:-6px;" > {{ today|date:"d N Y" }}  </li>
-
+{% endif %}
    {% include 'qcm/submenu_parcours.html' %}    
 
 
