@@ -33,7 +33,9 @@
 {% endblock %}
 
 {% block page_menu_right %}
+{% if today %}
  <font style="font-size:16px">{{ today|date:"d N Y, H:i" }}</font> <a href="{%  url 'profile' %}" style="font-size:11px" title="Régler le fuseau horaire"><i class="fa fa-clock"></i></a>
+{% endif %}
 {% endblock %}
 
  

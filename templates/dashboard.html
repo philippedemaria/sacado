@@ -285,11 +285,13 @@
     {% endif %}
 
     <hr>
+    {% if today %}
     <div class="row">
         <div class="col-lg-12 col-xs-12" style="text-align: center">
             {{ today|date:"d N Y" }}, {{ today|date:"H:i:s" }}
         </div>
     </div>
+    {% endif %}
     <hr>
 </div>
 
