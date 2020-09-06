@@ -65,8 +65,8 @@
                                             {% else %}
                                             darkgreen
                                             {% endif %}"
-                                          href=" " data-container="body"
-                                          data-toggle="popover"  style="border : 1px solid {{student.get_exercises.parcours.color }}"
+                                          href="#" data-container="body"
+                                          data-toggle="popover"  style="border : 1px solid #5d4391"
                                           data-trigger="hover" data-placement="bottom"
                                           title="{{ knowledge}}"
                                           data-content="{% for e in knowledge.knowledge_exercise.all %}{{ e.annoncement|cleanhtml }}{% if not forloop.last %}, {% endif %}{% endfor %}">
@@ -74,8 +74,8 @@
                                     </a>
                                 {% else %}
                                     <a class="markdown"                                                   
-                                          href="  " data-container="body"
-                                          data-toggle="popover"   style="border : 1px solid {{student.get_exercises.parcours.color }}"
+                                          href="#" data-container="body"
+                                          data-toggle="popover"   style="border : 1px solid #5d4391"
                                           data-trigger="hover"
                                            data-placement="bottom" 
                                           data-content="{{ knowledge.name }}"> 

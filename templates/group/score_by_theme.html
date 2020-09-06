@@ -15,7 +15,7 @@
             darkgreen
             {% endif %}"
           href="{% url 'show_this_exercise'  exercice.id   %}" data-container="body"
-          data-toggle="popover" style="border : 2px solid {{student.get_exercises.parcours.color }}"
+          data-toggle="popover" style="border : 2px solid #5d4391"
           data-trigger="hover" data-placement="top"
           title="{{ exercises.parcours.title }} : {{ scores }}"
           data-content="{{ exercice.knowledge.name }}">
@@ -24,7 +24,7 @@
 {% else %}
     <a class="markdown"                                                   
           href="{% url 'show_this_exercise' exercice.id %}" data-container="body"
-          data-toggle="popover"  style="border : 2px solid {{student.get_exercises.parcours.color }}"
+          data-toggle="popover"  style="border : 2px solid #5d4391"
           data-trigger="hover"
           title="{{ exercises.parcours.title }}" data-placement="top"
           data-content="{{ exercice.knowledge.name }}"> 
