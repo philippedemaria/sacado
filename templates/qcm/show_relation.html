@@ -32,6 +32,20 @@
 
 
     <div class="col-sm-0 col-md-1 col-lg-1">
+
+       <p style="font-size:12px;text-align: center;width:100%">
+        {% if parcours.course.all|length > 0 %}        
+         <a href="{% url 'show_course_student' 0 parcours.id %}" target="blank"  ><i class="fa fa-desktop fa-5x"></i> <br>Le cours</a>
+          {% else %}
+
+         <i class="fa fa-desktop fa-5x text-danger"></i> <br>Aucun cours</a>
+          {% endif %}
+      </p>
+        <br><br>
+
+
+
+    
         {% if relation.exercise.supportfile.calculator %}
           <img src="{% static 'img/calculator.png' %}"  with="80px"  height="80px" />
         {% else %}
