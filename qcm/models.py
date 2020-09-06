@@ -214,6 +214,8 @@ class Exercise(models.Model):
         else :
             scores_times["score"] = None
             scores_times["time"] = None
+
+
         return scores_times
 
 
