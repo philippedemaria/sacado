@@ -27,8 +27,11 @@
 
 
 <section class="content_main">
-     <div class="col-sm-0 col-md-1 col-lg-1">
-       
+ 
+ 
+
+
+    <div class="col-sm-0 col-md-1 col-lg-1">
 
        <p style="font-size:12px;text-align: center;width:100%">
         {% if parcours.course.all|length > 0 %}        
@@ -42,6 +45,7 @@
 
 
 
+    
         {% if relation.exercise.supportfile.calculator %}
           <img src="{% static 'img/calculator.png' %}"  with="80px"  height="80px" />
         {% else %}

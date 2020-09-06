@@ -182,6 +182,8 @@ def associate_parcours(request,id):
         for e in exercises:
             relationship, created = Relationship.objects.get_or_create(parcours = parcours, exercise=e, order = i)
             relationship.students.set(group.students.all())
+            if created :
+                relationship.skills.set(e.supportfile.skills.all()) 
             i+=1
 
     if len(parcours.students.all())>0 :
@@ -216,6 +218,8 @@ def get_parcours_default(request):
         i  = 0
         for e in exercises:
             relationship, created = Relationship.objects.get_or_create(parcours = parcours, exercise=e, order = i)
+            if created :
+                relationship.skills.set(e.supportfile.skills.all()) 
             i+=1
         n +=1
     if n > 1 :
@@ -274,12 +278,11 @@ def ajax_populate(request):
         else:
             statut = 1
 
-            relation = Relationship.objects.create(parcours_id=parcours_id, exercise_id = exercise_id, order = 100, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration, skills = exercise.supportfile.skills)  
+            relation = Relationship.objects.create(parcours_id=parcours_id, exercise_id = exercise_id, order = 100, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration) 
             relation.skills.set(exercise.supportfile.skills.all()) 
 
             students = parcours.students.all()
-            for student in students :
-                relation.students.add(student)
+            relation.students.set(students)
                 
             data["statut"] = "True"
             data["class"] = "btn btn-success"
@@ -335,7 +338,8 @@ def peuplate_parcours(request,id):
 
         for exercise in exercises_posted_ids :
             try :
-                r = Relationship.objects.create(parcours = nf , exercise = exercise , order =  i,situation = exercise.supportfile.situation , duration = exercise.supportfile.duration , skills = exercise.supportfile.skills )  
+                r = Relationship.objects.create(parcours = nf , exercise = exercise , order =  i,situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
+                r.skills.set(exercise.supportfile.skills.all()) 
                 i+=1
             except :
                 pass
@@ -557,10 +561,10 @@ def create_parcours(request):
         for exercise in form.cleaned_data.get('exercises'):
             exercise = Exercise.objects.get(pk=exercise.id)
             relationship = Relationship.objects.create(parcours=nf, exercise=exercise, order=i,
-                                                        skills = exercise.supportfile.skills , 
                                                        duration=exercise.supportfile.duration,
                                                        situation=exercise.supportfile.situation)
             relationship.students.set(form.cleaned_data.get('students'))
+            relationship.skills.set(exercise.supportfile.skills.all()) 
             i += 1
 
         if request.POST.get("save_and_choose") :
@@ -983,7 +987,8 @@ def add_exercice_in_a_parcours(request):
         except :
             r = 0
 
-        Relationship.objects.create(parcours = parcours , exercise = exercise , order=  r, is_publish= 1 , start= None , date_limit= None, duration= exercise.supportfile.duration, situation= exercise.supportfile.situation, skills= exercise.supportfile.skills )    
+        relation = Relationship.objects.create(parcours = parcours , exercise = exercise , order=  r, is_publish= 1 , start= None , date_limit= None, duration= exercise.supportfile.duration, situation= exercise.supportfile.situation ) 
+        relation.skills.set(exercise.supportfile.skills.all())   
         i +=1
 
     return redirect('exercises')
@@ -2151,7 +2156,8 @@ def ajax_create_title_parcours(request):
     supportfile = Supportfile.objects.create(knowledge_id=1, annoncement=value, author=teacher, code=code, level_id=1, theme_id=1, is_title=1, is_subtitle=subtitle)
 
     exe = Exercise.objects.create(knowledge_id=1, level_id=1, theme_id=1, supportfile=supportfile)
-    Relationship.objects.create(exercise=exe, parcours_id=parcours_id, order=0)
+    relation = Relationship.objects.create(exercise=exe, parcours_id=parcours_id, order=0)
+
 
     data["html"] = f'''<div class="panel-body separation_dashed" style="line-height: 30px;  border-top-right-radius:5px; border-top-left-radius:5px; background-color : #F2F1F0;id='new_title{exe.id}'">
     <a href='#' style='cursor:move;' class='move_inside'>
@@ -2265,10 +2271,11 @@ def create_evaluation(request):
         i = 0
         for exercise in form.cleaned_data.get('exercises'):
             exercise = Exercise.objects.get(pk=exercise.id)
-            relationship = Relationship.objects.create(parcours=nf, exercise=exercise, order=i, skills = exercise.supportfile.skills , 
+            relationship = Relationship.objects.create(parcours=nf, exercise=exercise, order=i, 
                                                        duration=exercise.supportfile.duration,
                                                        situation=exercise.supportfile.situation)
             relationship.students.set(form.cleaned_data.get('students'))
+            relationship.skills.set(exercise.supportfile.skills.all()) 
             i += 1
 
         if request.POST.get("save_and_choose") :
