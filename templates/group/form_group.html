@@ -96,7 +96,7 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
                         <div class="form-group">
-                            <label>Possibilité d'inscrire les élèves par leur nom et prénom.<small><em> L'adresse mail est facultative.</em> <br><span style="color:#cb2131">Respecter le format donné : 1 élève par ligne, informations séparées par un ;  <br/>Le mot de passe par défaut est : sacado2020</span></small></label> <br> 
+                            <label>Possibilité d'inscrire les élèves par leur prénom et nom.<small><em> L'adresse mail est facultative.</em> <br><span style="color:#cb2131">Respecter le format donné : 1 élève par ligne, informations séparées par un ;  <br/>Le mot de passe par défaut est : sacado2020</span></small></label> <br> 
                             <textarea name="students" id="students_id"  style="border:1px #CCC solid" class="form-control" rows="10" placeholder="Alan;Turing;alan.turing@enigma.com"></textarea>
                         </div>
                     </div>
@@ -163,7 +163,9 @@
                             <td>{{ student.user.last_name  }}  
                             </td>
                             <td>{{ student.user.first_name    }}  
-                            </td>                        
+                            </td>
+                            <td>{{ student.user.username    }}  
+                            </td>                                                    
                         </tr>
                         </form>
                     {% empty %}
