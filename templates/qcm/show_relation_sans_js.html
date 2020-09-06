@@ -32,6 +32,18 @@
 
 
     <div class="col-sm-0 col-md-1 col-lg-1">
+
+      <p style="font-size:12px;text-align: center;width:100%">
+        {% if parcours.course.all|length > 0 %}        
+         <a href="{% url 'show_course_student' 0 parcours.id %}" target="blank"  ><i class="fa fa-desktop fa-5x"></i> <br>Le cours</a>
+          {% else %}
+
+         <i class="fa fa-desktop fa-5x text-danger"></i> <br>Aucun cours</a>
+          {% endif %}
+      </p>
+        <br><br>
+
+
         {% if relation.exercise.supportfile.calculator %}
           <img src="{% static 'img/calculator.png' %}"  with="80px"  height="80px" />
         {% else %}
@@ -99,7 +111,7 @@
      
                 <div class="form-group">
                   {% if user.user_type == 0 %}
-                    <input  class="btn btn-primary" data-relation_id="{{ relation.id }}"  data-situation="{{ relation.situation }}"  data-start_time="{{ start_time }}" type="submit" id="submit_button_relation"  disabled value="Enregistrer le résultat"  />
+                    <input  class="btn btn-primary" data-relation_id="{{ relation.id }}"  data-situation="{{ relation.situation }}"  data-start_time="{{ start_time }}" type="submit" id="submit_button_relation"    value="Enregistrer le résultat"  />
                   {% endif %}   
                     <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
 
@@ -201,30 +213,14 @@
                "appletOnLoad" :  function(applet) { 
 
                         applet.setValue("situation",{{ relation.situation }});
-                        applet.registerObjectUpdateListener("numexo", "getNumexo");
- 
+
                 }
 
         };
 
  
- 
-          function getNumexo(objName) {
-                // get value from applet1 and set value in applet2   
-            var changedValue = ggbApplet.getValue(objName);        //  ggbApplet est super important !      
-
-            situation = document.getElementById("situation").value  ;
-
-            console.log("situation " + situation) ;
-            console.log("changedValue " + changedValue);
- 
-              if(changedValue>situation) {
-                    document.getElementById("submit_button_relation").disabled = false;
-                }
-          }
 
 
-   
 
 
         var applet = new GGBApplet('5.0', parameters,true);
