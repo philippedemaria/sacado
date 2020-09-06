@@ -212,8 +212,8 @@ class Exercise(models.Model):
             scores_times["score"] = studentanswer.point
             scores_times["time"] = convert_time(studentanswer.secondes)
         else :
-            scores_times["score"] = ""
-            scores_times["time"] = ""
+            scores_times["score"] = None
+            scores_times["time"] = None
         return scores_times
 
 
