@@ -79,9 +79,6 @@ define(['jquery', 'bootstrap'], function ($) {
                         csrfmiddlewaretoken: csrf_token
                     },
                     url: "../../store_the_score_relation_ajax/",
-                    success: function () {
-                        alert("Le score de cet exercice est enregistré.") ; 
-                        }
                 }
             );
 
