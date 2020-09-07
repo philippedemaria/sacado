@@ -56,7 +56,7 @@
                                     {% for knowledge in theme.knowledges  %}
                                         {% if knowledge.exercises|length > 0 %}
                                                 <tr>
-                                                    <td class="listingtd">
+                                                    <td class="listingtd"> 
                                                         {{ knowledge.name.name|capfirst }}
                                                         {% if request.user.is_superuser and '/admin' in request.path %}
                                                             <a href="{% url 'create_supportfile_knowledge' knowledge.name.id %}" class="pull-right edit"><i class='fa fa-plus' style="margin-left:10px;font-size: 10px"></i></a>

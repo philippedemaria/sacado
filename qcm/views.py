@@ -444,7 +444,7 @@ def list_parcours(request):
     except:
         pass  
 
-    return render(request, 'qcm/list_parcours.html', { 'parcourses' : parcourses , 'parcours' : None , 'teacher' : teacher , 'nb_archive' : nb_archive })
+    return render(request, 'qcm/list_parcours.html', { 'parcourses' : parcourses , 'communications' : [] , 'relationships' : [],  'parcours' : None , 'teacher' : teacher , 'nb_archive' : nb_archive })
 
 
 @login_required
@@ -458,7 +458,7 @@ def list_archives(request):
     except:
         pass   
 
-    return render(request, 'qcm/list_archives.html', { 'parcourses' : parcourses , 'parcours' : None , 'teacher' : teacher , })
+    return render(request, 'qcm/list_archives.html', { 'parcourses' : parcourses , 'parcours' : None , 'teacher' : teacher ,  'communications' : [] , 'relationships' : [], })
 
 
 
@@ -472,7 +472,7 @@ def list_evaluations(request):
     except:
         pass  
 
-    return render(request, 'qcm/list_evaluations.html', { 'parcourses' : parcourses, 'parcours' : None , 'communications' : [] , 'relationships' : []   , 'nb_archive' : nb_archive })
+    return render(request, 'qcm/list_evaluations.html', { 'parcourses' : parcourses, 'parcours' : None ,  'teacher' : teacher ,  'communications' : [] , 'relationships' : []   , 'nb_archive' : nb_archive })
 
 
 
@@ -486,7 +486,7 @@ def list_evaluations_archives(request):
     except:
         pass  
 
-    return render(request, 'qcm/list_evaluations_archives.html', { 'parcourses' : parcourses, 'parcours' : None , 'communications' : [] , 'relationships' : []   })
+    return render(request, 'qcm/list_evaluations_archives.html', { 'parcourses' : parcourses, 'parcours' : None , 'teacher' : teacher , 'communications' : [] , 'relationships' : []   })
 
 
 
@@ -520,10 +520,6 @@ def list_parcours_group(request,id):
 def all_parcourses(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcourses = Parcours.objects.exclude(exercises=None ).exclude(teacher=teacher).exclude(teacher__user__school= None).order_by("author").prefetch_related('exercises__knowledge__theme').select_related('author')
-    #parcourses = parcourses[:15] #limite pour le debuggage
-
-    for parcours in parcourses :
-        print(parcours.teacher, parcours.teacher.user.school, parcours.exercises.count())
 
     if request.user.school != None :
         inside = True
@@ -1536,7 +1532,7 @@ def list_exercises(request):
         teacher = Teacher.objects.get(user=user)
         datas = all_levels(user, 0)
 
-        return render(request, 'qcm/list_exercises.html', {'datas': datas, 'teacher': teacher , 'parcours': None, 'relationships' : [] , 'teacher': teacher})
+        return render(request, 'qcm/list_exercises.html', {'datas': datas, 'teacher': teacher , 'parcours': None, 'relationships' : [] ,  'communications': None , })
     
     elif user.is_student: # student
         student = Student.objects.get(user=user)
@@ -1546,11 +1542,22 @@ def list_exercises(request):
         relationships = Relationship.objects.filter(parcours__in=parcourses,is_publish=1,exercise__supportfile__is_title=0).order_by("exercise__theme")
 
         return render(request, 'qcm/student_list_exercises.html',
-                      {'relationships': relationships, 'nb_exercises': nb_exercises   })
+                      {'relationships': relationships, 'nb_exercises': nb_exercises ,     })
 
     else: # non utilisé
-        exercises = Exercise.objects.all().order_by("level")
-        return render(request, 'qcm/list_exercises.html', {'exercises': exercises  , 'parcours' : None })
+        parent = Parent.objects.get(user=user)
+        students = parent.students.all()
+        parcourses = []
+        for student in students :
+            for parcours in student.students_to_parcours.all() :
+                if parcours not in parcourses :
+                    parcourses.append(parcours)  
+
+        nb_exercises = Relationship.objects.filter(parcours__in=parcourses,is_publish=1,exercise__supportfile__is_title=0).count()
+        relationships = Relationship.objects.filter(parcours__in=parcourses,is_publish=1,exercise__supportfile__is_title=0).order_by("exercise__theme")
+
+        return render(request, 'qcm/student_list_exercises.html',
+                      {'relationships': relationships, 'nb_exercises': nb_exercises ,     })
 
 
 
@@ -2228,8 +2235,7 @@ def ajax_search_exercise(request):
         parcours = student.students_to_parcours.all()
     else :
         parcours = None 
- 
-    print(parcours)
+  
 
     relationships = Relationship.objects.filter(Q(exercise__knowledge__in = knowledges)|Q(exercise__supportfile__annoncement__contains= code)|Q(exercise__supportfile__code__contains= code)).filter(exercise__supportfile__is_title=0, parcours__in = parcours)
     data = {}

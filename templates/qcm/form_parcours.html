@@ -117,9 +117,9 @@
 
                                                     {% if parcours %}
                                                      {% get_in_parcours  s parcours  as bool  %}
-                                                        {% if bool or request.session.group_id == group.id %} checked {% endif %}
+                                                        {% if bool or group_id == group.id %} checked {% endif %}
                                                     {% else %}
-                                                        {% if request.session.group_id == group.id %} checked {% endif %}
+                                                        {% if group_id == group.id %} checked {% endif %}
                                                     {% endif %} > 
                                                     {{ s.user|title}}
                                         </label><br>

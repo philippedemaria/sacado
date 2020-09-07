@@ -97,13 +97,13 @@
                         </td>
                     </tr> 
                     {% regroup knowledges by theme as theme_list %}
-                    {% for theme in theme_list %}
+                    {% for thme in theme_list %}
                     <tr>
                         <td>     
-                            {{ theme.grouper }}        
+                            {{ thme.grouper }}        
                         </td>
                         <td>  
-                            {%  get_resultexercises_by_theme student theme.grouper as resultexercises %}  
+                            {%  get_resultexercises_by_theme student thme.grouper as resultexercises %}  
 
 
                             {% for resultexercise in resultexercises %}  
