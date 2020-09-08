@@ -2000,13 +2000,14 @@ def store_the_score_relation_ajax(request):
     timer =  int(end_time) - int(this_time)
     relation_id = int(request.POST.get("relation_id"))
 
+
     relation = Relationship.objects.get(pk = relation_id)
     data = {}
     student = Student.objects.get(user=request.user)
 
     if request.method == 'POST':
         score = round(float(request.POST.get("score")),2)*100
-
+        print(numexo , this_time , score , relation )
         if score > 100 :
             score = 100
  
@@ -2058,7 +2059,7 @@ def store_the_score_relation_ajax(request):
             except:
                 pass
 
-    return JsonResponse(data)
+    return redirect('show_parcours_student' , relation.parcours.id )
 
 
 def ajax_theme_exercice(request):
