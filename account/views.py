@@ -86,14 +86,17 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
-        this_user = User.objects.get(pk=self.request.user.id)
-        
-        today = time_zone_user(this_user)
-        relationships = Relationship.objects.filter(is_publish = 0,start__lte=today)
-        for r in relationships :
-            Relationship.objects.filter(id=r.id).update(is_publish = 1)
 
         if self.request.user.is_authenticated:
+
+            this_user = User.objects.get(pk=self.request.user.id)
+            
+            today = time_zone_user(this_user)
+            relationships = Relationship.objects.filter(is_publish = 0,start__lte=today)
+            for r in relationships :
+                Relationship.objects.filter(id=r.id).update(is_publish = 1)
+
+
             if self.request.user.is_teacher:  # Teacher
                 teacher = Teacher.objects.get(user=self.request.user.id)
                 groups = Group.objects.filter(teacher = teacher)
@@ -105,10 +108,8 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
                 parcours_tab = Parcours.objects.filter(students=None, teacher=teacher)
 
                 context = {'this_user': this_user, 'teacher': teacher, 'relationships': relationships,
-                           'parcourses': parcourses, 'groups': groups, 'parcours_tab': parcours_tab,
+                           'parcourses': parcourses, 'groups': groups, 'parcours_tab': parcours_tab, 'today' : today , 
                            'communications': communications, }
-
-
             elif self.request.user.is_student:  # Student
                 student = Student.objects.get(user=self.request.user.id)
 
@@ -153,14 +154,13 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
                                                                     date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
 
                 context = {'student_id': student.user.id, 'student': student, 'relationships': relationships,
-                           'ratio': ratio, 'evaluations': evaluations, 'ratiowidth': ratiowidth,
+                           'ratio': ratio, 'evaluations': evaluations, 'ratiowidth': ratiowidth, 'today' : today , 
                            'relationships_in_late': relationships_in_late}
-            
             elif self.request.user.is_parent:  # Parent
 
                 parent = Parent.objects.get(user=self.request.user)
                 students = parent.students.order_by("user__first_name")
-                context = {'parent': parent, 'students': students, }
+                context = {'parent': parent, 'students': students, 'today' : today ,  }
 
         else: ## Anonymous
 
@@ -177,7 +177,7 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
             exercise = exercises[i]
 
             context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form,
-                       'levels': levels, 'exercise_nb': exercise_nb, 'exercise': exercise, }
+                       'levels': levels, 'exercise_nb': exercise_nb, 'exercise': exercise }
  
         return context
 

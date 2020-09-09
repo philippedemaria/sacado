@@ -53,7 +53,7 @@ def index(request):
             parcours_tab = Parcours.objects.filter(students=None, teacher=teacher, is_favorite=1) ## Parcours favoris non affectés
 
 
-            context = {'this_user': this_user, 'teacher': teacher, 'groups': groups, 'parcourses': parcourses, 'parcours': None,
+            context = {'this_user': this_user, 'teacher': teacher, 'groups': groups, 'parcourses': parcourses, 'parcours': None, 'today' : today , 
                        'relationships': relationships, 'communications': communications, 'parcours_tab': parcours_tab,
                        'nb_teacher_level': nb_teacher_level}
 
@@ -101,15 +101,17 @@ def index(request):
             relationships_in_late = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, is_evaluation=0, date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
             relationships_in_tasks = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).exclude(exercise__in=exercises).order_by("date_limit")
 
+            print("relationships_in_tasks", relationships_in_tasks)
+
             context = {'student_id': student.user.id, 'student': student, 'relationships': relationships,
-                       'evaluations': evaluations, 'ratio': ratio,
+                       'evaluations': evaluations, 'ratio': ratio, 'today' : today , 
                        'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late,
-                       'relationships_in_tasks': relationships_in_tasks}
+                       'relationships_in_tasks': relationships_in_tasks , }
 
         elif request.user.is_parent:  ## parent
             parent = Parent.objects.get(user=request.user)
             students = parent.students.order_by("user__first_name")
-            context = {'parent': parent, 'students': students, }
+            context = {'parent': parent, 'students': students, 'today' : today ,  }
 
         return render(request, 'dashboard.html', context)
 
@@ -131,7 +133,7 @@ def index(request):
         i = random.randint(1, len(exercises))
         exercise = exercises[i]
 
-        context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels,
+        context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 
                    'cookie': cookie, 'exercise_nb': exercise_nb, 'exercise': exercise, }
 
 

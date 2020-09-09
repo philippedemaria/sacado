@@ -1922,73 +1922,7 @@ def execute_exercise(request, ide,idp):
     context = {'exercise': exercise,  'start_time' : start_time,  'parcours' : parcours,  'relation' : relation }
     return render(request, 'qcm/show_relation.html', context)
 
-# @login_required
-# def store_the_score_ajax(request):
-#     this_time = request.POST.get("start_time").split(",")[0]
-#     end_time = str(time.time())
-#     timer = get_time(this_time,end_time)
-#     exercise_id = int(request.POST.get("exercise_id"))
-#     exercise = Exercise.objects.get(pk = exercise_id)    
-#     if request.POST.get("parcours_id") :
-#         parcours_id = int(request.POST.get("parcours_id"))
-#         parcours = Parcours.objects.get(pk = parcours_id)
-#     else :           
-#         parcours = None
-#     data = {}
-#     student = Student.objects.get(user=request.user)
-#     numexo = int(request.POST.get("numexo"))
-#     if request.method == 'POST':
-#         score = round(float(request.POST.get("score")),2)*100
-#         if score > 100 :
-#             score = 100
-#         if exercise.supportfile.situation <= numexo+2:
-#             Studentanswer.objects.create(exercise  = exercise , parcours  = parcours , student  = student , numexo= numexo,  point= score, secondes = timer)
-#             result, created = Resultexercise.objects.get_or_create(exercise  = exercise , student  = student , defaults = { "point" : score , })
-#             if not created :
-#                 Resultexercise.objects.filter(exercise  = exercise , student  = student).update(point= score)
-#             # Moyenne des scores obtenus par savoir faire enregistré dans Resultknowledge
-#             knowledge = exercise.knowledge
 
-#             scored = 0
-#             studentanswers = Studentanswer.objects.filter(student = student,exercise__knowledge = knowledge) 
-#             for studentanswer in studentanswers:
-#                 scored +=  studentanswer.point 
-#             try :
-#                 scored = scored/len(studentanswers)
-#             except :
-#                 scored = 0
-
-#             result, created = Resultknowledge.objects.get_or_create(knowledge  = exercise.knowledge , student  = student , defaults = { "point" : scored , })
-#             if not created :
-#                 Resultknowledge.objects.filter(knowledge  = exercise.knowledge , student  = student).update(point= scored)
-
-#             # Moyenne des scores obtenus par compétences enregistrées dans Resultskill
-#             skills = exercise.supportfile.skills.all()
-#             for skill in skills :
-#                 Resultskill.objects.create(student = student, skill = skill, point = score) 
-#                 resultskills = Resultskill.objects.filter(student = student, skill = skill).order_by("-id")[0:10]
-#                 sco = 0
-#                 for resultskill in resultskills :
-#                     sco += resultskill.point
-#                     try :
-#                         sco_avg = sco/len(resultskills)
-#                     except :
-#                         sco_avg = 0
-#                 result, created = Resultlastskill.objects.get_or_create(student = student, skill = skill, defaults = { "point" : sco_avg , })
-#                 if not created :
-#                     Resultlastskill.objects.filter(student = student, skill = skill).update(point = sco_avg) 
-
-#             try :
-#                 msg = "Exercice : "+str(exercise.knowledge.name)+"\n Fait par : "+str(student.user)+"\n Nombre de situations : "+str(numexo)+"\n Score : "+str(score)+"%"+"\n Temps : "+convert_seconds_in_time(timer)+" "
-#                 rec = []
-#                 for g in student.students_to_group.all():
-#                     if not g.teacher.user.email in rec : 
-#                         rec.append(g.teacher.user.email)
-#                 if g.teacher.notification :
-#                     send_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , rec )
-#             except:
-#                 pass
-#     return JsonResponse(data)
 
 
 @login_required
@@ -2007,7 +1941,6 @@ def store_the_score_relation_ajax(request):
 
     if request.method == 'POST':
         score = round(float(request.POST.get("score")),2)*100
-        print(numexo , this_time , score , relation )
         if score > 100 :
             score = 100
  

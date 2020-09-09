@@ -93,7 +93,7 @@ def get_percent(obj,student):
 @register.simple_tag  
 def get_done(obj,student):
     """
-    teste le nombre d'exercices faits sur un parcours.
+    teste si l'exercice est fait.
     """ 
     return obj.is_done(student) 
 

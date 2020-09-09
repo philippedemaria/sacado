@@ -126,7 +126,7 @@
                         <div class="card-body student">
                             <span style="color:{{ relation.parcours.color }}"> {{ relation.parcours }}</span>
  
-                            {% if lc.calculator %}
+                            {% if relation.exercise.supportfile.calculator %}
                               <img src="{% static 'img/calculator.png' %}" class="pull-right" width="35px" />
                             {% else %}
                               <img src="{% static 'img/no_calculator.png' %}" class="pull-right"   width="35px" />
@@ -136,13 +136,15 @@
                             {% if student %}
                             <a href="{% url 'execute_exercise'  relation.parcours.id  relation.exercise.id   %}">  <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.3" {% endif %}    ></a>
                             {% else %}
-                            <a href="#" class="detail_parcours"  data-exercise_id="{{ relation.exercise.id }}"  data-num_exo="{{ forloop.counter}}"
-                                                       data-parcours_id="{{ parcours.id }}">
-                                                        <img src="{{ relation.exercise.supportfile.imagefile.url }}" class="image_parcours" {% if not relation.is_publish %} style="opacity:0.3" {% endif %}  >
-                                                       </a> 
+                            <a href="#" class="detail_parcours"  data-exercise_id="{{ relation.exercise.id }}"  data-num_exo="{{ forloop.counter}}"   data-parcours_id="{{ parcours.id }}">
+                                <img src="{{ relation.exercise.supportfile.imagefile.url }}" class="image_parcours" {% if not relation.is_publish %} style="opacity:0.3" {% endif %}  >
+                            </a> 
                             {% endif  %}
+
+
                             {% if  relation.date_limit %}
-                                {% if not data.score %} 
+                                {% get_done relation student as result   %} 
+                                {% if not result %} 
                                     <div  class="btn btn-danger"  style="position: absolute; right : 0px; top:120px;">   
                                           Avant le {{relation.date_limit|date:"d N Y" }}
                                     </div>

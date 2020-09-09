@@ -54,7 +54,7 @@
             <div class="card_freeze" {% if data.score %} style="opacity:0.3" {% endif %}>
                 <div class="card-body student">
                     <div style="color:{{ parcours.color }};font-size: 40px;padding-top: 6px">{{ nb_exo_only|index:forloop.counter0 }}.
-                    {% if lc.calculator %}
+                    {% if relation.exercise.supportfile.calculator %}
                       <img src="{% static 'img/calculator.png' %}" class="pull-right" width="35px" />
                     {% else %}
                       <img src="{% static 'img/no_calculator.png' %}" class="pull-right"   width="35px" />
