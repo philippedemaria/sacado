@@ -1919,7 +1919,8 @@ def execute_exercise(request, ide,idp):
     relation = Relationship.objects.get(parcours=parcours, exercise=exercise)
     request.session['level_id'] = exercise.level.id
     start_time =  time.time()
-    context = {'exercise': exercise,  'start_time' : start_time,  'parcours' : parcours,  'relation' : relation }
+    today = time_zone_user(request.user)
+    context = {'exercise': exercise,  'start_time' : start_time,  'parcours' : parcours,  'relation' : relation , 'today' : today , }
     return render(request, 'qcm/show_relation.html', context)
 
 
