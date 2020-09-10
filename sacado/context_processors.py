@@ -24,7 +24,7 @@ def menu(request):
             nb_not = nbs + nbe
             levels = Level.objects.all()
             nb_demand = Demand.objects.filter(done=0).count()
-            return {'today': today, 'nb_not': nb_not, 'levels': levels,  'nb_demand' : nb_demand }
+            return {'today': today, 'nb_not': nb_not, 'levels': levels,  'nb_demand' : nb_demand  }
 
         elif request.user.is_student:
             student = Student.objects.get(user=request.user)

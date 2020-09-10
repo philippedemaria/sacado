@@ -1864,7 +1864,7 @@ def create_exercise(request, supportfile_id):
 
             return redirect('admin_supportfiles' , supportfile.level.id )
 
-    context = {  'knowledges': knowledges, 'supportfile': supportfile , 'parcours': None, 'communications' : [] ,  }
+    context = {  'knowledges': knowledges, 'supportfile': supportfile , 'parcours': None, 'communications' : [] , 'communications' : [] , 'relationships' : []  }
 
     return render(request, 'qcm/form_exercise.html', context)
 
@@ -1880,7 +1880,7 @@ def show_exercise(request, id):
     t_form = TeacherForm()
     s_form = StudentForm()
 
-    context = {'exercise': exercise,   'form': form , 'u_form' : u_form , 's_form' : s_form , 't_form' : t_form , 'levels' : [], 'communications' : [] ,   }
+    context = {'exercise': exercise,   'form': form , 'u_form' : u_form , 's_form' : s_form , 't_form' : t_form , 'levels' : [],   'communications' : [] , 'relationships' : []  }
  
     return render(request, 'show_exercise.html', context)
 
@@ -1906,7 +1906,7 @@ def show_this_exercise(request, id):
     exercise = Exercise.objects.get(id=id)
     request.session['level_id'] = exercise.level.id
     start_time = time.time()
-    context = {'exercise': exercise, 'start_time': start_time, 'parcours': parcours}
+    context = {'exercise': exercise, 'start_time': start_time, 'parcours': parcours , 'communications' : [] , 'relationships' : [] }
     return render(request, 'qcm/show_exercise.html', context)
 
 
@@ -1920,7 +1920,7 @@ def execute_exercise(request, ide,idp):
     request.session['level_id'] = exercise.level.id
     start_time =  time.time()
     today = time_zone_user(request.user)
-    context = {'exercise': exercise,  'start_time' : start_time,  'parcours' : parcours,  'relation' : relation , 'today' : today , }
+    context = {'exercise': exercise,  'start_time' : start_time,  'parcours' : parcours,  'relation' : relation , 'today' : today , 'communications' : [] , 'relationships' : [] }
     return render(request, 'qcm/show_relation.html', context)
 
 
