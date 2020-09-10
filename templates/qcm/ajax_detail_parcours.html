@@ -64,7 +64,7 @@
                             {% endif %}
                         </td>
                         <td>{{ stat.heure_min|date:"Y m d - H:i" }}</td>
-                        <td>{% if nb %}x{{ nb }}{% endif %}</td>
+                        <td>{% if stat.nb %}x{{ nb }}{% endif %}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
