@@ -16,6 +16,7 @@ urlpatterns = [
 
     path('parcours_update/<int:id>/<int:idg>/', update_parcours, name='update_parcours'),
     path('parcours_delete/<int:id>/<int:idg>/', delete_parcours, name='delete_parcours'),  
+    path('parcours_archive/<int:id>/<int:idg>/', archive_parcours, name='archive_parcours'),  
     path('parcours_show/<int:id>/', show_parcours, name='show_parcours'), 
     path('parcours_tasks_and_publishes/<int:id>/', parcours_tasks_and_publishes, name='parcours_tasks_and_publishes'), # gestion des taches
     path('show_parcours_visual/<int:id>/', show_parcours_visual, name='show_parcours_visual'), 

@@ -645,6 +645,23 @@ def update_parcours(request, id, idg=0 ):
 
 
 @user_is_parcours_teacher 
+def archive_parcours(request, id, idg=0):
+
+    parcours = Parcours.objects.filter(id=id).update(is_archive=1,is_favorite=0,is_publish=0)
+
+    if idg == 99999999999:
+        return redirect('index')
+    elif idg == 0 :
+        return redirect('parcours')
+    else :
+        return redirect('list_parcours_group', idg)
+
+
+
+ 
+
+
+@user_is_parcours_teacher 
 def delete_parcours(request, id, idg=0):
     parcours = Parcours.objects.get(id=id)
 
@@ -2299,9 +2316,7 @@ def update_evaluation(request, id, idg=0 ):
 
 
 
-
-
-
+ 
 
 @login_required
 def delete_evaluation(request,id):

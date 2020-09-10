@@ -2,6 +2,10 @@ function TestDelete(f1) {
     if (!confirm('Vous souhaitez supprimer ' + f1 + ' ?')) return false;
 }
 
+function TestArchive(f1) {
+    if (!confirm('Vous souhaitez archiver ' + f1 + ' ?')) return false;
+}
+
 function Newpassword() {
     if (!confirm('Vous souhaitez créer un nouveau mot de passe ? ce sera : sacado2020')) return false;
 }

@@ -77,15 +77,6 @@
                         {{ form.is_share.errors }}
                     </div>
                 </div>
-                <div class="col-sm-4  col-md-4  col-lg-1">
-                    <div class="form-group">
-                
-                            {{ form.is_archive.label_tag }}<br>
-                            {{ form.is_archive |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-off:Non"|attr:"data-on:Oui"}} 
-                            {{ form.is_archive.errors }}
-
-                    </div>
-                </div>
                 <div class="col-sm-4  col-md-4  col-lg-2">
                     <div class="form-group">
                         {{ form.is_publish.label_tag }} <br>
@@ -173,10 +164,18 @@
  
                 <div class="col-sm-12 col-md-4">
                 {% if parcours %}
- 
+                         <a href="{% url 'archive_parcours' parcours.id  idg  %}" class="btn btn-warning"  onclick="return TestArchive('ce parcours')"> 
+                            <i class="fa fa-archive"> </i>   Archiver
+                        </a>
+
+                        
                         <a href="{% url 'delete_parcours' parcours.id  idg  %}" class="btn btn-danger"  onclick="return TestDelete('ce parcours')"> 
                             <i class="fa fa-trash"> </i>   Supprimer
                         </a>
+
+ 
+
+
  
                 {% endif %}  
                 </div>

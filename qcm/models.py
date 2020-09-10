@@ -354,7 +354,7 @@ class Parcours(ModelWithCode):
     students = models.ManyToManyField(Student, blank=True, related_name='students_to_parcours', verbose_name="Elèves")
     is_share = models.BooleanField(default=0, verbose_name="Mutualisé ?")
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
-    is_archive = models.BooleanField(default=0, verbose_name="Archivé ?")
+    is_archive = models.BooleanField(default=0, verbose_name="Archivé ?", editable=False)
 
     level = models.ForeignKey(Level, related_name="level_parcours", on_delete=models.PROTECT, default='', blank=True, null=True, editable=False)
     linked = models.BooleanField(default=0, editable=False)
