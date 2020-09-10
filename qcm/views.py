@@ -572,7 +572,10 @@ def create_parcours(request):
 
 
     try :
-        group_id = request.session.get["group_id"]
+        if 'group_id' in request.session :
+            group_id = request.session.get["group_id"]
+        else :
+            group_id = None
     except :
         group_id = None
 
