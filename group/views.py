@@ -218,7 +218,7 @@ def get_stage(group):
 @login_required
 def list_groups(request):
     groups = Group.objects.filter(teacher__user_id = request.user.id)
-    return render(request, 'group/list_group.html', {'groups': groups})
+    return render(request, 'group/list_group.html', {'groups': groups, 'communications' : [] , })
 
 
 
@@ -246,7 +246,7 @@ def create_group(request):
     else:
         print(form.errors)
 
-    context = {'form': form, 'teacher': teacher, 'group': None}
+    context = {'form': form, 'teacher': teacher, 'group': None, 'communications' : [] , }
 
     return render(request, 'group/form_group.html', context)
 
@@ -277,7 +277,7 @@ def update_group(request, id):
     else:
         print(form.errors)
 
-    context = {'form': form,  'group': group, 'teacher': teacher}
+    context = {'form': form,  'group': group, 'teacher': teacher, 'communications' : [] , }
 
     return render(request, 'group/form_group.html', context )
 
