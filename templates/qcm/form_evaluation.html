@@ -99,6 +99,12 @@
 
     <div class="col-sm-12 col-md-4">
     {% if parcours %}
+
+                         <a href="{% url 'archive_parcours' parcours.id  idg  %}" class="btn btn-warning"  onclick="return TestArchive('cette évaluation')"> 
+                            <i class="fa fa-archive"> </i>   Archiver
+                        </a>
+
+    
             <a href="{% url 'delete_parcours' parcours.id  idg  %}" class="btn btn-danger"  onclick="return TestDelete('cette évaluation')"> 
                 <i class="fa fa-trash"> </i>   Supprimer
             </a>
