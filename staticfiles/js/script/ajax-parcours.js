@@ -82,16 +82,13 @@ define(['jquery','bootstrap'], function ($) {
  
         $('select[name=theme]').on('change', function (event) {
 
-            console.log("essai"+$('select[name=level]').val()); 
-
-
             if (  $('select[name=level]').val() > 0 )
             {
-                ajax_choice($('select[name=level]'),$('select[name=theme]')) ;             console.log("essai1"); 
+                ajax_choice($('select[name=level]'),$('select[name=theme]')) ;            
             }
             else 
             {   
-                alert("Vous devez choisir un niveau."); return false;             console.log("essai2"); 
+                alert("Vous devez choisir un niveau."); return false;             
             }
 
 
