@@ -124,13 +124,13 @@
  
                 {% if group %}
 
-                    {% if not group.teacher.user.school.name    %}
+                    {% if not group.teacher.user.school or request.user.is_manager    %}
 
-                    <div class="col-sm-12 col-md-4">
-                        <div class="form-group">
-                            <a href="{% url 'delete_group' group.id %}" class="btn btn-danger" onclick="return TestDelete('ce groupe')">Supprimer ce groupe</a>
+                        <div class="col-sm-12 col-md-4">
+                            <div class="form-group">
+                                <a href="{% url 'delete_group' group.id %}" class="btn btn-danger" onclick="return TestDelete('ce groupe')">Supprimer ce groupe</a>
+                            </div>
                         </div>
-                    </div>
  
                     {% endif %}
                 {% endif %}
@@ -195,7 +195,7 @@
                          Nom du groupe obligatoire <span style="margin-left:50px">Niveau obligatoire</span>
                          <br><br><br><br> <span style="margin-left:150px;text-align: right">Suivi parent : cocher oui si vous voulez que les</span>
                         <br> <span style="margin-left:150px;text-align: right">parents de vos élèves accèdent à leurs résultats</span>
-    <br> <span style="margin-left:150px;text-align: right">Ils devront s'inscrire et se lier à leur enfants.</span>
+                        <br> <span style="margin-left:150px;text-align: right">Ils devront s'inscrire et se lier à leur enfants.</span>
                         
                     </div>
 
