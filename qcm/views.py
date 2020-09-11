@@ -671,10 +671,12 @@ def delete_parcours(request, id, idg=0):
     parcours.parcours_relationship.all()
  
     for r in parcours.parcours_relationship.all() :
+        r.students.clear()
+        r.skills.clear()
         r.delete()
 
     parcours.delete()
-    
+
     if idg == 99999999999:
         return redirect('index')
     elif idg == 0 :
