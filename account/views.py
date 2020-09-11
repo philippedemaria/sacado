@@ -1090,7 +1090,7 @@ def my_profile(request):
             else:
                 print(form.errors)
         return render(request, 'account/student_form.html',
-                      {'form': form, 'user_form': user_form, 'student': student, })
+                      {'form': form, 'user_form': user_form, 'student': student, 'idg' : None , })
 
     else:
         parent = Parent.objects.get(user=user)
