@@ -221,8 +221,11 @@ def get_school_students(request):
 def new_student_list(request,slug):
     group = Group.objects.get(code=slug)
     students = group.students.all().order_by("user__last_name")
-
-    return render(request,'school/new_student_list.html', {'group':group, 'students' : students })
+    p_students = Student.objects.filter(user__school = request.user.school).order_by("user__last_name")
+    pending_students = []
+    for student in p_students :
+    	pending_students.append(student)
+    return render(request,'school/new_student_list.html', {'group':group, 'students' : students, 'pending_students' : pending_students })
 
  
 
