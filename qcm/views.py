@@ -1914,6 +1914,7 @@ def show_exercise(request, id):
 def show_this_exercise(request, id):
 
     if request.user.is_authenticated:
+        today = time_zone_user(request.user)
         if request.user.is_teacher:
             teacher = Teacher.objects.get(user=request.user)
             parcours = Parcours.objects.filter(teacher=teacher)
@@ -1926,11 +1927,13 @@ def show_this_exercise(request, id):
     else :
         student = None
         parcours = None        
+        today = timezone.now()
 
     exercise = Exercise.objects.get(id=id)
     request.session['level_id'] = exercise.level.id
     start_time = time.time()
-    context = {'exercise': exercise, 'start_time': start_time, 'parcours': parcours , 'communications' : [] , 'relationships' : [] }
+
+    context = {'exercise': exercise, 'start_time': start_time, 'parcours': parcours , 'communications' : [] , 'relationships' : [] , 'today' : today ,  }
     return render(request, 'qcm/show_exercise.html', context)
 
 

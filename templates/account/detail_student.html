@@ -42,7 +42,7 @@
         {% endif %}
     {% else %}
 
-        <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small>{{ theme }}</small>
+        <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small>Suivis</small>
         
     {% endif %}
 
@@ -59,7 +59,7 @@
     {% endif %}
 
 
-        <li class="dropdown {% if 'result' not in request.url %} select_item {% endif %}"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"  style="font-size:18px;{% if 'detail_student_theme' in request.path %}color:#007EE2{% endif %}"> Suivi par thème </a>
+        <li class="dropdown {% if 'result' not in request.path  %} select_item {% endif %}"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"  style="font-size:18px;{% if 'detail_student_theme' in request.path %}color:#007EE2{% endif %}"> Suivi par thème </a>
             <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
                 <li {% if 'detail_student/' in request.path %} class="active" {% endif %} ><a href="{% url 'detail_student'  student.user.id  %}" > Général</a></li>
                 <li class="divider"></li>
@@ -70,7 +70,7 @@
         </li>
 
 
-        <li class="dropdown {% if 'result' not in request.url %} select_item {% endif %}"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"  style="font-size:18px;{% if 'detail_student_parcours' in request.path %}color:#007EE2{% endif %}"> Suivi par Parcours </a>
+        <li class="dropdown {% if 'result' not in request.path  %} select_item {% endif %}"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"  style="font-size:18px;{% if 'detail_student_parcours' in request.path %}color:#007EE2{% endif %}"> Suivi par Parcours </a>
             <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
                 {% for prcrs in parcourses|dictsortreversed:"is_publish" %} <!-- prcrs permet de comparer parcours avec prcrs et d'activer la classe active si affiché -->
                     <li {% if 'detail_student_parcours/' in request.path and prcrs.id == parcours.id %}  class="active" {% endif %}>

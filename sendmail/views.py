@@ -30,12 +30,26 @@ def unescape_html(string):
         return string
 
 
+def time_zone_user(user):
+    if user.time_zone :
+        time_zome = user.time_zone
+        timezone.activate(pytz.timezone(time_zome))
+        current_tz = timezone.get_current_timezone()
+        today = timezone.localtime(timezone.now())
+        today = timezone.now()
+     
+    else :
+        today = timezone.now()
+    return today
+
+
 @login_required
 def list_emails(request):
     user = request.user
     users = []
 
     if user.is_teacher:
+        today = time_zone_user(request.user)
         teacher = user.teacher
         groups = teacher.groups.all()
         for group in groups:
@@ -52,12 +66,13 @@ def list_emails(request):
 
         return render(request,
                       'sendmail/list.html',
-                      {'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups,
+                      {'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups,  'today': today,
                        'studentanswers': studentanswers, 'tasks': tasks})
 
     elif user.is_student:
         student = Student.objects.get(user=user)
         groups = student.students_to_group.all()
+        today = time_zone_user(request.user)
         for group in groups:
             users.append(group.teacher.user)
 
@@ -67,7 +82,7 @@ def list_emails(request):
 
         return render(request,
                       'sendmail/list.html',
-                      {'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups,
+                      {'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups, 'today': today,
                        'studentanswers': [], 'tasks': []})
     else:
         raise PermissionDenied
@@ -77,6 +92,7 @@ def list_emails(request):
 def create_email(request):
 	form = EmailForm(request.POST or None,request.FILES or None)
 	user = User.objects.get(pk=request.user.id)
+	today = time_zone_user(request.user)
 	if form.is_valid():		
 		new_f = form.save(commit=False)
 		new_f.author = user
@@ -101,12 +117,7 @@ def create_email(request):
 				if s.user.email :
 					rcv.append(str(s.user.email)) 
 
-
-	 
 		send_mail(subject, texte, str(user.email), rcv )
- 
- 
-
 
 		return redirect('emails')
 
@@ -114,7 +125,7 @@ def create_email(request):
 		print(form.errors)
 		messages.errors(request, "Le corps de message est obligatoire !")
 
-	return render(request,'sendmail/list.html',   {'emails': [] , 'sent_emails': [] ,  'form':form ,  'users': []  ,'groups': [], 'studentanswers':[],'tasks':[]  } )
+	return render(request,'sendmail/list.html',   {'emails': [] , 'sent_emails': [] ,  'form':form ,  'users': []  ,'groups': [], 'studentanswers':[],'tasks':[] ,  'today': today,  } )
 
 
  
