@@ -1750,7 +1750,7 @@ def create_supportfile(request):
 
             return redirect('admin_supportfiles' , nf.level.id )
 
-    context = {'form': form,   'teacher': teacher, 'knowledge': None,  'knowledges': [],     'supportfiles': [],   'levels': [], 'parcours': None, 'supportfile': None, 'communications' : [] ,  }
+    context = {'form': form,   'teacher': teacher, 'knowledge': None,  'knowledges': [], 'relationships': [],  'supportfiles': [],   'levels': [], 'parcours': None, 'supportfile': None, 'communications' : [] ,  }
 
     return render(request, 'qcm/form_supportfile.html', context)
 
@@ -1782,7 +1782,7 @@ def create_supportfile_knowledge(request,id):
             print(form.errors)
 
 
-    context = {'form': form,   'teacher': teacher,  'knowledges': knowledges,  'knowledge': knowledge,  'supportfile': None,  'supportfiles': supportfiles,   'levels': levels , 'parcours': None, 'communications' : [] ,  }
+    context = {'form': form,   'teacher': teacher,  'knowledges': knowledges, 'relationships': [],  'knowledge': knowledge,  'supportfile': None,  'supportfiles': supportfiles,   'levels': levels , 'parcours': None, 'communications' : [] ,  }
 
     return render(request, 'qcm/form_supportfile.html', context)
 

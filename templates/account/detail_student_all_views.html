@@ -69,7 +69,7 @@
                                           data-toggle="popover"  style="border : 1px solid #5d4391"
                                           data-trigger="hover" data-placement="bottom"
                                           title="{{ knowledge}}"
-                                          data-content="{% for e in knowledge.knowledge_exercise.all %}{{ e.annoncement|cleanhtml }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+                                          data-content="{% for e in knowledge.exercises.all %}{{ e.supportfile.annoncement|cleanhtml }}{% if not forloop.last %}  +  {% endif %}{% endfor %}">
                                         {{ score }}
                                     </a>
                                 {% else %}
