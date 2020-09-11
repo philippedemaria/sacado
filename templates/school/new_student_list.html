@@ -34,7 +34,7 @@
     <input value="{{ group.id }}" name="group_id"  type="hidden" />
     <section class="content_list"> 
         <div class="row">
-            <div class="col-sm-12 col-md-6">
+            <div class="col-sm-12 col-md-5">
                 <h2>Elève de la classe de {{group }}</h2>
                 <table class="table table-bordered table-hover standard_tab_sort">
                     <thead>
@@ -61,17 +61,18 @@
                <div class="col-sm-12 col-md-1">
                     <input type="submit"  class="btn btn-primary" value="Assigner" />
                </div>
-               <div class="col-sm-12 col-md-5 content_list pull-right">
+               <div class="col-sm-12 col-md-6 content_list pull-right">
                 <h2>Elèves à choisir</h2>
                 <table class="table table-bordered table-hover standard_tab_sort300">
                     <thead>
                         <tr>
                             <td>Nom</td>
                             <td>Prénom </td>
+                            <td>Classes </td>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for student in pending_students %}
+                        {% for student in students %}
                             <tr>
  
                                 <td >
@@ -80,6 +81,16 @@
                                 <td>
                                    {{ student.user.first_name }} 
                                 </td> 
+
+                                <td>
+                                   {% for group in s.students_to_group.all %} 
+
+                                        {{ group.name }} {% if not forloop.last %},{% endif %}
+
+                                   {% endfor  %} 
+                                </td>
+
+
                             </tr>
                         {% endfor %}
                     </tbody>
