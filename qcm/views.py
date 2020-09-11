@@ -667,12 +667,14 @@ def archive_parcours(request, id, idg=0):
 @user_is_parcours_teacher 
 def delete_parcours(request, id, idg=0):
     parcours = Parcours.objects.get(id=id)
-
-    relationships  = Relationship.objects.filter(parcours = parcours)
-    for r in relationships :
+    parcours.students.clear()
+    parcours.parcours_relationship.all()
+ 
+    for r in parcours.parcours_relationship.all() :
         r.delete()
 
     parcours.delete()
+    
     if idg == 99999999999:
         return redirect('index')
     elif idg == 0 :
@@ -713,7 +715,7 @@ def show_parcours(request, id):
     skills = Skill.objects.all()
 
     nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count()
-    context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills,
+    context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'communications' : [] , 
                'students_from_p_or_g': students_p_or_g, 'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible,
                'nb_exo_only': nb_exo_only, 'group_id': group_id, }
 
@@ -968,7 +970,7 @@ def stat_parcours(request, id):
             student["percent"] = ""
         stats.append(student)
 
-    context = {  'parcours': parcours, 'form': form, 'stats':stats , 'group_id':group_id , 'relationships':relationships }
+    context = {  'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'relationships' : relationships , 'communications' : [] , }
 
     return render(request, 'qcm/stat_parcours.html', context )
 
