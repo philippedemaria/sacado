@@ -83,7 +83,7 @@
                                 </td> 
 
                                 <td>
-                                   {% for group in s.students_to_group.all %} 
+                                   {% for group in student.students_to_group.all %} 
 
                                         {{ group.name }} {% if not forloop.last %},{% endif %}
 
