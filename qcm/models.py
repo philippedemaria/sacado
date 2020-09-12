@@ -540,7 +540,6 @@ class Relationship(models.Model):
             done = True
         return done
 
-
     def is_task(self):
         task = False
         today = timezone.now().date()

@@ -714,11 +714,13 @@ def show_parcours(request, id):
 
     students_p_or_g = students_from_p_or_g(request,parcours)
 
+    nb_students_p_or_g = len(students_p_or_g)
+
     skills = Skill.objects.all()
 
     nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count()
     context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'communications' : [] , 
-               'students_from_p_or_g': students_p_or_g, 'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible,
+               'students_from_p_or_g': students_p_or_g, 'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible, 'nb_students_p_or_g' : nb_students_p_or_g , 
                'nb_exo_only': nb_exo_only, 'group_id': group_id, }
 
     return render(request, 'qcm/show_parcours.html', context)
@@ -1397,6 +1399,10 @@ def ajax_detail_parcours(request):
 
     students = students_from_p_or_g(request,parcours)
 
+    try :
+        relationship = Relationship.objects.get(exercise_id = exercise_id, parcours_id=parcours_id )
+    except :
+        relationship = None
 
 
     exercise = Exercise.objects.get(id = exercise_id) 
@@ -1445,7 +1451,7 @@ def ajax_detail_parcours(request):
             student["nb"] = 0  
         stats.append(student)
 
-    context = {  'parcours': parcours,  'exercise':exercise ,'stats':stats ,  'num_exo':num_exo, 'communications' : [] , }
+    context = {  'parcours': parcours,  'exercise':exercise ,'stats':stats ,  'num_exo':num_exo, 'relationship':relationship, 'communications' : [] , }
 
     data = {}
 

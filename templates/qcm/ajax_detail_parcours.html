@@ -28,49 +28,51 @@
             <table class="table table-hover" style="width:100%; font-size: 14px">
                 <tbody>
                     {% for stat  in stats  %} 
-                    <tr> 
-                        <td>{{ stat.name }}</td>
-                        <td>{{ stat.duration }}</td>
-                        <td> 
-                            {% if stat.average_score != "" %}
-                                <span class="
-                                        {% if stat.average_score < 30 %}
-                                         text-red  
-                                        {% elif stat.average_score < 60 %}
-                                        text-orange
-                                        {% elif stat.average_score < 80 %}
-                                        text-green
-                                        {% else %}
-                                        text-darkgreen
-                                        {% endif %}">
-                                    {{ stat.average_score }}%
-                                </span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if stat.median != "" %}
-                                <span class="
-                                        {% if stat.average_score < 30 %}
-                                         text-red  
-                                        {% elif stat.average_score < 60 %}
-                                        text-orange
-                                        {% elif stat.average_score < 80 %}
-                                        text-green
-                                        {% else %}
-                                        text-darkgreen
-                                        {% endif %}">
-                                    {{ stat.median }}%
-                                </span>
-                            {% endif %}
-                        </td>
-                        <td>{{ stat.heure_min|date:"Y m d - H:i" }}</td>
-                        <td>{% if stat.nb %}x{{ stat.nb }}{% endif %}</td>
-                    </tr>
+                     {% if relationship %} {% if stat.name in relationship.students.all %}  
+                        <tr> 
+                            <td>{{ stat.name }}</td>
+                            <td>{{ stat.duration }}</td>
+                            <td> 
+                                {% if stat.average_score != "" %}
+                                    <span class="
+                                            {% if stat.average_score < 30 %}
+                                             text-red 
+                                            {% elif stat.average_score < 60 %}
+                                            text-orange
+                                            {% elif stat.average_score < 80 %}
+                                            text-green
+                                            {% else %}
+                                            text-darkgreen
+                                            {% endif %}">
+                                        {{ stat.average_score }}%
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if stat.median != "" %}
+                                    <span class="
+                                            {% if stat.average_score < 30 %}
+                                             text-red  
+                                            {% elif stat.average_score < 60 %}
+                                            text-orange
+                                            {% elif stat.average_score < 80 %}
+                                            text-green
+                                            {% else %}
+                                            text-darkgreen
+                                            {% endif %}">
+                                        {{ stat.median }}%
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>{{ stat.heure_min|date:"Y m d - H:i" }}</td>
+                            <td>{% if stat.nb %}x{{ stat.nb }}{% endif %}</td>
+                        </tr>
+                      {% endif %}{% endif %}   
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
-
+ 
 </div>
  
