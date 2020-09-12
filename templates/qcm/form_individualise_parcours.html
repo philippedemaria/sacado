@@ -36,17 +36,17 @@
     <div class="col-sm-12 col-md-12">
 
         <form action="" method="POST" enctype='multipart/form-data'> 
-            {% csrf_token %} 
+            {% csrf_token %}
             {% for relationship in relationships  %} 
-                <div class="row" style="margin-top:8px; padding-top: 8px; border-top: 1px solid #CCC;  border-top: 1px solid #CCC" id="relationship{{ relationship.id }}" >                        
-                    <div  class="col-sm-12 col-md-12">
+                <div class="row" style="margin-top:8px; padding-top: 8px; border-top: 1px solid #CCC;  border-top: 1px solid #CCC ;{% if relationship.is_publish %} border-left: 3px solid #00a65a {% endif %}" id="relationship{{ relationship.id }}">                        
+                    <div  class="col-sm-12 col-md-12">  
                         {% if not relationship.exercise.supportfile.is_title %}
                         <div class="header_exercise"  style="clear:both" >
                             <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" class="listing" target="_blank">  {{ relationship.exercise.knowledge.name|capfirst }}</a>
                         </div> 
                     </div>
                 </div>
-                <div class="row" style="margin-bottom:8px; padding-bottom: 8px; ">
+                <div class="row" style="margin-bottom:8px; padding-bottom: 8px;{% if relationship.is_publish %} border-left: 3px solid #00a65a {% endif %} ">
                     <div class="col-sm-12 col-md-5">        
                         <a href="{% url 'show_this_exercise' relationship.exercise.id   %}"  target="_blank">  
                         <img src="{{ relationship.exercise.supportfile.imagefile.url }}" class="imagefile"></a>
@@ -68,11 +68,19 @@
                         <br>
                         <span id="loading{{ relationship.exercise.id }}" class="pull-right"></span>
                             <br>
-              
+
+
+                                    
+                         {% if relationship.is_publish %} 
+                           <br><p style="clear: both; width:150px; padding:5px; border-radius: 4px; background-color: #4cae4c; color: #FFF"> Exercice publié </p><br>
+                         {% endif %}
+
+
+
                             <a href="{% url 'delete_relationship_by_individualise' relationship.id  relationship.parcours.id    %}" class="btn btn-danger" onclick="return TestDelete('cet exercice de ce parcours')"  >
                                 <i class="fa fa-trash"></i> Supprimer cet exercice du parcours
                             </a>
-            
+   
 
                     </div> 
                     <div  class="col-sm-12 col-md-7">
@@ -116,7 +124,7 @@
                     </div>   
                 </div>                
                 {% else %}
-                <div class="row">                        
+                <div class="row"  {% if relationship.is_publish %} style="border-left: 3px solid #00a65a" {% endif %}>                        
                     <div  class="col-sm-12 col-md-12">
                     {% if relationship.exercise.supportfile.is_subtitle %}
                         <h3>{{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}</h3>
