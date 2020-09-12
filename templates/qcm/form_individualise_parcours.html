@@ -118,7 +118,7 @@
                             <span class="btn btn-{% if has_it %}success{% else  %}danger{% endif  %} select_student selected_student{{relationship.exercise.id}}" 
                                 id="student{{relationship.exercise.id}}-{{s.user.id }}"
                                 data-student_id="{{ s.user.id }}" data-exercise_id="{{ relationship.exercise.id }}"  data-parcours_id="{{ relationship.parcours.id }}"  data-statut="{% if has_it %}True{% else  %}False{% endif  %}"  
-                                style="min-width:155px; margin:1px"/>{{ s.user }}</span>
+                                style="min-width:155px; margin:1px"/>{{ s.user.last_name }} {{ s.user.first_name|truncatechars:6 }}</span>
 
                         {%  endfor %}
                     </div>   
