@@ -25,6 +25,26 @@
     {% if request.user.is_manager %}
  
     <div class="row">
+        <!-- ./col -->
+        <div class="col-lg-3 col-md-4 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-purple">
+                <div class="inner">
+                     <span style="font-size: 35px">Établissement </span>
+                 </div>
+                 <p style="padding-left:5px">{{ school }}</p>
+
+                    <br><br>
+                <a href="{% url 'csv_full_group'  %}" class="btn btn-default btn-accueil" style="width:95%"> Importer  groupes d'élèves </a>      
+
+
+                {% if request.user.school %}
+                <a href="{% url 'update_school' request.user.school.id %}" class="small-box-footer"><i
+                        class="fa fa-arrow-circle-right"></i> En détails </a>
+                {% endif %}
+            </div>
+        </div>
+
         <div class="col-lg-3 col-md-4 col-xs-6">
             <!-- small box -->
             <div class="small-box bg-purple">
@@ -65,20 +85,6 @@
                         class="fa fa-arrow-circle-right"></i> En détails </a>
             </div>
         </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-md-4 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-purple">
-                <div class="inner">
-                     <span style="font-size: 35px">Établissement </span>
-                 </div>
-                 <p style="padding-left:5px">{{ school }}</p>
-                {% if request.user.school %}
-                <a href="{% url 'update_school' request.user.school.id %}" class="small-box-footer"><i
-                        class="fa fa-arrow-circle-right"></i> En détails </a>
-                {% endif %}
-            </div>
-        </div>
     </div>
 
     <div class="row">
@@ -112,6 +118,9 @@
 
         </div>
     </div>
+
+ 
+
     {% endif %} 
 
 

@@ -31,7 +31,10 @@ urlpatterns = [
     path('new_group_many', new_group_many, name='new_group_many'),
 
     path('send_account/<int:id>', send_account, name='send_account'),
-    path('pdf_account/<int:id>', pdf_account, name='pdf_account'),    
+    path('pdf_account/<int:id>', pdf_account, name='pdf_account'),   
+
+
+    path('csv_full_group', csv_full_group, name='csv_full_group'), 
 
     path('delete_student_group/<int:id>/<int:ids>', delete_student_group , name='delete_student_group'),
     path('delete_all_students_group/<int:id>', delete_all_students_group , name='delete_all_students_group'),

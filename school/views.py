@@ -237,8 +237,6 @@ def push_student_group(request):
 
 	student_ids = request.POST.getlist("student_ids")  
 
-	print(student_ids) 
-
 	for student_id in student_ids :
 		student = Student.objects.get(pk=student_id)	
 		group.students.add(student)
@@ -354,7 +352,6 @@ def new_group_many(request):
 	group_formset  = GroupFormSet(request.POST or None, form_kwargs={'school': school, })
 	if request.method == "POST" :	
 		if group_formset.is_valid():
-			print("ici")
 			for f in group_formset :
 				f.save()
 			messages.success(request, "Groupes créés avec succès.")
@@ -482,4 +479,83 @@ def pdf_account(request,id):
  
 
 	return response 
+
+
+
+ 
+###############################################################################################
+###############################################################################################
+######  Création par csv
+###############################################################################################
+###############################################################################################
+
+import csv
+@login_required
+@is_manager_of_this_school
+def csv_full_group(request):
+    """
+    Enregistrement par csv : key est le code du user_type : 0 pour student, 2 pour teacher
+    """
+    if request.method == "POST":
+        # try:
+        csv_file = request.FILES["csv_file"]
+        if not csv_file.name.endswith('.csv'):
+            messages.error(request, "Le fichier n'est pas format CSV")
+            return HttpResponseRedirect(reverse("register_teacher_csv"))
+        # if file is too large, return
+        if csv_file.multiple_chunks():
+            messages.error(request, "Le fichier est trop lourd (%.2f MB)." % (csv_file.size / (1000 * 1000),))
+            return HttpResponseRedirect(reverse("register_teacher_csv"))
+
+        try:
+            file_data = csv_file.read().decode("utf-8")
+        except UnicodeDecodeError:
+            return HttpResponse('Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
+
+        lines = file_data.split("\r\n")
+        # loop over the lines and save them in db. If error , store as string and then display
+        for line in lines:
+            try:
+                # loop over the lines and save them in db. If error , store as string and then display
+                fields = line.split(";")
+                ln = str(fields[0]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
+                fn = str(fields[1]).lower().capitalize()
+                username = get_username(ln, fn)
+                password = make_password("sacado2020")
+                try:
+                    if fields[2] != "":
+                        email = fields[2]
+                    else:
+                        email = ""
+                except:
+                    email = "" 
+
+                if key == User.TEACHER:  # Enseignant
+                    user = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,
+                                                      school=request.user.school, time_zone=request.user.time_zone,
+                                                      is_manager=0,
+                                                      defaults={'username': username, 'password': password,
+                                                                'is_extra': 1})
+                    Teacher.objects.get_or_create(user=user, notification=1, exercise_post=1)
+                    group = None
+                else:  # Student
+                    user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=0,
+                                                               school=request.user.school,
+                                                               time_zone=request.user.time_zone, is_manager=0,
+                                                               defaults={'username': username, 'password': password,
+                                                                         'is_extra': 0})
+                    student, creator = Student.objects.get_or_create(user=user, level=group.level, task_post=1)
+                    if not creator : #Si l'élève n'est pas créé alors il existe dans des groupes. On l'efface de ses anciens groupes pour l'inscrire à nouveau !
+                        for g in student.student_group.all():
+                            g.students.remove(student)
+                    group.students.add(student)
+            except:
+                pass
+ 
+        return redirect('admin_tdb')
+    else:
+ 
+        context = {}
+        return render(request, 'school/csv_full_group.html', context )
+
 
