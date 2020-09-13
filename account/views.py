@@ -119,8 +119,7 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
                 parcours = []
                 for p in parcourses:
                     parcours.append(p)
-                for g in groups:
-                    parcours.append(g.parcours)
+ 
 
                 relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in=parcours, is_evaluation=0, date_limit__gte=today).order_by("date_limit")
                 exercise_tab = []
@@ -169,9 +168,9 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
             t_form = TeacherForm()
             s_form = StudentForm()
             levels = Level.objects.all()
-            exercise_nb = Exercise.objects.filter(is_title=0).count()
+            exercise_nb = Exercise.objects.filter(supportfile__is_title=0).count()
 
-            exercises = Exercise.objects.filter(is_title=0)
+            exercises = Exercise.objects.filter(supportfile__is_title=0)
 
             i = random.randint(1, len(exercises))
             exercise = exercises[i]

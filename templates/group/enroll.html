@@ -102,18 +102,18 @@ body{
                 <div class="row">
                     <div class="col-sm-12 col-md-6">
                         <div class="form-group">
+                            {{ u_form.first_name.label_tag }}
+                            {{ u_form.first_name |add_class:"form-control id_first_name" }}
+                            {{ u_form.first_name.errors }}
+                        </div>
+                    </div>                
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group">
                             {{ u_form.last_name.label_tag }}
                             {{ u_form.last_name |add_class:"form-control id_last_name" }}
                             {{ u_form.last_name.errors }}
                         </div>
                     </div>    
-                    <div class="col-sm-12 col-md-6">
-                        <div class="form-group">
-                            {{ u_form.first_name.label_tag }}
-                            {{ u_form.first_name |add_class:"form-control id_first_name" }}
-                            {{ u_form.first_name.errors }}
-                        </div>
-                    </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-11 col-md-12">

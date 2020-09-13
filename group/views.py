@@ -657,11 +657,15 @@ def enroll(request, slug):
             student = Student.objects.create(user=user, level=group.level)
             group.students.add(student)
             parcourses = Parcours.objects.filter(teacher=group.teacher, level=group.level)
+
             for parcours in parcourses:
                 parcours.students.add(student)
                 relationships = parcours.parcours_relationship.all()
                 for r in relationships:
                     r.students.add(student)
+                courses = parcours.course.all()
+                for c in courses:
+                    c.students.add(student)
 
             user = authenticate(username=username, password=password)
             login(request, user)
@@ -671,10 +675,12 @@ def enroll(request, slug):
                           'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers http://sacado.erlm.tn.\n Ceci est un mail automatique. Ne pas répondre.',
                           'info@sacado.xyz',
                           [request.POST.get("email")])
+
+        return redirect('dashboard')    
     else:
         user_form = UserForm(request.POST or None)
 
-    return render(request, 'group/enroll.html', {"u_form": user_form, "slug": slug, "group": group, })
+        return render(request, 'group/enroll.html', {"u_form": user_form, "slug": slug, "group": group, })
 
 
 

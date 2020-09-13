@@ -77,7 +77,7 @@ body{
                         <td>
                             <a href="{% url 'show_parcours' parcours.id %}" > {{ parcours.title }} {% if parcours.linked %}(Par défaut){% endif %} </a>
                              <div style="font-size:14px;margin-top:-5px;">
-                                {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }} - {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }} {% endif %}min. 
+                                <span style="cursor:pointer" title="Code du parcours">{{ parcours.code }}</span> - {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }} - {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}min. 
                             </div>                            
                         </td>  
                         <td>

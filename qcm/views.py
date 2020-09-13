@@ -675,6 +675,10 @@ def delete_parcours(request, id, idg=0):
         r.skills.clear()
         r.delete()
 
+    studentanswers = Studentanswer.objects.filter(parcours = parcours)
+    for s in studentanswers :
+        s.delete()
+ 
     parcours.delete()
 
     if idg == 99999999999:

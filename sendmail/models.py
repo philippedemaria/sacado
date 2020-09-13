@@ -1,5 +1,5 @@
 from django.db import models
-from account.models import User
+from account.models import User, Teacher
 from group.models import Group
 from django.utils import timezone
 from ckeditor_uploader.fields import RichTextUploadingField
@@ -27,6 +27,7 @@ class Communication(models.Model):
     texte = RichTextUploadingField(  verbose_name="Texte")      
     today = models.DateField( auto_now_add= True)
     active = models.BooleanField( default=1,    verbose_name="Afficher la communication ?") 
+    teachers = models.ManyToManyField(Teacher, blank = True,  related_name="teachers_communication"  ) 
     
     def __str__(self):
         return "{} {} : {}".format(self.teacher.last_name, self.teacher.first_name, self.subject)

@@ -225,7 +225,7 @@ def int_minutes(arg):
             m = arg%60
             if m<10 :
                 m = "0"+str(m)
-        r = str(h)+"h."+str(m)           
+        r = str(h)+"h. "+str(m)           
 
     return r
 
