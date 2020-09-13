@@ -180,13 +180,18 @@ Aucun parcours
 
 
 {% if user.user_type == 2 %}
-    {% with  communications|length as communications_length %}
-        {% if communications_length > 0 %}
-        <a href="#" data-toggle='modal' data-target='#nouveaute'   class="btn btn-{% if communications_length > 0 %}danger{% else %}default{% endif %} full_width" >
-            Lire Les nouveautés 
-        </a>
-        {% endif %}
-    {% endwith %}
+            {% get_com_is_reading user as boolean_reader %}
+            {% if not boolean_reader %}        
+            <form action="#" method="POST">
+            <a href="#" id="reader_new" data-toggle='modal' data-target='#nouveaute'   class="btn btn-danger full_width" >
+                Lire Les nouveautés 
+            </a>
+            </form>
+            {% else %}
+            <a href="#"  data-toggle='modal' data-target='#nouveaute'   class="btn btn-default full_width" >
+                Lire Les nouveautés 
+            </a>
+            {% endif %}
 {% endif %}
 
 {% endif %}

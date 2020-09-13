@@ -181,8 +181,7 @@ def create_communication(request): # id du concours
 
 		else :
 			print(form.errors)
-	else :
-		print("ici")
+ 
 
 
 	return redirect('communications')
@@ -206,9 +205,6 @@ def update_communication(request,id): # update
 			return redirect('communications')
 		else :
 			print(form.errors)
-	else :
-		print("ici")
-
 
 	return render(request,'sendmail/form_update_communication.html', {'form':form,'communication':communication,   })
 
@@ -237,4 +233,17 @@ def show_communication(request):
 	html = render_to_string('sendmail/show_communication.html',{ 'communication' : communication  , 'form' : form  ,   })
 	data['html'] = html 		
 
+	return JsonResponse(data)
+
+
+
+@login_required
+def reader_communication(request):
+	
+	data = {} 
+	teacher = Teacher.objects.get(user = request.user)  
+	communications = Communication.objects.exclude(teachers = teacher)
+	for c in communications:
+		c.teachers.add(teacher)
+	
 	return JsonResponse(data)

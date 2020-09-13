@@ -14,6 +14,6 @@ urlpatterns = [
     path('update_communication/<int:id>/', update_communication, name='update_communication'),
     path('delete_communication/<int:id>/', delete_communication, name='delete_communication'),
     path('ajax/show_communication/', show_communication, name='show_communication'),
-
-
+    path('ajax/show_communication/', show_communication, name='show_communication'),
+    path('ajax/reader_communication/', reader_communication, name='reader_communication'),
 ]

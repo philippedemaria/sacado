@@ -3,6 +3,7 @@ import re
 import html
 from django import template
 register = template.Library()
+from sendmail.models import Communication
 
 @register.filter
 def decode(arg):
@@ -25,14 +26,7 @@ def get_score(obj,student):
     """
     return obj.send_score(student) 
 
-@register.simple_tag
-def get_score(obj,student):
-    """
-    retourne le  score d'un même exercice par élève.
-    """
-    return obj.send_score(student)
-
-
+ 
 
 @register.simple_tag
 def get_score2(results, id):
@@ -419,3 +413,11 @@ def get_parcours_from_this_exercise(obj,  teacher):
     renvoie les parcours d'un enseignant donné liés à un exercice
     """
     return obj.my_parcours_container(teacher)
+
+
+@register.simple_tag 
+def get_com_is_reading(user):
+    """
+    renvoie les parcours d'un enseignant donné liés à un exercice
+    """
+    return Communication.com_is_reading(user)

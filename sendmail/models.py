@@ -31,3 +31,11 @@ class Communication(models.Model):
     
     def __str__(self):
         return "{} {} : {}".format(self.teacher.last_name, self.teacher.first_name, self.subject)
+
+
+    def com_is_reading(user):
+        teacher = Teacher.objects.get(user = user)
+        is_read = False
+        if Communication.objects.filter(teachers = teacher).count() == Communication.objects.count()   :
+            is_read = True
+        return is_read
