@@ -135,7 +135,7 @@ def index(request):
         exercise = exercises[i]
 
         context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 
-                   'cookie': cookie, 'exercise_nb': exercise_nb, 'exercise': exercise, }
+                   'cookie': cookie, 'nb_exercise': exercise_nb, 'exercise': exercise, }
 
 
 
