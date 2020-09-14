@@ -6,6 +6,7 @@ from account.models import Student, Teacher, ModelWithCode, generate_code
 from socle.models import  Knowledge, Level , Theme, Skill 
 from django.apps import apps
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.db.models import Q
 import os.path
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User 
@@ -451,7 +452,7 @@ class Parcours(ModelWithCode):
         students = self.students.all() 
         group_tab = []
         for s  in students :
-            groups = s.students_to_group.all()
+            groups = s.students_to_group.filter(teacher = self.teacher)
             for group  in groups :
                 if group not in group_tab:
                     group_tab.append(group)       
