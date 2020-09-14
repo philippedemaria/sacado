@@ -213,6 +213,7 @@ def events_json_group(request):
     for relationship in relationships:
         # On récupère les dates dans le bon fuseau horaire
         relationship_start = relationship.date_limit 
+        print(relationship_start)
         if relationship.exercise.supportfile.annoncement :
             title =  cleanhtml(unescape_html(relationship.exercise.supportfile.annoncement ))
         else :

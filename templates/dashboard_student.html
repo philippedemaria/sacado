@@ -11,19 +11,28 @@
         <div class="row">
                 <div class="col-md-4  col-lg-3  col-sm-6">
                     {%  for evaluation in  evaluations %} 
-                    <div class="small-box" style="background-color:red">
-                        <div class="inner" style="color:white;">
-                            <h3>Evaluation </h3>  
-                            <p><i class="fa fa-tasks"></i>  
-                                {{ evaluation.evaluation_duration }} min<br>
-                                {{ evaluation.exercises.count }} exercice{{ evaluation.exercises.count|pluralize }} 
-                            </p> 
-                        </div>
+                    <div class="small-box-student" style="background-color:{{evaluation.color }};color:{{evaluation.color|contrast_color }};">
+ 
                         <div class="icon-student">
                             <small><i class="fa fa-graduation-cap"></i></small>
                         </div>
-                        <div class="small-box-footer">
-                          <a href="{% url 'show_parcours_student' evaluation.id  %}" class="white" style="margin-right: 30px;"><i class="fa fa-arrow-circle-right"></i> Démarrer</a>
+                        <div class="small-box-footer-max">
+                            <h2 class="white thin">{{ evaluation.title }}  </h2>
+                           
+                            <div style="text-align: center; margin-top: 20px; margin-bottom: 20px">
+                             <a href="{% url 'show_parcours_student' evaluation.id  %}" class="btn btn-default btn-accueil"><i class="fa fa-arrow-circle-right"></i> Démarrer</a>
+                            </div>
+                    
+
+                            <p>
+                                <div class="col-md-6  col-lg-6  col-sm-6">
+                                    <i class="fa fa-clock-o"></i>  {{ evaluation.evaluation_duration }} min 
+                                </div>
+                                <div class="col-md-6  col-lg-6  col-sm-6">
+                                    {{ evaluation.exercises.count }} exercice{{ evaluation.exercises.count|pluralize }} 
+                                </div>
+                            </p>
+                         
                         </div>
                     </div>
                     {% endfor %}
