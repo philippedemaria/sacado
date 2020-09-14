@@ -9,7 +9,7 @@ def user_is_parcours_teacher(function):
     def wrap(request, *args, **kwargs):
         parcours = Parcours.objects.get(pk=kwargs['id'])
         teacher = Teacher.objects.get(user= request.user)
-        if parcours.teacher == teacher :
+        if parcours.teacher == teacher or parcours.author == teacher :
             return function(request, *args, **kwargs)
         else:
             raise PermissionDenied
@@ -24,7 +24,7 @@ def user_can_modify_this_course(function):
 		course = Course.objects.get(pk=kwargs['idc'])
 		if request.user.user_type == 2 : 
 			teacher = Teacher.objects.get(user= request.user)
-			if parcours.teacher == teacher :
+			if parcours.teacher == teacher or parcours.author == teacher :
 				return function(request, *args, **kwargs)
 			else:
 				raise PermissionDenied

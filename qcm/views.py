@@ -1044,7 +1044,10 @@ def clone_parcours(request, id):
 
     messages.success(request, "Le parcours est cloné avec succès. Bonne utilisation.")
 
-    return redirect('parcours')
+    if parcours.is_evaluation :
+        return redirect('evaluations')
+    else :
+        return redirect('parcours')
  
  
 def ajax_exercise_error(request):
