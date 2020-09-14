@@ -2029,7 +2029,7 @@ def store_the_score_relation_ajax(request):
             try :
                 msg = "Exercice : "+str(relation.exercise.knowledge.name)+"\n Fait par : "+str(student.user)+"\n Nombre de situations : "+str(numexo)+"\n Score : "+str(score)+"%"+"\n Temps : "+str(convert_seconds_in_time(timer))
                 rec = []
-                for g in student.students_to_group.all():
+                for g in student.students_to_group.filter(teacher = relation.parcours.teacher):
                     if not g.teacher.user.email in rec : 
                         rec.append(g.teacher.user.email)
  
