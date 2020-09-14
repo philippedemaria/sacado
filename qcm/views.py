@@ -503,7 +503,7 @@ def list_parcours_group(request,id):
     parcours_tab = []
     students = group.students.all()
     for student in students :
-        pcs = Parcours.objects.filter(students= student,is_favorite=1).order_by("is_evaluation", "ranking")
+        pcs = Parcours.objects.filter(Q(teacher=teacher)|Q(author=teacher), students= student, is_favorite=1).order_by("is_evaluation", "ranking")
         if len(parcours_tab) == teacher.teacher_parcours.count() :
             break  
         else :    

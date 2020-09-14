@@ -376,31 +376,22 @@ def new_group_many(request):
 def manage_stage(request):
 
 	school = request.user.school
+	stage = Stage.objects.get(school = school)
+	stage_form = StageForm(request.POST or None, instance = stage)
 
-	try : 
-		stage = Stage.objects.get(school = school)
-		stage_form = StageForm(request.POST or None, instance = stage)
 
-		if request.method == "POST" :
-			if stage_form.is_valid():
-				nf = stage_form.save(commit = False) 
-				nf.school = school
-				nf.save()
 
-			eca, ac , dep = stage.medium - stage.low ,  stage.up - stage.medium ,  100 - stage.up
 
-		context =  {'stage_form': stage_form , 'stage': stage , 'eca': eca , 'ac': ac , 'dep': dep}  
+	if request.method == "POST" :
+		if stage_form.is_valid():
+			nf = stage_form.save(commit = False) 
+			nf.school = school
+			nf.save()
 
-	except : 
-		stage  = None
-		stage_form = StageForm(request.POST or None)
-		if request.method == "POST" :
-			if stage_form.is_valid():
-				nf = stage_form.save(commit = False) 
-				nf.school = school
-				nf.save() 
+	eca , ac , dep = stage.medium - stage.low ,  stage.up - stage.medium ,  100 - stage.up
 
-		context =  {'stage_form': stage_form , 'stage': stage}
+	context =  {'stage_form': stage_form , 'stage': stage , 'eca': eca , 'ac': ac , 'dep': dep}  
+
 
 
 	return render(request, 'school/stage.html', context )
