@@ -43,7 +43,7 @@
                          {{ pc }}% 
                     </div>
                     <div class="small-box-footer-max" style="background-color:{{parcours.color }};color:{{parcours.color|contrast_color }};"  >
-                        <h2 class="white thin"> {{ parcours.title|truncatechars:"20" }} </h2>
+                        <h2 class="white thin"> {{ parcours.title|truncatechars:"14" }} <span class="pull-right" style="color:{{parcours.color|contrast_color }}; font-size:14px; margin-top:15px">{{ parcours.teacher.user.civilite }} {{ parcours.teacher.user.last_name }}</span></h2>
                         <br> 
                         <div style="text-align: center">
                         <a href="{% url 'show_parcours_student' parcours.id %}" class="btn btn-default btn-accueil"> {% get_tasks student parcours  as is_task_exists %} 
@@ -73,7 +73,7 @@
                          {{ pc }}% 
                     </div>
                     <div class="small-box-footer-max">
-                        <h2 class="white thin"> {{ parcours.title|truncatechars:"20" }} </h2>
+                        <h2 class="white thin"> {{ parcours.title|truncatechars:"14" }} <span class="pull-right" style="color:{{parcours.color|contrast_color }}; font-size:14px; margin-top:15px">{{ parcours.teacher.user.civilite }} {{ parcours.teacher.user.last_name }}</span></h2>
                         <br> 
                         <div style="text-align: center">
                         <a href="{% url 'show_parcours_student' parcours.id %}" class="btn btn-default btn-accueil"> {% get_tasks student parcours  as is_task_exists %} 

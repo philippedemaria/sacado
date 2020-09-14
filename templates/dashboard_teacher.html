@@ -36,7 +36,13 @@
                         <!-- Legende de la small-box -->
                         <div class="inner" style="color:white;opacity:0.9"><br/>
                             <span style="color:{{ group.color|contrast_color }};font-size: 35px">{{ group.name }} </span> <br/><br><br>
-                             <span style="color:{{ group.color|contrast_color }};font-size: 16px"><i class="fa fa-barcode"></i> {{ group.code }}</span></h3> 
+                             <span style="color:{{ group.color|contrast_color }};font-size: 16px"><i class="fa fa-barcode"></i> {{ group.code }}</span> 
+
+                                {% if group.is_task_exists %}
+                                    <a  href="{% url 'schedule_task_group' group.id %}" class="pull-right" style="color:{{ group.color|contrast_color }}; font-size:12px;margin-top:8px;"> Tâche en cours <i class="fa fa-calendar"></i></a>
+                                {% endif %}
+                         
+
                              <br/> <br/>
 
                         </div>
@@ -62,12 +68,7 @@
                                 </a>
 
                             <br><br>
-
-                                {% if group.is_task_exists %}
-                                    <a  href="{% url 'schedule_task_group' group.id %}" style="color:{{ group.color|contrast_color }}; font-size:14px"> Tâche en cours <i class="fa fa-calendar"></i></a>
-                                {% endif %}
-                           
-
+                        
 
                             {% if data.nb_parcours == 0 %}
                                 <div class="row">                              
