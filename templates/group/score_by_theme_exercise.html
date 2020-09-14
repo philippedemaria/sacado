@@ -19,7 +19,7 @@
             {% else %}
             darkgreen
             {% endif %}"
-          href="{% url 'show_this_exercise'  exercise.id   %}" data-container="body"
+          href="{% url 'show_this_exercise'  exercise.id   %}" data-container="body" target="_blank"
           data-toggle="popover" style="border : 2px solid {{exercises.parcours.color }}"
           data-trigger="hover" data-placement="top"
           title="{{ exercises.parcours.title }}"
@@ -28,7 +28,7 @@
     </a>
 {% else %}
     <a class="markdown"                                                   
-          href="{% url 'show_this_exercise' exercise.id %}" data-container="body"
+          href="{% url 'show_this_exercise' exercise.id %}" data-container="body"  target="_blank"
           data-toggle="popover" style="border : 2px solid {{ exercises.parcours.color }}"
           data-trigger="hover"
           title="{{ exercises.parcours.title }}" data-placement="top"

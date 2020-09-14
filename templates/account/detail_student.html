@@ -109,8 +109,8 @@
                     </tr>   
                         {% for exercise in theme.exercises %} 
                         <tr class="no_padding"  {% if not exercise.is_publish %} style="background-color:#F0F0F0"{% endif %} >
-                            <td {% if exercise.is_publish %} style="padding:0px"{% endif %}"> 
-                                <div {% if exercise.is_publish %} style="border-left: 4px solid #00AC18; padding:10px;min-height:53px"{% endif %}">
+                            <td {% if exercise.is_publish %} style="padding:0px" {% endif %}> 
+                                <div {% if exercise.is_publish %} style="border-left: 4px solid #00AC18; padding:10px;min-height:53px"{% endif %} >
                                 <small><strong>{{ theme.name }}</strong></small>
                                 {{exercise.name.knowledge.name }} {% if exercise.name.supportfile.annoncement %} - <em>{{exercise.name.supportfile.annoncement|cleanhtml }} </em> {% endif %}
                                 </div>  

@@ -105,12 +105,7 @@
         </div>
     </div>
 </div>
-<hr>
-<div class="row">
-    <div class="col-sm-12 col-md-12">
-        <a href="{% url 'detail_student' student.user.id %}"><i class='fa fa-angle-right'></i> Détail complet des savoir faire</a>
-    </div>
-</div>
+
 {% else  %} 
 <div class="row">
     <div class="col-sm-10 col-md-10">
@@ -179,4 +174,9 @@
 </div>
  
 {% endif  %}
- 
+<hr>
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <a href="{% url 'detail_student_all_views' student.user.id %}"><i class='fa fa-angle-right'></i> Détail complet des savoir faire</a>
+    </div>
+</div> 

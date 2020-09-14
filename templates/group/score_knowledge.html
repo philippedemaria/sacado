@@ -18,15 +18,15 @@
             {% else %}
             darkgreen
             {% endif %}"
-          href=" " data-container="body"
-          data-toggle="popover"  style="border : 1px solid #CCC"
+          href="#" data-container="body"
+          data-toggle="popover"  style="border : 1px solid #CCC; cursor:not-allowed"
           data-trigger="hover" data-placement="top"
           data-content="{{ knowledge.name }}"> 
         {{ score }}
     </a>
 {% else %}
-<a class="markdown" href="  " data-container="body"
-   data-toggle="popover" style="border : 1px solid #CCC"
+<a class="markdown" href="#" data-container="body"
+   data-toggle="popover" style="border : 1px solid #CCC; cursor:not-allowed"
    data-trigger="hover" data-placement="top"
    data-content="{{ knowledge.name }}">{{score}}
 

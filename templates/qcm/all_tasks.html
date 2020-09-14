@@ -35,7 +35,7 @@
                 <thead>
                     <tr style="background-color: {{ p.grouper.color }}; color : #FFF ">
                         <th>{{ p.grouper }} </th>
-                        <th> <a href="{% url 'organize_parcours'  p.grouper.id   %}" class="btn btn-xs btn-default">Créer une tache</a></th>
+                        <th> <a href="{% url 'parcours_tasks_and_publishes'  p.grouper.id   %}" class="btn btn-xs btn-default">Créer une tache</a></th>
                         <th> <a href="{% url 'detail_task'  p.grouper.id  0  %}" class="btn btn-xs btn-default">En détails</a></th>
                     </tr>
                 </thead>
@@ -89,7 +89,7 @@
     <div class="row"> 
         <div class="col-sm-12 col-md-12">
                 {% for parcours in parcourses %}
-                    <a href="{% url 'organize_parcours'  parcours.id   %}" class="btn btn-xs btn-default">Créer une tache dans {{ parcours }} </a> 
+                    <a href="{% url 'parcours_tasks_and_publishes'  parcours.id   %}" class="btn btn-xs btn-default">Créer une tache dans {{ parcours }} </a> 
                 {% endfor %}
         </div>
     </div> 
