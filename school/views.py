@@ -40,7 +40,9 @@ def create_school(request):
 	form = SchoolForm(request.POST or None)
 	
 	if form.is_valid():
-		form.save()
+		school = form.save()
+
+		Stage.objects.create(school = school ,low = 30,  medium = 65, up = 85)
 		return redirect('schools')
 
 	return render(request,'school/_form.html', {'form':form})
