@@ -433,7 +433,7 @@ def newpassword_student(request, id,idg):
         send_mail('Réinitialisation de mot de passe Sacado', "Bonjour, votre mot de passe est réinitialisé. Il est générique. Votre mot de passe est : sacado2020.\n\n  Pour plus de sécurité, vous devez le modifier dès votre connexion.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.", 'info@sacado.xyz', [user.email])
     except :
         pass
-    return redirect('update_group', idg )
+    return redirect('show_group', idg )
 
 
 def knowledges_of_a_student(student, theme):

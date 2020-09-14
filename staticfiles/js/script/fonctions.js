@@ -7,7 +7,7 @@ function TestArchive(f1) {
 }
 
 function Newpassword() {
-    if (!confirm('Vous souhaitez créer un nouveau mot de passe ? ce sera : sacado2020')) return false;
+    if (!confirm('Le nouveau mot de passe sera : sacado2020 \nIl sera envoyé directement au courriel renseigné. Confirmer ?')) return false;
 }
 
 
@@ -33,15 +33,15 @@ function testPassword(f1, f2) {
 
 
 function deleteAllStudents() {
-    if (!confirm('Vous souhaitez supprimer tous les élèves de votre établissement ? Toutes leurs données actuelles seront perdues. Cette action est irréversible si vous cliquez sur OK.')) return false;
+    if (!confirm('Vous souhaitez supprimer tous les élèves de votre établissement ? \nToutes leurs données actuelles seront perdues. Cette action est irréversible si vous cliquez sur OK.')) return false;
 }
 
 
  
 function getAllStudents() {
-    if (!confirm('Vous souhaitez récupérer tous les élèves de votre établissement existant dans la base de données SACADO ? Tous les élèves associés à un enseignant de votre établissement seront associés à votre établissement.')) return false;
+    if (!confirm('Vous souhaitez récupérer tous les élèves de votre établissement existant dans la base de données SACADO ? \nTous les élèves associés à un enseignant de votre établissement seront associés à votre établissement.')) return false;
 }
 
 function deleteSelectedStudents() {
-    if (!confirm('Vous souhaitez supprimer tous les élèves sélectionnés ? Toutes leurs données actuelles seront perdues. Cette action est irréversible si vous cliquez sur OK.')) return false;
+    if (!confirm('Vous souhaitez supprimer tous les élèves sélectionnés ? \nToutes leurs données actuelles seront perdues. \nCette action est irréversible si vous cliquez sur OK.')) return false;
 }
