@@ -213,21 +213,23 @@ def events_json_group(request):
     for relationship in relationships:
         # On récupère les dates dans le bon fuseau horaire
         relationship_start = relationship.date_limit 
-        print(relationship_start)
-        if relationship.exercise.supportfile.annoncement :
-            title =  cleanhtml(unescape_html(relationship.exercise.supportfile.annoncement ))
-        else :
-            title =  unescape_html(relationship.exercise.knowledge.name)
-        
-        event_list.append({
-                    'id': relationship.id,
-                    'start': relationship_start.strftime('%Y-%m-%d %H:%M:%S'),
-                    'end': relationship_start.strftime('%Y-%m-%d %H:%M:%S'),
-                    'title': title,
-                    'allDay': True,
-                    'description': title,
-                    'color' : relationship.parcours.color,
-                    })
+        try :  
+            if relationship.exercise.supportfile.annoncement :
+                title =  cleanhtml(unescape_html(relationship.exercise.supportfile.annoncement ))
+            else :
+                title =  unescape_html(relationship.exercise.knowledge.name)
+
+            event_list.append({
+                        'id': relationship.id,
+                        'start': relationship_start.strftime('%Y-%m-%d %H:%M:%S'),
+                        'end': relationship_start.strftime('%Y-%m-%d %H:%M:%S'),
+                        'title': title,
+                        'allDay': True,
+                        'description': title,
+                        'color' : relationship.parcours.color,
+                        })
+        except : 
+            pass
 
     ## Gestion des parcours d'évaluation
     for student in students :
