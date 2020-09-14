@@ -84,7 +84,10 @@
                     <div class="row">
                         <div class="navbar-header">
                         {% block page_title %}
-                            <i class='fa fa-tachometer-alt'></i> Tableau de bord 
+                            <i class='fa fa-tachometer-alt'></i> Tableau de bord          
+                                {% if request.user.is_authenticated %}{% if user.is_student %} 
+                                    <a href="#" data-toggle='modal' data-target='#video_sacado' class="btn btn-violet" style="color:#FF0000; font-size:14px; margin-left: 100px"> <i class="fa fa-play"></i> Sacado en vidéo</a>
+                                {% endif %}{% endif %}
                         {% endblock %}
                         </div>
                         <ul class="nav navbar-nav navbar-right">
@@ -114,6 +117,23 @@
         {% endif %}
         </div>
     {% endblock %}
+</div>
+
+
+<div class="modal fade" id="video_sacado" tabindex="-1" role="dialog" aria-labelledby="video_sacado">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2  class='sacado'  >Sacado en vidéo,...</h2>
+            </div>
+            <div class="modal-body">
+ 
+            </div>
+        </div>
+    </div>
 </div>
 
 

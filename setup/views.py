@@ -63,7 +63,7 @@ def index(request):
 
         elif request.user.is_student: ## student
             student = Student.objects.get(user=request.user.id)
-            parcourses = Parcours.objects.filter(students=student, is_evaluation=0, is_publish=1)
+            parcourses = Parcours.objects.filter(students=student, is_evaluation=0, is_publish=1).order_by("ranking")
 
             parcours = []
 
@@ -102,10 +102,8 @@ def index(request):
             relationships_in_late = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, is_evaluation=0, date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
             relationships_in_tasks = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).exclude(exercise__in=exercises).order_by("date_limit")
 
-            print("relationships_in_tasks", relationships_in_tasks)
-
             context = {'student_id': student.user.id, 'student': student, 'relationships': relationships,
-                       'evaluations': evaluations, 'ratio': ratio, 'today' : today , 
+                       'evaluations': evaluations, 'ratio': ratio, 'today' : today ,  'parcourses': parcourses,
                        'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late,
                        'relationships_in_tasks': relationships_in_tasks , }
 
