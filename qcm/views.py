@@ -153,13 +153,14 @@ def students_from_p_or_g(request,parcours) :
 def get_stage(parcours):
 
     teacher = parcours.teacher
-
-    if teacher.user.school :
-        school = teacher.user.school
-        stage = Stage.objects.get(school = school)
-    else : 
-        stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
-
+    try :
+        if teacher.user.school :
+            school = teacher.user.school
+            stage = Stage.objects.get(school = school)
+        else : 
+            stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
+    except :
+        stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }  
     return stage
 
 
@@ -674,6 +675,11 @@ def delete_parcours(request, id, idg=0):
         r.students.clear()
         r.skills.clear()
         r.delete()
+
+    for c in parcours.course.all() :
+        c.students.clear()
+        c.creators.clear()
+        c.delete()
 
     studentanswers = Studentanswer.objects.filter(parcours = parcours)
     for s in studentanswers :
