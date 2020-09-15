@@ -64,7 +64,7 @@
                             <br>
                                 <a href="{% url 'list_parcours_group' group.id  %}#evaluation" class="btn btn-default btn-accueil" style="width:95%"> 
                                   <small>   <i class="fa fa-trophy"></i> </small>
-                                    Evaluation{{ data.nb_parcours_evaluation|pluralize }} favorite{{ data.nb_parcours_evaluation|pluralize }} <small> ({{ data.nb_parcours_evaluation }}) - 0 créée{{ data.nb_parcours_evaluation|pluralize }}</small>
+                                    Evaluation{{ data.nb_evaluation_favorite|pluralize }} favorite{{ data.nb_evaluation_favorite|pluralize }} <small> ({{ data.nb_evaluation_favorite }}) - {{  data.nb_evaluation }} passée{{ data.nb_evaluation|pluralize }}</small>
                                 </a>
 
                             <br><br>

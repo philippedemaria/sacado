@@ -106,6 +106,7 @@ class SupportfileForm(forms.ModelForm):
 	class Meta:
 		model = Supportfile
 		fields = '__all__'
+		exclude = ('attach_file','is_subtitle')
 
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
@@ -121,7 +122,7 @@ class SupportfileKForm(forms.ModelForm):
 	class Meta:
 		model = Supportfile
 		fields = '__all__'
-		exclude = ('knowledge',)
+		exclude = ('knowledge','attach_file','is_subtitle')
 
 	def __init__(self, *args, **kwargs):
 		knowledge = kwargs.pop('knowledge')
@@ -136,6 +137,7 @@ class UpdateSupportfileForm(forms.ModelForm):
 	class Meta:
 		model = Supportfile 
 		fields = '__all__'
+		exclude = ('attach_file','is_subtitle')
 
 	def __init__(self, *args, **kwargs):
 		knowledge = kwargs.pop('knowledge')
@@ -144,6 +146,17 @@ class UpdateSupportfileForm(forms.ModelForm):
 		instance = kwargs.pop('instance')
 		knowledges = Knowledge.objects.filter(theme__subject=subject)
 		skills = forms.ModelMultipleChoiceField(queryset=Skill.objects.filter(subject=subject), widget=forms.CheckboxSelectMultiple, required=False)
+
+
+
+
+class AttachForm(forms.ModelForm):
+	class Meta:
+		model = Supportfile
+		fields = ('attach_file','annoncement','is_subtitle')
+		widgets = {
+          'annoncement': forms.Textarea(attrs={'rows':1}),
+        }
 
 
 class CourseForm(forms.ModelForm):

@@ -9,7 +9,7 @@ from group.forms import GroupForm
 from group.models import Group 
 from school.models import Stage
 from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint, Course, Demand
-from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, CourseForm , DemandForm
+from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm  ,CourseForm , DemandForm
 from socle.models import  Theme, Knowledge , Level , Skill
 from django.http import JsonResponse 
 from django.core import serializers
@@ -1080,9 +1080,10 @@ def parcours_tasks_and_publishes(request, id):
     except :
         group_id = None
  
- 
+    form = AttachForm(request.POST or None, request.FILES or None)
+
     relationships = Relationship.objects.filter(parcours=parcours).order_by("exercise__theme")
-    context = {'relationships': relationships,  'parcours': parcours, 'teacher': teacher  , 'today' : today , 'group_id' : group_id , 'communications' : [] , }
+    context = {'relationships': relationships,  'parcours': parcours, 'teacher': teacher  , 'today' : today , 'group_id' : group_id , 'communications' : [] , 'form' : form , }
     return render(request, 'qcm/parcours_tasks_and_publishes.html', context)
  
 
@@ -2131,33 +2132,62 @@ def ajax_knowledge_exercice(request):
     return JsonResponse(data)
 
  
-
+@csrf_exempt
 def ajax_create_title_parcours(request):
     ''' Création d'une section ou d'une sous-section dans un parcours '''
     teacher = Teacher.objects.get(user=request.user)
-    value = request.POST.get('value', None)
+
     parcours_id = int(request.POST.get('parcours_id', 0))
-    subtitle = int(request.POST.get('subtitle', 0))
+
     code = str(uuid.uuid4())[:8]
     data = {}
 
-    supportfile = Supportfile.objects.create(knowledge_id=1, annoncement=value, author=teacher, code=code, level_id=1, theme_id=1, is_title=1, is_subtitle=subtitle)
+    print(parcours_id)
 
-    exe = Exercise.objects.create(knowledge_id=1, level_id=1, theme_id=1, supportfile=supportfile)
-    relation = Relationship.objects.create(exercise=exe, parcours_id=parcours_id, order=0)
+    #supportfile = Supportfile.objects.create(knowledge_id=1, annoncement=value, author=teacher, code=code, level_id=1, theme_id=1, is_title=1, is_subtitle=subtitle)
+    form = AttachForm(request.POST, request.FILES)
+    print(form)
+
+    if form.is_valid():
+        
+        supportfile = form.save(commit=False)
+        supportfile.knowledge_id = 1
+        supportfile.author = teacher
+        supportfile.code=code
+        supportfile.level_id=1
+        supportfile.theme_id=1
+        supportfile.is_title=1
+        supportfile.save()
+    
 
 
-    data["html"] = f'''<div class="panel-body separation_dashed" style="line-height: 30px;  border-top-right-radius:5px; border-top-left-radius:5px; background-color : #F2F1F0;id='new_title{exe.id}'">
-    <a href='#' style='cursor:move;' class='move_inside'>
-        <i class="fas fa-grip-vertical fa-xs" style="color:MediumSeaGreen;vertical-align: text-top;padding-right:5px;"></i>
-    </a>
-    <input type='hidden' class='div_exercise_id' value='{exe.id}' name='input_exercise_id' />
-        <h3>{value}
-            <a href='#' data-exercise_id='{exe.id}' data-parcours_id='{parcours_id}' class='pull-right erase_title'>
-                <i class='fa fa-times text-danger'></i>
-            </a>
-        </h3>
-    </div>'''
+        exe = Exercise.objects.create(knowledge_id=1, level_id=1, theme_id=1, supportfile=supportfile)
+        relation = Relationship.objects.create(exercise=exe, parcours_id=parcours_id, order=0)
+
+
+
+        if supportfile.attach_file != "" :
+            attachment = "<a href='#' target='_blank'>"+ supportfile.annoncement +"</a>"
+        else :
+            attachment = supportfile.annoncement
+
+
+        data["html"] = f'''<div class="panel-body separation_dashed" style="line-height: 30px;  border-top-right-radius:5px; border-top-left-radius:5px; background-color : #F2F1F0;id='new_title{exe.id}'">
+        <a href='#' style='cursor:move;' class='move_inside'>
+            <i class="fas fa-grip-vertical fa-xs" style="color:MediumSeaGreen;vertical-align: text-top;padding-right:5px;"></i>
+        </a>
+        <input type='hidden' class='div_exercise_id' value='{exe.id}' name='input_exercise_id' />
+            <h3>{attachment}
+                <a href='#' data-exercise_id='{exe.id}' data-parcours_id='{parcours_id}' class='pull-right erase_title'>
+                    <i class='fa fa-times text-danger'></i>
+                </a>
+            </h3>
+        </div>'''
+
+
+
+
+
 
     return JsonResponse(data)
 

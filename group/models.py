@@ -81,23 +81,26 @@ class Group(ModelWithCode):
             if len(parcours_tab) == number_of_parcours_of_this_level_by_this_teacher:
                 break
 
-        data, nb, nbf, nbp, nbe = {}, 0, 0, 0, 0
+        data, nb, nbf, nbp, nbef , nbe = {}, 0, 0, 0, 0, 0
         for parcours in parcours_tab:
-            if parcours.is_favorite:
+            if parcours.is_favorite and not parcours.is_evaluation :
                 nbf += 1
             if parcours.is_publish:
                 nbp += 1
             if parcours.is_evaluation:
-                nbe += 1
+                nbef += 1
             if not parcours.is_evaluation:
                 nb += 1
+            if parcours.is_evaluation and parcours.is_favorite :
+                nbe += 1
 
         data["count_students"] = students.values("user").count()
         data["students"] = students.values("user__id", "user__last_name", "user__first_name")
         data["nb_parcours"] = nb
         data["nb_parcours_visible"] = nbp
         data["nb_parcours_favorite"] = nbf
-        data["nb_parcours_evaluation"] = nbe 
+        data["nb_evaluation_favorite"] = nbef 
+        data["nb_evaluation"] = nbe 
 
         return data
 

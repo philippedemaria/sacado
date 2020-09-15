@@ -625,8 +625,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         // ================================================================================================================= 
         // =================================================================================================================
 
-        $('#create_section').click(function(event) {   
-
+       /* $('#create_section').click(function(event) {
             let value = $('#section_fill').val();  
             let subtitle = $('#subtitle').val(); 
             let parcours_id = $('#parcours_id').val(); 
@@ -650,6 +649,37 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 }
             });
         });
+*/
+
+        
+         $('#create_section').submit(function(event) {
+
+                    event.preventDefault();   
+
+                    var formData = new FormData(this); 
+                    let parcours_id = $('#parcours_id').val(); 
+                    formData.append("parcours_id", parcours_id);
+                    formData.append('attach_file', $('input[type=file]')[0].files[0]); 
+
+
+                    let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                    formData.append("csrfmiddlewaretoken" , csrf_token);
+ 
+
+                    $.ajax({
+                        url: '../../ajax/create_title_parcours',
+                        data: formData ,
+                        type: "POST",
+                        dataType: "json",
+                        success: function (data) {
+                        $(data.html).insertBefore( $('#miseEnAttenteDashboard').children()[0] );
+                        },
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                    });
+                });
+
 
 
         $('body').on('click','.erase_title', function (){   

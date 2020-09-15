@@ -34,7 +34,8 @@ def file_directory_path(instance, filename):
 def directory_path(instance, filename):
     return "demandfiles/{}/{}".format(instance.level.id, filename)
 
-
+def file_attach_path(instance, filename):
+    return "attach_files/{}/{}".format(instance.level.id, filename)
 
 
 def convert_time(duree) :
@@ -90,7 +91,8 @@ class Supportfile(models.Model):
     dragZoom = models.BooleanField(default=0, verbose_name="Zoom/déplacement ?")
 
     is_title = models.BooleanField(default=0, editable=False, verbose_name="titre pour l'organisation des parcours")
-    is_subtitle = models.BooleanField(default=0, editable=False, verbose_name="sous-titre pour l'organisation des parcours")
+    is_subtitle = models.BooleanField(default=0 , verbose_name="sous-titre pour l'organisation des parcours")
+    attach_file = models.FileField(upload_to=file_attach_path, blank=True,  verbose_name="Fichier pdf attaché", default="")
 
     duration = models.PositiveIntegerField(default=15, blank=True, verbose_name="Durée estimée - en minutes")
     skills = models.ManyToManyField(Skill, blank=True, related_name='skills_supportfile', verbose_name="Compétences ciblées")
