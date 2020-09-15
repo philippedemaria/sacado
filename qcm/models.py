@@ -126,6 +126,15 @@ class Supportfile(models.Model):
 
 
 
+    def used_in_parcours(self, teacher):
+        exercises = self.exercises.all()
+        parcours = Parcours.objects.filter(exercises__in= exercises, author=teacher)
+        return parcours
+
+
+
+ 
+
 
 
 class Exercise(models.Model):

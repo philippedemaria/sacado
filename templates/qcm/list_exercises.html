@@ -68,7 +68,7 @@
                                                     <tr>
                                                         <td>
                                                             <div class="pull-right" >
-                                                            {% get_used_in_parcours exercise teacher as uparcours  %}
+                                                            {% get_used_in_parcours exercise.supportfile teacher as uparcours  %}
                                                             {% for p in uparcours %}
                                                                  <span class="subtitle">{{ p }}</span>{% if not forloop.last %}<br>{% endif %}
                                                             {% empty %}
