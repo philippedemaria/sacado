@@ -502,6 +502,29 @@ class Parcours(ModelWithCode):
             test = True
         return test 
 
+ 
+    def is_individualized(self):
+
+        test = False
+        nb_students_parcours = self.students.count() # élève du parcours
+        relation_ships = self.parcours_relationship.all()
+        for r in relation_ships :
+            if r.students.count() != nb_students_parcours :
+                test = True 
+        return test 
+
+
+ 
+    def is_courses_exists(self):
+
+        test = False
+        if self.course.count() > 0 :
+            test = True
+        return test 
+
+
+
+
     def nb_task(self):
 
         today = timezone.now()
