@@ -38,7 +38,7 @@
 <div class="content_main">  
         <div class="row">        
             <div class="col-sm-11 col-md-12">
-                <p style="color:{{ group.color }}"><strong>Niveau : {{ group.level.name }}</strong></p>
+                <p style="color:{{ group.color }}"><strong>Niveau : {{ group.level.name }}</strong> <span style="margin-left:50px"><i class="fa fa-warning"></i> les champs modifiés sont directement enregistrés.</span></p>
             </div>
         </div> 
         <div class="row">        
@@ -53,7 +53,7 @@
                         <td>Courriel*</td>
                         <td>Identifiant* </td>
                         <td>Dernière connexion</td>
-                        <td><span style="font-size:11px; color:#cb2131">*Enregistrement dès la modification au clavier</span></td>                        
+                        <td><span style="font-size:13px; color:#cb2131">Mot de passe par défaut : <strong>sacado2020</strong></span></td>                        
                     </tr>
                     </thead>
                     <tbody>
@@ -102,7 +102,7 @@
                                        voir les résultats  
                                     </a> 
                                     <small>|</small> 
-                                    <a  href="{% url 'newpassword_student' student.user.id  group.id   %}" data-student_id="{{ student.user.id }}" 
+                                    <a  href="{% url 'newpassword_student' student.user.id  group.id   %}" data-student_id="{{ student.user.id }}" title="mot de passe par défaut : sacado2020" 
                                         onclick="return Newpassword()" style="font-size:11px; margin-right:5px"  >
                                         Init. mot de passe
                                     </a><small>|</small>       
