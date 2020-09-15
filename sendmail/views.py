@@ -14,9 +14,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from sendmail.decorators import user_is_email_teacher
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
 import re
 import html
-
+import pytz
 
 def cleanhtml(raw_html): #nettoie le code des balises HTML
     cleantext = re.sub('<.*?>', '', raw_html)
