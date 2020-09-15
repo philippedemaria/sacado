@@ -646,9 +646,7 @@ def enroll(request, slug):
     if request.method == 'POST':
         user_form = UserForm(request.POST)
         if user_form.is_valid():
-            username = user_form.cleaned_data['last_name'] + user_form.cleaned_data['first_name']
             user = user_form.save(commit=False)
-            user.username = username
             user.user_type = User.STUDENT
             password = request.POST.get("password1")
             user.set_password(password)
@@ -657,26 +655,25 @@ def enroll(request, slug):
             student = Student.objects.create(user=user, level=group.level)
             group.students.add(student)
             parcourses = Parcours.objects.filter(teacher=group.teacher, level=group.level)
-
             for parcours in parcourses:
+                print(parcours) 
                 parcours.students.add(student)
                 relationships = parcours.parcours_relationship.all()
                 for r in relationships:
-                    r.students.add(student)
+                    r.students.add(student)                
                 courses = parcours.course.all()
                 for c in courses:
                     c.students.add(student)
 
-            user = authenticate(username=username, password=password)
-            login(request, user)
-            messages.success(request, "Inscription réalisée avec succès !")
+
+            messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation. Connectez-vous avec vos identifiants en cliquant sur le bouton bleu Se connecter.")
             if user_form.cleaned_data['email']:
                 send_mail('Création de compte sur Sacado',
                           'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers http://sacado.erlm.tn.\n Ceci est un mail automatique. Ne pas répondre.',
                           'info@sacado.xyz',
                           [request.POST.get("email")])
 
-        return redirect('dashboard')    
+        return redirect('index')    
     else:
         user_form = UserForm(request.POST or None)
 
