@@ -75,20 +75,20 @@
 
 <li class="sans_puce"><a href="{% url 'create_evaluation' %}" class="btn btn-primary full_width">Créer une évaluation</a> </li> 
 
-
+<!--
 <hr>
 
 <li class="sans_puce"><a href="{% url 'create_demand' %}" class="btn btn-default full_width">Demander un exercice</a> </li> 
-
+-->
 <hr>
-<p style="margin-top:-15px"><strong>Tous mes parcours</strong></p>
+<p style="margin-top:-15px"><strong>Mes parcours favoris</strong></p>
 <div {% if parcourses|length > 8  %} class="div_accordion" {% endif %}>
     <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
     {% for parcours in parcourses  %}
     <div class="btn btn-default full_width" style="text-align: left; font-size:15px; margin-bottom: 5px">
 
             <span data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}" class="parcours_displayer" style="color : {{  parcours.color }}" >
-               {% if parcours.is_publish %} <i class="fa fa-check-circle text-success pull-right pull-right_top"></i>  {% else %} <i class="fa fa-ban pull-right pull-right_top"></i>{% endif  %}  {{ parcours.title|truncatechars:"22" }} 
+               {% if parcours.is_publish %} <i class="fa fa-check-circle text-success pull-right pull-right_top"></i>  {% else %} <i class="fa fa-check-circle  pull-right pull-right_top" style="color : #E0E0E0"></i>{% endif  %}  {{ parcours.title|truncatechars:"22" }} 
             </span>
 
         <div id="collapse{{ forloop.counter }}" class="collapse">
