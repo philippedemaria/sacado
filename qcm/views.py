@@ -512,8 +512,6 @@ def list_parcours_group(request,id):
                     parcours_tab.append(parcours)
                 if len(parcours_tab) == teacher.teacher_parcours.count() :
                     break 
-
-
     return render(request, 'qcm/list_parcours_group.html', {'parcours_tab': parcours_tab , 'group': group,  'parcours' : None , 'communications' : [] , 'relationships' : [] , })
 
 
