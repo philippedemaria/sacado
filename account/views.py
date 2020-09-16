@@ -491,11 +491,11 @@ def detail_student(request, id):
         teacher = Teacher.objects.get(user=request.user)
         group = Group.objects.get(students=student, teacher=teacher)
         nav = navigation(group, id)
-        context = {'datas': datas, 'parcourses': parcourses, 'group': group, 'sprev_id': nav[0], 'snext_id': nav[1], 'parcours' : None, 
+        context = {'datas': datas, 'parcourses': parcourses, 'group': group, 'sprev_id': nav[0], 'snext_id': nav[1], 'parcours' : None, 'students' : group.students.order_by("user__last_name") ,  
                    'themes': themes, 'student': student}
     else:
         group = Group.objects.filter(students=student).first()
-        context = {'datas': datas, 'parcourses': parcourses, 'group': group, 'themes': themes, 'student': student , 'communications' : [] , 'parcours' : None,  }
+        context = {'datas': datas, 'parcourses': parcourses, 'group': group, 'themes': themes, 'student': student , 'communications' : [] , 'parcours' : None, 'students' : None  }
 
     return render(request, 'account/detail_student.html', context)
 
@@ -545,7 +545,7 @@ def detail_student_theme(request, id,idt):
         teacher = Teacher.objects.get(user=request.user)
         group = Group.objects.get(students=student, teacher=teacher)
         nav = navigation(group, id)
-        context = {'datas': datas, 'student': student, 'theme': theme, 'group': group, 'parcours': None,
+        context = {'datas': datas, 'student': student, 'theme': theme, 'group': group, 'parcours': None, 'students' : group.students.order_by("user__last_name") ,  
                    'sprev_id': nav[0], 'snext_id': nav[1], 'communications': [], 'parcourses': parcourses,
                    'themes': themes}
 
@@ -572,7 +572,7 @@ def detail_student_parcours(request, id,idp):
         teacher = Teacher.objects.get(user=request.user)
         group = Group.objects.get(students=student, teacher=teacher)
         nav = navigation(group, id)
-        context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'sprev_id': nav[0],
+        context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'sprev_id': nav[0], 'students' : group.students.order_by("user__last_name") , 'group' : group ,
                    'snext_id': nav[1], 'parcourses': parcourses, 'student': student}
     else:
         context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'parcourses': parcourses,  'sprev_id': None ,
@@ -656,8 +656,8 @@ def detail_student_all_views(request, id):
         teacher = Teacher.objects.get(user=request.user)
         group = Group.objects.get(students=student, teacher=teacher)
         nav = navigation(group, id)
-        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes,
-                   'student': student, 'parcours': None, 'sprev_id': nav[0], 'snext_id': nav[1]}
+        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'students' : group.students.order_by("user__last_name") ,  'group' : group ,
+                   'student': student, 'parcours': None, 'sprev_id': nav[0], 'snext_id': nav[1] }
     else:
         context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes,
                    'student': student, 'parcours': None, 'sprev_id': None, 'snext_id': None}

@@ -11,34 +11,56 @@
 
  
 {% block page_title %}
-    <i class="fa fa-trophy"></i> {{ student |truncatechars:"30" }} 
+    <i class="fa fa-mortar-board"></i> 
 
     {% if request.user.user_type == 2 %}
-        {% if 'detail_student_theme' in request.path %}
-            {% if sprev_id %}<a href="{% url 'detail_student_theme' sprev_id theme.id %}"  class="btn btn-default"> Elève précédent </a>{% endif  %}
-            <select name="select_sudent" id="select_student" class="select2">
-                <option value="{{ student.user.id}}">
-                    {{ student.user.last_name }} {{ student.user.first_name }}
-                </option>
-            </select>
-
-            {% if snext_id %}<a href="{% url 'detail_student_theme' snext_id theme.id %}"  class="btn btn-default"> Elève suivant</a>{% endif  %}
-
-        {% elif 'detail_student_parcours' in request.path %}
-            {% if sprev_id %}<a href="{% url 'detail_student_parcours' sprev_id  parcours.id %}"  class="btn btn-default"> Elève précédent </a>{% endif  %}
-
-            {% if snext_id %}<a href="{% url 'detail_student_parcours' snext_id  parcours.id %}"  class="btn btn-default"> Elève suivant</a>{% endif  %}
-
-        {% elif 'detail_student_all_views' in request.path %}
-            {% if sprev_id %}<a href="{% url 'detail_student_all_views' sprev_id  %}"  class="btn btn-default"> Elève précédent </a>{% endif  %}
-
-            {% if snext_id %}<a href="{% url 'detail_student_all_views' snext_id  %}"  class="btn btn-default"> Elève suivant</a>{% endif  %}
-
+        {% if not students %}
+            {% if sprev_id %}<a href="{% url 'detail_student' sprev_id  %}"  class="btn btn-default"> Elève précédent </a>{% endif  %}{{ student |truncatechars:"30" }} {% if snext_id %}<a href="{% url 'detail_student' snext_id  %}"  class="btn btn-default"> Elève suivant</a>{% endif  %}
         {% else %}
-            {% if sprev_id %}<a href="{% url 'detail_student' sprev_id  %}"  class="btn btn-default"> Elève précédent </a>{% endif  %}
+
+            {% if 'detail_student_theme' in request.path %}
 
 
-            {% if snext_id %}<a href="{% url 'detail_student' snext_id  %}"  class="btn btn-default"> Elève suivant</a>{% endif  %}
+                {% if sprev_id %}<a href="{% url 'detail_student_theme' sprev_id theme.id %}"  class="btn btn-default"> Elève précédent </a>{% endif  %}
+                
+
+                <select name="select_sudent" id="select_student" style="width:250px; font-size: 20px;" onchange="location = this.value;">
+                {% for stdt in students %}
+                    <option value="{% url 'detail_student_theme' stdt.user.id  theme.id %}" {% if stdt.user.id == student.user.id %} selected {% endif %}>
+                        {{ stdt|truncatechars:"30" }}
+                    </option>
+                {% endfor %}
+                </select>
+
+                {% if snext_id %}<a href="{% url 'detail_student_theme' snext_id theme.id %}"  class="btn btn-default"> Elève suivant</a>{% endif  %}
+
+            {% elif 'detail_student_parcours' in request.path %}
+                {% if sprev_id %}<a href="{% url 'detail_student_parcours' sprev_id  parcours.id %}"  class="btn btn-default"> Elève précédent </a>{% endif  %}
+
+                <select name="select_sudent" id="select_student" style="width:250px; font-size: 20px;"  onchange="location = this.value;">
+                {% for stdt in students %}
+                    <option value="{% url 'detail_student_parcours' stdt.user.id  parcours.id %}" {% if stdt.user.id == student.user.id %} selected {% endif %}>
+                        {{ stdt|truncatechars:"30" }}
+                    </option>
+                {% endfor %}
+                </select>
+
+                {% if snext_id %}<a href="{% url 'detail_student_parcours' snext_id  parcours.id %}"  class="btn btn-default"> Elève suivant</a>{% endif  %}
+
+            {% elif 'detail_student_all_views' in request.path %}
+                {% if sprev_id %}<a href="{% url 'detail_student_all_views' sprev_id  %}"  class="btn btn-default"> Elève précédent </a>{% endif  %}
+
+                <select name="select_sudent" id="select_student" style="width:250px; font-size: 20px;"  onchange="location = this.value;">
+                {% for stdt in students %}
+                    <option value="{% url 'detail_student_all_views' stdt.user.id  %}" {% if stdt.user.id == student.user.id %} selected {% endif %}>
+                        {{ stdt|truncatechars:"30" }}
+                    </option>
+                {% endfor %}
+                </select>
+
+                {% if snext_id %}<a href="{% url 'detail_student_all_views' snext_id  %}"  class="btn btn-default"> Elève suivant</a>{% endif  %}
+    
+            {% endif %}
         {% endif %}
     {% else %}
 
@@ -55,11 +77,14 @@
     {% if request.user.user_type == 0 %}
         <li><a href="{% url 'detail_student_all_views' user.id %}"  class="no_button"  style="font-size:18px;"> Mon suivi</a></li>
     {% else %}
+
+        <li><a href="{% url 'result_group' group.id  %}"  class="no_button"  style="font-size:18px;"> {{ group }}</a></li>
+
         <li><a href="{% url 'detail_student_all_views' student.user.id  %}"  class="no_button"  style="font-size:18px;{% if 'detail_student_all_views' in request.path %}color:#007EE2{% endif %}"> Synthèse</a></li>
     {% endif %}
 
 
-        <li class="dropdown {% if 'result' not in request.path  %} select_item {% endif %}"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"  style="font-size:18px;{% if 'detail_student_theme' in request.path %}color:#007EE2{% endif %}"> Suivi par thème </a>
+        <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"  style="font-size:18px;{% if 'detail_student_theme' in request.path %}color:#007EE2{% endif %}"> Suivi par thème </a>
             <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
                 <li {% if 'detail_student/' in request.path %} class="active" {% endif %} ><a href="{% url 'detail_student'  student.user.id  %}" > Général</a></li>
                 <li class="divider"></li>
@@ -70,7 +95,7 @@
         </li>
 
 
-        <li class="dropdown {% if 'result' not in request.path  %} select_item {% endif %}"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"  style="font-size:18px;{% if 'detail_student_parcours' in request.path %}color:#007EE2{% endif %}"> Suivi par Parcours </a>
+        <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"  style="font-size:18px;{% if 'detail_student_parcours' in request.path %}color:#007EE2{% endif %}"> Suivi par Parcours </a>
             <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
                 {% for prcrs in parcourses|dictsortreversed:"is_publish" %} <!-- prcrs permet de comparer parcours avec prcrs et d'activer la classe active si affiché -->
                     <li {% if 'detail_student_parcours/' in request.path and prcrs.id == parcours.id %}  class="active" {% endif %}>

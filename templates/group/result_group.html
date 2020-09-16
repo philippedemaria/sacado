@@ -22,9 +22,23 @@
 
 
 {% block page_menu_right %}
+ 
+    <li class="dropdown  dropdown-large">
+      <a href="#" class="dropdown-toggle no_button {% if 'student' in request.path %} active {% endif %}" data-toggle="dropdown"> Elèves  <b class="caret"></b></a> 
+        <ul class="dropdown-menu" style="height:400px;overflow-y: auto">
+ 
+            {% for std in group.students.all|dictsort:"user.last_name" %}
+            <li class="dropdown dropdown-submenu {% if std.user.id == student.id  and 'student' in request.path  %} active {% endif %}" >
+                    <a href="{% url 'detail_student_all_views' std.user.id %}"  > {{ std }} </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </li>
+
+
     <li><a href="{%  url 'result_group_skill'  group.id %}"  class="no_button {% if  'result_group_skill' in request.path %} active {% endif %}" > Compétences </a></li>
     <li class="dropdown">
-      <a href="#" class="dropdown-toggle no_button {% if 'result_group_exercise' in request.path or 'group_theme_exercise' in request.path %} active {% endif %}" data-toggle="dropdown"> Suivi par exercice  <b class="caret"></b></a> 
+      <a href="#" class="dropdown-toggle no_button {% if 'result_group_exercise' in request.path or 'group_theme_exercise' in request.path %} active {% endif %}" data-toggle="dropdown"> Exercices  <b class="caret"></b></a> 
         <ul class="dropdown-menu">
             <li class="dropdown dropdown-submenu {% if 'result_group_exercise' in request.path %} active {% endif %}"><a href="{% url 'result_group_exercise'  group.id %}"  >Tous les exercices proposés </a></li>
             <li class="divider"></li>
@@ -36,7 +50,7 @@
         </ul>
     </li>
     <li class="dropdown">
-      <a href="#" class="dropdown-toggle no_button {% if  'result/' in request.path or  'group_theme/' in request.path %} active {% endif %}" data-toggle="dropdown"> Suivi par savoir faire <b class="caret"></b></a> 
+      <a href="#" class="dropdown-toggle no_button {% if  'result/' in request.path or  'group_theme/' in request.path %} active {% endif %}" data-toggle="dropdown"> Savoir faire <b class="caret"></b></a> 
         <ul class="dropdown-menu">
             <li class="dropdown dropdown-submenu {% if 'result/' in request.path and not 'result_group_exercise' in request.path %} active {% endif %}"><a href="{% url 'result_group'  group.id %}"  >Tous les savoir faire proposés </a></li>
             <li class="divider"></li>
