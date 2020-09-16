@@ -188,7 +188,7 @@
                         <a href="{% url 'show_course' 0 parcours.id   %}"  class="edit" {% if parcours.is_courses_exists %} style="color:#5d4391" {% endif %} ><i class="fa fa-fw fa-desktop"></i> <span class="label_icon">Cours </span> </a>
                     </div>   
                     <div class="col-lg-4 col-xs-4">
-                        <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"  class="edit"><i class="fa fa-fw fa-indent"></i> <span class="label_icon">Section.</span> </a>
+                        <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"  class="edit" {% if parcours.is_sections_exists %} style="color:#5d4391" {% endif %} ><i class="fa fa-fw fa-indent"></i> <span class="label_icon">Section.</span> </a>
                     </div>  
                 </div>
                 <div class="row extend">                              

@@ -159,4 +159,8 @@ urlpatterns = [
     path('ajax/constraint_create', ajax_create_constraint, name='ajax_create_constraint'),
     path('ajax/constraint_delete', ajax_delete_constraint, name='ajax_delete_constraint'), 
     path('ajax/infoExo', ajax_infoExo, name='ajax_infoExo'),
+
+    path('ajax/course_viewer', ajax_course_viewer, name='ajax_course_viewer'),
+
+
  ]

@@ -97,6 +97,8 @@ class Supportfile(models.Model):
     duration = models.PositiveIntegerField(default=15, blank=True, verbose_name="Durée estimée - en minutes")
     skills = models.ManyToManyField(Skill, blank=True, related_name='skills_supportfile', verbose_name="Compétences ciblées")
 
+
+
     def __str__(self): 
         knowledge = self.knowledge.name[:20]       
         return "{} > {} > {}".format(self.level.name, self.theme.name, knowledge)
@@ -523,6 +525,12 @@ class Parcours(ModelWithCode):
         return test 
 
 
+    def is_sections_exists(self) :
+
+        test = False
+        if self.parcours_relationship.filter(exercise__supportfile__is_title = 1).count() > 0 :
+            test = True
+        return test 
 
 
     def nb_task(self):
@@ -557,7 +565,10 @@ class Relationship(models.Model):
     students = models.ManyToManyField(Student, blank=True, related_name='students_relationship', editable=False)
 
     def __str__(self):
-        return "{} : {}".format(self.parcours, self.exercise)
+        try :
+            return "{} : {}".format(self.parcours, self.exercise.supportfile.annoncement)
+        except :
+            return "{}".format(self.parcours)  
 
     class Meta:
         unique_together = ('exercise', 'parcours')
@@ -601,6 +612,18 @@ class Relationship(models.Model):
 
         return under_score  
 
+
+    def is_header_of_section(self): # Contrainte. 
+    
+        header = False # On suppose que l'élève n'a pas obtenu le score minimum dans les exercices puisqu'il ne les a pas fait. 
+        courses = Course.objects.filter(relationships = self).order_by("ranking") 
+        data = {}
+        if courses.count() > 0 : 
+            header = True  
+        
+        data["header"] = header
+
+        return header 
 
 ########################################################################################################################################### 
 ########################################################################################################################################### 
@@ -704,7 +727,7 @@ class Course(models.Model): # pour les
  
     students = models.ManyToManyField(Student, blank=True,  related_name='students_course', verbose_name="Attribuer à/au")
     creators = models.ManyToManyField(Student, blank=True,  related_name='creators_course', verbose_name="Co auteurs élève") 
-
+    relationships = models.ManyToManyField(Relationship, blank=True,  related_name='relationships_course', verbose_name="Lier ce cours à ces sections") 
  
     def __str__(self):
         return self.parcours.title 

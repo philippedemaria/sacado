@@ -70,6 +70,16 @@
                                         </div>
                                             <span id="pub_task{{relationship.id}}">{% if relationship.date_limit > today %}<span class="label label-success">Tâche</span>{% endif %}</span> 
 
+
+                                        {% if relationship.is_publish %}
+                                        <i class="fas fa-grip-vertical fa-xs"
+                                           style="color:MediumSeaGreen;padding-right:10px;cursor: move;"></i>
+                                        {% else %}
+                                        <i class="fas fa-grip-vertical fa-xs"
+                                           style="color:SlateGrey;padding-right:10px;cursor: move;"></i>
+                                        {% endif %}
+
+
                                             {% if relationship.exercise.supportfile.annoncement %}
                                             <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" class="listing" target="_blank" >  {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}</a>
                                             {% else %}
@@ -111,10 +121,10 @@
                                     <a href="" style="cursor:move;" class="move_inside">
                                         {% if relationship.is_publish %}
                                         <i class="fas fa-grip-vertical fa-xs"
-                                           style="color:MediumSeaGreen;vertical-align: text-top;padding-right:5px;"></i>
+                                           style="color:MediumSeaGreen;vertical-align: text-top;padding-right:10px;"></i>
                                         {% else %}
                                         <i class="fas fa-grip-vertical fa-xs"
-                                           style="color:SlateGrey;vertical-align: text-bottom;padding-right:5px;"></i>
+                                           style="color:SlateGrey;vertical-align: text-bottom;padding-right:10px;"></i>
                                         {% endif %}
                                     </a>
                                     {% if relationship.exercise.supportfile.attach_file != ""  %}  
@@ -124,11 +134,24 @@
                                             <h2><a href="{{ relationship.exercise.supportfile.attach_file.url }}" target='_blank'  >{{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}</a> <a href='#'  data-exercise_id='{{ relationship.exercise.id }}'  data-parcours_id='{{parcours.id}}' class='pull-right erase_title'><i class='fa fa-times text-danger'></i></a></h2>
                                         {% endif %} 
                                     {% else %}
-                                        {% if relationship.exercise.supportfile.is_subtitle %}   
-                                            <h3>{{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}  <a href='#'  data-exercise_id='{{ relationship.exercise.id }}'  data-parcours_id='{{parcours.id}}' class='pull-right erase_title'><i class='fa fa-times text-danger'></i></a></h3>
-                                            {% else %}
-                                            <h2>{{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }} <a href='#'  data-exercise_id='{{ relationship.exercise.id }}'  data-parcours_id='{{parcours.id}}' class='pull-right erase_title'><i class='fa fa-times text-danger'></i></a></h2>
-                                        {% endif %}
+                                            {% if relationship.exercise.supportfile.is_subtitle %}   
+                                                <h3>{{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}  
+                                                    {% if relationship.is_header_of_section %} 
+                                                         <a href="{% url 'show_course' 0 relationship.parcours.id %}"><i class='fa fa-paperclip pull-right'></i></a>
+                                                    {% else %}
+                                                        <a href='#'  data-exercise_id='{{ relationship.exercise.id }}'  data-parcours_id='{{parcours.id}}' class='pull-right erase_title'><i class='fa fa-times text-danger'></i></a>
+                                                    {% endif %}
+                                                </h3>
+                                                {% else %}
+                                                <h2>{{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }} 
+                                                    {% if relationship.is_header_of_section %} 
+                                                        <a href="{% url 'show_course' 0 relationship.parcours.id %}"><i class='fa fa-paperclip pull-right'></i></a>
+                                                    {% else %}
+                                                       <a href='#'  data-exercise_id='{{ relationship.exercise.id }}'  data-parcours_id='{{parcours.id}}' class='pull-right erase_title'><i class='fa fa-times text-danger'></i></a>
+                                                    {% endif %}
+                                                </h2>
+                                            {% endif %}
+                                           
                                     {% endif %}
 
                                 {% endif %}

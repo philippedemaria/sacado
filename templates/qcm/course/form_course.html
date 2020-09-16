@@ -82,9 +82,19 @@
 
 
             <div class="col-sm-12 col-lg-4">
+
+
                 {% if request.user.user_type == 2 %}
-                <h4 class="thin">Détails</h4>
-                {% include 'qcm/course/content_details.html' %}
+                   <label>Lier ce cours à une ou des sections déjà créées</label> <br/>  
+                   {{ form.relationships|add_class:"form-control select2"}} 
+                   {{ form.relationships.errors }} 
+      
+
+
+
+                
+                    <h4 class="thin">Détails</h4>
+                    {% include 'qcm/course/content_details.html' %}
                 {% endif %}
 
                 <h4 class="thin">Liens vers</h4>

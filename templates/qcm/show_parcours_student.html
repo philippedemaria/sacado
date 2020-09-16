@@ -47,9 +47,28 @@
 
     {% for relation in relationships %}
         {%  if relation.exercise.supportfile.is_title %}       
-            <h2 class="listing thin" style="width:100%; clear:both"> {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}</h2>
+            <h2 class="listing thin" style="width:100%; clear:both"> 
+
+
+
+ 
+                {% if relation.is_header_of_section  %}
+                    <a href="#" data-toggle='modal' data-target='#head_of_section'    data-relation_id='{{ relation.id }}'  class="header_shower" title="Cours associé à cette section">{{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
+                {% else %}
+                    {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}
+                {% endif %}
+            </h2>
+
+
+
         {%  elif relation.exercise.supportfile.is_subtitle %}
-            <h3 class="listing thin" style="width:100%; clear:both"> {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}</h3>
+            <h3 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> 
+                {% if relation.is_header_of_section %}
+                    <a href="#" data-toggle='modal' data-target='#head_of_section'  data-relation_id='{{ relation.id }}' class="header_shower" title="Cours associé à cette sous-section">{{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
+                {% else %}
+                    {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}
+                {% endif %}
+            </h3>
        {% else %} 
             {% get_constraint_to_this_relationship  relation  student as    under_score   %}
 
@@ -172,7 +191,26 @@
 
  
 
- 
+ <div class="modal fade" id="head_of_section" tabindex="-1" role="dialog" aria-labelledby="head_of_section">
+    <div class="modal-dialog" role="document"  style="width:95%;">
+        <div class="modal-content" style="padding-top :0px;">
+            <div class="modal-header">
+                <h3>Cours associé
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                </h3>
+            </div>
+            <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12 col-xs-12">   
+                              <div id="courses_from_section"></div>
+                        </div>   
+                    </div> 
+            </div>
+        </div>
+    </div>
+</div>
 
 
 </section>

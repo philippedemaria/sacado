@@ -115,8 +115,7 @@ class SupportfileForm(forms.ModelForm):
 		subjects = teacher.subjects.all()
 		knowledges = Knowledge.objects.filter(theme__subject__in= subjects)
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
-		skills  = forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject__in= subjects), widget=forms.CheckboxSelectMultiple, required=False)
-
+		self.fields['skills']  =  forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject= subject), widget=forms.CheckboxSelectMultiple, required=False)
 
 class SupportfileKForm(forms.ModelForm):
 	class Meta:
@@ -129,7 +128,8 @@ class SupportfileKForm(forms.ModelForm):
 		super(SupportfileKForm, self).__init__(*args, **kwargs)
 		subject = knowledge.theme.subject 
 		knowledges = Knowledge.objects.filter(theme__subject= subject)
-		skills  = forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject= subject), widget=forms.CheckboxSelectMultiple, required=False)
+		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
+		self.fields['skills']  =  forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject= subject), widget=forms.CheckboxSelectMultiple, required=False)
 
 
 class UpdateSupportfileForm(forms.ModelForm):
@@ -144,8 +144,8 @@ class UpdateSupportfileForm(forms.ModelForm):
 		subject = knowledge.theme.subject	
 		super(UpdateSupportfileForm, self).__init__(*args, **kwargs)
 		instance = kwargs.pop('instance')
-		knowledges = Knowledge.objects.filter(theme__subject=subject)
-		skills = forms.ModelMultipleChoiceField(queryset=Skill.objects.filter(subject=subject), widget=forms.CheckboxSelectMultiple, required=False)
+		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
+		self.fields['skills']  = forms.ModelMultipleChoiceField(queryset=Skill.objects.filter(subject=subject), widget=forms.CheckboxSelectMultiple, required=False)
 
 
 
@@ -163,6 +163,15 @@ class CourseForm(forms.ModelForm):
 	class Meta:
 		model = Course
 		fields = '__all__'
+
+
+	def __init__(self, *args, **kwargs):
+		parcours = kwargs.pop('parcours')
+		print(parcours)
+		super(CourseForm, self).__init__(*args, **kwargs)
+		relations = Relationship.objects.filter(exercise__supportfile__is_title = 1, parcours=parcours)
+		print(relations)
+		self.fields['relationships'] = forms.ModelMultipleChoiceField(queryset=relations, required=False )
 
 
 class DemandForm(forms.ModelForm):

@@ -368,6 +368,27 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('.header_shower').on('click', function (event) {
+            let relation_id = $(this).attr("data-relation_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let parcours_id = $(this).attr("data-parcours_id");
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'relation_id': relation_id,
+                        csrfmiddlewaretoken: csrf_token,
+                        'parcours_id': parcours_id,
+                    },
+                    url: "../../ajax/course_viewer",
+                    success: function (data) {
+                        $('#courses_from_section').html(data.html);
+                    }
+                }
+            )
+        });
 
 
     });

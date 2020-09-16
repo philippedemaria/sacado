@@ -1,48 +1,17 @@
-{% extends 'dashboard.html' %}
 {% load static %}
 {% load widget_tweaks %}
 {% load item_tags %}
 
-
-{% block require %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
-    <script>
-        require(['script/ajax-parcours']);
-    </script> 
-    
-{% endblock %}
-
  
-
-{% block page_title %}
-       <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-desktop"></i> {{ parcours }} <img src="{% static 'img/angle-right.png' %}"/>    Cours   </span>  
-{% endblock %}
-
-
-{% block page_menu_right %}
-    {% if request.user.user_type == 2 %}
-        {% include 'qcm/submenu_parcours.html' %}
-    {% endif %}
-{% endblock %}
-
-
-
-
-{% block css_files %}
-{% endblock %}
-
-
-{% block body %}
-<section class="content_main">  
-
-
 
     <div class="row">
         <div class="col-md-4 col-xs-12 col-lg-3">
-            {% if request.user.user_type == 2 %}
+ 
+            {% if is_teacher %}
             <a href="{%  url 'create_course' 0 parcours.id %}" class="btn btn-danger full_width"> Créer un nouveau cours </a>
             <hr>
             {% endif %}
+ 
             <form action="" method="POST"> 
             {% csrf_token %}
             <ul class="nav nav-pills nav-stacked admin-menu" id="course_sortable">
@@ -52,10 +21,9 @@
                         <a href="#" data-target-id="course{{forloop.counter0}}">  <i class="{% if course.is_publish %}fa fa-eye{% else %}fa fa-eye-slash{% endif %}" style="font-size: 12px"></i>  {{ course.title }}
 
                             {% if course.relationships.count > 0 %} <sup title="Cours lié à une section"><i class="fa fa-paperclip" style="font-size:8px" ></i></sup> {% endif %}
+                        </a>
 
-
-                            <img src="{% static 'img/order_handler_white.png' %}" class="pull-right"/></a>
-                        <input type="hidden" value="{{ course.id }}" class="course_sort" /> 
+ 
                     </li>
                 {% endfor %}
             </ul>
@@ -67,7 +35,7 @@
 
         {% for course in courses %}
             <div class="col-md-8 col-xs-12 col-lg-9  admin-content" id="course{{forloop.counter0}}">
-                <h1 class="thin">  {{ course.title }}   <a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 12px" class="pull-right">Modifier ce cours</a></h1><hr>
+                <h1 class="thin">  {{ course.title }}               {% if is_teacher %}<a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 12px" class="pull-right">Modifier ce cours</a>            {% endif %} </h1><hr>
 
                 {{ course.annoncement|decode|safe }} 
             </div>
@@ -76,8 +44,6 @@
          
     </div>
 
-
-
-
-</section>
-{% endblock %} 
+<script type="text/javascript">
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>

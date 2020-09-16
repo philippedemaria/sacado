@@ -2142,11 +2142,7 @@ def ajax_create_title_parcours(request):
     code = str(uuid.uuid4())[:8]
     data = {}
 
-    print(parcours_id)
-
-    #supportfile = Supportfile.objects.create(knowledge_id=1, annoncement=value, author=teacher, code=code, level_id=1, theme_id=1, is_title=1, is_subtitle=subtitle)
     form = AttachForm(request.POST, request.FILES)
-    print(form)
 
     if form.is_valid():
         
@@ -2158,11 +2154,13 @@ def ajax_create_title_parcours(request):
         supportfile.theme_id=1
         supportfile.is_title=1
         supportfile.save()
-    
-
 
         exe = Exercise.objects.create(knowledge_id=1, level_id=1, theme_id=1, supportfile=supportfile)
         relation = Relationship.objects.create(exercise=exe, parcours_id=parcours_id, order=0)
+
+        parcours = Parcours.objects.get(pk = parcours_id)
+        for student in parcours.students.all():
+            relation.students.add(student)
 
 
 
@@ -2183,11 +2181,6 @@ def ajax_create_title_parcours(request):
                 </a>
             </h3>
         </div>'''
-
-
-
-
-
 
     return JsonResponse(data)
 
@@ -2813,7 +2806,7 @@ def create_course(request, idc , id ):
     """
     parcours = Parcours.objects.get(pk =  id)
     teacher = Teacher.objects.get(user_id = request.user.id)
-    form = CourseForm(request.POST or None  )
+    form = CourseForm(request.POST or None , parcours = parcours )
     relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("order")
     if request.method == "POST" :
         if form.is_valid():
@@ -2841,7 +2834,7 @@ def update_course(request, idc, id  ):
     """
     parcours = Parcours.objects.get(pk =  id)
     course = Course.objects.get(id=idc)
-    course_form = CourseForm(request.POST or None, instance=course, )
+    course_form = CourseForm(request.POST or None, instance=course , parcours = parcours )
     relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("order")
     if request.user.user_type == 2 :
         teacher = Teacher.objects.get(user_id = request.user.id)
@@ -3041,4 +3034,26 @@ def ajax_demand_done(request) :
 
     send_mail("SacAdo Demande d'exercice",  "Bonjour " + str(demand.teacher.user.get_full_name())+ ", \n\n Votre exercice est créé. \n\n Pour tester votre exercice, https://sacado.xyz/qcm/show_exercise/"+str(code)  +"\n\n Bonne utilisation de sacado." , "info@sacado.xyz" , rec )
     data={}
+    return JsonResponse(data)
+
+
+
+
+@csrf_exempt 
+def ajax_course_viewer(request):  
+
+    relation_id =  int(request.POST.get("relation_id"))
+    relationship = Relationship.objects.get( id = relation_id)
+    courses = Course.objects.filter(relationships = relationship).order_by("ranking")
+
+    data = {}
+
+    if request.user.user_type == 2 :
+        is_teacher = True
+    else : 
+        is_teacher = False 
+    context = { 'courses' : courses , 'parcours' : relationship.parcours , 'is_teacher' : is_teacher }
+    html = render_to_string('qcm/course/course_viewer.html',context)
+    data['html'] = html       
+
     return JsonResponse(data)
