@@ -285,13 +285,18 @@ def register_student(request):
 
             else:  # groupe du prof  de l'élève
                 code_group = request.POST.get("group")
-                if Group.objects.filter(code=code_group).exists():
+                if Group.objects.filter(code=code_group, lock = 0 ).exists():
                     group = Group.objects.get(code=code_group)
                     parcours = Parcours.objects.filter(teacher=group.teacher, level=group.level)
+                else :
+                    parcours = []
             #######################################################################################
             user.save()
             student = Student.objects.create(user=user, level=group.level)
-            group.students.add(student)
+            try :
+                group.students.add(student)
+            except :
+                pass
 
             for p in parcours:
                 p.students.add(student)

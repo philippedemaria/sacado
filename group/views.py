@@ -642,7 +642,7 @@ def enroll(request, slug):
     '''
     Création d'un compte élève et inscription à un groupe via le lien donné par l'enseignant
     '''
-    group = get_object_or_404(Group, code=slug)
+    group = get_object_or_404(Group, code=slug, lock=0)
     if request.method == 'POST':
         user_form = UserForm(request.POST)
         if user_form.is_valid():
@@ -656,7 +656,6 @@ def enroll(request, slug):
             group.students.add(student)
             parcourses = Parcours.objects.filter(teacher=group.teacher, level=group.level)
             for parcours in parcourses:
-                print(parcours) 
                 parcours.students.add(student)
                 relationships = parcours.parcours_relationship.all()
                 for r in relationships:

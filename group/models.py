@@ -23,6 +23,7 @@ class Group(ModelWithCode):
     level = models.ForeignKey(Level, on_delete=models.PROTECT, related_name="groups", verbose_name="Niveau*")
     assign = models.BooleanField(default=1)
     suiviparent = models.BooleanField(default=0)
+    lock = models.BooleanField(default=0)    
 
     class Meta:
         ordering = ['name']
