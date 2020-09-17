@@ -12,22 +12,22 @@
  
 
 {% block page_title %}
-    <i class="fa fa-indent" style="color:{{ parcours.color|contrast_color_title }}"></i> <span style="color:{{ parcours.color }}">{{ parcours.title }} <img src="{% static 'img/angle-right.png' %}"/> Gérer </span>  
+     <span style="color:{{ parcours.color|contrast_color_title }}"> <i class="fa fa-indent"></i>  
+
+    {% include 'qcm/breadcrumb.html' %}
+
+
+    <small>    
+        <a href="#" class="no_button" data-target="#section_div" data-toggle='modal'>
+         Créer une section
+        </a>
+    </small>  
 {% endblock %}
 
 {% block page_menu_right %}
+ 
 
-<li>
-    <a href="#" class="no_button" data-target="#section_div" data-toggle='modal'>
-        <i class="fa fa-indent"></i> Créer une section
-    </a>
-</li>
-
-<li>
-    <a href="javascript:history.back()" style="padding:12px; ">
-        <input type="button" value="Retour" class="btn btn-default "/>
-    </a>
-</li>
+    {% include 'qcm/submenu_parcours.html' %}
 
 {% endblock %}
 

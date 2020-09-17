@@ -11,7 +11,7 @@
                 <table class="table table-bordered table-hover standard_tab_sort300">
                     <thead>
                         <tr class="no_padding" style="background-color: {{ parcours.color }};color:#eee">
-                            <td>{{parcours }} <img src="{% static 'img/angle-right-white.png' %}" width="25px" /> Sections et exercices </th>
+                            <td> <a href="{% url 'show_parcours' parcours.id %}" target="_blank" style="color:#FFF" >{{ parcours|truncatechars:"18" }}</a><img src="{% static 'img/angle-right-white.png' %}" width="25px" /> Sections et exercices </th>
                             <td style="width:330px">Scores</th>
                         </tr>
                     </thead>
@@ -26,7 +26,7 @@
                             <tr class="no_padding" {% if not relation.is_publish %} style="background-color:#F0F0F0;"{% endif %}   >
                                 <td {% if relation.is_publish %} style="padding:0px"{% endif %}"> 
                                     <div {% if relation.is_publish %} style="border-left: 4px solid #00AC18; padding:10px"{% endif %}">
-                                        <a href="{% url 'show_this_exercise' relation.exercise.id   %}" >  
+                                        <a href="{% url 'show_this_exercise' relation.exercise.id   %}"  target="_blank" >  
                                             <img src="{{ relation.exercise.supportfile.imagefile.url }}" class="imagefile">
                                         </a>
                                                                    

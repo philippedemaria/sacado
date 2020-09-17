@@ -17,7 +17,9 @@
 
 
 {% block page_title %}
-    <span style="color:{{ parcours.color }}"><i class="fa fa-user"></i> {{ parcours }}    </span> <img src="{% static 'img/angle-right.png' %}"/>   <small> Individualiser le parcours</small> 
+    <span style="color:{{ parcours.color }}"><i class="fa fa-user"></i> </span>
+    {% include 'qcm/breadcrumb.html' %}
+      <small> Individualiser </small> 
 {% endblock %}
 
 {% block page_menu_right %}
@@ -72,7 +74,7 @@
 
                                     
                          {% if relationship.is_publish %} 
-                            <p style="clear: both; width:150px; padding:5px; border-radius: 4px; background-color: #4cae4c; color: #FFF"> Exercice publié </p><br>
+                            <p style="clear: both; width:150px; padding:5px; border-radius: 4px; background-color: #00a65a; color: #FFF"> Exercice publié </p><br>
                          {% endif %}
 
 

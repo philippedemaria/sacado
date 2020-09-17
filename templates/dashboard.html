@@ -84,7 +84,7 @@
                     <div class="row">
                         <div class="navbar-header">
                         {% block page_title %}
-                            <i class='fa fa-tachometer-alt'></i> Tableau de bord          
+                            <span style="color:#5d4391"><i class='fa fa-tachometer-alt'></i> Tableau de bord     </span>     
                                 {% if request.user.is_authenticated %}{% if user.is_student %} 
                                     <a href="#" data-toggle='modal' data-target='#video_sacado' class="btn btn-violet" style="color:#FF0000; font-size:14px; margin-left: 100px"> <i class="fa fa-play"></i> Sacado en vidéo</a>
                                 {% endif %}{% endif %}

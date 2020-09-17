@@ -12,10 +12,13 @@
 {% endblock %}
 
 {% block page_title %}
-    <span style="color:{{ group.color }}"><i class='fa fa-mortar-board'></i> {{ group.name }}  <img src="{% static 'img/angle-right.png' %}" width="15px"/> Suivis
+    <span style="color:{{ group.color }}"><i class='fa fa-mortar-board'></i></span>        
+     {% include 'group/breadcrumb.html' %} 
+
+     <small>Suivis</small>
     
     {% if theme %} <img src="{% static 'img/angle-right.png' %}" width="15px"/> <small>{{ theme }}</small>  {% endif %} 
-    </span>  
+ 
 {% endblock %}
 
 

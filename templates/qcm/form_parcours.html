@@ -22,11 +22,18 @@
 
 
 {% block page_title %}
+
+<span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-desktop"></i> </span>
+  
+
+      {% include 'qcm/breadcrumb.html' %}
+
+
+
     {% if parcours %}
-        <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-cogs
-        "></i> {{ parcours }}    </span>   <small><img src="{% static 'img/angle-right.png' %}"/> Configuration</small>   
+        <small>Configuration</small>   
     {% else %}
-       <i class="fa fa-th"></i> Nouveau parcours   
+       <i class="fa fa-cogs"></i> Nouveau parcours   
     {% endif %}
 
 {% endblock %}

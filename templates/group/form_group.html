@@ -20,7 +20,13 @@
 
 
 {% block page_title %}  
-    <i class='fa fa-cogs'></i>  {% if group %}<span style="color:{{group.color|contrast_color_title }}" > {{ group }} <img src="{% static 'img/angle-right.png' %}"/> <small> Configuration</small> </span> {% else %} Groupe    <img src="{% static 'img/angle-right.png' %}"/> <small>Nouveau groupe</small> {% endif %}  
+    
+    {% if group %} <span style="color:{{group.color|contrast_color_title }}" ><i class='fa fa-cogs'></i> </span>
+        {% include 'group/breadcrumb.html' %}
+          <small> Configuration</small> </span> 
+    {% else %} 
+      Nouveau groupe 
+    {% endif %}  
 {% endblock %}
 
 {% block page_menu_right %}

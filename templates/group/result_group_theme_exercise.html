@@ -17,7 +17,16 @@
 {% endblock %}
 
 {% block page_title %}
-    <i class='fa fa-mortar-board'></i>  {{ group.name }}    <img src="{% static 'img/angle-right.png'%}"/>  <small class='thin'>{{ theme }}</small>
+ 
+
+    <span style="color:{{ group.color }}"><i class='fa fa-mortar-board'></i></span>        
+     {% include 'group/breadcrumb.html' %} 
+
+ <small class='thin'>{{ theme }}</small>
+
+
+
+
 {% endblock %}
 
 

@@ -347,10 +347,12 @@ def peuplate_parcours(request,id):
 
     try :
         group_id = request.session.get("group_id")
+        group = Group.objects.get(pk = group_id)
     except :
         group_id = None
+        group = None
         # fin ---- modifie les exercices sélectionnés
-    context = {'form': form, 'parcours': parcours,     'communications':[],     'teacher': teacher, 'exercises': exercises , 'levels': levels , 'themes' : themes_tab , 'user': request.user , 'group_id' : group_id , 'relationships' :relationships  }
+    context = {'form': form, 'parcours': parcours,     'communications':[], 'group' : group ,    'teacher': teacher, 'exercises': exercises , 'levels': levels , 'themes' : themes_tab , 'user': request.user , 'group_id' : group_id , 'relationships' :relationships  }
 
     return render(request, 'qcm/form_peuplate_parcours.html', context)
 
@@ -367,13 +369,22 @@ def individualise_parcours(request,id):
     relationships = Relationship.objects.filter(parcours = parcours).order_by("order")
     students = parcours.students.all().order_by("user__last_name")
 
+    try :
+        group_id = request.session.get("group_id")
+        group = Group.objects.get(pk = group_id)
+    except :
+        group_id = None
+        group = None
+
+
+
     context = {'relationships': relationships, 'parcours': parcours,     'communications':[],     'students': students,  'form': None,  
                     'teacher': teacher,
                   'exercises': None , 
                   'levels': None , 
                   'themes' : None ,
                    'user': request.user , 
-                   'group_id' : None ,}
+                   'group_id' : group_id , 'group' : group , }
 
     return render(request, 'qcm/form_individualise_parcours.html', context )
 
@@ -573,14 +584,16 @@ def create_parcours(request):
     try :
         if 'group_id' in request.session :
             group_id = request.session.get["group_id"]
+            group = Group.objects.get(pk = group_id) 
         else :
             group_id = None
+            group = None  
     except :
         group_id = None
-
+        group = None
 
     context = {'form': form,   'teacher': teacher,  'groups': groups,  'levels': levels, 'idg': 0,   'themes' : themes_tab, 'group_id': group_id , 'parcours': None,  'relationships': [], 
-               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'communications' : None,}
+               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'communications' : None,  'group': group ,}
 
 
     return render(request, 'qcm/form_parcours.html', context)
@@ -633,13 +646,15 @@ def update_parcours(request, id, idg=0 ):
     if idg > 0 and idg < 99999999999 :
         group_id = idg
         request.session["group_id"] = idg
+        group = Group.objects.get(pk = group_id) 
     else :
         group_id = None
+        group = None
 
 
     students_checked = parcours.students.count()  # nombre d'étudiant dans le parcours
 
-    context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'relationships': relationships, 
+    context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'group': group ,  'relationships': relationships, 
                'exercises': exercises, 'levels': levels, 'themes': themes_tab, 'students_checked': students_checked, 'communications' : [], }
 
     return render(request, 'qcm/form_parcours.html', context)
@@ -716,9 +731,11 @@ def show_parcours(request, id):
 
     try:
         group_id = request.session["group_id"]
-
+        group = Group.objects.get(pk=group_id)
     except:
         group_id = None
+        group = None
+
 
     students_p_or_g = students_from_p_or_g(request,parcours)
 
@@ -729,7 +746,7 @@ def show_parcours(request, id):
     nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count()
     context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'communications' : [] , 
                'students_from_p_or_g': students_p_or_g, 'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible, 'nb_students_p_or_g' : nb_students_p_or_g , 
-               'nb_exo_only': nb_exo_only, 'group_id': group_id, }
+               'nb_exo_only': nb_exo_only, 'group_id': group_id, 'group': group }
 
     return render(request, 'qcm/show_parcours.html', context)
 
@@ -904,8 +921,10 @@ def stat_parcours(request, id):
 
     try :
         group_id = request.session["group_id"]
+        group = Group.objects.get(pk = group_id)
     except :
         group_id = None
+        group = None
 
 
     students = students_from_p_or_g(request,parcours) 
@@ -982,7 +1001,7 @@ def stat_parcours(request, id):
             student["percent"] = ""
         stats.append(student)
 
-    context = {  'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'relationships' : relationships , 'communications' : [] , }
+    context = {  'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'communications' : [] , }
 
     return render(request, 'qcm/stat_parcours.html', context )
 
@@ -1075,13 +1094,15 @@ def parcours_tasks_and_publishes(request, id):
  
     try :
         group_id = request.session.get("group_id")
+        group = Group.objects.get(pk = group_id)
     except :
         group_id = None
+        group = None
  
     form = AttachForm(request.POST or None, request.FILES or None)
 
     relationships = Relationship.objects.filter(parcours=parcours).order_by("exercise__theme")
-    context = {'relationships': relationships,  'parcours': parcours, 'teacher': teacher  , 'today' : today , 'group_id' : group_id , 'communications' : [] , 'form' : form , }
+    context = {'relationships': relationships,  'parcours': parcours, 'teacher': teacher  , 'today' : today , 'group' : group , 'group_id' : group_id , 'communications' : [] , 'form' : form , }
     return render(request, 'qcm/parcours_tasks_and_publishes.html', context)
  
 
@@ -1095,12 +1116,14 @@ def result_parcours_exercise_students(request,id):
     parcours = Parcours.objects.get(pk = id)
     try :
         group_id = request.session.get("group_id")
+        group = Group.objects.get(pk = group_id)
     except :
         group_id = None
+        group = None
  
     relationships = Relationship.objects.filter(parcours = parcours) 
 
-    return render(request, 'qcm/result_parcours_exercise_students.html', { 'relationships': relationships , 'parcours': parcours , 'group_id': group_id ,   })
+    return render(request, 'qcm/result_parcours_exercise_students.html', { 'relationships': relationships , 'parcours': parcours , 'group_id': group_id ,  'group' : group ,  })
 
 
 
@@ -2887,10 +2910,17 @@ def show_course(request, idc , id ):
     parcours = Parcours.objects.get(pk =  id)
     courses = parcours.course.all().order_by("ranking") 
 
+    try:
+        group_id = request.session["group_id"]
+        group = Group.objects.get(pk=group_id)
+    except:
+        group_id = None
+        group = None
+
     if len(courses) > 0 :
         user = User.objects.get(pk = request.user.id)
         teacher = Teacher.objects.get(user = user)
-        context = {  'courses': courses, 'teacher': teacher , 'parcours': parcours , 'group_id' : None, 'communications' : [] , 'relationships' : [] , }
+        context = {  'courses': courses, 'teacher': teacher , 'parcours': parcours , 'group_id' : None, 'communications' : [] , 'relationships' : [] , 'group' : group , }
         return render(request, 'qcm/course/show_course.html', context)
     else :
         return redirect('create_course', idc , id )

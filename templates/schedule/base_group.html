@@ -7,7 +7,10 @@
 
 
 {% block page_title %}
-        <i class="fa fa-calendar"></i> Calendrier des taches <img src="{% static 'img/angle-right.png' %}" /> {{ group }} 
+        <span style="color:{{ group.color }}"><i class="fa fa-calendar"></i> </span>  
+        {% include 'group/breadcrumb.html' %}
+        <small>Calendrier des taches</small>
+
 {% endblock %}
 
 {% block page_menu_right %}

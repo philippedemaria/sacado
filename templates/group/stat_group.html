@@ -12,18 +12,12 @@
 {% endblock %}
 
  
-
-
-
-
-
-
- 
-
-
-
 {% block page_title %}
-    <span style="color:{{ group.color }}"><i class='fa fa-bar-chart'></i>  Statistiques <img src="{% static 'img/angle-right.png' %}"/> {{ group.name }} </span> 
+
+        <span style="color:{{ group.color }}"><i class="fa fa-bar-chart"></i> </span>  
+        {% include 'group/breadcrumb.html' %}
+        <small>Statistiques</small>
+
 {% endblock %}
 
 {% block page_menu_right %}

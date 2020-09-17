@@ -20,7 +20,9 @@
 
 
 {% block page_title %}
-        <span style="color:{{ group.color }}"><i class="fa fa-arrow-circle-right"></i> {{ group.name }}  <img src="{% static 'img/angle-right.png' %}"/> Détails <img src="{% static 'img/angle-right.png' %}"/> </span>
+        <span style="color:{{ group.color }}"><i class="fa fa-arrow-circle-right"></i> {{ group.name }}   </span>
+            <img src="{% static 'img/angle-right.png' %}"/> <small>Détails</small> <img src="{% static 'img/angle-right.png' %}"/>
+
              <a href="{% url 'print_ids' group.id  %}" class="btn btn-default"><img src="{% static 'img/pdf.png' %}" width="18px" >  Télécharger les identifiants</a>
 
 {% endblock %}
