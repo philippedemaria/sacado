@@ -35,7 +35,7 @@
 
                         <!-- Legende de la small-box -->
                         <div class="inner" style="color:white;opacity:0.9"><br/>
-                            <span style="color:{{ group.color|contrast_color }};font-size: 35px">{{ group.name |truncatechars:"18" }} </span>{% if not group.lock %} <i class="fa fa-lock" style="font-size: 14px" title="Ce groupe est verrouillé" ></i>{% endif %} <br/><br><br>
+                            <span style="color:{{ group.color|contrast_color }};font-size: 35px">{{ group.name |truncatechars:"18" }} </span>{% if group.lock %} <i class="fa fa-lock" style="font-size: 14px" title="Ce groupe est verrouillé" ></i>{% endif %} <br/><br><br>
                              <span style="color:{{ group.color|contrast_color }};font-size: 16px"><i class="fa fa-barcode"></i> {{ group.code }} </span> 
 
                                 {% if group.is_task_exists %}
