@@ -2049,7 +2049,11 @@ def store_the_score_relation_ajax(request):
                 Resultlastskill.objects.filter(student = student, skill = skill).update(point = sco_avg) 
 
             try :
-                msg = "Exercice : "+str(relation.exercise.knowledge.name)+"\n Fait par : "+str(student.user)+"\n Nombre de situations : "+str(numexo)+"\n Score : "+str(score)+"%"+"\n Temps : "+str(convert_seconds_in_time(timer))
+                if relation.exercise.supportfile.annoncement != "" :
+                    name_title = relation.exercise.supportfile.annoncement
+                else :
+                    name_title = relation.exercise.knowledge.name
+                msg = "Exercice : "+str(name_title)+"\n Fait par : "+str(student.user)+"\n Nombre de situations : "+str(numexo)+"\n Score : "+str(score)+"%"+"\n Temps : "+str(convert_seconds_in_time(timer))
                 rec = []
                 for g in student.students_to_group.filter(teacher = relation.parcours.teacher):
                     if not g.teacher.user.email in rec : 
