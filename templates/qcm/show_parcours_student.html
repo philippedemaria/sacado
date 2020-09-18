@@ -48,10 +48,6 @@
     {% for relation in relationships %}
         {%  if relation.exercise.supportfile.is_title %}       
             <h2 class="listing thin" style="width:100%; clear:both"> 
-
-
-
- 
                 {% if relation.is_header_of_section  %}
                     <a href="#" data-toggle='modal' data-target='#head_of_section'    data-relation_id='{{ relation.id }}'  class="header_shower" title="Cours associé à cette section">{{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
                 {% else %}
@@ -182,13 +178,10 @@
                     </div>
                 </div>
             </div> 
-
-
         {% endif %}          
-
     {% endfor %}
 
-
+</section>
  
 
  <div class="modal fade" id="head_of_section" tabindex="-1" role="dialog" aria-labelledby="head_of_section">
@@ -213,7 +206,7 @@
 </div>
 
 
-</section>
+
  
    
 {% endblock %}

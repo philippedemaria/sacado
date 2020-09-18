@@ -339,9 +339,12 @@ def peuplate_parcours(request,id):
 
         for exercise in exercises_posted_ids :
             try :
-                r = Relationship.objects.create(parcours = nf , exercise = exercise , order =  i,situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
-                r.skills.set(exercise.supportfile.skills.all()) 
-                i+=1
+                if Relationship.objects.filter(parcours = nf , exercise__supportfile = exercise.supportfile ).count() == 0 :
+                    r = Relationship.objects.create(parcours = nf , exercise = exercise , order =  i, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
+                    r.skills.set(exercise.supportfile.skills.all()) 
+                    i+=1
+                else :
+                    pass
             except :
                 pass
 
