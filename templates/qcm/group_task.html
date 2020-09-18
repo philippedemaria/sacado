@@ -15,11 +15,11 @@
 
   
 {% block page_title %}
-    <i class="fa fa-calendar-check-o"></i> Toutes les taches en cours</span>
+<span style="color:{{ group.color|contrast_color_title }}"><i class="fa fa-calendar-check-o"></i> {{ group }}    </span> <img src="{% static 'img/angle-right.png' %}"/>  <small>  {% if 'all' in request.path %}Toutes les tâches   {% else %}Tâches en cours {% endif %}  </small> 
 {% endblock %}
 
 {% block page_menu_right %}
-    <li><small>{% now "d N Y, H:i" %}</small></li>
+    <li> <small>{% now "d N Y, H:i" %}</small></li>
     <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default"/></a>
 {% endblock %}
 
@@ -28,71 +28,48 @@
 <section class="content_main">  
     <div class="row"> 
         <div class="col-sm-12 col-md-12">
- 
-            <table  class="table table-hover display" >
+            <table  class="table table-hover display">
                 {% regroup relationships by parcours as parcours_list %}  
                 {% for p in parcours_list %}
                 <thead>
                     <tr style="background-color: {{ p.grouper.color }}; color : #FFF ">
-                        <th>{{ p.grouper }} <a href="{% url 'detail_task'  p.grouper.id  0  %}" class="btn btn-xs btn-default pull-right">En détails</a></th>
-                        <th></th>
-                        <th><a href="{% url 'parcours_tasks_and_publishes'  p.grouper.id   %}" class="btn btn-xs btn-default">Créer une tache</a> </th>
+                        <th style="width:350px">{{ p.grouper }} <a href="{% url 'detail_task'  p.grouper.id  0  %}" class="btn btn-xs btn-default pull-right">Voir les tâches de ce parcours</a></th>
+                        <th><a href="{% url 'parcours_tasks_and_publishes'  p.grouper.id   %}" class="btn btn-xs btn-default pull-right">Créer une tache</a> </th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for r in p.list %}
                         <tr> 
-                            <td >
+                            <td style="font-size: 14px" >
                                 <a href="{% url 'show_this_exercise' r.exercise.id %}" target="_blank">
-
-                                
                                     <img src="{{ r.exercise.supportfile.imagefile.url }}" class="imagefile">
-
-
                                     {{ r.exercise.supportfile.annoncement|cleanhtml|capfirst  }} 
                                                 {% if r.exercise.supportfile.calculator %}
-                                                  <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                                  <img src="{% static 'img/calculator.png' %}" width="20px" />
                                                 {% else %}
-                                                  <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                                  <img src="{% static 'img/no_calculator.png' %}"  width="20px" />
                                                 {% endif  %}   <br>
                                     <i class="fa fa-fw fa-barcode"></i> {{ r.exercise.supportfile.code }}      <br>
                                     <i class="fa fa-fw fa-clock-o"></i> {{ r.exercise.supportfile.duration }} minutes<br>
                                     <i class="fa fa-fw fa-save"></i> {{ r.exercise.supportfile.situation }}  situation{{ r.exercise.supportfile.situation|pluralize }}<br>
                                 </a>
+                                <br>
+                                <strong>Date limite :</strong> {{ r.date_limit }} <br/><br/><a href="{% url 'detail_task'  p.grouper.id  r.exercise.id   %}" class="btn btn-default">En détails</a>
                             </td>
                             <td>
-
-                                    {% get_nb_task_parcours_done  r.exercise  r.parcours as nb_task_done %}
-                                    {% get_who_are_done_parcours  r.exercise  p.grouper  as who_are  %}
-
-                                    {{ nb_task_done}}/{{ r.parcours.students.count  }} 
-                                <br/>
-                                
-                                {%  for s in who_are %} 
-                                <small>{{ s.student.user.last_name|lower|capfirst }}{% if not forloop.last %}, {% endif %} </small>
-                                {% endfor %}  
+                                {%  for s in  r.students.all|dictsort:"user.last_name" %}
+                                    {% if s in group.students.all %}
+                                    {% get_score  r.exercise   s   as   score %}
+                                    <a href="{%  url 'detail_student_parcours' s.user.id  r.parcours.id %}" class="btn btn-{% if score > 90  %}darkgreen{% elif score > 70  %}success{% elif score > 40  %}warning{% elif score > 0  %}danger{% else  %}default{% endif  %}" style="min-width:175px; margin:1px" target="_blank" />{{ s.user.last_name|lower|capfirst }} {{ s.user.first_name|lower|capfirst|truncatechars:5 }} <font style="font-size:10px">{{ score }}{% if score %}%{% endif  %}</font></a>
+                                    {% endif %}
+                                {%  endfor %}
                             </td>
-
-
-                            <td>{{ r.date_limit }} <br/><br/><a href="{% url 'detail_task'  p.grouper.id  r.exercise.id   %}" class="btn btn-default">En détails</a></td>
-
-
                         </tr>
                     {% endfor %}
                 </tbody>
-
                 {% endfor %}
             </table>
-  
         </div>
     </div> 
-    <div class="row"> 
-        <div class="col-sm-12 col-md-12">
-                {% for parcours in parcourses %}
-                    <a href="{% url 'parcours_tasks_and_publishes'  parcours.id   %}" class="btn btn-xs btn-default">Créer une tache dans {{ parcours }} </a> 
-                {% endfor %}
-        </div>
-    </div> 
-
 </section>
 {% endblock %}

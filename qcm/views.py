@@ -2502,10 +2502,68 @@ def detail_task(request,id,s):
 def all_my_tasks(request):
     today = time_zone_user(request.user) 
     teacher = Teacher.objects.get(user = request.user) 
-    parcourses = Parcours.objects.filter(is_publish=  1,teacher=teacher )       
+    parcourses = Parcours.objects.filter(is_publish=  1,teacher=teacher ) 
     relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today,exercise__supportfile__is_title=0).order_by("parcours") 
     context = {'relationships': relationships, 'parcourses': parcourses, 'parcours': None,  }
     return render(request, 'qcm/all_tasks.html', context)
+
+
+@login_required
+def these_all_my_tasks(request):
+    today = time_zone_user(request.user) 
+    teacher = Teacher.objects.get(user = request.user) 
+    parcourses = Parcours.objects.filter(is_publish=  1,teacher=teacher ) 
+    relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("parcours") 
+    context = {'relationships': relationships, 'parcourses': parcourses, 'parcours': None,  }
+    return render(request, 'qcm/all_tasks.html', context)
+
+
+
+ 
+@login_required
+def group_tasks(request,id):
+    today = time_zone_user(request.user) 
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    group = Group.objects.get(pk = id)
+
+    students = group.students.prefetch_related("students_to_parcours")
+    parcourses_tab = []
+    for student in students :
+        parcourses = student.students_to_parcours.all()
+        for p in parcourses :
+            if len(parcourses_tab) >= nb_parcours_teacher :
+                break
+            else :
+                parcourses_tab.append(p)
+
+
+    relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcourses_tab, date_limit__gte=today,exercise__supportfile__is_title=0).order_by("parcours") 
+
+    return render(request, 'qcm/group_task.html', { 'relationships': relationships ,    'group' : group ,  })
+
+@login_required
+def group_tasks_all(request,id):
+    today = time_zone_user(request.user) 
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    nb_parcours_teacher = teacher.teacher_parcours.count() # nombre de parcours pour un prof
+    group = Group.objects.get(pk = id) 
+    students = group.students.prefetch_related("students_to_parcours")
+    parcourses_tab = []
+    for student in students :
+        parcourses = student.students_to_parcours.all()
+        for p in parcourses :
+            if len(parcourses_tab) >= nb_parcours_teacher :
+                break
+            else :
+                parcourses_tab.append(p)
+
+
+
+    relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today),  parcours__in=parcourses_tab, exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("parcours") 
+
+    return render(request, 'qcm/group_task.html', { 'relationships': relationships ,    'group' : group ,  })
+
+
 
 
 #######################################################################################################################################################################

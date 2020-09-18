@@ -39,7 +39,7 @@
                              <span style="color:{{ group.color|contrast_color }};font-size: 16px"><i class="fa fa-barcode"></i> {{ group.code }} </span> 
 
                                 {% if group.is_task_exists %}
-                                    <a  href="{% url 'schedule_task_group' group.id %}" class="pull-right" style="color:{{ group.color|contrast_color }}; font-size:12px;margin-top:8px;"> Tâche en cours <i class="fa fa-calendar"></i></a>
+                                    <a  href="{% url 'group_tasks' group.id  %}" class="pull-right" style="color:{{ group.color|contrast_color }}; font-size:12px;margin-top:8px;"> Tâche en cours <i class="fa fa-calendar"></i></a>
                                 {% endif %}
                          
 

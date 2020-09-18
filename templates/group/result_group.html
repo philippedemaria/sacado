@@ -64,11 +64,39 @@
             {% endfor %}
         </ul>
     </li>
-    {% if request.user.is_extra %}
+    <li class="dropdown  dropdown-large">
+      <a href="#" class="dropdown-toggle no_button {% if 'student' in request.path %} active {% endif %}" data-toggle="dropdown"> Tâches  <b class="caret"></b></a> 
+        <ul class="dropdown-menu">
+ 
+ 
+            <li class="dropdown dropdown-submenu {% if  'group_task' in request.path  %} active {% endif %}" >
+                {% if group.is_task_exists %}
+                    <a href="{% url 'group_tasks' group.id %}"  > En cours de {{ group }}</a>
+                {% else %}
+                    <span style="padding: 3px 20px;display: block ; clear:both; white-space: nowrap; color:#c90202;font-weight: 400">   Aucune tâche en cours </span>
+                {% endif %}
+            </li>
+             <li class="dropdown dropdown-submenu {% if  'tasks_all' in request.path  %} active {% endif %}" >
+                    <a href="{% url 'group_tasks_all' group.id %}"  > Toutes de {{ group }} </a>
+            </li>
+            <li class="divider"></li>
+             <li class="dropdown dropdown-submenu {% if  'task_all' in request.path  %} active {% endif %}" >
+                    <a href="{% url 'all_my_tasks'  %}"  > Toutes les taches en cours</a>
+            </li>
+             <li class="dropdown dropdown-submenu {% if  'task_all' in request.path  %} active {% endif %}" >
+                    <a href="{% url 'these_all_my_tasks'    %}"  > Toutes les taches  </a>
+            </li>
+
+        </ul>
+    </li>
+
+
+    {% if request.user.school %}
     <a href="{% url 'print_statistiques' group.id 0 %}"  class="btn btn-xs btn-default" id="print_stats" ><span id="loading_stats"></span> Statistiques <img src="{% static 'img/pdf.png' %}" width="15px"/></a>
     {% else %}
     <a href="#"  class="btn btn-xs btn-default" style="cursor:not-allowed" title="Vous n'avez pas l'accès à cette option" > Statistiques <img src="{% static 'img/pdf.png' %}" width="15px"/></a>
     {% endif %}
+
 {% endblock %}
 
  
@@ -101,9 +129,9 @@
                                  {% for knowledge in knowledges %}
                                     <form  action="" method="POST">
                                     {% csrf_token %} 
-                                    <a class="marklegend" data-toggle='modal' href="#"
-                                                          data-target='#knowledge_details' data-group_id ="{{ group.id }}"
-                                                          data-knowledge_id="{{ knowledge.id }}" >
+                                    <a  class="marklegend" data-toggle='modal' href="#"
+                                        data-target='#knowledge_details' data-group_id ="{{ group.id }}"
+                                        data-knowledge_id="{{ knowledge.id }}" >
                                           {{ knowledge.nb_exercise }}
                                     </a>  
                                     </form>
@@ -130,16 +158,13 @@
                                                 data-target='#writer' 
                                                 class="send_message"   data-student_name="{{ student.user }}"
                                                 data-student_email="{{ student.user.email }}">  
-
                                                 {% if student.user.email  %}                                      
-                                                <i class="fa fa-inbox" style="font-size:14px"></i> 
+                                                    <i class="fa fa-inbox" style="font-size:14px"></i> 
                                                 {% else %}
-
-                                                <span class="icon-stack">
-                                                  <i class="icon-inbox"></i>
-                                                  <i class="icon-ban-circle icon-stack-base text-error"></i>
-                                                </span>
-
+                                                    <span class="icon-stack">
+                                                      <i class="icon-inbox"></i>
+                                                      <i class="icon-ban-circle icon-stack-base text-error"></i>
+                                                    </span>
                                                 {% endif %}
                                             </a>                                         
                                     </div>  

@@ -91,10 +91,11 @@ urlpatterns = [
     path('export_note/<int:idg>/<int:idp>/', export_note, name='export_note'),  
     path('export_skill/<int:idp>/', export_skill, name='export_skill'),  
 
-    path('detail_task/<int:id>/<int:s>/', detail_task, name='detail_task'), #modif idg en id pour la sécurité
+    path('detail_task/<int:id>/<int:s>/', detail_task, name='detail_task'), #modif idp en id pour la sécurité
     path('tasks', all_my_tasks, name='all_my_tasks'),
-
-
+    path('all_tasks', these_all_my_tasks, name='these_all_my_tasks'),    
+    path('group_tasks/<int:id>', group_tasks, name='group_tasks'), #taches en cours du groupe
+    path('group_tasks_all/<int:id>', group_tasks_all, name='group_tasks_all'), #taches du groupe
     #################################### Les cours dans les parcours ###########################################
 
     path('parcours_courses', list_courses, name='courses'),
