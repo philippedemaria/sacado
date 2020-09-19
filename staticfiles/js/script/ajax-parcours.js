@@ -239,7 +239,7 @@ define(['jquery','bootstrap'], function ($) {
                         $('#selector_e'+exercise_id).attr("data-statut",data.statut);                  
                         $('#selector_e'+exercise_id).removeClass(data.noclass);
                         $('#selector_e'+exercise_id).addClass(data.class);
-
+                        if (data.no_store) { alert("Vous ne pouvez pas enregistrer cet exercice. Un exercice similaire est déjà dans ce parcours.")}
                     }
                 }
             )
@@ -248,7 +248,7 @@ define(['jquery','bootstrap'], function ($) {
 
 
         // Affiche dans la modal la liste des élèves du groupe sélectionné
-        $('.select_student').on('click' ,function () {
+        $('.select_student').on('click' , function () {
 
             let parcours_id = $(this).attr("data-parcours_id"); 
             let exercise_id = $(this).attr("data-exercise_id"); 

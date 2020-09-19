@@ -6,8 +6,9 @@ from account.models import Student, Teacher, ModelWithCode, generate_code
 from socle.models import  Knowledge, Level , Theme, Skill 
 from django.apps import apps
 from ckeditor_uploader.fields import RichTextUploadingField
-from django.db.models import Q
+from django.db.models import Q, Min
 import os.path
+
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User 
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
@@ -549,6 +550,47 @@ class Parcours(ModelWithCode):
         return som 
 
 
+    def min_score_parcours(self,student):
+
+        Stage = apps.get_model('school', 'Stage')
+
+        data = {}
+        nb_done = 0
+        for exercise in self.exercises.all() :
+            if Studentanswer.objects.filter(exercise  = exercise , parcours  = self ,  student  = student).count()>0 :
+                    nb_done +=1
+
+        try :
+            stage = Stage.objects.get(school = student.user.school)
+            up = stage.up
+            med = stage.medium
+            low = stage.low
+        except :
+            up = 85
+            med = 65
+            low = 35
+
+        if nb_done == self.exercises.count() :
+            score = Studentanswer.objects.filter(student=student, parcours= self ).aggregate(Min('point'))
+            if score["point__min"] :
+                data["boolean"] = True
+                if score["point__min"] > up :
+                    data["colored"] = "darkgreen"
+                elif score["point__min"] >  med :
+                    data["colored"] = "green"
+                elif score["point__min"] > low :
+                    data["colored"] = "orange"
+                else :
+                    data["colored"] = "red"
+            else :
+                data["boolean"] = False
+                data["colored"] = "red"     
+        else :
+            data["boolean"] = False
+            data["colored"] = "red"
+        print(data)
+        return data
+ 
 
 class Relationship(models.Model):
     exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.PROTECT,  editable= False)

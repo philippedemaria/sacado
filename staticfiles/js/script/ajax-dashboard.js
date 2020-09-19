@@ -404,7 +404,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         $('#reader_new').on('click', function (event) {
  
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
- console.log("ici");
+
             $.ajax(
                 {
                     type: "POST",

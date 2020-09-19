@@ -42,12 +42,23 @@
    
 
             {% for parcours in parcourses %}
-            
-
+                {% get_percent parcours student as pc %}{% get_done parcours student as is_done %} {% get_affect parcours student as nb_affect %}            
+                {% get_min_score_parcours parcours student as data_min %} 
                 {% if parcours.vignette %}
                 <!-- small box -->
-                {% get_percent parcours student as pc %}{% get_done parcours student as is_done %} {% get_affect parcours student as nb_affect %}
+
                 <div class="small-box-student" style="background-image: url('{{parcours.vignette.url }}'); background-size: 100% 100%;">
+
+                
+
+                    {% if  data_min.boolean %}
+                    <div class="background_badge" >
+                    <i class="fa fa-trophy" style="color:{{ data_min.colored }};font-size: 40px "></i>
+                    </div>
+                    {% endif  %}
+
+
+
                     <div class="icon-student">
                          {{ pc }}% 
                     </div>
@@ -64,8 +75,8 @@
                             {{ is_done }}/{{ nb_affect }} exercice{{ nb_affect|pluralize }} étudié{{ nb_affect|pluralize }} 
 
                             {% if parcours.course.all|length > 0 %}  
-                            <a href="{% url 'show_course_student' 0 parcours.id %}" class="pull-right white">
-                                <i class="fa fa-desktop"></i> Le cours
+                            <a href="{% url 'show_course_student' 0 parcours.id %}" class="pull-right white" title="Rappels de cours"  target="_blank"  >
+                                <i class="fa fa-desktop"></i>  
                             </a>
                             {% endif  %}
 
@@ -74,9 +85,15 @@
                 </div>
 
                 {% else %}
-
-                {% get_percent parcours student as pc %}{% get_done parcours student as is_done %} {% get_affect parcours student as nb_affect %}
+ 
                 <div class="small-box-student" style="background-color:{{parcours.color }}">
+
+                    {% if data_min.boolean %}
+                    <div class="background_badge" >
+                    <i class="fa fa-trophy" style="color:{{ data_min.colored }};font-size: 40px"></i>
+                    </div>
+                    {% endif  %}
+
 
                     <div class="icon-student">
                          {{ pc }}% 
@@ -94,8 +111,8 @@
                                 {{ is_done }}/{{ nb_affect }} exercice{{ nb_affect|pluralize }} étudié{{ nb_affect|pluralize }}
 
                             {% if parcours.course.all|length > 0 %}  
-                            <a href="{% url 'show_course_student' 0 parcours.id %}" class="pull-right white">
-                                <i class="fa fa-desktop"></i> Le cours
+                            <a href="{% url 'show_course_student' 0 parcours.id %}" class="pull-right white" title="Rappels de cours" target="_blank"  >
+                                <i class="fa fa-desktop"></i>  
                             </a>
                             {% endif  %}
                         </div>
