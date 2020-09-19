@@ -6,7 +6,7 @@ from account.models import Student, Teacher, ModelWithCode, generate_code
 from socle.models import  Knowledge, Level , Theme, Skill 
 from django.apps import apps
 from ckeditor_uploader.fields import RichTextUploadingField
-from django.db.models import Q, Min
+from django.db.models import Q, Min, Max
 import os.path
 
 # Pour créer un superuser, il faut depuis le shell taper :
@@ -391,13 +391,8 @@ class Parcours(ModelWithCode):
 
     def is_done(self,student):
         Studentanswer = apps.get_model('qcm', 'Studentanswer')
-        exercises = self.exercises.all()
-        n = 0
-        exercise_done = []
-        for e in exercises:
-            if not e in exercise_done:
-                if Studentanswer.objects.filter(student=student, exercise=e).exists():
-                    n += 1
+        studentanswers = Studentanswer.objects.filter(student=student, parcours=self).values_list("exercise",flat=True).order_by("exercise").distinct()
+        n = len(studentanswers) 
         return n
 
     def is_affect(self, student):
@@ -413,13 +408,17 @@ class Parcours(ModelWithCode):
         nb_relationships =  Relationship.objects.filter(students = student, parcours=self,is_publish=1).count()
         ## Nombre de réponse avec exercice unique du parcours
         studentanswers = Studentanswer.objects.filter(student=student, parcours=self).values_list("exercise",flat=True).order_by("exercise").distinct()
-           
+        data = {}
         nb_exercise_done = len(studentanswers) 
         try :
-            percent = int(nb_exercise_done * 100/nb_relationships)
+            data["pc"] = int(nb_exercise_done * 100/nb_relationships)
+            data["nb"] = nb_exercise_done
+            data["nb_total"] = nb_relationships
         except :
-            percent = 0
-        return percent
+            data["pc"] = 0
+            data["nb"] = nb_exercise_done
+            data["nb_total"] = nb_relationships
+        return data
 
 
     def nb_exercises(self):
@@ -555,10 +554,14 @@ class Parcours(ModelWithCode):
         Stage = apps.get_model('school', 'Stage')
 
         data = {}
+        max_tab = []
         nb_done = 0
         for exercise in self.exercises.all() :
-            if Studentanswer.objects.filter(exercise  = exercise , parcours  = self ,  student  = student).count()>0 :
-                    nb_done +=1
+            maxi = Studentanswer.objects.filter(student=student, parcours= self, exercise = exercise )
+            if maxi.count()>0 :
+                maximum = maxi.aggregate(Max('point'))
+                max_tab.append(maximum["point__max"])
+                nb_done +=1
 
         try :
             stage = Stage.objects.get(school = student.user.school)
@@ -570,15 +573,21 @@ class Parcours(ModelWithCode):
             med = 65
             low = 35
 
-        if nb_done == self.exercises.count() :
-            score = Studentanswer.objects.filter(student=student, parcours= self ).aggregate(Min('point'))
-            if score["point__min"] :
+        if nb_done == Relationship.objects.filter(is_publish=1,students=student, parcours= self ).count() :
+            max_tab.sort()
+
+            if len(max_tab)>0 :
+                score = max_tab[0]
+            else :
+                score = None
+
+            if score :
                 data["boolean"] = True
-                if score["point__min"] > up :
+                if score > up :
                     data["colored"] = "darkgreen"
-                elif score["point__min"] >  med :
+                elif score >  med :
                     data["colored"] = "green"
-                elif score["point__min"] > low :
+                elif score > low :
                     data["colored"] = "orange"
                 else :
                     data["colored"] = "red"
