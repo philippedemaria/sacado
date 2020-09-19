@@ -144,6 +144,7 @@ class UpdateSupportfileForm(forms.ModelForm):
 		subject = knowledge.theme.subject	
 		super(UpdateSupportfileForm, self).__init__(*args, **kwargs)
 		instance = kwargs.pop('instance')
+		knowledges = Knowledge.objects.filter(theme__subject= subject)
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
 		self.fields['skills']  = forms.ModelMultipleChoiceField(queryset=Skill.objects.filter(subject=subject), widget=forms.CheckboxSelectMultiple, required=False)
 

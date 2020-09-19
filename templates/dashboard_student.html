@@ -50,13 +50,13 @@
                 <div class="small-box-student" style="background-image: url('{{parcours.vignette.url }}'); background-size: 100% 100%;">
 
                 
-
-                    {% if  data_min.boolean %}
-                    <div class="background_badge" >
-                    <i class="fa fa-trophy" style="color:{{ data_min.colored }};font-size: 40px "></i>
-                    </div>
+                    {% if  student.user.school %}
+                        {% if  data_min.boolean %}
+                        <div class="background_badge" >
+                        <i class="fa fa-trophy" style="color:{{ data_min.colored }};font-size: 40px "></i>
+                        </div>
+                        {% endif  %}
                     {% endif  %}
-
 
 
                     <div class="icon-student">
@@ -87,13 +87,13 @@
                 {% else %}
  
                 <div class="small-box-student" style="background-color:{{parcours.color }}">
-
-                    {% if data_min.boolean %}
-                    <div class="background_badge" >
-                    <i class="fa fa-trophy" style="color:{{ data_min.colored }};font-size: 40px"></i>
-                    </div>
+                    {% if  student.user.school %}
+                        {% if data_min.boolean %}
+                        <div class="background_badge" >
+                        <i class="fa fa-trophy" style="color:{{ data_min.colored }};font-size: 40px"></i>
+                        </div>
+                        {% endif  %}
                     {% endif  %}
-
 
                     <div class="icon-student">
                          {{ pc }}% 
