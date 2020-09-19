@@ -75,6 +75,7 @@
                         <th>Courriel</th>
                         <th>Groupe</th>
                         <th>Dernière connexion</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody> 
@@ -95,7 +96,13 @@
                                     {% endfor %} 
                                </td>
                                 <td>
-                                    {{ user.last_login|date:"Y N d à H:i" }}   
+                                     {{ user.last_login }} 
+                                </td>
+                                <td>
+                                    <a  href="{% url 'newpassword_student' user.id  0   %}" data-student_id="{{ student.user.id }}" title="mot de passe par défaut : sacado2020" 
+                                        onclick="return Newpassword()" style="font-size:11px; margin-right:5px"  >
+                                        Init. mot de passe
+                                    </a> 
                                 </td>
                             </tr>
                         {% endfor %}

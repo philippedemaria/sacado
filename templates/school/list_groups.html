@@ -60,9 +60,10 @@
                                         {% endfor %} 
                                 </td> 
                                 <td>
-                                    <a href="{% url 'new_student' group.code %}" class="label label-danger"> + <i class="fa fa-user"></i></a> <a href="{% url 'new_student_list' group.code %}" class="label label-warning"> + <i class="fa fa-list"></i></a>
-                                    <a href="{% url 'register_by_csv' 0 group.id %}" class="label label-success"> + <i class="fa fa-users"></i> csv</a>
-                                    <a href="{% url 'print_ids' group.id %}" class="label label-info"><img src="{% static 'img/pdf.png' %}" width="15px"/> Identifiants  </a>                                    
+                                    <a href="{% url 'new_student' group.code %}" class="btn btn-xs btn-default" style="margin: 2px" title="Ajouter un élève à ce groupe" > + <i class="fa fa-user"></i></a> 
+                                    <a href="{% url 'new_student_list' group.code %}" class="btn btn-xs btn-default" style="margin: 2px" title="Ajouter des élèves déjà enregistrés" > + <i class="fa fa-list"></i></a>
+                                    <a href="{% url 'register_by_csv' 0 group.id %}" class="btn btn-xs btn-default" style="margin: 2px" title="Ajouter plusieurs élèves à ce groupe avec du CSV" > + <i class="fa fa-users text-success"></i> csv</a>
+                                    <a href="{% url 'print_ids' group.id %}" class="btn btn-xs btn-default" style="margin: 2px" title="Télécharger les identifiants"><img src="{% static 'img/pdf.png' %}" width="15px"/> Identifiants  </a>                                    
                                 </td> 
 
                             </tr>
