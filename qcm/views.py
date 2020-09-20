@@ -1134,7 +1134,7 @@ def result_parcours_exercise_students(request,id):
         group_id = None
         group = None
  
-    relationships = Relationship.objects.filter(parcours = parcours) 
+    relationships = Relationship.objects.filter(parcours = parcours, is_publish = 1) 
 
     return render(request, 'qcm/result_parcours_exercise_students.html', { 'relationships': relationships , 'parcours': parcours , 'group_id': group_id ,  'group' : group ,  })
 
