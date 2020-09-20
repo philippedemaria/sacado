@@ -67,6 +67,11 @@ def cleanhtml(raw_html): #nettoie le code des balises HTML
     cleantext = re.sub('\n', '', cleantext)
     return cleantext
 
+def unescape_html(string):
+    '''HTML entity decode'''
+    string = html.unescape(string)
+    return string
+
 
 def new_content_type(s):
     names = ['Pages', 'Questionnaires', 'Activités', 'Tâches',  'Fichiers', 'Urls externes', 'Discussions' , 'Notes',  'Acquis', 'Participants', 'Suivis' ]                
@@ -2061,7 +2066,7 @@ def store_the_score_relation_ajax(request):
                     name_title = relation.exercise.supportfile.annoncement
                 else :
                     name_title = relation.exercise.knowledge.name
-                msg = "Exercice : "+str(cleanhtml(name_title))+"\n Fait par : "+str(student.user)+"\n Nombre de situations : "+str(numexo)+"\n Score : "+str(score)+"%"+"\n Temps : "+str(convert_seconds_in_time(timer))
+                msg = "Exercice : "+str(unescape_html(cleanhtml(name_title)))+"\n Fait par : "+str(student.user)+"\n Nombre de situations : "+str(numexo)+"\n Score : "+str(score)+"%"+"\n Temps : "+str(convert_seconds_in_time(timer))
                 rec = []
                 for g in student.students_to_group.filter(teacher = relation.parcours.teacher):
                     if not g.teacher.user.email in rec : 
