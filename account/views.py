@@ -804,7 +804,7 @@ def register_teacher_from_admin(request):
             teacher.save()
             teacher_form.save_m2m()
             send_mail('Création de compte sur Sacado',
-                      f'Bonjour, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {u_form.username} \r\n\r\n.\r\n\r\nVotre mot de passe est : sacado2020 \r\n\r\nVous pourrez le modifier une fois connecter à vorte espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
+                      f'Bonjour {teacher.user}, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {u_form.username} \r\n\r\nVotre mot de passe est : sacado2020 \r\n\r\nVous pourrez le modifier une fois connecter à votre espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
                       'info@sacado.xyz',
                       [u_form.email, ])
             return redirect('school_teachers')
@@ -848,6 +848,7 @@ def register_by_csv(request, key, idg=0):
 
         lines = file_data.split("\r\n")
         # loop over the lines and save them in db. If error , store as string and then display
+        destinataires = []
         for line in lines:
             try:
                 # loop over the lines and save them in db. If error , store as string and then display
@@ -859,13 +860,14 @@ def register_by_csv(request, key, idg=0):
                 try:
                     if fields[2] != "":
                         email = fields[2]
+                        destinataires.append(email)
                     else:
                         email = ""
                 except:
                     email = "" 
 
                 if key == User.TEACHER:  # Enseignant
-                    user = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,
+                    user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,
                                                       school=request.user.school, time_zone=request.user.time_zone,
                                                       is_manager=0,
                                                       defaults={'username': username, 'password': password,
@@ -883,8 +885,21 @@ def register_by_csv(request, key, idg=0):
                         for g in student.student_group.all():
                             g.students.remove(student)
                     group.students.add(student)
+
             except:
                 pass
+            print(user)
+        print(destinataires)
+
+
+        try :
+            send_mail('Création de compte sur Sacado',
+              f'Bonjour {user}, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {user.username} \r\n\r\nVotre mot de passe est : sacado2020 \r\n\r\nVous pourrez le modifier une fois connecter à votre espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
+              'info@sacado.xyz',
+              destinataires)
+        except :
+            pass
+
 
         if key == User.TEACHER:
             return redirect('school_teachers')
@@ -945,7 +960,7 @@ def register_users_by_csv(request,key):
                     email = "" 
 
                 if key == User.TEACHER:  # Enseignant
-                    user = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,
+                    user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,
                                                       school=request.user.school, time_zone=request.user.time_zone,
                                                       is_manager=0,
                                                       defaults={'username': username, 'password': password,
