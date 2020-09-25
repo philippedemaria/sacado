@@ -43,15 +43,16 @@
     <div class="alert alert-danger alert-dismissible" role="alert">
         <strong>Avant de lancer votre fichier csv, assurez-vous que tous les élèves ont été supprimés de la base de données.</strong> <br>
 
-        <i class="fa fa-warning fa-2x"></i> Votre fichier csv doit être <strong>encodé en utf-8</strong> et les données doivent vérifier le format imposé (comme exemple). Ces données doivent être séparées d'un <strong>point virgule (;)</strong>.  4 champs sont demandés :
+        <i class="fa fa-warning fa-2x"></i> Votre fichier csv doit être <strong>encodé en utf-8</strong> et les données doivent vérifier le format imposé (comme exemple). Ces données doivent être séparées d'un <strong>point virgule (;)</strong>.  Cinq champs sont demandés :
             <ul style="margin:10px">
                 <li>Classe</li>
+                <li>Code du niveau <i class="fa fa-warning"></i> Noter le code du niveau : CP = 1 | CE1 = 2 | CE2 = 3 ..... 6ème = 6 | 5ème = 7 | ... 2nde = 10 | Term = 12</li>
                 <li>Nom</li>
                 <li>Prénom</li>                
-                <li>Courriel, {% if idg > 0  %}optionnel mais préférable pour la correspondance et les notifications.{% else %}renseigner votre adresse professionnelle si vous en avez une.{% endif %}</li>
+                <li>Courriel, optionnel mais préférable pour la correspondance et les notifications.</li>
             </ul> 
-            Ces quatre données s'écrivent sur une seule ligne. Dans l'exemple ci-dessous, 4 personnes sont enregistrées.<br>
-            <pre style="font-size:20px">4ème1;Turing;Alan;alan.turing@enigma.edu <br>4ème1;Agnesi;Maria<br>4ème2;Chasles;Michel;michel.chasles@vector.edu<br>4ème2;de Fermat;Pierre;pierre.fermat@rsa.edu</pre>
+            Ces cinq données s'écrivent sur une seule ligne. Dans l'exemple ci-dessous, 4 personnes sont enregistrées.<br>
+            <pre style="font-size:20px">4ème1;8;Alan;alan.turing@enigma.edu <br>4ème1;8;Agnesi;Maria<br>4ème2;8;Chasles;Michel;michel.chasles@vector.edu<br>3ème2;9;de Fermat;Pierre;pierre.fermat@rsa.edu</pre>
 
 
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -74,7 +75,7 @@
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12" style="margin-bottom:10px;">
                 <div class="form-group">                    
-                    <button class="btn btn-primary" disabled ="disabled"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span> Téléverser </button>
+                    <button class="btn btn-primary"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span> Téléverser </button>
                     <a href="javascript:history.back()"  class="btn btn-default" > Annuler</a>
                 </div> 
             </div>
