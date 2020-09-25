@@ -10,6 +10,7 @@ from account.decorators import is_manager_of_this_school
 from account.models import User, Teacher, Student
 from account.forms import UserForm , StudentForm ,NewUserSForm
 from django.core.mail import send_mail
+from django.contrib.auth.hashers import make_password
 ############### bibliothèques pour les impressions pdf  #########################
 import os
 from django.utils import formats
@@ -27,6 +28,20 @@ from cgi import escape
 cm = 2.54
 #################################################################################
 
+def get_username(ln, fn):
+    """
+    retourne un username
+    """
+    ok = True
+    i = 0
+    un = str(ln) + "." + str(fn)[0]
+    while ok:
+        if User.objects.filter(username=un).count() == 0:
+            ok = False
+        else:
+            i += 1
+            un = un + str(i)
+    return un
 
 @login_required
 def list_schools(request):
@@ -507,48 +522,43 @@ def csv_full_group(request):
 
         lines = file_data.split("\r\n")
         # loop over the lines and save them in db. If error , store as string and then display
+        group_history = []
         for line in lines:
-            try:
+          
                 # loop over the lines and save them in db. If error , store as string and then display
                 fields = line.split(";")
-                ln = str(fields[0]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
-                fn = str(fields[1]).lower().capitalize()
-                username = get_username(ln, fn)
+                ln = str(fields[2]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
+                fn = str(fields[3]).lower().capitalize()
+                level = fields[1]
+                group_name = str(fields[0])
+                username =  get_username(ln,fn)
                 password = make_password("sacado2020")
                 try:
-                    if fields[2] != "":
-                        email = fields[2]
+                    if fields[4] != "":
+                        email = fields[4]
                     else:
                         email = ""
                 except:
-                    email = "" 
+                    email = ""
+                teacher = Teacher.objects.get(user = request.user)
 
-                if key == User.TEACHER:  # Enseignant
-                    user = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,
-                                                      school=request.user.school, time_zone=request.user.time_zone,
-                                                      is_manager=0,
-                                                      defaults={'username': username, 'password': password,
-                                                                'is_extra': 1})
-                    Teacher.objects.get_or_create(user=user, notification=1, exercise_post=1)
-                    group = None
-                else:  # Student
-                    user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=0,
-                                                               school=request.user.school,
-                                                               time_zone=request.user.time_zone, is_manager=0,
-                                                               defaults={'username': username, 'password': password,
-                                                                         'is_extra': 0})
-                    student, creator = Student.objects.get_or_create(user=user, level=group.level, task_post=1)
-                    if not creator : #Si l'élève n'est pas créé alors il existe dans des groupes. On l'efface de ses anciens groupes pour l'inscrire à nouveau !
-                        for g in student.student_group.all():
-                            g.students.remove(student)
-                    group.students.add(student)
-            except:
-                pass
+                if group_name not in group_history :
+                    group = Group.objects.create(name=group_name, color='#46119c', level_id = level , teacher = teacher )
+                    group_history.append(group_name)
+
+                user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=0,
+                                                           school=request.user.school, 
+                                                           time_zone=request.user.time_zone, is_manager=0,
+                                                           defaults={'username': username, 'password': password, 'cgu' : 1 ,
+                                                                     'is_extra': 0})
+                student, creator = Student.objects.get_or_create(user=user, level=group.level, task_post=1)
+                if creator : #Si l'élève n'est pas créé alors il existe dans des groupes. On l'efface de ses anciens groupes pour l'inscrire à nouveau !
+                	group.students.add(student)
+ 
  
         return redirect('admin_tdb')
     else:
  
         context = {}
         return render(request, 'school/csv_full_group.html', context )
-
 
