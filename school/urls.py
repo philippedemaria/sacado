@@ -34,6 +34,7 @@ urlpatterns = [
     path('pdf_account/<int:id>', pdf_account, name='pdf_account'),   
 
 
+    path('group_to_teacher',  group_to_teacher, name='group_to_teacher'),
     path('csv_full_group', csv_full_group, name='csv_full_group'), 
 
     path('delete_student_group/<int:id>/<int:ids>', delete_student_group , name='delete_student_group'),

@@ -35,7 +35,7 @@
                  <p style="padding-left:5px">{{ school }}</p>
 
                     <br><br>
-                <a href="{% url 'csv_full_group'  %}" class="btn btn-default btn-accueil" style="width:95%"> Importer  groupes d'élèves </a>      
+                <a href="{% url 'csv_full_group'  %}" class="btn btn-default btn-accueil" style="width:95%; position: absolute; top:150px;"> Importer  groupes d'élèves </a>      
 
 
                 {% if request.user.school %}
@@ -52,6 +52,10 @@
                      <span style="font-size: 35px">Enseignants </span>
                     
                 </div>
+
+
+                <br><br><br><br>
+                <a href="{% url 'group_to_teacher'  %}" class="btn btn-default btn-accueil" style="width:95%; position: absolute; top:150px;"> Attribuer des groupes existants </a>      
                 <div class="icon">
                     {{ nb_teachers }} 
                 </div>

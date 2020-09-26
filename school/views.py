@@ -543,7 +543,7 @@ def csv_full_group(request):
                 teacher = Teacher.objects.get(user = request.user)
 
                 if group_name not in group_history :
-                    group = Group.objects.create(name=group_name, color='#46119c', level_id = level , teacher = teacher )
+                    group = Group.objects.create_or_create(name=group_name, teacher = teacher , defaults={'color': '#46119c','level_id': level  })
                     group_history.append(group_name)
 
                 user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=0,
@@ -562,3 +562,24 @@ def csv_full_group(request):
         context = {}
         return render(request, 'school/csv_full_group.html', context )
 
+
+def group_to_teacher(request):
+ 
+    groups = Group.objects.filter(teacher__user__school = request.user.school).order_by("level")  
+    teachers = Teacher.objects.filter(user__school = request.user.school)
+
+ 
+
+    if request.method == "POST" :
+        group_ids = request.POST.getlist("groups")
+        teacher_id = int(request.POST.get("teacher"))
+ 
+        for group_id in group_ids :
+        	Group.objects.filter(pk = group_id).update(teacher_id = teacher_id)  
+
+        return redirect('admin_tdb') 
+ 
+
+    context = {'groups': groups,  'teachers': teachers ,   'communications' : []  }
+
+    return render(request, 'school/group_to_teacher.html', context )
