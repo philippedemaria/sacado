@@ -543,8 +543,9 @@ def csv_full_group(request):
                 teacher = Teacher.objects.get(user = request.user)
 
                 if group_name not in group_history :
-                    group = Group.objects.create_or_create(name=group_name, teacher = teacher , defaults={'color': '#46119c','level_id': level  })
-                    group_history.append(group_name)
+                    group, created_group = Group.objects.create_or_create(name=group_name, teacher = teacher , defaults={'color': '#46119c','level_id': level  })
+                    if created_group :
+                    	group_history.append(group_name)
 
                 user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=0,
                                                            school=request.user.school, 
