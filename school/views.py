@@ -524,7 +524,7 @@ def csv_full_group(request):
         # loop over the lines and save them in db. If error , store as string and then display
         group_history = []
         for line in lines:
-          
+            try : 
                 # loop over the lines and save them in db. If error , store as string and then display
                 fields = line.split(";")
                 ln = str(fields[2]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
@@ -553,8 +553,9 @@ def csv_full_group(request):
                                                                      'is_extra': 0})
                 student, creator = Student.objects.get_or_create(user=user, level=group.level, task_post=1)
                 if creator : #Si l'élève n'est pas créé alors il existe dans des groupes. On l'efface de ses anciens groupes pour l'inscrire à nouveau !
-                	group.students.add(student)
- 
+                    group.students.add(student)
+            except :
+                pass
  
         return redirect('admin_tdb')
     else:
