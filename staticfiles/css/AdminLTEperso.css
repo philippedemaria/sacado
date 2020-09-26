@@ -72,13 +72,17 @@ border : 0px!important;
   margin-right: 2px;  
 }
 
-#id_students  ,#id_exercises   {
+
+/* Liste des puces par le form django */
+#id_students  ,#id_exercises,#id_courses   {
   padding-left : 0px ; 
 }
-#id_students li,#id_exercises li  {
+#id_students li,#id_exercises li ,#id_courses li  {
   list-style: none;
   padding-left : 0px ; 
 }
+/* Liste des puces par le form django */
+
 .list_choice{
   background-color: #FFF;
   border:1px solid #CCC;
@@ -258,9 +262,58 @@ li.menu_course > a {
   color: #5d4391;
  
 }
+ 
+/* ********************************************************************************************************
+ * Select mastering  
+ *********************************************************************************************************/
 
+ .card_mastering_writing{
+  float: left;
+  margin: 10px ;
+  margin-top: 15px;
+  -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, .255);
+    box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
+    position:relative;
+    width:180px;
+    height:160px;
+    border : 1px solid #e6e2dd;
+    text-align: center;
+    padding-top: 30px;
+}
 
+ .card_mastering{
+  float: left;
+  margin: 10px ;
+  margin-top: 15px;
+  -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, .255);
+    box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
+    position:relative;
+    width:180px;
+    height:160px;
+    border : 1px solid #e6e2dd;
+}
 
+.select_mastering {
+  height:150px;
+  width:50px;
+  border: 2px dashed #5d4391 ; 
+  padding: 60px 0px;
+  text-align: center;
+  font-size: 16px;
+  color: #5d4391;
+  display: block;
+}
+.select_mastering:hover {
+  height:150px;
+  width:50px;
+  border: 2px dashed #5d4391 ; 
+  padding: 60px 0px;
+  text-align: center;
+  font-size: 16px;
+  color: #FFF;
+  display: block;
+  background-color: #5d4391;
+}
 
  /****************************************** help *******************************************************/
  
@@ -1028,7 +1081,31 @@ a.white, a.white:active, a.white:visited, a.white:hover{
 
 }
 /* Prelaoder */
- 
+ #preloader_groups {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  overflow: hidden;
+  background: #fff;
+  opacity:0.85;
+}
+
+#preloader_groups:before {
+  content: "";
+  position: fixed;
+  top: calc(50% - 30px);
+  left: calc(50% - 30px);
+  border: 16px solid #f2f2f2;
+  border-top: 16px solid #3498db ;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: animate-preloader 1s linear infinite;
+  animation: animate-preloader 2s linear infinite;
+}
 
 #preloader {
   position: fixed;
@@ -1393,8 +1470,6 @@ table.table-bordered.dataTable {
   width: 100%;
   height:600px;
 }
-
-
 
 /* ********************************************************************************************************
  * Loader

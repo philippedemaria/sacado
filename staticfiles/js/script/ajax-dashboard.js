@@ -14,9 +14,16 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
     }
   });
 
- 
 
- 
+        $('#preloader_groups').hide() ;
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('#televerser_groups').on('click', function (event) {
+            $('#preloader_groups').show() ;
+        });
+
+
+
+  
         $(".overlay").hide();
         $(".overdiv_show").click(function(){
             value =  $(this).attr("data-student_id"); 
