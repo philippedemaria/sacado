@@ -1,0 +1,66 @@
+{% if m.writing %}
+    <div class="card_mastering  sorter_mastering" data-mastering_id="{{ m.id  }}"> 
+        <div class="title_mastering title_space" title="{{ m.consigne }}"  ><i class="fa fa-pencil-alt"></i> <strong>Zone de texte</strong>  
+        <a href="{% url 'parcours_mastering_delete'  relationship.id    m.id   %}"  class="delete pull-right"   onclick="return TestDelete('cette activité')" >  
+           <i class="fa fa-times" ></i>
+        </a>  
+        </div>
+        <div class="consigne_mastering" title="{{ m.consigne }}">{{ m.consigne }}</div>   
+ 
+    </div>
+{% elif m.video != "" %}
+    <div class="card_mastering sorter_mastering" data-mastering_id="{{ m.id  }}">
+        <div class="title_mastering title_space"><i class="fa fa-video"></i> <strong>Vidéo</strong>       
+            <a href="{% url 'parcours_mastering_delete' relationship.id    m.id    %}"   class="delete pull-right"   onclick="return TestDelete('cette video')"> 
+                <i class="fa fa-times" ></i>
+            </a>
+        </div>    
+
+        <div class="card_mastering_w"> 
+            <iframe width="150" height="85" src="https://www.youtube.com/embed/{{ m.video }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <div class="consigne_mastering" title="{{ m.consigne }}" style="position: absolute;bottom:20px">{{ m.consigne|truncatechars:"100" }}</div>  
+
+    </div>
+{% elif m.exercise %}
+    <div class="card_mastering  sorter_mastering" data-mastering_id="{{ m.id  }}"> 
+        <div class="title_mastering title_space" title="{{ m.consigne }}"  ><i class="fa fa-desktop"></i> <strong>Exercice</strong>  
+        <a href="{% url 'parcours_mastering_delete'  relationship.id    m.id   %}"  class="delete pull-right"   onclick="return TestDelete('cette activité')" >  
+           <i class="fa fa-times" ></i>
+        </a>  
+        </div>
+
+        <div class="card_mastering_w"> 
+            <a href="{% url 'show_this_exercise'  m.exercise.id   %}"  target="_blank" >
+                <img src="{{ m.exercise.supportfile.imagefile.url }}" width="150">
+            </a> 
+        </div>
+
+        <div class="consigne_mastering" title="{{ m.consigne }}" style="position: absolute;bottom:20px">{{ m.consigne|truncatechars:"100" }}</div>   
+ 
+    </div>                     
+{% elif m.courses.all|length > 0 %}  
+    {% for c in m.courses.all %}
+        <div class="card_mastering sorter_mastering" data-mastering_id="{{ m.id  }}">
+            <div class="title_mastering title_space" title="{{ c.title }}"><i class="fa fa-desktop"></i> <strong>Cours</strong>
+                <a href="{% url 'parcours_mastering_delete' relationship.id    m.id    %}"  class="delete pull-right"   onclick="return TestDelete('ce cours')"> 
+                    <i class="fa fa-times" ></i>
+                </a> 
+                <div class="title_mastering_violet" >{{ c.title  }}</div>    
+            </div>     
+            <div class="consigne_mastering" title="{{ m.consigne }}">{{ m.consigne }}</div>  
+           
+        </div>
+    {% endfor %}  
+{% elif m.mediation != "" %}
+    <div class="card_mastering  sorter_mastering" data-mastering_id="{{ m.id  }}"> 
+        <div class="title_mastering title_space" title="{{ m.consigne }}"  ><i class="fa fa-file-pdf-o"></i> <strong>Fichier</strong>
+            <a href="{% url 'parcours_mastering_delete'  relationship.id    m.id   %}" class="delete pull-right" onclick="return TestDelete('ce fichier')" >  
+               <i class="fa fa-times" ></i>
+            </a> 
+        </div>
+        <div class="consigne_mastering" title="{{ m.consigne }}">{{ m.consigne }}</div>           
+        <a href="{{ m.mediation.url }}"  target="_blank" class="delete" style="font-size:10px; padding:5px; position: absolute; bottom:0px"><i class="fa fa-paperclip"></i>Télécharger </a>
+    </div>
+{% endif %} 

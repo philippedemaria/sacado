@@ -1,0 +1,280 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    <script>
+        require(['script/ajax-mastering']);
+    </script> 
+    
+{% endblock %}
+
+ 
+
+{% block page_title %}
+    <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-sitemap"></i> 
+    {% include 'qcm/breadcrumb.html' %}</span>  
+        <small>Parcours de maitrise  </small>
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+{% endblock %}
+
+
+
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+
+
+        <div class="row">
+            <div class="col-sm-12 col-lg-12">
+                <label class="label_select_checkbox">
+                    <a href="{% url 'show_this_exercise'  relationship.exercise.id   %}"  target="_blank" >
+ 
+                        <img src="{{ relationship.exercise.supportfile.imagefile.url }}" class="imagefile">
+ 
+                    </a> 
+                {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }} 
+    
+                {% if relationship.exercise.supportfile.calculator %}
+                  <img src="{% static 'img/calculator.png' %}" width="30px" />
+                {% else %}
+                  <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                {% endif  %}   
+                     <br>
+                        <small>   
+                            <i class="fa fa-fw fa-barcode"></i> {{ relationship.exercise.supportfile.code }}  {% if relationship.exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                            <i class="fa fa-fw fa-clock-o"></i> {{ relationship.exercise.supportfile.duration }} minutes {% if relationship.exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                            <i class="fa fa-fw fa-save"></i> {{ relationship.exercise.supportfile.situation}} situation{{ relationship.exercise.supportfile.situation|pluralize}} minimum</small>
+                </label>
+            </div>
+        </div>
+        <hr style="border-top: 1px solid #ccc;">
+
+    <form action="#" method="POST">        {% csrf_token %}<input value="{{ relationship.id }}"  type="hidden" id="relationship_to_mastering"/>
+        <div class="row">
+            <div class="col-sm-12 col-lg-1">
+                <strong>100 % </strong>
+                 <a href="#" data-toggle='modal' data-target='#mastering_choose'  class="deleted select_mastering" data-layer="4"> <i class="fa fa-plus"></i></a>
+            </div>
+            <div class="col-sm-12 col-lg-11 mastering_layer" id="layer4">
+                {% for m in masterings_q %}
+                    {% include 'qcm/mastering/mastering_choice.html' %}                   
+                {% endfor %}  
+            </div>
+        </div>
+        <hr style="border-top: 1px solid #ccc;">
+        <div class="row">
+            <div class="col-sm-12 col-lg-1">
+                <strong>{{ stage.up }}%</strong>
+                 <a href="#" data-toggle='modal' data-target='#mastering_choose'  class="deleted select_mastering" data-layer="3"> <i class="fa fa-plus"></i></a>
+            </div>
+            <div class="col-sm-12 col-lg-11 mastering_layer" id="layer3">
+                  {% for m in masterings_t %}
+                    {% include 'qcm/mastering/mastering_choice.html' %}                   
+                 {% endfor %} 
+            </div>
+        </div>
+        <hr style="border-top: 1px solid #ccc;">
+        <div class="row">
+            <div class="col-sm-12 col-lg-1">
+                <strong>{{ stage.medium }}%</strong>
+                 <a href="#" data-toggle='modal' data-target='#mastering_choose'  class="deleted select_mastering" data-layer="2"> <i class="fa fa-plus"></i></a>
+            </div>
+            <div class="col-sm-12 col-lg-11 mastering_layer" id="layer2">
+                {% for m in masterings_d %}
+                    {% include 'qcm/mastering/mastering_choice.html' %}
+                {% endfor %}                                      
+            </div>
+        </div>
+        <hr style="border-top: 1px solid #ccc;">       
+        <div class="row">
+            <div class="col-sm-12 col-lg-1">
+                <strong>{{ stage.low }}%</strong>
+                 <a href="#" data-toggle='modal' data-target='#mastering_choose'  class="deleted select_mastering" data-layer="1"> <i class="fa fa-plus"></i></a>
+                <strong>0%</strong>
+            </div>
+            <div class="col-sm-12 col-lg-11 mastering_layer" id="layer1">
+                {% for m in masterings_u %}
+                    {% include 'qcm/mastering/mastering_choice.html' %}
+                {% endfor %}                    
+            </div>
+        </div>
+    </form>  
+</section>
+
+ 
+<div class="modal fade" id="mastering_choose" tabindex="-1" role="dialog" aria-labelledby="mastering_choose">
+    <div class="modal-dialog" role="document" style="width:70%" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class='thin' > Parcours de maîtrise - Sélectionner le support  <a href="#" data-dismiss="modal" class="pull-right" ><i class="fa fa-times"></i> </a> </h1>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'create_mastering' relationship.id %}" method="POST" enctype='multipart/form-data'>        {% csrf_token %}
+                    <input   type="hidden" id="id_scale"  name="scale" />
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12"> 
+                            <div class="form-group">
+                                {{ form.consigne.label_tag }} <em style="font-size: 12px">optionnelle</em>
+                                {{ form.consigne |add_class:"form-control" }}
+                                {{ form.consigne.errors }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4 col-lg-3"> 
+                            <div class="form-group">
+                                {{ form.duration.label_tag }}
+                                {{ form.duration |add_class:"form-control" }}
+                                {{ form.duration.errors }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="nav nav-tabs">  
+                        <li class="active"><a data-toggle="pill" href="#video">Vidéo</a></li>  
+                        <li><a data-toggle="pill" href="#Cours">Cours</a></li>  
+                        <li><a data-toggle="pill" href="#Zone">Zone de texte</a></li>  
+                        <li><a data-toggle="pill" href="#Exercice">Exercice</a></li>  
+                        <li><a data-toggle="pill" href="#file">Fichier</a></li>  
+                    </ul>    
+                    <div class="tab-content">
+                        <div id="video" class="tab-pane fade in active">  
+                            <p>Vous souhaitez postez une vidéo Youtube, renseigner son <strong> code</strong>.</p>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-4 col-lg-3">
+                                {{ form.video|add_class:"form-control"|attr:"placeholder:Code de la vidéo" }}
+                                </div>
+                                <div class="col-sm-12 col-md-8 col-lg-9">
+                                    <img src="{% static 'img/code_video_youtube.png' %}" />
+                                </div> 
+                            </div>
+ 
+                            <div class="row">
+                                <div class="col-sm-12 col-lg-8"> 
+                                    <div class="form-group">
+                                        <input value="Associer" type="submit" class="btn btn-primary"/> 
+                                    </div>
+                                </div>
+                            </div>  
+                        </div>  
+                        <div id="Cours" class="tab-pane fade">  
+                            <p>Choisir le cours à associer.</p> 
+                            <div class="row">
+                                <div class="col-sm-12 col-lg-8">
+                                {{ form.courses  }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-lg-8"> 
+                                    <div class="form-group">
+                                        <input value="Associer" type="submit" class="btn btn-primary"/>  
+                                    </div>
+                                </div>
+                            </div>  
+                        </div>  
+                        <div id="Zone" class="tab-pane fade">  
+                            <p>Vous souhaitez activer une zone de texte pour que l'élève puisse rédiger un paragraphe.</p>
+                            <div class="row">
+                                <div class="col-sm-12 col-lg-4">
+                                   <div class="form-group">
+                                    <label>Activer la zone de texte ?</label><br>
+                                    {{ form.writing|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
+                                    </div>
+                                </div>
+                            </div>    
+                             <div class="row">
+                                <div class="col-sm-12 col-lg-8"> 
+                                    <div class="form-group">
+                                        <input value="Associer" type="submit" class="btn btn-primary"/>  
+                                    </div>
+                                </div>
+                            </div>  
+                        </div>  
+                        <div id="Exercice" class="tab-pane fade">   
+                            <p>Sélectionner une matière, un niveau, un thème, puis les exercices à associer à ce niveau de compétence.  </p> 
+                            <div class="row">
+                                <div class="col-sm-12 col-md-4 col-lg-3">
+                                    <div class="form-group">
+                                        <label>Enseignements</label>
+                                        <select id="id_subject" name="subject" class="form-control select2">
+                                            {% for s in teacher.subjects.all %}
+                                                <option value="{{s.id}}">{{ s.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4 col-lg-3">
+                                    <div class="form-group">
+                                        <label>Niveaux des exercices</label>
+                                        <select id="id_level" name="level" class="form-control select2" >
+                                            <option value=" ">Choisir un niveau</option>
+                                            {% for l in teacher.levels.all %}
+                                                <option value="{{l.id}}">{{ l.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3 col-lg-6">
+                                    <div class="form-group">
+                                        <label>Thèmes</label>
+                                        <select id="id_theme" name="theme" class="form-control select2" multiple>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12">
+                                    <div id="loader">
+                                    </div>
+                                    <div id="content_exercises" class="list_choice">
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="row">
+                                <div class="col-sm-12 col-lg-8">
+                                    <div class="form-group">
+                                        <a href="{{ request.path }}" class="btn btn-primary"> Associer </a>
+                                    </div>
+                                </div>
+                            </div>  
+                        </div> 
+                        <div id="file" class="tab-pane fade">  
+                            <p>Proposer un fichier.</p> 
+ 
+                            <div class="row">
+                                <div class="col-sm-12 col-lg-4">
+                                {{ form.mediation|add_class:"btn btn-default" }}
+                                </div>
+                            </div>
+                             <div class="row">
+                                <div class="col-sm-12 col-lg-8"><input value="{{ relationship.id }}"  type="hidden" name="relationship"  id="relationship"/>
+                                    <div class="form-group">
+                                        <input value="Associer" type="submit" class="btn btn-primary"/> 
+                                    </div>
+                                </div>
+                            </div>  
+                        </div> 
+                    </div>
+                </form>
+            </div>
+ 
+        </div>
+  
+
+
+
+
+{% endblock %} 

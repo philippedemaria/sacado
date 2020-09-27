@@ -621,6 +621,53 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
         // =================================================================================================================
         // =================================================================================================================           
+        // ===========================================  mastering     ======================================================
+        // ================================================================================================================= 
+        // =================================================================================================================
+  
+ 
+
+        sorter_mastering("#layer4", "#layer4 .sorter_mastering") ;
+        sorter_mastering("#layer3", "#layer3 .sorter_mastering") ;
+        sorter_mastering("#layer2", "#layer2 .sorter_mastering") ;
+        sorter_mastering("#layer1", "#layer1 .sorter_mastering") ;
+
+
+        function sorter_mastering(param0, param1){
+
+            $(param0).sortable({
+            start: function( event, ui ) { 
+                   $(ui.item).css("box-shadow", "2px 1px 2px gray").css("background-color", "#271942").css("color", "#FFF"); 
+               },
+            stop: function (event, ui) {
+
+
+                let relationship_id = $("#relationship_to_mastering").val();
+                var valeurs = "";
+                         
+                $(param1).each(function() {
+                    let this_mastering_id =  $(this).attr("data-mastering_id"); 
+                    valeurs = valeurs + this_mastering_id +"-";
+                });
+
+ 
+                $(ui.item).css("box-shadow", "0px 0px 0px transparent").css("background-color", "#dbcdf7").css("color", "#271942"); 
+
+                $.ajax({
+                        data:   { 'valeurs': valeurs , 'relationship_id' : relationship_id,  } ,   
+                        type: "POST",
+                        dataType: "json",
+                        url: "../../ajax/sort_mastering" 
+                    }); 
+                }
+            });
+
+
+        }
+
+
+        // =================================================================================================================
+        // =================================================================================================================           
         // ===========================================  Les sections  ======================================================
         // ================================================================================================================= 
         // =================================================================================================================
@@ -904,7 +951,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             display_custom_modal($('.select_task'),"#detail_dateur");
             display_custom_modal($('.select_publish'),"#detail_pub");
             display_custom_modal($('.select_details'),"#details");
-            display_custom_modal($('.sharer'),"#share");
+            display_custom_modal($('.sharered'),"#share");
             display_custom_modal($('.select_skills'),"#skill");
             display_custom_modal($('.select_constraint'),"#detail_constraint");
   
