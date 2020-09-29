@@ -30,7 +30,8 @@ def vignette_directory_path(instance, filename):
 def file_directory_path(instance, filename):
     return "files/{}/{}".format(instance.relationship.parcours.teacher.user.id, filename)
 
-
+def directory_path_mastering(instance, filename):
+    return "mastering/{}/{}".format(instance.relationship.parcours.teacher.user.id, filename)
  
 def directory_path(instance, filename):
     return "demandfiles/{}/{}".format(instance.level.id, filename)
@@ -596,8 +597,7 @@ class Parcours(ModelWithCode):
                 data["colored"] = "red"     
         else :
             data["boolean"] = False
-            data["colored"] = "red"
-        print(data)
+            data["colored"] = "red"       
         return data
  
 
@@ -646,7 +646,6 @@ class Relationship(models.Model):
         except :
             task = False
         return task
-
 
 
     def constraint_to_this_relationship(self,student): # Contrainte. 
@@ -805,3 +804,50 @@ class Demand(models.Model):
 
     def __str__(self):
         return "{}".format(self.demand)
+
+
+
+
+########################################################################################################################################### 
+########################################################################################################################################### 
+########################################################   Mastering        ############################################################### 
+########################################################################################################################################### 
+########################################################################################################################################### 
+
+
+class Mastering(models.Model):
+
+    relationship = models.ForeignKey(Relationship, related_name="relationship_mastering", on_delete=models.PROTECT, verbose_name="Exercice")
+    consigne = models.CharField(max_length=255, default='',  blank=True,   verbose_name="Consigne")   
+    video = models.CharField(max_length=50, default='',  blank=True,   verbose_name="code de vidéo Youtube")   
+    mediation = models.FileField(upload_to= directory_path_mastering, verbose_name="Fichier", default="", null = True, blank= True) 
+    writing = models.BooleanField( default=0,  verbose_name="Page d'écriture", ) 
+    duration = models.PositiveIntegerField(  default=15,  blank=True,  verbose_name="Durée estimée")    
+
+    scale = models.PositiveIntegerField(default=3, editable= False) 
+    ranking = models.PositiveIntegerField(default=0,  editable= False) 
+    exercise = models.ForeignKey(Exercise, related_name = "exercise", on_delete=models.PROTECT, editable=False, default="", null = True, blank= True )   
+    courses = models.ManyToManyField(Course, blank=True, related_name='courses_mastering')
+    
+    def __str__(self):
+        return "{}".format(self.relationship)
+
+
+
+    def is_done(self,student): 
+        is_do = False  
+        if Mastering_done.objects.filter(mastering = self, student = student).count()> 0 :  
+            is_do = True  
+        return is_do       
+
+
+class Mastering_done(models.Model):
+
+    mastering = models.ForeignKey(Mastering, related_name="mastering_done", editable=False, on_delete=models.PROTECT, verbose_name="Exercice")
+    student = models.ForeignKey(Student, on_delete=models.PROTECT, editable=False, related_name='students_mastering_done')
+    writing = RichTextUploadingField( blank=True, verbose_name="Texte*") 
+    
+    def __str__(self):
+        return "{}".format(self.mastering)
+
+

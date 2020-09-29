@@ -235,7 +235,11 @@
                 </span>
             </span> 
             <!-- Appel des compétences -->
-            <span class="horizontalmargin5"><a href="#" style="font-size:14px;color:{{ parcours.color|contrast_color }}" class="copy_link" data-code="{{ relation.exercise.supportfile.code}}">{{ relation.exercise.supportfile.code }}</a></span>  
+            <span class="horizontalmargin5"><a href="#" style="font-size:14px;color:{{ parcours.color|contrast_color }}" class="copy_link" data-code="{{ relation.exercise.supportfile.code}}"><i class="fa fa-barcode"></i></a></span> 
+
+            <span class="horizontalmargin5"><a href="{% url 'create_mastering' relation.id  %}" style="font-size:14px;color:{{ parcours.color|contrast_color }}"><i class="fa fa-sitemap"></i></a></span> 
+
+
             <!-- Appel des compétences -->
             <span class="select_skills horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="skill{{relation.id}}" title="Ajouter des compétences" ><i class="fa fa-cogs"></i> </span>             
             <!-- Appel des situations et durée -->
@@ -247,7 +251,7 @@
                 <i class="fa fa-save"></i> {{ relation.situation}}  
             </span>
             <!-- Appel de partage  -->
-            <span  class="sharer horizontalmargin5" data-relationship_id="{{ relation.id }}"  title="Accéder à cet exercice">
+            <span  class="sharered horizontalmargin5" data-relationship_id="{{ relation.id }}"  title="Accéder à cet exercice">
                <i class="fa fa-share-square"></i>
             </span>                                   
             <!-- Suppression de l'exercice dans ce parcours  -->

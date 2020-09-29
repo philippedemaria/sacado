@@ -29,17 +29,15 @@
                                                 </td><td></td>
                                             </tr>
                                             {% for e in knowledge.exercises  %}
-
-                                                    {%  get_is_selected  e  parcours  as  e_is_selected %} 
-
-
+                                                {%  get_is_selected  e  parcours  as  e_is_selected %} 
                                                 <tr>
                                                     <td>
                                                         <label class="container_checkbox">
-                                                        <input type="checkbox"  data-exercise_id="{{ e.id }}" data-parcours_id="{{ parcours.id }}"
+                                                        <input type="checkbox"  data-exercise_id="{{ e.id }}"  {% if parcours %}  data-parcours_id="{{ parcours.id }}" class="selector_e" {% else %}
+                                                                class="selector_m"     {% endif %}
                                                                 name="exercises" id="selector_e{{ e.id }}"  data-statut="{{ e_is_selected }}"
                                                                 {% if e_is_selected %}checked{% endif  %} 
-                                                                class="selector_e" /><span class="checkmark"></span>
+                                                                 /><span class="checkmark"></span>
                                                         </label>
                                                     </td>
                                                     <td> 
@@ -147,11 +145,15 @@
                     },
                     url: "../../ajax_populate",
                     success: function (data) {
-                        $('#is_selected'+exercise_id).html(data.html);   
-                        $('#selector_e'+exercise_id).attr("data-statut",data.statut);                  
-                        $('#selector_e'+exercise_id).removeClass(data.noclass);
-                        $('#selector_e'+exercise_id).addClass(data.class);
-                        $('#selector_e'+exercise_id).focus();
+                        if (data.no_store) { alert("Vous ne pouvez pas enregistrer cet exercice. Un exercice similaire est déjà dans ce parcours.")}
+                            else
+                            {
+                                $('#is_selected'+exercise_id).html(data.html);   
+                                $('#selector_e'+exercise_id).attr("data-statut",data.statut);                  
+                                $('#selector_e'+exercise_id).removeClass(data.noclass);
+                                $('#selector_e'+exercise_id).addClass(data.class);
+                                $('#selector_e'+exercise_id).focus();
+                            }
                     }
                 }
             )
@@ -160,7 +162,41 @@
 
 
 
+        $('.selector_m').on('click' ,function () {
 
+            let relationship_id = $("#relationship").val(); 
+            let exercise_id = $(this).attr("data-exercise_id"); 
+            let statut = $(this).attr("data-statut"); 
+            let scale = $("#id_scale").val(); 
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            console.log(exercise_id,relationship_id) ; 
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'relationship_id': relationship_id,
+                        'exercise_id': exercise_id,
+                        'scale': scale,     
+                        'statut': statut,
+                    },
+                    url: "../../ajax_populate_mastering",
+                    success: function (data) {
+
+                        if (data.no_store) { alert("Vous ne pouvez pas enregistrer cet exercice. Un exercice similaire est déjà dans ce parcours.")}
+                            else
+                            {
+                                $('#is_selected'+exercise_id).html(data.html);   
+                                $('#selector_e'+exercise_id).attr("data-statut",data.statut);                  
+                                $('#selector_e'+exercise_id).removeClass(data.noclass);
+                                $('#selector_e'+exercise_id).addClass(data.class); 
+                            }
+                    }
+                }
+            )
+        });
 
 
 

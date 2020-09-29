@@ -38,6 +38,9 @@ if PRODUCTION:
     SESSION_COOKIE_SECURE = os.environ.get('SESSION_COOKIE_SECURE')
     SECURE_SSL_REDIRECT = True
     CSRF_COOKIE_SECURE = os.environ.get('CSRF_COOKIE_SECURE')
+    SECURE_REFERRER_POLICY = os.environ.get('SECURE_REFERRER_POLICY')
+    CONN_MAX_AGE = os.environ.get('CONN_MAX_AGE')
+
 else:
     # configuration dévellopement
     DEBUG = True
@@ -52,6 +55,8 @@ else:
     DEFAULT_FROM_EMAIL = 'SacAdo < info@sacado.xyz >'
     # configuration email : affichés dans la console
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+ 
 
 
 # REDIRECT_URL

@@ -18,7 +18,7 @@
             darkgreen
             {% endif %}"
           href="{% url 'show_this_exercise'  relationship.exercise.id   %}" data-container="body"
-          data-toggle="popover" target="_blank"
+          data-toggle="popover" target="_blank" title="{{ relationship.exercise.knowledge.name }}"
           data-trigger="hover" data-placement="top"
           data-content="{{ relationship.exercise.knowledge.name }}">
         {{ score }}
