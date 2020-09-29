@@ -38,8 +38,11 @@ if PRODUCTION:
     SESSION_COOKIE_SECURE = os.environ.get('SESSION_COOKIE_SECURE')
     SECURE_SSL_REDIRECT = True
     CSRF_COOKIE_SECURE = os.environ.get('CSRF_COOKIE_SECURE')
+    SECURE_REFERRER_POLICY = os.environ.get('SECURE_REFERRER_POLICY')
+    CONN_MAX_AGE = os.environ.get('CONN_MAX_AGE')
+
 else:
-    # configuration dévellopement
+    # configuration développement
     DEBUG = True
     ALLOWED_HOSTS = ["*"]
     SECRET_KEY = '85umr_$zf2bd58xl)nzf)i*jh)o5h*dp%*3e@pqg+ijem=t1xq'
@@ -52,6 +55,8 @@ else:
     DEFAULT_FROM_EMAIL = 'SacAdo < info@sacado.xyz >'
     # configuration email : affichés dans la console
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+ 
 
 
 # REDIRECT_URL
@@ -290,25 +295,25 @@ CKEDITOR_CONFIGS = {
  
 
 ########################################################################################################################
-if PRODUCTION :
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'handlers': {
-            'file': {
-                'level': 'DEBUG',
-                'class': 'logging.handlers.RotatingFileHandler',
-                'filename': 'logs/debug.log',
-                'backupCount': 10,  # keep at most 10 log files
-                'maxBytes': 1048576,  # 1*1024*1024 bytes (1MB)
-            },
+#if PRODUCTION :
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': 'logs/debug.log',
+            'backupCount': 10,  # keep at most 10 log files
+            'maxBytes': 1048576,  # 1*1024*1024 bytes (1MB)
+        },
 
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
         },
-        'loggers': {
-            'django': {
-                'handlers': ['file'],
-                'level': 'DEBUG',
-                'propagate': True,
-            },
-        },
-    }
+    },
+}
