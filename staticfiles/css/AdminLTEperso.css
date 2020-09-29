@@ -1497,6 +1497,8 @@ table.table-bordered.dataTable {
 }
 .select_mastering:hover{
     background-color:  #5d4391 ;
+    width:50px;
+    height:130px;
 }
 
 .card_mastering_w {

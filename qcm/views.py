@@ -26,7 +26,7 @@ from django.db.models import Q
 from django.core.mail import send_mail
 
 from group.decorators import user_is_group_teacher 
-from qcm.decorators import user_is_parcours_teacher, user_can_modify_this_course, student_can_show_this_course
+from qcm.decorators import user_is_parcours_teacher, user_can_modify_this_course, student_can_show_this_course , user_is_relationship_teacher
 from account.decorators import user_can_create, user_is_superuser
 ##############bibliothèques pour les impressions pdf  #########################
 import os
@@ -3186,6 +3186,7 @@ def ajax_course_viewer(request):
 
 
 @login_required
+@user_is_relationship_teacher
 def create_mastering(request,id):
     relationship = Relationship.objects.get(pk = id)
     stage = Stage.objects.get(school= request.user.school)
@@ -3213,7 +3214,8 @@ def create_mastering(request,id):
     return render(request, 'qcm/mastering/form_mastering.html', context)
 
 
- 
+@login_required
+@user_is_relationship_teacher 
 def parcours_mastering_delete(request,id,idm):
 
     m = Mastering.objects.get(pk = idm)
@@ -3273,11 +3275,12 @@ def ajax_populate_mastering(request):
     return JsonResponse(data) 
 
 
+@login_required
 def mastering_student_show(request,id):
 
     relationship = Relationship.objects.get(pk = id)
     stage = Stage.objects.get(school= request.user.school)
-    student = Student.objects.get(user= request.user) 
+    student = Student.objects.get(user= request.user)
 
     studentanswer = Studentanswer.objects.filter(student=student, exercise = relationship.exercise, parcours = relationship.parcours).last()
     score = studentanswer.point
@@ -3293,10 +3296,11 @@ def mastering_student_show(request,id):
 
     context = { 'relationship': relationship , 'masterings': masterings , 'parcours': None , 'relationships': [] , 'score': score ,  'course': None , 'stage' : stage , 'student' : student }
 
-
     return render(request, 'qcm/mastering/mastering_student_show.html', context)
 
 
+
+@csrf_exempt  
 def ajax_mastering_modal_show(request):
 
     mastering_id =  int(request.POST.get("mastering_id"))
@@ -3345,6 +3349,7 @@ def ajax_mastering_modal_show(request):
     return JsonResponse(data)
 
 
+@login_required
 def mastering_done(request):
 
     mastering = Mastering.objects.get(pk = request.POST.get("mastering"))

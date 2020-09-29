@@ -1,4 +1,4 @@
-from qcm.models import Parcours, Course
+from qcm.models import Parcours, Course, Relationship
 from account.models import Teacher, Student
 from django.core.exceptions import PermissionDenied
 
@@ -53,3 +53,20 @@ def student_can_show_this_course(function):
 				raise PermissionDenied
 
 	return wrap 
+
+
+
+def user_is_relationship_teacher(function):
+	def wrap(request, *args, **kwargs):
+		relationship = Relationship.objects.get(pk=kwargs['id'])
+		teacher = Teacher.objects.get(user= request.user)
+		if relationship.parcours.teacher == teacher   :
+			return function(request, *args, **kwargs)
+		else:
+			raise PermissionDenied
+
+	return wrap
+
+
+
+ 

@@ -56,9 +56,11 @@ else:
     # configuration email : affichés dans la console
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+    SESSION_COOKIE_SECURE = False
+    SECURE_SSL_REDIRECT = False
+    CSRF_COOKIE_SECURE = False
  
-
-
+ 
 # REDIRECT_URL
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
