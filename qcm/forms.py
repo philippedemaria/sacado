@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from .models import Parcours, Exercise, Remediation, Relationship, Supportfile, Course, Demand, Mastering
+from .models import Parcours, Exercise, Remediation, Relationship, Supportfile, Course, Demand, Mastering,Mastering_done
 from account.models import Student
 from socle.models import Knowledge, Skill
 from group.models import Group
@@ -195,3 +195,10 @@ class MasteringForm (forms.ModelForm):
 		courses = Course.objects.filter(parcours=relationship.parcours)
 		self.fields['practices'] = forms.ModelMultipleChoiceField(queryset=relations, widget=forms.CheckboxSelectMultiple,   required=False )
 		self.fields['courses'] = forms.ModelMultipleChoiceField(queryset=courses, widget=forms.CheckboxSelectMultiple, required=False )
+
+
+
+class MasteringDoneForm (forms.ModelForm):
+	class Meta:
+		model = Mastering_done
+		fields = ('writing',)

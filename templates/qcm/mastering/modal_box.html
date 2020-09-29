@@ -1,0 +1,73 @@
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+<input type="hidden" id="mastering_id" name="mastering"  value="{{ mastering.id  }}" />  
+{% if resp == 0  %}
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+    <div class="col-sm-12 col-md-12">
+        <div class="form-group">
+            {{ form.writing |add_class:"form-control"|attr:"rows:3" }}
+            {{ form.writing.errors }}
+        </div>
+    </div>
+{% elif resp == 1  %}
+<iframe  width="560" height="315" src="https://www.youtube.com/embed/{{ mastering.video }}?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+{% elif resp == 2  %}
+
+        <div class='justify-content-center'>
+            <div class = 'col-auto' id='ggb_applet_container'  ></div>
+        </div>
+
+    <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script>
+
+    <script type="text/javascript">
+          // parameters of the geogebra app
+        var parameters = {
+                        "appname":"classic",
+                        "id":"ggb_applet_container",
+                        "prerelease":false,
+                        "width":{{ mastering.exercise.supportfile.width }},
+                        "height":{{ mastering.exercise.supportfile.height }},
+                        "showToolBar":{{ mastering.exercise.supportfile.toolBar|lower }},
+                        "showfullscreenbutton":true,
+                        "borderColor":"#f5f8fd",
+                        "showMenuBar":{{ mastering.exercise.supportfile.menuBar|lower }},
+                        "showAlgebraInput":{{ mastering.exercise.supportfile.algebraInput|lower }},
+                        "showResetIcon":{{ mastering.exercise.supportfile.resetIcon|lower }},
+                        "enableLabelDrags":false,
+                        "enableShiftDragZoom":{{ mastering.exercise.supportfile.dragZoom|lower }},
+                        "enableRightClick":false,
+                        "capturingThreshold":null,
+                        "showToolBarHelp":false,
+                        "errorDialogsActive":false,
+                        "useBrowserForJS":false,
+                        "langage":"en",
+                        "filename":"{{ mastering.exercise.supportfile.ggbfile.url }}"
+            };
+
+        var applet = new GGBApplet('5.0', parameters,true);
+        // Geogebra applet creation
+          applet.inject('ggb_applet_container', 'preferHTML5');     
+    </script>
+{% elif resp == 3  %}
+
+    <div class="row">
+        {% for course in mastering.courses.all %}
+            <div class="col-md-12 col-xs-12 col-lg-12" style="text-align: left">
+                <h3 style="color:#5d4391;">{{ course.title }} </h3>
+
+                {{ course.annoncement|decode|safe }} 
+            </div>
+        {% endfor %}
+   </div>
+<script type="text/javascript">
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>
+{% elif resp == 4  %}
+    <iframe src="{{ mastering.mediation.url  }}" width="100%" height="800px"></iframe>
+{% endif  %}
+
+ 

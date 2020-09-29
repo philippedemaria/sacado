@@ -8,8 +8,8 @@ from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group 
 from school.models import Stage
-from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint, Course, Demand, Mastering
-from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm  ,CourseForm , DemandForm , MasteringForm
+from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Mastering_done
+from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm  ,CourseForm , DemandForm , MasteringForm,MasteringDoneForm 
 from socle.models import  Theme, Knowledge , Level , Skill
 from django.http import JsonResponse 
 from django.core import serializers
@@ -3203,10 +3203,6 @@ def create_mastering(request,id):
             nf.save()
             form.save_m2m()
 
-
-
-
-
             return redirect('create_mastering', id )
         else:
             print(form.errors)
@@ -3275,3 +3271,96 @@ def ajax_populate_mastering(request):
 
 
     return JsonResponse(data) 
+
+
+def mastering_student_show(request,id):
+
+    relationship = Relationship.objects.get(pk = id)
+    stage = Stage.objects.get(school= request.user.school)
+    student = Student.objects.get(user= request.user) 
+
+    studentanswer = Studentanswer.objects.filter(student=student, exercise = relationship.exercise, parcours = relationship.parcours).last()
+    score = studentanswer.point
+
+    if score > stage.up :
+        masterings = Mastering.objects.filter(scale = 4, relationship = relationship)
+    elif score > stage.medium :
+        masterings = Mastering.objects.filter(scale = 3, relationship = relationship)
+    elif score > stage.low :
+        masterings = Mastering.objects.filter(scale = 2, relationship = relationship)
+    else :
+        masterings = Mastering.objects.filter(scale = 1, relationship = relationship)
+
+    context = { 'relationship': relationship , 'masterings': masterings , 'parcours': None , 'relationships': [] , 'score': score ,  'course': None , 'stage' : stage , 'student' : student }
+
+
+    return render(request, 'qcm/mastering/mastering_student_show.html', context)
+
+
+def ajax_mastering_modal_show(request):
+
+    mastering_id =  int(request.POST.get("mastering_id"))
+    mastering = Mastering.objects.get( id = mastering_id)
+
+    data = {}
+    data['nocss'] = "modal-exo"
+    data['css'] = "modal-md"
+    data['duration'] = "<i class='fa fa-clock'></i> "+ str(mastering.duration)+" min."
+    data['consigne'] = "<strong>Consigne : </strong>"+ str(mastering.consigne)
+   
+    form = None
+    if mastering.writing  :
+        resp = 0
+        data['nocss'] = "modal-md"
+        data['css'] = "modal-exo"
+        student = Student.objects.get(user = request.user)
+        mdone = Mastering_done.objects.filter( mastering = mastering , student = student)
+        if mdone.count() == 1 :
+            md = Mastering_done.objects.get( mastering = mastering , student = student)
+            form = MasteringDoneForm(instance = md )
+        else :
+            form = MasteringDoneForm(request.POST or None )
+    elif mastering.video != "" :
+        resp = 1
+    elif mastering.exercise :
+        resp = 2
+        data['duration'] = "<i class='fa fa-clock'></i> "+ str(mastering.exercise.supportfile.duration)+" min." 
+        data['consigne'] = "Exercice"
+        data['nocss'] = "modal-md"
+        data['css'] = "modal-exo"
+    elif len(mastering.courses.all()) > 0 :
+        resp = 3
+        data['css'] = "modal-exo"
+        data['nocss'] = "modal-md"
+    elif mastering.mediation != "" :
+        resp = 4
+        data['nocss'] = "modal-md"
+        data['css'] = "modal-exo"
+
+    context = { 'mastering' : mastering , 'resp' : resp , 'form' : form }
+
+    html = render_to_string('qcm/mastering/modal_box.html',context)
+    data['html'] = html       
+
+    return JsonResponse(data)
+
+
+def mastering_done(request):
+
+    mastering = Mastering.objects.get(pk = request.POST.get("mastering"))
+    student = Student.objects.get(user=request.user)
+
+    mdone = Mastering_done.objects.filter( mastering = mastering , student = student)
+
+    if mdone.count() == 0 : 
+        form = MasteringDoneForm(request.POST or None )
+    else :
+        md = Mastering_done.objects.get( mastering = mastering , student = student)
+        form = MasteringDoneForm(request.POST or None , instance = md )
+    if form.is_valid() :
+        nf = form.save(commit = False)
+        nf.student =  student
+        nf.mastering =  mastering
+        nf.save()
+
+    return redirect('mastering_student_show', mastering.relationship.id)

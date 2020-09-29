@@ -1,0 +1,110 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    <script>
+        require(['script/ajax-mastering']);
+    </script> 
+    
+{% endblock %}
+
+ 
+
+{% block page_title %}
+    <span style="color:{{ relationship.parcours.color|contrast_color_title }}"><i class="fa fa-sitemap"></i> 
+    {% include 'qcm/breadcrumb.html' %} 
+        Parcours de maîtrise  lié à un exercice cible</span> 
+{% endblock %}
+
+
+{% block page_menu_right %}
+ <a href="#" class="btn btn-default" onclick="window.close();">Quitter ce parcours de maîtrise</a>
+{% endblock %}
+
+
+
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+        <div class="row">
+            <div class="col-sm-12 col-lg-12">
+                Votre enseignant vous propose de travailler sur ces supports qu'il a lui même choisi, en fonction de votre score à l'exercice cible ci-dessous. Ces documents, video, cours exerices, vous donnent la possibilité d'approfondir vos connaissances. Chacun a sa propre consigne qu'il convient de suivre.
+                <hr>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12 col-lg-2">
+                <label class="label_select_checkbox">
+                    <a href="{% url 'show_this_exercise'  relationship.exercise.id   %}"  target="_blank" >
+ 
+                        <img src="{{ relationship.exercise.supportfile.imagefile.url }}" width="200px">
+ 
+                    </a> 
+
+            </div>
+            <div class="col-sm-12 col-lg-6">
+                <label class="label_select_checkbox">    
+                {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }} 
+    
+                {% if relationship.exercise.supportfile.calculator %}
+                  <img src="{% static 'img/calculator.png' %}" width="30px" />
+                {% else %}
+                  <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                {% endif  %}   
+                     <br>
+                        <small>   
+                            <i class="fa fa-fw fa-barcode"></i> {{ relationship.exercise.supportfile.code }}  {% if relationship.exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                            <i class="fa fa-fw fa-clock-o"></i> {{ relationship.exercise.supportfile.duration }} minutes {% if relationship.exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                            <i class="fa fa-fw fa-save"></i> {{ relationship.exercise.supportfile.situation}} situation{{ relationship.exercise.supportfile.situation|pluralize}} minimum</small>
+                </label>
+            </div>
+            <div class="col-sm-12 col-lg-4" style="text-align: center">Dernier score obtenu<br>
+                <div class="mastering_badge {% if score < stage.low %}red{% elif score < stage.medium %} orange  {% elif score < stage.up %}  green {% else %}darkgreen {% endif %}"> 
+                    {{ score }}%
+                </div>
+            </div>
+        </div>
+        <hr style="border-top: 1px solid #ccc;">
+
+        {% for m in masterings %}
+            {% include 'qcm/mastering/mastering_choice_student.html' %}
+        {% endfor %}
+
+<div class="modal fade" id="mastering_choice_student" tabindex="-1" role="dialog" aria-labelledby="mastering_choice_student">
+    <div class="modal-dialog modal-md" role="document" id="m_modale">
+        <form action="{% url 'mastering_done' %}" method="POST">        {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header consigne_mastering_modal" >
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-10" id="m_consigne">
+                        </div>    
+                        <div class="col-sm-12 col-lg-2" id="m_duration">
+                        </div> 
+                    </div> 
+                </div>
+                <div class="modal-body" id="m_body" style="text-align: center;">
+                    
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-lg-2">
+                        <a href="#" data-dismiss="modal" class="btn btn-default" >Annuler </a>
+                    </div>    
+                    <div class="col-sm-12 col-lg-10">
+                        <button type="submit" class="btn btn-primary">J'ai fini cette activité</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %} 

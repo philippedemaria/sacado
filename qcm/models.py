@@ -597,8 +597,7 @@ class Parcours(ModelWithCode):
                 data["colored"] = "red"     
         else :
             data["boolean"] = False
-            data["colored"] = "red"
-        print(data)
+            data["colored"] = "red"       
         return data
  
 
@@ -647,7 +646,6 @@ class Relationship(models.Model):
         except :
             task = False
         return task
-
 
 
     def constraint_to_this_relationship(self,student): # Contrainte. 
@@ -835,4 +833,21 @@ class Mastering(models.Model):
         return "{}".format(self.relationship)
 
 
- 
+
+    def is_done(self,student): 
+        is_do = False  
+        if Mastering_done.objects.filter(mastering = self, student = student).count()> 0 :  
+            is_do = True  
+        return is_do       
+
+
+class Mastering_done(models.Model):
+
+    mastering = models.ForeignKey(Mastering, related_name="mastering_done", editable=False, on_delete=models.PROTECT, verbose_name="Exercice")
+    student = models.ForeignKey(Student, on_delete=models.PROTECT, editable=False, related_name='students_mastering_done')
+    writing = RichTextUploadingField( blank=True, verbose_name="Texte*") 
+    
+    def __str__(self):
+        return "{}".format(self.mastering)
+
+

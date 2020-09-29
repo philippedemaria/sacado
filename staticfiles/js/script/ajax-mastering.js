@@ -132,5 +132,42 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
         }
 
+
+ 
+
+
+
+        $('.select_support_mastering').on('click', function (event) {
+            
+            let mastering_id = $(this).attr("data-mastering_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+ 
+            console.log(mastering_id);
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional: true,
+                    data: {
+                        'mastering_id': mastering_id,                      
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url : "../../ajax/mastering_modal_show",
+                    success: function (data) {
+                        $('#m_modale').removeClass(data.nocss);
+                        $('#m_body').html(data.html);
+                        $('#m_consigne').html(data.consigne);
+                        $('#m_duration').html(data.duration);
+                        $('#m_modale').addClass(data.css);
+ 
+                    }
+                }
+            )
+        });
+
+
+
+
     });        
 });

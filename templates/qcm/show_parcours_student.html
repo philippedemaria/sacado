@@ -172,7 +172,13 @@
                                     <img src="{%  static 'img/pdf.png' %}" width="20px" />
                                 {% endif  %}
                             </a>
-                        {% endfor  %}   
+                        {% endfor  %} 
+
+                        {% if relation.relationship_mastering.all|length > 0 %}
+                        <a href="{% url 'mastering_student_show' relation.id %}" target="_blank" style="color:{{ parcours.color|contrast_color }}">
+                            <i class="fa fa-fw fa-sitemap pull-right"></i>
+                        </a>
+                        {% endif  %}
                     </div>
                 </div>
             </div> 
@@ -182,7 +188,7 @@
 </section>
  
 
- <div class="modal fade" id="head_of_section" tabindex="-1" role="dialog" aria-labelledby="head_of_section">
+<div class="modal fade" id="head_of_section" tabindex="-1" role="dialog" aria-labelledby="head_of_section">
     <div class="modal-dialog" role="document"  style="width:95%;">
         <div class="modal-content" style="padding-top :0px;">
             <div class="modal-header">
@@ -193,19 +199,15 @@
                 </h3>
             </div>
             <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-12 col-xs-12">   
-                              <div id="courses_from_section"></div>
-                        </div>   
-                    </div> 
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">   
+                        <div id="courses_from_section"></div>
+                    </div>   
+                </div> 
             </div>
         </div>
     </div>
 </div>
-
-
-
- 
    
 {% endblock %}
 

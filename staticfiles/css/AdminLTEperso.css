@@ -210,6 +210,20 @@ li label:hover{
     box-shadow: 0px 0px 10px rgba(70, 17, 156, 0.2)
 }
 
+.mastering_badge{
+    margin: 15px;
+    border-radius: 50%;
+    padding-top :   20px;
+    text-align: center;
+    width:80px;
+    height:80px;  
+    box-shadow: 0px 0px 10px rgba(70, 17, 156, 0.2);
+    margin-right: auto; 
+    margin-left: auto ; 
+    font-size: 30px;
+    color:#FFF;
+}
+
  /****************************************** sort *******************************************************/
 #exercise_sortable{
   padding : 0px;  
@@ -1438,6 +1452,14 @@ table.table-bordered.dataTable {
   cursor: move ;
   font-style: italic ;
 }
+.consigne_mastering_modal{
+  padding: 10px  ;
+  color:#5d4391;
+  border-radius: 4px 4px 0px 0px ; 
+}
+#m_duration{
+  font-size : 14px;
+}
 .title_space{
     height : 65px;
     background: #f4f6f9 ;
@@ -1449,6 +1471,20 @@ table.table-bordered.dataTable {
     font-size: 12px;
     font-weight : bold;
 }
+
+.cursor_pointer{
+  cursor: pointer ;
+  font-style:normal;
+}
+.cursor_normal{
+  cursor: auto ;
+}
+
+.modal-exo{
+  width: 800px ;
+}
+
+
 /* ********************************************************************************************************
  * Loader
  *********************************************************************************************************/
@@ -3874,6 +3910,25 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   display: block;
 }
 /*****************************************************  Bouton sacado *************/
+.btn-mastering  {
+  background-color: #5d4391  ; /* #deeaea*rgb(219, 205, 247)*/
+  color:#FFF;  /* #657574*/
+  min-width: 120px;
+  border-radius: 20px;
+  opacity: 0.9;
+  font-size: 12px;
+  padding:0px;
+  margin-left: 25px;
+}
+
+ 
+.btn-mastering:hover,
+.btn-mastering:active,
+.btn-mastering.hover {
+  background-color: rgb(219, 205, 247);
+  color:#5d4391!important;
+  border-radius: 20px;
+}
 
 .btn-accueil  {
   background-color: #FFF ; /* #deeaea*/
