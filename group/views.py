@@ -312,7 +312,7 @@ def show_group(request, id ):
 
     group = Group.objects.get(id=id)
  
-    context = {  'group': group,    }
+    context = {  'group': group,  'communications' : []  }
 
     return render(request, 'group/show_group.html', context )
 
@@ -449,7 +449,7 @@ def result_group_skill(request, id):
     form = EmailForm(request.POST or None )
     stage = get_stage(group)
 
-    context = {  'group': group,'form': form,'skills': skills , 'stage' : stage   , 'communications' : [], 'relationships': [] , 'parcours' : None  }
+    context = {  'group': group,'form': form,'skills': skills , 'stage' : stage   ,  'theme' : None  , 'communications' : [], 'relationships': [] , 'parcours' : None  }
 
     return render(request, 'group/result_group_skill.html', context )
 

@@ -67,7 +67,7 @@ def list_emails(request):
 
         return render(request,
                       'sendmail/list.html',
-                      {'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups,  'today': today,
+                      {'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups,  'today': today, 'communications': [], 
                        'studentanswers': studentanswers, 'tasks': tasks})
 
     elif user.is_student:
@@ -83,7 +83,7 @@ def list_emails(request):
 
         return render(request,
                       'sendmail/list.html',
-                      {'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups, 'today': today,
+                      {'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups, 'today': today, 'communications': [], 'student' : student , 
                        'studentanswers': [], 'tasks': []})
     else:
         raise PermissionDenied
@@ -120,13 +120,12 @@ def create_email(request):
 
 		send_mail(subject, texte, str(user.email), rcv )
 
-		return redirect('emails')
 
 	else:
 		print(form.errors)
 		messages.errors(request, "Le corps de message est obligatoire !")
 
-	return render(request,'sendmail/list.html',   {'emails': [] , 'sent_emails': [] ,  'form':form ,  'users': []  ,'groups': [], 'studentanswers':[],'tasks':[] ,  'today': today,  } )
+	return redirect('emails')
 
 
  
@@ -145,7 +144,7 @@ def show_email(request):
 	form = EmailForm(request.POST or None,request.FILES or None)
 	data = {} 
 
-	html = render_to_string('sendmail/show.html',{ 'email' : email  , 'form' : form  ,   })
+	html = render_to_string('sendmail/show.html',{ 'email' : email  , 'form' : form  , 'communications': [],  })
 	data['html'] = html 		
 
 	return JsonResponse(data)

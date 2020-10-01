@@ -91,7 +91,6 @@
             <span data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}" class="parcours_displayer" style="color : {{  parcours.color }}" >
                {% if parcours.is_publish %} <i class="fa fa-check-circle text-success pull-right pull-right_top"></i>  {% else %} <i class="fa fa-check-circle  pull-right pull-right_top" style="color : #E0E0E0"></i>{% endif  %}  {{ parcours.title|truncatechars:"22" }} 
             </span>
-
         <div id="collapse{{ forloop.counter }}" class="collapse">
             <div class="panel-body"  style="padding:0px">
                 <table class="table" style="margin-bottom: 0px;font-size:14px;color : {{  parcours.color }}">
@@ -150,13 +149,12 @@ Aucun parcours
  
 <div class="btn btn-default full_width" style="text-align: left; font-size:15px; margin-bottom: 5px">
 
-        <span data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}">
-         {% with  nb_teacher_level as nbteacherlevel %}
-            {{ nbteacherlevel }} niveau{{ nbteacherlevel|pluralize:"x" }}  préféré{{  nbteacherlevel|pluralize }}  <i class="fa fa-caret-down pull-right"></i>
-         {% endwith %}
-        </span>
-
-    <div id="collapse{{ forloop.counter }}" class="collapse">
+    <span data-toggle="collapse" data-parent="#accordion" href="#collapse">
+     {% with  nb_teacher_level as nbteacherlevel %}
+        {{ nbteacherlevel }} niveau{{ nbteacherlevel|pluralize:"x" }}  préféré{{  nbteacherlevel|pluralize }}  <i class="fa fa-caret-down pull-right"></i>
+     {% endwith %}
+    </span>
+    <div id="collapse" class="collapse">
         <div class="panel-body" style="padding:0px">
             <table class="table" style="margin-bottom: 0px;font-size:14px">
                 {% for l in teacher.levels.all %}

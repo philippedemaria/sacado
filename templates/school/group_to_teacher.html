@@ -4,13 +4,8 @@
 {% load item_tags %}
 
 {% block require %}
- 
-    {% if group %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
-    {% else %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
-    {% endif %}
 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
  
 {% endblock %}
 
@@ -44,8 +39,8 @@
                 {% regroup groups by level as level_list %}
                 {% for level in level_list %}
                     <h3>{{ level.grouper.name }}</h3>
-                    {% for group in level.list %}
-                        <span class="btn btn-default"  style="margin:2px" ><label><input type="checkbox" name="groups" value="{{ group.id }}"   /> {{ group.name }} - {{ group.teacher }}</label></span>
+                    {% for group in level.list|dictsort:"name"  %}
+                        <span class="btn btn-default"  style="margin:2px" ><label><input type="checkbox" name="groups" value="{{ group.id }}"   /> {{ group.name }} - <small><em>{{ group.teacher }}</em></small></label></span>
                     {% endfor %}
                 {% endfor %}
             </div>

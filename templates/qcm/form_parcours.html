@@ -23,8 +23,9 @@
 
 {% block page_title %}
 
-<span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-desktop"></i> </span>
-  
+    {% if parcours %}
+    <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-th"></i> </span> 
+    {% endif %}
 
       {% include 'qcm/breadcrumb.html' %}
 
@@ -33,7 +34,7 @@
     {% if parcours %}
         <small>Configuration</small>   
     {% else %}
-       <i class="fa fa-cogs"></i> Nouveau parcours   
+         Nouveau parcours 
     {% endif %}
 
 {% endblock %}
@@ -101,7 +102,8 @@
                             {{ group.name }} <small><i class="fa fa-caret-down"></i></small> </a> 
                             {% if group.students.count > 0 %}<label class="pull-right"><input type="checkbox" value="{{ forloop.counter }}" 
                                                                                                 {% if group.students.count == students_checked or request.session.group_id == group.id %}checked {% endif %}
-                                                                                                class="select_all" /><small> tous </small> </label>{% endif %}<br>
+
+                                                                                                class="select_all" /><small> tous  </small> </label>{% endif %}<br>
 
                           <div id="demo{{ forloop.counter }}" class="collapse" >
                                 <div class="form-group">
@@ -171,10 +173,16 @@
  
                 <div class="col-sm-12 col-md-4">
                 {% if parcours %}
-                         <a href="{% url 'archive_parcours' parcours.id  idg  %}" class="btn btn-warning"  onclick="return TestArchive('ce parcours')"> 
-                            <i class="fa fa-archive"> </i>   Archiver
-                        </a>
 
+                        {% if parcours.is_archive %}
+                            <a href="{% url 'unarchive_parcours' parcours.id  idg  %}" class="btn btn-warning"> 
+                                <i class="fa fa-th"> </i>   Désarchiver
+                            </a>
+                        {% else %}
+                            <a href="{% url 'archive_parcours' parcours.id  idg  %}" class="btn btn-warning"  onclick="return TestArchive('ce parcours')"> 
+                                <i class="fa fa-archive"> </i>   Archiver
+                            </a>
+                        {% endif %}
                         
                         <a href="{% url 'delete_parcours' parcours.id  idg  %}" class="btn btn-danger"  onclick="return TestDelete('ce parcours')"> 
                             <i class="fa fa-trash"> </i>   Supprimer

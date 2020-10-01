@@ -43,7 +43,7 @@ if PRODUCTION:
 
 else:
     # configuration dévellopement
-    DEBUG = True
+    DEBUG = False
     ALLOWED_HOSTS = ["*"]
     SECRET_KEY = '85umr_$zf2bd58xl)nzf)i*jh)o5h*dp%*3e@pqg+ijem=t1xq'
 
@@ -59,7 +59,8 @@ else:
     SESSION_COOKIE_SECURE = False
     SECURE_SSL_REDIRECT = False
     CSRF_COOKIE_SECURE = False
- 
+    CONN_MAX_AGE = 3600
+    SECURE_REFERRER_POLICY = 'same-origin'
  
 # REDIRECT_URL
 LOGIN_REDIRECT_URL = '/'
@@ -297,7 +298,7 @@ CKEDITOR_CONFIGS = {
  
 
 ########################################################################################################################
-if PRODUCTION :
+if not PRODUCTION :
     LOGGING = {
         'version': 1,
         'disable_existing_loggers': False,

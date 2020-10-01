@@ -243,7 +243,7 @@ def admin_tdb(request):
 
     return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers, 'nb_students': nb_students,
                                                     'nb_groups': nb_groups, 'school': school, 'stage': stage,
-                                                    'eca': eca, 'ac': ac, 'dep': dep
+                                                    'eca': eca, 'ac': ac, 'dep': dep , 'communications' : [],
                                                     })
 
 

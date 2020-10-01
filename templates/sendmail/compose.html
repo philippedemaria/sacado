@@ -19,7 +19,7 @@
                             <select name="receivers" class="form-control select2" id="id_receivers"  multiple="multiple">
                                 {% for u in users|dictsort:"last_name" %}
                                     <option value='{{ u.id }}'>
-                                      {{ u.last_name|lower|capfirst }}  {{ u.first_name|lower|capfirst  }} - {% for g in u.student.students_to_group.all %} {{g}} {% if not forloop.last %} - {% endif %}{% endfor %}
+                                      {{ u.last_name|lower|capfirst }}  {{ u.first_name|lower|capfirst  }} - {% if u.user_type == 0 %} {% for g in u.student.students_to_group.all %} {{g}} {% if not forloop.last %} - {% endif %}{% endfor %}{% endif %}
                                     </option>
                                 {% endfor %}
                             </select>

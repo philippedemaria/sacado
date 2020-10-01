@@ -75,7 +75,7 @@ class User(AbstractUser):
     user_type = models.PositiveSmallIntegerField(editable=False, null=True, choices=USER_TYPES)
     civilite = models.CharField(max_length=10, default='M.', blank=True, choices=CIVILITIES, verbose_name="Civilité")
     time_zone = models.CharField(max_length=100, null=True, blank=True, choices=TZ_SET, verbose_name="Fuseau horaire")
-    is_extra = models.BooleanField(default=0, editable=0)
+    is_extra = models.BooleanField(default=0)
     is_manager = models.BooleanField(default=0)
     school = models.ForeignKey(School, blank=True, null=True, related_name="users", default=None, on_delete=models.PROTECT)
     cgu = models.BooleanField(default=0)

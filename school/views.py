@@ -46,7 +46,7 @@ def get_username(ln, fn):
 @login_required
 def list_schools(request):
 	schools = School.objects.all()
-	return render(request, 'school/lists.html', {'schools': schools})
+	return render(request, 'school/lists.html', { 'communications' : [], 'schools': schools})
 
 
 
@@ -60,7 +60,7 @@ def create_school(request):
 		Stage.objects.create(school = school ,low = 30,  medium = 65, up = 85)
 		return redirect('schools')
 
-	return render(request,'school/_form.html', {'form':form})
+	return render(request,'school/_form.html', { 'communications' : [], 'form':form})
 
 @login_required
 def update_school(request,id):
@@ -71,7 +71,7 @@ def update_school(request,id):
 		form.save()
 		return redirect('schools')
 
-	return render(request,'school/_form.html', {'form':form, 'school':school})
+	return render(request,'school/_form.html', {'form':form,  'communications' : [],'school':school})
 
 @login_required
 def delete_school(request,id):
@@ -86,7 +86,7 @@ def delete_school(request,id):
 @login_required
 def list_countries(request):
 	countries = Country.objects.all()
-	return render(request,'school/lists_country.html', {'countries':countries})
+	return render(request,'school/lists_country.html', { 'communications' : [], 'countries':countries})
 
 @login_required
 def create_country(request):
@@ -96,7 +96,7 @@ def create_country(request):
 		form.save()
 		return redirect('countries')
 
-	return render(request,'school/country_form.html', {'form':form})
+	return render(request,'school/country_form.html', { 'communications' : [], 'form':form})
 
 @login_required
 def update_country(request,id):
@@ -107,7 +107,7 @@ def update_country(request,id):
 		form.save()
 		return redirect('countries')
 
-	return render(request,'school/country_form.html', {'form':form, 'country':country})
+	return render(request,'school/country_form.html', { 'communications' : [], 'form':form, 'country':country})
 
 @login_required
 def delete_country(request,id):
@@ -150,7 +150,7 @@ def school_teachers(request):
 	teachers = User.objects.filter(school_id = school_id, user_type=2).order_by("last_name")  
  
 
-	return render(request,'school/list_teachers.html', {'teachers':teachers})
+	return render(request,'school/list_teachers.html', { 'communications' : [],'teachers':teachers})
 
 
 @login_required
@@ -165,7 +165,7 @@ def school_groups(request):
 	users = school.users.all()
 	groups = Group.objects.filter(teacher__user__in=users).order_by("level")
 
-	return render(request, 'school/list_groups.html', {'groups': groups})
+	return render(request, 'school/list_groups.html', { 'communications' : [],'groups': groups})
 
 
 @login_required
@@ -181,7 +181,7 @@ def school_level_groups(request):
 
 	groups = Group.objects.filter(teacher__user__in = users).order_by("level") 
 
-	return render(request,'school/list_level_groups.html', {'groups':groups})
+	return render(request,'school/list_level_groups.html', { 'communications' : [],'groups':groups})
 
 
 
@@ -196,7 +196,7 @@ def school_students(request):
 		school = request.user.school
 	users = User.objects.filter(school = school, user_type=0).order_by("last_name")  
 
-	return render(request,'school/list_students.html', {'users':users})
+	return render(request,'school/list_students.html', { 'communications' : [], 'users':users , 'school' : school , })
 
 
 @login_required
@@ -205,7 +205,7 @@ def new_student(request,slug):
     group = Group.objects.get(code=slug)
     user_form = NewUserSForm()
     form = StudentForm()
-    return render(request,'school/student_form.html', {'group':group, 'user_form' : user_form, 'form' : form })
+    return render(request,'school/student_form.html', { 'communications' : [],'group':group, 'user_form' : user_form, 'form' : form })
 
 
 
@@ -242,7 +242,7 @@ def new_student_list(request,slug):
     pending_students = []
     for student in p_students :
     	pending_students.append(student)
-    return render(request,'school/new_student_list.html', {'group':group, 'students' : students, 'pending_students' : pending_students })
+    return render(request,'school/new_student_list.html', { 'communications' : [],'group':group, 'students' : students, 'pending_students' : pending_students })
 
  
 
@@ -281,7 +281,7 @@ def new_group(request):
 		else :
 			print(form.errors)
 
-	return render(request,'school/group_form.html', { 'school' : school ,  'form' : form })
+	return render(request,'school/group_form.html', {  'communications' : [], 'school' : school ,  'group' : None ,  'form' : form })
 
 
 @login_required
@@ -374,7 +374,7 @@ def new_group_many(request):
 			messages.success(request, "Groupes créés avec succès.")
 			return redirect('school_groups')
  
-	return render(request,'school/many_group_form.html', {'formset' : group_formset , 'school': school})
+	return render(request,'school/many_group_form.html', {'formset' : group_formset , 'school': school , 'communications' : [] , 'group' : None  })
 
  
 
@@ -405,7 +405,7 @@ def manage_stage(request):
 
 	eca , ac , dep = stage.medium - stage.low ,  stage.up - stage.medium ,  100 - stage.up
 
-	context =  {'stage_form': stage_form , 'stage': stage , 'eca': eca , 'ac': ac , 'dep': dep}  
+	context =  {'stage_form': stage_form , 'stage': stage , 'eca': eca , 'ac': ac , 'dep': dep , 'communications' : []  }  
 
 
 
@@ -561,14 +561,16 @@ def csv_full_group(request):
         return redirect('admin_tdb')
     else:
  
-        context = {}
+        context = { 'communications' : []   , }
         return render(request, 'school/csv_full_group.html', context )
 
 
 def group_to_teacher(request):
+
+    school = request.user.school
  
-    groups = Group.objects.filter(teacher__user__school = request.user.school).order_by("level")  
-    teachers = Teacher.objects.filter(user__school = request.user.school)
+    groups = Group.objects.filter(teacher__user__school = school).order_by("level")  
+    teachers = Teacher.objects.filter(user__school = school)
 
  
 
@@ -582,6 +584,6 @@ def group_to_teacher(request):
         return redirect('admin_tdb') 
  
 
-    context = {'groups': groups,  'teachers': teachers ,   'communications' : []  }
+    context = {'groups': groups,  'teachers': teachers ,   'communications' : [] , 'school' : school  }
 
     return render(request, 'school/group_to_teacher.html', context )

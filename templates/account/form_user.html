@@ -53,7 +53,7 @@
                     </li> 
                 {% else %}
 
-                    <li><a href="#menu{{ forloop.counter }}" {% if forloop.first %} class="active" {% endif %}  data-toggle="pill" style="font-size:16px; color:#EEE;border-radius: 20px;background-color:{{ d.parcours.color }} ;margin-right:15px" >{{ d.parcours.title }}</a></li>
+                    <li><a href="#menu" class="active" data-toggle="pill" style="font-size:16px; color:#EEE;border-radius: 20px;background-color:{{ d.parcours.color }} ;margin-right:15px" >{{ d.parcours.title }}</a></li>
                 {% endif %} 
                     <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"  style="font-size:14px">Tous </a>
                         <ul id="products-menu" class="dropdown-menu clearfix" role="menu">

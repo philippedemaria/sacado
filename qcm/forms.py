@@ -194,7 +194,7 @@ class MasteringForm (forms.ModelForm):
 		relations = Relationship.objects.filter(exercise__supportfile__is_title = 0, parcours=relationship.parcours)
 		courses = Course.objects.filter(parcours=relationship.parcours)
 		self.fields['practices'] = forms.ModelMultipleChoiceField(queryset=relations, widget=forms.CheckboxSelectMultiple,   required=False )
-		self.fields['courses'] = forms.ModelMultipleChoiceField(queryset=courses, widget=forms.CheckboxSelectMultiple, required=False )
+ 
 
 
 

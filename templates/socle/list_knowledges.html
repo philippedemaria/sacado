@@ -22,8 +22,10 @@
 {% endblock %}
 
 {% block page_menu_right %}
-    <li><a href="{% url 'create_multi_knowledge' %}" class="btn btn-subsacado" ><img width="25px" src="{% static 'img/plus.png' %}"/>Création mulitple</a></li>  
-    <li><a href="{% url 'create_knowledge' %}" class="btn btn-subsacado" ><img width="25px" src="{% static 'img/plus.png' %}"/>Nouveau savoir faire</a></li>
+
+    <li><a href="{% url 'create_knowledge' %}" class="btn btn-new pull-right" ><i class="fa fa-plus"></i> Nouveau savoir faire</a></li>
+    <li><a href="{% url 'create_multi_knowledge' %}" class="btn btn-new pull-right" ><i class="fa fa-plus"></i>  Création multiple</a></li>  
+
 {% endblock %}
 
 

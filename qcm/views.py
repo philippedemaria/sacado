@@ -384,7 +384,10 @@ def individualise_parcours(request,id):
 
     try :
         group_id = request.session.get("group_id")
-        group = Group.objects.get(pk = group_id)
+        if group_id :
+            group = Group.objects.get(pk = group_id)
+        else :
+            group = None
     except :
         group_id = None
         group = None
@@ -549,7 +552,7 @@ def all_parcourses(request):
     else :
         inside = False
 
-    return render(request, 'qcm/all_parcourses.html', {'parcourses': parcourses , 'inside' : inside })
+    return render(request, 'qcm/all_parcourses.html', {'parcourses': parcourses , 'inside' : inside , 'communications' : [] , 'parcours' : None , 'relationships' : []})
 
 
 @login_required
@@ -594,19 +597,25 @@ def create_parcours(request):
         print(form.errors)
 
 
+
     try :
         if 'group_id' in request.session :
-            group_id = request.session.get["group_id"]
-            group = Group.objects.get(pk = group_id) 
+            if request.session.get["group_id"] :
+                group_id = request.session.get["group_id"]
+                group = Group.objects.get(pk = group_id) 
         else :
             group_id = None
-            group = None  
+            group = None
+
     except :
         group_id = None
         group = None
+        request.session["group_id"]  = None
+
+
 
     context = {'form': form,   'teacher': teacher,  'groups': groups,  'levels': levels, 'idg': 0,   'themes' : themes_tab, 'group_id': group_id , 'parcours': None,  'relationships': [], 
-               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'communications' : None,  'group': group ,}
+               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'communications' : [],  'group': group ,}
 
 
     return render(request, 'qcm/form_parcours.html', context)
@@ -655,14 +664,16 @@ def update_parcours(request, id, idg=0 ):
                 return redirect('parcours')
             else:
                 return redirect('list_parcours_group', idg)
-
+ 
     if idg > 0 and idg < 99999999999 :
         group_id = idg
         request.session["group_id"] = idg
         group = Group.objects.get(pk = group_id) 
+ 
     else :
         group_id = None
         group = None
+        request.session["group_id"] = None
 
 
     students_checked = parcours.students.count()  # nombre d'étudiant dans le parcours
@@ -688,6 +699,17 @@ def archive_parcours(request, id, idg=0):
 
 
 
+@user_is_parcours_teacher 
+def unarchive_parcours(request, id, idg=0):
+
+    parcours = Parcours.objects.filter(id=id).update(is_archive=0,is_favorite=0,is_publish=0)
+
+    if idg == 99999999999:
+        return redirect('index')
+    elif idg == 0 :
+        return redirect('parcours')
+    else :
+        return redirect('list_parcours_group', idg)
  
 
 
@@ -1146,7 +1168,7 @@ def result_parcours_exercise_students(request,id):
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_is_favorite(request):  
 
-    parcours_id = int(request.POST.get("parcours_id"))
+    parcours_id = int(request.POST.get("parcours_id",None))
     statut = int(request.POST.get("statut"))
     data = {}
     if statut :
@@ -1164,13 +1186,15 @@ def ajax_is_favorite(request):
 
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_course_sorter(request):  
+    try :
+        course_ids = request.POST.get("valeurs")
+        course_tab = course_ids.split("-") 
+        parcours_id = int(request.POST.get("parcours_id"))
 
-    course_ids = request.POST.get("valeurs")
-    course_tab = course_ids.split("-") 
-    parcours_id = int(request.POST.get("parcours_id"))
-
-    for i in range(len(course_tab)-1):
-        Course.objects.filter(parcours_id = parcours_id , pk = course_tab[i]).update(ranking = i)
+        for i in range(len(course_tab)-1):
+            Course.objects.filter(parcours_id = parcours_id , pk = course_tab[i]).update(ranking = i)
+    except :
+        pass
 
     data = {}
     return JsonResponse(data) 
@@ -1178,13 +1202,15 @@ def ajax_course_sorter(request):
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_parcours_sorter(request):  
 
-    course_ids = request.POST.get("valeurs")
-    course_tab = course_ids.split("-") 
- 
+    try :
+        course_ids = request.POST.get("valeurs")
+        course_tab = course_ids.split("-") 
+     
 
-    for i in range(len(course_tab)-1):
-        Parcours.objects.filter( pk = course_tab[i]).update(ranking = i)
-
+        for i in range(len(course_tab)-1):
+            Parcours.objects.filter( pk = course_tab[i]).update(ranking = i)
+    except :
+        pass
     data = {}
     return JsonResponse(data) 
 
@@ -1192,15 +1218,16 @@ def ajax_parcours_sorter(request):
 
 @csrf_exempt
 def ajax_sort_exercice(request):  
+    try :
+        exercise_ids = request.POST.get("valeurs")
+        exercise_tab = exercise_ids.split("-") 
+        
+        parcours = request.POST.get("parcours")
 
-    exercise_ids = request.POST.get("valeurs")
-    exercise_tab = exercise_ids.split("-") 
-    
-    parcours = request.POST.get("parcours")
-
-    for i in range(len(exercise_tab)-1):
-        Relationship.objects.filter(parcours = parcours , exercise_id = exercise_tab[i]).update(order = i)
-
+        for i in range(len(exercise_tab)-1):
+            Relationship.objects.filter(parcours = parcours , exercise_id = exercise_tab[i]).update(order = i)
+    except :
+        pass
     data = {}
     return JsonResponse(data) 
 
@@ -1993,7 +2020,7 @@ def show_this_exercise(request, id):
 
 
 @login_required
-def execute_exercise(request, ide,idp):
+def execute_exercise(request, idp,ide):
 
     parcours = Parcours.objects.get(id= idp)
     exercise = Exercise.objects.get(id= ide)
@@ -2344,12 +2371,25 @@ def create_evaluation(request):
     else:
         print(form.errors)
 
+
     try :
-        group_id = request.session.get("group_id")
+        if 'group_id' in request.session :
+            if request.session.get["group_id"] :
+                group_id = request.session.get("group_id")
+                group = Group.objects.get(pk = group_id) 
+        else :
+            group_id = None
+            group = None
+
     except :
         group_id = None
+        group = None
+        request.session.get["group_id"]  = None
 
-    context = {'form': form, 'teacher': teacher, 'parcours': None, 'groups': groups, 'idg': 0,  'group_id': group_id ,  'relationships': [], 
+
+
+
+    context = {'form': form, 'teacher': teacher, 'parcours': None, 'groups': groups, 'idg': 0,  'group_id': group_id ,  'relationships': [], 'communications' : [], 
                'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0}
 
 
@@ -2401,16 +2441,20 @@ def update_evaluation(request, id, idg=0 ):
             else:
                 return redirect('list_parcours_group', idg)
 
+ 
     if idg > 0 and idg < 99999999999 :
         group_id = idg
         request.session["group_id"] = idg
+        group = Group.objects.get(pk = group_id) 
+ 
     else :
         group_id = None
-
+        group = None
+        request.session["group_id"] = None
 
     students_checked = parcours.students.count()  # nombre d'étudiant dans le parcours
 
-    context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'relationships': relationships, 
+    context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'relationships': relationships, 'communications' : [], 
                'exercises': exercises, 'levels': levels, 'themes': themes_tab, 'students_checked': students_checked}
 
     return render(request, 'qcm/form_evaluation.html', context)
@@ -2563,7 +2607,7 @@ def group_tasks(request,id):
 
     relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcourses_tab, date_limit__gte=today,exercise__supportfile__is_title=0).order_by("parcours") 
 
-    return render(request, 'qcm/group_task.html', { 'relationships': relationships ,    'group' : group ,  })
+    return render(request, 'qcm/group_task.html', { 'relationships': relationships ,    'group' : group , 'parcours' : None , 'communications' : []  })
 
 @login_required
 def group_tasks_all(request,id):
@@ -2585,7 +2629,7 @@ def group_tasks_all(request,id):
 
     relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today),  parcours__in=parcourses_tab, exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("parcours") 
 
-    return render(request, 'qcm/group_task.html', { 'relationships': relationships ,    'group' : group ,  })
+    return render(request, 'qcm/group_task.html', { 'relationships': relationships ,    'group' : group , 'parcours' : None , 'communications' : []  })
 
 
 
@@ -2928,7 +2972,7 @@ def create_course(request, idc , id ):
         else:
             print(form.errors)
 
-    context = {'form': form,   'teacher': teacher, 'parcours': parcours , 'relationships': relationships , 'course': None , }
+    context = {'form': form,   'teacher': teacher, 'parcours': parcours , 'relationships': relationships , 'course': None , 'communications' : [] }
 
     return render(request, 'qcm/course/form_course.html', context)
 
@@ -2963,7 +3007,7 @@ def update_course(request, idc, id  ):
         else :
             print(course_form.errors)
 
-    context = {'form': course_form,  'course': course, 'teacher': teacher , 'parcours': parcours  , 'relationships': relationships , }
+    context = {'form': course_form,  'course': course, 'teacher': teacher , 'parcours': parcours  , 'relationships': relationships , 'communications' : [] }
 
     return render(request, 'qcm/course/form_course.html', context )
 
@@ -3208,7 +3252,7 @@ def create_mastering(request,id):
         else:
             print(form.errors)
 
-    context = {'form': form,   'relationship': relationship , 'parcours': relationship.parcours , 'relationships': [] , 'course': None , 'stage' : stage , 'teacher' : teacher , 
+    context = {'form': form,   'relationship': relationship , 'parcours': relationship.parcours , 'relationships': [] ,  'communications' : [] ,  'course': None , 'stage' : stage , 'teacher' : teacher ,  'group': None,
                 'masterings_q' : masterings_q, 'masterings_t' : masterings_t, 'masterings_d' : masterings_d, 'masterings_u' : masterings_u}
 
     return render(request, 'qcm/mastering/form_mastering.html', context)
@@ -3227,12 +3271,15 @@ def parcours_mastering_delete(request,id,idm):
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_sort_mastering(request):
 
-    relationship_id = request.POST.get("relationship_id")
-    mastering_ids = request.POST.get("valeurs")
-    mastering_tab = mastering_ids.split("-") 
- 
-    for i in range(len(mastering_tab)-1):
-        Mastering.objects.filter(relationship_id = relationship_id , pk = mastering_tab[i]).update(ranking = i)
+    try :
+        relationship_id = request.POST.get("relationship_id")
+        mastering_ids = request.POST.get("valeurs")
+        mastering_tab = mastering_ids.split("-") 
+     
+        for i in range(len(mastering_tab)-1):
+            Mastering.objects.filter(relationship_id = relationship_id , pk = mastering_tab[i]).update(ranking = i)
+    except :
+        pass
 
     data = {}
     return JsonResponse(data) 
@@ -3294,7 +3341,7 @@ def mastering_student_show(request,id):
     else :
         masterings = Mastering.objects.filter(scale = 1, relationship = relationship)
 
-    context = { 'relationship': relationship , 'masterings': masterings , 'parcours': None , 'relationships': [] , 'score': score ,  'course': None , 'stage' : stage , 'student' : student }
+    context = { 'relationship': relationship , 'masterings': masterings , 'parcours': None , 'relationships': [] ,  'communications' : [] ,  'score': score , 'group': None, 'course': None , 'stage' : stage , 'student' : student }
 
     return render(request, 'qcm/mastering/mastering_student_show.html', context)
 

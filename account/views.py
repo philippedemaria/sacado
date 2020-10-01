@@ -330,6 +330,7 @@ def update_student(request, id,idg=0):
     Upadta par un admin d'un établissement
     """
     user = get_object_or_404(User, pk=id)
+    today = time_zone_user(user)
     student = Student.objects.get(user=user)
     user_form = UserUpdateForm(request.POST or None, request.FILES or None, instance=user)
     student_form = StudentForm(request.POST or None, request.FILES or None, instance=student)
@@ -346,7 +347,7 @@ def update_student(request, id,idg=0):
             return redirect('school_groups')
 
     return render(request, 'account/student_form.html',
-                  {'user_form': user_form, 'form': student_form, 'student': student, 'idg': idg})
+                  {'user_form': user_form, 'form': student_form, 'student': student, 'communications' : [],  'idg': idg  , 'today' : today })
 
 
 
@@ -360,6 +361,7 @@ def update_student_by_admin(request, id):
     """
     school = request.user.school
     user = get_object_or_404(User, pk=id)
+    today = time_zone_user(user)
     student = Student.objects.get(user=user)
     user_form = UserUpdateForm(request.POST or None, request.FILES or None, instance=user)
     student_form = StudentForm(request.POST or None, request.FILES or None, instance=student)
@@ -383,7 +385,7 @@ def update_student_by_admin(request, id):
             return redirect('school_students')
 
     return render(request, 'account/student_form_by_admin.html',
-                  {'user_form': user_form, 'form': student_form, 'student': student, 'groups': groups})
+                  {'user_form': user_form, 'form': student_form, 'student': student, 'communications' : [],  'groups': groups  , 'today' : today })
 
 
 
@@ -469,7 +471,7 @@ def knowledges_of_a_student(student, theme):
 def detail_student(request, id):
 
     student = Student.objects.get(user_id=id)
- 
+    today = time_zone_user(request.user) 
     parcourses_publish = Parcours.objects.filter(students=student,is_publish=1)
     parcourses = Parcours.objects.filter(students=student)
     
@@ -496,14 +498,22 @@ def detail_student(request, id):
         datas.append(theme)
 
     if request.user.is_teacher:
+        students = []
         teacher = Teacher.objects.get(user=request.user)
-        group = Group.objects.get(students=student, teacher=teacher)
+        group = Group.objects.filter(students=student, teacher=teacher).last()
+        groups =  student.students_to_group.filter(teacher=teacher)
+        for g in groups :
+            sts = g.students.all().order_by("user__last_name")
+            for s in sts :
+                students.append(s)
+                
         nav = navigation(group, id)
-        context = {'datas': datas, 'parcourses': parcourses, 'group': group, 'sprev_id': nav[0], 'snext_id': nav[1], 'parcours' : None, 'students' : group.students.order_by("user__last_name") ,  
-                   'themes': themes, 'student': student}
+        context = {'datas': datas, 'parcourses': parcourses, 'group': group, 'sprev_id': nav[0], 'snext_id': nav[1], 'parcours' : None, 'students' : students ,  'today' : today ,  
+                   'themes': themes, 'student': student , 'communications' : [], }
     else:
         group = Group.objects.filter(students=student).first()
-        context = {'datas': datas, 'parcourses': parcourses, 'group': group, 'themes': themes, 'student': student , 'communications' : [] , 'parcours' : None, 'students' : None  }
+        
+        context = {'datas': datas, 'parcourses': parcourses, 'group': group, 'themes': themes, 'student': student , 'communications' : [] , 'parcours' : None,  'today' : today , 'students' : []  }
 
     return render(request, 'account/detail_student.html', context)
 
@@ -514,7 +524,7 @@ def detail_student_theme(request, id,idt):
     student = Student.objects.get(user_id=id)
     parcourses = Parcours.objects.filter(students=student)
     parcourses_publish = Parcours.objects.filter(students=student, is_publish=1)
-
+    today = time_zone_user(request.user)
     theme = Theme.objects.get(pk=idt)
 
     themes = student.level.themes.all()
@@ -550,17 +560,24 @@ def detail_student_theme(request, id,idt):
             datas.append(knowledge_dict)
 
     if request.user.is_teacher:
+        students = []
         teacher = Teacher.objects.get(user=request.user)
-        group = Group.objects.get(students=student, teacher=teacher)
+        group = Group.objects.filter(students=student, teacher=teacher).last()
+        groups =  student.students_to_group.filter(teacher=teacher)
+        for g in groups :
+            sts = g.students.all().order_by("user__last_name")
+            for s in sts :
+                students.append(s)
+
         nav = navigation(group, id)
-        context = {'datas': datas, 'student': student, 'theme': theme, 'group': group, 'parcours': None, 'students' : group.students.order_by("user__last_name") ,  
-                   'sprev_id': nav[0], 'snext_id': nav[1], 'communications': [], 'parcourses': parcourses,
+        context = {'datas': datas, 'student': student, 'theme': theme, 'group': group, 'parcours': None, 'students' : students ,  
+                   'sprev_id': nav[0], 'snext_id': nav[1], 'communications': [], 'parcourses': parcourses, 'today' : today ,
                    'themes': themes}
 
     else:
         group = Group.objects.filter(students=student).first()
         context = {'datas': datas, 'student': student, 'theme': theme, 'group': group, 'parcours': None,
-                   'communications': [], 'parcourses': parcourses, 'themes': themes, 'sprev_id': None,
+                   'communications': [], 'parcourses': parcourses, 'themes': themes, 'sprev_id': None, 'today' : today ,
                    'snext_id': None, }
     return render(request, 'account/detail_student_theme.html', context)
 
@@ -575,15 +592,24 @@ def detail_student_parcours(request, id,idp):
     parcourses = Parcours.objects.filter(students=student)
     themes = student.level.themes.all()
     relationships = Relationship.objects.filter(parcours = parcours, students = student, is_publish = 1).order_by("order")
-
+    today = time_zone_user(request.user)
     if request.user.is_teacher:
+        students = []
         teacher = Teacher.objects.get(user=request.user)
-        group = Group.objects.get(students=student, teacher=teacher)
+        group = Group.objects.filter(students=student, teacher=teacher).last()
+        groups =  student.students_to_group.filter(teacher=teacher)
+        for g in groups :
+            sts = g.students.all().order_by("user__last_name")
+            for s in sts :
+                students.append(s)
+
+
         nav = navigation(group, id)
-        context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'sprev_id': nav[0], 'students' : group.students.order_by("user__last_name") , 'group' : group ,
+        context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'sprev_id': nav[0], 'students' : students , 'group' : group , 'communications' : [], 
                    'snext_id': nav[1], 'parcourses': parcourses, 'student': student}
     else:
-        context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'parcourses': parcourses,  'sprev_id': None ,
+        group = Group.objects.filter(students=student).last()
+        context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'parcourses': parcourses,  'sprev_id': None , 'group' : group , 'communications' : [], 'today' : today ,
                    'snext_id': None, 'student': student}
 
     return render(request, 'account/detail_student_parcours.html', context)
@@ -599,7 +625,7 @@ def detail_student_all_views(request, id):
     student = Student.objects.get(user=user)
     studentanswers = student.answers.all()
     themes = student.level.themes.all()
-
+    today = time_zone_user(user)
     parcourses_tab = []
     parcourses_student_tab, exercise_tab = [], []
     parcourses = student.students_to_parcours.all()
@@ -661,13 +687,22 @@ def detail_student_all_views(request, id):
         std['median'] = 0
 
     if request.user.is_teacher:
+        students = []
         teacher = Teacher.objects.get(user=request.user)
-        group = Group.objects.get(students=student, teacher=teacher)
+        group = Group.objects.filter(students=student, teacher=teacher).last()
+        groups =  student.students_to_group.filter(teacher=teacher)
+        for g in groups :
+            sts = g.students.all().order_by("user__last_name")
+            for s in sts :
+                students.append(s)
+
+ 
         nav = navigation(group, id)
-        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'students' : group.students.order_by("user__last_name") ,  'group' : group ,
+        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'students' : students ,  'group' : group , 'communications' : [], 'today' : today , 
                    'student': student, 'parcours': None, 'sprev_id': nav[0], 'snext_id': nav[1] }
     else:
-        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes,
+        group = Group.objects.filter(students=student).last()
+        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'communications' : [], 'group' : group ,  'today' : today , 
                    'student': student, 'parcours': None, 'sprev_id': None, 'snext_id': None}
 
     return render(request, 'account/detail_student_all_views.html', context)
@@ -687,13 +722,14 @@ def detail_student_all_views(request, id):
 @login_required
 def close_an_account(request):
     user = request.user
-
-    return render(request, 'account/close_my_account.html', {'user': user, })
+    today = time_zone_user(user)
+    return render(request, 'account/close_my_account.html', {'user': user, 'communications' : [], 'today' : today  ,  })
 
 
 @login_required
 def close_my_account(request, id):
     user = get_object_or_404(User, user_id=id)
+    today = time_zone_user(user)
     user.delete()
     return redirect('index')
 
@@ -730,9 +766,10 @@ def register_teacher(request):
 def update_teacher(request, pk):
     user = get_object_or_404(User, pk=pk)
     teacher = get_object_or_404(Teacher, user=user)
+    today = time_zone_user(user)
     user_form = ManagerUpdateForm(request.POST or None, instance=user)
     teacher_form = TeacherForm(request.POST or None, instance=teacher)
-
+    new = False
     if all((user_form.is_valid(), teacher_form.is_valid())):
         teacher = teacher_form.save(commit=False)
         teacher.user = user
@@ -744,7 +781,7 @@ def update_teacher(request, pk):
         return redirect('list_teacher')
 
     return render(request, 'account/teacher_form.html',
-                  {'user_form': user_form,
+                  {'user_form': user_form, 'new' : new , 'communications': [] , 'today' : today , 
                    'teacher_form': teacher_form,
                    'teacher': teacher})
 
@@ -787,7 +824,7 @@ def register_teacher_from_admin(request):
     Enregistre un enseignant depuis la console admin d'un établissement
     """
 
-    user_form = NewUserTForm(request.POST or None)
+    user_form = ManagerForm(request.POST or None)
     teacher_form = TeacherForm(request.POST or None)
  
     new = False
@@ -813,8 +850,8 @@ def register_teacher_from_admin(request):
     else:
         new = True
 
-    return render(request, 'account/teacher_form.html',
-                  {'user_form': user_form,
+    return render(request, 'account/teacher_form.html', 
+                  {'user_form': user_form, 'communications': [] ,  
                    'teacher_form': teacher_form,
                    'new': new, })
 
@@ -911,7 +948,7 @@ def register_by_csv(request, key, idg=0):
         else:
             group = Group.objects.get(pk=idg)
 
-        return render(request, 'account/csv_teachers_or_students.html', {'key': key, 'idg': idg, 'group': group})
+        return render(request, 'account/csv_teachers_or_students.html', {'key': key, 'idg': idg, 'communications' : [],  'group': group})
 
 
 
@@ -984,14 +1021,15 @@ def register_users_by_csv(request,key):
 
     else :
 
-        return render(request, 'account/csv_all_teachers_or_students.html', {'key': key ,})
+        return render(request, 'account/csv_all_teachers_or_students.html', {'key': key , 'communications' : [], })
 
   
 #########################################Lost password #################################################################
 
 
 def updatepassword(request):
- 
+
+    today = time_zone_user(request.user)
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
@@ -1005,7 +1043,7 @@ def updatepassword(request):
     else:
         form = PasswordChangeForm(request.user)
  
-    return render(request, 'account/password_form.html', { 'form': form,  })
+    return render(request, 'account/password_form.html', { 'form': form, 'communications' : [], 'today' : today , })
 
 
 
@@ -1074,8 +1112,13 @@ def delete_parent(request, id):
 def my_profile(request):
 
     user = User.objects.get(id=request.user.id)
-    user_form = UserUpdateForm(request.POST or None, request.FILES or None, instance=user)
+    today = time_zone_user(user)    
+    if user.is_superuser :
+        user_form = ManagerUpdateForm(request.POST or None, request.FILES or None, instance=user)        
+    else :
+        user_form = UserUpdateForm(request.POST or None, request.FILES or None, instance=user)
 
+    new = False
     if request.user.is_teacher:
         teacher = Teacher.objects.get(user=user)
 
@@ -1093,8 +1136,8 @@ def my_profile(request):
                 else:
                     return redirect('profile')
 
-        return render(request, 'account/teacher_form.html',
-                      {'teacher_form': teacher_form, 'user_form': user_form, 'teacher': teacher})
+        return render(request, 'account/teacher_form.html', 
+                      {'teacher_form': teacher_form, 'user_form': user_form,'new' : new , 'communications': [] ,  'teacher': teacher, 'today' : today})
 
     elif request.user.is_student:
 
@@ -1112,7 +1155,7 @@ def my_profile(request):
             else:
                 print(form.errors)
         return render(request, 'account/student_form.html',
-                      {'form': form, 'user_form': user_form, 'student': student, 'idg' : None , })
+                      {'form': form, 'user_form': user_form, 'communications' : [],  'student': student, 'idg' : None , 'today' : today })
 
     else:
         parent = Parent.objects.get(user=user)
@@ -1128,7 +1171,7 @@ def my_profile(request):
 
             else:
                 print(form.errors)
-        return render(request, 'account/parent_form.html', {'form': form, 'user_form': user_form, 'student': student, })
+        return render(request, 'account/parent_form.html', {'form': form, 'communications' : [],  'user_form': user_form, 'student': student, 'today' : today })
 
 
 def ajax_userinfo(request):
@@ -1224,7 +1267,7 @@ def ajax_detail_student_exercise(request):
     relationships = Relationship.objects.filter(parcours=parcours, students=student).order_by("order")
     studentanswers = Studentanswer.objects.filter(student=student, parcours=parcours).order_by("exercise")
 
-    context = {'student': student, 'parcours': parcours, 'studentanswers': studentanswers,
+    context = {'student': student, 'parcours': parcours, 'studentanswers': studentanswers, 'communications' : [], 
                'relationships': relationships}
 
     data = {}

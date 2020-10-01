@@ -13,7 +13,7 @@ from django.core import serializers
 from django.core.mail import send_mail
 from qcm.models import  Relationship, Parcours, Studentanswer
 from django.db.models import Count, Q
-
+from sendmail.models import Communication
  
 from django.contrib.auth.decorators import login_required 
 from group.decorators import  user_is_group_teacher
@@ -149,8 +149,10 @@ def calendar_initialize(request):
         relationships = Relationship.objects.filter(parcours__teacher=teacher, date_limit__gte=today).exclude(date_limit=None)
         parcourses = Parcours.objects.filter(teacher=teacher)
         calendars = Calendar.objects.filter(user=request.user)
-        form = EventForm(request.user, request.POST or None)
-        context = {'form': form, 'relationships': relationships, 'parcourses': parcourses, 'calendars': calendars,
+        form = EventForm(request.user, request.POST or None)        
+        nb_teacher_level = teacher.levels.count()
+        communications = Communication.objects.values('id', 'subject', 'texte').filter(active=1)
+        context = {'form': form, 'relationships': relationships, 'parcourses': parcourses, 'calendars': calendars,'nb_teacher_level' :nb_teacher_level , 'communications' :  communications ,
                    'teacher': teacher}
 
     else:
@@ -177,6 +179,7 @@ def calendar_initialize(request):
 
         nb_relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), students=student,  date_limit__gte=today).count()
 
+
         try :
             ratio = int(num/nb_relationships*100)
         except :
@@ -185,7 +188,7 @@ def calendar_initialize(request):
         ratiowidth = int(0.9*ratio)
         student = Student.objects.get(user=request.user)
         parcours = Parcours.objects.filter(students = student)
-        context = {'student' : student ,     'relationships' : relationships ,    'ratio' : ratio ,  'ratiowidth' : ratiowidth ,       'relationships_in_late' : relationships_in_late ,    } 
+        context = {'student' : student ,    'relationships' : relationships ,    'ratio' : ratio ,  'ratiowidth' : ratiowidth ,       'relationships_in_late' : relationships_in_late ,    } 
 
     return render(request, "schedule/base.html" , context )
 

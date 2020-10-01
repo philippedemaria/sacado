@@ -17,7 +17,7 @@
  
  
 {% block page_title %}
-     <a href="{% url 'admin_tdb' %}"> <i class="fa fa-cloud"></i></a> {{ request.user.school.name}} <img src="{% static 'img/angle-right.png' %}"/> Elèves
+     <a href="{% url 'admin_tdb' %}"> <i class="fa fa-cloud"></i></a> {{  school.name}} <img src="{% static 'img/angle-right.png' %}"/> Elèves
 {% endblock %}
  
 
@@ -99,7 +99,7 @@
                                      {{ user.last_login }} 
                                 </td>
                                 <td>
-                                    <a  href="{% url 'newpassword_student' user.id  0   %}" data-student_id="{{ student.user.id }}" title="mot de passe par défaut : sacado2020" 
+                                    <a  href="{% url 'newpassword_student' user.id  0   %}" data-student_id="{{ user.id }}" title="mot de passe par défaut : sacado2020" 
                                         onclick="return Newpassword()" style="font-size:11px; margin-right:5px"  >
                                         Init. mot de passe
                                     </a> 

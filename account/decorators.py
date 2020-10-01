@@ -26,7 +26,6 @@ def decide(this_student, role, asker):
         groups = Group.objects.filter(students=this_student, teacher=teacher)
         if len(groups) > 0:
             test = True
-
     return test
 
 
@@ -35,7 +34,6 @@ def user_can_read_details(function):  # id est associé à un user
         user = User.objects.get(pk=kwargs['id'])
         student = Student.objects.get(user=user)  # détail de ce student
         testeur = decide(student, request.user.user_type, request.user)
-
         if testeur:
             return function(request, *args, **kwargs)
         else:

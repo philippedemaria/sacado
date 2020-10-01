@@ -26,7 +26,7 @@ def list_themes(request):
  
     themes = Theme.objects.all()
 
-    return render(request, 'socle/list_themes.html', {'themes': themes})
+    return render(request, 'socle/list_themes.html', {'themes': themes, 'communications' : [] , })
 
 
 def create_theme(request):
@@ -40,7 +40,7 @@ def create_theme(request):
     else:
         print(form.errors)
 
-    context = {'form': form, 'theme': None  }
+    context = {'form': form, 'communications' : [] , 'theme': None  }
 
     return render(request, 'socle/form_theme.html', context)
 
@@ -57,7 +57,7 @@ def update_theme(request, id):
         else:
             print(theme_form.errors)
 
-    context = {'form': theme_form,  'theme': theme,   }
+    context = {'form': theme_form, 'communications' : [] , 'theme': theme,   }
 
     return render(request, 'socle/form_theme.html', context )
 
@@ -75,7 +75,7 @@ def list_knowledges(request):
  
     knowledges = Knowledge.objects.all().select_related('theme', 'level').prefetch_related('exercises')
 
-    return render(request, 'socle/list_knowledges.html', {'knowledges': knowledges})
+    return render(request, 'socle/list_knowledges.html', {'communications' : [] , 'knowledges': knowledges})
 
 
 def create_knowledge(request):
@@ -89,7 +89,7 @@ def create_knowledge(request):
     else:
         print(form.errors)
 
-    context = {'form': form,  'knowledge': None  }
+    context = {'form': form,  'communications' : [] , 'knowledge': None  }
 
     return render(request, 'socle/form_knowledge.html', context)
 
@@ -111,7 +111,7 @@ def create_multi_knowledge(request):
         else:
             print(form.errors)
 
-    context = {'form': form,  'knowledge': None   }
+    context = {'form': form, 'communications' : [] ,  'knowledge': None   }
 
     return render(request, 'socle/form_knowledge.html', context)
 
@@ -130,7 +130,7 @@ def update_knowledge(request, id):
         else:
             print(knowledge_form.errors)
 
-    context = {'form': knowledge_form,  'knowledge': knowledge,   }
+    context = {'form': knowledge_form, 'communications' : [] , 'knowledge': knowledge,   }
 
     return render(request, 'socle/form_knowledge.html', context )
 
@@ -146,7 +146,7 @@ def list_levels(request):
  
     levels = Level.objects.all()
 
-    return render(request, 'socle/list_levels.html', {'levels': levels})
+    return render(request, 'socle/list_levels.html', {'communications' : [] ,'levels': levels})
 
 
 def create_level(request):
@@ -160,7 +160,7 @@ def create_level(request):
     else:
         print(form.errors)
 
-    context = {'form': form,  'level': None , 'teacher': teacher }
+    context = {'form': form,  'level': None , 'communications' : [] , 'teacher': teacher }
 
     return render(request, 'socle/form_level.html', context)
 
@@ -178,7 +178,7 @@ def update_level(request, id):
         else:
             print(level_form.errors)
 
-    context = {'form': level_form,  'level': level, 'teacher': teacher  }
+    context = {'form': level_form,  'level': level, 'communications' : [] ,'teacher': teacher  }
 
     return render(request, 'socle/form_level.html', context )
 
