@@ -115,7 +115,7 @@ class SupportfileForm(forms.ModelForm):
 		subjects = teacher.subjects.all()
 		knowledges = Knowledge.objects.filter(theme__subject__in= subjects)
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
-		self.fields['skills']  =  forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject= subject), widget=forms.CheckboxSelectMultiple, required=False)
+		self.fields['skills']  =  forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject= subject), required=False)
 
 class SupportfileKForm(forms.ModelForm):
 	class Meta:
@@ -129,7 +129,7 @@ class SupportfileKForm(forms.ModelForm):
 		subject = knowledge.theme.subject 
 		knowledges = Knowledge.objects.filter(theme__subject= subject)
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
-		self.fields['skills']  =  forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject= subject), widget=forms.CheckboxSelectMultiple, required=False)
+		self.fields['skills']  =  forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject= subject), required=False)
 
 
 class UpdateSupportfileForm(forms.ModelForm):
@@ -146,7 +146,7 @@ class UpdateSupportfileForm(forms.ModelForm):
 		instance = kwargs.pop('instance')
 		knowledges = Knowledge.objects.filter(theme__subject= subject)
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
-		self.fields['skills']  = forms.ModelMultipleChoiceField(queryset=Skill.objects.filter(subject=subject), widget=forms.CheckboxSelectMultiple, required=False)
+		self.fields['skills']  = forms.ModelMultipleChoiceField(queryset=Skill.objects.filter(subject=subject), required=False)
 
 
 

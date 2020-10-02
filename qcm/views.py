@@ -1776,7 +1776,7 @@ def admin_list_supportfiles(request,id):
 
 
 
-    return render(request, 'qcm/list_supportfiles.html', {'levels_dict': levels_dict, 'teacher':teacher , 'level':level })
+    return render(request, 'qcm/list_supportfiles.html', {'levels_dict': levels_dict, 'teacher':teacher , 'level':level , 'relationships' : [] , 'communications' : [] , 'parcours' :  None })
 
 
  
@@ -1891,8 +1891,8 @@ def update_supportfile(request, id, redirection=0):
 
                 return redirect('admin_supportfiles', supportfile.level.id)
 
-        context = {'form': supportfile_form, 'teacher': teacher, 'supportfile': supportfile, 'knowledges': knowledges,
-                   'supportfiles': supportfiles, 'levels': levels, 'parcours': None, 'communications' : [] ,  }
+        context = {'form': supportfile_form, 'teacher': teacher, 'supportfile': supportfile, 'knowledges': knowledges, 'relationships': [] ,
+                   'supportfiles': supportfiles, 'levels': levels, 'parcours': None, 'communications' : [] , 'knowledge' : knowledge ,   }
 
         return render(request, 'qcm/form_supportfile.html', context)
 
