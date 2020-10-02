@@ -472,7 +472,7 @@ def list_parcours(request):
     except:
         pass  
 
-    return render(request, 'qcm/list_parcours.html', { 'parcourses' : parcourses , 'communications' : [] , 'relationships' : [],  'parcours' : None , 'teacher' : teacher , 'nb_archive' : nb_archive })
+    return render(request, 'qcm/list_parcours.html', { 'parcourses' : parcourses , 'communications' : [] , 'relationships' : [],  'parcours' : None , 'group' : None , 'teacher' : teacher , 'nb_archive' : nb_archive })
 
 
 @login_required
@@ -2015,6 +2015,7 @@ def show_this_exercise(request, id):
     start_time = time.time()
 
     context = {'exercise': exercise, 'start_time': start_time, 'parcours': parcours , 'communications' : [] , 'relationships' : [] , 'today' : today ,  }
+
     return render(request, 'qcm/show_exercise.html', context)
 
 
@@ -2493,7 +2494,7 @@ def detail_task_parcours(request,id,s):
     if s == 0 : # groupe
 
         relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours =parcours,exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")  
-        context = {'relationships': relationships, 'parcours': parcours , 'today':today , 'date_today':date_today }
+        context = {'relationships': relationships, 'parcours': parcours , 'today':today ,  'communications' : [] ,  'date_today':date_today ,  'group_id' : None }
  
         return render(request, 'qcm/list_tasks.html', context)
     else : # exercice
@@ -2520,7 +2521,7 @@ def detail_task_parcours(request,id,s):
         relationship = Relationship.objects.get( parcours =parcours,exercise= exercise)
 
 
-        context = {'details_tab': details_tab, 'parcours': parcours ,   'exercise' : exercise , 'relationship': relationship,  'date_today' : date_today}
+        context = {'details_tab': details_tab, 'parcours': parcours ,   'exercise' : exercise , 'relationship': relationship,  'date_today' : date_today, 'communications' : [] ,  'group_id' : None }
 
         return render(request, 'qcm/task.html', context)
 
@@ -2535,7 +2536,7 @@ def detail_task(request,id,s):
     if s == 0 : # groupe
  
         relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours =parcours,exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")  
-        context = {'relationships': relationships, 'parcours': parcours , 'today':today }
+        context = {'relationships': relationships, 'parcours': parcours , 'today':today ,  'group_id' : None ,  'communications' : [] , }
         return render(request, 'qcm/list_tasks.html', context)
     else : # exercice
 
@@ -2561,7 +2562,7 @@ def detail_task(request,id,s):
         relationship = Relationship.objects.get( parcours =parcours,exercise= exercise)
 
 
-        context = {'details_tab': details_tab, 'parcours': parcours ,   'exercise' : exercise , 'relationship': relationship,  'today' : today}
+        context = {'details_tab': details_tab, 'parcours': parcours ,   'exercise' : exercise , 'relationship': relationship,  'today' : today ,  'communications' : [] ,  'group_id' : None}
 
         return render(request, 'qcm/task.html', context)
 
@@ -2572,7 +2573,7 @@ def all_my_tasks(request):
     teacher = Teacher.objects.get(user = request.user) 
     parcourses = Parcours.objects.filter(is_publish=  1,teacher=teacher ) 
     relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today,exercise__supportfile__is_title=0).order_by("parcours") 
-    context = {'relationships': relationships, 'parcourses': parcourses, 'parcours': None,  }
+    context = {'relationships': relationships, 'parcourses': parcourses, 'parcours': None,  'communications' : [] ,  'group_id' : None  }
     return render(request, 'qcm/all_tasks.html', context)
 
 
@@ -2582,7 +2583,7 @@ def these_all_my_tasks(request):
     teacher = Teacher.objects.get(user = request.user) 
     parcourses = Parcours.objects.filter(is_publish=  1,teacher=teacher ) 
     relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("parcours") 
-    context = {'relationships': relationships, 'parcourses': parcourses, 'parcours': None,  }
+    context = {'relationships': relationships, 'parcourses': parcourses, 'parcours': None,  'communications' : [] ,  'group_id' : None }
     return render(request, 'qcm/all_tasks.html', context)
 
 
@@ -2593,7 +2594,7 @@ def group_tasks(request,id):
     today = time_zone_user(request.user) 
     teacher = Teacher.objects.get(user_id = request.user.id)
     group = Group.objects.get(pk = id)
-
+    nb_parcours_teacher = teacher.teacher_parcours.count() # nombre de parcours pour un prof
     students = group.students.prefetch_related("students_to_parcours")
     parcourses_tab = []
     for student in students :

@@ -82,11 +82,11 @@
                          {{ d.student }}
                     </td>
                     <td>{% if d.point %}
-                         <a class="{% if s.point < 30 %}
+                         <a class="{% if d.point < 30 %}
                                      red 
-                                    {% elif s.point < 60 %}
+                                    {% elif d.point < 60 %}
                                     orange
-                                    {% elif s.point < 80 %}
+                                    {% elif d.point < 80 %}
                                     green
                                     {% else %}
                                     darkgreen
