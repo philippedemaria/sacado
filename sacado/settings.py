@@ -43,7 +43,7 @@ if PRODUCTION:
 
 else:
     # configuration dévellopement
-    DEBUG = False
+    DEBUG = True
     ALLOWED_HOSTS = ["*"]
     SECRET_KEY = '85umr_$zf2bd58xl)nzf)i*jh)o5h*dp%*3e@pqg+ijem=t1xq'
 
@@ -298,25 +298,25 @@ CKEDITOR_CONFIGS = {
  
 
 ########################################################################################################################
-#if PRODUCTION :
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'logs/debug.log',
-            'backupCount': 10,  # keep at most 10 log files
-            'maxBytes': 1048576,  # 1*1024*1024 bytes (1MB)
-        },
+if PRODUCTION :
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'file': {
+                'level': 'DEBUG',
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': 'logs/debug.log',
+                'backupCount': 10,  # keep at most 10 log files
+                'maxBytes': 1048576,  # 1*1024*1024 bytes (1MB)
+            },
 
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
         },
-    },
-}
+        'loggers': {
+            'django': {
+                'handlers': ['file'],
+                'level': 'DEBUG',
+                'propagate': True,
+            },
+        },
+    }
