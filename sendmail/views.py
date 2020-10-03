@@ -104,10 +104,6 @@ def create_email(request):
 		texte = request.POST.get('texte')
 		receivers = request.POST.getlist('receivers')
 		groups = request.POST.getlist('groups')
-
-		print(groups)
-		print(receivers)
-
 		rcv = []
  
 		for receiver  in receivers :
@@ -122,8 +118,8 @@ def create_email(request):
 					new_f.receivers.add(s.user)	
 					rcv.append(str(s.user.email)) 
 
-		send_mail(subject, texte, str(request.user.email), rcv )
-
+		send_mail(subject, cleanhtml(unescape_html(texte)) , str(request.user.email), rcv )
+		send_mail(subject, cleanhtml(unescape_html(texte)) , str(request.user.email), [str(request.user.email)] )
 
 	else:
 		print(form.errors)
