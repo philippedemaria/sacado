@@ -271,12 +271,14 @@ def new_group(request):
 		if form.is_valid():
 			form.save()
 			stdts = request.POST.get("students")
-
-			if len(stdts) > 0 :
-				tested = include_students(stdts,form)
-				if not tested :
-					messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
-
+			try :
+				if len(stdts) > 0 :
+					tested = include_students(stdts,form)
+					if not tested :
+						messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
+			except :
+				pass
+				
 			return redirect('school_groups')
 		else :
 			print(form.errors)
@@ -296,10 +298,13 @@ def update_group_school(request,id):
 			form.save()
 			stdts = request.POST.get("students")
 
-			if len(stdts) > 0 :
-				tested = include_students(stdts,form)
-				if not tested :
-					messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
+			try :
+				if len(stdts) > 0 :
+					tested = include_students(stdts,form)
+					if not tested :
+						messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
+			except :
+				pass
 
 			return redirect('school_groups')
 		else :
