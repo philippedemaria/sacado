@@ -92,8 +92,8 @@ def list_emails(request):
 @login_required
 def create_email(request):
 	form = EmailForm(request.POST or None,request.FILES or None)
-	user = User.objects.get(pk=request.user.id)
-	today = time_zone_user(request.user)
+	user = request.user
+	today = time_zone_user(user)
 	if form.is_valid():		
 		new_f = form.save(commit=False)
 		new_f.author = user
@@ -118,7 +118,7 @@ def create_email(request):
 				if s.user.email :
 					rcv.append(str(s.user.email)) 
 
-		send_mail(subject, texte, str(user.email), rcv )
+		send_mail(subject, texte, str(request.user.email), rcv )
 
 
 	else:
