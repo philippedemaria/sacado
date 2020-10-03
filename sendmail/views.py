@@ -105,17 +105,21 @@ def create_email(request):
 		receivers = request.POST.getlist('receivers')
 		groups = request.POST.getlist('groups')
 
+		print(groups)
+		print(receivers)
+
 		rcv = []
  
 		for receiver  in receivers :
 			u = User.objects.get(pk = int(receiver))
-			new_f.receivers.add(u.id)
+			new_f.receivers.add(u)
 			rcv.append(str(u.email))
 
 		for group_id  in groups :
 			group = Group.objects.get(pk = int(group_id))
 			for s in group.students.all():
 				if s.user.email :
+					new_f.receivers.add(s.user)	
 					rcv.append(str(s.user.email)) 
 
 		send_mail(subject, texte, str(request.user.email), rcv )
