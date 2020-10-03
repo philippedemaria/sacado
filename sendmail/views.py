@@ -137,6 +137,7 @@ def create_email(request):
 @user_is_email_teacher
 def delete_email(request,id):
     email = Email.objects.get(id=id)
+    email.receivers.clear()
     email.delete()
     return redirect('emails')
 
