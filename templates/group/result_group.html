@@ -28,7 +28,7 @@
  
     <li class="dropdown  dropdown-large">
       <a href="#" class="dropdown-toggle no_button {% if 'student' in request.path %} active {% endif %}" data-toggle="dropdown"> Elèves  <b class="caret"></b></a> 
-        <ul class="dropdown-menu" style="height:400px;overflow-y: auto">
+        <ul class="dropdown-menu" style="max-height:400px;overflow-y: auto">
             {% for std in group.students.all|dictsort:"user.last_name" %}
                 <li class="dropdown dropdown-submenu {% if 'student' in request.path  %} {% if std.user.id == student.id %} active {% endif %}{% endif %}" >
                     <a href="{% url 'detail_student_all_views' std.user.id %}"  > {{ std }} </a>

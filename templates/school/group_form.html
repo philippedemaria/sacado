@@ -10,7 +10,10 @@
     {% else %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
     {% endif %}
-
+    <script>
+        require(['script/ajax-school']);        
+        require(['script/ajax-dashboard']);
+    </script>
  
 {% endblock %}
 
@@ -86,13 +89,73 @@
                         </div>
                     </div>
                 </div> 
-                <div class="row">
- 
 
-                </div>
-
-
-
+                {% if request.user.school %}   
+                    {% if group %}
+                    <div class="row"> 
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="form-group">
+                                <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+                                    <div class="btn btn-default full_width" style="text-align: left; font-size:15px; margin-bottom: 5px">
+                                        <span data-toggle="collapse" data-parent="#accordion" href="#collapsed" class="parcours_displayer" style="color : {{  parcours.color }}" >
+                                             <label>Co-enseignement ?  <small>Partager une classe avec vos collègues</small> </label>
+                                        </span>
+                                        <div id="collapsed" class="collapse">
+                                            <div class="panel-body"  style="padding:0px">
+                                                <table class="table" style="margin-bottom: 0px;font-size:14px;">
+                                                    <tr>
+                                                        <td>
+                                                            Nom et prénom
+                                                        </td>
+                                                        <td>
+                                                            Lecteur
+                                                        </td>
+                                                        <td>
+                                                            Editeur
+                                                        </td>
+        
+                                                    </tr>
+                                                    {% for t in teachers  %}
+                                                    {% get_sharing_role group t as sharing %}
+                                                    <tr>
+                                                        <td>
+                                                            {{ t }}
+                                                        </td>
+                                                        <td>
+                                                            <input type="checkbox"  name="choices" class="select_radio choice{{ t.user.id }}" data-counter="{{ t.user.id }}"  value="0-{{ t.user.id }}" {% if sharing.reader %} checked {% endif %}> 
+                                                        </td>
+                                                        <td>
+                                                            <input type="checkbox"  name="choices" class="select_radio choice{{ t.user.id }}" data-counter="{{ t.user.id }}" value="1-{{ t.user.id }}"  {% if sharing.publisher %} checked {% endif %}> 
+                                                        </td>
+     
+                                                    </tr>
+                                                    {% endfor %}
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    {% else %}
+                    <div class="row"> 
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="alert alert-danger">
+                                 Une fois le groupe créé avec son enseignant de référence, vous pourrez lui attribuer des enseignants en co-animation.
+                            </div>
+                        </div>
+                    </div> 
+                    {% endif %}
+                {% else %}
+                    <div class="row"> 
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="alert alert-danger">
+                                La gestion de la co-animation n'est possible qu'avec la version établissement.
+                            </div>
+                        </div>
+                    </div> 
+                {% endif %}
                 <div class="row">
                     <div class="col-sm-12 col-md-8">
                         <div class="form-group">

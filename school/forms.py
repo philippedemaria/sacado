@@ -30,7 +30,7 @@ class GroupForm(forms.ModelForm):
 	class Meta:
 		model = Group
 		fields = '__all__'
-		exclude = ('students',)
+		exclude = ('students','teachers')
 
 	def __init__(self, *args, school, **kwargs):
 		self.school = school
@@ -39,9 +39,6 @@ class GroupForm(forms.ModelForm):
 			users = User.objects.filter(user_type = 2, school = school)
 			teachers = Teacher.objects.filter(user__in = users).order_by("user__last_name") 
 			self.fields['teacher']	 = forms.ModelChoiceField(queryset= teachers) 
-
-
-
 
 
 class StageForm(forms.ModelForm):

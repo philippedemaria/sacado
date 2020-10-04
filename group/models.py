@@ -23,7 +23,9 @@ class Group(ModelWithCode):
     level = models.ForeignKey(Level, on_delete=models.PROTECT, related_name="groups", verbose_name="Niveau*")
     assign = models.BooleanField(default=1)
     suiviparent = models.BooleanField(default=0)
-    lock = models.BooleanField(default=0)    
+    lock = models.BooleanField(default=0)
+    teachers = models.ManyToManyField(Teacher, blank=True,   editable=False, through="Sharing_group", related_name="teacher_group")
+
 
     class Meta:
         ordering = ['name']
@@ -72,6 +74,7 @@ class Group(ModelWithCode):
         Donne le nombre total de parcours, le nombre de visibles et de publiés du groupe
         """
         students = self.students.order_by("user__last_name")
+
         number_of_parcours_of_this_level_by_this_teacher = self.teacher.teacher_parcours.filter(level = self.level).count()
         parcours_tab = []
         parcours_id_tab = []
@@ -86,7 +89,7 @@ class Group(ModelWithCode):
         for parcours in parcours_tab:
             if parcours.is_favorite and not parcours.is_evaluation :
                 nbf += 1
-            if parcours.is_publish:
+            if parcours.is_publish and not parcours.is_evaluation :
                 nbp += 1
             if parcours.is_evaluation:
                 nbef += 1
@@ -105,7 +108,30 @@ class Group(ModelWithCode):
 
         return data
 
- 
+    def sharing_role(self,teacher):
+        data = {}
+        reader , publisher = False , False
+        if Sharing_group.objects.filter(group = self , teacher=teacher).exists() :
+            shared_grps = Sharing_group.objects.get(group = self , teacher=teacher)
+            if shared_grps.role == 0 :
+                reader = True
+            else :
+                publisher = True
 
+        data["publisher"] = publisher
+        data["reader"] = reader 
+        return data
 
+class Sharing_group(models.Model):
+
+    group = models.ForeignKey(Group, on_delete=models.PROTECT,  null=True, blank=True,   related_name='group_sharingteacher',  editable= False)
+    teacher = models.ForeignKey(Teacher, on_delete=models.PROTECT, null=True, blank=True,  related_name='teacher_sharingteacher',  editable= False)
+    role = models.BooleanField(default=0)
  
+    
+
+    def __str__(self):
+        return "{} : {} : {}".format(self.group, self.teacher, self.role)
+ 
+    
+

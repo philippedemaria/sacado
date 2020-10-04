@@ -24,31 +24,26 @@
 {% block page_menu_right %}
 
 
-{% include 'group/submenu_group.html' %}
+    {% include 'group/submenu_group.html' %}
+
+    {% if role %}
+        {% include 'qcm/submenu_creation_evaluation.html' %}
 
 
-{% include 'qcm/submenu_creation_evaluation.html' %}
+        <li class="dropdown">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Créer un parcours <b class="caret"></b> </a>
+
+            <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+         
+         
+                <li> <a href="{% url 'create_parcours' %}"  >  + Nouveau Parcours</a> </li> 
+                <li> <a href="{% url 'all_parcourses' %}"   > Parcours mutualisés</a></li>         
+                <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   > Parcours par défaut</a></li>
 
 
-<li class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Créer un parcours <b class="caret"></b> </a>
-
-    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
- 
- 
-        <li> <a href="{% url 'create_parcours' %}"  >  + Nouveau Parcours</a> </li> 
-        <li> <a href="{% url 'all_parcourses' %}"   > Parcours mutualisés</a></li>         
-        <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   > Parcours par défaut</a></li>
-
-
-    </ul>
-</li>  
-
-
-
- 
-
-
+            </ul>
+        </li>  
+    {% endif %}
 {% endblock %}
 
 {% block css_files %}
@@ -176,6 +171,7 @@
                 </div>
             </div>
             <div class="box-footer">
+                {% if role %}
                 <div class="row extend"> 
                     <div class="col-lg-4 col-xs-4">
                     {% if parcours.is_evaluation %}
@@ -227,12 +223,28 @@
                         </a>
                     </div> 
                 </div>
+                {% else %}
+                <div class="row extend">                     
+   
+                    <div class="col-lg-6 col-xs-6">
+                        <a  href="{% url 'result_parcours' parcours.id  %}" class="edit" target="_blank"><i class="fa fa-fw fa-mortar-board"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
+                        </a>   
+                    </div>
+                    <div class="col-lg-6 col-xs-6">
+                        <a href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
+                        </a>
+                    </div> 
+                </div>
+
+                {% endif %}
             </div>
         </div>   
         {% endfor %}
         </div>
     {% empty %}
+ 
 
+        {% if teacher_role %}
         <div class="row"> 
             <div class="col-sm-12 col-md-12">
                 <div class="alert alert-danger">Aucun parcours n'est affecté à ce groupe. Tant qu'un groupe ne contient pas d'élève, <strong>vous ne pouvez pas lui attribuer de parcours</strong>. Lorsque vos parcours sont créés, les élèves les rejoignent directement dès leur inscrition via le lien <span style="color:#271942">https://sacado.xyz/group/{{ group.code }}</span><br>
@@ -254,7 +266,14 @@
 
             </div>
         </div>
-
+        {% else %}
+            <div class="row"> 
+                <div class="col-sm-12 col-md-12">
+                    <div class="alert alert-danger">Vous ne pouvez pas créer de parcours pour ce groupe. Contacter votre administrateur.  
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     {% endfor %}
 
 </form>

@@ -134,6 +134,45 @@
                           </div>
                           <div style="height:5px"></div>
                         {% endfor %}
+                        {% if share_groups|length > 0 %}<hr><label>Groupes co-animés</label><br>{% endif %}
+                        {% for sg in share_groups %}
+                        <a data-toggle="collapse" data-target="#demosg{{ forloop.counter }}" style="color:{{ sg.group.color}};cursor:pointer">
+                            {{ sg.group.name }} <small><i class="fa fa-caret-down"></i></small> </a> 
+                            {% if sg.group.students.count > 0 %}<label class="pull-right"><input type="checkbox" value="{{ forloop.counter }}" 
+                                                                                                {% if request.session.group_id %}
+                                                                                                    {% if  request.session.group_id == sg.group.id %}checked {% endif %}
+                                                                                                {% else %}
+                                                                                                    {% if sg.group.students.count == students_checked  %}checked {% endif %}
+                                                                                                {% endif %}
+                                                                                                class="select_all_sg" /><small> tous  </small> </label>{% endif %}<br>
+
+                          <div id="demosg{{ forloop.counter }}" class="collapse" >
+                                <div class="form-group">
+                                    {% for s in sg.group.students.all|dictsort:"user.last_name"  %}
+
+                                        <label>
+                                            <input type = "checkbox" 
+                                                    class="selector" 
+                                                    name="students_sg" 
+                                                    value="{{ s.user.id}}"
+
+                                                    {% if parcours %}
+                                                     {% get_in_parcours  s parcours  as bool  %}
+
+                                                        {% if group_id %}
+                                                            {% if  group_id == sg.group.id  %}checked {% endif %}
+                                                        {% else %}
+                                                            {% if bool  %}checked {% endif %}
+                                                        {% endif %}
+                                                    {% endif %} > 
+                                                    {{ s.user|title}}
+                                        </label><br>
+                                    {% endfor %}
+                                </div>
+                          </div>
+                          <div style="height:5px"></div>
+                        {% endfor %}
+
                     </div>
                     <div class="form-group" style="font-size:12px">      
                         <div class="alert alert-danger">      

@@ -5,7 +5,7 @@ from django.contrib.auth import   logout
 from account.models import  User, Teacher, Student  ,Parent
 from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile
 from django.contrib.auth.decorators import login_required 
-from group.models import Group
+from group.models import Group, Sharing_group
 from school.models import Stage
 from sendmail.models import Communication
 from socle.models import Level
@@ -18,7 +18,7 @@ import random
 import pytz
 import uuid
 import os
-
+from itertools import chain
 
 def index(request):
 
@@ -41,7 +41,16 @@ def index(request):
                 request.session["school_id"] = request.user.school.id 
 
             teacher = Teacher.objects.get(user=request.user)
-            groups = Group.objects.filter(teacher=teacher)
+
+            grps = Group.objects.filter(teacher=teacher)
+            shared_grps_id = Sharing_group.objects.filter(teacher=teacher).values_list("group_id", flat=True)
+            sgps = []
+            for sg_id in shared_grps_id :
+                grp = Group.objects.get(pk=sg_id)
+                sgps.append(grp)
+
+            groups = chain(grps, sgps)
+
             this_user = request.user
             nb_teacher_level = teacher.levels.count()
 

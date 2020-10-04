@@ -20,11 +20,9 @@
 
 
 {% block page_menu_right %}
-    {% if request.user.user_type == 2 %}
-        {% include 'qcm/submenu_parcours.html' %}
-    {% elif request.user.user_type == 0 %}
+ 
         <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
-   {% endif %}
+ 
 {% endblock %}
 
 

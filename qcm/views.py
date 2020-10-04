@@ -6,7 +6,7 @@ from django.forms.models import modelformset_factory
 from django.contrib.auth.decorators import login_required, permission_required,user_passes_test
 from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
-from group.models import Group 
+from group.models import Group , Sharing_group
 from school.models import Stage
 from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Mastering_done
 from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm  ,CourseForm , DemandForm , MasteringForm,MasteringDoneForm 
@@ -383,16 +383,23 @@ def individualise_parcours(request,id):
     students = parcours.students.all().order_by("user__last_name")
 
     try :
-        group_id = request.session.get("group_id")
+        group_id = request.session["group_id"]
         if group_id :
             group = Group.objects.get(pk = group_id)
         else :
-            group = None
+            group = None     
+        if Sharing_group.objects.filter(group_id=group_id, teacher = teacher).exists() :
+            sh_group = Sharing_group.objects.get(group_id=group_id, teacher = teacher)
+            role = sh_group.role
+        else :
+            role = False
     except :
         group_id = None
+        role = False
         group = None
 
-
+    if parcours.teacher == teacher:
+        role = True
 
     context = {'relationships': relationships, 'parcours': parcours,     'communications':[],     'students': students,  'form': None,  
                     'teacher': teacher,
@@ -400,7 +407,7 @@ def individualise_parcours(request,id):
                   'levels': None , 
                   'themes' : None ,
                    'user': request.user , 
-                   'group_id' : group_id , 'group' : group , }
+                   'group_id' : group_id , 'group' : group , 'role' : role }
 
     return render(request, 'qcm/form_individualise_parcours.html', context )
 
@@ -523,14 +530,30 @@ def list_evaluations_archives(request):
 def list_parcours_group(request,id):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
+ 
     group = Group.objects.get(pk = id)
+    try :
+        sharing_group = Sharing_group.objects.get(group = group, teacher=teacher)
+        role = sharing_group.role
+        sharing = True
+    except :
+        role = False
+        sharing = False
+
+    if group.teacher == teacher :
+        role = True
+
     request.session["group_id"] = group.id
     group_tab = []
     data = {}
     parcours_tab = []
     students = group.students.all()
+
     for student in students :
-        pcs = Parcours.objects.filter(Q(teacher=teacher)|Q(author=teacher), students= student, is_favorite=1).order_by("is_evaluation", "ranking")
+        if sharing :
+            pcs = Parcours.objects.filter(students= student, is_favorite=1).order_by("is_evaluation", "ranking")
+        else :
+            pcs = Parcours.objects.filter(Q(teacher=teacher)|Q(author=teacher), students= student, is_favorite=1).order_by("is_evaluation", "ranking")
         if len(parcours_tab) == teacher.teacher_parcours.count() :
             break  
         else :    
@@ -539,7 +562,7 @@ def list_parcours_group(request,id):
                     parcours_tab.append(parcours)
                 if len(parcours_tab) == teacher.teacher_parcours.count() :
                     break 
-    return render(request, 'qcm/list_parcours_group.html', {'parcours_tab': parcours_tab , 'group': group,  'parcours' : None , 'communications' : [] , 'relationships' : [] , })
+    return render(request, 'qcm/list_parcours_group.html', {'parcours_tab': parcours_tab , 'group': group,  'parcours' : None , 'communications' : [] , 'relationships' : [] , 'role' : role })
 
 
 @login_required
@@ -562,7 +585,7 @@ def create_parcours(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
     levels =  teacher.levels.all()    
     form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher)
-
+ 
     themes_tab = []
     for level in levels :
         for theme in level.themes.all():
@@ -570,7 +593,8 @@ def create_parcours(request):
                 themes_tab.append(theme)
 
 
-    groups = Group.objects.filter(teacher  = teacher).order_by("level")
+    groups = Group.objects.filter(teacher=teacher).prefetch_related('students').order_by("level")
+    share_groups = Sharing_group.objects.filter(teacher  = teacher,role=1).order_by("group__level")
 
     if form.is_valid():
         nf = form.save(commit=False)
@@ -579,6 +603,14 @@ def create_parcours(request):
         nf.is_evaluation = 0 
         nf.save()
         nf.students.set(form.cleaned_data.get('students'))
+
+        sg_students =  request.POST.getlist('students_sg')
+
+        for s_id in sg_students :
+            student = Student.objects.get(user_id = s_id)
+            nf.students.add(s)
+
+
         i = 0
         for exercise in form.cleaned_data.get('exercises'):
             exercise = Exercise.objects.get(pk=exercise.id)
@@ -601,21 +633,35 @@ def create_parcours(request):
     try :
         if 'group_id' in request.session :
             if request.session.get["group_id"] :
-                group_id = request.session.get["group_id"]
+                group_id = request.session["group_id"]
                 group = Group.objects.get(pk = group_id) 
+
+            try :
+                group_id = request.session["group_id"]
+                if Sharing_group.objects.filter(group_id=group_id, teacher = teacher).exists() :
+                    sh_group = Sharing_group.objects.get(group_id=group_id, teacher = teacher)
+                    role = sh_group.role
+                else :
+                    role = False
+            except :
+                group_id = None
+                role = False
+                group = None
+
         else :
             group_id = None
             group = None
-
+            role = False
     except :
         group_id = None
         group = None
         request.session["group_id"]  = None
+        role = False
 
+ 
 
-
-    context = {'form': form,   'teacher': teacher,  'groups': groups,  'levels': levels, 'idg': 0,   'themes' : themes_tab, 'group_id': group_id , 'parcours': None,  'relationships': [], 
-               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'communications' : [],  'group': group ,}
+    context = {'form': form,   'teacher': teacher,  'groups': groups,  'levels': levels, 'idg': 0,   'themes' : themes_tab, 'group_id': group_id , 'parcours': None,  'relationships': [], 'share_groups' : share_groups , 
+               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'communications' : [],  'group': group , 'role' : role }
 
 
     return render(request, 'qcm/form_parcours.html', context)
@@ -625,7 +671,7 @@ def create_parcours(request):
 def update_parcours(request, id, idg=0 ):
     teacher = Teacher.objects.get(user_id=request.user.id)
     levels = teacher.levels.all()
-
+ 
     parcours = Parcours.objects.get(id=id)
     form = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher)
 
@@ -641,6 +687,10 @@ def update_parcours(request, id, idg=0 ):
     groups = Group.objects.filter(teacher=teacher).prefetch_related('students').order_by("level")
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
 
+
+    share_groups = Sharing_group.objects.filter(teacher  = teacher,role=1).order_by("group__level")
+
+
     if request.method == "POST":
         if form.is_valid():
             nf = form.save(commit=False)
@@ -649,6 +699,12 @@ def update_parcours(request, id, idg=0 ):
             nf.is_evaluation = 0 
             nf.save()
             nf.students.set(form.cleaned_data.get('students'))
+
+            sg_students =  request.POST.getlist('students_sg')
+            for s_id in sg_students :
+                student = Student.objects.get(user_id = s_id)
+                nf.students.add(student)
+
             try:
                 for exercise in parcours.exercises.all():
                     relationship = Relationship.objects.get(parcours=nf, exercise=exercise)
@@ -664,22 +720,31 @@ def update_parcours(request, id, idg=0 ):
                 return redirect('parcours')
             else:
                 return redirect('list_parcours_group', idg)
+        else :
+            print(form.errors)
  
     if idg > 0 and idg < 99999999999 :
         group_id = idg
         request.session["group_id"] = idg
         group = Group.objects.get(pk = group_id) 
- 
+        if Sharing_group.objects.filter(group_id=group_id, teacher = teacher).exists() :
+            sh_group = Sharing_group.objects.get(group_id=group_id, teacher = teacher)
+            role = sh_group.role 
     else :
         group_id = None
         group = None
         request.session["group_id"] = None
+        role = False
+
+    if parcours.teacher == teacher :
+        role = True
+
 
 
     students_checked = parcours.students.count()  # nombre d'étudiant dans le parcours
 
-    context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'group': group ,  'relationships': relationships, 
-               'exercises': exercises, 'levels': levels, 'themes': themes_tab, 'students_checked': students_checked, 'communications' : [], }
+    context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'group': group ,  'relationsips': relationships, 'share_groups': share_groups, 
+               'exercises': exercises, 'levels': levels, 'themes': themes_tab, 'students_checked': students_checked, 'communications' : [], 'role' : role }
 
     return render(request, 'qcm/form_parcours.html', context)
 
@@ -764,12 +829,24 @@ def show_parcours(request, id):
             j += 1
         nb_exo_visible.append(j)
 
-    try:
+ 
+
+    try :
         group_id = request.session["group_id"]
-        group = Group.objects.get(pk=group_id)
-    except:
+        group = Group.objects.get(pk = group_id)
+        if Sharing_group.objects.filter(group_id=group_id, teacher = parcours.teacher).exists() :
+            sh_group = Sharing_group.objects.get(group_id=group_id, teacher = parcours.teacher)
+            role = sh_group.role
+        else :
+            role = False
+    except :
         group_id = None
-        group = None
+        role = False
+        group = False
+
+    if parcours.teacher == teacher :
+        role = True
+
 
 
     students_p_or_g = students_from_p_or_g(request,parcours)
@@ -781,7 +858,7 @@ def show_parcours(request, id):
     nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count()
     context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'communications' : [] , 
                'students_from_p_or_g': students_p_or_g, 'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible, 'nb_students_p_or_g' : nb_students_p_or_g , 
-               'nb_exo_only': nb_exo_only, 'group_id': group_id, 'group': group }
+               'nb_exo_only': nb_exo_only, 'group_id': group_id, 'group': group, 'role' : role }
 
     return render(request, 'qcm/show_parcours.html', context)
 
@@ -842,11 +919,20 @@ def result_parcours(request, id):
 
     parcours = Parcours.objects.get(id=id)
     students = students_from_p_or_g(request,parcours) # liste des élèves d'un parcours donné 
-
+    teacher = Teacher.objects.get(user = request.user)
     try :
         group_id = request.session["group_id"]
+        if Sharing_group.objects.filter(group_id=group_id, teacher = parcours.teacher).exists() :
+            sh_group = Sharing_group.objects.get(group_id=group_id, teacher = parcours.teacher)
+            role = sh_group.role
+        else :
+            role = False
     except :
         group_id = None
+        role = False
+
+    if parcours.teacher == teacher :
+        role = True
 
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise').order_by("order")
     themes_tab, historic = [],  []
@@ -867,8 +953,7 @@ def result_parcours(request, id):
 
     stage = get_stage(parcours)
 
-
-    context = {  'relationships': relationships, 'parcours': parcours, 'students': students, 'themes': themes_tab, 'form': form,  'group_id' : group_id  , 'stage' : stage, 'communications' : [] }
+    context = {  'relationships': relationships, 'parcours': parcours, 'students': students, 'themes': themes_tab, 'form': form,  'group_id' : group_id  , 'stage' : stage, 'communications' : [] , 'role' : role }
 
     return render(request, 'qcm/result_parcours.html', context )
 
@@ -878,15 +963,24 @@ def result_parcours(request, id):
 @user_is_parcours_teacher 
 def result_parcours_theme(request, id, idt):
 
+    teacher = teacher.objects.get(user=request.user)
 
     parcours = Parcours.objects.get(id=id)
     students = students_from_p_or_g(request,parcours)
-
+    role = True
     try :
         group_id = request.session["group_id"]
+        if Sharing_group.objects.filter(group_id=group_id, teacher = parcours.teacher).exists() :
+            sh_group = Sharing_group.objects.get(group_id=group_id, teacher = parcours.teacher)
+            role = sh_group.role
+        else :
+            role = False
     except :
         group_id = None
+        role = False
 
+    if parcours.teacher == teacher :
+        role = True
 
     parcours = Parcours.objects.get(id=id)
     theme = Theme.objects.get(id=idt)
@@ -905,7 +999,7 @@ def result_parcours_theme(request, id, idt):
     stage = get_stage(parcours) 
     form = EmailForm(request.POST or None)
 
-    context = {  'relationships': relationships, 'parcours': parcours, 'students': students,  'themes': themes_tab,'form': form, 'group_id' : group_id , 'stage' : stage, 'communications' : [] }
+    context = {  'relationships': relationships, 'parcours': parcours, 'students': students,  'themes': themes_tab,'form': form, 'group_id' : group_id , 'stage' : stage, 'communications' : [], 'role' : role  }
 
     return render(request, 'qcm/result_parcours.html', context )
  
@@ -916,6 +1010,7 @@ def result_parcours_theme(request, id, idt):
 @user_is_parcours_teacher 
 def result_parcours_knowledge(request, id):
 
+    teacher = teacher.objects.get(user=request.user)
     parcours = Parcours.objects.get(id=id)
     students = students_from_p_or_g(request,parcours)
 
@@ -923,18 +1018,30 @@ def result_parcours_knowledge(request, id):
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
 
     knowledges = []
-    
+         
     try :
         group_id = request.session["group_id"]
+        if Sharing_group.objects.filter(group_id=group_id, teacher = parcours.teacher).exists() :
+            sh_group = Sharing_group.objects.get(group_id=group_id, teacher = parcours.teacher)
+            role = sh_group.role
+        else :
+            role = False
     except :
         group_id = None
-    
+        role = False
+ 
+
+
+    if parcours.teacher == teacher :
+        role = True
+
+
     knowledge_ids = parcours.exercises.values_list("knowledge",flat=True).order_by("knowledge").distinct()
     for k_id in knowledge_ids : 
         knowledges.append(Knowledge.objects.get(pk = k_id))
 
     stage = get_stage(parcours) 
-    context = {  'relationships': relationships,  'students': students, 'parcours': parcours,  'form': form, 'exercise_knowledges' : knowledges, 'group_id' : group_id, 'stage' : stage , 'communications' : []  }
+    context = {  'relationships': relationships,  'students': students, 'parcours': parcours,  'form': form, 'exercise_knowledges' : knowledges, 'group_id' : group_id, 'stage' : stage , 'communications' : [] , 'role' : role  }
 
     return render(request, 'qcm/result_parcours_knowledge.html', context )
 
@@ -942,6 +1049,8 @@ def result_parcours_knowledge(request, id):
 
 @user_is_parcours_teacher 
 def stat_parcours(request, id):
+
+    teacher = Teacher.objects.get(user = request.user)
     parcours = Parcours.objects.get(id=id)
     exercises = parcours.exercises.all()
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
@@ -953,13 +1062,23 @@ def stat_parcours(request, id):
 
     form = EmailForm(request.POST or None )
     stats = []
-
+ 
     try :
         group_id = request.session["group_id"]
-        group = Group.objects.get(pk = group_id)
+        group = Group.objects.get(pk = group_id)        
+        if Sharing_group.objects.filter(group_id=group_id, teacher = parcours.teacher).exists() :
+            sh_group = Sharing_group.objects.get(group_id=group_id, teacher = parcours.teacher)
+            role = sh_group.role
+        else :
+            role = False
     except :
         group_id = None
+        role = False
         group = None
+
+
+    if parcours.teacher == teacher :
+        role = True
 
 
     students = students_from_p_or_g(request,parcours) 
@@ -1036,7 +1155,7 @@ def stat_parcours(request, id):
             student["percent"] = ""
         stats.append(student)
 
-    context = {  'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'communications' : [] , }
+    context = {  'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'communications' : [] , 'role' : role  }
 
     return render(request, 'qcm/stat_parcours.html', context )
 
@@ -1126,18 +1245,27 @@ def parcours_tasks_and_publishes(request, id):
     today = time_zone_user(request.user)
     parcours = Parcours.objects.get(id=id)
     teacher = Teacher.objects.get(user=request.user)
- 
+
     try :
-        group_id = request.session.get("group_id")
-        group = Group.objects.get(pk = group_id)
+        group_id = request.session["group_id"]
+        group = Group.objects.get(pk = group_id)        
+        if Sharing_group.objects.filter(group_id=group_id, teacher = teacher).exists() :
+            sh_group = Sharing_group.objects.get(group_id=group_id, teacher = teacher)
+            role = sh_group.role
+        else :
+            role = False
     except :
         group_id = None
+        role = False
         group = None
- 
+
+    if parcours.teacher == teacher :
+        role = True
+
     form = AttachForm(request.POST or None, request.FILES or None)
 
     relationships = Relationship.objects.filter(parcours=parcours).order_by("exercise__theme")
-    context = {'relationships': relationships,  'parcours': parcours, 'teacher': teacher  , 'today' : today , 'group' : group , 'group_id' : group_id , 'communications' : [] , 'form' : form , }
+    context = {'relationships': relationships,  'parcours': parcours, 'teacher': teacher  , 'today' : today , 'group' : group , 'group_id' : group_id , 'communications' : [] , 'form' : form , 'role' : role , }
     return render(request, 'qcm/parcours_tasks_and_publishes.html', context)
  
 
@@ -2519,9 +2647,23 @@ def detail_task_parcours(request,id,s):
             details_tab.append(details)
 
         relationship = Relationship.objects.get( parcours =parcours,exercise= exercise)
+         
+        try :
+            group_id = request.session["group_id"]
+            group = Group.objects.get(pk = group_id)        
+            if Sharing_group.objects.filter(group_id=group_id, teacher = teacher).exists() :
+                sh_group = Sharing_group.objects.get(group_id=group_id, teacher = teacher)
+                role = sh_group.role
+            else :
+                role = False
+        except :
+            group_id = None
+            role = False
+            group = None
 
-
-        context = {'details_tab': details_tab, 'parcours': parcours ,   'exercise' : exercise , 'relationship': relationship,  'date_today' : date_today, 'communications' : [] ,  'group_id' : None }
+        if parcours.teacher == teacher :
+            role = True
+        context = {'details_tab': details_tab, 'parcours': parcours ,   'exercise' : exercise , 'relationship': relationship,  'date_today' : date_today, 'communications' : [] ,  'group_id' : None , 'role' : role }
 
         return render(request, 'qcm/task.html', context)
 
@@ -2973,7 +3115,12 @@ def create_course(request, idc , id ):
         else:
             print(form.errors)
 
-    context = {'form': form,   'teacher': teacher, 'parcours': parcours , 'relationships': relationships , 'course': None , 'communications' : [] }
+    if parcours.teacher == teacher :
+        role = True
+    else :
+        role = False
+
+    context = {'form': form,   'teacher': teacher, 'parcours': parcours , 'relationships': relationships , 'course': None , 'communications' : [] , 'role' : role }
 
     return render(request, 'qcm/course/form_course.html', context)
 
@@ -3040,18 +3187,28 @@ def show_course(request, idc , id ):
     """
     parcours = Parcours.objects.get(pk =  id)
     courses = parcours.course.all().order_by("ranking") 
-
-    try:
+    teacher = Teacher.objects.get(user = request.user)
+    
+    try :
         group_id = request.session["group_id"]
-        group = Group.objects.get(pk=group_id)
-    except:
+        group = Group.objects.get(pk = group_id)        
+        if Sharing_group.objects.filter(group_id=group_id, teacher = parcours.teacher).exists() :
+            sh_group = Sharing_group.objects.get(group_id=group_id, teacher = parcours.teacher)
+            role = sh_group.role
+        else :
+            role = False
+    except :
         group_id = None
+        role = False
         group = None
+
+    if parcours.teacher == teacher :
+        role = True
 
     if len(courses) > 0 :
         user = User.objects.get(pk = request.user.id)
         teacher = Teacher.objects.get(user = user)
-        context = {  'courses': courses, 'teacher': teacher , 'parcours': parcours , 'group_id' : None, 'communications' : [] , 'relationships' : [] , 'group' : group , }
+        context = {  'courses': courses, 'teacher': teacher , 'parcours': parcours , 'group_id' : None, 'communications' : [] , 'relationships' : [] , 'group' : group , 'role' : role }
         return render(request, 'qcm/course/show_course.html', context)
     else :
         return redirect('create_course', idc , id )

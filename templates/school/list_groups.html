@@ -35,8 +35,8 @@
                 <table class="table table-bordered table-hover standard_tab_sort">
                     <thead>
                         <tr>
-                            <td>Nom</td>
-                            <td>Participants </td>
+                            <td>Groupes</td>
+                            <td>ELèves </td>
                             <td style="width:40px"> </td>
                         </tr>
                     </thead>
@@ -45,7 +45,14 @@
                             <tr>
  
                                 <td style="width:150px ; border-left:5px solid {{group.color}}">
-                                     <a href="{% url 'update_group_school'  group.id %}" style="color:{{group.color}}">{{ group.name }} </a> <br><span style="color:{{group.color}}; font-size: 14px">{{ group.code }}</span> <br><div style="font-size: 12px"> <a href="{% url 'update_teacher' group.teacher.user.id %}">{{ group.teacher.user.civilite }} {{ group.teacher.user.first_name }} {{ group.teacher.user.last_name }}</a></div>
+                                    <a href="{% url 'update_group_school'  group.id %}" style="color:{{group.color}}">{{ group.name }} </a> <br><span style="color:{{group.color}}; font-size: 14px">{{ group.code }}</span> 
+                                    <br>
+                                    <div style="font-size: 12px"> <a href="{% url 'update_teacher' group.teacher.user.id %}">{{ group.teacher.user.civilite }} {{ group.teacher.user.first_name }} {{ group.teacher.user.last_name }}</a></div>
+                                    <div style="font-size: 12px">
+                                     {% for sg in group.group_sharingteacher.all %}
+                                      <a href="{% url 'update_teacher' sg.teacher.user.id %}">{{ sg.teacher.user.civilite }} {{ sg.teacher.user.first_name }} {{ sg.teacher.user.last_name }} ({% if sg.role %}E{% else %}L{% endif %})</a>{% if not forloop.last %}<br>{% endif %}
+                                     {% endfor %}
+                                    </div>
                                 </td>
                                 <td>
                                     <span class="label label-default"> {{ group.students.count }}<i class="fa fa-users"></i></span>

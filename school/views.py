@@ -5,7 +5,7 @@ from django.contrib import messages
 from .models import School, Country  , Stage
 from school.forms import SchoolForm, CountryForm, GroupForm, StageForm
 from group.views import include_students
-from group.models import Group
+from group.models import Group, Sharing_group
 from account.decorators import is_manager_of_this_school 
 from account.models import User, Teacher, Student
 from account.forms import UserForm , StudentForm ,NewUserSForm
@@ -261,15 +261,42 @@ def push_student_group(request):
 
 
 
+
+def sharing_teachers(request,group, teachers):
+
+
+	
+	shares = Sharing_group.objects.filter(group  = group)
+	for share in shares : 	
+		share.delete()
+
+	choices = request.POST.getlist("choices") 
+
+	for c in choices :
+		c_tab = c.split("-")
+		teacher = Teacher.objects.get(user_id = c_tab[1])
+		role =  int(c_tab[0])
+		Sharing_group.objects.create(group = group ,teacher = teacher, role = role  )
+
+
+
+
 @login_required
 @is_manager_of_this_school
 def new_group(request):
 	school = request.user.school
+	teachers = Teacher.objects.filter(user__school=school)
+
 	form = GroupForm(request.POST or None, school = school)
 
 	if request.method == "POST" :
 		if form.is_valid():
 			form.save()
+ 
+
+			sharing_teachers(request,form,teachers)
+
+
 			stdts = request.POST.get("students")
 			try :
 				if len(stdts) > 0 :
@@ -278,12 +305,14 @@ def new_group(request):
 						messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
 			except :
 				pass
-				
+
 			return redirect('school_groups')
 		else :
 			print(form.errors)
 
-	return render(request,'school/group_form.html', {  'communications' : [], 'school' : school ,  'group' : None ,  'form' : form })
+	return render(request,'school/group_form.html', {  'communications' : [], 'school' : school ,  'group' : None ,  'form' : form , 'teachers' : teachers ,  })
+
+
 
 
 @login_required
@@ -291,13 +320,17 @@ def new_group(request):
 def update_group_school(request,id):
 	school = request.user.school
 	group = Group.objects.get(id=id)
+	teachers = Teacher.objects.filter(user__school=school).exclude(user =  group.teacher.user)
 	form = GroupForm(request.POST or None, school = school, instance = group)
 
 	if request.method == "POST" :
 		if form.is_valid():
 			form.save()
-			stdts = request.POST.get("students")
 
+			sharing_teachers(request,group,teachers)
+
+
+			stdts = request.POST.get("students")
 			try :
 				if len(stdts) > 0 :
 					tested = include_students(stdts,form)
@@ -310,7 +343,7 @@ def update_group_school(request,id):
 		else :
 			print(form.errors)
 
-	return render(request,'school/group_form.html', { 'school' : school , 'group' : group ,  'form' : form , 'communications' : []  })
+	return render(request,'school/group_form.html', { 'school' : school , 'group' : group ,  'form' : form , 'communications' : []  , 'teachers' : teachers , })
 
 
 

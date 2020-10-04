@@ -158,6 +158,12 @@ define(['jquery','bootstrap'], function ($) {
         });
 
 
+        $(".select_all_sg").click(function(){
+            value = $(this).val(); 
+            $('#demosg'+value+' .selector').not(this).prop('checked', this.checked);
+        });
+
+
 
         $(".collapser").click(function(){
             value =  $(this).attr("data-group"); 

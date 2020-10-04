@@ -427,3 +427,10 @@ def get_com_is_reading(user):
     renvoie les parcours d'un enseignant donné liés à un exercice
     """
     return Communication.com_is_reading(user)
+
+@register.simple_tag 
+def get_sharing_role(obj,  teacher):
+    """
+    renvoie les parcours d'un enseignant donné liés à un exercice
+    """
+    return obj.sharing_role(teacher)

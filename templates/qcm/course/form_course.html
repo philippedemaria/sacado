@@ -20,6 +20,10 @@
 
 
 {% block page_menu_right %}
+
+    {% if parcours %}
+        {% include 'qcm/submenu_parcours.html' %}
+    {% endif %} 
  
 {% endblock %}
 
