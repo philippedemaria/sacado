@@ -469,8 +469,26 @@ class Parcours(ModelWithCode):
             groups = s.students_to_group.filter(teacher = self.teacher)
             for group  in groups :
                 if group not in group_tab:
-                    group_tab.append(group)       
+                    group_tab.append(group) 
         return group_tab 
+
+
+    def shared_group_list(self):
+
+        Sharing_group = apps.get_model('group', 'Sharing_group')
+        students = self.students.all() 
+        group_tab = []
+        for s  in students :
+            sh_groups = Sharing_group.objects.filter(group__students = s )
+            for sh_group  in sh_groups :
+                if sh_group not in group_tab:
+                    group_tab.append(sh_group) 
+        return group_tab 
+
+
+
+
+
 
     def parcours_shared(self):
 
