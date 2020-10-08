@@ -4,12 +4,21 @@ import html
 from django import template
 register = template.Library()
 from sendmail.models import Communication
+import re
 
 @register.filter
 def decode(arg):
         '''HTML entity decode'''
         string = html.unescape(arg)
         return string
+
+@register.filter
+def cleanhtml(raw_html): #nettoie le code des balises HTML
+    cleantext = re.sub('<.*?>', '', raw_html)
+    cleantext = re.sub('\n', '', cleantext)
+    return cleantext
+
+
 
 @register.filter
 def index(sequence, position):

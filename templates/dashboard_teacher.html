@@ -191,7 +191,7 @@
                                 </div> 
                             {% endif  %}
                             <div class="box_title_vignette"> 
-                                <a href="{% url 'show_parcours'  parcours.id  %}" style="color:{{ parcours.color|contrast_color }};"> {{ parcours.title|truncatechars:"18" }}
+                                <a {% if parcours.is_evaluation%} href="{% url 'show_evaluation'  parcours.id  %}" {% else %} href="{% url 'show_parcours'  parcours.id  %}"{% endif %}  style="color:{{ parcours.color|contrast_color }};"> {{ parcours.title|truncatechars:"18" }}
                                     <span style="font-size:12px"> 
                                         {% with parcours.nb_exercises as nb_p_exercises %}
                                             {{ nb_p_exercises }} exercice{{ nb_p_exercises|pluralize }}

@@ -65,6 +65,27 @@ class UpdateParcoursForm(forms.ModelForm):
 			self.fields['students']	 = forms.ModelMultipleChoiceField(queryset= students, widget=forms.CheckboxSelectMultiple, required=False)
 
 
+	def clean(self):
+		"""
+		Vérifie que la fin de l'évaluation n'est pas avant son début
+		"""
+		cleaned_data = super().clean()
+		start_date = cleaned_data.get("start")
+		start_time = cleaned_data.get("starter")
+		stop_date = cleaned_data.get("stop")
+		stop_time = cleaned_data.get("stopper")
+
+		if start_date and start_time and stop_date and stop_time:
+			stop = datetime.datetime.combine(stop_date, stop_time)
+			start = datetime.datetime.combine(start_date, start_time)
+			if stop <= start:
+				raise forms.ValidationError("La fin de l'évaluation ne peut pas être antérieure à son début.")
+
+
+
+
+
+
 class ExerciseForm(forms.ModelForm):
 	class Meta:
 		model = Exercise

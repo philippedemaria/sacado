@@ -34,7 +34,8 @@
           <!-- Exercice dissocié  -->  
           {% if  relation.students.count != nb_students_p_or_g %}
           <div  style="position: absolute; right : 0px; top:60px;" title="Cet exercice est indiviualisé à certains élèves" >   
-            <a href="#card{{relation.id}}" class="detail_parcours btn btn-warning"  data-exercise_id="{{ relation.exercise.id }}"  data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}">
+            <a href="#card{{relation.id}}" class="detail_parcours btn btn-warning" 
+               data-exercise_id="{{ relation.exercise.id }}"  data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}">
               <i class="fa fa-user"></i>
             </a>
           </div>
@@ -217,11 +218,11 @@
 
 
           <!--  Image de la card  -->
-          <a href="#card{{relation.id}}" class="detail_parcours"  data-exercise_id="{{ relation.exercise.id }}"  data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}">
+          <a href="#card{{relation.id}}" class="detail_parcours"  data-exercise_id="{{ relation.exercise.id }}" title="{{ relation.exercise.supportfile.annoncement|cleanhtml|safe }}"
+             data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}">
                <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours_order"  >
           </a> 
  
-
 
         <!--  Barre d'outil de la card  -->
         <div class="card-text" style="background-color:{{ parcours.color }}; text-align:center;color:{{ parcours.color|contrast_color }}">
@@ -231,13 +232,13 @@
             <span style="font-size:9px">{{  relation.relationship_remediation.all|length }}</span>
             <span class="horizontalmargin5">
                 <span style="cursor:pointer" data-target="#remediation" data-relationship_id="{{ relation.id }}"  data-toggle='modal' class="white remediation" title="Ajouter une vidéo, un fichier" >
-                        <i class="fa fa-life-ring"></i>
+                        <i class="fa fa-paperclip"></i>
                 </span>
             </span> 
             <!-- Appel des compétences -->
-            <span class="horizontalmargin5"><a href="#" style="font-size:14px;color:{{ parcours.color|contrast_color }}" class="copy_link" data-code="{{ relation.exercise.supportfile.code}}"><i class="fa fa-barcode"></i></a></span> 
+            <span class="horizontalmargin5"><a href="#" style="font-size:14px;color:{{ parcours.color|contrast_color }}" class="copy_link" title="Code de l'exercice" data-code="{{ relation.exercise.supportfile.code}}"><i class="fa fa-barcode"></i></a></span> 
 
-            <span class="horizontalmargin5"><a href="{% url 'create_mastering' relation.id  %}" style="font-size:14px;color:{{ parcours.color|contrast_color }}"><i class="fa fa-sitemap"></i></a></span> 
+            <span class="horizontalmargin5"><a href="{% url 'create_mastering' relation.id  %}" title="Parcours de maîtrise à partir de cet exercice" style="font-size:14px;color:{{ parcours.color|contrast_color }}"><i class="fa fa-sitemap"></i></a></span> 
 
 
             <!-- Appel des compétences -->
@@ -251,7 +252,7 @@
                 <i class="fa fa-save"></i> {{ relation.situation}}  
             </span>
             <!-- Appel de partage  -->
-            <span  class="sharered horizontalmargin5" data-relationship_id="{{ relation.id }}"  title="Accéder à cet exercice">
+            <span  class="sharered horizontalmargin5" data-relationship_id="{{ relation.id }}"  title="Accéder à cet exercice" style="cursor:pointer">
                <i class="fa fa-share-square"></i>
             </span>                                   
             <!-- Suppression de l'exercice dans ce parcours  -->

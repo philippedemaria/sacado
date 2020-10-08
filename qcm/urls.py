@@ -13,12 +13,14 @@ urlpatterns = [
     path('parcours_create', create_parcours, name='create_parcours'),
     path('parcours_create_evaluation', create_evaluation, name='create_evaluation'),
     path('parcours_evaluation_update/<int:id>/<int:idg>/', update_evaluation, name='update_evaluation'),
+    path('parcours_evaluation_show/<int:id>/', show_evaluation, name='show_evaluation'), 
 
     path('parcours_update/<int:id>/<int:idg>/', update_parcours, name='update_parcours'),
     path('parcours_delete/<int:id>/<int:idg>/', delete_parcours, name='delete_parcours'),  
     path('parcours_archive/<int:id>/<int:idg>/', archive_parcours, name='archive_parcours'),
     path('parcours_unarchive/<int:id>/<int:idg>/', unarchive_parcours, name='unarchive_parcours'), 
     path('parcours_show/<int:id>/', show_parcours, name='show_parcours'), 
+
     path('parcours_tasks_and_publishes/<int:id>/', parcours_tasks_and_publishes, name='parcours_tasks_and_publishes'), # gestion des taches
     path('show_parcours_visual/<int:id>/', show_parcours_visual, name='show_parcours_visual'), 
 
@@ -40,6 +42,11 @@ urlpatterns = [
     path('ajax_individualise', ajax_individualise , name='ajax_individualise'),
 
     path('result_parcours_exercise_students/<int:id>/', result_parcours_exercise_students, name='result_parcours_exercise_students'),#modif idp en id pour la sécurité
+
+
+    path('parcours_peuplate_evaluation/<int:id>/', peuplate_parcours_evaluation, name='peuplate_parcours_evaluation'),
+
+    path('parcours_stat_evaluation/<int:id>/', stat_evaluation, name='stat_evaluation'), 
 
     #####################################  Modifie les relations par parcours et exercices  ##############################################################  
     path('<int:idp>/<int:ide>/', execute_exercise, name='execute_exercise'),#modif idp en id pour la sécurité 

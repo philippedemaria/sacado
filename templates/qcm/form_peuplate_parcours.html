@@ -26,10 +26,16 @@
 
 {% block page_menu_right %}
 
-<li>                
-    <a href="{% url 'parcours' %}"  style="padding:12px; "><input type="button" value="Valider" class="btn btn-primary"/></a>
-</li>
- 
+    {% if parcours.is_evaluation %}
+        <li>                
+            <a href="{% url 'evaluations' %}"  style="padding:12px; "><input type="button" value="Valider" class="btn btn-primary"/></a>
+        </li>
+    
+    {% else %}
+        <li>                
+            <a href="{% url 'parcours' %}"  style="padding:12px; "><input type="button" value="Valider" class="btn btn-primary"/></a>
+        </li>
+    {% endif  %}
 
     {% include 'qcm/submenu_parcours.html' %}
 

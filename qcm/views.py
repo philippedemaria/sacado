@@ -359,9 +359,9 @@ def peuplate_parcours(request,id):
                 themes_tab.append(theme)
     
     if request.method == 'POST' :
- 
+        level = request.POST.get("level") 
         # modifie les exercices sélectionnés
-        exercises_all = parcours.exercises.filter(supportfile__is_title=0)
+        exercises_all = parcours.exercises.filter(supportfile__is_title=0,level=level)
         exercises_posted_ids = request.POST.getlist('exercises')
 
         new_list = []
@@ -405,6 +405,70 @@ def peuplate_parcours(request,id):
     return render(request, 'qcm/form_peuplate_parcours.html', context)
 
 
+
+@login_required
+@user_is_parcours_teacher
+def peuplate_parcours_evaluation(request,id):
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    levels =  teacher.levels.all() 
+ 
+    parcours = Parcours.objects.get(id=id)
+    form = UpdateParcoursForm(request.POST or None , instance=parcours, teacher = teacher  )
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
+    """ affiche le parcours existant avant la modif en ajax""" 
+    exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme")
+    """ fin """
+    themes_tab = []
+    for level in levels :
+        for theme in level.themes.all():
+            if not theme in themes_tab:
+                themes_tab.append(theme)
+    
+    if request.method == 'POST' :
+        level = request.POST.get("level") 
+        # modifie les exercices sélectionnés
+        exercises_all = parcours.exercises.filter(supportfile__is_title=0,level=level)
+        exercises_posted_ids = request.POST.getlist('exercises')
+
+        new_list = []
+        for e_id in exercises_posted_ids :
+            try : 
+                exercise  = Exercise.objects.get(id=e_id)
+                new_list.append(exercise)
+            except :
+                pass
+
+
+        intersection_list = [value for value in exercises_all if value not in new_list]
+
+        for exercise in intersection_list :
+            try :
+                rel = Relationship.objects.get(parcours = parcours , exercise = exercise).delete() # efface les existants sur le niveau sélectionné
+            except :
+                pass
+        i = 0 # réattribue les exercices choisis
+
+        for exercise in exercises_posted_ids :
+            try :
+                if Relationship.objects.filter(parcours = nf , exercise__supportfile = exercise.supportfile ).count() == 0 :
+                    r = Relationship.objects.create(parcours = nf , exercise = exercise , order =  i, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
+                    r.skills.set(exercise.supportfile.skills.all()) 
+                    i+=1
+                else :
+                    pass
+            except :
+                pass
+ 
+
+    data = get_complement(teacher, parcours)
+    role = data['role']
+    group = data['group']
+    group_id = data['group_id']
+
+        # fin ---- modifie les exercices sélectionnés
+    context = {'form': form, 'parcours': parcours, 'communications':[], 'group' : group , 'role' : role , 'teacher': teacher, 'exercises': exercises , 'levels': levels , 'themes' : themes_tab , 'user': request.user , 'group_id' : group_id , 'relationships' :relationships  }
+
+    return render(request, 'qcm/form_peuplate_parcours.html', context)
 
 
 
@@ -1119,6 +1183,114 @@ def stat_parcours(request, id):
     context = {  'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'communications' : [] , 'role' : role  }
 
     return render(request, 'qcm/stat_parcours.html', context )
+
+
+
+@user_is_parcours_teacher 
+def stat_evaluation(request, id):
+
+    teacher = Teacher.objects.get(user = request.user)
+    parcours = Parcours.objects.get(id=id)
+    exercises = parcours.exercises.all()
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
+    parcours_duration = parcours.duration #durée prévue pour le téléchargement
+    for e in exercises :
+        r = Relationship.objects.get(exercise = e, parcours = parcours)
+        parcours_duration += r.duration
+
+
+    form = EmailForm(request.POST or None )
+    stats = []
+ 
+
+    data = get_complement(teacher, parcours)
+    role = data['role']
+    group = data['group']
+    group_id = data['group_id']  
+
+
+    students = students_from_p_or_g(request,parcours) 
+
+    for s in students :
+        student = {}
+        student["name"] = s
+        studentanswers = Studentanswer.objects.filter(student=s,  exercise__in= exercises, parcours=parcours).order_by("date")
+
+        studentanswer_tab , student_tab  = [], []
+        for studentanswer in studentanswers :
+            if studentanswer.exercise not in studentanswer_tab :
+                studentanswer_tab.append(studentanswer.exercise)
+                student_tab.append(studentanswer)
+        student["nb_exo"] = len(studentanswer_tab)
+        duration, score, total_numexo, good_answer = 0, 0, 0, 0
+        tab, tab_date = [], []
+        student["legal_duration"] = parcours.duration
+
+        for studentanswer in  student_tab : 
+            duration += int(studentanswer.secondes)
+            score += int(studentanswer.point)
+            total_numexo += int(studentanswer.numexo)
+            good_answer += int(studentanswer.numexo*studentanswer.point/100)
+            tab.append(studentanswer.point)
+            tab_date.append(studentanswer.date)
+            tab_date.sort()
+        try :
+            if len(student_tab)>1 :
+                average_score = int(score/len(student_tab))
+                student["duration"] = convert_seconds_in_time(duration)
+                student["average_score"] = int(average_score)
+                student["good_answer"] = int(good_answer)
+                student["total_numexo"] = int(total_numexo)
+                student["last_connexion"] = studentanswer.date
+                student["score"] = int(score)
+                student["score_tab"] = tab
+                if duration > parcours_duration : 
+                    student["test_duration"] = True
+                else :
+                    student["test_duration"] = False 
+                tab.sort()
+                if len(tab)%2 == 0 :
+                    med = (tab[(len(tab)-1)//2]+tab[(len(tab)-1)//2+1])/2 ### len(tab)-1 , ce -1 est causÃ© par le rang 0 du tableau
+                else:
+                    med = tab[(len(tab)-1)//2+1]
+                student["median"] = int(med)
+                student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100 )   
+            else :
+                average_score = int(score)
+                student["duration"] = convert_seconds_in_time(duration)
+                student["average_score"] = int(score)
+                student["last_connexion"]  = studentanswer.date
+                if duration > parcours_duration : 
+                    student["test_duration"] = True
+                else :
+                    student["test_duration"] = False 
+                student["median"] = int(score)
+                student["score"] = int(score)
+                student["score_tab"] = tab
+                student["good_answer"] = int(good_answer)
+                student["total_numexo"] = int(total_numexo)
+                student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100)        
+        except :
+            student["duration"] = ""
+            student["average_score"] = ""
+            student["last_connexion"] =  ""
+            student["median"] = ""
+            student["score"] = ""
+            student["score_tab"] = []
+            student["test_duration"] = False
+            student["good_answer"] = ""
+            student["total_numexo"] = ""
+            student["percent"] = ""
+        stats.append(student)
+
+    context = {  'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'communications' : [] , 'role' : role  }
+
+    return render(request, 'qcm/stat_parcours.html', context )
+
+
+
+
+
 
 
 
@@ -2452,27 +2624,14 @@ def create_evaluation(request):
         print(form.errors)
 
 
-    try :
-        if 'group_id' in request.session :
-            if request.session.get["group_id"] :
-                group_id = request.session.get("group_id")
-                group = Group.objects.get(pk = group_id) 
-        else :
-            group_id = None
-            group = None
-
-    except :
-        group_id = None
-        group = None
-        request.session.get["group_id"]  = None
-
-
+    data = get_complement(teacher, parcours)
+    role = data['role']
+    group = data['group']
+    group_id = data['group_id'] 
 
 
     context = {'form': form, 'teacher': teacher, 'parcours': None, 'groups': groups, 'idg': 0,  'group_id': group_id ,  'relationships': [], 'communications' : [], 
-               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0}
-
-
+               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'role':role}
 
     return render(request, 'qcm/form_evaluation.html', context)
 
@@ -2532,9 +2691,13 @@ def update_evaluation(request, id, idg=0 ):
         group = None
         request.session["group_id"] = None
 
+    data = get_complement(teacher, parcours)
+    role = data['role']
+
+
     students_checked = parcours.students.count()  # nombre d'étudiant dans le parcours
 
-    context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'relationships': relationships, 'communications' : [], 
+    context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'relationships': relationships, 'communications' : [], 'role': role,
                'exercises': exercises, 'levels': levels, 'themes': themes_tab, 'students_checked': students_checked}
 
     return render(request, 'qcm/form_evaluation.html', context)
@@ -2554,6 +2717,53 @@ def delete_evaluation(request,id):
         Relationship.objects.filter(pk=id).update(beginner=None)
         form =  RelationshipForm(request.POST or None , instance = relationship )
     return redirect("show_parcours" , relationship.parcours.id )
+
+
+@login_required
+@user_is_parcours_teacher 
+def show_evaluation(request, id):
+    parcours = Parcours.objects.get(id=id)
+    user = User.objects.get(pk=request.user.id)
+    teacher = Teacher.objects.get(user=user)
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
+    nb_exo_only, nb_exo_visible = [], []
+    i ,j = 0, 0
+    for r in relationships:
+        if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle:
+            i = 0
+        else:
+            i += 1
+        nb_exo_only.append(i)
+        if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle or r.is_publish == 0:
+            j = 0
+        else:
+            j += 1
+        nb_exo_visible.append(j)
+
+ 
+
+
+    data = get_complement(teacher, parcours)
+    role = data['role']
+    group = data['group']
+    group_id = data['group_id']  
+
+
+
+    students_p_or_g = students_from_p_or_g(request,parcours)
+
+    nb_students_p_or_g = len(students_p_or_g)
+
+    skills = Skill.objects.all()
+
+    nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count()
+    context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'communications' : [] , 
+               'students_from_p_or_g': students_p_or_g, 'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible, 'nb_students_p_or_g' : nb_students_p_or_g , 
+               'nb_exo_only': nb_exo_only, 'group_id': group_id, 'group': group, 'role' : role }
+
+    return render(request, 'qcm/show_parcours.html', context)
+
+
 
     
 #######################################################################################################################################################################
@@ -3339,7 +3549,6 @@ def ajax_course_viewer(request):
 
 
 @login_required
-@user_is_relationship_teacher
 def create_mastering(request,id):
     relationship = Relationship.objects.get(pk = id)
     stage = Stage.objects.get(school= request.user.school)

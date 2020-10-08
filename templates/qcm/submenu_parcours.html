@@ -23,7 +23,9 @@
 <li class="dropdown">
     <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if 'parcours_show/' in request.path or 'parcours_update/' in request.path or 'parcours_peuplate/' in request.path or 'parcours_tasks_and_publishes/' in request.path  or 'parcours_individualise/' in request.path  or 'parcours_stat/' in request.path   %} active{% endif %}"> Paramètres {% if parcours.is_evaluation %}  de l'évaluation {% else %} du parcours {% endif %} <b class="caret"></b> </a>
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-        <li {% if 'parcours_show/' in request.path %} class="active" {% endif %}><a href="{% url 'show_parcours' parcours.id   %}"><i class="fa fa-th fa-fw"></i> Voir {% if parcours.is_evaluation %}  l'évaluation {% else %} le parcours {% endif %}</a>   </li>   
+        <li {% if 'parcours_show/' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'show_parcours' parcours.id   %}"><i class="fa fa-th fa-fw"></i> Voir {% if parcours.is_evaluation %}  l'évaluation {% else %} le parcours {% endif %}</a>
+        </li>   
         {% if group_id %}
             {% if parcours.is_evaluation %}
                 <li {% if 'evaluation_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_evaluation' parcours.id group_id  %}"><i class="fa fa-cogs fa-fw"></i> Modifier l'évaluation</a>   </li>
@@ -38,16 +40,35 @@
             {% endif %} 
         {% endif %} 
 
-
-        <li {% if 'show_course/' in request.path %} class="active" {% endif %}><a href="{% url 'show_course' 0 parcours.id   %}"><i class="fa fa-desktop fa-fw"></i> Voir les cours</a>   </li>
+        {% if parcours.is_evaluation %}
+        <li {% if 'parcours_peuplate_evaluation/' in request.path %} class="active" {% endif %}><a href="{% url 'peuplate_parcours_evaluation' parcours.id   %}"><i class="fa fa-laptop fa-fw"></i> Sélectionner les exercices</a>   </li>
+        {% else %}         
         <li {% if 'parcours_peuplate/' in request.path %} class="active" {% endif %}><a href="{% url 'peuplate_parcours' parcours.id   %}"><i class="fa fa-laptop fa-fw"></i> Sélectionner les exercices</a>   </li>
-        <li><a href="#"  class="no_button" id="handler_order_exercises" ><img src="{% static 'img/order_handler.png' %}" style="margin-right:10px; margin-left:3px"/> Organiser les exercices </a> </li>  
+        {% endif %}
+
+        <li><a href="#"  class="no_button" id="handler_order_exercises" ><img src="{% static 'img/order_handler.png' %}" style="margin-right:10px; margin-left:3px"/> Organiser les exercices </a> </li>
+
+        {% if not parcours.is_evaluation %}
+        <li {% if 'show_course/' in request.path %} class="active" {% endif %}><a href="{% url 'show_course' 0 parcours.id   %}"><i class="fa fa-desktop fa-fw"></i> Voir les cours</a>   </li>
         <li {% if 'parcours_tasks_and_publishes/' in request.path %} class="active" {% endif %}><a href="{% url 'parcours_tasks_and_publishes' parcours.id %}" ><i class="fa fa-indent fa-fw"></i> Gérer les sections</a></li>  
+        {% endif %} 
 
         {% if group_id %}
-        <li {% if 'parcours_individualise/' in request.path %} class="active" {% endif %}><a href="{% url 'individualise_parcours' parcours.id  %}" ><i class="fa fa-user fa-fw"></i> Individualiser les exercices</a> </li> 
+        <li {% if 'parcours_individualise/' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'individualise_parcours' parcours.id  %}" ><i class="fa fa-user fa-fw"></i> Individualiser les exercices</a> 
+        </li> 
         {% endif %} 
-        <li {% if 'parcours_stat/' in request.path %} class="active" {% endif %}><a href="{% url 'stat_parcours' parcours.id %}" ><i class="fa fa-bar-chart fa-fw"></i> Lire les {% if parcours.is_evaluation %}résultats de l'évaluation{% else  %}stats du parcours {% endif %} </a>   </li>
+
+
+        {% if parcours.is_evaluation %}
+        <li {% if 'parcours_stat/' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'stat_evaluation' parcours.id %}" ><i class="fa fa-bar-chart fa-fw"></i> Lire les résultats de l'évaluation </a>   
+        </li>
+        {% else %} 
+        <li {% if 'parcours_stat_evaluation/' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'stat_parcours' parcours.id %}" ><i class="fa fa-bar-chart fa-fw"></i> Lire les stats du parcours</a>   
+        </li>
+        {% endif %} 
     </ul>
 </li> 
 {% endif %}

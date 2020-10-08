@@ -31,9 +31,12 @@ def index(request):
         else:
             today = timezone.now()
 
+        timer = today.time()
+
         if request.user.last_login.date() != today.date() :
             request.user.last_login = today
             request.user.save()
+            
 
         if request.user.is_teacher:
 
@@ -63,7 +66,7 @@ def index(request):
             parcours_tab = Parcours.objects.filter(students=None, teacher=teacher, is_favorite=1) ## Parcours favoris non affectés
 
 
-            context = {'this_user': this_user, 'teacher': teacher, 'groups': groups, 'parcourses': parcourses, 'parcours': None, 'today' : today , 
+            context = {'this_user': this_user, 'teacher': teacher, 'groups': groups, 'parcourses': parcourses, 'parcours': None, 'today' : today , 'timer' : timer , 
                        'relationships': relationships, 'communications': communications, 'parcours_tab': parcours_tab,
                        'nb_teacher_level': nb_teacher_level}
 
@@ -98,9 +101,8 @@ def index(request):
 
             ratiowidth = int(0.9*ratio)
 
-            timer = timezone.now().time()
 
-            evaluations = Parcours.objects.filter(start__lte=today, stop__gte=today, students=student, is_evaluation=1)
+            evaluations = Parcours.objects.filter(start__lte=today, stop__gte=today, starter__lte=timer, stopper__gte=timer, students=student, is_evaluation=1)
 
             exercises = []
             studentanswers = Studentanswer.objects.filter(student = student)
@@ -111,9 +113,9 @@ def index(request):
             relationships_in_late = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, is_evaluation=0, date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
             relationships_in_tasks = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).exclude(exercise__in=exercises).order_by("date_limit")
 
-            context = {'student_id': student.user.id, 'student': student, 'relationships': relationships,
+            context = {'student_id': student.user.id, 'student': student, 'relationships': relationships, 'timer' : timer , 
                        'evaluations': evaluations, 'ratio': ratio, 'today' : today ,  'parcourses': parcourses,
-                       'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late,
+                       'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late, 
                        'relationships_in_tasks': relationships_in_tasks , }
 
         elif request.user.is_parent:  ## parent
