@@ -719,6 +719,11 @@ def create_parcours(request):
             if request.session.get["group_id"] :
                 group_id = request.session["group_id"]
                 group = Group.objects.get(pk = group_id) 
+        else :
+            group_id = None
+            group = None
+            request.session["group_id"]  = None            
+
     except :
         group_id = None
         group = None
@@ -2624,14 +2629,24 @@ def create_evaluation(request):
         print(form.errors)
 
 
-    data = get_complement(teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id'] 
+    try :
+        if 'group_id' in request.session :
+            if request.session.get["group_id"] :
+                group_id = request.session["group_id"]
+                group = Group.objects.get(pk = group_id) 
+        else :
+            group_id = None
+            group = None
+            request.session["group_id"]  = None            
+
+    except :
+        group_id = None
+        group = None
+        request.session["group_id"]  = None
 
 
     context = {'form': form, 'teacher': teacher, 'parcours': None, 'groups': groups, 'idg': 0,  'group_id': group_id ,  'relationships': [], 'communications' : [], 
-               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'role':role}
+               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'role':True}
 
     return render(request, 'qcm/form_evaluation.html', context)
 
