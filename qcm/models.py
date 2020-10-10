@@ -486,10 +486,6 @@ class Parcours(ModelWithCode):
         return group_tab 
 
 
-
-
-
-
     def parcours_shared(self):
 
         students = self.students.all() #Elève d'un parcours
@@ -499,7 +495,6 @@ class Parcours(ModelWithCode):
                 shared = True
                 break
         return shared
-
 
 
     def parcours_group_students_count(self,group):
