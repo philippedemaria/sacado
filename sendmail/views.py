@@ -121,10 +121,9 @@ def create_email(request):
 					new_f.receivers.add(s.user)	
 					rcv.append(str(s.user.email)) 
 
-		print("destinataires : ",rcv)
 
-		send_mail(subject, cleanhtml(unescape_html(texte)) , str(request.user.email), rcv )
-		send_mail(subject, cleanhtml(unescape_html(texte)) , str(request.user.email), [str(request.user.email)] )
+		send_mail(subject, cleanhtml(unescape_html(texte)) , "info@sacado.xyz", rcv )
+		send_mail(subject, cleanhtml(unescape_html(texte)) , "info@sacado.xyz", [str(request.user.email)] )
 
 	else:
 		print(form.errors)
