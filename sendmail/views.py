@@ -46,6 +46,7 @@ def time_zone_user(user):
 
 @login_required
 def list_emails(request):
+ 
     user = request.user
     users = []
 
@@ -91,9 +92,11 @@ def list_emails(request):
 
 @login_required
 def create_email(request):
+ 
 	form = EmailForm(request.POST or None,request.FILES or None)
 	user = request.user
 	today = time_zone_user(user)
+
 	if form.is_valid():		
 		new_f = form.save(commit=False)
 		new_f.author = user
@@ -117,6 +120,8 @@ def create_email(request):
 				if s.user.email :
 					new_f.receivers.add(s.user)	
 					rcv.append(str(s.user.email)) 
+
+		print("destinataires : ",rcv)
 
 		send_mail(subject, cleanhtml(unescape_html(texte)) , str(request.user.email), rcv )
 		send_mail(subject, cleanhtml(unescape_html(texte)) , str(request.user.email), [str(request.user.email)] )

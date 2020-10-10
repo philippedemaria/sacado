@@ -1,6 +1,6 @@
 {% extends 'dashboard.html' %}
 {% load static %}
- 
+{% load item_tags %} 
 
 
 {% block require %}
@@ -200,7 +200,7 @@
                                                 label-success 
                                                 {% else %}
                                                 label-primary 
-                                                {% endif %}" ">  {{s.point }}%</span>  <span class="label label-default"><i class="fa fa-save"></i> {{s.numexo }}</span> <span class="label label-default"><i class="fa fa-clock"></i> {{s.secondes }}</span>
+                                                {% endif %}">  {{s.point }}%</span>  <span class="label label-default"><i class="fa fa-save"></i> {{s.numexo }}</span> <span class="label label-default"><i class="fa fa-clock"></i> {{s.secondes|time_done }}</span>
                                           </td> 
                                       </tr>
                                       {% endfor %}
