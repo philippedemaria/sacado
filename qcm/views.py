@@ -2601,7 +2601,7 @@ def create_evaluation(request):
             if not theme in themes_tab:
                 themes_tab.append(theme)
 
-
+    share_groups = Sharing_group.objects.filter(teacher  = teacher,role=1).order_by("group__level")
     groups = Group.objects.filter(teacher  = teacher).order_by("level")
 
     if form.is_valid():
@@ -2645,7 +2645,7 @@ def create_evaluation(request):
         request.session["group_id"]  = None
 
 
-    context = {'form': form, 'teacher': teacher, 'parcours': None, 'groups': groups, 'idg': 0,  'group_id': group_id ,  'relationships': [], 'communications' : [], 
+    context = {'form': form, 'teacher': teacher, 'parcours': None, 'groups': groups, 'idg': 0,  'group_id': group_id ,  'relationships': [], 'communications' : [], 'share_groups' : share_groups , 
                'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'role':True}
 
     return render(request, 'qcm/form_evaluation.html', context)
@@ -2670,7 +2670,7 @@ def update_evaluation(request, id, idg=0 ):
 
     groups = Group.objects.filter(teacher=teacher).prefetch_related('students').order_by("level")
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
-
+    share_groups = Sharing_group.objects.filter(teacher  = teacher,role=1).order_by("group__level")
     if request.method == "POST":
         if form.is_valid():
             nf = form.save(commit=False)
@@ -2712,7 +2712,7 @@ def update_evaluation(request, id, idg=0 ):
 
     students_checked = parcours.students.count()  # nombre d'étudiant dans le parcours
 
-    context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'relationships': relationships, 'communications' : [], 'role': role,
+    context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'relationships': relationships, 'communications' : [], 'role': role,  'share_groups' : share_groups , 
                'exercises': exercises, 'levels': levels, 'themes': themes_tab, 'students_checked': students_checked}
 
     return render(request, 'qcm/form_evaluation.html', context)
