@@ -47,6 +47,11 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+
+
+
+
+
         // Affiche dans la modal la liste des élèves du groupe sélectionné
         $('.menuaction').on('click', function (event) {
             let group_id = $(this).attr("data-group_id");
@@ -158,6 +163,18 @@ define(['jquery', 'bootstrap'], function ($) {
             });
         });
 
+
+        $(".recording").hide() ;
+
+        $("#record_student_now").on('click' ,function () {    
+            $("#teacher_record").show();
+            $("#auto_record").hide();             
+        });
+
+        $("#record_student_auto").on('click' ,function () {    
+            $("#teacher_record").hide();
+            $("#auto_record").show();             
+        });
 
 
 

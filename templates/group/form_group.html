@@ -81,7 +81,7 @@
                 </div> 
                 <div class="row"> 
                      <div class="col-sm-12 col-md-2">
-                           <label>Suivi parent?</label> <br>
+                           <label>Suivi parent ?</label> <br>
                             {{ form.suiviparent  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                     </div>
                      <div class="col-sm-12 col-md-4" style="font-size: 10px"><br>
@@ -93,41 +93,55 @@
                             {{ form.lock  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                     </div>
                      <div class="col-sm-12 col-md-4" style="font-size: 10px"><br>
-                        Interdit d'inscrire de nouveaux élèves et ne parmet plus l'inscription par lien de connexion. 
+                        Interdit d'inscrire de nouveaux élèves et ne permet plus l'inscription par lien de connexion. 
                     </div>
                     {% endif %}
 
                 </div>
+                <hr>
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
-                        <div class="form-group">
+                        <div class="form-group"><h5><i class="fa fa-users"></i> Inscription des élèves</h5>
+                             <ul>
+                                <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_now" /> J'ai la liste de mes élèves et je veux les inscrire maintenant.<br> <small><b>Conseil</b> : Créez-vous un compte élève maintenant. Il vous permettra de regarder les vues élève.</small></label></li>
+                                <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_auto" /> Je veux générer un lien d'inscription. <small>Avec ce lien, les élèves pourront s'inscrire seuls. Ce lien est généré après la création du groupe.</small></label></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
  
-                <div class="row">
-                    <div class="col-sm-12 col-md-12">
+
+
+                <div class="row recording" id="teacher_record">
+                    <div class="col-sm-12 col-md-12"><hr>
                         <div class="form-group">
-                            <label>Possibilité d'inscrire les élèves par leur prénom et nom.<small><em> L'adresse mail est facultative.</em> <br><span style="color:#cb2131">Respecter le format donné : 1 élève par ligne, informations séparées par un ;  <br/>Le mot de passe par défaut est : sacado2020</span></small></label> <br> 
+                            <label>Possibilité d'inscrire les élèves par leur prénom et nom.<small><em> L'adresse mail est facultative.</em> <br><span style="color:#cb2131">Respecter le format donné : 1 élève par ligne, ses informations séparées par un ;  <br/>Le mot de passe par défaut est : sacado2020, chaque identifiant élève s'obtient dans le détail du groupe. </span></small></label> <br> 
                             <textarea name="students" id="students_id"  style="border:1px #CCC solid" class="form-control" rows="10" placeholder="Alan;Turing;alan.turing@enigma.com"></textarea>
+
+                             <label style="color:#cb2131"><small> <b>Conseil :</b> Après la création du groupe, accéder à votre groupe via Détails et télécharger la liste des identifiants au format pdf pour la distribuer à vos élèves.</span></small></label>
                         </div>
                     </div>
                 </div> 
  
-                <div class="alert alert-danger">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <div style="font-size: 16px"><i class="fa fa-question-circle"></i>
-                        Les élèves accèdent à leur compte à l'aide de leur identifiant généré une fois le groupe créé. 
+                <div class="row recording" id="auto_record">
+                    <div class="col-sm-12 col-md-12"><hr>
+                        <div class="form-group">
+                            <label>Vous souhaitez générer un lien d'inscription. Ce lien sera de la forme https://sacado.xyz/group/code_du_groupe et sera accessible via les détails du groupe une fois celui-ci créé, depuis votre tableau de bord.
+                            </label>
+                        </div>
                     </div>
-                </div>
+                </div>  
+
+
+
+
+
 
 
                 <div class="row">
                     <div class="col-sm-12 col-md-8">
                         <div class="form-group">
-                            <input value="Enregistrer" type="submit" class="btn btn-primary"  id="test_students"  />
+                            <input value="Créer le groupe" type="submit" class="btn btn-primary"  id="test_students"  />
                             <a href="javascript:history.back()"><input type="button" value="Annuler"
                                                                        class="btn btn-default "/></a>
                         </div>
