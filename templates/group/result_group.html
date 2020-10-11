@@ -154,7 +154,7 @@
                                     </a> 
                                     <div class="pull-right"> 
                                             <a href="#" data-toggle='modal'
-                                                data-target='#writer' 
+                                                data-target='#writer'  data-student_id="{{ student.user.id }}"
                                                 class="send_message"   data-student_name="{{ student.user }}"
                                                 data-student_email="{{ student.user.email }}">  
                                                 {% if student.user.email  %}                                      
@@ -202,7 +202,7 @@
                     <h5 class="modal-title" >Ecrire un message à  <span id="modal_student_name"></span></h5>
                 </div>
                 <div class="modal-body">
-                    <form action="" method="post" > 
+                    <form  method="POST" > 
                           {% csrf_token %}
                         <div class="form-group"><input type="hidden" name="student_id" class="form-control" id="student_id"/>
                           <input type="text" name="name" class="form-control" id="name" placeholder="Nom" />
@@ -214,7 +214,7 @@
                             {{ form.subject|add_class:"form-control"|attr:"placeholder:Objet"|attr:"required" }}
                         </div>
                         <div class="form-group">
-                            {{ form.texte  }}
+                            {{ form.texte|attr:"required"  }}
                         </div>
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary" id="sender_message">Envoyer</button>   

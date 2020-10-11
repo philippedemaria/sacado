@@ -7,7 +7,7 @@ urlpatterns = [
     path('new', create_email, name='create_email'),
     path('delete/<int:id>/', delete_email, name='delete_email'),
     path('ajax/show_email/', show_email, name='show_email'),
-
+ 
 
     path('communications', list_communications, name='communications'),
     path('new_communication', create_communication, name='create_communication'),

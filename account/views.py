@@ -28,8 +28,11 @@ from qcm.models import Exercise, Parcours, Relationship, Resultexercise, Student
 from sendmail.models import Communication
 from socle.models import Level
 from socle.models import Theme
+from sendmail.forms import EmailForm
 from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ParentUpdateForm, ManagerUpdateForm, NewUserTForm
 from templated_email import send_templated_mail
+
+
 
 def time_zone_user(user):
     if user.time_zone :
@@ -464,7 +467,29 @@ def knowledges_of_a_student(student, theme):
     return knowledges 
 
 
+def sender_mail(request,form):
 
+    if request.method == "POST" : 
+        subject = request.POST.get("subject") 
+        texte = request.POST.get("texte") 
+        student_id = request.POST.get("student_id")
+ 
+        student_user =  User.objects.get(pk=student_id)
+        rcv = []
+        if form.is_valid():
+            nf = form.save(commit = False)
+            nf.author =  request.user
+            nf.save()
+            nf.receivers.add(student_user)
+
+            for r in nf.receivers.all():
+                rcv.append(r.email)
+            print("sending")
+            send_mail( cleanhtml(subject), cleanhtml(texte) , "info@sacado.xyz" , rcv)
+
+        else :
+            print(form.errors)
+            print("no_sending")
 
 @login_required
 @who_can_read_details
@@ -696,14 +721,17 @@ def detail_student_all_views(request, id):
             for s in sts :
                 students.append(s)
 
+        form = EmailForm(request.POST or None)       
+        sender_mail(request,form)
  
         nav = navigation(group, id)
-        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'students' : students ,  'group' : group , 'communications' : [], 'today' : today , 
+        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'students' : students ,  'group' : group , 'communications' : [], 'today' : today , 'form' : form , 
                    'student': student, 'parcours': None, 'sprev_id': nav[0], 'snext_id': nav[1] }
     else:
         group = Group.objects.filter(students=student).last()
         context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'communications' : [], 'group' : group ,  'today' : today , 
                    'student': student, 'parcours': None, 'sprev_id': None, 'snext_id': None}
+
 
     return render(request, 'account/detail_student_all_views.html', context)
 

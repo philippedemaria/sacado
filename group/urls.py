@@ -34,7 +34,6 @@ urlpatterns = [
     path('ajax/chargelistgroup', chargelistgroup, name='chargelistgroup'),
 
     path('ajax/select_exercise_by_knowledge',  select_exercise_by_knowledge, name='select_exercise_by_knowledge'),
-    path('ajax/sending_message_student',  sending_message_student, name='sending_message_student'),    
 
     path('aggregate_group',  aggregate_group, name='aggregate_group'), 
 

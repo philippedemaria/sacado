@@ -45,11 +45,17 @@ import re
 
 
  
+
 def cleanhtml(raw_html): #nettoie le code des balises HTML
     cleantext = re.sub('<.*?>', '', raw_html)
     cleantext = re.sub('\n', '', cleantext)
-    cleantext = re.sub('\t', '', cleantext)
     return cleantext
+
+
+def unescape_html(string):
+        '''HTML entity decode'''
+        string = html.unescape(string)
+        return string
 
 
 
@@ -366,6 +372,32 @@ def chargelistgroup(request):
 
 
 
+def sender_mail(request,form):
+    if request.method == "POST" : 
+        subject = request.POST.get("subject") 
+        texte = request.POST.get("texte") 
+        student_id = request.POST.get("student_id")
+ 
+        student_user =  User.objects.get(pk=student_id)
+        rcv = []
+        if form.is_valid():
+            nf = form.save(commit = False)
+            nf.author =  request.user
+            nf.save()
+            nf.receivers.add(student_user)
+
+            for r in nf.receivers.all():
+                rcv.append(r.email)
+            print("sending")
+            send_mail( cleanhtml(subject), cleanhtml(texte) , "info@sacado.xyz" , rcv)
+
+        else :
+            print(form.errors)
+            print("no_sending")
+
+
+
+
 @login_required
 @user_is_group_teacher
 def result_group(request, id):
@@ -396,9 +428,11 @@ def result_group(request, id):
             knowledges.append(exercise.knowledge)
 
     stage = get_stage(group)
-
  
     form = EmailForm(request.POST or None )
+
+
+
     context = { 'group': group,'form': form, "knowledges" : knowledges, 'stage' : stage, 'theme': None , 'communications' : [] , 'relationships': []  , 'parcours_tab' : [] , 'parcours' : None }
 
     return render(request, 'group/result_group.html', context )
@@ -433,6 +467,9 @@ def result_group_exercise(request, id):
     group = Group.objects.get(id=id)
     form = EmailForm(request.POST or None)
     stage = get_stage(group)
+
+
+    sender_mail(request,form)
 
     context = {'group': group, 'form': form , 'stage' : stage  , 'theme' : None  , 'communications' : [], 'relationships': [] , 'parcours_tab' : [] , 'parcours' : None  }
 
@@ -608,34 +645,6 @@ def associate_exercise_by_parcours(request,id,idt):
 
 
 
-def sending_message_student(request):
-
-
-    name = request.POST.get("name") 
-    email = request.POST.get("email")  
-    subject = request.POST.get("subject") 
-    message = request.POST.get("message")  
-    rcv = []
- 
-    form = EmailForm(request.POST or None )
-    student_user = User.objects.get(email=email)
-    if form.is_valid():
-        nf = form.save(commit = False)
-        nf.author =  request.user
-        nf.save()
-        nf.receivers.add(student_user)
-        sender = request.user.email
-
-        for r in nf.receivers.all():
-            rcv.append(r.email)
-
-        send_mail(nf.subject, nf.texte , sender , rcv)
-    else :
-        print(form.erros)
-
-
-    data={}
-    return JsonResponse(data)
 
 
 def enroll(request, slug):

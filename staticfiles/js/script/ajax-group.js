@@ -26,10 +26,11 @@ define(['jquery', 'bootstrap'], function ($) {
 
             let name = $(this).attr("data-student_name"); 
             let email = $(this).attr("data-student_email"); 
+            let student_id = $(this).attr("data-student_id"); 
  
             $('#email').val(email);
             $('#name').val(name);
- 
+            $('#student_id').val(student_id);
             });
 
    
@@ -38,30 +39,9 @@ define(['jquery', 'bootstrap'], function ($) {
         // Affiche dans la modal la liste des élèves du groupe sélectionné
         $('#sender_message').on('click', function (event) {
             let name = $("#name").val(); 
-            let email = $("#email").val();
-            let subject = $("#subject").val(); 
-            let message = $("#message").val();
- 
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
- 
-            $.ajax(
-                {
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        'name' :  name, 
-                        'email' :  email,
-                        'subject' :  subject,
-                        'message' :  message,
-                        csrfmiddlewaretoken: csrf_token
-                    },
-                    url: "../../../ajax/sending_message_student",
-                    success: function (data) {
-                        console.log("teste sending");
-                        alert("Vous venez d'envoyer un message à "+name+". Pour le retrouver, consulter votre boite de messages." );
-                    }
-                }
-            )
+            alert("Vous venez d'envoyer un message à "+name+". Pour le retrouver, consulter votre boite de messages." );
+        
         });
 
 
