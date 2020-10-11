@@ -12,13 +12,12 @@
         </li> 
                 <li class="divider"></li>
 
-        {% if teacher_is_publisher %}
+ 
 
         <li {% if 'group/update/' in request.path %} class="active" {% endif %}>
             <a href="{% url 'update_group' group.id %}"  > <i class="fa fa-cogs fa-fw"  ></i><span class="small_displayer"> Modifier le groupe/Ajouter des élèves</span></a>    
         </li>  
-        {% endif %}
-
+ 
 
         
         <li {% if 'group/show/' in request.path %} class="active" {% endif %}>
