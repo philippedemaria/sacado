@@ -264,8 +264,6 @@ def push_student_group(request):
 
 def sharing_teachers(request,group, teachers):
 
-
-	
 	shares = Sharing_group.objects.filter(group  = group)
 	for share in shares : 	
 		share.delete()
@@ -290,19 +288,15 @@ def new_group(request):
 	form = GroupForm(request.POST or None, school = school)
 
 	if request.method == "POST" :
+		print(request.POST)	
 		if form.is_valid():
-			form.save()
- 
-
-			sharing_teachers(request,form,teachers)
-
-
+			group = form.save()
 			stdts = request.POST.get("students")
+			sharing_teachers(request,group,teachers)
+
 			try :
-				if len(stdts) > 0 :
-					tested = include_students(stdts,form)
-					if not tested :
-						messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
+				if stdts :
+					tested = include_students(stdts,group)
 			except :
 				pass
 
@@ -333,9 +327,8 @@ def update_group_school(request,id):
 			stdts = request.POST.get("students")
 			try :
 				if len(stdts) > 0 :
-					tested = include_students(stdts,form)
-					if not tested :
-						messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
+					tested = include_students(stdts,group)
+
 			except :
 				pass
 

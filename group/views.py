@@ -102,7 +102,7 @@ def count_unique(datas):
 
 def include_students(liste, group):
 
-    students_tab = liste.split("\r")
+    students_tab = liste.split("\r\n")
 
     for student_tab in students_tab:
         try:
@@ -155,7 +155,7 @@ def include_students(liste, group):
 
 def include_students_in_a_model(liste,model):
  
-    students_tab = liste.split("\r")
+    students_tab = liste.split("\r\n")
  
     for student_tab in students_tab :
         details = student_tab.split(";")

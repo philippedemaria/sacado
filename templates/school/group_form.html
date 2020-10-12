@@ -43,187 +43,186 @@
      
 {% block body %}     
 <div class="content_main">
-    <div class="row">
-        <div class="col-sm-12 col-md-6">
-            <form action="" method="POST">
-            {% csrf_token %}
-                <div class="row">
-                    <div class="col-sm-12 col-md-7">
-                        <div class="form-group">
-                            {{ form.name.label_tag }} <font style="font-size:12px">18 lettres max.</font>
-                            {{ form.name |add_class:"form-control" }}
-                            {{ form.name.errors }}
+    <form action="" method="POST">
+    {% csrf_token %}    
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-7">
+                            <div class="form-group">
+                                {{ form.name.label_tag }} <font style="font-size:12px">18 lettres max.</font>
+                                {{ form.name |add_class:"form-control" }}
+                                {{ form.name.errors }}
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-12 col-md-5">
-                        <div class="form-group">
-                            {{ form.level.label_tag }}
-                            {{ form.level |add_class:"form-control select2" }}
-                            {{ form.level.errors }}
+                        <div class="col-sm-12 col-md-5">
+                            <div class="form-group">
+                                {{ form.level.label_tag }}
+                                {{ form.level |add_class:"form-control select2" }}
+                                {{ form.level.errors }}
+                            </div>
                         </div>
-                    </div>
-                </div> 
-                <div class="row">
-                    <div class="col-sm-12 col-lg-4">
-                          {{ form.color.label_tag }}
-                          <div id="color-picker-component" class="input-group colorpicker-component">
-                              {{ form.color.as_hidden }}
-                              <span class="input-group-addon"><i></i></span>
-                          </div>
-                    </div>
-                     <div class="col-sm-12 col-md-2">
-                           <label>Suivi parent?</label> <br>
-                            {{ form.suiviparent  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
-                    </div>
-                     <div class="col-sm-12 col-md-6">
-                        <small>   Un code est généré par élève pour donner un accès aux résultats des acquisitions de leurs enfants. </small>
-                    </div>
-                    
-                </div> 
-                <div class="row"> 
-                    <div class="col-sm-12 col-lg-12">
-                        <div class="form-group">
-                            <label>Enseignant</label>
-                            {{ form.teacher |add_class:"form-control select2" }}
-                            {{ form.teacher.errors }}
+                    </div> 
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-4">
+                              {{ form.color.label_tag }}
+                              <div id="color-picker-component" class="input-group colorpicker-component">
+                                  {{ form.color.as_hidden }}
+                                  <span class="input-group-addon"><i></i></span>
+                              </div>
                         </div>
-                    </div>
-                </div> 
-
-                {% if request.user.school %}   
-                    {% if group %}
+                         <div class="col-sm-12 col-md-2">
+                               <label>Suivi parent?</label> <br>
+                                {{ form.suiviparent  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                        </div>
+                         <div class="col-sm-12 col-md-6">
+                            <small>   Un code est généré par élève pour donner un accès aux résultats des acquisitions de leurs enfants. </small>
+                        </div>
+                        
+                    </div> 
                     <div class="row"> 
                         <div class="col-sm-12 col-lg-12">
                             <div class="form-group">
-                                <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
-                                    <div class="btn btn-default full_width" style="text-align: left; font-size:15px; margin-bottom: 5px">
-                                        <span data-toggle="collapse" data-parent="#accordion" href="#collapsed" class="parcours_displayer" style="color : {{  parcours.color }}" >
-                                             <label>Co-enseignement ?  <small>Partager une classe avec vos collègues</small> </label>
-                                        </span>
-                                        <div id="collapsed" class="collapse">
-                                            <div class="panel-body"  style="padding:0px">
-                                                <table class="table" style="margin-bottom: 0px;font-size:14px;">
-                                                    <tr>
-                                                        <td>
-                                                            Nom et prénom
-                                                        </td>
-                                                        <td>
-                                                            Lecteur
-                                                        </td>
-                                                        <td>
-                                                            Editeur
-                                                        </td>
-        
-                                                    </tr>
-                                                    {% for t in teachers  %}
-                                                    {% get_sharing_role group t as sharing %}
-                                                    <tr>
-                                                        <td>
-                                                            {{ t }}
-                                                        </td>
-                                                        <td>
-                                                            <input type="checkbox"  name="choices" class="select_radio choice{{ t.user.id }}" data-counter="{{ t.user.id }}"  value="0-{{ t.user.id }}" {% if sharing.reader %} checked {% endif %}> 
-                                                        </td>
-                                                        <td>
-                                                            <input type="checkbox"  name="choices" class="select_radio choice{{ t.user.id }}" data-counter="{{ t.user.id }}" value="1-{{ t.user.id }}"  {% if sharing.publisher %} checked {% endif %}> 
-                                                        </td>
-     
-                                                    </tr>
-                                                    {% endfor %}
-                                                </table>
+                                <label>Enseignant</label>
+                                {{ form.teacher |add_class:"form-control select2" }}
+                                {{ form.teacher.errors }}
+                            </div>
+                        </div>
+                    </div> 
+
+                    {% if request.user.school %}   
+                        {% if group %}
+                        <div class="row"> 
+                            <div class="col-sm-12 col-lg-12">
+                                <div class="form-group">
+                                    <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+                                        <div class="btn btn-default full_width" style="text-align: left; font-size:15px; margin-bottom: 5px">
+                                            <span data-toggle="collapse" data-parent="#accordion" href="#collapsed" class="parcours_displayer" style="color : {{  parcours.color }}" >
+                                                 <label>Co-enseignement ?  <small>Partager une classe avec vos collègues</small> </label>
+                                            </span>
+                                            <div id="collapsed" class="collapse">
+                                                <div class="panel-body"  style="padding:0px">
+                                                    <table class="table" style="margin-bottom: 0px;font-size:14px;">
+                                                        <tr>
+                                                            <td>
+                                                                Nom et prénom
+                                                            </td>
+                                                            <td>
+                                                                Lecteur
+                                                            </td>
+                                                            <td>
+                                                                Editeur
+                                                            </td>
+            
+                                                        </tr>
+                                                        {% for t in teachers  %}
+                                                        {% get_sharing_role group t as sharing %}
+                                                        <tr>
+                                                            <td>
+                                                                {{ t }}
+                                                            </td>
+                                                            <td>
+                                                                <input type="checkbox"  name="choices" class="select_radio choice{{ t.user.id }}" data-counter="{{ t.user.id }}"  value="0-{{ t.user.id }}" {% if sharing.reader %} checked {% endif %}> 
+                                                            </td>
+                                                            <td>
+                                                                <input type="checkbox"  name="choices" class="select_radio choice{{ t.user.id }}" data-counter="{{ t.user.id }}" value="1-{{ t.user.id }}"  {% if sharing.publisher %} checked {% endif %}> 
+                                                            </td>
+         
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div> 
-                    {% else %}
-                    <div class="row"> 
-                        <div class="col-sm-12 col-lg-12">
-                            <div class="alert alert-danger">
-                                 Une fois le groupe créé avec son enseignant de référence, vous pourrez lui attribuer des enseignants en co-animation.
-                            </div>
-                        </div>
-                    </div> 
-                    {% endif %}
-                {% else %}
-                    <div class="row"> 
-                        <div class="col-sm-12 col-lg-12">
-                            <div class="alert alert-danger">
-                                La gestion de la co-animation n'est possible qu'avec la version établissement.
-                            </div>
-                        </div>
-                    </div> 
-                {% endif %}
-                <div class="row">
-                    <div class="col-sm-12 col-md-8">
-                        <div class="form-group">
-                            <input value="Enregistrer" type="submit" class="btn btn-primary"  id="test_students"  />
-                            <a href="javascript:history.back()"><input type="button" value="Annuler"
-                                                                       class="btn btn-default "/></a>
-                        </div>
-
-
-
-                       <div class="form-group">
-                            <table class="table">
-                            {% for s in group.students.all|dictsort:"user.last_name"  %}
-                                <tr><td>
-                                        {{ s }}
-                                    </td>
-                                    <td>
-                                        <a  href="{% url 'delete_student_group'  group.id s.user.id  %}"
-                                            onclick="return TestDelete('cet élève')" style="font-size:11px"  >
-                                            Supprimer
-                                        </a>                                         
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </table>
-                        </div>
-
-
-
-
-
-
-                    </div>
-                    {% if group %}
-                    <div class="col-sm-12 col-md-4">
-                        {% if group.students.all|length > 0 %}
-                        <div class="form-group" style="margin-top: 250px">
-                            <a href="{% url 'delete_all_students_group' group.id %}" class="btn btn-danger" onclick="return TestDelete('tous les élèves de ce groupe')">Dissocier tous les élèves de ce groupe</a>
-                        </div>
+                        </div> 
                         {% else %}
-                        <div class="form-group">
-                            <a href="{% url 'delete_group' group.id %}" class="btn btn-danger" onclick="return TestDelete('ce groupe')">Supprimer ce groupe</a>
+                        <div class="row"> 
+                            <div class="col-sm-12 col-lg-12">
+                                <div class="alert alert-danger">
+                                     Une fois le groupe créé avec son enseignant de référence, vous pourrez lui attribuer des enseignants en co-animation.
+                                </div>
+                            </div>
+                        </div> 
+                        {% endif %}
+                    {% else %}
+                        <div class="row"> 
+                            <div class="col-sm-12 col-lg-12">
+                                <div class="alert alert-danger">
+                                    La gestion de la co-animation n'est possible qu'avec la version établissement.
+                                </div>
+                            </div>
+                        </div> 
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-8">
+                            <div class="form-group">
+                                <input value="Enregistrer" type="submit" class="btn btn-primary"  id="test_students"  />
+                                <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                                           class="btn btn-default "/></a>
+                            </div>
+
+
+
+                           <div class="form-group">
+                                <table class="table">
+                                {% for s in group.students.all|dictsort:"user.last_name"  %}
+                                    <tr><td>
+                                            {{ s }}
+                                        </td>
+                                        <td>
+                                            <a  href="{% url 'delete_student_group'  group.id s.user.id  %}"
+                                                onclick="return TestDelete('cet élève')" style="font-size:11px"  >
+                                                Supprimer
+                                            </a>                                         
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </table>
+                            </div>
+
+
+
+
+
+
                         </div>
+                        {% if group %}
+                        <div class="col-sm-12 col-md-4">
+                            {% if group.students.all|length > 0 %}
+                            <div class="form-group" style="margin-top: 250px">
+                                <a href="{% url 'delete_all_students_group' group.id %}" class="btn btn-danger" onclick="return TestDelete('tous les élèves de ce groupe')">Dissocier tous les élèves de ce groupe</a>
+                            </div>
+                            {% else %}
+                            <div class="form-group">
+                                <a href="{% url 'delete_group' group.id %}" class="btn btn-danger" onclick="return TestDelete('ce groupe')">Supprimer ce groupe</a>
+                            </div>
 
 
-                        <div class="form-group" style="margin-top: 50px">
-                            Aucun élève associé à ce groupe
+                            <div class="form-group" style="margin-top: 50px">
+                                Aucun élève associé à ce groupe
+                            </div>
+                            {% endif %}
                         </div>
                         {% endif %}
                     </div>
-                    {% endif %}
-                </div>
-            </form>
-        </div>
-        <div class="col-sm-12 col-md-6">
-            
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <div class="form-group">
-                        <label>Elèves <small>(Optionnel)<em> L'adresse mail est facultative.</em> <br><span style="color:#cb2131">1 élève par ligne. <br/>Le mot de passe par défaut est : sacado2020</span></small></label> <br> 
-                        <textarea name="students" id="students_id"  style="border:1px #CCC solid" class="form-control" rows="20" placeholder="Alan;Turing;alan.turing@enigma.com"></textarea>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <label>Elèves <small>(Optionnel)<em> L'adresse mail est facultative.</em> <br><span style="color:#cb2131">1 élève par ligne. <br/>Le mot de passe par défaut est : sacado2020</span></small></label> <br> 
+                            <textarea name="students" id="students_id"  style="border:1px #CCC solid" class="form-control" rows="20" placeholder="Alan;Turing;alan.turing@enigma.com"></textarea>
+                        </div>
                     </div>
-                </div>
-            </div> 
- 
+                </div> 
+     
+            </div>
         </div>
-    </div>
-
+    </form>
 </div> 
         
 {% endblock %}
