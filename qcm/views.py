@@ -1023,7 +1023,7 @@ def result_parcours(request, id):
 @user_is_parcours_teacher 
 def result_parcours_theme(request, id, idt):
 
-    teacher = teacher.objects.get(user=request.user)
+    teacher = Teacher.objects.get(user=request.user)
 
     parcours = Parcours.objects.get(id=id)
     students = students_from_p_or_g(request,parcours)
@@ -1061,7 +1061,7 @@ def result_parcours_theme(request, id, idt):
 @user_is_parcours_teacher 
 def result_parcours_knowledge(request, id):
 
-    teacher = teacher.objects.get(user=request.user)
+    teacher = Teacher.objects.get(user=request.user)
     parcours = Parcours.objects.get(id=id)
     students = students_from_p_or_g(request,parcours)
 
