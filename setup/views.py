@@ -71,7 +71,7 @@ def index(request):
                        'nb_teacher_level': nb_teacher_level}
 
 
-
+ 
 
         elif request.user.is_student: ## student
             student = Student.objects.get(user=request.user.id)

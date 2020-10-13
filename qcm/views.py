@@ -813,7 +813,7 @@ def update_parcours(request, id, idg=0 ):
 
     students_checked = parcours.students.count()  # nombre d'étudiant dans le parcours
 
-    context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'group': group ,  'relationsips': relationships, 'share_groups': share_groups, 
+    context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'group': group ,  'relationsips': relationships, 'share_groups': share_groups, 'relationships' :  [] ,
                'exercises': exercises, 'levels': levels, 'themes': themes_tab, 'students_checked': students_checked, 'communications' : [], 'role' : role }
 
     return render(request, 'qcm/form_parcours.html', context)
@@ -2795,10 +2795,15 @@ def detail_task_parcours(request,id,s):
     parcours = Parcours.objects.get(pk=id) 
     today = time_zone_user(request.user)
     date_today = time_zone_user(request.user).date() 
+
+    data = get_complement(teacher, parcours)
+    role = data["role"]
+    group_id = data["group_id"]
+
     if s == 0 : # groupe
 
         relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours =parcours,exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")  
-        context = {'relationships': relationships, 'parcours': parcours , 'today':today ,  'communications' : [] ,  'date_today':date_today ,  'group_id' : None }
+        context = {'relationships': relationships, 'parcours': parcours , 'today':today ,  'communications' : [] ,  'date_today':date_today ,  'group_id' : group_id ,  'role' : role ,  }
  
         return render(request, 'qcm/list_tasks.html', context)
     else : # exercice
@@ -2824,22 +2829,7 @@ def detail_task_parcours(request,id,s):
 
         relationship = Relationship.objects.get( parcours =parcours,exercise= exercise)
          
-        try :
-            group_id = request.session["group_id"]
-            group = Group.objects.get(pk = group_id)        
-            if Sharing_group.objects.filter(group_id=group_id, teacher = teacher).exists() :
-                sh_group = Sharing_group.objects.get(group_id=group_id, teacher = teacher)
-                role = sh_group.role
-            else :
-                role = False
-        except :
-            group_id = None
-            role = False
-            group = None
-
-        if parcours.teacher == teacher :
-            role = True
-        context = {'details_tab': details_tab, 'parcours': parcours ,   'exercise' : exercise , 'relationship': relationship,  'date_today' : date_today, 'communications' : [] ,  'group_id' : None , 'role' : role }
+        context = {'details_tab': details_tab, 'parcours': parcours ,   'exercise' : exercise , 'relationship': relationship,  'date_today' : date_today, 'communications' : [] ,  'group_id' : group_id , 'role' : role }
 
         return render(request, 'qcm/task.html', context)
 
@@ -2851,10 +2841,16 @@ def detail_task(request,id,s):
     teacher = Teacher.objects.get(user = request.user)   
     parcours = Parcours.objects.get(pk=id) 
     today = time_zone_user(request.user) 
+
+    data = get_complement(teacher, parcours)
+    role = data["role"]
+    group_id = data["group_id"]
+
+
     if s == 0 : # groupe
  
         relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours =parcours,exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")  
-        context = {'relationships': relationships, 'parcours': parcours , 'today':today ,  'group_id' : None ,  'communications' : [] , }
+        context = {'relationships': relationships, 'parcours': parcours , 'today':today ,   'communications' : [],  'role' : role ,  'group_id' : group_id }
         return render(request, 'qcm/list_tasks.html', context)
     else : # exercice
 
@@ -2880,7 +2876,7 @@ def detail_task(request,id,s):
         relationship = Relationship.objects.get( parcours =parcours,exercise= exercise)
 
 
-        context = {'details_tab': details_tab, 'parcours': parcours ,   'exercise' : exercise , 'relationship': relationship,  'today' : today ,  'communications' : [] ,  'group_id' : None}
+        context = {'details_tab': details_tab, 'parcours': parcours ,   'exercise' : exercise , 'relationship': relationship,  'today' : today ,  'communications' : [],  'role' : role ,  'group_id' : group_id}
 
         return render(request, 'qcm/task.html', context)
 
@@ -2891,7 +2887,7 @@ def all_my_tasks(request):
     teacher = Teacher.objects.get(user = request.user) 
     parcourses = Parcours.objects.filter(is_publish=  1,teacher=teacher ) 
     relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today,exercise__supportfile__is_title=0).order_by("parcours") 
-    context = {'relationships': relationships, 'parcourses': parcourses, 'parcours': None,  'communications' : [] ,  'group_id' : None  }
+    context = {'relationships': relationships, 'parcourses': parcourses, 'parcours': None,  'communications' : [] , 'relationships' : [] , 'group_id' : None  , 'role' : False , }
     return render(request, 'qcm/all_tasks.html', context)
 
 
@@ -2901,7 +2897,7 @@ def these_all_my_tasks(request):
     teacher = Teacher.objects.get(user = request.user) 
     parcourses = Parcours.objects.filter(is_publish=  1,teacher=teacher ) 
     relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("parcours") 
-    context = {'relationships': relationships, 'parcourses': parcourses, 'parcours': None,  'communications' : [] ,  'group_id' : None }
+    context = {'relationships': relationships, 'parcourses': parcourses, 'parcours': None,  'communications' : [] ,  'relationships' : [] ,'group_id' : None  , 'role' : False , } 
     return render(request, 'qcm/all_tasks.html', context)
 
 
@@ -2923,10 +2919,14 @@ def group_tasks(request,id):
             else :
                 parcourses_tab.append(p)
 
+    data = get_complement(teacher, group)
+    role = data["role"]
+    group_id = data["group_id"]
 
     relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcourses_tab, date_limit__gte=today,exercise__supportfile__is_title=0).order_by("parcours") 
+    context = { 'relationships': relationships , 'group' : group , 'parcours' : None , 'communications' : [] , 'relationships' : [] , 'group_id' : group.id , 'role' : role , }
 
-    return render(request, 'qcm/group_task.html', { 'relationships': relationships ,    'group' : group , 'parcours' : None , 'communications' : []  })
+    return render(request, 'qcm/group_task.html', context)
 
 @login_required
 def group_tasks_all(request,id):
@@ -2945,10 +2945,14 @@ def group_tasks_all(request,id):
                 parcourses_tab.append(p)
 
 
+    data = get_complement(teacher, group)
+    role = data["role"]
+    group_id = data["group_id"]
 
     relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today),  parcours__in=parcourses_tab, exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("parcours") 
-
-    return render(request, 'qcm/group_task.html', { 'relationships': relationships ,    'group' : group , 'parcours' : None , 'communications' : []  })
+    context = { 'relationships': relationships ,    'group' : group , 'parcours' : None , 'relationships' : [] , 'communications' : [] ,  'group_id' : group.id , 'role' : role ,  }
+    
+    return render(request, 'qcm/group_task.html', context )
 
 
 
@@ -3291,12 +3295,13 @@ def create_course(request, idc , id ):
         else:
             print(form.errors)
 
-    if parcours.teacher == teacher :
-        role = True
-    else :
-        role = False
 
-    context = {'form': form,   'teacher': teacher, 'parcours': parcours , 'relationships': relationships , 'course': None , 'communications' : [] , 'role' : role }
+    data = get_complement(teacher, parcours)
+    role = data['role']
+    group = data['group']
+    group_id = data['group_id'] 
+
+    context = {'form': form,   'teacher': teacher, 'parcours': parcours , 'relationships': relationships , 'course': None , 'communications' : [], 'group' : group, 'group_id' : group_id , 'role' : role }
 
     return render(request, 'qcm/course/form_course.html', context)
 
@@ -3331,7 +3336,7 @@ def update_course(request, idc, id  ):
         else :
             print(course_form.errors)
 
-    context = {'form': course_form,  'course': course, 'teacher': teacher , 'parcours': parcours  , 'relationships': relationships , 'communications' : [] }
+    context = {'form': course_form,  'course': course, 'teacher': teacher , 'parcours': parcours  , 'relationships': relationships , 'communications' : [] , 'group' : group, 'group_id' : group_id , 'role' : role }
 
     return render(request, 'qcm/course/form_course.html', context )
 
