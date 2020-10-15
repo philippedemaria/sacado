@@ -1247,9 +1247,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 let situation = $("#situation"+relationship_id).val();
 
                 let duration = $("#duration"+relationship_id).val();
-                let type = $(this).attr("data-type");
-
-                console.log(situation, duration,  relationship_id) ; 
+                let type = $(this).attr("data-type"); 
 
                 datas = {   'relationship_id': relationship_id,
                             'situation': situation,
@@ -1264,7 +1262,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                         data: datas,
                         url: "../../ajax/dates" ,
                         success: function (data) {
+
                             console.log(data);
+
                             if (data.clock) {
                                 $('#clock'+relationship_id).html("").html(data.clock); 
                                 $('#duration'+relationship_id).val(duration);                                 
@@ -1273,8 +1273,10 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                                 $('#save'+relationship_id).html("").html(data.save);
                                 $('#situation'+relationship_id).val(situation);
                             }
-
-
+                            else if (data.annoncement) { 
+                                $('#annoncement'+relationship_id).html("").html(data.annonce); 
+                            }
+  
                         }
                     }
                 )

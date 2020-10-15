@@ -1,0 +1,128 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+
+
+{% block breadcrumbs  %}
+ 
+{% endblock  %}
+
+
+{% block page_title %}
+    <i class="fa fa-pencil-square"></i> Correction d'exercice          
+    <a href="#" data-toggle='modal' data-target='#consigne' class="btn btn-primary" ><i class="fa fa-eye"></i> Voir l'énoncé </a>
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+        <a href="javascript:history.back()"><input type="button" value="Retour au parcours"
+                                                                       class="btn btn-default "/></a>
+
+
+
+
+
+{% endblock %}
+
+
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script>
+        require(['script/ajax-exercise']);
+    </script>    
+{% endblock %}
+
+
+{% block body %}
+<section class="content_list">  
+    <div class="row"> 
+
+        <form method="post" action="" enctype='multipart/form-data'>
+            {% csrf_token %} 
+            <div class="col-sm-12 col-md-2">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                    <tr style="background-color: #F0F0F0">
+                        <th>Nom et prénom</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for student in relationship.students.all %}
+                        <tr>
+                            <td>
+                           
+                                <a href="#" data-student_id="{{ student.user.id }}" data-relationship_id="{{ relationship.id }}" class="choose_student">   {{ student.user.last_name }} {{ student.user.first_name }} 
+
+                                    <span id ="evaluate{{ student.user.id }}">
+                                      {% get_done relationship student as done %}
+                                      {% if done %}
+                                        {% get_score_student_for_this relationship student as  studentanswer %} 
+                                            {% if  studentanswer.point %}
+                                            <i class="fa fa-square
+                                                    {% if studentanswer.point >= stage.up %}
+                                                     text-primary 
+                                                    {% elif studentanswer.point >= stage.medium %}
+                                                     text-success 
+                                                    {% elif studentanswer.point >=  stage.low  %}
+                                                     text-warning 
+                                                    {% else %}
+                                                        text-danger  
+                                                    {% endif %} pull-right"
+                                                   ></i>
+                                            {% endif %}
+                                        {% endif %}
+
+
+                                </span></a>
+                        
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td>Aucun élève.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-12 col-md-10" id="correction_div">
+            </div>
+        </form>
+    </div>
+    <div class="row">                             
+        <div class="col-sm-12 col-md-10">
+
+        <a href="javascript:history.back()"><input type="button" value="Retour"
+                                                                       class="btn btn-default "/></a>
+        </div>
+    </div>
+
+</section>
+ 
+<div class="modal fade" id="consigne" tabindex="-1" role="dialog" aria-labelledby="consigne">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>  <h4>Enoncé</h4>
+            </div>
+            <div class="modal-body">
+                {% if relationship.instruction != ""  %}  {{ relationship.instruction|safe }}  {% else %} {{ relationship.exercise.support.annoncement|safe }} {% endif %}
+            </div>
+
+            <div class="modal-footer">
+                <a href="#" class="btn btn-default" data-dismiss="modal" aria-label="Close">
+                        Fermer
+                </a> 
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -96,7 +96,14 @@ ul#id_skills li{
                                 {{ form.imagefile.errors }}
                                 <font style="font-size:12px;color:#c70000">largeur : 750px - hauteur : 550px.</font>
                             </div>
-                            <div class="form-group">
+
+                        <div class="form-group">
+                            {{ form.is_ggbfile.label_tag }}
+                            {{ form.is_ggbfile |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:GGB"|attr:"data-off:Réponse rédigée"}}
+                            {{ form.is_ggbfile.errors }}
+                        </div>
+
+                            <div class="form-group setup_ggb">
                                 {{ form.ggbfile.label_tag }} 
                                 {{ form.ggbfile |add_class:"btn btn-default" }}
                                 {{ form.ggbfile.errors }}
@@ -117,12 +124,12 @@ ul#id_skills li{
                             {{ form.duration |add_class:"form-control" }}
                             {{ form.duration.errors }}
                         </div>
-                        <div class="form-group">
+                        <div class="form-group setup_ggb">
                             {{ form.situation.label_tag }}
                             {{ form.situation |add_class:"form-control" }}
                             {{ form.situation.errors }}
                         </div>
-                        <div class="row">
+                        <div class="row setup_ggb">
                             <div class="col-sm-12 col-md-6">
                                 <div class="form-group">
                                     {{ form.width.label_tag }}
@@ -147,7 +154,7 @@ ul#id_skills li{
                             {{ form.calculator.errors }}
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-3">
+                    <div class="col-sm-12 col-md-3 setup_ggb">
                         <h4 class="thin"><i class="fa fa-cog"></i> Configuration du fichier ggb</h4><hr/>
                         <div class="row">
                             <div class="col-sm-12 col-md-8">
@@ -215,11 +222,82 @@ ul#id_skills li{
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-sm-12 col-md-3 setup_no_ggb">
+                        <h4 class="thin"><i class="fa fa-cog"></i> Format de réponse non autocorrigée</h4><hr/>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-8">
+                                <div class="form-group">
+                                   Python ?
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    {{ form.is_python |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                    {{ form.is_python.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-8">
+                                <div class="form-group">
+                                   Scratch ?
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    {{ form.is_scratch |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                    {{ form.is_scratch.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-8">
+                                <div class="form-group">
+                                    Fichier pdf/doc/.. ?
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    {{ form.is_file |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                    {{ form.is_file.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-8">
+                                <div class="form-group">
+                                    Image ?
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    {{ form.is_image |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                    {{ form.is_image.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-8">
+                                <div class="form-group">
+                                    Texte en ligne ?
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    {{ form.is_text |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                    {{ form.is_text.errors }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
                         <div class="form-group">
-                            <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+                            <input value="Enregistrer" type="submit" class="btn btn-primary" id="click_button" />
                             <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
                         </div>
                     </div>

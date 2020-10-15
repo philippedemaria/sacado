@@ -42,7 +42,7 @@ if PRODUCTION:
     CONN_MAX_AGE = os.environ.get('CONN_MAX_AGE')
 
 else:
-    # configuration dévellopement
+    # configuration développement
     DEBUG = True
     ALLOWED_HOSTS = ["*"]
     SECRET_KEY = '85umr_$zf2bd58xl)nzf)i*jh)o5h*dp%*3e@pqg+ijem=t1xq'
@@ -96,6 +96,7 @@ INSTALLED_APPS = [
     'school',
     "django_cron",
     'corsheaders',
+    'basthon',
     ]
 
 

@@ -1,0 +1,86 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    <script>
+        require(['script/ajax-parcours']);
+    </script> 
+    
+{% endblock %}
+
+ 
+
+{% block page_title %}
+       <span style="color:{{ relationship.parcours.color }}"><i class="fa fa-desktop"></i> {{ relationship.parcours }}   </span>  
+{% endblock %}
+
+
+{% block page_menu_right %}
+
+{% endblock %}
+
+
+
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+
+    <label>Consigne :</label>         {% if relationship.instruction != ""  %}  {{ relationship.instruction|safe }}  {% else %} {{ relationship.exercise.support.annoncement|safe }} {% endif %}
+
+    <hr>
+
+    <form action="" method="POST">
+
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-8">
+ 
+                {% if relationship.exercise.supportfile.is_image   or   relationship.exercise.supportfile.is_file  %}   
+ 
+                <div class="form-group">
+                    {{ form.imagefile.label_tag }}  <br>
+                    {{ form.imagefile|add_class:"btn btn-default"   }}
+                    {{ form.imagefile.errors }} <br>
+                </div> 
+                {% endif %}
+
+                {% if relationship.exercise.supportfile.is_text   %} 
+
+                <div class="form-group">
+                    <label>Zone pour écrire</label><br>
+                    {{ form.answer }}
+                    {{ form.answer.errors }} <br>
+                </div>
+
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-sm-12 col-lg-8">
+                        <div class="form-group">
+                            <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+                            <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                                       class="btn btn-default "/></a>
+                        </div>
+                    </div>
+ 
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-4">
+                {% if relationship.exercise.supportfile.is_scratch   %} 
+                <label>Conseil :</label>  Utiliser le site Scratch pour créer votre script. Prendre une capture d'écran et la déposer dans la zone de texte.<br><br><br>
+                <a href="https://scratch.mit.edu/projects/editor/?tutorial=getStarted" target="_blank">Naviguer vers Scratch <img src="{% static 'img/scratch.png' %}"/></a>
+                {% endif %}    
+            </div>
+        </div>
+    </form>  
+</section>
+{% endblock %} 

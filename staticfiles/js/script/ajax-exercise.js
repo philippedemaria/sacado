@@ -77,9 +77,68 @@ define(['jquery', 'bootstrap'], function ($) {
         });
 
  
+            $(".setup_no_ggb").hide();
+            makeItemAppear($("#id_is_ggbfile"), $(".setup_ggb"), $(".setup_no_ggb"));
+            function makeItemAppear($toggle, $item, $itm) {
+                    $toggle.change(function () {
+                        if ($toggle.is(":checked")) {
+                            $item.show(500);
+                            $itm.hide(500);
+
+                        } else {
+                            $item.hide(500);
+                            $itm.show(500);
+                            }
+                    });
+                }
+
+
+
+
+
+        $("#click_button").on('click', function () {
+
+            if ($("#id_is_ggbfile").is(":checked")) {
+                if ($("#id_ggbfile").val() == "") { alert("vous devez uploader un ficher GGB") ; return false ;}
+            };
+        });
+
+
+
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('.choose_student').on('click', function (event) {
+
+            let relationship_id = $(this).attr("data-relationship_id");
+            let student_id = $(this).attr("data-student_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'student_id': student_id,
+                        'relationship_id': relationship_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../ajax_choose_student",
+                    success: function (data) {
+
+                            $('#correction_div').html("").html(data.html);
+                    }
+                }
+            )
+         });
+
+
+
+
+
+
+
 
  
-
-
-    });
 });
+
+});
+

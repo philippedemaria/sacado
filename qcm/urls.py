@@ -77,7 +77,7 @@ urlpatterns = [
     path('show_this_supportfile/<int:id>/', show_this_supportfile, name='show_this_supportfile'),  #from dashboard 
 
     path('create_exercise/<int:supportfile_id>/', create_exercise, name='create_exercise'), 
-
+    path('correction_exercise/<int:id>/', correction_exercise, name='correction_exercise'),  #from details_card 
 
     path('show_this_exercise/<int:id>/', show_this_exercise, name='show_this_exercise'),  #from dashboard 
 
@@ -184,5 +184,12 @@ urlpatterns = [
 
     path('ajax/course_viewer', ajax_course_viewer, name='ajax_course_viewer'),
 
+    # Evaluation des exercices non auto corrigé
+    path('ajax_choose_student', ajax_choose_student, name='ajax_choose_student'),
+    path('ajax_knowledge_evaluate', ajax_knowledge_evaluate, name='ajax_knowledge_evaluate'),
+    path('ajax_comment_relationship', ajax_comment_relationship, name='ajax_comment_relationship'),
+
+
+    path('write_exercise/<int:id>', write_exercise, name='write_exercise') # page dans laquelle l'élève repond à l'exercice non auto-corrigé - l'id est celui de la relation.
 
  ]

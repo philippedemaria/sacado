@@ -1,0 +1,160 @@
+
+<div class="col-sm-12 col-md-7" style="padding-top:10px">
+ 
+{% if w_a %}
+        {% if relationship.exercise.supportfile.is_file %}
+            <iframe src="{{  w_a.imagefile.url }}" height="700" width="100%"></iframe>
+        {%  elif relationship.exercise.supportfile.is_python or  relationship.exercise.supportfile.is_scratch %}
+           <pre>{{ w_a.answer|safe }}</pre>
+        {%  elif relationship.exercise.supportfile.is_text %}
+           {{ w_a.answer|safe }}
+        {%  elif relationship.exercise.supportfile.is_image %}
+            <img src="{{  w_a.imagefile.url }}" width="100%"/>
+        {% endif %}
+{% else %}
+
+    <div class="alert alert-danger">  
+        Document non rendu
+    </div>
+{% endif %}
+
+
+</div>
+<div class="col-sm-12 col-md-5" style="padding-right:0px">
+    <h4>{{ student }} {% if w_a %}<span class="pull-right text-primary">Remis le {{ w_a.date|date:"D d M Y"}}</span>{% endif %}</h4>
+    <hr>
+    <table class="table table-bordered table-hover">
+        <tr style="background-color: #F0F0F0">
+            <td>Savoir faire</td><td>NE</td><td><i class="fa fa-circle text-danger"></i></td><td><i class="fa fa-circle text-warning"></i></td><td><i class="fa fa-circle text-success"></i></td><td><i class="fa fa-circle text-primary"></i></td>
+        </tr>
+            <tr>
+                <td>{{ relationship.exercise.knowledge.name }} </td>
+                <td>
+                    <input  type="radio" {% if result_ansser == 4 %} checked {% endif %}  data-relationship_id="{{relationship.id}}" 
+                            name="knowledge" value="4" data-student_id="{{student.user.id}}" class="evaluate" />                               
+
+                </td>
+                <td>
+                    <input  type="radio" {% if result_ansser == 0 %} checked {% endif %}  data-relationship_id="{{relationship.id}}" 
+                            name="knowledge" value="0" data-student_id="{{student.user.id}}" class="evaluate" />                               
+
+                </td>
+                <td>
+                    <input  type="radio" {% if result_ansser == 1 %} checked {% endif %}   data-relationship_id="{{relationship.id}}" 
+                            name="knowledge" value="1" data-student_id="{{student.user.id}}" class="evaluate" />
+                </td>
+                <td>
+                    <input type="radio" {% if result_ansser == 2 %} checked {% endif %}   data-relationship_id="{{relationship.id}}" 
+                            name="knowledge" value="2" data-student_id="{{student.user.id}}" class="evaluate" />
+                </td>
+                <td>
+                    <input type="radio" {% if result_ansser == 3 %} checked {% endif %}   data-relationship_id="{{relationship.id}}" 
+                            name="knowledge" value="3"  data-student_id="{{student.user.id}}" class="evaluate" />
+                </td>
+            </tr>
+    </table>
+    <hr>
+    <table class="table table-bordered table-hover">
+        <tr style="background-color: #F0F0F0">
+            <td>Compétences</td><td>NE</td><td><i class="fa fa-circle text-danger"></i></td><td><i class="fa fa-circle text-warning"></i></td><td><i class="fa fa-circle text-success"></i></td><td><i class="fa fa-circle text-primary"></i></td>
+        </tr>
+        {% for s in  relationship.skills.all %}
+            <tr>
+                <td>{{ s }}</td>
+                <td>
+                    <input type="radio" name="skill{{s.id}}" value="4"   {% if result_ansser == 0 %} checked {% endif %}
+                    data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}"  class="evaluate" />
+                </td>
+
+                <td>
+                    <input type="radio" name="skill{{s.id}}" value="0"   {% if result_ansser == 0 %} checked {% endif %}
+                    data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}"  class="evaluate" />
+                </td>
+                <td>
+                    <input type="radio" name="skill{{s.id}}" value="1"   {% if result_ansser == 1 %} checked {% endif %}
+                    data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}"  class="evaluate" />
+                 </td>
+                <td>
+                    <input type="radio" name="skill{{s.id}}" value="2"   {% if result_ansser == 2 %} checked {% endif %}
+                    data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}"  class="evaluate" />
+                </td>
+                <td>
+                    <input type="radio" name="skill{{s.id}}" value="3"   {% if result_ansser == 3 %} checked {% endif %}
+                    data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}"  class="evaluate" />
+                </td>
+            </tr>
+         {% endfor %}
+    </table> 
+    <hr>
+    <h5>Commentaires</h5>
+    <textarea class="form-control" name="comment" id="comment">{{ answercomment }}</textarea>
+
+            <div class="row" style="margin-top:10px">
+                <div class="col-sm-12 col-md-8">
+                    <div class="form-group">
+                        <a href="#" class="btn btn-primary" id="save_comment" data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}" >Enregistrer ce commentaire</a>
+
+                        <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                                   class="btn btn-default "/></a>
+                    </div>
+                </div> 
+            </div>
+</div>
+
+<script>
+
+
+
+        // Enregistrer les commentaires
+        $('#save_comment').on('click', function (event) {
+            let comment = $("#comment").val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let student_id = $(this).attr("data-student_id");
+            let relationship_id = $(this).attr("data-relationship_id");
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'comment': comment,
+                        'student_id':student_id,
+                        'relationship_id': relationship_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../ajax_comment_relationship",
+ 
+                }
+            )
+        });
+
+
+
+
+        // ENregistre le score de knowledge
+        $('input[name=knowledge]').on('click', function (event) {
+            let value = $(this).val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let student_id = $(this).attr("data-student_id");
+            let relationship_id = $(this).attr("data-relationship_id");
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'value': value,
+                        'student_id':student_id,
+                        'relationship_id': relationship_id,
+                        'typ' : 0,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../ajax_knowledge_evaluate",
+                    success: function (data) {
+                        $('#evaluate'+student_id).html(data.eval);
+                    }
+                }
+            )
+        });
+
+</script>

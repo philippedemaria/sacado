@@ -8,8 +8,8 @@ from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group , Sharing_group
 from school.models import Stage
-from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Mastering_done
-from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm  ,CourseForm , DemandForm , MasteringForm,MasteringDoneForm 
+from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Mastering_done, Answercomment, Writtenanswerbystudent
+from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm  ,CourseForm , DemandForm , MasteringForm,MasteringDoneForm ,WrittenanswerbystudentForm
 from socle.models import  Theme, Knowledge , Level , Skill
 from django.http import JsonResponse 
 from django.core import serializers
@@ -47,6 +47,8 @@ cm = 2.54
 import re
 import pytz
 import csv
+import html
+
 
 def time_zone_user(user):
     if user.time_zone :
@@ -1639,20 +1641,41 @@ def ajax_dates(request):
         try :
             duration =  request.POST.get("duration") 
             Relationship.objects.filter(pk = int(relationship_id)).update(duration = duration)
-            data["clock"] = "<i class='fa fa-clock-o'></i> "+str(duration)+"  min."
+            data["clock"] = "<i class='fa fa-clock-o'></i> "+str(duration)+"  min."          
             try :
-                situation =  request.POST.get("situation") 
-                Relationship.objects.filter(pk = int(relationship_id)).update(situation = situation)
-                data["save"] = "<i class='fa fa-save'></i> "+str(situation)
-                data["situation"] = "<i class='fa fa-save'></i> "+str(situation)
+                situation =  request.POST.get("situation")
+                rel = Relationship.objects.get(pk = int(relationship_id))
+
+                if rel.exercise.supportfile.is_ggbfile :
+                    Relationship.objects.filter(pk = int(relationship_id)).update(situation = situation)
+                    data["save"] = "<i class='fa fa-save'></i> "+str(situation)
+                    data["situation"] = "<i class='fa fa-save'></i> "+str(situation)
+                    data["annonce"] = ""
+                    data["annoncement"]   = False
+
+                else :
+                    Relationship.objects.filter(pk = int(relationship_id)).update(instruction = situation)  
+                    data["save"] = False
+                    data["duration"] = ""
+                    data["annonce"] = situation
+                    data["annoncement"]   = True
             except : 
                 pass
 
         except :
             try :
                 situation =  request.POST.get("situation") 
-                Relationship.objects.filter(pk = int(relationship_id)).update(situation = situation)
-                data["save"] = "<i class='fa fa-save'></i> "+str(situation)
+                rel = Relationship.objects.get(pk = int(relationship_id))
+                if rel.exercise.supportfile.is_ggbfile :
+                    Relationship.objects.filter(pk = int(relationship_id)).update(situation = situation)
+                    data["save"] = "<i class='fa fa-save'></i> "+str(situation) 
+                    data["annonce"] = "" 
+                    data["annoncement"]   = False                                 
+                else :
+                    Relationship.objects.filter(pk = int(relationship_id)).update(instruction = situation)   
+                    data["save"] = False
+                    data["annonce"] = situation
+                    data["annoncement"]   = True
                 try :
                     duration =  request.POST.get("duration") 
                     Relationship.objects.filter(pk = int(relationship_id)).update(duration = duration)
@@ -2296,7 +2319,7 @@ def store_the_score_relation_ajax(request):
 
     this_time = request.POST.get("start_time").split(",")[0]
     end_time  =  str(time.time()).split(".")[0]
-    numexo = int(request.POST.get("numexo"))
+    numexo = int(request.POST.get("numexo"))-1
     timer =  int(end_time) - int(this_time)
     relation_id = int(request.POST.get("relation_id"))
 
@@ -2310,10 +2333,11 @@ def store_the_score_relation_ajax(request):
         if score > 100 :
             score = 100
  
-        if int(relation.situation) <= int(numexo+2):
+        if int(relation.situation) <= int(numexo+1):
             Studentanswer.objects.create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student , numexo= numexo,  point= score, secondes = timer)
-            result, created = Resultexercise.objects.get_or_create(exercise  = relation.exercise , student  = student , defaults = { "point" : score , })
-            Resultexercise.objects.filter(exercise  = relation.exercise , student  = student).update(point= score)
+            result, createded = Resultexercise.objects.get_or_create(exercise  = relation.exercise , student  = student , defaults = { "point" : score , })
+            if not createded :
+                Resultexercise.objects.filter(exercise  = relation.exercise , student  = student).update(point= score)
  
             # Moyenne des scores obtenus par savoir faire enregistré dans Resultknowledge
             knowledge = relation.exercise.knowledge
@@ -2342,8 +2366,9 @@ def store_the_score_relation_ajax(request):
                         sco_avg = sco/len(resultskills)
                     except :
                         sco_avg = 0
-                result, created = Resultlastskill.objects.get_or_create(student = student, skill = skill, defaults = { "point" : sco_avg , })
-                Resultlastskill.objects.filter(student = student, skill = skill).update(point = sco_avg) 
+                result, creat = Resultlastskill.objects.get_or_create(student = student, skill = skill, defaults = { "point" : sco_avg , })
+                if not creat :
+                    Resultlastskill.objects.filter(student = student, skill = skill).update(point = sco_avg) 
 
             try :
                 if relation.exercise.supportfile.annoncement != "" :
@@ -2724,14 +2749,12 @@ def update_evaluation(request, id, idg=0 ):
 @login_required
 def delete_evaluation(request,id):
 
-    relationship = Relationship.objects.get(pk=id)
+    parcours = Parcours.objects.get(pk=id)
     teacher = Teacher.objects.get(user=request.user)
-    if relationship.parcours.teacher == teacher :
-        Relationship.objects.filter(pk=id).update(is_evaluation=0)
-        Relationship.objects.filter(pk=id).update(situation=0)
-        Relationship.objects.filter(pk=id).update(beginner=None)
-        form =  RelationshipForm(request.POST or None , instance = relationship )
-    return redirect("show_parcours" , relationship.parcours.id )
+    if parcours.teacher == teacher :
+        parcours.exercices.clear() 
+        parcours.delete() 
+    return redirect('index')
 
 
 @login_required
@@ -2779,8 +2802,170 @@ def show_evaluation(request, id):
     return render(request, 'qcm/show_parcours.html', context)
 
 
+def correction_exercise(request,id):
 
+    stage = Stage.objects.get(school = request.user.school)
+
+    relationship = Relationship.objects.get(pk=id)
+    teacher = Teacher.objects.get(user=request.user)
+    context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage ,  'communications' : [] ,  }
+
+    return render(request, 'qcm/correction_exercise.html', context)
+
+
+def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à un exercice non auto-corrigé
+
+    relationship_id =  int(request.POST.get("relationship_id")) 
+    student_id =  int(request.POST.get("student_id"))
+ 
+    student = Student.objects.get(pk = student_id)    
+    relationship = Relationship.objects.get(pk = relationship_id)
+
+    if Answercomment.objects.filter(relationship_id = relationship_id , student_id = student_id).exists():
+        answer = Answercomment.objects.get(relationship_id = relationship_id , student_id = student_id)
+        answercomment = answer.comment 
+    else :
+        answercomment = ""
+
+    if Writtenanswerbystudent.objects.filter(relationship_id = relationship_id , student_id = student_id).exists():
+        w_a = Writtenanswerbystudent.objects.get(relationship_id = relationship_id , student_id = student_id)
+        if w_a.imagefile :
+            wa = w_a.imagefile 
+        else :
+            wa = w_a.answer
+    else :
+        w_a = False 
+ 
+
+    data = {}
+
+    context = { 'relationship' : relationship , 'student': student , 'answercomment' : answercomment , 'w_a' : w_a ,   }
+
+    html = render_to_string('qcm/correction_exercise_ajax.html', context )
+ 
+    data['html'] = html       
+
+    return JsonResponse(data)
+
+
+def ajax_knowledge_evaluate(request):
+
+    relationship_id =  int(request.POST.get("relationship_id")) 
+    student_id =  int(request.POST.get("student_id"))
+    value =  int(request.POST.get("value"))
+    typ =  int(request.POST.get("typ")) 
+    student = Student.objects.get(user_id = student_id)  
+
+    if student.user.school :
+        stage = Stage.objects.get(school = student.user.school)
+    else :
+        stage = { 'low' : 30, 'medium' : 60 , 'up' :80 }        
     
+    data = {}
+
+  
+    relationship = Relationship.objects.get(pk = relationship_id)
+  
+    tab_label = ["text-danger","text-warning","text-success","text-primary",""]
+    tab_value = [stage.low-1,stage.medium-1,stage.up-1,100,-1]
+
+    if tab_value[value] > -1 :
+
+
+        studentanswer, creator = Studentanswer.objects.get_or_create(parcours = relationship.parcours, exercise = relationship.exercise, student = student , defaults={"point" : tab_value[value] , 'secondes' : 0} )
+        if not creator :
+            Studentanswer.objects.filter(parcours  = relationship.parcours, exercise = relationship.exercise , student  = student).update(point= tab_value[value])
+        # Moyenne des scores obtenus par savoir faire enregistré dans Resultknowledge
+        knowledge = relationship.exercise.knowledge
+        scored = 0
+        studentanswers = Studentanswer.objects.filter(student = student,exercise__knowledge = knowledge) 
+        for studentanswer in studentanswers:
+            scored +=  studentanswer.point 
+        try :
+            scored = scored/len(studentanswers)
+        except :
+            scored = 0
+        result, created = Resultknowledge.objects.get_or_create(knowledge  = relationship.exercise.knowledge , student  = student , defaults = { "point" : scored , })
+        if not created :
+            Resultknowledge.objects.filter(knowledge  = relationship.exercise.knowledge , student  = student).update(point= scored)
+        
+
+        # Moyenne des scores obtenus par compétences enregistrées dans Resultskill
+        skills = relationship.skills.all()
+        for skill in skills :
+            Resultskill.objects.create(student = student, skill = skill, point = tab_value[value]) 
+            resultskills = Resultskill.objects.filter(student = student, skill = skill).order_by("-id")[0:10]
+            sco = 0
+            for resultskill in resultskills :
+                sco += resultskill.point
+                try :
+                    sco_avg = sco/len(resultskills)
+                except :
+                    sco_avg = 0
+            result, creat = Resultlastskill.objects.get_or_create(student = student, skill = skill, defaults = { "point" : sco_avg , })
+            if not creat :
+                Resultlastskill.objects.filter(student = student, skill = skill).update(point = sco_avg) 
+
+        data['eval'] = "<i class = 'fa fa-square "+tab_label[value]+" pull-right'></i>"       
+    else :
+        data['eval'] = ""
+    return JsonResponse(data)  
+
+
+
+def ajax_comment_relationship(request):
+
+    relationship_id =  int(request.POST.get("relationship_id")) 
+    student_id =  int(request.POST.get("student_id"))
+    comment =  cleanhtml(unescape_html(request.POST.get("comment")))
+
+    student = Student.objects.get(user_id = student_id)  
+    relationship = Relationship.objects.get(pk = relationship_id)
+
+    answercomment, created = Answercomment.objects.get_or_create(relationship = relationship, student = student , defaults={"comment" : comment } )
+    if not created :
+        Answercomment.objects.filter(relationship = relationship, student = student).update( comment = comment  )
+    data = {}
+       
+    return JsonResponse(data)  
+
+
+
+
+def write_exercise(request,id):
+ 
+    student = Student.objects.get(user = request.user)  
+    relationship = Relationship.objects.get(pk = id)
+
+    if Writtenanswerbystudent.objects.filter(student = student, relationship = relationship ).exists() : 
+        w = Writtenanswerbystudent.objects.get(student = student, relationship = relationship )
+        wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None, instance = w )    
+    else :
+        wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None ) 
+
+    if request.method == "POST":
+
+        if wForm.is_valid():
+            w_f = wForm.save(commit=False)
+            w_f.relationship = relationship
+            w_f.student = student
+            w_f.save()
+            return redirect('show_parcours_student' , relationship.parcours.id )
+
+
+    context = {'relationship': relationship, 'communications' : [] , 'form' : wForm }
+
+    if relationship.exercise.supportfile.is_python :
+        url = "basthon/index.html" 
+    else :
+        url = "qcm/form_writing.html" 
+ 
+
+
+
+    return render(request, url , context)
+
+
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 #################   Task

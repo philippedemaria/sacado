@@ -64,7 +64,7 @@
                                                    <br><a href="{% url 'create_exercise' supportfile.id %}" class="btn btn-primary"  >Associer/Dissocier un savoir faire à ce support</a>
                                                 </div>
 
-                                                    <a href="{% url 'show_this_supportfile' supportfile.id   %}" target="_blank"   >  
+                                                    <a href="{% url 'show_this_supportfile' supportfile.id   %}" target="_blank">  
                                                         <img src="{{ supportfile.imagefile.url }}" class="imagefile">
                                                     </a>
 
@@ -85,7 +85,7 @@
                                                     <small>   
                                                         <i class="fa fa-fw fa-barcode"></i> {{ supportfile.code }}  {% if supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
                                                         <i class="fa fa-fw fa-clock-o"></i> {{ supportfile.duration }} minutes {% if supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
-                                                        <i class="fa fa-fw fa-save"></i> {{ supportfile.situation}} situation{{ supportfile.situation|pluralize}} minimum
+                                                        {% if supportfile.is_ggbfile %}<i class="fa fa-fw fa-save"></i> {{ supportfile.situation}} situation{{ supportfile.situation|pluralize}} minimum{% endif %}
                                                     </small>   
                                            </td>
                                         </tr>

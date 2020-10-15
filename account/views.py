@@ -1312,9 +1312,15 @@ def ajax_detail_student_parcours(request):
     student = Student.objects.get(user_id=student_id)
     parcours = Parcours.objects.get(pk=parcours_id)
 
+    if student.user.school :
+        stage = Stage.objects.get(school = student.user.school)
+    else :
+        stage = { 'low' : 30, 'medium' : 60 , 'up' :80 }        
+
+
     relationships = Relationship.objects.filter(parcours=parcours).order_by("order")
 
-    context = {'student': student, 'relationships': relationships}
+    context = {'student': student, 'relationships': relationships, 'stage' : stage}
 
     data = {}
     data['html'] = render_to_string('account/ajax_detail_student_parcours.html', context)

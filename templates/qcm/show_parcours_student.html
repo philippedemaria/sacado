@@ -145,8 +145,16 @@
                     {% endif  %} 
                 </div>                    
                 <div class="card-image">
+
+
                     {% if student %}
-                    <a href="{% url 'execute_exercise'  relation.parcours.id  relation.exercise.id   %}">  <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.3" {% endif %}    ></a>
+
+                        {% if relation.exercise.supportfile.is_ggbfile %}          
+                        <a href="{% url 'execute_exercise'  relation.parcours.id  relation.exercise.id   %}">  <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.3" {% endif %}    ></a>
+                        {% else %}
+                        <a href="{% url 'write_exercise'  relation.id   %}">  <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.3" {% endif %}    ></a>
+
+                        {% endif  %}
                     {% else %}
                     <a href="#" class="detail_parcours"  data-exercise_id="{{ relation.exercise.id }}"  data-num_exo="{{ forloop.counter}}"
                                                data-parcours_id="{{ parcours.id }}">

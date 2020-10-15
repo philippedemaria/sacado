@@ -40,17 +40,24 @@ def file_attach_path(instance, filename):
     return "attach_files/{}/{}".format(instance.level.id, filename)
 
 
-def convert_time(duree) :
-    d = int(duree)
-    if d < 59 :
-        return duree+"s"
-    elif d < 3600:
-        s = d%60        
-        m = int((d-s)/60)
-        return str(m)+"min "+str(s)+"s"
-    else :
-        return  "td" #temps dépassé
+def file_directory_student(instance, filename):
+    return "files/{}/{}".format(instance.student.user.id, filename)
 
+
+
+def convert_time(duree) :
+    try :
+        d = int(duree)
+        if d < 59 :
+            return duree+"s"
+        elif d < 3600:
+            s = d%60        
+            m = int((d-s)/60)
+            return str(m)+"min "+str(s)+"s"
+        else :
+            return  "td" #temps dépassé
+    except :
+        return ""
 
 
 
@@ -83,7 +90,7 @@ class Supportfile(models.Model):
 
     width = models.PositiveIntegerField(default=750, verbose_name="Largeur")
     height = models.PositiveIntegerField(default=550, verbose_name="Hauteur")
-    ggbfile = models.FileField(upload_to=quiz_directory_path, verbose_name="Fichier ggb", default="")
+    ggbfile = models.FileField(upload_to=quiz_directory_path, verbose_name="Fichier ggb",blank=True, default="" )
     imagefile = models.ImageField(upload_to=image_directory_path, verbose_name="Vignette d'accueil", default="")
 
     toolBar = models.BooleanField(default=0, verbose_name="Barre des outils ?")
@@ -99,6 +106,12 @@ class Supportfile(models.Model):
     duration = models.PositiveIntegerField(default=15, blank=True, verbose_name="Durée estimée - en minutes")
     skills = models.ManyToManyField(Skill, blank=True, related_name='skills_supportfile', verbose_name="Compétences ciblées")
 
+    is_ggbfile = models.BooleanField(default=1, verbose_name="Type de support")
+    is_python = models.BooleanField(default=0, verbose_name="Python ?")
+    is_scratch = models.BooleanField(default=0, verbose_name="Scratch ?")
+    is_file = models.BooleanField(default=0, verbose_name="Fichier ?")
+    is_image = models.BooleanField(default=0, verbose_name="Iage/Scan ?")
+    is_text = models.BooleanField(default=0, verbose_name="Texte ?")
 
 
     def __str__(self): 
@@ -148,7 +161,7 @@ class Exercise(models.Model):
                                   verbose_name="Savoir faire associé - Titre")
     supportfile = models.ForeignKey(Supportfile, blank=True, default=1, related_name="exercises",
                                     on_delete=models.PROTECT, verbose_name="Fichier Géogebra")
- 
+  
 
     def __str__(self):
         return "{}".format(self.knowledge.name)
@@ -627,6 +640,7 @@ class Relationship(models.Model):
     beginner = models.TimeField(null=True, blank=True, verbose_name="Heure du début")
     skills = models.ManyToManyField(Skill, blank=True, related_name='skills_relationship', editable=False)
     students = models.ManyToManyField(Student, blank=True, related_name='students_relationship', editable=False)
+    instruction = models.TextField(blank=True,  editable=False)
 
     def __str__(self):
         try :
@@ -722,6 +736,34 @@ class Resultexercise(models.Model):  # Last result
 
     class Meta:
         unique_together = ['student', 'exercise']
+
+
+
+class Answercomment(models.Model): # Commentaire pour les exercices non autocorrigé coté enseignant
+
+    relationship = models.ForeignKey(Relationship,  on_delete=models.PROTECT,   related_name='relationship_answer', editable=False)
+    student = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='student_answer', editable=False)
+    comment = models.TextField( default="", null=True,   editable=False) 
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):        
+        return "{}".format(self.relationship.exercise.knowledge.name)
+
+
+
+class Writtenanswerbystudent(models.Model): # Commentaire pour les exercices non autocorrigé coté enseignant
+
+    relationship = models.ForeignKey(Relationship,  on_delete=models.PROTECT,   related_name='relationship_written_answer', editable=False)
+    student = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='student_written_answer', editable=False)
+    date = models.DateTimeField(auto_now_add=True)
+    # rendus
+    imagefile = models.ImageField(upload_to= file_directory_student, blank = True, null=True,   verbose_name="Scan ou image ou Photo", default="")
+    answer = RichTextUploadingField( default="", null=True,  blank=True, ) 
+
+
+    def __str__(self):        
+        return "{}".format(self.relationship.exercise.knowledge.name)
+
 
 
 ########################################################################################################################################### 

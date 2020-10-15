@@ -36,24 +36,25 @@
                     <td style="font-size:13px">{{ relation.exercise.knowledge.name }}<br><span style="font-size:12px">{{ relation.exercise.supportfile.annoncement|cleanhtml }}</span></td>
  
                     <td>
-
+                      {% get_done relation.exercise student as done %}
+                      {% if done %}
                         {% get_score_student_for_this relation student as  studentanswer %} 
                             {% if  studentanswer.point %}
                             <span class="markdown
-                                    {% if studentanswer.point < 30 %}
-                                     red 
-                                    {% elif studentanswer.point < 60 %}
-                                    orange
-                                    {% elif studentanswer.point < 80 %}
-                                    green
+                                    {% if studentanswer.point >= stage.up %}
+                                        red 
+                                    {% elif studentanswer.point >= stage.medium %}
+                                        green  
+                                    {% elif studentanswer.point >=  stage.low  %}
+                                        orange
                                     {% else %}
-                                    darkgreen
+                                        red
                                     {% endif %}"
                                    >
                                 {{  studentanswer.point }}%
                             </span>
                             {% endif %}
-
+                        {% endif %}
                     </td> 
                 </tr>
                 {% endfor %}
@@ -62,6 +63,5 @@
     </div>
 </div>
 </div>
- 
- 
+  
  

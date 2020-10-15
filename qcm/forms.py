@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from .models import Parcours, Exercise, Remediation, Relationship, Supportfile, Course, Demand, Mastering,Mastering_done
+from .models import Parcours, Exercise, Remediation, Relationship, Supportfile, Course, Demand, Mastering,Mastering_done, Writtenanswerbystudent
 from account.models import Student
 from socle.models import Knowledge, Skill
 from group.models import Group
@@ -123,6 +123,8 @@ class RemediationForm(forms.ModelForm):
 		fields = '__all__'
 
 
+
+
 class SupportfileForm(forms.ModelForm):
 	class Meta:
 		model = Supportfile
@@ -138,6 +140,9 @@ class SupportfileForm(forms.ModelForm):
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
 		self.fields['skills']  =  forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject= subject), required=False)
 
+
+
+
 class SupportfileKForm(forms.ModelForm):
 	class Meta:
 		model = Supportfile
@@ -151,6 +156,8 @@ class SupportfileKForm(forms.ModelForm):
 		knowledges = Knowledge.objects.filter(theme__subject= subject)
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
 		self.fields['skills']  =  forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject= subject), required=False)
+
+
 
 
 class UpdateSupportfileForm(forms.ModelForm):
@@ -179,6 +186,8 @@ class AttachForm(forms.ModelForm):
 		widgets = {
           'annoncement': forms.Textarea(attrs={'rows':1}),
         }
+
+
 
 
 class CourseForm(forms.ModelForm):
@@ -223,3 +232,11 @@ class MasteringDoneForm (forms.ModelForm):
 	class Meta:
 		model = Mastering_done
 		fields = ('writing',)
+
+
+class WrittenanswerbystudentForm (forms.ModelForm):
+	class Meta:
+		model = Writtenanswerbystudent
+		fields = ('imagefile','answer')
+
+ 
