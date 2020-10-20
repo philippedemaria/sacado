@@ -40,7 +40,7 @@ class User(AbstractUser):
     """
     Modèle représentant un utilisateur. Possède les champs suivants hérités de la classe AbstractUser :
 
-    first_name : Optional (blank=True). 30 characters or fewer.
+    first_name : Optional (blank=True). 100 characters or fewer.
     last_name : Optional (blank=True). 150 characters or fewer.
     email : Optional (blank=True). Email address.
     password : Required. A hash of, and metadata about, the password. (Django doesn’t store the raw password.)
