@@ -6,24 +6,29 @@ from group.models import Sharing_group
 
 
 def user_is_parcours_teacher(function):
-    def wrap(request, *args, **kwargs):
-        parcours = Parcours.objects.get(pk=kwargs['id'])
-        teacher = Teacher.objects.get(user= request.user)
+	def wrap(request, *args, **kwargs):
+		kid = kwargs['id']
+		if kid > 0 :
+			parcours = Parcours.objects.get(pk=kid)
+			teacher = Teacher.objects.get(user= request.user)
 
-        students_parcours = parcours.students.all()
-        groups = []
-        for st in students_parcours :
-            for g in st.students_to_group.all() :
-                if not g in groups :
-                    groups.append(g)
+			students_parcours = parcours.students.all()
+			groups = []
+			for st in students_parcours :
+				for g in st.students_to_group.all() :
+					if not g in groups :
+						groups.append(g)
 
-        sharing_group_nb = Sharing_group.objects.filter(group__in = groups, teacher = teacher ).count()
+			sharing_group_nb = Sharing_group.objects.filter(group__in = groups, teacher = teacher ).count()
 
-        if parcours.teacher == teacher or parcours.author == teacher or sharing_group_nb > 0:
-            return function(request, *args, **kwargs)
-        else:
-            raise PermissionDenied
-    return wrap
+			if parcours.teacher == teacher or parcours.author == teacher or sharing_group_nb > 0:
+				return function(request, *args, **kwargs)
+			else:
+				raise PermissionDenied
+		else :
+			return function(request, *args, **kwargs)
+
+	return wrap
 
 
  

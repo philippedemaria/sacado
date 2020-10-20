@@ -55,7 +55,7 @@ define(['jquery', 'bootstrap'], function ($) {
                         'level_id': level_id,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: "ajax_knowledge_exercice",
+                    url: "ajax_knowledge_exercise",
                     success: function (data) {
                         $('select[name=knowledge]').html("");
                         // Remplir la liste des choix avec le résultat de l'appel Ajax
@@ -93,6 +93,34 @@ define(['jquery', 'bootstrap'], function ($) {
                 }
 
 
+ 
+ 
+            makeDivAppear($("#id_is_mark"), $("#on_mark"));
+            function makeDivAppear($toggle, $item) {
+                    $toggle.change(function () {
+                        if ($toggle.is(":checked")) {
+                            $item.show(500);
+                            $itm.hide(500);
+
+                        } else {
+                            $item.hide(500);
+                            $itm.show(500);
+                            }
+                    });
+                }
+
+        $("#selector_student").click(function(){ 
+            $('.selected_student').not(this).prop('checked', this.checked);
+        });
+
+
+
+        $("#id_is_python").on('change', function () { console.log("coucou");
+
+            if ($("#id_is_python").is(":checked")) { $("#config_render").hide(500) ;}
+            else { $("#config_render").show(500) ;}
+
+        });
 
 
 
@@ -111,6 +139,8 @@ define(['jquery', 'bootstrap'], function ($) {
             let relationship_id = $(this).attr("data-relationship_id");
             let student_id = $(this).attr("data-student_id");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let custom = $(this).attr("data-custom");
+            let parcours_id = $(this).attr("data-parcours_id"); 
 
             $.ajax(
                 {
@@ -118,13 +148,15 @@ define(['jquery', 'bootstrap'], function ($) {
                     dataType: "json",
                     data: {
                         'student_id': student_id,
+                        'custom' : custom ,
                         'relationship_id': relationship_id,
+                        'parcours_id': parcours_id,
                         csrfmiddlewaretoken: csrf_token
                     },
                     url: "../../ajax_choose_student",
                     success: function (data) {
 
-                            $('#correction_div').html("").html(data.html);
+                        $('#correction_div').html("").html(data.html);
                     }
                 }
             )
@@ -132,12 +164,6 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
-
-
-
-
-
- 
 });
 
 });

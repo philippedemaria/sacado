@@ -9,8 +9,18 @@
 
 
 {% block page_title %}
-    <i class="fa fa-pencil-square"></i> Correction d'exercice          
-    <a href="#" data-toggle='modal' data-target='#consigne' class="btn btn-primary" ><i class="fa fa-eye"></i> Voir l'énoncé </a>
+
+    {% if parcours %}
+    <span style="color:{{ parcours.color  }}"><i class="fa fa-pencil-square"></i> </span> 
+    {% endif %}
+
+      {% include 'qcm/breadcrumb.html' %}
+
+
+
+
+    <small> Correction d'exercice          
+    <a href="#" data-toggle='modal' data-target='#consigne' class="btn btn-primary" ><i class="fa fa-eye"></i> Voir l'énoncé </a></small>
 {% endblock %}
 
 
@@ -50,11 +60,12 @@
                     </tr>
                     </thead>
                     <tbody>
+                    {% block liste_student %}  
                     {% for student in relationship.students.all %}
                         <tr>
                             <td>
                            
-                                <a href="#" data-student_id="{{ student.user.id }}" data-relationship_id="{{ relationship.id }}" class="choose_student">   {{ student.user.last_name }} {{ student.user.first_name }} 
+                                <a href="#" data-student_id="{{ student.user.id }}" data-relationship_id="{{ relationship.id }}" data-parcours_id="0" data-custom="0" class="choose_student">   {{ student.user.last_name }} {{ student.user.first_name }} 
 
                                     <span id ="evaluate{{ student.user.id }}">
                                       {% get_done relationship student as done %}
@@ -85,6 +96,7 @@
                             <td>Aucun élève.</td>
                         </tr>
                     {% endfor %}
+                    {% endblock %}                    
                     </tbody>
                 </table>
             </div>
@@ -111,7 +123,9 @@
                 </button>  <h4>Enoncé</h4>
             </div>
             <div class="modal-body">
+            {% block modal %} 
                 {% if relationship.instruction != ""  %}  {{ relationship.instruction|safe }}  {% else %} {{ relationship.exercise.support.annoncement|safe }} {% endif %}
+            {% endblock %}   
             </div>
 
             <div class="modal-footer">

@@ -42,8 +42,19 @@
 
         {% if parcours.is_evaluation %}
         <li {% if 'parcours_peuplate_evaluation/' in request.path %} class="active" {% endif %}><a href="{% url 'peuplate_parcours_evaluation' parcours.id   %}"><i class="fa fa-laptop fa-fw"></i> Sélectionner les exercices</a>   </li>
+
+        <li {% if 'parcours_new_exercice_evaluation/' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'parcours_create_custom_exercise' parcours.id 0  %}" ><i class="fa fa-plus fa-fw"></i> Ajouter un exercice personnalisé</a> 
+        </li> 
+
         {% else %}         
         <li {% if 'parcours_peuplate/' in request.path %} class="active" {% endif %}><a href="{% url 'peuplate_parcours' parcours.id   %}"><i class="fa fa-laptop fa-fw"></i> Sélectionner les exercices</a>   </li>
+
+        <li {% if 'parcours_new_exercice/' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'parcours_create_custom_exercise' parcours.id  1 %}" ><i class="fa fa-plus fa-fw"></i> Ajouter un exercice personnalisé</a> 
+        </li> 
+
+
         {% endif %}
 
         <li><a href="#"  class="no_button" id="handler_order_exercises" ><img src="{% static 'img/order_handler.png' %}" style="margin-right:10px; margin-left:3px"/> Organiser les exercices </a> </li>
@@ -69,6 +80,7 @@
             <a href="{% url 'stat_parcours' parcours.id %}" ><i class="fa fa-bar-chart fa-fw"></i> Lire les stats du parcours</a>   
         </li>
         {% endif %} 
+
     </ul>
 </li> 
 {% endif %}

@@ -5,6 +5,8 @@
     {% load bootstrap3 %}
     {% load widget_tweaks %}
     {% bootstrap_messages %}
+ 
+
     {% load static %}
     <!-- Bootstrap -->
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}"/>
@@ -22,8 +24,9 @@
     <!-- Tabs -->
     <link rel="stylesheet" href="{% static 'plugins/datatables/dataTables.bootstrap.css' %}">
 
- 
     <link rel="stylesheet" href="{% static 'plugins/datepicker/datepicker3.css' %}">
+ 
+    <link rel="stylesheet" href="{% static 'plugins/datepicker/datetimepicker.css' %}">
     <!-- Select2 -->
     <link rel="stylesheet" href="{% static 'plugins/select2/select2.min.css' %}">
 
@@ -36,8 +39,7 @@
  
     <link rel="stylesheet" href="{% static 'css/navbar-fixed-left.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/slide_menu.css' %}">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
-          integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,900">
  
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Amatic+SC:400,900">
@@ -159,6 +161,7 @@
         </div>
     </div>
 </div>
+
 
 
 <div class="modal fade" id="remediation_viewer" tabindex="-1" role="dialog" aria-labelledby="remediation_viewer">

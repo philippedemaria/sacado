@@ -1,0 +1,36 @@
+{% extends 'qcm/correction_exercise.html' %}
+{% load static %}
+{% load item_tags %}
+
+
+
+{% block liste_student %}  
+    {% for student in customexercise.students.all %}
+        <tr>
+            <td>
+                {% get_done customexercise student as done %}
+                {% if done %}
+                <a href="#" data-student_id="{{ student.user.id }}" data-relationship_id="{{ customexercise.id }}" data-parcours_id="{{ parcours.id }}" data-custom="1" class="choose_student">   {{ student.user.last_name }} {{ student.user.first_name }} 
+
+                    <span id ="evaluate{{ student.user.id }}">
+                        {% get_corrected_for_this customexercise student parcours as  is_corrected %} 
+                            {% if  is_corrected %}
+                            <i class="fa fa-check text-success pull-right"></i>
+                            {% endif %}
+                    </span>
+                </a>
+                {% else %}                
+                <span style="color:#DDD">{{ student.user.last_name }} {{ student.user.first_name }} </span>
+                {% endif %}
+            </td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td>Aucun élève.</td>
+        </tr>
+    {% endfor %}
+{% endblock %}
+
+{% block modal %} 
+    {{ customexercise.instruction|safe }} 
+{% endblock %}

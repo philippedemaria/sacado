@@ -199,7 +199,7 @@ li label:hover{
 
  /****************************************** details_card selectors **************************************/
 
-.select_details, .sharer, .details_relation,.action_content, .select_task{
+.select_details, .sharer, .details_relation,.action_content, .select_task, .custom_select_details, .custom_sharer, .custom_select_task{
   cursor: pointer;
 }  
  
@@ -1564,7 +1564,6 @@ table.table-bordered.dataTable {
 .modal-exo{
   width: 800px ;
 }
-
 
  
 /* ********************************************************************************************************
@@ -3832,7 +3831,6 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   border-radius: 10px;
 }
 
- 
 
 .div_links{
   height:340px;
@@ -3855,8 +3853,58 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   border-radius: 10px;
 }
 
+.teacher_corrected{
+  left : 60px; 
+  top:10px;
+  font-size: 12px;
+  position: absolute;
+  padding:2px;
+  border-radius: 2px;
+  background-color: #5d4391;
+  color:#FFF;
+}
 
+.div_results{
+  height:200px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding:10px;   
+  padding-right: 5px;
+  scrollbar-color:  gray white;
+  position: absolute; 
+  background-color: #fff;
+  font-size: 10px;
+  overflow-x: hidden;
+  z-index: 9999;
+}
 
+ .div_results::-webkit-scrollbar {
+  width: 0px;
+  height: 20px;
+}
+.div_results::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 10px;
+}
+.div_results::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.selector_div_result_custom{
+  cursor: pointer;
+}
+
+.div_consigne_student_custom{
+  left : 0px; 
+  top:60px;
+  padding:10px;
+  font-size: 12px;
+  width:100%;
+  z-index:999;
+  color: #000;
+  position: absolute;
+}
 
 .nobox {
     position: relative;
@@ -3918,6 +3966,40 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 .modal .panel-body {
   color: #444;
 }
+
+/*
+ * Component: Button
+ * -----------------
+ */
+
+.tool_tip {
+  position: relative;
+  opacity:1;
+}
+
+.tool_tip .tool_tip_text {
+  visibility: hidden;
+  width: 120px;
+  background-color: #FFF;
+  color: #222;
+  text-align: center;
+  border-radius: 4px;
+  padding: 5px 0;
+  position: absolute;
+  /* Position the tooltip */
+  width: 120px;
+  top: 100%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.tool_tip:hover .tool_tip_text {
+  visibility: visible;
+  position: absolute;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.25);
+}
+ 
+
 
 /*
  * Component: Button

@@ -33,9 +33,7 @@
 {% block body %}
 <section class="content_main"> 
 
-    <label>Consigne :</label>         {% if relationship.instruction != ""  %}  {{ relationship.instruction|safe }}  {% else %} {{ relationship.exercise.support.annoncement|safe }} {% endif %}
-
-    <hr>
+ 
 
     <form action="" method="POST">
 
@@ -43,7 +41,8 @@
 
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-8">
- 
+             <a href="#" data-toggle='modal' data-target='#consigne' class="btn btn-danger">Lire la consigne</a>
+            <hr>
                 {% if relationship.exercise.supportfile.is_image   or   relationship.exercise.supportfile.is_file  %}   
  
                 <div class="form-group">
@@ -78,9 +77,49 @@
                 {% if relationship.exercise.supportfile.is_scratch   %} 
                 <label>Conseil :</label>  Utiliser le site Scratch pour créer votre script. Prendre une capture d'écran et la déposer dans la zone de texte.<br><br><br>
                 <a href="https://scratch.mit.edu/projects/editor/?tutorial=getStarted" target="_blank">Naviguer vers Scratch <img src="{% static 'img/scratch.png' %}"/></a>
-                {% endif %}    
+                {% endif %}  
+                {% if relationship.skills.all|length > 0 %}
+                <hr>                
+                    <label>Compétences visées :</label>
+                    {% for skill in relationship.skills.all %}
+                        <li class="sans_puce">{{skill}}</li>
+                    {% endfor %}
+                {% endif %}
+                {% if relationship.knowledges.all|length > 0 %}                
+                <hr>
+                <label>Savoir faire évalués :</label>
+                {% for knowledge in relationship.knowledges.all %}
+                    <li class="sans_puce">{{knowledge}}</li>
+                {% endfor %}
+                {% endif %}
+
             </div>
         </div>
     </form>  
 </section>
+
+
+
+<div class="modal fade" id="consigne" tabindex="-1" role="dialog" aria-labelledby="consigne">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="padding-top :0px;">
+            <div class="modal-header">
+                <h3> Consigne :     
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                </h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">   
+                       {% if relationship.instruction != ""  %}  {{ relationship.instruction|safe }}  {% else %} {{ relationship.exercise.support.annoncement|safe }} {% endif %}                    </div>   
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 {% endblock %} 

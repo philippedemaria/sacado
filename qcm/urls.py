@@ -77,7 +77,7 @@ urlpatterns = [
     path('show_this_supportfile/<int:id>/', show_this_supportfile, name='show_this_supportfile'),  #from dashboard 
 
     path('create_exercise/<int:supportfile_id>/', create_exercise, name='create_exercise'), 
-    path('correction_exercise/<int:id>/', correction_exercise, name='correction_exercise'),  #from details_card 
+    path('correction_exercise/<int:id>/<int:idp>', correction_exercise, name='correction_exercise'),  #from details_card 
 
     path('show_this_exercise/<int:id>/', show_this_exercise, name='show_this_exercise'),  #from dashboard 
 
@@ -164,7 +164,7 @@ urlpatterns = [
     path('parcours_show_student/<int:id>/', show_parcours_student, name='show_parcours_student'),     
     
     path('ajax_search_exercise', ajax_search_exercise, name='ajax_search_exercise'),
-    path('ajax_knowledge_exercice', ajax_knowledge_exercice, name='ajax_knowledge_exercice'),
+    path('ajax_knowledge_exercise', ajax_knowledge_exercise, name='ajax_knowledge_exercise'),
     path('ajax_theme_exercice', ajax_theme_exercice, name='ajax_theme_exercice'),
     path('ajax_level_exercise', ajax_level_exercise, name='ajax_level_exercise'),
     path('ajax/sort_exercise', ajax_sort_exercice, name='ajax_sort_exercice'), 
@@ -186,10 +186,15 @@ urlpatterns = [
 
     # Evaluation des exercices non auto corrigé
     path('ajax_choose_student', ajax_choose_student, name='ajax_choose_student'),
-    path('ajax_knowledge_evaluate', ajax_knowledge_evaluate, name='ajax_knowledge_evaluate'),
-    path('ajax_comment_relationship', ajax_comment_relationship, name='ajax_comment_relationship'),
+    path('ajax_exercise_evaluate', ajax_exercise_evaluate, name='ajax_exercise_evaluate'),
+    path('ajax_comment_all_exercise', ajax_comment_all_exercise, name='ajax_comment_all_exercise'),
+    path('write_exercise/<int:id>', write_exercise, name='write_exercise'), # page dans laquelle l'élève repond à l'exercice non auto-corrigé - l'id est celui de la relation.
 
+    # page de création d'un exercice non auto-corrigé dans un parcours - l'id est celui du parcours.
+    path('parcours_create_custom_exercise/<int:id>/<int:typ>', parcours_create_custom_exercise, name='parcours_create_custom_exercise'), 
+    path('parcours_update_custom_exercise/<int:idcc>/<int:id>', parcours_update_custom_exercise, name='parcours_update_custom_exercise'), 
+    path('parcours_delete_custom_exercise/<int:idcc>/<int:id>', parcours_delete_custom_exercise, name='parcours_delete_custom_exercise'), 
 
-    path('write_exercise/<int:id>', write_exercise, name='write_exercise') # page dans laquelle l'élève repond à l'exercice non auto-corrigé - l'id est celui de la relation.
-
+    path('write_custom_exercise/<int:id>/<int:idp>', write_custom_exercise, name='write_custom_exercise'), 
+    path('ajax_mark_evaluate', ajax_mark_evaluate, name='ajax_mark_evaluate'),
  ]

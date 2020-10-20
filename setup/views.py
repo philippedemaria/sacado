@@ -102,7 +102,7 @@ def index(request):
             ratiowidth = int(0.9*ratio)
 
 
-            evaluations = Parcours.objects.filter(start__lte=today, stop__gte=today, starter__lte=timer, stopper__gte=timer, students=student, is_evaluation=1)
+            evaluations = Parcours.objects.filter(start__lte=today,  starter__lte=timer,  students=student, is_evaluation=1)
 
             exercises = []
             studentanswers = Studentanswer.objects.filter(student = student)

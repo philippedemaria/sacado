@@ -188,6 +188,34 @@ class Knowledge(models.Model):
 
         return {"exercise": test, "parcours": boolean}
 
+    def custom_score(self, customexercise, student, parcours):
+        Stage = apps.get_model('school', 'Stage')    
+        try :
+            stage = Stage.objects.get(school = student.user.school)
+            up = stage.up
+            med = stage.medium
+            low = stage.low
+        except :
+            up = 85
+            med = 65
+            low = 35
+        try :
+            c_knowledge = self.knowledge_correctionknowledge.filter(customexercise = customexercise,  parcours = parcours, student = student).last()
+            point = c_knowledge.point
+            if point > up :
+                crit = 4
+            elif point > med :
+                crit = 3
+            elif point > low :  
+                crit = 2
+            elif point > -1 :  
+                crit = 1
+            else :  
+                crit = 0
+        except :
+            crit = 0
+        return crit
+
 
 
 class Skill(models.Model): 
@@ -196,3 +224,33 @@ class Skill(models.Model):
 
     def __str__(self):
         return "{}".format(self.name )
+
+
+    def custom_score(self, customexercise, student, parcours):
+
+        Stage = apps.get_model('school', 'Stage')
+        try :
+            stage = Stage.objects.get(school = student.user.school)
+            up = stage.up
+            med = stage.medium
+            low = stage.low
+        except :
+            up = 85
+            med = 65
+            low = 35
+        try :
+            c_skill = self.skill_correctionskill.filter(customexercise = customexercise,  parcours = parcours, student = student).last()
+            pt = c_skill.point
+            if pt > up :
+                crit = 4
+            elif pt > med :
+                crit = 3
+            elif pt > low :  
+                crit = 2
+            elif pt > -1 :  
+                crit = 1
+            else :  
+                crit = 0
+        except :
+            crit = 0
+        return crit

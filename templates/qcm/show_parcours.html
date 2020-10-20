@@ -21,7 +21,7 @@
  
 
 {% block page_title %}
-<span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-desktop"></i> </span>
+<span style="color:{{ parcours.color }}"><i class="fa fa-desktop"></i> </span>
 
     {% include 'qcm/breadcrumb.html' %}
 
@@ -54,12 +54,7 @@ body{
 
 <input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
     {% for relation in relationships %}
-
-
-
         {%  if relation.exercise.supportfile.is_title %}     
-
-
             <h2 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> 
                 {% if relation.is_header_of_section  %}
                     <a href="#" data-toggle='modal' data-target='#head_of_section'    data-relation_id='{{ relation.id }}'  class="header_shower" title="Cours associé à cette section">{{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
@@ -67,8 +62,6 @@ body{
                     {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}
                 {% endif %}
             </h2>
-
-
         {%  elif relation.exercise.supportfile.is_subtitle %}
             <h3 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> 
                 {% if relation.is_header_of_section %}
@@ -80,8 +73,6 @@ body{
         {% else %}  
             {% include 'qcm/details_card.html' %}
         {% endif %}  
-
-
     {% empty %}
     <div class="row">
         <div class="col-sm-3 col-md-3" style="margin:40px">
@@ -94,16 +85,21 @@ body{
 
 
 
+    {% for customexercise in customexercises %}
+        {% include 'qcm/details_card_custom.html' %}
+    {% endfor %}
+
+    {% if teacher.user.school %}
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <div class="form-group">
                 {% if parcours.teacher != teacher %}<a href="{% url 'clone_parcours' parcours.id %}" class="btn btn-sacado">Cloner ce parcours</a>    {% endif %} 
-                <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
+                <input type="button" value="Retour" class="btn btn-default" onclick="javascript:history.back()"/>
             </div>
         </div>
-         
     </div>  
-  
+    {% endif %}  
+
 </section>
 </form>
 

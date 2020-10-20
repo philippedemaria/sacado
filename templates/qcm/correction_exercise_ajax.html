@@ -30,25 +30,25 @@
             <tr>
                 <td>{{ relationship.exercise.knowledge.name }} </td>
                 <td>
-                    <input  type="radio" {% if result_ansser == 4 %} checked {% endif %}  data-relationship_id="{{relationship.id}}" 
+                    <input  type="radio" {% if result_answer == 4 %} checked {% endif %}  data-relationship_id="{{relationship.id}}" 
                             name="knowledge" value="4" data-student_id="{{student.user.id}}" class="evaluate" />                               
 
                 </td>
                 <td>
-                    <input  type="radio" {% if result_ansser == 0 %} checked {% endif %}  data-relationship_id="{{relationship.id}}" 
+                    <input  type="radio" {% if result_answer == 0 %} checked {% endif %}  data-relationship_id="{{relationship.id}}" 
                             name="knowledge" value="0" data-student_id="{{student.user.id}}" class="evaluate" />                               
 
                 </td>
                 <td>
-                    <input  type="radio" {% if result_ansser == 1 %} checked {% endif %}   data-relationship_id="{{relationship.id}}" 
+                    <input  type="radio" {% if result_answer == 1 %} checked {% endif %}   data-relationship_id="{{relationship.id}}" 
                             name="knowledge" value="1" data-student_id="{{student.user.id}}" class="evaluate" />
                 </td>
                 <td>
-                    <input type="radio" {% if result_ansser == 2 %} checked {% endif %}   data-relationship_id="{{relationship.id}}" 
+                    <input type="radio" {% if result_answer == 2 %} checked {% endif %}   data-relationship_id="{{relationship.id}}" 
                             name="knowledge" value="2" data-student_id="{{student.user.id}}" class="evaluate" />
                 </td>
                 <td>
-                    <input type="radio" {% if result_ansser == 3 %} checked {% endif %}   data-relationship_id="{{relationship.id}}" 
+                    <input type="radio" {% if result_answer == 3 %} checked {% endif %}   data-relationship_id="{{relationship.id}}" 
                             name="knowledge" value="3"  data-student_id="{{student.user.id}}" class="evaluate" />
                 </td>
             </tr>
@@ -62,24 +62,24 @@
             <tr>
                 <td>{{ s }}</td>
                 <td>
-                    <input type="radio" name="skill{{s.id}}" value="4"   {% if result_ansser == 0 %} checked {% endif %}
+                    <input type="radio" name="skill{{s.id}}" value="4"   {% if result_answer == 0 %} checked {% endif %}
                     data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}"  class="evaluate" />
                 </td>
 
                 <td>
-                    <input type="radio" name="skill{{s.id}}" value="0"   {% if result_ansser == 0 %} checked {% endif %}
+                    <input type="radio" name="skill{{s.id}}" value="0"   {% if result_answer == 0 %} checked {% endif %}
                     data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}"  class="evaluate" />
                 </td>
                 <td>
-                    <input type="radio" name="skill{{s.id}}" value="1"   {% if result_ansser == 1 %} checked {% endif %}
+                    <input type="radio" name="skill{{s.id}}" value="1"   {% if result_answer == 1 %} checked {% endif %}
                     data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}"  class="evaluate" />
                  </td>
                 <td>
-                    <input type="radio" name="skill{{s.id}}" value="2"   {% if result_ansser == 2 %} checked {% endif %}
+                    <input type="radio" name="skill{{s.id}}" value="2"   {% if result_answer == 2 %} checked {% endif %}
                     data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}"  class="evaluate" />
                 </td>
                 <td>
-                    <input type="radio" name="skill{{s.id}}" value="3"   {% if result_ansser == 3 %} checked {% endif %}
+                    <input type="radio" name="skill{{s.id}}" value="3"   {% if result_answer == 3 %} checked {% endif %}
                     data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}"  class="evaluate" />
                 </td>
             </tr>
@@ -87,7 +87,7 @@
     </table> 
     <hr>
     <h5>Commentaires</h5>
-    <textarea class="form-control" name="comment" id="comment">{{ answercomment }}</textarea>
+    <textarea class="form-control" name="comment" id="comment">{{ w_a.comment }}</textarea>
 
             <div class="row" style="margin-top:10px">
                 <div class="col-sm-12 col-md-8">
@@ -119,10 +119,11 @@
                     data: {
                         'comment': comment,
                         'student_id':student_id,
-                        'relationship_id': relationship_id,
+                        'exercise_id': relationship_id,                        
+                        'typ' : 0,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: "../../ajax_comment_relationship",
+                    url: "../../ajax_comment_all_exercise",
  
                 }
             )
@@ -149,7 +150,7 @@
                         'typ' : 0,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: "../../ajax_knowledge_evaluate",
+                    url: "../../ajax_exercise_evaluate",
                     success: function (data) {
                         $('#evaluate'+student_id).html(data.eval);
                     }

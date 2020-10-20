@@ -1,0 +1,125 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+     
+            <h1 class="thin">
+                 <nav class="navbar navbar-default">
+                  <div class="container-fluid">
+                    <div class="navbar-header">
+                      {{ num_exo }}
+                    </div>
+                 
+                    <ul class="nav navbar-nav navbar-right">
+                     <a href="#" id="closeStudent" class="detail_student pull-right"> <i class="fa fa-times"></i></a>
+                    </ul>
+                  </div>
+                </nav> 
+            </h1>
+        </div>
+    </div>
+
+<div class="content_list">
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table class="table table-hover" style="width:100%; font-size: 14px">
+                <tbody>
+                    <tr> 
+                        <td style="width:150px">Nom Prénom</td>
+                        {% if customexercise.is_mark %}
+                        <td> 
+                            Note
+                        </td> 
+                        {% endif %}
+                        {% for knowledge in customexercise.knowledges.all %}
+                        {% get_custom_score knowledge customexercise student parcours as custom_score %}
+                            <td style="font-size: 10px;text-align:center">
+                                {{ knowledge}}
+                            </td>
+                        {% endfor %}
+                        {% for skill in customexercise.skills.all %}
+                        {% get_custom_score skill customexercise student parcours as custom_score %}
+                            <td style="font-size: 10px;text-align:center">
+                                {{ skill }}
+                            </td>
+                        {% endfor %}
+                    </tr>
+
+
+                    {% for student  in students  %}  {{ stat }}
+                        {% get_all_results_custom customexercise student parcours as data %}                   
+                        <tr> 
+                            <td>{{ student }}</td>
+                            {% if customexercise.is_mark %}
+                            <td> 
+                                {% if data.point %}{{ data.point }}{% endif %}
+                            </td> 
+                            {% endif %}
+                            {% for knowledge in customexercise.knowledges.all %}
+                            {% get_custom_score knowledge customexercise student parcours as custom_score %}
+                                <td style="text-align:center">
+                                     {% if custom_score == 4 %}<i class="fa fa-square text-primary"></i>
+                                     {% elif custom_score == 3 %}<i class="fa fa-square text-success"></i>
+                                     {% elif custom_score == 2 %}<i class="fa fa-square text-warning"></i>
+                                     {% elif custom_score == 1 %}<i class="fa fa-square text-danger"></i>                         
+                                     {% endif %}
+                                </td>
+                            {% endfor %}     
+                            {% for skill in customexercise.skills.all %}
+                            {% get_custom_score skill customexercise student parcours as custom_score %}
+                                <td style="text-align:center">
+                                     {% if custom_score == 4 %}<i class="fa fa-square text-primary"></i>
+                                     {% elif custom_score == 3 %}<i class="fa fa-square text-success"></i>
+                                     {% elif custom_score == 2 %}<i class="fa fa-square text-warning"></i>
+                                     {% elif custom_score == 1 %}<i class="fa fa-square text-danger"></i>                         
+                                     {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                        <tr> 
+                            <td><b>Moyenne</b></td>
+                            {% if customexercise.is_mark %}
+                            <td> 
+                                {{ average }}
+                            </td>
+                            {% endif %}
+                            {% for skill in customexercise.skills.all %}
+                            {% get_custom_score skill customexercise student parcours as custom_score %}
+                                <td>
+                                </td>
+                            {% endfor %}
+                            {% for knowledge in customexercise.knowledges.all %}
+                            {% get_custom_score knowledge customexercise student parcours as custom_score %}
+                                <td>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                        <tr> 
+                            <td><b>Médiane</b></td>
+                            {% if customexercise.is_mark %}
+                            <td> {{ median }}
+                            </td>
+                            {% endif %}
+                            {% for skill in customexercise.skills.all %}
+                            {% get_custom_score skill customexercise student parcours as custom_score %}
+                                <td>
+                                </td>
+                            {% endfor %}
+                            {% for knowledge in customexercise.knowledges.all %}
+                            {% get_custom_score knowledge customexercise student parcours as custom_score %}
+                                <td>
+                                </td>
+                            {% endfor %}
+                        </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+ 
+</div>
+ 

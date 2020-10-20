@@ -1,10 +1,10 @@
 import datetime
 from django import forms
-from .models import Parcours, Exercise, Remediation, Relationship, Supportfile, Course, Demand, Mastering,Mastering_done, Writtenanswerbystudent
+from .models import Parcours, Exercise, Remediation, Relationship, Supportfile, Course, Demand, Mastering,Mastering_done, Writtenanswerbystudent, Customexercise,Customanswerbystudent
 from account.models import Student
 from socle.models import Knowledge, Skill
 from group.models import Group
-
+from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 
 class ParcoursForm(forms.ModelForm):
 
@@ -239,4 +239,52 @@ class WrittenanswerbystudentForm (forms.ModelForm):
 		model = Writtenanswerbystudent
 		fields = ('imagefile','answer')
 
- 
+
+
+class CustomanswerbystudentForm (forms.ModelForm):
+	class Meta:
+		model = Customanswerbystudent
+		fields = ('imagefile','answer')
+
+class CustomexerciseForm (forms.ModelForm):
+	
+	class Meta:
+		model = Customexercise
+		fields = '__all__'
+
+				
+	def __init__(self, *args, **kwargs):
+		parcours = kwargs.pop('parcours')
+		teacher = kwargs.pop('teacher')
+
+		super(CustomexerciseForm, self).__init__(*args, **kwargs)
+		skills = Skill.objects.filter(subject__in = teacher.subjects.all())
+		knowledges = Knowledge.objects.filter(theme__subject__in = teacher.subjects.all(), level__in = teacher.levels.all())
+		parcourses = teacher.author_parcours.exclude(pk=parcours.id)
+		students = parcours.students.all()
+
+		self.fields['skills'] = forms.ModelMultipleChoiceField(queryset=skills,    required=False )
+		self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=False ) 
+		self.fields['parcourses'] = forms.ModelMultipleChoiceField(queryset=parcourses,  required=False )  
+		self.fields['students'] = forms.ModelMultipleChoiceField(queryset=students, widget=forms.CheckboxSelectMultiple,   required=False )
+
+
+
+class  CustomexerciseNPForm (forms.ModelForm):
+
+	class Meta:
+		model = Customexercise
+		fields = '__all__'
+
+				
+	def __init__(self, *args, **kwargs):
+		teacher = kwargs.pop('teacher')
+		custom = kwargs.pop('custom')
+		super(CustomexerciseNPForm, self).__init__(*args, **kwargs)
+		skills = Skill.objects.filter(subject__in = teacher.subjects.all())
+		knowledges = Knowledge.objects.filter(theme__subject__in = teacher.subjects.all(), level__in = teacher.levels.all())
+		students = custom.students.all() 
+		self.fields['skills'] = forms.ModelMultipleChoiceField(queryset=skills,    required=False )
+		self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=False ) 
+		self.fields['students'] = forms.ModelMultipleChoiceField(queryset=students, widget=forms.CheckboxSelectMultiple,   required=False )
+		

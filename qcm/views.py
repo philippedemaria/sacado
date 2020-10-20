@@ -8,8 +8,8 @@ from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group , Sharing_group
 from school.models import Stage
-from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Mastering_done, Answercomment, Writtenanswerbystudent
-from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm  ,CourseForm , DemandForm , MasteringForm,MasteringDoneForm ,WrittenanswerbystudentForm
+from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Correctionknowledgecustomexercise , Correctionskillcustomexercise
+from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm , CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , MasteringForm,MasteringDoneForm ,WrittenanswerbystudentForm,CustomanswerbystudentForm
 from socle.models import  Theme, Knowledge , Level , Skill
 from django.http import JsonResponse 
 from django.core import serializers
@@ -97,7 +97,7 @@ def get_time(s,e):
 
 
 
-def  advises(request):
+def advises(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
     return render(request, 'advises.html', {'teacher': teacher})
 
@@ -157,20 +157,6 @@ def students_from_p_or_g(request,parcours) :
 
 
 
-def get_stage(parcours):
-
-    teacher = parcours.teacher
-    try :
-        if teacher.user.school :
-            school = teacher.user.school
-            stage = Stage.objects.get(school = school)
-        else : 
-            stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
-    except :
-        stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }  
-    return stage
-
-
 def get_complement(teacher, parcours_or_group):
 
     data = {}
@@ -202,9 +188,17 @@ def get_complement(teacher, parcours_or_group):
 
 
 
+def get_stage(user):
 
-
-
+    try :
+        if user.school :
+            school = user.school
+            stage = Stage.objects.get(school = school)
+        else : 
+            stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
+    except :
+        stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }  
+    return stage
 
 
 #######################################################################################################################################################################
@@ -887,21 +881,28 @@ def show_parcours(request, id):
     user = User.objects.get(pk=request.user.id)
     teacher = Teacher.objects.get(user=user)
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
-    nb_exo_only, nb_exo_visible = [], []
-    i ,j = 0, 0
+    nb_exo_only, nb_exo_visible,nb_exo_only_c, nb_exo_visible_c = [] , []  , [], []
+    i , j = 0, 0
     for r in relationships:
-        if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle:
-            i = 0
-        else:
+
+        if not r.exercise.supportfile.is_title and not r.exercise.supportfile.is_subtitle:
             i += 1
         nb_exo_only.append(i)
-        if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle or r.is_publish == 0:
-            j = 0
-        else:
+        if not r.exercise.supportfile.is_title and not r.exercise.supportfile.is_subtitle and r.is_publish != 0:
             j += 1
         nb_exo_visible.append(j)
 
  
+    customexercises = Customexercise.objects.filter(parcourses=parcours).order_by("ranking")
+
+    for ce in customexercises:
+        i += 1
+        nb_exo_only_c.append(i)
+        if ce.is_publish :
+            j += 1
+        nb_exo_visible_c.append(j)
+
+
 
 
     data = get_complement(teacher, parcours)
@@ -916,11 +917,11 @@ def show_parcours(request, id):
     nb_students_p_or_g = len(students_p_or_g)
 
     skills = Skill.objects.all()
-
-    nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count()
-    context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'communications' : [] , 
-               'students_from_p_or_g': students_p_or_g, 'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible, 'nb_students_p_or_g' : nb_students_p_or_g , 
-               'nb_exo_only': nb_exo_only, 'group_id': group_id, 'group': group, 'role' : role }
+    nb_custom_exercises = customexercises.count()
+    nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count() + nb_custom_exercises
+    context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'communications' : [] , 'customexercises' : customexercises ,
+               'students_from_p_or_g': students_p_or_g, 'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible,  'nb_exo_visible_c': nb_exo_visible_c, 'nb_students_p_or_g' : nb_students_p_or_g , 
+               'nb_exo_only': nb_exo_only, 'nb_exo_only_c': nb_exo_only_c, 'group_id': group_id, 'group': group, 'role' : role }
 
     return render(request, 'qcm/show_parcours.html', context)
 
@@ -931,23 +932,38 @@ def show_parcours(request, id):
 @login_required
 def show_parcours_student(request, id):
     parcours = Parcours.objects.get(id=id)
-    user = User.objects.get(pk = request.user.id)
+    user = request.user
     student = Student.objects.get(user = user)
     relationships = Relationship.objects.filter(parcours=parcours, students=student, is_publish=1 ).order_by("order")
-    nb_exo_only = [] 
+    customexercises = Customexercise.objects.filter(parcourses = parcours, students=student, is_publish=1 ).order_by("ranking") 
+
+
+    stage = Stage.objects.get(school = user.school)
+
+
+    nb_exo_only,nb_exo_only_c = [] , [] 
     i=0
 
     for r in relationships :
-        if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle:
-            i=0
-        else :
+        if not r.exercise.supportfile.is_title and not r.exercise.supportfile.is_subtitle:
             i+=1
         nb_exo_only.append(i)
 
-    today = time_zone_user(request.user)
+    for ce in customexercises:
+        i += 1
+        nb_exo_only_c.append(i)
 
-    nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count()
-    context = {'relationships': relationships,  'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only, 'today': today ,   }
+    today = time_zone_user(user)
+    stage = get_stage(user)
+
+
+
+    courses = parcours.course.filter(Q(is_publish=1)|Q(publish_start__lte=today,publish_end__gte=today)).order_by("ranking")
+
+    nb_exercises = Relationship.objects.filter(parcours=parcours, students=student, is_publish=1 ).count() + Customexercise.objects.filter(parcourses = parcours, students=student, is_publish=1 ).count()
+
+
+    context = {'relationships': relationships, 'customexercises': customexercises, 'stage' : stage , 'courses':courses ,  'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only, 'nb_exo_only_c' : nb_exo_only_c ,  'today': today ,   }
  
     return render(request, 'qcm/show_parcours_student.html', context)
 
@@ -1013,7 +1029,7 @@ def result_parcours(request, id):
 
     form = EmailForm(request.POST or None )
 
-    stage = get_stage(parcours)
+    stage = get_stage(teacher.user)
 
     context = {  'relationships': relationships, 'parcours': parcours, 'students': students, 'themes': themes_tab, 'form': form,  'group_id' : group_id  , 'stage' : stage, 'communications' : [] , 'role' : role }
 
@@ -1049,7 +1065,7 @@ def result_parcours_theme(request, id, idt):
             theme["name"]= thm.name
             themes_tab.append(theme)
 
-    stage = get_stage(parcours) 
+    stage = get_stage(teacher.user)
     form = EmailForm(request.POST or None)
 
     context = {  'relationships': relationships, 'parcours': parcours, 'students': students,  'themes': themes_tab,'form': form, 'group_id' : group_id , 'stage' : stage, 'communications' : [], 'role' : role  }
@@ -1083,7 +1099,7 @@ def result_parcours_knowledge(request, id):
     for k_id in knowledge_ids : 
         knowledges.append(Knowledge.objects.get(pk = k_id))
 
-    stage = get_stage(parcours) 
+    stage = get_stage(teacher.user)
     context = {  'relationships': relationships,  'students': students, 'parcours': parcours,  'form': form, 'exercise_knowledges' : knowledges, 'group_id' : group_id, 'stage' : stage , 'communications' : [] , 'role' : role  }
 
     return render(request, 'qcm/result_parcours_knowledge.html', context )
@@ -1494,8 +1510,8 @@ def ajax_sort_exercice(request):
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_publish(request):  
 
-    relationship_id = request.POST.get("relationship_id")
     statut = request.POST.get("statut")
+    custom = request.POST.get("custom")
 
     data = {}
  
@@ -1515,7 +1531,12 @@ def ajax_publish(request):
         data["noclass"] = "legend-btn-danger"
         data["removeclass"] = "btn-danger"
 
-    Relationship.objects.filter(pk = int(relationship_id)).update(is_publish = statut)
+    if custom == "0" :
+        relationship_id = request.POST.get("relationship_id")        
+        Relationship.objects.filter(pk = int(relationship_id)).update(is_publish = statut)
+    else :
+        customexercise_id = request.POST.get("relationship_id")        
+        Customexercise.objects.filter(pk = int(customexercise_id)).update(is_publish = statut)    
     return JsonResponse(data) 
 
 
@@ -1559,35 +1580,55 @@ def ajax_publish_parcours(request):
 
 
 @csrf_exempt
-def ajax_dates(request):  
+def ajax_dates(request):  # On soncerve relationship_id par commodité mais c'est relationship_id et non customexercise_id dans tout le script
     data = {}
     relationship_id = request.POST.get("relationship_id")
     typ = int(request.POST.get("type"))
     duration =  request.POST.get("duration") 
+    custom =  request.POST.get("custom") 
     try :
-        if typ == 0 :
+        if typ == 0 : # Date de publication
             date = request.POST.get("dateur") 
             if date :
-                Relationship.objects.filter(pk = int(relationship_id)).update(start = date)
+                if custom == "0" :
+                    Relationship.objects.filter(pk = int(relationship_id)).update(start = date)
+                else :
+                    Customexercise.objects.filter(pk = int(relationship_id)).update(start = date)
                 data["class"] = "btn-success"
                 data["noclass"] = "btn-default"
             else :
-                Relationship.objects.filter(pk = int(relationship_id)).update(start = None)
+                if custom == "0" :
+                    Relationship.objects.filter(pk = int(relationship_id)).update(start = None)
+                else :
+                    Customexercise.objects.filter(pk = int(relationship_id)).update(start = None)
                 data["class"] = "btn-default"
                 data["noclass"] = "btn-success"
             data["dateur"] = date 
 
-        elif typ == 1 :
+        elif typ == 1 :  # Date de rendu de tache
             date = request.POST.get("dateur") 
             if date :
-                Relationship.objects.filter(pk = int(relationship_id)).update(date_limit = date)
-                r = Relationship.objects.get(pk = int(relationship_id))
-                data["class"] = "btn-success"
-                data["noclass"] = "btn-default"
-                msg = "Pour le "+str(date)+": \n Faire l'exercice : https://sacado.xyz/qcm/show_this_exercise/"+str(r.exercise.id)+" : " +str(r.exercise)+" \n. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
-                data["dateur"] = date 
-                students = r.parcours.students.all()
-                rec = []
+                if custom == "0" : 
+                    Relationship.objects.filter(pk = int(relationship_id)).update(date_limit = date)
+
+                    r = Relationship.objects.get(pk = int(relationship_id))
+                    data["class"] = "btn-success"
+                    data["noclass"] = "btn-default"
+                    msg = "Pour le "+str(date)+": \n Faire l'exercice : https://sacado.xyz/qcm/show_this_exercise/"+str(r.exercise.id)+" : " +str(r.exercise)+" \n. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
+                    data["dateur"] = date 
+                    students = r.students.all()
+                    rec = []
+                else :
+                    Customexercise.objects.filter(pk = int(relationship_id)).update(date_limit = date)
+                    ce = Customexercise.objects.get(pk = int(relationship_id))
+                    data["class"] = "btn-success"
+                    data["noclass"] = "btn-default"
+                    msg = "Pour le "+str(date)+": \n Faire l'exercice : https://sacado.xyz/qcm/show_this_exercise/"+str(ce.id)+"\n. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
+                    data["dateur"] = date 
+                    students = ce.students.all()
+                    rec = []
+
+
                 for s in students :
                     if s.task_post : 
                         if  s.user.email :                  
@@ -1597,15 +1638,25 @@ def ajax_dates(request):
                 send_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "info@sacado.xyz" , [r.parcours.teacher.user.email] )   
 
             else :
-                Relationship.objects.filter(pk = int(relationship_id)).update(date_limit = None)
-                r = Relationship.objects.get(pk = int(relationship_id))
-                data["class"] = "btn-default"
-                data["noclass"] = "btn-success"
-                msg = "L'exercice https://sacado.xyz/qcm/show_this_exercise/"+str(r.exercise.id)+" : "+str(r.exercise)+" n'est plus une tâche \n. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
-                date = "Tâche ?"          
-                data["dateur"] = date 
-         
-                students = r.parcours.students.all()
+                if custom == "0" : 
+                    Relationship.objects.filter(pk = int(relationship_id)).update(date_limit = None)
+
+                    r = Relationship.objects.get(pk = int(relationship_id))
+                    data["class"] = "btn-default"
+                    data["noclass"] = "btn-success"
+                    msg = "L'exercice https://sacado.xyz/qcm/show_this_exercise/"+str(r.exercise.id)+" : "+str(r.exercise)+" n'est plus une tâche \n. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
+                    date = "Tâche ?"  
+                    data["dateur"] = date 
+                    students = r.students.all()
+                else :
+                    Customexercise.objects.filter(pk = int(relationship_id)).update(date_limit = None)
+                    ce = Customexercise.objects.get(pk = int(relationship_id))
+                    data["class"] = "btn-success"
+                    data["noclass"] = "btn-default"
+                    msg = "L'exercice https://sacado.xyz/qcm/show_this_exercise/"+str(ce.id)+" : n'est plus une tâche \n Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
+                    data["dateur"] = date 
+                    students = ce.students.all()
+          
                 rec = []
                 for s in students :
                     if s.task_post : 
@@ -1615,13 +1666,21 @@ def ajax_dates(request):
                 send_mail("SacAdo. Annulation de tâche à effectuer",  msg , "info@sacado.xyz" , [r.parcours.teacher.user.email] ) 
 
         else :
-            Relationship.objects.filter(pk = int(relationship_id)).update(date_limit = date)
-            r = Relationship.objects.get(pk = int(relationship_id))
+            if custom == "0" :
+                Relationship.objects.filter(pk = int(relationship_id)).update(start = date)
+                r = Relationship.objects.get(pk = int(relationship_id))
+                msg = "Pour le "+str(date)+": \n Faire l'exercice : https://sacado.xyz/qcm/show_this_exercise/"+str(r.exercise.id)+" : " +str(r.exercise)+" \n. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
+                students = r.students.all()
+            else :
+                Customexercise.objects.filter(pk = int(relationship_id)).update(start = date)
+                Customexercise.objects.filter(pk = int(relationship_id)).update(date_limit = None)
+                ce = Customexercise.objects.get(pk = int(relationship_id))
+                msg = "Pour le "+str(date)+": \n Faire l'exercice : https://sacado.xyz/qcm/show_this_exercise/"+str(ce.id)+"\n Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
+                students = ce.students.all()
+
             data["class"] = "btn-success"
             data["noclass"] = "btn-default"
-            msg = "Pour le "+str(date)+": \n Faire l'exercice : https://sacado.xyz/qcm/show_this_exercise/"+str(r.exercise.id)+" : " +str(r.exercise)+" \n. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
-            
-            students = r.parcours.students.all()
+ 
             rec = []
             for s in students :
                 if s.task_post : 
@@ -1631,7 +1690,6 @@ def ajax_dates(request):
             send_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "info@sacado.xyz" , rec ) 
             send_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "info@sacado.xyz" , [r.parcours.teacher.user.email] ) 
 
-
             data["dateur"] = date  
 
 
@@ -1640,7 +1698,10 @@ def ajax_dates(request):
     except :
         try :
             duration =  request.POST.get("duration") 
-            Relationship.objects.filter(pk = int(relationship_id)).update(duration = duration)
+            if custom == "0" :
+                Relationship.objects.filter(pk = int(relationship_id)).update(duration = duration)
+            else :
+                Customexercise.objects.filter(pk = int(relationship_id)).update(duration = duration)
             data["clock"] = "<i class='fa fa-clock-o'></i> "+str(duration)+"  min."          
             try :
                 situation =  request.POST.get("situation")
@@ -1678,8 +1739,11 @@ def ajax_dates(request):
                     data["annoncement"]   = True
                 try :
                     duration =  request.POST.get("duration") 
-                    Relationship.objects.filter(pk = int(relationship_id)).update(duration = duration)
-                    data["clock"] = "<i class='fa fa-clock-o'></i> "+str(duration)+"  min."
+                    if custom == "0" :
+                        Relationship.objects.filter(pk = int(relationship_id)).update(duration = duration)
+                    else :
+                        Customexercise.objects.filter(pk = int(relationship_id)).update(duration = duration)
+                    data["clock"] = "<i class='fa fa-clock-o'></i> "+str(duration)+"  min."                            
                     data["duration"] = duration
                 except : 
                     pass
@@ -1687,6 +1751,13 @@ def ajax_dates(request):
                 pass
 
     return JsonResponse(data) 
+
+
+
+
+
+
+
 
 
 
@@ -1746,6 +1817,7 @@ def ajax_parcoursinfo(request):
 
 def ajax_detail_parcours(request):
 
+    custom =  int(request.POST.get("custom"))    
     parcours_id =  int(request.POST.get("parcours_id"))
     exercise_id =  int(request.POST.get("exercise_id"))
     num_exo =  int(request.POST.get("num_exo"))    
@@ -1757,60 +1829,93 @@ def ajax_detail_parcours(request):
         relationship = Relationship.objects.get(exercise_id = exercise_id, parcours_id=parcours_id )
     except :
         relationship = None
-
-
-    exercise = Exercise.objects.get(id = exercise_id) 
-    stats = []
-    for s in students :
-        student = {}
-        student["name"] = s 
-
-        studentanswers = Studentanswer.objects.filter(student=s,exercise=exercise)
-        duration, score = 0, 0
-        tab, tab_date = [], []
-        for studentanswer in  studentanswers : 
-            duration += int(studentanswer.secondes)
-            score += int(studentanswer.point)
-            tab.append(studentanswer.point)
-            tab_date.append(studentanswer.date)
-            tab_date.sort()
-        try :
-            if len(studentanswers)>1 :
-                average_score = int(score/len(studentanswers))
-                student["duration"] = convert_seconds_in_time(duration)
-                student["average_score"] = int(average_score)
-                student["heure_max"] = tab_date[len(tab_date)-1]
-                student["heure_min"] = tab_date[0]
-                tab.sort()
-                if len(tab)%2 == 0 :
-                    med = (tab[(len(tab)-1)//2]+tab[(len(tab)-1)//2+1])/2 ### len(tab)-1 , ce -1 est causÃ© par le rang 0 du tableau
-                else:
-                    med = tab[(len(tab)-1)//2+1]
-                student["median"] = int(med)
-                student["nb"] = int(len(tab))                
-            else :
-                average_score = int(score)
-                student["duration"] = convert_seconds_in_time(duration)
-                student["average_score"] = int(score)
-                student["heure_max"] = tab_date[0]
-                student["heure_min"] = tab_date[0]
-                student["median"] = int(score)
-                student["nb"] = 0  
-        except :
-            student["duration"] = ""
-            student["average_score"] = ""
-            student["heure_max"] = ""
-            student["heure_min"] = ""
-            student["median"] = ""
-            student["nb"] = 0  
-        stats.append(student)
-
-    context = {  'parcours': parcours,  'exercise':exercise ,'stats':stats ,  'num_exo':num_exo, 'relationship':relationship, 'communications' : [] , }
-
+    
     data = {}
+    if custom == 0 :
+        exercise = Exercise.objects.get(id = exercise_id) 
+        stats = []
+        for s in students :
+            student = {}
+            student["name"] = s 
 
-    data['html'] = render_to_string('qcm/ajax_detail_parcours.html', context)
+            studentanswers = Studentanswer.objects.filter(student=s,exercise=exercise)
+            duration, score = 0, 0
+            tab, tab_date = [], []
+            for studentanswer in  studentanswers : 
+                duration += int(studentanswer.secondes)
+                score += int(studentanswer.point)
+                tab.append(studentanswer.point)
+                tab_date.append(studentanswer.date)
+            tab_date.sort()
+            try :
+                if len(studentanswers)>1 :
+                    average_score = int(score/len(studentanswers))
+                    student["duration"] = convert_seconds_in_time(duration)
+                    student["average_score"] = int(average_score)
+                    student["heure_max"] = tab_date[len(tab_date)-1]
+                    student["heure_min"] = tab_date[0]
+                    tab.sort()
+                    if len(tab)%2 == 0 :
+                        med = (tab[(len(tab)-1)//2]+tab[(len(tab)-1)//2+1])/2 ### len(tab)-1 , ce -1 est causÃ© par le rang 0 du tableau
+                    else:
+                        med = tab[(len(tab)-1)//2+1]
+                    student["median"] = int(med)
+                    student["nb"] = int(len(tab))                
+                else :
+                    average_score = int(score)
+                    student["duration"] = convert_seconds_in_time(duration)
+                    student["average_score"] = int(score)
+                    student["heure_max"] = tab_date[0]
+                    student["heure_min"] = tab_date[0]
+                    student["median"] = int(score)
+                    student["nb"] = 0  
+            except :
+                student["duration"] = ""
+                student["average_score"] = ""
+                student["heure_max"] = ""
+                student["heure_min"] = ""
+                student["median"] = ""
+                student["nb"] = 0  
+            stats.append(student)
+
+        context = {  'parcours': parcours,  'exercise':exercise ,'stats':stats ,  'num_exo':num_exo, 'relationship':relationship, 'communications' : [] , }
+
+        data['html'] = render_to_string('qcm/ajax_detail_parcours.html', context)
+
+    else :
+        parcours = Parcours.objects.get(pk = parcours_id )
+
+        customexercise = Customexercise.objects.get(id = exercise_id, parcourses = parcours) 
  
+        students = customexercise.students.order_by("user__last_name") 
+ 
+
+        duration, score = 0, 0
+        tab = []
+        cas =  Customanswerbystudent.objects.filter(parcours=parcours, customexercise = customexercise)
+        for ca in cas  : 
+            score += int(ca.point)
+            tab.append(ca.point)
+
+        tab.sort()
+        try :
+            if len(tab)%2 == 0 :
+                med = (tab[(len(tab)-1)//2]+tab[(len(tab)-1)//2+1])/2 ### len(tab)-1 , ce -1 est cause par le rang 0 du tableau
+            else:
+                med = tab[(len(tab)-1)//2+1]
+        except :
+            med = 0     
+ 
+        try :
+            average = int(score / len(cas))
+        except :
+            average = ""                
+     
+        context = {  'parcours': parcours,  'customexercise':customexercise ,'average':average , 'students' : students , 'relationship':[], 'num_exo' : num_exo, 'communications' : [] , 'median' : med , 'communications' : [] , }
+
+        data['html'] = render_to_string('qcm/ajax_detail_parcours_customexercise.html', context)
+
+
     return JsonResponse(data)
 
 
@@ -1915,8 +2020,8 @@ def list_exercises(request):
     if user.is_teacher:  # teacher
         teacher = Teacher.objects.get(user=user)
         datas = all_levels(user, 0)
-
-        return render(request, 'qcm/list_exercises.html', {'datas': datas, 'teacher': teacher , 'parcours': None, 'relationships' : [] ,  'communications': [] , })
+        customexercises = teacher.teacher_customexercises.all()
+        return render(request, 'qcm/list_exercises.html', {'datas': datas, 'teacher': teacher , 'customexercises':customexercises, 'parcours': None, 'relationships' : [] ,  'communications': [] , })
     
     elif user.is_student: # student
         student = Student.objects.get(user=user)
@@ -2308,7 +2413,9 @@ def execute_exercise(request, idp,ide):
     request.session['level_id'] = exercise.level.id
     start_time =  time.time()
     today = time_zone_user(request.user)
-    context = {'exercise': exercise,  'start_time' : start_time,  'parcours' : parcours,  'relation' : relation , 'today' : today , 'communications' : [] , 'relationships' : [] }
+    timer = today.time()
+
+    context = {'exercise': exercise,  'start_time' : start_time,  'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today , 'communications' : [] , 'relationships' : [] }
     return render(request, 'qcm/show_relation.html', context)
 
 
@@ -2478,7 +2585,7 @@ def ajax_level_exercise(request):
 
  
 
-def ajax_knowledge_exercice(request):
+def ajax_knowledge_exercise(request):
     theme_id = request.POST.get('theme_id', None)
     level_id = request.POST.get('level_id', None)
     data = {}
@@ -2802,137 +2909,286 @@ def show_evaluation(request, id):
     return render(request, 'qcm/show_parcours.html', context)
 
 
-def correction_exercise(request,id):
+def correction_exercise(request,id,idp):
 
-    stage = Stage.objects.get(school = request.user.school)
-
-    relationship = Relationship.objects.get(pk=id)
     teacher = Teacher.objects.get(user=request.user)
-    context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage ,  'communications' : [] ,  }
+    stage = get_stage(teacher.user)
 
-    return render(request, 'qcm/correction_exercise.html', context)
+    if idp == 0 :
+        relationship = Relationship.objects.get(pk=id)
+        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage ,  'communications' : [] ,  'parcours' : None }
+        return render(request, 'qcm/correction_exercise.html', context)
+    else :
+        customexercise = Customexercise.objects.get(pk=id)
+        parcours = Parcours.objects.get(pk = idp)
+        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage ,  'communications' : [], 'parcours' : parcours }
+        return render(request, 'qcm/correction_custom_exercise.html', context)
 
 
 def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à un exercice non auto-corrigé
 
     relationship_id =  int(request.POST.get("relationship_id")) 
     student_id =  int(request.POST.get("student_id"))
- 
-    student = Student.objects.get(pk = student_id)    
-    relationship = Relationship.objects.get(pk = relationship_id)
-
-    if Answercomment.objects.filter(relationship_id = relationship_id , student_id = student_id).exists():
-        answer = Answercomment.objects.get(relationship_id = relationship_id , student_id = student_id)
-        answercomment = answer.comment 
-    else :
-        answercomment = ""
-
-    if Writtenanswerbystudent.objects.filter(relationship_id = relationship_id , student_id = student_id).exists():
-        w_a = Writtenanswerbystudent.objects.get(relationship_id = relationship_id , student_id = student_id)
-        if w_a.imagefile :
-            wa = w_a.imagefile 
-        else :
-            wa = w_a.answer
-    else :
-        w_a = False 
- 
-
+    student = Student.objects.get(pk = student_id)   
+    parcours_id =  request.POST.get("parcours_id", None)
     data = {}
 
-    context = { 'relationship' : relationship , 'student': student , 'answercomment' : answercomment , 'w_a' : w_a ,   }
+    if int(request.POST.get("custom")) == 0 :
 
-    html = render_to_string('qcm/correction_exercise_ajax.html', context )
- 
+        relationship = Relationship.objects.get(pk = relationship_id)
+
+        if Writtenanswerbystudent.objects.filter(relationship_id = relationship_id , student_id = student_id).exists():
+            w_a = Writtenanswerbystudent.objects.get(relationship_id = relationship_id , student_id = student_id)
+        else :
+            w_a = False 
+     
+        context = { 'relationship' : relationship , 'student': student ,   'w_a' : w_a   }
+
+        html = render_to_string('qcm/correction_exercise_ajax.html', context )   
+
+    else :
+        customexercise = Customexercise.objects.get(pk = relationship_id)
+        parcours_id =  int(parcours_id)
+
+        if Customanswerbystudent.objects.filter(customexercise_id = relationship_id ,  parcours_id = parcours_id , student_id = student_id).exists():
+            c_e = Customanswerbystudent.objects.get(customexercise_id = relationship_id ,  parcours_id = parcours_id , student_id = student_id)
+        else :
+            c_e = False 
+
+        context = { 'customexercise' : customexercise , 'student': student ,   'c_e' : c_e , 'parcours_id' :  parcours_id  }
+
+        html = render_to_string('qcm/correction_exercise_custom_ajax.html', context )
+     
     data['html'] = html       
 
     return JsonResponse(data)
 
 
-def ajax_knowledge_evaluate(request):
+def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
 
-    relationship_id =  int(request.POST.get("relationship_id")) 
+
     student_id =  int(request.POST.get("student_id"))
     value =  int(request.POST.get("value"))
     typ =  int(request.POST.get("typ")) 
-    student = Student.objects.get(user_id = student_id)  
-
-    if student.user.school :
-        stage = Stage.objects.get(school = student.user.school)
-    else :
-        stage = { 'low' : 30, 'medium' : 60 , 'up' :80 }        
-    
     data = {}
 
-  
-    relationship = Relationship.objects.get(pk = relationship_id)
-  
+    student = Student.objects.get(user_id = student_id)  
+
+    stage = get_stage(student.user) 
     tab_label = ["text-danger","text-warning","text-success","text-primary",""]
-    tab_value = [stage.low-1,stage.medium-1,stage.up-1,100,-1]
+    tab_value = [stage.low-1,stage.medium-1,stage.up-1,100,-1]       
 
-    if tab_value[value] > -1 :
+    if typ == 0 : 
+        relationship_id =  int(request.POST.get("relationship_id"))   
+        relationship = Relationship.objects.get(pk = relationship_id)
+        if tab_value[value] > -1 :
 
 
-        studentanswer, creator = Studentanswer.objects.get_or_create(parcours = relationship.parcours, exercise = relationship.exercise, student = student , defaults={"point" : tab_value[value] , 'secondes' : 0} )
-        if not creator :
-            Studentanswer.objects.filter(parcours  = relationship.parcours, exercise = relationship.exercise , student  = student).update(point= tab_value[value])
-        # Moyenne des scores obtenus par savoir faire enregistré dans Resultknowledge
-        knowledge = relationship.exercise.knowledge
-        scored = 0
-        studentanswers = Studentanswer.objects.filter(student = student,exercise__knowledge = knowledge) 
-        for studentanswer in studentanswers:
-            scored +=  studentanswer.point 
-        try :
-            scored = scored/len(studentanswers)
-        except :
+            studentanswer, creator = Studentanswer.objects.get_or_create(parcours = relationship.parcours, exercise = relationship.exercise, student = student , defaults={"point" : tab_value[value] , 'secondes' : 0} )
+            if not creator :
+                Studentanswer.objects.filter(parcours  = relationship.parcours, exercise = relationship.exercise , student  = student).update(point= tab_value[value])
+            # Moyenne des scores obtenus par savoir faire enregistré dans Resultknowledge
+            knowledge = relationship.exercise.knowledge
             scored = 0
-        result, created = Resultknowledge.objects.get_or_create(knowledge  = relationship.exercise.knowledge , student  = student , defaults = { "point" : scored , })
-        if not created :
-            Resultknowledge.objects.filter(knowledge  = relationship.exercise.knowledge , student  = student).update(point= scored)
-        
+            studentanswers = Studentanswer.objects.filter(student = student,exercise__knowledge = knowledge) 
+            for studentanswer in studentanswers:
+                scored +=  studentanswer.point 
+            try :
+                scored = scored/len(studentanswers)
+            except :
+                scored = 0
+            result, created = Resultknowledge.objects.get_or_create(knowledge  = relationship.exercise.knowledge , student  = student , defaults = { "point" : scored , })
+            if not created :
+                Resultknowledge.objects.filter(knowledge  = relationship.exercise.knowledge , student  = student).update(point= scored)
+            
 
-        # Moyenne des scores obtenus par compétences enregistrées dans Resultskill
-        skills = relationship.skills.all()
-        for skill in skills :
-            Resultskill.objects.create(student = student, skill = skill, point = tab_value[value]) 
-            resultskills = Resultskill.objects.filter(student = student, skill = skill).order_by("-id")[0:10]
-            sco = 0
-            for resultskill in resultskills :
-                sco += resultskill.point
-                try :
-                    sco_avg = sco/len(resultskills)
-                except :
-                    sco_avg = 0
-            result, creat = Resultlastskill.objects.get_or_create(student = student, skill = skill, defaults = { "point" : sco_avg , })
-            if not creat :
-                Resultlastskill.objects.filter(student = student, skill = skill).update(point = sco_avg) 
+            # Moyenne des scores obtenus par compétences enregistrées dans Resultskill
+            skills = relationship.skills.all()
+            for skill in skills :
+                Resultskill.objects.create(student = student, skill = skill, point = tab_value[value]) 
+                resultskills = Resultskill.objects.filter(student = student, skill = skill).order_by("-id")[0:10]
+                sco = 0
+                for resultskill in resultskills :
+                    sco += resultskill.point
+                    try :
+                        sco_avg = sco/len(resultskills)
+                    except :
+                        sco_avg = 0
+                result, creat = Resultlastskill.objects.get_or_create(student = student, skill = skill, defaults = { "point" : sco_avg , })
+                if not creat :
+                    Resultlastskill.objects.filter(student = student, skill = skill).update(point = sco_avg) 
 
-        data['eval'] = "<i class = 'fa fa-square "+tab_label[value]+" pull-right'></i>"       
+            data['eval'] = "<i class = 'fa fa-square "+tab_label[value]+" pull-right'></i>"       
+        else :
+            data['eval'] = ""
+  
     else :
-        data['eval'] = ""
+       
+        customexercise_id =  int(request.POST.get("customexercise_id"))  
+ 
+        parcours_id =  int(request.POST.get("parcours_id")) 
+        knowledge_id = request.POST.get("knowledge_id",None)       
+        skill_id = request.POST.get("skill_id",None)
+
+        this_custom = Customanswerbystudent.objects.filter(parcours_id = parcours_id , customexercise_id = customexercise_id, student = student)
+        this_custom.update(is_corrected= 1)
+
+        if tab_value[value] > -1 :
+
+            if skill_id : 
+                result, created = Correctionskillcustomexercise.objects.get_or_create(parcours_id = parcours_id , customexercise_id = customexercise_id, student  = student , skill_id = skill_id   , defaults = { "point" : tab_value[value]  })
+                if not created :
+                    Correctionskillcustomexercise.objects.filter(parcours_id = parcours_id , customexercise_id = customexercise_id, student  = student, skill_id = skill_id ).update(point= tab_value[value] )
+
+            if knowledge_id : 
+                result, created = Correctionknowledgecustomexercise.objects.get_or_create(parcours_id = parcours_id , customexercise_id = customexercise_id, student  = student , knowledge_id = knowledge_id  ,  defaults = {  "point" : tab_value[value]  })
+                if not created :
+                    Correctionknowledgecustomexercise.objects.filter(parcours_id = parcours_id , customexercise_id = customexercise_id, student  = student , knowledge_id = knowledge_id ).update(point= tab_value[value] )
+
+            data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"       
+        else :
+            data['eval'] = ""
+
     return JsonResponse(data)  
 
 
 
-def ajax_comment_relationship(request):
 
-    relationship_id =  int(request.POST.get("relationship_id")) 
+def ajax_mark_evaluate(request): # Evaluer un exercice custom par note
+
+    student_id =  int(request.POST.get("student_id"))
+    customexercise_id =  int(request.POST.get("customexercise_id"))  
+    parcours_id =  int(request.POST.get("parcours_id")) 
+    mark =  request.POST.get("mark")
+    data = {}
+    this_custom = Customanswerbystudent.objects.filter(parcours_id = parcours_id , customexercise_id = customexercise_id, student_id = student_id)
+    this_custom.update(is_corrected= 1)
+    this_custom.update(point= mark)
+
+    data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"             
+
+    return JsonResponse(data)  
+
+
+
+
+
+def ajax_comment_all_exercise(request): # Ajouter un commentaire à un exercice non auto-corrigé
+
     student_id =  int(request.POST.get("student_id"))
     comment =  cleanhtml(unescape_html(request.POST.get("comment")))
 
-    student = Student.objects.get(user_id = student_id)  
-    relationship = Relationship.objects.get(pk = relationship_id)
+    print(comment)
 
-    answercomment, created = Answercomment.objects.get_or_create(relationship = relationship, student = student , defaults={"comment" : comment } )
-    if not created :
-        Answercomment.objects.filter(relationship = relationship, student = student).update( comment = comment  )
+    exercise_id =  int(request.POST.get("exercise_id"))  
+
+    student = Student.objects.get(user_id = student_id)  
+
+    if int(request.POST.get("typ")) == 0 :
+        relationship = Relationship.objects.get(pk = exercise_id)
+        answer = Writtenanswerbystudent.objects.filter(relationship = relationship, student = student).update(comment = comment )
+
+    else  :
+        parcours_id =  int(request.POST.get("parcours_id"))     
+        ce = Customexercise.objects.get(pk = exercise_id)
+        answer = Customanswerbystudent.objects.filter(customexercise = ce, student = student, parcours_id = parcours_id).update(comment = comment )
+
     data = {}
-       
+    data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"          
     return JsonResponse(data)  
 
 
 
+@user_is_parcours_teacher 
+def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice non autocorrigé dans un parcours
 
-def write_exercise(request,id):
+    teacher = Teacher.objects.get(user=request.user)
+    stage = get_stage(teacher.user)
+    parcours = Parcours.objects.get(pk=id)
+
+    ceForm = CustomexerciseForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours) 
+
+
+    if request.method == "POST" :
+        if ceForm.is_valid() :
+            nf = ceForm.save(commit=False)
+            nf.teacher = teacher
+            nf.save()
+            ceForm.save_m2m()
+            nf.parcourses.add(parcours)            
+        else :
+            print(ceForm.errors)
+        return redirect('show_parcours', parcours.id )
+ 
+    context = {'parcours': parcours,  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'customexercise' : False }
+
+    return render(request, 'qcm/form_exercise_custom.html', context)
+
+
+@user_is_parcours_teacher 
+def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exercice non autocorrigé dans un parcours
+
+    teacher = Teacher.objects.get(user=request.user)
+    stage = get_stage(teacher.user)
+    custom = Customexercise.objects.get(pk=idcc)
+
+    if id == 0 :
+
+        ceForm = CustomexerciseNPForm(request.POST or None, request.FILES or None , teacher = teacher ,  custom = custom, instance = custom ) 
+
+        if request.method == "POST" :
+            if ceForm.is_valid() :
+                nf = ceForm.save(commit=False)
+                nf.teacher = teacher
+                nf.save()
+                ceForm.save_m2m()
+            else :
+                print(ceForm.errors)
+            return redirect('exercises' )
+     
+        context = {  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'customexercise' : custom ,'parcours': None, }
+
+    else :
+ 
+        parcours = Parcours.objects.get(pk=id)
+        ceForm = CustomexerciseForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours, instance = custom ) 
+
+        if request.method == "POST" :
+            if ceForm.is_valid() :
+                nf = ceForm.save(commit=False)
+                nf.teacher = teacher
+                nf.save()
+                ceForm.save_m2m()
+                nf.parcourses.add(parcours)
+            else :
+                print(ceForm.errors)
+            return redirect('show_parcours', parcours.id )
+     
+        context = {'parcours': parcours,  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'customexercise' : custom }
+
+    return render(request, 'qcm/form_exercise_custom.html', context)
+
+
+ 
+
+@user_is_parcours_teacher 
+def parcours_delete_custom_exercise(request,idcc,id): # Suppression d'un exercice non autocorrigé dans un parcours
+
+    teacher = Teacher.objects.get(user=request.user)
+    custom = Customexercise.objects.get(pk=idcc)
+
+    if id == 0 :   
+        custom.delete() 
+        return redirect('exercises')
+    else :
+        parcours = Parcours.objects.get(pk=id)
+        custom.parcourses.remove(parcours)
+        custom.delete() 
+        return redirect('show_parcours', parcours.id )
+
+
+
+def write_exercise(request,id): # Coté élève
  
     student = Student.objects.get(user = request.user)  
     relationship = Relationship.objects.get(pk = id)
@@ -2959,11 +3215,44 @@ def write_exercise(request,id):
         url = "basthon/index.html" 
     else :
         url = "qcm/form_writing.html" 
- 
-
-
 
     return render(request, url , context)
+
+
+
+def write_custom_exercise(request,id,idp): # Coté élève - exercice non autocorrigé
+ 
+    student = Student.objects.get(user = request.user)  
+    customexercise = Customexercise.objects.get(pk = id)
+    parcours = Parcours.objects.get(pk = idp)
+
+    if Customanswerbystudent.objects.filter(student = student, customexercise = customexercise ).exists() : 
+        ce = Customanswerbystudent.objects.get(student = student, customexercise = customexercise )
+        cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None, instance = ce )    
+    else :
+        cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None ) 
+
+    if request.method == "POST":
+
+        if cForm.is_valid():
+            w_f = cForm.save(commit=False)
+            w_f.customexercise = customexercise
+            w_f.parcours_id = idp
+            w_f.student = student
+            w_f.save()
+            return redirect('show_parcours_student' , idp )
+
+
+    context = {'customexercise': customexercise, 'communications' : [] , 'form' : cForm , 'parcours' : parcours ,'student' : student }
+
+    if customexercise.is_python :
+        url = "basthon/index_custom.html" 
+    else :
+        url = "qcm/form_writing_custom.html" 
+
+    return render(request, url , context)
+
+
 
 
 #######################################################################################################################################################################

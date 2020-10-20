@@ -50,6 +50,15 @@ def get_score2(results, id):
     """
     return results.get(id, '')
 
+@register.simple_tag
+def get_is_lock(obj,todaytimer): 
+    """Bloque un exercice dans une évaluation si celui-ci a une date de verrou"""
+    return obj.is_lock(todaytimer)
+
+@register.simple_tag
+def get_is_submit(obj,parcours,student): 
+    """Vérifie si un exercice non auto corrigé est envoyé par un élève"""
+    return obj.is_submit(parcours,student)
 
 
 @register.simple_tag 
@@ -360,9 +369,9 @@ def get_score_student_parcours(obj,student, parcours):
 
 
 @register.simple_tag  
-def get_percent_student_done_parcours_exercice(obj, parcours,group_id): 
+def get_percent_student_done_parcours_exercice(obj,parcours): 
 
-    return obj.percent_student_done_parcours_exercice(parcours,group_id)
+    return obj.percent_student_done_parcours_exercice(parcours)
 
 
 
@@ -443,3 +452,43 @@ def get_sharing_role(obj,  teacher):
     renvoie les parcours d'un enseignant donné liés à un exercice
     """
     return obj.sharing_role(teacher)
+
+
+@register.simple_tag 
+def get_corrected_for_this(obj, student, parcours):
+    """
+    renvoie les parcours d'un enseignant donné liés à un exercice
+    """
+    return obj.is_corrected_for_this(student, parcours)
+
+
+@register.simple_tag 
+def get_result_k_s(obj, k_s, student, parcours,typ):
+    """
+    renvoie les résultats d'une skill ou d'une knowledge d'un exercice
+    """
+    return obj.result_k_s(k_s, student, parcours,typ)
+
+
+@register.simple_tag 
+def get_mark_to_this(obj, student, parcours):
+    """
+    renvoie la note d'un exercice custom
+    """
+    return obj.mark_to_this(student, parcours)
+
+
+@register.simple_tag 
+def get_all_results_custom(obj, student, parcours):
+    """
+    renvoie le résultat d'un exo custom coté élève
+    """
+    return obj.all_results_custom(student, parcours)
+
+
+@register.simple_tag 
+def get_custom_score(obj, customexercise, student, parcours):
+    """
+    renvoie le résultat d'un exo custom coté élève
+    """
+    return obj.custom_score(customexercise, student, parcours)

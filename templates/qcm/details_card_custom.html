@@ -1,0 +1,223 @@
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}                     
+
+<div class="card_freeze" style="{% if not customexercise.is_publish %}background-color: #F5F5F5{% else %}background:#FFF{% endif %}" id="card{{customexercise.id}}">
+    <!-- Entete de la card  -->
+    <div class="card-body" style="height:37px;">
+          <input type="hidden" value="{{ customexercise.id }}" name="input_exercise_id" class="div_exercise_id"/><!--  sert à classer les thèmes  -->
+          <a href="" style="cursor:move;" class="move_inside" style="color:{{ parcours.color }}"> 
+          {% if not customexercise.is_publish %}<span style="color:#F5F5F5">{{ nb_exo_only_c|index:forloop.counter0 }}.</span>{% else %}{{ nb_exo_visible_c|index:forloop.counter0 }}.{% endif %}
+          </a>
+                       
+          <div class="card-score">
+ 
+              {%  get_percent_student_done_parcours_exercice   customexercise  parcours    as    data %} 
+ 
+              <div class="progress">
+                <div class="progress-bar bg-success" role="progressbar" style="width: {{ data.percent }}%;{% if not customexercise.is_publish %}color: #F5F5F5{% endif %};background-color: {{customexercise.parcours.color }};" aria-valuenow="{{ data.percent }}" aria-valuemin="0" aria-valuemax="100">{{ data.percent }}%</div>
+              </div>
+          </div>
+          <span class="label_progress_bar" style="color:{{ parcours.color }}">{{ data.nb_done }}/{{ data.nb }}</span> 
+          {% if customexercise.calculator %}
+            <img src="{% static 'img/calculator.png' %}" class="pull-right" width="35px" />
+          {% else %}
+            <img src="{% static 'img/no_calculator.png' %}" class="pull-right" width="35px" />
+          {% endif  %}
+    </div>   
+    <!-- Fin Entete de la card  -->
+
+    <!-- Partie sur laquelle est posée l'image  -->                  
+    <div class="card-image">
+
+
+         
+          <div style="position: absolute; left : 30px; top:44px;" id="annoncement{{customexercise.id}}"   >   
+              {{customexercise.instruction|safe}}  
+          </div>
+
+
+
+          
+          <!-- Exercice dissocié  -->  
+          {% if  customexercise.students.count != nb_students_p_or_g %}
+          <div  style="position: absolute; right : 0px; top:60px;" title="Cet exercice est indiviualisé à certains élèves" >   
+            <a href="#customcard{{customexercise.id}}" class="detail_parcours btn btn-warning" 
+               data-exercise_id="{{ customexercise.exercise.id }}"  data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}">
+              <i class="fa fa-user"></i>
+            </a>
+          </div>
+          {% endif %}
+
+          <!-- Pour ces deux actions, on ne modifie pas relationship_id en customexercise_id pour utiliser la même fonction Jquery dans dashboard.js  -->
+          <!-- Publication  -->
+          <div href="#customcard{{customexercise.id}}" class="action_content {% if  customexercise.is_publish %}btn btn-success{% else %}btn btn-danger{% endif %}"  style="position: absolute; right : 0px; top:90px;" id="publisher{{customexercise.id}}"  data-relationship_id="{{customexercise.id}}" data-statut="{{customexercise.is_publish }}" data-custom="1" title="Publier l'exercice" >   
+              {% if  customexercise.is_publish %}Publié{% elif customexercise.start %}{{ customexercise.start }}{% else %}Dépublié{% endif %}
+          </div>
+
+          <!-- Tache  -->
+          <div href="#customcard{{customexercise.id}}" class="btn btn-{% if  customexercise.date_limit %}success{% else %}default{% endif %} custom_select_task"  style="position: absolute; right : 0px; top:120px;" id="pub_task{{customexercise.id}}" data-relationship_id="{{customexercise.id}}" data-statut="{{customexercise.is_task }}" data-custom="1"  title="Proposer une tâche pour le" >   
+              <span id="loading{{ customexercise.id }}"></span>{% if  customexercise.date_limit %}{{customexercise.date_limit }}{% else %}Tâche ?{% endif %}
+          </div>
+ 
+
+          <!--  
+          =============================================================================================================
+          =============================================================================================================
+                Pop up de la date de la tache d'un exercice  
+          =============================================================================================================
+          =============================================================================================================-->
+
+          <!-- Pop up de la date de la tache d'un exercice  -->
+          <div id="custom_detail_dateur{{customexercise.id}}" class="card-dateur"  > 
+              <div class="row">
+                    <div class="col-sm-12 col-md-12 title">     
+                        <span href="#customcard{{customexercise.id}}" class="custom_select_task_close pull-right" data-customexercise_id="{{customexercise.id}}"><i class="fa fa-times"></i></span>  
+                         Programmation de tâche  
+                    </div>
+               </div> 
+              <div class="row">
+                  <div class="col-sm-12 col-md-12">              
+                    <hr style="padding:0px; margin:10px 0px"/> 
+                    <label  style="font-size: 10px;">Date limite de rendu ?</label><br>
+                    <input type="type" name="dateur" data-relationship_id="{{customexercise.id}}" data-type ="1" data-custom ="1" value='{{ customexercise.date_limit|date:"Y-m-d" }}' class="datepicker dateur pull-right" />
+              
+                  </div>
+              </div> 
+              <hr style="padding:0px; margin:10px 0px"/> 
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <span class="custom_select_task_close btn btn-xs btn-primary" data-customexercise_id="{{customexercise.id}}">Valider</span>
+                    </div>
+                </div> 
+          </div>
+
+          <!-- Pop up de la date de publication d'un exercice  -->
+          <div id="custom_detail_pub{{customexercise.id}}" class="card-dateur"  >
+              <div class="row">
+                    <div class="col-sm-12 col-md-12 title">     
+                        <span href="#card{{customexercise.id}}" class="custom_select_publish_close pull-right" data-customexercise_id="{{customexercise.id}}"><i class="fa fa-times"></i></span>  
+                         Date de publication
+                    </div>  
+               </div> 
+              <hr style="padding:0px; margin:10px 0px"/> 
+              <div class="row">
+                  <div class="col-sm-12 col-md-12">      
+                  <label  style="font-size: 12px;">Date de publication ?</label><br>
+                                                      <!-- on conserve  relationship_id pour réutiliser la fonction JS-->
+                  <input type="type" name="start" data-relationship_id="{{customexercise.id}}" data-type ="0" data-custom ="1" value='{{ customexercise.date_limit|date:"Y-m-d" }}' class="datepicker dateur pull-right" />
+                  </div>
+              </div>
+              <hr style="padding:0px; margin:10px 0px"/>                 
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <span class="custom_select_publish_close btn btn-xs btn-primary" data-customexercise_id="{{customexercise.id}}">Valider</span>
+                    </div>
+                </div>
+ 
+          </div>
+
+
+          <!-- Pop up de la durée et du nombre de situation d'un exercice  -->
+          <div id="custom_details{{customexercise.id}}" class="card-dateur"  > 
+              <div class="row">
+                    <div class="col-sm-12 col-md-12 title">
+                    <span href="#customcard{{customexercise.id}}" class="custom_select_details_close pull-right" data-customexercise_id="{{customexercise.id}}"><i class="fa fa-times"></i></span>               
+                        Contexte 
+                    </div>
+               </div> 
+              <hr style="padding:0px; margin:10px 0px"/> 
+
+               <div class="row">
+                    <div class="col-sm-6 col-md-6">
+                        <label  style="font-size: 12px;"><i class="fa fa-clock-o"></i> Durée estimée </label><br>
+                        <input type="type" name="duration" data-customexercise_id="{{customexercise.id}}" id="duration{{customexercise.id}}"  data-type ="2"  value="{{ customexercise.duration }}" class="custom_details_exercise" /> min.
+                    </div>
+                </div> 
+              <hr style="padding:0px; margin:10px 0px"/>  
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <span class="select_details_close btn btn-xs btn-primary" data-customexercise_id="{{customexercise.id}}">Valider</span>
+                    </div>
+                </div> 
+          </div>
+
+          <!-- Pop up de partage d'un exercice  -->
+          <div id="custom_share{{ customexercise.id }}" class="card-dateur"  > 
+              <div class="row">
+                    <div class="col-sm-12 col-md-12   title">  
+                      <span href="#customcard{{customexercise.id}}" class="custom_select_share_close" data-customexercise_id="{{customexercise.id}}"><i class="fa fa-times pull-right"></i></span>           
+                         Redirections & Liens
+                    </div>
+               </div> 
+              <hr style="padding:0px; margin:10px 0px"/><br> 
+                <a href="https://sacado.xyz/qcm/write_custom_exercise/{{ customexercise.id }}/{{ parcours.id }}" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice</a>
+                <br><br>                
+                <a href="#customcard{{customexercise.id}}" class="copy" data-exercise_id="{{ customexercise.id}}" data-custom=1 data-parcours_id="{{ parcours.id}}" style="font-size:14px"><i class="fa fa-clipboard fa-fw"></i> Copier pour coller dans une autre page</a> 
+          </div>
+
+          <!-- Pop up des compétences d'un exercice  -->
+          <div id="custom_skill{{ customexercise.id }}" class="card-skill"> Compétences visées
+              <span   class="select_skill_close pull-right" data-customexercise_id="{{customexercise.id}}"><i class="fa fa-times"></i></span>
+                {% for skill in skills %}
+                      <label style="font-size:10px">
+                      <input type="checkbox" name="skills" data-customexercise_id="{{customexercise.id}}" value="{{skill.id}}" class="skill_selector" {% if skill in customexercise.skills.all %} checked {% endif %}  />
+                      {{ skill }}
+                      </label>{% if not forloop.last %}<br>{% endif %}
+                {% endfor %}
+          </div>
+
+
+
+          <!--  Image de la card  -->
+          <a href="#customcard{{customexercise.id}}" class="detail_parcours"  data-exercise_id="{{ customexercise.id }}" title="{{ customexercise.instruction|safe }}"
+             data-num_exo="{{ nb_exo_only_c|index:forloop.counter0 }}" data-parcours_id="{{ parcours.id }}" data-custom=1>
+             
+               <img {% if customexercise.imagefile %} src="{{ customexercise.imagefile.url }}" {% else %}  src="{% static 'img/custom_exercise.png' %}" {% endif %} class="image_parcours_order"  >
+            
+          </a> 
+        <!--  Barre d'outil de la customcard  -->
+        <div class="card-text" style="background-color:{{ parcours.color }}; text-align:center;color:{{ parcours.color|contrast_color }}">
+ 
+ 
+            <span class="horizontalmargin5"><a href="#" style="font-size:14px;color:{{ parcours.color|contrast_color }}" class="copy_link" title="Code de l'exercice" data-code="{{ customexercise.code}}"><i class="fa fa-barcode"></i></a></span> 
+
+            <!-- Appel des parcours de maitrise -->
+            <span class="horizontalmargin5"><a href="{% url 'create_mastering' customexercise.id  %}" title="Parcours de maîtrise à partir de cet exercice" style="font-size:14px;color:{{ parcours.color|contrast_color }}"><i class="fa fa-sitemap"></i></a></span> 
+              
+            <!-- Appel des situations et durée -->
+            <span class="custom_select_details horizontalmargin5"  data-customexercise_id="{{ customexercise.id }}" id="clock{{customexercise.id}}"  title="Modifier le temps"><!-- l'id permet de modifier après ajax le temps -->
+                <i class="fa fa-clock-o"></i> {{ customexercise.duration }} min. 
+            </span>
+            <!-- Appel des situations -->
+             
+            <!-- Appel de partage  -->
+            <span  class="custom_sharer horizontalmargin5" data-customexercise_id="{{ customexercise.id }}"   title="Accéder à cet exercice" style="cursor:pointer">
+               <i class="fa fa-share-square"></i>
+            </span>                                   
+ 
+ 
+
+ 
+            <span class="horizontalmargin5">
+                <a href="{%  url 'parcours_update_custom_exercise' customexercise.id  parcours.id %}" title="Modifier cet exercice" style="font-size:18px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-pencil-square-o"></i></a> 
+            </span>
+
+            <!-- Suppression de l'exercice dans ce parcours  -->
+            <a href="{%  url 'parcours_delete_custom_exercise' customexercise.id  parcours.id %}" class="horizontalmargin5"   title="Supprimer cet exercice de ce parcours" style="font-size:14px;color:{{ parcours.color|contrast_color }}" onclick="return TestDelete('cet exercice de ce parcours')"  >
+                <i class="fa fa-trash"></i> 
+            </a>
+
+            <span class="horizontalmargin5" >
+                <a href="{%  url 'correction_exercise' customexercise.id  parcours.id %}" title="Corriger cet exercice" style="font-size:18px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-search"></i></a> 
+            </span>
+
+            {% if not customexercise.is_publish and not customexercise.start %}<br>
+            <span href="#customcard{{customexercise.id}}" title="Date de publication" class="custom_select_publish white horizontalmargin5" id="select_publish{{customexercise.id}}" data-customexercise_id="{{customexercise.id}}" data-statut="{{customexercise.is_publish }}" style="cursor:pointer">
+                <i class="fa fa-calendar-check"> </i> <span style="font-size:12px">Date de publication ?</span>  
+            </span>
+            {% endif %}
+        </div>
+    </div>
+    <!-- Partie sur laquelle est posée l'image  -->   
+</div> 

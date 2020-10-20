@@ -5,7 +5,6 @@
 {% load item_tags %}
 
 
-
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
 {% endblock %}
@@ -33,9 +32,14 @@
                 <a  href="#{{ forloop.counter}}a" data-toggle="tab">{{ data.name.shortname }}</a>
             </li>
             {% endfor  %}
+
+            <li> <a href="#my_exercises" data-toggle="tab">Mes exercices</a></li> 
+
             {% if not '/admin' in request.path %}
             <li> <a href="{% url 'profile' %}" class="thin">+</a></li>
             {% endif %}
+
+
         </ul>
         <div class="tab-content clearfix">
             {% for data in datas %}
@@ -136,6 +140,51 @@
                 </div>
             </div>
             {% endfor  %}
+            <div class="tab-pane {% if forloop.first %}active{% endif %}" id="my_exercises">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <table class="table  table-hover display100" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for customexercise in customexercises  %}
+  
+                                    <tr>
+                                        <td>
+                                            <div class="pull-right" >
+                                            {% for p in customexercise.parcourses.all %}
+                                                 <span class="btn btn-default">{{ p }}</span>{% if not forloop.last %}<br>{% endif %}
+                                            {% endfor %}
+                                            </div>
+                                                <img src="{{ customexercise.image.url }}" class="imagefile">
+                                                <a href="{% url 'parcours_update_custom_exercise'  customexercise.id 0  %}" class="listing" style="font-size: 18px">
+                                                    {{ customexercise.instruction|safe }}
+                                                </a>
+
+
+                                            {% if customexercise.calculator %}
+                                              <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                            {% else %}
+                                              <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                            {% endif  %}
+                                                 <br>
+                                                    <a  href="{% url 'parcours_update_custom_exercise'  customexercise.id 0    %}" class="sublisting"  target="_blank"> <small>
+                                                        <i class="fa fa-fw fa-barcode"></i> {{customexercise.code }} <br>
+                                                        <i class="fa fa-fw fa-clock-o"></i> {{ customexercise.duration }} minutes
+                                        </td>
+
+                                    </tr>
+ 
+                                 {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
         </div>
     {% else %}
 

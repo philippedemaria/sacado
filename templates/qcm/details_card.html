@@ -12,7 +12,7 @@
                        
           <div class="card-score">
  
-              {%  get_percent_student_done_parcours_exercice   relation.exercise    parcours   students_from_p_or_g   as    data %}
+              {%  get_percent_student_done_parcours_exercice   relation   parcours   as    data %}
  
  
               <div class="progress">
@@ -51,12 +51,12 @@
           {% endif %}
 
           <!-- Publication  -->
-          <div href="#card{{relation.id}}" class="action_content {% if  relation.is_publish %}btn btn-success{% else %}btn btn-danger{% endif %}"  style="position: absolute; right : 0px; top:90px;" id="publisher{{relation.id}}"  data-relationship_id="{{relation.id}}" data-statut="{{relation.is_publish }}" title="Publier l'exercice" >   
+          <div href="#card{{relation.id}}" class="action_content {% if  relation.is_publish %}btn btn-success{% else %}btn btn-danger{% endif %}"  style="position: absolute; right : 0px; top:90px;" id="publisher{{relation.id}}"  data-relationship_id="{{relation.id}}" data-statut="{{relation.is_publish }}" data-custom="0" title="Publier l'exercice" >   
               {% if  relation.is_publish %}Publié{% elif relation.start %}{{ relation.start }}{% else %}Dépublié{% endif %}
           </div>
 
           <!-- Tache  -->
-          <div href="#card{{relation.id}}" class="btn btn-{% if  relation.date_limit %}success{% else %}default{% endif %} select_task"  style="position: absolute; right : 0px; top:120px;" id="pub_task{{relation.id}}" data-relationship_id="{{relation.id}}" data-statut="{{relation.is_task }}"  title="Proposer une tâche pour le" >   
+          <div href="#card{{relation.id}}" class="btn btn-{% if  relation.date_limit %}success{% else %}default{% endif %} select_task"  style="position: absolute; right : 0px; top:120px;" id="pub_task{{relation.id}}" data-relationship_id="{{relation.id}}" data-statut="{{relation.is_task }}"  title="Proposer une tâche pour le" data-custom="0"  >   
               <span id="loading{{ relation.id }}"></span>{% if  relation.date_limit %}{{relation.date_limit }}{% else %}Tâche ?{% endif %}
           </div>
 
@@ -87,12 +87,20 @@
                </div> 
               <hr style="padding:0px; margin:10px 0px"/> 
                 <label  style="font-size: 10px;">Date limite de rendu ?</label><br>
-                <input type="type" name="dateur" data-relationship_id="{{relation.id}}" data-type ="1" value='{{ relation.date_limit|date:"Y-m-d" }}' class="datepicker dateur pull-right" />
+                <input type="type" name="dateur" data-relationship_id="{{relation.id}}" data-type ="1" data-custom ="0" value='{{ relation.date_limit|date:"Y-m-d" }}' class="datepicker dateur pull-right" />
           </div>
 
           <!-- Pop up de la date de publication d'un exercice  -->
           <div id="detail_pub{{relation.id}}" class="card-dateur"  >
-                <input type="type" name="start" data-relationship_id="{{relation.id}}" data-type ="0" value='{{ relation.date_limit|date:"Y-m-d" }}' class="datepicker dateur pull-right" />
+              <div class="row">
+                    <div class="col-sm-12 col-md-12 title">     
+                        <span href="#card{{relation.id}}" class="select_publish_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>  
+                         Date de publication
+                    </div>
+               </div> 
+              <hr style="padding:0px; margin:10px 0px"/>             
+                <label  style="font-size: 12px;">Date de publication ?</label><br>
+                <input type="type" name="start" data-relationship_id="{{relation.id}}" data-type ="0" data-custom ="0" value='{{ relation.date_limit|date:"Y-m-d" }}' class="datepicker dateur pull-right" />
           </div>
 
           <!-- Pop up de la constrainte  -->
@@ -217,7 +225,7 @@
                </div> 
               <hr style="padding:0px; margin:10px 0px"/><br> 
                 <a href="https://sacado.xyz/qcm/show_this_exercise/{{ relation.exercise.id }}/" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice</a>
-                <br><br>                <a href="#card{{relation.id}}" class="copy" data-exercise_id="{{ relation.exercise.id}}" data-relationship_id="{{ relation.id}}"  data-parcours_id="{{ relation.parcours.id}}" style="font-size:14px"><i class="fa fa-clipboard fa-fw"></i> Copier pour coller dans une autre page</a> 
+                <br><br>                <a href="#card{{relation.id}}" class="copy" data-custom=0 data-exercise_id="{{ relation.exercise.id}}" data-relationship_id="{{ relation.id}}"  data-parcours_id="{{ relation.parcours.id}}" style="font-size:14px"><i class="fa fa-clipboard fa-fw"></i> Copier pour coller dans une autre page</a> 
           </div>
 
           <!-- Pop up des compétences d'un exercice  -->
@@ -235,7 +243,7 @@
 
           <!--  Image de la card  -->
           <a href="#card{{relation.id}}" class="detail_parcours"  data-exercise_id="{{ relation.exercise.id }}" title="{{ relation.exercise.supportfile.annoncement|cleanhtml|safe }}"
-             data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}">
+             data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}" data-custom=0 >
                <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours_order"  >
           </a> 
 
@@ -283,13 +291,13 @@
  
             {% if not relation.exercise.supportfile.is_ggbfile %}
             <span class="select_details horizontalmargin5">
-                <a href="{% url 'correction_exercise'  relation.id  %}" title="Corriger cet exercice" style="font-size:18px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-search"></i></a> 
+                <a href="{% url 'correction_exercise'  relation.id 0 %}" title="Corriger cet exercice" style="font-size:18px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-search"></i></a> 
             </span>
             {% endif %}
 
 
             {% if not relation.is_publish and not relation.start %}<br>
-            <span href="#card{{relation.id}}" title="Date de publication" class="select_publish white horizontalmargin5" id="select_publish{{relation.id}}" data-relationship_id="{{relation.id}}" data-statut="{{relation.is_publish }}" >
+            <span href="#card{{relation.id}}" title="Date de publication" class="select_publish white horizontalmargin5" id="select_publish{{relation.id}}" data-relationship_id="{{relation.id}}" data-statut="{{relation.is_publish }}" style="cursor:pointer">
                 <i class="fa fa-calendar-check"> </i> <span style="font-size:12px">Date de publication ?</span>  
             </span>
             {% endif %}

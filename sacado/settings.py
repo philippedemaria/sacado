@@ -85,6 +85,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'bootstrap3',
+    'bootstrap_datepicker_plus',
     'setup',
     'social_django',
     'account',

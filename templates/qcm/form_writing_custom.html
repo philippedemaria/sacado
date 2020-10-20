@@ -1,0 +1,148 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    <script>
+        require(['script/ajax-exercise']);
+    </script> 
+    
+{% endblock %}
+
+ 
+
+{% block page_title %}
+    <span style="color:{{ parcours.color  }}"><i class="fa fa-desktop"></i> {{ parcours }} <img src="{% static 'img/angle-right.png' %}"/><small> Exercice corrigé par l'enseignant</small></span>  
+{% endblock %}
+
+
+{% block page_menu_right %}
+
+{% endblock %}
+
+
+
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-8">
+            <a href="#" data-toggle='modal' data-target='#consigne' class="btn btn-danger">Lire la consigne</a>
+            <hr>             
+            <form action="" method="POST">
+                {% csrf_token %}
+                {% if customexercise.is_image   or   customexercise.is_file  %}   
+ 
+                <div class="form-group">
+                    {{ form.imagefile.label_tag }}  <br>
+                    {{ form.imagefile|add_class:"btn btn-default"   }}
+                    {{ form.imagefile.errors }} <br>
+                </div> 
+                {% endif %}
+
+                {% if customexercise.is_text   %} 
+
+                <div class="form-group">
+                    <label>Zone pour écrire</label><br>
+                    {{ form.answer }}
+                    {{ form.answer.errors }} <br>
+                </div>
+
+                {% endif %}
+                <div class="row">
+                    <div class="col-sm-12 col-lg-8">
+                        <div class="form-group">
+                            {% get_all_results_custom customexercise student parcours.id as data %}                          
+                            {% if data.point  %}
+                                <h3>Note : {{ data.point }} <small>sur {{ customexercise.mark }}</small></h3>                             
+                            {% endif  %}
+                            {% if data.comment  %}
+                                <h3>Commentaire :</h3>
+                                 {{ data.comment }}                        
+                            {% endif  %}
+                            {% if data.is_corrected  %}<hr>
+                                <input type="button" value="Retour aux exercices" onclick="javascript:history.back()" class="btn btn-default "/>                               
+                            {% endif  %}
+                            {% if not data.point and not customexercise.is_lock  %}
+                                <input value="Soumettre votre exercice" type="submit" class="btn btn-primary"/>
+                                <input type="button" value="Annuler" onclick="javascript:history.back()"
+                                                                       class="btn btn-default "/>
+                            {% endif  %}
+                        </div>
+                    </div>
+ 
+                </div>
+            </form> 
+        </div>  
+        <div class="col-sm-12 col-lg-4">
+            {% if customexercise.is_scratch   %} 
+            <label>Conseil :</label>  Utiliser le site Scratch pour créer votre script. Prendre une capture d'écran et la déposer dans la zone de texte.<br><br>
+            <a href="https://scratch.mit.edu/projects/editor/?tutorial=getStarted" target="_blank">Naviguer vers Scratch <img src="{% static 'img/scratch.png' %}"/></a>
+            <hr>  
+            {% endif %} 
+            {% if customexercise.skills.all|length > 0 %}              
+                <label>Compétences visées :</label>
+                {% for skill in customexercise.skills.all %}
+                {% get_custom_score skill customexercise student parcours as custom_score %}
+                    <li class="sans_puce">{{skill}} 
+                         {% if custom_score == 4 %}<i class="fa fa-square text-primary"></i>
+                         {% elif custom_score == 3 %}<i class="fa fa-square text-success"></i>
+                         {% elif custom_score == 2 %}<i class="fa fa-square text-warning"></i>
+                         {% elif custom_score == 1 %}<i class="fa fa-square text-danger"></i>                         
+                         {% endif %}
+                    </li>
+                {% endfor %}
+            {% endif %}
+            {% if customexercise.skills.all|length > 0 and customexercise.knowledges.all|length > 0 %}
+            <hr>
+            {% endif %}
+            {% if customexercise.knowledges.all|length > 0 %}                
+            <label>Savoir faire évalués :</label>
+            {% for knowledge in customexercise.knowledges.all %}
+                {% get_custom_score knowledge customexercise student parcours as custom_score %}
+                <li class="sans_puce">{{knowledge}}
+                         {% if custom_score == 4 %}<i class="fa fa-square text-primary"></i>
+                         {% elif custom_score == 3 %}<i class="fa fa-square text-success"></i>
+                         {% elif custom_score == 2 %}<i class="fa fa-square text-warning"></i>
+                         {% elif custom_score == 1 %}<i class="fa fa-square text-danger"></i>                         
+                         {% endif %}
+                </li>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>        
+</section>
+
+
+
+<div class="modal fade" id="consigne" tabindex="-1" role="dialog" aria-labelledby="consigne">
+    <div class="modal-dialog" role="document" >
+        <div class="modal-content" style="padding-top :0px;">
+            <div class="modal-header">
+                <h3>Consigne
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                </h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">   
+                        {{ customexercise.instruction|safe }} 
+                    </div>   
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %} 

@@ -60,14 +60,8 @@ def convert_time(duree) :
         return ""
 
 
-
-
 ########################################################################################################
 ########################################################################################################
-
-
-
-
 class Supportfile(models.Model):
 
     knowledge = models.ForeignKey(Knowledge, on_delete=models.PROTECT,  related_name='supportfiles', verbose_name="Savoir faire associé - Titre")
@@ -147,11 +141,6 @@ class Supportfile(models.Model):
         exercises = self.exercises.all()
         parcours = Parcours.objects.filter(exercises__in= exercises, author=teacher)
         return parcours
-
-
-
- 
-
 
 
 class Exercise(models.Model):
@@ -342,23 +331,6 @@ class Exercise(models.Model):
 
 
 
-    def percent_student_done_parcours_exercice(self,parcours,students_from_p_or_g):
-
-        students = students_from_p_or_g
-        nb_student = len(students)
-
-        nb_exercise_done = Studentanswer.objects.filter(student__in= students, parcours= parcours, exercise = self).values_list("student",flat= True).order_by("student").distinct().count()
- 
-        try :
-            percent = int(nb_exercise_done * 100/nb_student)
-        except : 
-            percent = 0
-        data = {}
-        data["nb"] = nb_student
-        data["percent"] = percent
-        data["nb_done"] = nb_exercise_done
-        return data
-
 
     def levels_used(self):
 
@@ -393,8 +365,8 @@ class Parcours(ModelWithCode):
     duration = models.PositiveIntegerField(default=2, blank=True, verbose_name="Temps de chargement (min.)")
     start = models.DateField(null=True, blank=True, verbose_name="Date de début de publication")
     starter = models.TimeField(null=True, blank=True, verbose_name="Heure de début de publication")
-    stop = models.DateField(null=True, blank=True, verbose_name="Date de fin de publication")
-    stopper = models.TimeField(null=True, blank=True, verbose_name="Heure de fin de publication")
+    stop = models.DateField(null=True, blank=True, verbose_name="Verrouillée à partir de")
+    stopper = models.TimeField(null=True, blank=True, verbose_name="Heure de verrouillage")
 
     vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Vignette d'accueil", blank=True, default ="")
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
@@ -415,23 +387,33 @@ class Parcours(ModelWithCode):
         return nb_relationships
 
 
+    def is_lock(self,today, timer):
+        lock = False
+        if self.stop < today and self.stopper < timer :
+            lock = True 
+        return lock
+
+
 
 
     def is_percent(self,student):
         ## Nombre de relationships dans le parcours => nbre  d'exercices
         nb_relationships =  Relationship.objects.filter(students = student, parcours=self,is_publish=1).count()
+        nb_customs =  self.parcours_customexercises.filter(students = student, is_publish=1).count()
+
         ## Nombre de réponse avec exercice unique du parcours
         studentanswers = Studentanswer.objects.filter(student=student, parcours=self).values_list("exercise",flat=True).order_by("exercise").distinct()
+        customanswerbystudent = Customanswerbystudent.objects.filter(student=student, customexercise__parcourses=self).values_list("customexercise",flat=True).order_by("customexercise").distinct()
+
+
         data = {}
-        nb_exercise_done = len(studentanswers) 
+        nb_exercise_done = len(studentanswers) + len(customanswerbystudent) 
+        data["nb"] = nb_exercise_done
+        data["nb_total"] = nb_relationships+nb_customs
         try :
-            data["pc"] = int(nb_exercise_done * 100/nb_relationships)
-            data["nb"] = nb_exercise_done
-            data["nb_total"] = nb_relationships
+            data["pc"] = int(nb_exercise_done * 100/(nb_relationships+nb_customs))
         except :
             data["pc"] = 0
-            data["nb"] = nb_exercise_done
-            data["nb_total"] = nb_relationships
         return data
 
 
@@ -702,11 +684,24 @@ class Relationship(models.Model):
 
         return header 
 
-########################################################################################################################################### 
-########################################################################################################################################### 
-######################################################### FIN  Types de question ########################################################## 
-########################################################################################################################################### 
-########################################################################################################################################### 
+
+
+    def percent_student_done_parcours_exercice(self,parcours):
+
+        students = self.students.all()
+        nb_student = len(students)
+
+        nb_exercise_done = Studentanswer.objects.filter(student__in= students, parcours= parcours, exercise = self.exercise).values_list("student",flat= True).order_by("student").distinct().count()
+ 
+        try :
+            percent = int(nb_exercise_done * 100/nb_student)
+        except : 
+            percent = 0
+        data = {}
+        data["nb"] = nb_student
+        data["percent"] = percent
+        data["nb_done"] = nb_exercise_done
+        return data
 
 
 class Studentanswer(models.Model):
@@ -739,15 +734,13 @@ class Resultexercise(models.Model):  # Last result
 
 
 
-class Answercomment(models.Model): # Commentaire pour les exercices non autocorrigé coté enseignant
+class Comment(models.Model): # Commentaire du l'enseignant vers l'élève pour les exercices non autocorrigé coté enseignant
 
-    relationship = models.ForeignKey(Relationship,  on_delete=models.PROTECT,   related_name='relationship_answer', editable=False)
-    student = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='student_answer', editable=False)
-    comment = models.TextField( default="", null=True,   editable=False) 
-    date = models.DateTimeField(auto_now_add=True)
+    teacher = models.ForeignKey(Teacher,  on_delete=models.CASCADE, blank=True,  related_name='teacher_comment', editable=False)
+    comment = models.TextField() 
 
     def __str__(self):        
-        return "{}".format(self.relationship.exercise.knowledge.name)
+        return "{} : {}".format(self.comment, self.teacher)
 
 
 
@@ -759,10 +752,242 @@ class Writtenanswerbystudent(models.Model): # Commentaire pour les exercices non
     # rendus
     imagefile = models.ImageField(upload_to= file_directory_student, blank = True, null=True,   verbose_name="Scan ou image ou Photo", default="")
     answer = RichTextUploadingField( default="", null=True,  blank=True, ) 
-
+    comment = models.TextField( default="", null=True,   editable=False) # Commentaire de l'enseignant sur l'exercice
 
     def __str__(self):        
         return "{}".format(self.relationship.exercise.knowledge.name)
+
+
+########################################################################################################################################### 
+########################################################################################################################################### 
+############################################################ Exercice customisé ###########################################################
+########################################################################################################################################### 
+########################################################################################################################################### 
+class Customexercise(ModelWithCode):
+
+    instruction = RichTextUploadingField( verbose_name="Consigne*") 
+    teacher = models.ForeignKey(Teacher, related_name="teacher_customexercises", blank=True, on_delete=models.PROTECT)
+    calculator = models.BooleanField(default=0, verbose_name="Calculatrice ?")
+ 
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date de création")
+    date_modified = models.DateTimeField(auto_now=True, verbose_name="Date de modification")
+    #### pour donner une date de remise - Tache     
+    start = models.DateTimeField(null=True, blank=True, verbose_name="A partir de")
+    date_limit = models.DateTimeField(null=True, blank=True, verbose_name="Date limite du rendu")
+    lock = models.DateTimeField(null=True, blank=True, verbose_name="Verrouillé à partir de")
+
+    imagefile = models.ImageField(upload_to=vignette_directory_path, blank=True, verbose_name="Vignette d'accueil", default="")
+
+    duration = models.PositiveIntegerField(default=15, blank=True, verbose_name="Durée estimée (min.)")
+    
+    skills = models.ManyToManyField(Skill, blank=True, related_name='skill_customexercises', verbose_name="Compétences évaluées")
+    knowledges = models.ManyToManyField(Knowledge, blank=True, related_name='knowledge_customexercises', verbose_name="Savoir faire évalués")
+    parcourses = models.ManyToManyField(Parcours, blank=True, related_name='parcours_customexercises', verbose_name="Parcours attachés")
+    students = models.ManyToManyField(Student, blank=True, related_name='students_customexercises' )   
+
+    is_python = models.BooleanField(default=0, verbose_name="Python ?")
+    is_scratch = models.BooleanField(default=0, verbose_name="Scratch ?")
+    is_file = models.BooleanField(default=0, verbose_name="Fichier ?")
+    is_image = models.BooleanField(default=0, verbose_name="Image/Scan ?")
+    is_text = models.BooleanField(default=0, verbose_name="Texte ?")
+    is_mark = models.BooleanField(default=0, verbose_name="Notation ?")
+    mark = models.PositiveIntegerField(default=0, verbose_name="Sur ?")
+    is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
+    ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
+
+    file_cor = models.ImageField(upload_to=vignette_directory_path, blank=True, verbose_name="Fichier de correction", default="")
+    video_cor = models.CharField(max_length = 100, blank=True, verbose_name="Code de la vidéo Youtube", default="")
+    is_publish_cor = models.BooleanField(default=0, verbose_name="Publié ?")    
+
+    def __str__(self):       
+        return "{}".format(self.instruction)
+ 
+
+    def percent_student_done_parcours_exercice(self, parcours):
+
+        students = self.students.all()
+        nb_student = len(students)
+        nb_exercise_done = Customanswerbystudent.objects.filter(student__in= students, customexercise__parcourses = parcours, customexercise = self).values_list("student",flat= True).order_by("student").distinct().count()
+        
+        try :
+            percent = int(nb_exercise_done * 100/nb_student)
+        except : 
+            percent = 0
+        data = {}
+        data["nb"] = nb_student
+        data["percent"] = percent
+        data["nb_done"] = nb_exercise_done
+        return data
+
+    def is_done(self,student):
+        done = False
+        if Customanswerbystudent.objects.filter(student=student, customexercise = self).exists():
+            done = True
+        return done
+
+
+    def score_student_for_this(self,student):
+
+        correction = Customanswerbystudent.objects.filter(student=student, customexercise = self ).exclude(is_corrected=1)
+
+        if correction.exists() :
+            cor = correction.last()
+            try :
+                score = int(cor.point)
+            except:
+                score = "C"
+        else :
+            score = False
+
+        return score
+
+    def is_corrected_for_this(self,student,parcours): # devoir corrigé
+        correction = Customanswerbystudent.objects.filter(student=student, customexercise = self, parcours =parcours,is_corrected=1)
+        is_corrected = False
+        if correction.exists() :
+            is_corrected = True
+        return is_corrected
+
+
+
+    def is_lock(self,today):
+        locker = False
+        try :
+            if self.lock < today :
+                locker = True
+        except :
+            pass 
+        return locker
+
+
+    def is_submit(self,parcours,student):
+        submit = False
+        if Customanswerbystudent.objects.filter(customexercise = self, parcours = parcours, student = student).exclude(is_corrected=1).exists() :
+            submit = True          
+        return submit
+
+
+    def result_k_s(self,k_s, student, parcours_id,typ):
+        Stage = apps.get_model('school', 'Stage')
+
+        if typ == 1 :
+            if Correctionskillcustomexercise.objects.filter(customexercise = self, parcours_id = parcours_id, student = student, skill = k_s).exists() :
+                c = Correctionskillcustomexercise.objects.get(customexercise = self, parcours_id = parcours_id, student = student, skill = k_s)    
+                point = int(c.point)
+            else :
+                point = -1  
+        else :
+            if Correctionknowledgecustomexercise.objects.filter(customexercise = self, parcours_id = parcours_id, student = student, knowledge = k_s).exists() :
+                c = Correctionknowledgecustomexercise.objects.get(customexercise = self, parcours_id = parcours_id, student = student, knowledge = k_s)    
+                point = int(c.point)   
+            else :
+                point = -1  
+ 
+        if student.user.school :
+            school = student.user.school
+            stage = Stage.objects.get(school = school)
+        else : 
+            stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
+ 
+        if point > stage.up :
+            level = 4
+        elif point > stage.medium :
+            level = 3
+        elif point > stage.low :
+            level = 2
+        elif point > -1 :
+            level = 1
+        else :
+            level = 0
+        return level
+
+
+    def mark_to_this(self,student,parcours_id):
+        data = {}
+        if Customanswerbystudent.objects.filter(customexercise = self, parcours_id = parcours_id, student = student,is_corrected=1).exists() :
+            c = Customanswerbystudent.objects.get(customexercise = self, parcours_id = parcours_id, student = student,is_corrected=1)
+            data["is_marked"] = True
+            data["marked"] = c.point
+        else :
+            data["is_marked"] = False
+            data["marked"] = ""            
+
+        return data
+
+
+
+    def all_results_custom(self,student,parcours): # résultats vue élève
+        data = {}
+        if Customanswerbystudent.objects.filter(customexercise = self, parcours = parcours, student = student,is_corrected=1).exists() :
+            c = Customanswerbystudent.objects.get(customexercise = self, parcours = parcours, student = student,is_corrected=1)
+            data["is_corrected"] = True            
+            data["comment"] = c.comment
+            data["point"] = c.point
+            c_skills = Correctionskillcustomexercise.objects.filter(customexercise = self, parcours = parcours, student = student)
+            c_knowledges = Correctionknowledgecustomexercise.objects.filter(customexercise = self, parcours = parcours, student = student)
+            data["skills"] = c_skills
+            data["knowledges"] = c_knowledges
+        else :
+            data["is_corrected"] = False
+            data["comment"] = False           
+            data["skills"] = []
+            data["knowledges"] = []
+            data["point"] = False
+        return data
+
+
+
+
+class Customanswerbystudent(models.Model): # Commentaire et note pour les exercices customisés coté enseignant
+
+    customexercise = models.ForeignKey(Customexercise,  on_delete=models.PROTECT,   related_name='customexercise_custom_answer', editable=False)
+    parcours = models.ForeignKey(Parcours,  on_delete=models.PROTECT,   related_name='parcours_custom_answer', editable=False)    
+    student = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='student_custom_answer', editable=False)
+    date = models.DateTimeField(auto_now_add=True)
+    # rendus
+    imagefile = models.ImageField(upload_to= file_directory_student, blank = True, null=True,   verbose_name="Scan ou image ou Photo", default="")
+    answer = RichTextUploadingField( default="", null=True,  blank=True, ) 
+    # eval prof
+    comment = models.TextField( default="", null=True) 
+    point = models.CharField(default="", max_length=10, verbose_name="Note")
+    is_corrected = models.BooleanField( default=0, editable=False ) 
+
+    def __str__(self):        
+        return "{}".format(self.customexercise)
+
+    class Meta:
+        unique_together = ['student', 'parcours', 'customexercise']
+
+
+class Correctionskillcustomexercise(models.Model): # Evaluation des compétences pour les exercices customisés coté enseignant 
+
+    customexercise = models.ForeignKey(Customexercise,  on_delete=models.PROTECT,   related_name='customexercise_correctionskill', editable=False)
+    parcours = models.ForeignKey(Parcours,  on_delete=models.PROTECT,   related_name='parcours_customskill_answer', editable=False)    
+    student = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='student_correctionskill', editable=False)
+    skill = models.ForeignKey(Skill,  on_delete=models.PROTECT,   related_name='skill_correctionskill', editable=False)
+    date = models.DateTimeField(auto_now_add=True)
+    point = models.PositiveIntegerField(default=-1,  editable=False)
+    
+    def __str__(self):        
+        return "{}".format(self.customexercise)
+
+    class Meta:
+        unique_together = ['student', 'customexercise','skill']
+
+class Correctionknowledgecustomexercise(models.Model): # Evaluation des savoir faire pour les exercices customisés coté enseignant
+
+    customexercise = models.ForeignKey(Customexercise,  on_delete=models.PROTECT,   related_name='customexercise_correctionknowledge', editable=False)
+    parcours = models.ForeignKey(Parcours,  on_delete=models.PROTECT,   related_name='parcours_customknowledge_answer', editable=False)    
+    student = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='student_correctionknowledge', editable=False)
+    knowledge = models.ForeignKey(Knowledge,  on_delete=models.PROTECT,   related_name='knowledge_correctionknowledge', editable=False)
+    date = models.DateTimeField(auto_now_add=True)
+    point = models.PositiveIntegerField(default=-1,  editable=False)
+    
+    def __str__(self):        
+        return "{}".format(self.customexercise)
+
+    class Meta:
+        unique_together = ['student', 'customexercise','knowledge']
 
 
 
@@ -891,7 +1116,7 @@ class Mastering(models.Model):
 
     def is_done(self,student): 
         is_do = False  
-        if Mastering_done.objects.filter(mastering = self, student = student).count()> 0 :  
+        if Mastering_done.objects.filter(mastering = self, student = student).count() > 0 :  
             is_do = True  
         return is_do       
 

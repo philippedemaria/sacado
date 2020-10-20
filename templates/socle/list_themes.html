@@ -2,22 +2,6 @@
 {% load static %}
 {% load widget_tweaks %}
 
-
-
-{% block general_js %}
-    {% if item %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-action2.js' %}"></script>
-    {% else %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-index.js' %}"></script>
-    {% endif %}
-{% endblock %}
-
-
- 
-
-
-
- 
 {% block page_title %}
      Thèmes  
 {% endblock %}    

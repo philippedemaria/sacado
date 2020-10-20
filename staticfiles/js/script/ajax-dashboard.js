@@ -170,7 +170,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 let exercise_id =  $(this).attr("data-exercise_id");  
                 let parcours_id =  $(this).attr("data-parcours_id");  
                 let num_exo =  $(this).attr("data-num_exo");  
-
+                let custom =  $(this).attr("data-custom"); 
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
                 $.ajax({
                     url: '../../../../qcm/ajax_detail_parcours/'  ,
@@ -178,7 +178,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                         'exercise_id': exercise_id,
                         'parcours_id': parcours_id,
                         'num_exo': num_exo,
-
+                        'custom': custom,
                         csrfmiddlewaretoken: csrf_token,                        
                     },
                     type: "POST",
@@ -679,31 +679,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         // ================================================================================================================= 
         // =================================================================================================================
 
-       /* $('#create_section').click(function(event) {
-            let value = $('#section_fill').val();  
-            let subtitle = $('#subtitle').val(); 
-            let parcours_id = $('#parcours_id').val(); 
-            if (subtitle=="1") { subtitle = 1;} else { subtitle = 0;}
-
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-
-            $.ajax({
-                url: '../../ajax/create_title_parcours',
-                data: {
-                    'value': value,
-                    'subtitle': subtitle,
-                    'parcours_id': parcours_id,
-
-                    csrfmiddlewaretoken: csrf_token,                        
-                },
-                type: "POST",
-                dataType: "json",
-                success: function (data) {
-                $(data.html).insertBefore( $('#miseEnAttenteDashboard').children()[0] );
-                }
-            });
-        });
-*/
+ 
 
         
          $('#create_section').submit(function(event) {
@@ -864,6 +840,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 let relationship_id = $(this).attr("data-relationship_id");
                 let statut = $(this).attr("data-statut");
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                let custom = $(this).attr("data-custom");
+
+
 
                 $.ajax(
                     {
@@ -872,6 +851,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                         data: {
                             'relationship_id': relationship_id,
                             'statut': statut,
+                            'custom': custom,
                             csrfmiddlewaretoken: csrf_token
                         },
                         url: "../../ajax/publish" ,
@@ -945,7 +925,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
             function display_custom_modal($actionner,$target){
   
-
                 $actionner.on('click', function (event) {
                     let relationship_id = $(this).attr("data-relationship_id");
                     $($target+relationship_id).toggle();
@@ -1136,14 +1115,20 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         // ==================================================================================================
             $(".copy").on("click", function() {
 
+                let custom = $(this).attr("data-custom");
                 let parcours_id = $(this).attr("data-parcours_id");
                 let exercise_id = $(this).attr("data-exercise_id");  
                 let relationship_id = $(this).attr("data-relationship_id");  
- 
-                if (!confirm("Pour coller dans une page, sélectionner et copier (CTRL+C) :                    https://sacado.xyz/qcm/"+parcours_id+"/"+exercise_id+"/")) return false;
-                    $("#share"+relationship_id).toggle();
-                }
 
+                if (custom==1) {
+                    if (alert("Pour coller dans une page, sélectionner et copier (CTRL+C) :                    https://sacado.xyz/qcm/write_custom_exercise/"+exercise_id+"/"+parcours_id)) ;
+                        $("#custom_share"+exercise_id).hide();
+                    }
+                    else {
+                    if (alert("Pour coller dans une page, sélectionner et copier (CTRL+C) :                    https://sacado.xyz/qcm/"+parcours_id+"/"+exercise_id+"/")) ;
+                        $("#share"+relationship_id).hide();
+                    }
+                }
                 );
 
 
@@ -1197,6 +1182,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 let relationship_id = $(this).attr("data-relationship_id");
                 let type = $(this).attr("data-type");
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                let custom = $(this).attr("data-custom");
 
                 console.log(type,  relationship_id) ; 
                 $("#loading"+relationship_id).html("<i class='fa fa-spinner fa-pulse fa-fw'></i>"); 
@@ -1205,6 +1191,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     datas = {
                             'relationship_id': relationship_id,
                             'dateur': dateur,
+                            'custom': custom,
                             'type': type,
                             csrfmiddlewaretoken: csrf_token
                         } ;
