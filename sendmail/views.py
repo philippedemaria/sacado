@@ -11,8 +11,7 @@ from django.core.exceptions import PermissionDenied
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from sendmail.decorators import user_is_email_teacher
+from sendmail.decorators import user_is_email_teacher, user_is_active
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 import re
@@ -38,8 +37,6 @@ def list_emails(request):
 
         studentanswers = Studentanswer.objects.filter(student__user__in =  users).order_by("-date")[:50]
         tasks = Relationship.objects.filter(parcours__teacher = teacher,  exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")[:50] 
-
-        #import pdb;pdb.set_trace()
         sent_emails = Email.objects.distinct().filter(author=user).order_by("-today")
         emails = Email.objects.distinct().filter(receivers=user).order_by("-today")
         form = EmailForm(request.POST or None, request.FILES or None)
@@ -68,7 +65,7 @@ def list_emails(request):
         raise PermissionDenied
 
 
-
+@user_is_active
 def create_email(request):
  
 	form = EmailForm(request.POST or None,request.FILES or None)
@@ -110,11 +107,6 @@ def create_email(request):
 	return redirect('emails')
 
 
- 
-
-
-
-
 @user_is_email_teacher
 def delete_email(request,id):
     email = Email.objects.get(id=id)
@@ -124,18 +116,19 @@ def delete_email(request,id):
 
 
 
+
 def show_email(request):
 	email_id = int(request.POST.get("email_id"))
 	email = Email.objects.get(id=email_id)
-	form = EmailForm(request.POST or None,request.FILES or None)
 	data = {} 
-
-	html = render_to_string('sendmail/show.html',{ 'email' : email  , 'form' : form  , 'communications': [],  })
-	data['html'] = html 		
+	if request.user == email.author or request.user in email.receivers.all() :
+		form = EmailForm(request.POST or None,request.FILES or None)
+		html = render_to_string('sendmail/show.html',{ 'email' : email  , 'form' : form  , 'communications': [],  })
+		data['html'] = html
+	else :
+		data['html'] = ""		
 
 	return JsonResponse(data)
-
-
 
 
 def list_communications(request):
@@ -143,6 +136,7 @@ def list_communications(request):
 	form = CommunicationForm(request.POST or  None)
 	context = {'form': form,  'communications': communications,  } 
 	return render(request, 'sendmail/list_communications.html', context)
+
 
 
 @csrf_exempt

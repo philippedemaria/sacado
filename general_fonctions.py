@@ -31,8 +31,14 @@ def unescape_html(string):
     return string
 
 def dt_naive_to_timezone(naive_date,timezone_user):
-    naive_dt = datetime.combine(naive_date, datetime.min.time())
-    tz = pytz.timezone(timezone_user)
-    utc_dt = tz.localize(naive_dt, is_dst=None).astimezone(pytz.utc)
+
+    try :
+        naive_dt = datetime.combine(naive_date, datetime.min.time())
+        tz = pytz.timezone(timezone_user)
+        utc_dt = tz.localize(naive_dt, is_dst=None).astimezone(pytz.utc)
+    except :
+        naive_dt = datetime.combine(naive_date, datetime.min.time())
+        tz = pytz.timezone("Europe/Paris")
+        utc_dt = tz.localize(naive_dt, is_dst=None).astimezone(pytz.utc)        
     return utc_dt
  

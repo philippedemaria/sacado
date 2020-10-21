@@ -59,7 +59,6 @@ def is_manager_of_this_school(function):
     def wrap(request, *args, **kwargs):
 
         users = User.objects.filter(is_manager=1, school=request.user.school)
-
         user = request.user
 
         if user in users or user.is_superuser:
@@ -77,6 +76,17 @@ def can_register(function):
         user = request.user
 
         if user in users or user.is_superuser:
+            return function(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+    return wrap
+
+
+
+def user_is_admin_school(function): 
+    def wrap(request, *args, **kwargs):
+
+        if user.is_manager:
             return function(request, *args, **kwargs)
         else:
             raise PermissionDenied

@@ -6,7 +6,8 @@ from .models import School, Country  , Stage
 from school.forms import SchoolForm, CountryForm, GroupForm, StageForm
 from group.views import include_students
 from group.models import Group, Sharing_group
-from account.decorators import is_manager_of_this_school 
+from account.decorators import is_manager_of_this_school
+from socle.decorators import user_is_superuser
 from account.models import User, Teacher, Student
 from account.forms import UserForm , StudentForm ,NewUserSForm
 from django.core.mail import send_mail
@@ -43,14 +44,14 @@ def get_username(ln, fn):
             un = un + str(i)
     return un
 
-
+@user_is_superuser
 def list_schools(request):
 	schools = School.objects.all()
 	return render(request, 'school/lists.html', { 'communications' : [], 'schools': schools})
 
 
 
-
+@user_is_superuser
 def create_school(request):
 	form = SchoolForm(request.POST or None)
 	
@@ -62,7 +63,7 @@ def create_school(request):
 
 	return render(request,'school/_form.html', { 'communications' : [], 'form':form})
 
-
+@user_is_superuser
 def update_school(request,id):
 	school = School.objects.get(id=id)
 	form = SchoolForm(request.POST or None, instance=school)
@@ -73,7 +74,7 @@ def update_school(request,id):
 
 	return render(request,'school/_form.html', {'form':form,  'communications' : [],'school':school})
 
-
+@user_is_superuser
 def delete_school(request,id):
 	school = School.objects.get(id=id)
 	school.delete()
@@ -83,12 +84,12 @@ def delete_school(request,id):
 
 
 
-
+@user_is_superuser
 def list_countries(request):
 	countries = Country.objects.all()
 	return render(request,'school/lists_country.html', { 'communications' : [], 'countries':countries})
 
-
+@user_is_superuser
 def create_country(request):
 	form = CountryForm(request.POST or None,request.FILES or None )
 	
@@ -98,7 +99,7 @@ def create_country(request):
 
 	return render(request,'school/country_form.html', { 'communications' : [], 'form':form})
 
-
+@user_is_superuser
 def update_country(request,id):
 	country = Country.objects.get(id=id)
 	form = CountryForm(request.POST or None,request.FILES or None, instance=country)
@@ -109,7 +110,7 @@ def update_country(request,id):
 
 	return render(request,'school/country_form.html', { 'communications' : [], 'form':form, 'country':country})
 
-
+@user_is_superuser
 def delete_country(request,id):
 	country = Country.objects.get(id=id)
 	country.delete()

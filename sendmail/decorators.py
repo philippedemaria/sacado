@@ -16,4 +16,12 @@ def user_is_email_teacher(function):
     return wrap
 
 
+
+def user_is_active(function):
+    def wrap(request, *args, **kwargs):
  
+        if request.user.is_active :
+            return function(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+    return wrap 

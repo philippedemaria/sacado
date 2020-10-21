@@ -18,6 +18,7 @@ import pytz
 import uuid
 import os
 from itertools import chain
+from account.decorators import is_manager_of_this_school
 
 def index(request):
 
@@ -233,7 +234,7 @@ def change_color(filename, color, code):
         file.write(filedata)
 
 
-
+@is_manager_of_this_school
 def admin_tdb(request):
     school = request.user.school
     nb_teachers = User.objects.filter(school=school, user_type=2).count()
@@ -277,3 +278,6 @@ def gestion_files(request):
 def get_cookie(request):
     request.session["cookie"] = "accept"
     return redirect('index')
+
+
+ 

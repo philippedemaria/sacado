@@ -44,7 +44,7 @@ if PRODUCTION:
 else:
     # configuration développement
     #DEBUG = False # False comme en production
-    DEBUG = True # True en développpement
+    DEBUG = False # True en développpement
     ALLOWED_HOSTS = ["*"]
     SECRET_KEY = '85umr_$zf2bd58xl)nzf)i*jh)o5h*dp%*3e@pqg+ijem=t1xq'
 
