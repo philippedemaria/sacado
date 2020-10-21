@@ -708,10 +708,10 @@ def detail_student_all_views(request, id):
  
         nav = navigation(group, id)
         context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'students' : students ,  'group' : group , 'communications' : [], 'today' : today , 'form' : form , 
-                   'student': student, 'parcours': None, 'sprev_id': nav[0], 'snext_id': nav[1] }
+                   'student': student, 'parcours': None, 'sprev_id': nav[0], 'snext_id': nav[1] , 'teacher' : teacher }
     else:
         group = Group.objects.filter(students=student).last()
-        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'communications' : [], 'group' : group ,  'today' : today , 
+        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'communications' : [], 'group' : group ,  'today' : today  , 'teacher' : None , 
                    'student': student, 'parcours': None, 'sprev_id': None, 'snext_id': None}
 
 

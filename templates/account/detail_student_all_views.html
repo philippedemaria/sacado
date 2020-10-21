@@ -42,6 +42,8 @@
                     <tr>
                         <td>
                             <h2> Suivi par savoir faire
+
+                                {% if teacher %}
                                 <small>
                                     <a href="#" data-toggle='modal' class="pull-right btn btn-danger"
                                                 data-target='#writer'  
@@ -49,6 +51,8 @@
                                         Ecrire un message à {{ student.user }}
                                     </a>
                                 </small>
+                                {% endif %}
+
                         </h2> 
                         </td>
                         <td>
