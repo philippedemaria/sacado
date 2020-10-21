@@ -1,4 +1,4 @@
-from qcm.models import Parcours, Course, Relationship
+from qcm.models import Parcours, Course, Relationship,Customexercise
 from account.models import Teacher, Student
 from django.core.exceptions import PermissionDenied
 from group.models import Sharing_group
@@ -83,5 +83,14 @@ def user_is_relationship_teacher(function):
 	return wrap
 
 
+def user_is_customexercice_teacher(function):
+	def wrap(request, *args, **kwargs):
+		customexercise = Customexercise.objects.get(pk=kwargs['id'])
+		teacher = Teacher.objects.get(user= request.user)
+		if customexercise.teacher == teacher   :
+			return function(request, *args, **kwargs)
+		else:
+			raise PermissionDenied
 
+	return wrap
  

@@ -732,8 +732,6 @@ class Resultexercise(models.Model):  # Last result
     class Meta:
         unique_together = ['student', 'exercise']
 
-
-
 class Comment(models.Model): # Commentaire du l'enseignant vers l'élève pour les exercices non autocorrigé coté enseignant
 
     teacher = models.ForeignKey(Teacher,  on_delete=models.CASCADE, blank=True,  related_name='teacher_comment', editable=False)
@@ -741,8 +739,6 @@ class Comment(models.Model): # Commentaire du l'enseignant vers l'élève pour l
 
     def __str__(self):        
         return "{} : {}".format(self.comment, self.teacher)
-
-
 
 class Writtenanswerbystudent(models.Model): # Commentaire pour les exercices non autocorrigé coté enseignant
 
@@ -935,9 +931,6 @@ class Customexercise(ModelWithCode):
             data["point"] = False
         return data
 
-
-
-
 class Customanswerbystudent(models.Model): # Commentaire et note pour les exercices customisés coté enseignant
 
     customexercise = models.ForeignKey(Customexercise,  on_delete=models.PROTECT,   related_name='customexercise_custom_answer', editable=False)
@@ -957,7 +950,6 @@ class Customanswerbystudent(models.Model): # Commentaire et note pour les exerci
 
     class Meta:
         unique_together = ['student', 'parcours', 'customexercise']
-
 
 class Correctionskillcustomexercise(models.Model): # Evaluation des compétences pour les exercices customisés coté enseignant 
 
@@ -989,11 +981,9 @@ class Correctionknowledgecustomexercise(models.Model): # Evaluation des savoir f
     class Meta:
         unique_together = ['student', 'customexercise','knowledge']
 
-
-
 ########################################################################################################################################### 
 ########################################################################################################################################### 
-######################################################### FIN  Types de question ########################################################## 
+######################################################### FIN  Remediation       ########################################################## 
 ########################################################################################################################################### 
 ########################################################################################################################################### 
 
@@ -1131,3 +1121,44 @@ class Mastering_done(models.Model):
         return "{}".format(self.mastering)
 
 
+########################################################################################################################################### 
+########################################################################################################################################### 
+################################################   Mastering  from customexercise       ################################################### 
+########################################################################################################################################### 
+########################################################################################################################################### 
+
+
+class Masteringcustom(models.Model):
+
+    customexercise = models.ForeignKey(Customexercise, related_name="customexercise_mastering_custom", on_delete=models.PROTECT, verbose_name="Exercice")
+    consigne = models.CharField(max_length=255, default='',  blank=True,   verbose_name="Consigne")   
+    video = models.CharField(max_length=50, default='',  blank=True,   verbose_name="code de vidéo Youtube")   
+    mediation = models.FileField(upload_to= directory_path_mastering, verbose_name="Fichier", default="", null = True, blank= True) 
+    writing = models.BooleanField( default=0,  verbose_name="Page d'écriture", ) 
+    duration = models.PositiveIntegerField(  default=15,  blank=True,  verbose_name="Durée estimée")    
+
+    scale = models.PositiveIntegerField(default=3, editable= False) 
+    ranking = models.PositiveIntegerField(default=0,  editable= False) 
+    exercise = models.ForeignKey(Exercise, related_name = "exercise_mastering_custom", on_delete=models.PROTECT, editable=False, default="", null = True, blank= True )   
+    courses = models.ManyToManyField(Course, blank=True, related_name='courses_mastering_custom')
+    
+    def __str__(self):
+        return "{}".format(self.customexercise)
+
+
+
+    def is_done(self,student): 
+        is_do = False  
+        if Masteringcustom_done.objects.filter(mastering = self, student = student).count() > 0 :  
+            is_do = True  
+        return is_do       
+
+
+class Masteringcustom_done(models.Model):
+
+    mastering = models.ForeignKey(Masteringcustom, related_name="mastering_custom_done", editable=False, on_delete=models.PROTECT, verbose_name="Exercice")
+    student = models.ForeignKey(Student, on_delete=models.PROTECT, editable=False, related_name='students_mastering_custom_done')
+    writing = RichTextUploadingField( blank=True, verbose_name="Texte*") 
+    
+    def __str__(self):
+        return "{}".format(self.mastering)

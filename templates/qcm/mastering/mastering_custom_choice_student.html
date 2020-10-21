@@ -1,0 +1,64 @@
+{% load item_tags %}
+{% get_done m student as is_done %}
+
+{% if m.writing %}
+    <div class="card_mastering"> 
+        <div class="title_mastering title_space cursor_normal" title="{{ m.consigne }}"  ><i class="fa fa-pencil-alt"></i> <strong>Zone de texte</strong> {% if is_done %}<i class="fa fa-check text-success"></i> {% endif %}
+            <br><br>
+            {{ m.consigne }}
+        </div>
+        <div class="consigne_mastering cursor_pointer">
+            <br><br>
+            <a href="#" data-toggle='modal' data-target='#mastering_choice_student' class="btn btn-mastering select_support_mastering_custom"  data-mastering_id="{{ m.id  }}">Ecrire un texte</a>
+        </div>  
+    </div>
+{% elif m.video != "" %}
+    <div class="card_mastering" data-mastering_id="{{ m.id  }}">
+        <div class="title_mastering title_space cursor_normal"><i class="fa fa-video"></i> <strong>Vidéo</strong>   {% if is_done %}<i class="fa fa-check text-success"></i> {% endif %}
+                <br><br>
+                {{ m.consigne }}
+        </div>    
+            <div class="consigne_mastering cursor_pointer"><br><br>
+                <a href="#" data-toggle='modal' data-target='#mastering_choice_student' class="btn btn-mastering select_support_mastering_custom"  data-mastering_id="{{ m.id  }}">Visionner la vidéo</a>
+            </div>  
+    </div>
+{% elif m.exercise %}
+    <div class="card_mastering" data-mastering_id="{{ m.id  }}"> 
+        <div class="title_mastering title_space cursor_normal" title="{{ m.consigne }}"  ><i class="fa fa-desktop"></i> <strong>Exercice</strong> {% if is_done %}<i class="fa fa-check text-success"></i> {% endif %}
+        </div>
+        <div class="card_mastering_w"> 
+            <a href="#" data-toggle='modal' data-target='#mastering_choice_student' class="select_support_mastering_custom" data-mastering_id="{{ m.id  }}">
+                <img src="{{ m.exercise.supportfile.imagefile.url }}" width="150">
+            </a>
+        </div>
+    </div>                     
+{% elif m.courses.all|length > 0 %}  
+    {% for c in m.courses.all %}
+        <div class="card_mastering" data-mastering_id="{{ m.id  }}">
+            <div class="title_mastering title_space cursor_normal" title="{{ c.title }}"><i class="fa fa-desktop"></i> <strong>Cours</strong> {% if is_done %}<i class="fa fa-check text-success"></i> {% endif %}
+                <br><br>
+                {{ m.consigne }}
+            </div>
+            <div class="consigne_mastering cursor_pointer">
+                <div style="font-weight:600; font-style:normal" >
+                    {{ c.title  }}                
+                </div> 
+                <br>
+                <a href="#" data-toggle='modal' data-target='#mastering_choice_student' class="btn btn-mastering select_support_mastering_custom" data-mastering_id="{{ m.id  }}">Lire le cours</a>
+            </div>  
+        </div>
+    {% endfor %}  
+{% elif m.mediation != "" %}
+    <div class="card_mastering" data-mastering_id="{{ m.id  }}"> 
+        <div class="title_mastering title_space cursor_normal" title="{{ m.consigne }}"  ><i class="fa fa-pencil-alt"></i> <strong>Fichier</strong>  {% if is_done %}<i class="fa fa-check text-success"></i> {% endif %}
+            <br><br>
+            {{ m.consigne }}
+        </div>
+        <div class="consigne_mastering cursor_pointer">
+            <br><br>
+            <a href="{{ m.mediation.url }}" class="btn btn-mastering" target="_blank">
+                Télécharger le fichier
+            </a>
+        </div>  
+    </div>
+{% endif %} 

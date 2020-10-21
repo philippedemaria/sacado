@@ -492,3 +492,5 @@ def get_custom_score(obj, customexercise, student, parcours):
     renvoie le résultat d'un exo custom coté élève
     """
     return obj.custom_score(customexercise, student, parcours)
+
+

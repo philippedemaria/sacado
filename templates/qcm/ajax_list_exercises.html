@@ -34,7 +34,7 @@
                                                     <td>
                                                         <label class="container_checkbox">
                                                         <input type="checkbox"  data-exercise_id="{{ e.id }}"  {% if parcours %}  data-parcours_id="{{ parcours.id }}" class="selector_e" {% else %}
-                                                                class="selector_m"     {% endif %}
+                                                                class="selector_m"  {% endif %} {% if parcours_id %}  data-parcours_id="{{ parcours.id }}" {%endif %} value="{{ e.id }}"
                                                                 name="exercises" id="selector_e{{ e.id }}"  data-statut="{{ e_is_selected }}"
                                                                 {% if e_is_selected %}checked{% endif  %} 
                                                                  /><span class="checkmark"></span>
@@ -82,7 +82,7 @@
                                                     <td>
                                                         {% get_parcours_from_this_exercise e teacher as  my_parcours_container   %}
                                                         {% for p in my_parcours_container %}
-                                                            <div class="btn btn-info"  style="font-size: 10px;cursor:   default"">{{ p.title }} </div>
+                                                            <div class="btn btn-info"  style="font-size: 10px;cursor:default">{{ p.title }} </div>
                                                         {% endfor %}
 
                                                         {% if request.user.is_superuser  and '/admin' in request.path %}
@@ -170,35 +170,40 @@
             let scale = $("#id_scale").val(); 
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
-            console.log(exercise_id,relationship_id) ; 
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            'relationship_id': relationship_id,
+                            'exercise_id': exercise_id,
+                            'scale': scale,     
+                            'statut': statut,
+                        },
+                        url: "../../ajax_populate_mastering",
+                        success: function (data) {
 
-            $.ajax(
-                {
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        'relationship_id': relationship_id,
-                        'exercise_id': exercise_id,
-                        'scale': scale,     
-                        'statut': statut,
-                    },
-                    url: "../../ajax_populate_mastering",
-                    success: function (data) {
+                            if (data.no_store) { alert("Vous ne pouvez pas enregistrer cet exercice. Un exercice similaire est déjà dans ce parcours.")}
+                                else
+                                { 
+                                    $('#is_selected'+exercise_id).html(data.html);   
+                                    $('#selector_e'+exercise_id).attr("data-statut",data.statut);                  
+                                    $('#selector_e'+exercise_id).removeClass(data.noclass);
+                                    $('#selector_e'+exercise_id).addClass(data.class);
+                                    if(data.statut == "True") 
+                                        { $("#selector_e"+exercise_id).attr('checked', true);  } 
+                                    else { $("#selector_e"+exercise_id).attr('checked', false);  }
+                                }
 
-                        if (data.no_store) { alert("Vous ne pouvez pas enregistrer cet exercice. Un exercice similaire est déjà dans ce parcours.")}
-                            else
-                            {
-                                $('#is_selected'+exercise_id).html(data.html);   
-                                $('#selector_e'+exercise_id).attr("data-statut",data.statut);                  
-                                $('#selector_e'+exercise_id).removeClass(data.noclass);
-                                $('#selector_e'+exercise_id).addClass(data.class); 
-                            }
+                            
+
+                        }
                     }
-                }
-            )
+                )
+                           
+
         });
-
-
+ 
 
 
 

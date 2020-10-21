@@ -15,7 +15,7 @@
  
 
 {% block page_title %}
-    <span style="color:{{ relationship.parcours.color|contrast_color_title }}"><i class="fa fa-sitemap"></i> 
+    <i class="fa fa-sitemap"></i> 
     {% include 'qcm/breadcrumb.html' %} 
         Parcours de maîtrise  lié à un exercice cible</span> 
 {% endblock %}
@@ -45,27 +45,24 @@
         <div class="row">
             <div class="col-sm-12 col-lg-2">
                 <label class="label_select_checkbox">
-                    <a href="{% url 'show_this_exercise'  relationship.exercise.id   %}"  target="_blank" >
- 
-                        <img src="{{ relationship.exercise.supportfile.imagefile.url }}" width="200px">
- 
-                    </a> 
 
+                        <img src="{{ exercise.supportfile.imagefile.url }}" width="200px">
+ 
             </div>
             <div class="col-sm-12 col-lg-6">
                 <label class="label_select_checkbox">    
-                {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }} 
+                {{ exercise.supportfile.annoncement|cleanhtml|capfirst }} 
     
-                {% if relationship.exercise.supportfile.calculator %}
+                {% if exercise.supportfile.calculator %}
                   <img src="{% static 'img/calculator.png' %}" width="30px" />
                 {% else %}
                   <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
                 {% endif  %}   
                      <br>
                         <small>   
-                            <i class="fa fa-fw fa-barcode"></i> {{ relationship.exercise.supportfile.code }}  {% if relationship.exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
-                            <i class="fa fa-fw fa-clock-o"></i> {{ relationship.exercise.supportfile.duration }} minutes {% if relationship.exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
-                            <i class="fa fa-fw fa-save"></i> {{ relationship.exercise.supportfile.situation}} situation{{ relationship.exercise.supportfile.situation|pluralize}} minimum</small>
+                            <i class="fa fa-fw fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                            <i class="fa fa-fw fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                            <i class="fa fa-fw fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum</small>
                 </label>
             </div>
             {% if score  %}
@@ -88,7 +85,7 @@
         <hr style="border-top: 1px solid #ccc;">
 
         {% for m in masterings %}
-            {% include 'qcm/mastering/mastering_choice_student.html' %}
+            {% include 'qcm/mastering/mastering_custom_choice_student.html' %}
         {% endfor %}
 
 <div class="modal fade" id="mastering_choice_student" tabindex="-1" role="dialog" aria-labelledby="mastering_choice_student">

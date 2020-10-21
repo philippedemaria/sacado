@@ -8,8 +8,8 @@ from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group , Sharing_group
 from school.models import Stage
-from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Correctionknowledgecustomexercise , Correctionskillcustomexercise
-from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm , CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , MasteringForm,MasteringDoneForm ,WrittenanswerbystudentForm,CustomanswerbystudentForm
+from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Correctionknowledgecustomexercise , Correctionskillcustomexercise
+from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm
 from socle.models import  Theme, Knowledge , Level , Skill
 from django.http import JsonResponse 
 from django.core import serializers
@@ -26,7 +26,7 @@ from django.db.models import Q
 from django.core.mail import send_mail
 
 from group.decorators import user_is_group_teacher 
-from qcm.decorators import user_is_parcours_teacher, user_can_modify_this_course, student_can_show_this_course , user_is_relationship_teacher
+from qcm.decorators import user_is_parcours_teacher, user_can_modify_this_course, student_can_show_this_course , user_is_relationship_teacher, user_is_customexercice_teacher 
 from account.decorators import user_can_create, user_is_superuser
 ##############bibliothèques pour les impressions pdf  #########################
 import os
@@ -4017,14 +4017,9 @@ def ajax_course_viewer(request):
 
 #######################################################################################################################################################################
 #######################################################################################################################################################################
-##################    Demand     
+##################    Mastering     
 #######################################################################################################################################################################
 #######################################################################################################################################################################
-
-
- 
-
-
 
 def create_mastering(request,id):
     relationship = Relationship.objects.get(pk = id)
@@ -4042,8 +4037,6 @@ def create_mastering(request,id):
             nf.scale = int(request.POST.get("scale"))
             nf.save()
             form.save_m2m()
-
-            return redirect('create_mastering', id )
         else:
             print(form.errors)
 
@@ -4052,16 +4045,12 @@ def create_mastering(request,id):
 
     return render(request, 'qcm/mastering/form_mastering.html', context)
 
-
-
 @user_is_relationship_teacher 
 def parcours_mastering_delete(request,id,idm):
 
     m = Mastering.objects.get(pk = idm)
     m.delete()
     return redirect('create_mastering', id )
-
-
 
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_sort_mastering(request):
@@ -4079,22 +4068,24 @@ def ajax_sort_mastering(request):
     data = {}
     return JsonResponse(data) 
 
-
 @csrf_exempt  # PublieDépublie un exercice depuis organize_parcours
-def ajax_populate_mastering(request):  
+def ajax_populate_mastering(request): 
+    # Cette fonction est appelé pour les exercices ou pour les customexercices. Du coup pour éviter une erreur, si la relationship n'existe pas on ne fait rien, juste le css
 
     scale = int(request.POST.get("scale"))
     exercise_id = int(request.POST.get("exercise_id"))
-    relationship_id = int(request.POST.get("relationship_id"))
-    relationship = Relationship.objects.get(pk = relationship_id) 
+    rs = request.POST.get("relationship_id",None) # Permet de garder le jeu du css
+    if rs :
+        relationship_id = int(rs)
+        relationship = Relationship.objects.get(pk = relationship_id) 
     exercise = Exercise.objects.get(pk = exercise_id)
     statut = request.POST.get("statut") 
     data = {}    
 
     if statut=="true" or statut == "True":
-
-        m = Mastering.objects.get(relationship=relationship, exercise = exercise)  
-        m.delete()         
+        if rs :
+            m = Mastering.objects.get(relationship=relationship, exercise = exercise)  
+            m.delete()         
         statut = 0
         data["statut"] = "False"
         data["class"] = "btn btn-danger"
@@ -4104,15 +4095,19 @@ def ajax_populate_mastering(request):
 
     else:
         statut = 1
-        if Mastering.objects.filter(relationship=relationship, exercise = exercise).count() == 0 :
-            mastering = Mastering.objects.create(relationship=relationship, exercise = exercise, scale= scale, ranking=0)  
+        if rs :
+            if Mastering.objects.filter(relationship=relationship, exercise = exercise).count() == 0 :
+                mastering = Mastering.objects.create(relationship=relationship, exercise = exercise, scale= scale, ranking=0)  
+                data["statut"] = "True"
+                data["no_store"] = False
+
+            else :
+                data["statut"] = "False"
+                data["no_store"] = True
+           
+        else :
             data["statut"] = "True"
             data["no_store"] = False
-
-        else :
-            data["statut"] = "False"
-            data["no_store"] = True
-
 
     return JsonResponse(data) 
 
@@ -4123,24 +4118,24 @@ def mastering_student_show(request,id):
     relationship = Relationship.objects.get(pk = id)
     stage = Stage.objects.get(school= request.user.school)
     student = Student.objects.get(user= request.user)
-
     studentanswer = Studentanswer.objects.filter(student=student, exercise = relationship.exercise, parcours = relationship.parcours).last()
-    score = studentanswer.point
 
-    if score > stage.up :
-        masterings = Mastering.objects.filter(scale = 4, relationship = relationship)
-    elif score > stage.medium :
-        masterings = Mastering.objects.filter(scale = 3, relationship = relationship)
-    elif score > stage.low :
-        masterings = Mastering.objects.filter(scale = 2, relationship = relationship)
+    if studentanswer : 
+        score = studentanswer.point
+        if score > stage.up :
+            masterings = Mastering.objects.filter(scale = 4, relationship = relationship)
+        elif score > stage.medium :
+            masterings = Mastering.objects.filter(scale = 3, relationship = relationship)
+        elif score > stage.low :
+            masterings = Mastering.objects.filter(scale = 2, relationship = relationship)
+        else :
+            masterings = Mastering.objects.filter(scale = 1, relationship = relationship)
     else :
-        masterings = Mastering.objects.filter(scale = 1, relationship = relationship)
-
+        score = False
+        masterings = []
     context = { 'relationship': relationship , 'masterings': masterings , 'parcours': None , 'relationships': [] ,  'communications' : [] ,  'score': score , 'group': None, 'course': None , 'stage' : stage , 'student' : student }
 
     return render(request, 'qcm/mastering/mastering_student_show.html', context)
-
-
 
 @csrf_exempt  
 def ajax_mastering_modal_show(request):
@@ -4163,9 +4158,9 @@ def ajax_mastering_modal_show(request):
         mdone = Mastering_done.objects.filter( mastering = mastering , student = student)
         if mdone.count() == 1 :
             md = Mastering_done.objects.get( mastering = mastering , student = student)
-            form = MasteringDoneForm(instance = md )
+            form = MasteringcustomDoneForm(instance = md )
         else :
-            form = MasteringDoneForm(request.POST or None )
+            form = MasteringcustomDoneForm(request.POST or None )
     elif mastering.video != "" :
         resp = 1
     elif mastering.exercise :
@@ -4192,7 +4187,179 @@ def ajax_mastering_modal_show(request):
 
 
 
+
+
 def mastering_done(request):
+
+    mastering = Mastering.objects.get(pk = request.POST.get("mastering"))
+    student = Student.objects.get(user=request.user)
+
+    mdone = Mastering_done.objects.filter( mastering = mastering , student = student)
+
+    if mdone.count() == 0 : 
+        form = MasteringDoneForm(request.POST or None )
+    else :
+        md = Mastering_done.objects.get( mastering = mastering , student = student)
+        form = MasteringDoneForm(request.POST or None , instance = md )
+    if form.is_valid() :
+        nf = form.save(commit = False)
+        nf.student =  student
+        nf.mastering =  mastering
+        nf.save()
+
+    return redirect('mastering_student_show', mastering.relationship.id)
+
+
+
+
+
+
+
+
+#######################################################################################################################################################################
+#######################################################################################################################################################################
+##################    Mastering Custom    
+#######################################################################################################################################################################
+#######################################################################################################################################################################
+
+def create_mastering_custom(request,id,idp):
+    customexercise = Customexercise.objects.get(pk = id)
+    stage = Stage.objects.get(school= request.user.school)
+    form = MasteringcustomForm(request.POST or None, request.FILES or None, customexercise = customexercise )
+
+    parcours = Parcours.objects.get(pk= idp)
+
+    masterings_q = Masteringcustom.objects.filter(customexercise = customexercise , scale = 4).order_by("ranking")
+    masterings_t = Masteringcustom.objects.filter(customexercise = customexercise , scale = 3).order_by("ranking")
+    masterings_d = Masteringcustom.objects.filter(customexercise = customexercise , scale = 2).order_by("ranking")
+    masterings_u = Masteringcustom.objects.filter(customexercise = customexercise , scale = 1).order_by("ranking")
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    if request.method == "POST" :
+        exercise_id = request.POST.get("exercises",None)
+        if form.is_valid():
+            nf = form.save(commit = False)
+            nf.scale = int(request.POST.get("scale"))
+            nf.exercise_id = exercise_id            
+            nf.save()
+            form.save_m2m()
+        else:
+            print(form.errors)
+
+    context = {'form': form,   'customexercise': customexercise , 'parcours': parcours , 'relationships': [] ,  'communications' : [] ,  'course': None , 'stage' : stage , 'teacher' : teacher ,  'group': None,
+                'masterings_q' : masterings_q, 'masterings_t' : masterings_t, 'masterings_d' : masterings_d, 'masterings_u' : masterings_u}
+
+    return render(request, 'qcm/mastering/form_mastering_custom.html', context)
+
+
+@user_is_customexercice_teacher 
+def parcours_mastering_custom_delete(request,id,idm,idp):
+
+    m = Masteringcustom.objects.get(pk = idm)
+    m.delete()
+    return redirect('create_mastering_custom', id ,idp )
+
+@csrf_exempt # PublieDépublie un exercice depuis organize_parcours
+def ajax_sort_mastering_custom(request):
+
+    try :
+        relationship_id = request.POST.get("relationship_id")
+        mastering_ids = request.POST.get("valeurs")
+        mastering_tab = mastering_ids.split("-") 
+     
+        for i in range(len(mastering_tab)-1):
+            Mastering.objects.filter(relationship_id = relationship_id , pk = mastering_tab[i]).update(ranking = i)
+    except :
+        pass
+
+    data = {}
+    return JsonResponse(data) 
+ 
+
+def mastering_custom_student_show(request,id):
+
+    customexercise = Customexercise.objects.get(pk = id)
+    stage = Stage.objects.get(school= request.user.school)
+    student = Student.objects.get(user= request.user)
+    studentanswer = Customanswerbystudent.objects.filter(student=student, customexercise = customexercise, parcours__in= customexercise.parcourses.all()).last()
+
+    skill_answer = Correctionskillcustomexercise.objects.filter(student=student, customexercise = customexercise, parcours__in= customexercise.parcourses.all()).last()
+    
+
+    knowledge_answer = Correctionknowledgecustomexercise.objects.filter(student=student, customexercise = customexercise, parcours__in= customexercise.parcourses.all()).last()
+
+
+    if skill_answer or studentanswer or knowledge_answer : 
+        score = skill_answer.point
+        if score > stage.up :
+            masterings = Masteringcustom.objects.filter(scale = 4, customexercise = customexercise)
+        elif score > stage.medium :
+            masterings = Masteringcustom.objects.filter(scale = 3, customexercise = customexercise)
+        elif score > stage.low :
+            masterings = Masteringcustom.objects.filter(scale = 2, customexercise = customexercise)
+        else :
+            masterings = Masteringcustom.objects.filter(scale = 1, customexercise = customexercise)
+    else :
+        score = False
+        masterings = []
+
+    context = { 'customexercise': customexercise , 'masterings': masterings , 'parcours': None , 'relationships': [] ,  'communications' : [] ,  'score': score , 'group': None, 'course': None , 'stage' : stage , 'student' : student }
+
+    return render(request, 'qcm/mastering/mastering_custom_student_show.html', context)
+
+
+@csrf_exempt  
+def ajax_mastering_custom_modal_show(request):
+
+    mastering_id =  int(request.POST.get("mastering_id"))
+    mastering = Masteringcustom.objects.get( id = mastering_id)
+
+    data = {}
+    data['nocss'] = "modal-exo"
+    data['css'] = "modal-md"
+    data['duration'] = "<i class='fa fa-clock'></i> "+ str(mastering.duration)+" min."
+    data['consigne'] = "<strong>Consigne : </strong>"+ str(mastering.consigne)
+   
+    form = None
+    if mastering.writing  :
+        resp = 0
+        data['nocss'] = "modal-md"
+        data['css'] = "modal-exo"
+        student = Student.objects.get(user = request.user)
+        mdone = Masteringcustom_done.objects.filter( mastering = mastering , student = student)
+        if mdone.count() == 1 :
+            md = Masteringcustom_done.objects.get( mastering = mastering , student = student)
+            form = MasteringDoneForm(instance = md )
+        else :
+            form = MasteringDoneForm(request.POST or None )
+    elif mastering.video != "" :
+        resp = 1
+    elif mastering.exercise :
+        resp = 2
+        data['duration'] = "<i class='fa fa-clock'></i> "+ str(mastering.customexercise.duration)+" min." 
+        data['consigne'] = "Exercice"
+        data['nocss'] = "modal-md"
+        data['css'] = "modal-exo"
+    elif len(mastering.courses.all()) > 0 :
+        resp = 3
+        data['css'] = "modal-exo"
+        data['nocss'] = "modal-md"
+    elif mastering.mediation != "" :
+        resp = 4
+        data['nocss'] = "modal-md"
+        data['css'] = "modal-exo"
+
+    context = { 'mastering' : mastering , 'resp' : resp , 'form' : form }
+
+    html = render_to_string('qcm/mastering/modal_box.html',context)
+    data['html'] = html       
+
+    return JsonResponse(data)
+
+
+
+    
+
+def mastering_custom_done(request):
 
     mastering = Mastering.objects.get(pk = request.POST.get("mastering"))
     student = Student.objects.get(user=request.user)

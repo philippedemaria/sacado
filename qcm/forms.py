@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from .models import Parcours, Exercise, Remediation, Relationship, Supportfile, Course, Demand, Mastering,Mastering_done, Writtenanswerbystudent, Customexercise,Customanswerbystudent
+from .models import Parcours, Exercise, Remediation, Relationship, Supportfile, Course, Demand, Mastering,Mastering_done, Writtenanswerbystudent, Customexercise,Customanswerbystudent, Masteringcustom, Masteringcustom_done
 from account.models import Student
 from socle.models import Knowledge, Skill
 from group.models import Group
@@ -81,11 +81,6 @@ class UpdateParcoursForm(forms.ModelForm):
 			if stop <= start:
 				raise forms.ValidationError("La fin de l'évaluation ne peut pas être antérieure à son début.")
 
-
-
-
-
-
 class ExerciseForm(forms.ModelForm):
 	class Meta:
 		model = Exercise
@@ -96,19 +91,16 @@ class ExerciseForm(forms.ModelForm):
 		knowledges = Knowledge.objects.filter(id  = 0)
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
 
-
 class ExerciseKForm(forms.ModelForm):
 	class Meta:
 		model = Exercise
 		fields = '__all__'
 		exclude = ('knowledge',)
 
-
 class UpdateExerciseForm(forms.ModelForm):
 	class Meta:
 		model = Exercise
 		fields = '__all__'
-
 
 class RelationshipForm(forms.ModelForm):
 	class Meta:
@@ -116,14 +108,10 @@ class RelationshipForm(forms.ModelForm):
 		fields = '__all__'
 		exclude = ('exercise', 'parcours', 'order', 'skill')
 
-
 class RemediationForm(forms.ModelForm):
 	class Meta:
 		model = Remediation
 		fields = '__all__'
-
-
-
 
 class SupportfileForm(forms.ModelForm):
 	class Meta:
@@ -140,9 +128,6 @@ class SupportfileForm(forms.ModelForm):
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
 		self.fields['skills']  =  forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject= subject), required=False)
 
-
-
-
 class SupportfileKForm(forms.ModelForm):
 	class Meta:
 		model = Supportfile
@@ -156,9 +141,6 @@ class SupportfileKForm(forms.ModelForm):
 		knowledges = Knowledge.objects.filter(theme__subject= subject)
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
 		self.fields['skills']  =  forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject= subject), required=False)
-
-
-
 
 class UpdateSupportfileForm(forms.ModelForm):
 
@@ -175,9 +157,6 @@ class UpdateSupportfileForm(forms.ModelForm):
 		knowledges = Knowledge.objects.filter(theme__subject= subject)
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
 		self.fields['skills']  = forms.ModelMultipleChoiceField(queryset=Skill.objects.filter(subject=subject), required=False)
-
-
-
 
 class AttachForm(forms.ModelForm):
 	class Meta:
@@ -226,12 +205,31 @@ class MasteringForm (forms.ModelForm):
 		self.fields['practices'] = forms.ModelMultipleChoiceField(queryset=relations, widget=forms.CheckboxSelectMultiple,   required=False )
  
 
-
-
 class MasteringDoneForm (forms.ModelForm):
 	class Meta:
 		model = Mastering_done
 		fields = ('writing',)
+
+ 
+
+class MasteringcustomForm (forms.ModelForm):
+	class Meta:
+		model = Masteringcustom
+		fields = '__all__'
+
+	def __init__(self, *args, **kwargs):
+		customexercise = kwargs.pop('customexercise')
+		super(MasteringcustomForm, self).__init__(*args, **kwargs)
+		relations = Relationship.objects.filter(exercise__supportfile__is_title = 0, parcours__in=customexercise.parcourses.filter(is_publish=1))
+		courses = Course.objects.filter(parcours__in=customexercise.parcourses.filter(is_publish=1))
+		self.fields['practices'] = forms.ModelMultipleChoiceField(queryset=relations, widget=forms.CheckboxSelectMultiple,   required=False )
+ 
+class MasteringcustomDoneForm (forms.ModelForm):
+	class Meta:
+		model = Masteringcustom_done
+		fields = ('writing',)
+
+
 
 
 class WrittenanswerbystudentForm (forms.ModelForm):

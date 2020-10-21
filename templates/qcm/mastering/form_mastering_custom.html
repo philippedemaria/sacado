@@ -39,37 +39,36 @@
         <div class="row">
             <div class="col-sm-12 col-lg-12">
                 <label class="label_select_checkbox">
-                    <a href="{% url 'show_this_exercise'  relationship.exercise.id   %}"  target="_blank" >
  
-                        <img src="{{ relationship.exercise.supportfile.imagefile.url }}" class="imagefile">
  
-                    </a> 
-                {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }} 
+                        <img src="{{ customexercise.image.url }}" class="imagefile">
+ 
+   
+                {{ customexercise.instruction|safe }} 
     
-                {% if relationship.exercise.supportfile.calculator %}
+                {% if customexercise.calculator %}
                   <img src="{% static 'img/calculator.png' %}" width="30px" />
                 {% else %}
                   <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
                 {% endif  %}   
                      <br>
                         <small>   
-                            <i class="fa fa-fw fa-barcode"></i> {{ relationship.exercise.supportfile.code }}  {% if relationship.exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
-                            <i class="fa fa-fw fa-clock-o"></i> {{ relationship.exercise.supportfile.duration }} minutes {% if relationship.exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
-                            <i class="fa fa-fw fa-save"></i> {{ relationship.exercise.supportfile.situation}} situation{{ relationship.exercise.supportfile.situation|pluralize}} minimum</small>
+                            <i class="fa fa-fw fa-barcode"></i> {{ customexercise.code }}  {% if relationship.exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                            <i class="fa fa-fw fa-clock-o"></i> {{ customexercise.duration }} minutes  
                 </label>
             </div>
         </div>
         <hr style="border-top: 1px solid #ccc;">
 
-    <form action="#" method="POST">        {% csrf_token %}<input value="{{ relationship.id }}"  type="hidden" id="relationship_to_mastering"/>
-        <div class="row">
-            <div class="col-sm-12 col-lg-1">
+    <form action="#" method="POST">        {% csrf_token %}<input value="{{ customexercise.id }}"  type="hidden" id="customexercise_to_mastering"/>
+        <div class="row">                                   <input value="{{ parcours_id }}"  type="hidden" id="parcours_id"/>
+            <div class="col-sm-12 col-lg-1">        
                 <strong>100 % </strong>
                  <a href="#" data-toggle='modal' data-target='#mastering_choose'  class="deleted select_mastering" data-layer="4"> <i class="fa fa-plus"></i></a>
             </div>
             <div class="col-sm-12 col-lg-11 mastering_layer" id="layer4">
                 {% for m in masterings_q %}
-                    {% include 'qcm/mastering/mastering_choice.html' %}                   
+                    {% include 'qcm/mastering/mastering_custom_choice.html' %}                   
                 {% endfor %}  
             </div>
         </div>
@@ -81,7 +80,7 @@
             </div>
             <div class="col-sm-12 col-lg-11 mastering_layer" id="layer3">
                   {% for m in masterings_t %}
-                    {% include 'qcm/mastering/mastering_choice.html' %}                   
+                    {% include 'qcm/mastering/mastering_custom_choice.html' %}                   
                  {% endfor %} 
             </div>
         </div>
@@ -93,7 +92,7 @@
             </div>
             <div class="col-sm-12 col-lg-11 mastering_layer" id="layer2">
                 {% for m in masterings_d %}
-                    {% include 'qcm/mastering/mastering_choice.html' %}
+                    {% include 'qcm/mastering/mastering_custom_choice.html' %}
                 {% endfor %}                                      
             </div>
         </div>
@@ -106,7 +105,7 @@
             </div>
             <div class="col-sm-12 col-lg-11 mastering_layer" id="layer1">
                 {% for m in masterings_u %}
-                    {% include 'qcm/mastering/mastering_choice.html' %}
+                    {% include 'qcm/mastering/mastering_custom_choice.html' %}
                 {% endfor %}                    
             </div>
         </div>
@@ -121,8 +120,9 @@
                 <h1 class='thin' > Parcours de maîtrise - Sélectionner le support  <a href="#" data-dismiss="modal" class="pull-right" ><i class="fa fa-times"></i> </a> </h1>
             </div>
             <div class="modal-body">
-                <form action="{% url 'create_mastering' relationship.id %}" method="POST" enctype='multipart/form-data'>        {% csrf_token %}
-                    <input   type="hidden" id="id_scale"  name="scale" />
+                <form action="{% url 'create_mastering_custom' customexercise.id parcours.id %}" method="POST" enctype='multipart/form-data'>        
+                    {% csrf_token %}
+                    <input   type="hidden" id="id_scale"  name="scale" /> <input value="{{ parcours_id }}"  type="hidden" id="parcours_id"/>
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12"> 
                             <div class="form-group">
@@ -260,7 +260,7 @@
                                 </div>
                             </div>
                              <div class="row">
-                                <div class="col-sm-12 col-lg-8"><input value="{{ relationship.id }}"  type="hidden" name="relationship"  id="relationship"/>
+                                <div class="col-sm-12 col-lg-8"><input value="{{ customexercise.id }}"  type="hidden" name="customexercise"  id="customexercise"/>
                                     <div class="form-group">
                                         <input value="Associer" type="submit" class="btn btn-primary"/> 
                                     </div>

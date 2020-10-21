@@ -65,7 +65,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             }
             event.preventDefault();        
             pub ++ ;
-            console.log(pub) ; 
         });
 
         var show = 0 ;
@@ -581,7 +580,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 });
                 $(ui.item).css("box-shadow",  "2px 1px 2px gray");
 
-                console.log(valeurs) ; 
                 $.ajax({
                         data:   { 'valeurs': valeurs    } ,   
                         type: "POST",
@@ -612,8 +610,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     valeurs = valeurs + this_chapter_id +"-";
                 });
 
-                console.log(valeurs);
-                console.log(parcours_id);
+
                 $(ui.item).css("box-shadow", "0px 0px 0px transparent").css("background-color", "#dbcdf7").css("color", "#271942"); 
 
                 $.ajax({
@@ -984,7 +981,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
             if (codeExo.length  == 8) { 
-                            console.log(codeExo);
                             $.ajax({
                                 url: '../../ajax/infoExo',
                                 type: "POST",
@@ -1087,9 +1083,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 let relationship_id = $(this).attr("data-relationship_id");
                 let skill_id = $(this).val();
 
-                console.log(relationship_id);
-                console.log(skill_id);
-
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
                 $.ajax(
                     {
@@ -1184,7 +1177,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
                 let custom = $(this).attr("data-custom");
 
-                console.log(type,  relationship_id) ; 
                 $("#loading"+relationship_id).html("<i class='fa fa-spinner fa-pulse fa-fw'></i>"); 
                 
                 let dateur = $(this).val();
@@ -1250,8 +1242,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                         url: "../../ajax/dates" ,
                         success: function (data) {
 
-                            console.log(data);
-
                             if (data.clock) {
                                 $('#clock'+relationship_id).html("").html(data.clock); 
                                 $('#duration'+relationship_id).val(duration);                                 
@@ -1310,7 +1300,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             $('.remediation').on('click', function (event) {
                 let relationship_id = $(this).attr("data-relationship_id");
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-                console.log(relationship_id);
+
                 $.ajax(
                     {
                         type: "POST",
@@ -1333,7 +1323,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             $('.remediation_viewer').on('click', function (event) {
                 let remediation_id = $(this).attr("data-remediation_id");
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-                console.log(remediation_id);
+
                 $("#loader_shower").html("<i class='fa fa-spinner fa-pulse fa-fw fa-3x'></i>");  
                 $.ajax(
                     {

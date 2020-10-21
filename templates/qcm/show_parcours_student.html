@@ -311,9 +311,16 @@
                             <div class="card-text" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">
                                 <i class="fa fa-fw fa-barcode"></i> {{ customexercise.code }}
                                 <i class="fa fa-fw fa-clock-o"></i> {{ customexercise.duration }} min
-                                    {% if data.is_corrected %}
-                                        <span class="pull-right selector_div_result_custom" data-customexercise_id ="{{ customexercise.id }}">Résultats</span>
-                                    {% endif %}
+
+                               {% if customexercise.customexercise_mastering_custom.all|length > 0 %}
+                                <a href="{% url 'mastering_custom_student_show' customexercise.id %}" target="_blank" style="color:{{ parcours.color|contrast_color }}">
+                                    <i class="fa fa-fw fa-sitemap pull-right"></i>
+                                </a>
+                                {% endif  %}
+
+                                {% if data.is_corrected %}
+                                    <span class="pull-right selector_div_result_custom" data-customexercise_id ="{{ customexercise.id }}">Résultats</span>
+                                {% endif %}
                                 {% if customexercise.is_publish %}                            
                                     {% if customexercise.file_cor %}
                                     <a  href="#" data-toggle='modal' data-target='#customexercise_file_cor{{ forloop.counter }}'>

@@ -114,7 +114,7 @@ urlpatterns = [
     path('parcours_show_course_student/<int:idc>/<int:id>', show_course_student, name='show_course_student'),
     ############################################################################################################  
 
-    #################################### Mastering ###########################################
+    #################################### Mastering #############################################################
 
     path('parcours_create_mastering/<int:id>/', create_mastering, name='create_mastering'),
     path('parcours_mastering_delete/<int:id>/<int:idm>/', parcours_mastering_delete, name='parcours_mastering_delete'),
@@ -123,8 +123,20 @@ urlpatterns = [
     path('parcours_mastering_student_show/<int:id>/', mastering_student_show, name='mastering_student_show'),
     path('ajax/mastering_modal_show', ajax_mastering_modal_show, name='ajax_mastering_modal_show'),    
     path('parcours_mastering_done', mastering_done, name='mastering_done'),    
+    path('ajax_populate_mastering', ajax_populate_mastering, name='ajax_populate_mastering'),
+    ############################################################################################################ 
+    #################################### Mastering_custom ######################################################
 
+    path('parcours_create_mastering_custom/<int:id>/<int:idp>', create_mastering_custom , name='create_mastering_custom'),
+    path('parcours_mastering_custom_delete/<int:id>/<int:idm>/<int:idp>', parcours_mastering_custom_delete, name='parcours_mastering_custom_delete'),
+    path('ajax/sort_mastering_custom', ajax_sort_mastering_custom, name='ajax_sort_mastering_custom'),
 
+    path('parcours_mastering_student_show_custom/<int:id>/', mastering_custom_student_show, name='mastering_custom_student_show'),
+    path('ajax/mastering_custom_modal_show', ajax_mastering_custom_modal_show, name='ajax_mastering_custom_modal_show'),    
+    path('parcours_mastering_custom_done', mastering_custom_done, name='mastering_custom_done'),    
+ 
+
+    ############################################################################################################ 
     ############################################################################################################  
 
     ####################################     Les demandes d'exercice  ##########################################
@@ -159,7 +171,6 @@ urlpatterns = [
     path('ajax_is_favorite', ajax_is_favorite, name='ajax_is_favorite'),
     path('ajax/course_sorter', ajax_course_sorter, name='ajax_course_sorter'),
     path('ajax/parcours_sorter', ajax_parcours_sorter, name='ajax_parcours_sorter'),
-    path('ajax_populate_mastering', ajax_populate_mastering, name='ajax_populate_mastering'),
 
     path('parcours_show_student/<int:id>/', show_parcours_student, name='show_parcours_student'),     
     
