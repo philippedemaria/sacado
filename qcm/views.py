@@ -4328,9 +4328,9 @@ def ajax_mastering_custom_modal_show(request):
         mdone = Masteringcustom_done.objects.filter( mastering = mastering , student = student)
         if mdone.count() == 1 :
             md = Masteringcustom_done.objects.get( mastering = mastering , student = student)
-            form = MasteringDoneForm(instance = md )
+            form = MasteringcustomDoneForm(instance = md )
         else :
-            form = MasteringDoneForm(request.POST or None )
+            form = MasteringcustomDoneForm(request.POST or None )
     elif mastering.video != "" :
         resp = 1
     elif mastering.exercise :
@@ -4357,7 +4357,7 @@ def ajax_mastering_custom_modal_show(request):
 
 
 
-    
+
 
 def mastering_custom_done(request):
 
@@ -4367,14 +4367,14 @@ def mastering_custom_done(request):
     mdone = Mastering_done.objects.filter( mastering = mastering , student = student)
 
     if mdone.count() == 0 : 
-        form = MasteringDoneForm(request.POST or None )
+        form = MasteringcustomDoneForm(request.POST or None )
     else :
         md = Mastering_done.objects.get( mastering = mastering , student = student)
-        form = MasteringDoneForm(request.POST or None , instance = md )
+        form = MasteringcustomDoneForm(request.POST or None , instance = md )
     if form.is_valid() :
         nf = form.save(commit = False)
         nf.student =  student
         nf.mastering =  mastering
         nf.save()
 
-    return redirect('mastering_student_show', mastering.relationship.id)
+    return redirect('mastering_student_show', mastering.customexercise.id)
