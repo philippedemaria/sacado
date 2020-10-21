@@ -3986,6 +3986,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   border-radius: 4px;
   padding: 5px 0;
   position: absolute;
+  font-size: 14px;
   /* Position the tooltip */
   width: 120px;
   top: 100%;
