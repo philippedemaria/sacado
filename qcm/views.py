@@ -917,9 +917,6 @@ def show_parcours_student(request, id):
     customexercises = Customexercise.objects.filter(parcourses = parcours, students=student, is_publish=1 ).order_by("ranking") 
 
 
-    stage = Stage.objects.get(school = user.school)
-
-
     nb_exo_only,nb_exo_only_c = [] , [] 
     i=0
 
