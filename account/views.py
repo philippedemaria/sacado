@@ -4,10 +4,10 @@ import re
 from statistics import median, StatisticsError
 import csv
 import pytz
+from datetime import datetime 
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.hashers import make_password
@@ -31,18 +31,9 @@ from socle.models import Theme
 from sendmail.forms import EmailForm
 from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ParentUpdateForm, ManagerUpdateForm, NewUserTForm,ManagerForm
 from templated_email import send_templated_mail
+from general_fonctions import *
 
 
-
-def time_zone_user(user):
-    if user.time_zone :
-        time_zome = user.time_zone
-        timezone.activate(pytz.timezone(time_zome))
-        today = timezone.localtime(timezone.now())
-    else:
-        today = timezone.now()
-    return today
- 
 
 def list_teacher(request):
     teachers = User.objects.filter(user_type=User.TEACHER)
@@ -68,18 +59,6 @@ def navigation(group, id):
         snext_id = False
 
     return sprev_id, snext_id
-
-
-def cleanhtml(raw_html): #nettoie le code des balises HTML
-    cleantext = re.sub('<.*?>', '', raw_html)
-    cleantext = re.sub('\n', '', cleantext)
-    return cleantext
-
-
-def unescape_html(string):
-    '''HTML entity decode'''
-    string = html.unescape(string)
-    return string
 
 
 class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter.
@@ -211,7 +190,7 @@ def send_to_teachers(request):
 
 
 
-@login_required
+
 def message_to_teachers_sent(request):
     subject = request.POST.get("subject")
     message = request.POST.get("message")
@@ -231,7 +210,7 @@ def message_to_teachers_sent(request):
 
 #########################################Student #####################################################################
 
-@login_required
+
 @can_register
 @is_manager_of_this_school
 def register_student_from_admin(request):
@@ -325,7 +304,7 @@ def register_student(request):
  
 
 
-@login_required
+
 @can_register
 @is_manager_of_this_school
 def update_student(request, id,idg=0):  
@@ -355,7 +334,7 @@ def update_student(request, id,idg=0):
 
 
 
-@login_required
+
 @can_register
 @is_manager_of_this_school
 def update_student_by_admin(request, id):  
@@ -491,7 +470,7 @@ def sender_mail(request,form):
             print(form.errors)
             print("no_sending")
 
-@login_required
+
 @who_can_read_details
 def detail_student(request, id):
 
@@ -543,7 +522,7 @@ def detail_student(request, id):
     return render(request, 'account/detail_student.html', context)
 
 
-@login_required
+
 @who_can_read_details
 def detail_student_theme(request, id,idt):
     student = Student.objects.get(user_id=id)
@@ -609,7 +588,7 @@ def detail_student_theme(request, id,idt):
 
 
 
-@login_required
+
 @who_can_read_details
 def detail_student_parcours(request, id,idp):
     student = Student.objects.get(user_id=id)
@@ -643,7 +622,7 @@ def detail_student_parcours(request, id,idp):
 
 
 
-@login_required
+
 @user_can_read_details
 def detail_student_all_views(request, id):
     user = User.objects.get(pk=id)
@@ -678,7 +657,10 @@ def detail_student_all_views(request, id):
     done, late, no_done = 0, 0, 0
     for relationship in relationships :
         nb_ontime = Studentanswer.objects.filter(student=student, exercise = relationship.exercise ).count()
-        nb = Studentanswer.objects.filter(student=student, exercise = relationship.exercise, date__lte= relationship.date_limit ).count()
+
+        utc_dt = dt_naive_to_timezone(relationship.date_limit, student.user.time_zone)
+
+        nb = Studentanswer.objects.filter(student=student, exercise = relationship.exercise, date__lte= utc_dt ).count()
         if nb_ontime == 0:
             no_done += 1
         elif nb > 0:
@@ -747,14 +729,14 @@ def detail_student_all_views(request, id):
 ##
 ############################################################################################################## 
 
-@login_required
+
 def close_an_account(request):
     user = request.user
     today = time_zone_user(user)
     return render(request, 'account/close_my_account.html', {'user': user, 'communications' : [], 'today' : today  ,  })
 
 
-@login_required
+
 def close_my_account(request, id):
     user = get_object_or_404(User, user_id=id)
     today = time_zone_user(user)
@@ -788,7 +770,7 @@ def register_teacher(request):
     return redirect("index")
 
 
-@login_required
+
 @can_register
 @is_manager_of_this_school
 def update_teacher(request, pk):
@@ -814,7 +796,7 @@ def update_teacher(request, pk):
                    'teacher': teacher})
 
 
-@login_required
+
 @can_register
 @is_manager_of_this_school
 def delete_teacher(request, pk):
@@ -844,7 +826,7 @@ def get_username(ln, fn):
         print(un)
     return un
 
-@login_required
+
 @can_register
 @is_manager_of_this_school
 def register_teacher_from_admin(request):
@@ -886,7 +868,7 @@ def register_teacher_from_admin(request):
  
 
 
-@login_required
+
 @can_register
 @is_manager_of_this_school
 def register_by_csv(request, key, idg=0):
@@ -983,7 +965,7 @@ def register_by_csv(request, key, idg=0):
 
 
 
-@login_required
+
 @can_register
 @is_manager_of_this_school
 def register_users_by_csv(request,key):
@@ -1136,7 +1118,7 @@ def delete_parent(request, id):
 
 #####################################
 
-@login_required
+
 def my_profile(request):
 
     user = User.objects.get(id=request.user.id)
@@ -1260,7 +1242,7 @@ def ajax_control_code_student(request):
 
 
 
-@login_required
+
 def ajax_detail_student(request):
     student_id = int(request.POST.get("student_id"))
     theme_id = int(request.POST.get("theme_id"))
@@ -1284,7 +1266,7 @@ def ajax_detail_student(request):
     return JsonResponse(data)
 
 
-@login_required
+
 def ajax_detail_student_exercise(request):
     student_id = int(request.POST.get("student_id"))
     parcours_id = int(request.POST.get("parcours_id"))
@@ -1304,7 +1286,7 @@ def ajax_detail_student_exercise(request):
     return JsonResponse(data)
 
 
-@login_required
+
 def ajax_detail_student_parcours(request):
     student_id = int(request.POST.get("student_id"))
     parcours_id = int(request.POST.get("parcours_id"))

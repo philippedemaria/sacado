@@ -249,7 +249,7 @@
                         <a  href="{% url 'result_parcours' parcours.id  %}" class="edit" target="_blank"><i class="fa fa-fw fa-mortar-board"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
                         </a>   
                     {% else %}
-                        <a  href="{% url 'stat_parcours_evaluation' parcours.id %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon"> Résultats </span>
+                        <a  href="{% url 'stat_evaluation' parcours.id %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon"> Résultats </span>
                         </a>   
                     {% endif %} 
                     </div>                     

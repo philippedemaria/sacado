@@ -18,33 +18,11 @@ from django.utils import timezone
 import re
 import html
 import pytz
-
-def cleanhtml(raw_html): #nettoie le code des balises HTML
-    cleantext = re.sub('<.*?>', '', raw_html)
-    cleantext = re.sub('\n', '', cleantext)
-    return cleantext
+from general_fonctions import *
+ 
 
 
-def unescape_html(string):
-        '''HTML entity decode'''
-        string = html.unescape(string)
-        return string
 
-
-def time_zone_user(user):
-    if user.time_zone :
-        time_zome = user.time_zone
-        timezone.activate(pytz.timezone(time_zome))
-        current_tz = timezone.get_current_timezone()
-        today = timezone.localtime(timezone.now())
-        today = timezone.now()
-     
-    else :
-        today = timezone.now()
-    return today
-
-
-@login_required
 def list_emails(request):
  
     user = request.user
@@ -90,7 +68,7 @@ def list_emails(request):
         raise PermissionDenied
 
 
-@login_required
+
 def create_email(request):
  
 	form = EmailForm(request.POST or None,request.FILES or None)
@@ -145,7 +123,7 @@ def delete_email(request,id):
     return redirect('emails')
 
 
-@login_required
+
 def show_email(request):
 	email_id = int(request.POST.get("email_id"))
 	email = Email.objects.get(id=email_id)
@@ -199,7 +177,7 @@ def create_communication(request): # id du concours
 
 
 
-@login_required
+
 def update_communication(request,id): # update
 
 	communication = Communication.objects.get(id= id)
@@ -221,7 +199,7 @@ def update_communication(request,id): # update
 
 
 
-@login_required
+
 def delete_communication(request, id):
     communication = Communication.objects.get(id=id)
     communication.delete()
@@ -231,7 +209,7 @@ def delete_communication(request, id):
  
 
 
-@login_required
+
 def show_communication(request):
 	communication_id = int(request.POST.get("communication_id"))
 	communication = Communication.objects.get(id=communication_id)
@@ -245,7 +223,7 @@ def show_communication(request):
 
 
 
-@login_required
+
 def reader_communication(request):
 	
 	data = {} 

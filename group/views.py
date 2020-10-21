@@ -17,7 +17,6 @@ from django.core.mail import send_mail
 import uuid
 from django.contrib.auth.hashers import make_password
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from group.decorators import user_is_group_teacher
 from account.decorators import user_can_create
@@ -42,22 +41,11 @@ from cgi import escape
 cm = 2.54
 #################################################################################
 import re
-
+import pytz
+from datetime import datetime 
+from general_fonctions import *
 
  
-
-def cleanhtml(raw_html): #nettoie le code des balises HTML
-    cleantext = re.sub('<.*?>', '', raw_html)
-    cleantext = re.sub('\n', '', cleantext)
-    return cleantext
-
-
-def unescape_html(string):
-        '''HTML entity decode'''
-        string = html.unescape(string)
-        return string
-
-
 
 def student_parcours_studied(student):  
     parcourses = student.students_to_parcours.all()
@@ -221,7 +209,7 @@ def get_stage(group):
 #####################################################################################################################################
 
 
-@login_required
+
 def list_groups(request):
     groups = Group.objects.filter(teacher__user_id = request.user.id)
     return render(request, 'group/list_group.html', {'groups': groups, 'communications' : [] , })
@@ -229,7 +217,7 @@ def list_groups(request):
 
 
 
-@login_required
+
 @user_passes_test(user_can_create)
 def create_group(request):
     teacher = Teacher.objects.get(user_id=request.user.id)
@@ -257,7 +245,7 @@ def create_group(request):
     return render(request, 'group/form_group.html', context)
 
 
-@login_required
+
 @user_is_group_teacher
 def update_group(request, id):
 
@@ -289,7 +277,7 @@ def update_group(request, id):
 
 
 
-@login_required
+
 def delete_group(request, id):
     group = Group.objects.get(id=id)
 
@@ -312,7 +300,7 @@ def delete_group(request, id):
         return redirect('school_groups')        
 
 
-@login_required
+
 @user_is_group_teacher
 def show_group(request, id ):
 
@@ -323,7 +311,7 @@ def show_group(request, id ):
     return render(request, 'group/show_group.html', context )
 
 
-@login_required
+
 def aggregate_group(request):
 
     code_groupe = request.POST.get("groupe")
@@ -398,7 +386,7 @@ def sender_mail(request,form):
 
 
 
-@login_required
+
 @user_is_group_teacher
 def result_group(request, id):
 
@@ -438,7 +426,7 @@ def result_group(request, id):
     return render(request, 'group/result_group.html', context )
 
 
-@login_required
+
 @user_is_group_teacher
 def result_group_theme(request, id, idt):
 
@@ -461,7 +449,7 @@ def result_group_theme(request, id, idt):
     return render(request, 'group/result_group.html', context )
 
 
-@login_required
+
 @user_is_group_teacher
 def result_group_exercise(request, id):
     group = Group.objects.get(id=id)
@@ -476,7 +464,7 @@ def result_group_exercise(request, id):
     return render(request, 'group/result_group_exercise.html', context)
 
 
-@login_required
+
 @user_is_group_teacher
 def result_group_skill(request, id):
 
@@ -492,7 +480,7 @@ def result_group_skill(request, id):
 
 
 
-@login_required
+
 @user_is_group_teacher
 def result_group_theme_exercise(request, id, idt):
     group = Group.objects.get(id=id)
@@ -507,7 +495,7 @@ def result_group_theme_exercise(request, id, idt):
 
  
 
-@login_required
+
 @user_is_group_teacher
 def stat_group(request, id):
     group = Group.objects.get(id=id)
@@ -580,7 +568,7 @@ def stat_group(request, id):
 
  
 
-@login_required
+
 @user_is_group_teacher
 def task_group(request, id):
     group = Group.objects.get(id=id)
@@ -594,7 +582,10 @@ def task_group(request, id):
         done, late, no_done = 0, 0, 0
         for relationship in relationships:
             nb_ontime = Studentanswer.objects.filter(student=s, exercise=relationship.exercise).count()
-            nb = Studentanswer.objects.filter(student=s, exercise=relationship.exercise, date__lte=relationship.date_limit).count()
+
+            utc_dt = dt_naive_to_timezone(relationship.date_limit, student.user.time_zone)
+
+            nb = Studentanswer.objects.filter(student=s, exercise=relationship.exercise, date__lte=utc_dt).count()
             if nb_ontime == 0:
                 no_done += 1
             elif nb > 0:
@@ -841,6 +832,8 @@ def print_statistiques(request, group_id, student_id):
         done, late, no_done = 0 , 0 , 0 
         for relationship in relationships :
             nb_ontime = Studentanswer.objects.filter(student=student, exercise = relationship.exercise ).count()
+
+
             nb = Studentanswer.objects.filter(student=student, exercise = relationship.exercise, date__lte= relationship.date_limit ).count()
             if nb_ontime == 0 :
                 no_done += 1

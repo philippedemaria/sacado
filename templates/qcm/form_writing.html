@@ -35,7 +35,7 @@
 
  
 
-    <form action="" method="POST">
+    <form action="" method="POST" enctype='multipart/form-data'>
 
         {% csrf_token %}
 
@@ -78,21 +78,16 @@
                 <label>Conseil :</label>  Utiliser le site Scratch pour créer votre script. Prendre une capture d'écran et la déposer dans la zone de texte.<br><br><br>
                 <a href="https://scratch.mit.edu/projects/editor/?tutorial=getStarted" target="_blank">Naviguer vers Scratch <img src="{% static 'img/scratch.png' %}"/></a>
                 {% endif %}  
+                <hr>
+                <label>Savoir faire évalué :</label>
+                    <li class="sans_puce">{{relationship.exercise.knowledge}}</li>    
                 {% if relationship.skills.all|length > 0 %}
                 <hr>                
                     <label>Compétences visées :</label>
                     {% for skill in relationship.skills.all %}
                         <li class="sans_puce">{{skill}}</li>
                     {% endfor %}
-                {% endif %}
-                {% if relationship.knowledges.all|length > 0 %}                
-                <hr>
-                <label>Savoir faire évalués :</label>
-                {% for knowledge in relationship.knowledges.all %}
-                    <li class="sans_puce">{{knowledge}}</li>
-                {% endfor %}
-                {% endif %}
-
+                {% endif %}            
             </div>
         </div>
     </form>  

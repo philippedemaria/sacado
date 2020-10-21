@@ -43,7 +43,8 @@ if PRODUCTION:
 
 else:
     # configuration développement
-    DEBUG = True
+    #DEBUG = False # False comme en production
+    DEBUG = True # True en développpement
     ALLOWED_HOSTS = ["*"]
     SECRET_KEY = '85umr_$zf2bd58xl)nzf)i*jh)o5h*dp%*3e@pqg+ijem=t1xq'
 
@@ -300,13 +301,13 @@ CKEDITOR_CONFIGS = {
  
 
 ########################################################################################################################
-if PRODUCTION :
+if not PRODUCTION :
     LOGGING = {
         'version': 1,
         'disable_existing_loggers': False,
         'handlers': {
             'file': {
-                'level': 'DEBUG',
+                'level': 'INFO',
                 'class': 'logging.handlers.RotatingFileHandler',
                 'filename': 'logs/debug.log',
                 'backupCount': 10,  # keep at most 10 log files
@@ -317,7 +318,7 @@ if PRODUCTION :
         'loggers': {
             'django': {
                 'handlers': ['file'],
-                'level': 'DEBUG',
+                'level': 'INFO',
                 'propagate': True,
             },
         },

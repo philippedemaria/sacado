@@ -3,7 +3,7 @@ from account.models import  Student, Teacher, User,Resultknowledge, Resultskill,
 from account.forms import StudentForm, TeacherForm, UserForm
 from django.contrib.auth.forms import  AuthenticationForm
 from django.forms.models import modelformset_factory
-from django.contrib.auth.decorators import login_required, permission_required,user_passes_test
+from django.contrib.auth.decorators import  permission_required,user_passes_test
 from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group , Sharing_group
@@ -44,35 +44,14 @@ from reportlab.lib.utils import ImageReader
 from reportlab.lib.enums import TA_JUSTIFY,TA_LEFT,TA_CENTER,TA_RIGHT
 from cgi import escape
 cm = 2.54
+import os
 import re
 import pytz
 import csv
 import html
+from general_fonctions import *
 
-
-def time_zone_user(user):
-    if user.time_zone :
-        time_zome = user.time_zone
-        timezone.activate(pytz.timezone(time_zome))
-        current_tz = timezone.get_current_timezone()
-        today = timezone.localtime(timezone.now())
-        today = timezone.now()
-     
-    else :
-        today = timezone.now()
-    return today
-
-
-
-def cleanhtml(raw_html): #nettoie le code des balises HTML
-    cleantext = re.sub('<.*?>', '', raw_html)
-    cleantext = re.sub('\n', '', cleantext)
-    return cleantext
-
-def unescape_html(string):
-    '''HTML entity decode'''
-    string = html.unescape(string)
-    return string
+ 
 
 
 def new_content_type(s):
@@ -336,7 +315,7 @@ def ajax_populate(request):
 
 
 
-@login_required
+
 @user_is_parcours_teacher
 def peuplate_parcours(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -402,7 +381,7 @@ def peuplate_parcours(request,id):
 
 
 
-@login_required
+
 @user_is_parcours_teacher
 def peuplate_parcours_evaluation(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -469,7 +448,7 @@ def peuplate_parcours_evaluation(request,id):
 
 
 
-@login_required
+
 @user_is_parcours_teacher
 def individualise_parcours(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -549,8 +528,8 @@ def ajax_individualise(request):
 
     return JsonResponse(data) 
 
-import os
-@login_required
+
+
 def list_parcours(request):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -564,7 +543,7 @@ def list_parcours(request):
     return render(request, 'qcm/list_parcours.html', { 'parcourses' : parcourses , 'communications' : [] , 'relationships' : [],  'parcours' : None , 'group' : None , 'teacher' : teacher , 'nb_archive' : nb_archive })
 
 
-@login_required
+
 def list_archives(request):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -579,7 +558,7 @@ def list_archives(request):
 
 
 
-@login_required
+
 def list_evaluations(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=1,is_archive=0).order_by("-is_favorite")     
@@ -593,7 +572,7 @@ def list_evaluations(request):
 
 
 
-@login_required
+
 def list_evaluations_archives(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=1,is_archive=1).order_by("level")    
@@ -607,7 +586,7 @@ def list_evaluations_archives(request):
 
 
 
-@login_required
+
 @user_is_group_teacher
 def list_parcours_group(request,id):
 
@@ -645,7 +624,7 @@ def list_parcours_group(request,id):
     return render(request, 'qcm/list_parcours_group.html', {'parcours_tab': parcours_tab , 'group': group,  'parcours' : None , 'communications' : [] , 'relationships' : [] , 'role' : role })
 
 
-@login_required
+
 def all_parcourses(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcourses = Parcours.objects.exclude(exercises=None ).exclude(teacher=teacher).exclude(teacher__user__school= None).order_by("author").prefetch_related('exercises__knowledge__theme').select_related('author')
@@ -658,7 +637,7 @@ def all_parcourses(request):
     return render(request, 'qcm/all_parcourses.html', {'parcourses': parcourses , 'inside' : inside , 'communications' : [] , 'parcours' : None , 'relationships' : []})
 
 
-@login_required
+
 @user_passes_test(user_can_create)
 def create_parcours(request):
 
@@ -874,7 +853,7 @@ def delete_parcours(request, id, idg=0):
         return redirect('list_parcours_group', idg)
 
 
-@login_required
+
 @user_is_parcours_teacher 
 def show_parcours(request, id):
     parcours = Parcours.objects.get(id=id)
@@ -929,7 +908,7 @@ def show_parcours(request, id):
 
 
 
-@login_required
+
 def show_parcours_student(request, id):
     parcours = Parcours.objects.get(id=id)
     user = request.user
@@ -970,7 +949,7 @@ def show_parcours_student(request, id):
 
 
 
-@login_required
+
 def show_parcours_visual(request, id):
     parcours = Parcours.objects.get(id=id)
  
@@ -1209,6 +1188,7 @@ def stat_parcours(request, id):
 
 
 
+
 @user_is_parcours_teacher 
 def stat_evaluation(request, id):
 
@@ -1317,7 +1297,7 @@ def stat_evaluation(request, id):
 
 
 
-@login_required
+
 def add_exercice_in_a_parcours(request):
 
     e= request.POST.get('exercise')
@@ -1353,7 +1333,7 @@ def add_exercice_in_a_parcours(request):
     return redirect('exercises')
 
  
-@login_required 
+ 
 def clone_parcours(request, id):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -1418,7 +1398,7 @@ def parcours_tasks_and_publishes(request, id):
  
 
  
-@login_required
+
 @user_is_parcours_teacher
 def result_parcours_exercise_students(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -2013,7 +1993,9 @@ def all_levels(user, status):
         levels_dict["themes"]=themes_tab
         datas.append(levels_dict)
     return datas
- 
+
+
+
 def list_exercises(request):
     
     user = request.user
@@ -2050,7 +2032,7 @@ def list_exercises(request):
 
 
 
-@login_required
+
 @user_passes_test(user_is_superuser)
 def admin_list_associations(request,id):
     level = Level.objects.get(pk = id)
@@ -2062,7 +2044,7 @@ def admin_list_associations(request,id):
     return render(request, 'qcm/list_associations.html', {'data': data, 'teacher': teacher , 'parcours': None, 'relationships' : [] , 'communications' : []   })
  
 
-@login_required
+
 @user_passes_test(user_is_superuser)
 def gestion_supportfiles(request):
   
@@ -2081,7 +2063,7 @@ def gestion_supportfiles(request):
 
 
 
-@login_required
+
 @user_passes_test(user_is_superuser)
 def ajax_update_association(request):
     data = {} 
@@ -2120,7 +2102,7 @@ def ajax_update_association(request):
 
 
 
-@login_required
+
 @user_passes_test(user_is_superuser)
 def admin_list_supportfiles(request,id):
     user = request.user
@@ -2195,7 +2177,7 @@ def exercises_level(request, id):
 
 
 
-@login_required
+
 @user_passes_test(user_is_superuser)
 def create_supportfile(request):
 
@@ -2220,7 +2202,7 @@ def create_supportfile(request):
     return render(request, 'qcm/form_supportfile.html', context)
 
 
-@login_required
+
 @user_passes_test(user_is_superuser)
 def create_supportfile_knowledge(request,id):
 
@@ -2252,7 +2234,7 @@ def create_supportfile_knowledge(request,id):
     return render(request, 'qcm/form_supportfile.html', context)
 
 
-@login_required
+
 @user_passes_test(user_is_superuser)
 def update_supportfile(request, id, redirection=0):
 
@@ -2283,7 +2265,7 @@ def update_supportfile(request, id, redirection=0):
  
 
 
-@login_required
+
 @user_passes_test(user_is_superuser)
 def delete_supportfile(request, id):
     if request.user.is_superuser:
@@ -2297,7 +2279,7 @@ def delete_supportfile(request, id):
     return redirect('admin_supportfiles', supportfile.level.id)
 
 
-@login_required
+
 @user_passes_test(user_is_superuser)
 def show_this_supportfile(request, id):
 
@@ -2316,7 +2298,7 @@ def show_this_supportfile(request, id):
 
 
 
-@login_required
+
 @user_passes_test(user_is_superuser)
 def create_exercise(request, supportfile_id):
  
@@ -2404,7 +2386,7 @@ def show_this_exercise(request, id):
 
 
 
-@login_required
+
 def execute_exercise(request, idp,ide):
 
     parcours = Parcours.objects.get(id= idp)
@@ -2421,7 +2403,7 @@ def execute_exercise(request, idp,ide):
 
 
 
-@login_required
+
 def store_the_score_relation_ajax(request):
 
     this_time = request.POST.get("start_time").split(",")[0]
@@ -2719,7 +2701,7 @@ def ajax_search_exercise(request):
  
 
 
-@login_required
+
 @user_passes_test(user_can_create)
 def create_evaluation(request):
 
@@ -2853,7 +2835,7 @@ def update_evaluation(request, id, idg=0 ):
 
  
 
-@login_required
+
 def delete_evaluation(request,id):
 
     parcours = Parcours.objects.get(pk=id)
@@ -2864,7 +2846,7 @@ def delete_evaluation(request,id):
     return redirect('index')
 
 
-@login_required
+
 @user_is_parcours_teacher 
 def show_evaluation(request, id):
     parcours = Parcours.objects.get(id=id)
@@ -2916,12 +2898,12 @@ def correction_exercise(request,id,idp):
 
     if idp == 0 :
         relationship = Relationship.objects.get(pk=id)
-        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage ,  'communications' : [] ,  'parcours' : None }
+        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage ,  'communications' : [] ,  'parcours' : None, 'group' : None }
         return render(request, 'qcm/correction_exercise.html', context)
     else :
         customexercise = Customexercise.objects.get(pk=id)
         parcours = Parcours.objects.get(pk = idp)
-        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage ,  'communications' : [], 'parcours' : parcours }
+        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage ,  'communications' : [], 'parcours' : parcours, 'group' : None }
         return render(request, 'qcm/correction_custom_exercise.html', context)
 
 
@@ -3225,6 +3207,7 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
     student = Student.objects.get(user = request.user)  
     customexercise = Customexercise.objects.get(pk = id)
     parcours = Parcours.objects.get(pk = idp)
+    today = time_zone_user(student.user)
 
     if Customanswerbystudent.objects.filter(student = student, customexercise = customexercise ).exists() : 
         ce = Customanswerbystudent.objects.get(student = student, customexercise = customexercise )
@@ -3243,7 +3226,7 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
             return redirect('show_parcours_student' , idp )
 
 
-    context = {'customexercise': customexercise, 'communications' : [] , 'form' : cForm , 'parcours' : parcours ,'student' : student }
+    context = {'customexercise': customexercise, 'communications' : [] , 'form' : cForm , 'parcours' : parcours ,'student' : student, 'today' : today }
 
     if customexercise.is_python :
         url = "basthon/index_custom.html" 
@@ -3261,7 +3244,7 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 
-@login_required
+
 @user_is_parcours_teacher 
 def detail_task_parcours(request,id,s):
 
@@ -3308,7 +3291,7 @@ def detail_task_parcours(request,id,s):
         return render(request, 'qcm/task.html', context)
 
 
-@login_required
+
 @user_is_parcours_teacher 
 def detail_task(request,id,s):
 
@@ -3355,7 +3338,7 @@ def detail_task(request,id,s):
         return render(request, 'qcm/task.html', context)
 
 
-@login_required
+
 def all_my_tasks(request):
     today = time_zone_user(request.user) 
     teacher = Teacher.objects.get(user = request.user) 
@@ -3365,7 +3348,7 @@ def all_my_tasks(request):
     return render(request, 'qcm/all_tasks.html', context)
 
 
-@login_required
+
 def these_all_my_tasks(request):
     today = time_zone_user(request.user) 
     teacher = Teacher.objects.get(user = request.user) 
@@ -3377,7 +3360,7 @@ def these_all_my_tasks(request):
 
 
  
-@login_required
+
 def group_tasks(request,id):
     today = time_zone_user(request.user) 
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -3402,7 +3385,7 @@ def group_tasks(request,id):
 
     return render(request, 'qcm/group_task.html', context)
 
-@login_required
+
 def group_tasks_all(request,id):
     today = time_zone_user(request.user) 
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -3737,7 +3720,7 @@ def export_skill(request,idp):
 #######################################################################################################################################################################
 
 
-@login_required
+
 def list_courses(request):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -3892,7 +3875,7 @@ def show_course_student(request, idc , id ):
 #######################################################################################################################################################################
 
 
-@login_required
+
 def list_demands(request):
 
     demands = Demand.objects.order_by("done")
@@ -3901,7 +3884,7 @@ def list_demands(request):
 
 
 
-@login_required
+
 def create_demand(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
     form = DemandForm(request.POST or None  )
@@ -3929,7 +3912,7 @@ def create_demand(request):
 
 
 
-@login_required
+
 def update_demand(request, id):
  
     demand = Demand.objects.get(id=id)
@@ -3954,7 +3937,7 @@ def update_demand(request, id):
 
 
 
-@login_required
+
 def delete_demand(request, id  ):
     """
     idc : demand_id et id = parcours_id pour correspondre avec le decorateur
@@ -3965,7 +3948,7 @@ def delete_demand(request, id  ):
 
 
 
-@login_required
+
 def show_demand(request, id ):
     """
     idc : demand_id et id = parcours_id pour correspondre avec le decorateur
@@ -4042,7 +4025,7 @@ def ajax_course_viewer(request):
  
 
 
-@login_required
+
 def create_mastering(request,id):
     relationship = Relationship.objects.get(pk = id)
     stage = Stage.objects.get(school= request.user.school)
@@ -4070,7 +4053,7 @@ def create_mastering(request,id):
     return render(request, 'qcm/mastering/form_mastering.html', context)
 
 
-@login_required
+
 @user_is_relationship_teacher 
 def parcours_mastering_delete(request,id,idm):
 
@@ -4134,7 +4117,7 @@ def ajax_populate_mastering(request):
     return JsonResponse(data) 
 
 
-@login_required
+
 def mastering_student_show(request,id):
 
     relationship = Relationship.objects.get(pk = id)
@@ -4208,7 +4191,7 @@ def ajax_mastering_modal_show(request):
     return JsonResponse(data)
 
 
-@login_required
+
 def mastering_done(request):
 
     mastering = Mastering.objects.get(pk = request.POST.get("mastering"))

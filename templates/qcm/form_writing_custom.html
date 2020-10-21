@@ -36,7 +36,7 @@
         <div class="col-sm-12 col-md-12 col-lg-8">
             <a href="#" data-toggle='modal' data-target='#consigne' class="btn btn-danger">Lire la consigne</a>
             <hr>             
-            <form action="" method="POST">
+            <form action="" method="POST" enctype='multipart/form-data'>
                 {% csrf_token %}
                 {% if customexercise.is_image   or   customexercise.is_file  %}   
  

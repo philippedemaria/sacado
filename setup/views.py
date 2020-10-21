@@ -4,7 +4,6 @@ from account.forms import  UserForm, TeacherForm, StudentForm
 from django.contrib.auth import   logout
 from account.models import  User, Teacher, Student  ,Parent
 from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile
-from django.contrib.auth.decorators import login_required 
 from group.models import Group, Sharing_group
 from school.models import Stage
 from sendmail.models import Communication
@@ -234,7 +233,7 @@ def change_color(filename, color, code):
         file.write(filedata)
 
 
-@login_required
+
 def admin_tdb(request):
     school = request.user.school
     nb_teachers = User.objects.filter(school=school, user_type=2).count()

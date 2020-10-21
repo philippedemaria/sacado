@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.forms import formset_factory
-from django.contrib.auth.decorators import login_required, permission_required,user_passes_test
+from django.contrib.auth.decorators import permission_required,user_passes_test
 from django.contrib import messages
 from .models import School, Country  , Stage
 from school.forms import SchoolForm, CountryForm, GroupForm, StageForm
@@ -43,14 +43,14 @@ def get_username(ln, fn):
             un = un + str(i)
     return un
 
-@login_required
+
 def list_schools(request):
 	schools = School.objects.all()
 	return render(request, 'school/lists.html', { 'communications' : [], 'schools': schools})
 
 
 
-@login_required
+
 def create_school(request):
 	form = SchoolForm(request.POST or None)
 	
@@ -62,7 +62,7 @@ def create_school(request):
 
 	return render(request,'school/_form.html', { 'communications' : [], 'form':form})
 
-@login_required
+
 def update_school(request,id):
 	school = School.objects.get(id=id)
 	form = SchoolForm(request.POST or None, instance=school)
@@ -73,7 +73,7 @@ def update_school(request,id):
 
 	return render(request,'school/_form.html', {'form':form,  'communications' : [],'school':school})
 
-@login_required
+
 def delete_school(request,id):
 	school = School.objects.get(id=id)
 	school.delete()
@@ -83,12 +83,12 @@ def delete_school(request,id):
 
 
 
-@login_required
+
 def list_countries(request):
 	countries = Country.objects.all()
 	return render(request,'school/lists_country.html', { 'communications' : [], 'countries':countries})
 
-@login_required
+
 def create_country(request):
 	form = CountryForm(request.POST or None,request.FILES or None )
 	
@@ -98,7 +98,7 @@ def create_country(request):
 
 	return render(request,'school/country_form.html', { 'communications' : [], 'form':form})
 
-@login_required
+
 def update_country(request,id):
 	country = Country.objects.get(id=id)
 	form = CountryForm(request.POST or None,request.FILES or None, instance=country)
@@ -109,7 +109,7 @@ def update_country(request,id):
 
 	return render(request,'school/country_form.html', { 'communications' : [], 'form':form, 'country':country})
 
-@login_required
+
 def delete_country(request,id):
 	country = Country.objects.get(id=id)
 	country.delete()
@@ -140,7 +140,7 @@ def clear_detail_student(student):
 
 
 
-@login_required
+
 @is_manager_of_this_school
 def school_teachers(request):
 	if request.session.get("school_id") :
@@ -153,7 +153,7 @@ def school_teachers(request):
 	return render(request,'school/list_teachers.html', { 'communications' : [],'teachers':teachers})
 
 
-@login_required
+
 @is_manager_of_this_school
 def school_groups(request):
 	if request.session.get("school_id"):
@@ -168,7 +168,7 @@ def school_groups(request):
 	return render(request, 'school/list_groups.html', { 'communications' : [],'groups': groups})
 
 
-@login_required
+
 @is_manager_of_this_school
 def school_level_groups(request):
 	if request.session.get("school_id") :
@@ -186,7 +186,7 @@ def school_level_groups(request):
 
 
 
-@login_required
+
 @is_manager_of_this_school
 def school_students(request):
 	if request.session.get("school_id") :
@@ -199,7 +199,7 @@ def school_students(request):
 	return render(request,'school/list_students.html', { 'communications' : [], 'users':users , 'school' : school , })
 
 
-@login_required
+
 @is_manager_of_this_school
 def new_student(request,slug):
     group = Group.objects.get(code=slug)
@@ -210,7 +210,7 @@ def new_student(request,slug):
 
 
 
-@login_required
+
 @is_manager_of_this_school
 def get_school_students(request):
 
@@ -233,7 +233,7 @@ def get_school_students(request):
 
  
 
-@login_required
+
 @is_manager_of_this_school
 def new_student_list(request,slug):
     group = Group.objects.get(code=slug)
@@ -246,7 +246,7 @@ def new_student_list(request,slug):
 
  
 
-@login_required
+
 @is_manager_of_this_school
 def push_student_group(request):
 	group_id = request.POST.get("group_id")
@@ -279,7 +279,7 @@ def sharing_teachers(request,group, teachers):
 
 
 
-@login_required
+
 @is_manager_of_this_school
 def new_group(request):
 	school = request.user.school
@@ -309,7 +309,7 @@ def new_group(request):
 
 
 
-@login_required
+
 @is_manager_of_this_school
 def update_group_school(request,id):
 	school = request.user.school
@@ -340,7 +340,7 @@ def update_group_school(request,id):
 
 
 
-@login_required
+
 @is_manager_of_this_school
 def delete_student_group(request,id,ids):
 	school = request.user.school
@@ -352,7 +352,7 @@ def delete_student_group(request,id,ids):
 
 
 
-@login_required
+
 @is_manager_of_this_school
 def delete_all_students_group(request,id):
 	school = request.user.school
@@ -365,7 +365,7 @@ def delete_all_students_group(request,id):
 
 
 
-@login_required
+
 @is_manager_of_this_school
 def delete_school_students(request):
 	school = request.user.school
@@ -377,7 +377,7 @@ def delete_school_students(request):
 
 
 
-@login_required
+
 @is_manager_of_this_school
 def delete_selected_students(request):
 	user_ids = request.POST.getlist("user_ids")
@@ -391,7 +391,7 @@ def delete_selected_students(request):
 
 
 
-@login_required
+
 @is_manager_of_this_school
 def new_group_many(request):
 
@@ -417,7 +417,7 @@ def new_group_many(request):
 
 
 
-@login_required
+
 @is_manager_of_this_school
 def manage_stage(request):
 
@@ -451,7 +451,7 @@ def manage_stage(request):
 ###############################################################################################
 
 
-@login_required
+
 @is_manager_of_this_school
 def send_account(request, id):
 	rcv = []
@@ -472,7 +472,7 @@ def send_account(request, id):
 
 
 
-@login_required
+
 @is_manager_of_this_school
 def pdf_account(request,id):
 
@@ -529,7 +529,7 @@ def pdf_account(request,id):
 ###############################################################################################
 
 import csv
-@login_required
+
 @is_manager_of_this_school
 def csv_full_group(request):
     """

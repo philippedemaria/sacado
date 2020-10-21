@@ -36,7 +36,7 @@
             <li> <a href="#my_exercises" data-toggle="tab">Mes exercices</a></li> 
 
             {% if not '/admin' in request.path %}
-            <li> <a href="{% url 'profile' %}" class="thin">+</a></li>
+            <li> <a href="{% url 'profile' %}" class="thin" title="Ajouter un niveau à son profil">+</a></li>
             {% endif %}
 
 

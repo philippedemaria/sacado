@@ -8,7 +8,7 @@ from django.apps import apps
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db.models import Q, Min, Max
 import os.path
-
+from django.utils import timezone
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User 
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
@@ -711,7 +711,7 @@ class Studentanswer(models.Model):
     student = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='answers', editable=False)
     point  = models.PositiveIntegerField(default=0 )  
     numexo  = models.PositiveIntegerField(default=10 )  
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(default=timezone.now)
     secondes = models.CharField(max_length=255, editable=False)
 
     def __str__(self):        

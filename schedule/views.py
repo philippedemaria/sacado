@@ -15,39 +15,15 @@ from qcm.models import  Relationship, Parcours, Studentanswer
 from django.db.models import Count, Q
 from sendmail.models import Communication
  
-from django.contrib.auth.decorators import login_required 
-from group.decorators import  user_is_group_teacher
 
+from group.decorators import  user_is_group_teacher
+from general_fonctions import *
 
 import pytz
 import re
 import html
 
 
-def time_zone_user(user):
-    if user.time_zone :
-        time_zome = user.time_zone
-        timezone.activate(pytz.timezone(time_zome))
-        current_tz = timezone.get_current_timezone()
-        today = timezone.localtime(timezone.now())
-        
-    else :
-        today = timezone.now()
-    return today
-
-
-def unescape_html(string):
-        '''HTML entity decode'''
-        string = html.unescape(string)
-        return string 
-
-
-def cleanhtml(raw_html): # nettoie le code des balises HTML
-    cleantext = re.sub('<.*?>', '', raw_html)
-    cleantext = re.sub('\n', '', cleantext)
-    cleantext = re.sub('\t', '', cleantext)
-    return cleantext
- 
 
 
 def insert_in_calendar(user,title,start,end,comment, type_of_event,link):
@@ -112,7 +88,9 @@ def events_json(request):
 
     for relationship in relationships:
         # On récupère les dates dans le bon fuseau horaire
-        relationship_start = relationship.date_limit
+
+        relationship_start = dt_naive_to_timezone(relationship.date_limit, user.time_zone)
+
         try :  
             if relationship.exercise.supportfile.annoncement :
                 title =  cleanhtml(unescape_html(relationship.exercise.supportfile.annoncement ))
@@ -273,8 +251,7 @@ def events_json_group(request):
     return http.HttpResponse(json.dumps(event_list), content_type='application/json')
 
 
- 
-@login_required
+
 @user_is_group_teacher
 def schedule_task_group(request, id):
     group = Group.objects.get(id=id)
