@@ -90,7 +90,7 @@
 
 <div class="modal fade" id="mastering_choice_student" tabindex="-1" role="dialog" aria-labelledby="mastering_choice_student">
     <div class="modal-dialog modal-md" role="document" id="m_modale">
-        <form action="{% url 'mastering_done' %}" method="POST">        {% csrf_token %}
+        <form action="{% url 'mastering_custom_done' %}" method="POST">        {% csrf_token %}
             <div class="modal-content">
                 <div class="modal-header consigne_mastering_modal" >
                     <div class="row">
@@ -105,7 +105,7 @@
                 </div>
                 <div class="modal-footer">
                     <div class="col-sm-12 col-lg-2">
-                        <a href="#" data-dismiss="modal" class="btn btn-default" >Annuler </a>
+                        <a href="#" data-dismiss="modal" class="btn btn-default" >Annuler</a>
                     </div>    
                     <div class="col-sm-12 col-lg-10">
                         <button type="submit" class="btn btn-primary">J'ai fini cette activité</button>

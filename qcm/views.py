@@ -4360,16 +4360,18 @@ def ajax_mastering_custom_modal_show(request):
 
 
 def mastering_custom_done(request):
-
-    mastering = Mastering.objects.get(pk = request.POST.get("mastering"))
+    print(request.POST.get("mastering"))
+    mastering = Masteringcustom.objects.get(pk = request.POST.get("mastering"))
     student = Student.objects.get(user=request.user)
 
-    mdone = Mastering_done.objects.filter( mastering = mastering , student = student)
+
+
+    mdone = Masteringcustom_done.objects.filter( mastering = mastering , student = student)
 
     if mdone.count() == 0 : 
         form = MasteringcustomDoneForm(request.POST or None )
     else :
-        md = Mastering_done.objects.get( mastering = mastering , student = student)
+        md = Masteringcustom_done.objects.get( mastering = mastering , student = student)
         form = MasteringcustomDoneForm(request.POST or None , instance = md )
     if form.is_valid() :
         nf = form.save(commit = False)
@@ -4377,4 +4379,4 @@ def mastering_custom_done(request):
         nf.mastering =  mastering
         nf.save()
 
-    return redirect('mastering_student_show', mastering.customexercise.id)
+    return redirect('mastering_custom_student_show', mastering.customexercise.id)
