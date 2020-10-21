@@ -141,8 +141,22 @@ class Knowledge(models.Model):
     def send_scorek(self,student):
 
         try:
-            r = self.results_k.get(student=student)
-            score = r.point
+            coef, score , score_ce = 0, 0 , 0
+            if self.results_k.filter(student=student).exists() :
+                r = self.results_k.filter(student=student).last()
+                score = r.point
+                coef += 1
+
+            if self.knowledge_correctionknowledge.filter(student=student).exists() :
+                ce = self.knowledge_correctionknowledge.filter(student=student).last()
+                score_ce = ce.point + 1 
+                coef += 1
+
+            if coef != 0:
+                score = int((score + score_ce)/coef)
+            else :
+                score = ""                
+
         except ObjectDoesNotExist:
             score = ""
 

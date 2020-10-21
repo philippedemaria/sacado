@@ -1072,8 +1072,16 @@ def result_parcours_knowledge(request, id):
 
 
     knowledge_ids = parcours.exercises.values_list("knowledge",flat=True).order_by("knowledge").distinct()
-    for k_id in knowledge_ids : 
-        knowledges.append(Knowledge.objects.get(pk = k_id))
+
+    customexercises = parcours.parcours_customexercises.all()
+    for ce in  customexercises :
+        for knowledge in ce.knowledges.all() :
+            knowledges.append(knowledge)
+
+    for k_id in knowledge_ids :
+        kn = Knowledge.objects.get(pk = k_id)
+        if  kn not in knowledges :
+            knowledges.append(kn)
 
     stage = get_stage(teacher.user)
     context = {  'relationships': relationships,  'students': students, 'parcours': parcours,  'form': form, 'exercise_knowledges' : knowledges, 'group_id' : group_id, 'stage' : stage , 'communications' : [] , 'role' : role  }

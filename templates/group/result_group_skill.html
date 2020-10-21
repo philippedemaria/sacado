@@ -21,6 +21,7 @@
 		
     {% for skill in skills %}
     	<td>
+    		{% get_result_skills_custom student skill as resultskill_custom %}
     		{% get_result_skills student skill as resultskills %}
 			{% for r in resultskills %}
 					{% if r.point %}
@@ -41,7 +42,31 @@
 					          {{ r.point }}
 					    </a>
 					{% endif %}  
-	    	{% endfor %}  
+	    	{% endfor %} 
+			{% for r in resultskill_custom %}
+					{% if r.point %}
+					    <a  title="Exercice personnalisé" class="markdown square
+					            {% if r.point < 30 %}
+					             red 
+					            {% elif r.point < 60 %}
+					            orange
+					            {% elif r.point < 80 %}
+					            green
+					            {% else %}
+					            darkgreen
+					            {% endif %}" >
+					        {{ r.point }}
+					    </a>
+					{% else %}
+					    <a class="markdown"  > 
+					          {{ r.point }}
+					    </a>
+					{% endif %}  
+	    	{% endfor %} 
+
+
+
+
 	    </td>
 	{% endfor %} 
 {% endblock %}

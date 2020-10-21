@@ -920,7 +920,9 @@ width:100%;
   color: #555555;
 }
 
-
+.square{
+   border-radius: 4px; 
+}
 
 .markdown:hover{
   background-color: #e0e0e0;

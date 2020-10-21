@@ -12,9 +12,9 @@
         {% if group_id %}
         <li {% if 'result_parcours_exercise_students/' in request.path %} class="active" {% endif %}><a href="{% url 'result_parcours_exercise_students' parcours.id    %}"  class="no_button" ><i class="fa fa-tasks fa-fw"></i> Lire le suivi par exercice </a> </li>
         {% endif %}
-        <li class="divider"></li>
+        <!-- <li class="divider"></li>
         <li><a href="{% url 'export_knowledge' parcours.id    %}"  class="no_button" ><i class="fa fa-download fa-fw"></i> Exporter les résultats de savoir faire csv</a></li>          
-        <li><a href="{% url 'export_skill' parcours.id    %}"  class="no_button" ><i class="fa fa-download fa-fw"></i> Exporter les résultats de compétences csv</a></li>        
+        <li><a href="{% url 'export_skill' parcours.id    %}"  class="no_button" ><i class="fa fa-download fa-fw"></i> Exporter les résultats de compétences csv</a></li>         -->
     </ul>
 </li> 
 

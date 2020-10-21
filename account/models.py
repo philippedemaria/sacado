@@ -151,9 +151,12 @@ class Student(ModelWithCode):
 
 
     def result_skills(self, skill):
-        ''' résultats de l'étudiants aux 5 dernières évaluations de compétences de la compétence en paramètre'''
-        return self.results_s.filter(skill=skill).order_by("-id")[:5]
+        ''' résultats de l'étudiants aux 3 dernières évaluations de compétences de la compétence en paramètre'''
+        return self.results_s.filter(skill=skill).order_by("-id")[:3]
 
+
+    def result_skills_custom(self, skill):
+        return self.student_correctionskill.filter(skill=skill).order_by("-id")[:3]
 
 
     def knowledge_average(self, group):
@@ -237,6 +240,8 @@ class Student(ModelWithCode):
             test = False
  
         return test
+
+
 
 
 class Teacher(models.Model):

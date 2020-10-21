@@ -494,3 +494,9 @@ def get_custom_score(obj, customexercise, student, parcours):
     return obj.custom_score(customexercise, student, parcours)
 
 
+@register.simple_tag 
+def get_result_skills_custom(obj, skill):
+    """
+    renvoie le résultat des compétences corrigé par l'enseignant pour l'enseignant
+    """
+    return obj.result_skills_custom(skill)

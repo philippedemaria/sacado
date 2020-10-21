@@ -419,7 +419,8 @@ class Parcours(ModelWithCode):
 
     def nb_exercises(self):
         nb = self.exercises.filter(supportfile__is_title=0).count()
-        return nb 
+        nba = self.parcours_customexercises.filter(is_publish=1).count()       
+        return nb + nba
 
 
     def exercises_only(self):
