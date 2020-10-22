@@ -533,6 +533,7 @@ def ajax_individualise(request):
 def list_parcours(request):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
+    today = time_zone_user(teacher.user)
     parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=0,is_archive=0).order_by("-is_favorite")  
     nb_archive =  Parcours.objects.filter(teacher = teacher,is_evaluation=0,is_archive=1).count()  
     try :
@@ -540,7 +541,7 @@ def list_parcours(request):
     except:
         pass  
 
-    return render(request, 'qcm/list_parcours.html', { 'parcourses' : parcourses , 'communications' : [] , 'relationships' : [],  'parcours' : None , 'group' : None , 'teacher' : teacher , 'nb_archive' : nb_archive })
+    return render(request, 'qcm/list_parcours.html', { 'parcourses' : parcourses , 'communications' : [] , 'relationships' : [],  'parcours' : None , 'group' : None , 'today' : today ,  'teacher' : teacher , 'nb_archive' : nb_archive })
 
 
 
@@ -548,19 +549,20 @@ def list_archives(request):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=0,is_archive=1).order_by("level")  
- 
+    today = time_zone_user(teacher.user)
     try :
         del request.session["group_id"]
     except:
         pass   
 
-    return render(request, 'qcm/list_archives.html', { 'parcourses' : parcourses , 'parcours' : None , 'teacher' : teacher ,  'communications' : [] , 'relationships' : [], })
+    return render(request, 'qcm/list_archives.html', { 'parcourses' : parcourses , 'parcours' : None , 'teacher' : teacher ,  'communications' : [] , 'relationships' : [], 'today' : today , })
 
 
 
 
 def list_evaluations(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
+    today = time_zone_user(teacher.user)
     parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=1,is_archive=0).order_by("-is_favorite")     
     nb_archive = Parcours.objects.filter(teacher = teacher,is_evaluation=1,is_archive=1).count()  
     try :
@@ -568,7 +570,7 @@ def list_evaluations(request):
     except:
         pass  
 
-    return render(request, 'qcm/list_evaluations.html', { 'parcourses' : parcourses, 'parcours' : None ,  'teacher' : teacher ,  'communications' : [] , 'relationships' : []   , 'nb_archive' : nb_archive })
+    return render(request, 'qcm/list_evaluations.html', { 'parcourses' : parcourses, 'parcours' : None ,  'teacher' : teacher ,  'communications' : [] , 'relationships' : []   ,  'today' : today , 'nb_archive' : nb_archive })
 
 
 
@@ -576,13 +578,13 @@ def list_evaluations(request):
 def list_evaluations_archives(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=1,is_archive=1).order_by("level")    
-
+    today = time_zone_user(teacher.user)
     try :
         del request.session["group_id"]
     except:
         pass  
 
-    return render(request, 'qcm/list_evaluations_archives.html', { 'parcourses' : parcourses, 'parcours' : None , 'teacher' : teacher , 'communications' : [] , 'relationships' : []   })
+    return render(request, 'qcm/list_evaluations_archives.html', { 'parcourses' : parcourses, 'parcours' : None , 'teacher' : teacher , 'communications' : [] ,  'today' : today , 'relationships' : []   })
 
 
 
@@ -591,7 +593,7 @@ def list_evaluations_archives(request):
 def list_parcours_group(request,id):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
- 
+    today = time_zone_user(teacher.user)
     group = Group.objects.get(pk = id)
     try :
         sharing_group = Sharing_group.objects.get(group = group, teacher=teacher)
@@ -621,7 +623,7 @@ def list_parcours_group(request,id):
                     parcours_tab.append(parcours)
                 if len(parcours_tab) == teacher.teacher_parcours.count() :
                     break 
-    return render(request, 'qcm/list_parcours_group.html', {'parcours_tab': parcours_tab , 'group': group,  'parcours' : None , 'communications' : [] , 'relationships' : [] , 'role' : role })
+    return render(request, 'qcm/list_parcours_group.html', {'parcours_tab': parcours_tab , 'group': group,  'parcours' : None , 'communications' : [] , 'relationships' : [] , 'role' : role , 'today' : today })
 
 
 
@@ -915,7 +917,7 @@ def show_parcours_student(request, id):
     student = Student.objects.get(user = user)
     relationships = Relationship.objects.filter(parcours=parcours, students=student, is_publish=1 ).order_by("order")
     customexercises = Customexercise.objects.filter(parcourses = parcours, students=student, is_publish=1 ).order_by("ranking") 
-
+ 
 
     nb_exo_only,nb_exo_only_c = [] , [] 
     i=0
@@ -939,7 +941,7 @@ def show_parcours_student(request, id):
     nb_exercises = Relationship.objects.filter(parcours=parcours, students=student, is_publish=1 ).count() + Customexercise.objects.filter(parcourses = parcours, students=student, is_publish=1 ).count()
 
 
-    context = {'relationships': relationships, 'customexercises': customexercises, 'stage' : stage , 'courses':courses ,  'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only, 'nb_exo_only_c' : nb_exo_only_c ,  'today': today ,   }
+    context = {'relationships': relationships, 'customexercises': customexercises, 'stage' : stage , 'today' : today , 'courses':courses ,  'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only, 'nb_exo_only_c' : nb_exo_only_c ,  'today': today ,   }
  
     return render(request, 'qcm/show_parcours_student.html', context)
 
@@ -3266,7 +3268,7 @@ def write_exercise(request,id): # Coté élève
  
     student = Student.objects.get(user = request.user)  
     relationship = Relationship.objects.get(pk = id)
-
+    today = time_zone_user(student.user)
     if Writtenanswerbystudent.objects.filter(student = student, relationship = relationship ).exists() : 
         w = Writtenanswerbystudent.objects.get(student = student, relationship = relationship )
         wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None, instance = w )    
@@ -3283,7 +3285,7 @@ def write_exercise(request,id): # Coté élève
             return redirect('show_parcours_student' , relationship.parcours.id )
 
 
-    context = {'relationship': relationship, 'communications' : [] , 'form' : wForm }
+    context = {'relationship': relationship, 'communications' : [] , 'parcours' : relationship.parcours ,  'form' : wForm, 'today' : today  }
 
     if relationship.exercise.supportfile.is_python :
         url = "basthon/index.html" 

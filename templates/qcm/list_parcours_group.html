@@ -68,11 +68,12 @@
         <div  class="box box-widget widget-user-2 div_sorter"  {% if not parcours_sort.grouper %} data-parcours_id ="{{parcours.id}}" {% endif %} 
               style="cursor: move;{% if parcours.vignette %}background-image: url('{{ parcours.vignette.url }}'); background-size: cover; {% else %} background-color:{{parcours.color }}{% endif %};">
  
-              <!-- Add the bg color to the header using any of the bg-* classes -->
+
+            <!-- Add the bg color to the header using any of the bg-* classes -->
             <div class="handler widget-user-header">
                 <div class="group_show  group_show{{parcours.id }}"> 
                     <form action="#" method="POST">
-                                {% csrf_token %}
+                        {% csrf_token %}
                         <a  href="#principal_section" class="vue menuactionparcours" data-toggle='modal' style="float:left; margin-right:10px"  
                             data-group_name='{{ group.name }}' data-parcours_id='{{ parcours.id }}' data-target='#listing'> 
                             {% get_parcours_group_students_count parcours group as parcours_group_students %}
@@ -80,7 +81,7 @@
                         </a> 
                     </form>
                     <font style="font-size:11px; color:#AAA">
-                        {% for s in   parcours_group_students.students|dictsort:"user.last_name"  %}
+                        {% for s in parcours_group_students.students|dictsort:"user.last_name"  %}
                         <a  href="#principal_section" class="detail_student_parcours"  data-student_id="{{ s.user.id }}"  
                             data-parcours_id="{{ parcours.id }}" >{{s}}</a>{% if not forloop.last %}, {% endif %}
                         {% endfor %}
@@ -100,9 +101,8 @@
                 <div class="overlay  overlay_show{{parcours.id }}" style="height:100px"> 
                     <div class="overlay_expand">
                         <a href="#" data-parcours_id="{{parcours.id }}" class="overlay_show pull-right">
-                                <i class="fa fa-times"></i>
+                            <i class="fa fa-times"></i>
                         </a>
-
                         <form action="" method="POST" enctype='multipart/form-data'>     
                             {% csrf_token %}
                             <div class="btn-group"  style="padding:0px;margin:0px;">
@@ -139,7 +139,7 @@
                             </div>
  
                             <div class="col-md-6 col-lg-6 col-xs-6" style="padding-left:5px">
-                                <button href="#" class="btn btn-primary exportation_de_note" type="submit" data-parcours_id="{{parcours.id }}"  data-group_id="{{group.id }}"  > Export de notes</button>
+                                <button href="#" class="btn btn-primary exportation_de_note" type="submit" data-parcours_id="{{parcours.id }}"  data-group_id="{{group.id }}"> Export de notes</button>
                             </div>
                         </form>
                         {% else %}
@@ -159,6 +159,11 @@
                 {% endif  %}
                 <div class="box_title_vignette"> 
                     <a {% if parcours.is_evaluation%} href="{% url 'show_evaluation'  parcours.id  %}" {% else %} href="{% url 'show_parcours'  parcours.id  %}"{% endif %} style="color:{{ parcours.color|contrast_color }};"> {{ parcours.title|truncatechars:"18" }}
+
+
+                        {% get_is_lock parcours today as is_lock %} 
+                        {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillée. Il n'est plus possible de soumettre des exercices</div></span>{% endif %} 
+
                         <span style="font-size:12px"> 
                             {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}, 
                                 {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }} {% endif %}min.

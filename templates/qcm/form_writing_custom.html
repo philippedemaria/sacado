@@ -67,14 +67,16 @@
                                 <h3>Commentaire :</h3>
                                  {{ data.comment }}                        
                             {% endif  %}
-                            {% if data.is_corrected  %}<hr>
-                                <input type="button" value="Retour aux exercices" onclick="javascript:history.back()" class="btn btn-default "/>                               
+                            {% get_is_lock parcours today as is_lock %}                            
+                            {% get_is_lock customexercise today as is_block %}
+                            {% if not is_lock  %}
+                                {% if not data.is_corrected and not is_block  %}
+                                    <input value="Soumettre votre exercice" type="submit" class="btn btn-primary"/>
+                                {% endif  %}
                             {% endif  %}
-                            {% if not data.point and not customexercise.is_lock  %}
-                                <input value="Soumettre votre exercice" type="submit" class="btn btn-primary"/>
+
                                 <input type="button" value="Annuler" onclick="javascript:history.back()"
-                                                                       class="btn btn-default "/>
-                            {% endif  %}
+                                                                       class="btn btn-default "/>                                       
                         </div>
                     </div>
  

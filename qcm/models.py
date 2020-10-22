@@ -387,8 +387,11 @@ class Parcours(ModelWithCode):
 
     def is_lock(self,today):
         lock = False
-        if self.stop < today :
-            lock = True 
+        try :
+            if self.stop < today :
+                lock = True 
+        except :
+            pass
         return lock
 
 

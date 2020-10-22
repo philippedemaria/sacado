@@ -63,7 +63,11 @@ body{
                             </span>
                         </td>  
                         <td>
-                            <a href="{% url 'show_parcours' parcours.id %}" > {{ parcours.title }} {% if parcours.linked %}(Par défaut){% endif %} </a>
+                            <a href="{% url 'show_evaluation' parcours.id %}" > {{ parcours.title }}
+                                {% get_is_lock parcours today as is_lock %} 
+                                {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillée. Il n'est plus possible de soumettre des exercices</div></span>{% endif %} 
+
+                            </a>
 
 
                             

@@ -83,7 +83,7 @@
       </div>
       {% if   'write' in request.path or 'show_custom' in request.path %}
       <div id="left-div" style="margin-top: 20px">        
-        <button type="submit" name="submit_code" id="submit_code" class="btn btn-primary" >Envoyer ce script à mon enseignant</button>                         
+        <button {% get_is_lock customexercise today as is_lock %}{% if not is_lock %}type="submit"{% endif %} name="submit_code" id="submit_code" class="btn btn-primary" >Envoyer ce script à mon enseignant</button>                         
 
         <a href="javascript:history.back()"><input type="button" value="Annuler"
                                                                    class="btn btn-default "/></a>
@@ -100,3 +100,5 @@
     <script src="{% static 'basthon/js/shell.js' %}"></script>
     <script src="{% static 'basthon/js/gui.js' %}"></script>
 {% endblock %}
+
+    

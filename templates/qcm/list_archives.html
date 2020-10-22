@@ -72,7 +72,10 @@ body{
                             </span>
                         </td>  
                         <td>
-                            <a href="{% url 'show_parcours' parcours.id %}" > {{ parcours.title }} {% if parcours.linked %}(Par défaut){% endif %} </a>
+                            <a href="{% url 'show_parcours' parcours.id %}" > {{ parcours.title }}
+                                {% get_is_lock parcours today as is_lock %} 
+                                {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillée. Il n'est plus possible de soumettre des exercices</div></span>{% endif %} 
+                            </a>
                              <div style="font-size:14px;margin-top:-5px;">
                                 {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }} - {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }} {% endif %}min. 
                             </div>                            

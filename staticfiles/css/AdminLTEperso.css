@@ -4042,6 +4042,30 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   box-shadow: 0px 2px 50px rgba(0,0,0,0.3);
 }
 
+
+
+.helper_tip .helper_tip_text_right {
+  visibility: hidden;
+  width: 200px;
+  background-color: #FFF;
+  color: #222;
+  text-align: left;
+  border-radius: 4px;
+  padding: 5px;
+  position: absolute;
+  font-size: 14px;
+  /* Position the tooltip */
+  top: 100%;
+  left: 0;
+  z-index: 99999;
+}
+
+.helper_tip:hover .helper_tip_text_right {
+  visibility: visible;
+  position: absolute;
+  box-shadow: 0px 2px 50px rgba(0,0,0,0.3);
+}
+
 .box_result{
   float: left;
   height: 35px;

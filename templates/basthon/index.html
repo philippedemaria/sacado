@@ -83,7 +83,7 @@
       </div>
       {% if   'write_exercise' in request.path %}
       <div id="left-div" style="margin-top: 20px">        
-        <button type="submit" name="submit_code" id="submit_code" class="btn btn-primary" >Envoyer ce script à mon enseignant</button>                         
+        <button {% get_is_lock parcours today as is_lock %}{% if not is_lock %}type="submit" name="submit_code"{% endif %} id="submit_code" class="btn btn-primary" >Envoyer ce script à mon enseignant</button>                         
 
         <a href="javascript:history.back()"><input type="button" value="Annuler"
                                                                    class="btn btn-default "/></a>
