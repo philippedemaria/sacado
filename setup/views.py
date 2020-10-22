@@ -3,7 +3,7 @@ from django.contrib.auth.forms import  UserCreationForm,  AuthenticationForm
 from account.forms import  UserForm, TeacherForm, StudentForm
 from django.contrib.auth import   logout
 from account.models import  User, Teacher, Student  ,Parent
-from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile
+from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise
 from group.models import Group, Sharing_group
 from school.models import Stage
 from sendmail.models import Communication
@@ -19,24 +19,37 @@ import uuid
 import os
 from itertools import chain
 from account.decorators import is_manager_of_this_school
+from general_fonctions import *
+
 
 def index(request):
 
     if request.user.is_authenticated:
-        if request.user.time_zone:
-            time_zome = request.user.time_zone
-            timezone.activate(pytz.timezone(time_zome))
-            current_tz = timezone.get_current_timezone()
-            today = timezone.localtime(timezone.now())
-        else:
-            today = timezone.now()
+         
 
+        today = time_zone_user(request.user)
+        ############################################################################################
+        #### Mise à jour et affichage des publications  
+        ############################################################################################  
+        relationships = Relationship.objects.filter(is_publish = 0,start__lte=today)
+        for r in relationships :
+            Relationship.objects.filter(id=r.id).update(is_publish = 1)
+
+        parcourses = Parcours.objects.filter(start__lte=today).exclude(start = None)
+        for p in parcourses :
+            Parcours.objects.filter(id=p.id).update(is_publish = 1)
+
+        customexercises = Customexercise.objects.filter(start__lte=today).exclude(start = None)
+        for c in customexercises :
+            Customexercise.objects.filter(id=c.id).update(is_publish = 1)
+        ############################################################################################
+        #### Fin de Mise à jour et affichage des publications
+        ############################################################################################
         timer = today.time()
 
         if request.user.last_login.date() != today.date() :
             request.user.last_login = today
             request.user.save()
-            
 
         if request.user.is_teacher:
 
@@ -102,7 +115,7 @@ def index(request):
             ratiowidth = int(0.9*ratio)
 
 
-            evaluations = Parcours.objects.filter(start__lte=today,  starter__lte=timer,  students=student, is_evaluation=1)
+            evaluations = Parcours.objects.filter(start__lte=today, students=student, is_evaluation=1)
 
             exercises = []
             studentanswers = Studentanswer.objects.filter(student = student)

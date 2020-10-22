@@ -17,7 +17,11 @@
 
 
 {% block page_title %}
-    <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-th"></i> {{ parcours }}    </span> <img src="{% static 'img/angle-right.png' %}"/>   <small> Suivi par exercices</small> 
+       {% if parcours %}
+    <span style="color:{{ parcours.color }}"><i class="fa fa-th"></i> </span> 
+    {% endif %}
+
+      {% include 'qcm/breadcrumb.html' %}  <small> Suivi par exercices</small> 
 {% endblock %}
  
 
@@ -28,7 +32,6 @@
      
 <section class="content_main">
     <div class="col-sm-12 col-md-12">
-
         <form action="" method="POST" enctype='multipart/form-data'> 
             {% csrf_token %} 
             {% for relationship in relationships|dictsort:"order" %} 
@@ -120,6 +123,113 @@
             {% endfor %}
 
   
+
+            {% for customexercise in customexercises  %} <hr>
+                <div class="row" style="margin-bottom:8px; padding-bottom: 8px; clear:both">
+                    <div class="col-sm-12 col-md-5">        
+                        <a href="{% url 'show_custom_exercise' customexercise.id  parcours.id %}" target="_blank" >  
+                        <img src="{{ customexercise.image.url }}" class="imagefile"></a>
+                                                            
+                         {{ customexercise.instruction|safe }}
+
+   
+
+                        {% if customexercise.calculator %}
+                          <img src="{% static 'img/calculator.png' %}" width="30px" />
+                        {% else %}
+                          <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                        {% endif  %}  <br>                        
+
+   
+
+                        <span style="font-size:16px;">    
+                            <i class="fa fa-fw fa-barcode"></i> {{ customexercise.code }} <br> 
+                            <i class="fa fa-fw fa-clock-o"></i> {{ customexercise.duration }} minutes  
+ 
+                        </span>
+                        <ul><label>Compétences ciblées</label>
+                        {% for s in customexercise.skills.all %}
+                            <li class="sanspuce">{{ forloop.counter }}. {{ s.name }}</li>
+                        {% endfor %}
+                        </ul>
+                        <ul><label>Savoir faire ciblés</label>
+                        {% for k in customexercise.knowledges.all %}
+                            <li class="sanspuce">{{ forloop.counter }}. {{ k.name }}</li>
+                        {% endfor %}
+                        </ul>
+                    </div> 
+                    <div  class="col-sm-12 col-md-7">
+                        {%  for student in  customexercise.students.all|dictsort:"user.last_name" %}
+                            {% get_all_results_custom  customexercise  student parcours as data %}
+ 
+ 
+                                          <div class="helper_tip  btn btn-{% if data.is_corrected %}primary{% else %}default{% endif %}" style="min-width:175px; margin:1px;{% if data.is_corrected %}color:#FFF{% endif %}" >
+                                              {{  student.user.last_name }} {{ student.user.first_name|truncatechars:5 }}  
+                                              <div class="helper_tip_text" style="width:250px;z-index: 99999">
+                                                {{ customexercise.instruction|safe}}<hr> 
+                                                    {% if data.point %}
+                                                    Note : {{  data.point }}/{{ customexercise.mark}} 
+                                                    {% endif %}  <br>                                              
+                                                  <label>Compétences ciblées</label>
+                                                  {% for s in data.skills.all %} 
+                                                      <li class="sanspuce">{{s.skill.name}} <i class="fa fa-square
+                                                                                                        {% if s.point < stage.low %}
+                                                                                                         text-danger 
+                                                                                                        {% elif s.point < stage.medium  %}
+                                                                                                         text-warning 
+                                                                                                        {% elif s.point < stage.up  %}
+                                                                                                         text-success 
+                                                                                                        {% else %}
+                                                                                                         text-primary 
+                                                                                                        {% endif %}"></i>
+                                                                                    </li>
+                                                  {% endfor %}           <br>
+                                                  <label>Savoir faire ciblés</label>
+                                                  {% for k in data.knowledges.all %} 
+                                                      <li class="sanspuce">Savoir faire {{ forloop.counter }} <i class="fa fa-square
+                                                                                                        {% if k.point < stage.low %}
+                                                                                                         text-danger 
+                                                                                                        {% elif k.point < stage.medium  %}
+                                                                                                         text-warning 
+                                                                                                        {% elif k.point < stage.up  %}
+                                                                                                         text-success 
+                                                                                                        {% else %}
+                                                                                                         text-primary 
+                                                                                                        {% endif %}"></i>
+                                                                                    </li>
+                                                {% endfor %}
+                                              </div>
+                                          </div>
+                                      
+                        {%  endfor %}
+                    </div>   
+                </div>                
+ 
+            
+ 
+
+            {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </form>
      
     </div>   

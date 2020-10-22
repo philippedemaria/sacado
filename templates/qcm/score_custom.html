@@ -1,0 +1,101 @@
+{% load static %}
+{% load item_tags %}
+
+ 
+ 
+ 
+{% get_all_results_custom  customexercise  student parcours as data %}
+
+{% if data.is_corrected %}
+      {% if data.point %}
+          <span class="helper_tip box_result_note">
+              {{  data.point }}/{{ customexercise.mark}} 
+              <div class="helper_tip_text" style="width:250px;z-index: 99999">
+                {{ customexercise.instruction|safe}}<hr> 
+                  <label>Compétences ciblées</label>
+                  {% for s in data.skills.all %} 
+                      <li class="sanspuce">{{s.skill.name}}  <i class="fa fa-square
+                                                                        {% if s.point < stage.low %}
+                                                                         text-danger 
+                                                                        {% elif s.point < stage.medium  %}
+                                                                         text-warning 
+                                                                        {% elif s.point < stage.up  %}
+                                                                         text-success 
+                                                                        {% else %}
+                                                                         text-primary 
+                                                                        {% endif %}"></i>
+                                                    </li>
+                  {% endfor %}           <br>
+                  <label>Savoir faire ciblés</label>
+                  {% for k in data.knowledges.all %} 
+                      <li class="sanspuce">{{k.knowledge.name}} <i class="fa fa-square
+                                                                        {% if k.point < stage.low %}
+                                                                         text-danger 
+                                                                        {% elif k.point < stage.medium  %}
+                                                                         text-warning 
+                                                                        {% elif k.point < stage.up  %}
+                                                                         text-success 
+                                                                        {% else %}
+                                                                         text-primary 
+                                                                        {% endif %}"></i>
+                                                    </li>
+                {% endfor %}
+              </div>
+          </span>
+      {% else %}
+          <span class="helper_tip box_result">
+              {% for s in data.skills.all %} <i class="fa fa-square
+                                                                        {% if s.point < stage.low %}
+                                                                         text-danger 
+                                                                        {% elif s.point < stage.medium  %}
+                                                                         text-warning 
+                                                                        {% elif s.point < stage.up  %}
+                                                                         text-success 
+                                                                        {% else %}
+                                                                         text-primary 
+                                                                        {% endif %}"></i>{% endfor %}
+              {% for k in data.knowledges.all %} <i class="fa fa-square
+                                              {% if k.point < stage.low %}
+                                               text-danger 
+                                              {% elif k.point < stage.medium  %}
+                                               text-warning 
+                                              {% elif k.point < stage.up  %}
+                                               text-success 
+                                              {% else %}
+                                               text-primary 
+                                              {% endif %}"></i>{% endfor %}
+              <div class="helper_tip_text" style="width:250px;z-index: 99999">                {{ customexercise.instruction|safe}}<hr> 
+                  <label>Compétences ciblées</label>
+                  {% for s in data.skills.all %}
+                        <li class="sanspuce">{{s.skill.name}} <i class="fa fa-square
+                                                {% if s.point < stage.low %}
+                                                 text-danger 
+                                                {% elif s.point < stage.medium  %}
+                                                 text-warning 
+                                                {% elif s.point < stage.up  %}
+                                                 text-success 
+                                                {% else %}
+                                                 text-primary 
+                                                {% endif %}"></i>
+                        </li>
+                  {% endfor %}
+                  <br>
+                  <label>Savoir faire ciblés</label>
+                  {% for k in data.knowledges.all %}
+                  <li class="sanspuce">{{k.knowledge.name}}  <i class="fa fa-square
+                                              {% if k.point < stage.low %}
+                                               text-danger 
+                                              {% elif k.point < stage.medium  %}
+                                               text-warning 
+                                              {% elif k.point < stage.up  %}
+                                               text-success 
+                                              {% else %}
+                                               text-primary 
+                                              {% endif %}"></i>
+                  </li>{% endfor %}
+              </div>
+          </span>
+      {% endif %}
+{% endif %}
+
+ 

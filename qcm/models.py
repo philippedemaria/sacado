@@ -363,10 +363,8 @@ class Parcours(ModelWithCode):
 
     is_evaluation = models.BooleanField(default=0, editable=False)
     duration = models.PositiveIntegerField(default=2, blank=True, verbose_name="Temps de chargement (min.)")
-    start = models.DateField(null=True, blank=True, verbose_name="Date de début de publication")
-    starter = models.TimeField(null=True, blank=True, verbose_name="Heure de début de publication")
-    stop = models.DateField(null=True, blank=True, verbose_name="Verrouillée à partir de")
-    stopper = models.TimeField(null=True, blank=True, verbose_name="Heure de verrouillage")
+    start = models.DateTimeField(null=True, blank=True, verbose_name="Date de début de publication")
+    stop = models.DateTimeField(null=True, blank=True, verbose_name="Verrouillée à partir de")
 
     vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Vignette d'accueil", blank=True, default ="")
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
@@ -387,9 +385,9 @@ class Parcours(ModelWithCode):
         return nb_relationships
 
 
-    def is_lock(self,today, timer):
+    def is_lock(self,today):
         lock = False
-        if self.stop < today and self.stopper < timer :
+        if self.stop < today :
             lock = True 
         return lock
 
@@ -615,8 +613,8 @@ class Relationship(models.Model):
     parcours = models.ForeignKey(Parcours, on_delete=models.PROTECT,  related_name='parcours_relationship',  editable= False)
     order = models.PositiveIntegerField(default=0, editable=False)
     is_publish = models.BooleanField(default=1)
-    start = models.DateField(null=True, blank=True, verbose_name="A partir de")
-    date_limit = models.DateField(null=True, blank=True, verbose_name="Date limite du rendu")
+    start = models.DateTimeField(null=True, blank=True, verbose_name="A partir de")
+    date_limit = models.DateTimeField(null=True, blank=True, verbose_name="Date limite du rendu")
     is_evaluation = models.BooleanField(default=0)
     duration = models.PositiveIntegerField(default=15, verbose_name="Durée estimée en minutes")
     situation = models.PositiveIntegerField(default=10, verbose_name="Nombre minimal de situations", help_text="Pour valider le qcm")
@@ -649,7 +647,7 @@ class Relationship(models.Model):
 
     def is_task(self):
         task = False
-        today = timezone.now().date()
+        today = timezone.now() 
         try :
             if self.date_limit >= today:
                 task = True
@@ -847,7 +845,7 @@ class Customexercise(ModelWithCode):
 
 
 
-    def is_block(self,today):
+    def is_lock(self,today):
         locker = False
         try :
             if self.lock < today :
@@ -986,9 +984,7 @@ class Correctionknowledgecustomexercise(models.Model): # Evaluation des savoir f
 ########################################################################################################################################### 
 ######################################################### FIN  Remediation       ########################################################## 
 ########################################################################################################################################### 
-########################################################################################################################################### 
-
- 
+###########################################################################################################################################  
 class Remediation(models.Model):
 
     title = models.CharField(max_length=255, default='',  blank=True,verbose_name="Titre")
@@ -1028,8 +1024,8 @@ class Course(models.Model): # pour les
     duration = models.PositiveIntegerField(  default=15,  blank=True,  verbose_name="Durée estimée de lecture")  
 
     is_publish = models.BooleanField( default= 0, verbose_name="Publié ?")
-    publish_start = models.DateField(default=timezone.now,  blank=True, max_length=255, verbose_name="Début à", help_text="Changer les dates des cours peut remplacer les réglages de leur durée de disponibilité et leur placement dans les pages de cours ou le tableau de bord. Veuillez confirmer les dates d’échéance avant de modifier les dates des cours. ")
-    publish_end = models.DateField( blank=True, null=True,  max_length=255, verbose_name="Se termine à")
+    publish_start = models.DateTimeField(default=timezone.now,  blank=True, max_length=255, verbose_name="Début à", help_text="Changer les dates des cours peut remplacer les réglages de leur durée de disponibilité et leur placement dans les pages de cours ou le tableau de bord. Veuillez confirmer les dates d’échéance avant de modifier les dates des cours. ")
+    publish_end = models.DateTimeField( blank=True, null=True,  max_length=255, verbose_name="Se termine à")
 
 
     ranking = models.PositiveIntegerField(  default=1,  blank=True, null=True,  verbose_name="Ordre") 
@@ -1061,7 +1057,6 @@ class Course(models.Model): # pour les
 ########################################################################################################################################### 
 ########################################################################################################################################### 
 
-
 class Demand(models.Model):
     level = models.ForeignKey(Level, related_name="demand", on_delete=models.PROTECT, verbose_name="Niveau")
     theme = models.ForeignKey(Theme, related_name="demand", on_delete=models.PROTECT, verbose_name="Thème")
@@ -1077,14 +1072,11 @@ class Demand(models.Model):
         return "{}".format(self.demand)
 
 
-
-
 ########################################################################################################################################### 
 ########################################################################################################################################### 
 ########################################################   Mastering        ############################################################### 
 ########################################################################################################################################### 
 ########################################################################################################################################### 
-
 
 class Mastering(models.Model):
 
@@ -1102,8 +1094,6 @@ class Mastering(models.Model):
     
     def __str__(self):
         return "{}".format(self.relationship)
-
-
 
     def is_done(self,student): 
         is_do = False  
@@ -1127,7 +1117,6 @@ class Mastering_done(models.Model):
 ################################################   Mastering  from customexercise       ################################################### 
 ########################################################################################################################################### 
 ########################################################################################################################################### 
-
 
 class Masteringcustom(models.Model):
 

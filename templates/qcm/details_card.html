@@ -87,7 +87,7 @@
                </div> 
               <hr style="padding:0px; margin:10px 0px"/> 
                 <label  style="font-size: 10px;">Date limite de rendu ?</label><br>
-                <input type="type" name="dateur" data-relationship_id="{{relation.id}}" data-type ="1" data-custom ="0" value='{{ relation.date_limit|date:"Y-m-d" }}' class="datepicker dateur pull-right" />
+                <input type="type" name="dateur" data-relationship_id="{{relation.id}}" data-type ="1" data-custom ="0" value='{{ relation.date_limit|date:"Y-m-d" }}' class="datetimepicker dateur pull-right" />
           </div>
 
           <!-- Pop up de la date de publication d'un exercice  -->
@@ -100,7 +100,7 @@
                </div> 
               <hr style="padding:0px; margin:10px 0px"/>             
                 <label  style="font-size: 12px;">Date de publication ?</label><br>
-                <input type="type" name="start" data-relationship_id="{{relation.id}}" data-type ="0" data-custom ="0" value='{{ relation.date_limit|date:"Y-m-d" }}' class="datepicker dateur pull-right" />
+                <input type="type" name="start" data-relationship_id="{{relation.id}}" data-type ="0" data-custom ="0" value='{{ relation.date_limit|date:"Y-m-d" }}' class="datetimepicker dateur pull-right" />
           </div>
 
           <!-- Pop up de la constrainte  -->

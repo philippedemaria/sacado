@@ -15,8 +15,13 @@
         require(['script/ajax-parcours']);
     </script> 
 
- 
-
+    {% block require_complement %}
+        {% if not parcours %}
+            <script>
+                require(['script/ajax-parcours-complement']);
+            </script> 
+        {% endif %}
+    {% endblock %} 
 
 {% endblock %} 
 
@@ -65,15 +70,22 @@
                     </div>
                 </div>
                 <div class="col-sm-12  col-md-3  col-lg-2">
-                      {{ form.color.label_tag }}
+                      {{ form.color.label_tag }}      
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" >La couleur donne de la gaieté aux parcours et permet la reconnaissance rapide.</div>
+                                </span>
                       <div id="color-picker-component" class="input-group colorpicker-component">
                           {{ form.color.as_hidden }}
                           <span class="input-group-addon"><i></i></span>
                       </div>
                 </div>
+                {% block evaluation_choices %}     
                 <div class="col-sm-4  col-md-3  col-lg-2">
                     <div class="form-group">
-                        {{ form.is_favorite.label_tag  }} <span style="font-size:10px">Accessibilité depuis votre groupe</span><br>
+                        {{ form.is_favorite.label_tag  }} 
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" >Si coché, le parcours est accessible depuis le.s groupe.s au.x.quel.s il est rattaché. Sinon il n'est accessible que depuis la liste de vos parcours.</div>
+                                </span> <br>
                         {{ form.is_favorite |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                         {{ form.is_favorite.errors }}
                         
@@ -81,11 +93,15 @@
                 </div>
                 <div class="col-sm-4  col-md-4  col-lg-2">
                     <div class="form-group">
-                        {{ form.is_share.label_tag }} <br>
+                        {{ form.is_share.label_tag }}                                 
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" >Si coché, le parcours est proposé à l'ensemble des collègues de SACADO. Si vous n'avez pas la version établissement, le parcours n'est pas mutualisé par défaut.</div>
+                                </span><br>
                         {{ form.is_share |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                         {{ form.is_share.errors }}
                     </div>
                 </div>
+                {% endblock %}
                 <div class="col-sm-4  col-md-4  col-lg-2">
                     <div class="form-group">
                         {{ form.is_publish.label_tag }} <br>
@@ -150,7 +166,6 @@
                           <div id="demosg{{ forloop.counter }}" class="collapse" >
                                 <div class="form-group">
                                     {% for s in sg.group.students.all|dictsort:"user.last_name"  %}
-
                                         <label>
                                             <input type = "checkbox" 
                                                     class="selector" 
@@ -193,20 +208,32 @@
                         <span style="font-size:10px">La vignette propose une image de votre parcours à vos élèves (facultatif)</span>
                 {% if   parcours %} 
                     <div style="height:20px"></div>
-
                     <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-{% if parcours.exercises.all|length > 0 %}default{% else %}danger{% endif %}" ><i class="fa fa-tasks"></i> Sélectionner les exercices</a>   
                 {% endif %}   
                 </div>
 
-                
-                <div class="col-sm-12 col-md-5  col-lg-5"> 
-
-                    {% block evaluation %}
-
-
-                    {% endblock %}
-
+                {% block evaluation %}                 
+                <div class="col-sm-12 col-md-5 col-lg-5" id="publication_div"> 
+                    <table class="table">
+                        <tr>
+                            <td><label>Date de publication</label></td>
+                            <td>{{ form.start|add_class:"form-control datetimepicker"}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>{{ form.stop.label_tag }} 
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                        <div class="helper_tip_text" >Le parcours reste publié mais la soumission des exercices est interdite après la date renseignée. Pour dépublier, utiliser le bouton de publication.</div>
+                                    </span>
+                            </td>
+                            <td>{{ form.stop|add_class:"form-control datetimepicker"}}</td>
+                            <td>{{ form.stop.errors}}{% for error in form.non_field_errors %}
+                                    <p class="alert alert-danger">{{error}}</p>
+                                {% endfor %}</td>
+                        </tr>
+                    </table>
                 </div>
+                {% endblock %}                
             </div> 
 
             {% block save_evaluation %}

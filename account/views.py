@@ -78,13 +78,14 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
             for r in relationships :
                 Relationship.objects.filter(id=r.id).update(is_publish = 1)
 
-
             if self.request.user.is_teacher:  # Teacher
+
                 teacher = Teacher.objects.get(user=self.request.user.id)
+
                 groups = Group.objects.filter(teacher = teacher)
 
                 relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("parcours")
-                parcourses = Parcours.objects.filter(teacher=teacher, linked=0)  # parcours non liés à un groupe
+                parcourses = Parcours.objects.filter(teacher=teacher)  # parcours non liés à un groupe
 
                 communications = Communication.objects.filter(active=1)
                 parcours_tab = Parcours.objects.filter(students=None, teacher=teacher)

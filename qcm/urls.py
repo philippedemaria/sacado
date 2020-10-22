@@ -205,6 +205,7 @@ urlpatterns = [
     path('parcours_create_custom_exercise/<int:id>/<int:typ>', parcours_create_custom_exercise, name='parcours_create_custom_exercise'), 
     path('parcours_update_custom_exercise/<int:idcc>/<int:id>', parcours_update_custom_exercise, name='parcours_update_custom_exercise'), 
     path('parcours_delete_custom_exercise/<int:idcc>/<int:id>', parcours_delete_custom_exercise, name='parcours_delete_custom_exercise'), 
+    path('parcours_show_custom_exercise/<int:id>/<int:idp>',  show_custom_exercise, name='show_custom_exercise'), # vue enseignant de l'exercice
 
     path('write_custom_exercise/<int:id>/<int:idp>', write_custom_exercise, name='write_custom_exercise'), 
     path('ajax_mark_evaluate', ajax_mark_evaluate, name='ajax_mark_evaluate'),

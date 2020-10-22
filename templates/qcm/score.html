@@ -7,7 +7,7 @@
 {% get_score  relationship.exercise  student as score %}
 
 {% if score != "" %}
-    <a class="markdown
+    <a class="markdown helper_tip
             {% if score < stage.low %}
              red 
             {% elif score < stage.medium  %}
@@ -17,20 +17,20 @@
             {% else %}
             darkgreen
             {% endif %}"
-          href="{% url 'show_this_exercise'  relationship.exercise.id   %}" data-container="body"
-          data-toggle="popover" target="_blank" title="{{ relationship.exercise.knowledge.name }}"
-          data-trigger="hover" data-placement="top"
-          data-content="{{ relationship.exercise.knowledge.name }}">
-        {{ score }}
+          href="{% url 'show_this_exercise'  relationship.exercise.id   %}" 
+          target="_blank" >
+ 
+
+              {{ score }}<div class="helper_tip_text">{{ relationship.exercise.knowledge.name }}</div>
+
+ 
+
     </a>
 {% else %}
-    <a class="markdown"                                                   
-          href="{% url 'show_this_exercise' relationship.exercise.id %}" data-container="body"
-          data-toggle="popover"  
-          data-trigger="hover" target="_blank"
-          title="Exercice" data-placement="top"
-          data-content="{{ relationship.exercise.knowledge.name }}"> 
-          {{ score }}
+    <a class="markdown helper_tip" href="{% url 'show_this_exercise'  relationship.exercise.id   %}" target="_blank"  >
+
+              {{ score }}<div class="helper_tip_text">{{ relationship.exercise.knowledge.name }}</div>
+ 
     </a>
 {% endif %}
 

@@ -35,9 +35,9 @@
                             </form>
                             <font style="font-size:12px">
                             {% if parcours.is_evaluation %}
-                                Date de publication : {{  parcours.start|date:"d N Y"  }} à  {{  parcours.starter  }} 
+                                {{  parcours.start|date:"d N Y H:i"  }}   
                                 {% if parcours.stop %}
-                                    <br>Fin de publication : {{  parcours.stop|date:"d N Y"  }} {% if parcours.stopper %}à {{  parcours.stopper  }} {% endif %}    
+                                   - {{  parcours.stop|date:"d N Y H:i"  }}     
                                 {% endif %}                                
                             {% endif %}
                             </font>

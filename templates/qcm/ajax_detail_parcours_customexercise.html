@@ -92,11 +92,13 @@
                             {% for skill in customexercise.skills.all %}
                             {% get_custom_score skill customexercise student parcours as custom_score %}
                                 <td>
+                                    {{ custom_score }}
                                 </td>
                             {% endfor %}
                             {% for knowledge in customexercise.knowledges.all %}
                             {% get_custom_score knowledge customexercise student parcours as custom_score %}
                                 <td>
+                                    {{ custom_score }}
                                 </td>
                             {% endfor %}
                         </tr>

@@ -13,7 +13,7 @@ define(['jquery','bootstrap', 'ui','datepicker','datetimepicker'], function ($) 
 
 		        language: "fr",
 		        todayHighlight: true,
-                 format: "yyyy-mm-dd hh:ii"
+                format: "yyyy-mm-dd hh:ii"
 
              });
     

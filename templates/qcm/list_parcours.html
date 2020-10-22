@@ -128,9 +128,9 @@ body{
                         </form>
                         <span class="label_icon" style="color:{{ parcours.color   }};">
                             {% if parcours.is_evaluation %}
-                                {{  parcours.start|date:"d N Y"  }},  {{  parcours.starter  }} 
+                                {{  parcours.start|date:"d N Y H:i"  }}   
                                 {% if parcours.stop %}
-                                   - {{  parcours.stop|date:"d N Y"  }}{% if parcours.stopper %}, {{  parcours.stopper  }} {% endif %}    
+                                   - {{  parcours.stop|date:"d N Y H:i"  }}     
                                 {% endif %}                                
                             {% endif %}
                         </span>

@@ -1003,11 +1003,13 @@ def result_parcours(request, id):
                 theme["name"]= thm.name
                 themes_tab.append(theme)
 
+    customexercises = parcours.parcours_customexercises.all() 
+
     form = EmailForm(request.POST or None )
 
     stage = get_stage(teacher.user)
 
-    context = {  'relationships': relationships, 'parcours': parcours, 'students': students, 'themes': themes_tab, 'form': form,  'group_id' : group_id  , 'stage' : stage, 'communications' : [] , 'role' : role }
+    context = {  'customexercises': customexercises, 'relationships': relationships, 'parcours': parcours, 'students': students, 'themes': themes_tab, 'form': form,  'group_id' : group_id  , 'stage' : stage, 'communications' : [] , 'role' : role }
 
     return render(request, 'qcm/result_parcours.html', context )
 
@@ -1027,7 +1029,9 @@ def result_parcours_theme(request, id, idt):
     group = data['group']
     group_id = data['group_id']  
 
+    customexercises = parcours.parcours_customexercises.all() 
  
+
     theme = Theme.objects.get(id=idt)
     exercises = Exercise.objects.filter(knowledge__theme = theme, supportfile__is_title=0).order_by("id")
     relationships = Relationship.objects.filter(parcours= parcours,exercise__in=exercises ).order_by("order")
@@ -1044,7 +1048,7 @@ def result_parcours_theme(request, id, idt):
     stage = get_stage(teacher.user)
     form = EmailForm(request.POST or None)
 
-    context = {  'relationships': relationships, 'parcours': parcours, 'students': students,  'themes': themes_tab,'form': form, 'group_id' : group_id , 'stage' : stage, 'communications' : [], 'role' : role  }
+    context = {  'relationships': relationships, 'customexercises': customexercises,'parcours': parcours, 'students': students,  'themes': themes_tab,'form': form, 'group_id' : group_id , 'stage' : stage, 'communications' : [], 'role' : role  }
 
     return render(request, 'qcm/result_parcours.html', context )
  
@@ -1491,8 +1495,10 @@ def result_parcours_exercise_students(request,id):
         group = None
  
     relationships = Relationship.objects.filter(parcours = parcours, is_publish = 1) 
+    customexercises = parcours.parcours_customexercises.filter( is_publish = 1).order_by("ranking")
+    stage = get_stage(teacher.user)
 
-    return render(request, 'qcm/result_parcours_exercise_students.html', { 'relationships': relationships , 'parcours': parcours , 'group_id': group_id ,  'group' : group ,  })
+    return render(request, 'qcm/result_parcours_exercise_students.html', {'customexercises': customexercises , 'stage':stage ,   'relationships': relationships ,  'parcours': parcours , 'group_id': group_id ,  'group' : group ,  })
 
 
 
@@ -1944,20 +1950,19 @@ def ajax_detail_parcours(request):
 
     else :
         parcours = Parcours.objects.get(pk = parcours_id )
-
         customexercise = Customexercise.objects.get(id = exercise_id, parcourses = parcours) 
- 
         students = customexercise.students.order_by("user__last_name") 
- 
-
         duration, score = 0, 0
         tab = []
         cas =  Customanswerbystudent.objects.filter(parcours=parcours, customexercise = customexercise)
         for ca in cas  : 
-            score += int(ca.point)
-            tab.append(ca.point)
-
+            try :
+                score += int(ca.point)
+                tab.append(ca.point)
+            except:
+                pass
         tab.sort()
+
         try :
             if len(tab)%2 == 0 :
                 med = (tab[(len(tab)-1)//2]+tab[(len(tab)-1)//2+1])/2 ### len(tab)-1 , ce -1 est cause par le rang 0 du tableau
@@ -1969,7 +1974,14 @@ def ajax_detail_parcours(request):
         try :
             average = int(score / len(cas))
         except :
-            average = ""                
+            average = "" 
+
+
+
+
+
+
+
      
         context = {  'parcours': parcours,  'customexercise':customexercise ,'average':average , 'students' : students , 'relationship':[], 'num_exo' : num_exo, 'communications' : [] , 'median' : med , 'communications' : [] , }
 
@@ -3317,6 +3329,22 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
 
 
 
+
+def show_custom_exercise(request,id,idp): # vue de l'exercice non autocorrigé par le prof
+
+    teacher = Teacher.objects.get(user=request.user) 
+    customexercise = Customexercise.objects.get(pk = id)
+    parcours = Parcours.objects.get(pk = idp)
+    today = time_zone_user(teacher.user)
+
+    context = { 'customexercise' : customexercise, 'communications' : [] ,  'parcours' : parcours , 'today' : today , 'student' : None, }
+
+    if customexercise.is_python :
+        url = "basthon/index_custom.html" 
+    else :
+        url = "qcm/form_writing_custom.html" 
+
+    return render(request, url , context)
 
 #######################################################################################################################################################################
 #######################################################################################################################################################################

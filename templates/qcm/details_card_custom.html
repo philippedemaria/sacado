@@ -82,7 +82,7 @@
                   <div class="col-sm-12 col-md-12">              
                     <hr style="padding:0px; margin:10px 0px"/> 
                     <label  style="font-size: 10px;">Date limite de rendu ?</label><br>
-                    <input type="type" name="dateur" data-relationship_id="{{customexercise.id}}" data-type ="1" data-custom ="1" value='{{ customexercise.date_limit|date:"Y-m-d" }}' class="datepicker dateur pull-right" />
+                    <input type="type" name="dateur" data-relationship_id="{{customexercise.id}}" data-type ="1" data-custom ="1" value='{{ customexercise.date_limit|date:"Y-m-d" }}' class="datetimepicker dateur pull-right" />
               
                   </div>
               </div> 
@@ -107,7 +107,7 @@
                   <div class="col-sm-12 col-md-12">      
                   <label  style="font-size: 12px;">Date de publication ?</label><br>
                                                       <!-- on conserve  relationship_id pour réutiliser la fonction JS-->
-                  <input type="type" name="start" data-relationship_id="{{customexercise.id}}" data-type ="0" data-custom ="1" value='{{ customexercise.date_limit|date:"Y-m-d" }}' class="datepicker dateur pull-right" />
+                  <input type="type" name="start" data-relationship_id="{{customexercise.id}}" data-type ="0" data-custom ="1" value='{{ customexercise.date_limit|date:"Y-m-d" }}' class="datetimepicker dateur pull-right" />
                   </div>
               </div>
               <hr style="padding:0px; margin:10px 0px"/>                 
@@ -153,7 +153,7 @@
                     </div>
                </div> 
               <hr style="padding:0px; margin:10px 0px"/><br> 
-                <a href="https://sacado.xyz/qcm/write_custom_exercise/{{ customexercise.id }}/{{ parcours.id }}" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice</a>
+                <a href="{%  url 'show_custom_exercise'  customexercise.id  parcours.id %}" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice</a>
                 <br><br>                
                 <a href="#customcard{{customexercise.id}}" class="copy" data-exercise_id="{{ customexercise.id}}" data-custom=1 data-parcours_id="{{ parcours.id}}" style="font-size:14px"><i class="fa fa-clipboard fa-fw"></i> Copier pour coller dans une autre page</a> 
           </div>

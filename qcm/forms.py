@@ -15,6 +15,7 @@ class ParcoursForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
 		super(ParcoursForm, self).__init__(*args, **kwargs)
+		self.fields['stop'].required = False
 		if teacher:
 			groups = Group.objects.filter(teacher=teacher)
 			students_tab = []
@@ -25,6 +26,7 @@ class ParcoursForm(forms.ModelForm):
 			students = Student.objects.filter(user__in=students_tab).order_by("level", "user__last_name")
 			self.fields['students']	 = forms.ModelMultipleChoiceField(queryset=students, widget=forms.CheckboxSelectMultiple, required=False)
 
+
 	def clean(self):
 		"""
 		Vérifie que la fin de l'évaluation n'est pas avant son début
@@ -32,15 +34,12 @@ class ParcoursForm(forms.ModelForm):
 		cleaned_data = super().clean()
 
 		start_date = cleaned_data.get("start")
-		start_time = cleaned_data.get("starter")
 		stop_date = cleaned_data.get("stop")
-		stop_time = cleaned_data.get("stopper")
-
-		if start_date and start_time and stop_date and stop_time:
-			stop = datetime.datetime.combine(stop_date, stop_time)
-			start = datetime.datetime.combine(start_date, start_time)
+		try :
 			if stop <= start:
-				raise forms.ValidationError("La fin de l'évaluation ne peut pas être antérieure à son début.")
+				raise forms.ValidationError("La date de verrouillage ne peut pas être antérieure à son début.")
+		except:
+			pass
 
 
 class UpdateParcoursForm(forms.ModelForm):
@@ -53,6 +52,7 @@ class UpdateParcoursForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
 		super(UpdateParcoursForm, self).__init__(*args, **kwargs)
+		self.fields['stop'].required = False
 		if teacher:
 			groups = Group.objects.filter(teacher  = teacher)
 			students_tab = []
@@ -63,7 +63,7 @@ class UpdateParcoursForm(forms.ModelForm):
 			students = Student.objects.filter(user__in = students_tab).order_by("user__last_name") 
 
 			self.fields['students']	 = forms.ModelMultipleChoiceField(queryset= students, widget=forms.CheckboxSelectMultiple, required=False)
-
+			
 
 	def clean(self):
 		"""
@@ -71,15 +71,15 @@ class UpdateParcoursForm(forms.ModelForm):
 		"""
 		cleaned_data = super().clean()
 		start_date = cleaned_data.get("start")
-		start_time = cleaned_data.get("starter")
 		stop_date = cleaned_data.get("stop")
-		stop_time = cleaned_data.get("stopper")
 
-		if start_date and start_time and stop_date and stop_time:
-			stop = datetime.datetime.combine(stop_date, stop_time)
-			start = datetime.datetime.combine(start_date, start_time)
+		try :
 			if stop <= start:
-				raise forms.ValidationError("La fin de l'évaluation ne peut pas être antérieure à son début.")
+				raise forms.ValidationError("La date de verrouillage ne peut pas être antérieure à son début.")
+		except:
+			pass
+
+
 
 class ExerciseForm(forms.ModelForm):
 	class Meta:
@@ -265,7 +265,7 @@ class CustomexerciseForm (forms.ModelForm):
 		self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=False ) 
 		self.fields['parcourses'] = forms.ModelMultipleChoiceField(queryset=parcourses,  required=False )  
 		self.fields['students'] = forms.ModelMultipleChoiceField(queryset=students, widget=forms.CheckboxSelectMultiple,   required=False )
-
+ 
 
 
 class  CustomexerciseNPForm (forms.ModelForm):

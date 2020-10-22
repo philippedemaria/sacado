@@ -73,10 +73,6 @@ define(['jquery','bootstrap'], function ($) {
                 }
             )
         });
-
-
-
-
  
         $('select[name=theme]').on('change', function (event) {
 
@@ -356,10 +352,6 @@ define(['jquery','bootstrap'], function ($) {
             value =  $(this).attr("data-parcours_id"); 
             $('.overlay_export'+value).toggle(500);
         });
-
-
- 
-
 
         // Affiche dans la modal la liste des élèves du groupe sélectionné
         $('.exportation_de_note').on('click' ,function () {

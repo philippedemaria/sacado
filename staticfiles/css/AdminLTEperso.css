@@ -3970,7 +3970,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 }
 
 /*
- * Component: Button
+ * tool_tip
  * -----------------
  */
 
@@ -4002,7 +4002,69 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.25);
 }
  
+.text_align_left {
+  text-align: left;
+}
 
+
+.helper_tip {
+  position: relative;
+  opacity:1;
+  color:gray;
+  cursor:pointer;
+  font-size: 14px;
+
+}
+.helper_tip:hover {
+  color:#5d4391 ;
+}
+
+
+.helper_tip .helper_tip_text {
+  visibility: hidden;
+  width: 200px;
+  background-color: #FFF;
+  color: #222;
+  text-align: left;
+  border-radius: 4px;
+  padding: 5px;
+  position: absolute;
+  font-size: 14px;
+  /* Position the tooltip */
+  top: 100%;
+  right: 0;
+  z-index: 99999;
+}
+
+.helper_tip:hover .helper_tip_text {
+  visibility: visible;
+  position: absolute;
+  box-shadow: 0px 2px 50px rgba(0,0,0,0.3);
+}
+
+.box_result{
+  float: left;
+  height: 35px;
+  position: relative;
+  background-color: #f4f4f4;
+  border: 1px solid #DDD ;
+  border-radius: 5px; 
+  padding:5px;
+  font-size: 18px;
+  margin: 1px;
+}
+
+.box_result_note{
+  float: left;
+  height: 35px;
+  position: relative;
+  background-color: #f4f4f4;
+  border: 1px solid #DDD ;
+  border-radius: 20px; 
+  padding:5px;
+  font-size: 18px;
+  margin: 1px;
+}
 
 /*
  * Component: Button
