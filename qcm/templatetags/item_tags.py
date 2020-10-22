@@ -50,10 +50,7 @@ def get_score2(results, id):
     """
     return results.get(id, '')
 
-@register.simple_tag
-def get_is_lock(obj,today,timer): 
-    """Bloque un exercice dans une évaluation si celui-ci a une date de verrou"""
-    return obj.is_lock(today,timer)
+ 
 
 
 @register.simple_tag

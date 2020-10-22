@@ -114,10 +114,10 @@
        
                   <div class="form-group">
                     {% if user.user_type == 0 %} 
-                      {% get_is_lock  relation.parcours today timer as is_lock %}                       
-                        {% if not is_lock %}                     
+                
+                                
                           <input  class="btn btn-primary"   type="submit" id="submit_button_relation"  value="Enregistrer le résultat"  />
-                        {% endif %}  
+             
                     {% endif %}   
                       <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
                       
