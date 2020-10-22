@@ -283,7 +283,7 @@
                             <div class="div_consigne_student_custom">                                             
                             {{ customexercise.instruction|safe|truncatewords:50 }}
                             </div>   
-                            {% get_is_lock customexercise today as is_lock %} 
+                            {% get_is_block customexercise today as is_lock %} 
                             {% if not is_lock %}
                                 <a href="{% url 'write_custom_exercise' customexercise.id parcours.id %}"> 
                                     {% if customexercise.image %} 

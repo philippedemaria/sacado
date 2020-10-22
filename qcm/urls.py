@@ -94,7 +94,7 @@ urlpatterns = [
     path('delete_remediation/<int:id>/', delete_remediation, name='delete_remediation'),  
 
     ####################################### Export Pronote #####################################################
- 
+    path('export_note_custom/<int:id>/<int:idp>', export_note_custom, name='export_note_custom'),   
     path('export_knowledge/<int:idp>/', export_knowledge, name='export_knowledge'),  
     path('export_note/<int:idg>/<int:idp>/', export_note, name='export_note'),  
     path('export_skill/<int:idp>/', export_skill, name='export_skill'),  

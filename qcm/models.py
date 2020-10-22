@@ -847,7 +847,7 @@ class Customexercise(ModelWithCode):
 
 
 
-    def is_lock(self,today):
+    def is_block(self,today):
         locker = False
         try :
             if self.lock < today :

@@ -10,9 +10,11 @@
                  <nav class="navbar navbar-default">
                   <div class="container-fluid">
                     <div class="navbar-header">
-                      {{ num_exo }}
+                      {{ num_exo }}. 
                     </div>
-                 
+                    {% if customexercise.is_mark %}
+                    <a href="{% url 'export_note_custom' customexercise.id  parcours.id  %}" class="btn btn-default" style="margin-left: 60px" >Exporter les notes (CSV)</a>
+                    {% endif %} 
                     <ul class="nav navbar-nav navbar-right">
                      <a href="#" id="closeStudent" class="detail_student pull-right"> <i class="fa fa-times"></i></a>
                     </ul>

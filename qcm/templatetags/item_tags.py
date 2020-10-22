@@ -51,9 +51,17 @@ def get_score2(results, id):
     return results.get(id, '')
 
 @register.simple_tag
-def get_is_lock(obj,todaytimer): 
+def get_is_lock(obj,today,timer): 
+    """Bloque un exercice dans une évaluation si celui-ci a une date de verrou"""
+    return obj.is_lock(today,timer)
+
+
+@register.simple_tag
+def get_is_block(obj,todaytimer): 
     """Bloque un exercice dans une évaluation si celui-ci a une date de verrou"""
     return obj.is_lock(todaytimer)
+
+
 
 @register.simple_tag
 def get_is_submit(obj,parcours,student): 

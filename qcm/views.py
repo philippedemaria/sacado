@@ -1112,7 +1112,7 @@ def stat_parcours(request, id):
     group = data['group']
     group_id = data['group_id']  
 
-
+    customexercises = parcours.parcours_customexercises.order_by("ranking")
     students = students_from_p_or_g(request,parcours) 
 
     for s in students :
@@ -1185,6 +1185,44 @@ def stat_parcours(request, id):
             student["good_answer"] = ""
             student["total_numexo"] = ""
             student["percent"] = ""
+
+ 
+        total_c, details_c  = 0 , ""
+        for ce in customexercises :
+            if ce.is_mark :
+                cen = ce.customexercise_custom_answer.get(student=student, parcours = parcours) 
+                total_c = total_c + cen.point
+                details_c = details_c + "-" +str(cen.point)  
+
+        student["total_note"] = total_c
+        student["details_note"] = details_c
+
+             
+
+
+        total_knowledge, total_skill, detail_skill, detail_knowledge = 0,0, "",""
+        for ce in customexercises :
+            for skill in  ce.skills.all() :
+                scs = ce.customexercise_correctionskill.get(skill = skill,student=student, parcours = parcours)
+                try :
+                    total_skill += scs.point
+                    detail_skill += detail_skill + "-" +str(scs.point) 
+                except :
+                    total_skill = ""
+            student["total_skill"] = total_skill
+            student["detail_skill"] = detail_skill
+
+            for knowledge in  ce.knowledges.all() :
+                sck = ce.customexercise_correctionknowledge.get(knowledge = knowledge,student=student, parcours = parcours)
+                try :
+                    total_knowledge += sck.point
+                    detail_knowledge += detail_knowledge + "-" +str(sck.point) 
+                except :
+                    total_knowledge = total_knowledge
+            student["total_knowledge"] = total_knowledge
+            student["detail_knowledge"] = detail_knowledge  
+
+
         stats.append(student)
 
     context = {  'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'communications' : [] , 'role' : role  }
@@ -1206,6 +1244,7 @@ def stat_evaluation(request, id):
         r = Relationship.objects.get(exercise = e, parcours = parcours)
         parcours_duration += r.duration
 
+    customexercises = parcours.parcours_customexercises.order_by("ranking")
 
     form = EmailForm(request.POST or None )
     stats = []
@@ -1277,7 +1316,7 @@ def stat_evaluation(request, id):
                 student["score_tab"] = tab
                 student["good_answer"] = int(good_answer)
                 student["total_numexo"] = int(total_numexo)
-                student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100)        
+                student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100)             
         except :
             student["duration"] = ""
             student["average_score"] = ""
@@ -1289,6 +1328,42 @@ def stat_evaluation(request, id):
             student["good_answer"] = ""
             student["total_numexo"] = ""
             student["percent"] = ""
+        
+ 
+        total_c, details_c  = 0 , ""
+        for ce in customexercises :
+            if ce.is_mark :
+                cen = ce.customexercise_custom_answer.get(student=student, parcours = parcours) 
+                total_c = total_c + cen.point
+                details_c = details_c + "-" +str(cen.point)  
+
+        student["total_note"] = total_c
+        student["details_note"] = details_c
+
+        
+
+        total_knowledge, total_skill, detail_skill, detail_knowledge = 0,0, "",""
+        for ce in customexercises :
+            for skill in  ce.skills.all() :
+                scs = ce.customexercise_correctionskill.get(skill = skill,student=student, parcours = parcours)
+                try :
+                    total_skill += scs.point
+                    detail_skill += detail_skill + "-" +str(scs.point) 
+                except :
+                    total_skill = ""
+            student["total_skill"] = total_skill
+            student["detail_skill"] = detail_skill
+
+            for knowledge in  ce.knowledges.all() :
+                sck = ce.customexercise_correctionknowledge.get(knowledge = knowledge,student=student, parcours = parcours)
+                try :
+                    total_knowledge += sck.point
+                    detail_knowledge += detail_knowledge + "-" +str(sck.point) 
+                except :
+                    total_knowledge = total_knowledge
+            student["total_knowledge"] = total_knowledge
+            student["detail_knowledge"] = detail_knowledge  
+
         stats.append(student)
 
     context = {  'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'communications' : [] , 'role' : role  }
@@ -3639,8 +3714,26 @@ def ajax_delete_constraint(request):
 #######################################################################################################################################################################
 
 
+ 
+def export_note_custom(request,id,idp):
 
+    customexercise = Customexercise.objects.get(pk=id)
+    parcours = Parcours.objects.get(pk=idp)
 
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment;filename=Notes_exercice_{}_{}.csv'.format(customexercise.id,parcours.id)
+    writer = csv.writer(response)
+    fieldnames = ("Eleves", "Notes")
+    writer.writerow(fieldnames)
+    for student in parcours.students.order_by("user__last_name") :
+        full_name = str(student.user.last_name).lower() +" "+ str(student.user.first_name).lower() 
+        try :
+            studentanswer = Customanswerbystudent.objects.get(student=student, customexercise=customexercise,  parcours=parcours) 
+            score = int(studentanswer.point)
+        except :
+            score = "Abs"
+        writer.writerow( (full_name , score) )
+    return response
 
  
 def export_note(request,idg,idp):
