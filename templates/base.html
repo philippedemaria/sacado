@@ -34,6 +34,12 @@
 
 <body>
 <header id="header">
+    <div style="position: absolute;top: 0px;left:0px;background-color: #382857; color: #F0F0F0; width:100px; text-align:center;">
+        #JeSuisProf<br> <span style="font-size:10px;">Depuis l'étranger, fidèles à la France, à ses valeurs républicaines, laïques et fraternelles.</span>
+    </div>
+
+
+
     <div class="container">
         <div class="logo float-left">
             <a class="navbar-brand sacado" href="{% url 'index' %}"><img src="{% static 'img/sacadoA1.png' %}"/> SACADO
@@ -53,7 +59,7 @@
         </nav><!-- .main-nav -->
     </div>
 </header><!-- #header -->
-
+ 
 {% block body %}
 {% endblock %}
  
