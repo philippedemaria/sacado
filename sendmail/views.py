@@ -32,8 +32,9 @@ def list_emails(request):
         teacher = user.teacher
         groups = teacher.groups.all()
         for group in groups:
-            for student in group.students.filter():
-                users.append(student.user)
+            for student in group.students.order_by("user__last_name"):
+                if student.user.email :
+                    users.append(student.user)
 
         studentanswers = Studentanswer.objects.filter(student__user__in =  users).order_by("-date")[:50]
         tasks = Relationship.objects.filter(parcours__teacher = teacher,  exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")[:50] 
@@ -51,6 +52,9 @@ def list_emails(request):
         groups = student.students_to_group.all()
         today = time_zone_user(request.user)
         for group in groups:
+            for student in group.students.order_by("user__last_name"):
+                if student.user.email :
+                    users.append(student.user)
             users.append(group.teacher.user)
 
         sent_emails = Email.objects.distinct().filter(author=user).order_by("-today")
