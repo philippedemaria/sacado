@@ -69,12 +69,12 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
         // Affiche dans la modal la liste des élèves du groupe sélectionné
-        $('.student_select_to_school').on('click', function (event) {
+        $('#table_o').on('click', '.student_select_to_school' , function (event) {
             let group_id = $(this).attr("data_group_id");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
             let student_id = $(this).attr("data_student_id");
 
- 
+             console.log("loulou") ;
 
             $.ajax(
                 {
@@ -89,6 +89,7 @@ define(['jquery', 'bootstrap'], function ($) {
                     success: function (data) {
                         $('#tr'+student_id).remove();
                         $("#maTable > tbody:last").append(data.html);
+                        $("#maTable > tbody:last > tr:last > td:last a").addClass('student_remove_from_school');  
                     }
                 }
             )
@@ -97,7 +98,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
         // Affiche dans la modal la liste des élèves du groupe sélectionné
-        $('.student_remove_from_school').on('click', function (event) {
+        $('#maTable').on('click', ".student_remove_from_school", function (event) {
             let group_id = $(this).attr("data_group_id");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
             let student_id = $(this).attr("data_student_id");

@@ -137,7 +137,7 @@
             <div class="row">
                 <div class="col-sm-12 col-md-12">
                     <div class="form-group">
-                        <h5><i class="fa fa-users"></i> Inscription des élèves <span data-toggle="collapse" data-target="#collapsed"> <i class="fa fa-angle-down"></i></span></h5>
+                        <h5><i class="fa fa-users"></i> Inscription des élèves <span data-toggle="collapse" data-target="#collapsed"> <i class="fa fa-angle-down"></i></span><small class="pull-right text-danger"> <i class="fa fa-warning"></i> Les élèves sont ajoutés en fin de liste.</small></h5>
                     </div>
                 </div>
             </div> 
@@ -160,10 +160,10 @@
                                     {% for student in students %}
                                         <tr id="tr{{student.user.id}}">
                                             <td>
-                                                 <a class="btn btn-xs btn-primary student_select_to_school" data_student_id="{{student.user.id}}" data_group_id="{{ group.id}}" > <i class="fa fa-check"></i> </a>
+                                                 <input type="checkbox" class="student_select_to_school" data_student_id="{{student.user.id}}" data_group_id="{{ group.id}}" id="std{{student.user.id}}" /> 
                                             </td>
                                             <td>
-                                               {{ student.user.last_name }}  
+                                               <label for="std{{student.user.id}}">{{ student.user.last_name }}  </label>
                                             </td>
                                             <td>
                                                  {{ student.user.first_name }} 

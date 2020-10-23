@@ -204,7 +204,7 @@
                     {% else %}
                     <div class="col-sm-6 col-md-6">
                         <label  style="font-size: 12px;">Nouvelle consigne </label><br>
-                        <textarea style="font-size: 10px;width:110px" rows="3" name="situation" data-relationship_id="{{relation.id}}" id="situation{{relation.id}}"   data-type ="2"  class="details_relation form-control">{{ relation.instruction  }}</textarea>
+                        <textarea style="font-size: 10px;width:110px" rows="3" name="situation" data-relationship_id="{{relation.id}}" id="situation{{relation.id}}"   data-type ="2"  class="details_relation form-control">{% if relation.instruction %}{{ relation.instruction  }}{% endif %}</textarea>
                     </div>
                     {% endif %}
                 </div> 
