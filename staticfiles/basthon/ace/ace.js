@@ -3,6 +3,7 @@
                     if (a) {
                         a.config.init(true);
                         a.define = ace.define;
+                        a.config.set('basePath', 'https://sacado.xyz/static/basthon/ace');
                     }
                     if (!window.ace)
                         window.ace = a;

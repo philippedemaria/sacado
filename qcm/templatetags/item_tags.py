@@ -20,8 +20,7 @@ def cleanhtml(raw_html): #nettoie le code des balises HTML
 
 
 @register.filter
-def insert_tags(html): #nettoie le code des balises HTML
-    cutter = 45
+def insert_tags(html,cutter): #nettoie le code des balises HTML
     i = 1
     htm = html[:cutter]
     while i*cutter < len(html) : 

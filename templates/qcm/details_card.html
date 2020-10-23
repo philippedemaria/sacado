@@ -34,7 +34,7 @@
         {% if not relation.exercise.supportfile.is_ggbfile %}
           <div style="position: absolute; left : 30px; top:41px;" id="annoncement{{relation.id}}">   
               <span class="helper_tip btn btn-default">Consigne
-                <div class="helper_tip_text_right"> {% if relation.instruction %}    {{relation.instruction|insert_tags|safe}}    {% else %}      {{ relation.exercise.supportfile.annoncement|insert_tags|safe }}  {% endif %}</div> 
+                <div class="helper_tip_text_right"> {% if relation.instruction %}    {{relation.instruction|insert_tags:45|safe}}    {% else %}      {{ relation.exercise.supportfile.annoncement|insert_tags:45|safe }}  {% endif %}</div> 
               </span>
           </div>
         {% endif %}
