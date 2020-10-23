@@ -163,10 +163,10 @@
                                                  <input type="checkbox" class="student_select_to_school" data_student_id="{{student.user.id}}" data_group_id="{{ group.id}}" id="std{{student.user.id}}" /> 
                                             </td>
                                             <td>
-                                               <label for="std{{student.user.id}}">{{ student.user.last_name }}  </label>
+                                               <label for="std{{student.user.id}}">{{ student.user.last_name|lower|capfirst }}  </label>
                                             </td>
                                             <td>
-                                                 {{ student.user.first_name }} 
+                                                 {{ student.user.first_name|lower|capfirst }} 
                                             </td>
                                             <td>
                                                 {% for g in student.students_to_group.all %}{{ g }}{% endfor %}
@@ -257,9 +257,9 @@
                     <tbody>
                     {% for student in group.students.all|dictsort:"user.last_name" %}
                         <tr id="tr_school{{ student.user.id }}">
-                            <td>{{ student.user.last_name  }}  
+                            <td>{{ student.user.last_name|lower|capfirst  }}  
                             </td>
-                            <td>{{ student.user.first_name    }}  
+                            <td>{{ student.user.first_name|lower|capfirst    }}  
                             </td>
                             <td>{{ student.user.username    }}  
                             </td>
