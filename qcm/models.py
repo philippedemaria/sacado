@@ -624,7 +624,7 @@ class Relationship(models.Model):
     beginner = models.TimeField(null=True, blank=True, verbose_name="Heure du début")
     skills = models.ManyToManyField(Skill, blank=True, related_name='skills_relationship', editable=False)
     students = models.ManyToManyField(Student, blank=True, related_name='students_relationship', editable=False)
-    instruction = models.TextField(blank=True,  editable=False)
+    instruction = models.TextField(blank=True,  null=True,  editable=False)
 
     def __str__(self):
         try :

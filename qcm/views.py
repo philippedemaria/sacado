@@ -3296,30 +3296,6 @@ def write_exercise(request,id): # Coté élève
 
 
 
-def show_write_exercise(request,id): # vue pour le prof de l'exercice non autocorrigé par le prof
-
-    relationship = Relationship.objects.get(pk = id)
-    parcours = relationship.parcours
-    today = timezone.now()
-
-    wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None )
-
-    context = { 'relationship' : relationship, 'communications' : [] ,  'parcours' : parcours , 'today' : today ,  'form' : wForm,  'student' : None, }
-
-    if relationship.exercise.supportfile.is_python :
-        url = "basthon/index.html" 
-    else :
-        url = "qcm/form_writing.html" 
-
-    return render(request, url , context)
-
-
-
-
-
-
-
-
 
 
 
@@ -3356,7 +3332,26 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
 
     return render(request, url , context)
 
+#######################################################################################################################################################################
+############### VUE ENSEIGNANT
+#######################################################################################################################################################################
 
+def show_write_exercise(request,id): # vue pour le prof de l'exercice non autocorrigé par le prof
+
+    relationship = Relationship.objects.get(pk = id)
+    parcours = relationship.parcours
+    today = timezone.now()
+
+    wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None )
+
+    context = { 'relationship' : relationship, 'communications' : [] ,  'parcours' : parcours , 'today' : today ,  'form' : wForm,  'student' : None, }
+
+    if relationship.exercise.supportfile.is_python :
+        url = "basthon/index.html" 
+    else :
+        url = "qcm/form_writing.html" 
+
+    return render(request, url , context)
 
 
 def show_custom_exercise(request,id,idp): # vue pour le prof de l'exercice non autocorrigé par le prof

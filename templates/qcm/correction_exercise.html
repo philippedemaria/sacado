@@ -124,7 +124,7 @@
             </div>
             <div class="modal-body">
             {% block modal %} 
-                {% if relationship.instruction != ""  %}  {{ relationship.instruction|safe }}  {% else %} {{ relationship.exercise.supportfile.annoncement|safe }} {% endif %}
+                {% if relationship.instruction  %}  {{ relationship.instruction|safe }}  {% else %} {{ relationship.exercise.supportfile.annoncement|safe }} {% endif %}
             {% endblock %}   
             </div>
 
