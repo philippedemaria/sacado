@@ -5,7 +5,7 @@
 
 
 {% block liste_student %}  
-    {% for student in customexercise.students.all %}
+    {% for student in customexercise.students.all|dictsort:"user.last_name" %}
         <tr>
             <td>
                 {% get_done customexercise student as done %}

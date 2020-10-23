@@ -61,34 +61,35 @@
                     </thead>
                     <tbody>
                     {% block liste_student %}  
-                    {% for student in relationship.students.all %}
+                    {% for student in relationship.students.all|dictsort:"user.last_name" %}
                         <tr>
                             <td>
-                           
-                                <a href="#" data-student_id="{{ student.user.id }}" data-relationship_id="{{ relationship.id }}" data-parcours_id="0" data-custom="0" class="choose_student">   {{ student.user.last_name }} {{ student.user.first_name }} 
+                                {% get_done relationship student as done %}
+                                {% if done %}
+                                    <a href="#" data-student_id="{{ student.user.id }}" data-relationship_id="{{ relationship.id }}" data-parcours_id="0" data-custom="0" class="choose_student">   {{ student.user.last_name }} {{ student.user.first_name }} 
 
-                                    <span id ="evaluate{{ student.user.id }}">
-                                      {% get_done relationship student as done %}
-                                      {% if done %}
-                                        {% get_score_student_for_this relationship student as  studentanswer %} 
-                                            {% if  studentanswer.point %}
-                                            <i class="fa fa-square
-                                                    {% if studentanswer.point >= stage.up %}
-                                                     text-primary 
-                                                    {% elif studentanswer.point >= stage.medium %}
-                                                     text-success 
-                                                    {% elif studentanswer.point >=  stage.low  %}
-                                                     text-warning 
-                                                    {% else %}
-                                                        text-danger  
-                                                    {% endif %} pull-right"
-                                                   ></i>
+                                        <span id ="evaluate{{ student.user.id }}">
+                                          {% get_done relationship student as done %}
+                                          {% if done %}
+                                            {% get_score_student_for_this relationship student as  studentanswer %} 
+                                                {% if  studentanswer.point %}
+                                                <i class="fa fa-square
+                                                        {% if studentanswer.point >= stage.up %}
+                                                         text-primary 
+                                                        {% elif studentanswer.point >= stage.medium %}
+                                                         text-success 
+                                                        {% elif studentanswer.point >=  stage.low  %}
+                                                         text-warning 
+                                                        {% else %}
+                                                            text-danger  
+                                                        {% endif %} pull-right"
+                                                       ></i>
+                                                {% endif %}
                                             {% endif %}
-                                        {% endif %}
-
-
-                                </span></a>
-                        
+                                    </span></a>
+                                {% else %}                
+                                <span style="color:#DDD">{{ student.user.last_name }} {{ student.user.first_name }} </span>
+                                {% endif %}
                             </td>
                         </tr>
                     {% empty %}
