@@ -2476,9 +2476,12 @@ def show_this_exercise(request, id):
 
     context = {'exercise': exercise, 'start_time': start_time, 'parcours': parcours , 'communications' : [] , 'relationships' : [] , 'today' : today ,  }
 
-    return render(request, 'qcm/show_exercise.html', context)
+    if exercise.supportfile.is_python :
+        url = "basthon/index.html" 
+    else :
+        url = "qcm/form_writing.html" 
 
-
+    return render(request, url , context)
 
 
 def execute_exercise(request, idp,ide):
