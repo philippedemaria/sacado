@@ -3296,6 +3296,34 @@ def write_exercise(request,id): # Coté élève
 
 
 
+def show_write_exercise(request,id): # vue de l'exercice non autocorrigé par le prof
+
+    teacher = Teacher.objects.get(user=request.user) 
+    relationship = Relationship.objects.get(pk = id)
+    parcours = relationship.parcours
+    today = time_zone_user(teacher.user)
+
+    wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None )
+
+    context = { 'relationship' : relationship, 'communications' : [] ,  'parcours' : parcours , 'today' : today ,  'form' : wForm,  'student' : None, }
+
+    if relationship.exercise.supportfile.is_python :
+        url = "basthon/index.html" 
+    else :
+        url = "qcm/form_writing.html" 
+
+    return render(request, url , context)
+
+
+
+
+
+
+
+
+
+
+
 def write_custom_exercise(request,id,idp): # Coté élève - exercice non autocorrigé
  
     student = Student.objects.get(user = request.user)  

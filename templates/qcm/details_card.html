@@ -223,9 +223,13 @@
                          Redirections & Liens
                     </div>
                </div> 
-              <hr style="padding:0px; margin:10px 0px"/><br> 
-                <a href="https://sacado.xyz/qcm/show_this_exercise/{{ relation.exercise.id }}/" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice</a>
-                <br><br>                <a href="#card{{relation.id}}" class="copy" data-custom=0 data-exercise_id="{{ relation.exercise.id}}" data-relationship_id="{{ relation.id}}"  data-parcours_id="{{ relation.parcours.id}}" style="font-size:14px"><i class="fa fa-clipboard fa-fw"></i> Copier pour coller dans une autre page</a> 
+              <hr style="padding:0px; margin:10px 0px"/><br>
+                {% if relation.exercise.supportfile.is_ggbfile %}
+                <a href="{% url 'show_exercise' relation.exercise.id %}" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice</a>
+                {% else %}
+                <a href="{% url 'show_write_exercise' relation.id %}" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice</a>
+                {% endif %}
+                <br><br>                <a href="#card{{relation.id}}" class="copy" data-custom=0 data-exercise_id="{{ relation.exercise.id}}" data-relationship_id="{{ relation.id}}"  data-parcours_id="{{ relation.parcours.id}}" style="font-size:14px"><i  class="fa fa-clipboard fa-fw"></i> Copier pour coller dans une autre page</a> 
           </div>
 
           <!-- Pop up des compétences d'un exercice  -->

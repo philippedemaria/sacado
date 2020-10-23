@@ -81,6 +81,9 @@ urlpatterns = [
 
     path('show_this_exercise/<int:id>/', show_this_exercise, name='show_this_exercise'),  #from dashboard 
 
+    path('parcours_show_write_exercise/<int:id>/', show_write_exercise, name='show_write_exercise'), 
+
+
     path('show_exercise/<int:id>/', show_exercise, name='show_exercise'),       #from index  
     path('exercises_level/<int:id>/', exercises_level , name='exercises_level'), 
     path('content_is_done/<int:id>/', content_is_done , name='content_is_done'), 
