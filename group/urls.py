@@ -29,7 +29,8 @@ urlpatterns = [
     path('group_theme_exercise/<int:id>/<int:idt>/', result_group_theme_exercise, name='result_group_theme_exercise'),
     path('associate_exercise_by_parcours/<int:id>/<int:idt>/',  associate_exercise_by_parcours, name='associate_exercise_by_parcours'),
 
-
+    path('ajax/student_select_to_school',  student_select_to_school, name='student_select_to_school'),
+    path('ajax/student_remove_from_school',  student_remove_from_school, name='student_remove_from_school'),
     path('ajax/chargelisting', chargelisting, name='chargelisting'),
     path('ajax/chargelistgroup', chargelistgroup, name='chargelistgroup'),
 

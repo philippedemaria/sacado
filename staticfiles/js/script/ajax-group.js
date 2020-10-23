@@ -44,14 +44,6 @@ define(['jquery', 'bootstrap'], function ($) {
         
         });
 
-
-
-
-
-
-
-
-
         // Affiche dans la modal la liste des élèves du groupe sélectionné
         $('.menuaction').on('click', function (event) {
             let group_id = $(this).attr("data-group_id");
@@ -73,6 +65,72 @@ define(['jquery', 'bootstrap'], function ($) {
                 }
             )
         });
+
+
+
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('.student_select_to_school').on('click', function (event) {
+            let group_id = $(this).attr("data_group_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let student_id = $(this).attr("data_student_id");
+
+ 
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'group_id': group_id,
+                        'student_id': student_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../ajax/student_select_to_school",
+                    success: function (data) {
+                        $('#tr'+student_id).remove();
+                        $("#maTable > tbody:last").append(data.html);
+                    }
+                }
+            )
+        });
+
+
+
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('.student_remove_from_school').on('click', function (event) {
+            let group_id = $(this).attr("data_group_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let student_id = $(this).attr("data_student_id");
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'group_id': group_id,
+                        'student_id': student_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../ajax/student_remove_from_school",
+                    success: function (data) {
+                        $('#tr_school'+student_id).remove();
+                        $("#table_o > tbody:last").append(data.html);
+
+                    }
+                }
+            )
+        });
+
+
+
+
+
+
+
+
+
+
+
 
 
 

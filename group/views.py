@@ -251,7 +251,13 @@ def update_group(request, id):
 
 
     teacher = Teacher.objects.get(user_id = request.user.id)
-    group = Group.objects.get(id=id) 
+    group = Group.objects.get(id=id)
+
+    if teacher.user.school :
+        students = Student.objects.filter(user__school=teacher.user.school).order_by("user__last_name")
+    else :
+        students = []
+
     
     form = GroupForm(request.POST or None, instance=group )
 
@@ -271,7 +277,7 @@ def update_group(request, id):
     else:
         print(form.errors)
 
-    context = {'form': form,  'group': group, 'teacher': teacher, 'communications' : [] , }
+    context = {'form': form,  'group': group, 'teacher': teacher, 'students': students, 'communications' : [] , }
 
     return render(request, 'group/form_group.html', context )
 
@@ -341,6 +347,49 @@ def chargelisting(request):
  
  
     return JsonResponse(data)
+
+
+
+def student_select_to_school(request):
+
+    group_id = int(request.POST.get("group_id"))
+    student_id = int(request.POST.get("student_id"))
+
+    group = Group.objects.get(id=group_id) 
+    student = Student.objects.get(user_id=student_id) 
+    group.students.add(student)
+
+ 
+
+    data = {}
+   
+    data['html'] =  "<tr><td>"+str(student.user.last_name)+"</td><td>"+str(student.user.first_name)+"</td><td>"+str(student.user.username)+"</td><td><a class='btn btn-xs btn-danger student_remove_from_school' data_student_id='"+str(student.user.id)+" data_group_id='"+str(group.id)+"' ><i class='fa fa-trash'></i></a></td></tr>"
+ 
+ 
+    return JsonResponse(data)
+
+def student_remove_from_school(request):
+
+    group_id = int(request.POST.get("group_id"))
+    student_id = int(request.POST.get("student_id"))
+
+    group = Group.objects.get(id=group_id) 
+    student = Student.objects.get(user_id=student_id) 
+    group.students.remove(student)
+
+    groups = student.students_to_group.all()
+    gr = ""
+    for g in groups :
+        gr = gr +str(g.name)+" "
+
+    data = {}
+   
+    data['html'] =  "<tr><td><a class='btn btn-xs btn-primary student_select_to_school' data_student_id='"+str(student.user.id)+" data_group_id='"+str(group.id)+"'> <i class='fa fa-check'></i> </a></td><td>"+str(student.user.last_name)+"</td><td>"+str(student.user.first_name)+"</td><td>"+gr+"</td></tr>"
+ 
+ 
+    return JsonResponse(data)
+
+
 
 
 

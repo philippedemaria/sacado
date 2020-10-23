@@ -51,117 +51,183 @@
      
 {% block body %}     
 <div class="content_main">
+    <form action="" method="POST">
     <div class="row">
         <div class="col-sm-12 col-md-6">
-            <form action="" method="POST">
             {% csrf_token %}
-                <div class="row">
-                    <div class="col-sm-12 col-md-4">
-                        <div class="form-group">
-                            {{ form.name.label_tag }} <font style="font-size:12px">18 lettres max.</font>
-                            {{ form.name |add_class:"form-control" }}
-                            {{ form.name.errors }}
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-md-4">
-                        <div class="form-group">
-                            {{ form.level.label_tag }}
-                            {{ form.level |add_class:"form-control select2" }}
-                            {{ form.level.errors }}
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12 col-lg-4">
-                          {{ form.color.label_tag }}
-                          <div id="color-picker-component" class="input-group colorpicker-component">
-                              {{ form.color.as_hidden }}
-                              <span class="input-group-addon"><i></i></span>
-                          </div>
-                    </div>
-                </div> 
-                <div class="row"> 
-                     <div class="col-sm-12 col-md-2">
-                           <label>Suivi parent ?</label> <br>
-                            {{ form.suiviparent  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
-                    </div>
-                     <div class="col-sm-12 col-md-4" style="font-size: 10px"><br>
-                        Si oui, le suivi par les parents est disponible via un code unique et secret sur le tableau de bord élève. 
-                    </div>
-                    {% if group %}
-                     <div class="col-sm-12 col-md-2">
-                           <label>Verrouiller ?</label> <br>
-                            {{ form.lock  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
-                    </div>
-                     <div class="col-sm-12 col-md-4" style="font-size: 10px"><br>
-                        Interdit d'inscrire de nouveaux élèves et ne permet plus l'inscription par lien de connexion. 
-                    </div>
-                    {% endif %}
-
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-sm-12 col-md-12">
-                        <div class="form-group"><h5><i class="fa fa-users"></i> Inscription des élèves</h5>
-                             <ul>
-                                <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_now" /> J'ai la liste de mes élèves et je veux les inscrire maintenant.<br> <small><b>Conseil</b> : Créez-vous un compte élève maintenant pour avoir les vues élève. Utiliser le cadre ci-dessous.</small></label></li>
-                                <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_auto" /> Je veux inscrire mes élèves plus tard et générer un lien d'inscription. <small>Avec ce lien, les élèves pourront s'inscrire seuls. Ce lien est donné après la création du groupe.</small></label></li>
-                            </ul>
-                        </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        {{ form.name.label_tag }} <font style="font-size:12px">18 lettres max.</font>
+                        {{ form.name |add_class:"form-control" }}
+                        {{ form.name.errors }}
                     </div>
                 </div>
- 
-
-
-                <div class="row recording" id="teacher_record">
-                    <div class="col-sm-12 col-md-12"><hr>
-                        <div class="form-group">
-                            <label>Possibilité d'inscrire les élèves par leur prénom et nom.<small><em> L'adresse mail est facultative.</em> <br><span style="color:#cb2131">Respecter le format donné : 1 élève par ligne, ses informations séparées par un ;  <br/>Le mot de passe par défaut est : <b>sacado2020</b>, chaque identifiant élève s'obtient dans le détail du groupe. </span></small></label> <br> 
-                            <textarea name="students" id="students_id"  style="border:1px #CCC solid" class="form-control" rows="10" placeholder="Alan;Turing;alan.turing@enigma.com"></textarea>
-
-                             <label style="color:#cb2131"><small> <b>Conseil :</b> Après la création du groupe, accéder à votre groupe via Détails et télécharger la liste des identifiants au format pdf pour la distribuer à vos élèves.</span></small></label>
-                        </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        {{ form.level.label_tag }}
+                        {{ form.level |add_class:"form-control select2" }}
+                        {{ form.level.errors }}
                     </div>
-                </div> 
- 
-                <div class="row recording" id="auto_record">
-                    <div class="col-sm-12 col-md-12"><hr>
-                        <div class="form-group">
-                            <label>Vous souhaitez générer un lien d'inscription. Ce lien sera de la forme https://sacado.xyz/group/code_du_groupe et sera accessible via les détails du groupe une fois celui-ci créé, depuis votre tableau de bord.
-                            </label>
-                        </div>
+                </div>
+
+                <div class="col-sm-12 col-lg-4">
+                      {{ form.color.label_tag }}
+                      <div id="color-picker-component" class="input-group colorpicker-component">
+                          {{ form.color.as_hidden }}
+                          <span class="input-group-addon"><i></i></span>
+                      </div>
+                </div>
+            </div> 
+            <div class="row"> 
+                 <div class="col-sm-12 col-md-2">
+                       <label>Suivi parent ?</label> <br>
+                        {{ form.suiviparent  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                </div>
+                 <div class="col-sm-12 col-md-4" style="font-size: 10px"><br>
+                    Si oui, le suivi par les parents est disponible via un code unique et secret sur le tableau de bord élève. 
+                </div>
+                {% if group %}
+                 <div class="col-sm-12 col-md-2">
+                       <label>Verrouiller ?</label> <br>
+                        {{ form.lock  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                </div>
+                 <div class="col-sm-12 col-md-4" style="font-size: 10px"><br>
+                    Interdit d'inscrire de nouveaux élèves et ne permet plus l'inscription par lien de connexion. 
+                </div>
+                {% endif %}
+
+            </div>
+
+
+            {% if not teacher.user.school %}
+            <hr>
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group"><h5><i class="fa fa-users"></i> Inscription des élèves</h5>
+                         <ul>
+                            <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_now" /> J'ai la liste de mes élèves et je veux les inscrire maintenant.<br> <small><b>Conseil</b> : Créez-vous un compte élève maintenant pour avoir les vues élève. Utiliser le cadre ci-dessous.</small></label></li>
+                            <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_auto" /> Je veux inscrire mes élèves plus tard et générer un lien d'inscription. <small>Avec ce lien, les élèves pourront s'inscrire seuls. Ce lien est donné après la création du groupe.</small></label></li>
+                        </ul>
                     </div>
-                </div>  
+                </div>
+            </div>
+
+            <div class="row recording" id="teacher_record">
+                <div class="col-sm-12 col-md-12"><hr>
+                    <div class="form-group">
+                        <label>Possibilité d'inscrire les élèves par leur prénom et nom.<small><em> L'adresse mail est facultative.</em> <br><span style="color:#cb2131">Respecter le format donné : 1 élève par ligne, ses informations séparées par un ;  <br/>Le mot de passe par défaut est : <b>sacado2020</b>, chaque identifiant élève s'obtient dans le détail du groupe. </span></small></label> <br> 
+                        <textarea name="students" id="students_id"  style="border:1px #CCC solid" class="form-control" rows="10" placeholder="Alan;Turing;alan.turing@enigma.com"></textarea>
+
+                         <label style="color:#cb2131"><small> <b>Conseil :</b> Après la création du groupe, accéder à votre groupe via Détails et télécharger la liste des identifiants au format pdf pour la distribuer à vos élèves.</span></small></label>
+                    </div>
+                </div>
+            </div> 
+
+            <div class="row recording" id="auto_record">
+                <div class="col-sm-12 col-md-12"><hr>
+                    <div class="form-group">
+                        <label>Vous souhaitez générer un lien d'inscription. Ce lien sera de la forme https://sacado.xyz/group/code_du_groupe et sera accessible via les détails du groupe une fois celui-ci créé, depuis votre tableau de bord.
+                        </label>
+                    </div>
+                </div>
+            </div>  
+            {% else   %}
+            <hr>
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <h5><i class="fa fa-users"></i> Inscription des élèves <span data-toggle="collapse" data-target="#collapsed"> <i class="fa fa-angle-down"></i></span></h5>
+                    </div>
+                </div>
+            </div> 
+
+
+                {% if group %}
+                    {% if not group.lock %}  
+                    <div class="row collapse" id="collapsed"  >
+                        <div class="col-sm-12 col-md-12" style="overflow-y:auto; height: 500px;margin-bottom: 20px">
+                            <table  class="table table-hover standard_tab_sort2000" id='table_o'>
+                                <thead>
+                                <tr>
+                                    <td></td>
+                                    <td>Nom</td>
+                                    <td>Prénom</td>
+                                    <td>Groupes</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% for student in students %}
+                                        <tr id="tr{{student.user.id}}">
+                                            <td>
+                                                 <a class="btn btn-xs btn-primary student_select_to_school" data_student_id="{{student.user.id}}" data_group_id="{{ group.id}}" > <i class="fa fa-check"></i> </a>
+                                            </td>
+                                            <td>
+                                               {{ student.user.last_name }}  
+                                            </td>
+                                            <td>
+                                                 {{ student.user.first_name }} 
+                                            </td>
+                                            <td>
+                                                {% for g in student.students_to_group.all %}{{ g }}{% endfor %}
+                                            </td>
+                                        </tr>
+
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div> 
+                    <hr> 
+                    {% endif   %}
+                {% else %}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group alert alert-danger">
+                                Vous avez opté pour la version ETABLISSEMENT. Créer votre groupe et vous pourrez rajouter les élèves ensuite parmi les élèves de votre établissement.
+                            </div>
+                        </div>
+                    </div> 
+                {% endif   %}
+            {% endif   %}
 
 
 
-
-
-
-
+            {% if group %}
                 <div class="row">
                     <div class="col-sm-12 col-md-8">
                         <div class="form-group">
-                            <input value="Créer le groupe" type="submit" class="btn btn-primary"  id="test_students"  />
+                            <input value="Modifier le groupe" type="submit" class="btn btn-primary"  id="test_students"  />
                             <a href="javascript:history.back()"><input type="button" value="Annuler"
                                                                        class="btn btn-default "/></a>
                         </div>
-                    </div>
-                
- 
-                {% if group %}
-
-                    {% if not group.teacher.user.school or request.user.is_manager    %}
-
-                        <div class="col-sm-12 col-md-4">
-                            <div class="form-group">
-                                <a href="{% url 'delete_group' group.id %}" class="btn btn-danger" onclick="return TestDelete('ce groupe')">Supprimer ce groupe</a>
-                            </div>
-                        </div>
- 
-                    {% endif %}
-                {% endif %}
                 </div>
-            </form>
+                {% if not group.teacher.user.school or request.user.is_manager    %}
+
+                    <div class="col-sm-12 col-md-4">
+                        <div class="form-group">
+                            <a href="{% url 'delete_group' group.id %}" class="btn btn-danger" onclick="return TestDelete('ce groupe')">Supprimer ce groupe</a>
+                        </div>
+                    </div>
+
+                {% endif %}
+            {% else %}
+
+
+                <div class="row">
+                <div class="col-sm-12 col-md-8">
+                    <div class="form-group">
+                        <input value="Créer le groupe" type="submit" class="btn btn-primary"  id="test_students"  />
+                        <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                                   class="btn btn-default "/></a>
+                    </div>
+                </div>
+
+
+
+
+            {% endif %}
+            </div>
         </div>
         <div class="col-sm-12 col-md-6">
             {% if group %}
@@ -175,27 +241,32 @@
                     </div>
                 </div>
                 {% endif %}
-                <table class="table table-striped table-hover display50">
+                <table class="table table-striped table-hover display50" id="maTable">
                     <thead> 
                     <tr>
                         <th>Nom  
                         </th>
                          <th>  Prénom
                         </th>
+                         <th>  Identifiant
+                        </th>
+                         <th>  
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for student in group.students.all|dictsort:"user.last_name" %}
-                        <form action="" method="POST">
-                        <tr>
+                        <tr id="tr_school{{ student.user.id }}">
                             <td>{{ student.user.last_name  }}  
                             </td>
                             <td>{{ student.user.first_name    }}  
                             </td>
                             <td>{{ student.user.username    }}  
-                            </td>                                                    
+                            </td>
+                            <td> 
+                                <a class="btn btn-xs btn-danger student_remove_from_school" data_student_id="{{student.user.id}}" data_group_id="{{ group.id}}" ><i class="fa fa-trash"></i></a> 
+                            </td>
                         </tr>
-                        </form>
                     {% empty %}
                         <tr>
                             <td><div class="alert alert-danger">Aucun élève inséré.</div></td>
@@ -207,6 +278,7 @@
             {% endif %}
         </div>
     </div>
+    </form>
 </div> 
 
 
