@@ -2470,18 +2470,37 @@ def show_this_exercise(request, id):
         parcours = None        
         today = timezone.now()
 
-    exercise = Exercise.objects.get(id=id)
-    request.session['level_id'] = exercise.level.id
     start_time = time.time()
 
-    context = {'exercise': exercise, 'start_time': start_time, 'parcours': parcours , 'communications' : [] , 'relationships' : [] , 'today' : today ,  }
+    exercise = Exercise.objects.get(pk = id)
 
-    if exercise.supportfile.is_python :
-        url = "basthon/index.html" 
+    if exercise.supportfile.is_ggbfile :
+        wForm = None
+        url = "qcm/show_exercise.html" 
+    elif exercise.supportfile.is_python :
+        url = "basthon/index_teacher.html"
+        wForm = None
     else :
-        url = "qcm/form_writing.html" 
+        wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None )
+        url = "qcm/show_teacher_writing.html" 
 
-    return render(request, url , context)
+
+    context = {'exercise': exercise, 'start_time': start_time, 'parcours': parcours , 'communications' : [] , 'relationships' : [] , 'today' : today , 'wForm' : wForm }
+
+    return render(request, url, context)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def execute_exercise(request, idp,ide):
