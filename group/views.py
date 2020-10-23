@@ -228,9 +228,9 @@ def create_group(request):
         nf.teacher = teacher
         nf.save()
         stdts = request.POST.get("students")
-
-        if len(stdts) > 0 :
-            include_students(stdts,nf)
+        if stdts : 
+            if len(stdts) > 0 :
+                include_students(stdts,nf)
 
 
         if  teacher.groups.count() == 1 :
@@ -267,11 +267,11 @@ def update_group(request, id):
         nf.code = group.code
         nf.save()
         stdts = request.POST.get("students")
-
-        if len(stdts) > 0 :
-            tested = include_students(stdts,group)
-            if not tested :
-                messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
+        if stdts : 
+            if len(stdts) > 0 :
+                tested = include_students(stdts,group)
+                if not tested :
+                    messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
         
         return redirect('index')
     else:
