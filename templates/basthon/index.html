@@ -34,7 +34,7 @@
        {% if relationship %}
       <div class="row">
           <div class="col-xs-12 consigne" >         
-              <label>Enoncé : </label>{% if relationship.instruction   %}  {{ relationship.instruction|insert_tags:45|safe }}   {% else %} {{ relationship.exercise.supportfile.annoncement|insert_tags|safe }} {% endif %}
+              <label>Enoncé : </label>{% if relationship.instruction   %}  {{ relationship.instruction|insert_tags:45|safe }}   {% else %} {{ relationship.exercise.supportfile.annoncement|insert_tags:45|safe }} {% endif %}
           </div>
       </div>
       {% endif %}
