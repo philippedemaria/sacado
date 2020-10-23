@@ -3988,12 +3988,14 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   border-radius: 4px;
   padding: 5px 0;
   position: absolute;
-  font-size: 14px;
+  font-size: 14px;  
+  display: table;    
   /* Position the tooltip */
   width: 120px;
   top: 100%;
   left: 50%;
   margin-left: -60px;
+  z-index: 99999;
 }
 
 .tool_tip:hover .tool_tip_text {
@@ -4043,7 +4045,6 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 }
 
 
-
 .helper_tip .helper_tip_text_right {
   visibility: hidden;
   width: 200px;
@@ -4053,6 +4054,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   border-radius: 4px;
   padding: 5px;
   position: absolute;
+  display: table;  
   font-size: 14px;
   /* Position the tooltip */
   top: 100%;
@@ -4065,6 +4067,13 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   position: absolute;
   box-shadow: 0px 2px 50px rgba(0,0,0,0.3);
 }
+
+
+
+
+
+
+
 
 .box_result{
   float: left;

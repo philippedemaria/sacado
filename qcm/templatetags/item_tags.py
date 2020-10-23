@@ -19,6 +19,16 @@ def cleanhtml(raw_html): #nettoie le code des balises HTML
     return cleantext
 
 
+@register.filter
+def insert_tags(html): #nettoie le code des balises HTML
+    cutter = 45
+    i = 1
+    htm = html[:cutter]
+    while i*cutter < len(html) : 
+            htm += html[i*cutter:(i+1)*cutter].replace(" ","<br>",1)
+            i += 1
+    return "<p>"+htm+"</p>"
+
 
 @register.filter
 def index(sequence, position):

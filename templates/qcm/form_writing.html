@@ -15,7 +15,9 @@
  
 
 {% block page_title %}
-       <span style="color:{{ relationship.parcours.color }}"><i class="fa fa-desktop"></i> {{ relationship.parcours }}   </span>  
+       <span style="color:{{ relationship.parcours.color }}"><i class="fa fa-desktop"></i>    </span>  
+
+       {% include 'qcm/breadcrumb.html' %}
 {% endblock %}
 
 
@@ -79,13 +81,13 @@
                 {% if relationship.exercise.supportfile.is_scratch   %} 
                 <label>Conseil :</label>  Utiliser le site Scratch pour créer votre script. Prendre une capture d'écran et la déposer dans la zone de texte.<br><br><br>
                 <a href="https://scratch.mit.edu/projects/editor/?tutorial=getStarted" target="_blank">Naviguer vers Scratch <img src="{% static 'img/scratch.png' %}"/></a>
+                <hr>                
                 {% endif %}  
-                <hr>
-                <label>Savoir faire évalué :</label>
+                <label>Savoir faire ciblé :</label>
                     <li class="sans_puce">{{relationship.exercise.knowledge}}</li>    
                 {% if relationship.skills.all|length > 0 %}
                 <hr>                
-                    <label>Compétences visées :</label>
+                    <label>Compétences ciblés :</label>
                     {% for skill in relationship.skills.all %}
                         <li class="sans_puce">{{skill}}</li>
                     {% endfor %}
@@ -110,7 +112,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-12 col-xs-12">   
-                       {% if relationship.instruction != ""  %}  {{ relationship.instruction|safe }}  {% else %} {{ relationship.exercise.support.annoncement|safe }} {% endif %}                    </div>   
+                       {% if relationship.instruction != ""  %}  {{ relationship.instruction|insert_tags|safe }}  {% else %} {{ relationship.exercise.support.annoncement|insert_tags|safe }} {% endif %}                    </div>   
                 </div> 
             </div>
         </div>
