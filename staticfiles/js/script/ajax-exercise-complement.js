@@ -10,6 +10,8 @@ define(['jquery', 'bootstrap'], function ($) {
             $('.selected_student').prop('checked', true);
 
             $('#id_is_publish').prop('checked', true);
+
+            $('#id_is_ggbfile').prop('checked', true);            
  
         $("#click_button").click(function(){ 
 
