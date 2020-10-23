@@ -3296,12 +3296,11 @@ def write_exercise(request,id): # Coté élève
 
 
 
-def show_write_exercise(request,id): # vue de l'exercice non autocorrigé par le prof
+def show_write_exercise(request,id): # vue pour le prof de l'exercice non autocorrigé par le prof
 
-    teacher = Teacher.objects.get(user=request.user) 
     relationship = Relationship.objects.get(pk = id)
     parcours = relationship.parcours
-    today = time_zone_user(teacher.user)
+    today = timezone.now()
 
     wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None )
 
@@ -3360,12 +3359,11 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
 
 
 
-def show_custom_exercise(request,id,idp): # vue de l'exercice non autocorrigé par le prof
+def show_custom_exercise(request,id,idp): # vue pour le prof de l'exercice non autocorrigé par le prof
 
-    teacher = Teacher.objects.get(user=request.user) 
     customexercise = Customexercise.objects.get(pk = id)
     parcours = Parcours.objects.get(pk = idp)
-    today = time_zone_user(teacher.user)
+    today = timezone.now()
 
     context = { 'customexercise' : customexercise, 'communications' : [] ,  'parcours' : parcours , 'today' : today , 'student' : None, }
 
