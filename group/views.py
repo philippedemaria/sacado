@@ -4,7 +4,7 @@ from account.forms import UserForm
 from group.models import Group
 from socle.models import Knowledge, Theme, Level, Skill
 from qcm.models import Exercise, Parcours, Relationship, Studentanswer, Resultexercise
-from group.forms import GroupForm
+from group.forms import GroupForm , GroupTeacherForm
 from sendmail.models import Email
 from sendmail.forms import EmailForm
 from school.models import Stage
@@ -221,7 +221,7 @@ def list_groups(request):
 @user_passes_test(user_can_create)
 def create_group(request):
     teacher = Teacher.objects.get(user_id=request.user.id)
-    form = GroupForm(request.POST or None)
+    form = GroupTeacherForm(request.POST or None, teacher = teacher )
 
     if form.is_valid():
         nf = form.save(commit=False)
@@ -259,7 +259,7 @@ def update_group(request, id):
         students = []
 
     
-    form = GroupForm(request.POST or None, instance=group )
+    form = GroupTeacherForm(request.POST or None, teacher = teacher , instance=group )
 
     if form.is_valid():
         nf = form.save(commit = False)
@@ -507,7 +507,7 @@ def result_group_exercise(request, id):
 def result_group_skill(request, id):
 
     group = Group.objects.get(id=id)
-    skills = Skill.objects.filter(subject__in=group.teacher.subjects.all())
+    skills = Skill.objects.filter(subject=group.subject)
 
     form = EmailForm(request.POST or None )
     stage = get_stage(group)
@@ -722,8 +722,8 @@ def enroll(request, slug):
 def print_statistiques(request, group_id, student_id):
 
     themes, subjects = [], []
+    group = Group.objects.get(pk = group_id)
     if student_id == 0  :
-        group = Group.objects.get(pk = group_id)
         students = group.students.order_by("user__last_name")
         title_of_report = group.name+"_"+str(timezone.now().date())
 
@@ -743,8 +743,8 @@ def print_statistiques(request, group_id, student_id):
             if not know.theme in themes :
                 themes.append(know.theme)
     
-    for thm in themes :
-        subjects.append(thm.subject)
+ 
+    subject = group.subject
 
 
     elements = []        
@@ -929,7 +929,7 @@ def print_statistiques(request, group_id, student_id):
         #### Gestion des compétences
         ##########################################################################
         sk_tab = []
-        skills = Skill.objects.filter(subject__in= subjects)
+        skills = Skill.objects.filter(subject= subject)
         for skill  in skills :
             try :
                 resultlastskill  = Resultlastskill.objects.get(student = student, skill= skill )

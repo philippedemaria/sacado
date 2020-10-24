@@ -48,18 +48,25 @@
         <div class="row">
             <div class="col-sm-12 col-md-6">
                     <div class="row">
-                        <div class="col-sm-12 col-md-7">
+                        <div class="col-sm-12 col-md-4">
                             <div class="form-group">
                                 {{ form.name.label_tag }} <font style="font-size:12px">18 lettres max.</font>
                                 {{ form.name |add_class:"form-control" }}
                                 {{ form.name.errors }}
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-5">
+                        <div class="col-sm-12 col-md-4">
                             <div class="form-group">
                                 {{ form.level.label_tag }}
                                 {{ form.level |add_class:"form-control select2" }}
                                 {{ form.level.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <div class="form-group">
+                                {{ form.subject.label_tag }}
+                                {{ form.subject |add_class:"form-control select2" }}
+                                {{ form.subject.errors }}
                             </div>
                         </div>
                     </div> 

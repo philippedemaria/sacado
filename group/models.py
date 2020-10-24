@@ -2,7 +2,7 @@ from django.db import models
 from datetime import date
 
 from account.models import Student, Teacher, ModelWithCode, generate_code
-from socle.models import Level
+from socle.models import Level, Subject
 from qcm.models import Parcours
 from account.models import ModelWithCode
 from django.apps import apps
@@ -25,7 +25,7 @@ class Group(ModelWithCode):
     suiviparent = models.BooleanField(default=0)
     lock = models.BooleanField(default=0)
     teachers = models.ManyToManyField(Teacher, blank=True,   editable=False, through="Sharing_group", related_name="teacher_group")
-
+    subject = models.ForeignKey(Subject, default = "" ,  null=True, on_delete=models.PROTECT, related_name="subject_group", verbose_name="Matière*")
 
     class Meta:
         ordering = ['name']

@@ -56,7 +56,7 @@
         <div class="col-sm-12 col-md-6">
             {% csrf_token %}
             <div class="row">
-                <div class="col-sm-12 col-md-4">
+                <div class="col-sm-12 col-md-3">
                     <div class="form-group">
                         {{ form.name.label_tag }} <font style="font-size:12px">18 lettres max.</font>
                         {{ form.name |add_class:"form-control" }}
@@ -65,14 +65,26 @@
                 </div>
                 <div class="col-sm-12 col-md-4">
                     <div class="form-group">
-                        {{ form.level.label_tag }}
+                        <label>Niveau*: <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" >Si aucun niveau n'apparait, sélectionner vos niveaux préférés <a href="{% url 'profile' %}">ici</a>.</div>
+                                </span></label>
                         {{ form.level |add_class:"form-control select2" }}
                         {{ form.level.errors }}
                     </div>
                 </div>
-
-                <div class="col-sm-12 col-lg-4">
-                      {{ form.color.label_tag }}
+                <div class="col-sm-12 col-md-3">
+                    <div class="form-group">
+                        <label>Enseignement*:<span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" >Si aucun enseignement n'apparait, sélectionner vos enseignements <a href="{% url 'profile' %}">ici</a>.</div>
+                                </span></label>
+                        {{ form.subject |add_class:"form-control select2" }}
+                        {{ form.subject.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-lg-2">
+                      {{ form.color.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
+                                </span>
                       <div id="color-picker-component" class="input-group colorpicker-component">
                           {{ form.color.as_hidden }}
                           <span class="input-group-addon"><i></i></span>

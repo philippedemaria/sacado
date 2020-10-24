@@ -8,10 +8,13 @@ from group.views import include_students
 from group.models import Group, Sharing_group
 from account.decorators import is_manager_of_this_school
 from socle.decorators import user_is_superuser
+from socle.models import Subject
 from account.models import User, Teacher, Student
 from account.forms import UserForm , StudentForm ,NewUserSForm
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 ############### bibliothèques pour les impressions pdf  #########################
 import os
 from django.utils import formats
@@ -363,6 +366,31 @@ def delete_all_students_group(request,id):
 		clear_detail_student(student)
 	group.students.clear()
 	return redirect('update_group_school', group.id)
+
+ 
+
+@csrf_exempt
+def ajax_subject_teacher(request):
+ 	
+    school = request.user.school
+    subject_id =  int(request.POST.get("subject_id"))
+    subject =  Subject.objects.get(pk = subject_id)
+    data = {}
+ 
+    teachers = Teacher.objects.filter(subjects = subject, user__school=school).order_by("user__last_name")
+    tchs = []
+    for t in teachers : 
+    	tchs.append([t.user.id, t.user.last_name+" "+t.user.first_name])
+    data['teachers'] = list(tchs)
+ 
+    return JsonResponse(data)
+
+
+
+
+
+
+
 
 
 

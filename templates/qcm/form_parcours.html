@@ -72,7 +72,7 @@
                 <div class="col-sm-12  col-md-3  col-lg-2">
                       {{ form.color.label_tag }}      
                                 <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                    <div class="helper_tip_text" >La couleur donne de la gaieté aux parcours et permet la reconnaissance rapide.</div>
+                                    <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
                                 </span>
                       <div id="color-picker-component" class="input-group colorpicker-component">
                           {{ form.color.as_hidden }}
@@ -202,10 +202,12 @@
 
                 <div class="col-sm-6 col-md-3  col-lg-4">
 
-                        {{ form.vignette.label_tag }} <span style="font-size: 10px">format recommandé: l:450px h:300px </span>
+                        {{ form.vignette.label_tag }}   <span class="helper_tip"> <i class="fa fa-question-circle"></i> <span style="font-size:12px">(facultatif)</span>
+                                    <div class="helper_tip_text" >format recommandé: l:450px h:300px <br>La vignette se superpose à la couleur du parcours qui ne sera pas visible selon la taille de l'image. </div>
+                                </span> 
                         {{ form.vignette|add_class:"btn btn-default" }} 
                         {{ form.vignette.errors }}
-                        <span style="font-size:10px">La vignette propose une image de votre parcours à vos élèves (facultatif)</span>
+                        
                 {% if   parcours %} 
                     <div style="height:20px"></div>
                     <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-{% if parcours.exercises.all|length > 0 %}default{% else %}danger{% endif %}" ><i class="fa fa-tasks"></i> Sélectionner les exercices</a>   

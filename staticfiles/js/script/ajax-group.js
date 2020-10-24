@@ -180,7 +180,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
           
                 if ( students_id != "") {  
-                    alert("Vous inscrivez des élèves. Chacun de vos parcours et leurs exercices leur sont affectés. Il sera possible d'individualiser les exercices dans un parcours favori.")  ;  
+                    alert("Si vous inscrivez des élèves, chacun de vos parcours et leurs exercices leur seront affectés. Il sera possible d'individualiser les exercices dans un parcours favori.")  ;  
                     }  
             });
 

@@ -17,7 +17,7 @@ class Subject(models.Model):
     shortname = models.CharField(max_length=10, default ="" , verbose_name="Abréviation")
  
     def __str__(self):
-        return "{}".format(self.name)
+        return "{}".format(self.shortname)
 
 
 
