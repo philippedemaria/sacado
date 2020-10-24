@@ -790,10 +790,14 @@ def update_teacher(request, pk):
 
         messages.success(request, "Actualisation réussie !")
 
-        if request.user.is_superuser :
+        test = request.POST.get("listing",None)
+        print(test)
+        if test :
             return redirect('list_teacher')
         elif request.user.is_manager :
             return redirect('school_teachers')
+        else :
+            return redirect('index') 
 
     return render(request, 'account/teacher_form.html',
                   {'user_form': user_form, 'new' : new , 'communications': [] , 'today' : today , 
@@ -809,7 +813,8 @@ def delete_teacher(request, pk):
         teacher = get_object_or_404(Teacher, user_id=pk)
         teacher.user.delete()
 
-    if request.user.is_superuser :
+    test = request.POST.get("listing",None)
+    if test :
         return redirect('list_teacher')
     elif request.user.is_manager :
         return redirect('school_teachers')
