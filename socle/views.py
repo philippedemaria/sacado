@@ -4,8 +4,8 @@ from django.core import serializers
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.shortcuts import render, redirect
-from socle.models import  Knowledge, Level, Theme
-from socle.forms import  LevelForm, KnowledgeForm,  ThemeForm,MultiKnowledgeForm
+from socle.models import  Knowledge, Level, Theme, Skill
+from socle.forms import  LevelForm, KnowledgeForm,  ThemeForm,MultiKnowledgeForm , SkillForm, MultiSkillForm  
 from account.models import Teacher, Student
 from django.contrib import messages
 from account.decorators import user_can_create
@@ -187,3 +187,56 @@ def delete_level(request, id):
  
 
  
+
+
+@user_is_superuser 
+def create_multi_skill(request):
+
+    form = MultiSkillForm(request.POST or None  )
+    if request.method == "POST" :
+        if form.is_valid():
+            subject = form.cleaned_data["subject"]
+            names = form.cleaned_data["name"].split("\r")
+            for name in names :
+                Skill.objects.create(name=cleanhtml(name),subject=subject)
+ 
+            messages.success(request, 'Les compétences ont été créées avec succès !')
+            return redirect('skills')
+        else:
+            print(form.errors)
+
+    context = {'form': form, 'communications' : [] ,  'skill': None   }
+
+    return render(request, 'socle/form_skill.html', context)
+
+
+
+@user_is_superuser
+def update_skill(request, id):
+
+    skill = Skill.objects.get(id=id)
+    skill_form = SkillForm(request.POST or None, instance=skill )
+    if request.method == "POST" :
+        if skill_form.is_valid():
+            skill_form.save()
+            messages.success(request, 'Le savoir faire a été modifié avec succès !')
+            return redirect('skills')
+        else:
+            print(skill_form.errors)
+
+    context = {'form': skill_form, 'communications' : [] , 'skill': skill,   }
+
+    return render(request, 'socle/form_skill.html', context )
+
+@user_is_superuser
+def delete_skill(request, id):
+    skill = Skill.objects.get(id=id)
+    skill.delete()
+    return redirect('skills')
+
+
+@user_is_superuser
+def list_skills(request):
+ 
+    skills = Skill.objects.order_by("subject")
+    return render(request, 'socle/list_skills.html', {'communications' : [] ,'skills': skills})

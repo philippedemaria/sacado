@@ -233,7 +233,7 @@ class Knowledge(models.Model):
 
 
 class Skill(models.Model): 
-    name = models.CharField(max_length=50 , verbose_name="Nom")
+    name = models.CharField(max_length=10000, verbose_name="Nom")
     subject  = models.ForeignKey(Subject, related_name="skill", default="", on_delete=models.PROTECT, null = True ,  verbose_name="Enseignement")
 
     def __str__(self):
@@ -268,3 +268,14 @@ class Skill(models.Model):
         except :
             crit = 0
         return crit
+
+
+
+    def used(self):
+        return self.nb_exercise() > 0
+
+    def nb_exercise(self):
+        return self.skills_relationship.count()
+
+
+ 

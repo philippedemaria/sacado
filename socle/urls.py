@@ -12,6 +12,12 @@ urlpatterns = [
     path('update_knowledge/<int:id>/', update_knowledge, name='update_knowledge'),
     path('delete_knowledge/<int:id>/', delete_knowledge, name='delete_knowledge'),
 
+
+    path('skills', list_skills, name='skills'),
+    path('create_multi_skill', create_multi_skill, name='create_multi_skill'),
+    path('update_skill/<int:id>/', update_skill, name='update_skill'),
+    path('delete_skill/<int:id>/', delete_skill, name='delete_skill'),
+
  
     path('themes', list_themes, name='themes'),
     path('create_theme', create_theme, name='create_theme'),

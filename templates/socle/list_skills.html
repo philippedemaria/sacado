@@ -5,11 +5,9 @@
 
 
 {% block general_js %}
-    {% if knowledge %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-action2.js' %}"></script>
-    {% else %}
+
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-index.js' %}"></script>
-    {% endif %}
+
 {% endblock %}
 
  
@@ -22,9 +20,9 @@
 {% endblock %}
 
 {% block page_menu_right %}
- 
-    <li><a href="{% url 'create_knowledge' %}" class="btn btn-new pull-right" ><i class="fa fa-plus"></i> Nouveau savoir faire</a></li>
-    <li><a href="{% url 'create_multi_knowledge' %}" class="btn btn-new pull-right" ><i class="fa fa-plus"></i>  Création multiple</a></li>  
+
+    <li><a href="{% url 'create_multi_skill' %}" class="btn btn-new pull-right" ><i class="fa fa-plus"></i>  Création multiple</a></li>  
+
 {% endblock %}
 
 
@@ -37,24 +35,20 @@
                   <thead>
                       <tr>
                         <th>Nom</th>                      
-                        <th>Thème</th>
-                        <th>Niveau</th>
+                        <th>Enseignement</th>
                       </tr>
                   </thead>
                   <tbody>
-                        {% for knowledge in knowledges %}
+                        {% for skill in skills %}
                         <tr> 
                           <td>
-                              <a href="{% url 'update_knowledge' knowledge.id %}">{{ knowledge.name }}  {% if knowledge.used %}<i class="fa fa-check text-success"></i> [{{ knowledge.nb_exercise }}]   {% endif %}</a> 
+                              <a href="{% url 'update_skill' skill.id %}">{{ skill.name }}  {% if skill.used %}<i class="fa fa-check text-success"></i> [{{ skill.nb_exercise }}]   {% endif %}</a> 
                               <small>
-                              <a href="{% url 'delete_knowledge' knowledge.id %}"  onclick="return TestDelete('ce savoir faire')"><i class='fa fa-trash pull-right'></i></a>
+                              <a href="{% url 'delete_skill' skill.id %}"  onclick="return TestDelete('ce savoir faire')"><i class='fa fa-trash pull-right'></i></a>
                               </small>
                           </td>
                           <td >
-                              {{ knowledge.theme.name }} 
-                          </td> 
-                          <td >
-                              {{ knowledge.level.name }}
+                              {{ skill.subject.name }}
                           </td>
                         </tr>
                         {% endfor %}

@@ -1,5 +1,5 @@
 from django import forms 
-from socle.models import   Theme, Knowledge, Level
+from socle.models import   Theme, Knowledge, Level, Skill
  
 
  
@@ -17,7 +17,12 @@ class KnowledgeForm(forms.ModelForm):
  		model = Knowledge  
  		fields = '__all__'
 
- 
+
+
+class SkillForm(forms.ModelForm):
+	class Meta:
+ 		model = Skill  
+ 		fields = '__all__' 
 
 class LevelForm(forms.ModelForm):
  
@@ -40,4 +45,13 @@ class MultiKnowledgeForm(forms.ModelForm):
 	name = forms.CharField( widget=forms.Textarea )
 	class Meta:
  		model = Knowledge  
+ 		fields = '__all__'
+
+
+
+class MultiSkillForm(forms.ModelForm):
+
+	name = forms.CharField( widget=forms.Textarea )
+	class Meta:
+ 		model = Skill  
  		fields = '__all__'
