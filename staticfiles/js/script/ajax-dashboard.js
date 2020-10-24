@@ -755,6 +755,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             let exercise_id =  $(this).attr("data-exercise_id");   
             let from =  $(this).attr("data-from");   
 
+            if (message == "") { alert("Vous devez décrire brièvement le problème.") ; return false ; }    
+
             if (from == "0") { url_to ="../../ajax/exercise_error"} else  { url_to ="../ajax/exercise_error" ; } 
  
             $.ajax({
