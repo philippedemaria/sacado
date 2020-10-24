@@ -97,7 +97,7 @@
                             <td {% if knowledge_supportfile.exercise  %} style="border-left:10px solid {% if knowledge_supportfile.parcours  %} #dd4b39 {% else %} #00AC18 {% endif %}" {% endif %}>
                                 <label>
                                     {% if knowledge_supportfile.parcours %}
-                                        <i class="fa fa-check text-success"></i>    <strong>{{ knowledge.level.name }},</strong> {{ knowledge.name|capfirst }}<input type="hidden" name="choice_knowledges" value="{{ knowledge.id }}" />
+                                        <i class="fa fa-check text-success"></i>    <strong>{{ knowledge.level.name }} - {{ knowledge.theme.subject.shortname }} </strong> {{ knowledge.name|capfirst }}<input type="hidden" name="choice_knowledges" value="{{ knowledge.id }}" />
                                     {% else %}
                                     <input type="checkbox" name="choice_knowledges" value="{{ knowledge.id }}" class="check_box"
                                         {% if knowledge_supportfile.exercise %}checked{% endif %}/> <strong>{{ knowledge.level.name }},</strong> {{ knowledge.name|capfirst }}
