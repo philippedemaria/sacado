@@ -1451,7 +1451,7 @@ def ajax_parcours_get_exercise_custom(request):
     customexercise = Customexercise.objects.get(pk=exercise_id)
     parcourses =  teacher.teacher_parcours.all()    
 
-    context = {  'customexercise': customexercise , 'parcourses': parcourses ,   }
+    context = {  'customexercise': customexercise , 'parcourses': parcourses , 'teacher' : teacher  }
     data = {}
     data['html'] = render_to_string('qcm/ajax_parcours_get_exercise_custom.html', context)
  
@@ -1480,7 +1480,17 @@ def parcours_clone_exercise_custom(request):
     return JsonResponse(data)
 
 
-     
+  
+
+def exercise_custom_show_shared(request):
+    
+    user = request.user
+    if user.is_teacher:  # teacher
+        teacher = Teacher.objects.get(user=user) 
+        customexercises = Customexercise.objects.filter(is_share = 1).exclude(teacher = teacher)
+        return render(request, 'qcm/list_custom_exercises.html', {  'teacher': teacher , 'customexercises':customexercises, 'parcours': None, 'relationships' : [] ,  'communications': [] , })
+    else :
+        return redirect('index')   
 
 
  
@@ -2148,19 +2158,6 @@ def list_exercises(request):
         return render(request, 'qcm/student_list_exercises.html',
                       {'relationships': relationships, 'nb_exercises': nb_exercises ,     })
 
-
-
-
-
-def exercise_custom_show_shared(request):
-    
-    user = request.user
-    if user.is_teacher:  # teacher
-        teacher = Teacher.objects.get(user=user) 
-        customexercises = Customexercise.objects.filter(is_share = 1).exclude(teacher = teacher)
-        return render(request, 'qcm/list_custom_exercises.html', {  'teacher': teacher , 'customexercises':customexercises, 'parcours': None, 'relationships' : [] ,  'communications': [] , })
-    else :
-        return redirect('index')
 
 
 

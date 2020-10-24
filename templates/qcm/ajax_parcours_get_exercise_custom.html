@@ -1,8 +1,24 @@
+    {% if  not  teacher.user.school %}
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="alert alert-danger">
+                Vous ne pouvez pas cloner d'exercice. Pour activer cette fonctionnalité, il faut utiliser la version établissement.
+            </div> 
+        </div>
+    </div>
+    <hr>     
+    {% endif  %}
+
     {{ customexercise.instruction|safe }}
     <hr> 
     <div class="row">
         <div class="col-sm-12 col-md-12">
+
+            {% if teacher.user.school %}
             <a href="#" class="btn btn-primary clone_to" data-exercise_id = '{{ customexercise.id }}' data-cloner = 0  >Cloner cet exercice dans mes exercices</a>
+            {% else %}
+            <span class="btn btn-primary">Cloner cet exercice dans mes exercices</span>
+            {% endif  %}
         </div>
     </div>
 
@@ -21,7 +37,11 @@
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <div class="form-group">
+                {% if teacher.user.school %}
                 <a href="#" class="btn btn-primary clone_to" data-exercise_id = '{{ customexercise.id }}' data-cloner = 1 >Cloner cet exercice dans mes parcours</a>
+                {% else %}
+                <span class="btn btn-primary">Cloner cet exercice dans mes parcours</span>
+                {% endif  %}
             </div>
         </div>
     </div>
