@@ -51,9 +51,14 @@
                              {{ level.shortname }}
                           </td>
                           <td >
-                               {% for t in level.themes.all %}                 
-                                 {{ t.name  }}{% if not forloop.last %}, {% endif %}
-                               {% endfor %} 
+                               {% regroup level.themes.all by  subject as  subject_list %}   
+                                 {% for s in subject_list %}     
+                                      <b>{{ s.grouper }}</b>
+                                     {% for theme in s.list %}                 
+                                       {{ theme.name  }}  {% if not forloop.last %}, {% endif %}
+                                     {% endfor %} 
+                                     {% if not forloop.last %}<br> {% endif %}
+                                  {% endfor %} 
                           </td>
                         </tr>
                         {% endfor %}
