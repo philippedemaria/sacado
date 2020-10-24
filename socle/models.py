@@ -27,7 +27,7 @@ class Theme(models.Model):
     subject  = models.ForeignKey(Subject, related_name="theme", default="",  null = True , on_delete=models.PROTECT, verbose_name="Enseignement")
 
     def __str__(self):
-        return "{}".format(self.name)
+        return "{} : {}".format(self.subject,self.name)
 
     def string_id(self):
         return "{}".format(self.id)

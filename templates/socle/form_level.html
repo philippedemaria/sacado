@@ -52,11 +52,36 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
-                        {% if level %}
-                        <button type="submit" class="btn btn-sacado">Enregistrer les modifications</button>   
-                        {% else %}
-                        <button type="submit" class="btn btn-sacado">Créer le niveau</button> 
-                        {% endif %}
+                        <div class="form-group">
+                            <label>{{ form.cycle.label_tag }}</label>
+                            {{ form.cycle |add_class:"form-control" }}
+                            {{ form.cycle.errors }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <label>{{ form.image.label_tag }}</label>
+                            {{ form.image |add_class:"form-control" }}
+                            {{ form.image.errors }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <label>{{ form.themes.label_tag }}</label>
+                            {{ form.themes }}
+                            {{ form.themes.errors }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        
+                        <button type="submit" class="btn btn-primary">{% if level %}Enregistrer les modifications{% else %}Créer le niveau{% endif %}</button>   
+                        
                         <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
                     </div>
                 </div>

@@ -75,10 +75,10 @@ border : 0px!important;
 
 
 /* Liste des puces par le form django */
-#id_students  ,#id_exercises,#id_courses   {
+#id_students  ,#id_exercises,#id_courses ,#id_themes   {
   padding-left : 0px ; 
 }
-#id_students li,#id_exercises li ,#id_courses li  {
+#id_students li,#id_exercises li ,#id_courses li,#id_themes li  {
   list-style: none;
   padding-left : 0px ; 
 }

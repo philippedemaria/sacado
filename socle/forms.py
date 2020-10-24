@@ -1,7 +1,11 @@
 from django import forms 
 from socle.models import   Theme, Knowledge, Level
+ 
 
  
+ 
+
+
 class ThemeForm(forms.ModelForm):
 	class Meta:
  		model = Theme  
@@ -16,9 +20,19 @@ class KnowledgeForm(forms.ModelForm):
  
 
 class LevelForm(forms.ModelForm):
+ 
 	class Meta:
  		model = Level  
  		fields = '__all__'
+
+
+	def __init__(self, *args, **kwargs):
+		super(LevelForm, self).__init__(*args, **kwargs)
+		themes = Theme.objects.all()
+ 
+		self.fields['themes'] = forms.ModelMultipleChoiceField(queryset=themes, widget=forms.CheckboxSelectMultiple, required=False)
+
+
 
 
 class MultiKnowledgeForm(forms.ModelForm):
