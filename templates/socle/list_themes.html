@@ -17,17 +17,20 @@
 <section class="content_main"> 
     <div class="row">
         <div class="col-sm-12 col-md-12">
-            <table id="standard_tab" class="table table-bordered table-hover"  class="display" style="width:100%">
+            <table id="standard_tab" class="table table-bordered table-hover standard_tab_sort300" style="width:100%">
                   <thead>
                       <tr>
+                        <th>Enseignement</th>
                         <th>Nom</th>                  
                         <th>Niveau</th> 
- 
                       </tr>
                   </thead>
                   <tbody>
                         {% for theme in themes %}
                         <tr> 
+                          <td>
+                             {{ theme.subject.shortname }} 
+                          </td>
                           <td>
                              <a href="{% url 'update_theme' theme.id %}">{{ theme.name }} </a> 
                               <a href="{% url 'delete_theme' theme.id %}"  onclick="return TestDelete('ce thème')"><i class='fa fa-trash pull-right'></i></a>
