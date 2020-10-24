@@ -128,7 +128,7 @@
                 <div class="row" style="margin-bottom:8px; padding-bottom: 8px; clear:both">
                     <div class="col-sm-12 col-md-5">        
                         <a href="{% url 'show_custom_exercise' customexercise.id  parcours.id %}" target="_blank" >  
-                        <img src="{{ customexercise.image.url }}" class="imagefile"></a>
+                          <img {% if customexercise.imagefile %} src="{{ customexercise.imagefile.url }}" {% else %}  src="{% static 'img/custom_exercise.png' %}" {% endif %} class="imagefile"  >
                                                             
                          {{ customexercise.instruction|safe }}
 

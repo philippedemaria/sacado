@@ -165,7 +165,8 @@
                                                  <span class="btn btn-default">{{ p }}</span>{% if not forloop.last %}<br>{% endif %}
                                             {% endfor %}
                                             </div>
-                                                <img src="{{ customexercise.image.url }}" class="imagefile">
+                                                <img {% if customexercise.imagefile %} src="{{ customexercise.imagefile.url }}" {% else %}  src="{% static 'img/custom_exercise.png' %}" {% endif %} class="imagefile"  >
+
                                                 <a href="{% url 'parcours_update_custom_exercise'  customexercise.id 0  %}" class="listing" style="font-size: 18px">
                                                     {{ customexercise.instruction|safe }}
                                                 </a>

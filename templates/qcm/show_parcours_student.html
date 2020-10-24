@@ -301,14 +301,14 @@
                             {% get_is_lock customexercise today as is_block %} 
                             {% if  not is_block  %}
                                 <a href="{% if not is_lock %}{% url 'write_custom_exercise' customexercise.id parcours.id %}{% endif %}"> 
-                                    {% if customexercise.image %} 
+                                    {% if customexercise.imagefile %} 
                                         <img src="{{ customexercise.imagefile.url }}"  class="image_parcours" {% if not customexercise.is_publish %} style="opacity:0.3" {% endif %} >
                                     {% else %}
                                         <img src="{% static 'img/custom_exercise.png' %}"  class="image_parcours" {% if not customexercise.is_publish %} style="opacity:0.3" {% endif %} >
                                     {% endif %}
                                 </a>
                             {% else %}         
-                                     {% if customexercise.image %} 
+                                     {% if customexercise.imagefile %} 
                                         <img src="{{ customexercise.imagefile.url }}"  class="image_parcours" {% if not customexercise.is_publish %} style="opacity:0.3" {% endif %} >
                                     {% else %}
                                         <img src="{% static 'img/custom_exercise.png' %}"  class="image_parcours" {% if not customexercise.is_publish %} style="opacity:0.3" {% endif %} >

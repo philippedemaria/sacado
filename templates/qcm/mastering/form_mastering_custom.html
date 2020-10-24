@@ -41,7 +41,7 @@
                 <label class="label_select_checkbox">
  
  
-                        <img src="{{ customexercise.image.url }}" class="imagefile">
+                  <img {% if customexercise.imagefile %} src="{{ customexercise.imagefile.url }}" {% else %}  src="{% static 'img/custom_exercise.png' %}" {% endif %} class="imagefile"  >
  
    
                 {{ customexercise.instruction|safe }} 
