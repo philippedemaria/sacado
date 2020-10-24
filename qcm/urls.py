@@ -48,6 +48,10 @@ urlpatterns = [
 
     path('parcours_stat_evaluation/<int:id>/', stat_evaluation, name='stat_evaluation'), 
 
+    path('parcours_get_exercise_custom', ajax_parcours_get_exercise_custom, name='ajax_parcours_get_exercise_custom'),
+    path('parcours_clone_exercise_custom', parcours_clone_exercise_custom, name='parcours_clone_exercise_custom'),
+
+
     #####################################  Modifie les relations par parcours et exercices  ##############################################################  
     path('<int:idp>/<int:ide>/', execute_exercise, name='execute_exercise'),#modif idp en id pour la sécurité 
     path('delete_evaluation/<int:id>/', delete_evaluation, name='delete_evaluation'), 
@@ -116,6 +120,7 @@ urlpatterns = [
     path('parcours_show_course/<int:idc>/<int:id>', show_course, name='show_course'),
     path('parcours_show_course_student/<int:idc>/<int:id>', show_course_student, name='show_course_student'),
     ############################################################################################################  
+    path('exercise_custom_show_shared', exercise_custom_show_shared, name='exercise_custom_show_shared'),  
 
     #################################### Mastering #############################################################
 

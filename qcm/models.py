@@ -782,6 +782,8 @@ class Customexercise(ModelWithCode):
     knowledges = models.ManyToManyField(Knowledge, blank=True, related_name='knowledge_customexercises', verbose_name="Savoir faire évalués")
     parcourses = models.ManyToManyField(Parcours, blank=True, related_name='parcours_customexercises', verbose_name="Parcours attachés")
     students = models.ManyToManyField(Student, blank=True, related_name='students_customexercises' )   
+    
+    is_share = models.BooleanField(default=0, verbose_name="Mutualisé ?")
 
     is_python = models.BooleanField(default=0, verbose_name="Python ?")
     is_scratch = models.BooleanField(default=0, verbose_name="Scratch ?")
@@ -800,6 +802,41 @@ class Customexercise(ModelWithCode):
     def __str__(self):       
         return "{}".format(self.instruction)
  
+
+    def subjects(self):
+        subjects = []
+        for k in self.knowledges.all() :
+            if k.theme.subject  not in subjects :
+                subjects.append(k.theme.subject)
+
+        for s in self.skills.all() :
+            if s.subject not in subjects :
+                subjects.append(s.subject)
+
+        if len(subjects) == 0 :
+            for sb in self.teacher.subjects.all() :
+                if sb  not in subjects :
+                    subjects.append(sb)       
+        return subjects
+
+
+
+    def levels(self):
+        levels = []
+        for k in self.knowledges.all() :
+            if k.level  not in levels :
+                levels.append(k.level)
+
+ 
+        if len(levels) == 0 :
+            for sb in self.teacher.levels.all() :
+                if sb  not in levels :
+                    levels.append(sb)       
+        return levels
+
+
+
+
 
     def percent_student_done_parcours_exercice(self, parcours):
 

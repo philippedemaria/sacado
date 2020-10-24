@@ -11,12 +11,18 @@
 
 
 {% block page_title %}
-    <i class="fa fa-laptop"></i> Les exercices
+    <i class="fa fa-laptop"></i> Les exercices SACADO
 {% endblock %}
 
 {% block page_menu_right %}
 
-    <li  >{% if request.user.is_superuser and  '/admin' in request.path %}<a href="{% url 'create_supportfile' %}"   class="btn btn-new"><img width="25px" src="{% static 'img/plus.png' %}"/> Nouveau support GGB {% endif  %}</a> </li>
+
+    <li> <a href="{% url 'exercise_custom_show_shared' %}"   class="btn btn-new"> Exercices Mutualisés</a> </li>
+
+
+    {% if request.user.is_superuser and  '/admin' in request.path %}
+    <li ><a href="{% url 'create_supportfile' %}"   class="btn btn-new"><img width="25px" src="{% static 'img/plus.png' %}"/> Nouveau support GGB </a> </li> 
+    {% endif  %}
 
 {% endblock %}
 

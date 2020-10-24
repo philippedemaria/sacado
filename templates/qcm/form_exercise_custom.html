@@ -74,7 +74,7 @@ ul#id_skills li{
                             </div>
  
                         <div class="row" style="margin:0px; background-color: #F0F0F0;padding:10px;">
-                            <label>Correction :</label><br>
+                            <label>Correction : <small>(Falcultatif)</small></label><br>
                             <div class="col-sm-12 col-md-6">                        
                                 <div class="form-group">
                                     {{ form.file_cor.label_tag }}                        
@@ -100,7 +100,10 @@ ul#id_skills li{
                     </div>
                     <div class="col-sm-12 col-md-3">
                         <div class="form-group">
-                            <label>Autres parcours affectés : </label> <br>
+                            <label>Autres parcours affectés : </label> 
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" >L'exercice est associé par défaut à ce parcours. Si vous souhaitez placer cet exercice dans un autre parcours.</div>
+                                </span> <br>
                             {{ form.parcourses|add_class:"form-control select2" }}
                             {{ form.parcourses.errors }}
                         </div>
@@ -114,7 +117,9 @@ ul#id_skills li{
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="form-group">
-                                    {{ form.lock.label_tag }}
+                                    {{ form.lock.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <div class="helper_tip_text">A partir de cette date et heure, l'exercice ne pourra plus être remis. <small>(Facultatif)</small></div>
+                                    </span>
                                     {{ form.lock |add_class:"form-control datetimepicker" }}
                                     {{ form.lock.errors }}
                                 </div>
@@ -122,7 +127,9 @@ ul#id_skills li{
                         </div>
 
                         <div class="form-group">
-                            {{ form.imagefile.label_tag }}
+                            {{ form.imagefile.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <div class="helper_tip_text">La vignette d'accueil propose un visuel de votre exercice. Sans vignette de votre part, SACADO associe une vignette par défaut.(Facultatif)</div>
+                                    </span>
                             {{ form.imagefile |add_class:"btn btn-default" }}
                             {{ form.imagefile.errors }}
                             <font style="font-size:12px;color:#c70000">Largeur : 750px - hauteur : 550px.</font>
@@ -154,6 +161,28 @@ ul#id_skills li{
                         <div class="row">
                             <div class="col-sm-12 col-md-8">
                                 <div class="form-group">
+                                   Mutualisé ?  
+                                   {% if not  teacher.user.school %}
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <div class="helper_tip_text">L'exercice ne peut pas être mutualisé. Pour accéder à cette fonctionnalité, il faut utiliser la version établissement.</div>
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    {% if   teacher.user.school %}
+                                    {{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                    {% else %}
+                                    {{ form.is_publish |attr:"disabled" |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                    {% endif %}
+                                    {{ form.is_publish.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-8">
+                                <div class="form-group">
                                    Calculatrice ?
                                 </div>
                             </div>
@@ -167,7 +196,9 @@ ul#id_skills li{
                         <div class="row">
                             <div class="col-sm-12 col-md-8">
                                 <div class="form-group">
-                                   Interface Python ?
+                                   Interface Python ? <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <div class="helper_tip_text">SACADO propose une interface Python</div>
+                                    </span>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-4">
@@ -180,7 +211,9 @@ ul#id_skills li{
                         <div class="row">
                             <div class="col-sm-12 col-md-8">
                                 <div class="form-group">
-                                   Lien vers Scratch ?
+                                   Lien vers Scratch ? <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <div class="helper_tip_text">Une zone de texte est proposée aux élèves. Un lien Scratch est donné pour que les élèves puissent créer leur script. Il leur suffit de prendre une capture d'écran de leur script et de la glisser déposer dans la zone de texte.</div>
+                                    </span>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-4">

@@ -1442,6 +1442,47 @@ def clone_parcours(request, id):
     else :
         return redirect('parcours')
  
+
+
+def ajax_parcours_get_exercise_custom(request):
+
+    teacher = Teacher.objects.get(user_id = request.user.id) 
+    exercise_id =  int(request.POST.get("exercise_id"))
+    customexercise = Customexercise.objects.get(pk=exercise_id)
+    parcourses =  teacher.teacher_parcours.all()    
+
+    context = {  'customexercise': customexercise , 'parcourses': parcourses ,   }
+    data = {}
+    data['html'] = render_to_string('qcm/ajax_parcours_get_exercise_custom.html', context)
+ 
+    return JsonResponse(data)
+ 
+ 
+def parcours_clone_exercise_custom(request):
+
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    exercise_id =  int(request.POST.get("exercise_id"))
+    customexercise = Customexercise.objects.get(pk=exercise_id)
+
+    checkbox_value = request.POST.get("checkbox_value")
+    customexercise.pk = None
+    customexercise.teacher = teacher
+    customexercise.code = str(uuid.uuid4())[:8]  
+    customexercise.save()
+
+    if checkbox_value == "" :
+        checkbox_ids = checkbox_value.split("-")
+        for checkbox_id in checkbox_ids :
+            parcours = Parcours.objects.get(pk = checkbox_id)
+            customexercise.parcourses.add(parcours) 
+
+    data = {}  
+    return JsonResponse(data)
+
+
+     
+
+
  
 def ajax_exercise_error(request):
 
@@ -1760,9 +1801,6 @@ def ajax_dates(request):  # On soncerve relationship_id par commodité mais c'es
 
             data["dateur"] = date  
 
-
-
-
     except :
         try :
             duration =  request.POST.get("duration") 
@@ -1819,14 +1857,6 @@ def ajax_dates(request):  # On soncerve relationship_id par commodité mais c'es
                 pass
 
     return JsonResponse(data) 
-
-
-
-
-
-
-
-
 
 
 
@@ -1979,12 +2009,6 @@ def ajax_detail_parcours(request):
             average = "" 
 
 
-
-
-
-
-
-     
         context = {  'parcours': parcours,  'customexercise':customexercise ,'average':average , 'students' : students , 'relationship':[], 'num_exo' : num_exo, 'communications' : [] , 'median' : med , 'communications' : [] , }
 
         data['html'] = render_to_string('qcm/ajax_detail_parcours_customexercise.html', context)
@@ -2123,6 +2147,20 @@ def list_exercises(request):
 
         return render(request, 'qcm/student_list_exercises.html',
                       {'relationships': relationships, 'nb_exercises': nb_exercises ,     })
+
+
+
+
+
+def exercise_custom_show_shared(request):
+    
+    user = request.user
+    if user.is_teacher:  # teacher
+        teacher = Teacher.objects.get(user=user) 
+        customexercises = Customexercise.objects.filter(is_share = 1).exclude(teacher = teacher)
+        return render(request, 'qcm/list_custom_exercises.html', {  'teacher': teacher , 'customexercises':customexercises, 'parcours': None, 'relationships' : [] ,  'communications': [] , })
+    else :
+        return redirect('index')
 
 
 
@@ -2488,18 +2526,6 @@ def show_this_exercise(request, id):
     context = {'exercise': exercise, 'start_time': start_time, 'parcours': parcours , 'communications' : [] , 'relationships' : [] , 'today' : today , 'wForm' : wForm }
 
     return render(request, url, context)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
