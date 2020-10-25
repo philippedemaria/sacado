@@ -9,6 +9,12 @@
     <script>
         require(['script/ajax-parcours']);
     </script> 
+
+    {% if not course %}
+    <script>
+        require(['script/ajax-parcours-complement']);
+    </script> 
+    {% endif %} 
     
 {% endblock %}
 

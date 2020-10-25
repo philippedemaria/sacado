@@ -167,8 +167,6 @@ class AttachForm(forms.ModelForm):
         }
 
 
-
-
 class CourseForm(forms.ModelForm):
 	class Meta:
 		model = Course
@@ -190,7 +188,6 @@ class DemandForm(forms.ModelForm):
 		fields = '__all__'
 
 
-
 class MasteringForm (forms.ModelForm):
 	class Meta:
 		model = Mastering
@@ -210,8 +207,6 @@ class MasteringDoneForm (forms.ModelForm):
 		model = Mastering_done
 		fields = ('writing',)
 
- 
-
 class MasteringcustomForm (forms.ModelForm):
 	class Meta:
 		model = Masteringcustom
@@ -230,14 +225,10 @@ class MasteringcustomDoneForm (forms.ModelForm):
 		fields = ('writing',)
 
 
-
-
 class WrittenanswerbystudentForm (forms.ModelForm):
 	class Meta:
 		model = Writtenanswerbystudent
 		fields = ('imagefile','answer')
-
-
 
 class CustomanswerbystudentForm (forms.ModelForm):
 	class Meta:

@@ -1073,7 +1073,7 @@ class Course(models.Model): # pour les
     is_task = models.BooleanField( default=0,    verbose_name="Tache à rendre ?") 
     is_paired = models.BooleanField( default=0,    verbose_name="Elèves créateurs ?") 
     is_active = models.BooleanField( default=0,  verbose_name="Contenu en cours")  
-
+    is_share = models.BooleanField( default=0,  verbose_name="Mutualisé ?")  
  
     date_limit = models.DateTimeField( null=True, blank=True, verbose_name="Date limite du rendu")
 
@@ -1090,6 +1090,36 @@ class Course(models.Model): # pour les
         return self.parcours.title 
 
 
+    def subjects(self):
+        subjects = []
+        for k in self.parcours.knowledges.all() :
+            if k.theme.subject  not in subjects :
+                subjects.append(k.theme.subject)
+
+        for s in self.skills.all() :
+            if s.subject not in subjects :
+                subjects.append(s.subject)
+
+        if len(subjects) == 0 :
+            for sb in self.teacher.subjects.all() :
+                if sb  not in subjects :
+                    subjects.append(sb)       
+        return subjects
+
+
+
+    def levels(self):
+        levels = []
+        for k in self.knowledges.all() :
+            if k.level  not in levels :
+                levels.append(k.level)
+
+ 
+        if len(levels) == 0 :
+            for sb in self.teacher.levels.all() :
+                if sb  not in levels :
+                    levels.append(sb)       
+        return levels
 
 ########################################################################################################################################### 
 ########################################################################################################################################### 

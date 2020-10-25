@@ -20,6 +20,8 @@
 
 {% block page_menu_right %}
 
+    <li><a href="{% url 'course_custom_show_shared' %}"  class="no_button"><i class="fa fa-desktop"></i> Cours mutualisés</a></li>
+
     <li><a href="{% url 'archives' %}"  class="no_button"><i class="fa fa-archive"></i> Parcours archivé{{ nb_archive|pluralize }} ({{ nb_archive }})</a></li>
 
 

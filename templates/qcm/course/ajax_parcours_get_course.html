@@ -9,20 +9,9 @@
     <hr>     
     {% endif  %}
 
-    {{ customexercise.instruction|safe }}
+    <label>Titre du cours : </label>{{ course.title }}
     <hr> 
-    <div class="row">
-        <div class="col-sm-12 col-md-12">
 
-            {% if teacher.user.school %}
-            <a href="#" class="btn btn-primary clone_to" data-exercise_id = '{{ customexercise.id }}' data-cloner = 0   data-dismiss="modal" aria-label="Close"  >Cloner cet exercice dans mes exercices</a>
-            {% else %}
-            <span class="btn btn-primary">Cloner cet exercice dans mes exercices</span>
-            {% endif  %}
-        </div>
-    </div>
-
-    <hr>
  
     <div class="row">
         <div class="col-sm-12 col-md-12">
@@ -37,9 +26,9 @@
         <div class="col-sm-12 col-md-12">
             <div class="form-group">
                 {% if teacher.user.school %}
-                <a href="#" class="btn btn-primary clone_to" data-exercise_id = '{{ customexercise.id }}' data-cloner = 1  data-dismiss="modal" aria-label="Close" >Cloner cet exercice dans mes parcours</a>
+                <a href="#" class="btn btn-primary clone_to" data-course_id = '{{ course.id }}'  data-dismiss="modal" aria-label="Close" >Cloner ce cours dans mes parcours</a>
                 {% else %}
-                <span class="btn btn-primary">Cloner cet exercice dans mes parcours</span>
+                <span class="btn btn-primary">Cloner ce cours dans mes parcours</span>
                 {% endif  %}
             </div>
         </div>

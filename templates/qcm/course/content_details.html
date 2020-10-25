@@ -9,12 +9,16 @@
     </tr>
     <tr id="publish_date">
       <td>A publier du {{ form.publish_start|add_class:"form-control datepicker"}} </td>
-      <td>Au {{ form.publish_end|add_class:"form-control datepicker" }}</td>
+      <td>Au {{ form.publish_end|add_class:"form-control datetimepicker" }}</td>
       <td> </td>
     </tr>
- 
     <tr>
-      <td>{{ form.is_task.label_tag }} <span id="task_date"> {{ form.date_limit|add_class:"form-control datepicker"|attr:"placeholder:Pour le"   }}</span>  </td>
+      <td>{{ form.is_share.label_tag }}   </td>
+      <td>{{ form.is_share|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+      <td> {{ form.is_share.errors }}</td>
+    </tr>
+    <tr>
+      <td>{{ form.is_task.label_tag }} <span id="task_date"> {{ form.date_limit|add_class:"form-control datetimepicker"|attr:"placeholder:Pour le"   }}</span>  </td>
       <td>{{ form.is_task|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
       <td> {{ form.is_task.errors }}</td>
     </tr>

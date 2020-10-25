@@ -1470,11 +1470,14 @@ def parcours_clone_exercise_custom(request):
     customexercise.code = str(uuid.uuid4())[:8]  
     customexercise.save()
 
-    if checkbox_value == "" :
+    if checkbox_value != "" :
         checkbox_ids = checkbox_value.split("-")
         for checkbox_id in checkbox_ids :
-            parcours = Parcours.objects.get(pk = checkbox_id)
-            customexercise.parcourses.add(parcours) 
+            try :
+                parcours = Parcours.objects.get(pk = checkbox_id)
+                customexercise.parcourses.add(parcours)
+            except :
+                pass 
 
     data = {}  
     return JsonResponse(data)
@@ -4037,6 +4040,76 @@ def show_course(request, idc , id ):
     teacher = Teacher.objects.get(user = user)
     context = {  'courses': courses, 'teacher': teacher , 'parcours': parcours , 'group_id' : None, 'communications' : [] , 'relationships' : [] , 'group' : group ,  'group_id' : group_id , 'role' : role }
     return render(request, 'qcm/course/show_course.html', context)
+
+ 
+
+
+ 
+def ajax_parcours_shower_course(request):
+    course_id =  int(request.POST.get("course_id"))
+    course = Course.objects.get(pk=course_id)
+
+    data = {}
+    data['annoncement'] = course.annoncement
+    data['title'] = course.title
+    return JsonResponse(data)
+
+
+
+def ajax_parcours_get_course(request):
+    teacher = Teacher.objects.get(user_id = request.user.id) 
+    course_id =  int(request.POST.get("course_id"))
+    course = Course.objects.get(pk=course_id)
+    parcourses =  teacher.teacher_parcours.all()    
+
+    context = {  'course': course , 'parcourses': parcourses , 'teacher' : teacher  }
+    data = {}
+    data['html'] = render_to_string('qcm/course/ajax_parcours_get_course.html', context)
+ 
+    return JsonResponse(data)
+ 
+
+ 
+def ajax_parcours_clone_course(request):
+
+    teacher = Teacher.objects.get(user_id = request.user.id)
+    course_id =  int(request.POST.get("course_id"))
+    course = Course.objects.get(pk=course_id)
+
+    checkbox_value = request.POST.get("checkbox_value")
+
+    if checkbox_value != "" :
+        checkbox_ids = checkbox_value.split("-")
+        for checkbox_id in checkbox_ids :
+            try :
+                course.pk = None
+                course.teacher = teacher
+                course.parcours_id = int(checkbox_id)
+                course.save()
+            except :
+                pass 
+
+    data = {}  
+    return JsonResponse(data)
+
+
+
+
+def course_custom_show_shared(request):
+    
+    user = request.user
+    if user.is_teacher:  # teacher
+        teacher = Teacher.objects.get(user=user) 
+        courses = Course.objects.filter(is_share = 1).exclude(teacher = teacher)
+        return render(request, 'qcm/course/list_courses.html', {  'teacher': teacher , 'courses':courses, 'parcours': None, 'relationships' : [] ,  'communications': [] , })
+    else :
+        return redirect('index')   
+
+
+
+
+
+
 
 
 
