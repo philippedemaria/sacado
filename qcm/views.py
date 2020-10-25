@@ -4037,13 +4037,12 @@ def show_course(request, idc , id ):
     if parcours.teacher == teacher :
         role = True
 
-    if len(courses) > 0 :
-        user = User.objects.get(pk = request.user.id)
-        teacher = Teacher.objects.get(user = user)
-        context = {  'courses': courses, 'teacher': teacher , 'parcours': parcours , 'group_id' : None, 'communications' : [] , 'relationships' : [] , 'group' : group , 'role' : role }
-        return render(request, 'qcm/course/show_course.html', context)
-    else :
-        return redirect('create_course', idc , id )
+
+    user = User.objects.get(pk = request.user.id)
+    teacher = Teacher.objects.get(user = user)
+    context = {  'courses': courses, 'teacher': teacher , 'parcours': parcours , 'group_id' : None, 'communications' : [] , 'relationships' : [] , 'group' : group , 'role' : role }
+    return render(request, 'qcm/course/show_course.html', context)
+
 
 
 @student_can_show_this_course
