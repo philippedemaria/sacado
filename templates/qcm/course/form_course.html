@@ -76,34 +76,20 @@
                 
                 {% endif %}
                 </div>
-
-
             </div>
 
 
-
-
-
-
             <div class="col-sm-12 col-lg-4">
-
-
                 {% if request.user.user_type == 2 %}
                    <label>Lier ce cours à une ou des sections déjà créées</label> <br/>  
                    {{ form.relationships|add_class:"form-control select2"}} 
                    {{ form.relationships.errors }} 
-      
-
-
-
-                
                     <h4 class="thin">Détails</h4>
                     {% include 'qcm/course/content_details.html' %}
                 {% endif %}
 
                 <h4 class="thin">Liens vers</h4>
 
- 
                 <div class="div_links">                
                 {% for relationship in relationships %}
                     <div style="font-size: 16px;margin-top: 5px"> 
