@@ -14,7 +14,7 @@
     {% load bootstrap3 %}
     {% bootstrap_messages %}
 
-    {% load static %}
+ 
 
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'plugins/select2/select2.css' %}"/>
@@ -29,6 +29,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pinyon+Script">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap">
     <link href="{% static 'index/css/style_layout.css' %}" rel="stylesheet">
+
+
+
+    {% block python %}
+    {% endblock %}
 
 </head>
 
@@ -55,6 +60,8 @@
         </div>
     </header><!-- #header -->
     <div class="main_body">
+        {% block page_menu_right %}>
+        {% endblock %}
         {% block body %}
         {% endblock %}
     </div>
@@ -221,6 +228,9 @@
     {% block general_js %}
     <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-accueil.js' %}"></script>
     {% endblock %}
+
+{% block python_js %}
+{% endblock %}
 
     <script>
         {% block require %}{% endblock %} 

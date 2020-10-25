@@ -2485,7 +2485,16 @@ def show_exercise(request, id):
 
     context = {'exercise': exercise,   'form': form , 'u_form' : u_form , 's_form' : s_form , 't_form' : t_form , 'levels' : [],   'communications' : [] , 'relationships' : []  }
  
-    return render(request, 'show_exercise.html', context)
+    if exercise.supportfile.is_ggbfile :
+        wForm = None
+        url = "show_exercise.html" 
+    elif exercise.supportfile.is_python :
+        url = "basthon/index_shower.html"
+        wForm = None
+    else :
+        url = "qcm/show_teacher_writing.html" 
+
+    return render(request, url , context)
 
 
 
