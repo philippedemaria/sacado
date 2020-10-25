@@ -6,9 +6,12 @@ var shell = window.shell;
 /**
  * # permet d'attribuer un nom à la balise textarea pour récupérer le code
    */
-
+if (document.getElementById("submit_code"))
+{
 editor.container.childNodes[0].name = "answer" ; 
-document.getElementById("submit_code").disabled = true; 
+document.getElementById("submit_code").disabled = true;    
+}
+ 
 /**
  * Run the editor script in the shell.
  */
@@ -260,19 +263,21 @@ function copy_to_clipboard(text) {
  * Sharing button.
  */
 var button = document.getElementById("share");
-button.addEventListener("click", function () {
-    hideShowPopup('share', true);
-    var editor = ace.edit("editor");
-    var code = editor.getValue();
-    code = code.replace(/\r\n|\r|\n/g, "\r\n"); // To retain the Line breaks.
-    var share_link = document.getElementById("sharing_link");
-    const url = new URL(window.location.href);
-    url.hash = "";
-    url.searchParams.set('script', encode_string(code));
-    share_link.href = url.href;
-    copy_to_clipboard(url.href);
-});
-
+if (button)
+{ 
+    button.addEventListener("click", function () {
+        hideShowPopup('share', true);
+        var editor = ace.edit("editor");
+        var code = editor.getValue();
+        code = code.replace(/\r\n|\r|\n/g, "\r\n"); // To retain the Line breaks.
+        var share_link = document.getElementById("sharing_link");
+        const url = new URL(window.location.href);
+        url.hash = "";
+        url.searchParams.set('script', encode_string(code));
+        share_link.href = url.href;
+        copy_to_clipboard(url.href);
+    });
+}
 
 /**
  * Switching side view (recorded).

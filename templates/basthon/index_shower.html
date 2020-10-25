@@ -4,7 +4,11 @@
 {% load widget_tweaks %}
 
 
-{% block python %}
+
+{% block python_no_other_css %}
+{% endblock %}
+
+{% block python_css %}
 <link rel="stylesheet" href="{% static 'basthon/fontawesome/css/all.min.css' %}">
 <link rel="stylesheet" href="{% static 'basthon/css/style.css' %}">
 <script src="{% static 'basthon/js/basthon-kernel/basthon.js' %}"></script>
@@ -81,14 +85,6 @@
           </a>
         </div>
       </div>
-
-
-      <div id="left-div" style="margin-top: 20px">        
-                
-          <input type="button" value="Annuler" onclick="javascript:window.close()"
-                                                                   class="btn btn-default "/>
-      </div>
-
     </div>
 </form>
  
@@ -102,4 +98,8 @@
      <script src="{% static 'basthon/js/editor.js' %}"></script>
     <script src="{% static 'basthon/js/shell.js' %}"></script>
     <script src="{% static 'basthon/js/gui.js' %}"></script>
+{% endblock %}
+
+
+{% block no_modal %}
 {% endblock %}
