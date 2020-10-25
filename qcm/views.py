@@ -3987,6 +3987,12 @@ def update_course(request, idc, id  ):
         else :
             print(course_form.errors)
 
+    data = get_complement(teacher, parcours)
+    role = data['role']
+    group = data['group']
+    group_id = data['group_id'] 
+
+
     context = {'form': course_form,  'course': course, 'teacher': teacher , 'parcours': parcours  , 'relationships': relationships , 'communications' : [] , 'group' : group, 'group_id' : group_id , 'role' : role }
 
     return render(request, 'qcm/course/form_course.html', context )
@@ -4021,26 +4027,15 @@ def show_course(request, idc , id ):
     courses = parcours.course.all().order_by("ranking") 
     teacher = Teacher.objects.get(user = request.user)
     
-    try :
-        group_id = request.session["group_id"]
-        group = Group.objects.get(pk = group_id)        
-        if Sharing_group.objects.filter(group_id=group_id, teacher = parcours.teacher).exists() :
-            sh_group = Sharing_group.objects.get(group_id=group_id, teacher = parcours.teacher)
-            role = sh_group.role
-        else :
-            role = False
-    except :
-        group_id = None
-        role = False
-        group = None
-
-    if parcours.teacher == teacher :
-        role = True
+    data = get_complement(teacher, parcours)
+    role = data['role']
+    group = data['group']
+    group_id = data['group_id'] 
 
 
     user = User.objects.get(pk = request.user.id)
     teacher = Teacher.objects.get(user = user)
-    context = {  'courses': courses, 'teacher': teacher , 'parcours': parcours , 'group_id' : None, 'communications' : [] , 'relationships' : [] , 'group' : group , 'role' : role }
+    context = {  'courses': courses, 'teacher': teacher , 'parcours': parcours , 'group_id' : None, 'communications' : [] , 'relationships' : [] , 'group' : group ,  'group_id' : group_id , 'role' : role }
     return render(request, 'qcm/course/show_course.html', context)
 
 
