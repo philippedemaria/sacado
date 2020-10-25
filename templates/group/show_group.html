@@ -46,12 +46,12 @@
         <div class="row">        
             <div class="col-sm-11 col-md-12">
                 
+
                 <table class="table table-hover standard_tab_sort">
                     <thead>
                     <tr>
                         <td>Nom* </td>
                         <td>Prénom*</td>
-
                         <td>Courriel*</td>
                         <td>Identifiant* </td>
                         <td>Dernière connexion</td>
@@ -60,68 +60,89 @@
                     </thead>
                     <tbody>
                         {% for student in group.students.all|dictsort:"user.last_name"  %}
-                            <form action="" method="POST">            
-                            {% csrf_token %}        
-                            <tr>
-                                <td><input  type="text" 
-                                            id="studentLastName{{ student.user.id }}" 
-                                            data-student_id="{{ student.user.id }}" 
-                                            class="updateStudent" 
-                                            data-is_name="1" 
-                                            value="{{ student.user.last_name|lower|title }}" 
-                                            style="background: #f2f0f0; border: none;width:140px" />
- 
-                                </td>
-                                <td><input  type="text" 
-                                            id="studentFirstName{{ student.user.id }}" 
-                                            data-student_id="{{ student.user.id }}" 
-                                            data-is_name="0" 
-                                            class="updateStudent"  
-                                            value="{{ student.user.first_name|lower|title }}" 
-                                            style="background: #f2f0f0; border: none;width:120px" /> 
-                                </td>
-                                <td><input  type="text" 
-                                            id="studentEmail{{ student.user.id }}" 
-                                            data-student_id="{{ student.user.id }}" 
-                                            data-is_name="2" 
-                                            class="updateStudent"  
-                                            value="{{ student.user.email }}" 
-                                            style="background: #f2f0f0; border: none;width:310px" /> </td>
-                                <td><input  type="text" 
-                                            id="studentUsername{{ student.user.id }}" 
-                                            data-student_id="{{ student.user.id }}" 
-                                            data-is_name="3" 
-                                            class="updateStudent"  
-                                            value="{{ student.user.username }}" 
-                                            style="background: #f2f0f0; border: none;width:180px" />
-                                
-                                </td>
-                                <td>
-                                    {% if student.user.last_login %}{{ student.user.last_login|date:"Y m d, H:i"  }}{% else %}Jamais{% endif %}
-                                </td>
-                                <td>
-                                    <a href="{% url 'detail_student_all_views'  student.user.id   %}"  style="font-size: 11px"> 
-                                       voir les résultats  
-                                    </a> 
-                                    <small>|</small> 
-                                    <a  href="{% url 'newpassword_student' student.user.id  group.id   %}" data-student_id="{{ student.user.id }}" title="mot de passe par défaut : sacado2020" 
-                                        onclick="return Newpassword()" style="font-size:11px; margin-right:5px"  >
-                                        Init. mot de passe
-                                    </a><small>|</small>       
-                                    <a  href="{% url 'delete_student' student.user.id  group.id %}"
-                                        onclick="return TestDelete('cet élève')" style="font-size:11px"  >
-                                        Supprimer
-                                    </a> 
-                                  
-
-
-
-                                </td>
-                            </tr>
-                            </form>
+                            {% if not teacher.user.school %}
+                                <form action="" method="POST">            
+                                {% csrf_token %}        
+                                    <tr>
+                                        <td><input  type="text" 
+                                                    id="studentLastName{{ student.user.id }}" 
+                                                    data-student_id="{{ student.user.id }}" 
+                                                    class="updateStudent" 
+                                                    data-is_name="1" 
+                                                    value="{{ student.user.last_name|lower|title }}" 
+                                                    style="background: #f2f0f0; border: none;width:140px" />
+         
+                                        </td>
+                                        <td><input  type="text" 
+                                                    id="studentFirstName{{ student.user.id }}" 
+                                                    data-student_id="{{ student.user.id }}" 
+                                                    data-is_name="0" 
+                                                    class="updateStudent"  
+                                                    value="{{ student.user.first_name|lower|title }}" 
+                                                    style="background: #f2f0f0; border: none;width:120px" /> 
+                                        </td>
+                                        <td><input  type="text" 
+                                                    id="studentEmail{{ student.user.id }}" 
+                                                    data-student_id="{{ student.user.id }}" 
+                                                    data-is_name="2" 
+                                                    class="updateStudent"  
+                                                    value="{{ student.user.email }}" 
+                                                    style="background: #f2f0f0; border: none;width:310px" /> </td>
+                                        <td><input  type="text" 
+                                                    id="studentUsername{{ student.user.id }}" 
+                                                    data-student_id="{{ student.user.id }}" 
+                                                    data-is_name="3" 
+                                                    class="updateStudent"  
+                                                    value="{{ student.user.username }}" 
+                                                    style="background: #f2f0f0; border: none;width:180px" />
+                                        
+                                        </td>
+                                        <td>
+                                            {% if student.user.last_login %}{{ student.user.last_login|date:"Y m d, H:i"  }}{% else %}Jamais{% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'detail_student_all_views'  student.user.id   %}"  style="font-size: 11px"> 
+                                               voir les résultats  
+                                            </a> 
+                                            <small>|</small> 
+                                            <a  href="{% url 'newpassword_student' student.user.id  group.id   %}" data-student_id="{{ student.user.id }}" title="mot de passe par défaut : sacado2020" 
+                                                onclick="return Newpassword()" style="font-size:11px; margin-right:5px"  >
+                                                Init. mot de passe
+                                            </a><small>|</small>       
+                                            <a  href="{% url 'delete_student' student.user.id  group.id %}"
+                                                onclick="return TestDelete('cet élève')" style="font-size:11px"  >
+                                                Supprimer
+                                            </a> 
+                                        </td>
+                                    </tr>
+                                </form>
+                            {% else %} 
+                                <tr>
+                                    <td>
+                                        {{ student.user.last_name|lower|title }}
+                                    </td>
+                                    <td>
+                                        {{ student.user.first_name|lower|title }}
+                                    <td>
+                                        {{ student.user.email }}
+                                    </td>
+                                    <td>
+                                        {{ student.user.username }}
+                                    </td>
+                                    <td>
+                                        {% if student.user.last_login %}{{ student.user.last_login|date:"Y m d, H:i"  }}{% else %}Jamais{% endif %}
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>
+
+
+
+
             </div>   
         </div> 
 

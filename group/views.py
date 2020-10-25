@@ -312,7 +312,7 @@ def show_group(request, id ):
 
     group = Group.objects.get(id=id)
  
-    context = {  'group': group,  'communications' : []  }
+    context = {  'group': group,  'communications' : [] , 'teacher' : group.teacher  }
 
     return render(request, 'group/show_group.html', context )
 
