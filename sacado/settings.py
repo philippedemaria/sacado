@@ -262,7 +262,7 @@ MEDIA_ROOT = os.environ.get('MEDIA_ROOT')
 
 ########################################################################################################################
 
-CKEDITOR_UPLOAD_PATH = ''
+CKEDITOR_UPLOAD_PATH = 'https://ressources.sacado.xyz/'
 
 CKEDITOR_CONFIGS = {
     'default': {
