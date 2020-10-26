@@ -5,9 +5,9 @@ from django.db.models import Avg
 from datetime import datetime
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
+from general_fonctions import *
 
-
-today = timezone.now().date()
+ 
 
 
 
@@ -51,6 +51,7 @@ class Theme(models.Model):
 
     def all_details(self,parcours):
         Relationship = apps.get_model('qcm', 'Relationship')
+        today = time_zone_user(parcours.teacher.user)
         detail = {}
         detail["pub"] = Relationship.objects.filter(parcours=parcours, exercise__theme = self,is_publish=1).count()
         detail["total"] = Relationship.objects.filter(parcours=parcours, exercise__theme = self).count()        

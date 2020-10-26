@@ -12,7 +12,7 @@ class Email(models.Model):
     subject = models.CharField(max_length=255, blank=True,verbose_name="Objet")    
     texte = RichTextUploadingField(  verbose_name="Texte")      
     receivers = models.ManyToManyField(User, blank = True,    related_name="receiver_email"  ) 
-    today = models.DateField( default=timezone.now)
+    today = models.DateTimeField( default=timezone.now)
     
     def __str__(self):
         return "{} {} : {}".format(self.author.last_name, self.author.first_name, self.subject)  

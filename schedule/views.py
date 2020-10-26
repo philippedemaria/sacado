@@ -88,10 +88,8 @@ def events_json(request):
 
     for relationship in relationships:
         # On récupère les dates dans le bon fuseau horaire
-
-        relationship_start = dt_naive_to_timezone(relationship.date_limit, user.time_zone)
-
         try :  
+            relationship_start = dt_naive_to_timezone(relationship.date_limit, user.time_zone)            
             if relationship.exercise.supportfile.annoncement :
                 title =  cleanhtml(unescape_html(relationship.exercise.supportfile.annoncement ))
             else :
@@ -197,8 +195,8 @@ def events_json_group(request):
 
     for relationship in relationships:
         # On récupère les dates dans le bon fuseau horaire
-        relationship_start = relationship.date_limit 
-        try :  
+        try :       
+            relationship_start = dt_naive_to_timezone(relationship.date_limit, user.time_zone) 
             if relationship.exercise.supportfile.annoncement :
                 title =  cleanhtml(unescape_html(relationship.exercise.supportfile.annoncement ))
             else :

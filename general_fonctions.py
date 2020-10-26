@@ -8,12 +8,16 @@ from django.utils import timezone
 
 
 def time_zone_user(user):
-    if user.time_zone :
-        time_zome = user.time_zone
-        timezone.activate(pytz.timezone(time_zome))
-        today = timezone.localtime(timezone.now())
-    else:
+    try :
+        if user.time_zone :
+            time_zome = user.time_zone
+            timezone.activate(pytz.timezone(time_zome))
+            today = timezone.localtime(timezone.now())
+        else:
+            today = timezone.now()
+    except :
         today = timezone.now()
+
     return today
  
 

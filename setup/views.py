@@ -26,22 +26,22 @@ def index(request):
 
     if request.user.is_authenticated:
          
-
         today = time_zone_user(request.user)
+
         ############################################################################################
         #### Mise à jour et affichage des publications  
         ############################################################################################  
-        relationships = Relationship.objects.filter(is_publish = 0,start__lte=today)
-        for r in relationships :
-            Relationship.objects.filter(id=r.id).update(is_publish = 1)
+        # relationships = Relationship.objects.filter(is_publish = 0,start__lte=today)
+        # for r in relationships :
+        #     Relationship.objects.filter(id=r.id).update(is_publish = 1)
 
-        parcourses = Parcours.objects.filter(start__lte=today).exclude(start = None)
-        for p in parcourses :
-            Parcours.objects.filter(id=p.id).update(is_publish = 1)
+        # parcourses = Parcours.objects.filter(start__lte=today).exclude(start = None)
+        # for p in parcourses :
+        #     Parcours.objects.filter(id=p.id).update(is_publish = 1)
 
-        customexercises = Customexercise.objects.filter(start__lte=today).exclude(start = None)
-        for c in customexercises :
-            Customexercise.objects.filter(id=c.id).update(is_publish = 1)
+        # customexercises = Customexercise.objects.filter(start__lte=today).exclude(start = None)
+        # for c in customexercises :
+        #     Customexercise.objects.filter(id=c.id).update(is_publish = 1)
         ############################################################################################
         #### Fin de Mise à jour et affichage des publications
         ############################################################################################
@@ -83,8 +83,6 @@ def index(request):
                        'relationships': relationships, 'communications': communications, 'parcours_tab': parcours_tab,
                        'nb_teacher_level': nb_teacher_level}
 
-
- 
 
         elif request.user.is_student: ## student
             student = Student.objects.get(user=request.user.id)

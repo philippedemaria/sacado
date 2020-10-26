@@ -57,7 +57,7 @@
                                       <tbody>
                                             {% for c in communications %}
                                             <tr> 
-                                                <td style="width:10%"><small>{{ c.today|date:"d b. Y" }}</small></td>                                              
+                                                <td style="width:10%"><small>{{ c.today|date:"d b. Y, H:i" }}</small></td>                                              
                                                 <td>
                                                     <a href="#" class="show_com"  data-toggle='modal' data-target='#showCom'  data-communication_id="{{ c.id }}"> {{ c.subject|truncatechars:30 }} </a> 
                                                 </td>  

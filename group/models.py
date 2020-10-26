@@ -58,7 +58,7 @@ class Group(ModelWithCode):
 
     def is_task_exists(self):
         Relationship = apps.get_model('qcm', 'Relationship')
-        today = timezone.now().date()
+        today = timezone.now() 
         test = False
         students = self.students.prefetch_related("students_relationship")
         for student in students:

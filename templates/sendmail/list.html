@@ -108,7 +108,7 @@
 
                                               <a href="#" class="show_email"  data-toggle='modal' data-target='#showEmail'  data-email_id="{{ e.id }}"> {{ e.subject|truncatechars:30 }} </a> </td>  
               
-                                              <td style="width:10%"><small>{{ e.today|date:"d b. Y" }}</small></td>  
+                                              <td style="width:10%"><small>{{ e.today|date:"d b. Y, H:i" }}</small></td>  
                                           </tr>
                                           {% endfor %}
                                     </tbody>
@@ -148,7 +148,7 @@
                                           <td>
                                               <a href="#" class="show_email" {% if e.author == user %} style="color:#000;"{% endif  %}  data-toggle='modal' data-target='#showEmail'  data-email_id="{{ e.id }}"> {{ e.subject|truncatechars:30 }} </a>
                                           </td>  
-                                          <td style="width:20%"><small>{{ e.today|date:"d b. Y" }}</small></td>  
+                                          <td style="width:20%"><small>{{ e.today|date:"d b. Y, H:i" }}</small></td>  
                                       </tr>
                                       {% endfor %}
                                 </tbody>

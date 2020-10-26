@@ -28,7 +28,7 @@
         <div class="col-sm-12 col-md-12">
             <div class="form-group">
                 {% for p in parcourses|dictsort:"title" %}
-                    <label style="margin-bottom:4px" class="btn btn-default"><input value="{{ p.id }}" name="get_parcourses" type="checkbox" /> {{ p }} </label>
+                    <label style="margin-bottom:4px" class="btn btn-default"><input value="{{ p.id }}" name="get_parcourses" type="checkbox" /> {{ p }} {% if p.is_evaluation %}<i class="fa fa-trophy"></i> {% endif %}</label>
                 {% endfor %}
             </div>
         </div>
