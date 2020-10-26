@@ -13,7 +13,6 @@
             {% endif %}
  
             <form action="" method="POST"> 
-            {% csrf_token %}
             <ul class="nav nav-pills nav-stacked admin-menu" id="course_sortable">
                 <input type="hidden" value="{{ parcours.id }}" name="parcours_id" id="parcours_id"/>
                 {% for course in courses %}

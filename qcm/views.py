@@ -4266,19 +4266,19 @@ def ajax_demand_done(request) :
 @csrf_exempt 
 def ajax_course_viewer(request):  
 
-    relation_id =  int(request.POST.get("relation_id"))
-    relationship = Relationship.objects.get( id = relation_id)
-    courses = Course.objects.filter(relationships = relationship).order_by("ranking")
-
+    relation_id =  request.POST.get("relation_id",None)
     data = {}
+    if relation_id : 
+        relationship = Relationship.objects.get( id = int(relation_id))
+        courses = Course.objects.filter(relationships = relationship).order_by("ranking")
 
-    if request.user.user_type == 2 :
-        is_teacher = True
-    else : 
-        is_teacher = False 
-    context = { 'courses' : courses , 'parcours' : relationship.parcours , 'is_teacher' : is_teacher }
-    html = render_to_string('qcm/course/course_viewer.html',context)
-    data['html'] = html       
+        if request.user.user_type == 2 :
+            is_teacher = True
+        else : 
+            is_teacher = False 
+        context = { 'courses' : courses , 'parcours' : relationship.parcours , 'is_teacher' : is_teacher }
+        html = render_to_string('qcm/course/course_viewer.html',context)
+        data['html'] = html       
 
     return JsonResponse(data)
 
