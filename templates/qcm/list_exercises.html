@@ -17,7 +17,7 @@
 {% block page_menu_right %}
 
 
-    <li> <a href="{% url 'exercise_custom_show_shared' %}"   class="btn btn-new"> Exercices Mutualisés</a> </li>
+    <li> <a href="{% url 'exercise_custom_show_shared' %}"   class="btn btn-new"> Exercices personnels mutualisés</a> </li>
 
 
     {% if request.user.is_superuser and  '/admin' in request.path %}
