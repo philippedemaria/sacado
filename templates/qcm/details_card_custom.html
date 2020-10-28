@@ -202,7 +202,7 @@
 
  
             <span class="horizontalmargin5">
-                <a href="{%  url 'parcours_update_custom_exercise' customexercise.id  parcours.id %}" title="Modifier cet exercice" style="font-size:18px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-pencil-square-o"></i></a> 
+                <a href="{%  url 'parcours_update_custom_exercise' customexercise.id  parcours.id %}" title="Modifier cet exercice" style="font-size:15px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-pencil-square-o"></i></a> 
             </span>
 
             <!-- Suppression de l'exercice dans ce parcours  -->
@@ -210,10 +210,14 @@
                 <i class="fa fa-trash"></i> 
             </a>
 
-            <span class="horizontalmargin5" >
-                <a href="{%  url 'correction_exercise' customexercise.id  parcours.id %}" title="Corriger cet exercice" style="font-size:18px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-search"></i></a> 
+            <span class="horizontalmargin5" style="width:40px">
+                {% if customexercise.is_pending_correction %}
+                <a href="{% url 'correction_exercise'  customexercise.id  parcours.id %}" title="Production à corriger" style="font-weight:bold; font-size:16px;color:{{ parcours.color|contrast_color }}" >C</a> 
+                </a> 
+                {% else %}
+                <a href="{% url 'correction_exercise'  customexercise.id  parcours.id %}" title="Voir les productions" style="position: relative; font-size:16px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-search"></i></a> 
+                {% endif %}
             </span>
-
             {% if not customexercise.is_publish and not customexercise.start %}<br>
             <span href="#customcard{{customexercise.id}}" title="Date de publication" class="custom_select_publish white horizontalmargin5" id="select_publish{{customexercise.id}}" data-customexercise_id="{{customexercise.id}}" data-statut="{{customexercise.is_publish }}" style="cursor:pointer">
                 <i class="fa fa-calendar-check"> </i> <span style="font-size:12px">Date de publication ?</span>  

@@ -87,7 +87,7 @@
     </table> 
     <hr>
     <h5>Commentaires</h5>
-    <textarea class="form-control" name="comment" id="comment">{{ w_a.comment }}</textarea>
+    <textarea class="form-control" name="comment" id="comment">{% if w_a.comment %}{{ w_a.comment %}{% endif %}</textarea>
 
             <div class="row" style="margin-top:10px">
                 <div class="col-sm-12 col-md-12">

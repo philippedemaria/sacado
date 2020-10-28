@@ -651,7 +651,7 @@ class Relationship(models.Model):
     def is_done(self,student):
         done = False
         sta = Studentanswer.objects.filter(student=student, exercise = self.exercise, parcours= self.parcours ).exists()
-        stw = Writtenanswerbystudent.objects.filter(student=student, relationship = self ).exists()
+        stw = self.relationship_written_answer.filter(student=student).exists()
         if sta or stw :
             done = True
         return done
@@ -702,11 +702,11 @@ class Relationship(models.Model):
         students = self.students.all()
         nb_student = len(students)
 
-        nb_exercise_d = Studentanswer.objects.filter(student__in= students, parcours= parcours, exercise = self.exercise).values_list("student",flat= True).order_by("student").distinct().count()
-        nb_exercise = Writtenanswerbystudent.objects.filter(relationship= self, student__in= students ).values_list("student",flat= True).order_by("student").distinct().count()        
+        if self.exercise.supportfile.is_ggbfile :
+            nb_exercise_done = Studentanswer.objects.filter(student__in= students, parcours= parcours, exercise = self.exercise).values_list("student",flat= True).order_by("student").distinct().count()
+        else :
+            nb_exercise_done = Writtenanswerbystudent.objects.filter(relationship= self, student__in= students ).values_list("student",flat= True).order_by("student").distinct().count()        
  
-        nb_exercise_done = nb_exercise_d + nb_exercise
-
         try :
             percent = int(nb_exercise_done * 100/nb_student)
         except : 
@@ -720,10 +720,16 @@ class Relationship(models.Model):
 
     def is_submit(self,student):
         submit = False
-        if Writtenanswerbystudent.objects.filter(relationship = self,  student = student).exists() :
+        if self.relationship_written_answer.filter(student = student).exclude(is_corrected = 1).exists() :
             submit = True          
         return submit
 
+
+    def is_pending_correction(self):
+        submit = False
+        if self.relationship_written_answer.exclude(is_corrected = 1).exists() :
+            submit = True          
+        return submit
 
 
 
@@ -773,7 +779,8 @@ class Writtenanswerbystudent(models.Model): # Commentaire pour les exercices non
     imagefile = models.ImageField(upload_to= file_directory_student, blank = True, null=True,   verbose_name="Scan ou image ou Photo", default="")
     answer = RichTextUploadingField( default="", null=True,  blank=True, ) 
     comment = models.TextField( default="", null=True,   editable=False) # Commentaire de l'enseignant sur l'exercice
-    audio = models.FileField(upload_to=file_directory_path,verbose_name="Commentaire audio", blank=True, default ="")
+    audio = models.FileField(upload_to=file_directory_path,verbose_name="Commentaire audio", blank=True, null= True, default ="")
+    is_corrected = models.BooleanField( default=0, editable=False ) 
 
     def __str__(self):        
         return "{}".format(self.relationship.exercise.knowledge.name)
@@ -857,9 +864,6 @@ class Customexercise(ModelWithCode):
         return levels
 
 
-
-
-
     def percent_student_done_parcours_exercice(self, parcours):
 
         students = self.students.all()
@@ -875,6 +879,8 @@ class Customexercise(ModelWithCode):
         data["percent"] = percent
         data["nb_done"] = nb_exercise_done
         return data
+
+
 
     def is_done(self,student):
         done = False
@@ -992,6 +998,16 @@ class Customexercise(ModelWithCode):
             data["point"] = False
         return data
 
+
+    def is_pending_correction(self):
+        submit = False
+        if self.customexercise_custom_answer.exclude(is_corrected = 1).exists() :
+            submit = True      
+        return submit
+
+
+
+
 class Customanswerbystudent(models.Model): # Commentaire et note pour les exercices customisés coté enseignant
 
     customexercise = models.ForeignKey(Customexercise,  on_delete=models.PROTECT,   related_name='customexercise_custom_answer', editable=False)
@@ -1005,13 +1021,14 @@ class Customanswerbystudent(models.Model): # Commentaire et note pour les exerci
     comment = models.TextField( default="", null=True) 
     point = models.CharField(default="", max_length=10, verbose_name="Note")
     is_corrected = models.BooleanField( default=0, editable=False ) 
-    audio = models.FileField(upload_to=file_folder_path,verbose_name="Commentaire audio", blank=True, default ="")
+    audio = models.FileField(upload_to=file_folder_path,verbose_name="Commentaire audio", blank=True, null= True,  default ="")
 
     def __str__(self):        
         return "{}".format(self.customexercise)
 
     class Meta:
         unique_together = ['student', 'parcours', 'customexercise']
+
 
 class Correctionskillcustomexercise(models.Model): # Evaluation des compétences pour les exercices customisés coté enseignant 
 
@@ -1053,7 +1070,7 @@ class Remediation(models.Model):
     title = models.CharField(max_length=255, default='',  blank=True,verbose_name="Titre")
     relationship = models.ForeignKey(Relationship, on_delete=models.CASCADE, default='',   blank=True, related_name='relationship_remediation') 
     video = models.CharField(max_length=255, default='',  blank=True,  verbose_name="url de la vidéo")
-    mediation = models.FileField(upload_to=file_directory_path,verbose_name="Fichier", blank=True, default ="")
+    mediation = models.FileField(upload_to=file_directory_path,verbose_name="Fichier", blank=True,   default ="")
     audio = models.BooleanField( default=0,    verbose_name="Audio texte ?") 
     duration = models.PositiveIntegerField(  default=15,  blank=True,  verbose_name="Durée estimée (en min.)")  
 

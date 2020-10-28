@@ -3047,7 +3047,7 @@ def correction_exercise(request,id,idp):
 
     if idp == 0 :
         relationship = Relationship.objects.get(pk=id)
-        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage ,  'communications' : [] ,  'parcours' : None, 'group' : None }
+        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage ,  'communications' : [] ,  'parcours' : relationship.parcours , 'group' : None }
         return render(request, 'qcm/correction_exercise.html', context)
     else :
         customexercise = Customexercise.objects.get(pk=id)
@@ -3217,12 +3217,13 @@ def ajax_comment_all_exercise(request): # Ajouter un commentaire à un exercice 
 
     if int(request.POST.get("typ")) == 0 :
         relationship = Relationship.objects.get(pk = exercise_id)
-        answer = Writtenanswerbystudent.objects.filter(relationship = relationship, student = student).update(comment = comment )
-
+        Writtenanswerbystudent.objects.filter(relationship = relationship, student = student).update(comment = comment )
+        Writtenanswerbystudent.objects.filter(relationship = relationship, student = student).update(is_corrected = 1 )
     else  :
         parcours_id =  int(request.POST.get("parcours_id"))     
         ce = Customexercise.objects.get(pk = exercise_id)
-        answer = Customanswerbystudent.objects.filter(customexercise = ce, student = student, parcours_id = parcours_id).update(comment = comment )
+        Customanswerbystudent.objects.filter(customexercise = ce, student = student, parcours_id = parcours_id).update(comment = comment )
+        Customanswerbystudent.objects.filter(customexercise = ce, student = student, parcours_id = parcours_id).update(is_corrected = 1 )
 
     data = {}
     data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"          
@@ -3259,7 +3260,8 @@ def ajax_audio_comment_all_exercise(request): # Ajouter un commentaire à un exe
             nf.student = student
             nf.comment = relationship.comment
             nf.answer = relationship.answer
-            nf.imagefile = relationship.imagefile                        
+            nf.imagefile = relationship.imagefile 
+            nf.is_corrected = True                     
             nf.save()
 
     else  :
@@ -3280,6 +3282,7 @@ def ajax_audio_comment_all_exercise(request): # Ajouter un commentaire à un exe
             nf.customexercise = customexercise
             nf.student = student
             nf.parcours = parcours
+            nf.is_corrected = True    
             nf.save()
 
     data = {}
@@ -3422,6 +3425,7 @@ def write_exercise(request,id): # Coté élève
             w_f = wForm.save(commit=False)
             w_f.relationship = relationship
             w_f.student = student
+            w_f.is_corrected = True            
             w_f.save()
 
             ### Envoi de mail à l'enseignant

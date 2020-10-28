@@ -115,7 +115,7 @@
     {% endif %} 
 
     <h5>Commentaire</h5>
-    <textarea class="form-control" name="comment" id="comment">{{ c_e.comment }}</textarea>
+    <textarea class="form-control" name="comment" id="comment">{% if c_e.comment %}{{ c_e.comment %}{% endif %}</textarea>
 
             <div class="row" style="margin-top:10px">
                 <div class="col-sm-12 col-md-12">
