@@ -3902,6 +3902,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   scrollbar-color:  gray white;
   overflow-x: hidden;
   z-index: 9999;
+  font-size: 16px;
 }
 
  .div_students::-webkit-scrollbar {
