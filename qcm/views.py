@@ -3018,8 +3018,6 @@ def show_evaluation(request, id):
             j += 1
         nb_exo_visible.append(j)
 
- 
-
 
     data = get_complement(teacher, parcours)
     role = data['role']
@@ -3423,6 +3421,12 @@ def write_exercise(request,id): # Coté élève
             w_f.relationship = relationship
             w_f.student = student
             w_f.save()
+
+            ### Envoi de mail à l'enseignant
+            msg = "Exercice posté par : "+str(student.user) 
+            if relationship.parcours.teacher.notification :
+                send_mail("SACADO Exercice posté",  msg , "info@sacado.xyz" , [relationship.parcours.teacher.user.email] )
+
             return redirect('show_parcours_student' , relationship.parcours.id )
 
 
@@ -3461,6 +3465,12 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
             w_f.parcours_id = idp
             w_f.student = student
             w_f.save()
+
+            ### Envoi de mail à l'enseignant
+            msg = "Exercice posté par : "+str(student.user) 
+            if customexercise.teacher.notification :
+                send_mail("SACADO Exercice posté",  msg , "info@sacado.xyz" , [customexercise.teacher.user.email] )
+
             return redirect('show_parcours_student' , idp )
 
 
