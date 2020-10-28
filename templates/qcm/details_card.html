@@ -297,7 +297,7 @@
             {% if not relation.exercise.supportfile.is_ggbfile %}
             <span class="select_details horizontalmargin5" style="width:40px">
                 {% if relation.is_pending_correction %}              
-                <a href="{% url 'correction_exercise'  relation.id 0 %}" title="Production à corriger" style="font-weight:bold; font-size:16px;color:{{ parcours.color|contrast_color }}" >C</a>  
+                <a href="{% url 'correction_exercise'  relation.id 0 %}" title="Copies à corriger" style="font-weight:bold; font-size:16px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-copyright"></i></a>  
                 {% else %}
                 <a href="{% url 'correction_exercise'  relation.id 0 %}" title="Voir les productions" style="position: relative; font-size:16px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-search"></i></a> 
                 {% endif %}

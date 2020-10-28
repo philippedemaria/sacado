@@ -45,12 +45,7 @@
                              <br/> <br/>
 
                         </div>
-                        <!-- Icon de la small-box 
-                        <div class="icon">
-                             <i class="fa fa-users"></i> 
-                        </div>
-                        -->
-                        <!-- Menu de la small-box -->
+ 
 
                         <div class="small-box-footer" >
                             <br>
@@ -58,7 +53,13 @@
                                 <small>   <i class="fa fa-th"></i> </small>
                                
                                    Parcours favoris  <small> ({{ data.nb_parcours_favorite }}) - 
-                                 {{ data.nb_parcours_visible }} publié{{ data.nb_parcours_visible|pluralize }}  </small>
+                                 {{ data.nb_parcours_visible }} publié{{ data.nb_parcours_visible|pluralize }}  
+
+                                {% if group.is_pending_correction %}
+                                <i class="fa fa-copyright pull-right" style="font-size:12px; margin-top:5px" title="Copies à corriger" ></i> 
+                                {% endif %}
+
+                                </small>
                                 </a>
                             <br>
                                 <a href="{% url 'list_parcours_group' group.id  %}#evaluation" class="btn btn-default btn-accueil" style="width:95%"> 

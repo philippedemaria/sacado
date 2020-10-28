@@ -161,18 +161,22 @@
                     </div> 
                 {% endif  %}
                 <div class="box_title_vignette"> 
-                    <a {% if parcours.is_evaluation%} href="{% url 'show_evaluation'  parcours.id  %}" {% else %} href="{% url 'show_parcours'  parcours.id  %}"{% endif %} style="color:{{ parcours.color|contrast_color }};"> {{ parcours.title|truncatechars:"18" }}
 
-
+                    <a {% if parcours.is_evaluation%} href="{% url 'show_evaluation'  parcours.id  %}" {% else %} href="{% url 'show_parcours'  parcours.id  %}"{% endif %} style="color:{{ parcours.color|contrast_color }};">
+                        {% if parcours.is_pending_correction %}
+                        <i class="fa fa-copyright pull-right" style="font-size:12px;padding-right:5px;color:{{ parcours.color|contrast_color }};" title="Copies à corriger" ></i> 
+                        {% endif %}
+                        {{ parcours.title|truncatechars:"18" }}
                         {% get_is_lock parcours today as is_lock %} 
                         {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillée. Il n'est plus possible de soumettre des exercices</div></span>{% endif %} 
 
                         <span style="font-size:12px"> 
                             {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}, 
                                 {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }} {% endif %}min.
-
                         </span>
                     </a>
+
+
                     {% if parcours.group_list|length > 1 %}
                     <span class="shared" style="color:{{ parcours.color }};">Parcours partagé</span>
                     {% endif %} 

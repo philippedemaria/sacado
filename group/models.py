@@ -122,6 +122,25 @@ class Group(ModelWithCode):
         data["reader"] = reader 
         return data
 
+
+    def is_pending_correction(self):
+        submit = False
+
+        for student in self.students.all() :
+            if student.student_custom_answer.filter(is_corrected = 0) :
+                submit = True 
+                break
+            if student.student_written_answer.filter(is_corrected = 0) :
+                submit = True 
+                break
+        return submit
+
+
+
+
+
+
+
 class Sharing_group(models.Model):
 
     group = models.ForeignKey(Group, on_delete=models.PROTECT,  null=True, blank=True,   related_name='group_sharingteacher',  editable= False)

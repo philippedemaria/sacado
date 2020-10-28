@@ -617,6 +617,29 @@ class Parcours(ModelWithCode):
         return data
  
 
+
+    def is_pending_correction(self):
+
+        submit = False
+        customexercises = Customexercise.objects.filter(parcourses = self)
+        for customexercise in customexercises :
+            if customexercise.customexercise_custom_answer.exclude(is_corrected = 1).exists() :
+                submit = True 
+                break
+
+        if not submit :
+            writtenanswerbystudents = Writtenanswerbystudent.objects.filter(relationship__parcours  = self)
+            for writtenanswerbystudent in writtenanswerbystudents :
+                if writtenanswerbystudent.is_corrected :
+                    submit = True 
+                    break
+
+        return submit
+
+
+
+
+
 class Relationship(models.Model):
     exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.PROTECT,  editable= False)
     parcours = models.ForeignKey(Parcours, on_delete=models.PROTECT,  related_name='parcours_relationship',  editable= False)
