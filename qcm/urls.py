@@ -214,6 +214,7 @@ urlpatterns = [
     path('ajax_choose_student', ajax_choose_student, name='ajax_choose_student'),
     path('ajax_exercise_evaluate', ajax_exercise_evaluate, name='ajax_exercise_evaluate'),
     path('ajax_comment_all_exercise', ajax_comment_all_exercise, name='ajax_comment_all_exercise'),
+    path('ajax_audio_comment_all_exercise', ajax_audio_comment_all_exercise, name='ajax_audio_comment_all_exercise'),
     path('write_exercise/<int:id>', write_exercise, name='write_exercise'), # page dans laquelle l'élève repond à l'exercice non auto-corrigé - l'id est celui de la relation.
 
     # page de création d'un exercice non auto-corrigé dans un parcours - l'id est celui du parcours.

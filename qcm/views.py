@@ -9,7 +9,7 @@ from group.forms import GroupForm
 from group.models import Group , Sharing_group
 from school.models import Stage
 from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Correctionknowledgecustomexercise , Correctionskillcustomexercise
-from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm
+from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm
 from socle.models import  Theme, Knowledge , Level , Skill
 from django.http import JsonResponse 
 from django.core import serializers
@@ -3066,6 +3066,8 @@ def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à
     parcours_id =  request.POST.get("parcours_id", None)
     data = {}
 
+    teacher = Teacher.objects.get(user=request.user)
+
     if int(request.POST.get("custom")) == 0 :
 
         relationship = Relationship.objects.get(pk = relationship_id)
@@ -3075,9 +3077,9 @@ def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à
         else :
             w_a = False 
      
-        context = { 'relationship' : relationship , 'student': student ,   'w_a' : w_a   }
+        context = { 'relationship' : relationship , 'student': student ,   'w_a' : w_a,   'teacher' : teacher     }
 
-        html = render_to_string('qcm/correction_exercise_ajax.html', context )   
+        html = render_to_string('qcm/ajax_correction_exercise.html', context )   
 
     else :
         customexercise = Customexercise.objects.get(pk = relationship_id)
@@ -3088,9 +3090,9 @@ def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à
         else :
             c_e = False 
 
-        context = { 'customexercise' : customexercise , 'student': student ,   'c_e' : c_e , 'parcours_id' :  parcours_id  }
+        context = { 'customexercise' : customexercise , 'student': student ,   'c_e' : c_e , 'parcours_id' :  parcours_id,   'teacher' : teacher  }
 
-        html = render_to_string('qcm/correction_exercise_custom_ajax.html', context )
+        html = render_to_string('qcm/ajax_correction_exercise_custom.html', context )
      
     data['html'] = html       
 
@@ -3211,8 +3213,6 @@ def ajax_comment_all_exercise(request): # Ajouter un commentaire à un exercice 
     student_id =  int(request.POST.get("student_id"))
     comment =  cleanhtml(unescape_html(request.POST.get("comment")))
 
-    print(comment)
-
     exercise_id =  int(request.POST.get("exercise_id"))  
 
     student = Student.objects.get(user_id = student_id)  
@@ -3229,6 +3229,90 @@ def ajax_comment_all_exercise(request): # Ajouter un commentaire à un exercice 
     data = {}
     data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"          
     return JsonResponse(data)  
+
+
+
+
+@csrf_exempt
+def ajax_audio_comment_all_exercise(request): # Ajouter un commentaire à un exercice non auto-corrigé
+
+
+    data = {}
+    student_id =  int(request.POST.get("id_student"))
+    audio_text = request.FILES.get("id_mediation")
+    student = Student.objects.get(user_id = student_id)
+
+  
+    id_relationship =  int(request.POST.get("id_relationship"))  
+
+    if int(request.POST.get("custom")) == 0 :
+        relationship = Relationship.objects.get(pk = id_relationship)
+        w_a = Writtenanswerbystudent.objects.get(student = student , relationship = relationship) # On récupère la Writtenanswerbystudent
+
+        form = WAnswerAudioForm(request.POST or None, request.FILES or None,instance = w_a )
+
+        if form.is_valid() :
+
+            nf =  form.save(commit = False)
+            nf.audio = audio_text
+
+            nf.relationship = relationship
+            nf.student = student
+            nf.comment = relationship.comment
+            nf.answer = relationship.answer
+            nf.imagefile = relationship.imagefile                        
+            nf.save()
+
+    else  :
+
+        parcours_id =  int(request.POST.get("id_parcours"))  
+        parcours = Parcours.objects.get(pk = parcours_id)
+        customexercise = Customexercise.objects.get(pk = id_relationship)
+        c_e = Customanswerbystudent.objects.get(customexercise  = customexercise, student = student , parcours = parcours) # On récupère la Customanswerbystudent
+
+        form = CustomAnswerAudioForm(request.POST or None, request.FILES or None,instance = c_e )
+
+        if form.is_valid() :
+
+            nf =  form.save(commit = False)
+            nf.audio = audio_text
+            nf.customexercise = customexercise
+            nf.student = student
+            nf.parcours = parcours
+
+            nf.save()
+
+    data = {}
+    data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"          
+    return JsonResponse(data)  
+
+
+
+
+@csrf_exempt  
+def audio_remediation(request):
+
+    data = {}
+    idr =  int(request.POST.get("id_relationship"))
+    relationship = Relationship.objects.get(pk=idr) 
+    form = RemediationForm(request.POST or None, request.FILES or None )
+
+    if form.is_valid():
+        nf =  form.save(commit = False)
+        nf.mediation = request.FILES.get("id_mediation")
+        nf.relationship = relationship
+        nf.audio = True
+        nf.save()
+    else:
+        print(form.errors)
+
+    return JsonResponse(data)  
+
+
+
+
+
+
 
 
 

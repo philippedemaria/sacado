@@ -151,29 +151,55 @@
 			//upload link
 			var upload = document.createElement('a');
 			upload.href="#";
-			upload.innerHTML = "<span class='btn btn-primary' data-dismiss='modal'>Téléverser au serveur</span>";
+			upload.innerHTML = "<span class='btn btn-primary' data-dismiss='modal'>Téléverser ce commentaire</span>";
 			upload.addEventListener("click", function(event){
 				var xhr=new XMLHttpRequest();
 				var fd=new FormData();
 
-				var id_title = document.getElementById('id_title').value ;
-				var id_duration = document.getElementById('id_duration').value ;
-				var id_relationship = document.getElementById('id_relationship').value ;
+				console.log(document.getElementById('custom') ) ; 
 
+				if ( document.getElementById('custom') )
+					{ 
+						custom = document.getElementById('custom').value ;
 
-				document.getElementById('id_mediation').remove() ; 
+						var id_student = document.getElementById('id_student').value ;
+						var id_parcours = document.getElementById('id_parcours').value ;
+						var id_relationship = document.getElementById('id_relationship').value ;						
 
-				fd.append("id_title",id_title);
-				fd.append("id_duration",id_duration);
-				fd.append("id_audio",true);
-				fd.append("id_video","");
-				fd.append("id_relationship",id_relationship);
-				fd.append("id_mediation",blob, link.download);
-				var url = "../../audio_remediation";
+						if (custom) {
 
-			 
-   
+							fd.append("custom",custom);						
+							fd.append("id_parcours",id_parcours);
+							fd.append("id_relationship",id_relationship);
+							fd.append("id_student",id_student);
+						}
+						else 
+						{
+							fd.append("custom",custom);						
+							fd.append("id_relationship",id_relationship);
+							fd.append("id_student",id_student);
+						}
+						fd.append("id_mediation",blob, link.download);
+						var url = "../../ajax_audio_comment_all_exercise";
+					}
+				else 
+					{  
 
+						var id_title = document.getElementById('id_title').value ;
+						var id_duration = document.getElementById('id_duration').value ;
+						var id_relationship = document.getElementById('id_relationship').value ;
+
+						document.getElementById('id_mediation').remove() ; 
+
+						fd.append("id_title",id_title);
+						fd.append("id_duration",id_duration);
+						fd.append("id_audio",true);
+						fd.append("id_video","");
+						fd.append("id_relationship",id_relationship);
+						fd.append("id_mediation",blob, link.download);	
+
+						var url = "../../audio_remediation";
+					}
 
 				xhr.open("POST",url);
 				xhr.send(fd);

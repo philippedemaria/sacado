@@ -142,6 +142,11 @@ define(['jquery', 'bootstrap'], function ($) {
             let custom = $(this).attr("data-custom");
             let parcours_id = $(this).attr("data-parcours_id"); 
 
+            $("#id_student").val(student_id);
+            $("#id_relationship").val(relationship_id);
+            $("#id_parcours").val(parcours_id);
+            $("#custom").val(custom);
+
             $.ajax(
                 {
                     type: "POST",

@@ -260,6 +260,19 @@ MEDIA_URL = 'https://ressources.sacado.xyz/'
 MEDIA_ROOT = os.environ.get('MEDIA_ROOT')
 
 
+
+CONTENT_TYPES = ['image', 'video', 'audio','pdf', 'vnd.oasis.opendocument.text','vnd.ms-excel','msword','application',]
+# 2.5MB - 2621440
+# 5MB - 5242880
+# 10MB - 10485760
+# 20MB - 20971520
+# 50MB - 5242880
+# 100MB 104857600
+# 250MB - 214958080
+# 500MB - 429916160
+MAX_UPLOAD_SIZE = "2621440"
+
+
 ########################################################################################################################
 
 CKEDITOR_UPLOAD_PATH = 'https://ressources.sacado.xyz/'

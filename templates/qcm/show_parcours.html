@@ -151,19 +151,20 @@ body{
                                     <button type="button" id="stopButton" disabled  class="btn btn-default"><i class="fa fa-stop"></i></button>
                                 </div>
                                 <div id="formats"></div>
-                                <label>Mes enregistrements</label>
+                                <label><small>Vous pouvez vous enregistrer plusieurs fois pour déterminer le meilleur.</small></label>
                                 <ol id="recordingsList"></ol>
                                 <!-- inserting these scripts at the end to be able to use all the elements in the DOM  -->
                                 <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
                                 <script src="{% static 'js/script/recorder_voice.js' %}"></script>
                             </div>
-                        </div>
+                        </div>                
+                        <input name="id_relationship" id="id_relationship" type="hidden" />
+
                     </form>                    
                 </div> 
 
 
 
-                <input name="id_relationship" id="id_relationship" type="hidden" />
 
  
             </div>

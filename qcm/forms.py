@@ -6,6 +6,23 @@ from socle.models import Knowledge, Skill
 from group.models import Group
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 
+from django.template.defaultfilters import filesizeformat
+from django.conf import settings
+
+
+def validation_file(content):
+    if content :
+	    content_type = content.content_type.split('/')[0]
+	    if content_type in settings.CONTENT_TYPES:
+	        if content._size > settings.MAX_UPLOAD_SIZE:
+	            raise forms.ValidationError("Taille max : {}. Taille trop volumineuse {}".format(filesizeformat(settings.MAX_UPLOAD_SIZE), filesizeformat(content._size)))
+	    else:
+	        raise forms.ValidationError("Type de fichier non accepté")
+	    return content
+
+
+
+
 class ParcoursForm(forms.ModelForm):
 
 	class Meta:
@@ -112,6 +129,11 @@ class RemediationForm(forms.ModelForm):
 	class Meta:
 		model = Remediation
 		fields = '__all__'
+
+	def clean_content(self):
+		content = self.cleaned_data['mediation']
+		validation_file(content)
+
 
 class SupportfileForm(forms.ModelForm):
 	class Meta:
@@ -230,10 +252,22 @@ class WrittenanswerbystudentForm (forms.ModelForm):
 		model = Writtenanswerbystudent
 		fields = ('imagefile','answer')
 
+	def clean_content(self):
+		content = self.cleaned_data['imagefile']
+		validation_file(content)
+
 class CustomanswerbystudentForm (forms.ModelForm):
 	class Meta:
 		model = Customanswerbystudent
 		fields = ('imagefile','answer')
+
+
+	def clean_content(self):
+		content = self.cleaned_data['imagefile']
+		validation_file(content)
+
+
+
 
 class CustomexerciseForm (forms.ModelForm):
 	
@@ -259,7 +293,7 @@ class CustomexerciseForm (forms.ModelForm):
  
 
 
-class  CustomexerciseNPForm (forms.ModelForm):
+class CustomexerciseNPForm (forms.ModelForm):
 
 	class Meta:
 		model = Customexercise
@@ -277,3 +311,23 @@ class  CustomexerciseNPForm (forms.ModelForm):
 		self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=False ) 
 		self.fields['students'] = forms.ModelMultipleChoiceField(queryset=students, widget=forms.CheckboxSelectMultiple,   required=False )
 		
+
+class WAnswerAudioForm (forms.ModelForm):
+	class Meta:
+		model = Writtenanswerbystudent
+		fields = ('audio',)
+
+	def clean_content(self):
+		content = self.cleaned_data['audio']
+		validation_file(content)
+
+class CustomAnswerAudioForm (forms.ModelForm):
+	class Meta:
+		model = Customanswerbystudent
+		fields = ('audio',)
+
+
+	def clean_content(self):
+		content = self.cleaned_data['audio']
+		validation_file(content)
+ 

@@ -30,6 +30,12 @@ def vignette_directory_path(instance, filename):
 def file_directory_path(instance, filename):
     return "files/{}/{}".format(instance.relationship.parcours.teacher.user.id, filename)
 
+
+def file_folder_path(instance, filename):
+    return "files/{}/{}".format(instance.customexercise.teacher.user.id, filename)
+
+
+
 def directory_path_mastering(instance, filename):
     return "mastering/{}/{}".format(instance.relationship.parcours.teacher.user.id, filename)
  
@@ -751,6 +757,7 @@ class Writtenanswerbystudent(models.Model): # Commentaire pour les exercices non
     imagefile = models.ImageField(upload_to= file_directory_student, blank = True, null=True,   verbose_name="Scan ou image ou Photo", default="")
     answer = RichTextUploadingField( default="", null=True,  blank=True, ) 
     comment = models.TextField( default="", null=True,   editable=False) # Commentaire de l'enseignant sur l'exercice
+    audio = models.FileField(upload_to=file_directory_path,verbose_name="Commentaire audio", blank=True, default ="")
 
     def __str__(self):        
         return "{}".format(self.relationship.exercise.knowledge.name)
@@ -983,6 +990,7 @@ class Customanswerbystudent(models.Model): # Commentaire et note pour les exerci
     comment = models.TextField( default="", null=True) 
     point = models.CharField(default="", max_length=10, verbose_name="Note")
     is_corrected = models.BooleanField( default=0, editable=False ) 
+    audio = models.FileField(upload_to=file_folder_path,verbose_name="Commentaire audio", blank=True, default ="")
 
     def __str__(self):        
         return "{}".format(self.customexercise)

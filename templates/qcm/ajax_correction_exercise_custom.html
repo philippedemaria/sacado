@@ -118,11 +118,21 @@
     <textarea class="form-control" name="comment" id="comment">{{ c_e.comment }}</textarea>
 
             <div class="row" style="margin-top:10px">
-                <div class="col-sm-12 col-md-8">
+                <div class="col-sm-12 col-md-12">
                     <div class="form-group">
-                        <a href="#" class="btn btn-primary" id="save_comment" data-student_id="{{student.user.id}}"  data-customexercise_id="{{customexercise.id}}" 
-                            data-parcours_id="{{ parcours_id }}">Enregistrer ce commentaire</a>
-                        <span id="comment_sign"></span>
+                        <a href="#" class="btn btn-primary" id="save_comment" data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}" >Enregistrer ce commentaire</a>
+                        {% if c_e and  teacher.user.school %}  
+                        <a href="#" data-toggle='modal' data-target='#audio_comment' class="btn btn-primary" ><i class="fa fa-microphone"></i> Commentaire Audio </a>
+                        {% elif teacher.user.school %}  
+                        <a href="#" data-toggle='modal' data-target='#audio_comment' class="btn btn-primary" ><i class="fa fa-microphone"></i> Commentaire Audio </a>
+                        {% else %}   
+                        <a href="#" class="btn btn-primary" ><i class="fa fa-microphone"></i> Commentaire Audio 
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" >Version établissement.</div>
+                                </span>
+                        </a>
+                        {% endif %}
+ 
 
                         <a href="javascript:history.back()"><input type="button" value="Annuler"
                                                                    class="btn btn-default "/></a>
@@ -131,20 +141,16 @@
             </div>
 
 
-    <h5>Commentaire Audio</h5>
-    <div id="controls">
-            <button type="button" id="recordButton"><i class="fa fa-microphone text-danger"></i>Recorder</button>
-            <button type="button" id="pauseButton" disabled><i class="fa fa-pause"></i> Pause</button>
-            <button type="button" id="stopButton" disabled><i class="fa fa-stop"></i>Stop</button>
-    </div>
-    <div id="formats">Format: start recording to see sample rate</div>
-    <p><strong>Recordings:</strong></p>
-    <ol id="recordingsList"></ol>
-    <!-- inserting these scripts at the end to be able to use all the elements in the DOM -->
-    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
- <script src="{% static 'js/script/recorder_voice.js' %}"></script>
-
-
+            <div class="row" style="margin-top:10px">
+                <div class="col-sm-12 col-md-12">
+                    {% if c_e.audio %}
+                    <audio controls>
+                      <source src="{{ c_e.audio.url }}" type="audio/mpeg">
+                      <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                    </audio>
+                    {% endif %}
+                </div> 
+            </div>
 
 
 </div>
