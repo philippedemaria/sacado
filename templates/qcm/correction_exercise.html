@@ -63,7 +63,7 @@
                             <td>
                                 {% get_done relationship student as done %}
                                 {% if done %}
-                                    <a href="#" data-student_id="{{ student.user.id }}" data-relationship_id="{{ relationship.id }}" data-parcours_id="0" data-custom="0" class="choose_student">   {{ student.user.last_name }} {{ student.user.first_name }} 
+                                    <a href="#" data-student_id="{{ student.user.id }}" data-relationship_id="{{ relationship.id }}" data-parcours_id="0" data-custom="0" class="choose_student">   {{ student.user.last_name|title }} {{ student.user.first_name|title }} 
 
                                         <span id ="evaluate{{ student.user.id }}">
                                           {% get_done relationship student as done %}
