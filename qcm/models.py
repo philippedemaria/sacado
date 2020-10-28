@@ -650,9 +650,10 @@ class Relationship(models.Model):
 
     def is_done(self,student):
         done = False
-        if Studentanswer.objects.filter(student=student, exercise = self.exercise, parcours= self.parcours ).exists():
+        if Studentanswer.objects.filter(student=student, exercise = self.exercise, parcours= self.parcours ).exists()  :
             done = True
         return done
+
 
     def is_task(self):
         task = False
