@@ -1,7 +1,12 @@
 <p>
 Durée estimée : {{ remediation.duration  }} minutes
 </p>
-{% if remediation.sort %}
+{% if remediation.audio %}
+<audio controls>
+    <source src="{{ remediation.mediation.url }}" type="audio/mpeg">
+    <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+</audio>
+{% elif remediation.mediation == "" %}
 <iframe  width="560" height="315" src="https://www.youtube.com/embed/{{ remediation.video }}?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 {% else %}
 

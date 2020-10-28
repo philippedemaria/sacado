@@ -2,8 +2,8 @@ requirejs.config({
     baseUrl: "../../../static/js", 
     waitSeconds: 90,
     paths: {
-        jquery: ['//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min', 'lib/jquery-2.2.4.min'],
-        jquery19: ['//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min'],  
+        jquery: [ 'lib/jquery-2.2.4.min'],
+ 
         select2: "lib/select2.full.min",
         ui: "lib/jquery-ui.min",
         ui_draggable: "script/ui-draggable",
@@ -33,7 +33,6 @@ requirejs.config({
         fonctions_jquery: "script/fonctions-jquery",
         fonctions: "script/fonctions",
         bootstrapjs: "bootstrap",
- 
     },
     shim: {
         "bootstrap": {
@@ -61,6 +60,7 @@ requirejs.config({
             deps: ['jquery','toggle']
         },
 
+
         mathjax: {
             exports: "MathJax",
             init: function () {
@@ -81,6 +81,4 @@ requirejs.config({
     }
 });
 
-require(['jquery', 'bootstrap',  'mathjax',  'datatables', 'datatables_bootstrap',  'ckeditor', 'ckeditor_init','config_select2', 'config_datepicker', 'config_toggle',  'config_colorpicker', 'fonctions_jquery', 'fonctions',   'config_datatable', 'multiselect', 'ui',]);
-
- 
+require(['jquery', 'bootstrap',  'mathjax',  'datatables', 'datatables_bootstrap', 'ckeditor', 'ckeditor_init','config_select2', 'config_datepicker', 'config_toggle',  'config_colorpicker', 'fonctions_jquery', 'fonctions',   'config_datatable', 'multiselect', 'ui',]);

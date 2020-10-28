@@ -2,7 +2,7 @@ define(['jquery', 'bootstrap'], function ($) {
     $(document).ready(function () {
         console.log("chargement JS ajax-remediation.js OK");
 
- 
+            $("#audio_capture").hide(500); 
             $("#file").hide(500);
  
             function makeItemAppear($toggle, $item, $item2) {
@@ -19,6 +19,12 @@ define(['jquery', 'bootstrap'], function ($) {
    
 
             makeItemAppear($("#type_choice"), $("#file"), $("#video"));
+
+
+
+
+
+
 
     });
 });

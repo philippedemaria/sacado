@@ -1116,7 +1116,7 @@ a.white, a.white:active, a.white:visited, a.white:hover{
   top: calc(50% - 30px);
   left: calc(50% - 30px);
   border: 16px solid #f2f2f2;
-  border-top: 16px solid #3498db ;
+  border-top: 16px solid #5d4391 ;
   border-radius: 50%;
   width: 120px;
   height: 120px;
@@ -1141,7 +1141,7 @@ a.white, a.white:active, a.white:visited, a.white:hover{
   top: calc(50% - 30px);
   left: calc(50% - 30px);
   border: 16px solid #f2f2f2;
-  border-top: 16px solid #3498db ;
+  border-top: 16px solid #5d4391 ;
   border-radius: 50%;
   width: 120px;
   height: 120px;

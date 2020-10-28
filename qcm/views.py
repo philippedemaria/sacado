@@ -3709,6 +3709,8 @@ def json_create_remediation(request,idr):
 
     return redirect( 'show_parcours', relationship.parcours.id )
 
+
+
 @csrf_exempt  
 def json_delete_remediation(request, id):
     remediation = Remediation.objects.get(id=id)
@@ -3717,6 +3719,32 @@ def json_delete_remediation(request, id):
     return redirect( 'show_parcours', remediation.relationship.parcours.id )
 
  
+
+
+
+@csrf_exempt  
+def audio_remediation(request):
+
+    data = {}
+    idr =  int(request.POST.get("id_relationship"))
+    relationship = Relationship.objects.get(pk=idr) 
+    form = RemediationForm(request.POST or None, request.FILES or None )
+
+    if form.is_valid():
+        nf =  form.save(commit = False)
+        nf.mediation = request.FILES.get("id_mediation")
+        nf.relationship = relationship
+        nf.audio = True
+        nf.save()
+    else:
+        print(form.errors)
+
+    return JsonResponse(data)  
+
+
+
+
+
 
 
 @csrf_exempt 

@@ -1,4 +1,6 @@
 {% load item_tags %}
+{% load static %}
+
 <div class="col-sm-12 col-md-7" style="padding-top:10px">
  
 {% if c_e %}
@@ -127,7 +129,27 @@
                     </div>
                 </div> 
             </div>
+
+
+    <h5>Commentaire Audio</h5>
+    <div id="controls">
+            <button type="button" id="recordButton"><i class="fa fa-microphone text-danger"></i>Recorder</button>
+            <button type="button" id="pauseButton" disabled><i class="fa fa-pause"></i> Pause</button>
+            <button type="button" id="stopButton" disabled><i class="fa fa-stop"></i>Stop</button>
+    </div>
+    <div id="formats">Format: start recording to see sample rate</div>
+    <p><strong>Recordings:</strong></p>
+    <ol id="recordingsList"></ol>
+    <!-- inserting these scripts at the end to be able to use all the elements in the DOM -->
+    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+ <script src="{% static 'js/script/recorder_voice.js' %}"></script>
+
+
+
+
 </div>
+
+
 
 <script>
 

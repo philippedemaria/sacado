@@ -85,11 +85,9 @@ define(['jquery','bootstrap'], function ($) {
                 alert("Vous devez choisir un niveau."); return false;             
             }
 
-
         }); 
 
 
-   
         $('.send_message').on('click', function () {
 
             let name = $(this).attr("data-student_name"); 

@@ -1030,9 +1030,9 @@ class Remediation(models.Model):
     title = models.CharField(max_length=255, default='',  blank=True,verbose_name="Titre")
     relationship = models.ForeignKey(Relationship, on_delete=models.CASCADE, default='',   blank=True, related_name='relationship_remediation') 
     video = models.CharField(max_length=255, default='',  blank=True,  verbose_name="url de la vidéo")
-    mediation = models.FileField(upload_to=file_directory_path,verbose_name="Fichier - pdf", blank=True, default ="")
-    sort = models.BooleanField( default=0,    verbose_name="Type du document") 
-    duration = models.PositiveIntegerField(  default=15,   verbose_name="Durée estimée (en min.)")  
+    mediation = models.FileField(upload_to=file_directory_path,verbose_name="Fichier", blank=True, default ="")
+    audio = models.BooleanField( default=0,    verbose_name="Audio texte ?") 
+    duration = models.PositiveIntegerField(  default=15,  blank=True,  verbose_name="Durée estimée (en min.)")  
 
     def __str__(self):        
         return "title {}".format(self.title)

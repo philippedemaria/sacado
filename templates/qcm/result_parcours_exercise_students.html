@@ -72,7 +72,7 @@
  
                         {% for remediation in relationship.relationship_remediation.all %}
                             <a href="#" data-target="#remediation_viewer" data-remediation_id="{{ remediation.id }}"  data-toggle='modal' class="white remediation_viewer pull-right">
-                                {% if remediation.sort %}
+                                {% if remediation.video != "" %}
                                     <img src="{%  static 'img/video.png' %}" width="30px" />
                                 {% else %}
                                     <img src="{%  static 'img/pdf.png' %}" width="20px" />
