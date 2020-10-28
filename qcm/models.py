@@ -628,11 +628,8 @@ class Parcours(ModelWithCode):
                 break
 
         if not submit :
-            writtenanswerbystudents = Writtenanswerbystudent.objects.filter(relationship__parcours  = self)
-            for writtenanswerbystudent in writtenanswerbystudents :
-                if writtenanswerbystudent.is_corrected :
-                    submit = True 
-                    break
+            if Writtenanswerbystudent.objects.filter(relationship__parcours  = self).exclude(is_corrected = 1).exists() : 
+                submit = True 
 
         return submit
 
@@ -753,8 +750,6 @@ class Relationship(models.Model):
         if self.relationship_written_answer.exclude(is_corrected = 1).exists() :
             submit = True          
         return submit
-
-
 
 
 class Studentanswer(models.Model):
