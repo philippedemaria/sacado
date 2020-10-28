@@ -3894,6 +3894,30 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   border-radius: 10px;
 }
 
+
+.div_students{
+  height:90vh;
+  overflow-y: auto;
+  scrollbar-width: none;  
+  scrollbar-color:  gray white;
+  overflow-x: hidden;
+  z-index: 9999;
+}
+
+ .div_students::-webkit-scrollbar {
+  width: 0px;
+  height: 20px;
+}
+.div_students::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 10px;
+}
+.div_students::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+
 .selector_div_result_custom{
   cursor: pointer;
 }
