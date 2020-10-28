@@ -712,6 +712,16 @@ class Relationship(models.Model):
         return data
 
 
+    def is_submit(self,student):
+        submit = False
+        if Writtenanswerbystudent.objects.filter(relationship = self,  student = student).exists() :
+            submit = True          
+        return submit
+
+
+
+
+
 class Studentanswer(models.Model):
 
     parcours = models.ForeignKey(Parcours,  on_delete=models.PROTECT, blank=True, null=True,  related_name='answers', editable=False)
@@ -761,7 +771,6 @@ class Writtenanswerbystudent(models.Model): # Commentaire pour les exercices non
 
     def __str__(self):        
         return "{}".format(self.relationship.exercise.knowledge.name)
-
 
 ########################################################################################################################################### 
 ########################################################################################################################################### 

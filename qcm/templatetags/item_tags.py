@@ -70,6 +70,11 @@ def get_is_lock(obj,todaytimer):
 
 
 @register.simple_tag
+def get_is_submitted(obj,student): 
+    """Vérifie si un exercice non auto corrigé est envoyé par un élève"""
+    return obj.is_submit(student)
+
+@register.simple_tag
 def get_is_submit(obj,parcours,student): 
     """Vérifie si un exercice non auto corrigé est envoyé par un élève"""
     return obj.is_submit(parcours,student)
