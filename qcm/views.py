@@ -3245,15 +3245,16 @@ def ajax_audio_comment_all_exercise(request): # Ajouter un commentaire à un exe
 
     if int(request.POST.get("custom")) == 0 :
         relationship = Relationship.objects.get(pk = id_relationship)
-        w_a = Writtenanswerbystudent.objects.get(student = student , relationship = relationship) # On récupère la Writtenanswerbystudent
 
-        form = WAnswerAudioForm(request.POST or None, request.FILES or None,instance = w_a )
+        if Writtenanswerbystudent.objects.filter(student = student , relationship = relationship).exists() :
+            w_a = Writtenanswerbystudent.objects.get(student = student , relationship = relationship) # On récupère la Writtenanswerbystudent
+            form = WAnswerAudioForm(request.POST or None, request.FILES or None,instance = w_a )
+        else :
+            form = WAnswerAudioForm(request.POST or None, request.FILES or None )
 
         if form.is_valid() :
-
             nf =  form.save(commit = False)
             nf.audio = audio_text
-
             nf.relationship = relationship
             nf.student = student
             nf.comment = relationship.comment
@@ -3266,18 +3267,19 @@ def ajax_audio_comment_all_exercise(request): # Ajouter un commentaire à un exe
         parcours_id =  int(request.POST.get("id_parcours"))  
         parcours = Parcours.objects.get(pk = parcours_id)
         customexercise = Customexercise.objects.get(pk = id_relationship)
-        c_e = Customanswerbystudent.objects.get(customexercise  = customexercise, student = student , parcours = parcours) # On récupère la Customanswerbystudent
-
-        form = CustomAnswerAudioForm(request.POST or None, request.FILES or None,instance = c_e )
+        
+        if Customanswerbystudent.objects.filter(customexercise  = customexercise, student = student , parcours = parcours).exists() :
+            c_e = Customanswerbystudent.objects.get(customexercise  = customexercise, student = student , parcours = parcours) # On récupère la Customanswerbystudent
+            form = CustomAnswerAudioForm(request.POST or None, request.FILES or None,instance = c_e )
+        else :
+            form = CustomAnswerAudioForm(request.POST or None, request.FILES or None )
 
         if form.is_valid() :
-
             nf =  form.save(commit = False)
             nf.audio = audio_text
             nf.customexercise = customexercise
             nf.student = student
             nf.parcours = parcours
-
             nf.save()
 
     data = {}
