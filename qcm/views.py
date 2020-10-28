@@ -3241,7 +3241,6 @@ def ajax_audio_comment_all_exercise(request): # Ajouter un commentaire à un exe
     audio_text = request.FILES.get("id_mediation")
     student = Student.objects.get(user_id = student_id)
 
-  
     id_relationship =  int(request.POST.get("id_relationship"))  
 
     if int(request.POST.get("custom")) == 0 :
@@ -3258,9 +3257,6 @@ def ajax_audio_comment_all_exercise(request): # Ajouter un commentaire à un exe
             nf.audio = audio_text
             nf.relationship = relationship
             nf.student = student
-            nf.comment = relationship.comment
-            nf.answer = relationship.answer
-            nf.imagefile = relationship.imagefile 
             nf.is_corrected = True                     
             nf.save()
 
