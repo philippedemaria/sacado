@@ -699,8 +699,11 @@ class Relationship(models.Model):
         students = self.students.all()
         nb_student = len(students)
 
-        nb_exercise_done = Studentanswer.objects.filter(student__in= students, parcours= parcours, exercise = self.exercise).values_list("student",flat= True).order_by("student").distinct().count()
+        nb_exercise_d = Studentanswer.objects.filter(student__in= students, parcours= parcours, exercise = self.exercise).values_list("student",flat= True).order_by("student").distinct().count()
+        nb_exercise = Writtenanswerbystudent.objects.filter(relationship= self, student__in= students ).values_list("student",flat= True).order_by("student").distinct().count()        
  
+        nb_exercise_done = nb_exercise_d + nb_exercise
+
         try :
             percent = int(nb_exercise_done * 100/nb_student)
         except : 
