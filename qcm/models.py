@@ -752,7 +752,10 @@ class Relationship(models.Model):
     def code_student_for_this(self,student):
         Stage = apps.get_model('school', 'Stage')
         studentanswer = Studentanswer.objects.filter(student=student, parcours= self.parcours , exercise = self.exercise ).last()
-        point = studentanswer.point
+        try :
+            point = studentanswer.point
+        except :
+            point = 0
  
         if student.user.school :
             school = student.user.school
