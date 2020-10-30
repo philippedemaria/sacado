@@ -15,7 +15,8 @@
  
 
 {% block page_title %}
-       <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-desktop"></i> {{ parcours }} <img src="{% static 'img/angle-right.png' %}"/>    Cours   </span>  
+       <a href="{% url 'show_parcours_student' parcours.id %}" style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-desktop"></i> {{ parcours }} </a><img src="{% static 'img/angle-right.png' %}"/> 
+       <small>   Cours </small>   
 {% endblock %}
 
 
@@ -57,17 +58,17 @@
 
 
 
-
+        <div class="col-md-8 col-xs-12 col-lg-9">
         {% for course in courses %}
 
-            <div class="col-md-8 col-xs-12 col-lg-9  admin-content" id="course{{forloop.counter0}}">
+            <div class="admin-content" id="course{{forloop.counter0}}">
                 <h1 class="thin">  {{ course.title }}  {% if course.is_paired %}  <a href="{%  url 'update_course' course.id parcours.id %}" class="btn btn-danger pull-right"> Contribuer à ce cours </a> {% endif %}</h1>
                 <hr>
 
                 {{ course.annoncement|decode|safe }} 
             </div>
         {% endfor %}
-  
+      </div>
          
     </div>
 

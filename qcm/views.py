@@ -3716,16 +3716,17 @@ def group_tasks_all(request,id):
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 @csrf_exempt 
-def create_remediation(request,idr):
+def create_remediation(request,idr): # Pour la partie superadmin
 
     relationship = Relationship.objects.get(pk=idr) 
-    form = RemediationForm(request.POST or None,request.FILES or None)
+    form = RemediationForm(request.POST or None,request.FILES or None, teacher = relationship.parcours.teacher)
  
     if form.is_valid():
         nf =  form.save(commit = False)
         nf.relationship = relationship
         nf.save()
         nf.exercises.add(exercise)
+        form.save_m2m()
         return redirect('admin_exercises')
 
     context = {'form': form,  'exercise' : exercise}
@@ -3733,15 +3734,13 @@ def create_remediation(request,idr):
     return render(request, 'qcm/form_remediation.html', context)
 
  
-
-
-
 @csrf_exempt 
-def update_remediation(request,idr, id):
+def update_remediation(request,idr, id): # Pour la partie superadmin
 
     remediation = Remediation.objects.get(id=id)
+    teacher = Teacher.objects.get(user = request.user)
     exercise = Exercise.objects.get(pk=ide) 
-    remediation_form = remediationForm(request.POST or None, request.FILES or None, instance=remediation )
+    form = RemediationUpdateForm(request.POST or None, request.FILES or None, instance=remediation, teacher = teacher  )
  
     if form.is_valid():
         nf.save()
@@ -3752,8 +3751,7 @@ def update_remediation(request,idr, id):
     return render(request, 'qcm/form_remediation.html', context )
 
 
-
-def delete_remediation(request, id):
+def delete_remediation(request, id): # Pour la partie superadmin
     remediation = Remediation.objects.get(id=id)
     remediation.delete()
 
@@ -3796,7 +3794,7 @@ def ajax_remediation(request):
         customexercise_id =  int(request.POST.get("customexercise_id"))
         customexercise = Customexercise.objects.get( id = customexercise_id)
 
-        form = RemediationcustomForm(request.POST or None,request.FILES or None)
+        form = RemediationcustomForm(request.POST or None,request.FILES or None, teacher = customexercise.teacher)
         data = {}
 
         remediations = Remediationcustom.objects.filter(customexercise = customexercise)
@@ -3808,7 +3806,7 @@ def ajax_remediation(request):
         relationship_id =  int(request.POST.get("relationship_id"))
         relationship = Relationship.objects.get( id = relationship_id)
 
-        form = RemediationForm(request.POST or None,request.FILES or None)
+        form = RemediationForm(request.POST or None,request.FILES or None, teacher = relationship.parcours.teacher)
         data = {}
 
         remediations = Remediation.objects.filter(relationship = relationship)
@@ -3829,21 +3827,23 @@ def json_create_remediation(request,idr,idp,typ):
 
     if typ == 0 :
         relationship = Relationship.objects.get(pk=idr) 
-        form = RemediationForm(request.POST or None, request.FILES or None )
+        form = RemediationForm(request.POST or None, request.FILES or None , teacher = relationship.parcours.teacher)
      
         if form.is_valid():
             nf =  form.save(commit = False)
             nf.relationship = relationship
-            nf.save()
+            nf.save()  
+            form.save_m2m()
 
     else :
         customexercise = Customexercise.objects.get(pk=idr) 
-        form = RemediationcustomForm(request.POST or None, request.FILES or None )
+        form = RemediationcustomForm(request.POST or None, request.FILES or None, teacher = customexercise.teacher)
      
         if form.is_valid():
             nf =  form.save(commit = False)
             nf.customexercise = customexercise
             nf.save()  
+            form.save_m2m()
 
     return redirect( 'show_parcours', idp )
     
@@ -3871,25 +3871,27 @@ def audio_remediation(request):
     is_custom = request.POST.get("is_custom")
     if int(is_custom) == 0 : # 0 pour les exos GGB
         relationship = Relationship.objects.get(pk=idr) 
-        form = RemediationForm(request.POST or None, request.FILES or None )
+        form = RemediationForm(request.POST or None, request.FILES or None , teacher = relationship.parcours.teacher)
         if form.is_valid():
             nf =  form.save(commit = False)
             nf.mediation = request.FILES.get("id_mediation")
             nf.relationship = relationship
             nf.audio = True
-            nf.save()
+            nf.save()  
+            form.save_m2m()
         else:
             print(form.errors)
 
     else :
         customexercise = Customexercise.objects.get( id = idr)
-        form = RemediationcustomForm(request.POST or None,request.FILES or None)
+        form = RemediationcustomForm(request.POST or None,request.FILES or None, teacher = customexercise.teacher)
         if form.is_valid():
             nf =  form.save(commit = False)
             nf.mediation = request.FILES.get("id_mediation")
             nf.customexercise = customexercise
             nf.audio = True
-            nf.save()
+            nf.save()  
+            form.save_m2m()
         else:
             print(form.errors)
 
@@ -3903,7 +3905,12 @@ def audio_remediation(request):
 def ajax_remediation_viewer(request): # student_view
 
     remediation_id =  int(request.POST.get("remediation_id"))
-    remediation = Remediation.objects.get( id = remediation_id)
+    if request.POST.get("is_custom") == "0" :
+        remediation = Remediation.objects.get( id = remediation_id)
+    else :
+        remediation = Remediationcustom.objects.get( id = remediation_id)    
+
+
     data = {}
     context = { 'remediation' : remediation ,   } 
     html = render_to_string('qcm/ajax_remediation_viewer.html',context)

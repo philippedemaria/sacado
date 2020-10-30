@@ -1,0 +1,11 @@
+{% load static %}          
+
+{% if remediation.audio  %}
+  <i class="fa fa-play text-info"></i>
+{% elif remediation.video != "" %}
+  <img src="{%  static 'img/video.png' %}" width="26px" />
+{% elif  remediation.courses.all|length > 0 %} 
+  <i class="fa fa-desktop text-pink"></i>
+{% else %}
+  <img src="{%  static 'img/pdf.png' %}" width="20px" />
+{% endif  %}

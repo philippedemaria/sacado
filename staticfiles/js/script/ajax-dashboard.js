@@ -1375,6 +1375,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 let remediation_id = $(this).attr("data-remediation_id");
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
                 let url_code = $(this).attr("data-url");
+                let is_custom = $(this).attr("data-is_custom");
+
+                console.log(is_custom) ; 
 
                 if (url_code == "0") {url = "../../ajax/remediation_viewer" ;}
                 else if (url_code == "1") {url = "../ajax/remediation_viewer" ;}
@@ -1387,6 +1390,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                         dataType: "json",
                         data: {
                             'remediation_id': remediation_id,
+                            'is_custom': is_custom,
                             csrfmiddlewaretoken: csrf_token
                         },
                         url: url ,

@@ -47,14 +47,8 @@
           <div class="col-xs-12 col-md-5" >         
             <label>Aides : </label>
               {% for remediation in relationship.relationship_remediation.all %}
-                  <a href="#" data-target="#remediation_viewer" data-remediation_id="{{ remediation.id }}"  data-url="1" data-toggle='modal' class="white remediation_viewer btn btn-default">
-                      {% if remediation.audio  %}
-                          <i class="fa fa-play text-default "></i>
-                      {% elif remediation.mediation == "" %}
-                          <img src="{%  static 'img/video.png' %}" width="40px" />
-                      {% else %}
-                          <img src="{%  static 'img/pdf.png' %}" width="40px" />
-                      {% endif  %}
+                  <a href="#" data-target="#remediation_viewer" data-remediation_id="{{ remediation.id }}" data-is_custom="0" data-url="1" data-toggle='modal' class="white remediation_viewer btn btn-default">
+                      {% include 'qcm/remediation_choices.html' %}
                   </a>
               {% endfor  %} 
           </div>

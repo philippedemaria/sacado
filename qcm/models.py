@@ -797,8 +797,6 @@ class Relationship(models.Model):
         return level
  
 
-
-
 class Studentanswer(models.Model):
 
     parcours = models.ForeignKey(Parcours,  on_delete=models.PROTECT, blank=True, null=True,  related_name='answers', editable=False)
@@ -813,7 +811,7 @@ class Studentanswer(models.Model):
         return "{}".format(self.exercise.knowledge.name)
 
 
-class Resultggbskill(models.Model): # Pour récupérer tous les scores des compétences
+class Resultggbskill(models.Model): # Pour récupérer tous les scores des compétences d'une relationship
     student = models.ForeignKey(Student, related_name="student_resultggbskills", default="", on_delete=models.CASCADE, editable=False)
     skill = models.ForeignKey(Skill, related_name="skill_resultggbskills", on_delete=models.CASCADE, editable=False)
     point = models.PositiveIntegerField(default=0)
@@ -821,11 +819,6 @@ class Resultggbskill(models.Model): # Pour récupérer tous les scores des comp�
 
     def __str__(self):
         return f"{self.skill} : {self.point}"
-
-
-
-
-
 
 
 class Resultexercise(models.Model):  # Last result
@@ -1085,7 +1078,6 @@ class Customexercise(ModelWithCode):
             submit = True      
         return submit
 
-
 class Customanswerbystudent(models.Model): # Commentaire et note pour les exercices customisés coté enseignant
 
     customexercise = models.ForeignKey(Customexercise,  on_delete=models.PROTECT,   related_name='customexercise_custom_answer', editable=False)
@@ -1106,7 +1098,6 @@ class Customanswerbystudent(models.Model): # Commentaire et note pour les exerci
 
     class Meta:
         unique_together = ['student', 'parcours', 'customexercise']
-
 
 class Correctionskillcustomexercise(models.Model): # Evaluation des compétences pour les exercices customisés coté enseignant 
 
@@ -1137,47 +1128,6 @@ class Correctionknowledgecustomexercise(models.Model): # Evaluation des savoir f
 
     class Meta:
         unique_together = ['student', 'customexercise','knowledge']
-
-########################################################################################################################################### 
-########################################################################################################################################### 
-######################################################### FIN  Remediation       ########################################################## 
-########################################################################################################################################### 
-###########################################################################################################################################  
-class Remediation(models.Model):
-
-    title = models.CharField(max_length=255, default='',  blank=True,verbose_name="Titre")
-    relationship = models.ForeignKey(Relationship, on_delete=models.CASCADE, default='',   blank=True, related_name='relationship_remediation') 
-    video = models.CharField(max_length=255, default='',  blank=True,  verbose_name="url de la vidéo")
-    mediation = models.FileField(upload_to=file_directory_path,verbose_name="Fichier", blank=True,   default ="")
-    audio = models.BooleanField( default=0,    verbose_name="Audio texte ?") 
-    duration = models.PositiveIntegerField(  default=15,  blank=True,  verbose_name="Durée estimée (en min.)")  
-    consigne = models.BooleanField( default=0,    verbose_name="Consigne ?") 
-
-    def __str__(self):        
-        return "title {}".format(self.title)
-
-class Remediationcustom(models.Model):
-
-    title = models.CharField(max_length=255, default='',  blank=True,verbose_name="Titre")
-    customexercise = models.ForeignKey(Customexercise,  on_delete=models.CASCADE, default='',   blank=True, related_name='customexercise_remediation') 
-    video = models.CharField(max_length=255, default='',  blank=True,  verbose_name="url de la vidéo")
-    mediation = models.FileField(upload_to=file_folder_path,verbose_name="Fichier", blank=True,   default ="")
-    audio = models.BooleanField( default=0,    verbose_name="Audio texte ?") 
-    duration = models.PositiveIntegerField(  default=15,  blank=True,  verbose_name="Durée estimée (en min.)")  
-    consigne = models.BooleanField( default=0,    verbose_name="Consigne ?") 
-
-    def __str__(self):        
-        return "title {}".format(self.title)
-
-class Constraint(models.Model):
-
-    code = models.CharField(max_length=8, default='', editable=False)# code de l'exo qui constraint
-    relationship = models.ForeignKey(Relationship, on_delete=models.CASCADE, default='',   blank=True, related_name='relationship_constraint') 
-    scoremin = models.PositiveIntegerField(  default=80, editable=False)  
-
-
-    def __str__(self):        
-        return "{} à {}%".format(self.code , self.scoremin)
 
 
 ########################################################################################################################################### 
@@ -1218,7 +1168,7 @@ class Course(models.Model): # pour les
     relationships = models.ManyToManyField(Relationship, blank=True,  related_name='relationships_course', verbose_name="Lier ce cours à ces sections") 
  
     def __str__(self):
-        return self.parcours.title 
+        return self.title 
 
 
     def subjects(self):
@@ -1251,6 +1201,50 @@ class Course(models.Model): # pour les
                 if sb  not in levels :
                     levels.append(sb)       
         return levels
+
+
+########################################################################################################################################### 
+########################################################################################################################################### 
+#############################################################  Remediation       ########################################################## 
+########################################################################################################################################### 
+###########################################################################################################################################  
+class Remediation(models.Model):
+
+    title = models.CharField(max_length=255, default='',  blank=True,verbose_name="Titre")
+    relationship = models.ForeignKey(Relationship, on_delete=models.CASCADE, default='',   blank=True, related_name='relationship_remediation') 
+    video = models.CharField(max_length=255, default='',  blank=True,   verbose_name="url de la vidéo")
+    mediation = models.FileField(upload_to=file_directory_path,verbose_name="Fichier", blank=True,   default ="")
+    audio = models.BooleanField( default=0,    verbose_name="Audio texte ?") 
+    duration = models.PositiveIntegerField(  default=15,  blank=True,  verbose_name="Durée estimée (en min.)")  
+    consigne = models.BooleanField( default=0,    verbose_name="Consigne ?") 
+    courses = models.ManyToManyField(Course, blank=True,  related_name='courses_remediation', verbose_name="Cours") 
+
+    def __str__(self):        
+        return "title {}".format(self.title)
+
+class Remediationcustom(models.Model):
+
+    title = models.CharField(max_length=255, default='',  blank=True,verbose_name="Titre")
+    customexercise = models.ForeignKey(Customexercise,  on_delete=models.CASCADE, default='',   blank=True, related_name='customexercise_remediation') 
+    video = models.CharField(max_length=255, default='',  blank=True,   verbose_name="url de la vidéo")
+    mediation = models.FileField(upload_to=file_folder_path,verbose_name="Fichier", blank=True,   default ="")
+    audio = models.BooleanField( default=0,    verbose_name="Audio texte ?") 
+    duration = models.PositiveIntegerField(  default=15,  blank=True,  verbose_name="Durée estimée (en min.)")  
+    consigne = models.BooleanField( default=0,    verbose_name="Consigne ?") 
+    courses = models.ManyToManyField(Course, blank=True,  related_name='courses_remediationcustom', verbose_name="Cours") 
+
+    def __str__(self):        
+        return "title {}".format(self.title)
+
+class Constraint(models.Model):
+
+    code = models.CharField(max_length=8, default='', editable=False)# code de l'exo qui constraint
+    relationship = models.ForeignKey(Relationship, on_delete=models.CASCADE, default='',   blank=True, related_name='relationship_constraint') 
+    scoremin = models.PositiveIntegerField(  default=80, editable=False)  
+
+
+    def __str__(self):        
+        return "{} à {}%".format(self.code , self.scoremin)
 
 ########################################################################################################################################### 
 ########################################################################################################################################### 

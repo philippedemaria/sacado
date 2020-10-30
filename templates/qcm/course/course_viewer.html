@@ -3,7 +3,6 @@
 {% load item_tags %}
 
  
-
     <div class="row">
         <div class="col-md-4 col-xs-12 col-lg-3">
  
@@ -13,7 +12,7 @@
             {% endif %}
  
             <form action="" method="POST"> 
-            <ul class="nav nav-pills nav-stacked admin-menu" id="course_sortable">
+            <ul class="nav nav-pills nav-stacked admin-menu"  {% if is_teacher %} id="course_sortable" {% endif %}>
                 <input type="hidden" value="{{ parcours.id }}" name="parcours_id" id="parcours_id"/>
                 {% for course in courses %}
                     <li class="{% if forloop.first %}active{% endif %} menu_course">
@@ -21,25 +20,20 @@
 
                             {% if course.relationships.count > 0 %} <sup title="Cours lié à une section"><i class="fa fa-paperclip" style="font-size:8px" ></i></sup> {% endif %}
                         </a>
-
- 
                     </li>
                 {% endfor %}
             </ul>
             </form>
         </div>
-
-
-
-
+        <div class="col-md-8 col-xs-12 col-lg-9">
         {% for course in courses %}
-            <div class="col-md-8 col-xs-12 col-lg-9  admin-content" id="course{{forloop.counter0}}">
+            <div class="admin-content"  id="course{{forloop.counter0}}">
                 <h1 class="thin">  {{ course.title }}               {% if is_teacher %}<a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 12px" class="pull-right">Modifier ce cours</a>            {% endif %} </h1><hr>
 
                 {{ course.annoncement|decode|safe }} 
             </div>
         {% endfor %}
-  
+        </div>  
          
     </div>
 

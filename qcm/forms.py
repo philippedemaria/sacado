@@ -9,6 +9,9 @@ from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 from django.template.defaultfilters import filesizeformat
 from django.conf import settings
 
+from itertools import groupby
+from django.forms.models import ModelChoiceIterator, ModelChoiceField, ModelMultipleChoiceField
+
 
 def validation_file(content):
     if content :
@@ -19,8 +22,6 @@ def validation_file(content):
 	    else:
 	        raise forms.ValidationError("Type de fichier non accepté")
 	    return content
-
-
 
 
 class ParcoursForm(forms.ModelForm):
@@ -97,7 +98,6 @@ class UpdateParcoursForm(forms.ModelForm):
 			pass
 
 
-
 class ExerciseForm(forms.ModelForm):
 	class Meta:
 		model = Exercise
@@ -129,6 +129,32 @@ class RemediationForm(forms.ModelForm):
 	class Meta:
 		model = Remediation
 		fields = '__all__'
+
+	def __init__(self, *args, **kwargs):
+		teacher = kwargs.pop('teacher')
+		super(RemediationForm, self).__init__(*args, **kwargs)
+		if teacher:
+			courses = teacher.course.order_by("parcours","ranking")			
+			self.fields['courses']= forms.ModelMultipleChoiceField(queryset=courses, widget=forms.CheckboxSelectMultiple,  required=False)
+
+	def clean_content(self):
+		content = self.cleaned_data['mediation']
+		validation_file(content)
+
+
+
+
+class RemediationcustomForm(forms.ModelForm):
+	class Meta:
+		model = Remediationcustom
+		fields = '__all__'
+
+	def __init__(self, *args, **kwargs):
+		teacher = kwargs.pop('teacher')
+		super(RemediationcustomForm, self).__init__(*args, **kwargs)	
+		if teacher:
+			courses = teacher.course.order_by("parcours","ranking")	
+			self.fields['courses'] = forms.ModelMultipleChoiceField(queryset=courses, widget=forms.CheckboxSelectMultiple,  required=False)
 
 	def clean_content(self):
 		content = self.cleaned_data['mediation']
@@ -267,14 +293,6 @@ class CustomanswerbystudentForm (forms.ModelForm):
 		validation_file(content)
 
 
-class RemediationcustomForm(forms.ModelForm):
-	class Meta:
-		model = Remediationcustom
-		fields = '__all__'
-
-	def clean_content(self):
-		content = self.cleaned_data['mediation']
-		validation_file(content)
 
 
 class CustomexerciseForm (forms.ModelForm):

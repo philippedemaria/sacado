@@ -1,0 +1,47 @@
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+
+    <div class="row" id="myRow">
+        <div class="col-md-4 col-xs-12 col-lg-3">
+            <ul class="nav nav-pills nav-stacked admin-menu">
+                {% for course in courses %}
+                    <li class="{% if forloop.first %}active{% endif %} menu_course">
+                        <a href="#" data-target-id="course{{forloop.counter0}}"> {{ course.title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-8 col-xs-12 col-lg-9">        
+        {% for course in courses %}
+            <div class="tab-content {% if forloop.first %}active{% endif %} admin-content" role="tabpanel" id="course{{forloop.counter0}}"   >    
+                <h1 class="thin">  {{ course.title }} </h1><hr>
+
+                {{ course.annoncement|decode|safe }} 
+            </div>
+            <div style="clear: both"></div>            
+        {% endfor %}
+
+        </div>
+    </div>
+
+
+<script type="text/javascript">
+
+$(".tab-content").css("display","none"); 
+$(".tab-content:first-child").css("display","block"); 
+$('#myRow a').on('click', function (e) {
+  e.preventDefault()
+  target_id = $(this).attr("data-target-id"); 
+  $('#myRow > li').removeClass("active") ;
+  $('#myRow > li > a').parent().addClass("active") ;
+  $(".tab-content").css("display","none"); 
+  $("#"+target_id).css("display","block");
+
+})
+
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>
