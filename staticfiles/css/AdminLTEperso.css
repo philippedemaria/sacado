@@ -72,7 +72,9 @@ border : 0px!important;
   margin-right: 5px;  
 }
 
-
+.fontsize_14{
+  font-size: 14px;
+}
 
 /* Liste des puces par le form django */
 #id_students  ,#id_exercises,#id_courses ,#id_themes   {
