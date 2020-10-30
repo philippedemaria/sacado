@@ -41,11 +41,18 @@
 body{
     overflow: hidden;
 }  
+
+#response_div{
+    display:none;
+}
 </style>
 
 {% include 'preloader.html' %}
-
-
+<div class="row" id="response_div">
+    <div class="col-sm-12 col-md-12">
+        <div class="alert alert-success" id="response">Votre commentaire audio est enregistré</div>
+    </div>
+</div>
 <form action="" methode="POST">      
 <section class="content_list exercise_sortable" id="miseEnAttenteDashboard">
 
@@ -137,9 +144,6 @@ body{
             <div class="modal-body">
                 <div id="remediation_form">
                 </div>
-
-
-
                  <div class="row" id="audio" >
                     <form enctype="multipart/form-data" action="" method="post">                    
                         <div class="col-sm-12 col-md-12"> 
@@ -159,19 +163,10 @@ body{
                             </div>
                         </div>                
                         <input name="id_relationship" id="id_relationship" type="hidden" />
-
+                        <input name="id_parcours" id="id_parcours" type="hidden" value="{{ parcours.id }}" />
                     </form>                    
                 </div> 
-
-
-
-
- 
             </div>
-
-
- 
-
         </div>
     </div>
 </div>

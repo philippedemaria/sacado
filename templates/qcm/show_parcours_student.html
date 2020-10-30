@@ -192,24 +192,28 @@
                             <div class="card-text" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">
                                 <i class="fa fa-fw fa-barcode"></i> {{ relation.exercise.supportfile.code }}
                                 <i class="fa fa-fw fa-clock-o"></i> {{ relation.duration }} min.
-                                <i class="fa fa-fw fa-save"></i> {{ relation.situation}}
-                                {% for remediation in relation.relationship_remediation.all %}
-                                    <a href="#" data-target="#remediation_viewer" data-remediation_id="{{ remediation.id }}"  data-toggle='modal' class="white remediation_viewer pull-right">
-                                        {% if remediation.audio  %}
-                                            <i class="fa fa-play text-success"></i>
-                                        {% elif remediation.mediation == "" %}
-                                            <img src="{%  static 'img/video.png' %}" width="30px" />
-                                        {% else %}
-                                            <img src="{%  static 'img/pdf.png' %}" width="20px" />
-                                        {% endif  %}
-                                    </a>
-                                {% endfor  %} 
+                                <i class="fa fa fa-save"></i> {{ relation.situation}}
+
+
 
                                 {% if relation.relationship_mastering.all|length > 0 %}
-                                <a href="{% url 'mastering_student_show' relation.id %}" target="_blank" style="color:{{ parcours.color|contrast_color }}">
+                                <a href="{% url 'mastering_student_show' relation.id %}" target="_blank" class="helper_tip_card" style="color:{{ parcours.color|contrast_color }}">
                                     <i class="fa fa-fw fa-sitemap pull-right"></i>
+                                    <div class="helper_tip_text_card" >Cet exercice ouvre un parcours de maitrise.</div>
                                 </a>
                                 {% endif  %}
+
+
+
+                                {% if relation.relationship_remediation.all|length > 0 %}
+                                    <span class="helper_tip_card"><i class="fa fa-fw fa-paperclip pull-right" style="color:{{ parcours.color|contrast_color }}"></i>
+                                            <div class="helper_tip_text_card" >Cet exercice contient une aide extérieure ou une consigne orale.</div>
+                                </span>
+                                {% endif  %}
+
+ 
+
+
                             </div>
                         </div>
                     </div> 
@@ -334,6 +338,16 @@
                                 <i class="fa fa-fw fa-barcode"></i> {{ customexercise.code }}
                                 <i class="fa fa-fw fa-clock-o"></i> {{ customexercise.duration }} min
 
+
+
+
+                                {% if customexercise.customexercise_remediation.all|length > 0 %}
+                                    <span class="helper_tip_card"><i class="fa fa-fw fa-paperclip" style="color:{{ parcours.color|contrast_color }}"></i>
+                                            <div class="helper_tip_text_card" >Cet exercice contient une aide extérieure ou une consigne orale.</div>
+                                </span>
+                                {% endif  %}
+
+
                                {% if customexercise.customexercise_mastering_custom.all|length > 0 %}
                                 <a href="{% url 'mastering_custom_student_show' customexercise.id %}" target="_blank" style="color:{{ parcours.color|contrast_color }}">
                                     <i class="fa fa-fw fa-sitemap pull-right"></i>
@@ -397,26 +411,26 @@
                         <a href="#" data-toggle='modal' data-target='#menu_course{{ forloop.counter }}'  data-relation_id='{{ relation.id }}' class="header_shower"> {{ course.title }}</a> 
                     
 
-                    <div class="modal fade" id="menu_course{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="menu_course{{ forloop.counter }}">
-                        <div class="modal-dialog" role="document"  style="width:95%;color:#000">
-                            <div class="modal-content" style="padding-top :0px;">
-                                <div class="modal-header">
-                                    <h3>{{ course.title }}
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button> 
-                                    </h3>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="row">
-                                        <div class="col-lg-12 col-xs-12">   
-                                            {{ course.annoncement|safe }}
-                                        </div>   
-                                    </div> 
+                        <div class="modal fade" id="menu_course{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="menu_course{{ forloop.counter }}">
+                            <div class="modal-dialog" role="document"  style="width:95%;color:#000">
+                                <div class="modal-content" style="padding-top :0px;">
+                                    <div class="modal-header">
+                                        <h3>{{ course.title }}
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button> 
+                                        </h3>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-xs-12">   
+                                                {{ course.annoncement|safe }}
+                                            </div>   
+                                        </div> 
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
                     </li>
 

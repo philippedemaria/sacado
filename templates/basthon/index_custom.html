@@ -17,7 +17,7 @@
 
 
 {% block page_title %}
-  <span style="color:{{ parcours.color }}"><i class="fab fa-python"></i> {{ parcours }}</span>
+  <a href="{% url 'show_parcours_student' parcours.id %}" style="color:{{ parcours.color }}"><i class="fab fa-python"></i> {{ parcours }}</a> <img src="{% static 'img/angle-right.png' %}"/> <small> Exercice corrigé par l'enseignant</small>
 {% endblock %}
  
  
@@ -31,13 +31,40 @@
 
     {% csrf_token %}
     <div id="container">
- 
       <div class="row">
-          <div class="col-xs-12 consigne" >         
-              <label>Enoncé : </label>  {{ customexercise.instruction|safe }}  
+          <div class="col-xs-12 col-md-7 consigne" >         
+              <label>Enoncé : </label>{{ customexercise.instruction|safe }}  
+               
+              {% for remediation in customexercise.customexercise_remediation.all %}
+                  {% if remediation.consigne %}
+                  <audio controls>
+                      <source src="{{ remediation.mediation.url }}" type="audio/mpeg">
+                      <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                  </audio>
+                  {% endif %}
+              {% endfor  %} 
+   
+
+
+
           </div>
+          {% if customexercise.customexercise_remediation.all|length > 0 %}          
+          <div class="col-xs-12 col-md-5" > 
+            <label>Aides : </label>
+              {% for remediation in customexercise.customexercise_remediation.all %}
+                  <a href="#" data-target="#remediation_viewer" data-remediation_id="{{ remediation.id }}"  data-url="0" data-toggle='modal' class="white remediation_viewer btn btn-default">
+                      {% if remediation.audio  %}
+                          <i class="fa fa-play text-default "></i>
+                      {% elif remediation.mediation == "" %}
+                          <img src="{%  static 'img/video.png' %}" width="40px" />
+                      {% else %}
+                          <img src="{%  static 'img/pdf.png' %}" width="30px" />
+                      {% endif  %}
+                  </a>
+              {% endfor  %} 
+          </div>
+          {% endif  %}
       </div>
- 
       <div id="left-div">
         <div id="editor"></div>
         <div style="padding: 1vw 0px 0px 0px; display: flex; float: left;">

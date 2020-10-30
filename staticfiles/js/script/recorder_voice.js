@@ -156,7 +156,7 @@
 				var xhr=new XMLHttpRequest();
 				var fd=new FormData();
 
-				console.log(document.getElementById('custom') ) ; 
+ 
 
 				if ( document.getElementById('custom') )
 					{ 
@@ -181,6 +181,8 @@
 						}
 						fd.append("id_mediation",blob, link.download);
 						var url = "../../ajax_audio_comment_all_exercise";
+
+
 					}
 				else 
 					{  
@@ -188,6 +190,8 @@
 						var id_title = document.getElementById('id_title').value ;
 						var id_duration = document.getElementById('id_duration').value ;
 						var id_relationship = document.getElementById('id_relationship').value ;
+						var is_custom = document.getElementById('is_custom').value ;
+						var id_parcours = document.getElementById('id_parcours').value ;
 
 						document.getElementById('id_mediation').remove() ; 
 
@@ -195,13 +199,19 @@
 						fd.append("id_duration",id_duration);
 						fd.append("id_audio",true);
 						fd.append("id_video","");
-						fd.append("id_relationship",id_relationship);
 						fd.append("id_mediation",blob, link.download);	
+						fd.append("id_consigne",id_consigne);
+						fd.append("id_relationship",id_relationship);
+						fd.append("is_custom",is_custom);
+						fd.append("id_parcours",id_parcours);
 
 						var url = "../../audio_remediation";
 					}
 			  	xhr.onload = function() {
 					   document.getElementById('response').innerHTML = "Votre commentaire audio est enregistré.";
+					   document.getElementById('response_div').style.display = "block";
+					   setTimeout(function() { document.getElementById('response').style.display = "none"; }, 3000);
+
 					};
 				xhr.open("POST",url);
 				xhr.send(fd);

@@ -634,9 +634,6 @@ class Parcours(ModelWithCode):
         return submit
 
 
-
-
-
 class Relationship(models.Model):
     exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.PROTECT,  editable= False)
     parcours = models.ForeignKey(Parcours, on_delete=models.PROTECT,  related_name='parcours_relationship',  editable= False)
@@ -752,6 +749,56 @@ class Relationship(models.Model):
         return submit
 
 
+    def code_student_for_this(self,student):
+        Stage = apps.get_model('school', 'Stage')
+        studentanswer = Studentanswer.objects.filter(student=student, parcours= self.parcours , exercise = self.exercise ).last()
+        point = studentanswer.point
+ 
+        if student.user.school :
+            school = student.user.school
+            stage = Stage.objects.get(school = school)
+        else : 
+            stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
+ 
+        if point > stage.up :
+            level = 4
+        elif point > stage.medium :
+            level = 3
+        elif point > stage.low :
+            level = 2
+        elif point > -1 :
+            level = 1
+        else :
+            level = 0
+        return level
+
+
+    def result_skill(self,skill,student):
+        Stage = apps.get_model('school', 'Stage')
+
+        studentanswer = Resultggbskill.objects.get(student=student, relationship= self,skill = skill )
+        point = studentanswer.point
+        if student.user.school :
+            school = student.user.school
+            stage = Stage.objects.get(school = school)
+        else : 
+            stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
+ 
+        if point > stage.up :
+            level = 4
+        elif point > stage.medium :
+            level = 3
+        elif point > stage.low :
+            level = 2
+        elif point > -1 :
+            level = 1
+        else :
+            level = 0
+        return level
+ 
+
+
+
 class Studentanswer(models.Model):
 
     parcours = models.ForeignKey(Parcours,  on_delete=models.PROTECT, blank=True, null=True,  related_name='answers', editable=False)
@@ -764,6 +811,21 @@ class Studentanswer(models.Model):
 
     def __str__(self):        
         return "{}".format(self.exercise.knowledge.name)
+
+
+class Resultggbskill(models.Model): # Pour récupérer tous les scores des compétences
+    student = models.ForeignKey(Student, related_name="student_resultggbskills", default="", on_delete=models.CASCADE, editable=False)
+    skill = models.ForeignKey(Skill, related_name="skill_resultggbskills", on_delete=models.CASCADE, editable=False)
+    point = models.PositiveIntegerField(default=0)
+    relationship = models.ForeignKey(Relationship,  on_delete=models.PROTECT, blank=True, null=True,  related_name='relationship_resultggbskills', editable=False)
+
+    def __str__(self):
+        return f"{self.skill} : {self.point}"
+
+
+
+
+
 
 
 class Resultexercise(models.Model):  # Last result
@@ -1024,8 +1086,6 @@ class Customexercise(ModelWithCode):
         return submit
 
 
-
-
 class Customanswerbystudent(models.Model): # Commentaire et note pour les exercices customisés coté enseignant
 
     customexercise = models.ForeignKey(Customexercise,  on_delete=models.PROTECT,   related_name='customexercise_custom_answer', editable=False)
@@ -1091,11 +1151,24 @@ class Remediation(models.Model):
     mediation = models.FileField(upload_to=file_directory_path,verbose_name="Fichier", blank=True,   default ="")
     audio = models.BooleanField( default=0,    verbose_name="Audio texte ?") 
     duration = models.PositiveIntegerField(  default=15,  blank=True,  verbose_name="Durée estimée (en min.)")  
+    consigne = models.BooleanField( default=0,    verbose_name="Consigne ?") 
 
     def __str__(self):        
         return "title {}".format(self.title)
 
- 
+class Remediationcustom(models.Model):
+
+    title = models.CharField(max_length=255, default='',  blank=True,verbose_name="Titre")
+    customexercise = models.ForeignKey(Customexercise,  on_delete=models.CASCADE, default='',   blank=True, related_name='customexercise_remediation') 
+    video = models.CharField(max_length=255, default='',  blank=True,  verbose_name="url de la vidéo")
+    mediation = models.FileField(upload_to=file_folder_path,verbose_name="Fichier", blank=True,   default ="")
+    audio = models.BooleanField( default=0,    verbose_name="Audio texte ?") 
+    duration = models.PositiveIntegerField(  default=15,  blank=True,  verbose_name="Durée estimée (en min.)")  
+    consigne = models.BooleanField( default=0,    verbose_name="Consigne ?") 
+
+    def __str__(self):        
+        return "title {}".format(self.title)
+
 class Constraint(models.Model):
 
     code = models.CharField(max_length=8, default='', editable=False)# code de l'exo qui constraint

@@ -1,4 +1,5 @@
-
+{% load item_tags %}
+{% load static %}
 <div class="col-sm-12 col-md-7" style="padding-top:10px">
  
 {% if w_a %}
@@ -27,13 +28,9 @@
         <tr style="background-color: #F0F0F0">
             <td>Savoir faire</td><td>NE</td><td><i class="fa fa-circle text-danger"></i></td><td><i class="fa fa-circle text-warning"></i></td><td><i class="fa fa-circle text-success"></i></td><td><i class="fa fa-circle text-primary"></i></td>
         </tr>
+            {% get_code_student_for_this relationship  student  as result_answer %} 
             <tr>
                 <td>{{ relationship.exercise.knowledge.name }} </td>
-                <td>
-                    <input  type="radio" {% if result_answer == 4 %} checked {% endif %}  data-relationship_id="{{relationship.id}}" 
-                            name="knowledge" value="4" data-student_id="{{student.user.id}}" class="evaluate" />                               
-
-                </td>
                 <td>
                     <input  type="radio" {% if result_answer == 0 %} checked {% endif %}  data-relationship_id="{{relationship.id}}" 
                             name="knowledge" value="0" data-student_id="{{student.user.id}}" class="evaluate" />                               
@@ -51,6 +48,11 @@
                     <input type="radio" {% if result_answer == 3 %} checked {% endif %}   data-relationship_id="{{relationship.id}}" 
                             name="knowledge" value="3"  data-student_id="{{student.user.id}}" class="evaluate" />
                 </td>
+                <td>
+                    <input  type="radio" {% if result_answer == 4 %} checked {% endif %}  data-relationship_id="{{relationship.id}}" 
+                            name="knowledge" value="4" data-student_id="{{student.user.id}}" class="evaluate" />                               
+
+                </td>
             </tr>
     </table>
     <hr>
@@ -59,28 +61,27 @@
             <td>Compétences</td><td>NE</td><td><i class="fa fa-circle text-danger"></i></td><td><i class="fa fa-circle text-warning"></i></td><td><i class="fa fa-circle text-success"></i></td><td><i class="fa fa-circle text-primary"></i></td>
         </tr>
         {% for s in  relationship.skills.all %}
-            <tr>
+            <tr>{% get_skill_result relationship s  student  as result_answer %}
                 <td>{{ s }}</td>
                 <td>
-                    <input type="radio" name="skill{{s.id}}" value="4"   {% if result_answer == 0 %} checked {% endif %}
-                    data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}"  class="evaluate" />
-                </td>
-
-                <td>
                     <input type="radio" name="skill{{s.id}}" value="0"   {% if result_answer == 0 %} checked {% endif %}
-                    data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}"  class="evaluate" />
+                    data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}" data-skill_id="{{s.id}}"  class="evaluate" />
                 </td>
                 <td>
                     <input type="radio" name="skill{{s.id}}" value="1"   {% if result_answer == 1 %} checked {% endif %}
-                    data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}"  class="evaluate" />
+                    data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}" data-skill_id="{{s.id}}"  class="evaluate" />
                  </td>
                 <td>
                     <input type="radio" name="skill{{s.id}}" value="2"   {% if result_answer == 2 %} checked {% endif %}
-                    data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}"  class="evaluate" />
+                    data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}" data-skill_id="{{s.id}}"  class="evaluate" />
                 </td>
                 <td>
                     <input type="radio" name="skill{{s.id}}" value="3"   {% if result_answer == 3 %} checked {% endif %}
-                    data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}"  class="evaluate" />
+                    data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}" data-skill_id="{{s.id}}"  class="evaluate" />
+                </td>
+                <td>
+                    <input type="radio" name="skill{{s.id}}" value="4"   {% if result_answer == 4 %} checked {% endif %}
+                    data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}" data-skill_id="{{s.id}}"  class="evaluate" />
                 </td>
             </tr>
          {% endfor %}
@@ -113,7 +114,7 @@
                 </div> 
             </div>
 
-            <div class="row" style="margin-top:10px">
+            <div class="row" style="margin-top:10px" id="response_div">
                 <div class="col-sm-12 col-md-12" style="color:#cb2131"  id="response">
                     {% if w_a.audio %}
                     <audio controls>
@@ -158,7 +159,7 @@
 
 
 
-        // ENregistre le score de knowledge
+        // Enregistre le score de knowledge
         $('input[name=knowledge]').on('click', function (event) {
             let value = $(this).val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
@@ -174,6 +175,7 @@
                         'student_id':student_id,
                         'relationship_id': relationship_id,
                         'typ' : 0,
+                        'knowledge_id': 1,
                         csrfmiddlewaretoken: csrf_token
                     },
                     url: "../../ajax_exercise_evaluate",
@@ -183,5 +185,52 @@
                 }
             )
         });
+
+
+
+
+        // Enregistre le score de knowledge
+        $('.evaluate').on('click', function (event) {
+            let value = $(this).val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let student_id = $(this).attr("data-student_id");
+            let relationship_id = $(this).attr("data-relationship_id");
+            let skill_id = $(this).attr("data-skill_id");
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'value': value,
+                        'student_id':student_id,
+                        'skill_id':skill_id,
+                        'relationship_id': relationship_id,
+                        'typ' : 0,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../ajax_exercise_evaluate",
+                    success: function (data) {
+                        $('#evaluate'+student_id).html(data.eval);
+                    }
+                }
+            )
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </script>

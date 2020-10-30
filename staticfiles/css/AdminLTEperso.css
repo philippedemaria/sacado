@@ -4095,6 +4095,34 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 }
 
 
+.helper_tip_card {
+  cursor:pointer;
+  font-size: 16px;
+}
+ 
+
+.helper_tip_card .helper_tip_text_card {
+  visibility: hidden;
+  width: 200px;
+  background-color: #FFF;
+  color: #222;
+  text-align: left;
+  border-radius: 4px;
+  padding: 5px;
+  position: absolute;
+  display: table;  
+  font-size: 14px;
+  /* Position the tooltip */
+  left: 20%;
+  top: -40px;
+  z-index: 99999;
+}
+
+.helper_tip_card:hover .helper_tip_text_card {
+  visibility: visible;
+  position: absolute;
+  box-shadow: 0px 2px 50px rgba(0,0,0,0.3);
+}
 
 
 

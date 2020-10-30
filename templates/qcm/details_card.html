@@ -257,7 +257,7 @@
             <!-- Appel de la fenetre remédiation 
                   Appel ajax vers la modale qui est dans la page dashboard : id="remediation"
             -->
-            <span style="font-size:9px">{{  relation.relationship_remediation.all|length }}</span>
+            <span style="font-size:9px" id="response{{relation.id}}" >{{  relation.relationship_remediation.all|length }}</span>
             <span class="horizontalmargin5">
                 <span style="cursor:pointer" data-target="#remediation" data-relationship_id="{{ relation.id }}"  data-toggle='modal' class="white remediation" title="Ajouter une vidéo, un fichier" >
                         <i class="fa fa-paperclip"></i>

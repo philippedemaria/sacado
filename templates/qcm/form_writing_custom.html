@@ -34,7 +34,38 @@
 <section class="content_main"> 
     <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-8">
-            <a href="#" data-toggle='modal' data-target='#consigne' class="btn btn-danger">Lire la consigne</a>
+            {% if customexercise.customexercise_remediation.all|length > 0 %}
+            <span class="pull-right">
+                <label>Aides : </label>
+                  {% for remediation in customexercise.customexercise_remediation.all %}
+                      <a href="#" data-target="#remediation_viewer" data-remediation_id="{{ remediation.id }}"  data-url="0" data-toggle='modal' class="white remediation_viewer btn btn-default">
+                          {% if remediation.audio  %}
+                              <i class="fa fa-play text-default  fa-2x"></i>
+                          {% elif remediation.mediation == "" %}
+                              <img src="{%  static 'img/video.png' %}" width="40px" />
+                          {% else %}
+                              <img src="{%  static 'img/pdf.png' %}" width="30px" />
+                          {% endif  %}
+                      </a>
+                  {% endfor  %} 
+            </span>
+            {% endif  %}
+
+            {% if customexercise.instruction %}
+            <a href="#" data-toggle='modal' data-target='#consigne' class="btn btn-danger">Lire la consigne</a><br/>
+            {% endif  %}
+            {% for remediation in customexercise.customexercise_remediation.all %}
+                {% if remediation.consigne %}
+                <audio controls>
+                    <source src="{{ remediation.mediation.url }}" type="audio/mpeg">
+                    <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                </audio>
+                {% endif %}
+            {% endfor  %} 
+
+
+
+
             <hr>             
             <form action="" method="POST" enctype='multipart/form-data'>
                 {% csrf_token %}
@@ -128,7 +159,7 @@
     <div class="modal-dialog" role="document" >
         <div class="modal-content" style="padding-top :0px;">
             <div class="modal-header">
-                <h3>Consigne
+                <h3 class="sacado">Consigne
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button> 

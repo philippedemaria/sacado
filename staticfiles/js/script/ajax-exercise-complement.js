@@ -15,8 +15,13 @@ define(['jquery', 'bootstrap'], function ($) {
  
         $("#click_button").click(function(){ 
 
-            if (!$('#id_is_python').is(":checked") && !$('#id_is_scratch').is(":checked") && !$('#id_is_file').is(":checked") && !$('#id_is_image').is(":checked") && !$('#id_is_text').is(":checked"))
-            { alert("vous devez sélectionner une type de remise d'exercice") ; return false ; } 
+            if (!$('#id_is_ggbfile').is(":checked")){
+
+                if (!$('#id_is_python').is(":checked") && !$('#id_is_scratch').is(":checked") && !$('#id_is_file').is(":checked") && !$('#id_is_image').is(":checked") && !$('#id_is_text').is(":checked"))
+                { alert("vous devez sélectionner une type de remise d'exercice") ; return false ; } 
+            }
+
+
         });
 
 });

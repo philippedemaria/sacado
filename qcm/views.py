@@ -8,8 +8,8 @@ from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group , Sharing_group
 from school.models import Stage
-from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Correctionknowledgecustomexercise , Correctionskillcustomexercise
-from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm
+from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom
+from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm
 from socle.models import  Theme, Knowledge , Level , Skill
 from django.http import JsonResponse 
 from django.core import serializers
@@ -2609,6 +2609,11 @@ def store_the_score_relation_ajax(request):
                 result, creat = Resultlastskill.objects.get_or_create(student = student, skill = skill, defaults = { "point" : sco_avg , })
                 if not creat :
                     Resultlastskill.objects.filter(student = student, skill = skill).update(point = sco_avg) 
+                
+                result, creater = Resultggbskill.objects.get_or_create(student = student, skill = skill, relationship = relation, defaults = { "point" : score , })
+                if not creater :
+                    Resultggbskill.objects.filter(student = student, skill = skill, relationship = relation).update(point = sco_avg) 
+
 
             try :
                 if relation.exercise.supportfile.annoncement != "" :
@@ -3108,36 +3113,39 @@ def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
     student = Student.objects.get(user_id = student_id)  
 
     stage = get_stage(student.user) 
-    tab_label = ["text-danger","text-warning","text-success","text-primary",""]
-    tab_value = [stage.low-1,stage.medium-1,stage.up-1,100,-1]       
+    tab_label = ["","text-danger","text-warning","text-success","text-primary"]
+    tab_value = [-1, stage.low-1,stage.medium-1,stage.up-1,100]       
 
     if typ == 0 : 
+
+        knowledge_id = request.POST.get("knowledge_id",None)       
+        skill_id = request.POST.get("skill_id",None)
+
         relationship_id =  int(request.POST.get("relationship_id"))   
         relationship = Relationship.objects.get(pk = relationship_id)
         if tab_value[value] > -1 :
 
-
-            studentanswer, creator = Studentanswer.objects.get_or_create(parcours = relationship.parcours, exercise = relationship.exercise, student = student , defaults={"point" : tab_value[value] , 'secondes' : 0} )
-            if not creator :
-                Studentanswer.objects.filter(parcours  = relationship.parcours, exercise = relationship.exercise , student  = student).update(point= tab_value[value])
-            # Moyenne des scores obtenus par savoir faire enregistré dans Resultknowledge
-            knowledge = relationship.exercise.knowledge
-            scored = 0
-            studentanswers = Studentanswer.objects.filter(student = student,exercise__knowledge = knowledge) 
-            for studentanswer in studentanswers:
-                scored +=  studentanswer.point 
-            try :
-                scored = scored/len(studentanswers)
-            except :
+            if knowledge_id :
+                studentanswer, creator = Studentanswer.objects.get_or_create(parcours = relationship.parcours, exercise = relationship.exercise, student = student , defaults={"point" : tab_value[value] , 'secondes' : 0} )
+                if not creator :
+                    Studentanswer.objects.filter(parcours  = relationship.parcours, exercise = relationship.exercise , student  = student).update(point= tab_value[value])
+                # Moyenne des scores obtenus par savoir faire enregistré dans Resultknowledge
+                knowledge = relationship.exercise.knowledge
                 scored = 0
-            result, created = Resultknowledge.objects.get_or_create(knowledge  = relationship.exercise.knowledge , student  = student , defaults = { "point" : scored , })
-            if not created :
-                Resultknowledge.objects.filter(knowledge  = relationship.exercise.knowledge , student  = student).update(point= scored)
-            
-
+                studentanswers = Studentanswer.objects.filter(student = student,exercise__knowledge = knowledge) 
+                for studentanswer in studentanswers:
+                    scored +=  studentanswer.point 
+                try :
+                    scored = scored/len(studentanswers)
+                except :
+                    scored = 0
+                result, created = Resultknowledge.objects.get_or_create(knowledge  = relationship.exercise.knowledge , student  = student , defaults = { "point" : scored , })
+                if not created :
+                    Resultknowledge.objects.filter(knowledge  = relationship.exercise.knowledge , student  = student).update(point= scored)
+                
+            if skill_id :
             # Moyenne des scores obtenus par compétences enregistrées dans Resultskill
-            skills = relationship.skills.all()
-            for skill in skills :
+                skill = Skill.objects.get(pk = skill_id )
                 Resultskill.objects.create(student = student, skill = skill, point = tab_value[value]) 
                 resultskills = Resultskill.objects.filter(student = student, skill = skill).order_by("-id")[0:10]
                 sco = 0
@@ -3151,7 +3159,11 @@ def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
                 if not creat :
                     Resultlastskill.objects.filter(student = student, skill = skill).update(point = sco_avg) 
 
-            data['eval'] = "<i class = 'fa fa-square "+tab_label[value]+" pull-right'></i>"       
+                result, creater = Resultggbskill.objects.get_or_create(student = student, skill = skill, relationship = relationship, defaults = { "point" : tab_value[value] , })
+                if not creater :
+                    Resultggbskill.objects.filter(student = student, skill = skill, relationship = relationship).update(point = tab_value[value]) 
+
+            data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"       
         else :
             data['eval'] = ""
   
@@ -3777,68 +3789,112 @@ def show_remediation(request, id):
 @csrf_exempt 
 def ajax_remediation(request):
 
-    relationship_id =  int(request.POST.get("relationship_id"))
-    relationship = Relationship.objects.get( id = relationship_id)
+    parcours_id =  request.POST.get("parcours_id",None) 
 
-    form = RemediationForm(request.POST or None,request.FILES or None)
-    data = {}
+    if parcours_id :
+        parcours_id =  int(request.POST.get("parcours_id"))
+        customexercise_id =  int(request.POST.get("customexercise_id"))
+        customexercise = Customexercise.objects.get( id = customexercise_id)
 
-    remediations = Remediation.objects.filter(relationship = relationship)
+        form = RemediationcustomForm(request.POST or None,request.FILES or None)
+        data = {}
 
-    context = {'form': form,  'relationship' : relationship ,  'remediations' : remediations } 
+        remediations = Remediationcustom.objects.filter(customexercise = customexercise)
+
+        context = {'form': form,  'customexercise' : customexercise ,  'remediations' : remediations , 'relationship' : None , 'parcours_id' : parcours_id   } 
+
+    else :
+        
+        relationship_id =  int(request.POST.get("relationship_id"))
+        relationship = Relationship.objects.get( id = relationship_id)
+
+        form = RemediationForm(request.POST or None,request.FILES or None)
+        data = {}
+
+        remediations = Remediation.objects.filter(relationship = relationship)
+
+        context = {'form': form,  'relationship' : relationship ,  'remediations' : remediations, 'customexercise' : None , 'parcours_id' : relationship.parcours.id   } 
+    
     html = render_to_string('qcm/ajax_remediation.html',context)
     data['html'] = html       
 
     return JsonResponse(data)
 
 
-@csrf_exempt  
-def json_create_remediation(request,idr):
-
-    relationship = Relationship.objects.get(pk=idr) 
-    form = RemediationForm(request.POST or None, request.FILES or None )
- 
-    if form.is_valid():
-        nf =  form.save(commit = False)
-        nf.relationship = relationship
-        nf.save()
-
-    return redirect( 'show_parcours', relationship.parcours.id )
 
 
 
 @csrf_exempt  
-def json_delete_remediation(request, id):
-    remediation = Remediation.objects.get(id=id)
+def json_create_remediation(request,idr,idp,typ):
+
+    if typ == 0 :
+        relationship = Relationship.objects.get(pk=idr) 
+        form = RemediationForm(request.POST or None, request.FILES or None )
+     
+        if form.is_valid():
+            nf =  form.save(commit = False)
+            nf.relationship = relationship
+            nf.save()
+
+    else :
+        customexercise = Customexercise.objects.get(pk=idr) 
+        form = RemediationcustomForm(request.POST or None, request.FILES or None )
+     
+        if form.is_valid():
+            nf =  form.save(commit = False)
+            nf.customexercise = customexercise
+            nf.save()  
+
+    return redirect( 'show_parcours', idp )
+    
+
+
+
+@csrf_exempt  
+def json_delete_remediation(request, id,typ):
+
+    if typ == 0 :
+        remediation = Remediation.objects.get(id=id)
+    else :
+        remediation = Remediationcustom.objects.get(id=id)
     remediation.delete()
 
     return redirect( 'show_parcours', remediation.relationship.parcours.id )
 
  
 
-
-
 @csrf_exempt  
 def audio_remediation(request):
 
     data = {}
     idr =  int(request.POST.get("id_relationship"))
-    relationship = Relationship.objects.get(pk=idr) 
-    form = RemediationForm(request.POST or None, request.FILES or None )
+    is_custom = request.POST.get("is_custom")
+    if int(is_custom) == 0 : # 0 pour les exos GGB
+        relationship = Relationship.objects.get(pk=idr) 
+        form = RemediationForm(request.POST or None, request.FILES or None )
+        if form.is_valid():
+            nf =  form.save(commit = False)
+            nf.mediation = request.FILES.get("id_mediation")
+            nf.relationship = relationship
+            nf.audio = True
+            nf.save()
+        else:
+            print(form.errors)
 
-    if form.is_valid():
-        nf =  form.save(commit = False)
-        nf.mediation = request.FILES.get("id_mediation")
-        nf.relationship = relationship
-        nf.audio = True
-        nf.save()
-    else:
-        print(form.errors)
+    else :
+        customexercise = Customexercise.objects.get( id = idr)
+        form = RemediationcustomForm(request.POST or None,request.FILES or None)
+        if form.is_valid():
+            nf =  form.save(commit = False)
+            nf.mediation = request.FILES.get("id_mediation")
+            nf.customexercise = customexercise
+            nf.audio = True
+            nf.save()
+        else:
+            print(form.errors)
+
 
     return JsonResponse(data)  
-
-
-
 
 
 
@@ -3854,9 +3910,6 @@ def ajax_remediation_viewer(request): # student_view
     data['html'] = html       
 
     return JsonResponse(data)
-
-
-
 
 
 #######################################################################################################################################################################

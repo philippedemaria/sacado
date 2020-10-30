@@ -2,37 +2,70 @@
 {% load static %}
 {% load item_tags %}
 
+<style>
+.toggle.btn {
+    min-width: 80px;
+}
+</style>
 
-<form action="{% if remediation %}{%  url 'json_delete_remediation' remediation.id  %}{% else %}{%  url 'json_create_remediation' relationship.id  %}{% endif %}" method="POST" enctype='multipart/form-data'> 
+<form action="{% if customexercise %}{%  url 'json_create_remediation' customexercise.id parcours_id  1  %}{% else  %}{%  url 'json_create_remediation' relationship.id parcours_id 0  %}{% endif %}" method="POST" enctype='multipart/form-data'> 
+	 
+
+
 	<div class="row">
 	    <div class="col-sm-12 col-md-12">
-	        {{ relationship.parcours.title }}       
+	 		{% if customexercise %} 
+	        	{{ customexercise.title }}  <input type="hidden" id="is_custom"  value="1" />
+			{% else  %} 
+	        	{{ relationship.parcours.title }} <input type="hidden" id="is_custom"  value="0" />
+			{% endif %} 
 	    </div>
 	</div>
 	<div class="row">
 	    <div class="col-sm-12 col-md-12">
-	        {{ relationship.exercise.supportfile.annoncement|safe }}       
+	 		{% if customexercise %} 
+	        	{{ customexercise.instruction|safe }}
+			{% else  %} 
+	        	{{ relationship.exercise.supportfile.annoncement|safe }} 
+			{% endif %} 
 	    </div>
 	</div>
+
 	{% if remediations|length > 0 %}
+	<hr>
 	<div class="row">
 	    <div class="col-sm-12 col-md-12">
-		    <div class="alert alert-info">
-			 {% for remediation in remediations %}
-			 <div style="font-size:16px"> 
-			 		{% if  remediation.video %}
-			 			<a href="https://www.youtube.com/watch?v={{ remediation.video }}"  target="_blank"><img src="{%  static 'img/video.png' %}" width="15px" /> {{ remediation.title }} </a>
+	 		<label><a href="#" data-toggle="collapse" data-target="#toggleHelp" style="color: #222"> Aides et consignes [ {{ remediations|length }} ] <i class="fa fa-angle-down accordion_click"></i> </a></label>
+	    </div>
+	</div>	
+	<div class="row collapse" id="toggleHelp">
+	    <div class="col-sm-12 col-md-12">
+			{% for remediation in remediations %}
+			<div class="alert alert-info"> 
+
+		 		{% if  remediation.audio %}                   
+			 		<audio controls>
+                      	<source src="{{ remediation.audio.url }}" type="audio/mpeg">
+                      	<span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                    </audio>
+	 		 		{% elif  remediation.video %}
+			 			<a href="https://www.youtube.com/watch?v={{ remediation.video }}"  target="_blank"><img src="{%  static 'img/video.png' %}" width="30px" /> {{ remediation.title }} </a>
 	 		 		{% else %}
-			 			<a href="{{ remediation.mediation.url }}"  target="_blank"><img src="{%  static 'img/pdf.png' %}" width="15px" /> {{ remediation.title }} </a>
+			 			<a href="{{ remediation.mediation.url }}"  target="_blank"><img src="{%  static 'img/pdf.png' %}" width="30px" /> {{ remediation.title }} </a>
 			 		{% endif  %}
-			 		<a href="{%  url 'json_delete_remediation' remediation.id %}"  onclick="return TestDelete('cette ressource ')"  class="pull-right"><i class="fa fa-trash"></i></a>
-			 </div>
-			 {% empty  %}
-			 Aucun document
-			 {% endfor  %}
-		    </div>
+					{% if customexercise %}
+			 		<a href="{%  url 'json_delete_remediation' remediation.id parcours_id 1 %}"  onclick="return TestDelete('cette ressource ')"  class="pull-right"><i class="fa fa-trash"></i></a>
+					{% else  %}
+			 		<a href="{%  url 'json_delete_remediation' remediation.id parcours_id 0 %}"  onclick="return TestDelete('cette ressource ')"  class="pull-right"><i class="fa fa-trash"></i></a>
+					{% endif %}
+					<label class="pull-right" style="margin-right: 30px">{% if remediation.consigne  %}Consigne.{% else %}Aide.{% endif %}</label>
+			</div>
+			{% empty  %}
+			Aucun document
+			{% endfor  %}
 	    </div>
 	</div>
+	<hr>
 	{% endif  %}
 	{% csrf_token %}
 	<div class="row">
@@ -55,7 +88,7 @@
 		     <div class="form-group">
 		        <label>Audio texte ?</label>
 		        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                    <div class="helper_tip_text" >Lire l'énoncé, proposer une aide, apporter une précision en audio à vos élèves.</div>
+                    <div class="helper_tip_text">Lire l'énoncé, proposer une aide, apporter une précision en audio à vos élèves.</div>
                 </span>
 		    </div>
 		</div>
@@ -66,6 +99,26 @@
 		    </div>
 		</div>
 	</div> 
+
+	<div class="row" id="consigne">
+		<div class="col-sm-12 col-md-8">
+		     <div class="form-group">
+		        <label>Consigne ?</label>
+		        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                    <div class="helper_tip_text">Cocher si vous souhaitez que l'audio s'affiche en tant que consigne (en chapeau d'exercice). Sinon l'audio est une aide.</div>
+                </span>
+		    </div>
+		</div>
+		<div class="col-sm-12 col-md-4">
+		     <div class="form-group">
+		        {{ form.consigne |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+		        {{ form.consigne.errors }}
+		    </div>
+		</div>
+	</div> 
+
+
+
 	<div class="row" id="format">
 		<div class="col-sm-12 col-md-8">
 		    <div class="form-group">
@@ -74,7 +127,7 @@
 		</div>
 		<div class="col-sm-12 col-md-4">
 		    <div class="form-group">
-		        <input type="checkbox" id="choice_div" data-onstyle="primary" data-offstyle="default" data-on="Vidéo" data-off="Fichier" />
+		        <input type="checkbox" id="choice_div" data-onstyle="info" data-offstyle="info" data-on="Vidéo" data-off="Fichier" style="width:100px" />
 		    </div>
 		</div>
 	</div> 
@@ -123,20 +176,21 @@ $(document).ready(function () {
 
     $('#choice_div').bootstrapToggle(); 
     $('#id_audio').bootstrapToggle();  
- 
-                $('#file').show();
-                $('#video').hide();
-             	$("#audio").hide(); 
+    $('#id_consigne').bootstrapToggle();  
 
+    $('#file').show();
+    $('#video').hide();
+ 	$("#audio").hide(); 
+ 	$("#consigne").hide(); 
  
         $('#choice_div').change(function () {
             if ($('#choice_div').is(":checked")) {
                 $('#file').hide(500);
                 $('#video').show(500);
-
             } else {
                 $('#file').show(500);
                 $('#video').hide(500);
+
             }
         });
            
@@ -148,14 +202,32 @@ $(document).ready(function () {
                 $('#audio').show(500);
                 $('#format').hide(500);
                 $('#submission').hide(500);
+                $('#consigne').show(500);
+    			$('#video').hide();
 
             } else {
                 $('#file').show(500);
                 $('#audio').hide(500);
                 $('#format').show(500);
                 $('#submission').show(500);
+                $('#consigne').hide(500);
+
             }
         });
+
+
+ 	$(".accordion_click").click(function(event) { 
+
+            if ($(this).hasClass('fa-angle-down')) {
+                $(this).removeClass('fa-angle-down').addClass('fa-angle-up');
+              }
+            else
+            {
+                $(this).removeClass('fa-angle-up').addClass('fa-angle-down');
+            }
+            event.preventDefault();        
+        }); 
+
  
                 
 });

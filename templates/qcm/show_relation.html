@@ -4,7 +4,10 @@
 {% load item_tags %}
  
 {% block page_title %}
- {{ relation.exercise.knowledge.name }}
+ <a href="{% url 'show_parcours_student' relation.parcours.id %}" style="color:{{ parcours.color }}">
+  <i class="fa fa-desktop"></i> {{ relation.parcours }}
+  </a> <img src="{% static 'img/angle-right.png' %}"/> 
+  <small> {{ relation.exercise.knowledge.name }}</small>
 {% endblock %}
 
 {% block page_menu_right %}
@@ -31,17 +34,10 @@
  
 
 
-    <div class="col-sm-0 col-md-1 col-lg-1">
+    <div class="col-sm-0 col-md-1 col-lg-1" style="font-size:12px;text-align: center">
 
-      <p style="font-size:12px;text-align: center;width:100%">
-        {% if parcours.course.all|length > 0 %}        
-         <a href="{% url 'show_course_student' 0 parcours.id %}" target="blank"  ><i class="fa fa-desktop fa-5x"></i> <br>Le cours</a>
-          {% else %}
 
-         <i class="fa fa-desktop fa-5x text-danger"></i> <br>Aucun cours</a>
-          {% endif %}
-      </p>
-        <br><br>
+ 
 
 
         {% if relation.exercise.supportfile.calculator %}
@@ -49,8 +45,8 @@
         {% else %}
           <img src="{% static 'img/no_calculator.png' %}"  with="80px"  height="80px"  />
         {% endif  %} 
-<br>
-<br>
+        <br>
+        <br>
         {% if relation.duration == 5 %}
           <img src="{% static 'img/horloge5.png' %}" with="80px"  height="80px"  />
         {% elif relation.duration == 10 %}
@@ -78,23 +74,30 @@
         {% else %}
           <img src="{% static 'img/horloge15.png' %}" with="80px"  height="80px"  />
         {% endif  %} 
-        <p style="font-size:12px;text-align: center;width:100%"> {{ relation.duration }} minute{{ relation.duration|pluralize }}</p>
+        <p> {{ relation.duration }} minute{{ relation.duration|pluralize }}</p>
 
 
           <img src="{% static 'img/situation.png' %}" with="75px"  height="75px"  />
 
 
-        <p style="font-size:12px;text-align: center;width:100%">{{ relation.situation }} situation{{ relation.situation|pluralize }}</p>
-        <i class="fa fa-barcode fa-4x"></i><p style="font-size:14px;text-align: center;width:100%">{{ relation.exercise.supportfile.code }}</p>
+        <p>{{ relation.situation }} situation{{ relation.situation|pluralize }}</p>
+        <i class="fa fa-barcode fa-4x"></i>
+        <p>{{ relation.exercise.supportfile.code }}</p>
 
     </div>  
-    <div class="col-sm-12 col-md-8 col-lg-8">
-          {% if remediation.audio %}
+    <div class="col-sm-10 col-md-8 col-lg-8">
+
+      {% for remediation in relation.relationship_remediation.all %}
+
+          {% if remediation.consigne %}
           <audio controls>
               <source src="{{ remediation.mediation.url }}" type="audio/mpeg">
               <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
           </audio>
           {% endif %}
+
+      {% endfor  %} 
+
 
       <form action="{% url 'store_the_score_relation_ajax'  %}" method="POST" enctype='multipart/form-data'>   
         {% csrf_token %}  
@@ -106,7 +109,7 @@
 
           <div class='justify-content-center'  style="position:relative">
 
-              <div style="position:absolute;bottom:80px;font-size: 12px;width:50px;color:#0d72ac;right:60px;">
+              <div style="position:absolute;bottom:80px;font-size: 12px;width:50px;color:#0d72ac;left:780px;">
                   Mode plein <br> écran <br>
                   <img src="{% static 'img/flechebleue.png' %}" style="position:absolute; right:30px;"/>            
               </div>
@@ -138,9 +141,25 @@
             
       </form>
     </div> 
+    <div class="col-sm-2 col-md-1 col-lg-1">
 
-    
-    <div class="col-sm-12 col-md-3 col-lg-3">
+      {% if relation.relationship_remediation.all|length > 0 %}
+      <h1 class="thin">Aides</h1>
+         {% for remediation in relation.relationship_remediation.all %}
+              <a href="#" data-target="#remediation_viewer" data-remediation_id="{{ remediation.id }}" data-url="0" data-toggle='modal' class="white remediation_viewer btn btn-default full_width">
+                  {% if remediation.audio  %}
+                      <i class="fa fa-play text-default fa-3x"></i>
+                  {% elif remediation.mediation == "" %}
+                      <img src="{%  static 'img/video.png' %}" width="50px" />
+                  {% else %}
+                      <img src="{%  static 'img/pdf.png' %}" width="50px" />
+                  {% endif  %}
+              </a><br/><br/>
+          {% endfor  %} 
+      {% endif  %}
+
+    </div>
+    <div class="col-sm-12 col-md-2 col-lg-2">
         {% if user.user_type == 2 %}
             <form action="{% url 'add_exercice_in_a_parcours' %}" method="POST" enctype='multipart/form-data'>   {% csrf_token %}
                 <input type="hidden" id="id_exercise"  name="exercise" required="" value="{{ exercise.id }}">

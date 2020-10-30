@@ -23,6 +23,21 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
+        $(".accordion_click").click(function(event) { 
+
+            if ($(this).hasClass('fa-angle-down')) {
+                $(this).removeClass('fa-angle-down').addClass('fa-angle-up');
+              }
+            else
+            {
+                $(this).removeClass('fa-angle-up').addClass('fa-angle-down');
+            }
+            event.preventDefault();        
+        }); 
+
+
+
+
   
         $(".overlay").hide();
         $(".overdiv_show").click(function(){
@@ -1306,7 +1321,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 var li_dom = document.querySelector("#recordingsList > li")
                 if (li_dom) { li_dom.remove() ; $("#formats").html("");}
 
-
                 $.ajax(
                     {
                         type: "POST",
@@ -1322,9 +1336,35 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                         }
                     }
                 )
+            });
 
-                });
+ 
+            $('.remediationCustom').on('click', function (event) {
 
+                let parcours_id = $(this).attr("data-parcours_id");
+                let customexercise_id = $(this).attr("data-customexercise_id");
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+                var li_dom = document.querySelector("#recordingsList > li")
+                if (li_dom) { li_dom.remove() ; $("#formats").html("");}
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            'parcours_id': parcours_id,
+                            'customexercise_id': customexercise_id,
+                            csrfmiddlewaretoken: csrf_token
+                        },
+                        url: "../../ajax/remediation" ,
+                        success: function (data) {
+                            $('#remediation_form').html('').html(data.html); 
+                            $('#id_relationship').val(customexercise_id); 
+                        }
+                    }
+                )
+            });
         // ==================================================================================================================  
         // ==================================================================================================================             
         // ====================================================   fenetre modale ============================================ 
@@ -1334,6 +1374,11 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             $('.remediation_viewer').on('click', function (event) {
                 let remediation_id = $(this).attr("data-remediation_id");
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                let url_code = $(this).attr("data-url");
+
+                if (url_code == "0") {url = "../../ajax/remediation_viewer" ;}
+                else if (url_code == "1") {url = "../ajax/remediation_viewer" ;}
+
 
                 $("#loader_shower").html("<i class='fa fa-spinner fa-pulse fa-fw fa-3x'></i>");  
                 $.ajax(
@@ -1344,7 +1389,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                             'remediation_id': remediation_id,
                             csrfmiddlewaretoken: csrf_token
                         },
-                        url: "../../ajax/remediation_viewer" ,
+                        url: url ,
                         success: function (data) {
                             $('#remediation_shower').html('').html(data.html);          
                         }

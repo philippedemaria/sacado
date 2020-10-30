@@ -1,6 +1,6 @@
 import pyodide
 import sys
-from js import document
+from js import document, window
 
 
 class BasthonNamespace(object):
@@ -255,3 +255,27 @@ class BasthonNamespace(object):
 
 
 Basthon = BasthonNamespace()
+
+# hacking Pyodide bugy input function
+
+_old_input = __builtins__.input
+
+
+def _hacked_input(prompt=None):
+    res = window.prompt(prompt)
+    if prompt is not None:
+        print(prompt, end='')
+    print(res)
+    return res
+
+
+# copying all writable attributes (usefull to keep docstring and name)
+for a in dir(_old_input):
+    try:
+        setattr(_hacked_input, a, getattr(_old_input, a))
+    except Exception:
+        pass
+
+# replacing
+__builtins__.input = _hacked_input
+

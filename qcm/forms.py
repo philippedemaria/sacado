@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from .models import Parcours, Exercise, Remediation, Relationship, Supportfile, Course, Demand, Mastering,Mastering_done, Writtenanswerbystudent, Customexercise,Customanswerbystudent, Masteringcustom, Masteringcustom_done
+from .models import Parcours, Exercise, Remediation, Relationship, Supportfile, Course, Demand, Mastering,Mastering_done, Writtenanswerbystudent, Customexercise,Customanswerbystudent, Masteringcustom, Masteringcustom_done, Remediationcustom
 from account.models import Student
 from socle.models import Knowledge, Skill
 from group.models import Group
@@ -267,6 +267,14 @@ class CustomanswerbystudentForm (forms.ModelForm):
 		validation_file(content)
 
 
+class RemediationcustomForm(forms.ModelForm):
+	class Meta:
+		model = Remediationcustom
+		fields = '__all__'
+
+	def clean_content(self):
+		content = self.cleaned_data['mediation']
+		validation_file(content)
 
 
 class CustomexerciseForm (forms.ModelForm):
@@ -291,7 +299,6 @@ class CustomexerciseForm (forms.ModelForm):
 		self.fields['parcourses'] = forms.ModelMultipleChoiceField(queryset=parcourses,  required=False )  
 		self.fields['students'] = forms.ModelMultipleChoiceField(queryset=students, widget=forms.CheckboxSelectMultiple,   required=False )
  
-
 
 class CustomexerciseNPForm (forms.ModelForm):
 

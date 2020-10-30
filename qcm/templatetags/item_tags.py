@@ -394,13 +394,21 @@ def get_percent_student_done_parcours_exercice(obj,parcours):
 
 
 
-
 @register.simple_tag 
 def get_score_student_for_this(obj, student): 
     """
     renvoie le score par relation pour un étudiant donné
     """
     return obj.score_student_for_this(student)
+
+
+
+@register.simple_tag 
+def get_code_student_for_this(obj, student): 
+    """
+    renvoie le score par relation pour un étudiant donné
+    """
+    return obj.code_student_for_this(student)
 
 
 
@@ -449,6 +457,21 @@ def get_result_skills(obj,  skill):
     renvoie le score par knowledge 
     """
     return obj.result_skills(skill)
+
+
+ 
+@register.simple_tag  
+def get_skill_result(obj,  skill ,student): 
+    """
+    renvoie le score par skill et par relationship par élève 
+    """
+    return obj.result_skill( skill ,student)
+
+
+
+
+
+
 
 @register.simple_tag 
 def get_parcours_from_this_exercise(obj,  teacher):

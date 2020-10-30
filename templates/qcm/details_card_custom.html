@@ -182,6 +182,15 @@
         <div class="card-text" style="background-color:{{ parcours.color }}; text-align:center;color:{{ parcours.color|contrast_color }}">
  
  
+            <span style="font-size:9px">{{  customexercise.customexercise_remediation.all|length }}</span>
+            <span class="horizontalmargin5">
+                <span style="cursor:pointer" data-target="#remediation" data-customexercise_id="{{ customexercise.id }}"  data-parcours_id="{{ parcours.id }}"  data-toggle='modal' class="white remediationCustom" title="Ajouter une vidéo, un fichier" >
+                        <i class="fa fa-paperclip"></i>
+                </span>
+            </span> 
+
+
+
             <span class="horizontalmargin5"><a href="#" style="font-size:14px;color:{{ parcours.color|contrast_color }}" class="copy_link" title="Code de l'exercice" data-code="{{ customexercise.code}}"><i class="fa fa-barcode"></i></a></span> 
 
             <!-- Appel des parcours de maitrise -->

@@ -43,7 +43,36 @@
 
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-8">
-             <a href="#" data-toggle='modal' data-target='#consigne' class="btn btn-danger">Lire la consigne</a>
+             {% if relationship.instruction or relationship.exercise.supportfile.annoncement  %}  
+            <a href="#" data-toggle='modal' data-target='#consigne' class="btn btn-danger">Lire la consigne</a><br/>
+            {% endif  %}
+
+              {% for remediation in relationship.relationship_remediation.all %}
+                  {% if remediation.consigne %}
+                  <audio controls>
+                      <source src="{{ remediation.mediation.url }}" type="audio/mpeg">
+                      <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                  </audio>
+                  {% endif %}
+              {% endfor  %} 
+
+            {% if relationship.relationship_remediation.all|length > 0 %}
+             <span class="pull-right">
+                <label>Aides : </label>
+                  {% for remediation in relationship.relationship_remediation.all %}
+                      <a href="#" data-target="#remediation_viewer" data-remediation_id="{{ remediation.id }}"  data-url="0" data-toggle='modal' class="white remediation_viewer btn btn-default">
+                          {% if remediation.audio  %}
+                              <i class="fa fa-play text-default  fa-2x"></i>
+                          {% elif remediation.mediation == "" %}
+                              <img src="{%  static 'img/video.png' %}" width="40px" />
+                          {% else %}
+                              <img src="{%  static 'img/pdf.png' %}" width="30px" />
+                          {% endif  %}
+                      </a>
+                  {% endfor  %} 
+            </span>
+            {% endif  %}
+
             <hr>
                 {% if relationship.exercise.supportfile.is_image   or   relationship.exercise.supportfile.is_file  %}   
  
