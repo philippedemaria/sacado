@@ -3142,6 +3142,11 @@ def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
                 if not created :
                     Resultknowledge.objects.filter(knowledge  = relationship.exercise.knowledge , student  = student).update(point= scored)
                 
+                resultat, crtd = Writtenanswerbystudent.objects.get_or_create(relationship  = relationship  , student  = student , defaults = { "is_corrected" : True , })
+                if not crtd :
+                    Writtenanswerbystudent.objects.filter(relationship  = relationship  , student  = student).update(is_corrected = True)
+
+
             if skill_id :
             # Moyenne des scores obtenus par compétences enregistrées dans Resultskill
                 skill = Skill.objects.get(pk = skill_id )
@@ -3431,8 +3436,7 @@ def write_exercise(request,id): # Coté élève
         if wForm.is_valid():
             w_f = wForm.save(commit=False)
             w_f.relationship = relationship
-            w_f.student = student
-            w_f.is_corrected = True            
+            w_f.student = student         
             w_f.save()
 
             ### Envoi de mail à l'enseignant
