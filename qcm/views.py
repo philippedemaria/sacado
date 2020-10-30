@@ -3069,14 +3069,13 @@ def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à
     parcours_id =  request.POST.get("parcours_id", None)
     data = {}
 
-    teacher = Teacher.objects.get(user=request.user)
-
-    if int(request.POST.get("custom")) == 0 :
+ 
+    if request.POST.get("custom") == "0" :
 
         relationship = Relationship.objects.get(pk = relationship_id)
-
-        if Writtenanswerbystudent.objects.filter(relationship_id = relationship_id , student_id = student_id).exists():
-            w_a = Writtenanswerbystudent.objects.get(relationship_id = relationship_id , student_id = student_id)
+        teacher = relationship.parcours.teacher
+        if Writtenanswerbystudent.objects.filter(relationship = relationship , student = student).exists():
+            w_a = Writtenanswerbystudent.objects.get(relationship = relationship , student = student)
         else :
             w_a = False 
      
@@ -3087,9 +3086,9 @@ def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à
     else :
         customexercise = Customexercise.objects.get(pk = relationship_id)
         parcours_id =  int(parcours_id)
-
-        if Customanswerbystudent.objects.filter(customexercise_id = relationship_id ,  parcours_id = parcours_id , student_id = student_id).exists():
-            c_e = Customanswerbystudent.objects.get(customexercise_id = relationship_id ,  parcours_id = parcours_id , student_id = student_id)
+        teacher = customexercise.teacher
+        if Customanswerbystudent.objects.filter(customexercise = customexercise ,  parcours_id = parcours_id , student_id = student_id).exists():
+            c_e = Customanswerbystudent.objects.get(customexercise = customexercise ,  parcours_id = parcours_id , student_id = student_id)
         else :
             c_e = False 
 
