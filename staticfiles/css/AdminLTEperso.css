@@ -3901,7 +3901,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   scrollbar-width: none;  
   scrollbar-color:  gray white;
   overflow-x: hidden;
-  z-index: 9999;
+  z-index: 2;
   font-size: 16px;
 }
 
