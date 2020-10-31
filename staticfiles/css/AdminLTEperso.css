@@ -35,6 +35,11 @@ body {
   font-size:18px;
  /*height : 100vh ;*/
 }
+
+.div_results audio{
+  width:265px !important;
+  height: 45px !important;
+}
 .navbar-default{
 background-color: transparent !important;
 border-top:  transparent !important;

@@ -95,7 +95,7 @@
                                         <hr style="padding:0px; margin:10px 0px"/> 
                                       {% endif %}
                                       {% if noggb_data.audio %}
-                                        <audio controls>
+                                        <audio controls  class="dv_results">
                                           <source src="{{ noggb_data.audio.url }}" type="audio/mpeg">
                                           <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
                                         </audio>
@@ -275,7 +275,7 @@
                                         <hr style="padding:0px; margin:10px 0px"/> 
                                       {% endif %}  
                                       {% if data.audio %}
-                                        <audio controls>
+                                        <audio controls >
                                           <source src="{{ data.audio.url }}" type="audio/mpeg">
                                           <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
                                         </audio>

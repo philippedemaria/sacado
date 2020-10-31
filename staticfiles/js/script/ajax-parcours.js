@@ -171,7 +171,7 @@ define(['jquery','bootstrap'], function ($) {
             $('#div_results_custom'+value).toggle(500);
         });
 
-        $(".div_results_close_custom").click(function(){
+        $(".div_results_custom_close").click(function(){
             value =  $(this).attr("data-customexercise_id"); 
             $('#div_results_custom'+value).toggle(500);
         });
