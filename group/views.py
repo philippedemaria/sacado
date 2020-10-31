@@ -337,13 +337,15 @@ def aggregate_group(request):
 def chargelisting(request):
 
     group_id = int(request.POST.get("group_id"))
-    group = Group.objects.get(id=group_id) 
+    group = Group.objects.get(id=group_id)
+
+    is_remove = False 
  
     data = {}
 
     data['html_modal_group_name'] = group.name 
    
-    data['html_list_students'] = render_to_string('group/listingOfStudents.html', {  'group':group,  })
+    data['html_list_students'] = render_to_string('group/listingOfStudents.html', {  'group':group, 'is_remove' : is_remove })
  
  
     return JsonResponse(data)
@@ -403,12 +405,13 @@ def chargelistgroup(request):
 
     parcours_id = int(request.POST.get("parcours_id"))
     parcours = Parcours.objects.get(id=parcours_id) 
- 
     data = {}
+
+    is_remove = True
 
     data['html_modal_group_name'] = parcours.title 
    
-    data['html_list_students'] = render_to_string('group/listingOfStudents.html', {  'group':parcours,  })
+    data['html_list_students'] = render_to_string('group/listingOfStudents.html', {  'group':parcours, 'is_remove' : is_remove   })
  
  
     return JsonResponse(data)

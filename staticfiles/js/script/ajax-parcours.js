@@ -176,21 +176,28 @@ define(['jquery','bootstrap'], function ($) {
             $('#div_results'+value).toggle(500);
         });
 
+
         // Affiche dans la modal la liste des élèves du groupe sélectionné
         $('.menuactionparcours').on('click', function (event) {
             let parcours_id = $(this).attr("data-parcours_id");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
- 
+            let is_disabled = $(this).attr("data-is_disabled");
+
+            console.log(is_disabled) ;
+
+            if (is_disabled == "0"){ $('#remove_student').prop('disabled', false); } else { $('#remove_student').prop('disabled', true) ; }
+
             $.ajax(
                 {
                     type: "POST",
                     dataType: "json",
                     data: {
                         'parcours_id': parcours_id,
-                        csrfmiddlewaretoken: csrf_token
+                        csrfmiddlewaretoken: csrf_token,
                     },
                     url: "../../../group/ajax/chargelistgroup",
                     success: function (data) {
+                        $('#parcours_id').val(parcours_id);
                         $('#modal_group_name').html(data.html_modal_group_name);
                         $('#list_students').html(data.html_list_students);
                     }

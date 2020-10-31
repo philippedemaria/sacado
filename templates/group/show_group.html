@@ -40,7 +40,11 @@
 <div class="content_main">  
         <div class="row">        
             <div class="col-sm-11 col-md-12">
-                <p style="color:{{ group.color }}"><strong>Niveau : {{ group.level.name }}</strong> <span style="margin-left:50px"><i class="fa fa-warning"></i> les champs modifiés sont directement enregistrés.</span></p>
+                <p style="color:{{ group.color }}"><strong>Niveau : {{ group.level.name }}</strong>
+                    {% if not teacher.user.school %} 
+                    <span style="margin-left:50px"><i class="fa fa-warning"></i> les champs modifiés sont directement enregistrés.</span>
+                    {% endif %}
+                </p>
             </div>
         </div> 
         <div class="row">        
@@ -55,7 +59,9 @@
                         <td>Courriel*</td>
                         <td>Identifiant* </td>
                         <td>Dernière connexion</td>
-                        <td><span style="font-size:13px; color:#cb2131">Mot de passe par défaut : <strong>sacado2020</strong></span></td>                        
+                        {% if not teacher.user.school %}
+                        <td><span style="font-size:13px; color:#cb2131">Mot de passe par défaut : <strong>sacado2020</strong></span></td> 
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
@@ -131,8 +137,6 @@
                                     </td>
                                     <td>
                                         {% if student.user.last_login %}{{ student.user.last_login|date:"Y m d, H:i"  }}{% else %}Jamais{% endif %}
-                                    </td>
-                                    <td>
                                     </td>
                                 </tr>
                             {% endif %}

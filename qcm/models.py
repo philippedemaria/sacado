@@ -466,10 +466,10 @@ class Parcours(ModelWithCode):
 
 
     def group_list(self):
-        students = self.students.all() 
+        students = self.students.all() # tous les élèves du parcours
         group_tab = []
-        for s  in students :
-            groups = s.students_to_group.filter(teacher = self.teacher)
+        for s  in students : 
+            groups = s.students_to_group.filter(teacher = self.teacher) # Pour chaque élèves à quel groupe du prof il appartient 
             for group  in groups :
                 if group not in group_tab:
                     group_tab.append(group) 
