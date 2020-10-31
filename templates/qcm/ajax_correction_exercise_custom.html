@@ -19,9 +19,9 @@
         Document non rendu
     </div>
 {% endif %}
-
-
 </div>
+
+
 <div class="col-sm-12 col-md-5" style="padding-right:0px">
     <h4>{{ student }} {% if c_e %}<span class="pull-right text-primary">Remis le {{ c_e.date|date:"D d M Y"}}</span>{% endif %}</h4>
     {% if customexercise.is_mark %}
@@ -37,8 +37,6 @@
         </div>
         <div class="col-sm-1 col-md-3" id="mark_sign">  
         </div>
-
-
     </div>
     <hr>               
     {% endif %}
@@ -140,7 +138,7 @@
                 </div> 
             </div>
 
-            <div class="row" style="margin-top:10px" id="response_div">>
+            <div class="row" style="margin-top:10px" id="response_div">
                 <div class="col-sm-12 col-md-12" style="color:#cb2131"  id="response">
                     {% if c_e.audio %}
                     <audio controls>
