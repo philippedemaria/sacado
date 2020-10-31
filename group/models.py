@@ -26,7 +26,7 @@ class Group(ModelWithCode):
     lock = models.BooleanField(default=0)
     teachers = models.ManyToManyField(Teacher, blank=True,   editable=False, through="Sharing_group", related_name="teacher_group")
     subject = models.ForeignKey(Subject, default = "" ,  null=True, on_delete=models.PROTECT, related_name="subject_group", verbose_name="Matière*")
-
+    # Todo : parcourses = models.ManyToManyField(Parcours, blank=True,   related_name="Parcours")
     class Meta:
         ordering = ['name']
 
@@ -75,18 +75,17 @@ class Group(ModelWithCode):
         """
         students = self.students.order_by("user__last_name")
 
-        number_of_parcours_of_this_level_by_this_teacher = self.teacher.teacher_parcours.filter(level = self.level).count()
-        parcours_tab = []
-        parcours_id_tab = []
 
-        for student in students:
-            parcourses = student.students_to_parcours.all()
-            parcours_tab = [parcours for parcours in parcourses if parcours.id not in parcours_id_tab]
-            if len(parcours_tab) == number_of_parcours_of_this_level_by_this_teacher:
-                break
+        parcourses = []
+        for student in self.students.all():
+            for p in student.students_to_parcours.filter(teacher=self.teacher, teacher__subjects = self.subject) :
+                if p not in parcourses :
+                    parcourses.append(p)
+
+        print(self.subject)
 
         data, nb, nbf, nbp, nbef , nbe = {}, 0, 0, 0, 0, 0
-        for parcours in parcours_tab:
+        for parcours in parcourses :
             if parcours.is_favorite and not parcours.is_evaluation :
                 nbf += 1
             if parcours.is_publish and not parcours.is_evaluation :
