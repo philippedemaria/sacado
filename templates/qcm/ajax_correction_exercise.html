@@ -87,7 +87,7 @@
          {% endfor %}
     </table> 
     <hr>
-    <h5>Commentaires</h5>
+    <h5>Commentaire <span id="comment_result" style="color:#228b22 ; font-size:12px"></span></h5>
     <textarea class="form-control" name="comment" id="comment">{% if w_a.comment %}{{ w_a.comment }}{% endif %}</textarea>
 
             <div class="row" style="margin-top:10px">
@@ -139,6 +139,8 @@
             let student_id = $(this).attr("data-student_id");
             let relationship_id = $(this).attr("data-relationship_id");
 
+ 
+
             $.ajax(
                 {
                     type: "POST",
@@ -151,7 +153,9 @@
                         csrfmiddlewaretoken: csrf_token
                     },
                     url: "../../ajax_comment_all_exercise",
- 
+                    success: function (data) {
+                        $('#comment_result').html(" enregistré");
+                    } 
                 }
             )
         });

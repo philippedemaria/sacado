@@ -82,8 +82,6 @@ class Group(ModelWithCode):
                 if p not in parcourses :
                     parcourses.append(p)
 
-        print(self.subject)
-
         data, nb, nbf, nbp, nbef , nbe = {}, 0, 0, 0, 0, 0
         for parcours in parcourses :
             if parcours.is_favorite and not parcours.is_evaluation :

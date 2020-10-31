@@ -112,13 +112,13 @@
     <hr>
     {% endif %} 
 
-    <h5>Commentaire</h5>
+    <h5>Commentaire <span id="comment_result" style="color:#228b22 ; font-size:12px"></span></h5>
     <textarea class="form-control" name="comment" id="comment">{% if c_e.comment %}{{ c_e.comment }}{% endif %}</textarea>
 
             <div class="row" style="margin-top:10px">
                 <div class="col-sm-12 col-md-12">
                     <div class="form-group">
-                        <a href="#" class="btn btn-primary" id="save_comment" data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}" >Enregistrer ce commentaire</a>
+                        <a href="#" class="btn btn-primary" id="save_comment" data-parcours_id="{{ parcours_id}}"   data-student_id="{{student.user.id}}"  data-customexercise_id="{{customexercise.id}}" >Enregistrer ce commentaire</a>
                         {% if c_e and  teacher.user.school %}  
                         <a href="#" data-toggle='modal' data-target='#audio_comment' class="btn btn-primary" ><i class="fa fa-microphone"></i> Commentaire Audio </a>
                         {% elif teacher.user.school %}  
@@ -166,6 +166,8 @@
             let customexercise_id = $(this).attr("data-customexercise_id");
             let parcours_id = $(this).attr("data-parcours_id");
 
+ 
+
             $.ajax(
                 {
                     type: "POST",
@@ -180,11 +182,13 @@
                     },
                     url: "../../ajax_comment_all_exercise",
                     success: function (data) {
-                        $('#comment_sign').html(data.eval);
+                        $('#comment_result').html(" enregistré");
                     } 
                 }
             )
         });
+
+
 
 
 
