@@ -11,19 +11,13 @@ function Newpassword() {
 }
 
 
-function TestRemove(f1) {
-    if (!confirm('Vous souhaitez retirer  ' + f1 + ' ?')) return false;
-}
-
-
-
 
 function TestDuplicate(f1) {
     if (!confirm('Vous souhaitez dupliquer ' + f1 + ' ?')) return false;
 }
 
 function TestRefus() {
-    if (!confirm('Vous souhaitez refuser cette mission ?')) return false;
+    if (!confirm('Vous souhaitez Refuser cette mission ?')) return false;
 }
 
 function testPassword(f1, f2) {

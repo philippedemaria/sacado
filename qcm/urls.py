@@ -44,9 +44,6 @@ urlpatterns = [
     path('result_parcours_exercise_students/<int:id>/', result_parcours_exercise_students, name='result_parcours_exercise_students'),#modif idp en id pour la sécurité
 
 
-    path('remove_students_from_parcours', remove_students_from_parcours, name='remove_students_from_parcours'),
-
-
     path('parcours_peuplate_evaluation/<int:id>/', peuplate_parcours_evaluation, name='peuplate_parcours_evaluation'),
 
     path('parcours_stat_evaluation/<int:id>/', stat_evaluation, name='stat_evaluation'), 

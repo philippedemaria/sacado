@@ -2051,22 +2051,6 @@ def delete_relationship_by_individualise(request,idr, id):
 
 
 
-def remove_students_from_parcours(request):
-
-    parcours_id = request.POST.get("parcours_id")
-    parcours = Parcours.objects.get(pk = parcours_id)
-    students_id = request.POST.getlist("students")
-    for student_id in students_id:
-        student = Student.objects.get(user = student_id)
-        relationships = Relationship.objects.filter(parcours = parcours, students = student)
-        for r in relationships :
-            r.students.remove(student)
-        parcours.students.remove(student)
- 
-    return redirect("parcours" ) 
-
-
-
 
 #######################################################################################################################################################################
 #######################################################################################################################################################################
