@@ -164,17 +164,31 @@ define(['jquery','bootstrap'], function ($) {
         
         // Affiche div_results dans le parcours_show_student des élèves
         $('.div_results').hide();
+        $('.div_results_custom').hide();
+
         $(".selector_div_result_custom").click(function(){
             value =  $(this).attr("data-customexercise_id"); 
-            $('#div_results'+value).toggle(500);
+            $('#div_results_custom'+value).toggle(500);
+        });
+
+        $(".div_results_close_custom").click(function(){
+            value =  $(this).attr("data-customexercise_id"); 
+            $('#div_results_custom'+value).toggle(500);
         });
 
 
+
+        $(".selector_div_result").click(function(){
+            value =  $(this).attr("data-relation_id"); 
+            $('#div_results'+value).toggle(500);
+        });
 
         $(".div_results_close").click(function(){
-            value =  $(this).attr("data-customexercise_id"); 
+            value =  $(this).attr("data-relation_id"); 
             $('#div_results'+value).toggle(500);
         });
+
+
 
         // Affiche dans la modal la liste des élèves du groupe sélectionné
         $('.menuactionparcours').on('click', function (event) {

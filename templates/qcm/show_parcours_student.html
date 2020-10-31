@@ -81,10 +81,48 @@
                     </h3>
                {% else %} 
                     {% get_constraint_to_this_relationship  relation  student as    under_score   %}
-
                     {%  get_last_score_and_time   relation.exercise   relation.parcours   student    as    data %}
+                    {%  get_noggb_data   relation   student    as    noggb_data %}
+                    <!-- div de résultat SACADO corrigé par le prof -->                    
                     <div class="card_freeze" {% if data.score %} style="opacity:0.6" {% endif %}>
-                       
+
+                        {% if noggb_data.is_corrected %}
+                            <div id="div_results{{ relation.id }}" class="div_results" >
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12"> <a href="#" class="div_results_close pull-right" data-relation_id="{{relation.id}}"><i class="fa fa-times"></i></a>     
+                                      {% if noggb_data.comment %}
+                                        <label  style="font-size: 10px;font-weight: 600">Commentaire :</label> {{ noggb_data.comment }} 
+                                        <hr style="padding:0px; margin:10px 0px"/> 
+                                      {% endif %}
+                                      {% if noggb_data.audio %}
+                                        <audio controls>
+                                          <source src="{{ noggb_data.audio.url }}" type="audio/mpeg">
+                                          <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                                        </audio>
+                                        <hr style="padding:0px; margin:10px 0px"/> 
+                                      {% endif %}
+                                    </div>
+                                </div>                            
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12">   
+                                        <label  style="font-size: 10px;font-weight: 600">Compétences </label>
+                                          {% for d in noggb_data.skills.all %} 
+                                            <li class="sanspuce" style="font-size: 10px;">{{d.skill.name }}  <i class="fa fa-square
+                                                {% if d.point < stage.low %}
+                                                 text-danger 
+                                                {% elif d.point < stage.medium  %}
+                                                 text-warning 
+                                                {% elif d.point < stage.up  %}
+                                                 text-success 
+                                                {% else %}
+                                                 text-primary 
+                                                {% endif %}"></i>  </li>
+                                          {% endfor %}
+                                    </div>
+                                </div>   
+                            </div>                           
+                        {% endif %}  
+                        <!-- Fin de div de résultat -->
                         <!-- Si l'exercice est bloqué, on pose une div par-dessus -->
                         {% if  under_score %} <!-- under_score = l'exercice est sous contrainte car l'élève n'a pas obtenu les résultats suffisants-->
                             <div class="under_constraint"> <!-- div de fond pour opacité -->
@@ -198,26 +236,20 @@
                                 <i class="fa fa-fw fa-clock-o"></i> {{ relation.duration }} min.
                                 <i class="fa fa fa-save"></i> {{ relation.situation}}
 
-
-
+                                {% if noggb_data.is_corrected %}
+                                    <span class="pull-right selector_div_result" data-relation_id ="{{ relation.id }}"><i class="fa fa-trophy"></i></span>
+                                {% endif %}
                                 {% if relation.relationship_mastering.all|length > 0 %}
                                 <a href="{% url 'mastering_student_show' relation.id %}" target="_blank" class="helper_tip_card" style="color:{{ parcours.color|contrast_color }}">
                                     <i class="fa fa-fw fa-sitemap pull-right"></i>
                                     <div class="helper_tip_text_card" >Cet exercice ouvre un parcours de maitrise.</div>
                                 </a>
                                 {% endif  %}
-
-
-
                                 {% if relation.relationship_remediation.all|length > 0 %}
                                     <span class="helper_tip_card"><i class="fa fa-fw fa-paperclip pull-right" style="color:{{ parcours.color|contrast_color }}"></i>
                                             <div class="helper_tip_text_card" >Cet exercice contient une aide extérieure ou une consigne orale.</div>
                                 </span>
                                 {% endif  %}
-
- 
-
-
                             </div>
                         </div>
                     </div> 
@@ -232,10 +264,9 @@
                     <div class="card_freeze"  {% if score %} style="opacity:0.6" {% endif %}  >
                         <!-- div de résultat -->
                         {% if data.is_corrected %}
-                            <div id="div_results{{ customexercise.id }}" class="div_results" >
-
+                            <div id="div_results_custom{{ customexercise.id }}" class="div_results" >
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12"> <a href="#" class="div_results_close pull-right" data-customexercise_id="{{customexercise.id}}"><i class="fa fa-times"></i></a>     
+                                    <div class="col-sm-12 col-md-12"> <a href="#" class="div_results_custom_close pull-right" data-customexercise_id="{{customexercise.id}}"><i class="fa fa-times"></i></a>     
                                       {% if data.point %}
                                         <label  style="font-size: 10px;font-weight: 600;">Note : {{ data.point }}/{{ customexercise.mark }} </label><br>
                                       {% endif %}
@@ -243,8 +274,15 @@
                                         <label  style="font-size: 10px;font-weight: 600">Commentaire :</label> {{ data.comment }} 
                                         <hr style="padding:0px; margin:10px 0px"/> 
                                       {% endif %}  
+                                      {% if data.audio %}
+                                        <audio controls>
+                                          <source src="{{ data.audio.url }}" type="audio/mpeg">
+                                          <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                                        </audio>
+                                        <hr style="padding:0px; margin:10px 0px"/> 
+                                      {% endif %}
                                     </div>
-                               </div>                            
+                                </div>                            
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12">   
                                         <label  style="font-size: 10px;font-weight: 600">Compétences </label>
@@ -261,7 +299,7 @@
                                                 {% endif %}"></i>  </li>
                                           {% endfor %}
                                     </div>
-                               </div>   
+                                </div>   
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12">   
                                         <label  style="font-size: 10px;font-weight: 600;">Savoir faire </label>
@@ -280,17 +318,13 @@
                                     </div>
                                </div>   
                             </div>
-                        <div class="teacher_corrected"  >
-                            {% if data.point %}
-                                <label  style="font-size: 12px;font-weight: 600;">{{ data.point }}/{{ customexercise.mark }} </label>
-                            {% else %}
-                                Exercice corrigé sans note
-                            {% endif %}
-                        </div>                             
-                        {% else %}
-                        <div class="teacher_corrected"  >
-                            Exercice corrigé par l'enseignant
-                        </div>  
+                            <div class="teacher_corrected"  >
+                                {% if data.point %}
+                                    <label  style="font-size: 12px;font-weight: 600;">{{ data.point }}/{{ customexercise.mark }} </label>
+                                {% else %}
+                                    Exercice non note
+                                {% endif %}
+                            </div>                             
                         {% endif %}
                         <!-- Fin de div de résultat -->
 
@@ -299,9 +333,9 @@
                                 {{ nb_exo_only_c|index:forloop.counter0 }}.</span> 
                             <div class="card-score-student"  >
 
-                                    {% if submitter %}
-                                    <div style="font-size: 10px; text-align: center; position: absolute; top:0px; background-color: #5d4391; color: #FFF; border-radius: 4px">En attente<br> de correction</div>
-                                    {% endif %}
+                            {% if submitter %}
+                            <div style="font-size: 10px; text-align: center; position: absolute; top:0px; background-color: #5d4391; color: #FFF; border-radius: 4px">En attente<br> de correction</div>
+                            {% endif %}
                             </div>
                             {% if customexercise.calculator %}
                               <img src="{% static 'img/calculator.png' %}" class="pull-right" width="35px" />

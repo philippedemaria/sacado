@@ -742,6 +742,16 @@ class Relationship(models.Model):
         return submit
 
 
+    def noggb_data(self,student):
+        try :
+            data =  self.relationship_written_answer.get(student = student)   
+        except :
+            data = {'is_corrected' : False , 'skills' : [] , 'comment' : "" , }     
+        return data
+
+
+
+
     def is_pending_correction(self):
         submit = False
         if self.relationship_written_answer.exclude(is_corrected = 1).exists() :
@@ -801,6 +811,12 @@ class Relationship(models.Model):
             level = 0
         return level
  
+
+
+
+
+
+
 
 class Studentanswer(models.Model):
 
@@ -1063,6 +1079,7 @@ class Customexercise(ModelWithCode):
             c = Customanswerbystudent.objects.get(customexercise = self, parcours = parcours, student = student,is_corrected=1)
             data["is_corrected"] = True            
             data["comment"] = c.comment
+            data["audio"] =  c.audio
             data["point"] = c.point
             c_skills = Correctionskillcustomexercise.objects.filter(customexercise = self, parcours = parcours, student = student)
             c_knowledges = Correctionknowledgecustomexercise.objects.filter(customexercise = self, parcours = parcours, student = student)
@@ -1074,6 +1091,7 @@ class Customexercise(ModelWithCode):
             data["skills"] = []
             data["knowledges"] = []
             data["point"] = False
+            data["audio"] = False
         return data
 
 

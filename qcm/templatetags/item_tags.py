@@ -542,3 +542,11 @@ def get_result_skills_custom(obj, skill):
     renvoie le résultat des compétences corrigé par l'enseignant pour l'enseignant
     """
     return obj.result_skills_custom(skill)
+
+
+@register.simple_tag 
+def get_noggb_data(obj, student):
+    """
+    renvoie le résultat d'un exo custom coté élève
+    """
+    return obj.noggb_data(student)

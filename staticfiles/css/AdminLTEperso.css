@@ -2169,7 +2169,17 @@ font-weight: 600;
   width : 100%;
 }
 
-
+.pending_copy{
+  font-size: 10px; 
+  text-align: center; 
+  position: absolute; 
+  top:0px; 
+  background-color: #5d4391; 
+  color: #FFF; border-radius: 
+  4px;
+  z-index: 9;
+  padding:2px;
+}
 /*
  * liste
  * ------------------
@@ -3870,6 +3880,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 }
 
 .div_results{
+  width : 290px;
   height:200px;
   overflow-y: auto;
   scrollbar-width: none;
@@ -3920,7 +3931,10 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   border-radius: 10px;
 }
 
-
+.selector_div_result{
+  cursor: pointer;
+  margin-left:10px;
+}
 .selector_div_result_custom{
   cursor: pointer;
 }
