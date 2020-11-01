@@ -68,4 +68,4 @@ requirejs.config({
     }
 });
 
-require(['jquery',  'jquerymigrate',    'bootstrapbundle',  'easing', 'mobile', 'waypoints','counterup',      'contactform', 'main',     ]);
+require(['jquery',  'jquerymigrate',  'mathjax',  'bootstrapbundle',  'easing', 'mobile', 'waypoints','counterup',      'contactform', 'main',     ]);

@@ -33,6 +33,6 @@ requirejs.config({
 
         }
     }
-});
+);
 
 require(['jquery', 'bootstrap',   'webSimple0', 'webSimple12','webSimple4','webSimple5','webSimple6','webSimple7','webSimple9','webSimpleNoCache' ]);

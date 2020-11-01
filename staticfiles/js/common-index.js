@@ -77,7 +77,7 @@ requirejs.config({
     }
 });
 
-require(['jquery', 'bootstrap',   'ckeditor', 'ckeditor_init', 'ckeditor_jquery', 'datatables', 'datatables_bootstrap',
+require(['jquery', 'bootstrap', 'mathjax',   'ckeditor', 'ckeditor_init', 'ckeditor_jquery', 'datatables', 'datatables_bootstrap',
     'config_select2',   'config_toggle', 'config_colorpicker', 'fonctions_jquery', 'fonctions' , 'ui', 'ui_sortable', 
     'multiselect', 'slimscroll',    ]);
 
