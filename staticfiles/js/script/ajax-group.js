@@ -3,7 +3,13 @@ define(['jquery', 'bootstrap'], function ($) {
         console.log("chargement JS ajax-group.js OK");
 
 
-        $('[data-toggle="popover"]').popover() ;
+
+        try {
+          $('[data-toggle="popover"]').popover();
+        }
+        catch(err) {
+          console.log("popover not load") ;
+        }
 
         $('.selector_color').on('click', function () {
 

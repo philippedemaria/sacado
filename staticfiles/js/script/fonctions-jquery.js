@@ -5,7 +5,13 @@ define(['jquery', 'bootstrap','ui' ], function ($) {
         // Trier des éléments 
         $("#sortable-row").sortable();      
         // 
-        //$('[data-toggle="popover"]').popover();
+
+        try {
+          $('[data-toggle="popover"]').popover();
+        }
+        catch(err) {
+          console.log("popover not load") ;
+        }
 
     // enregistrement de l'ordre des items dont l'ordre est réarrangable
     function saveOrder() {

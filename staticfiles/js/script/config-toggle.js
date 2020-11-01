@@ -12,8 +12,13 @@ define(['jquery',  'bootstrap',  'toggle',], function ($) {
         });
     }
 
- 
-   // $('[data-toggle="popover"]').popover() ;
+  
+        try {
+          $('[data-toggle="popover"]').popover();
+        }
+        catch(err) {
+          console.log("popover not load") ;
+        }
  
   
 
