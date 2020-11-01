@@ -42,28 +42,7 @@ requirejs.config({
                 deps: ['webSimple_neuf']
             },
  
-
-            mathjax: {
-                    exports: "MathJax",
-                    init: function () {
-                        MathJax.Hub.Config({
-                            extensions: ["tex2jax.js"],
-                            jax: ["input/TeX", "output/HTML-CSS"],
-                            tex2jax: {
-                                inlineMath: [['$', '$'], ["\\(", "\\)"]],
-                                displayMath: [['$$', '$$'], ["\\[", "\\]"]],
-                                processEscapes: true
-                            },
-                            "HTML-CSS": {availableFonts: ["TeX"], scale: 90}
-                        });
-                        MathJax.Hub.Startup.onload();
-                        return MathJax;
-                    }
-                }
-
-
-
         }
 });
 
-require(['jquery', 'mathjax', 'webSimple_zero', 'webSimple_douze','webSimple_quatre','webSimple_cinq','webSimple_six','webSimple_sept','webSimple_neuf','webSimpleNoCache' ]);
+require(['jquery', 'webSimple_zero', 'webSimple_douze','webSimple_quatre','webSimple_cinq','webSimple_six','webSimple_sept','webSimple_neuf','webSimpleNoCache' ]);
