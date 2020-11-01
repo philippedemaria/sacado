@@ -1,13 +1,9 @@
-define(['jquery', 'bootstrap', 'config_toggle'], function ($) {
+define(['jquery','bootstrap_popover', 'bootstrap' ], function ($) {
     $(document).ready(function () {
  
 
-        try {
-          $('[data-toggle="popover"]').popover();
-        }
-        catch(err) {
-          console.log("popover not load") ;
-        }
+       //$('[data-toggle="popover"]').popover();
+
 
  
     });

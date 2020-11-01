@@ -1,20 +1,13 @@
- $(document).ready(function()
-	{
+ 
+    $(document).ready(function () {
+ 
+
+		 
+        console.log("---- NEW test ajax-accueil.js ---") ;      
 
 
-		console.log("---- NEW test ajax-accueil.js ---") ;		
-
-	   
-
-        try {
-          $('[data-toggle="popover"]').popover();
-        }
-        catch(err) {
-          console.log("popover not load") ;
-        }
-
-
-        $(".select2").select2({width: '100%'});
+        //$('[data-toggle="popover"]').popover();
+        //$(".select2").select2({width: '100%'});
 
         $('#teacher_form .sendit').prop('disabled', true);
         $("#teacher_form #id_username").on('blur', function () {
@@ -103,8 +96,6 @@
             });
         });
 
-
-
         $('#student_form .id_first_name').on('blur', function () {
 
                 let lastname = $("#student_form .id_last_name").val().toLowerCase();
@@ -132,11 +123,6 @@
                     }
                 });
             });
-
-
-
-
-
 
 
         $('.is_child_exist').prop('disabled', true);
@@ -198,7 +184,7 @@
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
                 let code_student =  $(this).val()  ;
 
-            console.log(code_student) ;
+                console.log(code_student) ;
 
                 $.ajax({
                     url: '../account/ajax/control_code_student/',
@@ -239,9 +225,7 @@
                 else{
                 $('#send_alone').prop('disabled', true);
                 }
-
             });
-
 
 
         $("#send_alone").click(function(){
@@ -253,14 +237,12 @@
                 alert('Vous devez sélectionner au moins un niveau');
                 return false;
             }
-
-        });
-
+            });
 
 
+    });
 
+ 
 
-
-	});
 
  

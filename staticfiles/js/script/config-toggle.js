@@ -1,6 +1,7 @@
-define(['jquery',  'bootstrap',  'toggle',], function ($) {
+define(['jquery','bootstrap_popover',  'bootstrap',  'toggle' ], function ($) {
     // fonctions pour gérer l'apparition d'un élément quand on clique sur un checkbox (ou toggle) todo:vérifier les anciennces et si elles servent encore
-
+ 
+    $(document).ready(function () { 
     
     function makeItemAppear($toggle, $item) {
         $toggle.change(function () {
@@ -13,13 +14,9 @@ define(['jquery',  'bootstrap',  'toggle',], function ($) {
     }
 
   
-        try {
-          $('[data-toggle="popover"]').popover();
-        }
-        catch(err) {
-          console.log("popover not load") ;
-        }
- 
+
+   // $('[data-toggle="popover"]').popover();
+
   
 
     function hiddenItem($toggle, $item) {
@@ -33,4 +30,6 @@ define(['jquery',  'bootstrap',  'toggle',], function ($) {
     }
 
  
+    });
+
 });

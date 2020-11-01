@@ -11,7 +11,7 @@ requirejs.config({
         datepicker: ["https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.0/js/bootstrap-datepicker.min", "lib/bootstrap-datepicker"],
         datepicker_fr: ["script/config-datepicker-fr"],
         bootstrap: "lib/bootstrap.min",
-        popoverx: "lib/bootstrap-popover-x.min",
+        bootstrap_popover: ["https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min", 'lib/popper.min'], 
         ckeditor: "../ckeditor/ckeditor/ckeditor",
         toggle: ["lib/bootstrap-toggle.min"],
         colorpicker: "lib/bootstrap-colorpicker.min",
@@ -31,9 +31,14 @@ requirejs.config({
         popper: 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min',
         fonctions_jquery: "script/fonctions-jquery",
         fonctions: "script/fonctions",
+ 
+
     },
     shim: {
         "bootstrap": {
+            deps: ['jquery']
+        },
+        "bootstrap_popover": {
             deps: ['jquery']
         },
         "toggle": {
@@ -79,7 +84,7 @@ requirejs.config({
     }
 });
 
-require(['jquery', 'bootstrap', 'mathjax', 'ckeditor',  'datatables', 'datatables_bootstrap',
+require(['jquery', 'bootstrap', 'bootstrap_popover',  'mathjax', 'ckeditor',  'datatables', 'datatables_bootstrap',
     'config_select2', 'config_datepicker', 'config_toggle', 'config_colorpicker', 'fonctions_jquery', 'fonctions',   'config_datatable',
     'multiselect', 'ui', 'slimscroll', 'chart']);
 

@@ -11,6 +11,7 @@ requirejs.config({
         datepicker: ["https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.0/js/bootstrap-datepicker.min", "lib/bootstrap-datepicker"],
         datepicker_fr: ["script/config-datepicker-fr"],
         bootstrap: "lib/bootstrap.min",
+        bootstrap_popover: ["https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min", 'lib/popper.min'], 
         popoverx: "lib/bootstrap-popover-x.min",
         ckeditor: "../ckeditor/ckeditor/ckeditor",
         ckeditor_init: "../ckeditor/ckeditor-init",
@@ -33,12 +34,14 @@ requirejs.config({
         popper: 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min',
         fonctions_jquery: "script/fonctions-jquery",
         fonctions: "script/fonctions",
-        bootstrapjs: "bootstrap",
  
 
     },
     shim: {
         "bootstrap": {
+            deps: ['jquery']
+        },
+        "bootstrap_popover": {
             deps: ['jquery']
         },
         "toggle": {
@@ -56,13 +59,10 @@ requirejs.config({
         "ckeditor_jquery": {
             deps: ['jquery', 'ckeditor']
         },
- 
-        "bootstrapjs": {
-            deps: ['jquery']
-        },
         "config_toggle": {
             deps: ['jquery','toggle']
         },
+
 
         mathjax: {
             exports: "MathJax",
@@ -84,7 +84,7 @@ requirejs.config({
     }
 });
 
-require(['jquery', 'bootstrap',  'mathjax',  'ckeditor', 'ckeditor_init', 'ckeditor_jquery',  'datatables', 'datatables_bootstrap',
+require(['jquery', 'bootstrap', 'bootstrap_popover',  'mathjax',  'ckeditor', 'ckeditor_init', 'ckeditor_jquery',  'datatables', 'datatables_bootstrap',
     'config_select2', 'config_datepicker', 'config_toggle', 'config_colorpicker', 'fonctions_jquery', 'fonctions',   'config_datatable',
     'multiselect', 'ui', 'slimscroll', 'chart']);
 

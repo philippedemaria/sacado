@@ -1,17 +1,9 @@
-define(['jquery', 'bootstrap','ui' ], function ($) {
+define(['jquery','bootstrap_popover', 'bootstrap','ui', 'ui_sortable'  ], function ($) {
     
     $(document).ready(function () {
 
-        // Trier des éléments 
         $("#sortable-row").sortable();      
-        // 
-
-        try {
-          $('[data-toggle="popover"]').popover();
-        }
-        catch(err) {
-          console.log("popover not load") ;
-        }
+         //$('[data-toggle="popover"]').popover();
 
     // enregistrement de l'ordre des items dont l'ordre est réarrangable
     function saveOrder() {
@@ -40,6 +32,6 @@ define(['jquery', 'bootstrap','ui' ], function ($) {
         xhr.send("row_order=" + selectedLanguage);
     }
 
-});
+    });
 
 });
