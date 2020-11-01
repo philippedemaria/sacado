@@ -4,7 +4,16 @@
 
 		console.log("---- NEW test ajax-accueil.js ---") ;		
 
-	   $('[data-toggle="popover"]').popover();
+	   
+
+        try {
+          $('[data-toggle="popover"]').popover();
+        }
+        catch(err) {
+          console.log("popover not load") ;
+        }
+
+
         $(".select2").select2({width: '100%'});
 
         $('#teacher_form .sendit').prop('disabled', true);
