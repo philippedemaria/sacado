@@ -9,30 +9,20 @@
     <script>
         require(['script/ajax-group']);
     </script>
-
- 
-
 {% endblock %}
 
  
 
-
-
-
- 
                  
 
 {% block datae %} 
 <style>
-
 .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
     padding: 5px;
     line-height: 1.42857143;
     border-top: 1px solid #ddd;
 }
 </style>
- 
-
 {% if knowledges|length > 0 %}
 <div class="row">
     <div class="row">
@@ -41,8 +31,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <h2> Suivi par savoir faire
-
+                            <h2>Suivi par savoir faire
                                 {% if teacher %}
                                 <small>
                                     <a href="#" data-toggle='modal' class="pull-right btn btn-danger"
@@ -52,8 +41,7 @@
                                     </a>
                                 </small>
                                 {% endif %}
-
-                        </h2> 
+                            </h2> 
                         </td>
                         <td>
                              Dernière connexion : {{ student.user.last_login|date:"d N Y, H:i"  }}

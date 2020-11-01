@@ -22,17 +22,32 @@ requirejs.config({
         fonctions: "script/fonctions",
     },
     shim: {
-        "bootstrap": {
-            deps: ['jquery']
-        }, 
-        "toggle": {
-            deps: ['jquery']
-        },
- 
- 
+                "bootstrap": {
+                    deps: ['jquery']
+                }, 
+                "toggle": {
+                    deps: ['jquery']
+                },
+         
+                 "mathjax": {
+                    exports: "MathJax",
+                    init: function () {
+                        MathJax.Hub.Config({
+                            extensions: ["tex2jax.js"],
+                            jax: ["input/TeX", "output/HTML-CSS"],
+                            tex2jax: {
+                                inlineMath: [['$', '$'], ["\\(", "\\)"]],
+                                displayMath: [['$$', '$$'], ["\\[", "\\]"]],
+                                processEscapes: true
+                            },
+                            "HTML-CSS": {availableFonts: ["TeX"], scale: 90}
+                        });
+                        MathJax.Hub.Startup.onload();
+                        return MathJax;
+                    }
+                }
 
         }
-    }
-});
+    });
 
-require(['jquery', 'bootstrap',   'webSimple0', 'webSimple12','webSimple4','webSimple5','webSimple6','webSimple7','webSimple9','webSimpleNoCache' ]);
+require(['jquery', 'bootstrap', 'mathjax' , 'webSimple0', 'webSimple12','webSimple4','webSimple5','webSimple6','webSimple7','webSimple9','webSimpleNoCache' ]);
