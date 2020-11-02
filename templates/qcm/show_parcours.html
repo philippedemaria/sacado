@@ -78,13 +78,14 @@ body{
             {% include 'qcm/details_card.html' %}
         {% endif %}  
     {% empty %}
+
+
     <div class="row">
         <div class="col-sm-3 col-md-3" style="margin:40px">
-        <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-danger"> Associer des exercices à {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
+        <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-danger"> Associer des exercices SACADO à {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
         </div> 
+    </div> 
 
- 
-    </div>         
     {% endfor %}
 
 
