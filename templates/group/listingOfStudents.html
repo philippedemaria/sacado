@@ -1,36 +1,43 @@
-
-<table class="table table-striped table-hover display">
-    <thead> 
-    <tr>
-        <th>Nom</th>
-        <th>Prénom</th> 
-        <th>Courriel</th> 
-        <th>Ident.</th> 
-        <th>Date d'inscription</th> 
-        <th>Dernière connexion</th> 
-    </tr>
-    </thead>
-    <tbody>
-    {% for student in group.students.all|dictsort:"user.last_name" %}
+ 
+    <table class="table table-striped table-hover display">
+        <thead> 
         <tr>
-            <td>{{ student.user.last_name|lower|title }} </td>
-            <td>{{ student.user.first_name|lower|title }} </td>
-            <td>{{ student.user.email }} </td>
-            <td>{{ student.user.username }} </td>
-            <td>{{ student.user.date_joined|date:"Y M d" }} </td>
-            <td>{{ student.user.last_login|date:"Y M d H:i" }} </td>
-
+            <th>Nom</th>
+            <th>Prénom</th> 
+            <th>Courriel</th> 
+            <th>Ident.</th> 
+            <th>Date d'inscription</th> 
+            <th>Dernière connexion</th>
+            {% if is_remove %}
+            <th></th> 
+            {% endif %}  
         </tr>
-    {% empty %}
-        <tr>
-            <td>Aucun élève inséré.</td>
-            <td></td><td></td><td></td><td></td><td></td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
-
-    
+        </thead>
+        <tbody>
+        {% for student in group.students.all|dictsort:"user.last_name" %}
+            <tr>
+                <td>{{ student.user.last_name|lower|title }} </td>
+                <td>{{ student.user.first_name|lower|title }} </td>
+                <td>{{ student.user.email }} </td>
+                <td>{{ student.user.username }} </td>
+                <td>{{ student.user.date_joined|date:"Y M d" }} </td>
+                <td>{{ student.user.last_login|date:"Y M d H:i" }} </td>
+                {% if is_remove %}
+                    <td><input type="checkbox" name="students" value="{{ student.user.id }}"/></td>
+                {% endif %}
+            </tr>
+        {% empty %}
+            <tr>
+                <td>Aucun élève inséré.</td>
+                <td></td><td></td><td></td><td></td><td></td>
+                {% if is_remove %}
+                <td></td>
+                {% endif %} 
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+ 
  <script>
  $('table.display').DataTable({
     "pageLength": 50,

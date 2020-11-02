@@ -64,7 +64,8 @@ body{
                         <th style="width:300px">Nom</th>
                         <th>Modif.</th>
                         <th>Niveau</th>
-                        <th>Groupes affectés</th>
+                        <th style="width:350px">Mes groupes </th>
+                        <th>Groupes co-animés</th>
                         <th>Elèves</th>
                         <th style="width:120px">Publication</th>                    
                     </tr> 
@@ -104,11 +105,38 @@ body{
                         <td>
                             {% for g in  parcours.group_list  %}
                                 {% get_parcours_group_students_count parcours g as nb_st %}
-                                <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
+                                {% for g in  parcours.group_list  %}
+                                    {% get_parcours_group_students_count parcours g as nb_st %}
+                                    <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
+                                {% endfor %}
                             {% empty %}
-                                <i class="fa fa-warning"></i> <span style="font-size:12px;color:#c70000;">Non affecté </span><a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-xs btn-danger">{{ parcours.students.count }}<i class="fa fa-users"></i> Affecter des élèves à {% if parcours.is_evaluation %}cette évaluation{% else %}ce parcours{% endif %}</a> 
-                            {% endfor %}
-        
+                                {% if parcours.students.count %}
+
+
+                                    <small>
+                                    {% if parcours.shared_group_list|length == 0  %}
+                                        <form action="#" method="POST">
+                                            Ce parcours contient des élèves qui n'appartiennent pas à vos groupes.
+                                            <a href="#groupe_name_anchor" class="vue menuactionparcours" data-toggle='modal' 
+                                                data-is_disabled="{% if parcours.shared_group_list|length > 0  %}1{% else %}0{% endif %}" 
+                                                 data-parcours_id='{{ parcours.id }}' data-target='#listing'> 
+                                                 > Retirer des élèves de ce parcours
+                                            </a>
+                                        </form>
+                                    {% else %}
+                                         Groupe co-animé
+                                    {% endif %}
+                                    </small>
+
+                                {% else %}
+                                    <a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-xs btn-danger">
+                                        <i class="fa fa-users"></i> Affecter des élèves à {% if parcours.is_evaluation %}cette évaluation{% else %}ce parcours{% endif %}
+                                    </a>
+                                {% endif %}
+                            {% endfor %} 
+                        </td>
+                        <td>
+
                             {% for sg in  parcours.shared_group_list  %}
                                 <a href="{% url 'list_parcours_group' sg.group.id %}" title="Groupe partagé"><small>{{ sg.group.name }} <small>({{ sg.group.students.count}})</small>{% if not forloop.last %}, {% endif %}</small></a>
                             {% endfor %}
@@ -117,8 +145,8 @@ body{
                             <form action="#" method="POST">
                                 {% csrf_token %}
                                 <a href="#groupe_name_anchor" class="vue menuactionparcours" data-toggle='modal' style="float:left; margin-right:10px"  
-                                     data-parcours_id='{{ parcours.id }}' data-target='#listing'> 
-                                    <span class="label label-default"> {{ parcours.students.count }}<i class="fa fa-users"></i></span>
+                                     data-parcours_id='{{ parcours.id }}' data-target='#listing'  data-is_disabled="{% if parcours.shared_group_list|length > 0  %}1{% else %}0{% endif %}"  > 
+                                    <span class="label label-{% if parcours.shared_group_list|length > 0  %}warning{% else %}default{% endif %}"> {{ parcours.students.count }}<i class="fa fa-users"></i></span>
                                 </a>
                             </form>
                         </td>
@@ -127,6 +155,7 @@ body{
                             {% csrf_token %}
                             <div class="btn-group"  style="padding:0px;margin:0px;">
                                 <a href="#" class="btn btn-default publisher"  data-from="1" id="parcours_publisher{{parcours.id}}" 
+                                    data-is_disabled="{% if parcours.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
                                     data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
                                     <i class="fa fa-circle-o-notch"></i>
                                 </a><span class="legend-btn  legend-btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %} size13" id="parcours_statut{{parcours.id}}"  >  
@@ -191,7 +220,13 @@ body{
                     <h5 class="modal-title">Liste des élèves - <span id="modal_group_name"></span></h5>
                 </div>
                 <div class="modal-body">
-                    <div id="list_students"></div>
+                    <form action="{% url 'remove_students_from_parcours' %}" method="POST" enctype='multipart/form-data'> 
+                        {% csrf_token %}                        
+                        <div id="list_students"></div>
+                        <input type="hidden" id="parcours_id" name="parcours_id" />
+                        <input type="submit" id="remove_student" value="Retirer ces élèves de ce parcours" disabled  onclick="return TestRemove('ces élèves de ce parcours')"  class="btn btn-danger"/>
+                        <input type="button" value="Annuler" class="btn btn-default" onclick="javascript:history.back()" /> 
+                    </form>
                 </div>
             </div>
         </div>
@@ -231,4 +266,4 @@ body{
 {% endblock  %}   
 
 
- 
+ parcours.shared_group_list

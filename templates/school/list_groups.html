@@ -36,14 +36,13 @@
                     <thead>
                         <tr>
                             <td>Groupes</td>
-                            <td>ELèves </td>
+                            <td>Élèves </td>
                             <td style="width:40px"> </td>
                         </tr>
                     </thead>
                     <tbody>
                         {% for group in groups %}
                             <tr>
- 
                                 <td style="width:150px ; border-left:5px solid {{group.color}}">
                                     <a href="{% url 'update_group_school'  group.id %}" style="color:{{group.color}}">{{ group.name }} </a> <br><span style="color:{{group.color}}; font-size: 14px">{{ group.code }}</span> 
                                     <br>

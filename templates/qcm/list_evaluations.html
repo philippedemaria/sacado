@@ -88,13 +88,39 @@ body{
                             {% endfor %}
                         </td> 
                         <td>
+                        <td>
                             {% for g in  parcours.group_list  %}
                                 {% get_parcours_group_students_count parcours g as nb_st %}
-                                <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
-
+                                {% for g in  parcours.group_list  %}
+                                    {% get_parcours_group_students_count parcours g as nb_st %}
+                                    <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
+                                {% endfor %}
                             {% empty %}
-                                <i class="fa fa-warning"></i> <span style="font-size:12px;color:#c70000;">Non affecté </span><a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-xs btn-danger">{{ parcours.students.count }}<i class="fa fa-users"></i> Affecter des élèves à {% if parcours.is_evaluation %}cette évaluation{% else %}ce parcours{% endif %}</a> 
-                            {% endfor %}
+                                {% if parcours.students.count %}
+
+
+                                    <small>
+                                    {% if parcours.shared_group_list|length == 0  %}
+                                        <form action="#" method="POST">
+                                            Ce parcours contient des élèves qui n'appartiennent pas à vos groupes.
+                                            <a href="#groupe_name_anchor" class="vue menuactionparcours" data-toggle='modal' 
+                                                data-is_disabled="{% if parcours.shared_group_list|length > 0  %}1{% else %}0{% endif %}" 
+                                                 data-parcours_id='{{ parcours.id }}' data-target='#listing'> 
+                                                 > Retirer des élèves de ce parcours
+                                            </a>
+                                        </form>
+                                    {% else %}
+                                         Groupe co-animé
+                                    {% endif %}
+                                    </small>
+
+                                {% else %}
+                                    <a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-xs btn-danger">
+                                        <i class="fa fa-users"></i> Affecter des élèves à {% if parcours.is_evaluation %}cette évaluation{% else %}ce parcours{% endif %}
+                                    </a>
+                                {% endif %}
+                            {% endfor %} 
+                        </td>
                         </td>
                         <td>
                             <form action="#" method="POST">
@@ -133,13 +159,6 @@ body{
     </div>
 </div>
  
-
-
-
-
-
-
-
 </section>
 
     <div class="modal fade bd-example-modal-lg" id="listing" tabindex="-1" role="dialog" aria-labelledby="listing" aria-hidden="true">
