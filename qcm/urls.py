@@ -87,7 +87,7 @@ urlpatterns = [
     path('show_this_supportfile/<int:id>/', show_this_supportfile, name='show_this_supportfile'),  #from dashboard 
 
     path('create_exercise/<int:supportfile_id>/', create_exercise, name='create_exercise'), 
-    path('correction_exercise/<int:id>/<int:idp>', correction_exercise, name='correction_exercise'),  #from details_card 
+    path('correction_exercise/<int:id>/<int:idp>/<int:ids>', correction_exercise, name='correction_exercise'),  #from details_card 
 
     path('show_this_exercise/<int:id>/', show_this_exercise, name='show_this_exercise'),  #from dashboard 
 

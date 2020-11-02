@@ -3061,20 +3061,44 @@ def show_evaluation(request, id):
     return render(request, 'qcm/show_parcours.html', context)
 
 
-def correction_exercise(request,id,idp):
+def correction_exercise(request,id,idp,ids=0):
 
     teacher = Teacher.objects.get(user=request.user)
     stage = get_stage(teacher.user)
 
+    if ids > 0 :
+        student = Student.objects.get(pk=ids)
+    else : 
+        student = None
+
+
     if idp == 0 :
         relationship = Relationship.objects.get(pk=id)
-        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage ,  'communications' : [] ,  'parcours' : relationship.parcours , 'group' : None }
+
+        if student :
+            if Writtenanswerbystudent.objects.filter(relationship = relationship , student = student).exists():
+                w_a = Writtenanswerbystudent.objects.get(relationship = relationship , student = student)
+            else :
+                w_a = False 
+        else :
+            w_a = False 
+
+        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage , 'custom':0, 'w_a':w_a, 'communications' : [] ,  'parcours' : relationship.parcours , 'parcours_id': relationship.parcours.id, 'group' : None , 'student' : student }
         return render(request, 'qcm/correction_exercise.html', context)
     else :
         customexercise = Customexercise.objects.get(pk=id)
         parcours = Parcours.objects.get(pk = idp)
-        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage ,  'communications' : [], 'parcours' : parcours, 'group' : None }
+        if student :
+            if Customanswerbystudent.objects.filter(customexercise = customexercise ,  parcours = parcours , student_id = student).exists():
+                c_e = Customanswerbystudent.objects.get(customexercise = customexercise ,  parcours = parcours , student_id = student)
+            else :
+                c_e = False 
+        else :
+            c_e = False 
+
+        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage , 'c_e':c_e, 'custom':1,  'communications' : [], 'parcours' : parcours, 'group' : None , 'parcours_id': parcours.id, 'student' : student }
         return render(request, 'qcm/correction_custom_exercise.html', context)
+
 
 
 def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à un exercice non auto-corrigé

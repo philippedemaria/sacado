@@ -1,0 +1,93 @@
+{% load static %}    
+
+<div class="row">
+
+
+ 
+
+
+    <div class="col-sm-12 col-md-12">  
+        <table class="table_tools" >
+            <tr>
+                <td style="width:40%"><label>Outils </label></td>
+                <td style="width:12%"></td>
+                <td style="width:12%"></td>
+                <td style="width:25%"><label>Mes commentaires </label></td>
+            </tr>
+            <tr>
+                <td><button id="text_writer"  data-nbclone=0  class="btn btn-default" style="font-family: Times New Roman;font-size: 18px; font-weight:bold;" >T</button>
+                    <button id="right"  data-nb=1 class="btn btn-default"  style="padding-top: 5px; padding-bottom: 5px;font-size:16px "><i class="fa fa-check"></i></button>
+                    <button id="wrong"  data-nb=1 class="btn btn-default"  style="padding-top: 5px; padding-bottom: 5px;font-size:16px "><i class="fa fa-times"></i></button> 
+                    <button id="line"  data-nb=1 class="btn btn-default line"  style="padding-top: 5px; padding-bottom: 5px;font-size:16px "><i class="fa fa-window-minimize"></i></button>
+                </td>
+                <td>
+                    <div class="color-container">
+                        <div id="bcPicker1" class="color-picker display-inline"></div>
+                    </div>
+                </td>                
+                <td><button id="trash"  class="btn btn-default"  style="margin-left:10px; padding-top: 5px; padding-bottom: 5px;font-size:16px "><i class="fa fa-trash"></i></button>    </td>
+
+                <td><button id="comments" class="btn btn-default toggle_tools"  style="padding-top: 5px; padding-bottom: 5px;font-size:16px "><i class="fa fa-comment"></i></button>  
+                    <button id="more" class="btn btn-default toggle_tools"  style="padding-top: 5px; padding-bottom: 5px;font-size:16px "><i class="fa fa-plus"></i></button> 
+                    <button id="save" class="btn btn-default"  style="padding-top: 5px; padding-bottom: 5px;font-size:16px "><i class="fa fa-save"></i></button> 
+                </td>
+
+
+
+
+            </tr>
+        </table>
+    </div> 
+</div> 
+
+<hr/>  
+
+<div id="paint_tools"  class="row tools">   
+    <div class="col-sm-12 col-md-12">
+        <label>Taille</label> <br/>
+            <button id="decrease" class="btn btn-default" >-</button>
+            <span id="size" class="btn btn-default" >2</span>
+            <button id="increase" class="btn btn-default" >+</button>
+
+            <button id="clear" class="btn btn-default" style="margin-left: 20px"><i class="fa fa-eraser"></i></button>
+    </div>
+    <div class="col-sm-12 col-md-12">
+        <hr>  
+    </div>
+</div> 
+<div id="more_text"  class="row tools">   
+    <div class="col-sm-12 col-md-12">
+        <label>Enregistrer un nouveau commentaire</label> <br/>
+            <textarea  name="new_text" id="new_text" rows="2" cols="40"></textarea><br/>
+            <a href="#" id="more_text_saver" class="btn btn-primary" >Enregistrer</a>
+    </div>
+    <div class="col-sm-12 col-md-12">
+        <hr>  
+    </div>
+</div> 
+
+<div id="comments_div"  class="tools"> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <button id="comment1" data-nb=1 data-text="bla bla bla" class="btn btn-default comment">bla bla bla</button> 
+            <button id="comment2" data-nb=1 data-text="Commentaire 2" class="btn btn-default comment">Commentaire 2</button> 
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <hr>  
+        </div>
+    </div>
+</div> 
+
+<div id="templateDiv" class="annotation" data-nbclone=0 >
+    <a href="#" class="pull-right gray remove" ><i class="fa fa-trash fa-xs"></i></a>
+    <div class="annotationheader" style="background-color: #333;">
+         <img src="{% static 'img/moving.png' %}" />   
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-12 col-lg-12">
+            <textarea rows="2" cols="30" class="textarea_div" ></textarea>
+        </div>
+    </div> 
+</div>

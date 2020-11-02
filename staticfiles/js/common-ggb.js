@@ -14,10 +14,6 @@ requirejs.config({
         webSimple7: "ggb/webSimple-7",
         webSimple9: "ggb/webSimple-9", 
         webSimpleNoCache: "ggb/webSimple.nocache", 
-
-
-
-      
         fonctions_jquery: "script/fonctions-jquery",
         fonctions: "script/fonctions",
     },

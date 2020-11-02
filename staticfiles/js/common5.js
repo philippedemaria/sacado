@@ -14,7 +14,10 @@ requirejs.config({
         bootstrap_popover: ["https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min", 'lib/popper.min'], 
         ckeditor: "../ckeditor/ckeditor/ckeditor",
         toggle: ["lib/bootstrap-toggle.min"],
+        
         colorpicker: "lib/bootstrap-colorpicker.min",
+        bcPicker: "lib/bcPicker", 
+
         multiselect: "lib/multiselect.min",
         mathjax: ["https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML&amp;delayStartupUntil=configured"],
         fastclick: "lib/fastclick.min",
@@ -63,7 +66,10 @@ requirejs.config({
         "config_toggle": {
             deps: [ 'jquery', 'bootstrap','toggle']
         },
- 
+        "bcPicker": {
+            deps: ['jquery',]
+        },
+        
         mathjax: {
             exports: "MathJax",
             init: function () {
@@ -84,7 +90,7 @@ requirejs.config({
     }
 });
 
-require(['jquery', 'bootstrap', 'bootstrap_popover',  'mathjax', 'ckeditor',  'datatables', 'datatables_bootstrap',
+require(['jquery', 'bootstrap', 'bootstrap_popover', 'bcPicker', 'mathjax', 'ckeditor',  'datatables', 'datatables_bootstrap',
     'config_select2', 'config_datepicker', 'config_toggle', 'config_colorpicker', 'fonctions_jquery', 'fonctions',   'config_datatable',
     'multiselect', 'ui', 'slimscroll', 'chart']);
 

@@ -1,9 +1,14 @@
 {% load item_tags %}
 {% load static %}
 
+ 
+
 <div class="col-sm-12 col-md-7" style="padding-top:10px">
  
 {% if c_e %}
+    <div id="corrector">
+      
+
         {% if customexercise.is_file %}
             <iframe src="{{  c_e.imagefile.url }}" height="700" width="100%"></iframe>
         {%  elif customexercise.is_python or  customexercise.is_scratch %}
@@ -13,6 +18,9 @@
         {%  elif customexercise.is_image %}
             <img src="{{  c_e.imagefile.url }}" width="100%"/>
         {% endif %}
+    </div>
+
+
 {% else %}
 
     <div class="alert alert-danger">  
@@ -24,8 +32,9 @@
 
 <div class="col-sm-12 col-md-5" style="padding-right:0px">
     <h4>{{ student }} {% if c_e %}<span class="pull-right text-primary">Remis le {{ c_e.date|date:"D d M Y"}}</span>{% endif %}</h4>
+    <hr>    
     {% if customexercise.is_mark %}
-    <hr>
+
         {% get_mark_to_this customexercise student parcours_id as this_mark %}  
     <div class="row">
         <div class="col-sm-6 col-md-3" style="padding-top: 5px">  
@@ -37,9 +46,15 @@
         </div>
         <div class="col-sm-1 col-md-3" id="mark_sign">  
         </div>
-    </div>
-    <hr>               
+    </div>    
+    <hr>   
     {% endif %}
+
+
+
+    {% include 'qcm/correction_tools.html' %}
+
+
     {% if customexercise.knowledges.all|length > 0 %}
     <table class="table table-bordered table-hover fontsize_14">
         <tr style="background-color: #F0F0F0">
@@ -48,7 +63,7 @@
         {% for knowledge in  customexercise.knowledges.all %}
             {% get_result_k_s customexercise knowledge student parcours_id 0 as result_answer %} 
             <tr>
-                <td>{{ knowledge }} {{ result_answer }} </td>
+                <td>{{ knowledge }}</td>
                 <td>
                     <input  type="radio" {% if result_answer == -1 %} checked {% endif %}  data-customexercise_id="{{customexercise.id}}" data-knowledge_id="{{knowledge.id}}" data-skill_id="" 
                             data-parcours_id="{{ parcours_id }}" name="knowledge{{ knowledge.id }}" value="-1" data-student_id="{{student.user.id}}" class="evaluate" />                               
@@ -148,15 +163,18 @@
                     {% endif %}
                 </div> 
             </div>
-
-
 </div>
+ 
 
 
+
+
+
+
+<link type="text/css" rel="stylesheet" href="{% static 'corrector/css/bcPicker.css' %}"/>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
 
 <script>
-
-
 
         // Enregistrer les commentaires
         $('#save_comment').on('click', function (event) {
@@ -180,16 +198,13 @@
                         'parcours_id':parcours_id,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: "../../ajax_comment_all_exercise",
+                    url: "../../../ajax_comment_all_exercise",
                     success: function (data) {
                         $('#comment_result').html(" enregistré");
                     } 
                 }
             )
         });
-
-
-
 
 
         // Enregistre le score de knowledge
@@ -211,7 +226,7 @@
                         'customexercise_id': customexercise_id,                        
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: "../../ajax_mark_evaluate",
+                    url: "../../../ajax_mark_evaluate",
                     success: function (data) {
                         $('#evaluate'+student_id).html(data.eval);
                         $('#mark_sign').html(data.eval);
@@ -247,7 +262,7 @@
                         'typ' : 1,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: "../../ajax_exercise_evaluate",
+                    url: "../../../ajax_exercise_evaluate",
                     success: function (data) {
                         $('#evaluate'+student_id).html(data.eval);
                     }
