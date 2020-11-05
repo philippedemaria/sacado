@@ -8,7 +8,12 @@ from socle.models import Level
 from school.models import School
 
 def menu(request):
- 
+    print("===========================================================================")
+    print("====================     CONTEXT COMPRESSOR   =============================")
+    print("===========================================================================")    
+    print(request.user)
+    print("===========================================================================")
+    print("===========================================================================")
     if request.user.is_authenticated:
 
         if request.user.time_zone:
