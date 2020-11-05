@@ -24,9 +24,12 @@ from general_fonctions import *
 
 def index(request):
 
+
     if request.user.is_authenticated:
          
         today = time_zone_user(request.user)
+
+        print("user initial form index   ", request.user)
 
         ############################################################################################
         #### Mise à jour et affichage des publications  

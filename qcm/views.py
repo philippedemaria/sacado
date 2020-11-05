@@ -4158,7 +4158,7 @@ def create_course(request, idc , id ):
             try :
                 return redirect('show_course' , 0 , id)
             except :
-                return redirect('dashboard')
+                return redirect('index')
         else:
             print(form.errors)
 
@@ -4199,7 +4199,7 @@ def update_course(request, idc, id  ):
             try :
                 return redirect('show_course' , 0 , id)
             except :
-                return redirect('dashboard')
+                return redirect('index')
         else :
             print(course_form.errors)
 
@@ -4230,7 +4230,7 @@ def delete_course(request, idc , id  ):
     try :
         return redirect('list_parcours_group' , request.session.get("group_id"))
     except :
-        return redirect('dashboard')  
+        return redirect('index')  
 
 
 
@@ -4375,7 +4375,7 @@ def create_demand(request):
             send_mail("SacAdo Demande d'exercice",  "Votre demande d'exercice est en cours de traitement." , "info@sacado.xyz" , sender )
 
 
-            return redirect('dashboard')
+            return redirect('index')
 
         else:
             print(form.errors)
@@ -4401,7 +4401,7 @@ def update_demand(request, id):
  
 
             messages.success(request, 'La demande a été modifiée avec succès !')
-            return redirect('dashboard')
+            return redirect('index')
         else :
             print(demand_form.errors)
 
@@ -4418,7 +4418,7 @@ def delete_demand(request, id  ):
     """
     demand = Demand.objects.get(id=idc)
     demand.delete()
-    return redirect('dashboard')  
+    return redirect('index')  
 
 
 

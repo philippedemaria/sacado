@@ -61,107 +61,108 @@ def navigation(group, id):
     return sprev_id, snext_id
 
 
-class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter.
-    template_name = "dashboard.html"
+def initialView(request): # lorsque l'utilisateur vient de se connecter.
+
 
     # Lors de la connexion, analyse les exercices de tous les parcours qui doivent être visible à partir de cette date
-
-    def get_context_data(self, **kwargs):
-        context = super(DashboardView, self).get_context_data(**kwargs)
-
-        if self.request.user.is_authenticated:
-
-            this_user = User.objects.get(pk=self.request.user.id)
-            
-            today = time_zone_user(this_user)
-            relationships = Relationship.objects.filter(is_publish = 0,start__lte=today)
-            for r in relationships :
-                Relationship.objects.filter(id=r.id).update(is_publish = 1)
-
-            if self.request.user.is_teacher:  # Teacher
-
-                teacher = Teacher.objects.get(user=self.request.user.id)
-
-                groups = Group.objects.filter(teacher = teacher)
-
-                relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("parcours")
-                parcourses = Parcours.objects.filter(teacher=teacher)  # parcours non liés à un groupe
-
-                communications = Communication.objects.filter(active=1)
-                parcours_tab = Parcours.objects.filter(students=None, teacher=teacher)
-
-                context = {'this_user': this_user, 'teacher': teacher, 'relationships': relationships,
-                           'parcourses': parcourses, 'groups': groups, 'parcours_tab': parcours_tab, 'today' : today , 
-                           'communications': communications, }
-            elif self.request.user.is_student:  # Student
-                student = Student.objects.get(user=self.request.user.id)
-
-                parcourses = Parcours.objects.filter(students=student, linked=0, is_evaluation=0, is_publish=1)
-                groups = student.students_to_group.all()
-
-                parcours = []
-                for p in parcourses:
-                    parcours.append(p)
  
+    if request.user.is_authenticated:
 
-                relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in=parcours, is_evaluation=0, date_limit__gte=today).order_by("date_limit")
-                exercise_tab = []
-                for r in relationships:
-                    if r not in exercise_tab:
-                        exercise_tab.append(r.exercise)
+        this_user = User.objects.get(pk=request.user.id)
+        
+        today = time_zone_user(this_user)
+        relationships = Relationship.objects.filter(is_publish = 0,start__lte=today)
+        for r in relationships :
+            Relationship.objects.filter(id=r.id).update(is_publish = 1)
 
-                num = 0
-                for e in exercise_tab:
-                    if Studentanswer.objects.filter(student=student, exercise=e).count() > 0:
-                        num += 1
+        if request.user.is_teacher:  # Teacher
 
-                nb_relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).count()
-                try:
-                    ratio = int(num / nb_relationships * 100)
-                except:
-                    ratio = 0
+            teacher = Teacher.objects.get(user=request.user.id)
 
-                ratiowidth = int(0.9*ratio)
+            groups = Group.objects.filter(teacher = teacher)
 
-                evaluations = Parcours.objects.filter(start__lte=today, stop__gte=today, students=student, is_evaluation=1)
-                studentanswers = Studentanswer.objects.filter(student=student)
+            relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("parcours")
+            parcourses = Parcours.objects.filter(teacher=teacher)  # parcours non liés à un groupe
 
-                exercises = []
-                for studentanswer in studentanswers:
-                    if not studentanswer.exercise in exercises:
-                        exercises.append(studentanswer.exercise)
+            communications = Communication.objects.filter(active=1)
+            parcours_tab = Parcours.objects.filter(students=None, teacher=teacher)
 
-                relationships_in_late = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today),
-                                                                    parcours__in=parcours, is_evaluation=0,
-                                                                    date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
+            context = {'this_user': this_user, 'teacher': teacher, 'relationships': relationships,
+                       'parcourses': parcourses, 'groups': groups, 'parcours_tab': parcours_tab, 'today' : today , 
+                       'communications': communications, }
+        elif request.user.is_student:  # Student
+            student = Student.objects.get(user=request.user.id)
 
-                context = {'student_id': student.user.id, 'student': student, 'relationships': relationships,
-                           'ratio': ratio, 'evaluations': evaluations, 'ratiowidth': ratiowidth, 'today' : today , 
-                           'relationships_in_late': relationships_in_late}
-            elif self.request.user.is_parent:  # Parent
+            parcourses = Parcours.objects.filter(students=student, linked=0, is_evaluation=0, is_publish=1)
+            groups = student.students_to_group.all()
 
-                parent = Parent.objects.get(user=self.request.user)
-                students = parent.students.order_by("user__first_name")
-                context = {'parent': parent, 'students': students, 'today' : today ,  }
+            parcours = []
+            for p in parcourses:
+                parcours.append(p)
 
-        else: ## Anonymous
 
-            form = AuthenticationForm()
-            u_form = UserForm()
-            t_form = TeacherForm()
-            s_form = StudentForm()
-            levels = Level.objects.all()
-            exercise_nb = Exercise.objects.filter(supportfile__is_title=0).count()
+            relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in=parcours, is_evaluation=0, date_limit__gte=today).order_by("date_limit")
+            exercise_tab = []
+            for r in relationships:
+                if r not in exercise_tab:
+                    exercise_tab.append(r.exercise)
 
-            exercises = Exercise.objects.filter(supportfile__is_title=0)
+            num = 0
+            for e in exercise_tab:
+                if Studentanswer.objects.filter(student=student, exercise=e).count() > 0:
+                    num += 1
 
-            i = random.randint(1, len(exercises))
-            exercise = exercises[i]
+            nb_relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).count()
+            try:
+                ratio = int(num / nb_relationships * 100)
+            except:
+                ratio = 0
 
-            context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form,
-                       'levels': levels, 'exercise_nb': exercise_nb, 'exercise': exercise }
- 
-        return context
+            ratiowidth = int(0.9*ratio)
+
+            evaluations = Parcours.objects.filter(start__lte=today, stop__gte=today, students=student, is_evaluation=1)
+            studentanswers = Studentanswer.objects.filter(student=student)
+
+            exercises = []
+            for studentanswer in studentanswers:
+                if not studentanswer.exercise in exercises:
+                    exercises.append(studentanswer.exercise)
+
+            relationships_in_late = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today),
+                                                                parcours__in=parcours, is_evaluation=0,
+                                                                date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
+
+            context = {'student_id': student.user.id, 'student': student, 'relationships': relationships,
+                       'ratio': ratio, 'evaluations': evaluations, 'ratiowidth': ratiowidth, 'today' : today , 
+                       'relationships_in_late': relationships_in_late}
+        elif request.user.is_parent:  # Parent
+
+            parent = Parent.objects.get(user=request.user)
+            students = parent.students.order_by("user__first_name")
+            context = {'parent': parent, 'students': students, 'today' : today ,  }
+
+        template_name = "dashboard.html"
+
+    else: ## Anonymous
+
+        form = AuthenticationForm()
+        u_form = UserForm()
+        t_form = TeacherForm()
+        s_form = StudentForm()
+        levels = Level.objects.all()
+        exercise_nb = Exercise.objects.filter(supportfile__is_title=0).count()
+
+        exercises = Exercise.objects.filter(supportfile__is_title=0)
+
+        i = random.randint(1, len(exercises))
+        exercise = exercises[i]
+
+        template_name = "home.html"
+
+        context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form,
+                   'levels': levels, 'exercise_nb': exercise_nb, 'exercise': exercise }
+
+    return render(request, template_name , context)
 
 
 

@@ -255,6 +255,7 @@ class MasteringDoneForm (forms.ModelForm):
 		model = Mastering_done
 		fields = ('writing',)
 
+
 class MasteringcustomForm (forms.ModelForm):
 	class Meta:
 		model = Masteringcustom
@@ -263,7 +264,7 @@ class MasteringcustomForm (forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		customexercise = kwargs.pop('customexercise')
 		super(MasteringcustomForm, self).__init__(*args, **kwargs)
-		relations = Relationship.objects.filter(exercise__supportfile__is_title = 0, parcours__in=customexercise.parcourses.filter(is_publish=1))
+		relations = Relationship.objects.filter(exercise__supportfile__is_title = 0, parcours__in= customexercise.parcourses.filter(is_publish=1))
 		courses = Course.objects.filter(parcours__in=customexercise.parcourses.filter(is_publish=1))
 		self.fields['practices'] = forms.ModelMultipleChoiceField(queryset=relations, widget=forms.CheckboxSelectMultiple,   required=False )
  
