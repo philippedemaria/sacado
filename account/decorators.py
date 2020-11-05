@@ -30,95 +30,90 @@ def decide(this_student, role, asker):
 
 
 def user_can_read_details(function):  # id est associé à un user
-    # def wrap(request, *args, **kwargs):
-    #     user = User.objects.get(pk=kwargs['id'])
-    #     student = Student.objects.get(user=user)  # détail de ce student
-    #     testeur = decide(student, user.user_type, user)
-    #     if testeur:
-    #         return function(request, *args, **kwargs)
-    #     else:
-    #         #raise PermissionDenied
-    #         messages.error(request, " Vous passez par un espace interdit.")
-    #         return function(request, *args, **kwargs)
-    # return wrap
-    pass
+    def wrap(request, *args, **kwargs):
+        user = User.objects.get(pk=kwargs['id'])
+        student = Student.objects.get(user=user)  # détail de ce student
+        testeur = decide(student, user.user_type, user)
+        if testeur:
+            return function(request, *args, **kwargs)
+        else:
+            #raise PermissionDenied
+            messages.error(request, " Vous passez par un espace interdit.")
+            return function(request, *args, **kwargs)
+    return wrap
 
 
 def who_can_read_details(function):   # id est associé à un student
-    # def wrap(request, *args, **kwargs):
+    def wrap(request, *args, **kwargs):
 
-    #     print("====================================") 
-    #     print("====================================")   
-    #     print(request.user) 
-    #     print("====================================")   
-    #     print("====================================") 
+        print("====================================") 
+        print("====================================")   
+        print(request.user) 
+        print("====================================")   
+        print("====================================") 
 
-    #     student = Student.objects.get(pk=kwargs['id'])
-    #     testeur = decide(student, request.user.user_type, request.user)
+        student = Student.objects.get(pk=kwargs['id'])
+        testeur = decide(student, request.user.user_type, request.user)
 
-    #     if testeur:
-    #         return function(request, *args, **kwargs)
-    #     else:
-    #         #raise PermissionDenied
-    #         messages.error(request, " Vous passez par un espace interdit.")
-    #         return function(request, *args, **kwargs)
-    # return wrap
-    pass
+        if testeur:
+            return function(request, *args, **kwargs)
+        else:
+            #raise PermissionDenied
+            messages.error(request, " Vous passez par un espace interdit.")
+            return function(request, *args, **kwargs)
+    return wrap
 
 
 def is_manager_of_this_school(function): 
-    # def wrap(request, *args, **kwargs):
+    def wrap(request, *args, **kwargs):
 
-    #     print("====================================") 
-    #     print("====================================")   
-    #     print(request.user) 
-    #     print("====================================")   
-    #     print("====================================") 
-    #     users = User.objects.filter(is_manager=1, school=request.user.school)
-    #     user = request.user
+        print("====================================") 
+        print("====================================")   
+        print(request.user) 
+        print("====================================")   
+        print("====================================") 
+        users = User.objects.filter(is_manager=1, school=request.user.school)
+        user = request.user
 
-    #     if user in users or user.is_superuser:
-    #         return function(request, *args, **kwargs)
-    #     else:
-    #         #raise PermissionDenied
-    #         return function(request, *args, **kwargs)
-    # return wrap
-    pass
+        if user in users or user.is_superuser:
+            return function(request, *args, **kwargs)
+        else:
+            #raise PermissionDenied
+            return function(request, *args, **kwargs)
+    return wrap
 
 
 def can_register(function): 
-    # def wrap(request, *args, **kwargs):
+    def wrap(request, *args, **kwargs):
 
-    #     print("====================================") 
-    #     print("====================================")   
-    #     print(request.user) 
-    #     print("====================================")   
-    #     print("====================================")  
+        print("====================================") 
+        print("====================================")   
+        print(request.user) 
+        print("====================================")   
+        print("====================================")  
 
-    #     users = User.objects.filter(is_manager=1)
-    #     user = request.user
+        users = User.objects.filter(is_manager=1)
+        user = request.user
 
-    #     if user in users or user.is_superuser:
-    #         return function(request, *args, **kwargs)
-    #     else:
-    #         #raise PermissionDenied
-    #         return function(request, *args, **kwargs)
-    # return wrap
-    pass
+        if user in users or user.is_superuser:
+            return function(request, *args, **kwargs)
+        else:
+            #raise PermissionDenied
+            return function(request, *args, **kwargs)
+    return wrap
 
 
 
 def user_is_admin_school(function): 
-    # def wrap(request, *args, **kwargs):
-    #     print("====================================") 
-    #     print("====================================")   
-    #     print(request.user) 
-    #     print("====================================")   
-    #     print("====================================") 
-    #     if request.user.is_manager:
-    #         return function(request, *args, **kwargs)
-    #     else:
-    #         #raise PermissionDenied
-    #         return function(request, *args, **kwargs)
-    # return wrap
-    pass
+    def wrap(request, *args, **kwargs):
+        print("====================================") 
+        print("====================================")   
+        print(request.user) 
+        print("====================================")   
+        print("====================================") 
+        if request.user.is_manager:
+            return function(request, *args, **kwargs)
+        else:
+            #raise PermissionDenied
+            return function(request, *args, **kwargs)
+    return wrap
