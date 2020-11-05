@@ -8,6 +8,7 @@ from socle.models import Level
 from school.models import School
 
 def menu(request):
+ 
     if request.user.is_authenticated:
 
         if request.user.time_zone:
