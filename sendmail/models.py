@@ -1,17 +1,17 @@
 from django.db import models
-from account.models import User, Teacher
+from account.models import Teacher
 from group.models import Group
 from django.utils import timezone
 from ckeditor_uploader.fields import RichTextUploadingField
-
+from django.conf import settings
  
 
 
 class Email(models.Model):
-    author = models.ForeignKey(User, blank = True, on_delete=models.CASCADE,   related_name="author_email"  ) 
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, blank = True, on_delete=models.CASCADE,   related_name="author_email"  ) 
     subject = models.CharField(max_length=255, blank=True,verbose_name="Objet")    
     texte = RichTextUploadingField(  verbose_name="Texte")      
-    receivers = models.ManyToManyField(User, blank = True,    related_name="receiver_email"  ) 
+    receivers = models.ManyToManyField(settings.AUTH_USER_MODEL, blank = True,    related_name="receiver_email"  ) 
     today = models.DateTimeField( default=timezone.now)
     
     def __str__(self):
@@ -22,7 +22,7 @@ class Email(models.Model):
 
 class Communication(models.Model):
 
-    teacher = models.ForeignKey(User, blank = True, on_delete=models.CASCADE,   related_name="teacher_communication"  ) 
+    teacher = models.ForeignKey(settings.AUTH_USER_MODEL, blank = True, on_delete=models.CASCADE,   related_name="teacher_communication"  ) 
     subject = models.CharField(max_length=255, blank=True, verbose_name="Objet")    
     texte = RichTextUploadingField(  verbose_name="Texte")      
     today = models.DateField( auto_now_add= True)
