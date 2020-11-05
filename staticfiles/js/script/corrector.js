@@ -11,6 +11,33 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
                 $(".remove").hide();
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///// Gestion des annonations après leur enregistrement dans la base de données
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+               
+////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+// classe est une classe donnée une fois l'annotation enregistrée dans la base de données
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                $( ".classe" ).draggable({
+							    classes: {
+							      "ui-draggable": "move"
+							    }
+							  });  
+
+
+                // Permet de déplacer une annotation après son enregistrement dans la base de donnée
+				$( ".classe" ).on('mouseup', function(){	
+
+									attr_id = $(this).attr("id");
+									style = $(this).attr("style");
+									html = $(this).html();
+									save_annotation(attr_id, style,  "classe" , html ) ;
+									}); 
+ 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///// Affecte la classe primary au bouton quand cliqué
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,10 +52,6 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
                       		target.show(500);                         	
                       }
                 }
-
-
-
-
 
 
                 function change_color(toggle,tool,e){
@@ -121,19 +144,19 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
  
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//// Cette fonction agit avec les boutons dans la zone de correction
+////////////////////////      Création des annontations  
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function annote(toggle,event,type){ 
 
                   	// décale l'abscisse selon la position du clic de la souris
-                  	abscisse = event.offsetX ; // - 412
+                  	var abscisse = event.pageX - 420; // - 412
 
                   	// décale l'ordonnée selon la hauteur du clic de la souris
-                    ordonnee = event.offsetY - 15   ; //  - 82
+                    var ordonnee = event.pageY - 100   ; //  - 82
  
                     // récupération du numéro du toggle
-                    nb = toggle.attr("data-nb");
+                    var nb = toggle.attr("data-nb");
 
                     // Caractéristiques à afficher suivant le toggle
                     if(type == 0) 
@@ -146,13 +169,29 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
                       	{  
                       		fa = "check" ; 
                       		color = "success" ;  
-                      	} 
+                      	}
 
-                    // Affichage du tpe de div selon l'appel du toggle
+
+                    // Poubelle Effaceur
+					var erase = "<a href='#' class='pull-right gray remove'><i class='fa fa-trash' style='font-size:9px'></i></a>";
+
+					// style de la div
+					var style = "position:absolute;left:"+abscisse+"px; top:"+ordonnee+"px;z-index:99;" ;
+
+                    var classe = "classe" ;
+
+			//////////////////////////////////////
+			////// Création des annotations //////
+			//////////////////////////////////////
+
+	                // Check ok times
                     if (type < 2)
 	                    {
-	                     	myDiv = "<div id='"+fa+""+nb+"' style='position:absolute;left:"+abscisse+"px; top:"+ordonnee+"px;z-index:99;'><i class='fa fa-"+fa+" text-"+color+"'></i><a href='#' class='pull-right gray remove'><i class='fa fa-trash' style='font-size:9px'></i></a></div>" 
+	                    	// studentcontent ne contient pas a possibilité d'effacer.
+	                    	studentcontent = "<i class='fa fa-"+fa+" text-"+color+"'></i>" ;
+			            	content = studentcontent+erase;
 	                    }
+	                // Conmmentaire pré écrit par l'enseignant 
                     else if  (type == 2)
 	                    {
 	                    	// Récupération du texte et de ses caractéristiques
@@ -165,8 +204,18 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
 	                      			color = "#000";
 	                      		}
 
-	                      	myDiv = "<div id='"+fa+""+nb+"' style='position:absolute;left:"+abscisse+"px; top:"+ordonnee+"px;z-index:99;color:"+color+"'>"+text+"<a href='#' class='pull-right gray remove'><i class='fa fa-trash' style='font-size:9px'></i></a></div>"   
+                       		extra_style = "font-size:14px;font-weight:700;" ;
+
+                       		style = style+extra_style ;
+			            	style = style+"color:"+color ;
+	                    	// studentcontent ne contient pas a possibilité d'effacer.
+			            	studentcontent = text;
+			            	content =  studentcontent+erase ;
+
+			            	classe = classe + " annotation"
+
 	                    }
+	                // Soulignement
                     else if  (type == 3)
 	                    {
 	                    	// Récupération du texte et de ses caractéristiques
@@ -178,8 +227,17 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
 	                      			color = "#000";
 	                      		}
 
-	                      	myDiv = "<div id='"+fa+""+nb+"' style='position:absolute;left:"+abscisse+"px; top:"+ordonnee+"px;z-index:99'><i class='fa fa-window-minimize' style='color:"+color+"'></i><i class='fa fa-window-minimize' style='color:"+color+"'></i><i class='fa fa-window-minimize' style='color:"+color+"'></i><a href='#' class='pull-right gray remove'><i class='fa fa-trash' style='font-size:9px'></i></a></div>"   
+ 							fa_line = "<i class='fa fa-window-minimize' style='color:"+color+"'></i>";
+	                    	// studentcontent ne contient pas a possibilité d'effacer.
+							studentcontent = fa_line+fa_line+fa_line
+			            	content =  studentcontent+erase ;	
+
 	                    }
+	                // id de la div
+			        var attr_id = fa+""+nb ;
+	                // La div crée dans le HTML
+	                var myDiv = "<div id='"+attr_id+"' style='"+style+"'>"+content+"</div>"  
+                    
 	                // Ajout de myDiv à la div via son id #corrector
                     $('#corrector').append(myDiv) ;
 
@@ -187,27 +245,43 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
                     $("#"+fa+""+nb).draggable();
 
 	                // Associe un nouveau nb au bouton de création toggle 
-                    nb++;
+                    nb++; // nb est le nombre d'annotations sur la page
 
                     if (type == 2)
 	                    {
- 							
  							$('.comment').attr("data-nb",nb);
 	                    }
 	                else
 	                    {
  							toggle.attr("data-nb",nb);
-	                    }    
+	                    }
 
+	                // Action de l'AJAX
+
+                    save_annotation( attr_id, style,  classe,  content, studentcontent) ;	  
                   } 
 
 
-        function create_clone(e){   
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////// Clone la div textuelle
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function create_clone(e){ 
+              	// décale l'abscisse selon la position du clic de la souris
+              	var abscisse = event.pageX - 420; // - 412
+
+              	// décale l'ordonnée selon la hauteur du clic de la souris
+                var ordonnee = event.pageY - 120   ; //  - 82
+
+              	// clone de la div clonée
 	            var clone = $("#templateDiv").clone();
 
 	            // Modifie l'id du clone
-	            nbClone = $("#templateDiv").attr("data-nbclone");
+	            var nbClone = $("#templateDiv").attr("data-nbclone");
 	            clone[0].id = "#templateDiv"+nbClone ;
 
 	            // Rend le clone draggabe  
@@ -216,25 +290,41 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
 	            // Enlève le style "display","block" au clone
 	            clone.find('remove').css("display","block");
 	            // Ajout de la classe et de la position
-	            clone.addClass("annotation").attr("style",'left:'+e.offsetX+'px; top:'+e.offsetY+'px;') ;
+	            clone.addClass("annotation").attr("style",'left:'+abscisse+'px; top:'+ordonnee+'px;') ;
 
 	            // Associe le numéro du clone                        
 	            nbClone++ ;
 	            $("#templateDiv").attr("data-nbclone",nbClone);
+	            clone.css({"font-size":"14px", "font-weight": 700});
 	            clone.find('.textarea_div').focus();
-
 	            // Empeche l'appel du lien par la balise button
 	          	e.preventDefault();
 				}
+ 
 
 
+
+				$(document).on("keyup", ".textarea_div", function() {
+
+					attr_id = $(this).parent().parent().parent().attr("id") ; 
+					style = $(this).parent().parent().parent().attr("style") ;
+					classe = "classe"
+					text_value = $(this).val() ;
+					style = style+"position:absolute;"
+					style_textarea = $(this).attr("style") ;
+
+					studentcontent =  "<a href='#' class='pull-right gray remove' ><i class='fa fa-trash fa-xs'></i></a><div class='annotationheader' ><i class='fa fa-arrows-alt fa_white'></i></div><div class='row'><div class='col-xs-12 col-md-12 col-lg-12'><textarea rows='2' cols='30' class='textarea_div' style='"+style_textarea+"' >"+text_value+"</textarea></div></div> "; 
+
+
+				    save_textarea_div_content(attr_id, style,  classe, studentcontent) ;
+
+				})
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////   Crée une div d'écriture ou une annotation
+////////////////   Appels des fonctions de création
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 $("#corrector").on('click', function (e) { 
-
 
  					if ($("#trash").hasClass("btn-danger")) { 
                       	
@@ -267,7 +357,7 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
 
                     	}
 
-                    else if ($(".comment").hasClass("btn-primary")) { 
+                    else if ($(".comment").hasClass("btn-primary")) {  // commentaire d'un enseignenpré écrit
 
                     	// Choisit le bon commentaire
 						selector = $("#comments_div").find(".btn-primary");
@@ -277,25 +367,25 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
 
                     	}
                 });
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////   Supprime la div cliquée
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
                  $("#corrector").on('click', '.remove', function () {
+                 	attr_id = $(this).parent().attr("id") ; 
 
-                     $(this).parent().remove();  
+	                    $(this).parent().remove();
+	                     erase_annotation(attr_id) ; 
 
                     });
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////   Enlève les contours de la div une fois le clic perdu
+////////////////    
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-        
+  
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -320,28 +410,102 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                $("#level_selected_id").on('change', function () { 
-                    let level_selected_id = $(this).val();
+            function save_annotation(attr_id, style,  classe, studentcontent ) {  
 
-                    let data_url = $(this).attr("data-url"); 
-                    if (data_url == "yes") { url =  'qcm/ajax/parcours_default' ; } else { url =  'ajax/parcours_default' ; } 
+                    let answer_id = $("#answer_id").val() ; 
+                    let custom = $("#custom").val() ; // 0 si relationship et 1 si customexercise
                     let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+ 
+
+                    url =  '../../../ajax_save_annotation' ;
 
                     $.ajax({
                         url: url ,
                         type: "POST",
                         data: {
-                            'level_selected_id': level_selected_id,
+                            'attr_id': attr_id,
+                            'style': style,
+                            'classe': 'classe',
+                            'studentcontent': studentcontent,
+                            'answer_id': answer_id,
+                            'custom': custom,
                             csrfmiddlewaretoken: csrf_token,    
                         },
                         dataType: 'json',
                         success: function (data) {
-                            $("#parcours_shower").html(data.html);
+                            console.log("enregistré");
+                        }
 
 
+                    });
+
+                }
+
+
+
+
+                function erase_annotation(attr_id) { 
+
+                    let answer_id = $("#answer_id").val() ; 
+                    let custom = $("#custom").val() ; // 0 si relationship et 1 si customexercise
+                    let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+                    url =  '../../../ajax_remove_annotation' ;
+
+                    $.ajax({
+                        url: url ,
+                        type: "POST",
+ 						data: {
+                            'attr_id': attr_id,
+                            'answer_id': answer_id,
+                            'custom': custom,
+                            csrfmiddlewaretoken: csrf_token,    
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log("effacé");
                         }
                     });
-                  });
+
+                }
+
+
+
+ 
+
+
+		        function save_textarea_div_content(attr_id, style, classe, studentcontent) { 
+
+		            let answer_id = $("#answer_id").val() ; 
+		            let custom = $("#custom").val() ; // 0 si relationship et 1 si customexercise
+		            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+		            url =  '../../../ajax_save_annotation' ;
+
+		            $.ajax(
+		                {
+		                    type: "POST",
+		                    dataType: "json",
+		                    data: {
+		                            'attr_id': attr_id,
+		                            'style': style,
+		                            'classe': 'classe',
+		                            'studentcontent': studentcontent,
+		                            'answer_id': answer_id,
+		                            'custom': custom,
+		                            csrfmiddlewaretoken: csrf_token,   
+		                    },
+		                    url: url ,
+		                    success: function (data) {
+		                            console.log("enregistré");
+		                    }
+		                }
+		            )
+		        } 
+
+ 
+
 
 
 

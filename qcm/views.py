@@ -8,7 +8,7 @@ from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group , Sharing_group
 from school.models import Stage
-from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom
+from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation
 from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm
 from socle.models import  Theme, Knowledge , Level , Skill
 from django.http import JsonResponse 
@@ -3071,19 +3071,23 @@ def correction_exercise(request,id,idp,ids=0):
     else : 
         student = None
 
-
+    nb = 0
     if idp == 0 :
         relationship = Relationship.objects.get(pk=id)
 
         if student :
             if Writtenanswerbystudent.objects.filter(relationship = relationship , student = student).exists():
                 w_a = Writtenanswerbystudent.objects.get(relationship = relationship , student = student)
+                annotations = Annotation.objects.filter(writtenanswerbystudent = w_a)
+                nb = annotations.count()
             else :
-                w_a = False 
+                w_a = False
+                annotations = [] 
         else :
             w_a = False 
+            annotations = [] 
 
-        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage , 'custom':0, 'w_a':w_a, 'communications' : [] ,  'parcours' : relationship.parcours , 'parcours_id': relationship.parcours.id, 'group' : None , 'student' : student }
+        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage , 'custom':0, 'nb':nb, 'w_a':w_a, 'annotations':annotations,  'communications' : [] ,  'parcours' : relationship.parcours , 'parcours_id': relationship.parcours.id, 'group' : None , 'student' : student }
         return render(request, 'qcm/correction_exercise.html', context)
     else :
         customexercise = Customexercise.objects.get(pk=id)
@@ -3091,13 +3095,67 @@ def correction_exercise(request,id,idp,ids=0):
         if student :
             if Customanswerbystudent.objects.filter(customexercise = customexercise ,  parcours = parcours , student_id = student).exists():
                 c_e = Customanswerbystudent.objects.get(customexercise = customexercise ,  parcours = parcours , student_id = student)
+                customannotations = Customannotation.objects.filter(customanswerbystudent = c_e)
+                nb = customannotations.count()
             else :
                 c_e = False 
+                customannotations = []
         else :
             c_e = False 
-
-        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage , 'c_e':c_e, 'custom':1,  'communications' : [], 'parcours' : parcours, 'group' : None , 'parcours_id': parcours.id, 'student' : student }
+            customannotations = []
+        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage , 'nb':nb,'c_e':c_e, 'customannotations':customannotations,  'custom':1,  'communications' : [], 'parcours' : parcours, 'group' : None , 'parcours_id': parcours.id, 'student' : student }
         return render(request, 'qcm/correction_custom_exercise.html', context)
+
+
+
+
+@csrf_exempt  
+def ajax_save_annotation(request):
+
+    data = {}
+
+    custom =  int(request.POST.get("custom"))
+    answer_id =  request.POST.get("answer_id") 
+    attr_id = request.POST.get("attr_id") 
+    style = request.POST.get("style") 
+    classe = request.POST.get("classe") 
+    studentcontent = request.POST.get("studentcontent") 
+
+    if custom :
+        annotation, created = Customannotation.objects.get_or_create(customanswerbystudent_id = answer_id,attr_id = attr_id , defaults = {  'classe' : classe, 'style' : style , 'content' : studentcontent} )
+        if not created :
+            Customannotation.objects.filter(customanswerbystudent_id = answer_id, attr_id = attr_id).update(content = studentcontent, style = style)
+    else :
+        annotation, created = Annotation.objects.get_or_create(writtenanswerbystudent_id = answer_id,attr_id = attr_id , defaults = {  'classe' : classe, 'style' : style , 'content' : studentcontent} )
+        if not created :
+            Annotation.objects.filter(writtenanswerbystudent_id = answer_id, attr_id = attr_id).update(content = studentcontent, style = style)
+
+    return JsonResponse(data)  
+
+
+
+@csrf_exempt  
+def ajax_remove_annotation(request):
+
+    data = {}
+    custom =  int(request.POST.get("custom"))
+    attr_id = request.POST.get("attr_id") 
+    teacher = Teacher.objects.get(user = request.user)
+    try :
+        if custom :
+            Customannotation.objects.get(customanswerbystudent__customexercise__teacher= teacher,  attr_id = attr_id ).delete()
+        else :  
+            Annotation.objects.get(writtenanswerbystudent__relationship__parcours__teacher = teacher, attr_id = attr_id).delete()
+    except :
+        pass
+
+    return JsonResponse(data)  
+
+
+
+ 
+
+
 
 
 
@@ -3366,11 +3424,6 @@ def audio_remediation(request):
 
 
 
-
-
-
-
-
 @user_is_parcours_teacher 
 def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice non autocorrigé dans un parcours
 
@@ -3539,6 +3592,7 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
         url = "qcm/form_writing_custom.html" 
 
     return render(request, url , context)
+
 
 #######################################################################################################################################################################
 ############### VUE ENSEIGNANT

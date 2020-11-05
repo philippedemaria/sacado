@@ -4,6 +4,7 @@
 
 
 
+
 {% block liste_student %}  
     {% for stud in customexercise.students.all|dictsort:"user.last_name" %}
         <tr>
@@ -36,6 +37,7 @@
         </tr>
     {% endfor %}
 {% endblock %}
+
 
 {% block modal %} 
     {{ customexercise.instruction|safe }} 

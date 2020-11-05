@@ -89,6 +89,10 @@ urlpatterns = [
     path('create_exercise/<int:supportfile_id>/', create_exercise, name='create_exercise'), 
     path('correction_exercise/<int:id>/<int:idp>/<int:ids>', correction_exercise, name='correction_exercise'),  #from details_card 
 
+    path('ajax_save_annotation', ajax_save_annotation, name='ajax_save_annotation'),  #from details_card 
+    path('ajax_remove_annotation', ajax_remove_annotation, name='ajax_remove_annotation'),  #from details_card 
+ 
+
     path('show_this_exercise/<int:id>/', show_this_exercise, name='show_this_exercise'),  #from dashboard 
 
     path('parcours_show_write_exercise/<int:id>/', show_write_exercise, name='show_write_exercise'), 

@@ -3,6 +3,18 @@
 <div class="col-sm-12 col-md-7" style="padding-top:10px">
  
 {% if w_a %}
+
+
+    {% block annotate %} 
+    <!-- Caractéristique pour les AJAX pour la correction en ligne -->
+    <input type="hidden" id="answer_id" value="{{ w_a.id}}" />
+    <input type="hidden" id="custom" value="0" />
+    <!-- Caractéristique pour les AJAX pour la correction en ligne -->
+    {% endblock %} 
+
+
+
+    <div id="corrector">
         {% if relationship.exercise.supportfile.is_file %}
             <iframe src="{{  w_a.imagefile.url }}" height="700" width="100%"></iframe>
         {%  elif relationship.exercise.supportfile.is_python or  relationship.exercise.supportfile.is_scratch %}
@@ -12,6 +24,12 @@
         {%  elif relationship.exercise.supportfile.is_image %}
             <img src="{{  w_a.imagefile.url }}" width="100%"/>
         {% endif %}
+
+
+
+
+
+    </div>    
 {% else %}
 
     <div class="alert alert-danger">  
@@ -20,8 +38,7 @@
 {% endif %}
 </div>
 <div class="col-sm-12 col-md-5" style="padding-right:0px">
-    <h4>{{ student }} {% if w_a %}<span class="pull-right text-primary">Remis le {{ w_a.date|date:"D d M Y"}}</span>{% endif %}</h4>
-    <hr>
+ 
     
     {% include 'qcm/correction_tools.html' %}
 
@@ -58,7 +75,6 @@
                 </td>
             </tr>
     </table>
-    <hr>
     <table class="table table-bordered table-hover fontsize_14">
         <tr style="background-color: #F0F0F0">
             <td>Compétences</td><td>NE</td><td><i class="fa fa-circle text-danger"></i></td><td><i class="fa fa-circle text-warning"></i></td><td><i class="fa fa-circle text-success"></i></td><td><i class="fa fa-circle text-primary"></i></td>

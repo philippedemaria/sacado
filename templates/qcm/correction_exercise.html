@@ -44,9 +44,17 @@
 
 
 {% block page_menu_right %}
+
+
+{% if student %}
+    <h4 style="color:#999">Remis par <span  style="color:#5d4391">{{ student }}</span>, le {% if w_a %}{{ w_a.date|date:"D d M Y"}}{% endif %}{% if c_e %}{{ c_e.date|date:"D d M Y"}}{% endif %}</h4>
+{% else %}
     <a href="{% url 'show_parcours' parcours.id %}">
         <input type="button" value="Retour au parcours" class="btn btn-default "/>
     </a>
+{% endif %}
+
+
 {% endblock %}
 
 
@@ -55,8 +63,7 @@
 {% block body %}
 <section class="content_list">  
     <div class="row"> 
-
-        <form method="post" action="" enctype='multipart/form-data'>
+        <form method="POST" action="" enctype='multipart/form-data'>
             {% csrf_token %} 
             <div class="col-sm-12 col-md-2 div_students">
                 <table class="table table-bordered table-hover">
@@ -72,7 +79,7 @@
                             <td {% if student %}{% if student == stud %} style="background-color: #F0F0F0;"{% endif %}{% endif %}>
                                 {% get_done relationship stud as done %}
                                 {% if done %}
-                                    <a href="{% url 'correction_exercise' relationship.id  relationship.parcours.id  stud.user.id  %}" >
+                                    <a href="{% url 'correction_exercise' relationship.id  0  stud.user.id  %}" >
                                         <!--data-student_id="{{ student.user.id }}" data-relationship_id="{{ relationship.id }}" data-parcours_id="0" data-custom="0" class="choose_student"  --> 
                                         {{ stud.user.last_name|title }} {{ stud.user.first_name|title }} 
 
