@@ -18,14 +18,14 @@ import re
 
 
 
-@user_is_superuser
+#@user_is_superuser
 def list_themes(request):
  
     themes = Theme.objects.all()
 
     return render(request, 'socle/list_themes.html', {'themes': themes, 'communications' : [] , })
 
-@user_is_superuser 
+#@user_is_superuser 
 def create_theme(request):
 
     form = ThemeForm(request.POST or None  )
@@ -41,7 +41,7 @@ def create_theme(request):
 
     return render(request, 'socle/form_theme.html', context)
 
-@user_is_superuser 
+#@user_is_superuser 
 def update_theme(request, id):
 
     theme = Theme.objects.get(id=id)
@@ -59,7 +59,7 @@ def update_theme(request, id):
     return render(request, 'socle/form_theme.html', context )
 
 
-@user_is_superuser 
+#@user_is_superuser 
 def delete_theme(request, id):
     theme = Theme.objects.get(id=id)
     theme.delete()
@@ -67,14 +67,14 @@ def delete_theme(request, id):
 
 
 
-@user_is_superuser 
+#@user_is_superuser 
 def list_knowledges(request):
  
     knowledges = Knowledge.objects.all().select_related('theme', 'level').prefetch_related('exercises')
 
     return render(request, 'socle/list_knowledges.html', {'communications' : [] , 'knowledges': knowledges})
 
-@user_is_superuser 
+#@user_is_superuser 
 def create_knowledge(request):
 
     form = KnowledgeForm(request.POST or None  )
@@ -90,7 +90,7 @@ def create_knowledge(request):
 
     return render(request, 'socle/form_knowledge.html', context)
 
-@user_is_superuser 
+#@user_is_superuser 
 def create_multi_knowledge(request):
 
     form = MultiKnowledgeForm(request.POST or None  )
@@ -113,7 +113,7 @@ def create_multi_knowledge(request):
 
 
 
-@user_is_superuser
+#@user_is_superuser
 def update_knowledge(request, id):
 
     knowledge = Knowledge.objects.get(id=id)
@@ -130,21 +130,21 @@ def update_knowledge(request, id):
 
     return render(request, 'socle/form_knowledge.html', context )
 
-@user_is_superuser
+#@user_is_superuser
 def delete_knowledge(request, id):
     knowledge = Knowledge.objects.get(id=id)
     knowledge.delete()
     return redirect('knowledges')
 
 
-@user_is_superuser
+#@user_is_superuser
 def list_levels(request):
  
     levels = Level.objects.all()
 
     return render(request, 'socle/list_levels.html', {'communications' : [] ,'levels': levels})
 
-@user_is_superuser
+#@user_is_superuser
 def create_level(request):
 
     form = LevelForm(request.POST or None  )
@@ -160,7 +160,7 @@ def create_level(request):
 
     return render(request, 'socle/form_level.html', context)
 
-@user_is_superuser
+#@user_is_superuser
 def update_level(request, id):
     
     teacher = Teacher.objects.get(user=request.user)
@@ -178,7 +178,7 @@ def update_level(request, id):
 
     return render(request, 'socle/form_level.html', context )
 
-@user_is_superuser
+#@user_is_superuser
 def delete_level(request, id):
     level = Level.objects.get(id=id)
     level.delete()
@@ -189,7 +189,7 @@ def delete_level(request, id):
  
 
 
-@user_is_superuser 
+#@user_is_superuser 
 def create_multi_skill(request):
 
     form = MultiSkillForm(request.POST or None  )
@@ -211,7 +211,7 @@ def create_multi_skill(request):
 
 
 
-@user_is_superuser
+#@user_is_superuser
 def update_skill(request, id):
 
     skill = Skill.objects.get(id=id)
@@ -228,14 +228,14 @@ def update_skill(request, id):
 
     return render(request, 'socle/form_skill.html', context )
 
-@user_is_superuser
+#@user_is_superuser
 def delete_skill(request, id):
     skill = Skill.objects.get(id=id)
     skill.delete()
     return redirect('skills')
 
 
-@user_is_superuser
+#@user_is_superuser
 def list_skills(request):
  
     skills = Skill.objects.order_by("subject")

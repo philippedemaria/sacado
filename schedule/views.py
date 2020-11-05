@@ -243,7 +243,7 @@ def events_json_group(request):
 
 
 
-@user_is_group_teacher
+#@user_is_group_teacher
 def schedule_task_group(request, id):
     group = Group.objects.get(id=id)
     teacher =  Teacher.objects.get(user= request.user)

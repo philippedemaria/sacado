@@ -218,7 +218,7 @@ def list_groups(request):
 
 
 
-@user_passes_test(user_can_create)
+#@user_passes_test(user_can_create)
 def create_group(request):
     teacher = Teacher.objects.get(user_id=request.user.id)
     form = GroupTeacherForm(request.POST or None, teacher = teacher )
@@ -246,7 +246,7 @@ def create_group(request):
 
 
 
-@user_is_group_teacher
+#@user_is_group_teacher
 def update_group(request, id):
 
 
@@ -307,7 +307,7 @@ def delete_group(request, id):
 
 
 
-@user_is_group_teacher
+#@user_is_group_teacher
 def show_group(request, id ):
 
     group = Group.objects.get(id=id)
@@ -445,7 +445,7 @@ def sender_mail(request,form):
 
 
 
-@user_is_group_teacher
+#@user_is_group_teacher
 def result_group(request, id):
 
     group = Group.objects.get(id=id)
@@ -485,7 +485,7 @@ def result_group(request, id):
 
 
 
-@user_is_group_teacher
+#@user_is_group_teacher
 def result_group_theme(request, id, idt):
 
     teacher = Teacher.objects.get(user=request.user)
@@ -508,7 +508,7 @@ def result_group_theme(request, id, idt):
 
 
 
-@user_is_group_teacher
+#@user_is_group_teacher
 def result_group_exercise(request, id):
     group = Group.objects.get(id=id)
     form = EmailForm(request.POST or None)
@@ -523,7 +523,7 @@ def result_group_exercise(request, id):
 
 
 
-@user_is_group_teacher
+#@user_is_group_teacher
 def result_group_skill(request, id):
 
     group = Group.objects.get(id=id)
@@ -539,7 +539,7 @@ def result_group_skill(request, id):
 
 
 
-@user_is_group_teacher
+#@user_is_group_teacher
 def result_group_theme_exercise(request, id, idt):
     group = Group.objects.get(id=id)
     form = EmailForm(request.POST or None )
@@ -554,7 +554,7 @@ def result_group_theme_exercise(request, id, idt):
  
 
 
-@user_is_group_teacher
+#@user_is_group_teacher
 def stat_group(request, id):
     group = Group.objects.get(id=id)
     form = EmailForm(request.POST or None )
@@ -627,7 +627,7 @@ def stat_group(request, id):
  
 
 
-@user_is_group_teacher
+#@user_is_group_teacher
 def task_group(request, id):
     group = Group.objects.get(id=id)
     stats = []

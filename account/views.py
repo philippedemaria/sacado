@@ -212,8 +212,8 @@ def message_to_teachers_sent(request):
 #########################################Student #####################################################################
 
 
-@can_register
-@is_manager_of_this_school
+#@can_register
+#@is_manager_of_this_school
 def register_student_from_admin(request):
     """"
     Enregistre un enseignant depuis la console admin d'un établissement
@@ -306,8 +306,8 @@ def register_student(request):
 
 
 
-@can_register
-@is_manager_of_this_school
+#@can_register
+#@is_manager_of_this_school
 def update_student(request, id,idg=0):  
     """
     Upadta par un admin d'un établissement
@@ -336,8 +336,8 @@ def update_student(request, id,idg=0):
 
 
 
-@can_register
-@is_manager_of_this_school
+#@can_register
+#@is_manager_of_this_school
 def update_student_by_admin(request, id):  
     """
     Upadta par un admin d'un établissement
@@ -472,7 +472,7 @@ def sender_mail(request,form):
             print("no_sending")
 
 
-@who_can_read_details
+#@who_can_read_details
 def detail_student(request, id):
 
     student = Student.objects.get(user_id=id)
@@ -524,7 +524,7 @@ def detail_student(request, id):
 
 
 
-@who_can_read_details
+#@who_can_read_details
 def detail_student_theme(request, id,idt):
     student = Student.objects.get(user_id=id)
     parcourses = Parcours.objects.filter(students=student)
@@ -590,7 +590,7 @@ def detail_student_theme(request, id,idt):
 
 
 
-@who_can_read_details
+#@who_can_read_details
 def detail_student_parcours(request, id,idp):
     student = Student.objects.get(user_id=id)
     parcours = Parcours.objects.get(pk=idp)
@@ -624,7 +624,7 @@ def detail_student_parcours(request, id,idp):
 
 
 
-@user_can_read_details
+#@user_can_read_details
 def detail_student_all_views(request, id):
     user = User.objects.get(pk=id)
     student = Student.objects.get(user=user)
@@ -772,8 +772,8 @@ def register_teacher(request):
 
 
 
-@can_register
-@is_manager_of_this_school
+#@can_register
+#@is_manager_of_this_school
 def update_teacher(request, pk):
     user = get_object_or_404(User, pk=pk)
     teacher = get_object_or_404(Teacher, user=user)
@@ -806,8 +806,8 @@ def update_teacher(request, pk):
 
 
 
-@can_register
-@is_manager_of_this_school
+#@can_register
+#@is_manager_of_this_school
 def delete_teacher(request, pk):
     if request.POST:
         teacher = get_object_or_404(Teacher, user_id=pk)
@@ -842,8 +842,8 @@ def get_username(ln, fn):
     return un
 
 
-@can_register
-@is_manager_of_this_school
+#@can_register
+#@is_manager_of_this_school
 def register_teacher_from_admin(request):
     """"
     Enregistre un enseignant depuis la console admin d'un établissement
@@ -884,8 +884,8 @@ def register_teacher_from_admin(request):
 
 
 
-@can_register
-@is_manager_of_this_school
+#@can_register
+#@is_manager_of_this_school
 def register_by_csv(request, key, idg=0):
     """
     Enregistrement par csv : key est le code du user_type : 0 pour student, 2 pour teacher
@@ -981,8 +981,8 @@ def register_by_csv(request, key, idg=0):
 
 
 
-@can_register
-@is_manager_of_this_school
+#@can_register
+#@is_manager_of_this_school
 def register_users_by_csv(request,key):
     """
     Enregistrement par csv : key est le code du user_type : 0 pour student, 2 pour teacher

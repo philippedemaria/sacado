@@ -245,37 +245,28 @@ def change_color(filename, color, code):
         file.write(filedata)
 
 
+@is_manager_of_this_school
 def admin_tdb(request):
-    if request.user.school :
-        school = request.user.school
-        nb_teachers = User.objects.filter(school=school, user_type=2).count()
-        nb_students = User.objects.filter(school=school, user_type=0).count()
-        nb_groups = Group.objects.filter(teacher__user__school=school).count()
+    school = request.user.school
+    nb_teachers = User.objects.filter(school=school, user_type=2).count()
+    nb_students = User.objects.filter(school=school, user_type=0).count()
+    nb_groups = Group.objects.filter(teacher__user__school=school).count()
 
-        try:
-            stage = Stage.objects.get(school=school)
-            if stage:
-                eca, ac, dep = stage.medium - stage.low, stage.up - stage.medium, 100 - stage.up
-            else:
-                eca, ac, dep = 20, 15, 15
-
-        except:
-            stage = {"low": 50, "medium": 70, "up": 85}
+    try:
+        stage = Stage.objects.get(school=school)
+        if stage:
+            eca, ac, dep = stage.medium - stage.low, stage.up - stage.medium, 100 - stage.up
+        else:
             eca, ac, dep = 20, 15, 15
 
-        context = {'nb_teachers': nb_teachers, 'nb_students': nb_students,
+    except:
+        stage = {"low": 50, "medium": 70, "up": 85}
+        eca, ac, dep = 20, 15, 15
+
+    return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers, 'nb_students': nb_students,
                                                     'nb_groups': nb_groups, 'school': school, 'stage': stage,
                                                     'eca': eca, 'ac': ac, 'dep': dep , 'communications' : [],
-                                                    }
-
-
-    else : 
-
-        context = { }
-
-
-
-    return render(request, 'dashboard_admin.html', context )
+                                                    })
 
 
 def gestion_files(request):

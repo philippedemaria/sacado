@@ -316,7 +316,7 @@ def ajax_populate(request):
 
 
 
-@user_is_parcours_teacher
+#@user_is_parcours_teacher
 def peuplate_parcours(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
     levels =  teacher.levels.all() 
@@ -382,7 +382,7 @@ def peuplate_parcours(request,id):
 
 
 
-@user_is_parcours_teacher
+#@user_is_parcours_teacher
 def peuplate_parcours_evaluation(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
     levels =  teacher.levels.all() 
@@ -449,7 +449,7 @@ def peuplate_parcours_evaluation(request,id):
 
 
 
-@user_is_parcours_teacher
+#@user_is_parcours_teacher
 def individualise_parcours(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcours = Parcours.objects.get(pk = id)
@@ -589,7 +589,7 @@ def list_evaluations_archives(request):
 
 
 
-@user_is_group_teacher
+##@user_is_group_teacher
 def list_parcours_group(request,id):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -640,7 +640,7 @@ def all_parcourses(request):
 
 
 
-@user_passes_test(user_can_create)
+#@user_passes_test(user_can_create)
 def create_parcours(request):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -714,7 +714,7 @@ def create_parcours(request):
     return render(request, 'qcm/form_parcours.html', context)
 
 
-@user_is_parcours_teacher 
+#@user_is_parcours_teacher 
 def update_parcours(request, id, idg=0 ):
     teacher = Teacher.objects.get(user_id=request.user.id)
     levels = teacher.levels.all()
@@ -797,7 +797,7 @@ def update_parcours(request, id, idg=0 ):
 
 
 
-@user_is_parcours_teacher 
+#@user_is_parcours_teacher 
 def archive_parcours(request, id, idg=0):
 
     parcours = Parcours.objects.filter(id=id).update(is_archive=1,is_favorite=0,is_publish=0)
@@ -811,7 +811,7 @@ def archive_parcours(request, id, idg=0):
 
 
 
-@user_is_parcours_teacher 
+#@user_is_parcours_teacher 
 def unarchive_parcours(request, id, idg=0):
 
     parcours = Parcours.objects.filter(id=id).update(is_archive=0,is_favorite=0,is_publish=0)
@@ -825,7 +825,7 @@ def unarchive_parcours(request, id, idg=0):
  
 
 
-@user_is_parcours_teacher 
+#@user_is_parcours_teacher 
 def delete_parcours(request, id, idg=0):
     parcours = Parcours.objects.get(id=id)
     parcours.students.clear()
@@ -856,7 +856,7 @@ def delete_parcours(request, id, idg=0):
 
 
 
-@user_is_parcours_teacher 
+#@user_is_parcours_teacher 
 def show_parcours(request, id):
     parcours = Parcours.objects.get(id=id)
     user = User.objects.get(pk=request.user.id)
@@ -970,7 +970,7 @@ def show_parcours_visual(request, id):
 
 
 
-@user_is_parcours_teacher 
+#@user_is_parcours_teacher 
 def result_parcours(request, id):
 
     parcours = Parcours.objects.get(id=id)
@@ -1018,7 +1018,7 @@ def result_parcours(request, id):
 
 
  ########## Sans doute plus utilisée ???? 
-@user_is_parcours_teacher 
+#@user_is_parcours_teacher 
 def result_parcours_theme(request, id, idt):
 
     teacher = Teacher.objects.get(user=request.user)
@@ -1058,7 +1058,7 @@ def result_parcours_theme(request, id, idt):
 
 
  
-@user_is_parcours_teacher 
+#@user_is_parcours_teacher 
 def result_parcours_knowledge(request, id):
 
     teacher = Teacher.objects.get(user=request.user)
@@ -1096,7 +1096,7 @@ def result_parcours_knowledge(request, id):
 
 
 
-@user_is_parcours_teacher 
+#@user_is_parcours_teacher 
 def stat_parcours(request, id):
 
     teacher = Teacher.objects.get(user = request.user)
@@ -1238,7 +1238,7 @@ def stat_parcours(request, id):
 
 
 
-@user_is_parcours_teacher 
+#@user_is_parcours_teacher 
 def stat_evaluation(request, id):
 
     teacher = Teacher.objects.get(user = request.user)
@@ -1515,7 +1515,7 @@ def ajax_exercise_error(request):
     return JsonResponse(data) 
 
 
-@user_is_parcours_teacher
+#@user_is_parcours_teacher
 def parcours_tasks_and_publishes(request, id):
 
     today = time_zone_user(request.user)
@@ -1539,7 +1539,7 @@ def parcours_tasks_and_publishes(request, id):
 
  
 
-@user_is_parcours_teacher
+#@user_is_parcours_teacher
 def result_parcours_exercise_students(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcours = Parcours.objects.get(pk = id)
@@ -2181,7 +2181,7 @@ def list_exercises(request):
 
 
 
-@user_passes_test(user_is_superuser)
+#@user_passes_test(user_is_superuser)
 def admin_list_associations(request,id):
     level = Level.objects.get(pk = id)
     user = request.user
@@ -2193,7 +2193,7 @@ def admin_list_associations(request,id):
  
 
 
-@user_passes_test(user_is_superuser)
+#@user_passes_test(user_is_superuser)
 def gestion_supportfiles(request):
   
     lvls = []
@@ -2212,7 +2212,7 @@ def gestion_supportfiles(request):
 
 
 
-@user_passes_test(user_is_superuser)
+#@user_passes_test(user_is_superuser)
 def ajax_update_association(request):
     data = {} 
     code = request.POST.get('code')
@@ -2251,7 +2251,7 @@ def ajax_update_association(request):
 
 
 
-@user_passes_test(user_is_superuser)
+#@user_passes_test(user_is_superuser)
 def admin_list_supportfiles(request,id):
     user = request.user
     teacher = Teacher.objects.get(user=user)
@@ -2298,7 +2298,7 @@ def admin_list_supportfiles(request,id):
 
 
 
-@user_is_parcours_teacher
+#@user_is_parcours_teacher
 def parcours_exercises(request,id):
     user = request.user
     parcours = Parcours.objects.get(pk=id)
@@ -2326,7 +2326,7 @@ def exercises_level(request, id):
 
 
 
-@user_passes_test(user_is_superuser)
+#@user_passes_test(user_is_superuser)
 def create_supportfile(request):
 
     code = str(uuid.uuid4())[:8]
@@ -2351,7 +2351,7 @@ def create_supportfile(request):
 
 
 
-@user_passes_test(user_is_superuser)
+#@user_passes_test(user_is_superuser)
 def create_supportfile_knowledge(request,id):
 
     code = str(uuid.uuid4())[:8]
@@ -2383,7 +2383,7 @@ def create_supportfile_knowledge(request,id):
 
 
 
-@user_passes_test(user_is_superuser)
+#@user_passes_test(user_is_superuser)
 def update_supportfile(request, id, redirection=0):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -2414,7 +2414,7 @@ def update_supportfile(request, id, redirection=0):
 
 
 
-@user_passes_test(user_is_superuser)
+#@user_passes_test(user_is_superuser)
 def delete_supportfile(request, id):
     if request.user.is_superuser:
         supportfile = Supportfile.objects.get(id=id)
@@ -2428,7 +2428,7 @@ def delete_supportfile(request, id):
 
 
 
-@user_passes_test(user_is_superuser)
+#@user_passes_test(user_is_superuser)
 def show_this_supportfile(request, id):
 
     if request.user.is_teacher:
@@ -2447,7 +2447,7 @@ def show_this_supportfile(request, id):
 
 
 
-@user_passes_test(user_is_superuser)
+#@user_passes_test(user_is_superuser)
 def create_exercise(request, supportfile_id):
  
     knowledges = Knowledge.objects.all().order_by("level").select_related('level')
@@ -2875,7 +2875,7 @@ def ajax_search_exercise(request):
 
 
 
-@user_passes_test(user_can_create)
+#@user_passes_test(user_can_create)
 def create_evaluation(request):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -2938,7 +2938,7 @@ def create_evaluation(request):
     return render(request, 'qcm/form_evaluation.html', context)
 
 
-@user_is_parcours_teacher 
+#@user_is_parcours_teacher 
 def update_evaluation(request, id, idg=0 ):
     teacher = Teacher.objects.get(user_id=request.user.id)
     levels = teacher.levels.all()
@@ -3020,7 +3020,7 @@ def delete_evaluation(request,id):
 
 
 
-@user_is_parcours_teacher 
+#@user_is_parcours_teacher 
 def show_evaluation(request, id):
     parcours = Parcours.objects.get(id=id)
     user = User.objects.get(pk=request.user.id)
@@ -3348,7 +3348,7 @@ def audio_remediation(request):
 
 
 
-@user_is_parcours_teacher 
+#@user_is_parcours_teacher 
 def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice non autocorrigé dans un parcours
 
     teacher = Teacher.objects.get(user=request.user)
@@ -3374,7 +3374,7 @@ def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice no
     return render(request, 'qcm/form_exercise_custom.html', context)
 
 
-@user_is_parcours_teacher 
+#@user_is_parcours_teacher 
 def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exercice non autocorrigé dans un parcours
 
     teacher = Teacher.objects.get(user=request.user)
@@ -3420,7 +3420,7 @@ def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exerci
 
  
 
-@user_is_parcours_teacher 
+#@user_is_parcours_teacher 
 def parcours_delete_custom_exercise(request,idcc,id): # Suppression d'un exercice non autocorrigé dans un parcours
 
     teacher = Teacher.objects.get(user=request.user)
@@ -3561,7 +3561,7 @@ def show_custom_exercise(request,id,idp): # vue pour le prof de l'exercice non a
 #######################################################################################################################################################################
 
 
-@user_is_parcours_teacher 
+#@user_is_parcours_teacher 
 def detail_task_parcours(request,id,s):
 
     teacher = Teacher.objects.get(user = request.user)   
@@ -3608,7 +3608,7 @@ def detail_task_parcours(request,id,s):
 
 
 
-@user_is_parcours_teacher 
+#@user_is_parcours_teacher 
 def detail_task(request,id,s):
 
     teacher = Teacher.objects.get(user = request.user)   
@@ -4140,7 +4140,7 @@ def list_courses(request):
 
 
 
-@user_is_parcours_teacher
+#@user_is_parcours_teacher
 def create_course(request, idc , id ):
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
@@ -4174,7 +4174,7 @@ def create_course(request, idc , id ):
 
 
 
-@user_can_modify_this_course
+#@user_can_modify_this_course
 def update_course(request, idc, id  ):
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
@@ -4219,7 +4219,7 @@ def update_course(request, idc, id  ):
 
 
 
-@user_is_parcours_teacher
+#@user_is_parcours_teacher
 def delete_course(request, idc , id  ):
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
@@ -4234,7 +4234,7 @@ def delete_course(request, idc , id  ):
 
 
 
-@user_is_parcours_teacher
+#@user_is_parcours_teacher
 def show_course(request, idc , id ):
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
@@ -4519,7 +4519,7 @@ def create_mastering(request,id):
 
     return render(request, 'qcm/mastering/form_mastering.html', context)
 
-@user_is_relationship_teacher 
+#@user_is_relationship_teacher 
 def parcours_mastering_delete(request,id,idm):
 
     m = Mastering.objects.get(pk = idm)
@@ -4725,7 +4725,7 @@ def create_mastering_custom(request,id,idp):
     return render(request, 'qcm/mastering/form_mastering_custom.html', context)
 
 
-@user_is_customexercice_teacher 
+#@user_is_customexercice_teacher 
 def parcours_mastering_custom_delete(request,id,idm,idp):
 
     m = Masteringcustom.objects.get(pk = idm)

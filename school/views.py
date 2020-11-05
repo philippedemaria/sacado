@@ -47,14 +47,14 @@ def get_username(ln, fn):
             un = un + str(i)
     return un
 
-@user_is_superuser
+#@user_is_superuser
 def list_schools(request):
 	schools = School.objects.all()
 	return render(request, 'school/lists.html', { 'communications' : [], 'schools': schools})
 
 
 
-@user_is_superuser
+#@user_is_superuser
 def create_school(request):
 	form = SchoolForm(request.POST or None)
 	
@@ -66,7 +66,7 @@ def create_school(request):
 
 	return render(request,'school/_form.html', { 'communications' : [], 'form':form})
 
-@user_is_superuser
+#@user_is_superuser
 def update_school(request,id):
 	school = School.objects.get(id=id)
 	form = SchoolForm(request.POST or None, instance=school)
@@ -77,7 +77,7 @@ def update_school(request,id):
 
 	return render(request,'school/_form.html', {'form':form,  'communications' : [],'school':school})
 
-@user_is_superuser
+#@user_is_superuser
 def delete_school(request,id):
 	school = School.objects.get(id=id)
 	school.delete()
@@ -87,12 +87,12 @@ def delete_school(request,id):
 
 
 
-@user_is_superuser
+#@user_is_superuser
 def list_countries(request):
 	countries = Country.objects.all()
 	return render(request,'school/lists_country.html', { 'communications' : [], 'countries':countries})
 
-@user_is_superuser
+#@user_is_superuser
 def create_country(request):
 	form = CountryForm(request.POST or None,request.FILES or None )
 	
@@ -102,7 +102,7 @@ def create_country(request):
 
 	return render(request,'school/country_form.html', { 'communications' : [], 'form':form})
 
-@user_is_superuser
+#@user_is_superuser
 def update_country(request,id):
 	country = Country.objects.get(id=id)
 	form = CountryForm(request.POST or None,request.FILES or None, instance=country)
@@ -113,7 +113,7 @@ def update_country(request,id):
 
 	return render(request,'school/country_form.html', { 'communications' : [], 'form':form, 'country':country})
 
-@user_is_superuser
+#@user_is_superuser
 def delete_country(request,id):
 	country = Country.objects.get(id=id)
 	country.delete()
@@ -145,7 +145,7 @@ def clear_detail_student(student):
 
 
 
-@is_manager_of_this_school
+#@is_manager_of_this_school
 def school_teachers(request):
 	if request.session.get("school_id") :
 		school_id = request.session.get("school_id")
@@ -158,7 +158,7 @@ def school_teachers(request):
 
 
 
-@is_manager_of_this_school
+#@is_manager_of_this_school
 def school_groups(request):
 	if request.session.get("school_id"):
 		school_id = request.session.get("school_id")
@@ -173,7 +173,7 @@ def school_groups(request):
 
 
 
-@is_manager_of_this_school
+#@is_manager_of_this_school
 def school_level_groups(request):
 	if request.session.get("school_id") :
 		school_id = request.session.get("school_id")
@@ -191,7 +191,7 @@ def school_level_groups(request):
 
 
 
-@is_manager_of_this_school
+#@is_manager_of_this_school
 def school_students(request):
 	if request.session.get("school_id") :
 		school_id = request.session.get("school_id")
@@ -204,7 +204,7 @@ def school_students(request):
 
 
 
-@is_manager_of_this_school
+#@is_manager_of_this_school
 def new_student(request,slug):
     group = Group.objects.get(code=slug)
     user_form = NewUserSForm()
@@ -215,7 +215,7 @@ def new_student(request,slug):
 
 
 
-@is_manager_of_this_school
+#@is_manager_of_this_school
 def get_school_students(request):
 
 	school = request.user.school
@@ -238,7 +238,7 @@ def get_school_students(request):
  
 
 
-@is_manager_of_this_school
+#@is_manager_of_this_school
 def new_student_list(request,slug):
     group = Group.objects.get(code=slug)
     students = group.students.all().order_by("user__last_name")
@@ -251,7 +251,7 @@ def new_student_list(request,slug):
  
 
 
-@is_manager_of_this_school
+#@is_manager_of_this_school
 def push_student_group(request):
 	group_id = request.POST.get("group_id")
 	group = Group.objects.get(pk=group_id)
@@ -284,7 +284,7 @@ def sharing_teachers(request,group, teachers):
 
 
 
-@is_manager_of_this_school
+#@is_manager_of_this_school
 def new_group(request):
 	school = request.user.school
 	teachers = Teacher.objects.filter(user__school=school)
@@ -314,7 +314,7 @@ def new_group(request):
 
 
 
-@is_manager_of_this_school
+#@is_manager_of_this_school
 def update_group_school(request,id):
 	school = request.user.school
 	group = Group.objects.get(id=id)
@@ -345,7 +345,7 @@ def update_group_school(request,id):
 
 
 
-@is_manager_of_this_school
+#@is_manager_of_this_school
 def delete_student_group(request,id,ids):
 	school = request.user.school
 	group = Group.objects.get(id=id)
@@ -357,7 +357,7 @@ def delete_student_group(request,id,ids):
 
 
 
-@is_manager_of_this_school
+#@is_manager_of_this_school
 def delete_all_students_group(request,id):
 	school = request.user.school
 	group = Group.objects.get(id=id)
@@ -395,7 +395,7 @@ def ajax_subject_teacher(request):
 
 
 
-@is_manager_of_this_school
+#@is_manager_of_this_school
 def delete_school_students(request):
 	school = request.user.school
 	students = Student.objects.filter(user__school = school, user_type = 0)
@@ -407,7 +407,7 @@ def delete_school_students(request):
 
 
 
-@is_manager_of_this_school
+#@is_manager_of_this_school
 def delete_selected_students(request):
 	user_ids = request.POST.getlist("user_ids")
 	for user_id in user_ids :
@@ -421,7 +421,7 @@ def delete_selected_students(request):
 
 
 
-@is_manager_of_this_school
+#@is_manager_of_this_school
 def new_group_many(request):
 
 	school = request.user.school
@@ -447,7 +447,7 @@ def new_group_many(request):
 
 
 
-@is_manager_of_this_school
+#@is_manager_of_this_school
 def manage_stage(request):
 
 	school = request.user.school
@@ -481,7 +481,7 @@ def manage_stage(request):
 
 
 
-@is_manager_of_this_school
+#@is_manager_of_this_school
 def send_account(request, id):
 	rcv = []
 	if id == 0:
@@ -502,7 +502,7 @@ def send_account(request, id):
 
 
 
-@is_manager_of_this_school
+#@is_manager_of_this_school
 def pdf_account(request,id):
 
 	response = HttpResponse(content_type='application/pdf')
@@ -559,7 +559,7 @@ def pdf_account(request,id):
 
 import csv
 
-@is_manager_of_this_school
+#@is_manager_of_this_school
 def csv_full_group(request):
     """
     Enregistrement par csv : key est le code du user_type : 0 pour student, 2 pour teacher
