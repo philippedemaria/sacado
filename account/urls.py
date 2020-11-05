@@ -7,9 +7,10 @@ from account.views import *
 urlpatterns = [
     path('login', view=LoginView.as_view(template_name='registration/login.html', redirect_authenticated_user=True), name='login'),
     path('logout', LogoutView.as_view(template_name='home.html'), name='logout'),
-
     
-    path('dashboard',  initialView, name='dashboard'),
+
+    path('dashboard', view=DashboardView.as_view(), name='dashboard'),
+
 
     path('password/reset/', PasswordResetView.as_view(), name='password_reset'),
     path('password/reset/done/', PasswordResetDoneView.as_view(), name='password_reset_done'),
