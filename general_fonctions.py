@@ -5,7 +5,8 @@ import csv
 import pytz
 from datetime import datetime 
 from django.utils import timezone
-
+from django.http import HttpResponseRedirect
+from django.shortcuts import  redirect
 
 def time_zone_user(user):
     try :
@@ -46,3 +47,25 @@ def dt_naive_to_timezone(naive_date,timezone_user):
         utc_dt = tz.localize(naive_dt, is_dst=None).astimezone(pytz.utc)        
     return utc_dt
  
+
+
+def authorizing_access(teacher ,parcours_or_group, sharing_group): #sharing_group est un booléen
+
+    try : 
+        if  teacher == parcours_or_group.teacher or  sharing_group :
+            return True
+        else :
+            return False
+    except : 
+            return False
+
+
+def authorizing_access_student(student , parcours_or_group): 
+
+    try :
+        if student in parcours_or_group.students.all() :
+            pass
+        else :
+            return False
+    except : 
+            return False

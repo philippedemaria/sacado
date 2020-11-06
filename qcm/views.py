@@ -51,8 +51,6 @@ import csv
 import html
 from general_fonctions import *
 
- 
-
 
 def new_content_type(s):
     names = ['Pages', 'Questionnaires', 'Activités', 'Tâches',  'Fichiers', 'Urls externes', 'Discussions' , 'Notes',  'Acquis', 'Participants', 'Suivis' ]                
@@ -274,7 +272,8 @@ def ajax_populate(request):
     statut = request.POST.get("statut") 
     data = {}    
 
-    teacher = Teacher.objects.get(user= request.user)     
+    teacher = Teacher.objects.get(user= request.user)    
+
     if parcours.teacher == teacher :
         if statut=="true" or statut == "True":
 
@@ -320,8 +319,12 @@ def ajax_populate(request):
 def peuplate_parcours(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
     levels =  teacher.levels.all() 
- 
     parcours = Parcours.objects.get(id=id)
+
+    if not authorizing_access(teacher,parcours, True ):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
     form = UpdateParcoursForm(request.POST or None , instance=parcours, teacher = teacher  )
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
     """ affiche le parcours existant avant la modif en ajax""" 
@@ -388,6 +391,13 @@ def peuplate_parcours_evaluation(request,id):
     levels =  teacher.levels.all() 
  
     parcours = Parcours.objects.get(id=id)
+
+    if not authorizing_access(teacher,parcours, True ):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
+
+
     form = UpdateParcoursForm(request.POST or None , instance=parcours, teacher = teacher  )
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
     """ affiche le parcours existant avant la modif en ajax""" 
@@ -456,11 +466,15 @@ def individualise_parcours(request,id):
     relationships = Relationship.objects.filter(parcours = parcours).order_by("order")
     students = parcours.students.all().order_by("user__last_name")
 
-
     data = get_complement(teacher, parcours)
     role = data['role']
     group = data['group']
-    group_id = data['group_id']           
+    group_id = data['group_id']   
+
+    if not authorizing_access(teacher,parcours, role ):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
 
     context = {'relationships': relationships, 'parcours': parcours,     'communications':[],     'students': students,  'form': None,  
                     'teacher': teacher,
@@ -489,7 +503,14 @@ def ajax_individualise(request):
 
     relationship = Relationship.objects.get(parcours=parcours,exercise=exercise) 
     data = {}
-    teacher = Teacher.objects.get(user= request.user)     
+    teacher = Teacher.objects.get(user= request.user)
+
+
+    if not authorizing_access(teacher,parcours , True ):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
+
     if parcours.teacher == teacher :
         if student_id == 0 :  
             if statut=="true" or statut == "True" :
@@ -594,16 +615,22 @@ def list_parcours_group(request,id):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
     today = time_zone_user(teacher.user)
-    group = Group.objects.get(pk = id)
+    group = Group.objects.get(pk = id) 
+
     try :
         sharing_group = Sharing_group.objects.get(group = group, teacher=teacher)
         sharing = True
     except :
         sharing = False
 
+
+    if not authorizing_access(teacher,group, sharing ):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
+
     data = get_complement(teacher, group)
     role = data['role']
- 
     request.session["group_id"] = group.id
     group_tab = []
     data = {}
@@ -656,6 +683,17 @@ def create_parcours(request):
 
     groups = Group.objects.filter(teacher=teacher).prefetch_related('students').order_by("level")
     share_groups = Sharing_group.objects.filter(teacher  = teacher,role=1).order_by("group__level")
+
+    if len(share_groups)>0 :
+        sharing = True
+    else :
+        sharing = False
+
+    if not authorizing_access(teacher,group, sharing ):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
+
 
     if form.is_valid():
         nf = form.save(commit=False)
@@ -736,7 +774,14 @@ def update_parcours(request, id, idg=0 ):
 
 
     share_groups = Sharing_group.objects.filter(teacher  = teacher,role=1).order_by("group__level")
+    if len(share_groups)>0 :
+        sharing = True
+    else :
+        sharing = False
 
+    if not authorizing_access(teacher, parcours, sharing ):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
 
     if request.method == "POST":
         if form.is_valid():
@@ -800,7 +845,14 @@ def update_parcours(request, id, idg=0 ):
 #@user_is_parcours_teacher 
 def archive_parcours(request, id, idg=0):
 
+
     parcours = Parcours.objects.filter(id=id).update(is_archive=1,is_favorite=0,is_publish=0)
+    teacher = Teacher.objects.get(user = request.user) 
+
+    if not authorizing_access(teacher, parcours, False ):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
 
     if idg == 99999999999:
         return redirect('index')
@@ -814,7 +866,14 @@ def archive_parcours(request, id, idg=0):
 #@user_is_parcours_teacher 
 def unarchive_parcours(request, id, idg=0):
 
+
     parcours = Parcours.objects.filter(id=id).update(is_archive=0,is_favorite=0,is_publish=0)
+
+    teacher = Teacher.objects.get(user = request.user)
+
+    if not authorizing_access(teacher, parcours, False ):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
 
     if idg == 99999999999:
         return redirect('index')
@@ -830,6 +889,14 @@ def delete_parcours(request, id, idg=0):
     parcours = Parcours.objects.get(id=id)
     parcours.students.clear()
     parcours.parcours_relationship.all()
+
+
+    teacher = Teacher.objects.get(user = request.user)
+
+    if not authorizing_access(teacher, parcours, False ):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
  
     for r in parcours.parcours_relationship.all() :
         r.students.clear()
@@ -861,6 +928,16 @@ def show_parcours(request, id):
     parcours = Parcours.objects.get(id=id)
     user = User.objects.get(pk=request.user.id)
     teacher = Teacher.objects.get(user=user)
+
+    data = get_complement(teacher, parcours)
+    role = data['role']
+    group = data['group']
+    group_id = data['group_id'] 
+
+    if not authorizing_access(teacher, parcours, role ):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
     nb_exo_only, nb_exo_visible,nb_exo_only_c, nb_exo_visible_c = [] , []  , [], []
     i , j = 0, 0
@@ -886,10 +963,6 @@ def show_parcours(request, id):
 
 
 
-    data = get_complement(teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id']  
 
 
 
@@ -915,6 +988,11 @@ def show_parcours_student(request, id):
     parcours = Parcours.objects.get(id=id)
     user = request.user
     student = Student.objects.get(user = user)
+
+    if not authorizing_access_student(student, parcours):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
     relationships = Relationship.objects.filter(parcours=parcours, students=student, is_publish=1 ).order_by("order")
     customexercises = Customexercise.objects.filter(parcourses = parcours, students=student, is_publish=1 ).order_by("ranking") 
  
@@ -976,6 +1054,7 @@ def result_parcours(request, id):
     parcours = Parcours.objects.get(id=id)
     students = students_from_p_or_g(request,parcours) # liste des élèves d'un parcours donné 
     teacher = Teacher.objects.get(user = request.user)
+
     try :
         group_id = request.session["group_id"]
         if Sharing_group.objects.filter(group_id=group_id, teacher = parcours.teacher).exists() :
@@ -989,6 +1068,11 @@ def result_parcours(request, id):
 
     if parcours.teacher == teacher :
         role = True
+
+    if not authorizing_access(teacher, parcours,role):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
 
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise').order_by("order")
     themes_tab, historic = [],  []
@@ -1033,6 +1117,9 @@ def result_parcours_theme(request, id, idt):
 
     customexercises = parcours.parcours_customexercises.all() 
  
+    if not authorizing_access(teacher, parcours,role):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
 
     theme = Theme.objects.get(id=idt)
     exercises = Exercise.objects.filter(knowledge__theme = theme, supportfile__is_title=0).order_by("id")
@@ -1074,8 +1161,11 @@ def result_parcours_knowledge(request, id):
     data = get_complement(teacher, parcours)
     role = data['role']
     group = data['group']
-    group_id = data['group_id']  
+    group_id = data['group_id'] 
 
+    if not authorizing_access(teacher, parcours,role):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
 
     knowledge_ids = parcours.exercises.values_list("knowledge",flat=True).order_by("knowledge").distinct()
 
@@ -1117,6 +1207,10 @@ def stat_parcours(request, id):
     role = data['role']
     group = data['group']
     group_id = data['group_id']  
+
+    if not authorizing_access(teacher, parcours,role):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
 
     customexercises = parcours.parcours_customexercises.order_by("ranking")
     students = students_from_p_or_g(request,parcours) 
@@ -1261,6 +1355,9 @@ def stat_evaluation(request, id):
     group = data['group']
     group_id = data['group_id']  
 
+    if not authorizing_access(teacher, parcours,role):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
 
     students = students_from_p_or_g(request,parcours) 
 
@@ -1528,6 +1625,10 @@ def parcours_tasks_and_publishes(request, id):
     group = data['group']
     group_id = data['group_id']  
 
+    if not authorizing_access(teacher, parcours,role):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
     form = AttachForm(request.POST or None, request.FILES or None)
 
     relationships = Relationship.objects.filter(parcours=parcours).order_by("exercise__theme")
@@ -1549,7 +1650,11 @@ def result_parcours_exercise_students(request,id):
     except :
         group_id = None
         group = None
- 
+
+    if not authorizing_access(teacher, parcours,True):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
     relationships = Relationship.objects.filter(parcours = parcours, is_publish = 1) 
     customexercises = parcours.parcours_customexercises.filter( is_publish = 1).order_by("ranking")
     stage = get_stage(teacher.user)
@@ -2181,7 +2286,7 @@ def list_exercises(request):
 
 
 
-#@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_superuser)
 def admin_list_associations(request,id):
     level = Level.objects.get(pk = id)
     user = request.user
@@ -2193,7 +2298,7 @@ def admin_list_associations(request,id):
  
 
 
-#@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_superuser)
 def gestion_supportfiles(request):
   
     lvls = []
@@ -2212,7 +2317,7 @@ def gestion_supportfiles(request):
 
 
 
-#@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_superuser)
 def ajax_update_association(request):
     data = {} 
     code = request.POST.get('code')
@@ -2251,7 +2356,7 @@ def ajax_update_association(request):
 
 
 
-#@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_superuser)
 def admin_list_supportfiles(request,id):
     user = request.user
     teacher = Teacher.objects.get(user=user)
@@ -2296,13 +2401,14 @@ def admin_list_supportfiles(request,id):
  
 
 
-
-
-#@user_is_parcours_teacher
 def parcours_exercises(request,id):
     user = request.user
     parcours = Parcours.objects.get(pk=id)
     student = Student.objects.get(user=user)
+
+    if not authorizing_access_student(student, parcours):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
 
     relationships = Relationship.objects.filter(parcours=parcours,is_publish=1).order_by("exercise__theme")
 
@@ -2326,7 +2432,7 @@ def exercises_level(request, id):
 
 
 
-#@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_superuser)
 def create_supportfile(request):
 
     code = str(uuid.uuid4())[:8]
@@ -2351,7 +2457,7 @@ def create_supportfile(request):
 
 
 
-#@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_superuser)
 def create_supportfile_knowledge(request,id):
 
     code = str(uuid.uuid4())[:8]
@@ -2383,7 +2489,7 @@ def create_supportfile_knowledge(request,id):
 
 
 
-#@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_superuser)
 def update_supportfile(request, id, redirection=0):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -2414,7 +2520,7 @@ def update_supportfile(request, id, redirection=0):
 
 
 
-#@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_superuser)
 def delete_supportfile(request, id):
     if request.user.is_superuser:
         supportfile = Supportfile.objects.get(id=id)
@@ -2428,7 +2534,7 @@ def delete_supportfile(request, id):
 
 
 
-#@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_superuser)
 def show_this_supportfile(request, id):
 
     if request.user.is_teacher:
@@ -2447,7 +2553,7 @@ def show_this_supportfile(request, id):
 
 
 
-#@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_superuser)
 def create_exercise(request, supportfile_id):
  
     knowledges = Knowledge.objects.all().order_by("level").select_related('level')
@@ -2736,10 +2842,6 @@ def ajax_level_exercise(request):
 
 
 
- 
-
- 
-
 def ajax_knowledge_exercise(request):
     theme_id = request.POST.get('theme_id', None)
     level_id = request.POST.get('level_id', None)
@@ -2871,12 +2973,10 @@ def ajax_search_exercise(request):
 
 
 
- 
-
-
-
-#@user_passes_test(user_can_create)
 def create_evaluation(request):
+
+    if not request.user.is_authenticated :
+        redirect('index')
 
     teacher = Teacher.objects.get(user_id = request.user.id)
     levels =  teacher.levels.all()    
@@ -2944,6 +3044,11 @@ def update_evaluation(request, id, idg=0 ):
     levels = teacher.levels.all()
 
     parcours = Parcours.objects.get(id=id)
+
+    if not authorizing_access(teacher, parcours,True):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
     form = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher)
 
     """ affiche le parcours existant avant la modif en ajax"""
@@ -3013,6 +3118,11 @@ def delete_evaluation(request,id):
 
     parcours = Parcours.objects.get(pk=id)
     teacher = Teacher.objects.get(user=request.user)
+
+    if not authorizing_access(teacher, parcours,True):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
     if parcours.teacher == teacher :
         parcours.exercices.clear() 
         parcours.delete() 
@@ -3025,6 +3135,11 @@ def show_evaluation(request, id):
     parcours = Parcours.objects.get(id=id)
     user = User.objects.get(pk=request.user.id)
     teacher = Teacher.objects.get(user=user)
+
+    if not authorizing_access(teacher, parcours,True):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
     nb_exo_only, nb_exo_visible = [], []
     i ,j = 0, 0
@@ -3069,11 +3184,22 @@ def correction_exercise(request,id,idp):
 
     if idp == 0 :
         relationship = Relationship.objects.get(pk=id)
+
+        if not authorizing_access(teacher, relationship.parcours,True):
+            messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+            return redirect('index')
+
+
         context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage ,  'communications' : [] ,  'parcours' : relationship.parcours , 'group' : None }
         return render(request, 'qcm/correction_exercise.html', context)
     else :
         customexercise = Customexercise.objects.get(pk=id)
         parcours = Parcours.objects.get(pk = idp)
+
+        if not authorizing_access(teacher, parcours,True):
+            messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+            return redirect('index')
+
         context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage ,  'communications' : [], 'parcours' : parcours, 'group' : None }
         return render(request, 'qcm/correction_custom_exercise.html', context)
 
@@ -3342,18 +3468,16 @@ def audio_remediation(request):
 
 
 
-
-
-
-
-
-
-#@user_is_parcours_teacher 
+ 
 def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice non autocorrigé dans un parcours
 
     teacher = Teacher.objects.get(user=request.user)
     stage = get_stage(teacher.user)
     parcours = Parcours.objects.get(pk=id)
+
+    if not authorizing_access(teacher, parcours,True):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
 
     ceForm = CustomexerciseForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours) 
 
@@ -3374,7 +3498,7 @@ def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice no
     return render(request, 'qcm/form_exercise_custom.html', context)
 
 
-#@user_is_parcours_teacher 
+ 
 def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exercice non autocorrigé dans un parcours
 
     teacher = Teacher.objects.get(user=request.user)
@@ -3382,6 +3506,10 @@ def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exerci
     custom = Customexercise.objects.get(pk=idcc)
 
     if id == 0 :
+
+        if not authorizing_access(teacher, custom ,True):
+            messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+            return redirect('index')
 
         ceForm = CustomexerciseNPForm(request.POST or None, request.FILES or None , teacher = teacher ,  custom = custom, instance = custom ) 
 
@@ -3400,6 +3528,10 @@ def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exerci
     else :
  
         parcours = Parcours.objects.get(pk=id)
+        if not authorizing_access(teacher, parcours,True):
+            messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+            return redirect('index')
+
         ceForm = CustomexerciseForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours, instance = custom ) 
 
         if request.method == "POST" :
@@ -3425,6 +3557,10 @@ def parcours_delete_custom_exercise(request,idcc,id): # Suppression d'un exercic
 
     teacher = Teacher.objects.get(user=request.user)
     custom = Customexercise.objects.get(pk=idcc)
+        
+    if not authorizing_access(teacher, custom,True):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
 
     if id == 0 :   
         custom.delete() 
@@ -3441,6 +3577,12 @@ def write_exercise(request,id): # Coté élève
  
     student = Student.objects.get(user = request.user)  
     relationship = Relationship.objects.get(pk = id)
+
+
+    if not authorizing_access_student(student, relationship,True):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
     today = time_zone_user(student.user)
     if Writtenanswerbystudent.objects.filter(student = student, relationship = relationship ).exists() : 
         w = Writtenanswerbystudent.objects.get(student = student, relationship = relationship )
@@ -3484,6 +3626,10 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
     customexercise = Customexercise.objects.get(pk = id)
     parcours = Parcours.objects.get(pk = idp)
     today = time_zone_user(student.user)
+
+    if not authorizing_access_student(student, parcours):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
 
     if Customanswerbystudent.objects.filter(student = student, customexercise = customexercise ).exists() : 
         ce = Customanswerbystudent.objects.get(student = student, customexercise = customexercise )
@@ -3560,8 +3706,7 @@ def show_custom_exercise(request,id,idp): # vue pour le prof de l'exercice non a
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 
-
-#@user_is_parcours_teacher 
+  
 def detail_task_parcours(request,id,s):
 
     teacher = Teacher.objects.get(user = request.user)   
@@ -3572,6 +3717,10 @@ def detail_task_parcours(request,id,s):
     data = get_complement(teacher, parcours)
     role = data["role"]
     group_id = data["group_id"]
+
+    if not authorizing_access(teacher, parcours,role):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
 
     if s == 0 : # groupe
 
@@ -3607,8 +3756,7 @@ def detail_task_parcours(request,id,s):
         return render(request, 'qcm/task.html', context)
 
 
-
-#@user_is_parcours_teacher 
+ 
 def detail_task(request,id,s):
 
     teacher = Teacher.objects.get(user = request.user)   
@@ -3619,6 +3767,10 @@ def detail_task(request,id,s):
     role = data["role"]
     group_id = data["group_id"]
 
+
+    if not authorizing_access(teacher, parcours,role):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
 
     if s == 0 : # groupe
  
@@ -3736,11 +3888,12 @@ def group_tasks_all(request,id):
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 @csrf_exempt 
+@user_passes_test(user_is_superuser)
 def create_remediation(request,idr): # Pour la partie superadmin
 
     relationship = Relationship.objects.get(pk=idr) 
     form = RemediationForm(request.POST or None,request.FILES or None, teacher = relationship.parcours.teacher)
- 
+
     if form.is_valid():
         nf =  form.save(commit = False)
         nf.relationship = relationship
@@ -3755,6 +3908,7 @@ def create_remediation(request,idr): # Pour la partie superadmin
 
  
 @csrf_exempt 
+@user_passes_test(user_is_superuser)
 def update_remediation(request,idr, id): # Pour la partie superadmin
 
     remediation = Remediation.objects.get(id=id)
@@ -3771,6 +3925,8 @@ def update_remediation(request,idr, id): # Pour la partie superadmin
     return render(request, 'qcm/form_remediation.html', context )
 
 
+@csrf_exempt 
+@user_passes_test(user_is_superuser)
 def delete_remediation(request, id): # Pour la partie superadmin
     remediation = Remediation.objects.get(id=id)
     remediation.delete()
@@ -4147,6 +4303,18 @@ def create_course(request, idc , id ):
     """
     parcours = Parcours.objects.get(pk =  id)
     teacher = Teacher.objects.get(user_id = request.user.id)
+
+    data = get_complement(teacher, parcours)
+
+    role = data['role']
+    group = data['group']
+    group_id = data['group_id'] 
+
+
+    if not authorizing_access(teacher, parcours,True):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
     form = CourseForm(request.POST or None , parcours = parcours )
     relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("order")
     if request.method == "POST" :
@@ -4163,10 +4331,7 @@ def create_course(request, idc , id ):
             print(form.errors)
 
 
-    data = get_complement(teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id'] 
+
 
     context = {'form': form,   'teacher': teacher, 'parcours': parcours , 'relationships': relationships , 'course': None , 'communications' : [], 'group' : group, 'group_id' : group_id , 'role' : role }
 
@@ -4214,18 +4379,20 @@ def update_course(request, idc, id  ):
     return render(request, 'qcm/course/form_course.html', context )
 
 
-
-
-
-
-
 #@user_is_parcours_teacher
 def delete_course(request, idc , id  ):
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
+    teacher = Teacher.objects.get(user_id = request.user.id)
     parcours = Parcours.objects.get(pk =  id)
     course = Course.objects.get(id=idc)
+
+
+    if not authorizing_access(teacher, parcours,True):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
     course.delete()
     try :
         return redirect('list_parcours_group' , request.session.get("group_id"))
@@ -4247,6 +4414,11 @@ def show_course(request, idc , id ):
     role = data['role']
     group = data['group']
     group_id = data['group_id'] 
+
+
+    if not authorizing_access(teacher, parcours,role):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
 
 
     user = User.objects.get(pk = request.user.id)
@@ -4317,13 +4489,6 @@ def course_custom_show_shared(request):
         return render(request, 'qcm/course/list_courses.html', {  'teacher': teacher , 'courses':courses, 'parcours': None, 'relationships' : [] ,  'communications': [] , })
     else :
         return redirect('index')   
-
-
-
-
-
-
-
 
 
 @student_can_show_this_course
@@ -4505,6 +4670,14 @@ def create_mastering(request,id):
     masterings_d = Mastering.objects.filter(relationship = relationship , scale = 2).order_by("ranking")
     masterings_u = Mastering.objects.filter(relationship = relationship , scale = 1).order_by("ranking")
     teacher = Teacher.objects.get(user_id = request.user.id)
+
+
+
+    if not authorizing_access(teacher, relationship.parcours,role):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
+
     if request.method == "POST" :
         if form.is_valid():
             nf = form.save(commit = False)
@@ -4519,12 +4692,26 @@ def create_mastering(request,id):
 
     return render(request, 'qcm/mastering/form_mastering.html', context)
 
+
+
+
 #@user_is_relationship_teacher 
 def parcours_mastering_delete(request,id,idm):
 
     m = Mastering.objects.get(pk = idm)
+
+    if not authorizing_access(teacher,  m.relationship.parcours,True):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
+
     m.delete()
     return redirect('create_mastering', id )
+
+
+
+
+
 
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_sort_mastering(request):
@@ -4541,6 +4728,9 @@ def ajax_sort_mastering(request):
 
     data = {}
     return JsonResponse(data) 
+
+
+
 
 @csrf_exempt  # PublieDépublie un exercice depuis organize_parcours
 def ajax_populate_mastering(request): 
@@ -4610,6 +4800,9 @@ def mastering_student_show(request,id):
     context = { 'relationship': relationship , 'masterings': masterings , 'parcours': None , 'relationships': [] ,  'communications' : [] ,  'score': score , 'group': None, 'course': None , 'stage' : stage , 'student' : student }
 
     return render(request, 'qcm/mastering/mastering_student_show.html', context)
+
+
+
 
 @csrf_exempt  
 def ajax_mastering_modal_show(request):

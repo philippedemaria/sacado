@@ -32,6 +32,14 @@ from cgi import escape
 cm = 2.54
 #################################################################################
 
+
+def authorizing_access(teacher, school) :
+	if (teacher == teacher.user.school and teacher.user.is_manager) or teacher.user.is_superuser :
+		return True
+	else :
+		return False
+
+
 def get_username(ln, fn):
     """
     retourne un username
@@ -47,14 +55,14 @@ def get_username(ln, fn):
             un = un + str(i)
     return un
 
-#@user_is_superuser
+@user_is_superuser
 def list_schools(request):
 	schools = School.objects.all()
 	return render(request, 'school/lists.html', { 'communications' : [], 'schools': schools})
 
 
 
-#@user_is_superuser
+@user_is_superuser
 def create_school(request):
 	form = SchoolForm(request.POST or None)
 	
@@ -66,7 +74,7 @@ def create_school(request):
 
 	return render(request,'school/_form.html', { 'communications' : [], 'form':form})
 
-#@user_is_superuser
+@user_is_superuser
 def update_school(request,id):
 	school = School.objects.get(id=id)
 	form = SchoolForm(request.POST or None, instance=school)
@@ -77,7 +85,7 @@ def update_school(request,id):
 
 	return render(request,'school/_form.html', {'form':form,  'communications' : [],'school':school})
 
-#@user_is_superuser
+@user_is_superuser
 def delete_school(request,id):
 	school = School.objects.get(id=id)
 	school.delete()
@@ -87,12 +95,12 @@ def delete_school(request,id):
 
 
 
-#@user_is_superuser
+@user_is_superuser
 def list_countries(request):
 	countries = Country.objects.all()
 	return render(request,'school/lists_country.html', { 'communications' : [], 'countries':countries})
 
-#@user_is_superuser
+@user_is_superuser
 def create_country(request):
 	form = CountryForm(request.POST or None,request.FILES or None )
 	
@@ -102,7 +110,7 @@ def create_country(request):
 
 	return render(request,'school/country_form.html', { 'communications' : [], 'form':form})
 
-#@user_is_superuser
+@user_is_superuser
 def update_country(request,id):
 	country = Country.objects.get(id=id)
 	form = CountryForm(request.POST or None,request.FILES or None, instance=country)
@@ -113,7 +121,7 @@ def update_country(request,id):
 
 	return render(request,'school/country_form.html', { 'communications' : [], 'form':form, 'country':country})
 
-#@user_is_superuser
+@user_is_superuser
 def delete_country(request,id):
 	country = Country.objects.get(id=id)
 	country.delete()
@@ -147,10 +155,23 @@ def clear_detail_student(student):
 
 #@is_manager_of_this_school
 def school_teachers(request):
+
+
+
 	if request.session.get("school_id") :
 		school_id = request.session.get("school_id")
 	else :
 		school_id = request.user.school.id
+
+
+	teacher = Teacher.objects.get(user=request.user)
+
+	if not authorizing_access(teacher, school):
+		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+		return redirect('index')
+
+
+
 	teachers = User.objects.filter(school_id = school_id, user_type=2).order_by("last_name")  
  
 
@@ -166,6 +187,14 @@ def school_groups(request):
 	else:
 		school = request.user.school
 
+	teacher = Teacher.objects.get(user=request.user)
+
+	if not authorizing_access(teacher, school):
+		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+		return redirect('index')
+
+
+
 	users = school.users.all()
 	groups = Group.objects.filter(teacher__user__in=users).order_by("level")
 
@@ -180,6 +209,15 @@ def school_level_groups(request):
 		school = School.objects.get(pk = school_id)
 	else :
 		school = request.user.school
+
+	teacher = Teacher.objects.get(user=request.user)
+
+	if not authorizing_access(teacher, school):
+		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+		return redirect('index')
+
+ 
+
 
 	users = school.users.all()
 
@@ -198,15 +236,24 @@ def school_students(request):
 		school = School.objects.get(pk = school_id)
 	else :
 		school = request.user.school
+
+
+	teacher = Teacher.objects.get(user=request.user)
+	if not authorizing_access(teacher, school):
+		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+		return redirect('index')
+
+
 	users = User.objects.filter(school = school, user_type=0).order_by("last_name")  
 
 	return render(request,'school/list_students.html', { 'communications' : [], 'users':users , 'school' : school , })
 
 
 
-#@is_manager_of_this_school
+ 
 def new_student(request,slug):
     group = Group.objects.get(code=slug)
+
     user_form = NewUserSForm()
     form = StudentForm()
     return render(request,'school/student_form.html', { 'communications' : [],'group':group, 'user_form' : user_form, 'form' : form })
@@ -215,10 +262,16 @@ def new_student(request,slug):
 
 
 
-#@is_manager_of_this_school
+ 
 def get_school_students(request):
 
 	school = request.user.school
+	teacher = Teacher.objects.get(user = request.user)
+ 
+	if not authorizing_access(teacher, school):
+		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+		return redirect('index')
+
 	time_zone = request.user.time_zone
 	teachers = Teacher.objects.filter(user__school = school)
 	groups = Group.objects.filter(teacher__in = teachers)
@@ -289,6 +342,11 @@ def new_group(request):
 	school = request.user.school
 	teachers = Teacher.objects.filter(user__school=school)
 
+	teacher = Teacher.objects.get(user=request.user)
+	if not authorizing_access(teacher, school):
+		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+		return redirect('index')
+
 	form = GroupForm(request.POST or None, school = school)
 
 	if request.method == "POST" :
@@ -321,6 +379,11 @@ def update_group_school(request,id):
 	teachers = Teacher.objects.filter(user__school=school).exclude(user =  group.teacher.user)
 	form = GroupForm(request.POST or None, school = school, instance = group)
 
+	teacher = Teacher.objects.get(user=request.user)
+	if not authorizing_access(teacher, school):
+		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+		return redirect('index')
+
 	if request.method == "POST" :
 		if form.is_valid():
 			form.save()
@@ -348,6 +411,12 @@ def update_group_school(request,id):
 #@is_manager_of_this_school
 def delete_student_group(request,id,ids):
 	school = request.user.school
+
+	teacher = Teacher.objects.get(user=request.user)
+	if not authorizing_access(teacher, school):
+		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+		return redirect('index')
+
 	group = Group.objects.get(id=id)
 	student = Student.objects.get(user_id=ids)
 	form = GroupForm(request.POST or None, school = school, instance = group)
@@ -360,6 +429,12 @@ def delete_student_group(request,id,ids):
 #@is_manager_of_this_school
 def delete_all_students_group(request,id):
 	school = request.user.school
+
+	teacher = Teacher.objects.get(user=request.user)
+	if not authorizing_access(teacher, school):
+		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+		return redirect('index')
+
 	group = Group.objects.get(id=id)
 	form = GroupForm(request.POST or None, school = school, instance = group)
 	for student in group.students.all() :
@@ -398,6 +473,13 @@ def ajax_subject_teacher(request):
 #@is_manager_of_this_school
 def delete_school_students(request):
 	school = request.user.school
+
+	teacher = Teacher.objects.get(user=request.user)
+	if not authorizing_access(teacher, school):
+		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+		return redirect('index')
+
+
 	students = Student.objects.filter(user__school = school, user_type = 0)
 	for s in students :
 		clear_detail_student(s)
@@ -425,6 +507,13 @@ def delete_selected_students(request):
 def new_group_many(request):
 
 	school = request.user.school
+
+	teacher = Teacher.objects.get(user=request.user)
+	if not authorizing_access(teacher, school):
+		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+		return redirect('index')
+
+
 	GroupFormSet = formset_factory(GroupForm , extra=2) 
 	group_formset  = GroupFormSet(request.POST or None, form_kwargs={'school': school, })
 	if request.method == "POST" :	
@@ -454,7 +543,10 @@ def manage_stage(request):
 	stage = Stage.objects.get(school = school)
 	stage_form = StageForm(request.POST or None, instance = stage)
 
-
+	teacher = Teacher.objects.get(user=request.user)
+	if not authorizing_access(teacher, school):
+		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+		return redirect('index')
 
 
 	if request.method == "POST" :
@@ -628,7 +720,11 @@ def csv_full_group(request):
 def group_to_teacher(request):
 
     school = request.user.school
- 
+    teacher = Teacher.objects.get(user = request.user)
+    if not authorizing_access(teacher, school):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
     groups = Group.objects.filter(teacher__user__school = school).order_by("level")  
     teachers = Teacher.objects.filter(user__school = school)
 
