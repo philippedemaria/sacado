@@ -37,8 +37,8 @@
 <div id="more_text"  class="row tools">   
     <div class="col-sm-12 col-md-12">
         <label>Enregistrer un nouveau commentaire</label> <br/>
-            <textarea  name="new_text" id="new_text" rows="2" cols="40"></textarea><br/>
-            <a href="#" id="more_text_saver" class="btn btn-primary" >Enregistrer</a>
+        {{ formComment.comment|attr"rows:2"|attr"cols:4" }} <br/>
+        <a href="#" id="add_comment" class="btn btn-primary" >Enregistrer</a>
     </div>
     <div class="col-sm-12 col-md-12">
         <hr>  

@@ -8,8 +8,8 @@ from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group , Sharing_group
 from school.models import Stage
-from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation
-from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm
+from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation
+from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm
 from socle.models import  Theme, Knowledge , Level , Skill
 from django.http import JsonResponse 
 from django.core import serializers
@@ -3065,7 +3065,7 @@ def correction_exercise(request,id,idp,ids=0):
 
     teacher = Teacher.objects.get(user=request.user)
     stage = get_stage(teacher.user)
-
+    formComment = CommentForm(request.POST or None )
     if ids > 0 :
         student = Student.objects.get(pk=ids)
     else : 
@@ -3087,7 +3087,7 @@ def correction_exercise(request,id,idp,ids=0):
             w_a = False 
             annotations = [] 
 
-        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage , 'custom':0, 'nb':nb, 'w_a':w_a, 'annotations':annotations,  'communications' : [] ,  'parcours' : relationship.parcours , 'parcours_id': relationship.parcours.id, 'group' : None , 'student' : student }
+        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage , 'formComment' : formComment , 'custom':0, 'nb':nb, 'w_a':w_a, 'annotations':annotations,  'communications' : [] ,  'parcours' : relationship.parcours , 'parcours_id': relationship.parcours.id, 'group' : None , 'student' : student }
         return render(request, 'qcm/correction_exercise.html', context)
     else :
         customexercise = Customexercise.objects.get(pk=id)
@@ -3420,6 +3420,41 @@ def audio_remediation(request):
         print(form.errors)
 
     return JsonResponse(data)  
+
+
+
+###################################################################
+######   Création des commentaires de correction
+###################################################################
+@csrf_exempt  
+def ajax_create_or_update_comment(request):
+
+    data = {}
+    comment_id = request.POST.get("comment_id",None)
+
+    if comment_id :
+        comment = Comment.objects.get(pk = comment_id )
+        formComment = CommentForm(request.POST or None, instance = comment )
+    else :
+        formComment = CommentForm(request.POST or None ) 
+
+    teacher = Teacher.objects.get(user = request.user)
+
+    if formComment.is_valid():
+        nf =  formComment.save(commit = False)
+        nf.teacher = teacher
+        nf.save()
+    else:
+        print(form.errors)
+
+    nb = Comment.objects.filter(teacher= teacher).count() + 1
+
+    data["html"] = "<button id='comment"+nb+"' data-nb="+nb+"  data-text='"+nf.comment+"' class='btn btn-default comment'>"+nf.comment+" <i class='fa fa-pencil'></i></button>"
+
+    return JsonResponse(data)  
+
+
+
 
 
 
@@ -4908,14 +4943,10 @@ def ajax_mastering_custom_modal_show(request):
 
 
 
-
-
 def mastering_custom_done(request):
     print(request.POST.get("mastering"))
     mastering = Masteringcustom.objects.get(pk = request.POST.get("mastering"))
     student = Student.objects.get(user=request.user)
-
-
 
     mdone = Masteringcustom_done.objects.filter( mastering = mastering , student = student)
 

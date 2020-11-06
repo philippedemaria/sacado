@@ -356,3 +356,11 @@ class CustomAnswerAudioForm (forms.ModelForm):
 		content = self.cleaned_data['audio']
 		validation_file(content)
  
+
+
+class CommentForm(forms.ModelForm):
+
+	class Meta:
+		model = Comment
+		fields = ('comment',)
+ 
