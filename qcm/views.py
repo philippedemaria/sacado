@@ -667,10 +667,10 @@ def all_parcourses(request):
 
 
 
-#@user_passes_test(user_can_create)
+ 
 def create_parcours(request):
 
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = Teacher.objects.get(user = request.user)
     levels =  teacher.levels.all()    
     form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher)
  
@@ -688,11 +688,6 @@ def create_parcours(request):
         sharing = True
     else :
         sharing = False
-
-    if not authorizing_access(teacher,group, sharing ):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
-        return redirect('index')
-
 
 
     if form.is_valid():
