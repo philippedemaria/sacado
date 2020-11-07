@@ -957,10 +957,6 @@ def show_parcours(request, id):
 
 
 
-
-
-
-
     students_p_or_g = students_from_p_or_g(request,parcours)
 
     nb_students_p_or_g = len(students_p_or_g)
@@ -973,7 +969,6 @@ def show_parcours(request, id):
                'nb_exo_only': nb_exo_only, 'nb_exo_only_c': nb_exo_only_c, 'group_id': group_id, 'group': group, 'role' : role }
 
     return render(request, 'qcm/show_parcours.html', context)
-
 
 
 
@@ -3129,7 +3124,7 @@ def delete_evaluation(request,id):
 def show_evaluation(request, id):
 
     parcours = Parcours.objects.get(id=id)
-    teacher = Teacher.objects.get(user=parcours.teacher.user)
+    teacher =  parcours.teacher 
 
     if not authorizing_access(teacher, parcours,True):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
@@ -3156,7 +3151,16 @@ def show_evaluation(request, id):
     group = data['group']
     group_id = data['group_id']  
 
-    customexercises = Customexercise.objects.filter(teacher=teacher)
+    customexercises = Customexercise.objects.filter(teacher=teacher).order_by("ranking")
+
+ 
+    for ce in customexercises:
+        i += 1
+        nb_exo_only_c.append(i)
+        if ce.is_publish :
+            j += 1
+        nb_exo_visible_c.append(j)
+
 
     students_p_or_g = students_from_p_or_g(request,parcours)
 
@@ -3166,6 +3170,7 @@ def show_evaluation(request, id):
 
     nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count()
     context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'communications' : [] ,  'customexercises': customexercises, 
+                'nb_exo_only_c': nb_exo_only_c,'nb_exo_visible_c': nb_exo_visible_c,
                'students_from_p_or_g': students_p_or_g, 'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible, 'nb_students_p_or_g' : nb_students_p_or_g , 
                'nb_exo_only': nb_exo_only, 'group_id': group_id, 'group': group, 'role' : role }
 
