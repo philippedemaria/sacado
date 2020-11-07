@@ -3212,7 +3212,7 @@ def correction_exercise(request,id,idp):
             return redirect('index')
 
 
-        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage ,  'communications' : [] ,  'parcours' : relationship.parcours , 'group' : None }
+        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage , 'customexercises' : [] , 'relationships' : [] , 'communications' : [] ,  'parcours' : relationship.parcours , 'group' : None }
         return render(request, 'qcm/correction_exercise.html', context)
     else :
         customexercise = Customexercise.objects.get(pk=id)
@@ -3227,7 +3227,7 @@ def correction_exercise(request,id,idp):
  
         stage = get_stage(teacher.user)
 
-        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage ,  'communications' : [], 'parcours' : parcours, 'group' : None }
+        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage , 'customexercises' : [] ,  'relationships' : [] ,  'communications' : [], 'parcours' : parcours, 'group' : None }
         return render(request, 'qcm/correction_custom_exercise.html', context)
 
 
