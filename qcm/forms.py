@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from .models import Parcours, Exercise, Remediation, Relationship, Supportfile, Course, Demand, Mastering,Mastering_done, Writtenanswerbystudent, Customexercise,Customanswerbystudent, Masteringcustom, Masteringcustom_done, Remediationcustom
+from .models import Parcours, Exercise, Remediation, Relationship, Supportfile, Course, Comment, Demand, Mastering,Mastering_done, Writtenanswerbystudent, Customexercise,Customanswerbystudent, Masteringcustom, Masteringcustom_done, Remediationcustom
 from account.models import Student
 from socle.models import Knowledge, Skill
 from group.models import Group

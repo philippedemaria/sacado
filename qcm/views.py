@@ -3103,7 +3103,7 @@ def correction_exercise(request,id,idp,ids=0):
         else :
             c_e = False 
             customannotations = []
-        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage , 'nb':nb,'c_e':c_e, 'customannotations':customannotations,  'custom':1,  'communications' : [], 'parcours' : parcours, 'group' : None , 'parcours_id': parcours.id, 'student' : student }
+        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage , 'formComment' : formComment , 'nb':nb,'c_e':c_e, 'customannotations':customannotations,  'custom':1,  'communications' : [], 'parcours' : parcours, 'group' : None , 'parcours_id': parcours.id, 'student' : student }
         return render(request, 'qcm/correction_custom_exercise.html', context)
 
 

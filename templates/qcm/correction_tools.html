@@ -1,4 +1,5 @@
 {% load static %}    
+{% load widget_tweaks %}
 
 <div class="row">
     <div class="col-sm-12 col-md-12" >  
@@ -37,7 +38,7 @@
 <div id="more_text"  class="row tools">   
     <div class="col-sm-12 col-md-12">
         <label>Enregistrer un nouveau commentaire</label> <br/>
-        {{ formComment.comment|attr"rows:2"|attr"cols:4" }} <br/>
+        {{ formComment.comment|add_class:"form-control"|attr:"rows:2"|attr:"cols:4" }} <br/>
         <a href="#" id="add_comment" class="btn btn-primary" >Enregistrer</a>
     </div>
     <div class="col-sm-12 col-md-12">
