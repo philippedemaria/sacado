@@ -5,7 +5,7 @@
 <div class="card_freeze" style="{% if not relation.is_publish %}background-color: #F5F5F5{% else %}background:#FFF{% endif %}" id="card{{relation.id}}">
     <!-- Entete de la card  -->
     <div class="card-body" style="height:37px;">
-          <input type="hidden" value="{{ relation.exercise.id }}" name="input_exercise_id" class="div_exercise_id"/><!--  sert à classer les thèmes  -->
+          <input type="hidden" value="{{ relation.exercise.id }}" name="input_exercise_id" class="div_exercise_id" data-custom=0 /><!--  sert à classer les thèmes  -->
           <a href="" style="cursor:move;" class="move_inside" style="color:{{ parcours.color }}"> 
           {% if not relation.is_publish %}<span style="color:#F5F5F5">{{ nb_exo_only|index:forloop.counter0 }}.</span>{% else %}{{ nb_exo_visible|index:forloop.counter0 }}.{% endif %}
           </a>

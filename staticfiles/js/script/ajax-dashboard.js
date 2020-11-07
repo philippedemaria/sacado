@@ -526,19 +526,20 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                },
             stop: function (event, ui) {
 
-
                 let parcours = $("#parcours").val();
                 var valeurs = "";
                          
                 $(".sorted_exercise_id").each(function() {
+                    cstm = parseInt($(this).attr("data-custom"));
                     let this_exercise_id = $(this).val();
                     valeurs = valeurs + this_exercise_id +"-";
                 });
 
                 $(ui.item).css("box-shadow", "0px 0px 0px transparent").css("background-color", "#dbcdf7").css("color", "#271942"); 
-
+                custom = 0 ; 
+                custom = custom + cstm;
                 $.ajax({
-                        data:   { 'valeurs': valeurs , 'parcours' : parcours,  } ,   
+                        data:   { 'valeurs': valeurs , 'parcours' : parcours,  'custom' : custom,  } ,   
                         type: "POST",
                         dataType: "json",
                         url: "../../ajax/sort_exercise" 
@@ -563,15 +564,21 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
                 let parcours = $("#parcours").val();
                 var valeurs = "";
-                         
+      
                 $(".div_exercise_id").each(function() {
+
+                    cstm = parseInt($(this).attr("data-custom"));
                     let div_exercise_id = $(this).val();
                     valeurs = valeurs + div_exercise_id +"-";
+       
                 });
                 $(ui.item).css("box-shadow", "0px 0px 0px transparent");  
 
+                var custom = 0;
+                custom = custom + cstm;
+
                 $.ajax({
-                        data:   { 'valeurs': valeurs , 'parcours' : parcours,  } ,   
+                        data:   { 'valeurs': valeurs ,  'custom' : custom, 'parcours' : parcours,  } ,   
                         type: "POST",
                         dataType: "json",
                         url: "../../ajax/sort_exercise" 

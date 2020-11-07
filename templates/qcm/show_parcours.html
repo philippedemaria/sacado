@@ -77,14 +77,7 @@ body{
         {% else %}  
             {% include 'qcm/details_card.html' %}
         {% endif %}  
-    {% empty %}
-
-
-    <div class="row">
-        <div class="col-sm-3 col-md-3" style="margin:40px">
-        <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-danger"> Associer des exercices SACADO à {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
-        </div> 
-    </div> 
+ 
 
     {% endfor %}
 
@@ -93,6 +86,22 @@ body{
     {% for customexercise in customexercises %}
         {% include 'qcm/details_card_custom.html' %}
     {% endfor %}
+
+
+    {% if customexercises|length == 0 and relationships|length == 0 %}
+
+        <div class="row">
+            <div class="col-sm-3 col-md-3" style="margin:40px">
+            <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-danger"> Associer des exercices SACADO à {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
+            </div> 
+            <div class="col-sm-3 col-md-3" style="margin:40px">
+            <a href="{% url 'parcours_create_custom_exercise' parcours.id 0  %}" class="btn btn-danger"> Créer un exercice personnalisé dans {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
+            </div> 
+        </div> 
+
+    {% endif %}
+
+
 
     {% if teacher.user.school %}
     <div class="row">

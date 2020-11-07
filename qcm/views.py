@@ -1708,15 +1708,28 @@ def ajax_parcours_sorter(request):
  
 
 @csrf_exempt
-def ajax_sort_exercice(request):  
+def ajax_sort_exercise(request):  
     try :
         exercise_ids = request.POST.get("valeurs")
         exercise_tab = exercise_ids.split("-") 
-        
+
         parcours = request.POST.get("parcours")
 
-        for i in range(len(exercise_tab)-1):
-            Relationship.objects.filter(parcours = parcours , exercise_id = exercise_tab[i]).update(order = i)
+        custom = request.POST.get("custom")
+        if not custom :
+            for i in range(len(exercise_tab)-1):
+                try :
+                    Relationship.objects.filter(parcours = parcours , exercise_id = exercise_tab[i]).update(order = i)
+                except :
+                    pass
+        else :
+            for i in range(len(exercise_tab)-1):
+                try :
+                    Customexercise.objects.filter(pk = exercise_tab[i]).update(ranking = i)
+                except :
+                    pass
+ 
+
     except :
         pass
     data = {}
