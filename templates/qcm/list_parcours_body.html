@@ -27,9 +27,9 @@
                             <form action="#" method="POST" enctype='multipart/form-data'>     {% csrf_token %}
                             <a href="#groupe_name_anchor{{ group.name.id }}" class="btn btn-{% if parcours.is_publish %}success{% else  %}danger{% endif  %} publisher" style="padding:7px;font-size:12px;font-weight: 100" id="parcours_publisher{{parcours.id}}"  data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}" data-from=1  > 
                             {% if parcours.is_evaluation %}
-                                {% if parcours.is_publish %} Evaluation publiée  {% else %} Evaluation non publiée {% endif  %} 
+                                {% if parcours.is_publish %} Evaluation publiée  {% else %} Evaluation dépubliée {% endif  %} 
                             {% else %}
-                                {% if parcours.is_publish %} Parcours publié  {% else %} Parcours non publié {% endif  %}  
+                                {% if parcours.is_publish %} Parcours publié  {% else %} Parcours dépublié {% endif  %}  
                             {% endif %}
                             </a>
                             </form>

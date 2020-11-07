@@ -172,7 +172,7 @@
 
 
           <!--  Image de la card  -->
-          <a href="#customcard{{customexercise.id}}" class="detail_parcours"  data-exercise_id="{{ customexercise.id }}" title="{{ customexercise.instruction|safe }}"
+          <a href="#customcard{{customexercise.id}}" class="detail_parcours"  data-exercise_id="{{ customexercise.id }}"  
              data-num_exo="{{ nb_exo_only_c|index:forloop.counter0 }}" data-parcours_id="{{ parcours.id }}" data-custom=1>
              
                <img {% if customexercise.imagefile %} src="{{ customexercise.imagefile.url }}" {% else %}  src="{% static 'img/custom_exercise.png' %}" {% endif %} class="image_parcours_order"  >

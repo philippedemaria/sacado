@@ -33,8 +33,8 @@ cm = 2.54
 #################################################################################
 
 
-def authorizing_access(teacher, school) :
-	if (teacher == teacher.user.school and teacher.user.is_manager) or teacher.user.is_superuser :
+def authorizing_access_school(teacher, school) :
+	if (school == teacher.user.school and teacher.user.is_manager) or teacher.user.is_superuser :
 		return True
 	else :
 		return False
@@ -166,7 +166,7 @@ def school_teachers(request):
 
 	teacher = Teacher.objects.get(user=request.user)
 
-	if not authorizing_access(teacher, school):
+	if not authorizing_access_school(teacher, school):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
 		return redirect('index')
 
@@ -189,7 +189,7 @@ def school_groups(request):
 
 	teacher = Teacher.objects.get(user=request.user)
 
-	if not authorizing_access(teacher, school):
+	if not authorizing_access_school(teacher, school):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
 		return redirect('index')
 
@@ -212,7 +212,7 @@ def school_level_groups(request):
 
 	teacher = Teacher.objects.get(user=request.user)
 
-	if not authorizing_access(teacher, school):
+	if not authorizing_access_school(teacher, school):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
 		return redirect('index')
 
@@ -239,7 +239,7 @@ def school_students(request):
 
 
 	teacher = Teacher.objects.get(user=request.user)
-	if not authorizing_access(teacher, school):
+	if not authorizing_access_school(teacher, school):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
 		return redirect('index')
 
@@ -268,7 +268,7 @@ def get_school_students(request):
 	school = request.user.school
 	teacher = Teacher.objects.get(user = request.user)
  
-	if not authorizing_access(teacher, school):
+	if not authorizing_access_school(teacher, school):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
 		return redirect('index')
 
@@ -343,7 +343,7 @@ def new_group(request):
 	teachers = Teacher.objects.filter(user__school=school)
 
 	teacher = Teacher.objects.get(user=request.user)
-	if not authorizing_access(teacher, school):
+	if not authorizing_access_school(teacher, school):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
 		return redirect('index')
 
@@ -380,7 +380,7 @@ def update_group_school(request,id):
 	form = GroupForm(request.POST or None, school = school, instance = group)
 
 	teacher = Teacher.objects.get(user=request.user)
-	if not authorizing_access(teacher, school):
+	if not authorizing_access_school(teacher, school):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
 		return redirect('index')
 
@@ -413,7 +413,7 @@ def delete_student_group(request,id,ids):
 	school = request.user.school
 
 	teacher = Teacher.objects.get(user=request.user)
-	if not authorizing_access(teacher, school):
+	if not authorizing_access_school(teacher, school):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
 		return redirect('index')
 
@@ -431,7 +431,7 @@ def delete_all_students_group(request,id):
 	school = request.user.school
 
 	teacher = Teacher.objects.get(user=request.user)
-	if not authorizing_access(teacher, school):
+	if not authorizing_access_school(teacher, school):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
 		return redirect('index')
 
@@ -475,7 +475,7 @@ def delete_school_students(request):
 	school = request.user.school
 
 	teacher = Teacher.objects.get(user=request.user)
-	if not authorizing_access(teacher, school):
+	if not authorizing_access_school(teacher, school):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
 		return redirect('index')
 
@@ -509,7 +509,7 @@ def new_group_many(request):
 	school = request.user.school
 
 	teacher = Teacher.objects.get(user=request.user)
-	if not authorizing_access(teacher, school):
+	if not authorizing_access_school(teacher, school):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
 		return redirect('index')
 
@@ -544,7 +544,7 @@ def manage_stage(request):
 	stage_form = StageForm(request.POST or None, instance = stage)
 
 	teacher = Teacher.objects.get(user=request.user)
-	if not authorizing_access(teacher, school):
+	if not authorizing_access_school(teacher, school):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
 		return redirect('index')
 
@@ -721,7 +721,7 @@ def group_to_teacher(request):
 
     school = request.user.school
     teacher = Teacher.objects.get(user = request.user)
-    if not authorizing_access(teacher, school):
+    if not authorizing_access_school(teacher, school):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
