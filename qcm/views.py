@@ -3127,9 +3127,9 @@ def delete_evaluation(request,id):
 
 #@user_is_parcours_teacher 
 def show_evaluation(request, id):
+
     parcours = Parcours.objects.get(id=id)
-    user = User.objects.get(pk=request.user.id)
-    teacher = Teacher.objects.get(user=user)
+    teacher = Teacher.objects.get(user=parcours.teacher.user)
 
     if not authorizing_access(teacher, parcours,True):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
@@ -3176,12 +3176,11 @@ def show_evaluation(request, id):
 
 def correction_exercise(request,id,idp):
 
-    teacher = Teacher.objects.get(user=request.user)
-    stage = get_stage(teacher.user)
-
     if idp == 0 :
         relationship = Relationship.objects.get(pk=id)
 
+        teacher = relationship.parcours.teacher
+        stage = get_stage(teacher.user)
         if not authorizing_access(teacher, relationship.parcours,True):
             messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
             return redirect('index')
@@ -3193,9 +3192,14 @@ def correction_exercise(request,id,idp):
         customexercise = Customexercise.objects.get(pk=id)
         parcours = Parcours.objects.get(pk = idp)
 
+        teacher = parcours.teacher
+
         if not authorizing_access(teacher, parcours,True):
             messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
             return redirect('index')
+
+ 
+        stage = get_stage(teacher.user)
 
         context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage ,  'communications' : [], 'parcours' : parcours, 'group' : None }
         return render(request, 'qcm/correction_custom_exercise.html', context)
@@ -3468,9 +3472,10 @@ def audio_remediation(request):
  
 def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice non autocorrigé dans un parcours
 
-    teacher = Teacher.objects.get(user=request.user)
-    stage = get_stage(teacher.user)
     parcours = Parcours.objects.get(pk=id)
+    teacher = parcours.teacher
+    stage = get_stage(teacher.user)
+
 
     if not authorizing_access(teacher, parcours,True):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
@@ -3498,9 +3503,10 @@ def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice no
  
 def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exercice non autocorrigé dans un parcours
 
-    teacher = Teacher.objects.get(user=request.user)
-    stage = get_stage(teacher.user)
     custom = Customexercise.objects.get(pk=idcc)
+
+    teacher = custom.teacher
+    stage = get_stage(teacher.user)
 
     if id == 0 :
 
@@ -3554,7 +3560,8 @@ def parcours_delete_custom_exercise(request,idcc,id): # Suppression d'un exercic
 
     teacher = Teacher.objects.get(user=request.user)
     custom = Customexercise.objects.get(pk=idcc)
-        
+    teacher = custom.teacher
+
     if not authorizing_access(teacher, custom,True):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
@@ -3706,10 +3713,12 @@ def show_custom_exercise(request,id,idp): # vue pour le prof de l'exercice non a
   
 def detail_task_parcours(request,id,s):
 
-    teacher = Teacher.objects.get(user = request.user)   
+  
     parcours = Parcours.objects.get(pk=id) 
-    today = time_zone_user(request.user)
-    date_today = time_zone_user(request.user).date() 
+    teacher = parcours.teacher
+
+    today = time_zone_user(teacher.user)
+    date_today = today.date() 
 
     data = get_complement(teacher, parcours)
     role = data["role"]
@@ -3756,9 +3765,10 @@ def detail_task_parcours(request,id,s):
  
 def detail_task(request,id,s):
 
-    teacher = Teacher.objects.get(user = request.user)   
     parcours = Parcours.objects.get(pk=id) 
-    today = time_zone_user(request.user) 
+    teacher = parcours.teacher
+
+    today = time_zone_user(teacher.user) 
 
     data = get_complement(teacher, parcours)
     role = data["role"]
@@ -3827,9 +3837,12 @@ def these_all_my_tasks(request):
  
 
 def group_tasks(request,id):
-    today = time_zone_user(request.user) 
-    teacher = Teacher.objects.get(user_id = request.user.id)
+
+
     group = Group.objects.get(pk = id)
+    teacher = group.teacher
+    today = time_zone_user(teacher.user) 
+
     nb_parcours_teacher = teacher.teacher_parcours.count() # nombre de parcours pour un prof
     students = group.students.prefetch_related("students_to_parcours")
     parcourses_tab = []
@@ -3852,10 +3865,12 @@ def group_tasks(request,id):
 
 
 def group_tasks_all(request,id):
-    today = time_zone_user(request.user) 
-    teacher = Teacher.objects.get(user_id = request.user.id)
+
+    group = Group.objects.get(pk = id)
+    teacher = group.teacher
+    today = time_zone_user(teacher.user) 
     nb_parcours_teacher = teacher.teacher_parcours.count() # nombre de parcours pour un prof
-    group = Group.objects.get(pk = id) 
+
     students = group.students.prefetch_related("students_to_parcours")
     parcourses_tab = []
     for student in students :
@@ -4299,7 +4314,7 @@ def create_course(request, idc , id ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     parcours = Parcours.objects.get(pk =  id)
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = parcours.teacher
 
     data = get_complement(teacher, parcours)
 
@@ -4342,11 +4357,12 @@ def update_course(request, idc, id  ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     parcours = Parcours.objects.get(pk =  id)
+    teacher = parcours.teacher
     course = Course.objects.get(id=idc)
     course_form = CourseForm(request.POST or None, instance=course , parcours = parcours )
     relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("order")
     if request.user.user_type == 2 :
-        teacher = Teacher.objects.get(user_id = request.user.id)
+        teacher = parcours.teacher
     else :
         teacher = None
 
@@ -4381,8 +4397,10 @@ def delete_course(request, idc , id  ):
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
-    teacher = Teacher.objects.get(user_id = request.user.id)
+
     parcours = Parcours.objects.get(pk =  id)
+    teacher = parcours.teacher
+
     course = Course.objects.get(id=idc)
 
 
@@ -4405,7 +4423,7 @@ def show_course(request, idc , id ):
     """
     parcours = Parcours.objects.get(pk =  id)
     courses = parcours.course.all().order_by("ranking") 
-    teacher = Teacher.objects.get(user = request.user)
+    teacher = parcours.teacher
     
     data = get_complement(teacher, parcours)
     role = data['role']
@@ -4659,14 +4677,14 @@ def ajax_course_viewer(request):
 
 def create_mastering(request,id):
     relationship = Relationship.objects.get(pk = id)
-    stage = Stage.objects.get(school= request.user.school)
+    stage = Stage.objects.get(school= relationship.parcours.teacher.user.school)
     form = MasteringForm(request.POST or None, request.FILES or None, relationship = relationship )
 
     masterings_q = Mastering.objects.filter(relationship = relationship , scale = 4).order_by("ranking")
     masterings_t = Mastering.objects.filter(relationship = relationship , scale = 3).order_by("ranking")
     masterings_d = Mastering.objects.filter(relationship = relationship , scale = 2).order_by("ranking")
     masterings_u = Mastering.objects.filter(relationship = relationship , scale = 1).order_by("ranking")
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = relationship.parcours.teacher
 
 
 
@@ -4777,7 +4795,9 @@ def ajax_populate_mastering(request):
 def mastering_student_show(request,id):
 
     relationship = Relationship.objects.get(pk = id)
-    stage = Stage.objects.get(school= request.user.school)
+    teacher = relationship.parcours.teacher
+    stage = Stage.objects.get(school= teacher.user.school)
+
     student = Student.objects.get(user= request.user)
     studentanswer = Studentanswer.objects.filter(student=student, exercise = relationship.exercise, parcours = relationship.parcours).last()
 
@@ -4942,8 +4962,9 @@ def ajax_sort_mastering_custom(request):
 def mastering_custom_student_show(request,id):
 
     customexercise = Customexercise.objects.get(pk = id)
-    stage = Stage.objects.get(school= request.user.school)
-    student = Student.objects.get(user= request.user)
+    stage = Stage.objects.get(school= customexercise.teacher.user.school)
+
+    student = Student.objects.get(user = request.user)
     studentanswer = Customanswerbystudent.objects.filter(student=student, customexercise = customexercise, parcours__in= customexercise.parcourses.all()).last()
 
     skill_answer = Correctionskillcustomexercise.objects.filter(student=student, customexercise = customexercise, parcours__in= customexercise.parcourses.all()).last()
@@ -5024,7 +5045,7 @@ def ajax_mastering_custom_modal_show(request):
 
 
 def mastering_custom_done(request):
-    print(request.POST.get("mastering"))
+ 
     mastering = Masteringcustom.objects.get(pk = request.POST.get("mastering"))
     student = Student.objects.get(user=request.user)
 
