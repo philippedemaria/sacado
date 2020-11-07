@@ -4,13 +4,13 @@
 <div class="col-sm-12 col-md-7" style="padding-top:10px">
  
 {% if c_e %}
-        {% if customexercise.is_file %}
+        {% if customexercise.is_file and c_e.imagefile %}
             <iframe src="{{  c_e.imagefile.url }}" height="700" width="100%"></iframe>
         {%  elif customexercise.is_python or  customexercise.is_scratch %}
            <pre>{{ c_e.answer|safe }}</pre>
         {%  elif customexercise.is_text %}
            {{ c_e.answer|safe }}
-        {%  elif customexercise.is_image %}
+        {%  elif customexercise.is_image  and c_e.imagefile  %}
             <img src="{{  c_e.imagefile.url }}" width="100%"/>
         {% endif %}
 {% else %}
