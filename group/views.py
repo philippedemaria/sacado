@@ -403,7 +403,15 @@ def student_remove_from_school(request):
     student_id = int(request.POST.get("student_id"))
     group = Group.objects.get(id=group_id) 
     student = Student.objects.get(user_id=student_id) 
+
+    for p in student.students_to_parcours.all() :
+        p.students.remove(student) 
+  
+    for r in student.students_relationship.all() :
+        r.students.remove(student) 
+
     group.students.remove(student)
+
     groups = student.students_to_group.all()
     gr = ""
     for g in groups :
