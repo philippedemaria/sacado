@@ -378,7 +378,6 @@
 
 
 
-
                                 {% if customexercise.customexercise_remediation.all|length > 0 %}
                                     <span class="helper_tip_card"><i class="fa fa-fw fa-paperclip" style="color:{{ parcours.color|contrast_color }}"></i>
                                             <div class="helper_tip_text_card" >Cet exercice contient une aide extérieure ou une consigne orale.</div>
@@ -395,7 +394,8 @@
                                 {% if data.is_corrected %}
                                     <span class="pull-right selector_div_result_custom" data-customexercise_id ="{{ customexercise.id }}"><i class="fa fa-trophy"></i></span>
                                 {% endif %}
-                                {% if customexercise.is_publish %}                            
+
+                                {% if customexercise.is_publish_cor %}                            
                                     {% if customexercise.file_cor %}
                                     <a  href="#" data-toggle='modal' data-target='#customexercise_file_cor{{ forloop.counter }}'>
                                         <i class="fa fa-fw fa-file"></i>
