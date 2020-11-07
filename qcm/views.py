@@ -3500,7 +3500,7 @@ def audio_remediation(request):
 def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice non autocorrigé dans un parcours
 
     parcours = Parcours.objects.get(pk=id)
-    teacher = parcours.teacher
+    teacher = Teacher.objects.get(user= request.user)
     stage = get_stage(teacher.user)
 
 
@@ -3532,7 +3532,7 @@ def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exerci
 
     custom = Customexercise.objects.get(pk=idcc)
 
-    teacher = custom.teacher
+    teacher = Teacher.objects.get(user= request.user)
     stage = get_stage(teacher.user)
 
     if id == 0 :
@@ -3587,7 +3587,7 @@ def parcours_delete_custom_exercise(request,idcc,id): # Suppression d'un exercic
 
     teacher = Teacher.objects.get(user=request.user)
     custom = Customexercise.objects.get(pk=idcc)
-    teacher = custom.teacher
+    teacher = Teacher.objects.get(user= request.user)
 
     if not authorizing_access(teacher, custom,True):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
@@ -3793,7 +3793,7 @@ def detail_task_parcours(request,id,s):
 def detail_task(request,id,s):
 
     parcours = Parcours.objects.get(pk=id) 
-    teacher = parcours.teacher
+    teacher = Teacher.objects.get(user= request.user)
 
     today = time_zone_user(teacher.user) 
 
@@ -3867,7 +3867,7 @@ def group_tasks(request,id):
 
 
     group = Group.objects.get(pk = id)
-    teacher = group.teacher
+    teacher = Teacher.objects.get(user= request.user)
     today = time_zone_user(teacher.user) 
 
     nb_parcours_teacher = teacher.teacher_parcours.count() # nombre de parcours pour un prof
@@ -3894,7 +3894,7 @@ def group_tasks(request,id):
 def group_tasks_all(request,id):
 
     group = Group.objects.get(pk = id)
-    teacher = group.teacher
+    teacher = Teacher.objects.get(user= request.user)
     today = time_zone_user(teacher.user) 
     nb_parcours_teacher = teacher.teacher_parcours.count() # nombre de parcours pour un prof
 
@@ -4341,7 +4341,7 @@ def create_course(request, idc , id ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     parcours = Parcours.objects.get(pk =  id)
-    teacher = parcours.teacher
+    teacher = Teacher.objects.get(user= request.user)
 
     data = get_complement(teacher, parcours)
 
@@ -4384,7 +4384,7 @@ def update_course(request, idc, id  ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     parcours = Parcours.objects.get(pk =  id)
-    teacher = parcours.teacher
+    teacher = Teacher.objects.get(user= request.user)
     course = Course.objects.get(id=idc)
     course_form = CourseForm(request.POST or None, instance=course , parcours = parcours )
     relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("order")
@@ -4426,7 +4426,7 @@ def delete_course(request, idc , id  ):
     """
 
     parcours = Parcours.objects.get(pk =  id)
-    teacher = parcours.teacher
+    teacher = Teacher.objects.get(user= request.user)
 
     course = Course.objects.get(id=idc)
 
@@ -4450,7 +4450,7 @@ def show_course(request, idc , id ):
     """
     parcours = Parcours.objects.get(pk =  id)
     courses = parcours.course.all().order_by("ranking") 
-    teacher = parcours.teacher
+    teacher = Teacher.objects.get(user= request.user)
     
     data = get_complement(teacher, parcours)
     role = data['role']
@@ -4598,7 +4598,7 @@ def update_demand(request, id):
  
     demand = Demand.objects.get(id=id)
     demand_form = DemandForm(request.POST or None, instance=demand, )
-
+    teacher = Teacher.objects.get(user= request.user)
 
     if request.method == "POST" :
         if demand_form.is_valid():
@@ -4711,7 +4711,7 @@ def create_mastering(request,id):
     masterings_t = Mastering.objects.filter(relationship = relationship , scale = 3).order_by("ranking")
     masterings_d = Mastering.objects.filter(relationship = relationship , scale = 2).order_by("ranking")
     masterings_u = Mastering.objects.filter(relationship = relationship , scale = 1).order_by("ranking")
-    teacher = relationship.parcours.teacher
+    teacher = Teacher.objects.get(user= request.user)
 
 
 
