@@ -19,7 +19,7 @@ window.editor = (function () {
         } else if( (typeof(localStorage) !== "undefined") && "py_src" in localStorage) {
             editor.setValue(localStorage.py_src);
         } else {
-            editor.setValue('for i in range(10):\n\tprint(i)');
+            editor.setValue('');
         }
         
         editor.scrollToRow(0);
