@@ -289,6 +289,7 @@ def register_student(request):
 
             user = authenticate(username=username, password=password)
             login(request, user)
+            request.session["user_id"] = request.user.id
             messages.success(request, "Inscription réalisée avec succès !")               
             if user_form.cleaned_data['email']:
                 send_templated_mail(

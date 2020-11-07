@@ -32,12 +32,37 @@
                                     {% else %}
                                     {{ relation.exercise.supportfile.knowledge.name }}
                                     {% endif %}
-                                    <input type="hidden" value="{{ relation.exercise.id }}" class="sorted_exercise_id"/>
+                                    <input type="hidden" value="{{ relation.exercise.id }}" class="sorted_exercise_id" data-custom=0 />
                                 </td>
                             </tr>
                         </table>
                     </li>
                     {% endfor %}
+
+                    {% for c in customexercises|dictsort:"ranking" %}
+                    <li class="sorted_list">
+                        <table>
+                            <tr>
+                                <td style="width:20px">
+                                    <img src="{% static 'img/order_handler.png' %}"/><br><br>{{forloop.counter }}.
+                                </td>
+                                {% if c.imagefile %}
+                                <td style="width:210px">
+                                    <img src="{{ c.imagefile.url }}" width="200px">
+                                </td>
+                                {% endif %}
+                                <td>
+                                    {% if c.instruction %}
+                                    {{  c.instruction|cleanhtml }}
+                                    {% endif %}
+                                    <input type="hidden" value="{{ c.id }}" class="sorted_exercise_id" data-custom=1  />
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                    {% endfor %}
+
+
                 </ul>
             </div>
         </form>

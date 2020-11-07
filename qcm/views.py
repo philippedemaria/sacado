@@ -3166,6 +3166,8 @@ def show_evaluation(request, id):
 
     customexercises = Customexercise.objects.filter(teacher=teacher).order_by("ranking")
 
+ 
+
     nb_exo_only_c, nb_exo_visible_c = [] , []
     for ce in customexercises:
         i += 1
