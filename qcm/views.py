@@ -3236,7 +3236,6 @@ def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à
     relationship_id =  int(request.POST.get("relationship_id")) 
     student_id =  int(request.POST.get("student_id"))
     student = Student.objects.get(pk = student_id)   
-    parcours_id =  request.POST.get("parcours_id", None)
     data = {}
     custom = int(request.POST.get("custom"))
 
@@ -3256,10 +3255,11 @@ def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à
     else :
 
         customexercise = Customexercise.objects.get(pk = relationship_id)
-        parcours_id =  int(parcours_id)
+        parcours_id =  int(request.POST.get("parcours_id"))
+        parcours = Parcours.objects.get(pk = parcours_id)
         teacher = customexercise.teacher
-        if Customanswerbystudent.objects.filter(customexercise = customexercise ,  parcours_id = parcours_id , student_id = student_id).exists():
-            c_e = Customanswerbystudent.objects.get(customexercise = customexercise ,  parcours_id = parcours_id , student_id = student_id)
+        if Customanswerbystudent.objects.filter(customexercise = customexercise ,  parcours = parcours , student = student).exists():
+            c_e = Customanswerbystudent.objects.get(customexercise = customexercise ,   parcours = parcours , student = student )
         else :
             c_e = False 
 
