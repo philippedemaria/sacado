@@ -248,7 +248,7 @@ def create_group(request):
 def update_group(request, id):
 
 
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = Teacher.objects.get(user= request.user)
     group = Group.objects.get(id=id)
 
     if not authorizing_access(teacher, group, False ):
@@ -256,8 +256,8 @@ def update_group(request, id):
         return redirect('index')
 
 
-    if teacher.user.school :
-        students = Student.objects.filter(user__school=teacher.user.school).order_by("user__last_name")
+    if group.teacher.user.school :
+        students = Student.objects.filter(user__school=group.teacher.user.school).order_by("user__last_name")
     else :
         students = []
 
