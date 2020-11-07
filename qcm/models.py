@@ -770,32 +770,7 @@ class Relationship(models.Model):
         if student.user.school :
             school = student.user.school
             stage = Stage.objects.get(school = school)
-        else : 
-            stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
- 
-        if point > stage.up :
-            level = 4
-        elif point > stage.medium :
-            level = 3
-        elif point > stage.low :
-            level = 2
-        elif point > -1 :
-            level = 1
-        else :
-            level = 0
-        return level
 
-
-    def result_skill(self,skill,student):
-        Stage = apps.get_model('school', 'Stage')
-        try :
-            studentanswer = Resultggbskill.objects.get(student=student, relationship= self,skill = skill )
-            point = studentanswer.point
-            if student.user.school :
-                school = student.user.school
-                stage = Stage.objects.get(school = school)
-            else : 
-                stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
      
             if point > stage.up :
                 level = 4
@@ -807,6 +782,55 @@ class Relationship(models.Model):
                 level = 1
             else :
                 level = 0
+
+        else : 
+            stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
+ 
+            if point > stage["up"] :
+                level = 4
+            elif point > stage["medium"] :
+                level = 3
+            elif point > stage["low"] :
+                level = 2
+            elif point > -1 :
+                level = 1
+            else :
+                level = 0
+        return level
+
+
+    def result_skill(self,skill,student):
+        Stage = apps.get_model('school', 'Stage')
+        try :
+            studentanswer = Resultggbskill.objects.get(student=student, relationship= self,skill = skill )
+            point = studentanswer.point
+            if student.user.school :
+                school = student.user.school
+                stage = Stage.objects.get(school = school)
+         
+                if point > stage.up :
+                    level = 4
+                elif point > stage.medium :
+                    level = 3
+                elif point > stage.low :
+                    level = 2
+                elif point > -1 :
+                    level = 1
+                else :
+                    level = 0
+            else : 
+                stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
+ 
+                if point > stage["up"] :
+                    level = 4
+                elif point > stage["medium"] :
+                    level = 3
+                elif point > stage["low"] :
+                    level = 2
+                elif point > -1 :
+                    level = 1
+                else :
+                    level = 0
         except :
             level = 0
         return level

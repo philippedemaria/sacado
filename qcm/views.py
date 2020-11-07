@@ -2682,10 +2682,16 @@ def execute_exercise(request, idp,ide):
 
 def store_the_score_relation_ajax(request):
 
-    this_time = request.POST.get("start_time").split(",")[0]
-    end_time  =  str(time.time()).split(".")[0]
-    numexo = int(request.POST.get("numexo"))-1
-    timer =  int(end_time) - int(this_time)
+    time_begin = request.POST.get("start_time",None)
+
+    if time_begin :
+        this_time = request.POST.get("start_time").split(",")[0]
+        end_time  =  str(time.time()).split(".")[0]
+        timer =  int(end_time) - int(this_time)
+    else : 
+        timer = 0
+
+    numexo = int(request.POST.get("numexo"))-1    
     relation_id = int(request.POST.get("relation_id"))
 
 
@@ -3232,11 +3238,12 @@ def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à
     student = Student.objects.get(pk = student_id)   
     parcours_id =  request.POST.get("parcours_id", None)
     data = {}
+    custom = int(request.POST.get("custom"))
+    print("custom ", custom)
 
- 
-    if request.POST.get("custom") == "0" :
+    if custom == 0 :
 
-        relationship = Relationship.objects.get(pk = relationship_id)
+        relationship = Relationship.objects.get(pk = int(relationship_id))
         teacher = relationship.parcours.teacher
         if Writtenanswerbystudent.objects.filter(relationship = relationship , student = student).exists():
             w_a = Writtenanswerbystudent.objects.get(relationship = relationship , student = student)
@@ -3248,6 +3255,7 @@ def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à
         html = render_to_string('qcm/ajax_correction_exercise.html', context )   
 
     else :
+
         customexercise = Customexercise.objects.get(pk = relationship_id)
         parcours_id =  int(parcours_id)
         teacher = customexercise.teacher
@@ -3603,7 +3611,7 @@ def write_exercise(request,id): # Coté élève
     relationship = Relationship.objects.get(pk = id)
 
 
-    if not authorizing_access_student(student, relationship,True):
+    if not authorizing_access_student(student, relationship):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
