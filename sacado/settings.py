@@ -322,7 +322,7 @@ if PRODUCTION :
         'disable_existing_loggers': False,
         'handlers': {
             'file': {
-                'level': 'CRITICAL',
+                'level': 'DEBUG',
                 'class': 'logging.handlers.RotatingFileHandler',
                 'filename': 'logs/debug.log',
                 'backupCount': 10,  # keep at most 10 log files
@@ -332,7 +332,7 @@ if PRODUCTION :
         'loggers': {
             'django': {
                 'handlers': ['file'],
-                'level': 'CRITICAL',
+                'level': 'DEBUG',
                 'propagate': True,
             },
         },

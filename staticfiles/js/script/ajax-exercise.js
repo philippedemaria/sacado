@@ -147,6 +147,12 @@ define(['jquery', 'bootstrap'], function ($) {
             $("#id_parcours").val(parcours_id);
             $("#custom").val(custom);
 
+console.log(custom) ;
+console.log(parcours_id) ;
+console.log(student_id) ;
+console.log(relationship_id) ;
+
+
             $.ajax(
                 {
                     type: "POST",
