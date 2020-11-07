@@ -112,8 +112,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     'social_django.middleware.SocialAuthExceptionMiddleware',
+
 ]
 
 
@@ -138,6 +138,7 @@ else:
         'debug_toolbar.panels.signals.SignalsPanel',
         'debug_toolbar.panels.logging.LoggingPanel',
         'debug_toolbar.panels.redirects.RedirectsPanel',
+
     ]
 
     DEBUG_TOOLBAR_CONFIG = {
@@ -321,18 +322,17 @@ if PRODUCTION :
         'disable_existing_loggers': False,
         'handlers': {
             'file': {
-                'level': 'INFO',
+                'level': 'CRITICAL',
                 'class': 'logging.handlers.RotatingFileHandler',
                 'filename': 'logs/debug.log',
                 'backupCount': 10,  # keep at most 10 log files
                 'maxBytes': 1048576,  # 1*1024*1024 bytes (1MB)
             },
-
         },
         'loggers': {
             'django': {
                 'handlers': ['file'],
-                'level': 'INFO',
+                'level': 'CRITICAL',
                 'propagate': True,
             },
         },

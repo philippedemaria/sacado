@@ -3239,7 +3239,6 @@ def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à
     parcours_id =  request.POST.get("parcours_id", None)
     data = {}
     custom = int(request.POST.get("custom"))
-    print("custom ", custom)
 
     if custom == 0 :
 

@@ -20,12 +20,14 @@ import os
 from itertools import chain
 from account.decorators import is_manager_of_this_school
 from general_fonctions import *
+ 
+
 
 
 def index(request):
 
-    if request.user.is_authenticated:
-         
+    if request.user.is_authenticated :
+  
         today = time_zone_user(request.user)
 
         ############################################################################################
