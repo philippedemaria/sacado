@@ -134,21 +134,22 @@ def students_from_p_or_g(request,parcours) :
 
 
 
-def get_complement(teacher, parcours_or_group):
+def get_complement(request, teacher, parcours_or_group):
 
     data = {}
 
     try :
-        group_id = request.session["group_id"]
+        group_id = request.session.get("group_id",None)
         if group_id :
             group = Group.objects.get(pk = group_id)
         else :
             group = None     
-        if Sharing_group.objects.filter(group_id=group_id, teacher = teacher).exists() :
+        if Sharing_group.objects.filter(group_id= group_id , teacher = teacher).exists() :
             sh_group = Sharing_group.objects.get(group_id=group_id, teacher = teacher)
             role = sh_group.role
         else :
             role = False
+
     except :
         group_id = None
         role = False
@@ -372,7 +373,7 @@ def peuplate_parcours(request,id):
                 pass
  
 
-    data = get_complement(teacher, parcours)
+    data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
     group_id = data['group_id']
@@ -443,7 +444,7 @@ def peuplate_parcours_evaluation(request,id):
                 pass
  
 
-    data = get_complement(teacher, parcours)
+    data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
     group_id = data['group_id']
@@ -466,7 +467,7 @@ def individualise_parcours(request,id):
 
     customexercises = Customexercise.objects.filter(parcourses = parcours).order_by("ranking")    
 
-    data = get_complement(teacher, parcours)
+    data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
     group_id = data['group_id']   
@@ -664,6 +665,8 @@ def list_parcours_group(request,id):
     today = time_zone_user(teacher.user)
     group = Group.objects.get(pk = id) 
 
+    request.session["group_id"] = group.id
+
     try :
         sharing_group = Sharing_group.objects.get(group = group, teacher=teacher)
         sharing = True
@@ -676,9 +679,12 @@ def list_parcours_group(request,id):
         return redirect('index')
 
 
-    data = get_complement(teacher, group)
+    data = get_complement(request, teacher, group)
     role = data['role']
-    request.session["group_id"] = group.id
+
+    print(data)
+
+
     group_tab = []
     data = {}
     parcours_tab = []
@@ -965,20 +971,24 @@ def delete_parcours(request, id, idg=0):
 
 
 
-#@user_is_parcours_teacher 
 def show_parcours(request, id):
     parcours = Parcours.objects.get(id=id)
     user = User.objects.get(pk=request.user.id)
     teacher = Teacher.objects.get(user=user)
 
-    data = get_complement(teacher, parcours)
+    data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
     group_id = data['group_id'] 
 
+
+    print(group)
+
+
     if not authorizing_access(teacher, parcours, role ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
+
 
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
     nb_exo_only, nb_exo_visible,nb_exo_only_c, nb_exo_visible_c = [] , []  , [], []
@@ -1147,7 +1157,7 @@ def result_parcours_theme(request, id, idt):
     parcours = Parcours.objects.get(id=id)
     students = students_from_p_or_g(request,parcours)
 
-    data = get_complement(teacher, parcours)
+    data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
     group_id = data['group_id']  
@@ -1195,7 +1205,7 @@ def result_parcours_knowledge(request, id):
     knowledges = []
          
 
-    data = get_complement(teacher, parcours)
+    data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
     group_id = data['group_id'] 
@@ -1240,7 +1250,7 @@ def stat_parcours(request, id):
     stats = []
  
 
-    data = get_complement(teacher, parcours)
+    data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
     group_id = data['group_id']  
@@ -1387,7 +1397,7 @@ def stat_evaluation(request, id):
     stats = []
  
 
-    data = get_complement(teacher, parcours)
+    data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
     group_id = data['group_id']  
@@ -1657,7 +1667,7 @@ def parcours_tasks_and_publishes(request, id):
     teacher = Teacher.objects.get(user=request.user)
 
 
-    data = get_complement(teacher, parcours)
+    data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
     group_id = data['group_id']  
@@ -3155,7 +3165,7 @@ def update_evaluation(request, id, idg=0 ):
         group = None
         request.session["group_id"] = None
 
-    data = get_complement(teacher, parcours)
+    data = get_complement(request, teacher, parcours)
     role = data['role']
 
 
@@ -3213,7 +3223,7 @@ def show_evaluation(request, id):
         nb_exo_visible.append(j)
 
 
-    data = get_complement(teacher, parcours)
+    data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
     group_id = data['group_id']  
@@ -3936,7 +3946,7 @@ def detail_task_parcours(request,id,s):
     today = time_zone_user(teacher.user)
     date_today = today.date() 
 
-    data = get_complement(teacher, parcours)
+    data = get_complement(request, teacher, parcours)
     role = data["role"]
     group_id = data["group_id"]
 
@@ -3986,7 +3996,7 @@ def detail_task(request,id,s):
 
     today = time_zone_user(teacher.user) 
 
-    data = get_complement(teacher, parcours)
+    data = get_complement(request, teacher, parcours)
     role = data["role"]
     group_id = data["group_id"]
 
@@ -4070,7 +4080,7 @@ def group_tasks(request,id):
             else :
                 parcourses_tab.append(p)
 
-    data = get_complement(teacher, group)
+    data = get_complement(request, teacher, group)
     role = data["role"]
     group_id = data["group_id"]
 
@@ -4098,7 +4108,7 @@ def group_tasks_all(request,id):
                 parcourses_tab.append(p)
 
 
-    data = get_complement(teacher, group)
+    data = get_complement(request, teacher, group)
     role = data["role"]
     group_id = data["group_id"]
 
@@ -4532,7 +4542,7 @@ def create_course(request, idc , id ):
     parcours = Parcours.objects.get(pk =  id)
     teacher = Teacher.objects.get(user= request.user)
 
-    data = get_complement(teacher, parcours)
+    data = get_complement(request, teacher, parcours)
 
     role = data['role']
     group = data['group']
@@ -4597,7 +4607,7 @@ def update_course(request, idc, id  ):
         else :
             print(course_form.errors)
 
-    data = get_complement(teacher, parcours)
+    data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
     group_id = data['group_id'] 
@@ -4641,7 +4651,7 @@ def show_course(request, idc , id ):
     courses = parcours.course.all().order_by("ranking") 
     teacher = Teacher.objects.get(user= request.user)
     
-    data = get_complement(teacher, parcours)
+    data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
     group_id = data['group_id'] 

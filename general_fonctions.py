@@ -62,7 +62,6 @@ def authorizing_access(teacher ,parcours_or_group, sharing_group): #sharing_grou
 
 def authorizing_access_student(student , parcours_or_group): 
 
-    print( parcours_or_group.students.all() )
     try :
         if student in parcours_or_group.students.all() :
             return True
