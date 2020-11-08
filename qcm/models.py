@@ -405,7 +405,7 @@ class Parcours(ModelWithCode):
 
     def is_percent(self,student):
         ## Nombre de relationships dans le parcours => nbre  d'exercices
-        nb_relationships =  Relationship.objects.filter(students = student, parcours=self,is_publish=1, exercise__supportfile__is_title=0).count()
+        nb_relationships =  Relationship.objects.filter(students = student, parcours=self, is_publish=1, exercise__supportfile__is_title=0).count()
         nb_customs =  self.parcours_customexercises.filter(students = student, is_publish=1).count()
 
         ## Nombre de réponse avec exercice unique du parcours
