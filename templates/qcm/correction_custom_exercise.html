@@ -4,23 +4,30 @@
 
 
 
-{% block liste_student %}  
-    {% for student in customexercise.students.all|dictsort:"user.last_name" %}
-        <tr>
-            <td>
-                {% get_done customexercise student as done %}
-                {% if done %}
-                <a href="#" data-student_id="{{ student.user.id }}" data-relationship_id="{{ customexercise.id }}" data-parcours_id="{{ parcours.id }}" data-custom="1" class="choose_student">   {{ student.user.last_name }} {{ student.user.first_name }} 
 
-                    <span id ="evaluate{{ student.user.id }}">
-                        {% get_corrected_for_this customexercise student parcours as  is_corrected %} 
+{% block liste_student %}  
+    {% for stud in customexercise.students.all|dictsort:"user.last_name" %}
+        <tr>
+             <td {% if student %}{% if student == stud %} style="background-color: #F0F0F0;"{% endif %}{% endif %}>
+                {% get_done customexercise stud as done %}
+                {% if done %}
+                  
+
+                <a href="{% url 'correction_exercise' customexercise.id parcours.id  stud.user.id  %}" >
+                                        <!--<a href="#" data-student_id="{{ student.user.id }}" data-relationship_id="{{ customexercise.id }}" data-parcours_id="{{ parcours.id }}" data-custom="1" class="choose_student"> --> 
+
+
+                 {{ stud.user.last_name }} {{ stud.user.first_name }} 
+
+                    <span id ="evaluate{{ stud.user.id }}">
+                        {% get_corrected_for_this customexercise stud parcours as  is_corrected %} 
                             {% if  is_corrected %}
                             <i class="fa fa-check text-success pull-right"></i>
                             {% endif %}
                     </span>
                 </a>
                 {% else %}                
-                <span style="color:#DDD">{{ student.user.last_name }} {{ student.user.first_name }} </span>
+                <span style="color:#DDD">{{ stud.user.last_name }} {{ stud.user.first_name }} </span>
                 {% endif %}
             </td>
         </tr>
@@ -30,6 +37,7 @@
         </tr>
     {% endfor %}
 {% endblock %}
+
 
 {% block modal %} 
     {{ customexercise.instruction|safe }} 

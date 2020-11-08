@@ -1,9 +1,21 @@
 {% load item_tags %}
 {% load static %}
 
-<div class="col-sm-12 col-md-7" style="padding-top:10px">
+ 
+
+<div class="col-sm-12 col-md-7">
  
 {% if c_e %}
+ 
+{% block annotate %} 
+<!-- Caractéristique pour les AJAX pour la correction en ligne -->
+<input type="hidden" id="answer_id" value="{{ c_e.id}}" />
+<input type="hidden" id="custom" value="1" />
+<!-- Caractéristique pour les AJAX pour la correction en ligne -->
+{% endblock %}
+
+
+    <div id="corrector">
         {% if customexercise.is_file and c_e.imagefile %}
             <iframe src="{{  c_e.imagefile.url }}" height="700" width="100%"></iframe>
         {%  elif customexercise.is_python or  customexercise.is_scratch %}
@@ -13,6 +25,14 @@
         {%  elif customexercise.is_image  and c_e.imagefile  %}
             <img src="{{  c_e.imagefile.url }}" width="100%"/>
         {% endif %}
+
+        {% for c in customannotations %} 
+            <div id="{{ c.attr_id }}" class="{{ c.classe }}" style="{{ c.style }}">{{ c.content|safe }}</div>
+        {% endfor %}
+ 
+    </div>
+
+
 {% else %}
 
     <div class="alert alert-danger">  
@@ -20,26 +40,31 @@
     </div>
 {% endif %}
 </div>
-
-
-<div class="col-sm-12 col-md-5" style="padding-right:0px">
-    <h4>{{ student }} {% if c_e %}<span class="pull-right text-primary">Remis le {{ c_e.date|date:"D d M Y"}}</span>{% endif %}</h4>
+<div class="col-sm-12 col-md-1" style="padding-right:0px">  
+</div>
+<div class="col-sm-12 col-md-4" style="padding-right:0px">   
     {% if customexercise.is_mark %}
-    <hr>
+
         {% get_mark_to_this customexercise student parcours_id as this_mark %}  
     <div class="row">
-        <div class="col-sm-6 col-md-3" style="padding-top: 5px">  
+        <div class="col-sm-6 col-md-4" style="padding-top: 5px">  
         Note sur {{customexercise.mark}}
         </div>
         <div class="col-sm-5 col-md-3">  
         <input  type="number" {% if this_mark.is_marked %} value="{{ this_mark.marked }}" {% endif %} max="{{customexercise.mark}}" min="0"  data-customexercise_id="{{customexercise.id}}"
                 data-parcours_id="{{ parcours_id }}" name="mark" class="form-control" data-student_id="{{student.user.id}}" id="mark_evaluate" /> 
         </div>
-        <div class="col-sm-1 col-md-3" id="mark_sign">  
+        <div class="col-sm-1 col-md-1" id="mark_sign">  
         </div>
-    </div>
-    <hr>               
+    </div>    
+    <hr>   
     {% endif %}
+
+
+
+    {% include 'qcm/correction_tools.html' %}
+
+
     {% if customexercise.knowledges.all|length > 0 %}
     <table class="table table-bordered table-hover fontsize_14">
         <tr style="background-color: #F0F0F0">
@@ -48,7 +73,7 @@
         {% for knowledge in  customexercise.knowledges.all %}
             {% get_result_k_s customexercise knowledge student parcours_id 0 as result_answer %} 
             <tr>
-                <td>{{ knowledge }} {{ result_answer }} </td>
+                <td>{{ knowledge }}</td>
                 <td>
                     <input  type="radio" {% if result_answer == -1 %} checked {% endif %}  data-customexercise_id="{{customexercise.id}}" data-knowledge_id="{{knowledge.id}}" data-skill_id="" 
                             data-parcours_id="{{ parcours_id }}" name="knowledge{{ knowledge.id }}" value="-1" data-student_id="{{student.user.id}}" class="evaluate" />                               
@@ -73,8 +98,7 @@
                 </td>
             </tr>
         {% endfor %}            
-    </table>
-    <hr>    
+    </table>  
     {% endif %} 
     {% if customexercise.skills.all|length > 0 %} 
     <table class="table table-bordered table-hover fontsize_14">
@@ -148,111 +172,7 @@
                     {% endif %}
                 </div> 
             </div>
-
-
 </div>
-
-
-
-<script>
-
-
-
-        // Enregistrer les commentaires
-        $('#save_comment').on('click', function (event) {
-            let comment = $("#comment").val();
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-            let student_id = $(this).attr("data-student_id");
-            let customexercise_id = $(this).attr("data-customexercise_id");
-            let parcours_id = $(this).attr("data-parcours_id");
-
  
 
-            $.ajax(
-                {
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        'comment': comment,
-                        'student_id':student_id,
-                        'exercise_id': customexercise_id,
-                        'typ' : 1,
-                        'parcours_id':parcours_id,
-                        csrfmiddlewaretoken: csrf_token
-                    },
-                    url: "../../ajax_comment_all_exercise",
-                    success: function (data) {
-                        $('#comment_result').html(" enregistré");
-                    } 
-                }
-            )
-        });
-
-
-
-
-
-        // Enregistre le score de knowledge
-        $('#mark_evaluate').on('change', function (event) {
-            let mark = $(this).val();
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-            let student_id = $(this).attr("data-student_id");
-            let customexercise_id = $(this).attr("data-customexercise_id");
-            let parcours_id = $(this).attr("data-parcours_id");
-
-            $.ajax(
-                {
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        'mark': mark,
-                        'student_id':student_id,
-                        'parcours_id':parcours_id,
-                        'customexercise_id': customexercise_id,                        
-                        csrfmiddlewaretoken: csrf_token
-                    },
-                    url: "../../ajax_mark_evaluate",
-                    success: function (data) {
-                        $('#evaluate'+student_id).html(data.eval);
-                        $('#mark_sign').html(data.eval);
-
-                    }
-                }
-            )
-        });
-
-
-        // Enregistre le score de knowledge
-        $('.evaluate').on('click', function (event) {
-            let value = $(this).val();
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-            let student_id = $(this).attr("data-student_id");
-            let customexercise_id = $(this).attr("data-customexercise_id");
-            let parcours_id = $(this).attr("data-parcours_id");
-
-            let knowledge_id =  $(this).attr("data-knowledge_id");
-            let skill_id = $(this).attr("data-skill_id");
-
-            $.ajax(
-                {
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        'value': value,
-                        'student_id':student_id,
-                        'parcours_id':parcours_id,
-                        'customexercise_id': customexercise_id,
-                        'knowledge_id':knowledge_id,
-                        'skill_id':skill_id,                        
-                        'typ' : 1,
-                        csrfmiddlewaretoken: csrf_token
-                    },
-                    url: "../../ajax_exercise_evaluate",
-                    success: function (data) {
-                        $('#evaluate'+student_id).html(data.eval);
-                    }
-                }
-            )
-        });
-
-</script>
+ 

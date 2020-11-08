@@ -16,7 +16,10 @@ requirejs.config({
         ckeditor_init: "../ckeditor/ckeditor-init",
         ckeditor_jquery: "../ckeditor/ckeditor/adapters/jquery",
         toggle: ["lib/bootstrap-toggle.min"],
+
         colorpicker: "lib/bootstrap-colorpicker.min",
+        bcPicker: "lib/bcPicker", 
+
         multiselect: "lib/multiselect.min",
         mathjax: ["https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML&amp;delayStartupUntil=configured"],
         fastclick: "lib/fastclick.min",
@@ -32,8 +35,6 @@ requirejs.config({
         popper: 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min',
         fonctions_jquery: "script/fonctions-jquery",
         fonctions: "script/fonctions",
- 
-
 
     },
     shim: {
@@ -62,7 +63,9 @@ requirejs.config({
         "config_toggle": {
             deps: ['jquery','toggle']
         },
-
+        "bcPicker": {
+            deps: ['jquery',]
+        },
 
         mathjax: {
             exports: "MathJax",
@@ -84,4 +87,4 @@ requirejs.config({
     }
 });
 
-require(['jquery', 'bootstrap', 'bootstrap_popover',  'mathjax',  'datatables', 'datatables_bootstrap',  'ckeditor', 'ckeditor_init', 'config_select2', 'config_datepicker', 'config_toggle',  'config_colorpicker', 'fonctions_jquery', 'fonctions',   'config_datatable', 'multiselect', 'ui',]);
+require(['jquery', 'bootstrap', 'bootstrap_popover', 'bcPicker', 'mathjax',  'datatables', 'datatables_bootstrap',  'ckeditor', 'ckeditor_init', 'config_select2', 'config_datepicker', 'config_toggle',  'config_colorpicker', 'fonctions_jquery', 'fonctions',   'config_datatable', 'multiselect', 'ui',]);

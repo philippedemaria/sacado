@@ -1,0 +1,137 @@
+define(['jquery','bootstrap','corrector'], function ($) {
+    $(document).ready(function () {
+        console.log("chargement JS corrector.js OK");
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///// INIT
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                $(".tools").hide();
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///// Couleur du bouton quand cliqué
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                function change_color(toggle,tool){
+                     $("button").removeClass("btn-primary").addClass("btn-default");     
+                     toggle.addClass("btn-primary").removeClass("btn-default");
+                      $(".tools").hide(500);
+                      if(tool != "") {tool.show(500); }
+                  }  
+
+                  $("#text_writer").on('click', function () {
+                     change_color($(this),$("#text_tools"));
+                  }) 
+                  $("#paint_brush").on('click', function () {
+                     change_color($(this),$("#paint_tools"));
+                  }) 
+                  $("#wrong").on('click', function () {
+                     change_color($(this),"");
+                  }) 
+                  $("#right").on('click', function () {
+                     change_color($(this),"");
+                  }) 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//// Cette fonction agit avec les boutons dans le canvas
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                  function annote(toggle,event,type){
+                    ordonne = event.pageY-10;
+                    nb = $(toggle).attr("data-nb");
+                    if(type == 0) { fa = "times" ; color = "danger" ; } 
+                    else {  fa = "check" ; color = "success" ;  } 
+                 
+
+                    myDiv = "<div id='"+fa+""+nb+"' style='position:absolute;left:"+event.pageX+"px; top:"+ordonne+"px;z-index:99;'><i class='fa fa-"+fa+" text-"+color+"'></i><a href='#' class='pull-right gray remove'><i class='fa fa-trash' style='font-size:9px'></i></a></div>"
+
+                    $('#container').append(myDiv) ;
+                    $("#"+fa+""+nb).draggable();    
+                    nb++;
+                    $(toggle).attr("data-nb",nb);
+
+                  } 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////   Crée une div d'écriture ou une annotation
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                $("#canvas_div").on('click', function (e) { 
+
+                    if($("#text_writer").hasClass("btn-primary")) {
+                        var clone = $("#templateDiv").clone();
+                        nbClone = $(this).attr("data-nbclone");
+                        clone[0].id = "#templateDiv"+nbClone ;
+                        clone.draggable();
+                        clone.appendTo("body");
+                        clone.addClass("annotation").attr("style",'left:'+e.pageX+'px; top:'+e.pageY+'px;') ;
+                        nbClone++ ;
+                        $(this).attr("data-nbclone",nbClone);
+                      }
+                    else if ($("#right").hasClass("btn-primary")) { 
+                          annote("#right",e,1) ;
+                    }
+                    else if ($("#wrong").hasClass("btn-primary")) {  
+                          annote("#wrong",e,0) ;
+                    }
+
+                });
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////   Supprime la div cliquée
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                 $("body").on('click', '.remove', function () {
+                     $(this).parent().remove();  
+                    });
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////   Color Picker text
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    $('#bcPicker1').bcPicker();
+                    $('#bcPicker2').bcPicker({defaultColor: '33CCCC'});
+
+                    $('.bcPicker-palette').on('click', '.bcPicker-color', function(){
+                      var color = $(this).css('background-color');
+                      var hex_color = $.fn.bcPicker.toHex(color) ;
+
+                      $(".textarea_div").css("color", hex_color);
+                      $(this).parent().parent().next().next().children().text(color);
+                    })
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////   AJAX
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                $("#level_selected_id").on('change', function () { 
+                    let level_selected_id = $(this).val();
+
+                    let data_url = $(this).attr("data-url"); 
+                    if (data_url == "yes") { url =  'qcm/ajax/parcours_default' ; } else { url =  'ajax/parcours_default' ; } 
+                    let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+                    $.ajax({
+                        url: url ,
+                        type: "POST",
+                        data: {
+                            'level_selected_id': level_selected_id,
+                            csrfmiddlewaretoken: csrf_token,    
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            $("#parcours_shower").html(data.html);
+
+
+                        }
+                    });
+                  });
+
+
+    });
+});

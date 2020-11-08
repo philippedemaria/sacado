@@ -8,8 +8,8 @@ from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group , Sharing_group
 from school.models import Stage
-from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom
-from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm
+from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation
+from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm
 from socle.models import  Theme, Knowledge , Level , Skill
 from django.http import JsonResponse 
 from django.core import serializers
@@ -383,9 +383,7 @@ def peuplate_parcours(request,id):
     return render(request, 'qcm/form_peuplate_parcours.html', context)
 
 
-
-
-#@user_is_parcours_teacher
+ 
 def peuplate_parcours_evaluation(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
     levels =  teacher.levels.all() 
@@ -747,7 +745,7 @@ def create_parcours(request):
     return render(request, 'qcm/form_parcours.html', context)
 
 
-#@user_is_parcours_teacher 
+  
 def update_parcours(request, id, idg=0 ):
     teacher = Teacher.objects.get(user_id=request.user.id)
     levels = teacher.levels.all()
@@ -3199,39 +3197,116 @@ def show_evaluation(request, id):
     return render(request, 'qcm/show_parcours.html', context)
 
 
+ 
+#####################################################################################################################################
+#####################################################################################################################################
+######   Correction des exercices
+#####################################################################################################################################
+#####################################################################################################################################
 
 
-def correction_exercise(request,id,idp):
 
+def correction_exercise(request,id,idp,ids=0):
+
+    teacher = Teacher.objects.get(user=request.user)
+    stage = get_stage(teacher.user)
+    formComment = CommentForm(request.POST or None )
+
+    comments = Comment.objects.filter(teacher = teacher)
+
+    if ids > 0 :
+        student = Student.objects.get(pk=ids)
+    else : 
+        student = None
+
+    nb = 0
     if idp == 0 :
         relationship = Relationship.objects.get(pk=id)
 
-        teacher = relationship.parcours.teacher
-        stage = get_stage(teacher.user)
-        if not authorizing_access(teacher, relationship.parcours,True):
-            messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
-            return redirect('index')
+        if student :
+            if Writtenanswerbystudent.objects.filter(relationship = relationship , student = student).exists():
+                w_a = Writtenanswerbystudent.objects.get(relationship = relationship , student = student)
+                annotations = Annotation.objects.filter(writtenanswerbystudent = w_a)
+                nb = annotations.count()
+            else :
+                w_a = False
+                annotations = [] 
+        else :
+            w_a = False 
+            annotations = [] 
 
-
-        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage , 'customexercises' : [] , 'relationships' : [] , 'communications' : [] ,  'parcours' : relationship.parcours , 'group' : None }
+        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage , 'comments' : comments   , 'formComment' : formComment , 'custom':0, 'nb':nb, 'w_a':w_a, 'annotations':annotations,  'communications' : [] ,  'parcours' : relationship.parcours , 'parcours_id': relationship.parcours.id, 'group' : None , 'student' : student }
+ 
         return render(request, 'qcm/correction_exercise.html', context)
     else :
         customexercise = Customexercise.objects.get(pk=id)
         parcours = Parcours.objects.get(pk = idp)
-
-        teacher = parcours.teacher
-
-        if not authorizing_access(teacher, parcours,True):
-            messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
-            return redirect('index')
-
  
-        stage = get_stage(teacher.user)
-
-        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage , 'customexercises' : [] ,  'relationships' : [] ,  'communications' : [], 'parcours' : parcours, 'group' : None }
+        if student :
+            if Customanswerbystudent.objects.filter(customexercise = customexercise ,  parcours = parcours , student_id = student).exists():
+                c_e = Customanswerbystudent.objects.get(customexercise = customexercise ,  parcours = parcours , student_id = student)
+                customannotations = Customannotation.objects.filter(customanswerbystudent = c_e)
+                nb = customannotations.count()
+            else :
+                c_e = False 
+                customannotations = []
+        else :
+            c_e = False 
+            customannotations = []
+        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage , 'comments' : comments   , 'formComment' : formComment , 'nb':nb,'c_e':c_e, 'customannotations':customannotations,  'custom':1,  'communications' : [], 'parcours' : parcours, 'group' : None , 'parcours_id': parcours.id, 'student' : student }
+ 
         return render(request, 'qcm/correction_custom_exercise.html', context)
 
 
+
+
+@csrf_exempt  
+def ajax_save_annotation(request):
+
+    data = {}
+
+    custom =  int(request.POST.get("custom"))
+    answer_id =  request.POST.get("answer_id") 
+    attr_id = request.POST.get("attr_id") 
+    style = request.POST.get("style") 
+    classe = request.POST.get("classe") 
+    studentcontent = request.POST.get("studentcontent") 
+
+    if custom :
+        annotation, created = Customannotation.objects.get_or_create(customanswerbystudent_id = answer_id,attr_id = attr_id , defaults = {  'classe' : classe, 'style' : style , 'content' : studentcontent} )
+        if not created :
+            Customannotation.objects.filter(customanswerbystudent_id = answer_id, attr_id = attr_id).update(content = studentcontent, style = style)
+    else :
+        annotation, created = Annotation.objects.get_or_create(writtenanswerbystudent_id = answer_id,attr_id = attr_id , defaults = {  'classe' : classe, 'style' : style , 'content' : studentcontent} )
+        if not created :
+            Annotation.objects.filter(writtenanswerbystudent_id = answer_id, attr_id = attr_id).update(content = studentcontent, style = style)
+
+    return JsonResponse(data)  
+
+
+
+@csrf_exempt  
+def ajax_remove_annotation(request):
+    """
+    Suppression d'une appréciation par un enseignant
+    """
+
+    data = {}
+    custom =  int(request.POST.get("custom"))
+    attr_id = request.POST.get("attr_id") 
+    teacher = Teacher.objects.get(user = request.user)
+    try :
+        if custom :
+            Customannotation.objects.get(customanswerbystudent__customexercise__teacher= teacher,  attr_id = attr_id ).delete()
+        else :  
+            Annotation.objects.get(writtenanswerbystudent__relationship__parcours__teacher = teacher, attr_id = attr_id).delete()
+    except :
+        pass
+
+    return JsonResponse(data)  
+
+
+####Sélection des élèves par AJAX --- N'est pas utilisé ---A supprimer éventuellement avec son url 
 def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à un exercice non auto-corrigé
 
     relationship_id =  int(request.POST.get("relationship_id")) 
@@ -3240,7 +3315,10 @@ def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à
     data = {}
     custom = int(request.POST.get("custom"))
 
-    if custom == 0 :
+ 
+    comments = Comment.objects.filter(teacher = teacher)
+ 
+    if request.POST.get("custom") == "0" :
 
         relationship = Relationship.objects.get(pk = int(relationship_id))
         teacher = relationship.parcours.teacher
@@ -3249,7 +3327,7 @@ def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à
         else :
             w_a = False 
      
-        context = { 'relationship' : relationship , 'student': student ,   'w_a' : w_a,   'teacher' : teacher     }
+        context = { 'relationship' : relationship , 'student': student ,   'w_a' : w_a,   'teacher' : teacher, 'comments' : comments      }
 
         html = render_to_string('qcm/ajax_correction_exercise.html', context )   
 
@@ -3264,13 +3342,18 @@ def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à
         else :
             c_e = False 
 
-        context = { 'customexercise' : customexercise , 'student': student ,   'c_e' : c_e , 'parcours_id' :  parcours_id,   'teacher' : teacher  }
+        context = { 'customexercise' : customexercise , 'student': student ,   'c_e' : c_e , 'parcours_id' :  parcours_id,   'teacher' : teacher , 'comments' : comments  }
 
         html = render_to_string('qcm/ajax_correction_exercise_custom.html', context )
      
     data['html'] = html       
 
     return JsonResponse(data)
+
+
+
+
+
 
 
 def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
@@ -3498,6 +3581,61 @@ def audio_remediation(request):
 
 
  
+###################################################################
+######   Création des commentaires de correction
+###################################################################
+@csrf_exempt  
+def ajax_create_or_update_appreciation(request):
+
+    data = {}
+    comment_id = request.POST.get("comment_id",None)
+    comment = request.POST.get("comment",None)
+    teacher = Teacher.objects.get(user = request.user)
+
+    # Choix du formulaire à compléter
+    if comment_id :
+        appreciation = Comment.objects.get(pk = int(comment_id) )
+        formComment = CommentForm(request.POST or None, instance = appreciation ) # Formulaire existant
+    else :
+        formComment = CommentForm(request.POST or None ) # Formulaire nouvelle appréciation
+ 
+    if formComment.is_valid(): # Analyse du formulaire
+        nf =  formComment.save(commit = False)
+        nf.teacher = teacher
+        nf.save() # Enregistrement
+
+    if comment_id :
+        data["comment_id"] = nf.pk
+        data["comment"] = nf.comment
+    else :
+        nb = Comment.objects.filter(teacher= teacher).count() + 1
+        data["html"] = "<button id='comment"+str(nb)+"' data-nb="+str(nb)+" data-text=\""+str(nf.comment)+"\" class='btn btn-default comment'>"+str(nf.comment)+"</button>"
+
+    return JsonResponse(data)  
+
+
+
+
+
+@csrf_exempt  
+def ajax_remove_my_appreciation(request):
+
+    data = {}
+    comment_id = request.POST.get("comment_id")
+    appreciation = Comment.objects.get(pk = int(comment_id) )
+    appreciation.delete()
+
+    return JsonResponse(data)  
+
+
+#####################################################################################################################################
+#####################################################################################################################################
+######   Fin des outils de correction
+#####################################################################################################################################
+#####################################################################################################################################
+
+
+ 
 def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice non autocorrigé dans un parcours
 
     parcours = Parcours.objects.get(pk=id)
@@ -3694,6 +3832,7 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
         url = "qcm/form_writing_custom.html" 
 
     return render(request, url , context)
+
 
 #######################################################################################################################################################################
 ############### VUE ENSEIGNANT
@@ -5070,14 +5209,10 @@ def ajax_mastering_custom_modal_show(request):
 
 
 
-
-
 def mastering_custom_done(request):
  
     mastering = Masteringcustom.objects.get(pk = request.POST.get("mastering"))
     student = Student.objects.get(user=request.user)
-
-
 
     mdone = Masteringcustom_done.objects.filter( mastering = mastering , student = student)
 

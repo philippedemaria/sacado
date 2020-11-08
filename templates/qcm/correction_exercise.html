@@ -4,69 +4,89 @@
 
 
 {% block breadcrumbs  %}
- 
 {% endblock  %}
 
 
-{% block page_title %}
+{% block python %}
+    <link type="text/css" rel="stylesheet" href="{% static 'corrector/css/bcPicker.css' %}"/>
+{% endblock %}
 
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    <script>
+        require(['script/ajax-exercise']);
+
+        require(['script/corrector']);
+
+
+        {% if custom %}
+        require(['script/ajax-customexercise_correction']);
+        {% else %}
+        require(['script/ajax-exercise_correction']);
+        {% endif %}
+    </script>   
+{% endblock %}
+
+
+
+{% block page_title %}
     {% if parcours %}
     <span style="color:{{ parcours.color  }}"><i class="fa fa-pencil-square"></i> </span> 
     {% endif %}
 
       {% include 'qcm/breadcrumb.html' %}
-
-
-
-
     <small> Correction d'exercice          
     <a href="#" data-toggle='modal' data-target='#consigne' class="btn btn-primary" ><i class="fa fa-eye"></i> Voir l'énoncé </a></small>
 {% endblock %}
 
 
+
 {% block page_menu_right %}
  
-       
+
+{% if student %}
+    <h4 style="color:#999">Remis par <span  style="color:#5d4391">{{ student }}</span>, le {% if w_a %}{{ w_a.date|date:"D d M Y"}}{% endif %}{% if c_e %}{{ c_e.date|date:"D d M Y"}}{% endif %}</h4>
+{% else %}
+    <a href="{% url 'show_parcours' parcours.id %}">
+        <input type="button" value="Retour au parcours" class="btn btn-default "/>
+    </a>
+{% endif %}
+
 
 {% endblock %}
 
 
-
-
-{% block require %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
-    <script>
-        require(['script/ajax-exercise']);
-    </script>    
-{% endblock %}
 
 
 {% block body %}
 <section class="content_list">  
     <div class="row"> 
-
-        <form method="post" action="" enctype='multipart/form-data'>
+        <form method="POST" action="" enctype='multipart/form-data'>
             {% csrf_token %} 
             <div class="col-sm-12 col-md-2 div_students">
                 <table class="table table-bordered table-hover">
                     <thead>
-                    <tr style="background-color: #F0F0F0">
+                    <tr style="background-color: #EFEFEF">
                         <th>Noms et prénoms</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% block liste_student %}  
-                    {% for student in relationship.students.all|dictsort:"user.last_name" %}
+                    {% block liste_student %} 
+                    {% for stud in relationship.students.all|dictsort:"user.last_name" %}
                         <tr>
-                            <td>
-                                {% get_done relationship student as done %}
+                            <td {% if student %}{% if student == stud %} style="background-color: #F0F0F0;"{% endif %}{% endif %}>
+                                {% get_done relationship stud as done %}
                                 {% if done %}
-                                    <a href="#" data-student_id="{{ student.user.id }}" data-relationship_id="{{ relationship.id }}" data-parcours_id="0" data-custom="0" class="choose_student">   {{ student.user.last_name|title }} {{ student.user.first_name|title }} 
+                                    <a href="{% url 'correction_exercise' relationship.id  0  stud.user.id  %}" >
+                                        <!--data-student_id="{{ student.user.id }}" data-relationship_id="{{ relationship.id }}" data-parcours_id="0" data-custom="0" class="choose_student"  --> 
+                                        {{ stud.user.last_name|title }} {{ stud.user.first_name|title }} 
 
-                                        <span id ="evaluate{{ student.user.id }}">
-                                          {% get_done relationship student as done %}
+                                        <span id ="evaluate{{ stud.user.id }}">
+                                          {% get_done relationship stud as done %}
                                           {% if done %}
-                                            {% get_score_student_for_this relationship student as  studentanswer %} 
+                                            {% get_score_student_for_this relationship stud as  studentanswer %} 
                                                 {% if  studentanswer.point %}
                                                 <i class="fa fa-square
                                                         {% if studentanswer.point >= stage.up %}
@@ -83,7 +103,7 @@
                                             {% endif %}
                                     </span></a>
                                 {% else %}                
-                                <span style="color:#DDD">{{ student.user.last_name }} {{ student.user.first_name }} </span>
+                                <span style="color:#DDD">{{ stud.user.last_name }} {{ stud.user.first_name }} </span>
                                 {% endif %}
                             </td>
                         </tr>
@@ -97,6 +117,13 @@
                 </table>
             </div>
             <div class="col-sm-12 col-md-10" id="correction_div">
+            {% if student %}  
+                {% if custom %} 
+                    {% include 'qcm/ajax_correction_exercise_custom.html' %}                
+                {% else %}
+                    {% include 'qcm/ajax_correction_exercise.html' %} 
+                {% endif %} 
+            {% endif %}  
             </div>
         </form>
     </div>

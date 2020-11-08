@@ -3,27 +3,44 @@
 <div class="col-sm-12 col-md-7" style="padding-top:10px">
  
 {% if w_a %}
-        {% if relationship.exercise.supportfile.is_file  and w_a.imagefile  %}
+ 
+
+
+    {% block annotate %} 
+    <!-- Caractéristique pour les AJAX pour la correction en ligne -->
+    <input type="hidden" id="answer_id" value="{{ w_a.id}}" />
+    <input type="hidden" id="custom" value="0" />
+    <!-- Caractéristique pour les AJAX pour la correction en ligne -->
+    {% endblock %} 
+
+
+
+    <div id="corrector">
+        {% if relationship.exercise.supportfile.is_file  and   w_a.imagefile %}
+ 
             <iframe src="{{  w_a.imagefile.url }}" height="700" width="100%"></iframe>
         {%  elif relationship.exercise.supportfile.is_python or  relationship.exercise.supportfile.is_scratch %}
            <pre>{{ w_a.answer|safe }}</pre>
         {%  elif relationship.exercise.supportfile.is_text %}
            {{ w_a.answer|safe }}
-        {%  elif relationship.exercise.supportfile.is_image   and w_a.imagefile  %}
+        {%  elif relationship.exercise.supportfile.is_image   and   w_a.imagefile  %}
             <img src="{{  w_a.imagefile.url }}" width="100%"/>
         {% endif %}
+    </div>    
 {% else %}
 
     <div class="alert alert-danger">  
         Document non rendu
     </div>
 {% endif %}
-
-
 </div>
 <div class="col-sm-12 col-md-5" style="padding-right:0px">
-    <h4>{{ student }} {% if w_a %}<span class="pull-right text-primary">Remis le {{ w_a.date|date:"D d M Y"}}</span>{% endif %}</h4>
-    <hr>
+ 
+    
+    {% include 'qcm/correction_tools.html' %}
+
+
+
     <table class="table table-bordered table-hover fontsize_14">
         <tr style="background-color: #F0F0F0">
             <td>Savoir faire</td><td>NE</td><td><i class="fa fa-circle text-danger"></i></td><td><i class="fa fa-circle text-warning"></i></td><td><i class="fa fa-circle text-success"></i></td><td><i class="fa fa-circle text-primary"></i></td>
@@ -55,7 +72,6 @@
                 </td>
             </tr>
     </table>
-    <hr>
     <table class="table table-bordered table-hover fontsize_14">
         <tr style="background-color: #F0F0F0">
             <td>Compétences</td><td>NE</td><td><i class="fa fa-circle text-danger"></i></td><td><i class="fa fa-circle text-warning"></i></td><td><i class="fa fa-circle text-success"></i></td><td><i class="fa fa-circle text-primary"></i></td>
@@ -124,117 +140,5 @@
                     {% endif %}
                 </div> 
             </div>
-
-
 </div>
 
-<script>
-
-
-
-        // Enregistrer les commentaires
-        $('#save_comment').on('click', function (event) {
-            let comment = $("#comment").val();
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-            let student_id = $(this).attr("data-student_id");
-            let relationship_id = $(this).attr("data-relationship_id");
-
- 
-
-            $.ajax(
-                {
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        'comment': comment,
-                        'student_id':student_id,
-                        'exercise_id': relationship_id,                        
-                        'typ' : 0,
-                        csrfmiddlewaretoken: csrf_token
-                    },
-                    url: "../../ajax_comment_all_exercise",
-                    success: function (data) {
-                        $('#comment_result').html(" enregistré");
-                    } 
-                }
-            )
-        });
-
-
-
-
-        // Enregistre le score de knowledge
-        $('input[name=knowledge]').on('click', function (event) {
-            let value = $(this).val();
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-            let student_id = $(this).attr("data-student_id");
-            let relationship_id = $(this).attr("data-relationship_id");
-
-            $.ajax(
-                {
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        'value': value,
-                        'student_id':student_id,
-                        'relationship_id': relationship_id,
-                        'typ' : 0,
-                        'knowledge_id': 1,
-                        csrfmiddlewaretoken: csrf_token
-                    },
-                    url: "../../ajax_exercise_evaluate",
-                    success: function (data) {
-                        $('#evaluate'+student_id).html(data.eval);
-                    }
-                }
-            )
-        });
-
-
-
-
-        // Enregistre le score de knowledge
-        $('.evaluate').on('click', function (event) {
-            let value = $(this).val();
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-            let student_id = $(this).attr("data-student_id");
-            let relationship_id = $(this).attr("data-relationship_id");
-            let skill_id = $(this).attr("data-skill_id");
-
-            $.ajax(
-                {
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        'value': value,
-                        'student_id':student_id,
-                        'skill_id':skill_id,
-                        'relationship_id': relationship_id,
-                        'typ' : 0,
-                        csrfmiddlewaretoken: csrf_token
-                    },
-                    url: "../../ajax_exercise_evaluate",
-                    success: function (data) {
-                        $('#evaluate'+student_id).html(data.eval);
-                    }
-                }
-            )
-        });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</script>

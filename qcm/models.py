@@ -836,12 +836,6 @@ class Relationship(models.Model):
         return level
  
 
-
-
-
-
-
-
 class Studentanswer(models.Model):
 
     parcours = models.ForeignKey(Parcours,  on_delete=models.PROTECT, blank=True, null=True,  related_name='answers', editable=False)
@@ -880,13 +874,6 @@ class Resultexercise(models.Model):  # Last result
     class Meta:
         unique_together = ['student', 'exercise']
 
-class Comment(models.Model): # Commentaire du l'enseignant vers l'élève pour les exercices non autocorrigé coté enseignant
-
-    teacher = models.ForeignKey(Teacher,  on_delete=models.CASCADE, blank=True,  related_name='teacher_comment', editable=False)
-    comment = models.TextField() 
-
-    def __str__(self):        
-        return "{} : {}".format(self.comment, self.teacher)
 
 class Writtenanswerbystudent(models.Model): # Commentaire pour les exercices non autocorrigé coté enseignant
 
@@ -1408,3 +1395,52 @@ class Masteringcustom_done(models.Model):
     
     def __str__(self):
         return "{}".format(self.mastering)
+
+
+########################################################################################################################################### 
+########################################################################################################################################### 
+##############################################################  Annotations       ######################################################### 
+########################################################################################################################################### 
+########################################################################################################################################### 
+
+class Comment(models.Model): # Commentaire du l'enseignant vers l'élève pour les exercices non autocorrigé coté enseignant
+
+    teacher = models.ForeignKey(Teacher,  on_delete=models.CASCADE, blank=True,  related_name='teacher_comment', editable=False)
+    comment = models.TextField() 
+
+    def __str__(self):        
+        return "{} : {}".format(self.comment, self.teacher)
+
+
+class CommonAnnotation(models.Model):
+ 
+    classe = models.CharField(max_length=255, editable=False)   
+    style = models.CharField(max_length=255, editable=False) 
+    attr_id = models.CharField(max_length=255, editable=False) 
+    content = models.TextField(editable=False) 
+  
+    class Meta:
+        abstract = True
+
+
+class Annotation(CommonAnnotation):
+
+    writtenanswerbystudent = models.ForeignKey(Writtenanswerbystudent, on_delete=models.CASCADE,related_name='annotations') 
+
+    def __str__(self):
+        return "{}".format(self.writtenanswerbystudent)
+
+    class Meta:
+        unique_together = ['writtenanswerbystudent', 'attr_id']
+
+
+class Customannotation(CommonAnnotation):
+
+    customanswerbystudent = models.ForeignKey(Customanswerbystudent, on_delete=models.CASCADE, related_name='annotations') 
+
+    def __str__(self):
+        return "{}".format(self.customanswerbystudent)
+
+
+    class Meta:
+        unique_together = ['customanswerbystudent', 'attr_id']    
