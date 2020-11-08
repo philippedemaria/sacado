@@ -707,9 +707,10 @@ def list_parcours_group(request,id):
     try :
         sharing_group = Sharing_group.objects.get(group = group, teacher=teacher)
         sharing = True
+        role = sharing_group.role
     except :
         sharing = False
-
+        role = False
 
     if not authorizing_access(teacher,group, sharing ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
@@ -4029,7 +4030,7 @@ def detail_task(request,id,s):
     group = data['group']
     group_id = data['group_id'] 
     access = data['access']
-    
+
     if not authorizing_access(teacher, parcours,access):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
