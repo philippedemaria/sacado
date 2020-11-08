@@ -10,7 +10,8 @@ db.sqlite3
 env
 .idea
 sacado/settings_prod
- 
+
+sacado/settings.py 
 settings.py
 static/
 
@@ -20,4 +21,4 @@ staticfiles/img/img_psd
 logs/
 
 media/
-sacado/settings.py
+
