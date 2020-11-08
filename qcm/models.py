@@ -405,18 +405,22 @@ class Parcours(ModelWithCode):
 
     def is_percent(self,student):
         ## Nombre de relationships dans le parcours => nbre  d'exercices
-        nb_relationships =  Relationship.objects.filter(students = student, parcours=self, is_publish=1, exercise__supportfile__is_title=0).count()
+        nb_relationships =  self.parcours_relationship.filter(students = student, is_publish=1,  exercise__supportfile__is_title=0 ).count()
         nb_customs =  self.parcours_customexercises.filter(students = student, is_publish=1).count()
 
+
+        print(nb_relationships)
+        print(nb_customs)
+
         ## Nombre de réponse avec exercice unique du parcours
-        studentanswers = Studentanswer.objects.filter(student=student, parcours=self).values_list("exercise",flat=True).order_by("exercise").distinct()
-        customanswerbystudent = Customanswerbystudent.objects.filter(student=student, customexercise__parcourses=self).values_list("customexercise",flat=True).order_by("customexercise").distinct()
+        nb_studentanswers = Studentanswer.objects.filter(student=student, parcours=self).values_list("exercise",flat=True).order_by("exercise").distinct().count()
+        nb_customanswerbystudent = Customanswerbystudent.objects.filter(student=student, customexercise__parcourses=self).values_list("customexercise",flat=True).order_by("customexercise").distinct().count()
 
-
+ 
         data = {}
-        nb_exercise_done = len(studentanswers) + len(customanswerbystudent) 
+        nb_exercise_done = nb_studentanswers + nb_customanswerbystudent
         data["nb"] = nb_exercise_done
-        data["nb_total"] = nb_relationships+nb_customs
+        data["nb_total"] = nb_relationships + nb_customs
         try :
             data["pc"] = int(nb_exercise_done * 100/(nb_relationships+nb_customs))
         except :

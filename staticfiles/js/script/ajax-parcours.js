@@ -320,53 +320,53 @@ define(['jquery','bootstrap'], function ($) {
                     },
                     url: "../../ajax_individualise",
                     success: function (data) {
- 
-                    if (custom == "1"){
 
-                        if (student_id != 0)
-                            {       
-                            $('#studentCustom'+exercise_id+"-"+student_id).html(data.html);   
-                            $('#studentCustom'+exercise_id+"-"+student_id).attr("data-statut",data.statut);                  
-                            $('#studentCustom'+exercise_id+"-"+student_id).removeClass(data.noclass);
-                            $('#studentCustom'+exercise_id+"-"+student_id).addClass(data.class);
+                        if (custom == "1"){
+
+                            if (student_id != 0)
+                                {       
+                                $('#studentCustom'+exercise_id+"-"+student_id).html(data.html);   
+                                $('#studentCustom'+exercise_id+"-"+student_id).attr("data-statut",data.statut);                  
+                                $('#studentCustom'+exercise_id+"-"+student_id).removeClass(data.noclass);
+                                $('#studentCustom'+exercise_id+"-"+student_id).addClass(data.class);
+                                }
+                            else 
+                                { 
+                                $('.selected_studentCustom'+exercise_id).html(data.html);   
+                                $('.selected_studentCustom'+exercise_id).attr("data-statut",data.statut);                  
+                                $('.selected_studentCustom'+exercise_id).removeClass(data.noclass);
+                                $('.selected_studentCustom'+exercise_id).addClass(data.class);                        
+                                }
+
+                            $("#loadingCustom"+exercise_id).html("");  
+                            $('#selecteurCustom'+exercise_id).attr("data-statut",data.statut);   
+
+                        }
+                        else{ 
+
+                            if (student_id != 0)
+                                {       
+                                $('#student'+exercise_id+"-"+student_id).html(data.html);   
+                                $('#student'+exercise_id+"-"+student_id).attr("data-statut",data.statut);                  
+                                $('#student'+exercise_id+"-"+student_id).removeClass(data.noclass);
+                                $('#student'+exercise_id+"-"+student_id).addClass(data.class);
+                                }
+                            else 
+                                { 
+                                $('.selected_student'+exercise_id).html(data.html);   
+                                $('.selected_student'+exercise_id).attr("data-statut",data.statut);                  
+                                $('.selected_student'+exercise_id).removeClass(data.noclass);
+                                $('.selected_student'+exercise_id).addClass(data.class);                      
+                                }
+
+     
+
+                            $("#loading"+exercise_id).html("");  
+                            $('#selecteur'+exercise_id).attr("data-statut",data.statut);    
+
                             }
-                        else 
-                            { 
-                            $('.selected_studentCustom'+exercise_id).html(data.html);   
-                            $('.selected_studentCustom'+exercise_id).attr("data-statut",data.statut);                  
-                            $('.selected_studentCustom'+exercise_id).removeClass(data.noclass);
-                            $('.selected_studentCustom'+exercise_id).addClass(data.class);                        
-                            }
 
-                        $("#loadingCustom"+exercise_id).html("");  
-                        $('#selecteurCustom'+exercise_id).attr("data-statut",data.statut);   
-
-                    }
-                    else{ console.log(exercise_id) ;
-
-                        if (student_id != 0)
-                            {       
-                            $('#student'+exercise_id+"-"+student_id).html(data.html);   
-                            $('#student'+exercise_id+"-"+student_id).attr("data-statut",data.statut);                  
-                            $('#student'+exercise_id+"-"+student_id).removeClass(data.noclass);
-                            $('#student'+exercise_id+"-"+student_id).addClass(data.class);
-                            }
-                        else 
-                            { 
-                            $('.selected_student'+exercise_id).html(data.html);   
-                            $('.selected_student'+exercise_id).attr("data-statut",data.statut);                  
-                            $('.selected_student'+exercise_id).removeClass(data.noclass);
-                            $('.selected_student'+exercise_id).addClass(data.class);                      
-                            }
-
- 
-
-                        $("#loading"+exercise_id).html("");  
-                        $('#selecteur'+exercise_id).attr("data-statut",data.statut);    
-
-                    }
-
-
+                        if (data.alert){ alert("Certains exercices ont fait l'objet d'une réponse par certains élèves. Vous ne pouvez plus les dissocier.");}
 
 
                     }

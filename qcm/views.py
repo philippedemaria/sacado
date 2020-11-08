@@ -511,12 +511,15 @@ def ajax_individualise(request):
     if custom :
         customexercise = Customexercise.objects.get(pk = exercise_id )
 
-        if student_id == 0 :  
+        if student_id == 0 : 
+             
             if statut=="true" or statut == "True" :
                 try :
-                    print("ici")
+                    som = 0
                     for s in parcours.students.all() :
-                        customexercise.students.remove(s)
+                        if Customanswerbystudent.objects.filter(student = s , customexercise = customexercise).count() == 0 :
+                            customexercise.students.remove(s)
+                            som +=1
                 except :
                     pass
 
@@ -524,7 +527,10 @@ def ajax_individualise(request):
                 data["statut"] = "False"
                 data["class"] = "btn btn-danger"
                 data["noclass"] = "btn btn-success"
-                
+                if som == 0 :
+                    data["alert"] = True
+                else :
+                    data["alert"] = False 
             else : 
                 try :
                     customexercise.students.set(parcours.students.all())
@@ -534,12 +540,16 @@ def ajax_individualise(request):
                 data["statut"] = "True"
                 data["class"] = "btn btn-success"
                 data["noclass"] = "btn btn-danger"
-     
+                data["alert"] = False   
         else :
             student = Student.objects.get(pk = student_id) 
             if statut=="true" or statut == "True":
                 try :
-                    customexercise.students.remove(student)
+                    if Customanswerbystudent.objects.filter(student = student , customexercise = customexercise).count() == 0 :
+                        customexercise.students.remove(student)
+                        data["alert"] = False
+                    else :
+                        data["alert"] = True                        
                 except :
                     pass
                 statut = 0
@@ -555,7 +565,7 @@ def ajax_individualise(request):
                 data["statut"] = "True"
                 data["class"] = "btn btn-success"
                 data["noclass"] = "btn btn-danger"
-
+                data["alert"] = False   
     else :
 
         exercise = Exercise.objects.get(pk = exercise_id)
@@ -563,37 +573,54 @@ def ajax_individualise(request):
 
         if student_id == 0 :  
             if statut=="true" or statut == "True" :
+                somme = 0
                 try :
                     for s in parcours.students.all() :
-                        relationship.students.remove(s)
+                        if Studentanswer.objects.filter(student = s , exercise = exercise, parcours = relationship.parcours).count() == 0 :
+                            relationship.students.remove(s)
+                            somme +=1
                 except :
                     pass
                 statut = 0
                 data["statut"] = "False"
                 data["class"] = "btn btn-danger"
                 data["noclass"] = "btn btn-success"
+                if somme == 0 :
+                    data["alert"] = True
+                else :
+                    data["alert"] = False
+
             else : 
                 relationship.students.set(parcours.students.all())
                 statut = 1    
                 data["statut"] = "True"
                 data["class"] = "btn btn-success"
                 data["noclass"] = "btn btn-danger"
-     
+                data["alert"] = False
         else :
-            student = Student.objects.get(pk = student_id)        
+            student = Student.objects.get(pk = student_id)  
+
             if statut=="true" or statut == "True":
-                relationship.students.remove(student)
-                statut = 0
-                data["statut"] = "False"
-                data["class"] = "btn btn-danger"
-                data["noclass"] = "btn btn-success" 
+
+                if Studentanswer.objects.filter(student = student , exercise = exercise, parcours = relationship.parcours).count() == 0 :
+                    relationship.students.remove(student)
+                    statut = 0
+                    data["statut"] = "False"
+                    data["class"] = "btn btn-danger"
+                    data["noclass"] = "btn btn-success"
+                    data["alert"] = False
+                else :
+                    data["statut"] = "True"
+                    data["class"] = "btn btn-success"
+                    data["noclass"] = "btn btn-danger"
+                    data["alert"] = True
             else:
                 statut = 1
                 relationship.students.add(student) 
                 data["statut"] = "True"
                 data["class"] = "btn btn-success"
                 data["noclass"] = "btn btn-danger"
-
+                data["alert"] = False
 
     return JsonResponse(data) 
 
@@ -4618,7 +4645,7 @@ def update_course(request, idc, id  ):
     return render(request, 'qcm/course/form_course.html', context )
 
 
-#@user_is_parcours_teacher
+
 def delete_course(request, idc , id  ):
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
