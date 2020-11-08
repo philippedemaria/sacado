@@ -15,8 +15,6 @@
 
         <button id="trash"  class="btn btn-default bcPicker-tools"><i class="fa fa-trash"></i></button>   
         <button id="comments" class="btn btn-default toggle_tools bcPicker-tools"   style="margin-left:10px"  ><i class="fa fa-comment"></i></button>  
-        <button id="more" class="btn btn-default toggle_tools bcPicker-tools"   ><i class="fa fa-plus"></i></button> 
-        <button id="save" class="btn btn-default bcPicker-tools"  ><i class="fa fa-save"></i></button> 
     </div> 
 </div> 
 
@@ -35,31 +33,44 @@
         <hr>  
     </div>
 </div> 
-<div id="more_text"  class="row tools">   
-    <div class="col-sm-12 col-md-12">
-        <label>Enregistrer un nouveau commentaire</label> <br/>
-        {{ formComment.comment|add_class:"form-control"|attr:"rows:2"|attr:"cols:4" }} <br/>
-        <a href="#" id="add_comment" class="btn btn-primary" >Enregistrer</a>
-    </div>
-    <div class="col-sm-12 col-md-12">
-        <hr>  
-    </div>
-</div> 
+
  
 
 <div id="comments_div"  class="tools"> 
  
     <div class="row">
-        <div class="col-sm-12 col-md-12">
-            <button id="comment1" data-nb={% if c_e or w_a %}{{ nb }}{% else %}1{% endif %} data-text="bla bla bla" class="btn btn-default comment">bla bla bla</button> 
-            <button id="comment2" data-nb={% if c_e or w_a %}{{ nb }}{% else %}1{% endif %} data-text="Commentaire 2" class="btn btn-default comment">Commentaire 2</button> 
+
+
+        <div class="col-sm-12 col-md-12" id="my_appreciations">
+           <h5>Mes appréciations personnalisées  </h5>
+            {% for comment in comments %}
+                <button id="comment{{ comment.id }}" data-nb={% if c_e or w_a %}{{ nb }}{% else %}1{% endif %} data-text="{{ comment.comment }}" class="btn btn-default comment">{{ comment.comment }}</button> 
+            {% endfor %}
+
+
         </div>
     </div>
-    <div class="row">
+    <hr>  
+    <div id="more_text"  class="row">   
+        <div class="col-sm-12 col-md-12">
+            <label>Ajouter une appréciation personnalisée</label> <br/>
+            {{ formComment.comment|add_class:"form-control"|attr:"rows:2"|attr:"cols:4" }} <br/>
+            <a href="#" id="add_my_appreciation" class="btn btn-primary" >Sauvegarder</a>
+
+
+            <a href="#" id="delete_appreciation" class="btn btn-default pull-right" ><i class="fa fa-trash"></i></a> 
+            <a href="#" id="modifier_appreciation" class="btn btn-default pull-right" ><i class="fa fa-pencil-square-o"></i></a> 
+            <input type="hidden" name="modif_appreciation" id="modif_appreciation">
+
+
+
+        </div>
         <div class="col-sm-12 col-md-12">
             <hr>  
         </div>
-    </div>
+    </div> 
+
+
 </div> 
 
 <div id="templateDiv" class="annotation" data-nbclone={% if c_e or w_a %}{{ nb }}{% else %}1{% endif %} >

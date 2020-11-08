@@ -3061,11 +3061,22 @@ def show_evaluation(request, id):
     return render(request, 'qcm/show_parcours.html', context)
 
 
+#####################################################################################################################################
+#####################################################################################################################################
+######   Correction des exercices
+#####################################################################################################################################
+#####################################################################################################################################
+
+
+
 def correction_exercise(request,id,idp,ids=0):
 
     teacher = Teacher.objects.get(user=request.user)
     stage = get_stage(teacher.user)
     formComment = CommentForm(request.POST or None )
+
+    comments = Comment.objects.filter(teacher = teacher)
+
     if ids > 0 :
         student = Student.objects.get(pk=ids)
     else : 
@@ -3087,7 +3098,7 @@ def correction_exercise(request,id,idp,ids=0):
             w_a = False 
             annotations = [] 
 
-        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage , 'formComment' : formComment , 'custom':0, 'nb':nb, 'w_a':w_a, 'annotations':annotations,  'communications' : [] ,  'parcours' : relationship.parcours , 'parcours_id': relationship.parcours.id, 'group' : None , 'student' : student }
+        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage , 'comments' : comments   , 'formComment' : formComment , 'custom':0, 'nb':nb, 'w_a':w_a, 'annotations':annotations,  'communications' : [] ,  'parcours' : relationship.parcours , 'parcours_id': relationship.parcours.id, 'group' : None , 'student' : student }
         return render(request, 'qcm/correction_exercise.html', context)
     else :
         customexercise = Customexercise.objects.get(pk=id)
@@ -3103,7 +3114,7 @@ def correction_exercise(request,id,idp,ids=0):
         else :
             c_e = False 
             customannotations = []
-        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage , 'formComment' : formComment , 'nb':nb,'c_e':c_e, 'customannotations':customannotations,  'custom':1,  'communications' : [], 'parcours' : parcours, 'group' : None , 'parcours_id': parcours.id, 'student' : student }
+        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage , 'comments' : comments   , 'formComment' : formComment , 'nb':nb,'c_e':c_e, 'customannotations':customannotations,  'custom':1,  'communications' : [], 'parcours' : parcours, 'group' : None , 'parcours_id': parcours.id, 'student' : student }
         return render(request, 'qcm/correction_custom_exercise.html', context)
 
 
@@ -3136,6 +3147,9 @@ def ajax_save_annotation(request):
 
 @csrf_exempt  
 def ajax_remove_annotation(request):
+    """
+    Suppression d'une appréciation par un enseignant
+    """
 
     data = {}
     custom =  int(request.POST.get("custom"))
@@ -3152,13 +3166,7 @@ def ajax_remove_annotation(request):
     return JsonResponse(data)  
 
 
-
- 
-
-
-
-
-
+####Sélection des élèves par AJAX --- N'est pas utilisé ---A supprimer éventuellement avec son url 
 def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à un exercice non auto-corrigé
 
     relationship_id =  int(request.POST.get("relationship_id")) 
@@ -3167,6 +3175,7 @@ def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à
     parcours_id =  request.POST.get("parcours_id", None)
     data = {}
 
+    comments = Comment.objects.filter(teacher = teacher)
  
     if request.POST.get("custom") == "0" :
 
@@ -3177,7 +3186,7 @@ def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à
         else :
             w_a = False 
      
-        context = { 'relationship' : relationship , 'student': student ,   'w_a' : w_a,   'teacher' : teacher     }
+        context = { 'relationship' : relationship , 'student': student ,   'w_a' : w_a,   'teacher' : teacher, 'comments' : comments      }
 
         html = render_to_string('qcm/ajax_correction_exercise.html', context )   
 
@@ -3190,13 +3199,18 @@ def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à
         else :
             c_e = False 
 
-        context = { 'customexercise' : customexercise , 'student': student ,   'c_e' : c_e , 'parcours_id' :  parcours_id,   'teacher' : teacher  }
+        context = { 'customexercise' : customexercise , 'student': student ,   'c_e' : c_e , 'parcours_id' :  parcours_id,   'teacher' : teacher , 'comments' : comments  }
 
         html = render_to_string('qcm/ajax_correction_exercise_custom.html', context )
      
     data['html'] = html       
 
     return JsonResponse(data)
+
+
+
+
+
 
 
 def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
@@ -3427,35 +3441,54 @@ def audio_remediation(request):
 ######   Création des commentaires de correction
 ###################################################################
 @csrf_exempt  
-def ajax_create_or_update_comment(request):
+def ajax_create_or_update_appreciation(request):
 
     data = {}
     comment_id = request.POST.get("comment_id",None)
-
-    if comment_id :
-        comment = Comment.objects.get(pk = comment_id )
-        formComment = CommentForm(request.POST or None, instance = comment )
-    else :
-        formComment = CommentForm(request.POST or None ) 
-
+    comment = request.POST.get("comment",None)
     teacher = Teacher.objects.get(user = request.user)
 
-    if formComment.is_valid():
+    # Choix du formulaire à compléter
+    if comment_id :
+        appreciation = Comment.objects.get(pk = int(comment_id) )
+        formComment = CommentForm(request.POST or None, instance = appreciation ) # Formulaire existant
+    else :
+        formComment = CommentForm(request.POST or None ) # Formulaire nouvelle appréciation
+ 
+    if formComment.is_valid(): # Analyse du formulaire
         nf =  formComment.save(commit = False)
         nf.teacher = teacher
-        nf.save()
-    else:
-        print(form.errors)
+        nf.save() # Enregistrement
 
-    nb = Comment.objects.filter(teacher= teacher).count() + 1
-
-    data["html"] = "<button id='comment"+nb+"' data-nb="+nb+"  data-text='"+nf.comment+"' class='btn btn-default comment'>"+nf.comment+" <i class='fa fa-pencil'></i></button>"
+    if comment_id :
+        data["comment_id"] = nf.pk
+        data["comment"] = nf.comment
+    else :
+        nb = Comment.objects.filter(teacher= teacher).count() + 1
+        data["html"] = "<button id='comment"+str(nb)+"' data-nb="+str(nb)+" data-text=\""+str(nf.comment)+"\" class='btn btn-default comment'>"+str(nf.comment)+"</button>"
 
     return JsonResponse(data)  
 
 
 
 
+
+@csrf_exempt  
+def ajax_remove_my_appreciation(request):
+
+    data = {}
+    comment_id = request.POST.get("comment_id")
+    appreciation = Comment.objects.get(pk = int(comment_id) )
+    appreciation.delete()
+
+    return JsonResponse(data)  
+
+
+#####################################################################################################################################
+#####################################################################################################################################
+######   Fin des outils de correction
+#####################################################################################################################################
+#####################################################################################################################################
 
 
 
@@ -3483,6 +3516,8 @@ def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice no
     context = {'parcours': parcours,  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'customexercise' : False }
 
     return render(request, 'qcm/form_exercise_custom.html', context)
+
+
 
 
 @user_is_parcours_teacher 

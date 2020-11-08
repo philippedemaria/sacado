@@ -103,15 +103,6 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
 	                   	toggle_div($(this),$("#comments_div"),e)
 	                })
 
-  
-                  $("#more").on('click', function (e) {
-
-		                   	toggle_div($(this),$("#more_text"),e)
-		            })
-
-
-  
-
                   $("#trash").on('click', function (e) {  
 
 					if ($("#corrector").find(".gray").length == 0) 
@@ -135,11 +126,84 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
                     e.preventDefault();
                   }) 
 
+
+   				$("body").on('click', '#delete_appreciation', function (e) { 
+
+ 					if($("#delete_appreciation").hasClass("btn-default")) {  // Le bouton supprimer une appréciation devient rouge
+						$(this).addClass("btn-danger").removeClass("btn-default");
+                     	$(".comment").addClass("btn-danger").removeClass("btn-primary").removeClass("btn-default");
+                    }
+                    else
+                    {
+						$(this).addClass("btn-default").removeClass("btn-danger");
+                     	$(".comment").addClass("btn-default").removeClass("btn-primary").removeClass("btn-danger");
+                    }
+                     	
+                    $("#modifier_appreciation").addClass("btn-default").removeClass("btn-primary");
+
+                   e.preventDefault();
+                });
+
+
+
+
+   				$("body").on('click', '#modifier_appreciation', function (e) { 
+
+ 					if($("#modifier_appreciation").hasClass("btn-default")) {  // Le bouton supprimer une appréciation devient rouge
+ 						$(".comment").addClass("btn-primary").removeClass("btn-default").removeClass("btn-danger");
+                     	$(this).addClass("btn-primary").removeClass("btn-default");
+                    }
+                    else
+                    {
+						$(this).addClass("btn-default").removeClass("btn-primary");
+                     	$(".comment").addClass("btn-default").removeClass("btn-primary").removeClass("btn-danger");
+                    }
+                     	
+                    $("#delete_appreciation").addClass("btn-default").removeClass("btn-danger");
+
+                   e.preventDefault();
+                });
+
+
 /////////////////////////    Cas particulier   /////////////////////////////////////////////////////////////
-                  $(".comment").on('click', function (e) {
-                      	$(".comment").addClass("btn-default").removeClass("btn-primary");
-                     	$(this).addClass("btn-primary").removeClass("btn-default");   
-                      	e.preventDefault();
+                  $("#my_appreciations").on('click', '.comment', function (e) {
+
+	                  	if ($("#modifier_appreciation").hasClass("btn-primary") )  // Modification enregistrement
+	                  	{ 
+
+	                      	$(".comment").addClass("btn-default").removeClass("btn-primary");
+	                     	$(this).addClass("btn-primary").removeClass("btn-default");   
+	                     	$("#modifier_appreciation").addClass("btn-default").removeClass("btn-primary");
+
+							value = $(this).attr("data-text")
+	                      	$("#id_comment").val(value);
+
+	 						selected = $(this).attr("id");
+
+	 						comment_id = selected.substring(7,selected.length);
+
+	                      	$("#modif_appreciation").val(comment_id);
+	                      	$("#add_my_appreciation").html("").html("Modifier");
+	                  	}
+
+	                  	else if ($(this).hasClass("btn-danger") )
+	                  	{
+	                  		 
+	                  		if (!confirm('Vous souhaitez supprimer cette appréciation : ' + $(this).attr("data-text") + ' ?')) return false;
+
+	 						selected = $(this).attr("id");
+	 						comment_id = selected.substring(7,selected.length);
+
+	                  		delete_appreciation(comment_id);
+	                  	}
+	                  	else // Ajout enregistrement
+	                  	{
+	                      	$(".comment").addClass("btn-default").removeClass("btn-primary");
+	                     	$(this).addClass("btn-primary").removeClass("btn-default");   
+	                     	$("#modifier_appreciation").addClass("btn-default").removeClass("btn-primary");
+
+	                  	}
+	                    e.preventDefault();
                   }) 
  
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -153,7 +217,7 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
                   	var abscisse = event.pageX - 420; // - 412
 
                   	// décale l'ordonnée selon la hauteur du clic de la souris
-                    var ordonnee = event.pageY - 100   ; //  - 82
+                    var ordonnee = event.pageY - 90   ; //  - 82
  
                     // récupération du numéro du toggle
                     var nb = toggle.attr("data-nb");
@@ -357,7 +421,13 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
 
                     	}
 
-                    else if ($(".comment").hasClass("btn-primary")) {  // commentaire d'un enseignenpré écrit
+
+                });
+
+
+   				$("body").on('click', '#corrector', function (e) { 
+
+ 					if($(".comment").hasClass("btn-primary")) {  // commentaire d'un enseignant pré écrit
 
                     	// Choisit le bon commentaire
 						selector = $("#comments_div").find(".btn-primary");
@@ -367,6 +437,8 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
 
                     	}
                 });
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////   Supprime la div cliquée
@@ -378,7 +450,7 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
 	                    $(this).parent().remove();
 	                     erase_annotation(attr_id) ; 
 
-                    });
+                    });              
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////    
@@ -470,8 +542,6 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
 
                 }
 
-
-
  
 
 
@@ -503,6 +573,79 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
 		                }
 		            )
 		        } 
+
+
+
+
+		        function delete_appreciation(comment_id) { 
+
+ 
+		            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+		            url =  '../../../ajax_remove_my_appreciation' ;
+
+		            $.ajax(
+		                {
+		                    type: "POST",
+		                    dataType: "json",
+		                    data: {
+		                            'comment_id': comment_id,
+		                            csrfmiddlewaretoken: csrf_token,   
+		                    },
+		                    url: url ,
+		                    success: function (data) {
+		                    	$("#comment"+comment_id).remove();		                         
+		                    }
+		                }
+		            )
+		        }
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////   Ajouter une appréciation personnelle dans sa liste
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                 $("#add_my_appreciation").on('click', function () {
+                 	 
+	 					let comment = $("#id_comment").val() ; 
+			            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+			            let comment_id = $("#modif_appreciation").val() ; 
+	 
+
+			            $.ajax(
+			                {
+			                    type: "POST",
+			                    dataType: "json",
+			                    data: {
+			                            'comment': comment,
+			                            'comment_id': comment_id,
+			                            csrfmiddlewaretoken: csrf_token,   
+			                    },
+			                    url: '../../../ajax_create_or_update_appreciation' ,
+			                    success: function (data) {
+
+			                    	if (comment_id)
+			                    	{
+			                    		$("#comment"+comment_id).html(comment) ;
+			                    		$("#comment"+comment_id).attr("data-text",comment) ;		                    		
+			                    	}
+			                    	else
+			                        {
+			                    	$("#my_appreciations").append(data.html) ;
+			                    	$("#comments_div").show(500) ;
+			                    	}
+			                    	$("#modif_appreciation").val("");	
+			  	                    $("#add_my_appreciation").html("").html("Sauvegarder");
+									$("#id_comment").val("") ; 
+
+			                    }
+			                })
+
+
+                    });
+ 
 
  
 

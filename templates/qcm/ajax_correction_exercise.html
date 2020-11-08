@@ -15,13 +15,13 @@
 
 
     <div id="corrector">
-        {% if relationship.exercise.supportfile.is_file %}
+        {% if relationship.exercise.supportfile.is_file  and w_a.imagefile %}
             <iframe src="{{  w_a.imagefile.url }}" height="700" width="100%"></iframe>
         {%  elif relationship.exercise.supportfile.is_python or  relationship.exercise.supportfile.is_scratch %}
            <pre>{{ w_a.answer|safe }}</pre>
         {%  elif relationship.exercise.supportfile.is_text %}
            {{ w_a.answer|safe }}
-        {%  elif relationship.exercise.supportfile.is_image %}
+        {%  elif relationship.exercise.supportfile.is_image and w_a.imagefile %}
             <img src="{{  w_a.imagefile.url }}" width="100%"/>
         {% endif %}
 

@@ -87,11 +87,6 @@ urlpatterns = [
     path('show_this_supportfile/<int:id>/', show_this_supportfile, name='show_this_supportfile'),  #from dashboard 
 
     path('create_exercise/<int:supportfile_id>/', create_exercise, name='create_exercise'), 
-    path('correction_exercise/<int:id>/<int:idp>/<int:ids>', correction_exercise, name='correction_exercise'),  #from details_card 
-
-    path('ajax_save_annotation', ajax_save_annotation, name='ajax_save_annotation'),  #from details_card 
-    path('ajax_remove_annotation', ajax_remove_annotation, name='ajax_remove_annotation'),  #from details_card 
- 
 
     path('show_this_exercise/<int:id>/', show_this_exercise, name='show_this_exercise'),  #from dashboard 
 
@@ -219,12 +214,7 @@ urlpatterns = [
 
     path('ajax/course_viewer', ajax_course_viewer, name='ajax_course_viewer'),
 
-    # Evaluation des exercices non auto corrigé
-    path('ajax_choose_student', ajax_choose_student, name='ajax_choose_student'),
-    path('ajax_exercise_evaluate', ajax_exercise_evaluate, name='ajax_exercise_evaluate'),
-    path('ajax_comment_all_exercise', ajax_comment_all_exercise, name='ajax_comment_all_exercise'),
-    path('ajax_audio_comment_all_exercise', ajax_audio_comment_all_exercise, name='ajax_audio_comment_all_exercise'),
-    path('write_exercise/<int:id>', write_exercise, name='write_exercise'), # page dans laquelle l'élève repond à l'exercice non auto-corrigé - l'id est celui de la relation.
+   
 
     # page de création d'un exercice non auto-corrigé dans un parcours - l'id est celui du parcours.
     path('parcours_create_custom_exercise/<int:id>/<int:typ>', parcours_create_custom_exercise, name='parcours_create_custom_exercise'), 
@@ -232,6 +222,33 @@ urlpatterns = [
     path('parcours_delete_custom_exercise/<int:idcc>/<int:id>', parcours_delete_custom_exercise, name='parcours_delete_custom_exercise'), 
     path('parcours_show_custom_exercise/<int:id>/<int:idp>',  show_custom_exercise, name='show_custom_exercise'), # vue enseignant de l'exercice
 
+
+    #####################################################################################################################################
+    ####################################### Correction 
+    #####################################################################################################################################
+
+    path('correction_exercise/<int:id>/<int:idp>/<int:ids>', correction_exercise, name='correction_exercise'),  #from details_card 
+
+    # Evaluation des exercices non auto corrigé
+    path('ajax_choose_student', ajax_choose_student, name='ajax_choose_student'),
+    path('ajax_exercise_evaluate', ajax_exercise_evaluate, name='ajax_exercise_evaluate'),
+    path('ajax_comment_all_exercise', ajax_comment_all_exercise, name='ajax_comment_all_exercise'),
+    path('ajax_audio_comment_all_exercise', ajax_audio_comment_all_exercise, name='ajax_audio_comment_all_exercise'),
+    path('write_exercise/<int:id>', write_exercise, name='write_exercise'), # page dans laquelle l'élève repond à l'exercice non auto-corrigé - l'id est celui de la relation.
+
+
+    path('ajax_save_annotation', ajax_save_annotation, name='ajax_save_annotation'),  #from details_card 
+    path('ajax_remove_annotation', ajax_remove_annotation, name='ajax_remove_annotation'),  #from details_card 
+    
     path('write_custom_exercise/<int:id>/<int:idp>', write_custom_exercise, name='write_custom_exercise'), 
     path('ajax_mark_evaluate', ajax_mark_evaluate, name='ajax_mark_evaluate'),
+
+    path('ajax_create_or_update_appreciation', ajax_create_or_update_appreciation, name='ajax_create_or_update_appreciation'),
+    path('ajax_remove_my_appreciation', ajax_remove_my_appreciation, name='ajax_remove_my_appreciation'),
+
+
+    
+    #####################################################################################################################################
+    #####################################################################################################################################
+
  ]
