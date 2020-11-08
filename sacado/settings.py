@@ -8,7 +8,6 @@ from django.conf import global_settings
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-
 PRODUCTION = os.environ.get('PRODUCTION')
 
 if PRODUCTION:
