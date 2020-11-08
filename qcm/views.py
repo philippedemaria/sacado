@@ -2797,16 +2797,17 @@ def ajax_level_exercise(request):
     level_ids = request.POST.getlist('level_id')
     theme_ids = request.POST.getlist('theme_id')
 
-    parcours_id = request.POST.get('parcours_id', 0)
+    parcours_id = request.POST.get('parcours_id', None)
  
 
-    if int(parcours_id) > 0:
+    if  parcours_id :
         parcours = Parcours.objects.get(id = int(parcours_id))
         ajax = True
 
     else :
         parcours = None
         ajax = False
+        parcours_id = None
 
     datas = []
     levels_dict = {}
@@ -2845,7 +2846,7 @@ def ajax_level_exercise(request):
         levels_dict["themes"]=themes_tab
         datas.append(levels_dict)
 
-    data['html'] = render_to_string('qcm/ajax_list_exercises.html', { 'datas': datas , "parcours" : parcours, "ajax" : ajax, "teacher" : teacher , "request" : request  })
+    data['html'] = render_to_string('qcm/ajax_list_exercises.html', { 'datas': datas , "parcours" : parcours, "ajax" : ajax, "teacher" : teacher , "request" : request , 'parcours_id' : parcours_id })
  
     return JsonResponse(data)
 
