@@ -464,6 +464,8 @@ def individualise_parcours(request,id):
     relationships = Relationship.objects.filter(parcours = parcours).order_by("order")
     students = parcours.students.all().order_by("user__last_name")
 
+    customexercises = Customexercise.objects.filter(parcourses = parcours).order_by("ranking")    
+
     data = get_complement(teacher, parcours)
     role = data['role']
     group = data['group']
@@ -475,7 +477,7 @@ def individualise_parcours(request,id):
 
 
     context = {'relationships': relationships, 'parcours': parcours,     'communications':[],     'students': students,  'form': None,  
-                    'teacher': teacher,
+                    'teacher': teacher, 'customexercises' : customexercises ,
                   'exercises': None , 
                   'levels': None , 
                   'themes' : None ,
@@ -494,22 +496,70 @@ def ajax_individualise(request):
     exercise_id = int(request.POST.get("exercise_id"))
     parcours_id = int(request.POST.get("parcours_id"))
     student_id = int(request.POST.get("student_id"))
-
-    exercise = Exercise.objects.get(pk = exercise_id)
-    parcours = Parcours.objects.get(pk = parcours_id)
-    statut = request.POST.get("statut") 
-
-    relationship = Relationship.objects.get(parcours=parcours,exercise=exercise) 
     data = {}
     teacher = Teacher.objects.get(user= request.user)
-
+    parcours = Parcours.objects.get(pk = parcours_id)
+    statut = request.POST.get("statut") 
 
     if not authorizing_access(teacher,parcours , True ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
+    custom = int(request.POST.get("custom") )
 
-    if parcours.teacher == teacher :
+    if custom :
+        customexercise = Customexercise.objects.get(pk = exercise_id )
+
+        if student_id == 0 :  
+            if statut=="true" or statut == "True" :
+                try :
+                    print("ici")
+                    for s in parcours.students.all() :
+                        customexercise.students.remove(s)
+                except :
+                    pass
+
+                statut = 0
+                data["statut"] = "False"
+                data["class"] = "btn btn-danger"
+                data["noclass"] = "btn btn-success"
+                
+            else : 
+                try :
+                    customexercise.students.set(parcours.students.all())
+                except :
+                    pass
+                statut = 1    
+                data["statut"] = "True"
+                data["class"] = "btn btn-success"
+                data["noclass"] = "btn btn-danger"
+     
+        else :
+            student = Student.objects.get(pk = student_id) 
+            if statut=="true" or statut == "True":
+                try :
+                    customexercise.students.remove(student)
+                except :
+                    pass
+                statut = 0
+                data["statut"] = "False"
+                data["class"] = "btn btn-danger"
+                data["noclass"] = "btn btn-success" 
+            else:
+                statut = 1
+                try :
+                    customexercise.students.add(student) 
+                except :
+                    pass
+                data["statut"] = "True"
+                data["class"] = "btn btn-success"
+                data["noclass"] = "btn btn-danger"
+
+    else :
+
+        exercise = Exercise.objects.get(pk = exercise_id)
+        relationship = Relationship.objects.get(parcours=parcours,exercise=exercise) 
+
         if student_id == 0 :  
             if statut=="true" or statut == "True" :
                 try :
@@ -521,7 +571,6 @@ def ajax_individualise(request):
                 data["statut"] = "False"
                 data["class"] = "btn btn-danger"
                 data["noclass"] = "btn btn-success"
-                
             else : 
                 relationship.students.set(parcours.students.all())
                 statut = 1    

@@ -291,6 +291,7 @@ def get_exercises_by_knowledge(obj,student,group):
     return obj.exercices_by_knowledge(student,group)
 
 
+ 
 
 @register.simple_tag 
 def get_exercise_used(obj,parcours_tab): 
@@ -357,6 +358,19 @@ def get_exercise(obj, exercise):
     booleen si l'élève appartient ou pas à un parcours
     """
     return obj.has_exercise( exercise)
+
+
+
+@register.simple_tag 
+def get_customexercise(obj, exercise): 
+    """
+    booleen si l'élève appartient ou pas à un parcours
+    """
+    return obj.has_customexercise( exercise)
+
+
+
+
 
 @register.simple_tag 
 def get_all_details(obj,parcours): 

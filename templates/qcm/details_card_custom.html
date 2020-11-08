@@ -42,12 +42,12 @@
 
           
           <!-- Exercice dissocié  -->  
-          {% if  customexercise.students.count != nb_students_p_or_g %}
+          {% if  data.nb != nb_students_p_or_g %}    
           <div  style="position: absolute; right : 0px; top:60px;" title="Cet exercice est indiviualisé à certains élèves" >   
-            <a href="#customcard{{customexercise.id}}" class="detail_parcours btn btn-warning" 
-               data-exercise_id="{{ customexercise.exercise.id }}"  data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}">
-              <i class="fa fa-user"></i>
-            </a>
+              <a href="#customcard{{customexercise.id}}" class="detail_parcours btn btn-warning" data-custom=1
+                 data-exercise_id="{{ customexercise.id }}"  data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}">
+                <i class="fa fa-user"></i>
+              </a>
           </div>
           {% endif %}
 

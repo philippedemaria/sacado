@@ -208,6 +208,15 @@ class Student(ModelWithCode):
         return test
  
 
+    def has_customexercise(self, customexercise):
+        if self in customexercise.students.all() :
+            test =  True
+        else :
+            test = False
+        return test
+ 
+
+
     def suiviparent(self):
         test = False
         groups = self.students_to_group.all()
