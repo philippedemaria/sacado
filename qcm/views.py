@@ -143,17 +143,20 @@ def get_complement(request, teacher, parcours_or_group):
         if group_id :
             group = Group.objects.get(pk = group_id)
         else :
-            group = None     
+            group = None   
+
         if Sharing_group.objects.filter(group_id= group_id , teacher = teacher).exists() :
             sh_group = Sharing_group.objects.get(group_id=group_id, teacher = teacher)
             role = sh_group.role
+            access = True
         else :
             role = False
-
+            access = False
     except :
         group_id = None
         role = False
         group = None
+        access = False
 
     if parcours_or_group.teacher == teacher:
         role = True
@@ -161,6 +164,7 @@ def get_complement(request, teacher, parcours_or_group):
     data["group_id"] = group_id
     data["group"] = group
     data["role"] = role
+    data["access"] = access
 
     return data
 
@@ -322,7 +326,13 @@ def peuplate_parcours(request,id):
     levels =  teacher.levels.all() 
     parcours = Parcours.objects.get(id=id)
 
-    if not authorizing_access(teacher,parcours, True ):
+    data = get_complement(request, teacher, parcours)
+    role = data['role']
+    group = data['group']
+    group_id = data['group_id']
+    access = data['access']
+
+    if not authorizing_access(teacher,parcours, access ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
@@ -371,12 +381,7 @@ def peuplate_parcours(request,id):
                     pass
             except :
                 pass
- 
 
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id']
 
         # fin ---- modifie les exercices sélectionnés
     context = {'form': form, 'parcours': parcours, 'communications':[], 'group' : group , 'role' : role , 'teacher': teacher, 'exercises': exercises , 'levels': levels , 'themes' : themes_tab , 'user': request.user , 'group_id' : group_id , 'relationships' :relationships  }
@@ -391,7 +396,14 @@ def peuplate_parcours_evaluation(request,id):
  
     parcours = Parcours.objects.get(id=id)
 
-    if not authorizing_access(teacher,parcours, True ):
+
+    data = get_complement(request, teacher, parcours)
+    role = data['role']
+    group = data['group']
+    group_id = data['group_id']
+    access = data['access']
+
+    if not authorizing_access(teacher,parcours, access ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
@@ -444,10 +456,7 @@ def peuplate_parcours_evaluation(request,id):
                 pass
  
 
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id']
+ 
 
         # fin ---- modifie les exercices sélectionnés
     context = {'form': form, 'parcours': parcours, 'communications':[], 'group' : group , 'role' : role , 'teacher': teacher, 'exercises': exercises , 'levels': levels , 'themes' : themes_tab , 'user': request.user , 'group_id' : group_id , 'relationships' :relationships  }
@@ -465,17 +474,18 @@ def individualise_parcours(request,id):
     relationships = Relationship.objects.filter(parcours = parcours).order_by("order")
     students = parcours.students.all().order_by("user__last_name")
 
-    customexercises = Customexercise.objects.filter(parcourses = parcours).order_by("ranking")    
+    customexercises = Customexercise.objects.filter(parcourses = parcours).order_by("ranking")  
 
     data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
-    group_id = data['group_id']   
+    group_id = data['group_id']
+    access = data['access']
 
-    if not authorizing_access(teacher,parcours, role ):
+    if not authorizing_access(teacher,parcours, access ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
-
+ 
 
     context = {'relationships': relationships, 'parcours': parcours,     'communications':[],     'students': students,  'form': None,  
                     'teacher': teacher, 'customexercises' : customexercises ,
@@ -704,12 +714,6 @@ def list_parcours_group(request,id):
     if not authorizing_access(teacher,group, sharing ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
-
-
-    data = get_complement(request, teacher, group)
-    role = data['role']
-
-    print(data)
 
 
     group_tab = []
@@ -1007,12 +1011,9 @@ def show_parcours(request, id):
     role = data['role']
     group = data['group']
     group_id = data['group_id'] 
-
-
-    print(group)
-
-
-    if not authorizing_access(teacher, parcours, role ):
+    access = data['access'] 
+ 
+    if not authorizing_access(teacher, parcours, access ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
@@ -1187,11 +1188,12 @@ def result_parcours_theme(request, id, idt):
     data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
-    group_id = data['group_id']  
+    group_id = data['group_id'] 
+    access = data['access'] 
 
     customexercises = parcours.parcours_customexercises.all() 
  
-    if not authorizing_access(teacher, parcours,role):
+    if not authorizing_access(teacher, parcours,access):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
@@ -1231,13 +1233,14 @@ def result_parcours_knowledge(request, id):
 
     knowledges = []
          
-
     data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
     group_id = data['group_id'] 
+    access = data['access'] 
 
-    if not authorizing_access(teacher, parcours,role):
+
+    if not authorizing_access(teacher, parcours,access):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
@@ -1280,9 +1283,9 @@ def stat_parcours(request, id):
     data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
-    group_id = data['group_id']  
-
-    if not authorizing_access(teacher, parcours,role):
+    group_id = data['group_id'] 
+    access = data['access']
+    if not authorizing_access(teacher, parcours,access):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
@@ -1423,13 +1426,12 @@ def stat_evaluation(request, id):
     form = EmailForm(request.POST or None )
     stats = []
  
-
     data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
-    group_id = data['group_id']  
-
-    if not authorizing_access(teacher, parcours,role):
+    group_id = data['group_id'] 
+    access = data['access']
+    if not authorizing_access(teacher, parcours,access):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
@@ -1693,13 +1695,12 @@ def parcours_tasks_and_publishes(request, id):
     parcours = Parcours.objects.get(id=id)
     teacher = Teacher.objects.get(user=request.user)
 
-
     data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
-    group_id = data['group_id']  
-
-    if not authorizing_access(teacher, parcours,role):
+    group_id = data['group_id'] 
+    access = data['access']
+    if not authorizing_access(teacher, parcours,access):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
@@ -3974,13 +3975,13 @@ def detail_task_parcours(request,id,s):
     date_today = today.date() 
 
     data = get_complement(request, teacher, parcours)
-    role = data["role"]
-    group_id = data["group_id"]
-
-    if not authorizing_access(teacher, parcours,role):
+    role = data['role']
+    group = data['group']
+    group_id = data['group_id'] 
+    access = data['access']
+    if not authorizing_access(teacher, parcours,access):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
-
     if s == 0 : # groupe
 
         relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours =parcours,exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")  
@@ -4024,11 +4025,12 @@ def detail_task(request,id,s):
     today = time_zone_user(teacher.user) 
 
     data = get_complement(request, teacher, parcours)
-    role = data["role"]
-    group_id = data["group_id"]
-
-
-    if not authorizing_access(teacher, parcours,role):
+    role = data['role']
+    group = data['group']
+    group_id = data['group_id'] 
+    access = data['access']
+    
+    if not authorizing_access(teacher, parcours,access):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
@@ -4569,14 +4571,14 @@ def create_course(request, idc , id ):
     parcours = Parcours.objects.get(pk =  id)
     teacher = Teacher.objects.get(user= request.user)
 
-    data = get_complement(request, teacher, parcours)
 
+    data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
     group_id = data['group_id'] 
-
-
-    if not authorizing_access(teacher, parcours,True):
+    access = data['access']
+    
+    if not authorizing_access(teacher, parcours,access):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
@@ -4678,16 +4680,16 @@ def show_course(request, idc , id ):
     courses = parcours.course.all().order_by("ranking") 
     teacher = Teacher.objects.get(user= request.user)
     
+
     data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
     group_id = data['group_id'] 
-
-
-    if not authorizing_access(teacher, parcours,role):
+    access = data['access']
+    
+    if not authorizing_access(teacher, parcours,access):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
-
 
     user = User.objects.get(pk = request.user.id)
     teacher = Teacher.objects.get(user = user)
