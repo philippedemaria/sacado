@@ -13,7 +13,7 @@ PRODUCTION = os.environ.get('PRODUCTION')
 if PRODUCTION:
     # configuration production
     DEBUG = os.environ.get('DEBUG') == 'True'
-    SECRET_KEY =  os.environ.get('SECRET_KEY')  
+    SECRET_KEY =   #os.environ.get('SECRET_KEY')  
     ALLOWED_HOSTS = ['sacado.xyz', 'ressources.sacado.xyz']
 
     # configuation bdd
