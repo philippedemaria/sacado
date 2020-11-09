@@ -26,6 +26,12 @@
         {%  elif relationship.exercise.supportfile.is_image   and   w_a.imagefile  %}
             <img src="{{  w_a.imagefile.url }}" width="100%"/>
         {% endif %}
+
+
+        {% for a in annotations %} 
+            <div id="{{ a.attr_id }}" class="{{ a.classe }}" style="{{ a.style }}">{{ a.content|safe }}</div>
+        {% endfor %}
+
     </div>    
 {% else %}
 
