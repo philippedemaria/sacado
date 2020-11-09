@@ -705,7 +705,7 @@ def list_parcours_group(request,id):
     request.session["group_id"] = group.id
 
  
-    data = get_complement(request, teacher, parcours)
+    data = get_complement(request, teacher, group)
     role = data['role']
     group = data['group']
     group_id = data['group_id'] 
