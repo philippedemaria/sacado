@@ -706,13 +706,14 @@ def list_parcours_group(request,id):
 
     try :
         sharing_group = Sharing_group.objects.get(group = group, teacher=teacher)
-        sharing = True
+        access = True
         role = sharing_group.role
     except :
-        sharing = False
+        access = False
         role = False
 
-    if not authorizing_access(teacher,group, sharing ):
+
+    if not authorizing_access(teacher,group, access ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
@@ -723,7 +724,7 @@ def list_parcours_group(request,id):
     students = group.students.all()
 
     for student in students :
-        if sharing :
+        if access :
             pcs = Parcours.objects.filter(students= student, is_favorite=1).order_by("is_evaluation", "ranking")
         else :
             pcs = Parcours.objects.filter(Q(teacher=teacher)|Q(author=teacher), students= student, is_favorite=1).order_by("is_evaluation", "ranking")
@@ -4942,9 +4943,10 @@ def create_mastering(request,id):
     masterings_u = Mastering.objects.filter(relationship = relationship , scale = 1).order_by("ranking")
     teacher = Teacher.objects.get(user= request.user)
 
+    data = get_complement(request, teacher, relationship.parcours)
+    access = data['access']
 
-
-    if not authorizing_access(teacher, relationship.parcours,role):
+    if not authorizing_access(teacher, relationship.parcours,access):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
