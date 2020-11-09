@@ -704,14 +704,13 @@ def list_parcours_group(request,id):
 
     request.session["group_id"] = group.id
 
-    try :
-        sharing_group = Sharing_group.objects.get(group = group, teacher=teacher)
-        access = True
-        role = sharing_group.role
-    except :
-        access = False
-        role = False
-
+ 
+    data = get_complement(request, teacher, parcours)
+    role = data['role']
+    group = data['group']
+    group_id = data['group_id'] 
+    access = data['access'] 
+    
 
     if not authorizing_access(teacher,group, access ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
