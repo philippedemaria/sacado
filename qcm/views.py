@@ -160,7 +160,8 @@ def get_complement(request, teacher, parcours_or_group):
 
     if parcours_or_group.teacher == teacher:
         role = True
-
+        access = True
+        
     data["group_id"] = group_id
     data["group"] = group
     data["role"] = role
@@ -710,7 +711,7 @@ def list_parcours_group(request,id):
     group = data['group']
     group_id = data['group_id'] 
     access = data['access'] 
-    
+
 
     if not authorizing_access(teacher,group, access ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
