@@ -45,15 +45,13 @@
 
 {% block page_menu_right %}
  
-
-{% if student %}
-    <h4 style="color:#999">Remis par <span  style="color:#5d4391">{{ student }}</span>, le {% if w_a %}{{ w_a.date|date:"D d M Y"}}{% endif %}{% if c_e %}{{ c_e.date|date:"D d M Y"}}{% endif %}</h4>
-{% else %}
-    <a href="{% url 'show_parcours' parcours.id %}">
-        <input type="button" value="Retour au parcours" class="btn btn-default "/>
-    </a>
-{% endif %}
-
+    {% if student %}
+        <h4 style="color:#999">Remis par <span  style="color:#5d4391">{{ student }}</span>, le {% if w_a %}{{ w_a.date|date:"D d M Y"}}{% endif %}{% if c_e %}{{ c_e.date|date:"D d M Y"}}{% endif %}</h4>
+    {% else %}
+        <a href="{% url 'show_parcours' parcours.id %}">
+            <input type="button" value="Retour au parcours" class="btn btn-default "/>
+        </a>
+    {% endif %}
 
 {% endblock %}
 

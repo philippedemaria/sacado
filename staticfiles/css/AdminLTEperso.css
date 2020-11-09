@@ -3876,12 +3876,10 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 .teacher_corrected{
   left : 60px; 
   top:10px;
-  font-size: 12px;
+  font-size: 14px;
   position: absolute;
   padding:2px;
-  border-radius: 2px;
-  background-color: #5d4391;
-  color:#FFF;
+  color: #5d4391;
 }
 
 .div_results{
@@ -4042,7 +4040,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   top: 100%;
   left: 50%;
   margin-left: -60px;
-  z-index: 99999;
+  z-index: 9999999;
 }
 
 .tool_tip:hover .tool_tip_text {
@@ -4082,7 +4080,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   /* Position the tooltip */
   top: 100%;
   right: 0;
-  z-index: 99999;
+  z-index: 9999999;
 }
 
 .helper_tip:hover .helper_tip_text {
@@ -4145,8 +4143,36 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   box-shadow: 0px 2px 50px rgba(0,0,0,0.3);
 }
 
+ 
+.shared_group{
+  font-size:12px; 
+  position: absolute; 
+  top: 150px
+}
+
+.modal_helper_tip_text {
+  visibility: hidden;
+  width: 180px;
+  background-color: #FFF;
+  color: #222;
+  text-align: left;
+  border-radius: 3px 0px 0px 3px ;
+  padding: 5px;
+  position: absolute;
+  display: table;  
+  font-size: 14px;
+  /* Position the tooltip */
+  top: -70px;
+  left: 110px;
+  z-index: 99;
+}
 
 
+.shared_group:hover .modal_helper_tip_text {
+  visibility: visible;
+  position: absolute;
+  box-shadow: 0px 2px 50px rgba(0,0,0,0.3);
+}
 
 
 

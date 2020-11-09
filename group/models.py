@@ -108,7 +108,7 @@ class Group(ModelWithCode):
     def sharing_role(self,teacher):
         data = {}
         reader , publisher = False , False
-        if Sharing_group.objects.filter(group = self , teacher=teacher).exists() :
+        if self.group_sharingteacher.filter(teacher=teacher).exists() :
             shared_grps = Sharing_group.objects.get(group = self , teacher=teacher)
             if shared_grps.role == 0 :
                 reader = True
@@ -132,10 +132,7 @@ class Group(ModelWithCode):
                 break
         return submit
 
-
-
-
-
+ 
 
 
 class Sharing_group(models.Model):

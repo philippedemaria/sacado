@@ -41,9 +41,18 @@
                                     <a  href="{% url 'group_tasks' group.id  %}" class="pull-right" style="color:{{ group.color|contrast_color }}; font-size:12px;margin-top:8px;"> Tâche en cours <i class="fa fa-calendar"></i></a>
                                 {% endif %}
                          
-
                              <br/> <br/>
-
+                            {% if teacher != group.teacher %}
+                            <span class="shared_group"> Groupe partagé. 
+                                 <i class="fa fa-info-circle"></i>
+                                    <div class="modal_helper_tip_text" > 
+                                        {{ group.teacher }} <small>(Propriétaire)</small><br>
+                                        {% for gs in group.group_sharingteacher.all %}
+                                            {{ gs.teacher }} <small>({% if gs.role %}Editeur{% else %}Lecteur{% endif %})</small>{% if not forloop.last %}<br>{% endif %}
+                                        {% endfor %}
+                                    </div>
+                            </span>
+                            {% endif %}
                         </div>
  
 
