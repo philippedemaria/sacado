@@ -1,4 +1,4 @@
-define(['jquery','bootstrap','corrector'], function ($) {
+define(['jquery','bootstrap', 'ui','corrector'], function ($) {
     $(document).ready(function () {
         console.log("chargement JS corrector.js OK");
 
