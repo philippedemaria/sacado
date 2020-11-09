@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from account.models import Student, Teacher, User, Resultknowledge, Resultlastskill
 from account.forms import UserForm
-from group.models import Group
+from group.models import Group, Sharing_group
 from socle.models import Knowledge, Theme, Level, Skill
 from qcm.models import Exercise, Parcours, Relationship, Studentanswer, Resultexercise
 from group.forms import GroupForm , GroupTeacherForm
@@ -213,13 +213,14 @@ def get_complement(request, teacher, parcours_or_group):
         else :
             group = None   
 
-        if Sharing_group.objects.filter(group_id= group_id , teacher = teacher).exists() :
-            sh_group = Sharing_group.objects.get(group_id=group_id, teacher = teacher)
+        if Sharing_group.objects.filter(group = group  , teacher = teacher).exists() :
+            sh_group = Sharing_group.objects.get(group = group , teacher = teacher)
             role = sh_group.role
             access = True
         else :
             role = False
             access = False
+ 
     except :
         group_id = None
         role = False
@@ -229,10 +230,10 @@ def get_complement(request, teacher, parcours_or_group):
     if parcours_or_group.teacher == teacher:
         role = True
         access = True
-        
+
     data["group_id"] = group_id
     data["group"] = group
-    data["role"] = role
+    data["role"] = True
     data["access"] = access
 
     return data
@@ -357,10 +358,20 @@ def show_group(request, id ):
 
     group = Group.objects.get(id=id)
     teacher = Teacher.objects.get(user=request.user)
-    if not authorizing_access(teacher, group, False):
+
+    request.session["group_id"] = id
+
+
+    data = get_complement(request, teacher, group)
+    role = data['role']
+    access = data['access']
+
+
+
+
+    if not authorizing_access(teacher, group, access ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
-
  
     context = {  'group': group,  'communications' : [] , 'teacher' : group.teacher  }
 
