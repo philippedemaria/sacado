@@ -246,7 +246,7 @@ urlpatterns = [
     path('ajax_create_or_update_appreciation', ajax_create_or_update_appreciation, name='ajax_create_or_update_appreciation'),
     path('ajax_remove_my_appreciation', ajax_remove_my_appreciation, name='ajax_remove_my_appreciation'),
 
-
+    path('ajax_read_my_production', ajax_read_my_production, name='ajax_read_my_production'),
     
     #####################################################################################################################################
     #####################################################################################################################################

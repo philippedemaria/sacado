@@ -30,6 +30,27 @@ def insert_tags(html,cutter): #nettoie le code des balises HTML
 
 
 @register.filter
+def top_less(html,up): #nettoie le code des balises HTML
+
+    htm_css_tab = html.split(";")#récupère chaque propriétés du css
+
+    htm_propriete_tab = []
+    for css in htm_css_tab : 
+        propriete =  css.split(":") 
+        htm_propriete_tab.append(propriete)
+
+    for prop in htm_propriete_tab :
+        if "top" in prop[0] : 
+            prop[1] = str(int(prop[1][:-2])-up)+"px"
+            break
+ 
+    chaine = ""
+    for i in range(len(htm_propriete_tab)-1):
+        chaine += str(htm_propriete_tab[i][0])+":"+str(htm_propriete_tab[i][1])+";"
+    print(chaine)
+    return chaine
+
+@register.filter
 def index(sequence, position):
     """
     Renvoie la valeur dans une sequence donné sur un index donné

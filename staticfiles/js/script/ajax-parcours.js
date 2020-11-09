@@ -433,6 +433,50 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
+
+        // Pour un élève... Depuis son parcours
+        $('.read_my_production').on('click', function (event) {
+
+            let custom = $(this).attr("data-custom");
+            let exercise_id = $(this).attr("data-exercise_id");
+            let student_id = $(this).attr("data-student_id");
+
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'exercise_id': exercise_id,
+                        csrfmiddlewaretoken: csrf_token,
+                        'custom': custom,
+                        'student_id': student_id,
+                    },
+                    url: "../../ajax_read_my_production",
+                    success: function (data) {
+                        $('#my_production_paper').html(data.html);
+                    }
+                }
+            )
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // Affiche dans la modal la liste des élèves du groupe sélectionné
         $('.header_shower').on('click', function (event) {
             let relation_id = $(this).attr("data-relation_id");

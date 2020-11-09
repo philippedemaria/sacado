@@ -3896,7 +3896,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   background-color: #fff;
   font-size: 10px;
   overflow-x: hidden;
-  z-index: 9999;
+  z-index: 9;
 }
 
  .div_results::-webkit-scrollbar {
@@ -3950,7 +3950,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   padding:10px;
   font-size: 12px;
   width:100%;
-  z-index:999;
+  z-index:8;
   color: #000;
   position: absolute;
 }

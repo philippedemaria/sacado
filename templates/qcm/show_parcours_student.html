@@ -84,9 +84,9 @@
                     {%  get_last_score_and_time   relation.exercise   relation.parcours   student    as    data %}
                     {%  get_noggb_data   relation   student    as    noggb_data %}
                     <!-- div de résultat SACADO corrigé par le prof -->                    
-                    <div class="card_freeze" {% if data.score %} style="opacity:0.6" {% endif %}>
+                    <div class="card_freeze" {% if data.score %} style="opacity:0.8" {% endif %}>
 
-                        {% if noggb_data.is_corrected %}
+
                             <div id="div_results{{ relation.id }}" class="div_results" >
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12"> <a href="#" class="div_results_close pull-right" data-relation_id="{{relation.id}}"><i class="fa fa-times"></i></a>     
@@ -104,8 +104,15 @@
                                     </div>
                                 </div>                            
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12">   
-                                        <label  style="font-size: 10px;font-weight: 600">Compétences </label>
+                                    <div class="col-sm-12 col-md-12"> 
+                                        <a href="#" data-toggle='modal' data-target='#my_production' 
+                                                        class="read_my_production pull-right" data-student_id="{{ student.user.id}}" data-custom=0 
+                                                        data-exercise_id="{{ relation.id}}">
+                                            <b> Voir ma copie</b>
+                                        </a>   
+                                        <label  style="font-size: 10px;font-weight: 600">Compétences 
+                                           
+                                        </label>
                                           {% for d in noggb_data.skills.all %} 
                                             <li class="sanspuce" style="font-size: 10px;">{{d.skill.name }}  <i class="fa fa-square
                                                 {% if d.point < stage.low %}
@@ -121,7 +128,7 @@
                                     </div>
                                 </div>   
                             </div>                           
-                        {% endif %}  
+
                         <!-- Fin de div de résultat -->
                         <!-- Si l'exercice est bloqué, on pose une div par-dessus -->
                         {% if  under_score %} <!-- under_score = l'exercice est sous contrainte car l'élève n'a pas obtenu les résultats suffisants-->
@@ -213,9 +220,9 @@
                             {% if student %}
 
                                 {% if relation.exercise.supportfile.is_ggbfile %}          
-                                <a href="{% if not is_lock %}{% url 'execute_exercise'  relation.parcours.id  relation.exercise.id   %}{% endif %}">  <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.6" {% endif %}    ></a>
+                                <a href="{% if not is_lock %}{% url 'execute_exercise'  relation.parcours.id  relation.exercise.id   %}{% endif %}">  <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.8" {% endif %}    ></a>
                                 {% else %}
-                                <a href="{% if not is_lock %}{% url 'write_exercise'  relation.id   %}{% endif %}">  <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.6" {% endif %}    ></a>
+                                <a href="{% if not is_lock %}{% url 'write_exercise'  relation.id   %}{% endif %}">  <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.8" {% endif %}    ></a>
 
                                 {% endif  %}
                             {% else %}
@@ -238,6 +245,10 @@
 
                                 {% if noggb_data.is_corrected %}
                                     <span class="pull-right selector_div_result" data-relation_id ="{{ relation.id }}"><i class="fa fa-trophy"></i></span>
+                                {% else %}
+                                    {% if not relation.exercise.supportfile.is_ggbfile %}  
+                                    <span class="pull-right selector_div_result" data-relation_id ="{{ relation.id }}"><i class="fa fa-copy"></i></span>
+                                    {% endif %}
                                 {% endif %}
                                 {% if relation.relationship_mastering.all|length > 0 %}
                                 <a href="{% url 'mastering_student_show' relation.id %}" target="_blank" class="helper_tip_card" style="color:{{ parcours.color|contrast_color }}">
@@ -284,8 +295,13 @@
                                     </div>
                                 </div>                            
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12">   
-                                        <label  style="font-size: 10px;font-weight: 600">Compétences </label>
+                                    <div class="col-sm-12 col-md-12">  
+                                        <a href="#" data-toggle='modal' data-target='#my_production' 
+                                                        class="read_my_production pull-right" data-student_id="{{ student.user.id}}" data-custom=1 
+                                                        data-exercise_id="{{ customexercise.id}}">
+                                            <b> Voir ma copie</b>
+                                        </a>  
+                                        <label  style="font-size: 10px;font-weight: 600">Compétences</label>
                                           {% for d in data.skills.all %} 
                                             <li class="sanspuce" style="font-size: 10px;">{{d.skill.name }}  <i class="fa fa-square
                                                 {% if d.point < stage.low %}
@@ -502,6 +518,29 @@
     </div>
 </div>
    
+
+<div class="modal fade" id="my_production" tabindex="-1" role="dialog" aria-labelledby="my_production">
+    <div class="modal-dialog" role="document"  style="width:95%;">
+        <div class="modal-content" style="padding-top :0px;">
+            <div class="modal-header">
+                <h3>Ma copie
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                </h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">   
+                        <div id="my_production_paper"></div>
+                    </div>   
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {% endblock %}
 
  

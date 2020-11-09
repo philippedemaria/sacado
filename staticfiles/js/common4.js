@@ -65,7 +65,7 @@ requirejs.config({
             deps: ['jquery','toggle']
         },
         "bcPicker": {
-            deps: ['jquery',]
+            deps: ['jquery']
         },
         
         mathjax: {

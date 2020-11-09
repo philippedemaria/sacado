@@ -1,0 +1,53 @@
+{% load item_tags %}
+{% load static %}
+
+<style>
+.remove{
+    color:transparent;
+}
+
+</style>
+
+
+{% if custom %}
+    <div id="corrector">
+        {% if customexercise.is_file  and   response.imagefile %}
+ 
+            <iframe src="{{  response.imagefile.url }}" height="700" width="100%"></iframe>
+        {%  elif customexercise.is_python or  customexercise.is_scratch %}
+           <pre>{{ response.answer|safe }}</pre>
+        {%  elif customexercise.is_text %}
+           {{ response.answer|safe }}
+        {%  elif customexercise.is_image   and   response.imagefile  %}
+            <img src="{{  response.imagefile.url }}" width="100%"/>
+        {% endif %}
+
+
+        {% for a in annotations %} 
+            <div id="{{ a.attr_id }}" class="{{ a.classe }}" style="{{ a.style|top_less:0  }}">{{ a.content|safe }}</div>
+        {% endfor %}
+
+    </div>    
+{% else %}
+
+    <div id="corrector">
+        {% if relationship.exercise.supportfile.is_file  and   response.imagefile %}
+ 
+            <iframe src="{{  response.imagefile.url }}" height="700" width="100%"></iframe>
+        {%  elif relationship.exercise.supportfile.is_python or  relationship.exercise.supportfile.is_scratch %}
+           <pre>{{ response.answer|safe }}</pre>
+        {%  elif relationship.exercise.supportfile.is_text %}
+           {{ response.answer|safe }}
+        {%  elif relationship.exercise.supportfile.is_image   and   response.imagefile  %}
+            <img src="{{  response.imagefile.url }}" width="100%"/>
+        {% endif %}
+
+
+        {% for a in annotations %} 
+            <div id="{{ a.attr_id }}" class="{{ a.classe }}" style="{{ a.style|top_less:10 }}">{{ a.content|safe }}</div>
+        {% endfor %}
+
+    </div>  
+{% endif %}
+
+       

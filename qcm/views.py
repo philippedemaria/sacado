@@ -3669,6 +3669,38 @@ def audio_remediation(request):
 
 
 
+
+
+def ajax_read_my_production(request): # Propose à un élève de lire sa copie depuis son parcours
+
+    student_id =  int(request.POST.get("student_id"))
+    exercise_id =  int(request.POST.get("exercise_id"))  
+    custom =  int(request.POST.get("custom")) 
+    student = Student.objects.get(pk=student_id)
+
+    data = {}
+
+    if custom :
+        customexercise = Customexercise.objects.get(pk=exercise_id)
+        response = Customanswerbystudent.objects.get(customexercise  = customexercise , student  = student )
+        annotations = Customannotation.objects.filter(customanswerbystudent  = response)
+
+        context = { 'customexercise' : customexercise , 'student': student ,   'custom' : True , 'response' :  response,   'annotations' : annotations   }
+
+    else :
+        relationship = Relationship.objects.get(pk=exercise_id)
+        response = Writtenanswerbystudent.objects.get(relationship  = relationship  , student  = student )
+        annotations = Annotation.objects.filter(writtenanswerbystudent = response)
+ 
+        context = { 'relationship' : relationship , 'student': student ,   'custom' : False , 'response' :  response,   'annotations' : annotations   }
+
+    html = render_to_string('qcm/ajax_student_restitution.html', context )
+     
+    data['html'] = html    
+            
+
+    return JsonResponse(data)  
+
  
 ###################################################################
 ######   Création des commentaires de correction
