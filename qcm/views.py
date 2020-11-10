@@ -184,6 +184,64 @@ def get_stage(user):
     return stage
 
 
+
+def group_has_parcourses(group,is_evaluation ,is_archive ):
+    pses_tab = []
+
+    for s in group.students.all() :
+        pses = s.students_to_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive)
+        for p in pses :
+            if p not in  pses_tab :
+                pses_tab.append(p)
+ 
+    return pses_tab
+
+
+def teacher_has_parcourses(teacher,is_evaluation ,is_archive ):
+    """
+    Renvoie les parcours dont le prof est propriétaire et donc les parcours lui sont partagés
+    """
+    sharing_groups = teacher.teacher_sharingteacher.all()
+    parcourses = list(teacher.teacher_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive))
+
+
+    for sg in sharing_groups :
+        pcs = group_has_parcourses(sg.group,is_evaluation ,is_archive )
+        for p in pcs :
+            if p not in parcourses:
+                parcourses.append(p) 
+    return parcourses
+
+
+
+def teacher_has_permisson_to_share_inverse_parcourses(request,teacher,parcours):
+    """
+    Quand un enseignant partage son groupe, il doit aussi voir les parcours que son co animateur propose.
+    """
+    test_has_permisson = False
+    for student in parcours.students.all() :
+        for group in teacher.groups.all() :
+            if student in group.students.all()  :
+                test_has_permisson = True
+                break
+    return test_has_permisson
+
+
+
+
+def teacher_has_permisson_to_parcourses(request,teacher,parcours):
+
+
+    test_has_permisson = teacher_has_permisson_to_share_inverse_parcourses(request,teacher,parcours)
+
+    if test_has_permisson or parcours in teacher_has_parcourses(teacher,0,0) or parcours in teacher_has_parcourses(teacher,0,1) or parcours in teacher_has_parcourses(teacher,1,0) or parcours in teacher_has_parcourses(teacher,1,1):
+        has_permisson = True
+    else :
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        has_permisson = False
+    return has_permisson 
+
+
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 #################   parcours par defaut
@@ -641,8 +699,10 @@ def list_parcours(request):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
     today = time_zone_user(teacher.user)
-    parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=0,is_archive=0).order_by("-is_favorite")  
-    nb_archive =  Parcours.objects.filter(teacher = teacher,is_evaluation=0,is_archive=1).count()  
+
+    parcourses = teacher_has_parcourses(teacher,0 ,0 ) #  is_evaluation ,is_archive 
+    nb_archive =  len(teacher_has_parcourses(teacher,0 ,1)) 
+
     try :
         del request.session["group_id"]
     except:
@@ -655,7 +715,7 @@ def list_parcours(request):
 def list_archives(request):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
-    parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=0,is_archive=1).order_by("level")  
+    parcourses = teacher_has_parcourses(teacher,0 ,1 ) #  is_evaluation ,is_archive  
     today = time_zone_user(teacher.user)
     try :
         del request.session["group_id"]
@@ -670,8 +730,8 @@ def list_archives(request):
 def list_evaluations(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
     today = time_zone_user(teacher.user)
-    parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=1,is_archive=0).order_by("-is_favorite")     
-    nb_archive = Parcours.objects.filter(teacher = teacher,is_evaluation=1,is_archive=1).count()  
+    parcourses = teacher_has_parcourses(teacher,1 ,0 ) #  is_evaluation ,is_archive    
+    nb_archive = len(teacher_has_parcourses(teacher,1 ,1))  
     try :
         del request.session["group_id"]
     except:
@@ -684,7 +744,7 @@ def list_evaluations(request):
 
 def list_evaluations_archives(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
-    parcourses = Parcours.objects.filter(teacher = teacher,is_evaluation=1,is_archive=1).order_by("level")    
+    parcourses = teacher_has_parcourses(teacher,1 ,1 ) #  is_evaluation ,is_archive      
     today = time_zone_user(teacher.user)
     try :
         del request.session["group_id"]
@@ -717,9 +777,7 @@ def list_parcours_group(request,id):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
-
-    group_tab = []
-    data = {}
+ 
     parcours_tab = []
     students = group.students.all()
 
@@ -735,7 +793,9 @@ def list_parcours_group(request,id):
                 if parcours not in parcours_tab :
                     parcours_tab.append(parcours)
                 if len(parcours_tab) == teacher.teacher_parcours.count() :
-                    break 
+                    break
+
+
     return render(request, 'qcm/list_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group': group,  'parcours' : None , 'communications' : [] , 'relationships' : [] , 'role' : role , 'today' : today })
 
 
@@ -1013,10 +1073,8 @@ def show_parcours(request, id):
     role = data['role']
     group = data['group']
     group_id = data['group_id'] 
-    access = data['access'] 
- 
-    if not authorizing_access(teacher, parcours, access ):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
 
@@ -1146,8 +1204,7 @@ def result_parcours(request, id):
     if parcours.teacher == teacher :
         role = True
 
-    if not authorizing_access(teacher, parcours,role):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
 
@@ -1195,8 +1252,7 @@ def result_parcours_theme(request, id, idt):
 
     customexercises = parcours.parcours_customexercises.all() 
  
-    if not authorizing_access(teacher, parcours,access):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
     theme = Theme.objects.get(id=idt)
@@ -1241,9 +1297,7 @@ def result_parcours_knowledge(request, id):
     group_id = data['group_id'] 
     access = data['access'] 
 
-
-    if not authorizing_access(teacher, parcours,access):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
     knowledge_ids = parcours.exercises.values_list("knowledge",flat=True).order_by("knowledge").distinct()
@@ -1701,9 +1755,9 @@ def parcours_tasks_and_publishes(request, id):
     role = data['role']
     group = data['group']
     group_id = data['group_id'] 
-    access = data['access']
-    if not authorizing_access(teacher, parcours,access):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+ 
+
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
     form = AttachForm(request.POST or None, request.FILES or None)
@@ -1714,10 +1768,6 @@ def parcours_tasks_and_publishes(request, id):
  
 
  
-
- 
-
-#@user_is_parcours_teacher
 def result_parcours_exercise_students(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcours = Parcours.objects.get(pk = id)
@@ -1728,8 +1778,7 @@ def result_parcours_exercise_students(request,id):
         group_id = None
         group = None
 
-    if not authorizing_access(teacher, parcours,True):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
     relationships = Relationship.objects.filter(parcours = parcours, is_publish = 1) 
@@ -2496,10 +2545,6 @@ def parcours_exercises(request,id):
     parcours = Parcours.objects.get(pk=id)
     student = Student.objects.get(user=user)
 
-    if not authorizing_access_student(student, parcours):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
-        return redirect('index')
-
     relationships = Relationship.objects.filter(parcours=parcours,is_publish=1).order_by("exercise__theme")
 
     return render(request, 'qcm/student_list_exercises.html', {'parcours': parcours  , 'relationships': relationships, })
@@ -3142,8 +3187,7 @@ def update_evaluation(request, id, idg=0 ):
 
     parcours = Parcours.objects.get(id=id)
 
-    if not authorizing_access(teacher, parcours,True):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
     form = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher)
@@ -3216,8 +3260,7 @@ def delete_evaluation(request,id):
     parcours = Parcours.objects.get(pk=id)
     teacher = Teacher.objects.get(user=request.user)
 
-    if not authorizing_access(teacher, parcours,True):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
     if parcours.teacher == teacher :
@@ -3233,8 +3276,7 @@ def show_evaluation(request, id):
     parcours = Parcours.objects.get(id=id)
     teacher =  parcours.teacher 
 
-    if not authorizing_access(teacher, parcours,True):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
@@ -3764,8 +3806,7 @@ def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice no
     stage = get_stage(teacher.user)
 
 
-    if not authorizing_access(teacher, parcours,True):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
     ceForm = CustomexerciseForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours) 
@@ -3818,8 +3859,7 @@ def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exerci
     else :
  
         parcours = Parcours.objects.get(pk=id)
-        if not authorizing_access(teacher, parcours,True):
-            messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
             return redirect('index')
 
         ceForm = CustomexerciseForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours, instance = custom ) 
@@ -4012,10 +4052,10 @@ def detail_task_parcours(request,id,s):
     role = data['role']
     group = data['group']
     group_id = data['group_id'] 
-    access = data['access']
-    if not authorizing_access(teacher, parcours,access):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
+
     if s == 0 : # groupe
 
         relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours =parcours,exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")  
@@ -4062,10 +4102,8 @@ def detail_task(request,id,s):
     role = data['role']
     group = data['group']
     group_id = data['group_id'] 
-    access = data['access']
 
-    if not authorizing_access(teacher, parcours,access):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
     if s == 0 : # groupe
@@ -4610,10 +4648,8 @@ def create_course(request, idc , id ):
     role = data['role']
     group = data['group']
     group_id = data['group_id'] 
-    access = data['access']
     
-    if not authorizing_access(teacher, parcours,access):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
     form = CourseForm(request.POST or None , parcours = parcours )
@@ -4692,9 +4728,7 @@ def delete_course(request, idc , id  ):
 
     course = Course.objects.get(id=idc)
 
-
-    if not authorizing_access(teacher, parcours,True):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
     course.delete()
@@ -4721,8 +4755,7 @@ def show_course(request, idc , id ):
     group_id = data['group_id'] 
     access = data['access']
     
-    if not authorizing_access(teacher, parcours,access):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
     user = User.objects.get(pk = request.user.id)
@@ -4975,13 +5008,8 @@ def create_mastering(request,id):
     masterings_u = Mastering.objects.filter(relationship = relationship , scale = 1).order_by("ranking")
     teacher = Teacher.objects.get(user= request.user)
 
-    data = get_complement(request, teacher, relationship.parcours)
-    access = data['access']
-
-    if not authorizing_access(teacher, relationship.parcours,access):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+    if not teacher_has_permisson_to_parcourses(request,teacher,relationship.parcours) :
         return redirect('index')
-
 
     if request.method == "POST" :
         if form.is_valid():
@@ -5005,10 +5033,8 @@ def parcours_mastering_delete(request,id,idm):
 
     m = Mastering.objects.get(pk = idm)
 
-    if not authorizing_access(teacher,  m.relationship.parcours,True):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+    if not teacher_has_permisson_to_parcourses(request,teacher,m.relationship.parcours) :
         return redirect('index')
-
 
     m.delete()
     return redirect('create_mastering', id )

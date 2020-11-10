@@ -117,7 +117,7 @@
                                 </span>
                             </div>
                         </form>
-                        {% if parcours.teacher != teacher %}<br><small  style="color:{{ parcours.color }};"><b>Création :</b>    {{ parcours.teacher }}</small>{% endif %}
+                        {% if parcours.teacher != teacher %}<br><small  style="color:{{ parcours.color }};"><b>Propriétaire :</b>    {{ parcours.teacher }}</small>{% endif %}
                         <br>
                         <span class="label_icon" style="color:{{ parcours.color }};">
                             {% if parcours.is_evaluation %}
@@ -169,7 +169,7 @@
                         {% endif %}
                         {{ parcours.title|truncatechars:"18" }}
                         {% get_is_lock parcours today as is_lock %} 
-                        {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillée. Il n'est plus possible de soumettre des exercices</div></span>{% endif %} 
+                        {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock" style="color:{{ parcours.color|contrast_color }};"></i><div class="helper_tip_text_right">Le parcours est verrouillée. Il n'est plus possible aux élèves de soumettre des exercices.</div></span>{% endif %} 
 
                         <span style="font-size:12px"> 
                             {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}, 
@@ -179,7 +179,7 @@
 
 
                     {% if parcours.group_list|length > 1 %}
-                    <span class="shared" style="color:{{ parcours.color }};">Parcours partagé</span>
+                    <span class="shared" style="color:{{ parcours.color }};">Parcours partagé entre plusieurs groupes</span>
                     {% endif %} 
                 </div>
             </div>

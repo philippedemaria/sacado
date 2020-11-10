@@ -506,6 +506,20 @@ def get_skill_result(obj,  skill ,student):
 
 
 
+@register.simple_tag 
+def get_access_to_this_group(obj,  teacher):
+    """
+    Donne l'accès à un groupe à un enseignant
+    """
+    return obj.authorize_access(teacher)
+
+
+@register.simple_tag 
+def get_group_parcours_counter(obj,  teacher):
+    """
+    Contre le nombre de parcours associé à un groupe d'un enseignant donné
+    """
+    return obj.parcours_counter(teacher)
 
 
 @register.simple_tag 

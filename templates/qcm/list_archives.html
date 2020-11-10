@@ -81,12 +81,16 @@ body{
                             </div>                            
                         </td>  
                         <td>
-                            {% if parcours.is_evaluation %}
-                            <a href="{% url 'update_evaluation' parcours.id 0 %}"> 
+                            {% if parcours.teacher != teacher %}
+                                <i class="fa fa-edit text-default" aria-hidden="true" ></i></a>
                             {% else %}
-                            <a href="{% url 'update_parcours' parcours.id 0 %}" >
+                                {% if parcours.is_evaluation %}
+                                <a href="{% url 'update_evaluation' parcours.id 0 %}"> 
+                                {% else %}
+                                <a href="{% url 'update_parcours' parcours.id 0 %}">
+                                {% endif %}
+                                <i class="fa fa-edit" aria-hidden="true"></i></a>
                             {% endif %}
-                            <i class="fa fa-edit" aria-hidden="true"></i></a> 
                         </td> 
                         <td>
                             {% for l in  parcours.level_list  %}

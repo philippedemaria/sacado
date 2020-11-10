@@ -107,7 +107,7 @@ body{
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <div class="form-group">
-                {% if parcours.teacher != teacher %}<a href="{% url 'clone_parcours' parcours.id %}" class="btn btn-primary">Cloner ce parcours</a>    {% endif %} 
+                {% if parcours.teacher != teacher  and  parcours.is_share %}<a href="{% url 'clone_parcours' parcours.id %}" class="btn btn-primary">Cloner ce parcours</a>    {% endif %} 
                 <input type="button" value="Retour" class="btn btn-default" onclick="javascript:history.back()"/>
             </div>
         </div>

@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load item_tags %}
 
 
 <li class="dropdown">
@@ -12,17 +12,18 @@
         </li> 
                 <li class="divider"></li>
 
- 
 
+        {%  get_access_to_this_group  group   teacher  as     has_access_to_this_group %}
+        {%  if  has_access_to_this_group.role   %}
         <li {% if 'group/update/' in request.path %} class="active" {% endif %}>
             <a href="{% url 'update_group' group.id %}"  > <i class="fa fa-cogs fa-fw"  ></i><span class="small_displayer"> Modifier le groupe/Ajouter des élèves</span></a>    
         </li>  
- 
 
-        
         <li {% if 'group/show/' in request.path %} class="active" {% endif %}>
              <a href="{% url 'show_group' group.id  %}" ><i class="fa fa-arrow-circle-right fa-fw fa-fw"></i>  Lire les détails/Modifier les élèves </a>
         </li>
+        {%  endif %} 
+
 
         <li {% if 'group/print_ids/' in request.path %} class="active" {% endif %}>
              <a href="{% url 'print_ids' group.id  %}" ><img src="{% static 'img/pdf.png' %}" width="15px" style="margin-right:11px"> Télécharger les identifiants </a>

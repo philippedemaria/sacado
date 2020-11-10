@@ -6,7 +6,8 @@
             <h2 class="thin">Mes groupes</h2>
             <div class="row"></div><hr style="margin-top: 0px">   
             {% for group in groups %}
-                {% with group.parcours_counter as data %}
+
+                {% get_group_parcours_counter group  teacher as data %}
                     <!-- small box -->
                     <div class="small-box" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}">
                         
@@ -43,7 +44,7 @@
                          
                              <br/> <br/>
                             {% if teacher != group.teacher %}
-                            <span class="shared_group"> Groupe partagé. 
+                            <span class="shared_group"> Co-animation 
                                  <i class="fa fa-info-circle"></i>
                                     <div class="modal_helper_tip_text" > 
                                         {{ group.teacher }} <small>(Propriétaire)</small><br>
@@ -126,7 +127,7 @@
                         </div>
                     </div>
 
-                {% endwith %}
+   
             {% endfor %}
 
             {% if nb_teacher_level == 0 %} 

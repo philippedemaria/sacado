@@ -69,18 +69,26 @@ class Group(ModelWithCode):
 
 
 
-    def parcours_counter(self):
+    def parcours_counter(self,teacher):
         """
-        Donne le nombre total de parcours, le nombre de visibles et de publiés du groupe
+        Donne le nombre total de parcours/évaluations, le nombre de visibles et de publiés du groupe
         """
         students = self.students.order_by("user__last_name")
 
 
+        # parcourses__ = []
+        # for student in self.students.all():
+        #     for p in student.students_to_parcours.filter(Q(teacher=self.teacher)|Q(teacher=teacher), teacher__subjects = self.subject) :
+        #         if p not in parcourses__ :
+        #             parcourses__.append(p)
+
+
         parcourses = []
         for student in self.students.all():
-            for p in student.students_to_parcours.filter(teacher=self.teacher, teacher__subjects = self.subject) :
-                if p not in parcourses :
+            for p in student.students_to_parcours.all() :
+                if p not in parcourses  :
                     parcourses.append(p)
+
 
         data, nb, nbf, nbp, nbef , nbe = {}, 0, 0, 0, 0, 0
         for parcours in parcourses :
@@ -89,11 +97,11 @@ class Group(ModelWithCode):
             if parcours.is_publish and not parcours.is_evaluation :
                 nbp += 1
             if parcours.is_evaluation:
-                nbef += 1
+                nbe  += 1
             if not parcours.is_evaluation:
                 nb += 1
             if parcours.is_evaluation and parcours.is_favorite :
-                nbe += 1
+                nbef += 1
 
         data["count_students"] = students.values("user").count()
         data["students"] = students.values("user__id", "user__last_name", "user__first_name")
@@ -105,7 +113,12 @@ class Group(ModelWithCode):
 
         return data
 
+
+
     def sharing_role(self,teacher):
+        """
+        Renvoie le role d'un enseignant pour un groupe donné
+        """
         data = {}
         reader , publisher = False , False
         if self.group_sharingteacher.filter(teacher=teacher).exists() :
@@ -121,6 +134,10 @@ class Group(ModelWithCode):
 
 
     def is_pending_correction(self):
+        """
+        Prédicat pour tester s'il existe des correction en attente
+        """
+
         submit = False
 
         for student in self.students.all() :
@@ -133,6 +150,26 @@ class Group(ModelWithCode):
         return submit
 
  
+ 
+    def authorize_access(self, teacher): 
+        """
+        Authorise l'acces de ce groupe à un enseignant
+        """
+        access, role = False, False
+        if teacher.teacher_sharingteacher.filter(group = self).count() > 0 :
+            access = True
+        if self.teacher == teacher or access :
+            access = True 
+        if access and teacher.teacher_sharingteacher.filter(group = self).exists():
+            sg = teacher.teacher_sharingteacher.filter(group = self).last()
+            role = sg.role
+
+        data = {}
+        data["role"] = role
+        data["access"] = access
+
+        return data
+
 
 
 class Sharing_group(models.Model):
