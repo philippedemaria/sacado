@@ -338,17 +338,6 @@ def ajax_populate(request):
 
     teacher = Teacher.objects.get(user= request.user)    
 
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id']
-    access = data['access']
-
-    if not authorizing_access(teacher,parcours, access ):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
-        return redirect('index')
-
-
     if statut=="true" or statut == "True":
 
         r = Relationship.objects.get(parcours=parcours, exercise = exercise)  
