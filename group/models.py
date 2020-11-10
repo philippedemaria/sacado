@@ -135,7 +135,7 @@ class Group(ModelWithCode):
 
     def is_pending_correction(self):
         """
-        Prédicat pour tester s'il existe des correction en attente
+        Prédicat pour tester s'il existe des corrections en attente
         """
 
         submit = False
@@ -150,6 +150,18 @@ class Group(ModelWithCode):
         return submit
 
  
+    def is_shared(self):
+        """
+        Prédicat pour tester si le groupe est en co animation
+        """
+        is_shared = False
+        if len(self.group_sharingteacher.all()) > 0 :
+            is_shared = True
+
+        return is_shared
+
+
+
  
     def authorize_access(self, teacher): 
         """

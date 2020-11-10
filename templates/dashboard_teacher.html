@@ -43,7 +43,7 @@
                                 {% endif %}
                          
                              <br/> <br/>
-                            {% if teacher != group.teacher %}
+                            {% if teacher != group.teacher or group.is_shared %}
                             <span class="shared_group"> Co-animation 
                                  <i class="fa fa-info-circle"></i>
                                     <div class="modal_helper_tip_text" > 
