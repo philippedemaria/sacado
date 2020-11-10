@@ -779,9 +779,9 @@ def list_parcours_group(request,id):
 
     for student in students :
         if access :
-            pcs = Parcours.objects.filter(students= student, is_favorite=1).order_by("is_evaluation", "ranking")
+            pcs = Parcours.objects.filter(students= student, is_favorite=1).order_by("is_evaluation","ranking")
         else :
-            pcs = Parcours.objects.filter(Q(teacher=teacher)|Q(author=teacher), students= student, is_favorite=1).order_by("is_evaluation", "ranking")
+            pcs = Parcours.objects.filter(Q(teacher=teacher)|Q(author=teacher), students= student, is_favorite=1).order_by("is_evaluation","ranking")
         if len(parcours_tab) == teacher.teacher_parcours.count() :
             break  
         else :    
@@ -1460,8 +1460,6 @@ def stat_parcours(request, id):
 
 
 
-
-#@user_is_parcours_teacher 
 def stat_evaluation(request, id):
 
     teacher = Teacher.objects.get(user = request.user)
@@ -3296,7 +3294,7 @@ def show_evaluation(request, id):
     group = data['group']
     group_id = data['group_id']  
 
-    customexercises = Customexercise.objects.filter(teacher=teacher).order_by("ranking")
+    customexercises = Customexercise.objects.filter(teacher=teacher,parcourses=parcours).order_by("ranking")
 
  
 

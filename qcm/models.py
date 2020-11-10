@@ -430,9 +430,11 @@ class Parcours(ModelWithCode):
 
     def nb_exercises(self):
         nb = self.exercises.filter(supportfile__is_title=0).count()
-        nba = self.parcours_customexercises.filter(is_publish=1).count()       
+        nba = self.parcours_customexercises.all().count()     
+        print(self, self.parcours_customexercises.all())   
         return nb + nba
 
+ 
 
     def exercises_only(self):
         exercises = self.exercises.filter(supportfile__is_title=0).prefetch_related('level')
@@ -903,7 +905,7 @@ class Writtenanswerbystudent(models.Model): # Commentaire pour les exercices non
 class Customexercise(ModelWithCode):
 
     instruction = RichTextUploadingField( verbose_name="Consigne*") 
-    teacher = models.ForeignKey(Teacher, related_name="teacher_customexercises", blank=True, on_delete=models.PROTECT)
+    teacher = models.ForeignKey(Teacher, related_name="teacher_customexercises", blank=True, on_delete=models.CASCADE)
     calculator = models.BooleanField(default=0, verbose_name="Calculatrice ?")
  
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date de création")
@@ -1133,8 +1135,8 @@ class Customexercise(ModelWithCode):
 
 class Customanswerbystudent(models.Model): # Commentaire et note pour les exercices customisés coté enseignant
 
-    customexercise = models.ForeignKey(Customexercise,  on_delete=models.PROTECT,   related_name='customexercise_custom_answer', editable=False)
-    parcours = models.ForeignKey(Parcours,  on_delete=models.PROTECT,   related_name='parcours_custom_answer', editable=False)    
+    customexercise = models.ForeignKey(Customexercise,  on_delete=models.CASCADE,   related_name='customexercise_custom_answer', editable=False)
+    parcours = models.ForeignKey(Parcours,  on_delete=models.CASCADE,   related_name='parcours_custom_answer', editable=False)    
     student = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='student_custom_answer', editable=False)
     date = models.DateTimeField(auto_now_add=True)
     # rendus
@@ -1154,10 +1156,10 @@ class Customanswerbystudent(models.Model): # Commentaire et note pour les exerci
 
 class Correctionskillcustomexercise(models.Model): # Evaluation des compétences pour les exercices customisés coté enseignant 
 
-    customexercise = models.ForeignKey(Customexercise,  on_delete=models.PROTECT,   related_name='customexercise_correctionskill', editable=False)
-    parcours = models.ForeignKey(Parcours,  on_delete=models.PROTECT,   related_name='parcours_customskill_answer', editable=False)    
+    customexercise = models.ForeignKey(Customexercise,  on_delete=models.CASCADE,   related_name='customexercise_correctionskill', editable=False)
+    parcours = models.ForeignKey(Parcours,  on_delete=models.CASCADE,   related_name='parcours_customskill_answer', editable=False)    
     student = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='student_correctionskill', editable=False)
-    skill = models.ForeignKey(Skill,  on_delete=models.PROTECT,   related_name='skill_correctionskill', editable=False)
+    skill = models.ForeignKey(Skill,  on_delete=models.CASCADE,   related_name='skill_correctionskill', editable=False)
     date = models.DateTimeField(auto_now_add=True)
     point = models.PositiveIntegerField(default=-1,  editable=False)
     
@@ -1169,10 +1171,10 @@ class Correctionskillcustomexercise(models.Model): # Evaluation des compétences
 
 class Correctionknowledgecustomexercise(models.Model): # Evaluation des savoir faire pour les exercices customisés coté enseignant
 
-    customexercise = models.ForeignKey(Customexercise,  on_delete=models.PROTECT,   related_name='customexercise_correctionknowledge', editable=False)
-    parcours = models.ForeignKey(Parcours,  on_delete=models.PROTECT,   related_name='parcours_customknowledge_answer', editable=False)    
+    customexercise = models.ForeignKey(Customexercise,  on_delete=models.CASCADE,   related_name='customexercise_correctionknowledge', editable=False)
+    parcours = models.ForeignKey(Parcours,  on_delete=models.CASCADE,   related_name='parcours_customknowledge_answer', editable=False)    
     student = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='student_correctionknowledge', editable=False)
-    knowledge = models.ForeignKey(Knowledge,  on_delete=models.PROTECT,   related_name='knowledge_correctionknowledge', editable=False)
+    knowledge = models.ForeignKey(Knowledge,  on_delete=models.CASCADE,   related_name='knowledge_correctionknowledge', editable=False)
     date = models.DateTimeField(auto_now_add=True)
     point = models.PositiveIntegerField(default=-1,  editable=False)
     
@@ -1191,10 +1193,10 @@ class Correctionknowledgecustomexercise(models.Model): # Evaluation des savoir f
 
 class Course(models.Model): # pour les 
 
-    parcours = models.ForeignKey(Parcours,  on_delete=models.PROTECT, blank=True, null=True,  related_name='course', editable=False) 
+    parcours = models.ForeignKey(Parcours,  on_delete=models.CASCADE, blank=True, null=True,  related_name='course', editable=False) 
     title = models.CharField(max_length=50, default='',  blank=True, verbose_name="Titre")    
     annoncement = RichTextUploadingField( blank=True, verbose_name="Texte*") 
-    teacher = models.ForeignKey(Teacher, related_name = "course", on_delete=models.PROTECT, editable=False )
+    teacher = models.ForeignKey(Teacher, related_name = "course", on_delete=models.CASCADE, editable=False )
     duration = models.PositiveIntegerField(  default=15,  blank=True,  verbose_name="Durée estimée de lecture")  
 
     is_publish = models.BooleanField( default= 0, verbose_name="Publié ?")
