@@ -39,6 +39,7 @@ if PRODUCTION:
     CSRF_COOKIE_SECURE = os.environ.get('CSRF_COOKIE_SECURE')
     SECURE_REFERRER_POLICY = os.environ.get('SECURE_REFERRER_POLICY')
     CONN_MAX_AGE = os.environ.get('CONN_MAX_AGE')
+    SESSION_SAVE_EVERY_REQUEST = True
 
 else:
     # configuration développement
