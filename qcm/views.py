@@ -377,9 +377,6 @@ def ajax_populate(request):
 
 
 
-
-
-#@user_is_parcours_teacher
 def peuplate_parcours(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
     levels =  teacher.levels.all() 
@@ -395,7 +392,7 @@ def peuplate_parcours(request,id):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
-    form = UpdateParcoursForm(request.POST or None , instance=parcours, teacher = teacher  )
+    form = UpdateParcoursForm(request.POST or None , instance=parcours, teacher = parcours.teacher  )
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
     """ affiche le parcours existant avant la modif en ajax""" 
     exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme")
