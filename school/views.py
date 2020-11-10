@@ -157,11 +157,11 @@ def clear_detail_student(student):
 def school_teachers(request):
 
 
-
-	if request.session.get("school_id") :
+	if request.session.get("school_id"):
 		school_id = request.session.get("school_id")
-	else :
-		school_id = request.user.school.id
+		school = School.objects.get(pk=school_id)
+	else:
+		school = request.user.school
 
 
 	teacher = Teacher.objects.get(user=request.user)
@@ -216,9 +216,6 @@ def school_level_groups(request):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
 		return redirect('index')
 
- 
-
-
 	users = school.users.all()
 
 	groups = Group.objects.filter(teacher__user__in = users).order_by("level") 
@@ -231,14 +228,14 @@ def school_level_groups(request):
 
 #@is_manager_of_this_school
 def school_students(request):
+
 	if request.session.get("school_id") :
 		school_id = request.session.get("school_id")
 		school = School.objects.get(pk = school_id)
 	else :
 		school = request.user.school
-
-
 	teacher = Teacher.objects.get(user=request.user)
+	
 	if not authorizing_access_school(teacher, school):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
 		return redirect('index')
