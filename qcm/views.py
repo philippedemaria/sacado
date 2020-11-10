@@ -338,40 +338,50 @@ def ajax_populate(request):
 
     teacher = Teacher.objects.get(user= request.user)    
 
-    if parcours.teacher == teacher :
-        if statut=="true" or statut == "True":
+    data = get_complement(request, teacher, parcours)
+    role = data['role']
+    group = data['group']
+    group_id = data['group_id']
+    access = data['access']
 
-            r = Relationship.objects.get(parcours=parcours, exercise = exercise)  
+    if not authorizing_access(teacher,parcours, access ):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
+
+    if statut=="true" or statut == "True":
+
+        r = Relationship.objects.get(parcours=parcours, exercise = exercise)  
+        students = parcours.students.all()
+        for student in students :
+            r.students.remove(student)
+
+        r.delete()         
+        statut = 0
+        data["statut"] = "False"
+        data["class"] = "btn btn-danger"
+        data["noclass"] = "btn btn-success"
+        data["html"] = "<i class='fa fa-times'></i>"
+        data["no_store"] = False
+
+    else:
+        statut = 1
+        if Relationship.objects.filter(parcours_id=parcours_id , exercise__supportfile = exercise.supportfile ).count() == 0 :
+            relation = Relationship.objects.create(parcours_id=parcours_id, exercise_id = exercise_id, order = 100, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration) 
+            relation.skills.set(exercise.supportfile.skills.all())
             students = parcours.students.all()
-            for student in students :
-                r.students.remove(student)
-
-            r.delete()         
-            statut = 0
+            relation.students.set(students)
+            data["statut"] = "True"
+            data["class"] = "btn btn-success"
+            data["noclass"] = "btn btn-danger"
+            data["html"] = "<i class='fa fa-check-circle fa-2x'></i>"
+            data["no_store"] = False
+        else :
             data["statut"] = "False"
             data["class"] = "btn btn-danger"
             data["noclass"] = "btn btn-success"
             data["html"] = "<i class='fa fa-times'></i>"
-            data["no_store"] = False
-
-        else:
-            statut = 1
-            if Relationship.objects.filter(parcours_id=parcours_id , exercise__supportfile = exercise.supportfile ).count() == 0 :
-                relation = Relationship.objects.create(parcours_id=parcours_id, exercise_id = exercise_id, order = 100, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration) 
-                relation.skills.set(exercise.supportfile.skills.all())
-                students = parcours.students.all()
-                relation.students.set(students)
-                data["statut"] = "True"
-                data["class"] = "btn btn-success"
-                data["noclass"] = "btn btn-danger"
-                data["html"] = "<i class='fa fa-check-circle fa-2x'></i>"
-                data["no_store"] = False
-            else :
-                data["statut"] = "False"
-                data["class"] = "btn btn-danger"
-                data["noclass"] = "btn btn-success"
-                data["html"] = "<i class='fa fa-times'></i>"
-                data["no_store"] = True
+            data["no_store"] = True
 
     return JsonResponse(data) 
 
