@@ -846,11 +846,6 @@ class Relationship(models.Model):
         return level
  
 
-
-
-
-
-
 class Studentanswer(models.Model):
 
     parcours = models.ForeignKey(Parcours,  on_delete=models.PROTECT, blank=True, null=True,  related_name='answers', editable=False)

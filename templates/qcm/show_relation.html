@@ -123,7 +123,11 @@
                         {% get_is_lock parcours today as is_lock %} 
                         {% if not is_lock %}
                           <input  class="btn btn-primary"   type="submit" id="submit_button_relation"  value="Enregistrer le résultat"  />
-                        {% endif %}  
+                        {% else %}  
+
+                          <div class="alert alert-danger"><small><b>Soumisssion interdite.</b> <a href="{% url 'profile' %}">Vous n'avez peut être pas renseigné votre fuseau horaire</a> ou avez dépassé la date permise. Contacter votre enseignant. </small></div>
+
+                        {% endif %}               
                     {% endif %}   
                       <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
                       
