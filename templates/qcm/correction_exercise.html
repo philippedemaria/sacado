@@ -82,10 +82,9 @@
                                         {{ stud.user.last_name|title }} {{ stud.user.first_name|title }} 
 
                                         <span id ="evaluate{{ stud.user.id }}">
-                                          {% get_done relationship stud as done %}
-                                          {% if done %}
-                                            {% get_score_student_for_this relationship stud as  studentanswer %}
-                                            {% get_is_corrected relationship stud as is_corrected %}                                    
+                                        {% get_done relationship stud as done %}
+                                        {% if done %}
+                                            {% get_score_student_for_this relationship stud as  studentanswer %}                                
                                                 {% if studentanswer.point %}
                                                 <i class="fa fa-square
                                                         {% if studentanswer.point >= stage.up or %}
@@ -97,10 +96,8 @@
                                                         {% else %}
                                                             text-danger  
                                                         {% endif %} pull-right"></i>
-                                                {% elif is_corrected %}
-                                                    <i class="fa fa-check text-success pull-right"></i>
                                                 {% endif %}
-                                            {% endif %}
+                                        {% endif %}
                                     </span></a>
                                 {% else %}                
                                 <span style="color:#DDD">{{ stud.user.last_name }} {{ stud.user.first_name }} </span>

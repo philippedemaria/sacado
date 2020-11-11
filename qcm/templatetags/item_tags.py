@@ -553,6 +553,7 @@ def get_corrected_for_this(obj, student, parcours):
     return obj.is_corrected_for_this(student, parcours)
 
 
+
 @register.simple_tag 
 def get_result_k_s(obj, k_s, student, parcours,typ):
     """

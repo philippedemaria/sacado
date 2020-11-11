@@ -844,7 +844,7 @@ class Relationship(models.Model):
         except :
             level = 0
         return level
- 
+
 
 class Studentanswer(models.Model):
 
