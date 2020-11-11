@@ -84,10 +84,11 @@
                                         <span id ="evaluate{{ stud.user.id }}">
                                           {% get_done relationship stud as done %}
                                           {% if done %}
-                                            {% get_score_student_for_this relationship stud as  studentanswer %} 
-                                                {% if  studentanswer.point %}
+                                            {% get_score_student_for_this relationship stud as  studentanswer %}
+                                            {% get_is_corrected relationship stud as is_corrected %}                                    
+                                                {% if studentanswer.point %}
                                                 <i class="fa fa-square
-                                                        {% if studentanswer.point >= stage.up %}
+                                                        {% if studentanswer.point >= stage.up or %}
                                                          text-primary 
                                                         {% elif studentanswer.point >= stage.medium %}
                                                          text-success 
@@ -95,8 +96,9 @@
                                                          text-warning 
                                                         {% else %}
                                                             text-danger  
-                                                        {% endif %} pull-right"
-                                                       ></i>
+                                                        {% endif %} pull-right"></i>
+                                                {% elif is_corrected %}
+                                                    <i class="fa fa-check text-success pull-right"></i>
                                                 {% endif %}
                                             {% endif %}
                                     </span></a>

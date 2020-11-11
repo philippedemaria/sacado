@@ -774,7 +774,7 @@ class Relationship(models.Model):
         try :
             point = studentanswer.point
         except :
-            point = 0
+            point = -1
  
         if student.user.school :
             school = student.user.school
@@ -805,6 +805,7 @@ class Relationship(models.Model):
                 level = 1
             else :
                 level = 0
+
         return level
 
 
@@ -844,6 +845,11 @@ class Relationship(models.Model):
             level = 0
         return level
  
+
+
+
+
+
 
 class Studentanswer(models.Model):
 
@@ -1017,6 +1023,7 @@ class Customexercise(ModelWithCode):
             score = False
 
         return score
+
 
     def is_corrected_for_this(self,student,parcours): # devoir corrigé
         correction = Customanswerbystudent.objects.filter(student=student, customexercise = self, parcours =parcours,is_corrected=1)

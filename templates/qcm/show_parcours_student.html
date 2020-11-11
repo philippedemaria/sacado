@@ -360,9 +360,15 @@
                             {% endif  %} 
                         </div> 
                         <div class="card-image"> 
-                            <div class="div_consigne_student_custom">                                             
-                            {{ customexercise.instruction|safe|truncatewords:50 }}
-                            </div>   
+         
+                          <div style="position: absolute; left : 30px; top:41px;" id="annoncement{{customexercise.id}}"   >   
+                              <span class="helper_tip btn btn-default">Consigne
+                                <div class="helper_tip_text_right">{{customexercise.instruction|insert_tags:45|safe}} </div> 
+                              </span>
+                          </div>
+
+
+  
                             {% get_is_lock customexercise today as is_block %} 
                             {% if  not is_block  %}
                                 <a href="{% if not is_lock %}{% url 'write_custom_exercise' customexercise.id parcours.id %}{% endif %}"> 

@@ -3563,7 +3563,7 @@ def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
         this_custom.update(is_corrected= 1)
 
         if tab_value[value] > -1 :
-
+  
             if skill_id : 
                 result, created = Correctionskillcustomexercise.objects.get_or_create(parcours_id = parcours_id , customexercise_id = customexercise_id, student  = student , skill_id = skill_id   , defaults = { "point" : tab_value[value]  })
                 if not created :
