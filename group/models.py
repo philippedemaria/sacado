@@ -76,17 +76,9 @@ class Group(ModelWithCode):
         """
         students = self.students.order_by("user__last_name")
 
-
-        # parcourses__ = []
-        # for student in self.students.all():
-        #     for p in student.students_to_parcours.filter(Q(teacher=self.teacher)|Q(teacher=teacher), teacher__subjects = self.subject) :
-        #         if p not in parcourses__ :
-        #             parcourses__.append(p)
-
-
         parcourses = []
         for student in self.students.all():
-            for p in student.students_to_parcours.all() :
+            for p in student.students_to_parcours.filter(Q(author=teacher)|Q(teacher=teacher)|Q(coteachers=teacher)) :
                 if p not in parcourses  :
                     parcourses.append(p)
 

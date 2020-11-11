@@ -411,10 +411,6 @@ class Parcours(ModelWithCode):
         nb_relationships =  self.parcours_relationship.filter(students = student, is_publish=1,  exercise__supportfile__is_title=0 ).count()
         nb_customs =  self.parcours_customexercises.filter(students = student, is_publish=1).count()
 
-
-        print(nb_relationships)
-        print(nb_customs)
-
         ## Nombre de réponse avec exercice unique du parcours
         nb_studentanswers = Studentanswer.objects.filter(student=student, parcours=self).values_list("exercise",flat=True).order_by("exercise").distinct().count()
         nb_customanswerbystudent = Customanswerbystudent.objects.filter(student=student, customexercise__parcourses=self).values_list("customexercise",flat=True).order_by("customexercise").distinct().count()
