@@ -17,7 +17,7 @@
 
     {% include 'qcm/breadcrumb.html' %}
 
-        <small>Statistiques <small>({{ parcours.exercises.count }} exercice{{ parcours.exercises.count|pluralize }})</small>
+        <small>Statistiques <small>({{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }})</small>
         {% if  parcours.is_evaluation %}
             <i class='fa fa-clock'></i>  {{ parcours.evaluation_duration }} min.
         {% endif %}
@@ -64,7 +64,7 @@ body{
                     <tbody>   
                         {% for stat in stats|dictsort:"name.user.last_name"  %}
                             <tr class="no_padding">
-                                <td style="width:200px">
+                                <td>
                                     <form  action="" method="POST">{% csrf_token %} 
 
                                         <a href="#" class="detail_student_exercise"  data-student_id="{{  stat.name.user.id }}"  data-parcours_id="{{ parcours.id }}"  >   

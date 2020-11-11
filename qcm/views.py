@@ -1485,7 +1485,7 @@ def stat_evaluation(request, id):
     students = students_from_p_or_g(request,parcours) 
 
     for s in students :
-        student = {}
+        student = {"percent" : "" , "total_numexo" : "" , "good_answer" : "" , "test_duration" : False ,  "duration" : "" , "average_score" : "" ,"last_connexion" : "" ,"median" : "" ,"score" : "" ,"score_tab" : ""  }
         student["name"] = s
         studentanswers = Studentanswer.objects.filter(student=s,  exercise__in= exercises, parcours=parcours).order_by("date")
 
@@ -1510,7 +1510,10 @@ def stat_evaluation(request, id):
         try :
             if len(student_tab)>1 :
                 average_score = int(score/len(student_tab))
-                student["duration"] = convert_seconds_in_time(duration)
+                if duration > 0 :
+                    student["duration"] = convert_seconds_in_time(duration)
+                else :
+                    student["duration"] = ""
                 student["average_score"] = int(average_score)
                 student["good_answer"] = int(good_answer)
                 student["total_numexo"] = int(total_numexo)
@@ -1523,45 +1526,45 @@ def stat_evaluation(request, id):
                     student["test_duration"] = False 
                 tab.sort()
                 if len(tab)%2 == 0 :
-                    med = (tab[(len(tab)-1)//2]+tab[(len(tab)-1)//2+1])/2 ### len(tab)-1 , ce -1 est causÃ© par le rang 0 du tableau
+                    med = (tab[(len(tab)-1)//2]+tab[(len(tab)-1)//2+1])/2 ### len(tab)-1 , ce -1 est causé par le rang 0 du tableau
                 else:
                     med = tab[(len(tab)-1)//2+1]
                 student["median"] = int(med)
                 student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100 )   
             else :
-                average_score = int(score)
-                student["duration"] = convert_seconds_in_time(duration)
-                student["average_score"] = int(score)
-                student["last_connexion"]  = studentanswer.date
-                if duration > parcours_duration : 
-                    student["test_duration"] = True
-                else :
-                    student["test_duration"] = False 
-                student["median"] = int(score)
-                student["score"] = int(score)
-                student["score_tab"] = tab
-                student["good_answer"] = int(good_answer)
-                student["total_numexo"] = int(total_numexo)
-                student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100)             
+                try :
+                    average_score = int(score)
+                    if duration > 0 :
+                        student["duration"] = convert_seconds_in_time(duration)
+                    else :
+                        student["duration"] = ""
+                    student["average_score"] = int(score)
+                    student["last_connexion"]  = studentanswer.date
+                    if duration > parcours_duration : 
+                        student["test_duration"] = True
+                    else :
+                        student["test_duration"] = False 
+                    student["median"] = int(score)
+                    student["score"] = int(score)
+                    student["score_tab"] = tab
+                    student["good_answer"] = int(good_answer)
+                    student["total_numexo"] = int(total_numexo)
+                    student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100)
+                except :
+                    pass         
         except :
-            student["duration"] = ""
-            student["average_score"] = ""
-            student["last_connexion"] =  ""
-            student["median"] = ""
-            student["score"] = ""
-            student["score_tab"] = []
-            student["test_duration"] = False
-            student["good_answer"] = ""
-            student["total_numexo"] = ""
-            student["percent"] = ""
-        
- 
+            pass
+
         total_c, details_c  = 0 , ""
         for ce in customexercises :
             if ce.is_mark :
-                cen = ce.customexercise_custom_answer.get(student=student, parcours = parcours) 
-                total_c = total_c + cen.point
-                details_c = details_c + "-" +str(cen.point)  
+                try  : 
+                    cen = ce.customexercise_custom_answer.get(student=student, parcours = parcours) 
+                    total_c = total_c + cen.point
+                    details_c = details_c + "-" +str(cen.point) 
+                except :
+                    total_c = total_c  
+                    details_c = details_c  
 
         student["total_note"] = total_c
         student["details_note"] = details_c
@@ -1571,8 +1574,8 @@ def stat_evaluation(request, id):
         total_knowledge, total_skill, detail_skill, detail_knowledge = 0,0, "",""
         for ce in customexercises :
             for skill in  ce.skills.all() :
-                scs = ce.customexercise_correctionskill.get(skill = skill,student=student, parcours = parcours)
                 try :
+                    scs = ce.customexercise_correctionskill.get(skill = skill,student=student, parcours = parcours)
                     total_skill += scs.point
                     detail_skill += detail_skill + "-" +str(scs.point) 
                 except :
@@ -1581,8 +1584,8 @@ def stat_evaluation(request, id):
             student["detail_skill"] = detail_skill
 
             for knowledge in  ce.knowledges.all() :
-                sck = ce.customexercise_correctionknowledge.get(knowledge = knowledge,student=student, parcours = parcours)
                 try :
+                    sck = ce.customexercise_correctionknowledge.get(knowledge = knowledge,student=student, parcours = parcours)
                     total_knowledge += sck.point
                     detail_knowledge += detail_knowledge + "-" +str(sck.point) 
                 except :
@@ -1592,7 +1595,7 @@ def stat_evaluation(request, id):
 
         stats.append(student)
 
-    context = {  'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'communications' : [] , 'role' : role  }
+    context = { 'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'communications' : [] , 'role' : role  }
 
     return render(request, 'qcm/stat_parcours.html', context )
 
