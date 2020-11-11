@@ -1,7 +1,7 @@
 import datetime
 from django import forms
 from .models import Parcours, Exercise, Remediation, Relationship, Supportfile, Course, Comment, Demand, Mastering,Mastering_done, Writtenanswerbystudent, Customexercise,Customanswerbystudent, Masteringcustom, Masteringcustom_done, Remediationcustom
-from account.models import Student
+from account.models import Student , Teacher
 from socle.models import Knowledge, Skill
 from group.models import Group
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
@@ -40,10 +40,11 @@ class ParcoursForm(forms.ModelForm):
 			for group in groups:
 				for student in group.students.order_by("user__last_name"):
 					students_tab.append(student.user)
+			students = Student.objects.filter(user__in=students_tab).order_by("level", "user__last_name")					
+			coteachers = Teacher.objects.filter(user__school=teacher.user.school).order_by("user__last_name") 
 
-			students = Student.objects.filter(user__in=students_tab).order_by("level", "user__last_name")
 			self.fields['students']	 = forms.ModelMultipleChoiceField(queryset=students, widget=forms.CheckboxSelectMultiple, required=False)
-
+			self.fields['coteachers']	 = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
 
 	def clean(self):
 		"""
@@ -78,10 +79,12 @@ class UpdateParcoursForm(forms.ModelForm):
 				for student in group.students.order_by("user__last_name"):
 					students_tab.append(student.user)
 
-			students = Student.objects.filter(user__in = students_tab).order_by("user__last_name") 
+			students = Student.objects.filter(user__in = students_tab).order_by("user__last_name") 					
+			coteachers = Teacher.objects.filter(user__school=teacher.user.school).order_by("user__last_name") 
+
 
 			self.fields['students']	 = forms.ModelMultipleChoiceField(queryset= students, widget=forms.CheckboxSelectMultiple, required=False)
-			
+			self.fields['coteachers']	 = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
 
 	def clean(self):
 		"""

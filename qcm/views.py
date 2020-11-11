@@ -214,23 +214,6 @@ def teacher_has_parcourses(teacher,is_evaluation ,is_archive ):
 
 
 
-def teacher_has_published_parcourses(teacher,is_publish,is_evaluation ,is_archive ):
-    """
-    Renvoie les parcours dont le prof est propriétaire et donc les parcours lui sont partagés
-    """
-    sharing_groups = teacher.teacher_sharingteacher.all()
-    parcourses = list(teacher.teacher_parcours.filter(is_publish = is_publish, is_evaluation=is_evaluation,is_archive=is_archive))
-
-
-    for sg in sharing_groups :
-        pcs = group_has_parcourses(sg.group,is_evaluation ,is_archive )
-        for p in pcs :
-            if p not in parcourses:
-                parcourses.append(p) 
-    return parcourses
-
-
-
 def teacher_has_permisson_to_share_inverse_parcourses(request,teacher,parcours):
     """
     Quand un enseignant partage son groupe, il doit aussi voir les parcours que son co animateur propose.
@@ -791,24 +774,20 @@ def list_parcours_group(request,id):
         return redirect('index')
 
  
-    # parcours_tab = []
-    # students = group.students.all()
+    parcours_tab = []
+    students = group.students.all()
 
-    # for student in students :
-    #     if access :
-    #         pcs = Parcours.objects.filter(students= student, is_favorite=1).order_by("is_evaluation","ranking")
-    #     else :
-    #         pcs = Parcours.objects.filter(Q(teacher=teacher)|Q(author=teacher), students= student, is_favorite=1).order_by("is_evaluation","ranking")
+    for student in students :
+        if access :
+            pcs = Parcours.objects.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),students= student, is_favorite=1).order_by("is_evaluation","ranking")
+        else :
+            pcs = student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), is_favorite=1).order_by("is_evaluation","ranking")
+        for parcours in pcs : 
+            if parcours not in parcours_tab   :
+                parcours_tab.append(parcours)
+            if len(parcours_tab) == teacher.teacher_parcours.count() :
+                break
 
-    #     if len(parcours_tab) == teacher.teacher_parcours.count() :
-    #         break  
-    #     else :    
-    #         for parcours in pcs : 
-    #             if parcours not in parcours_tab and parcours.teacher == teacher:
-    #                 parcours_tab.append(parcours)
-    #             if len(parcours_tab) == teacher.teacher_parcours.count() :
-    #                 break
-    parcours_tab = teacher_has_published_parcourses(teacher,1, 0 ,0 )
 
     return render(request, 'qcm/list_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group': group,  'parcours' : None , 'communications' : [] , 'relationships' : [] , 'role' : role , 'today' : today })
 

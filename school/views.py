@@ -55,6 +55,40 @@ def get_username(ln, fn):
             un = un + str(i)
     return un
 
+
+
+
+def group_has_overall_parcourses(group):
+    parcourses_tab = []
+
+    for s in group.students.all() :
+        pses = s.students_to_parcours.all()
+        for p in pses :
+            if p not in  parcourses_tab :
+                parcourses_tab.append(p)
+ 
+    return parcourses_tab
+
+
+def sharing_teachers(request,group, teachers):
+
+	shares = Sharing_group.objects.filter(group  = group)
+	for share in shares : 	
+		share.delete()
+
+	choices = request.POST.getlist("choices") 
+
+	for c in choices :
+		c_tab = c.split("-")
+		teacher = Teacher.objects.get(user_id = c_tab[1])
+		role =  int(c_tab[0])
+		Sharing_group.objects.create(group = group ,teacher = teacher, role = role  )
+
+		parcourses = group_has_overall_parcourses(group)
+		for parcours in parcourses :
+			parcours.coteachers.add(teacher)
+
+
 @user_is_superuser
 def list_schools(request):
 	schools = School.objects.all()
@@ -235,7 +269,7 @@ def school_students(request):
 	else :
 		school = request.user.school
 	teacher = Teacher.objects.get(user=request.user)
-	
+
 	if not authorizing_access_school(teacher, school):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
 		return redirect('index')
@@ -316,21 +350,7 @@ def push_student_group(request):
 
 
 
-def sharing_teachers(request,group, teachers):
-
-	shares = Sharing_group.objects.filter(group  = group)
-	for share in shares : 	
-		share.delete()
-
-	choices = request.POST.getlist("choices") 
-
-	for c in choices :
-		c_tab = c.split("-")
-		teacher = Teacher.objects.get(user_id = c_tab[1])
-		role =  int(c_tab[0])
-		Sharing_group.objects.create(group = group ,teacher = teacher, role = role  )
-
-
+ 
 
 
 

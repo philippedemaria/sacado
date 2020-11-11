@@ -105,7 +105,7 @@
                                     <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
                                         <div class="btn btn-default full_width" style="text-align: left; font-size:15px; margin-bottom: 5px">
                                             <span data-toggle="collapse" data-parent="#accordion" href="#collapsed" class="parcours_displayer" style="color : {{  parcours.color }}" >
-                                                 <label>Co-enseignement ?  <small>Partager une classe avec vos collègues</small> </label>
+                                                 <label>Co-enseignement ?  <small>Partager un groupe avec vos collègues</small> </label>
                                             </span>
                                             <div id="collapsed" class="collapse">
                                                 <div class="panel-body"  style="padding:0px">
@@ -142,6 +142,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <span class="helper_label">Tous les parcours du groupe sont attribués en coanimation par défaut. Il est possible à l'enseignant propriétaire de dissocier le partage.</small>
                                 </div>
                             </div>
                         </div> 
@@ -172,8 +173,8 @@
                             </div>
 
 
-
-                           <div class="form-group">
+                            <label>Elèves du groupes</label>
+                            <div class="form-group">
                                 <table class="table">
                                 {% for s in group.students.all|dictsort:"user.last_name"  %}
                                     <tr><td>
@@ -182,7 +183,7 @@
                                         <td>
                                             <a  href="{% url 'delete_student_group'  group.id s.user.id  %}"
                                                 onclick="return TestDelete('cet élève')" style="font-size:11px"  >
-                                                Supprimer
+                                                Dissocier
                                             </a>                                         
                                         </td>
                                     </tr>

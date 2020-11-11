@@ -356,6 +356,7 @@ class Parcours(ModelWithCode):
     color = models.CharField(max_length=255, default='#00819F', verbose_name="Couleur")
     author = models.ForeignKey(Teacher, related_name="author_parcours", on_delete=models.PROTECT, default='', blank=True, null=True, verbose_name="Auteur")
     teacher = models.ForeignKey(Teacher, related_name="teacher_parcours", on_delete=models.PROTECT, default='', blank=True, editable=False)
+    coteachers = models.ManyToManyField(Teacher, blank=True,  related_name="coteacher_parcours",  verbose_name="Enseignant en co-animation")
 
     exercises = models.ManyToManyField(Exercise, blank=True, through="Relationship", related_name="exercises_parcours")
     students = models.ManyToManyField(Student, blank=True, related_name='students_to_parcours', verbose_name="Elèves")
@@ -374,6 +375,8 @@ class Parcours(ModelWithCode):
 
     vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Vignette d'accueil", blank=True, default ="")
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
+
+
 
     def __str__(self):
         return "{}".format(self.title)
@@ -431,7 +434,6 @@ class Parcours(ModelWithCode):
     def nb_exercises(self):
         nb = self.exercises.filter(supportfile__is_title=0).count()
         nba = self.parcours_customexercises.all().count()     
-        print(self, self.parcours_customexercises.all())   
         return nb + nba
 
  
@@ -564,7 +566,9 @@ class Parcours(ModelWithCode):
 
 
     def evaluation_duration(self):
-
+        """
+        Calcul de la durée d'une évaluation par somme des temps d'exercices choisis
+        """
         relationships = self.parcours_relationship.all()
         som = self.duration
         for r in relationships : 
@@ -573,9 +577,10 @@ class Parcours(ModelWithCode):
 
 
     def min_score_parcours(self,student):
-
+        """
+        min score d'un parcours par élève
+        """
         Stage = apps.get_model('school', 'Stage')
-
         data = {}
         max_tab = []
         nb_done = 0
@@ -625,7 +630,9 @@ class Parcours(ModelWithCode):
 
 
     def is_pending_correction(self):
-
+        """
+        Correction en attente
+        """
         submit = False
         customexercises = Customexercise.objects.filter(parcourses = self)
         for customexercise in customexercises :
@@ -638,7 +645,6 @@ class Parcours(ModelWithCode):
                 submit = True 
 
         return submit
-
 
 
 class Relationship(models.Model):

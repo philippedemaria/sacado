@@ -26,7 +26,8 @@ class Group(ModelWithCode):
     lock = models.BooleanField(default=0)
     teachers = models.ManyToManyField(Teacher, blank=True,   editable=False, through="Sharing_group", related_name="teacher_group")
     subject = models.ForeignKey(Subject, default = "" ,  null=True, on_delete=models.PROTECT, related_name="subject_group", verbose_name="Matière*")
-    # Todo : parcourses = models.ManyToManyField(Parcours, blank=True,   related_name="Parcours")
+ 
+
     class Meta:
         ordering = ['name']
 

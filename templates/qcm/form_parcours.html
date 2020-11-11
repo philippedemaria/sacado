@@ -82,8 +82,7 @@
                 {% block evaluation_choices %}     
                 <div class="col-sm-4  col-md-3  col-lg-2">
                     <div class="form-group">
-                        {{ form.is_favorite.label_tag  }} 
-                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                        {{ form.is_favorite.label_tag  }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                     <div class="helper_tip_text" >Si coché, le parcours est accessible depuis le.s groupe.s au.x.quel.s il est rattaché. Sinon il n'est accessible que depuis la liste de vos parcours.</div>
                                 </span> <br>
                         {{ form.is_favorite |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
@@ -93,8 +92,7 @@
                 </div>
                 <div class="col-sm-4  col-md-4  col-lg-2">
                     <div class="form-group">
-                        {{ form.is_share.label_tag }}                                 
-                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                        {{ form.is_share.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                     <div class="helper_tip_text" >Si coché, le parcours est proposé à l'ensemble des collègues de SACADO. Si vous n'avez pas la version établissement, le parcours n'est pas mutualisé par défaut.</div>
                                 </span><br>
                         {{ form.is_share |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
@@ -202,16 +200,30 @@
 
                 <div class="col-sm-6 col-md-3  col-lg-4">
 
-                        {{ form.vignette.label_tag }}   <span class="helper_tip"> <i class="fa fa-question-circle"></i> <span style="font-size:12px">(facultatif)</span>
+                    <div class="form-group">
+                        {% if teacher.user.school %}
+                            <label>Parcours co animé avec</label>
+                            {{ form.coteachers|add_class:"form-control select2"}}
+                            {{ form.coteachers.errors }}
+                        {% else %}
+                            <label>Parcours co animé avec <small>(facultatif)</small></label><br>
+                            <div class="alert alert-danger">Co-animation uniquement avec la version établissement</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.vignette.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i> <span style="font-size:12px">(facultatif)</span>
                                     <div class="helper_tip_text" >format recommandé: l:450px h:300px <br>La vignette se superpose à la couleur du parcours qui ne sera pas visible selon la taille de l'image. </div>
                                 </span> 
                         {{ form.vignette|add_class:"btn btn-default" }} 
                         {{ form.vignette.errors }}
-                        
-                {% if   parcours %} 
-                    <div style="height:20px"></div>
-                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-{% if parcours.exercises.all|length > 0 %}default{% else %}danger{% endif %}" ><i class="fa fa-tasks"></i> Sélectionner les exercices</a>   
-                {% endif %}   
+                    </div>
+                    <div class="form-group"> 
+                        {% if  parcours %} 
+                            <div style="height:20px"></div>
+                            <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-{% if parcours.exercises.all|length > 0 %}default{% else %}danger{% endif %}" ><i class="fa fa-tasks"></i> Sélectionner les exercices</a>   
+                        {% endif %}   
+                    </div>
                 </div>
 
                 {% block evaluation %}                 

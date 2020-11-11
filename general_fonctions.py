@@ -69,3 +69,16 @@ def authorizing_access_student(student , parcours_or_group):
             return False
     except : 
             return False
+
+
+
+def group_has_parcourses(group,is_evaluation ,is_archive ):
+    pses_tab = []
+
+    for s in group.students.all() :
+        pses = s.students_to_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive)
+        for p in pses :
+            if p not in  pses_tab :
+                pses_tab.append(p)
+ 
+    return pses_tab

@@ -9,29 +9,6 @@ from school.models import School
 
 def menu(request):
 
-    session_user = request.session.get("user_id", None)
-    ## Test de config des users
-    if request.user.is_authenticated :
-        request.session["user_id"] = request.user.id
-        this_user = request.user
-        mode = "en connexion" 
-    elif session_user :
-        mode ="en session"
-        this_user = User.objects.get(pk= request.session.get("user_id"))
-        login(request,this_user)
-    else :
-        this_user = None 
-        mode= " hors connexion et hors session"
-    ## Test de config des users
-
-    print("===========================================================================")
-    print("====================     CONTEXT COMPRESSOR   =============================")
-    print("===========================================================================")    
-    print("===========================================================================")
-    print("====== This_user :  "+str(this_user)+" "+mode)
-    print("===========================================================================")
-    print("===========================================================================")
-
     if request.user.is_authenticated:
 
         if request.user.time_zone:
