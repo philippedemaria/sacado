@@ -82,12 +82,12 @@
                                         {{ stud.user.last_name|title }} {{ stud.user.first_name|title }} 
 
                                         <span id ="evaluate{{ stud.user.id }}">
-                                        {% get_done relationship stud as done %}
-                                        {% if done %}
-                                            {% get_score_student_for_this relationship stud as  studentanswer %}                                
-                                                {% if studentanswer.point %}
+                                          {% get_done relationship stud as done %}
+                                          {% if done %}
+                                            {% get_score_student_for_this relationship stud as  studentanswer %} 
+                                                {% if  studentanswer.point %}
                                                 <i class="fa fa-square
-                                                        {% if studentanswer.point >= stage.up or %}
+                                                        {% if studentanswer.point >= stage.up %}
                                                          text-primary 
                                                         {% elif studentanswer.point >= stage.medium %}
                                                          text-success 
@@ -95,9 +95,10 @@
                                                          text-warning 
                                                         {% else %}
                                                             text-danger  
-                                                        {% endif %} pull-right"></i>
+                                                        {% endif %} pull-right"
+                                                       ></i>
                                                 {% endif %}
-                                        {% endif %}
+                                            {% endif %}
                                     </span></a>
                                 {% else %}                
                                 <span style="color:#DDD">{{ stud.user.last_name }} {{ stud.user.first_name }} </span>
