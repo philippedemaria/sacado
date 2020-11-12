@@ -25,7 +25,7 @@
                 <img src="{{  response.imagefile.url }}" width="100%"/>
             {% endif %}
             {% for a in annotations %} 
-                <div id="{{ a.attr_id }}" class="{{ a.classe }}" style="{{ a.style|top_less:0  }}">{{ a.content|safe }}</div>
+                <div id="{{ a.attr_id }}" class="{{ a.classe }}" style="{{ a.style|top_less:40  }}">{{ a.content|safe }}</div>
             {% endfor %}
         </div>  
     </div>  
@@ -68,7 +68,7 @@
                 <img src="{{  response.imagefile.url }}" width="100%"/>
             {% endif %}
             {% for a in annotations %} 
-                <div id="{{ a.attr_id }}" class="{{ a.classe }}" style="{{ a.style|top_less:0  }}">{{ a.content|safe }}</div>
+                <div id="{{ a.attr_id }}" class="{{ a.classe }}" style="{{ a.style|top_less:40  }}">{{ a.content|safe }}</div>
             {% endfor %}
         </div>  
     </div>  
