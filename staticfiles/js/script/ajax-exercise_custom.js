@@ -28,6 +28,7 @@ define(['jquery', 'bootstrap'], function ($) {
          });
 
 
+
         // Affiche dans la modal le modèle pour récupérer un exercice custom
         $('#get_exercice_result').on('click', ".clone_to" ,  function (event) {
 

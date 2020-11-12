@@ -1062,6 +1062,8 @@ def show_parcours(request, id):
     user = User.objects.get(pk=request.user.id)
     teacher = Teacher.objects.get(user=user)
 
+    today = time_zone_user(user) 
+
     data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
@@ -1102,7 +1104,7 @@ def show_parcours(request, id):
     skills = Skill.objects.all()
     nb_custom_exercises = customexercises.count()
     nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count() + nb_custom_exercises
-    context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'communications' : [] , 'customexercises' : customexercises ,
+    context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'communications' : [] , 'customexercises' : customexercises , 'today' : today , 
                'students_from_p_or_g': students_p_or_g, 'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible,  'nb_exo_visible_c': nb_exo_visible_c, 'nb_students_p_or_g' : nb_students_p_or_g , 
                'nb_exo_only': nb_exo_only, 'nb_exo_only_c': nb_exo_only_c, 'group_id': group_id, 'group': group, 'role' : role }
 
@@ -3910,13 +3912,13 @@ def write_exercise(request,id): # Coté élève
 
     today = time_zone_user(student.user)
     if Writtenanswerbystudent.objects.filter(student = student, relationship = relationship ).exists() : 
-        w = Writtenanswerbystudent.objects.get(student = student, relationship = relationship )
-        wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None, instance = w )    
+        w_a = Writtenanswerbystudent.objects.get(student = student, relationship = relationship )
+        wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None, instance = w_a )  
     else :
         wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None ) 
+        w_a = False
 
     if request.method == "POST":
-
         if wForm.is_valid():
             w_f = wForm.save(commit=False)
             w_f.relationship = relationship
@@ -3930,8 +3932,7 @@ def write_exercise(request,id): # Coté élève
 
             return redirect('show_parcours_student' , relationship.parcours.id )
 
-
-    context = {'relationship': relationship, 'communications' : [] , 'parcours' : relationship.parcours ,  'form' : wForm, 'today' : today  }
+    context = {'relationship': relationship, 'communications' : [] , 'w_a' : w_a , 'parcours' : relationship.parcours ,  'form' : wForm, 'today' : today  }
 
     if relationship.exercise.supportfile.is_python :
         url = "basthon/index.html" 
@@ -3957,10 +3958,11 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
         return redirect('index')
 
     if Customanswerbystudent.objects.filter(student = student, customexercise = customexercise ).exists() : 
-        ce = Customanswerbystudent.objects.get(student = student, customexercise = customexercise )
-        cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None, instance = ce )    
+        c_e = Customanswerbystudent.objects.get(student = student, customexercise = customexercise )
+        cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None, instance = c_e )    
     else :
-        cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None ) 
+        cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None )
+        c_e = False
 
     if request.method == "POST":
 
@@ -3978,8 +3980,7 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
 
             return redirect('show_parcours_student' , idp )
 
-
-    context = {'customexercise': customexercise, 'communications' : [] , 'form' : cForm , 'parcours' : parcours ,'student' : student, 'today' : today }
+    context = {'customexercise': customexercise, 'communications' : [] , 'c_e' : c_e , 'form' : cForm ,  'parcours' : parcours ,'student' : student, 'today' : today }
 
     if customexercise.is_python :
         url = "basthon/index_custom.html" 

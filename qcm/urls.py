@@ -214,8 +214,7 @@ urlpatterns = [
 
     path('ajax/course_viewer', ajax_course_viewer, name='ajax_course_viewer'),
 
-   
-
+ 
     # page de création d'un exercice non auto-corrigé dans un parcours - l'id est celui du parcours.
     path('parcours_create_custom_exercise/<int:id>/<int:typ>', parcours_create_custom_exercise, name='parcours_create_custom_exercise'), 
     path('parcours_update_custom_exercise/<int:idcc>/<int:id>', parcours_update_custom_exercise, name='parcours_update_custom_exercise'), 
@@ -228,7 +227,6 @@ urlpatterns = [
     #####################################################################################################################################
 
     path('correction_exercise/<int:id>/<int:idp>/<int:ids>', correction_exercise, name='correction_exercise'),  #from details_card 
-
     # Evaluation des exercices non auto corrigé
     path('ajax_choose_student', ajax_choose_student, name='ajax_choose_student'),
     path('ajax_exercise_evaluate', ajax_exercise_evaluate, name='ajax_exercise_evaluate'),

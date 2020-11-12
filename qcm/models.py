@@ -939,6 +939,7 @@ class Customexercise(ModelWithCode):
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
 
+    text_cor = RichTextUploadingField(  blank=True, null=True,  verbose_name="Correction écrite") 
     file_cor = models.ImageField(upload_to=vignette_directory_path, blank=True, verbose_name="Fichier de correction", default="")
     video_cor = models.CharField(max_length = 100, blank=True, verbose_name="Code de la vidéo Youtube", default="")
     is_publish_cor = models.BooleanField(default=0, verbose_name="Publié ?")    

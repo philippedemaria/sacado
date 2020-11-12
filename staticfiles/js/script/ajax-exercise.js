@@ -114,6 +114,13 @@ define(['jquery', 'bootstrap'], function ($) {
         });
 
 
+        $('#enable_correction_div').hide();
+        $("#enable_correction").click(function(){ 
+            $('#enable_correction_div').toggle(500);
+        });
+
+
+
 
         $("#id_is_python").on('change', function () { console.log("coucou");
 

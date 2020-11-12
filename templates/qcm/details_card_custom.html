@@ -33,13 +33,22 @@
 
          
           <div style="position: absolute; left : 30px; top:41px;" id="annoncement{{customexercise.id}}"   >   
-              <span class="helper_tip btn btn-default">Consigne
+              <span class="helper_tip btn btn-default">
+                      Consigne {% if customexercise.text_cor or  customexercise.video_cor or  customexercise.file_cor %}+ correction 
+                                  <small><i class="fa fa-{% if customexercise.is_publish_cor %}eye{% else %}eye-slash{% endif %}"></i></small>
+                               {% endif %}
                 <div class="helper_tip_text_right">{{customexercise.instruction|insert_tags:45|safe}} </div> 
               </span>
           </div>
 
-
-
+          {% get_is_lock customexercise today as is_block %} 
+          {% if is_block  %}
+              <a href="{%  url 'parcours_update_custom_exercise' customexercise.id  parcours.id %}">
+                  <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
+                      <i class="fa fa-lock"></i> <span class="hidden_lock"> {{ customexercise.lock|date:"d-m-Y à H:i" }}</span>
+                  </div>
+              </a>
+          {% endif %}
           
           <!-- Exercice dissocié  -->  
           {% if  data.nb != nb_students_p_or_g %}    

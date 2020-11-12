@@ -74,26 +74,35 @@ ul#id_skills li{
                             </div>
  
                         <div class="row" style="margin:0px; background-color: #F0F0F0;padding:10px;">
-                            <label>Correction : <small>(Falcultatif)</small></label><br>
-                            <div class="col-sm-12 col-md-6">                        
-                                <div class="form-group">
-                                    {{ form.file_cor.label_tag }}                        
-                                    {{ form.file_cor|add_class:"btn btn-default" }}
-                                    {{ form.file_cor.errors }}
+                            <label><a href="#"  id="enable_correction">Ajouter une correction</a> <small>(Falcultatif)</small>    </label>
+                            <div id="enable_correction_div">
+                                <div class="col-sm-12 col-md-12">                        
+                                    <div class="form-group"> 
+                                        {{ form.text_cor.label_tag }}                        
+                                        {{ form.text_cor }}
+                                        {{ form.text_cor.errors }}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-12 col-md-4">   
-                                <div class="form-group">
-                                    {{ form.video_cor.label_tag }}
-                                    {{ form.video_cor |add_class:"form-control"|attr:"placeholder:Code de la vidéo" }} 
-                                    {{ form.video_cor.errors }}
+                                <div class="col-sm-12 col-md-6">                        
+                                    <div class="form-group">
+                                        {{ form.file_cor.label_tag }}                        
+                                        {{ form.file_cor|add_class:"btn btn-default" }}
+                                        {{ form.file_cor.errors }}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-12 col-md-2">   
-                                <div class="form-group">
-                                    {{ form.is_publish_cor.label_tag }}
-                                    {{ form.is_publish_cor |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
-                                    {{ form.is_publish_cor.errors }}
+                                <div class="col-sm-12 col-md-4">   
+                                    <div class="form-group">
+                                        {{ form.video_cor.label_tag }}
+                                        {{ form.video_cor |add_class:"form-control"|attr:"placeholder:Code de la vidéo" }} 
+                                        {{ form.video_cor.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-2">   
+                                    <div class="form-group">
+                                        {{ form.is_publish_cor.label_tag }}
+                                        {{ form.is_publish_cor |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                        {{ form.is_publish_cor.errors }}
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -463,20 +463,6 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         // Affiche dans la modal la liste des élèves du groupe sélectionné
         $('.header_shower').on('click', function (event) {
             let relation_id = $(this).attr("data-relation_id");
