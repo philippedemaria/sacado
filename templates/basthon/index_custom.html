@@ -70,7 +70,7 @@
           </div>          
       </div>
       <div id="left-div">
-        <div id="editor">{{ c_e.answer }}</div>
+        <div id="editor">{% if c_e %}{{ c_e.answer|safe }}{% endif %}</div>
         <div style="padding: 1vw 0px 0px 0px; display: flex; float: left;">
           <a id="run" class="btn" title="Exécuter le script">
             <i class="fas fa-cogs fa-fw btn-logo btn-titled"></i>
