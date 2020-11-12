@@ -75,26 +75,26 @@
             <tr>
                 <td>{{ knowledge }}</td>
                 <td>
-                    <input  type="radio" {% if result_answer == -1 %} checked {% endif %}  data-customexercise_id="{{customexercise.id}}" data-knowledge_id="{{knowledge.id}}" data-skill_id="" 
-                            data-parcours_id="{{ parcours_id }}" name="knowledge{{ knowledge.id }}" value="-1" data-student_id="{{student.user.id}}" class="evaluate" />                               
-
-                </td>
-                <td>
-                    <input  type="radio" {% if result_answer == 0 %} checked {% endif %}  data-customexercise_id="{{customexercise.id}}"  data-knowledge_id="{{knowledge.id}}" data-skill_id="" 
+                    <input  type="radio" {% if result_answer == 0 %} checked {% endif %}  data-customexercise_id="{{customexercise.id}}" data-knowledge_id="{{knowledge.id}}" data-skill_id="" 
                             data-parcours_id="{{ parcours_id }}" name="knowledge{{ knowledge.id }}" value="0" data-student_id="{{student.user.id}}" class="evaluate" />                               
 
                 </td>
                 <td>
-                    <input  type="radio" {% if result_answer == 1 %} checked {% endif %}   data-customexercise_id="{{customexercise.id}}"  data-knowledge_id="{{knowledge.id}}" data-skill_id=""  
-                            data-parcours_id="{{ parcours_id }}" name="knowledge{{ knowledge.id }}" value="1" data-student_id="{{student.user.id}}" class="evaluate" />
+                    <input  type="radio" {% if result_answer == 1 %} checked {% endif %}  data-customexercise_id="{{customexercise.id}}"  data-knowledge_id="{{knowledge.id}}" data-skill_id="" 
+                            data-parcours_id="{{ parcours_id }}" name="knowledge{{ knowledge.id }}" value="1" data-student_id="{{student.user.id}}" class="evaluate" />                               
+
                 </td>
                 <td>
-                    <input type="radio" {% if result_answer == 2 %} checked {% endif %}   data-customexercise_id="{{customexercise.id}}"  data-knowledge_id="{{knowledge.id}}" data-skill_id=""  
-                           data-parcours_id="{{ parcours_id }}"  name="knowledge{{ knowledge.id }}" value="2" data-student_id="{{student.user.id}}" class="evaluate" />
+                    <input  type="radio" {% if result_answer == 2 %} checked {% endif %}   data-customexercise_id="{{customexercise.id}}"  data-knowledge_id="{{knowledge.id}}" data-skill_id=""  
+                            data-parcours_id="{{ parcours_id }}" name="knowledge{{ knowledge.id }}" value="2" data-student_id="{{student.user.id}}" class="evaluate" />
                 </td>
                 <td>
-                    <input type="radio" {% if result_answer == 3 %} checked {% endif %}   data-customexercise_id="{{customexercise.id}}"  data-knowledge_id="{{knowledge.id}}" data-skill_id="" 
-                           data-parcours_id="{{ parcours_id }}" name="knowledge{{ knowledge.id }}" value="3"  data-student_id="{{student.user.id}}" class="evaluate" />
+                    <input type="radio" {% if result_answer == 3 %} checked {% endif %}   data-customexercise_id="{{customexercise.id}}"  data-knowledge_id="{{knowledge.id}}" data-skill_id=""  
+                           data-parcours_id="{{ parcours_id }}"  name="knowledge{{ knowledge.id }}" value="3" data-student_id="{{student.user.id}}" class="evaluate" />
+                </td>
+                <td>
+                    <input type="radio" {% if result_answer == 4 %} checked {% endif %}   data-customexercise_id="{{customexercise.id}}"  data-knowledge_id="{{knowledge.id}}" data-skill_id="" 
+                           data-parcours_id="{{ parcours_id }}" name="knowledge{{ knowledge.id }}" value="4"  data-student_id="{{student.user.id}}" class="evaluate" />
                 </td>
             </tr>
         {% endfor %}            
@@ -110,24 +110,24 @@
             <tr>
                 <td>{{ s }}</td>
                 <td>
-                    <input type="radio" name="skill{{s.id}}" value="-1"   {% if result_answer == -1 %} checked {% endif %}  data-skill_id="{{s.id}}" data-knowledge_id="" data-parcours_id="{{ parcours_id }}"
+                    <input type="radio" name="skill{{s.id}}" value="0"   {% if result_answer == 0 %} checked {% endif %}  data-skill_id="{{s.id}}" data-knowledge_id="" data-parcours_id="{{ parcours_id }}"
                     data-student_id="{{student.user.id}}"  data-customexercise_id="{{customexercise.id}}"  class="evaluate" />
                 </td>
 
                 <td>
-                    <input type="radio" name="skill{{s.id}}" value="0"   {% if result_answer == 0 %} checked {% endif %}  data-skill_id="{{s.id}}" data-knowledge_id="" data-parcours_id="{{ parcours_id }}"
-                    data-student_id="{{student.user.id}}"  data-customexercise_id="{{customexercise.id}}"  class="evaluate" />
-                </td>
-                <td>
                     <input type="radio" name="skill{{s.id}}" value="1"   {% if result_answer == 1 %} checked {% endif %}  data-skill_id="{{s.id}}" data-knowledge_id="" data-parcours_id="{{ parcours_id }}"
                     data-student_id="{{student.user.id}}"  data-customexercise_id="{{customexercise.id}}"  class="evaluate" />
-                 </td>
+                </td>
                 <td>
                     <input type="radio" name="skill{{s.id}}" value="2"   {% if result_answer == 2 %} checked {% endif %}  data-skill_id="{{s.id}}" data-knowledge_id="" data-parcours_id="{{ parcours_id }}"
                     data-student_id="{{student.user.id}}"  data-customexercise_id="{{customexercise.id}}"  class="evaluate" />
-                </td>
+                 </td>
                 <td>
                     <input type="radio" name="skill{{s.id}}" value="3"   {% if result_answer == 3 %} checked {% endif %}  data-skill_id="{{s.id}}" data-knowledge_id="" data-parcours_id="{{ parcours_id }}"
+                    data-student_id="{{student.user.id}}"  data-customexercise_id="{{customexercise.id}}"  class="evaluate" />
+                </td>
+                <td>
+                    <input type="radio" name="skill{{s.id}}" value="4"   {% if result_answer == 4 %} checked {% endif %}  data-skill_id="{{s.id}}" data-knowledge_id="" data-parcours_id="{{ parcours_id }}"
                     data-student_id="{{student.user.id}}"  data-customexercise_id="{{customexercise.id}}"  class="evaluate" />
                 </td>
             </tr>
