@@ -569,6 +569,11 @@ class Parcours(ModelWithCode):
         som = self.duration
         for r in relationships : 
             som += r.duration
+
+        customexercises = self.parcours_customexercises.all()
+        for c in customexercises : 
+            som += c.duration
+
         return som 
 
 
@@ -1084,9 +1089,6 @@ class Customexercise(ModelWithCode):
                 level = 1
             else :
                 level = 0
-
-
-
         else : 
             stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
  

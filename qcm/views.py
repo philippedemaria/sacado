@@ -1459,6 +1459,43 @@ def stat_parcours(request, id):
 
 
 
+def check_level_by_point(student, point):
+    print(point)
+    point = int(point)
+    if student.user.school :
+        school = student.user.school
+        stage = Stage.objects.get(school = school)
+
+        if point > stage.up :
+            level = "primary"
+        elif point > stage.medium :
+            level = "success"
+        elif point > stage.low :
+            level = "warning"
+        elif point > -1 :
+            level = "danger"
+        else :
+            level = "default"
+    else : 
+        stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
+
+        if point > stage["up"]  :
+            level = "primary"
+        elif point > stage["medium"]  :
+            level = "success"
+        elif point > stage["low"]  :
+            level = "warning"
+        elif point > -1 :
+            level = "warning"
+        else :
+            level = "default"
+    rep = "<i class='fa fa-square text-"+level+"'></i>"
+    print(rep) 
+    return rep
+ 
+
+
+
 def stat_evaluation(request, id):
 
     teacher = Teacher.objects.get(user = request.user)
@@ -1487,7 +1524,7 @@ def stat_evaluation(request, id):
     students = students_from_p_or_g(request,parcours) 
 
     for s in students :
-        student = {"percent" : "" , "total_numexo" : "" , "good_answer" : "" , "test_duration" : False ,  "duration" : "" , "average_score" : "" ,"last_connexion" : "" ,"median" : "" ,"score" : "" ,"score_tab" : ""  }
+        student = {"percent" : "" , "total_numexo" : "" , "good_answer" : "" , "test_duration" : False ,  "duration" : "" , "average_score" : "" ,"last_connexion" : "" ,"median" : "" ,"score" : "" ,"score_tab" : "" }
         student["name"] = s
         studentanswers = Studentanswer.objects.filter(student=s,  exercise__in= exercises, parcours=parcours).order_by("date")
 
@@ -1557,29 +1594,25 @@ def stat_evaluation(request, id):
         except :
             pass
 
+        student.update({"total_note":"", "details_note":"" , "total_skill":"", "detail_skill":"" , "total_knowledge":"", "detail_knowledge":"" , })
         total_c, details_c  = 0 , ""
-        for ce in customexercises :
-            if ce.is_mark :
-                try  : 
-                    cen = ce.customexercise_custom_answer.get(student=student, parcours = parcours) 
-                    total_c = total_c + cen.point
-                    details_c = details_c + "-" +str(cen.point) 
-                except :
-                    total_c = total_c  
-                    details_c = details_c  
-
-        student["total_note"] = total_c
-        student["details_note"] = details_c
-
-        
-
         total_knowledge, total_skill, detail_skill, detail_knowledge = 0,0, "",""
         for ce in customexercises :
+            if ce.is_mark :
+                try :
+                    cen = Customanswerbystudent.objects.get(customexercise = ce, student=s, parcours = parcours)
+                    total_c +=  int(cen.point)
+                    details_c = details_c + " - " +str(cen.point) 
+                except :
+                    total_c = 0
+                    details_c = ""
+
+
             for skill in  ce.skills.all() :
                 try :
-                    scs = ce.customexercise_correctionskill.get(skill = skill,student=student, parcours = parcours)
-                    total_skill += scs.point
-                    detail_skill += detail_skill + "-" +str(scs.point) 
+                    scs = Correctionskillcustomexercise.objects.get(customexercise = ce,skill = skill,student=s, parcours = parcours).first() 
+                    total_skill += int(scs.point)
+                    detail_skill += scs.skill.name + "-" +check_level_by_point(s,scs.point) 
                 except :
                     total_skill = ""
             student["total_skill"] = total_skill
@@ -1587,15 +1620,20 @@ def stat_evaluation(request, id):
 
             for knowledge in  ce.knowledges.all() :
                 try :
-                    sck = ce.customexercise_correctionknowledge.get(knowledge = knowledge,student=student, parcours = parcours)
-                    total_knowledge += sck.point
-                    detail_knowledge += detail_knowledge + "-" +str(sck.point) 
+                    sck = Correctionknowledgecustomexercise.objects.get(customexercise = ce, knowledge = knowledge,student=s, parcours = parcours)
+                    total_knowledge += int(sck.point)
+                    detail_knowledge += sck.knowledge.name + " "  +check_level_by_point(s,sck.point) + "<br>" 
                 except :
                     total_knowledge = total_knowledge
             student["total_knowledge"] = total_knowledge
-            student["detail_knowledge"] = detail_knowledge  
+            student["detail_knowledge"] = detail_knowledge 
+
+                    
+        student["total_note"] = total_c
+        student["details_note"] = details_c
 
         stats.append(student)
+
 
     context = { 'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'communications' : [] , 'role' : role  }
 

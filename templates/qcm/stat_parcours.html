@@ -19,7 +19,7 @@
 
         <small>Statistiques <small>({{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }})</small>
         {% if  parcours.is_evaluation %}
-            <i class='fa fa-clock'></i>  {{ parcours.evaluation_duration }} min.
+            <i class='fa fa-clock'></i>  {{ parcours.evaluation_duration|int_minutes }} min.
         {% endif %}
         </small>
  {% endblock %}
@@ -55,6 +55,8 @@ body{
                     <tr>
                         <th>Nom et prénom</th>
                         <th style="text-align: center;">Exercices faits</th>
+                        <th style="text-align: center;">Savoir faire</th>
+                        <th style="text-align: center;">Compétences</th>
                         <th style="text-align: center;">Durée totale</th>
                         <th style="text-align: center;">Score en détail </th>
                         <th style="text-align: center;">Score total </th>
@@ -89,9 +91,23 @@ body{
                                     </form>    
                                 </td>
                                 <td style="text-align: center;">{{ stat.nb_exo  }}</td>
+                                <td style="text-align: left;">
+                                    <small>{{  stat.detail_knowledge|safe  }}</small>
+                                </td>
+                                <td style="text-align: left;">
+                                    <small>{{  stat.detail_skill|safe }}</small>
+                                </td>
                                 <td style="text-align: center;{% if stat.test_duration %}color:#FF0000; font-weight:600{% endif %}">{{ stat.duration  }}</td>
-                                <td style="text-align: center;">{% for s in stat.score_tab  %} {{ s }}{% if not forloop.last %} + {% endif %}{% endfor %}</td>
-                                <td style="text-align: center;">{% if stat.total_numexo  %} {{ stat.good_answer  }}/{{ stat.total_numexo  }}{% endif %}</td>
+                                <td style="text-align: center;">
+                                    {% for s in stat.score_tab  %} {{ s }}{% if not forloop.last %} + {% endif %}{% endfor %}
+                                    {% if stat.score_tab and stat.details_note %}|{% endif %}
+                                    {% if stat.details_note  %} {{ stat.details_note  }} {% endif %}
+                                </td>
+                                <td style="text-align: center;">
+                                    {% if stat.total_numexo  %} {{ stat.good_answer  }}/{{ stat.total_numexo  }}{% endif %}
+                                    {% if stat.total_numexo and stat.total_note %}|{% endif %}
+                                    {% if stat.total_note  %} {{ stat.total_note  }} {% endif %}
+                                </td>
                                 <td style="text-align: center;">{% if stat.percent  %} {{ stat.percent  }} {% endif %}</td>
                             </tr>
                         {% endfor %}
