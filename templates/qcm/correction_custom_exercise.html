@@ -20,14 +20,27 @@
                  {{ stud.user.last_name }} {{ stud.user.first_name }} 
 
                     <span id ="evaluate{{ stud.user.id }}">
-                        {% get_corrected_for_this customexercise stud parcours as  is_corrected %} 
-                            {% if  is_corrected %}
-                            <i class="fa fa-check text-success pull-right"></i>
+                        {% get_corrected_for_this customexercise stud parcours as  data %} 
+                            {% if  data.is_corrected %}
+                                {% if  data.answer %}
+                                    <i class="fa fa-check text-success pull-right"></i>
+                                {% else %}
+                                    <i class="fa fa-toggle-on text-success pull-right"></i>
+                                {% endif %}
                             {% endif %}
                     </span>
                 </a>
                 {% else %}                
-                <span style="color:#DDD">{{ stud.user.last_name }} {{ stud.user.first_name }} </span>
+                <span style="color:#DDD">
+                    {{ stud.user.last_name }} {{ stud.user.first_name }} 
+                    <a href="#" class="exercise_no_made" title="Marqué comme corrigé, avec compétences/savoir faire non évalués. Si note, note = 0." 
+                            data-exercise_id ={{ customexercise.id }} data-parcours_id ={{ parcours.id }}
+                            data-custom =1
+                            id="exercise_no_made{{ stud.user.id }}" 
+                            data-student_id ={{ stud.user.id }} >
+                            <i class="fa fa-toggle-off text-default pull-right"></i>
+                    </a> 
+                </span>
                 {% endif %}
             </td>
         </tr>

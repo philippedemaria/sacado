@@ -80,7 +80,6 @@
                                     <a href="{% url 'correction_exercise' relationship.id  0  stud.user.id  %}" >
                                         <!--data-student_id="{{ student.user.id }}" data-relationship_id="{{ relationship.id }}" data-parcours_id="0" data-custom="0" class="choose_student"  --> 
                                         {{ stud.user.last_name|title }} {{ stud.user.first_name|title }} 
-
                                         <span id ="evaluate{{ stud.user.id }}">
                                           {% get_done relationship stud as done %}
                                           {% if done %}
@@ -99,9 +98,13 @@
                                                        ></i>
                                                 {% endif %}
                                             {% endif %}
-                                    </span></a>
+                                        </span>
+                                    </a>
                                 {% else %}                
-                                <span style="color:#DDD">{{ stud.user.last_name }} {{ stud.user.first_name }} </span>
+                                <span style="color:#DDD">
+                                    {{ stud.user.last_name }} {{ stud.user.first_name }} 
+                                    <a href="" ><i class="fa fa-toggle-off"></i></a>
+                                </span>
                                 {% endif %}
                             </td>
                         </tr>

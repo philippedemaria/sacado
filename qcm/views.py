@@ -3583,6 +3583,24 @@ def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
     return JsonResponse(data)  
 
 
+ 
+
+def ajax_annotate_exercise_no_made(request): # Marquer un exercice non fait
+
+    student_id =  int(request.POST.get("student_id"))
+    exercise_id =  int(request.POST.get("exercise_id"))  
+    parcours_id =  int(request.POST.get("parcours_id")) 
+    custom =  int(request.POST.get("custom")) 
+    data = {}
+    if custom :
+        Customanswerbystudent.objects.update_or_create(parcours_id = parcours_id , customexercise_id = exercise_id, student_id = student_id,defaults={"answer":"", "comment":"Non rendu", "point":0,"is_corrected":1})
+    else :
+        pass
+         
+
+    return JsonResponse(data)  
+
+
 
 
 def ajax_mark_evaluate(request): # Evaluer un exercice custom par note

@@ -1024,9 +1024,16 @@ class Customexercise(ModelWithCode):
     def is_corrected_for_this(self,student,parcours): # devoir corrigé
         correction = Customanswerbystudent.objects.filter(student=student, customexercise = self, parcours =parcours,is_corrected=1)
         is_corrected = False
+        data = {}
         if correction.exists() :
+            correction = Customanswerbystudent.objects.get(student=student, customexercise = self, parcours =parcours,is_corrected=1)
+            answer = correction.answer
             is_corrected = True
-        return is_corrected
+        else :
+            answer=None
+        data["answer"] = answer
+        data["is_corrected"] = is_corrected
+        return data
 
 
 

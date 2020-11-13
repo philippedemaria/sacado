@@ -177,6 +177,54 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+
+
+
+        // Corrige les élèves qui n'ont pas rendu de copie. Cela permet d'afficher la correction et de leur mettre une note.
+        $('.exercise_no_made').on('click', function (event) {
+
+            let exercise_id = $(this).attr("data-exercise_id");
+            let student_id = $(this).attr("data-student_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let custom = $(this).attr("data-custom");
+            let parcours_id = $(this).attr("data-parcours_id"); 
+ 
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'student_id': student_id,
+                        'custom' : custom ,
+                        'exercise_id': exercise_id,
+                        'parcours_id': parcours_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../../ajax_annotate_exercise_no_made",
+                    success: function (data) {
+
+                        $('#exercise_no_made'+student_id).html("<i class='fa fa-toggle-on text-success pull-right'></i>");
+                    }
+                }
+            )
+         });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 });
 
 });
