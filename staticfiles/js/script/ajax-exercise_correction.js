@@ -12,7 +12,6 @@ define(['jquery', 'bootstrap'], function ($) {
             let relationship_id = $(this).attr("data-relationship_id");
             let saver = $(this).attr("data-saver");
  
-
             $.ajax(
                 {
                     type: "POST",

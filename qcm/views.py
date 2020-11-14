@@ -25,7 +25,6 @@ import random
 from datetime import datetime , timedelta
 from django.db.models import Q
 from django.core.mail import send_mail
-
 from group.decorators import user_is_group_teacher 
 from qcm.decorators import user_is_parcours_teacher, user_can_modify_this_course, student_can_show_this_course , user_is_relationship_teacher, user_is_customexercice_teacher 
 from account.decorators import user_can_create, user_is_superuser
@@ -72,7 +71,6 @@ def get_time(s,e):
     end_time = e.split(".")[0]
     full_time = int(end_time) - int(start_time)
     return  full_time
-
 
 
 

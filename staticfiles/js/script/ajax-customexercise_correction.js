@@ -99,7 +99,6 @@ define(['jquery', 'bootstrap'], function ($) {
         });
 
 
-
 });
 
 });

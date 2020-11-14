@@ -228,7 +228,6 @@ define(['jquery', 'bootstrap'], function ($) {
         
         $(tr_object).find('.delete_button').html('<a href="javascript:void(0)" class="btn btn-danger remove_more">Supprimer</a>');
 
-
         $(tr_object).find('.btn-default').attr("name","customexercise_custom_answer_image-"+totalForms+"-image");
         $(tr_object).find('.btn-default').attr("id","customexercise_custom_answer_image-"+totalForms+"-image");
 

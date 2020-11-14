@@ -1181,13 +1181,6 @@ class Customanswerimage(models.Model): # Commentaire et note pour les exercices 
     def __str__(self):        
         return "{}".format(self.customanswerbystudent)
 
- 
-
-
-
-
-
-
 class Correctionskillcustomexercise(models.Model): # Evaluation des compétences pour les exercices customisés coté enseignant 
 
     customexercise = models.ForeignKey(Customexercise,  on_delete=models.CASCADE,   related_name='customexercise_correctionskill', editable=False)

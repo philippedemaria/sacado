@@ -145,8 +145,6 @@ class RemediationForm(forms.ModelForm):
 		validation_file(content)
 
 
-
-
 class RemediationcustomForm(forms.ModelForm):
 	class Meta:
 		model = Remediationcustom

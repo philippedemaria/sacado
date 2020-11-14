@@ -5,7 +5,6 @@
 {% if w_a %}
  
 
-
     {% block annotate %} 
     <!-- Caractéristique pour les AJAX pour la correction en ligne -->
     <input type="hidden" id="answer_id" value="{{ w_a.id}}" />
@@ -25,7 +24,6 @@
         {%  elif relationship.exercise.supportfile.is_image   and   w_a.imagefile  %}
             <img src="{{  w_a.imagefile.url }}" width="100%"/>
         {% endif %}
-
 
         {% for a in annotations %} 
             <div id="{{ a.attr_id }}" class="{{ a.classe }}" style="{{ a.style }}">{{ a.content|safe }}</div>

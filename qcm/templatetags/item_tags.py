@@ -79,7 +79,6 @@ def get_score2(results, id):
     """
     return results.get(id, '')
 
- 
 
 
 @register.simple_tag
