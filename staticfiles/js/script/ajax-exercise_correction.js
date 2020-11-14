@@ -5,12 +5,12 @@ define(['jquery', 'bootstrap'], function ($) {
  
 
         // Enregistrer les commentaires
-        $('.save_comment').on('click', function (event) {
+        $('#save_comment').on('click', function (event) {
             let comment = $("#comment").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
             let student_id = $(this).attr("data-student_id");
             let relationship_id = $(this).attr("data-relationship_id");
-            let saver = $(this).attr("data-saver");
+
  
 
             $.ajax(
@@ -20,8 +20,7 @@ define(['jquery', 'bootstrap'], function ($) {
                     data: {
                         'comment': comment,
                         'student_id':student_id,
-                        'exercise_id': relationship_id, 
-                        'saver': saver,                     
+                        'exercise_id': relationship_id,                        
                         'typ' : 0,
                         csrfmiddlewaretoken: csrf_token
                     },

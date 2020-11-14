@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from .models import Parcours, Exercise, Remediation, Relationship, Supportfile, Course, Comment, Demand, Mastering,Mastering_done, Writtenanswerbystudent, Customexercise,Customanswerimage , Customanswerbystudent, Masteringcustom, Masteringcustom_done, Remediationcustom
+from .models import Parcours, Exercise, Remediation, Relationship, Supportfile, Course, Comment, Demand, Mastering,Mastering_done, Writtenanswerbystudent, Customexercise,Customanswerbystudent, Masteringcustom, Masteringcustom_done, Remediationcustom
 from account.models import Student , Teacher
 from socle.models import Knowledge, Skill
 from group.models import Group
@@ -285,23 +285,14 @@ class WrittenanswerbystudentForm (forms.ModelForm):
 		content = self.cleaned_data['imagefile']
 		validation_file(content)
 
-
-
 class CustomanswerbystudentForm (forms.ModelForm):
 	class Meta:
 		model = Customanswerbystudent
-		fields = ('file','answer')
+		fields = ('imagefile','answer')
 
-
-
-
-class CustomanswerimageForm (forms.ModelForm):
-	class Meta:
-		model = Customanswerimage
-		fields = ('image', )
 
 	def clean_content(self):
-		content = self.cleaned_data['image']
+		content = self.cleaned_data['imagefile']
 		validation_file(content)
 
 

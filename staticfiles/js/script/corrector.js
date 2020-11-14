@@ -9,13 +9,6 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 $(".tools").hide();
                 $(".remove").hide();
-
-                 
-			    $('iframe').each(function(){
-			        var url = $(this).attr("src");
-			        $(this).attr("src",url+"?wmode=opaque");
-			    });
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///// Gestion des annonations après leur enregistrement dans la base de données
@@ -177,7 +170,7 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
 
 
 /////////////////////////    Cas particulier   /////////////////////////////////////////////////////////////
-                  $("#my_appreciations").on('click', '.comment', function (e) {  
+                  $("#my_appreciations").on('click', '.comment', function (e) {
 
 	                  	if ($("#modifier_appreciation").hasClass("btn-primary") )  // Modification enregistrement
 	                  	{ 
@@ -186,8 +179,7 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
 	                     	$(this).addClass("btn-primary").removeClass("btn-default");   
 	                     	$("#modifier_appreciation").addClass("btn-default").removeClass("btn-primary");
 
-							value = $(this).attr("data-text");
-
+							value = $(this).attr("data-text")
 	                      	$("#id_comment").val(value);
 
 	 						selected = $(this).attr("id");
@@ -445,7 +437,7 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
  					if($(".comment").hasClass("btn-primary")) {  // commentaire d'un enseignant pré écrit
 
                     	// Choisit le bon commentaire
-						selector = $("#my_appreciations").find(".btn-primary");
+						selector = $("#comments_div").find(".btn-primary");
  						selected = $("#"+selector.attr("id"));
 
  						annote(selected,e,2) ;
@@ -523,7 +515,6 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
                         dataType: 'json',
                         success: function (data) {
                             console.log("enregistré");
-                            
                         }
 
 
@@ -651,11 +642,10 @@ define(['jquery','bootstrap','bcPicker'], function ($) {
 			                    	$("#my_appreciations").append(data.html) ;
 			                    	$("#comments_div").show(500) ;
 			                    	}
-
 			                    	$("#modif_appreciation").val("");	
 			  	                    $("#add_my_appreciation").html("").html("Sauvegarder");
 									$("#id_comment").val("") ; 
-                            		if($('#empty_annotation') ) { $('#empty_annotation').hide(500); }
+
 			                    }
 			                })
 

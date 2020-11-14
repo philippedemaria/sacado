@@ -247,8 +247,7 @@ urlpatterns = [
     path('ajax_read_my_production', ajax_read_my_production, name='ajax_read_my_production'),
 
     path('ajax_annotate_exercise_no_made', ajax_annotate_exercise_no_made, name='ajax_annotate_exercise_no_made'),    
-    path('ajax_delete_custom_answer_image', ajax_delete_custom_answer_image, name='ajax_delete_custom_answer_image'),        
-
+    
     path('export_notes_after_evaluation', export_notes_after_evaluation, name='export_notes_after_evaluation'),
 
     #####################################################################################################################################

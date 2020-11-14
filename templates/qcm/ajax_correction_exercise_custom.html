@@ -16,20 +16,18 @@
 
 
     <div id="corrector">
-        {% if customexercise.is_file and c_e.file %}
-            {% for image in images_pdf %}
-                <img src="{{ image }}" width="100%"/>
-            {% endfor %}
+        {% if customexercise.is_file and c_e.imagefile %}
+            <iframe src="{{  c_e.imagefile.url }}" height="700" width="100%"></iframe>
         {%  elif customexercise.is_python or  customexercise.is_scratch %}
-            <pre>{{ c_e.answer|safe }}</pre>
+           <pre>{{ c_e.answer|safe }}</pre>
         {%  elif customexercise.is_text %}
-            {{ c_e.answer|safe }}
+           {{ c_e.answer|safe }}
         {%  elif customexercise.is_image  and c_e.imagefile  %}
             <img src="{{  c_e.imagefile.url }}" width="100%"/>
         {% endif %}
 
         {% for c in customannotations %} 
-             <div id="{{ c.attr_id }}" class="{{ c.classe }}" style="{{ c.style }}">{{ c.content|safe }}</div>
+            <div id="{{ c.attr_id }}" class="{{ c.classe }}" style="{{ c.style }}">{{ c.content|safe }}</div>
         {% endfor %}
  
     </div>
@@ -144,16 +142,13 @@
             <div class="row" style="margin-top:10px">
                 <div class="col-sm-12 col-md-12">
                     <div class="form-group">
-                        <a href="#" class="btn btn-primary save_comment margin_space5" data-saver=0 data-parcours_id="{{ parcours_id}}"   data-student_id="{{student.user.id}}"  data-customexercise_id="{{customexercise.id}}" >Enregistrer </a>
-
-                        <a href="#" class="btn btn-primary save_comment margin_space5" data-saver=1 data-parcours_id="{{ parcours_id}}"   data-student_id="{{student.user.id}}"  data-customexercise_id="{{customexercise.id}}" >Enregistrer et conserver</a>
-
+                        <a href="#" class="btn btn-primary" id="save_comment" data-parcours_id="{{ parcours_id}}"   data-student_id="{{student.user.id}}"  data-customexercise_id="{{customexercise.id}}" >Enregistrer ce commentaire</a>
                         {% if c_e and  teacher.user.school %}  
-                        <a href="#" data-toggle='modal' data-target='#audio_comment' class="btn btn-primary margin_space5" ><i class="fa fa-microphone"></i> Commentaire Audio </a>
+                        <a href="#" data-toggle='modal' data-target='#audio_comment' class="btn btn-primary" ><i class="fa fa-microphone"></i> Commentaire Audio </a>
                         {% elif teacher.user.school %}  
-                        <a href="#" data-toggle='modal' data-target='#audio_comment' class="btn btn-primary margin_space5" ><i class="fa fa-microphone"></i> Commentaire Audio </a>
+                        <a href="#" data-toggle='modal' data-target='#audio_comment' class="btn btn-primary" ><i class="fa fa-microphone"></i> Commentaire Audio </a>
                         {% else %}   
-                        <a href="#" class="btn btn-primary margin_space5" ><i class="fa fa-microphone"></i> Commentaire Audio 
+                        <a href="#" class="btn btn-primary" ><i class="fa fa-microphone"></i> Commentaire Audio 
                                 <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                     <div class="helper_tip_text" >Version établissement.</div>
                                 </span>
