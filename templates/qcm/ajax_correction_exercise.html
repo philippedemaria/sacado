@@ -16,9 +16,8 @@
 
 
     <div id="corrector">
-        {% if relationship.exercise.supportfile.is_file  and   w_a.imagefile %}
- 
-            <iframe src="{{  w_a.imagefile.url }}" height="700" width="100%"></iframe>
+        {% if relationship.exercise.supportfile.is_file  and   w_a.file %}
+            <iframe src="{{  w_a.file.url }}" height="700" width="100%"></iframe>
         {%  elif relationship.exercise.supportfile.is_python or  relationship.exercise.supportfile.is_scratch %}
            <pre>{{ w_a.answer|safe }}</pre>
         {%  elif relationship.exercise.supportfile.is_text %}
@@ -110,12 +109,20 @@
     </table> 
     <hr>
     <h5>Commentaire <span id="comment_result" style="color:#228b22 ; font-size:12px"></span></h5>
+
+    <div id="saver_comments"></div>
+
+
     <textarea class="form-control" name="comment" id="comment">{% if w_a.comment %}{{ w_a.comment }}{% endif %}</textarea>
 
             <div class="row" style="margin-top:10px">
                 <div class="col-sm-12 col-md-12">
                     <div class="form-group">
-                        <a href="#" class="btn btn-primary" id="save_comment" data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}" >Enregistrer ce commentaire</a>
+                        <a href="#" class="btn btn-primary save_comment" data-saver=0  data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}" >Enregistrer</a>
+
+                         <a href="#" class="btn btn-primary save_comment" data-saver=1  data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}" >Enregistrer et conserver</a>
+
+
                         {% if w_a and  teacher.user.school %}  
                         <a href="#" data-toggle='modal' data-target='#audio_comment' class="btn btn-primary" ><i class="fa fa-microphone"></i> Commentaire Audio </a>
                         {% elif teacher.user.school %}  

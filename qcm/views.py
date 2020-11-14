@@ -3,13 +3,14 @@ from account.models import  Student, Teacher, User,Resultknowledge, Resultskill,
 from account.forms import StudentForm, TeacherForm, UserForm
 from django.contrib.auth.forms import  AuthenticationForm
 from django.forms.models import modelformset_factory
+from django.forms import inlineformset_factory
 from django.contrib.auth.decorators import  permission_required,user_passes_test
 from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group , Sharing_group
 from school.models import Stage
-from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation
-from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm
+from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage
+from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm
 from socle.models import  Theme, Knowledge , Level , Skill
 from django.http import JsonResponse 
 from django.core import serializers
@@ -30,6 +31,7 @@ from qcm.decorators import user_is_parcours_teacher, user_can_modify_this_course
 from account.decorators import user_can_create, user_is_superuser
 ##############bibliothèques pour les impressions pdf  #########################
 import os
+from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
 from django.utils import formats, timezone
 from io import BytesIO, StringIO
 from django.http import  HttpResponse
@@ -3417,6 +3419,9 @@ def show_evaluation(request, id):
 
 
 def correction_exercise(request,id,idp,ids=0):
+    """
+    script qui envoie au prof les fichiers à corriger custom et SACADO
+    """
 
     teacher = Teacher.objects.get(user=request.user)
     stage = get_stage(teacher.user)
@@ -3443,7 +3448,7 @@ def correction_exercise(request,id,idp,ids=0):
                 annotations = [] 
         else :
             w_a = False 
-            annotations = [] 
+            annotations = []
 
         context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage , 'comments' : comments   , 'formComment' : formComment , 'custom':0, 'nb':nb, 'w_a':w_a, 'annotations':annotations,  'communications' : [] ,  'parcours' : relationship.parcours , 'parcours_id': relationship.parcours.id, 'group' : None , 'student' : student }
  
@@ -3451,19 +3456,24 @@ def correction_exercise(request,id,idp,ids=0):
     else :
         customexercise = Customexercise.objects.get(pk=id)
         parcours = Parcours.objects.get(pk = idp)
- 
+        c_e = False 
+        customannotations = []
+        images_pdf = []
+
         if student :
             if Customanswerbystudent.objects.filter(customexercise = customexercise ,  parcours = parcours , student_id = student).exists():
                 c_e = Customanswerbystudent.objects.get(customexercise = customexercise ,  parcours = parcours , student_id = student)
+                images_pdf = []  
+                if c_e.file :
+                    images = convert_from_path(c_e.file) 
+                    for img in images: 
+                        img.save('output.jpg', 'JPEG')
+                        images_pdf.append(img)
+
                 customannotations = Customannotation.objects.filter(customanswerbystudent = c_e)
                 nb = customannotations.count()
-            else :
-                c_e = False 
-                customannotations = []
-        else :
-            c_e = False 
-            customannotations = []
-        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage , 'comments' : comments   , 'formComment' : formComment , 'nb':nb,'c_e':c_e, 'customannotations':customannotations,  'custom':1,  'communications' : [], 'parcours' : parcours, 'group' : None , 'parcours_id': parcours.id, 'student' : student }
+
+        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage , 'images_pdf' : images_pdf   ,  'comments' : comments   , 'formComment' : formComment , 'nb':nb,'c_e':c_e, 'customannotations':customannotations,  'custom':1,  'communications' : [], 'parcours' : parcours, 'group' : None , 'parcours_id': parcours.id, 'student' : student }
  
         return render(request, 'qcm/correction_custom_exercise.html', context)
 
@@ -3505,11 +3515,12 @@ def ajax_remove_annotation(request):
     custom =  int(request.POST.get("custom"))
     attr_id = request.POST.get("attr_id") 
     teacher = Teacher.objects.get(user = request.user)
+    answer_id = request.POST.get("answer_id") 
     try :
         if custom :
-            Customannotation.objects.get(customanswerbystudent__customexercise__teacher= teacher,  attr_id = attr_id ).delete()
+            Customannotation.objects.get(customanswerbystudent_id = answer_id,  attr_id = attr_id ).delete()
         else :  
-            Annotation.objects.get(writtenanswerbystudent__relationship__parcours__teacher = teacher, attr_id = attr_id).delete()
+            Annotation.objects.get(writtenanswerbystudent_id  = answer_id, attr_id = attr_id).delete()
     except :
         pass
 
@@ -3711,17 +3722,25 @@ def ajax_comment_all_exercise(request): # Ajouter un commentaire à un exercice 
 
     exercise_id =  int(request.POST.get("exercise_id"))  
 
+    saver =  int(request.POST.get("saver"))
+
     student = Student.objects.get(user_id = student_id)  
 
     if int(request.POST.get("typ")) == 0 :
         relationship = Relationship.objects.get(pk = exercise_id)
         Writtenanswerbystudent.objects.filter(relationship = relationship, student = student).update(comment = comment )
         Writtenanswerbystudent.objects.filter(relationship = relationship, student = student).update(is_corrected = 1 )
+        if saver == 1:
+            Generalcomment.objects.create(comment=comment, teacher = relationship.parcours.teacher)
+
     else  :
         parcours_id =  int(request.POST.get("parcours_id"))     
         ce = Customexercise.objects.get(pk = exercise_id)
         Customanswerbystudent.objects.filter(customexercise = ce, student = student, parcours_id = parcours_id).update(comment = comment )
         Customanswerbystudent.objects.filter(customexercise = ce, student = student, parcours_id = parcours_id).update(is_corrected = 1 )
+
+        if saver == 1:
+            Generalcomment.objects.create(comment=comment, teacher = ce.teacher)
 
     data = {}
     data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"          
@@ -4059,10 +4078,18 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
 
     if Customanswerbystudent.objects.filter(student = student, customexercise = customexercise ).exists() : 
         c_e = Customanswerbystudent.objects.get(student = student, customexercise = customexercise )
-        cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None, instance = c_e )    
+        cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None, instance = c_e )
+        images = Customanswerimage.objects.filter(customanswerbystudent = c_e)    
     else :
         cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None )
         c_e = False
+        images = False
+
+    if customexercise.is_image :
+        form_ans = inlineformset_factory( Customanswerbystudent , Customanswerimage , fields=('image',) , extra=1)
+    else :
+        form_ans = None
+
 
     if request.method == "POST":
 
@@ -4073,6 +4100,14 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
             w_f.student = student
             w_f.save()
 
+            if customexercise.is_image :
+                form_images = form_ans(request.POST or None,  request.FILES or None, instance = w_f)
+                for form_image in form_images :
+                    if form_image.is_valid():
+                        form_image.save()
+
+
+
             ### Envoi de mail à l'enseignant
             msg = "Exercice posté par : "+str(student.user) 
             if customexercise.teacher.notification :
@@ -4080,7 +4115,7 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
 
             return redirect('show_parcours_student' , idp )
 
-    context = {'customexercise': customexercise, 'communications' : [] , 'c_e' : c_e , 'form' : cForm ,  'parcours' : parcours ,'student' : student, 'today' : today }
+    context = {'customexercise': customexercise, 'communications' : [] , 'c_e' : c_e , 'form' : cForm , 'images':images, 'form_ans' : form_ans , 'parcours' : parcours ,'student' : student, 'today' : today }
 
     if customexercise.is_python :
         url = "basthon/index_custom.html" 
@@ -4089,6 +4124,14 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
 
     return render(request, url , context)
 
+
+
+def ajax_delete_custom_answer_image(request):
+    data = {}
+    custom = request.POST.get("custom")
+    image_id = request.POST.get("image_id")
+    Customanswerimage.objects.get(pk = int(image_id)).delete()
+    return JsonResponse(data)  
 
 #######################################################################################################################################################################
 ############### VUE ENSEIGNANT

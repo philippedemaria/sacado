@@ -63,23 +63,68 @@
             <hr>             
             <form action="" method="POST" enctype='multipart/form-data'>
                 {% csrf_token %}
-                {% if customexercise.is_image   or   customexercise.is_file  %}   
- 
-                <div class="form-group">
-                    {{ form.imagefile.label_tag }}  <br>
-                    {{ form.imagefile|add_class:"btn btn-default"   }}
-                    {{ form.imagefile.errors }} <br>
-                </div> 
-                {% endif %}
+                {% if customexercise.is_image  %} 
+                    <div class="col-sm-7 col-lg-7" >  
+                    {{ form_ans.management_form }}
+                        <!-- Les formulaires du formset -->
+                        <div id="formsetZone">
+                            <div class="row" id="duplicate" style="display:none">            
+                                <div class="col-sm-12 col-md-6">
+                                        <div class="form-group">
+                                            {{ form_ans.empty_form.image |add_class:"btn btn-default" }}
+                                            {{ form_ans.empty_form.image.errors }}
+                                        </div>
 
+                                </div>    
+                                <div class="col-sm-12 col-md-6">
+                                        <div class="delete_button"></div>
+
+                                </div>
+                            </div>
+                            {% for form in form_ans %}
+                            <div class="row" id="duplicate{{ forloop.counter0 }}">            
+                                <div class="col-sm-12 col-md-6">
+                                    <div class="form-group">
+                                        <label>{{ form.image.label_tag }}</label><br/>
+                                        {{ form.image |add_class:"btn btn-default" }}
+                                        {{ form.image.errors }}
+                                    </div> 
+                                 </div>
+                            </div>
+                            {% endfor %}
+
+                        </div> 
+                        <div class="row">
+                            <div class="col-sm-6 col-md-6 controls">
+                                <div class="form-group">
+                                    <a href="#" id="new_item" class="btn btn-default add_more" ><i class="fa fa-plus"></i> Ajouter une image</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5 col-lg-5">
+                        {% for img in images %}
+                            <div class="row" id="delete_custom_answer_image{{ img.id }}">
+                                <a href="#" class="btn btn-danger delete_custom_answer_image" data-image_id="{{ img.id }}" data-custom=1 ><i class="fa fa-trash"></i></a>
+                                <img src="{{ img.image.url }}" width="100%"/>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% if   customexercise.is_file  %}   
+                    <div class="form-group">
+                        {{ form.file.label_tag }}  <br>
+                        {{ form.file|add_class:"btn btn-default"   }}
+                        {{ form.file.errors }} <br>
+                    </div> 
+                {% endif %}
                 {% if customexercise.is_text   %} 
 
-                <div class="form-group">
-                    <label>Zone pour écrire</label><br>
-                    {{ form.answer }}
-                    {{ form.answer.errors }} <br>
-                </div>
-
+                    <div class="form-group">
+                        <label>Zone pour écrire</label><br>
+                        {{ form.answer }}
+                        {{ form.answer.errors }} <br>
+                    </div>
                 {% endif %}
                 <div class="row">
                     <div class="col-sm-12 col-lg-8">
@@ -104,7 +149,6 @@
                                                                        class="btn btn-default "/>                                       
                         </div>
                     </div>
- 
                 </div>
             </form> 
         </div>  
@@ -173,3 +217,4 @@
 
 
 {% endblock %} 
+ 

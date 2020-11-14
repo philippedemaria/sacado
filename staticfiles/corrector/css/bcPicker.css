@@ -70,11 +70,12 @@
     padding : 10px;
     background-color: #f8f8f8;
     border-radius: 0px 4px ;
-    min-height: 300px;
+    min-height: 700px;
     border: 1px solid #EEE;
     -webkit-box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.15);
     -moz-  box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.15);
     box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.15);
+    z-index: 9;
 }
 
 .iframe_div{
