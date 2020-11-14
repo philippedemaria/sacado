@@ -47,7 +47,6 @@ def top_less(html,up): #nettoie le code des balises HTML
     chaine = ""
     for i in range(len(htm_propriete_tab)-1):
         chaine += str(htm_propriete_tab[i][0])+":"+str(htm_propriete_tab[i][1])+";"
-    print(chaine)
     return chaine
 
 @register.filter

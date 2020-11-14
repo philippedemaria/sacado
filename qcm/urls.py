@@ -248,6 +248,8 @@ urlpatterns = [
 
     path('ajax_annotate_exercise_no_made', ajax_annotate_exercise_no_made, name='ajax_annotate_exercise_no_made'),    
     
+    path('export_notes_after_evaluation', export_notes_after_evaluation, name='export_notes_after_evaluation'),
+
     #####################################################################################################################################
     #####################################################################################################################################
 

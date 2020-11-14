@@ -242,6 +242,38 @@ def teacher_has_permisson_to_parcourses(request,teacher,parcours):
     return has_permisson 
 
 
+def skills_in_parcours(parcours):
+
+    skills = []
+    for exercise in parcours.exercises.all():
+        relationships = exercise.exercise_relationship.filter(parcours=parcours)
+        for r in relationships :
+            for sk in r.skills.all() :
+                if sk not in skills :
+                    skills.append(sk)
+    for ce in parcours.parcours_customexercises.all():
+        for sk in ce.skills.all() :
+            if sk not in skills :
+                skills.append(sk)   
+    return skills
+
+
+def knowledges_in_parcours(parcours):
+
+    knowledges = []
+    for exercise in parcours.exercises.all():
+        relationships = exercise.exercise_relationship.filter(parcours=parcours)
+        for r in relationships :
+            for k in r.knowledges.all() :
+                if sk not in knowledges :
+                    knowledges.append(sk)
+    for ce in parcours.parcours_customexercises.all():
+        for sk in ce.knowledges.all() :
+            if sk not in knowledges :
+                knowledges.append(sk)   
+    return knowledges
+
+
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 #################   parcours par defaut
@@ -1460,7 +1492,6 @@ def stat_parcours(request, id):
 
 
 def check_level_by_point(student, point):
-    print(point)
     point = int(point)
     if student.user.school :
         school = student.user.school
@@ -1489,10 +1520,13 @@ def check_level_by_point(student, point):
             level = "warning"
         else :
             level = "default"
-    rep = "<i class='fa fa-square text-"+level+"'></i>"
-    print(rep) 
+    rep = "<i class='fa fa-square text-"+level+" pull-right'></i>"
+ 
     return rep
  
+
+
+
 
 
 
@@ -1500,6 +1534,8 @@ def stat_evaluation(request, id):
 
     teacher = Teacher.objects.get(user = request.user)
     parcours = Parcours.objects.get(id=id)
+    skills = skills_in_parcours(parcours)
+    knowledges = knowledges_in_parcours(parcours)
     exercises = parcours.exercises.all()
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
     parcours_duration = parcours.duration #durée prévue pour le téléchargement
@@ -1525,6 +1561,7 @@ def stat_evaluation(request, id):
 
     for s in students :
         student = {"percent" : "" , "total_numexo" : "" , "good_answer" : "" , "test_duration" : False ,  "duration" : "" , "average_score" : "" ,"last_connexion" : "" ,"median" : "" ,"score" : "" ,"score_tab" : "" }
+        student.update({"total_note":"", "details_note":"" ,  "detail_skill":"" ,  "detail_knowledge":"" , })
         student["name"] = s
         studentanswers = Studentanswer.objects.filter(student=s,  exercise__in= exercises, parcours=parcours).order_by("date")
 
@@ -1533,7 +1570,11 @@ def stat_evaluation(request, id):
             if studentanswer.exercise not in studentanswer_tab :
                 studentanswer_tab.append(studentanswer.exercise)
                 student_tab.append(studentanswer)
-        student["nb_exo"] = len(studentanswer_tab)
+
+        nb_exo_w = s.student_written_answer.filter(relationship__exercise__in = studentanswer_tab, relationship__parcours = parcours ).count()
+        nb_exo_ce = s.student_custom_answer.filter(parcours = parcours ).count()
+
+        student["nb_exo"] = len(studentanswer_tab) + nb_exo_w + nb_exo_ce
         duration, score, total_numexo, good_answer = 0, 0, 0, 0
         tab, tab_date = [], []
         student["legal_duration"] = parcours.duration
@@ -1594,43 +1635,47 @@ def stat_evaluation(request, id):
         except :
             pass
 
-        student.update({"total_note":"", "details_note":"" , "total_skill":"", "detail_skill":"" , "total_knowledge":"", "detail_knowledge":"" , })
-        total_c, details_c  = 0 , ""
+        details_c , score_custom , tab_custom , score_total = "" , 0 , [] , 0
         total_knowledge, total_skill, detail_skill, detail_knowledge = 0,0, "",""
         for ce in customexercises :
+            score_total += float(ce.mark)
             if ce.is_mark :
-                try :
-                    cen = Customanswerbystudent.objects.get(customexercise = ce, student=s, parcours = parcours)
-                    total_c +=  int(cen.point)
-                    details_c = details_c + " - " +str(cen.point) 
-                except :
-                    total_c = 0
-                    details_c = ""
+                cen = Customanswerbystudent.objects.get(customexercise = ce, student=s, parcours = parcours)
+                if cen.point :
+                    score_custom +=  float(cen.point)
+                    tab_custom.append(float(cen.point))  
+ 
+        student["score_custom"] = score_custom
+        student["tab_custom"] = tab_custom
+        student["score_total"] = int(score_total)
 
+        for skill in  skills:
+            scs = s.student_correctionskill.filter(skill = skill, parcours = parcours)
+            nbs = scs.count()
+            for sc in scs :
+                total_skill += int(sc.point)
+            try :
+                tot_s = total_skill//nbs
+            except :
+                tot_s = 0
+            detail_skill += skill.name + " " +check_level_by_point(s,tot_s) + "<br>" 
 
-            for skill in  ce.skills.all() :
-                try :
-                    scs = Correctionskillcustomexercise.objects.get(customexercise = ce,skill = skill,student=s, parcours = parcours).first() 
-                    total_skill += int(scs.point)
-                    detail_skill += scs.skill.name + "-" +check_level_by_point(s,scs.point) 
-                except :
-                    total_skill = ""
-            student["total_skill"] = total_skill
-            student["detail_skill"] = detail_skill
+        student["detail_skill"] = detail_skill
 
-            for knowledge in  ce.knowledges.all() :
-                try :
-                    sck = Correctionknowledgecustomexercise.objects.get(customexercise = ce, knowledge = knowledge,student=s, parcours = parcours)
-                    total_knowledge += int(sck.point)
-                    detail_knowledge += sck.knowledge.name + " "  +check_level_by_point(s,sck.point) + "<br>" 
-                except :
-                    total_knowledge = total_knowledge
-            student["total_knowledge"] = total_knowledge
-            student["detail_knowledge"] = detail_knowledge 
+        for knowledge in  knowledges :
+            sks = s.student_correctionknowledge.filter(knowledge = knowledge, parcours = parcours)
+            nbk = sks.count()
+            for sk in sks :
+                total_knowledge += int(sk.point)
+            try :
+                tot_k = total_knowledge//nbk
+            except :
+                tot_k = 0
+            detail_knowledge += knowledge.name + " "  +check_level_by_point(s,tot_k) + "<br>" 
+
+        student["detail_knowledge"] = detail_knowledge 
 
                     
-        student["total_note"] = total_c
-        student["details_note"] = details_c
 
         stats.append(student)
 
@@ -3633,8 +3678,7 @@ def ajax_annotate_exercise_no_made(request): # Marquer un exercice non fait
     if custom :
         Customanswerbystudent.objects.update_or_create(parcours_id = parcours_id , customexercise_id = exercise_id, student_id = student_id,defaults={"answer":"", "comment":"Non rendu", "point":0,"is_corrected":1})
     else :
-        pass
-         
+        Writtenanswerbystudent.objects.update_or_create(relationship_id = exercise_id , student_id = student_id,defaults={"answer":"", "comment":"Non rendu",  "is_corrected":1})     
 
     return JsonResponse(data)  
 
@@ -4571,6 +4615,73 @@ def ajax_delete_constraint(request):
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 
+def export_notes_after_evaluation(request):
+
+    parcours_id = request.POST.get("parcours_id")  
+    parcours = Parcours.objects.get(pk = parcours_id)  
+
+    note_sacado  = request.POST.get("note_sacado",None)  
+    note_totale  = request.POST.get("note_totale")  
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment;filename=Notes_exercice_{}.csv'.format(parcours.id)
+    writer = csv.writer(response)
+    fieldnames = ("Eleves", "Notes")
+    writer.writerow(fieldnames)
+
+    customexercises = parcours.parcours_customexercises.all()
+    over_all = 0
+    for ce in customexercises :
+        over_all += ce.mark
+    # Pour ramener les notes sur 20    
+    if note_totale :
+        try :
+            coef = note_totale/over_all
+        except : 
+            coef = 1
+    else :
+        coef = 1
+
+
+
+    for student in parcours.students.order_by("user__last_name") :
+        full_name = str(student.user.last_name).lower() +" "+ str(student.user.first_name).lower() 
+        note = 0
+        customanswers = student.student_custom_answer.filter(parcours=parcours) 
+        for customanswer in customanswers :
+            try :
+                note += float(customanswer.point)
+                final_mark = note*coef
+            except :
+                note = 0
+                final_mark = note*coef   
+
+        # Pour prendre en compte les notes SACADO    
+        if note_sacado :
+            nb_num_exo , good_answer = 0 , 0
+            answers = student.answers.filter(parcours=parcours) 
+            for ans in answers :
+                good_answer += ans.point
+                nb_num_exo += ans.num_exo
+            try :
+                coeff = note_sacado / nb_num_exo
+                note_s = good_answer * coeff
+            except :
+                coeff = 0
+                note_s = 0
+            
+            final_mark = ((note_totale - note_sacado) * final_mark + note_s) / note_totale
+
+            if len(answers) == 0 :
+                final_mark = ""             
+
+        if len(customanswers) == 0 :
+            final_mark = "" 
+
+        writer.writerow( (full_name , final_mark ) )
+    return response
+
+
 
  
 def export_note_custom(request,id,idp):
@@ -4587,7 +4698,7 @@ def export_note_custom(request,id,idp):
         full_name = str(student.user.last_name).lower() +" "+ str(student.user.first_name).lower() 
         try :
             studentanswer = Customanswerbystudent.objects.get(student=student, customexercise=customexercise,  parcours=parcours) 
-            score = int(studentanswer.point)
+            score = float(studentanswer.point)
         except :
             score = "Abs"
         writer.writerow( (full_name , score) )
@@ -4609,9 +4720,9 @@ def export_note(request,idg,idp):
         try :
             studentanswer = Studentanswer.objects.filter(student=student, parcours=parcours).last() 
             if value :
-                score = int(studentanswer.point * value/100)
+                score = float(studentanswer.point * value/100)
             else :
-                score = int(studentanswer.point) 
+                score = float(studentanswer.point) 
         except :
             score = "Abs"
         writer.writerow( (full_name , score) )

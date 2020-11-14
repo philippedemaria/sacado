@@ -96,14 +96,22 @@
                                                             text-danger  
                                                         {% endif %} pull-right"
                                                        ></i>
+                                                {% else %}
+                                                    <i class="fa fa-toggle-on text-success pull-right"></i>   
                                                 {% endif %}
                                             {% endif %}
                                         </span>
                                     </a>
                                 {% else %}                
                                 <span style="color:#DDD">
-                                    {{ stud.user.last_name }} {{ stud.user.first_name }} 
-                                    <a href="" ><i class="fa fa-toggle-off"></i></a>
+                                    {{ stud.user.last_name }} {{ stud.user.first_name }}  
+                                    <a href="#" class="exercise_no_made" title="Marqué comme corrigé, avec compétences/savoir faire non évalués. Si note, note = 0." 
+                                            data-exercise_id ={{ relationship.id }} data-parcours_id ={{ parcours.id }}
+                                            data-custom =0
+                                            id="exercise_no_made{{ stud.user.id }}" 
+                                            data-student_id ={{ stud.user.id }} >
+                                            <i class="fa fa-toggle-off text-default pull-right"></i>
+                                    </a> 
                                 </span>
                                 {% endif %}
                             </td>
