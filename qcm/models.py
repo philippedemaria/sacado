@@ -49,6 +49,8 @@ def file_attach_path(instance, filename):
 def file_directory_student(instance, filename):
     return "files/{}/{}".format(instance.student.user.id, filename)
 
+def file_directory_to_student(instance, filename):
+    return "files/{}/{}".format(instance.customanswerbystudent.student.user.id, filename)
 
 
 def convert_time(duree) :
@@ -1154,7 +1156,7 @@ class Customanswerbystudent(models.Model): # Commentaire et note pour les exerci
     student = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='student_custom_answer', editable=False)
     date = models.DateTimeField(auto_now_add=True)
     # rendus
-    imagefile = models.ImageField(upload_to= file_directory_student, blank = True, null=True,   verbose_name="Scan ou image ou Photo", default="")
+    file = models.FileField(upload_to= file_directory_student, blank = True, null=True,   verbose_name="Fichier pdf ou texte", default="")
     answer = RichTextUploadingField( default="", null=True,  blank=True, ) 
     # eval prof
     comment = models.TextField( default="", null=True) 
@@ -1167,6 +1169,24 @@ class Customanswerbystudent(models.Model): # Commentaire et note pour les exerci
 
     class Meta:
         unique_together = ['student', 'parcours', 'customexercise']
+
+
+class Customanswerimage(models.Model): # Commentaire et note pour les exercices customisés coté enseignant
+
+    customanswerbystudent = models.ForeignKey(Customanswerbystudent,  on_delete=models.CASCADE,   related_name='customexercise_custom_answer_image', editable=False)
+    date = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to= file_directory_to_student, blank = True, null=True,   verbose_name="Scan ou image ou Photo", default="")
+    
+
+    def __str__(self):        
+        return "{}".format(self.customanswerbystudent)
+
+ 
+
+
+
+
+
 
 class Correctionskillcustomexercise(models.Model): # Evaluation des compétences pour les exercices customisés coté enseignant 
 
@@ -1431,6 +1451,17 @@ class Comment(models.Model): # Commentaire du l'enseignant vers l'élève pour l
 
     def __str__(self):        
         return "{} : {}".format(self.comment, self.teacher)
+
+
+
+class Generalcomment(models.Model): # Commentaire conservé d'une copie  coté enseignant
+
+    teacher = models.ForeignKey(Teacher,  on_delete=models.CASCADE, blank=True,  related_name='teacher_generalcomment', editable=False)
+    comment = models.TextField() 
+
+    def __str__(self):        
+        return "{} : {}".format(self.comment, self.teacher)
+
 
 
 class CommonAnnotation(models.Model):

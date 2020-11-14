@@ -214,13 +214,67 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+ 
+ 
+          
+    $('.add_more').on('click', function (event) {
+
+        var totalForms = parseInt(document.getElementById('id_customexercise_custom_answer_image-TOTAL_FORMS').value)  ;
+        var FormToDuplicate = totalForms - 1 ;
+ 
+        var tr_object = $('#duplicate').clone();
+        tr_object.attr("id","duplicate"+totalForms) 
+        tr_object.attr("style","display:block") 
+        
+        $(tr_object).find('.delete_button').html('<a href="javascript:void(0)" class="btn btn-danger remove_more">Supprimer</a>');
+
+
+        $(tr_object).find('.btn-default').attr("name","customexercise_custom_answer_image-"+totalForms+"-image");
+        $(tr_object).find('.btn-default').attr("id","customexercise_custom_answer_image-"+totalForms+"-image");
+
+
+        tr_object.appendTo("#formsetZone");
+        $("#id_customexercise_custom_answer_image-TOTAL_FORMS").val(totalForms+1)
+
+    });
 
 
 
+        $(document).on('click', '.remove_more', function () {
+        var totalForms = parseInt(document.getElementById('id_customexercise_custom_answer_image-TOTAL_FORMS').value)  ;
+        var FormToDuplicate = totalForms - 1 ;
+
+            $('#duplicate'+FormToDuplicate).remove();
+            $("#id_customexercise_custom_answer_image-TOTAL_FORMS").val(FormToDuplicate)
+        });
+                
+ 
 
 
+        // Supprimer une image réponse depuis la vue élève.
+        $('.delete_custom_answer_image').on('click', function () {
 
+            let image_id = $(this).attr("data-image_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let custom = $(this).attr("data-custom");
 
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'image_id': image_id,
+                        'custom' : custom,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../ajax_delete_custom_answer_image",
+                    success: function (data) {
+
+                        $("#delete_custom_answer_image"+image_id).remove();
+                    }
+                }
+            )
+         });
 
 
 

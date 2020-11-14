@@ -209,6 +209,12 @@ li label:hover{
   border-bottom: 1px solid #CCC; 
 }
 
+
+.margin_space5{
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
  /****************************************** details_card selectors **************************************/
 
 .select_details, .sharer, .details_relation,.action_content, .select_task, .custom_select_details, .custom_sharer, .custom_select_task{

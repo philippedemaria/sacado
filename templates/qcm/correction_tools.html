@@ -31,32 +31,24 @@
 
             <button id="clear" class="btn btn-default" style="margin-left: 20px"><i class="fa fa-eraser"></i></button>
     </div>
-    <div class="col-sm-12 col-md-12">
-        <hr>  
-    </div>
 </div> 
- 
- 
 
-<div id="comments_div"  class="tools"> 
- 
-    <div class="row">
- 
-
-
-        <div class="col-sm-12 col-md-12" id="my_appreciations">
-           <h5>Mes appréciations personnalisées  </h5>
+    <div class="row">  
+        <div class="col-sm-12 col-md-12" id="my_appreciations"><label>Annotations</label><br>
             {% for comment in comments %}
                 <button id="comment{{ comment.id }}" data-nb={% if c_e or w_a %}{{ nb }}{% else %}1{% endif %} data-text="{{ comment.comment }}" class="btn btn-default comment">{{ comment.comment }}</button> 
+            {% empty %}
+                <div class="alert alert-danger helper_label" id="empty_annotation">Aucune annotation personnalisée. Pour en ajouter, cliquer sur <button class="btn btn-default"><i class="fa fa-comment"></i></button> ci-dessus.</div>
             {% endfor %}
-
-
         </div>
     </div>
-    <hr>  
+     
+  <hr>
+<div id="comments_div"  class="tools"> 
+ 
     <div id="more_text"  class="row">   
         <div class="col-sm-12 col-md-12">
-            <label>Ajouter une appréciation personnalisée</label> <br/>
+            <label>Ajouter une annotation personnalisée</label> <br/>
             {{ formComment.comment|add_class:"form-control"|attr:"rows:2"|attr:"cols:4" }} <br/>
             <a href="#" id="add_my_appreciation" class="btn btn-primary" >Sauvegarder</a>
 

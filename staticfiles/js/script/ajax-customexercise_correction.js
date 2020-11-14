@@ -4,13 +4,13 @@ define(['jquery', 'bootstrap'], function ($) {
 
  
         // Enregistrer les commentaires
-        $('#save_comment').on('click', function (event) {
+        $('.save_comment').on('click', function (event) {
             let comment = $("#comment").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
             let student_id = $(this).attr("data-student_id");
             let customexercise_id = $(this).attr("data-customexercise_id");
             let parcours_id = $(this).attr("data-parcours_id");
-
+            let saver = $(this).attr("data-saver");
  
 
             $.ajax(
@@ -23,6 +23,7 @@ define(['jquery', 'bootstrap'], function ($) {
                         'exercise_id': customexercise_id,
                         'typ' : 1,
                         'parcours_id':parcours_id,
+                        'saver':saver,
                         csrfmiddlewaretoken: csrf_token
                     },
                     url: "../../../ajax_comment_all_exercise",
