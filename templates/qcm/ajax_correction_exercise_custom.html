@@ -15,7 +15,7 @@
 {% endblock %}
 
 
-    <div id="corrector">
+    <div id="corrector"> 
         {% if customexercise.is_file and c_e.file %}
             {% for image in images_pdf %}
                 <img src="{{ image }}" width="100%"/>
@@ -24,8 +24,11 @@
             <pre>{{ c_e.answer|safe }}</pre>
         {%  elif customexercise.is_text %}
             {{ c_e.answer|safe }}
-        {%  elif customexercise.is_image  and c_e.imagefile  %}
-            <img src="{{  c_e.imagefile.url }}" width="100%"/>
+        {%  elif customexercise.is_image    %} 
+            {% for img in images_pdf %}
+                <img src="{{ img.image.url }}" width="100%"/>
+                {% if not forloop.last %}<hr/>{% endif %}
+            {% endfor %}
         {% endif %}
 
         {% for c in customannotations %} 

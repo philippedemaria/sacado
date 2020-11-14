@@ -64,19 +64,22 @@
             <form action="" method="POST" enctype='multipart/form-data'>
                 {% csrf_token %}
                 {% if customexercise.is_image  %} 
-                    <div class="col-sm-7 col-lg-7" >  
+                    <div class="col-sm-7 col-lg-7" >
+                        <div class="alert alert-danger">
+                            Insérer les images dans l'ordre des pages de votre copie. Merci.
+                        </div>
                     {{ form_ans.management_form }}
                         <!-- Les formulaires du formset -->
                         <div id="formsetZone">
                             <div class="row" id="duplicate" style="display:none">            
-                                <div class="col-sm-12 col-md-6">
+                                <div class="col-sm-12 col-md-8">
                                         <div class="form-group">
                                             {{ form_ans.empty_form.image |add_class:"btn btn-default" }}
                                             {{ form_ans.empty_form.image.errors }}
                                         </div>
 
                                 </div>    
-                                <div class="col-sm-12 col-md-6">
+                                <div class="col-sm-12 col-md-4">
                                         <div class="delete_button"></div>
 
                                 </div>

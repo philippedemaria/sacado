@@ -3463,15 +3463,19 @@ def correction_exercise(request,id,idp,ids=0):
         if student :
             if Customanswerbystudent.objects.filter(customexercise = customexercise ,  parcours = parcours , student_id = student).exists():
                 c_e = Customanswerbystudent.objects.get(customexercise = customexercise ,  parcours = parcours , student_id = student)
-                images_pdf = []  
+                images_pdf = [] 
+                customannotations = Customannotation.objects.filter(customanswerbystudent = c_e)
+                nb = customannotations.count()                 
                 if c_e.file :
                     images = convert_from_path(c_e.file) 
                     for img in images: 
                         img.save('output.jpg', 'JPEG')
                         images_pdf.append(img)
 
-                customannotations = Customannotation.objects.filter(customanswerbystudent = c_e)
-                nb = customannotations.count()
+                elif customexercise.is_image :
+                    images_pdf = Customanswerimage.objects.filter(customanswerbystudent = c_e)
+                    print(images_pdf)
+
 
         context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage , 'images_pdf' : images_pdf   ,  'comments' : comments   , 'formComment' : formComment , 'nb':nb,'c_e':c_e, 'customannotations':customannotations,  'custom':1,  'communications' : [], 'parcours' : parcours, 'group' : None , 'parcours_id': parcours.id, 'student' : student }
  
