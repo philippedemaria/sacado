@@ -1135,9 +1135,9 @@ def show_parcours(request, id):
 
     skills = Skill.objects.all()
     nb_custom_exercises = customexercises.count()
-    nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count() + nb_custom_exercises
+ 
     context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'communications' : [] , 'customexercises' : customexercises , 'today' : today , 
-               'students_from_p_or_g': students_p_or_g, 'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible,  'nb_exo_visible_c': nb_exo_visible_c, 'nb_students_p_or_g' : nb_students_p_or_g , 
+               'students_from_p_or_g': students_p_or_g,   'nb_exo_visible': nb_exo_visible,  'nb_exo_visible_c': nb_exo_visible_c, 'nb_students_p_or_g' : nb_students_p_or_g , 
                'nb_exo_only': nb_exo_only, 'nb_exo_only_c': nb_exo_only_c, 'group_id': group_id, 'group': group, 'role' : role }
 
     return render(request, 'qcm/show_parcours.html', context)
