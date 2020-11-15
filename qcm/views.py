@@ -1931,7 +1931,8 @@ def ajax_sort_exercise(request):
         parcours = request.POST.get("parcours")
 
         custom = request.POST.get("custom")
-        if not custom :
+
+        if custom == "0" :
             for i in range(len(exercise_tab)-1):
                 try :
                     Relationship.objects.filter(parcours = parcours , exercise_id = exercise_tab[i]).update(order = i)

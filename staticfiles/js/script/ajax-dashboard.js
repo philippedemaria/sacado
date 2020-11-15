@@ -549,6 +549,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
  
     
+
+    
         $('.exercise_sortable').sortable({
             cursor: "move",
             swap: true,    
