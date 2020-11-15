@@ -3472,10 +3472,8 @@ def correction_exercise(request,id,idp,ids=0):
 
                 elif customexercise.is_image :
                     images_pdf = Customanswerimage.objects.filter(customanswerbystudent = c_e)
-                    print(images_pdf)
 
-
-        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage , 'images_pdf' : images_pdf   ,  'comments' : comments   , 'formComment' : formComment , 'nb':nb,'c_e':c_e, 'customannotations':customannotations,  'custom':1,  'communications' : [], 'parcours' : parcours, 'group' : None , 'parcours_id': parcours.id, 'student' : student }
+        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage , 'images_pdf' : images_pdf   ,  'comments' : comments   , 'formComment' : formComment , 'nb':nb, 'c_e':c_e, 'customannotations':customannotations,  'custom':1,  'communications' : [], 'parcours' : parcours, 'group' : None , 'parcours_id': parcours.id, 'student' : student }
  
         return render(request, 'qcm/correction_custom_exercise.html', context)
 

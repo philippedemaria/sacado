@@ -225,7 +225,7 @@
                </div> 
               <hr style="padding:0px; margin:10px 0px"/><br>
                 {% if relation.exercise.supportfile.is_ggbfile %}
-                <a href="{% url 'show_exercise' relation.exercise.id %}" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice</a>
+                <a href="{% url 'show_this_exercise' relation.exercise.id %}" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice</a>
                 {% else %}
                 <a href="{% url 'show_write_exercise' relation.id %}" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice</a>
                 {% endif %}

@@ -124,13 +124,20 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-sm-12 col-md-10" id="correction_div">
+            <div class="col-sm-12 col-md-10" id="correction_div"> 
             {% if student %}  
                 {% if custom %} 
                     {% include 'qcm/ajax_correction_exercise_custom.html' %}                
                 {% else %}
                     {% include 'qcm/ajax_correction_exercise.html' %} 
                 {% endif %} 
+            {% else %} 
+
+                {% if custom %}  
+                    {% include 'qcm/ajax_detail_customexercise.html' %}                
+                {% endif %} 
+
+
             {% endif %}  
             </div>
         </form>

@@ -1,0 +1,72 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+<div class="content_list">
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table class="table table-hover" style="width:100%; font-size: 14px">
+                <tbody>
+                    <tr> 
+                        <td style="width:150px">Nom Prénom</td>
+                        {% if customexercise.is_mark %}
+                        <td> 
+                            Note
+                        </td> 
+                        {% endif %}
+                        {% for knowledge in customexercise.knowledges.all %}
+                        {% get_custom_score knowledge customexercise student parcours as custom_score %}
+                            <td style="font-size: 10px;text-align:center">
+                                {{ knowledge}}
+                            </td>
+                        {% endfor %}
+                        {% for skill in customexercise.skills.all %}
+                        {% get_custom_score skill customexercise student parcours as custom_score %}
+                            <td style="font-size: 10px;text-align:center">
+                                {{ skill }}
+                            </td>
+                        {% endfor %}
+                    </tr>
+
+
+                    {% for student  in customexercise.students.all|dictsort:"user.last_name"  %}  
+                        {% get_all_results_custom customexercise student parcours as data %}                   
+                        <tr> 
+                            <td>{{ student }}</td>
+                            {% if customexercise.is_mark %}
+                            <td> 
+                                {% if data.point %}<b>{{ data.point }}</b>{% endif %}
+                            </td> 
+                            {% endif %}
+                            {% for knowledge in customexercise.knowledges.all %}
+                            {% get_custom_score knowledge customexercise student parcours as custom_score %}
+                                <td style="text-align:center">
+                                     {% if custom_score == 4 %}<i class="fa fa-square text-primary"></i>
+                                     {% elif custom_score == 3 %}<i class="fa fa-square text-success"></i>
+                                     {% elif custom_score == 2 %}<i class="fa fa-square text-warning"></i>
+                                     {% elif custom_score == 1 %}<i class="fa fa-square text-danger"></i>                         
+                                     {% endif %}
+                                </td>
+                            {% endfor %}     
+                            {% for skill in customexercise.skills.all %}
+                            {% get_custom_score skill customexercise student parcours as custom_score %}
+                                <td style="text-align:center">
+                                     {% if custom_score == 4 %}<i class="fa fa-square text-primary"></i>
+                                     {% elif custom_score == 3 %}<i class="fa fa-square text-success"></i>
+                                     {% elif custom_score == 2 %}<i class="fa fa-square text-warning"></i>
+                                     {% elif custom_score == 1 %}<i class="fa fa-square text-danger"></i>                         
+                                     {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+ 
+                         
+                </tbody>
+            </table>
+        </div>
+    </div>
+ 
+</div>
+ 
