@@ -3,7 +3,7 @@
 {% load item_tags %}
 
 
-<div class="content_list">
+<!-- <div class="content_list">
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <table class="table table-hover" style="width:100%; font-size: 14px">
@@ -17,10 +17,10 @@
                                 Note
                             </td> 
                             {% endif %}
-                            {% for knowledge in customexercise.knowledges.all %}
-                            {% get_custom_score knowledge customexercise student parcours as custom_score %}
+                            {% for knowledge in relationship.exercise.knowledge %}
+                            {% get_custom_score knowledge relationship student parcours as custom_score %}
                                 <td style="font-size: 10px;text-align:center">
-                                    {{ knowledge}}
+                                    {{ relationship.exercise.knowledge}}
                                 </td>
                             {% endfor %}
                             {% for skill in customexercise.skills.all %}
@@ -62,4 +62,4 @@
     </div>
  
 </div>
- 
+  -->
