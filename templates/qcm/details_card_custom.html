@@ -192,7 +192,7 @@
              <a class="helper_tip white">
                 <i class="fa fa-search-plus"></i>
                 <span class="helper_tip_card_flex" style="font-size:40px;color:{{ parcours.color }}">
-                  {% if not customexercise.is_publish %}<span style="color:#F5F5F5;">{{ nb_exo_only|index:forloop.counter0 }}.</span>{% else %}{{ nb_exo_visible|index:forloop.counter0 }}.{% endif %}<br>
+                  {% if not customexercise.is_publish %}<span style="color:#F5F5F5;">{{ nb_exo_only_c|index:forloop.counter0 }}.</span>{% else %}{{ nb_exo_visible_c|index:forloop.counter0 }}.{% endif %}<br>
                   <img {% if customexercise.imagefile %} src="{{ customexercise.imagefile.url }}" {% else %}  src="{% static 'img/custom_exercise.png' %}" {% endif %} width="500px" />
                 </span>
             </a>

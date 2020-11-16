@@ -4118,7 +4118,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   position: absolute;
   font-size: 14px;
   /* Position the tooltip */
-  top: -250px;
+  top: -230px;
   z-index: 99999999;  
 }
 
