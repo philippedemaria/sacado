@@ -4153,6 +4153,38 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 }
 
 
+.helper_tip .helper_tip_text_center {
+  visibility: hidden;
+  background-color: #FFF;
+  color: #222;
+  text-align: left;
+  border-radius: 4px;
+  padding: 5px;
+  position: absolute;
+  display: table;  
+  font-size: 14px;
+  /* Position the tooltip */
+  top: 100%;
+  left: -200px;
+  z-index: 99999;
+}
+
+.helper_tip:hover .helper_tip_text_center {
+  visibility: visible;
+  position: absolute;
+  box-shadow: 0px 2px 50px rgba(0,0,0,0.3);
+}
+
+.open_score:hover .helper_tip_text_center {
+  visibility: visible;
+  position: absolute;
+  box-shadow: 0px 2px 50px rgba(0,0,0,0.3);
+}
+
+.open_score:hover  {
+   background-color: #AAA;
+}
+
 
 
 .helper_tip .helper_tip_text_right {

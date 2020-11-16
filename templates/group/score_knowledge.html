@@ -8,7 +8,7 @@
 
 
 {% if score != "" %}
-    <a class="markdown
+    <a class="helper_tip markdown white open_score
             {% if score < stage.low %}
              red 
             {% elif score < stage.medium %}
@@ -17,12 +17,39 @@
             green
             {% else %}
             darkgreen
-            {% endif %}"
-          href="#" data-container="body"
-          data-toggle="popover"  style="border : 1px solid #CCC; cursor:not-allowed"
-          data-trigger="hover" data-placement="top"
-          data-content="{{ knowledge.name }}"> 
+            {% endif %}" href="#"  style="border : 1px solid #CCC; cursor:help"> 
         {{ score }}
+
+        <span class="helper_tip_text_center" style="width:630px; position:relative; top:0px">
+          {% for exercise in knowledge.exercises.all %}
+
+              {% get_score exercise student  as score_st %}
+
+              <div style="width:300px;height:220px;float:left; margin:5px; position:relative">
+                <img src="{{ exercise.supportfile.imagefile.url }}" width="300px" style="position:absolute;"   /> 
+                 {% if score_st %}                
+                    <h2 style="position:absolute; left: 200px ; top :60px ; border-radius: 50%;
+                          -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);    
+                           width:60px; height:60px; padding-top:10px;
+                          -moz-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+                          box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+                          text-align: center;" class="{% if score_st < stage.low %}
+                                                         red 
+                                                        {% elif score_st < stage.medium %}
+                                                        orange
+                                                        {% elif score_st < stage.up %}
+                                                        green
+                                                        {% else %}
+                                                        darkgreen
+                                                        {% endif %}">
+                      {{ score_st}} 
+                    </h2>
+             {% endif %}
+              </div>
+
+          {% endfor %}
+
+        </span>
     </a>
 {% else %}
 <a class="markdown" href="#" data-container="body"
