@@ -32,7 +32,7 @@ urlpatterns = [
     path('parcours_detail_task/<int:id>/<int:s>/', detail_task_parcours, name='detail_task_parcours'), #modif idp en id pour la sécurité
     path('parcours_exercises/<int:id>/', parcours_exercises, name='parcours_exercises'),  # student_list_exercises
     path('parcourses_all/', all_parcourses, name='all_parcourses'),
-    path('parcours_clone/<int:id>/', clone_parcours, name='clone_parcours'),
+    path('parcours_clone/<int:id>/<int:course_on>', clone_parcours, name='clone_parcours'),
     path('parcours_group/<int:id>/', list_parcours_group, name='list_parcours_group'), # parcours d'un groupe
 
     path('parcours_peuplate/<int:id>/', peuplate_parcours, name='peuplate_parcours'),
@@ -250,6 +250,11 @@ urlpatterns = [
 
     path('export_notes_after_evaluation', export_notes_after_evaluation, name='export_notes_after_evaluation'),
 
+
+
+    path('ajax/chargethemes_parcours', ajax_chargethemes_parcours, name='ajax_chargethemes_parcours'),
+    path('ajax_all_parcourses', ajax_all_parcourses, name='ajax_all_parcourses'),     
+    path('ajax_course_custom_show_shared', ajax_course_custom_show_shared, name='ajax_course_custom_show_shared'),  
     #####################################################################################################################################
     #####################################################################################################################################
 

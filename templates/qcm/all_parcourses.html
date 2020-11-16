@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block page_title %}
-    <i class="fa fa-th"></i> Tous les parcours  
+    <i class="fa fa-th"></i> Parcours mutualisés  
 {% endblock %}
 
 
@@ -30,39 +30,70 @@
 
 
 {% block body  %}  
-    <section class="content_main"> 
-     
+<section class="content_main"> 
+    <form method="POST"> 
+    {% csrf_token %}
+    <div class="row alert" style="margin-left:0px; margin-right:0px; border:1px solid #CCC; background: #F0F0F0">
+        <div class="col-sm-12 col-md-4 col-lg-1">
+            <div class="form-group">
+                <h4> Recherche</h4>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="form-group">
+                <select id="id_subject" name="subject" class="form-control select2">
+                    {% for s in teacher.subjects.all %}
+                        <option value="{{s.id}}">{{ s.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="form-group">
+                <select id="level_id" name="level" class="form-control select2" >
+                    <option value=" ">Choisir un niveau</option>
+                    {% for l in teacher.levels.all %}
+                        <option value="{{l.id}}">{{ l.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4 col-lg-5">
+            <div class="form-group">
+                <select id="thm_id" name="theme" class="form-control select2" multiple>
+                    <option value=" ">Choisir un niveau puis un thème</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+
+
      
         {% if inside %}    
                 <table class="table table-bordered table-hover standard_tab_sort"  style="width:100%">
                       <thead>
                           <tr>
                             <th style="width:290px">Titre</th>   
-                            <th>Thèmes et Exercices</th>                                        
+                            <th>Thèmes  </th>                                        
                             <th>Niveau</th> 
                             <th  style="width:150px">Auteur</th> 
                           </tr>
                       </thead>
-                      <tbody>
+                      <tbody id="parcours_details">
                             {% for parcours in parcourses %}
                             <tr> 
                                 <td style="border-left: {{ parcours.color }}  5px solid">
                                    <a href="{% url 'show_parcours_visual'  parcours.id %}" class="listing">{{ parcours.title }} <small>[{{ parcours.exercises.count }} exercice{{ parcours.exercises.count|pluralize }}]</small> </a>
                                 </td>
                                 <td style="font-size:10px">
-                                    {% regroup parcours.exercises.all  by  knowledge.theme as theme_list %} 
-                                    {% for theme in theme_list  %}
-                                        <span class="open_details btn btn-default" style="margin:2px">{{ theme.grouper.name }} 
-                                            <div class="details_exos">
-                                            {% for e in theme.list %}
-                                                {% ifchanged  %}
-                                                    <span style="color:#444">{{ e|truncatechars:76 }}</span><br/>
-                                                {% endifchanged  %}
-                                                <em>{{ e.supportfile.annoncement|cleanhtml|truncatechars:76 }}</em> 
-                                                {% if not forloop.last %} <br/>{% endif %}
-                                            {% endfor %}
-                                            </div>
-                                        </span>
+                                    {% for data in parcours.get_themes   %} 
+                                    <span class="open_details btn btn-default" style="margin:2px">{{ data.theme }} 
+                                        <div class="details_exos">
+                                                <span style="color:#444">{{ data.annoncement|cleanhtml|truncatechars:76  }}</span><br/>
+                                            {% if not forloop.last %} <br/>{% endif %}
+                                        </div>
+                                    </span>
                                     {% endfor %}
                                 </td>
                                 <td> 
@@ -73,7 +104,7 @@
                                     {% endfor %}
                                 </td>
                                 <td>
-                                    {{ parcours.author.user.get_full_name|truncatechars:20 }} 
+                                    {% if parcours.author.user.is_superuser %} SACADO {% else %}{{ parcours.author.user.get_full_name|truncatechars:20 }} {% endif %}
                                 </td>
                             </tr>
                             {% empty %}
@@ -93,6 +124,7 @@
             </div>
 
 
-        {% endif %}    
-    </section>
+        {% endif %}  
+    </form>  
+</section>
 {% endblock  %}   

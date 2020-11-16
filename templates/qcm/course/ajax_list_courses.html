@@ -1,0 +1,95 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% for course in courses  %} 
+    
+    <tr id="tr{{ course.id }}"> 
+        <td>
+           {{ course.title }} <a href="#" data-toggle='modal' data-target='#get_course' data-course_id = '{{ course.id }}' class="shower_course"><i class="fa fa-eye"></i></a> 
+        </td>
+        <td>
+           {{ course.parcours.title }} 
+        </td> 
+        <td>
+            {% if course.teacher.user.is_superuser %} SACADO {% else %}{{ course.teacher }}{% endif %}
+        </td>
+        <td>
+            <a href="#" data-toggle='modal' data-target='#clone_course' data-course_id = '{{ course.id }}' class="btn btn-primary getter_course">Cloner <br>ce cours</a>
+        </td>
+    </tr> 
+{% empty %} 
+    <tr class="alert alert-danger"><td colspan="4">Aucun résultat de votre recherche  </td>  </tr> 
+
+{% endfor %} 
+ 
+
+<script type="text/javascript">
+
+
+        // Affiche dans la modal le modèle pour récupérer un exercice custom
+        $('.shower_course').on('click', function (event) {
+
+            let course_id = $(this).attr("data-course_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'course_id': course_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "parcours_shower_course",
+                    success: function (data) {
+
+                        $('#get_course_title').html(data.title);
+                        $('#get_course_body').html(data.html);
+                    }
+                }
+            )
+         });
+
+
+
+
+
+
+
+
+
+        // Affiche dans la modal le modèle pour récupérer un exercice custom
+        $('.getter_course').on('click', function (event) {
+
+            let course_id = $(this).attr("data-course_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'course_id': course_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "parcours_get_course",
+                    success: function (data) {
+
+                        $('#get_course_result').html(data.html);
+
+                    }
+                }
+            )
+         });
+
+
+
+
+
+
+
+
+
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>

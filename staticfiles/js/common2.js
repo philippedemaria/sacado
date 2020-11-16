@@ -89,7 +89,7 @@ requirejs.config({
     }
 });
 
-require(['jquery', 'bootstrap', 'bootstrap_popover',  'bcPicker',  'mathjax',  'ckeditor', 'ckeditor_init', 'ckeditor_jquery',  'datatables', 'datatables_bootstrap',
+require(['jquery', 'bootstrap', 'bootstrap_popover',  'bcPicker',  'mathjax' ,  'ckeditor', 'ckeditor_init', 'ckeditor_jquery',  'datatables', 'datatables_bootstrap',
     'config_select2', 'config_datepicker', 'config_toggle', 'config_colorpicker', 'fonctions_jquery', 'fonctions',   'config_datatable',
     'multiselect', 'ui', 'slimscroll', 'chart']);
 

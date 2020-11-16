@@ -74,7 +74,111 @@ define(['jquery','bootstrap'], function ($) {
             )
         });
  
-        $('select[name=theme]').on('change', function (event) {
+
+  // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('#level_id').on('change', function (event) {
+            let id_level = $(this).val();
+            let id_subject = $("#id_subject").val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional: true,
+                    data: {
+                        'id_level': id_level,
+                        'id_subject': id_subject,                        
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url : "../ajax/chargethemes_parcours",
+                    success: function (data) {
+
+                        themes = data["themes"];
+                        $('select[name=theme]').empty("");
+                        if (themes.length >0)
+
+                        { for (let i = 0; i < themes.length; i++) {
+                                    
+
+                                    console.log(themes[i]);
+                                    let themes_id = themes[i][0];
+                                    let themes_name =  themes[i][1]  ;
+                                    let option = $("<option>", {
+                                        'value': Number(themes_id),
+                                        'html': themes_name
+                                    });
+                                    $('select[name=theme]').append(option);
+                                }
+                        }
+                        else
+                        {
+                                    let option = $("<option>", {
+                                        'value': 0,
+                                        'html': "Aucun contenu disponible"
+                                    });
+                            $('select[name=theme]').append(option);
+                        }
+
+
+                        $('#parcours_details').html("").html(data.html);
+
+
+                    }
+                }
+            )
+        });
+
+
+
+
+        $('#thm_id').on('change', function (event) { 
+ 
+            if (  $('select[name=level]').val() > 0 )
+            {
+                    let level_id = $('#level_id').val();
+                    let theme_id = $(this).val();
+                    let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                    $("#loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");
+                                
+                    $.ajax(
+                        {
+                            type: "POST",
+                            dataType: "json",
+                            traditional: true,
+                            data: {
+                                'level_id': level_id,
+                                'theme_id': theme_id,
+                                csrfmiddlewaretoken: csrf_token
+                            },
+                            url: '../ajax_all_parcourses',
+                            success: function (data) {
+         
+                                $('#parcours_details').html("").html(data.html);
+                                $("#loader").html("").hide(); 
+                                
+                                }
+                        }
+                    )
+          
+            }
+            else 
+            {   
+                alert("Vous devez choisir un niveau."); return false;             
+            }
+
+        }); 
+
+
+
+
+
+
+
+
+
+
+        $('#id_theme').on('change', function (event) {
 
             if (  $('select[name=level]').val() > 0 )
             {
@@ -99,7 +203,7 @@ define(['jquery','bootstrap'], function ($) {
             });
 
 
-            function ajax_choice(param0, param1){
+        function ajax_choice(param0, param1){
 
             let is_parcours = $("#is_parcours").val();
             let level_id = param0.val();

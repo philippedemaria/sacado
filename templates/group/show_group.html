@@ -59,15 +59,13 @@
                         <td>Courriel*</td>
                         <td>Identifiant* </td>
                         <td>Dernière connexion</td>
-                        {% if not teacher.user.school %}
                         <td><span style="font-size:13px; color:#cb2131">Mot de passe par défaut : <strong>sacado2020</strong></span></td> 
-                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
+                        <form action="" method="POST">   
                         {% for student in group.students.all|dictsort:"user.last_name"  %}
-                            {% if not teacher.user.school %}
-                                <form action="" method="POST">            
+                            {% if not teacher.user.school %}         
                                 {% csrf_token %}        
                                     <tr>
                                         <td><input  type="text" 
@@ -121,7 +119,6 @@
                                             </a> 
                                         </td>
                                     </tr>
-                                </form>
                             {% else %} 
                                 <tr>
                                     <td>
@@ -138,9 +135,25 @@
                                     <td>
                                         {% if student.user.last_login %}{{ student.user.last_login|date:"Y m d, H:i"  }}{% else %}Jamais{% endif %}
                                     </td>
+                                    <td>
+                                        <a href="{% url 'detail_student_all_views'  student.user.id   %}"  style="font-size: 11px"> 
+                                           voir les résultats  
+                                        </a> 
+                                        <small>|</small> 
+                                        <a  href="{% url 'newpassword_student' student.user.id  group.id   %}" data-student_id="{{ student.user.id }}" title="mot de passe par défaut : sacado2020" 
+                                            onclick="return Newpassword()" style="font-size:11px; margin-right:5px"  >
+                                            Init. mot de passe
+                                        </a><small>|</small>       
+                                        <a  href="{% url 'delete_student' student.user.id  group.id %}"
+                                            onclick="alert('Vous avez la version établissement. Contacter le gestion SACADO de votre établissement.'); return false;" style="font-size:11px"  >
+                                            Supprimer
+                                        </a> 
+                                    </td>
+
                                 </tr>
                             {% endif %}
                         {% endfor %}
+                        </form>
                     </tbody>
                 </table>
 

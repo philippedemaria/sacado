@@ -150,7 +150,6 @@ class Supportfile(models.Model):
         parcours = Parcours.objects.filter(exercises__in= exercises, author=teacher)
         return parcours
 
-
 class Exercise(models.Model):
     level = models.ForeignKey(Level, related_name="exercises", on_delete=models.PROTECT, verbose_name="Niveau")
     theme = models.ForeignKey(Theme, related_name="exercises", on_delete=models.PROTECT, verbose_name="Thème")
@@ -351,7 +350,6 @@ class Exercise(models.Model):
         parcours = self.exercises_parcours.filter(teacher=teacher)
         return parcours
 
-
 class Parcours(ModelWithCode):
 
     title = models.CharField(max_length=255, verbose_name="Titre")
@@ -405,7 +403,17 @@ class Parcours(ModelWithCode):
             pass
         return lock
 
-
+    def get_themes(self):
+        exercises = self.exercises.all()
+        theme_tab, theme_tab_id  = [] , []
+        for exercise in exercises :
+            data = {}
+            if not exercise.theme.id in theme_tab_id :
+                data["theme"] = exercise.theme
+                data["annoncement"] = exercise.supportfile.annoncement              
+                theme_tab_id.append(exercise.theme.id)
+                theme_tab.append(data)
+        return theme_tab
 
 
     def is_percent(self,student):
@@ -649,7 +657,6 @@ class Parcours(ModelWithCode):
 
         return submit
 
-
 class Relationship(models.Model):
     exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.PROTECT,  editable= False)
     parcours = models.ForeignKey(Parcours, on_delete=models.PROTECT,  related_name='parcours_relationship',  editable= False)
@@ -852,7 +859,6 @@ class Relationship(models.Model):
             level = 0
         return level
 
-
 class Studentanswer(models.Model):
 
     parcours = models.ForeignKey(Parcours,  on_delete=models.PROTECT, blank=True, null=True,  related_name='answers', editable=False)
@@ -866,7 +872,6 @@ class Studentanswer(models.Model):
     def __str__(self):        
         return "{}".format(self.exercise.knowledge.name)
 
-
 class Resultggbskill(models.Model): # Pour récupérer tous les scores des compétences d'une relationship
     student = models.ForeignKey(Student, related_name="student_resultggbskills", default="", on_delete=models.CASCADE, editable=False)
     skill = models.ForeignKey(Skill, related_name="skill_resultggbskills", on_delete=models.CASCADE, editable=False)
@@ -875,7 +880,6 @@ class Resultggbskill(models.Model): # Pour récupérer tous les scores des comp�
 
     def __str__(self):
         return f"{self.skill} : {self.point}"
-
 
 class Resultexercise(models.Model):  # Last result
 
@@ -890,7 +894,6 @@ class Resultexercise(models.Model):  # Last result
 
     class Meta:
         unique_together = ['student', 'exercise']
-
 
 class Writtenanswerbystudent(models.Model): # Commentaire pour les exercices non autocorrigé coté enseignant
 
@@ -1170,7 +1173,6 @@ class Customanswerbystudent(models.Model): # Commentaire et note pour les exerci
     class Meta:
         unique_together = ['student', 'parcours', 'customexercise']
 
-
 class Customanswerimage(models.Model): # Commentaire et note pour les exercices customisés coté enseignant
 
     customanswerbystudent = models.ForeignKey(Customanswerbystudent,  on_delete=models.CASCADE,   related_name='customexercise_custom_answer_image', editable=False)
@@ -1217,7 +1219,6 @@ class Correctionknowledgecustomexercise(models.Model): # Evaluation des savoir f
 ################################################################   Cours    ############################################################### 
 ########################################################################################################################################### 
 ########################################################################################################################################### 
-
 class Course(models.Model): # pour les 
 
     parcours = models.ForeignKey(Parcours,  on_delete=models.CASCADE, blank=True, null=True,  related_name='course', editable=False) 

@@ -827,14 +827,65 @@ def list_parcours_group(request,id):
 
 def all_parcourses(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
-    parcourses = Parcours.objects.exclude(exercises=None ).exclude(teacher=teacher).exclude(teacher__user__school= None).order_by("author").prefetch_related('exercises__knowledge__theme').select_related('author')
+    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1).exclude(exercises=None ).exclude(teacher=teacher).order_by("author").prefetch_related('exercises__knowledge__theme').select_related('author')
 
     if request.user.school != None :
         inside = True
     else :
         inside = False
 
-    return render(request, 'qcm/all_parcourses.html', {'parcourses': parcourses , 'inside' : inside , 'communications' : [] , 'parcours' : None , 'relationships' : []})
+    return render(request, 'qcm/all_parcourses.html', { 'teacher' : teacher ,   'parcourses': parcourses , 'inside' : inside , 'communications' : [] , 'parcours' : None , 'relationships' : []})
+
+
+def ajax_all_parcourses(request):
+    teacher = Teacher.objects.get(user= request.user)
+    data = {} 
+    level_id = request.POST.get('level_id',None)
+
+    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1).exclude(exercises=None ).exclude(teacher=teacher).order_by("author").prefetch_related('exercises__knowledge__theme').select_related('author')
+    
+
+    print(level_id)
+
+    if level_id :
+        level = Level.objects.get(pk=int(level_id))
+        theme_ids = request.POST.getlist('theme_id',[])
+        
+        if len(theme_ids)>0 and theme_ids[0] !=0:
+            themes_tab = []
+
+            for theme_id in theme_ids :
+                themes_tab.append(theme_id) 
+            parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1, exercises__knowledge__theme__in = themes_tab, exercises__level_id = level_id ).exclude(teacher=teacher).order_by('author').distinct()
+        else :
+            parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1, exercises__level_id = level_id ).exclude(teacher=teacher).order_by('author').distinct()
+
+    data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : parcourses, })
+ 
+    return JsonResponse(data)
+
+
+
+@csrf_exempt
+def ajax_chargethemes_parcours(request):
+    level_id =  request.POST.get("id_level")
+    id_subject =  request.POST.get("id_subject")
+    teacher = Teacher.objects.get(user= request.user)
+
+    data = {}
+    level =  Level.objects.get(pk = level_id)
+
+    thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject)
+    data['themes'] = list(thms)
+    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1, exercises__level_id = level_id ).exclude(teacher=teacher).order_by('author').distinct()
+
+    data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : parcourses, })
+
+    return JsonResponse(data)
+
+
+
+
 
 
 
@@ -1728,11 +1779,12 @@ def add_exercice_in_a_parcours(request):
 
  
  
-def clone_parcours(request, id):
+def clone_parcours(request, id, course_on ):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcours = Parcours.objects.get(pk=id)
-    relationships = Relationship.objects.filter(parcours = parcours)   
+    relationships = Relationship.objects.filter(parcours = parcours) 
+  
     parcours.pk = None
     parcours.teacher = teacher 
     parcours.code = str(uuid.uuid4())[:8]  
@@ -1742,6 +1794,15 @@ def clone_parcours(request, id):
         relationship.pk = None
         relationship.parcours = parcours
         relationship.save() 
+
+    if course_on == 1 :
+        courses = Course.objects.filter(parcours = parcours)         
+        for course in courses :
+            course.pk = None
+            course.parcours = parcours
+            course.save() 
+
+
 
     messages.success(request, "Le parcours est cloné avec succès. Bonne utilisation.")
 
@@ -4976,10 +5037,12 @@ def show_course(request, idc , id ):
 def ajax_parcours_shower_course(request):
     course_id =  int(request.POST.get("course_id"))
     course = Course.objects.get(pk=course_id)
-
     data = {}
-    data['annoncement'] = course.annoncement
     data['title'] = course.title
+    context = {  'course': course ,  }
+ 
+    data['html'] = render_to_string('qcm/course/ajax_shower_course.html', context)
+
     return JsonResponse(data)
 
 
@@ -5003,21 +5066,33 @@ def ajax_parcours_clone_course(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
     course_id =  int(request.POST.get("course_id"))
     course = Course.objects.get(pk=course_id)
-
+    all_parcours = request.POST.get("all_parcours")
     checkbox_value = request.POST.get("checkbox_value")
 
     if checkbox_value != "" :
         checkbox_ids = checkbox_value.split("-")
         for checkbox_id in checkbox_ids :
             try :
-                course.pk = None
-                course.teacher = teacher
-                course.parcours_id = int(checkbox_id)
-                course.save()
+                if all_parcours == "0" :
+                    course.pk = None
+                    course.teacher = teacher
+                    course.parcours_id = int(checkbox_id)
+                    course.save()
+                else :
+                    courses = course.parcours.course.all()
+                    for course in courses :
+                        course.pk = None
+                        course.teacher = teacher
+                        course.parcours_id = int(checkbox_id)
+                        course.save()
             except :
-                pass 
+                pass
 
-    data = {}  
+
+
+    data = {} 
+
+
     return JsonResponse(data)
 
 
@@ -5027,11 +5102,73 @@ def course_custom_show_shared(request):
     
     user = request.user
     if user.is_teacher:  # teacher
-        teacher = Teacher.objects.get(user=user) 
-        courses = Course.objects.filter(is_share = 1).exclude(teacher = teacher)
-        return render(request, 'qcm/course/list_courses.html', {  'teacher': teacher , 'courses':courses, 'parcours': None, 'relationships' : [] ,  'communications': [] , })
+        teacher = Teacher.objects.get(user=user)
+        courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user__is_superuser=1),is_share = 1).exclude(teacher = teacher)
+        levels = teacher.levels.all() 
+
+        return render(request, 'qcm/course/list_courses.html', {  'teacher': teacher , 'courses':courses, 'levels':levels,  'parcours': None, 'relationships' : [] ,  'communications': [] , })
     else :
         return redirect('index')   
+
+
+def ajax_course_custom_show_shared(request):
+    
+    teacher = Teacher.objects.get(user= request.user)
+    data = {} 
+    level_id = request.POST.get('level_id',None)
+
+    courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user__is_superuser=1),is_share = 1).exclude(teacher = teacher)
+
+    if level_id :
+        level = Level.objects.get(pk=int(level_id))
+        theme_ids = request.POST.getlist('theme_id')
+
+        datas = []
+        themes_tab = []
+
+        for theme_id in theme_ids :
+            themes_tab.append(theme_id) 
+
+ 
+
+        if len(themes_tab) > 0 and themes_tab[0] != "" :
+            exercises = Exercise.objects.filter(theme_id__in= themes_tab, level_id = level_id)
+
+            parcours_tab = []
+            for exercise in exercises :
+                parcourses = exercise.exercises_parcours.all()
+                for p in parcourses :
+                    if not p in parcours_tab:
+                        parcours_tab.append(p)
+
+            courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user__is_superuser=1),is_share = 1, parcours__in = parcours_tab )
+
+    data['html'] = render_to_string('qcm/course/ajax_list_courses.html', {'courses' : courses, })
+ 
+    return JsonResponse(data)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @student_can_show_this_course

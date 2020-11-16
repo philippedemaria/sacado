@@ -17,6 +17,7 @@
   
 {% block page_title %}
     <i class="fa fa-laptop"></i> Les cours mutualisés 
+
 {% endblock %}
 
 {% block page_menu_right %}
@@ -29,7 +30,41 @@
 {% block body %}
 <section class="content_main">
 <form method="POST"> 
+    <div class="row alert" style="margin-left:0px; margin-right:0px; border:1px solid #CCC; background: #F0F0F0">
+        <div class="col-sm-12 col-md-4 col-lg-1">
+            <div class="form-group">
+                <h4> Recherche</h4>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="form-group">
+                <select id="id_subject" name="subject" class="form-control select2">
+                    {% for s in teacher.subjects.all %}
+                        <option value="{{s.id}}">{{ s.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="form-group">
+                <select id="id_level" name="level" class="form-control select2" >
+                    <option value=" ">Choisir un niveau</option>
+                    {% for l in levels %}
+                        <option value="{{l.id}}">{{ l.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4 col-lg-5">
+            <div class="form-group">
+                <select id="id_theme" name="theme" class="form-control select2" multiple>
+                    <option value=" ">Choisir un niveau puis un thème</option>
+                </select>
+            </div>
+        </div>
+    </div>
     {% csrf_token %}
+    <div id="loader"></div>
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <table class="table  table-hover display100" id="table_course" style="width:100%">
@@ -41,7 +76,7 @@
                         <td></td>
                     </tr>
                 </thead> 
-                <tbody>
+                <tbody id="courses_details">
                     {% for course in courses  %} 
                         
                         <tr id="tr{{ course.id }}"> 
@@ -52,7 +87,7 @@
                                {{ course.parcours.title }} 
                             </td> 
                             <td>
-                                {{ course.teacher }}
+                                {% if course.teacher.user.is_superuser %} SACADO {% else %}{{ course.teacher }}{% endif %}
                             </td>
                             <td>
                                 <a href="#" data-toggle='modal' data-target='#clone_course' data-course_id = '{{ course.id }}' class="btn btn-primary getter_course">Cloner <br>ce cours</a>
@@ -68,7 +103,7 @@
 
 
 <div class="modal fade" id="get_course" tabindex="-1" role="dialog" aria-labelledby="get_course">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document"  style="width:850px">
         <div class="modal-content" >
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -86,7 +121,7 @@
 </div>
 
 <div class="modal fade" id="clone_course" tabindex="-1" role="dialog" aria-labelledby="clone_course">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" style="width:850px">
         <div class="modal-content" >
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -96,13 +131,12 @@
             </div>
             <form method="POST">
                 <div class="modal-body" id="get_course_result">
-     
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-
+ 
 {% endblock %}
 

@@ -26,15 +26,18 @@
         <div class="col-sm-12 col-md-12">
             <div class="form-group">
                 {% if teacher.user.school %}
-                <a href="#" class="btn btn-primary clone_to" data-course_id = '{{ course.id }}'  data-dismiss="modal" aria-label="Close" >Cloner ce cours dans mes parcours</a>
+                <a href="#" class="btn btn-primary clone_to" data-course_id = '{{ course.id }}' data-all_parcours=0  data-dismiss="modal" aria-label="Close" >Cloner ce cours dans mes parcours</a>
+
+                <a href="#" class="btn btn-primary clone_to" data-course_id = '{{ course.id }}' data-all_parcours=1  data-dismiss="modal" aria-label="Close" >Cloner tous les cours de ce parcours dans mes parcours</a>
                 {% else %}
                 <span class="btn btn-primary">Cloner ce cours dans mes parcours</span>
+                
+                <span class="btn btn-primary">Cloner tous les cours de ce parcours dans mes parcours</span>
                 {% endif  %}
             </div>
         </div>
     </div>
 </form>
-
 <script type="text/javascript">
     MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 </script>
