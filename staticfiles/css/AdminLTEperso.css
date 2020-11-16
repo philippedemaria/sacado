@@ -933,6 +933,9 @@ width:100%;
   float: left;
   height:35px;
   position:relative;
+  cursor:help;
+  color:#DEDEDE;
+
 }
 
 .markdown > a:hover{
@@ -944,7 +947,7 @@ width:100%;
 }
 
 .markdown:hover{
-  background-color: #e0e0e0;
+  background-color: #CCC;
 }
 
 .markdown:hover .details_exos{
@@ -982,13 +985,6 @@ width:100%;
   text-align: left;
   float:left;
 }
-
-
-
-
-
-
-
 
 .markup{
   background-color: #F0F0F0;
@@ -1376,7 +1372,6 @@ table.table-bordered.dataTable {
   font-size:14px;
   padding: 10px 10px;
   width : 100%;
- opacity:0.9;
  color : #F2F1F0;
 }
 
@@ -4110,6 +4105,54 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   position: absolute;
   box-shadow: 0px 2px 50px rgba(0,0,0,0.3);
 }
+
+
+
+.helper_tip .helper_tip_card_flex {
+  visibility: hidden;
+  width: 510px;
+  background-color: #FFF;
+  text-align: left;
+  border-radius: 4px;
+  padding: 5px;
+  position: absolute;
+  font-size: 14px;
+  /* Position the tooltip */
+  top: -250px;
+  z-index: 99999999;  
+}
+
+.helper_tip:hover .helper_tip_card_flex {
+  visibility: visible;
+  position: absolute;
+  box-shadow: 0px 2px 50px rgba(0,0,0,0.3);
+  z-index: 99999999;
+  opacity:1;
+}
+
+.helper_tip .helper_tip_text_flex {
+  visibility: hidden;
+  width: 420px;
+  background-color: #FFF;
+  color: #222;
+  text-align: center;
+  border-radius: 4px;
+  padding: 5px;
+  position: absolute;
+  font-size: 14px;
+  /* Position the tooltip */
+  top: 100%;
+  right: 0;
+  z-index: 9999999;
+}
+
+.helper_tip:hover .helper_tip_text_flex {
+  visibility: visible;
+  position: absolute;
+  box-shadow: 0px 2px 50px rgba(0,0,0,0.3);
+}
+
+
 
 
 .helper_tip .helper_tip_text_right {

@@ -257,6 +257,14 @@
             <!-- Appel de la fenetre remédiation 
                   Appel ajax vers la modale qui est dans la page dashboard : id="remediation"
             -->
+            <a class="helper_tip white">
+                <i class="fa fa-search-plus"></i>
+                <span class="helper_tip_card_flex" style="font-size:40px;color:{{ parcours.color }}">
+                  {% if not relation.is_publish %}<span style="color:#F5F5F5;">{{ nb_exo_only|index:forloop.counter0 }}.</span>{% else %}{{ nb_exo_visible|index:forloop.counter0 }}.{% endif %}<br>
+                  <img src="{{ relation.exercise.supportfile.imagefile.url }}" width="500px" />
+                </span>
+            </a>
+
             <span style="font-size:9px" id="response{{relation.id}}" >{{  relation.relationship_remediation.all|length }}</span>
             <span class="horizontalmargin5">
                 <span style="cursor:pointer" data-target="#remediation" data-relationship_id="{{ relation.id }}"  data-toggle='modal' class="white remediation" title="Ajouter une vidéo, un fichier" >
@@ -273,7 +281,7 @@
             <span class="select_skills horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="skill{{relation.id}}" title="Ajouter des compétences" ><i class="fa fa-cogs"></i> </span>             
             <!-- Appel des situations et durée -->
             <span class="select_details horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="clock{{relation.id}}"  title="Modifier le temps"><!-- l'id permet de modifier après ajax le temps -->
-                <i class="fa fa-clock-o"></i> {{ relation.duration }} min. 
+                <i class="fa fa-clock-o"></i> <span style="font-size:10px">{{ relation.duration }} min.</span> 
             </span>
             <!-- Appel des situations -->
             {% if relation.exercise.supportfile.is_ggbfile %}
@@ -297,9 +305,9 @@
             {% if not relation.exercise.supportfile.is_ggbfile %}
             <span class="select_details horizontalmargin5" style="width:40px">
                 {% if relation.is_pending_correction %}              
-                <a href="{% url 'correction_exercise'  relation.id 0 0 %}" title="Copies à corriger" style="font-weight:bold; font-size:16px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-copyright"></i></a>  
+                <a href="{% url 'correction_exercise'  relation.id 0 0 %}" title="Copies à corriger" style="font-weight:bold; font-size:16px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-cc text-warning"></i></a>  
                 {% else %}
-                <a href="{% url 'correction_exercise'  relation.id 0 0 %}" title="Voir les productions" style="position: relative; font-size:16px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-search"></i></a> 
+                <a href="{% url 'correction_exercise'  relation.id 0 0 %}" title="Voir les copies corrigées" style="font-size:16px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-copyright"></i></a> 
                 {% endif %}
             </span>
             {% endif %}

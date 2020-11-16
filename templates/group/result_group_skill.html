@@ -22,10 +22,11 @@
     {% for skill in skills %}
     	<td>
     		{% get_result_skills_custom student skill as resultskill_custom %}
-    		{% get_result_skills student skill as resultskills %}
-			{% for r in resultskills %}
+    		{% get_result_skills student skill as data %}
+			{% for r in data.results %}
+				{% with data.relationships|index:forloop.counter0 as looper %}
 					{% if r.point %}
-					    <a class="markdown
+					    <a class="helper_tip white markdown
 					            {% if r.point < 30 %}
 					             red 
 					            {% elif r.point < 60 %}
@@ -34,18 +35,22 @@
 					            green
 					            {% else %}
 					            darkgreen
-					            {% endif %}" >
+					            {% endif %}" style="cursor: help" >
 					        {{ r.point }}
+					        <span class="helper_tip_text_flex"><img src="{{ looper.exercise.supportfile.imagefile.url }}" width="400px" /></span>
 					    </a>
 					{% else %}
-					    <a class="markdown"  > 
+					    <a class="markdown"   style="cursor: help" > 
 					          {{ r.point }}
 					    </a>
-					{% endif %}  
+					{% endif %} 
+				{% endwith %} 
 	    	{% endfor %} 
-			{% for r in resultskill_custom %}
+
+			{% for r in resultskill_custom.results %}
+				{% with resultskill_custom.customexercises|index:forloop.counter0 as loopp %}
 					{% if r.point %}
-					    <a  title="Exercice personnalisé" class="markdown square
+					    <a  title="Exercice personnalisé" class="square helper_tip white markdown
 					            {% if r.point < 30 %}
 					             red 
 					            {% elif r.point < 60 %}
@@ -54,14 +59,16 @@
 					            green
 					            {% else %}
 					            darkgreen
-					            {% endif %}" >
+					            {% endif %}"  style="cursor: help" >
 					        {{ r.point }}
+					        <span class="helper_tip_text_flex"><img src="{{ loopp.imagefile.url }}" width="400px" /></span>
 					    </a>
 					{% else %}
-					    <a class="markdown"  > 
+					    <a class="markdown"   style="cursor: help" > 
 					          {{ r.point }}
 					    </a>
-					{% endif %}  
+					{% endif %} 
+				{% endwith %} 
 	    	{% endfor %} 
 
 

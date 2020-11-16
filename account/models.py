@@ -152,11 +152,22 @@ class Student(ModelWithCode):
 
     def result_skills(self, skill):
         ''' résultats de l'étudiants aux 3 dernières évaluations de compétences de la compétence en paramètre'''
-        return self.results_s.filter(skill=skill).order_by("-id")[:3]
+        relationships = self.students_relationship.filter(skills = skill).order_by("-id")[:3]
+        results = self.results_s.filter(skill=skill).order_by("-id")[:3]
+        data = {}
+        data["relationships"] = relationships
+        data["results"] = results
+        return data
 
 
     def result_skills_custom(self, skill):
-        return self.student_correctionskill.filter(skill=skill).order_by("-id")[:3]
+        data = {}
+        customexercises = self.students_customexercises.filter(skills = skill).order_by("-id")[:3]
+        print(customexercises)
+        results = self.student_correctionskill.filter(skill=skill).order_by("-id")[:3]
+        data["customexercises"] = customexercises
+        data["results"] = results
+        return data
 
 
     def knowledge_average(self, group):
