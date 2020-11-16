@@ -860,7 +860,7 @@ def ajax_all_parcourses(request):
         else :
             parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1, exercises__level_id = level_id ).exclude(teacher=teacher).order_by('author').distinct()
 
-    data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : parcourses, })
+    data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : parcourses, 'teacher' : teacher ,  })
  
     return JsonResponse(data)
 
