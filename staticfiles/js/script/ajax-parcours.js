@@ -80,7 +80,8 @@ define(['jquery','bootstrap'], function ($) {
             let id_level = $(this).val();
             let id_subject = $("#id_subject").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-
+            $("#loading").html("<i class='fa fa-spinner fa-pulse fa-fw'></i>");
+            $("#loading").show(); 
             $.ajax(
                 {
                     type: "POST",
@@ -123,7 +124,7 @@ define(['jquery','bootstrap'], function ($) {
 
                         $('#parcours_details').html("").html(data.html);
 
-
+                        $("#loading").hide(500); 
                     }
                 }
             )

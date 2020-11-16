@@ -45,7 +45,7 @@
                 </select>
             </div>
         </div>
-        <div class="col-sm-12 col-md-4 col-lg-3">
+        <div class="col-sm-12 col-md-2 col-lg-2">
             <div class="form-group">
                 <select id="id_level" name="level" class="form-control select2" >
                     <option value=" ">Choisir un niveau</option>
@@ -53,6 +53,10 @@
                         <option value="{{l.id}}">{{ l.name }}</option>
                     {% endfor %}
                 </select>
+            </div>
+        </div>
+        <div class="col-sm-2 col-md-1 col-lg-1">
+            <div class="form-group" id="loading">
             </div>
         </div>
         <div class="col-sm-12 col-md-4 col-lg-5">
