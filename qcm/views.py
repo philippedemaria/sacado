@@ -176,7 +176,8 @@ def get_stage(user):
     try :
         if user.school :
             school = user.school
-            stage = Stage.objects.get(school = school)
+            stg = Stage.objects.get(school = school)
+            stage = { "low" : stg.low ,  "medium" : stg.medium  ,  "up" : stg.up  }
         else : 
             stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
     except :
@@ -1231,8 +1232,6 @@ def show_parcours_student(request, id):
 
     today = time_zone_user(user)
     stage = get_stage(user)
-
-
 
     courses = parcours.course.filter(Q(is_publish=1)|Q(publish_start__lte=today,publish_end__gte=today)).order_by("ranking")
 
@@ -3693,7 +3692,6 @@ def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à
 
 def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
 
-
     student_id =  int(request.POST.get("student_id"))
     value =  int(request.POST.get("value"))
     typ =  int(request.POST.get("typ")) 
@@ -3702,8 +3700,14 @@ def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
     student = Student.objects.get(user_id = student_id)  
 
     stage = get_stage(student.user) 
+
+
     tab_label = ["","text-danger","text-warning","text-success","text-primary"]
-    tab_value = [-1, stage.low-1,stage.medium-1,stage.up-1,100]       
+    tab_value = [-1, stage["low"]-1,stage["medium"]-1,stage["up"]-1,100]       
+
+
+
+
 
     if typ == 0 : 
 

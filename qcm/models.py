@@ -375,7 +375,7 @@ class Parcours(ModelWithCode):
 
     vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Vignette d'accueil", blank=True, default ="")
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
-
+    #root = models.BooleanField(default=1, verbose_name="est un sous parcours de")
 
 
     def __str__(self):
