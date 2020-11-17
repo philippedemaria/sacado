@@ -1150,7 +1150,7 @@ def show_parcours(request, id):
     data = get_complement(request, teacher, parcours)
     role = data['role']
     group = data['group']
-    group_id = data['group_id'] 
+    group_id = data['group_id']
 
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
@@ -1182,6 +1182,13 @@ def show_parcours(request, id):
 
     students_p_or_g = students_from_p_or_g(request,parcours)
 
+    parcours_group = []
+    for s in students_p_or_g :
+        pses = s.students_to_parcours.all()
+        for p in pses :
+            if p not in  parcours_group :
+                parcours_group.append(p)
+ 
     nb_students_p_or_g = len(students_p_or_g)
 
     skills = Skill.objects.all()
@@ -1189,7 +1196,7 @@ def show_parcours(request, id):
  
     context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'communications' : [] , 'customexercises' : customexercises , 'today' : today , 
                'students_from_p_or_g': students_p_or_g,   'nb_exo_visible': nb_exo_visible,  'nb_exo_visible_c': nb_exo_visible_c, 'nb_students_p_or_g' : nb_students_p_or_g , 
-               'nb_exo_only': nb_exo_only, 'nb_exo_only_c': nb_exo_only_c, 'group_id': group_id, 'group': group, 'role' : role }
+               'nb_exo_only': nb_exo_only, 'nb_exo_only_c': nb_exo_only_c, 'group_id': group_id, 'group': group, 'role' : role, 'parcours_group' : parcours_group  }
 
     return render(request, 'qcm/show_parcours.html', context)
 
@@ -1256,6 +1263,51 @@ def show_parcours_visual(request, id):
     context = {'relationships': relationships,  'parcours': parcours,   'nb_exo_only': nb_exo_only, 'nb_exercises': nb_exercises,  'communications' : [] ,  }
  
     return render(request, 'qcm/show_parcours_visual.html', context)
+
+
+
+
+
+def replace_exercise_into_parcours(request):
+
+    exercise_id = request.POST.get("change_parcours_exercise_id")
+    parcours_id = request.POST.get("change_parcours_parcours_id")
+    custom = request.POST.get("change_parcours_custom")
+
+    parcourses_id = request.POST.getlist("change_into_parcours")
+    parcours = Parcours.objects.get(pk = parcours_id)
+
+    if request.method == "POST" :
+
+        if custom == "0" :
+            relationship = Relationship.objects.get(pk = exercise_id)
+            
+            for p_id in parcourses_id :
+                prcrs = Parcours.objects.get(pk = p_id)                
+                Relationship.objects.filter(pk = int(exercise_id)).update(parcours = prcrs)
+                print("modif", int(exercise_id) , prcrs.id )
+                try :
+                    print("ici")
+                    Studentanswer.objects.filter(exercise = relationship.exercise, parcours = parcours).update(parcours = prcrs)
+                except :
+                    pass
+
+        else :
+            customexercise = Customexercise.objects.get(pk = exercise_id)
+            parcours = Parcours.objects.get(pk = parcours_id)
+            customexercise.parcourses.remove(prcrs)
+            for p_id in parcourses_id :
+                prcrs = Parcours.objects.get(pk = p_id)
+                customexercise.parcourses.add(prcrs)
+                try :
+                    Customanswerbystudent.objects.filter(customexercise = customexercise, parcours = parcours).update(parcours =  prcrs)
+                    Correctionskillcustomexercise.objects.filter(customexercise = customexercise, parcours = parcours).update(parcours =  prcrs)
+                    Correctionknowledgecustomexercise.objects.filter(customexercise = customexercise, parcours = parcours).update(parcours =  prcrs)
+                except :
+                    pass
+
+
+    return redirect('show_parcours', parcours_id)
 
 
 

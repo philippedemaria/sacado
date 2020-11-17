@@ -130,9 +130,6 @@ define(['jquery','bootstrap'], function ($) {
             )
         });
 
-
-
-
         $('#thm_id').on('change', function (event) { 
  
             if (  $('select[name=level]').val() > 0 )
@@ -174,11 +171,6 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
-
-
-
-
-
         $('#id_theme').on('change', function (event) {
 
             if (  $('select[name=level]').val() > 0 )
@@ -189,9 +181,7 @@ define(['jquery','bootstrap'], function ($) {
             {   
                 alert("Vous devez choisir un niveau."); return false;             
             }
-
         }); 
-
 
         $('.send_message').on('click', function () {
 
@@ -593,35 +583,46 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
-            function display_custom_exercise_modal($actionner,$target){
-                  
-                $actionner.on('click', function (event) {
-                    let customexerciseship_id = $(this).attr("data-customexercise_id");
-                    $($target+customexerciseship_id).toggle();
-                    $($target+customexerciseship_id).focus();                  
-                });
+        function display_custom_exercise_modal($actionner,$target){
+              
+            $actionner.on('click', function (event) {
+                let customexerciseship_id = $(this).attr("data-customexercise_id");
+                $($target+customexerciseship_id).toggle();
+                $($target+customexerciseship_id).focus();                  
+            });
 
-            } ;
+        } ;
 
-            display_custom_exercise_modal($('.custom_action_task'),"#custom_task_detail");
- 
-            display_custom_exercise_modal($('.custom_select_publish'),"#custom_detail_pub");
-            display_custom_exercise_modal($('.custom_select_details'),"#custom_details");
-            display_custom_exercise_modal($('.custom_sharer'),"#custom_share");
- 
-            display_custom_exercise_modal($('.custom_select_task_close'),"#custom_detail_dateur");
-            display_custom_exercise_modal($('.custom_select_publish_close'),"#custom_detail_pub");
-            display_custom_exercise_modal($('.custom_select_details_close'),"#custom_details");
-            display_custom_exercise_modal($('.custom_select_share_close'),"#custom_share");
-  
-               
-                $('.custom_select_task').on('click', function (event) {
-                    let relationship_id = $(this).attr("data-relationship_id");
-                    $("#custom_detail_dateur"+relationship_id).toggle();
-                    $("#custom_detail_dateur"+relationship_id).focus();
-                });
+        display_custom_exercise_modal($('.custom_action_task'),"#custom_task_detail");
+
+        display_custom_exercise_modal($('.custom_select_publish'),"#custom_detail_pub");
+        display_custom_exercise_modal($('.custom_select_details'),"#custom_details");
+        display_custom_exercise_modal($('.custom_sharer'),"#custom_share");
+
+        display_custom_exercise_modal($('.custom_select_task_close'),"#custom_detail_dateur");
+        display_custom_exercise_modal($('.custom_select_publish_close'),"#custom_detail_pub");
+        display_custom_exercise_modal($('.custom_select_details_close'),"#custom_details");
+        display_custom_exercise_modal($('.custom_select_share_close'),"#custom_share");
+
+           
+            $('.custom_select_task').on('click', function (event) {
+                let relationship_id = $(this).attr("data-relationship_id");
+                $("#custom_detail_dateur"+relationship_id).toggle();
+                $("#custom_detail_dateur"+relationship_id).focus();
+            });
 
 
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('.attribute_to_parcours').on('click', function (event) {
+
+            let parcours_id = $(this).attr("data-parcours_id");
+            let exercise_id = $(this).attr("data-exercise_id");            
+            let custom = $(this).attr("data-custom");
+
+            $("#change_parcours_exercise_id").val(exercise_id);
+            $("#change_parcours_parcours_id").val(parcours_id);
+            $("#change_parcours_custom").val(custom);
+        });
 
 
 

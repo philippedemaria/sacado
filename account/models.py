@@ -163,7 +163,6 @@ class Student(ModelWithCode):
     def result_skills_custom(self, skill):
         data = {}
         customexercises = self.students_customexercises.filter(skills = skill).order_by("-id")[:3]
-        print(customexercises)
         results = self.student_correctionskill.filter(skill=skill).order_by("-id")[:3]
         data["customexercises"] = customexercises
         data["results"] = results

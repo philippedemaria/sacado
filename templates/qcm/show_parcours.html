@@ -185,7 +185,66 @@ body{
 </div>
 
 
+<div class="modal fade" id="change_parcours" tabindex="-1" role="dialog" aria-labelledby="change_parcours">
+    <div class="modal-dialog" role="document" >
+        <div class="modal-content" style="padding-top :0px;">
+            <form action="{% url 'replace_exercise_into_parcours' %}" method="POST" enctype='multipart/form-data'>
+            {% csrf_token %}
+                <div class="modal-header">
+                    <h3>Déplacer un exercice   
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button> 
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12 col-xs-12">   
+                            <input  name="change_parcours_exercise_id" type="hidden" id="change_parcours_exercise_id"   />
+                            <input  name="change_parcours_parcours_id" type="hidden" id="change_parcours_parcours_id"   />
+                            <input  name="change_parcours_custom" type="hidden" id="change_parcours_custom"   />                            
+                        </div>   
+                    </div> 
 
+                    <div class="row">
+                        <div class="col-lg-12 col-xs-12">  
+                                Si vous souhaitez conserver cet exercice dans le parcours actuel, 
+                                cocher aussi le parcours actuel signalé. Sinon l'exercice sera déplacé et n'apparaitra plus dans ce parcours.                       
+                        </div>   
+                    </div> 
+                    <hr/>
+
+                    <div class="row">
+                        <div class="col-lg-12 col-xs-12"> 
+                            <div class="form-group">
+                                {% for p in parcours_group %}
+
+                                   <label> 
+                                        <input type="checkbox" name="change_into_parcours" id="change_into_parcours"  value="{{ p.id }}" /> 
+                                        {% if p.id == parcours.id %}<b>{{ p.title}} <i class="fa fa-hand-o-right"></i> Parcours actuel</b>{% else %} {{ p.title}} {% endif%}
+                                    </label>
+                                    <br>
+
+                                {% endfor %}
+                            </div>
+                        </div>   
+                    </div> 
+
+                    <div class="row">
+                        <div class="col-lg-12 col-xs-12"> 
+                            <div class="form-group">
+                                <input  value="Déplacer cet exercice dans ces parcours" 
+                                        type="submit" class="btn btn-primary" 
+                                        onclick="changeExerciceIntoParcours()" />
+                                <a href="#" class="btn btn-default" data-dismiss="modal" aria-label="Close">Fermer</a>
+                            </div>
+                        </div>   
+                    </div> 
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
  

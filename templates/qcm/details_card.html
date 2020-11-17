@@ -229,7 +229,21 @@
                 {% else %}
                 <a href="{% url 'show_write_exercise' relation.id %}" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice</a>
                 {% endif %}
-                <br><br>                <a href="#card{{relation.id}}" class="copy" data-custom=0 data-exercise_id="{{ relation.exercise.id}}" data-relationship_id="{{ relation.id}}"  data-parcours_id="{{ relation.parcours.id}}" style="font-size:14px"><i  class="fa fa-clipboard fa-fw"></i> Copier pour coller dans une autre page</a> 
+                <br><br>                
+                <a href="#card{{relation.id}}" class="copy" 
+                    data-custom=0 data-exercise_id="{{ relation.exercise.id}}" 
+                    data-relationship_id="{{ relation.id}}"  data-parcours_id="{{ relation.parcours.id}}" 
+                    style="font-size:14px">
+                    <i  class="fa fa-clipboard fa-fw"></i> Copier pour coller dans une autre page
+                </a> <br><br>   
+                <a  href="#card{{relation.id}}" class="attribute_to_parcours"  
+                    data-toggle='modal' data-target='#change_parcours' 
+                    data-custom=0 data-parcours_id="{{ relation.parcours.id}}" 
+                    data-exercise_id="{{ relation.id}}" style="font-size:14px">
+                    <i  class="fa fa-random fa-fw"></i> Déplacer dans un autre parcours
+                </a>
+
+
           </div>
 
           <!-- Pop up des compétences d'un exercice  -->

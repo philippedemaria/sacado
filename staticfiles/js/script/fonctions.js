@@ -51,3 +51,10 @@ function getAllStudents() {
 function deleteSelectedStudents() {
     if (!confirm('Vous souhaitez supprimer tous les élèves sélectionnés ? \nToutes leurs données actuelles seront perdues. \nCette action est irréversible si vous cliquez sur OK.')) return false;
 }
+
+
+function changeExerciceIntoParcours() {
+    if (!confirm('Vous déplacez cet exercice dans un ou plusieurs parcours. Souhaitez vous continuer ?')) return false;
+}
+
+ 
