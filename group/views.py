@@ -337,12 +337,9 @@ def update_group(request, id):
 
 def delete_group(request, id):
     group = Group.objects.get(id=id)
-
     # Si le prof n'appartient pas à un établissement
     teacher = group.teacher
-
     authorizing_access_group(teacher,group )
-
     if not teacher.user.school :
         # Si les élèves n'appartiennent pas à un établissement
         for student in group.students.all():
@@ -351,11 +348,9 @@ def delete_group(request, id):
                     #Si les élèves n'appartiennent pas à un autre groupe
                     student.student_user.delete()
                     student.delete() # alors on les supprime
-
         group.delete()
         return redirect('index')
     else :
-
         group.delete()
         return redirect('school_groups')        
 
@@ -364,16 +359,11 @@ def show_group(request, id ):
 
     group = Group.objects.get(id=id)
     teacher = Teacher.objects.get(user=request.user)
-
     request.session["group_id"] = id
-
-
     data = get_complement(request, teacher, group)
     role = data['role']
     access = data['access']
-
     authorizing_access_group(teacher,group )
- 
     context = {  'group': group,  'communications' : [] , 'teacher' : group.teacher  }
 
     return render(request, 'group/show_group.html', context )
@@ -791,49 +781,48 @@ def enroll(request, slug):
     '''
     Création d'un compte élève et inscription à un groupe via le lien donné par l'enseignant
     '''
-    group = get_object_or_404(Group, code=slug, lock=0)
-    if not group.lock :
-        if request.method == 'POST':
-            user_form = UserForm(request.POST)
-            if user_form.is_valid():
-                user = user_form.save(commit=False)
-                user.user_type = User.STUDENT
-                password = request.POST.get("password1")
-                user.set_password(password)
-                user.save()
+    group = get_object_or_404(Group, code=slug)
+    user_form = UserForm(request.POST or None)
 
-                # Liste des parcours des élèves du groupe
-                parcourses = []
-                for student in group.students.all():
-                    for p in student.students_to_parcours.filter(teacher=group.teacher) :
-                        if p not in parcourses :
-                            parcourses.append(p)
+    if request.method == 'POST':
+        user_form = UserForm(request.POST)
+        if user_form.is_valid() and  group.lock == 0 :
+            user = user_form.save(commit=False)
+            user.user_type = User.STUDENT
+            password = request.POST.get("password1")
+            user.set_password(password)
+            user.save()
 
-                # Création de Student et affections des parcours
-                student = Student.objects.create(user=user, level=group.level)
-                for parcours in parcourses:
-                    parcours.students.add(student)
-                    relationships = parcours.parcours_relationship.all()
-                    for r in relationships:
-                        r.students.add(student)                
-                    courses = parcours.course.all()
-                    for c in courses:
-                        c.students.add(student)
+            # Liste des parcours des élèves du groupe
+            parcourses = []
+            for student in group.students.all():
+                for p in student.students_to_parcours.filter(teacher=group.teacher) :
+                    if p not in parcourses :
+                        parcourses.append(p)
 
-                group.students.add(student)
+            # Création de Student et affections des parcours
+            student = Student.objects.create(user=user, level=group.level)
+            for parcours in parcourses:
+                parcours.students.add(student)
+                relationships = parcours.parcours_relationship.all()
+                for r in relationships:
+                    r.students.add(student)                
+                courses = parcours.course.all()
+                for c in courses:
+                    c.students.add(student)
 
-                messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation. Connectez-vous avec vos identifiants en cliquant sur le bouton bleu Se connecter.")
-                if user_form.cleaned_data['email']:
-                    send_mail('Création de compte sur Sacado',
-                              'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers http://sacado.erlm.tn.\n Ceci est un mail automatique. Ne pas répondre.',
-                              'info@sacado.xyz',
-                              [request.POST.get("email")])
+            group.students.add(student)
+
+            messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation. Connectez-vous avec vos identifiants en cliquant sur le bouton bleu Se connecter.")
+            if user_form.cleaned_data['email']:
+                send_mail('Création de compte sur Sacado',
+                          'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers http://sacado.erlm.tn.\n Ceci est un mail automatique. Ne pas répondre.',
+                          'info@sacado.xyz',
+                          [request.POST.get("email")])
 
             return redirect('index')    
         else:
             user_form = UserForm(request.POST or None)
-    else :
-        messages.error(request, "Inscription non réalisée avec succès ! Ce groupe est verrouilé. Contacter l'enseignant.")  
 
     return render(request, 'group/enroll.html', {"u_form": user_form, "slug": slug, "group": group, })
 
