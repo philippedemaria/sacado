@@ -156,9 +156,10 @@
 
 
                 {% if group %}
-                    {% if not group.lock %}  
+
                     <div class="row collapse" id="collapsed"  >
                         <div class="col-sm-12 col-md-12" style="overflow-y:auto; height: 500px;margin-bottom: 20px">
+                            {% if not group.lock %}                              
                             <table  class="table table-hover standard_tab_sort2000" id='table_o'>
                                 <thead>
                                 <tr>
@@ -188,10 +189,15 @@
                                     {% endfor %}
                                 </tbody>
                             </table>
+                            {% else %}
+                                <div class="form-group alert alert-danger">
+                                    Votre groupe est verrouillé. Vous devez déverrouiller votre groupe pour ajouter des élèves.
+                                </div>
+                            {% endif   %}
                         </div>
                     </div> 
                     <hr> 
-                    {% endif   %}
+
                 {% else %}
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
