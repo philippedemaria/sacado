@@ -786,7 +786,7 @@ def enroll(request, slug):
 
     if request.method == 'POST':
         user_form = UserForm(request.POST)
-        if user_form.is_valid() and  group.lock == 0 :
+        if user_form.is_valid() :
             user = user_form.save(commit=False)
             user.user_type = User.STUDENT
             password = request.POST.get("password1")
