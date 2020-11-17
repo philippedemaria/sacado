@@ -88,7 +88,7 @@ body{
 
                 {% if group.lock %}
                     <div class="alert alert-danger">
-                        <i class="fa fa-lock fa-2x"></i> Le groupe {{ group }} est verrouillé. <br/>Vous ne pouvez plus vous y inscrire. Contacter l'ensignant {{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}.
+                        <i class="fa fa-lock fa-2x"></i> Le groupe <b>{{ group }}</b> est verrouillé. <br/>Vous ne pouvez plus vous y inscrire. Contacter l'enseignant {{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}.
                     </div>
                 {% else %}
                 {% csrf_token %}
