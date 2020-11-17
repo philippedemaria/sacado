@@ -163,6 +163,10 @@ label {
     font-size: 12px;
     color : #cb2131;
 }
+.helper_label_gray{
+    font-size: 12px;
+    color : #AAA;
+}
 
 li label{
     cursor:pointer;

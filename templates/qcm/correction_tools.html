@@ -38,7 +38,7 @@
             {% for comment in comments %}
                 <button id="comment{{ comment.id }}" data-nb={% if c_e or w_a %}{{ nb }}{% else %}1{% endif %} data-text="{{ comment.comment }}" class="btn btn-default comment">{{ comment.comment }}</button> 
             {% empty %}
-                <div class="alert alert-danger helper_label" id="empty_annotation">Aucune annotation personnalisée. Pour en ajouter, cliquer sur <button class="btn btn-default"><i class="fa fa-comment"></i></button> ci-dessus.</div>
+                <small class="helper_label_gray" id="empty_annotation">Pour ajouter un annotation personnalisée, cliquer sur <button class="btn btn-default"><i class="fa fa-comment"></i></button> ci-dessus.</small>
             {% endfor %}
         </div>
     </div>

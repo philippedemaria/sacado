@@ -59,6 +59,9 @@
 
 {% block body %}
 <section class="content_list">  
+
+{% include 'preloader.html' %}
+
     <div class="row"> 
         <form method="POST" action="" enctype='multipart/form-data'>
             {% csrf_token %} 
