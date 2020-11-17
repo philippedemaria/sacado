@@ -1,4 +1,4 @@
-define(['jquery','bootstrap','bcPicker'], function ($) {
+define(['jquery','bootstrap','ui','bcPicker'], function ($) {
     $(document).ready(function () {
         console.log("chargement JS corrector.js OK");
 
