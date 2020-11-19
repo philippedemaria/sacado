@@ -18,13 +18,15 @@
  
 
 {% block page_title %}
-       <span style="color:{{ group.color|contrast_color_title }}"><i class="fa fa-th"></i>      </span>          {% include 'qcm/breadcrumb.html' %}
+       <span style="color:{{ group.color  }}"><i class="fa fa-th"></i></span>  
+
+        {% include 'qcm/breadcrumb.html' %}
 {% endblock %}
 
 {% block page_menu_right %}
 
 
-    {% include 'group/submenu_group.html' %}
+ 
 
     {% if role %}
         {% include 'qcm/submenu_creation_evaluation.html' %}
@@ -57,12 +59,13 @@
 
 <section class="content_list" id="principal_section"> 
 
-<form action="" methode="POST" >  
+ <form action="" methode="POST" >  
  
     {% regroup parcours_tab by is_evaluation as list_parcours %} 
 
-    {% for parcours_sort in list_parcours %}  
 
+    {% for parcours_sort in list_parcours %}  
+    <div class="row"></div>
     {% if  parcours_sort.grouper %}<h1 class="thin" id="evaluation">Evaluations favorites</h1>{% else %}<h1 class="thin"> Parcours favoris</h1>{% endif %}  
         <div id="parcours_sortable">
         {% for parcours in parcours_sort.list %}  
@@ -97,13 +100,7 @@
                 </div>
                 </a> 
 
-                <!-- Fenetre accessible par le disc qui montre les sous parcours  -->
-                <div class="group_show" id="subparcours_show{{parcours.id }}" style="font-size:12px; color:#AAA"> 
-                    <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ parcours.color }};">Sous-parcours</h4> 
-                    {% for p in parcours.leaf_parcours.all %} 
-                        <li class="sans_puce">{{ p.title }}</li> 
-                    {% endfor %}
-                </div>
+
                 <!-- Fenetre accessible par le disc   -->
 
                 <div class="overlay  overlay_show{{parcours.id }}" style="height:100px"> 
@@ -157,6 +154,9 @@
                     </div> 
                 </div>
                 <!-- Fin de la fenetre  -->
+
+
+
                 {% if parcours.is_evaluation %}   
                     <div class="icon_evaluation">
                         <i class="fa fa-bullseye"></i> 
@@ -168,11 +168,11 @@
                 {% endif  %}
                 <div class="box_title_vignette"> 
                     {% if parcours.is_folder %}
-                    <a href="{% url 'list_sub_parcours_group' group.id parcours.id  %}" style="color:{{ parcours.color|contrast_color }};">
-                        {% if parcours.is_pending_folder_correction %}
+                    <a href="{% url 'list_sub_parcours_group'  parcours.id  %}" style="color:{{ parcours.color|contrast_color }};">
+                        {% if parcours.is_pending_correction %}
                         <i class="fa fa-copyright pull-right" style="font-size:12px;padding-right:5px;color:{{ parcours.color|contrast_color }};" title="Copies à corriger" ></i> 
                         {% endif %}
-                        {{ parcours.title|truncatechars:"18" }} <span style="font-size:12px"> {{ parcours.leaf_parcours.count}} sous-parcours </span>
+                        {{ parcours.title|truncatechars:"18" }}
                     </a>
                     {% else %}
                     <a {% if parcours.is_evaluation%} href="{% url 'show_evaluation'  parcours.id  %}" {% else %} href="{% url 'show_parcours'  parcours.id  %}"{% endif %} style="color:{{ parcours.color|contrast_color }};">
@@ -195,44 +195,6 @@
                     {% endif %} 
                 </div>
             </div>
-
-
-
-            {% if parcours.is_folder %}
-            <div class="box-footer">
-                <div class="row extend">  
-                    <div class="col-lg-6 col-xs-5">
-                        <a href="{% url 'update_parcours' parcours.id  group.id  %}"  class="edit"><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span> </a>
-                    </div> 
-                    <div class="col-lg-6 col-xs-5">
-                        <a  href="{% url 'result_parcours' parcours.id  %}" class="edit" target="_blank"><i class="fa fa-fw fa-mortar-board"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
-                        </a>   
-                    </div>
-                </div>
-                <div class="row extend">
-                    <div class="col-lg-6 col-xs-5">
-                        <a href="{% url 'show_course' 0 parcours.id   %}"  class="edit" {% if parcours.is_folder_courses_exists %} style="color:#5d4391" {% endif %} ><i class="fa fa-fw fa-desktop"></i> <span class="label_icon">Cours </span> 
-                        </a>
-                    </div> 
-                    <div class="col-lg-6 col-xs-7">
-                        <a  href="{% url 'detail_task_parcours' parcours.id 0 0 %}"   class="edit" {% if parcours.is_task_folder_exists %} style="color:#5d4391" {% endif %}>
-                            {% if not parcours.is_task_exists %}<i class="fa fa-fw fa-calendar"></i>{% else %}<i class="fa fa-fw fa-calendar-check"></i>{% endif %}
-                             <span class="label_icon">Tâches</span>
-                        </a> 
-                    </div>                     
-                </div> 
-                <div class="row">
-                    <div class="col-lg-6 col-xs-7">
-                        <a href="#"  class="edit click_subparcours_show"   data-parcours_id="{{parcours.id }}" ><i class="fa fa-fw fa-folder"></i> <span class="label_icon">Sous-parcours</span> </a>
-                    </div> 
-
-                    <div class="col-lg-6 col-xs-7">
-                        <a href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
-                        </a>
-                    </div>                    
-                </div> 
-            </div>
-            {% else %}
             <div class="box-footer">
                 {% if role or parcours.teacher == teacher %}
                     <div class="row extend"> 
@@ -243,7 +205,6 @@
                             <a href="{% url 'update_parcours' parcours.id  group.id  %}"  class="edit"><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span> </a>
                         {% endif  %}
                         </div> 
-
                         <div class="col-lg-4 col-xs-4">
                             {% if not parcours.is_evaluation %}
                                 <a href="{% url 'show_course' 0 parcours.id   %}"  class="edit" {% if parcours.is_courses_exists %} style="color:#5d4391" {% endif %} ><i class="fa fa-fw fa-desktop"></i> <span class="label_icon">Cours </span> </a>
@@ -261,6 +222,9 @@
                             {% endif  %}
                             </div> 
                         {% endif  %}
+
+
+
                     </div>
 
                     {% if not parcours.is_evaluation %}
@@ -286,7 +250,11 @@
                         </div>
                     </div>
                     {% endif %} 
+
+
+
                     <div class="row">  
+                        {% if  not parcours.is_folder %}
                         <div class="col-lg-4 col-xs-4">
                             <a href="{% url 'individualise_parcours' parcours.id  %}" class="edit" {% if parcours.is_individualized %} style="color:#5d4391" {% endif %} ><i class="fa fa-fw fa-user"></i> <span class="label_icon">Individual.</span>
                             </a> 
@@ -298,7 +266,7 @@
                             <a  href="{% url 'stat_parcours' parcours.id %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon">Stats</span></a>  
                         {% endif %}  
                         </div>
-                         
+                        {% endif %}                          
                         <div class="col-lg-4 col-xs-4">
                             <a href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
                             </a>
@@ -322,11 +290,6 @@
                 </div>
                 {% endif %}
             </div>
-            {% endif %}
-
-
-
-
         </div>   
         {% endfor %}
         </div>

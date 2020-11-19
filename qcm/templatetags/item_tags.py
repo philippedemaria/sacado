@@ -340,6 +340,14 @@ def get_knowledge_average(obj,group):
 def get_knowledge_worked(obj,student): 
     return obj.nb_knowledge_worked(student)
 
+@register.simple_tag
+def get_nb_leaf(obj,student): 
+    """
+    envoie le nombre de sous parcours
+    """
+    return obj.nb_leaf(student)
+
+
 
 @register.simple_tag
 def get_nb_task_done(obj,group): 

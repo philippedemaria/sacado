@@ -1,0 +1,56 @@
+{% extends 'qcm/result_parcours.html' %}
+{% load item_tags %}
+
+{% block sub_page_title %}des compétences{% endblock %}
+
+
+
+
+{% block tab_title %}
+	{% for skill in skill_tab %}
+        <td style="font-size:10px">
+        	{{ skill.name }}
+		</td>
+	{% endfor %}
+{% endblock %} 
+
+
+
+
+{% block result %}
+ 
+ 
+	{% for skill in skill_tab %}
+        <td>
+		{% get_scorek  skill  student  as score %}
+
+
+		<!-- Requête moins rapide de 2 secondes mais plus précise puis que sélection sur le parcours
+		Rajouter les accolades et pourcentages ! au cas où !
+		 get_score_student_parcours  knowledge  student parcours as score 
+
+		 -->
+
+			{% if score != "" %}
+			    <span class="markdown
+			            {% if score < 30 %}
+			             red 
+			            {% elif score < 60 %}
+			            orange
+			            {% elif score < 80 %}
+			            green
+			            {% else %}
+			            darkgreen
+			            {% endif %}"  >
+				        {{ score }} 
+			    </span>
+			{% else %}
+			    <span class="markdown"> 
+			          {{ score }} 
+			    </span> 
+			{% endif %}
+		</td>
+	{% endfor %}
+
+ 
+{% endblock %}

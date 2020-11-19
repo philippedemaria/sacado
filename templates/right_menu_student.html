@@ -8,7 +8,6 @@
         {%  if relationships|length > 0 %} 
             {% for relationship in relationships|dictsort:"date_limit" %}
             <li class="sans_puce" class="advertise"> {{ relationship.date_limit|date:"d.m.y" }} :
-
                 {% get_done relationship.exercise student as done %}
                 {% if done %}
                     {% get_score_student_for_this relationship  student as score %}
@@ -34,8 +33,7 @@
                 <a href="{% url 'execute_exercise' relationship.parcours.id  relationship.exercise.id %}"  class="parcours_displayer"  style="color:#cb2131">
                  {% if relationship.exercise.supportfile.annoncement  %} {{ relationship.exercise.supportfile.annoncement|cleanhtml }}{% else %}{{ relationship.exercise.knowledge.name }}{% endif %}
                 </a>
-                 
-
+            
             </li>
             {% endfor %}
              
@@ -43,9 +41,43 @@
                     <div class="progress">
                         <div class="progress-bar bg-danger" role="progressbar" style="width: {{ ratio }}%" aria-valuenow="{{ ratio }}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-
         {% else %}
             <li class="sans_puce">Aucune tâche proposée</li>
+        {% endif %}
+
+        {%  if customexercises|length > 0 %} 
+            {% for ce in customexercises|dictsort:"date_limit" %}
+            <li class="sans_puce" class="advertise"> {{ ce.date_limit|date:"d.m.y" }} :
+                {% get_done ce student as done %}
+                {% if done %}
+                    {% get_score_student_for_this ce  student as score %}
+                        <span class="{% if score.point < 30 %}
+                                     text-red  
+                                    {% elif score.point < 60 %}
+                                    text-orange
+                                    {% elif score.point < 80 %}
+                                    text-green
+                                    {% else %}
+                                    text-darkgreen
+                                    {% endif %} parcours_displayer">
+                                    <i class="fa fa-check-circle"></i>
+                          </span>    
+                          <small>{{  score.point }}%</small>
+ 
+
+                {% endif  %}
+
+
+                <a href="{% url 'write_custom_exercise' ce.id  %}"  class="parcours_displayer"  style="color:#cb2131">
+                  Exercice à rendre
+                </a>
+            
+            </li>
+            {% endfor %}
+             
+ 
+
+ 
         {% endif %}
 </div>
 

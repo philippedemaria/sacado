@@ -3773,7 +3773,7 @@ li .list_no_indent{
   width: 300px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
   float:left;
-  margin: 0px 36px  36px 0px ;
+  margin: 0px 31px  36px 5px ;
 }
 .box:hover {
   box-shadow: 0 4px 10px rgba(0,0,0,0.35);

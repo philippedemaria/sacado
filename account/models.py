@@ -245,7 +245,10 @@ class Student(ModelWithCode):
 
     def is_task_exists(self,parcours):
 
-        relationships = self.students_relationship.filter(parcours = parcours).exclude(date_limit = None)
+        if parcours.is_folder :
+            relationships = self.students_relationship.filter(parcours__in = parcours.leaf_parcours.filter(is_publish=1)).exclude(date_limit = None)
+        else :
+            relationships = self.students_relationship.filter(parcours = parcours).exclude(date_limit = None)
 
         if len(relationships) == 0 :
             test = False #Aucune tache créée.

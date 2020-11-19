@@ -75,10 +75,11 @@
                                 {% if remediation.audio %}
                                     <i class="fa fa-play"></i>
                                 {% else %}
-                                {% if remediation.video != "" %}
-                                    <img src="{%  static 'img/video.png' %}" width="30px" />
-                                {% else %}
-                                    <img src="{%  static 'img/pdf.png' %}" width="20px" />
+                                    {% if remediation.video != "" %}
+                                        <img src="{%  static 'img/video.png' %}" width="30px" />
+                                    {% else %}
+                                        <img src="{%  static 'img/pdf.png' %}" width="20px" />
+                                    {% endif  %}
                                 {% endif  %}
                             </a>
                         {% endfor  %}   

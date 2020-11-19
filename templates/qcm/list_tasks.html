@@ -61,7 +61,7 @@
                         </a>
                     </td>
                     <td>
-                        {% get_nb_task_done  r.exercise r.parcours  as nb_task_done %}
+                        {% get_nb_task_done  r.exercise  r.parcours  as nb_task_done %}
                         {% if r.parcours.linked %} {{ nb_task_done}}/{{  r.parcours.students.count  }}{% else %} {{ nb_task_done}}/{{ r.parcours.students.count  }} {% endif %}<br/>
                         {% get_who_are_done  r.exercise  r.parcours   as who_are %}
                         {%  for s in who_are|dictsort:"student.user.last_name" %} 
@@ -70,11 +70,47 @@
                     </td>
                     <td>{{ r.date_limit }} <br/><br/>
 
-                        <a href="{% url 'detail_task_parcours'   r.parcours.id  r.exercise.id   %}" class="btn btn-{% if r.date_limit < date_today %}default{% else %}sacado{% endif %} ">En détails</a>
+                        <a href="{% url 'detail_task_parcours'   r.parcours.id  r.exercise.id  0 %}" class="btn btn-{% if r.date_limit < date_today %}default{% else %}sacado{% endif %} ">En détails</a>
                     </td>
-                </tr>
-                    
+                </tr>  
                 {% endfor %}
+
+
+                {% for c in customexercises  %} 
+                <tr {% if c.date_limit < date_today %} style="background-color:#DDD" {% endif %}> 
+                    <td >   
+                        <a href="{% url 'show_this_exercise' r.exercise.id %}" target="_blank">
+
+                        
+                            <img src="{{ c.imagefile.url }}" class="imagefile">
+
+
+                            {{ c.instruction|cleanhtml|capfirst  }} 
+                                        {% if c.calculator %}
+                                          <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                        {% else %}
+                                          <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                        {% endif  %}   <br>
+                            <i class="fa fa-fw fa-barcode"></i> {{ c.code }}      <br>
+                            <i class="fa fa-fw fa-clock-o"></i> {{ c.duration }} minutes<br>
+                        </a>
+                    </td>
+                    <td>
+                        {% get_nb_task_done  c  parcours  as data %}
+                        {% if  parcours  %} {{ data.nb_task_done}}/{{   parcours.students.count  }}{% else %} {{ data.nb_task_done}}/{{  parcours.students.count  }} {% endif %}<br/>
+ 
+                        {%  for s in data.custom_tab|dictsort:"student.user.last_name" %} 
+                        <small>{{ s.student.user.last_name|lower|capfirst }}{% if not forloop.last %}, {% endif %} </small>
+                        {% endfor %}  
+                    </td>
+                    <td>{{ c.date_limit }} <br/><br/>
+
+                        <a href="{% url 'detail_task_parcours' parcours.id  c.id  1   %}" class="btn btn-{% if c.date_limit < date_today %}default{% else %}default{% endif %} ">En détails</a>
+                    </td>
+                </tr>  
+                {% endfor %}
+
+
             </tbody>
 
         </table>

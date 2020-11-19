@@ -164,7 +164,6 @@ define(['jquery','bootstrap'], function ($) {
             {   
                 alert("Vous devez choisir un niveau."); return false;             
             }
-
         }); 
 
 
@@ -623,6 +622,50 @@ define(['jquery','bootstrap'], function ($) {
             $("#change_parcours_parcours_id").val(parcours_id);
             $("#change_parcours_custom").val(custom);
         });
+
+
+
+        // Pour le form_parcours
+ 
+        if( $("#id_is_leaf").is(":checked")) { $('#folder_div').show(); } else { $('#folder_div').hide(); }
+
+        $("#id_is_leaf").on('change', function (event) {
+            $('#folder_div').toggle(500);
+        });
+
+
+        if( $("#id_is_folder").is(":checked")) { $('#leaf_div').show(); } else { $('#leaf_div').hide(); }
+        
+        $("#id_is_folder").on('change', function (event) {
+            $('#leaf_div').toggle(500);
+        });
+
+
+            $(".click_subparcours_show").on('click', function (event) {
+                let parcours_id = $(this).attr("data-parcours_id");
+                $("#subparcours_show"+parcours_id).toggle(500);
+
+                if( $(this).find("i").hasClass("fa-folder") ) 
+
+                    { $(this).find("i").removeClass("fa-folder").addClass("fa-folder-open");}
+
+                else 
+
+                    { $(this).find("i").removeClass("fa-folder-open").addClass("fa-folder");}
+
+
+
+
+            });
+
+
+
+
+
+
+
+
+
 
 
 

@@ -31,11 +31,12 @@ urlpatterns = [
     path('parcours_result_theme/<int:id>/<int:idt>/', result_parcours_theme, name='result_parcours_theme'),  # Je ne sais pas si cette route est utilisée ?????
     path('parcours_result_knowledge/<int:id>/', result_parcours_knowledge, name='result_parcours_knowledge'), 
     path('parcours_stat/<int:id>/', stat_parcours, name='stat_parcours'), 
-    path('parcours_detail_task/<int:id>/<int:s>/', detail_task_parcours, name='detail_task_parcours'), #modif idp en id pour la sécurité
+    path('parcours_detail_task/<int:id>/<int:s>/<int:c>/', detail_task_parcours, name='detail_task_parcours'), #modif idp en id pour la sécurité
     path('parcours_exercises/<int:id>/', parcours_exercises, name='parcours_exercises'),  # student_list_exercises
     path('parcourses_all/', all_parcourses, name='all_parcourses'),
     path('parcours_clone/<int:id>/<int:course_on>', clone_parcours, name='clone_parcours'),
     path('parcours_group/<int:id>/', list_parcours_group, name='list_parcours_group'), # parcours d'un groupe
+    path('parcours_sub_parcours/<int:idg>/<int:id>/', list_sub_parcours_group, name='list_sub_parcours_group'), # parcours d'un parcours
 
     path('parcours_peuplate/<int:id>/', peuplate_parcours, name='peuplate_parcours'),
     path('parcours_individualise/<int:id>/', individualise_parcours, name='individualise_parcours'),#modif idp en id pour la sécurité
@@ -43,7 +44,7 @@ urlpatterns = [
     path('ajax_individualise', ajax_individualise , name='ajax_individualise'),
 
     path('result_parcours_exercise_students/<int:id>/', result_parcours_exercise_students, name='result_parcours_exercise_students'),#modif idp en id pour la sécurité
-
+    path('result_parcours_skill/<int:id>/', result_parcours_skill, name='result_parcours_skill'),#modif idp en id pour la sécurité
 
     path('remove_students_from_parcours', remove_students_from_parcours, name='remove_students_from_parcours'),
 
@@ -188,8 +189,8 @@ urlpatterns = [
     path('ajax/course_sorter', ajax_course_sorter, name='ajax_course_sorter'),
     path('ajax/parcours_sorter', ajax_parcours_sorter, name='ajax_parcours_sorter'),
 
-    path('parcours_show_student/<int:id>/', show_parcours_student, name='show_parcours_student'),     
-    
+    path('parcours_show_student/<int:id>/', show_parcours_student, name='show_parcours_student'), 
+
     path('ajax_search_exercise', ajax_search_exercise, name='ajax_search_exercise'),
     path('ajax_knowledge_exercise', ajax_knowledge_exercise, name='ajax_knowledge_exercise'),
     path('ajax_theme_exercice', ajax_theme_exercice, name='ajax_theme_exercice'),

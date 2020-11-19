@@ -279,4 +279,26 @@ class Skill(models.Model):
         return self.skills_relationship.count()
 
 
- 
+    def send_scorek(self,student):
+
+        try:
+            coef, score , score_ce = 0, 0 , 0
+            if self.results_s.filter(student=student).exists() :
+                r = self.results_s.filter(student=student).last()
+                score = r.point
+                coef += 1
+
+            if self.skill_correctionskill.filter(student=student).exists() :
+                ce = self.skill_correctionskill.filter(student=student).last()
+                score_ce = ce.point + 1 
+                coef += 1
+
+            if coef != 0:
+                score = int((score + score_ce)/coef)
+            else :
+                score = ""                
+
+        except ObjectDoesNotExist:
+            score = ""
+
+        return score 

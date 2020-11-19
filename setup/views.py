@@ -88,14 +88,31 @@ def index(request):
 
         elif request.user.is_student: ## student
             student = Student.objects.get(user=request.user.id)
-            parcourses = Parcours.objects.filter(students=student, is_evaluation=0, is_publish=1).order_by("ranking")
+            parcourses = Parcours.objects.filter(students=student, is_evaluation=0, is_publish=1).exclude(is_leaf=1).order_by("ranking")
 
             parcours = []
-
-            for p in parcourses:
+            customexercises_set = set()
+            nb_custom = 0
+            for p in parcourses :
                 parcours.append(p)
+                custom_exercises = Customexercise.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcourses = p , date_limit__gte=today).order_by("date_limit")
+                nb_custom += custom_exercises.count()
+                customexercises_set.update(set(custom_exercises))
+            customexercises = list(customexercises_set)
 
-            relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).order_by("date_limit")
+
+            relation_ships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).order_by("date_limit")
+ 
+
+            leaf_parcourses = Parcours.objects.filter(students=student, is_evaluation=0, is_publish=1,is_leaf=1).order_by("ranking")
+            leaf_relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in= leaf_parcourses, date_limit__gte=today).order_by("date_limit")
+
+            if len(set(relation_ships)) > 0 :
+                relation_ships = set(relation_ships).update(set(leaf_relationships))
+            else :
+                relation_ships = set(leaf_relationships)
+            nb_relationships = len(leaf_relationships)
+            relationships = list(relation_ships)
 
             exercise_tab = []
             for r in relationships:
@@ -106,9 +123,12 @@ def index(request):
                 if Studentanswer.objects.filter(student=student, exercise=e).count() > 0:
                     num += 1
 
-            nb_relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).count()
+            for c in customexercises :
+                if Customanswerbystudent.objects.filter(student=student, customexercise=c).count() > 0:
+                    num += 1
+
             try:
-                ratio = int(num / nb_relationships * 100)
+                ratio = int(num / (nb_relationships+nb_custom) * 100)
             except:
                 ratio = 0
 
@@ -127,7 +147,7 @@ def index(request):
             relationships_in_tasks = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).exclude(exercise__in=exercises).order_by("date_limit")
 
             context = {'student_id': student.user.id, 'student': student, 'relationships': relationships, 'timer' : timer , 
-                       'evaluations': evaluations, 'ratio': ratio, 'today' : today ,  'parcourses': parcourses,
+                       'evaluations': evaluations, 'ratio': ratio, 'today' : today ,  'parcourses': parcourses,   'customexercises': customexercises,
                        'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late, 
                        'relationships_in_tasks': relationships_in_tasks , }
 

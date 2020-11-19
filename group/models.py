@@ -78,7 +78,7 @@ class Group(ModelWithCode):
 
         parcourses = []
         for student in self.students.all():
-            for p in student.students_to_parcours.filter(Q(author=teacher)|Q(teacher=teacher)|Q(coteachers=teacher)) :
+            for p in student.students_to_parcours.filter(Q(author=teacher)|Q(teacher=teacher)|Q(coteachers=teacher)).exclude(is_leaf=1) :
                 if p not in parcourses  :
                     parcourses.append(p)
 

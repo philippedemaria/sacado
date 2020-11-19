@@ -173,7 +173,6 @@ class Exercise(models.Model):
         except:
             return ""
 
-
     #############################################
     # non utilisée ?????? 
     def send_scores(self, student_id):
@@ -200,10 +199,6 @@ class Exercise(models.Model):
                 scores_times_tab.append(scores_times)
         return scores_times_tab
 
-
-
-
-
     def details(self, parcours):
         details, tab = {}, []
         somme = 0
@@ -228,7 +223,6 @@ class Exercise(models.Model):
 
         return details
 
-
     def last_score_and_time(self, parcours, student_id):
         student = Student.objects.get(pk=student_id)
         scores_times = {}
@@ -242,7 +236,6 @@ class Exercise(models.Model):
 
 
         return scores_times
-
 
     def timer(self, parcours, student_id):
         reponse, datetime_object = "", ""
@@ -259,13 +252,9 @@ class Exercise(models.Model):
                 datetime_object = str(reponse) + " s"
         return datetime_object
 
-
     def is_selected(self, parcours):
         relationship = Relationship.objects.filter(parcours=parcours, exercise=self)
         return relationship.count() == 1
-
-
- 
 
     def is_relationship(self ,parcours):
         try:
@@ -274,12 +263,9 @@ class Exercise(models.Model):
             relationship = False
         return relationship
 
-
     def used_in_parcours(self, teacher):
         parcours = Parcours.objects.filter(exercises=self, author=teacher)
         return parcours
-
-
 
     def is_used(self):
         '''
@@ -287,12 +273,13 @@ class Exercise(models.Model):
         '''
         return Relationship.objects.filter(exercise=self).exists()
 
-
     def is_done(self,student):
         return Studentanswer.objects.filter(student=student, exercise=self).exists()
 
-
     def nb_task_done(self, group):
+        """
+        group ou parcours car on s'en sert pour récupérer les élèves
+        """
         try:
             studentanswer_tab = []
             for s in group.students.all():
@@ -303,7 +290,6 @@ class Exercise(models.Model):
         except:
             nb_task_done = 0
         return nb_task_done
-
 
     def who_are_done(self, group):
         studentanswer_tab = []
@@ -316,7 +302,6 @@ class Exercise(models.Model):
             pass
         return studentanswer_tab
 
-
     def nb_task_parcours_done(self, parcours):
         studentanswer_tab = []
         for s in parcours.students.all():
@@ -326,8 +311,6 @@ class Exercise(models.Model):
         nb_task_done = len(studentanswer_tab)
         return nb_task_done
 
-
-
     def who_are_done_parcours(self,parcours):
         studentanswer_tab = []
         for s in parcours.students.all():
@@ -336,14 +319,10 @@ class Exercise(models.Model):
                 studentanswer_tab.append(studentanswer)
         return studentanswer_tab
 
-
-
-
     def levels_used(self):
 
         exercises = Exercise.objects.filter(level=self.supportfile)
         return exercises
-
 
     def my_parcours_container(self, teacher):
 
@@ -354,8 +333,8 @@ class Parcours(ModelWithCode):
 
     title = models.CharField(max_length=255, verbose_name="Titre")
     color = models.CharField(max_length=255, default='#00819F', verbose_name="Couleur")
-    author = models.ForeignKey(Teacher, related_name="author_parcours", on_delete=models.PROTECT, default='', blank=True, null=True, verbose_name="Auteur")
-    teacher = models.ForeignKey(Teacher, related_name="teacher_parcours", on_delete=models.PROTECT, default='', blank=True, editable=False)
+    author = models.ForeignKey(Teacher, related_name="author_parcours", on_delete=models.CASCADE, default='', blank=True, null=True, verbose_name="Auteur")
+    teacher = models.ForeignKey(Teacher, related_name="teacher_parcours", on_delete=models.CASCADE, default='', blank=True, editable=False)
     coteachers = models.ManyToManyField(Teacher, blank=True,  related_name="coteacher_parcours",  verbose_name="Enseignant en co-animation")
 
     exercises = models.ManyToManyField(Exercise, blank=True, through="Relationship", related_name="exercises_parcours")
@@ -364,18 +343,23 @@ class Parcours(ModelWithCode):
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
     is_archive = models.BooleanField(default=0, verbose_name="Archivé ?", editable=False)
 
-    level = models.ForeignKey(Level, related_name="level_parcours", on_delete=models.PROTECT, default='', blank=True, null=True, editable=False)
+    level = models.ForeignKey(Level, related_name="level_parcours", on_delete=models.CASCADE, default='', blank=True, null=True, editable=False)
     linked = models.BooleanField(default=0, editable=False)
     is_favorite = models.BooleanField(default=1, verbose_name="Favori ?")
 
     is_evaluation = models.BooleanField(default=0, editable=False)
     duration = models.PositiveIntegerField(default=2, blank=True, verbose_name="Temps de chargement (min.)")
     start = models.DateTimeField(null=True, blank=True, verbose_name="Date de début de publication")
-    stop = models.DateTimeField(null=True, blank=True, verbose_name="Verrouillée à partir de")
+    stop = models.DateTimeField(null=True, blank=True, verbose_name="Verrouillé à partir de")
 
     vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Vignette d'accueil", blank=True, default ="")
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
-    #root = models.BooleanField(default=1, verbose_name="est un sous parcours de")
+    
+    is_leaf = models.BooleanField(default=0, verbose_name="Sous-parcours ?")
+    folder_parcours = models.ManyToManyField('self',  blank=True,  related_name="subparcours_parcours",  verbose_name="Nom de parcours")    
+    
+    is_folder = models.BooleanField(default=0, verbose_name="Dossier")
+    leaf_parcours = models.ManyToManyField('self',  blank=True,  related_name="subparcours_parcours",  verbose_name="Nom de parcours")
 
 
     def __str__(self):
@@ -392,7 +376,6 @@ class Parcours(ModelWithCode):
         nb_relationships = Relationship.objects.filter(parcours=self, exercise__supportfile__is_title=0,
                                                        students=student, is_publish=1).count()
         return nb_relationships
-
 
     def is_lock(self,today):
         lock = False
@@ -415,15 +398,30 @@ class Parcours(ModelWithCode):
                 theme_tab.append(data)
         return theme_tab
 
+    def nb_leaf(self,student):
+        nb = self.leaf_parcours.filter(is_publish=1, students=student).count()
+        return nb
 
     def is_percent(self,student):
         ## Nombre de relationships dans le parcours => nbre  d'exercices
-        nb_relationships =  self.parcours_relationship.filter(students = student, is_publish=1,  exercise__supportfile__is_title=0 ).count()
-        nb_customs =  self.parcours_customexercises.filter(students = student, is_publish=1).count()
+        if self.is_folder :
+            nb_relationships , nb_customs , nb_customanswerbystudent , nb_studentanswers = 0 , 0, 0 , 0
+            for pcs in self.leaf_parcours.filter(is_publish=1):
+                nb_relationships +=  pcs.parcours_relationship.filter(students = student, is_publish=1,  exercise__supportfile__is_title=0 ).count()
+                nb_customs +=  pcs.parcours_customexercises.filter(students = student, is_publish=1).count()
 
-        ## Nombre de réponse avec exercice unique du parcours
-        nb_studentanswers = Studentanswer.objects.filter(student=student, parcours=self).values_list("exercise",flat=True).order_by("exercise").distinct().count()
-        nb_customanswerbystudent = Customanswerbystudent.objects.filter(student=student, customexercise__parcourses=self).values_list("customexercise",flat=True).order_by("customexercise").distinct().count()
+                ## Nombre de réponse avec exercice unique du parcours
+                nb_studentanswers += Studentanswer.objects.filter(student=student, parcours=pcs).values_list("exercise",flat=True).order_by("exercise").distinct().count()
+                nb_customanswerbystudent += Customanswerbystudent.objects.filter(student=student, customexercise__parcourses=pcs).values_list("customexercise",flat=True).order_by("customexercise").distinct().count()
+
+
+        else :
+            nb_relationships =  self.parcours_relationship.filter(students = student, is_publish=1,  exercise__supportfile__is_title=0 ).count()
+            nb_customs =  self.parcours_customexercises.filter(students = student, is_publish=1).count()
+
+            ## Nombre de réponse avec exercice unique du parcours
+            nb_studentanswers = Studentanswer.objects.filter(student=student, parcours=self).values_list("exercise",flat=True).order_by("exercise").distinct().count()
+            nb_customanswerbystudent = Customanswerbystudent.objects.filter(student=student, customexercise__parcourses=self).values_list("customexercise",flat=True).order_by("customexercise").distinct().count()
 
  
         data = {}
@@ -436,18 +434,14 @@ class Parcours(ModelWithCode):
             data["pc"] = 0
         return data
 
-
     def nb_exercises(self):
         nb = self.exercises.filter(supportfile__is_title=0).count()
         nba = self.parcours_customexercises.all().count()     
         return nb + nba
 
- 
-
     def exercises_only(self):
         exercises = self.exercises.filter(supportfile__is_title=0).prefetch_related('level')
         return exercises 
-
 
     def level_list(self):
         
@@ -457,7 +451,6 @@ class Parcours(ModelWithCode):
             if e.level not in exercises_level_tab:
                 exercises_level_tab.append(e.level)
         return exercises_level_tab
-
 
     def duration_overall(self):
         som = self.duration
@@ -478,7 +471,6 @@ class Parcours(ModelWithCode):
             name = k
         return name
 
-
     def group_list(self):
         students = self.students.all() # tous les élèves du parcours
         group_tab = []
@@ -488,7 +480,6 @@ class Parcours(ModelWithCode):
                 if group not in group_tab:
                     group_tab.append(group) 
         return group_tab 
-
 
     def shared_group_list(self):
 
@@ -502,7 +493,6 @@ class Parcours(ModelWithCode):
                     group_tab.append(sh_group) 
         return group_tab 
 
-
     def parcours_shared(self):
 
         students = self.students.all() #Elève d'un parcours
@@ -512,7 +502,6 @@ class Parcours(ModelWithCode):
                 shared = True
                 break
         return shared
-
 
     def parcours_group_students_count(self,group):
 
@@ -524,18 +513,27 @@ class Parcours(ModelWithCode):
         data["nb"]= len(intersection)
         data["students"] = intersection
         return data 
-
-
  
     def is_task_exists(self):
-
         today = timezone.now()
         test = False
         if Relationship.objects.filter(parcours= self,date_limit__gte = today).count() > 0 :
             test = True
+        if Customexercise.objects.filter(parcourses = self, date_limit__gte = today).count() > 0 :
+            test = True
         return test 
 
- 
+    def is_task_folder_exists(self):
+        today = timezone.now()
+        test = False
+        if Relationship.objects.filter(parcours__in= self.leaf_parcours.filter(is_publish=1),date_limit__gte = today).count() > 0 :
+            test = True
+        for p in self.leaf_parcours.filter(is_publish=1):
+            if Customexercise.objects.filter(parcourses= p ,date_limit__gte = today).count() > 0 :
+                test = True
+                break
+        return test 
+
     def is_individualized(self):
 
         test = False
@@ -546,8 +544,6 @@ class Parcours(ModelWithCode):
                 test = True 
         return test 
 
-
- 
     def is_courses_exists(self):
 
         test = False
@@ -555,6 +551,14 @@ class Parcours(ModelWithCode):
             test = True
         return test 
 
+    def is_folder_courses_exists(self):
+
+        test = False
+        for p in self.leaf_parcours.filter(is_publish=1) :
+            if p.course.count() > 0 :
+                test = True
+                break
+        return test 
 
     def is_sections_exists(self) :
 
@@ -563,13 +567,11 @@ class Parcours(ModelWithCode):
             test = True
         return test 
 
-
     def nb_task(self):
 
         today = timezone.now()
         nb = self.parcours_relationship.filter(date_limit__gte = today).count()
         return nb
-
 
     def evaluation_duration(self):
         """
@@ -585,7 +587,6 @@ class Parcours(ModelWithCode):
             som += c.duration
 
         return som 
-
 
     def min_score_parcours(self,student):
         """
@@ -637,8 +638,6 @@ class Parcours(ModelWithCode):
             data["boolean"] = False
             data["colored"] = "red"       
         return data
- 
-
 
     def is_pending_correction(self):
         """
@@ -653,6 +652,24 @@ class Parcours(ModelWithCode):
 
         if not submit :
             if Writtenanswerbystudent.objects.filter(relationship__parcours  = self).exclude(is_corrected = 1).exists() : 
+                submit = True 
+
+        return submit
+
+    def is_pending_folder_correction(self):
+        """
+        Correction en attente deuis un folder de parcours
+        """
+        submit = False
+        for p in self.leaf_parcours.filter(is_publish=1) :
+            customexercises = Customexercise.objects.filter(parcourses  = p )
+            for customexercise in customexercises :
+                if customexercise.customexercise_custom_answer.exclude(is_corrected = 1).exists() :
+                    submit = True 
+                    break
+
+        if not submit :
+            if Writtenanswerbystudent.objects.filter(relationship__parcours__in = self.leaf_parcours.all() ).exclude(is_corrected = 1).exists() : 
                 submit = True 
 
         return submit
@@ -974,8 +991,6 @@ class Customexercise(ModelWithCode):
                     subjects.append(sb)       
         return subjects
 
-
-
     def levels(self):
         levels = []
         for k in self.knowledges.all() :
@@ -988,7 +1003,6 @@ class Customexercise(ModelWithCode):
                 if sb  not in levels :
                     levels.append(sb)       
         return levels
-
 
     def percent_student_done_parcours_exercice(self, parcours):
 
@@ -1006,14 +1020,11 @@ class Customexercise(ModelWithCode):
         data["nb_done"] = nb_exercise_done
         return data
 
-
-
     def is_done(self,student):
         done = False
         if Customanswerbystudent.objects.filter(student=student, customexercise = self).exists():
             done = True
         return done
-
 
     def score_student_for_this(self,student):
 
@@ -1030,7 +1041,6 @@ class Customexercise(ModelWithCode):
 
         return score
 
-
     def is_corrected_for_this(self,student,parcours): # devoir corrigé
         correction = Customanswerbystudent.objects.filter(student=student, customexercise = self, parcours =parcours,is_corrected=1)
         is_corrected = False
@@ -1045,8 +1055,6 @@ class Customexercise(ModelWithCode):
         data["is_corrected"] = is_corrected
         return data
 
-
-
     def is_lock(self,today):
         locker = False
         try :
@@ -1056,13 +1064,11 @@ class Customexercise(ModelWithCode):
             pass 
         return locker
 
-
     def is_submit(self,parcours,student):
         submit = False
         if Customanswerbystudent.objects.filter(customexercise = self, parcours = parcours, student = student).exclude(is_corrected=1).exists() :
             submit = True          
         return submit
-
 
     def result_k_s(self,k_s, student, parcours_id,typ):
         Stage = apps.get_model('school', 'Stage')
@@ -1109,7 +1115,6 @@ class Customexercise(ModelWithCode):
                 level = 0
         return level
 
-
     def mark_to_this(self,student,parcours_id):
         data = {}
         if Customanswerbystudent.objects.filter(customexercise = self, parcours_id = parcours_id, student = student,is_corrected=1).exists() :
@@ -1121,8 +1126,6 @@ class Customexercise(ModelWithCode):
             data["marked"] = ""            
 
         return data
-
-
 
     def all_results_custom(self,student,parcours): # résultats vue élève
         data = {}
@@ -1145,12 +1148,39 @@ class Customexercise(ModelWithCode):
             data["audio"] = False
         return data
 
-
     def is_pending_correction(self):
         submit = False
         if self.customexercise_custom_answer.exclude(is_corrected = 1).exists() :
             submit = True      
         return submit
+
+    def nb_task_parcours_done(self, parcours):
+        studentanswer_tab = []
+        for s in parcours.students.all():
+            studentanswer = Studentanswer.objects.filter(exercise=self, student=s).first()
+            if studentanswer:
+                studentanswer_tab.append(studentanswer)
+        nb_task_done = len(studentanswer_tab)
+        return nb_task_done
+
+    def nb_task_done(self, group):
+        """
+        group ou parcours car on s'en sert pour récupérer les élèves
+        """
+        try:
+            custom_tab = []
+            for s in group.students.all():
+                custom_answer = Customanswerbystudent.objects.filter(customexercise=self, student=s).first()
+                if custom_answer:
+                    custom_tab.append(custom_answer)
+            nb_task_done = len(custom_tab)
+        except:
+            nb_task_done = 0
+
+        data = {}
+        data["nb_task_done"] = nb_task_done
+        data["custom_tab"] = custom_tab
+        return data
 
 class Customanswerbystudent(models.Model): # Commentaire et note pour les exercices customisés coté enseignant
 
