@@ -4362,7 +4362,8 @@ def write_exercise(request,id): # Coté élève
         if wForm.is_valid():
             w_f = wForm.save(commit=False)
             w_f.relationship = relationship
-            w_f.student = student         
+            w_f.student = student
+            w_f.is_corrected = 0  # si l'élève soumets une production alors elle n'est pas corrigée 
             w_f.save()
 
             ### Envoi de mail à l'enseignant
@@ -4419,6 +4420,7 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
             w_f.customexercise = customexercise
             w_f.parcours_id = idp
             w_f.student = student
+            w_f.is_corrected = 0
             w_f.save()
 
             if customexercise.is_image :
