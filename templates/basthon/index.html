@@ -98,9 +98,13 @@
         </div>
       </div>
       {% if   'write_exercise' in request.path %}
-      <div id="left-div" style="margin-top: 20px">        
-        <button {% get_is_lock parcours today as is_lock %}{% if not is_lock %}type="submit" name="submit_code"{% endif %} id="submit_code" class="btn btn-primary" >Envoyer ce script à mon enseignant</button>                         
-
+      <div id="left-div" style="margin-top: 20px">
+        {% get_is_lock parcours today as is_lock %}
+        {% if  is_lock or  relationship.is_lock  %}  
+        <button  class="btn btn-primary" disabled="" >Exercice verrouillé</button>   
+        {% else  %} 
+        <button type="submit" name="submit_code"   id="submit_code" class="btn btn-primary" >Envoyer ce script à mon enseignant</button>   
+        {% endif %}
         <a href="javascript:history.back()"><input type="button" value="Annuler"
                                                                    class="btn btn-default "/></a>
       </div>
@@ -116,3 +120,6 @@
     <script src="{% static 'basthon/js/shell.js' %}"></script>
     <script src="{% static 'basthon/js/gui.js' %}"></script>
 {% endblock %}
+
+
+              

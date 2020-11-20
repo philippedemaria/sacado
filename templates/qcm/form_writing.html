@@ -91,9 +91,20 @@
                     <div class="col-sm-12 col-lg-8">
                         <div class="form-group">
                             {% get_is_lock parcours today as is_lock %}                            
-                            {% if not is_lock  %}
-                                    <input value="Soumettre votre exercice" type="submit" class="btn btn-primary"/>
+ 
+
+
+                            {% get_is_lock parcours today as is_lock %}                            
+                            {% if   is_lock or   relationship.is_lock  %}
+                                    <input value="Exercice verrouillé" disabled class="btn btn-primary"/>      
+                            {% else  %}
+                                    <input value="Soumettre votre exercice" type="submit" class="btn btn-primary"/>                                    
                             {% endif  %}
+
+
+
+
+
                             <input type="button" value="Annuler" class="btn btn-default" onclick="javascript:history.back()"/>
                         </div>
                     </div>

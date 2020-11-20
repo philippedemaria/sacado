@@ -218,12 +218,23 @@
 
 
                             {% if student %}
-
                                 {% if relation.exercise.supportfile.is_ggbfile %}          
                                 <a href="{% if not is_lock %}{% url 'execute_exercise'  relation.parcours.id  relation.exercise.id   %}{% endif %}">  <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.8" {% endif %}    ></a>
                                 {% else %}
-                                <a href="{% if not is_lock %}{% url 'write_exercise'  relation.id   %}{% endif %}">  <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.8" {% endif %}    ></a>
 
+                                    {% if is_lock or relation.is_lock %}
+
+                                        <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
+                                              <i class="fa fa-lock"></i> <span class="hidden_lock"> {{ customexercise.lock|date:"d-m-Y à H:i" }}</span>
+                                        </div>
+                                        <a href="#"> 
+                                            <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.8" {% endif %}  >
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'write_exercise'  relation.id   %}"> 
+                                            <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.8" {% endif %}  >
+                                        </a>
+                                    {% endif %}
                                 {% endif  %}
                             {% else %}
                             <a href="#" class="detail_parcours"  data-exercise_id="{{ relation.exercise.id }}"  data-num_exo="{{ forloop.counter}}"

@@ -727,6 +727,7 @@ class Relationship(models.Model):
             task = False
         return task
 
+
     def constraint_to_this_relationship(self,student): # Contrainte. 
     
         under_score = True # On suppose que l'élève n'a pas obtenu le score minimum dans les exercices puisqu'il ne les a pas fait. 
