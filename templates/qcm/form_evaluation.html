@@ -59,7 +59,7 @@
 
 
 {% block evaluation %}
- 
+        {% if teacher.user.is_superuser %}  
         <tr>
             <td>{{ form.is_leaf.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                     <div class="helper_tip_text" >Si coché, le parcours est insclus dans un pacours existant.</div>
@@ -81,7 +81,7 @@
             <td><label> Nom des sous-parcours</label></td>
             <td colspan=2>{{ form.leaf_parcours  |add_class:"select2" }} {{ form.leaf_parcours.errors }}</td>
         </tr>
-
+        {% endif %} 
 
         <tr>
             <td>{{ form.duration.label_tag }}
