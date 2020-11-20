@@ -73,7 +73,7 @@ def convert_time(duree) :
 class Supportfile(models.Model):
 
     knowledge = models.ForeignKey(Knowledge, on_delete=models.PROTECT,  related_name='supportfiles', verbose_name="Savoir faire associé - Titre")
-    annoncement = models.TextField( verbose_name="Précision sur le savoir faire")
+    annoncement = RichTextUploadingField( verbose_name="Précision sur le savoir faire")
     author = models.ForeignKey(Teacher, related_name="supportfiles", on_delete=models.PROTECT, editable=False)
 
  
@@ -115,6 +115,7 @@ class Supportfile(models.Model):
     is_image = models.BooleanField(default=0, verbose_name="Iage/Scan ?")
     is_text = models.BooleanField(default=0, verbose_name="Texte ?")
 
+    correction = RichTextUploadingField( blank=True, default="", null=True, verbose_name="Correction")
 
     def __str__(self): 
         knowledge = self.knowledge.name[:20]       
@@ -689,6 +690,11 @@ class Relationship(models.Model):
     students = models.ManyToManyField(Student, blank=True, related_name='students_relationship', editable=False)
     instruction = models.TextField(blank=True,  null=True,  editable=False)
 
+    is_lock = models.BooleanField(default=0, verbose_name="Exercice cloturé ?")
+    is_mark = models.BooleanField(default=0, verbose_name="Notation ?")
+    mark = models.PositiveIntegerField(default=0, verbose_name="Sur ?")
+
+
     def __str__(self):
         try :
             return "{} : {}".format(self.parcours, self.exercise.supportfile.annoncement)
@@ -703,8 +709,6 @@ class Relationship(models.Model):
         studentanswer = Studentanswer.objects.filter(student=student, parcours= self.parcours , exercise = self.exercise ).last()
         return studentanswer
 
-
-
     def is_done(self,student):
         done = False
         sta = Studentanswer.objects.filter(student=student, exercise = self.exercise, parcours= self.parcours ).exists()
@@ -712,7 +716,6 @@ class Relationship(models.Model):
         if sta or stw :
             done = True
         return done
-
 
     def is_task(self):
         task = False
@@ -723,7 +726,6 @@ class Relationship(models.Model):
         except :
             task = False
         return task
-
 
     def constraint_to_this_relationship(self,student): # Contrainte. 
     
@@ -739,7 +741,6 @@ class Relationship(models.Model):
 
         return under_score  
 
-
     def is_header_of_section(self): # Contrainte. 
     
         header = False # On suppose que l'élève n'a pas obtenu le score minimum dans les exercices puisqu'il ne les a pas fait. 
@@ -751,8 +752,6 @@ class Relationship(models.Model):
         data["header"] = header
 
         return header 
-
-
 
     def percent_student_done_parcours_exercice(self,parcours):
 
@@ -774,13 +773,11 @@ class Relationship(models.Model):
         data["nb_done"] = nb_exercise_done
         return data
 
-
     def is_submit(self,student):
         submit = False
         if self.relationship_written_answer.filter(student = student).exclude(is_corrected = 1).exists() :
             submit = True          
         return submit
-
 
     def noggb_data(self,student):
         try :
@@ -789,15 +786,11 @@ class Relationship(models.Model):
             data = {'is_corrected' : False , 'skills' : [] , 'comment' : "" , }     
         return data
 
-
-
-
     def is_pending_correction(self):
         submit = False
         if self.relationship_written_answer.exclude(is_corrected = 1).exists() :
             submit = True          
         return submit
-
 
     def code_student_for_this(self,student):
         Stage = apps.get_model('school', 'Stage')
@@ -839,7 +832,6 @@ class Relationship(models.Model):
 
         return level
 
-
     def result_skill(self,skill,student):
         Stage = apps.get_model('school', 'Stage')
         try :
@@ -875,6 +867,22 @@ class Relationship(models.Model):
         except :
             level = 0
         return level
+
+
+    def mark_to_this(self,student,parcours_id): # parcours_id n'est pas utilisé mais on le garde pour utiliser la fontion exostante dans item_tags
+        data = {}
+ 
+        if Writtenanswerbystudent.objects.filter(relationship = self,  student = student,is_corrected=1).exists() :
+            wa = Writtenanswerbystudent.objects.get(relationship = self,   student = student,is_corrected=1)
+            data["is_marked"] = True
+            data["marked"] = wa.point
+        else :
+            data["is_marked"] = False
+            data["marked"] = ""            
+
+        return data
+
+
 
 class Studentanswer(models.Model):
 
@@ -922,6 +930,7 @@ class Writtenanswerbystudent(models.Model): # Commentaire pour les exercices non
     answer = RichTextUploadingField( default="", null=True,  blank=True, ) 
     comment = models.TextField( default="", null=True,   editable=False) # Commentaire de l'enseignant sur l'exercice
     audio = models.FileField(upload_to=file_directory_path,verbose_name="Commentaire audio", blank=True, null= True, default ="")
+    point = models.CharField(default="", max_length=10, verbose_name="Note")
     is_corrected = models.BooleanField( default=0, editable=False ) 
 
     def __str__(self):        

@@ -51,7 +51,8 @@ define(['jquery', 'bootstrap'], function ($) {
                         'mark': mark,
                         'student_id':student_id,
                         'parcours_id':parcours_id,
-                        'customexercise_id': customexercise_id,                        
+                        'customexercise_id': customexercise_id,  
+                        'custom': 1,                 
                         csrfmiddlewaretoken: csrf_token
                     },
                     url: "../../../ajax_mark_evaluate",

@@ -31,6 +31,17 @@
     <!-- Partie sur laquelle est posée l'image  -->                  
     <div class="card-image">
 
+
+
+ 
+          {% if relation.is_lock  %}
+                  <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
+                      <i class="fa fa-lock"></i> <span class="hidden_lock"></span>
+                  </div>
+          {% endif %}
+          
+
+
         {% if not relation.exercise.supportfile.is_ggbfile %}
           <div style="position: absolute; left : 30px; top:41px;" id="annoncement{{relation.id}}">   
               <span class="helper_tip btn btn-default">Consigne

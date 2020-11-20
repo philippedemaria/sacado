@@ -258,6 +258,10 @@ urlpatterns = [
     path('ajax/chargethemes_parcours', ajax_chargethemes_parcours, name='ajax_chargethemes_parcours'),
     path('ajax_all_parcourses', ajax_all_parcourses, name='ajax_all_parcourses'),     
     path('ajax_course_custom_show_shared', ajax_course_custom_show_shared, name='ajax_course_custom_show_shared'),  
+
+
+
+    path('ajax_closer_exercise', ajax_closer_exercise, name='ajax_closer_exercise'),
     #####################################################################################################################################
     #####################################################################################################################################
 

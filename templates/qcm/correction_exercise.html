@@ -38,6 +38,18 @@
       {% include 'qcm/breadcrumb.html' %}
     <small> Interface de correction          
     <a href="#" data-toggle='modal' data-target='#consigne' class="btn btn-primary" ><i class="fa fa-eye"></i> Voir l'énoncé </a></small>
+
+
+ 
+        {% if custom %}
+    		<small> <a href="#" class="btn btn-{% if customexercise.lock %}danger{% else %}default{% endif %} closer_exercise"  
+    							data-exercise_id = "{{ customexercise.id }}"  data-custom= 1  
+    							data-parcours_id = "{{ parcours.id }}"  ><span id="closer"><i class="fa fa-{% if customexercise.lock %}lock{% else %}unlock{% endif %}"></i></span> Clôturer l'exercice et afficher le corrigé </a></small>
+        {% else %}
+    		<small> <a href="#" class="btn btn-{% if relationship.is_lock %}danger{% else %}default{% endif %} closer_exercise" data-custom= 0   
+    							data-exercise_id = "{{ relationship.id }}" ><span id="closer"><i class="fa fa-{% if relationship.is_lock %}lock{% else %}unlock{% endif %}"></i></span> Clôturer l'exercice et afficher le corrigé </a></small>
+        {% endif %}
+
 {% endblock %}
 
 
@@ -52,12 +64,18 @@
         </a>
     {% endif %}
 
+
+
+
+
+
 {% endblock %}
 
 
 
 
 {% block body %}
+
 <section class="content_list">  
 
 {% include 'preloader.html' %}
@@ -98,8 +116,6 @@
                                                             text-danger  
                                                         {% endif %} pull-right"
                                                        ></i>
-                                                {% else %}
-                                                    <i class="fa fa-toggle-on text-success pull-right"></i>   
                                                 {% endif %}
                                             {% endif %}
                                         </span>

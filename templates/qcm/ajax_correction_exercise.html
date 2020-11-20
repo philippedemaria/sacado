@@ -38,7 +38,21 @@
 {% endif %}
 </div>
 <div class="col-sm-12 col-md-5" style="padding-right:0px">
- 
+    {% if relationship.is_mark %}
+        {% get_mark_to_this relationship student relationship as this_mark %}  
+        <div class="row">
+            <div class="col-sm-6 col-md-4" style="padding-top: 5px">  
+            Note sur {{relationship.mark}}
+            </div>
+            <div class="col-sm-5 col-md-3">  
+            <input  type="number" {% if this_mark.is_marked %} value="{{ this_mark.marked }}" {% endif %} max="{{relationship.mark}}" min="0"   
+                    step="0.25" data-relationship_id="{{ relationship.id }}" name="mark" class="form-control" data-student_id="{{student.user.id}}" id="mark_evaluate"  /> 
+            </div>
+            <div class="col-sm-1 col-md-1" id="mark_sign">  
+            </div>
+        </div>    
+        <hr>   
+    {% endif %}
     
     {% include 'qcm/correction_tools.html' %}
 

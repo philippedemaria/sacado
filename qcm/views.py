@@ -3716,7 +3716,7 @@ def correction_exercise(request,id,idp,ids=0):
             w_a = False 
             annotations = []
 
-        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage , 'comments' : comments   , 'formComment' : formComment , 'custom':0, 'nb':nb, 'w_a':w_a, 'annotations':annotations,  'communications' : [] ,  'parcours' : relationship.parcours , 'parcours_id': relationship.parcours.id, 'group' : None , 'student' : student }
+        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage , 'comments' : comments   , 'formComment' : formComment , 'custom':  False , 'nb':nb, 'w_a':w_a, 'annotations':annotations,  'communications' : [] ,  'parcours' : relationship.parcours , 'parcours_id': relationship.parcours.id, 'group' : None , 'student' : student }
  
         return render(request, 'qcm/correction_exercise.html', context)
     else :
@@ -3741,10 +3741,48 @@ def correction_exercise(request,id,idp,ids=0):
                 elif customexercise.is_image :
                     images_pdf = Customanswerimage.objects.filter(customanswerbystudent = c_e)
 
-        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage , 'images_pdf' : images_pdf   ,  'comments' : comments   , 'formComment' : formComment , 'nb':nb, 'c_e':c_e, 'customannotations':customannotations,  'custom':1,  'communications' : [], 'parcours' : parcours, 'group' : None , 'parcours_id': parcours.id, 'student' : student }
+        context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage , 'images_pdf' : images_pdf   ,  'comments' : comments   , 'formComment' : formComment , 'nb':nb, 'c_e':c_e, 'customannotations':customannotations,  'custom': True,  'communications' : [], 'parcours' : parcours, 'group' : None , 'parcours_id': parcours.id, 'student' : student }
  
         return render(request, 'qcm/correction_custom_exercise.html', context)
 
+
+
+ 
+def ajax_closer_exercise(request):
+
+    today = time_zone_user(request.user)
+    now = today.now()
+    custom =  int(request.POST.get("custom")) 
+    exercise_id =  int(request.POST.get("exercise_id")) 
+
+    data = {}
+
+    if custom == 1:
+        parcours_id =  int(request.POST.get("parcours_id"))
+        if Customexercise.objects.filter(pk = exercise_id , is_lock = 1).exists() :
+            Customexercise.objects.filter(pk = exercise_id ).update(is_lock = 0).update(date_limit = None)  
+            data["html"] = "<i class='fa fa-unlock'></i>"    
+            data["btn_off"] = "btn-danger"
+            data["btn_on"] = "btn-default" 
+        else :   
+            Customexercise.objects.filter(pk = exercise_id ).update(is_lock = 1).update(date_limit = now) 
+            data["html"] = "<i class='fa fa-lock'></i>" 
+            data["btn_off"] = "btn-default"
+            data["btn_on"] = "btn-danger"      
+    else :
+        if Relationship.objects.filter(pk = exercise_id,is_lock = 1).exists():
+            Relationship.objects.filter(pk = exercise_id).update(is_lock = 0) 
+            data["html"] = "<i class='fa fa-unlock'></i>"    
+            data["btn_off"] = "btn-danger"
+            data["btn_on"] = "btn-default" 
+        else :
+            Relationship.objects.filter(pk = exercise_id).update(is_lock = 1)  
+            data["html"] = "<i class='fa fa-lock'></i>"    
+            data["btn_off"] = "btn-default"
+            data["btn_on"] = "btn-danger"    
+
+
+    return JsonResponse(data) 
 
 
 
@@ -3972,13 +4010,23 @@ def ajax_annotate_exercise_no_made(request): # Marquer un exercice non fait
 def ajax_mark_evaluate(request): # Evaluer un exercice custom par note
 
     student_id =  int(request.POST.get("student_id"))
-    customexercise_id =  int(request.POST.get("customexercise_id"))  
-    parcours_id =  int(request.POST.get("parcours_id")) 
     mark =  request.POST.get("mark")
     data = {}
-    this_custom = Customanswerbystudent.objects.filter(parcours_id = parcours_id , customexercise_id = customexercise_id, student_id = student_id)
-    this_custom.update(is_corrected= 1)
-    this_custom.update(point= mark)
+
+    if int(request.POST.get("student_id")) == 1 :
+
+        customexercise_id =  int(request.POST.get("customexercise_id"))  
+        parcours_id =  int(request.POST.get("parcours_id")) 
+        this_custom = Customanswerbystudent.objects.filter(parcours_id = parcours_id , customexercise_id = customexercise_id, student_id = student_id)
+        this_custom.update(is_corrected= 1)
+        this_custom.update(point= mark)
+
+    else :
+
+        relationship_id =  int(request.POST.get("relationship_id"))  
+        this_exercise = Writtenanswerbystudent.objects.filter(relationship_id = relationship_id ,   student_id = student_id)
+        this_exercise.update(is_corrected= 1)
+        this_exercise.update(point= mark)
 
     data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"             
 

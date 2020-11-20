@@ -1,6 +1,6 @@
 define(['jquery', 'bootstrap'], function ($) {
     $(document).ready(function () {
-        console.log("chargement JS ajax-customexercise.js OK");
+        console.log("chargement JS ajax-exercise.js OK");
 
  
 
@@ -92,6 +92,38 @@ define(['jquery', 'bootstrap'], function ($) {
                 }
             )
         });
+
+
+        // Enregistre le score de knowledge
+        $('#mark_evaluate').on('change', function (event) {
+            let mark = $(this).val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let student_id = $(this).attr("data-student_id");
+            let relationship_id = $(this).attr("data-relationship_id");
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'mark': mark,
+                        'student_id':student_id,
+                        'custom': 0,
+                        'relationship_id': relationship_id,                        
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../../ajax_mark_evaluate",
+                    success: function (data) {
+                        $('#evaluate'+student_id).html(data.eval);
+                        $('#mark_sign').html(data.eval);
+
+                    }
+                }
+            )
+        });
+
+
+
 
 });
 
