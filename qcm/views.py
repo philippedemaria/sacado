@@ -950,16 +950,7 @@ def create_parcours(request):
         nf.save()
         form.save_m2m()
         nf.students.set(form.cleaned_data.get('students'))
-
-        leaf_parcours =  request.POST.getlist('leaf_parcours')
-        for lp in leaf_parcours :
-            lp.is_leaf = 1
-            lp.save()
-
-        folder_parcours =  request.POST.getlist('folder_parcours')
-        for fp in folder_parcours :
-            fp.is_folder = 1
-            fp.save()
+ 
 
         sg_students =  request.POST.getlist('students_sg')
         for s_id in sg_students :
@@ -1050,16 +1041,7 @@ def update_parcours(request, id, idg=0 ):
             form.save_m2m()
             nf.students.set(form.cleaned_data.get('students'))
 
-
-            leaf_parcours =  request.POST.getlist('leaf_parcours')
-            for lp in leaf_parcours :
-                lp.is_leaf = 1
-                lp.save()
-
-            folder_parcours =  request.POST.getlist('folder_parcours')
-            for fp in folder_parcours :
-                fp.is_folder = 1
-                fp.save()
+ 
 
             sg_students =  request.POST.getlist('students_sg')
             for s_id in sg_students :
