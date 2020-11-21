@@ -633,13 +633,13 @@ define(['jquery','bootstrap'], function ($) {
             $('#folder_div').toggle(500);
         });
 
-
+        */
         if( $("#id_is_folder").is(":checked")) { $('#leaf_div').show(); } else { $('#leaf_div').hide(); }
         
         $("#id_is_folder").on('change', function (event) {
             $('#leaf_div').toggle(500);
         });
-        */
+
 
         $(".click_subparcours_show").on('click', function (event) {
             let parcours_id = $(this).attr("data-parcours_id");
