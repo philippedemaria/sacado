@@ -16,9 +16,7 @@
 
     <div id="corrector"> 
         {% if customexercise.is_file and c_e.file %}
-            {% for image in images_pdf %}
-                <img src="{{ image }}" width="100%"/>
-            {% endfor %}
+            <iframe src="{{  c_e.file.url }}" height="700" width="100%"></iframe>
         {%  elif customexercise.is_python or  customexercise.is_scratch %}
             <pre>{{ c_e.answer|safe }}</pre>
         {%  elif customexercise.is_text %}

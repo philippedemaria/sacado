@@ -28,6 +28,7 @@ from django.core.mail import send_mail
 from group.decorators import user_is_group_teacher 
 from qcm.decorators import user_is_parcours_teacher, user_can_modify_this_course, student_can_show_this_course , user_is_relationship_teacher, user_is_customexercice_teacher 
 from account.decorators import user_can_create, user_is_superuser
+import img2pdf
 ##############bibliothèques pour les impressions pdf  #########################
 import os
 from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
@@ -3762,10 +3763,7 @@ def correction_exercise(request,id,idp,ids=0):
                 customannotations = Customannotation.objects.filter(customanswerbystudent = c_e)
                 nb = customannotations.count()                 
                 if c_e.file :
-                    images = convert_from_path(c_e.file) 
-                    for img in images: 
-                        img.save('output.jpg', 'JPEG')
-                        images_pdf.append(img)
+                    images_pdf = c_e.file
 
                 elif customexercise.is_image :
                     images_pdf = Customanswerimage.objects.filter(customanswerbystudent = c_e)
