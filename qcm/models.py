@@ -115,7 +115,7 @@ class Supportfile(models.Model):
     is_image = models.BooleanField(default=0, verbose_name="Iage/Scan ?")
     is_text = models.BooleanField(default=0, verbose_name="Texte ?")
 
-    correction = RichTextUploadingField( blank=True, default="", null=True, verbose_name="Correction")
+    correction = RichTextUploadingField( blank=True, default="", null=True, verbose_name="Corrigé")
 
     def __str__(self): 
         knowledge = self.knowledge.name[:20]       
@@ -692,7 +692,7 @@ class Relationship(models.Model):
 
     is_lock = models.BooleanField(default=0, verbose_name="Exercice cloturé ?")
     is_mark = models.BooleanField(default=0, verbose_name="Notation ?")
-    mark = models.PositiveIntegerField(default=0, verbose_name="Sur ?")
+    mark = models.CharField(max_length=3, default="", verbose_name="Sur ?")
 
 
     def __str__(self):

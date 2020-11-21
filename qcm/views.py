@@ -2463,6 +2463,24 @@ def ajax_dates(request):  # On soncerve relationship_id par commodité mais c'es
     return JsonResponse(data) 
 
 
+@csrf_exempt
+def ajax_notes(request):  
+    data = {}
+    relationship_id = request.POST.get("relationship_id")
+    mark =  request.POST.get("mark")
+    relationship  = Relationship.objects.filter(pk = relationship_id ).update(is_mark = 1, mark = mark)
+    return JsonResponse(data) 
+
+
+
+@csrf_exempt
+def ajax_delete_notes(request):  
+    data = {}
+    relationship_id = request.POST.get("relationship_id")
+    relationship  = Relationship.objects.filter(pk = relationship_id ).update(is_mark = 0, mark = "")
+    return JsonResponse(data) 
+
+
 
 @csrf_exempt
 def ajax_skills(request):  
@@ -2920,13 +2938,17 @@ def create_supportfile(request):
     code = str(uuid.uuid4())[:8]
     teacher = Teacher.objects.get(user_id = request.user.id)
     form = SupportfileForm(request.POST or None,request.FILES or None,teacher = teaher)
+    is_ggbfile = request.POST.get("is_ggbfile")
     if request.user.is_superuser :
         if form.is_valid():
             nf =  form.save(commit = False)
             nf.code = code
             nf.author = teacher
+            if is_ggbfile :
+                nf.annoncement = unescape_html(cleanhtml(nf.annoncement)) 
             send_to_teachers(nf.level)        
             nf.save()
+            form.save_m2m()
             # le supprot GGB est placé comme exercice par défaut.
             Exercise.objects.create(supportfile = nf, knowledge = nf.knowledge, level = nf.level, theme = nf.theme )
 
@@ -2950,14 +2972,19 @@ def create_supportfile_knowledge(request,id):
     supportfiles = Supportfile.objects.filter(is_title=0).order_by("level")
     knowledges = Knowledge.objects.all().order_by("level")
 
+    is_ggbfile = request.POST.get("is_ggbfile")
+
     if request.user.is_superuser : 
         if form.is_valid():
             nf =  form.save(commit = False)
             nf.code = code
             nf.author = teacher
             nf.knowledge = knowledge
+            if is_ggbfile :
+                nf.annoncement = unescape_html(cleanhtml(nf.annoncement)) 
             #send_to_teachers(nf.level)    
             nf.save()
+            form.save_m2m()
             # le support GGB est placé comme exercice par défaut.
             Exercise.objects.create(supportfile = nf, knowledge = nf.knowledge, level = nf.level, theme = nf.theme )
             return redirect('admin_supportfiles' , nf.level.id )
@@ -2982,11 +3009,13 @@ def update_supportfile(request, id, redirection=0):
         levels = Level.objects.all()
         supportfiles = Supportfile.objects.filter(is_title=0).order_by("level")
         knowledges = Knowledge.objects.all().order_by("level")
-
+        is_ggbfile = request.POST.get("is_ggbfile")
         if request.method == "POST":
             if supportfile_form.is_valid():
                 nf = supportfile_form.save(commit=False)
                 nf.code = supportfile.code
+                if is_ggbfile :
+                    nf.annoncement = unescape_html(cleanhtml(nf.annoncement)) 
                 nf.save()
                 supportfile_form.save_m2m()
                 messages.success(request, "L'exercice a été modifié avec succès !")

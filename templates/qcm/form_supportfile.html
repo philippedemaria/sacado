@@ -53,7 +53,7 @@ ul#id_skills li{
         <form action="" method="POST" enctype='multipart/form-data'>
             {% csrf_token %}
             <div class="row" id="standard_layer">
-            {% if knowledge %}
+                {% if knowledge %}
                         <input value="{{ knowledge.level.id }}" name="level" id="id_level" type="hidden" />
                         <input value="{{ knowledge.theme.id }}" name="theme" id="id_theme" type="hidden" />
                         <input value="{{ knowledge.id }}" name="knowledge" id="id_knowledge" type="hidden" />
@@ -89,7 +89,7 @@ ul#id_skills li{
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 {{ form.annoncement.label_tag }} <small><em>A privilégier</em></small>
-                                {{ form.annoncement |add_class:"form-control"|attr:"rows:3" }}
+                                {{ form.annoncement  }}
                                 {{ form.annoncement.errors }}
                             </div>
                         </div>
@@ -226,7 +226,6 @@ ul#id_skills li{
                             </div>
                         </div>
                     </div>
-
                     <div class="col-sm-12 col-md-3 setup_no_ggb">
                         <h4 class="thin"><i class="fa fa-cog"></i> Format de réponse non autocorrigée</h4><hr/>
                         <div class="row">
@@ -294,9 +293,21 @@ ul#id_skills li{
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    {{ form.correction.label_tag }}
+                                    {{ form.correction}}
+                                    {{ form.correction.errors }}
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
                     </div>
-
-
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-md-12">

@@ -200,8 +200,8 @@ urlpatterns = [
     path('ajax/publish_parcours', ajax_publish_parcours, name='ajax_publish_parcours'),  
     path('ajax/dates', ajax_dates, name='ajax_dates'), 
     path('ajax/skills', ajax_skills, name='ajax_skills'), 
-
-
+    path('ajax/notes', ajax_notes, name='ajax_notes'), 
+    path('ajax/delete_notes', ajax_delete_notes, name='ajax_delete_notes'), 
     path('ajax/remediation', ajax_remediation, name='ajax_remediation'),
 
     path('ajax/remediation_viewer', ajax_remediation_viewer , name='ajax_remediation_viewer'),

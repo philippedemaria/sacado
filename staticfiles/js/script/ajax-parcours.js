@@ -604,11 +604,11 @@ define(['jquery','bootstrap'], function ($) {
         display_custom_exercise_modal($('.custom_select_share_close'),"#custom_share");
 
            
-            $('.custom_select_task').on('click', function (event) {
-                let relationship_id = $(this).attr("data-relationship_id");
-                $("#custom_detail_dateur"+relationship_id).toggle();
-                $("#custom_detail_dateur"+relationship_id).focus();
-            });
+        $('.custom_select_task').on('click', function (event) {
+            let relationship_id = $(this).attr("data-relationship_id");
+            $("#custom_detail_dateur"+relationship_id).toggle();
+            $("#custom_detail_dateur"+relationship_id).focus();
+        });
 
 
         // Affiche dans la modal la liste des élèves du groupe sélectionné
@@ -641,22 +641,16 @@ define(['jquery','bootstrap'], function ($) {
         });
 
 
-            $(".click_subparcours_show").on('click', function (event) {
-                let parcours_id = $(this).attr("data-parcours_id");
-                $("#subparcours_show"+parcours_id).toggle(500);
+        $(".click_subparcours_show").on('click', function (event) {
+            let parcours_id = $(this).attr("data-parcours_id");
+            $("#subparcours_show"+parcours_id).toggle(500);
+            if( $(this).find("i").hasClass("fa-folder") ) 
 
-                if( $(this).find("i").hasClass("fa-folder") ) 
+                { $(this).find("i").removeClass("fa-folder").addClass("fa-folder-open");}
+            else 
+                { $(this).find("i").removeClass("fa-folder-open").addClass("fa-folder");}
 
-                    { $(this).find("i").removeClass("fa-folder").addClass("fa-folder-open");}
-
-                else 
-
-                    { $(this).find("i").removeClass("fa-folder-open").addClass("fa-folder");}
-
-
-
-
-            });
+        });
 
 
 

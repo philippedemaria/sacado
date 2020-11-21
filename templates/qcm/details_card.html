@@ -85,9 +85,6 @@
                 Pop up de la date de la tache d'un exercice  
           =============================================================================================================
           =============================================================================================================-->
-
-
-
           <!-- Pop up de la date de la tache d'un exercice  -->
           <div id="detail_dateur{{relation.id}}" class="card-dateur"  > 
               <div class="row">
@@ -113,10 +110,13 @@
                 <label  style="font-size: 12px;">Date de publication ?</label><br>
                 <input type="type" name="start" data-relationship_id="{{relation.id}}" data-type ="0" data-custom ="0" value='{{ relation.date_limit|date:"Y-m-d" }}' class="datetimepicker dateur pull-right" />
           </div>
-
-          <!-- Pop up de la constrainte  -->
+          <!--  
+          =============================================================================================================
+          =============================================================================================================
+                Pop up de la constrainte 
+          =============================================================================================================
+          =============================================================================================================-->
           <div id="detail_constraint{{relation.id}}" class="card-dateur"> 
-
               <div class="row">
                     <div class="col-sm-12 col-md-12 title">  
                       <span href="#card{{relation.id}}" class="select_constraint_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>  
@@ -188,10 +188,12 @@
                </div>
           </div>
 
- 
-
-
-          <!-- Pop up de la durée et du nombre de situation d'un exercice  -->
+           <!--  
+          =============================================================================================================
+          =============================================================================================================
+                Pop up de la durée et du nombre de situation d'un exercice
+          =============================================================================================================
+          =============================================================================================================-->
           <div id="details{{relation.id}}" class="card-dateur"  > 
               <div class="row">
                     <div class="col-sm-12 col-md-12 title">
@@ -225,8 +227,12 @@
                     </div>
                 </div> 
           </div>
-
-          <!-- Pop up de partage d'un exercice  -->
+           <!--  
+          =============================================================================================================
+          =============================================================================================================
+              Pop up de partage d'un exercice
+          =============================================================================================================
+          =============================================================================================================-->
           <div id="share{{ relation.id }}" class="card-dateur"  > 
               <div class="row">
                     <div class="col-sm-12 col-md-12   title">  
@@ -253,11 +259,13 @@
                     data-exercise_id="{{ relation.id}}" style="font-size:14px">
                     <i  class="fa fa-random fa-fw"></i> Déplacer dans un autre parcours
                 </a>
-
-
           </div>
-
-          <!-- Pop up des compétences d'un exercice  -->
+           <!--  
+          =============================================================================================================
+          =============================================================================================================
+              Pop up des compétences d'un exercice
+          =============================================================================================================
+          =============================================================================================================-->
           <div id="skill{{ relation.id }}" class="card-skill"> Compétences visées<br>
               <span   class="select_skill_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>
                 {% for skill in skills %}
@@ -267,17 +275,68 @@
                       </label>{% if not forloop.last %}<br>{% endif %}
                 {% endfor %}
           </div>
+           <!--  
+          =============================================================================================================
+          =============================================================================================================
+              Pop up des notes
+          =============================================================================================================
+          =============================================================================================================-->
+          {% if not relation.exercise.supportfile.is_ggbfile %}
+          <div id="select_note{{ relation.id }}"  class="card-dateur"  >  
+              <div class="row">
+                    <div class="col-sm-12 col-md-12 title">
+                    <span href="#card{{relation.id}}" class="select_note_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>               
+                        Notes 
+                    </div>
+               </div> 
+              <hr style="padding:0px; margin:10px 0px"/> 
 
+               <div class="row">
+                    <div class="col-sm-6 col-md-7">
+                        <label  style="font-size: 14px;">Sur ? </label>
+                    </div>
+                    <div class="col-sm-6 col-md-5">
+                        <input type="number" step=0.5 min=0 name="mark" data-relationship_id="{{relation.id}}" id="mark{{relation.id}}" value="{% if  relation.is_mark %}{{ relation.mark }}{% endif %}" class="details_notes form-control" />  
+                    </div>
+                </div>
+ 
+               <div class="row {% if not relation.is_mark %}is_marked{% endif %}" id = "is_marked{{relation.id}}" >
+                    <div class="col-sm-6 col-md-7">
+                        <label  style="font-size: 14px;">Supprimer la note ? </label>
+                    </div>
+                    <div class="col-sm-6 col-md-5">
+                        <input type="checkbox" class="no_marker"    data-relationship_id="{{relation.id}}"    />  
+                    </div>
+                </div> 
+ 
 
-
-          <!--  Image de la card  -->
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <span class="select_notes_close btn btn-xs btn-primary" data-relationship_id="{{relation.id}}">Valider</span>
+                    </div>
+                </div> 
+          </div>
+          {% endif %}
+           <!-- ######################################################################################################## 
+          }
+          ############################################################################################################## 
+          ##############################################################################################################
+              Image de la card
+          ##############################################################################################################
+          ##############################################################################################################-->
           <a href="#card{{relation.id}}" class="detail_parcours"  data-exercise_id="{{ relation.exercise.id }}" title="{{ relation.exercise.supportfile.annoncement|cleanhtml|safe }}"
              data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}" data-custom=0 > 
 
                <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours_order"  >  
           </a> 
 
-        <!--  Barre d'outil de la card  -->
+           <!-- ######################################################################################################## 
+          ############################################################################################################## 
+          ##############################################################################################################
+              Barre d'outil de la card
+          ##############################################################################################################
+          ##############################################################################################################-->
+
         <div class="card-text" style="background-color:{{ parcours.color }}; text-align:center;color:{{ parcours.color|contrast_color }}">
             <!-- Appel de la fenetre remédiation 
                   Appel ajax vers la modale qui est dans la page dashboard : id="remediation"
@@ -303,19 +362,41 @@
 
 
             <!-- Appel des compétences -->
-            <span class="select_skills horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="skill{{relation.id}}" title="Ajouter des compétences" ><i class="fa fa-cogs"></i> </span>             
+            <span class="select_skills horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="skill{{relation.id}}" title="Ajouter des compétences" ><i class="fa fa-cogs"></i> </span>  
+            {% if relation.exercise.supportfile.is_ggbfile %}
             <!-- Appel des situations et durée -->
             <span class="select_details horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="clock{{relation.id}}"  title="Modifier le temps"><!-- l'id permet de modifier après ajax le temps -->
                 <i class="fa fa-clock-o"></i> <span style="font-size:10px">{{ relation.duration }} min.</span> 
             </span>
             <!-- Appel des situations -->
-            {% if relation.exercise.supportfile.is_ggbfile %}
             <span class="select_details horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="save{{relation.id}}" title="Modifier le nombre de situations"><!-- l'id permet de modifier après ajax le nombre de situation -->
                 <i class="fa fa-save"></i> {{ relation.situation}}  
             </span>
             {% else %}
+            <!-- Appel des durées -->
+            <span class="select_details horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="clock{{relation.id}}"  title="Modifier le temps"><!-- l'id permet de modifier après ajax le temps -->
+                 <span style="font-size:10px">{{ relation.duration }} min.</span> 
+            </span>
+            <!-- Appel des situations -->
             <span class="select_details horizontalmargin5"  data-relationship_id="{{ relation.id }}" id="save{{relation.id}}" title="Modifier la consigne"><!-- l'id permet de modifier après ajax le nombre de situation -->
                 <i class="fa fa-pencil-square" style="font-size:15px"></i> 
+            </span>
+            <!-- Appel des notes -->
+            <span class="select_note"  data-relationship_id="{{ relation.id }}" id="marker{{relation.id}}"  title="Noter cet exercice"><!-- l'id permet de modifier après ajax le temps -->
+                <span style="font-size:8px; font-weight: 800" class="no_new_mark" id="no_new_mark{{ relation.id }}">
+                    $\frac{  n  }{  {% if relation.is_mark %} {{relation.mark}} {% else %}?{% endif  %}  }$
+                </span>
+                <span style="font-size:8px; font-weight: 800" class="new_mark" id="new_mark{{ relation.id }}">
+ 
+                </span>
+            </span>
+            <!-- Appel des copies à corriger  -->
+            <span class="select_details horizontalmargin5" style="width:40px">
+                {% if relation.is_pending_correction %}              
+                <a href="{% url 'correction_exercise'  relation.id 0 0 %}" title="Copies à corriger" style="font-weight:bold; font-size:16px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-cc text-warning"></i></a>  
+                {% else %}
+                <a href="{% url 'correction_exercise'  relation.id 0 0 %}" title="Voir les copies corrigées" style="font-size:16px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-copyright"></i></a> 
+                {% endif %}
             </span>
             {% endif %}
             <!-- Appel de partage  -->
@@ -327,16 +408,6 @@
                 <i class="fa fa-trash"></i> 
             </a>
  
-            {% if not relation.exercise.supportfile.is_ggbfile %}
-            <span class="select_details horizontalmargin5" style="width:40px">
-                {% if relation.is_pending_correction %}              
-                <a href="{% url 'correction_exercise'  relation.id 0 0 %}" title="Copies à corriger" style="font-weight:bold; font-size:16px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-cc text-warning"></i></a>  
-                {% else %}
-                <a href="{% url 'correction_exercise'  relation.id 0 0 %}" title="Voir les copies corrigées" style="font-size:16px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-copyright"></i></a> 
-                {% endif %}
-            </span>
-            {% endif %}
-
 
             {% if not relation.is_publish and not relation.start %}<br>
             <span href="#card{{relation.id}}" title="Date de publication" class="select_publish white horizontalmargin5" id="select_publish{{relation.id}}" data-relationship_id="{{relation.id}}" data-statut="{{relation.is_publish }}" style="cursor:pointer">
