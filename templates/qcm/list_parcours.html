@@ -76,7 +76,7 @@ body{
                     <tr {% if not parcours.is_publish %} style="background-color:#F4F4F4;" {% endif  %}>
                         <td style="text-align:center">
                             <span class="fa-stack selector_favorite" id="selector_favorite{{ parcours.id }}" data-fav="{% if parcours.is_favorite %}1{% else  %}0{% endif  %}" data-parcours_id="{{ parcours.id }}" style="cursor:pointer">
-                              <i class="fa fa-{% if parcours.is_evaluation %}bullseye{% else %}square{% endif  %} fa-2x" style="color: {{ parcours.color }} ;"></i>
+                              <i class="fa fa-{% if parcours.is_evaluation %}bullseye{% elif parcours.is_folder %}folder{% else %}square{% endif  %} fa-2x" style="color: {{ parcours.color }} ;"></i>
                               <span id="is_favorite_id{{ parcours.id }}">{% if parcours.is_favorite %}<i class="fa fa-star fa-stack-1x" style="font-size: 12px; color:#FFF" ></i>{% endif  %}</span>
                             </span>
                         </td>  
