@@ -190,12 +190,28 @@ def group_has_parcourses(group,is_evaluation ,is_archive ):
     pses_tab = []
 
     for s in group.students.all() :
-        pses = s.students_to_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive)
+        pses = s.students_to_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive,is_leaf = 0)
         for p in pses :
             if p not in  pses_tab :
                 pses_tab.append(p)
  
     return pses_tab
+
+
+def teacher_has_parcourses_folder(teacher,is_evaluation ,is_archive ):
+    """
+    Renvoie les parcours dont le prof est propriétaire et donc les parcours lui sont partagés
+    """
+    sharing_groups = teacher.teacher_sharingteacher.all()
+    parcourses = list(teacher.teacher_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive,is_leaf = 0))
+
+
+    for sg in sharing_groups :
+        pcs = group_has_parcourses(sg.group,is_evaluation ,is_archive )
+        for p in pcs :
+            if p not in parcourses:
+                parcourses.append(p) 
+    return parcourses
 
 
 def teacher_has_parcourses(teacher,is_evaluation ,is_archive ):
@@ -212,8 +228,6 @@ def teacher_has_parcourses(teacher,is_evaluation ,is_archive ):
             if p not in parcourses:
                 parcourses.append(p) 
     return parcourses
-
-
 
 def teacher_has_permisson_to_share_inverse_parcourses(request,teacher,parcours):
     """
@@ -729,8 +743,8 @@ def list_parcours(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
     today = time_zone_user(teacher.user)
 
-    parcourses = teacher_has_parcourses(teacher,0 ,0 ) #  is_evaluation ,is_archive 
-    nb_archive =  len(teacher_has_parcourses(teacher,0 ,1)) 
+    parcourses = teacher_has_parcourses_folder(teacher,0 ,0 ) #  is_evaluation ,is_archive 
+    nb_archive =  len(teacher_has_parcourses_folder(teacher,0 ,1)) 
 
     try :
         del request.session["group_id"]
