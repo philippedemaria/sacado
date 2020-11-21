@@ -28,7 +28,6 @@ from django.core.mail import send_mail
 from group.decorators import user_is_group_teacher 
 from qcm.decorators import user_is_parcours_teacher, user_can_modify_this_course, student_can_show_this_course , user_is_relationship_teacher, user_is_customexercice_teacher 
 from account.decorators import user_can_create, user_is_superuser
-import img2pdf
 ##############bibliothèques pour les impressions pdf  #########################
 import os
 from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
