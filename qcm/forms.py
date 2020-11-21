@@ -86,11 +86,15 @@ class UpdateParcoursForm(forms.ModelForm):
 
 			students = Student.objects.filter(user__in = students_tab).order_by("user__last_name") 					
 			coteachers = Teacher.objects.filter(user__school=teacher.user.school).order_by("user__last_name") 
-
+			leaf_parcourses = teacher.teacher_parcours.filter(is_evaluation=0,is_archive=0,is_leaf = 1)		
+			folder_parcourses = teacher.teacher_parcours.filter(is_evaluation=0,is_archive=0,is_folder = 1)
 
 			self.fields['students']	 = forms.ModelMultipleChoiceField(queryset= students, widget=forms.CheckboxSelectMultiple, required=False)
 			self.fields['coteachers']	 = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
+			self.fields['leaf_parcours']	 = forms.ModelMultipleChoiceField(queryset=leaf_parcourses,  required=False)
+			self.fields['folder_parcours']	 = forms.ModelMultipleChoiceField(queryset=folder_parcourses,  required=False)
 
+			
 	def clean(self):
 		"""
 		Vérifie que la fin de l'évaluation n'est pas avant son début
