@@ -920,11 +920,6 @@ def ajax_chargethemes_parcours(request):
 
 
 
-
-
-
-
- 
 def create_parcours(request):
 
     teacher = Teacher.objects.get(user = request.user)
@@ -956,8 +951,17 @@ def create_parcours(request):
         form.save_m2m()
         nf.students.set(form.cleaned_data.get('students'))
 
-        sg_students =  request.POST.getlist('students_sg')
+        leaf_parcours =  request.POST.getlist('leaf_parcours')
+        for lp in leaf_parcours :
+            lp.is_leaf = 1
+            lp.save()
 
+        folder_parcours =  request.POST.getlist('folder_parcours')
+        for fp in folder_parcours :
+            fp.is_folder = 1
+            fp.save()
+
+        sg_students =  request.POST.getlist('students_sg')
         for s_id in sg_students :
             student = Student.objects.get(user_id = s_id)
             nf.students.add(s)
@@ -1045,6 +1049,17 @@ def update_parcours(request, id, idg=0 ):
             nf.save()
             form.save_m2m()
             nf.students.set(form.cleaned_data.get('students'))
+
+
+            leaf_parcours =  request.POST.getlist('leaf_parcours')
+            for lp in leaf_parcours :
+                lp.is_leaf = 1
+                lp.save()
+
+            folder_parcours =  request.POST.getlist('folder_parcours')
+            for fp in folder_parcours :
+                fp.is_folder = 1
+                fp.save()
 
             sg_students =  request.POST.getlist('students_sg')
             for s_id in sg_students :
