@@ -626,7 +626,7 @@ define(['jquery','bootstrap'], function ($) {
 
 
         // Pour le form_parcours
- 
+        /*
         if( $("#id_is_leaf").is(":checked")) { $('#folder_div').show(); } else { $('#folder_div').hide(); }
 
         $("#id_is_leaf").on('change', function (event) {
@@ -639,7 +639,7 @@ define(['jquery','bootstrap'], function ($) {
         $("#id_is_folder").on('change', function (event) {
             $('#leaf_div').toggle(500);
         });
-
+        */
 
         $(".click_subparcours_show").on('click', function (event) {
             let parcours_id = $(this).attr("data-parcours_id");
