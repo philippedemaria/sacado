@@ -42,8 +42,12 @@ def menu(request):
 
         elif request.user.is_parent:
             this_user = User.objects.get(pk=request.user.id)
+            students = this_user.parent.students.all()
+            last_exercises_done = Studentanswer.objects.filter(student__in= students).order_by("-date")[:10]
+
             return {
                 'this_user': this_user,
+                'last_exercises_done': last_exercises_done,
             }
 
 

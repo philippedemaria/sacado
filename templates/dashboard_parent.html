@@ -14,7 +14,7 @@
                               <!-- Add the bg color to the header using any of the bg-* classes -->
                             <div class="handler widget-user-header">
       
-
+                                <!-- 
                                 <a href="#" data-student_id="{{student.user.id }}" class="overlay_show overdiv_show white">
                                 <div class="disc" style="background-color: #FFF ;"> 
                                     <i class="fa fa-ellipsis-v" style="color: #BBB ;"></i>
@@ -22,7 +22,6 @@
                                 </a> 
 
 
-                                <!-- Fenetre accessible par le disc et les 3 points -->
 
                                 <div class="overlay  overdiv_show{{student.user.id }}"> 
                                     <div class="overlay_expand">
@@ -33,7 +32,7 @@
                                     </div>  
                                 </div>
 
-
+-->
          
 
  
@@ -44,15 +43,11 @@
                             </div>
                             <div class="box-footer">
                                 <div class="row extend">                              
-                                    <div class="col-lg-4 col-xs-4">
+                                    <div class="col-lg-6 col-xs-6">
                                         <a  href="{% url 'detail_student_all_views' student.user.id  %}"  class="edit" ><i class="fa fa-mortar-board"></i> <span class="label_icon">Suivi</span>
                                         </a>   
                                     </div>
-                                    <div class="col-lg-4 col-xs-4">
-                                        <a  href="{% url 'detail_student' student.user.id  %}" class="edit"><i class="fa fa-trophy"></i> <span class="label_icon">Suivi</span>
-                                        </a>   
-                                    </div>
-                                    <div class="col-lg-4 col-xs-4">
+                                    <div class="col-lg-6 col-xs-6">
                                         <a  href=" "  {% if not student.is_task_exists %}class="edit"{% endif %}  >
                                             {% if not student.is_task_exists %}<i class="fa fa-calendar"></i>{% else %}<i class="fa fa-calendar-check"></i>{% endif %}
                                              <span class="label_icon">Tâches</span>
@@ -72,7 +67,51 @@
 </div>
 
 
-
+        <div class="row" id="parcours_div">  
+            <hr>  
+            <div class="col-md-12 col-sm-12">
+                <table class="table" style="background-color:#FFF; width:100%">
+                    {% regroup last_exercises_done by exercise as responses_list %}
+                    <thead>
+                        <tr style="background-color:#f4f6f9"> 
+                        <td><span  style="font-weight:100;font-size:20px ">Derniers exercices </span> </td>
+                        <td>Thème</td>
+                        <td></td>
+                        <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for r in responses_list %}
+                        <tr>
+                            <td> 
+                                <a href="{% url 'show_this_exercise'  r.grouper.id   %}" >  
+                                    <img src="{{ r.grouper.supportfile.imagefile.url }}" class="imagefile">
+                                </a>
+                            </td>
+                            <td style="width:75%"><a href="{% url 'show_this_exercise' r.grouper.id %}">{{ r.grouper }}</a></td>
+                            <td>{{ r.grouper.theme.name }}</td>
+                            <td style="width:10%">
+                                {% for s in r.list  %}
+                                    <div  class="markdown pull-right
+                                        {% if s.point < 30 %}
+                                         red 
+                                        {% elif s.point < 60 %}
+                                        orange
+                                        {% elif s.point < 80 %}
+                                        green
+                                        {% else %}
+                                        darkgreen
+                                        {% endif %}">
+                                        {{ s.point }}%
+                                    </div> 
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
  
 </section> 
 

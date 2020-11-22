@@ -473,10 +473,46 @@ def sender_mail(request,form):
             print("no_sending")
 
 
-#@who_can_read_details
+def logged_user_has_permission_to_this_student(user_reader, student) :
+
+    test = False
+
+    if user_reader.is_teacher :
+        groups = Group.objects.filter(teacher__user = user_reader) # tous le groupes du prof
+        for group in groups :
+            if student in group.students.all() :
+                test = True
+                break
+
+        sgroups = Sharing_group.objects.filter(teacher__user = user_reader) # tous le groupes partagés du prof
+        for sgroup in sgroups :
+            if student in sgroup.group.students.all() :
+                test = True
+                break
+
+    elif user_reader.is_parent : 
+        parent = Parent.objects.get(user = user_reader)
+        if student in parent.students.all():
+            test = True
+
+    else : 
+        if user_reader == student.user :
+            test = True
+
+    return test
+
+ 
+
+ 
 def detail_student(request, id):
 
     student = Student.objects.get(user_id=id)
+
+
+    if not logged_user_has_permission_to_this_student(request.user, student) :
+        messages.error(request, "Erreur...Vous n'avez pas accès à ces résultats.")
+        return redirect('index')
+
     today = time_zone_user(request.user) 
     parcourses_publish = Parcours.objects.filter(students=student,is_publish=1)
     parcourses = Parcours.objects.filter(students=student)
@@ -528,6 +564,12 @@ def detail_student(request, id):
 #@who_can_read_details
 def detail_student_theme(request, id,idt):
     student = Student.objects.get(user_id=id)
+
+
+    if not logged_user_has_permission_to_this_student(request.user, student) :
+        messages.error(request, "Erreur...Vous n'avez pas accès à ces résultats.")
+        return redirect('index')
+
     parcourses = Parcours.objects.filter(students=student)
     parcourses_publish = Parcours.objects.filter(students=student, is_publish=1)
     today = time_zone_user(request.user)
@@ -594,6 +636,12 @@ def detail_student_theme(request, id,idt):
 #@who_can_read_details
 def detail_student_parcours(request, id,idp):
     student = Student.objects.get(user_id=id)
+
+
+    if not logged_user_has_permission_to_this_student(request.user, student) :
+        messages.error(request, "Erreur...Vous n'avez pas accès à ces résultats.")
+        return redirect('index')
+
     parcours = Parcours.objects.get(pk=idp)
     parcourses = Parcours.objects.filter(students=student)
     themes = student.level.themes.all()
@@ -621,14 +669,21 @@ def detail_student_parcours(request, id,idp):
     return render(request, 'account/detail_student_parcours.html', context)
 
 
-
-
+ 
 
 
 #@user_can_read_details
 def detail_student_all_views(request, id):
+
     user = User.objects.get(pk=id)
     student = Student.objects.get(user=user)
+
+
+    if not logged_user_has_permission_to_this_student(request.user, student) :
+        messages.error(request, "Erreur...Vous n'avez pas accès à ces résultats.")
+        return redirect('index')
+
+
     studentanswers = student.answers.all()
     themes = student.level.themes.all()
     today = time_zone_user(user)
@@ -1197,7 +1252,7 @@ def my_profile(request):
 
             else:
                 print(form.errors)
-        return render(request, 'account/parent_form.html', {'form': form, 'communications' : [],  'user_form': user_form, 'student': student, 'today' : today })
+        return render(request, 'account/parent_form.html', {'form': form, 'communications' : [],  'user_form': user_form, 'parent': parent, 'today' : today })
 
 
 def ajax_userinfo(request):
