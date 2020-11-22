@@ -636,8 +636,18 @@ define(['jquery','bootstrap'], function ($) {
         */
         if( $("#id_is_folder").is(":checked")) { $('#leaf_div').show(); } else { $('#leaf_div').hide(); }
         
+
+        $("#id_is_leaf").on('change', function (event) {
+            $('.folder').toggle(500);
+            $('#leaf_div').toggle(500);
+        });
+
+
+
         $("#id_is_folder").on('change', function (event) {
             $('#leaf_div').toggle(500);
+            $('.leaf').toggle(500);
+
         });
 
 
