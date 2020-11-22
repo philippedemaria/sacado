@@ -6,7 +6,7 @@
  
 
 <div class="row">
-    <div class="col-md-10 col-lg-10 col-xs-12">
+    <div class="col-md-12 col-lg-12 col-xs-12">
  
   
                     {%  for student in  students %} 
@@ -48,7 +48,7 @@
                                         </a>   
                                     </div>
                                     <div class="col-lg-6 col-xs-6">
-                                        <a  href=" "  {% if not student.is_task_exists %}class="edit"{% endif %}  >
+                                        <a  href="{% url 'my_child_tasks' student.user.id %}"  {% if not student.is_task_exists %}class="edit"{% endif %}  >
                                             {% if not student.is_task_exists %}<i class="fa fa-calendar"></i>{% else %}<i class="fa fa-calendar-check"></i>{% endif %}
                                              <span class="label_icon">Tâches</span>
                                         </a>  
@@ -60,10 +60,6 @@
                     {% endfor %}
  
     </div>
-    <div class="col-md-2 col-lg-2 col-xs-12">
-
-        {% include 'right_menu_parent.html' %}
-    </div>  
 </div>
 
 

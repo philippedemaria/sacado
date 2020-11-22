@@ -118,6 +118,8 @@ urlpatterns = [
     path('all_tasks', these_all_my_tasks, name='these_all_my_tasks'),    
     path('group_tasks/<int:id>', group_tasks, name='group_tasks'), #taches en cours du groupe
     path('group_tasks_all/<int:id>', group_tasks_all, name='group_tasks_all'), #taches du groupe
+
+    path('my_child_tasks/<int:id>', my_child_tasks, name='my_child_tasks'), #taches du groupe 
     #################################### Les cours dans les parcours ###########################################
 
     path('parcours_courses', list_courses, name='courses'),

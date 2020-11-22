@@ -263,9 +263,6 @@ class Student(ModelWithCode):
  
         return test
 
-
-
-
 class Teacher(models.Model):
     """
     Modèle représentant un enseignant.
@@ -305,7 +302,6 @@ class Teacher(models.Model):
             recipient_list=admins_emails,
             context={"teacher": self.user,}, )
 
- 
 class Resultknowledge(models.Model):
     student = models.ForeignKey(Student, related_name="results_k", default="", on_delete=models.CASCADE, editable=False)
     knowledge = models.ForeignKey(Knowledge, related_name="results_k", on_delete=models.CASCADE, editable=False)
@@ -317,7 +313,6 @@ class Resultknowledge(models.Model):
     class Meta:
         unique_together = ['student', 'knowledge']
 
-
 class Resultskill(models.Model): # Pour récupérer tous les scores des compétences
     student = models.ForeignKey(Student, related_name="results_s", default="", on_delete=models.CASCADE, editable=False)
     skill = models.ForeignKey(Skill, related_name="results_s", on_delete=models.CASCADE, editable=False)
@@ -325,7 +320,6 @@ class Resultskill(models.Model): # Pour récupérer tous les scores des compéte
 
     def __str__(self):
         return f"{self.skill} : {self.point}"
-
 
 class Resultlastskill(models.Model): # Pour récupérer la moyenne des 10 derniers score des compétences
     student = models.ForeignKey(Student,   related_name = "student_resultskill", default="", on_delete=models.CASCADE, editable=False)
@@ -338,7 +332,6 @@ class Resultlastskill(models.Model): # Pour récupérer la moyenne des 10 dernie
     class Meta:
         unique_together = ['student', 'skill']
  
-
 class Parent(models.Model):
     """
     Modèle représentant un parent.

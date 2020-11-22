@@ -1,0 +1,72 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+
+
+
+{% endblock %} 
+
+  
+{% block page_title %}
+    <i class="fa fa-calendar-check-o"></i> Toutes les taches de {{ student}}</span>
+{% endblock %}
+
+{% block page_menu_right %}
+    <li><small>{% now "d N Y, H:i" %}</small></li>
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main">  
+    <div class="row"> 
+        <div class="col-sm-12 col-md-12">
+ 
+            <table  class="table table-hover display" >
+                <thead>
+                    <tr>
+                        <th>Tâches
+                        <th> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in relationships %}
+                        {% get_done r student as is_done %}
+                        {% if not is_done %}
+                        <tr> 
+                            <td>
+                                <a href="{% url 'show_this_exercise' r.exercise.id %}" target="_blank">
+
+                                
+                                    <img src="{{ r.exercise.supportfile.imagefile.url }}" class="imagefile">
+
+
+                                    {{ r.exercise.supportfile.annoncement|cleanhtml|capfirst  }} 
+                                                {% if r.exercise.supportfile.calculator %}
+                                                  <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                                {% else %}
+                                                  <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                                {% endif  %}   <br>
+                                    <i class="fa fa-fw fa-barcode"></i> {{ r.exercise.supportfile.code }}      <br>
+                                    <i class="fa fa-fw fa-clock-o"></i> {{ r.exercise.supportfile.duration }} minutes<br>
+                                    <i class="fa fa-fw fa-save"></i> {{ r.exercise.supportfile.situation }}  situation{{ r.exercise.supportfile.situation|pluralize }}<br>
+                                </a>
+                            </td>
+                            <td>{{ r.date_limit }}</td>
+
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+  
+        </div>
+    </div> 
+</section>
+{% endblock %}

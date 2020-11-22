@@ -4776,6 +4776,24 @@ def group_tasks_all(request,id):
 
 
 
+def my_child_tasks(request,id):
+    user = request.user
+    today = time_zone_user(user) 
+    parent = user.parent
+    student = Student.objects.get(pk = id) 
+
+    if not student in parent.students.all() :
+        return redirect('index')
+
+    relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__students = student, exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("date_limit")
+
+
+    context = {'relationships': relationships,  'communications' : [] ,  'relationships' : [] ,  'parent' : parent , 'student' : student , } 
+    return render(request, 'qcm/my_child_tasks.html', context)
+
+
+
+
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 #################   Remédiation
