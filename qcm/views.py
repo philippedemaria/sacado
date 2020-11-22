@@ -5098,41 +5098,28 @@ def export_notes_after_evaluation(request):
     parcours_id = request.POST.get("parcours_id")  
     parcours = Parcours.objects.get(pk = parcours_id)  
 
-    note_sacado  = request.POST.get("note_sacado",None)  
+    note_sacado  = request.POST.get("note_sacado",0)  
     note_totale  = request.POST.get("note_totale")  
 
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment;filename=Notes_exercice_{}.csv'.format(parcours.id)
+    response['Content-Disposition'] = 'attachment;filename=Notes_exercice_{}.txt'.format(parcours.id)
     writer = csv.writer(response)
-    fieldnames = ("Eleves", "Notes")
+    fieldnames = ("Nom", "Prénom", "Notes")
     writer.writerow(fieldnames)
 
     customexercises = parcours.parcours_customexercises.all()
-    over_all = 0
+    note_custom = 0
     for ce in customexercises :
-        over_all += ce.mark
-    # Pour ramener les notes sur 20    
-    if note_totale :
-        try :
-            coef = note_totale/over_all
-        except : 
-            coef = 1
-    else :
-        coef = 1
-
-
+        note_custom += ce.mark
 
     for student in parcours.students.order_by("user__last_name") :
-        full_name = str(student.user.last_name).lower() +" "+ str(student.user.first_name).lower() 
-        note = 0
+        note_custom = 0
         customanswers = student.student_custom_answer.filter(parcours=parcours) 
         for customanswer in customanswers :
             try :
-                note += float(customanswer.point)
-                final_mark = note*coef
+                note_custom += float(customanswer.point)
             except :
-                note = 0
-                final_mark = note*coef   
+                pass
 
         # Pour prendre en compte les notes SACADO    
         if note_sacado :
@@ -5140,23 +5127,23 @@ def export_notes_after_evaluation(request):
             answers = student.answers.filter(parcours=parcours) 
             for ans in answers :
                 good_answer += ans.point
-                nb_num_exo += ans.num_exo
+                nb_num_exo += ans.numexo
             try :
-                coeff = note_sacado / nb_num_exo
-                note_s = good_answer * coeff
+                note_s = good_answer / nb_num_exo
             except :
-                coeff = 0
                 note_s = 0
-            
-            final_mark = ((note_totale - note_sacado) * final_mark + note_s) / note_totale
+            no_sacado_note = False
+        else :
+            note_s = 0
+            note_sacado = 0
+            no_sacado_note = True
 
-            if len(answers) == 0 :
-                final_mark = ""             
+        final_mark = round( float(note_custom) * (float(note_totale) - float(note_sacado))/float(note_totale) + float(note_s) * float(note_sacado)/float(note_totale), 1)
 
-        if len(customanswers) == 0 :
-            final_mark = "" 
+        if len(customanswers) == 0 and no_sacado_note :
+            final_mark = "Abs" 
 
-        writer.writerow( (full_name , final_mark ) )
+        writer.writerow( (str(student.user.last_name).lower() , str(student.user.first_name).lower() , final_mark ) )
     return response
 
 
