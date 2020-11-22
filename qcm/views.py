@@ -5102,8 +5102,10 @@ def export_notes_after_evaluation(request):
     note_totale  = request.POST.get("note_totale")  
 
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment;filename=Notes_exercice_{}.txt'.format(parcours.id)
+    response['Content-Disposition'] = 'attachment;filename=Notes_exercice_{}.csv'.format(parcours.id)
+    response.write(u'\ufeff'.encode('utf8'))
     writer = csv.writer(response)
+    
     fieldnames = ("Nom", "Prénom", "Notes")
     writer.writerow(fieldnames)
 
