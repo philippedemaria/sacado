@@ -23,7 +23,6 @@ def validation_file(content):
 	        raise forms.ValidationError("Type de fichier non accepté")
 	    return content
 
-
 class ParcoursForm(forms.ModelForm):
 
 	class Meta:
@@ -64,7 +63,6 @@ class ParcoursForm(forms.ModelForm):
 				raise forms.ValidationError("La date de verrouillage ne peut pas être antérieure à son début.")
 		except:
 			pass
-
 
 class UpdateParcoursForm(forms.ModelForm):
 
@@ -109,7 +107,6 @@ class UpdateParcoursForm(forms.ModelForm):
 		except:
 			pass
 
-
 class ExerciseForm(forms.ModelForm):
 	class Meta:
 		model = Exercise
@@ -153,7 +150,6 @@ class RemediationForm(forms.ModelForm):
 		content = self.cleaned_data['mediation']
 		validation_file(content)
 
-
 class RemediationcustomForm(forms.ModelForm):
 	class Meta:
 		model = Remediationcustom
@@ -169,7 +165,6 @@ class RemediationcustomForm(forms.ModelForm):
 	def clean_content(self):
 		content = self.cleaned_data['mediation']
 		validation_file(content)
-
 
 class SupportfileForm(forms.ModelForm):
 	class Meta:
@@ -224,7 +219,6 @@ class AttachForm(forms.ModelForm):
           'annoncement': forms.Textarea(attrs={'rows':1}),
         }
 
-
 class CourseForm(forms.ModelForm):
 	class Meta:
 		model = Course
@@ -239,12 +233,10 @@ class CourseForm(forms.ModelForm):
 		print(relations)
 		self.fields['relationships'] = forms.ModelMultipleChoiceField(queryset=relations, required=False )
 
-
 class DemandForm(forms.ModelForm):
 	class Meta:
 		model = Demand
 		fields = '__all__'
-
 
 class MasteringForm (forms.ModelForm):
 	class Meta:
@@ -259,7 +251,6 @@ class MasteringForm (forms.ModelForm):
 		courses = Course.objects.filter(parcours=relationship.parcours)
 		self.fields['practices'] = forms.ModelMultipleChoiceField(queryset=relations, widget=forms.CheckboxSelectMultiple,   required=False )
  
-
 class MasteringDoneForm (forms.ModelForm):
 	class Meta:
 		model = Mastering_done
@@ -282,7 +273,6 @@ class MasteringcustomDoneForm (forms.ModelForm):
 		model = Masteringcustom_done
 		fields = ('writing',)
 
-
 class WrittenanswerbystudentForm (forms.ModelForm):
 	class Meta:
 		model = Writtenanswerbystudent
@@ -292,15 +282,10 @@ class WrittenanswerbystudentForm (forms.ModelForm):
 		content = self.cleaned_data['imagefile']
 		validation_file(content)
 
-
-
 class CustomanswerbystudentForm (forms.ModelForm):
 	class Meta:
 		model = Customanswerbystudent
 		fields = ('file','answer')
-
-
-
 
 class CustomanswerimageForm (forms.ModelForm):
 	class Meta:
@@ -310,9 +295,6 @@ class CustomanswerimageForm (forms.ModelForm):
 	def clean_content(self):
 		content = self.cleaned_data['image']
 		validation_file(content)
-
-
-
 
 class CustomexerciseForm (forms.ModelForm):
 	
@@ -329,7 +311,7 @@ class CustomexerciseForm (forms.ModelForm):
 		skills = Skill.objects.filter(subject__in = teacher.subjects.all())
 		knowledges = Knowledge.objects.filter(theme__subject__in = teacher.subjects.all(), level__in = teacher.levels.all())
 		parcourses = teacher.author_parcours.exclude(pk=parcours.id)
-		students = parcours.students.all()
+		students = parcours.students.order_by("user__last_name")
 
 		self.fields['skills'] = forms.ModelMultipleChoiceField(queryset=skills,    required=False )
 		self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=False ) 
