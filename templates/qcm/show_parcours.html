@@ -89,16 +89,31 @@ body{
 
 
     {% if customexercises|length == 0 and relationships|length == 0 %}
+        {% if parcours.is_folder %}
+            <div class="row">
+                <div class="col-sm-12 col-md-1">
+                </div>
+                <div class="col-sm-12 col-md-2" style="margin :40px 0px 0px 0px">
+                    <i class="fa fa-folder-open fa-10x" style="color: {{ parcours.color }}"></i>
+                </div>
+                <div class="col-sm-12 col-md-9" style="margin :40px 0px 0px 0px">
+                    <p>Ce parcours est un dossier. </p>
+                    <p>Pour lui attribuer des parcours, cliquer sur le bouton et choisir ses sous-parcours associés.</p>
+                    <p><a href="{% url 'update_parcours' parcours.id 0  %}" class="btn btn-danger">Choisir ses sous-parcours associés</a></p>
+                </div>
+            </div>
 
-        <div class="row">
-            <div class="col-sm-3 col-md-3" style="margin:40px">
-            <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-danger"> Associer des exercices SACADO à {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
-            </div> 
-            <div class="col-sm-3 col-md-3" style="margin:40px">
-            <a href="{% url 'parcours_create_custom_exercise' parcours.id 0  %}" class="btn btn-danger"> Créer un exercice personnalisé dans {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
-            </div> 
-        </div> 
 
+        {% else %}
+            <div class="row">
+                <div class="col-sm-3 col-md-3" style="margin:40px">
+                <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-danger"> Associer des exercices SACADO à {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
+                </div> 
+                <div class="col-sm-3 col-md-3" style="margin:40px">
+                <a href="{% url 'parcours_create_custom_exercise' parcours.id 0  %}" class="btn btn-danger"> Créer un exercice personnalisé dans {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
+                </div> 
+            </div> 
+        {% endif %}
     {% endif %}
 
 
