@@ -7,6 +7,11 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3.js' %}"></script> 
     <script>
+
+        {% if 'parcours_skill' in request.path  %}
+            require(['script/ajax-parcours_inside_data_tab']);
+        {% endif %}
+
         require(['script/ajax-parcours']);
     </script>
 {% endblock %}
@@ -154,5 +159,98 @@
         </div>
     </div>  
 
+    <div class="modal fade" id="export_skills" tabindex="-1" role="dialog" aria-labelledby="export_skills" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>                
+                    <h5 class="modal-title" >Exporter les compétences</h5>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'export_skills_after_evaluation' %}" method="post" > 
+                        {% csrf_token %}<input type="hidden" name="parcours_id" value="{{ parcours.id }}" id="parcours_id"/>
+                        <div class="row">
+                            <div class="col-sm-6">  
+                                <label>Pour chaque compétence, prendre en compte </label>
+                            </div>
+                            <div class="col-sm-6">  
+                                <select name="nb_skill" class="form-control select2">
+                                    <option value="1">La dernière évaluée</option>
+                                    <option value="2">Les 2 dernières évaluées</option>
+                                    <option value="3">Les 3 dernières évaluées</option>
+                                    <option value="0">Toutes évaluées</option>
+                                </select> 
+                            </div>
+                        </div>  
+                        <hr/>
 
+
+                        <div class="row">
+                            <div class="col-sm-12">  
+                                <label> Rappel : <br/>
+                                4 niveaux de maitrise. Les codes correpondants sont 1, 2, 3, 4 et A.<br>  
+                                    <li class="sanspuce"><i class="fa fa-square text-primary"></i> Très bonne maitrise  : 4 </li>
+                                    <li class="sanspuce"><i class="fa fa-square text-success"></i> Bonne maitrise  : 3  </li>
+                                    <li class="sanspuce"><i class="fa fa-square text-warning"></i> Maitrise fragile  : 2 </li>
+                                    <li class="sanspuce"><i class="fa fa-square text-danger"></i> Maitrise insuffisante  : 1  </li>
+                                    <li class="sanspuce"><i class="fa fa-square text-default"></i> Absent :   A</li>
+                                    <br>  
+                                    Ces codes doivent être reportés dans Pronote. Les compétences transférées doivent être les mêmes que celles en attente dans Pronote. Voir l'aide éventuellement.
+                                </label>
+                            </div>
+                        </div> 
+                        <hr/>
+                        <div class="row">
+                            <div class="col-sm-12">  
+                                <button type="submit" class="btn btn-primary" > Exporter </button>   
+                                <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
+                            </div>
+                        </div>     
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+
+
+    <div class="modal fade" id="export_help" tabindex="-1" role="dialog" aria-labelledby="export_help" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>                
+                    <h5 class="modal-title" >Aide pour Pronote</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">     
+                            Transfert de notes de Sacado vers Pronote (1 min. 14 s.)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">     
+                            <iframe width="560" height="315" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    src="https://www.youtube.com/embed/rBm7qq7SVso?rel=0"  allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">     
+                            Transfert de compétences de Sacado vers Pronote (1 min. 17 s.)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">     
+ 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

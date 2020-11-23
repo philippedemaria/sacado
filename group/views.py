@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from account.models import Student, Teacher, User, Resultknowledge, Resultlastskill
+from account.models import Student, Teacher, User, Resultknowledge, Resultlastskill, Resultskill
 from account.forms import UserForm
 from group.models import Group, Sharing_group
 from socle.models import Knowledge, Theme, Level, Skill
-from qcm.models import Exercise, Parcours, Relationship, Studentanswer, Resultexercise
+from qcm.models import Exercise, Parcours, Relationship, Studentanswer, Resultexercise , Resultggbskill
 from group.forms import GroupForm , GroupTeacherForm
 from sendmail.models import Email
 from sendmail.forms import EmailForm
@@ -1162,9 +1162,6 @@ def print_statistiques(request, group_id, student_id):
     return response
 
 
-
-
-
 def print_ids(request, id):
     group = Group.objects.get(id=id)
     teacher = Teacher.objects.get(user=request.user)
@@ -1196,3 +1193,83 @@ def print_ids(request, id):
  
     p.save()
     return response 
+
+
+
+def export_skills(request):
+
+    group_id = request.POST.get("group_id")  
+    group = Group.objects.get(pk = group_id)  
+    nb_skill = int(request.POST.get("nb_skill"))
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment;filename=Skills_group_{}.csv'.format(group_id)
+    response.write(u'\ufeff'.encode('utf8'))
+    writer = csv.writer(response)
+    
+
+    skills = Skill.objects.filter(subject = group.subject)
+
+    label_in_export = ["Nom", "Prénom"]
+    for ski in skills :
+        if not ski.name in label_in_export : 
+            label_in_export.append(ski.name) 
+
+    writer.writerow(label_in_export)
+
+    for student in group.students.order_by("user__last_name") :
+        skill_level_tab = [str(student.user.last_name).capitalize(),str(student.user.first_name).capitalize()]
+
+        for skill in  skills:
+            total_skill = 0
+
+            scs = student.student_correctionskill.filter(skill = skill)
+            nbs = scs.count() 
+            offseter = min(nb_skill, nbs)
+
+            if offseter > 0 :
+                result_custom_skills  = scs[:offseter]
+            else :
+                result_custom_skills  = scs
+
+            nbsk = 0
+            for sc in result_custom_skills :
+                total_skill += int(sc.point)
+                nbsk += 1
+
+            # Ajout éventuel de résultat sur la compétence sur un exo SACADO
+            result_skills_set = set()
+            result_skills_ = Resultskill.objects.filter(skill= skill,student=student).order_by("-id")
+            result_skills_set.update(set(result_skills_))
+            result_skills__ = Resultggbskill.objects.filter(skill= skill,student=student,relationship__parcours = parcours).order_by("-id")
+            result_skills_set.update(set(result_skills__))
+            result_skills = list(result_skills_set)
+            nb_result_skill = len(result_skills)
+            offset = min(nb_skill, nb_result_skill)
+
+            if offset > 0 :
+                result_sacado_skills  = result_skills[:offset]
+            else :
+                result_sacado_skills  = result_skills
+
+            for result_sacado_skill in result_sacado_skills:
+                total_skill += result_sacado_skill.point
+                nbsk += 1
+            ################################################################
+
+            if nbsk != 0 :
+                tot_s = total_skill//nbsk
+                level_skill = get_level_by_point(student,tot_s)
+            else :
+                level_skill = "A"
+
+            skill_level_tab.append(level_skill)
+
+
+        writer.writerow( skill_level_tab )
+    return response
+
+
+
+
+

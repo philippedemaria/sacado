@@ -22,7 +22,7 @@
  
 	{% for skill in skill_tab %}
         <td>
-		{% get_scorek  skill  student  as score %}
+		{% get_scorekp  skill  student parcours as score %}
 
 
 		<!-- Requête moins rapide de 2 secondes mais plus précise puis que sélection sur le parcours
@@ -32,22 +32,10 @@
 		 -->
 
 			{% if score != "" %}
-			    <span class="markdown
-			            {% if score < 30 %}
-			             red 
-			            {% elif score < 60 %}
-			            orange
-			            {% elif score < 80 %}
-			            green
-			            {% else %}
-			            darkgreen
-			            {% endif %}"  >
-				        {{ score }} 
-			    </span>
+			    <i class="fa fa-square text-{% if score < stage.low %}danger{% elif score < stage.medium %}warning{% elif score < stage.up %}success{% else %}primary{% endif %}"  ></i>
+				        
 			{% else %}
-			    <span class="markdown"> 
-			          {{ score }} 
-			    </span> 
+				<i class="fa fa-square text-default" title="Absent ou non évalué" ></i>
 			{% endif %}
 		</td>
 	{% endfor %}

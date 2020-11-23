@@ -38,9 +38,9 @@ urlpatterns = [
 
     path('aggregate_group',  aggregate_group, name='aggregate_group'), 
 
-
+    path('export_skills',  export_skills, name='export_skills'), 
+    
     path('<slug:slug>', enroll , name='enroll'),
-
 
 
 ]

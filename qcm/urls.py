@@ -109,9 +109,8 @@ urlpatterns = [
 
     ####################################### Export Pronote #####################################################
     path('export_note_custom/<int:id>/<int:idp>', export_note_custom, name='export_note_custom'),   
-    path('export_knowledge/<int:idp>/', export_knowledge, name='export_knowledge'),  
     path('export_note/<int:idg>/<int:idp>/', export_note, name='export_note'),  
-    path('export_skill/<int:idp>/', export_skill, name='export_skill'),  
+
 
     path('detail_task/<int:id>/<int:s>/', detail_task, name='detail_task'), #modif idp en id pour la sécurité
     path('tasks', all_my_tasks, name='all_my_tasks'),
@@ -254,7 +253,7 @@ urlpatterns = [
     path('ajax_delete_custom_answer_image', ajax_delete_custom_answer_image, name='ajax_delete_custom_answer_image'),        
 
     path('export_notes_after_evaluation', export_notes_after_evaluation, name='export_notes_after_evaluation'),
-
+    path('export_skills_after_evaluation', export_skills_after_evaluation, name='export_skills_after_evaluation'),
 
 
     path('ajax/chargethemes_parcours', ajax_chargethemes_parcours, name='ajax_chargethemes_parcours'),

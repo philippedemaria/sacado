@@ -7,6 +7,7 @@ from datetime import datetime
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 from django.shortcuts import  redirect
+from school.models import Stage
 
 def time_zone_user(user):
     try :
@@ -82,3 +83,33 @@ def group_has_parcourses(group,is_evaluation ,is_archive ):
                 pses_tab.append(p)
  
     return pses_tab
+
+
+def get_level_by_point(student, point):
+    point = int(point)
+    if student.user.school :
+        school = student.user.school
+        stage = Stage.objects.get(school = school)
+
+        if point > stage.up :
+            level = 4
+        elif point > stage.medium :
+            level = 3
+        elif point > stage.low :
+            level = 2
+        else   :
+            level = 1
+ 
+    else : 
+        stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
+
+        if point > stage["up"]  :
+            level = 4
+        elif point > stage["medium"]  :
+            level = 3
+        elif point > stage["low"]  :
+            level = 2
+        else :
+            level = 1
+    return level
+

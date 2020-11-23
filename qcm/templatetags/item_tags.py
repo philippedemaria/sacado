@@ -303,7 +303,13 @@ def get_scorek(obj,student):
     """
     return obj.send_scorek(student)
 
-
+ 
+@register.simple_tag  
+def get_scorekp(obj,student,parcours): 
+    """
+    résultats d'un savoir faire par élève
+    """
+    return obj.send_scorekp(student,parcours)
 
 @register.simple_tag  
 def get_exercises_by_knowledge(obj,student,group):

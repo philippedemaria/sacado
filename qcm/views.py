@@ -241,9 +241,6 @@ def teacher_has_permisson_to_share_inverse_parcourses(request,teacher,parcours):
                 break
     return test_has_permisson
 
-
-
-
 def teacher_has_permisson_to_parcourses(request,teacher,parcours):
 
 
@@ -256,21 +253,42 @@ def teacher_has_permisson_to_parcourses(request,teacher,parcours):
         has_permisson = False
     return has_permisson 
 
+def skills_in_parcours(request,parcours):
 
-def skills_in_parcours(parcours):
+    relationships = Relationship.objects.filter(parcours=parcours)
+    skillsInParcours = set()
+    for r in relationships:
+        skillsInParcours.update(r.skills.all()) # skill des exo sacado
 
-    skills = []
-    for exercise in parcours.exercises.all():
-        relationships = exercise.exercise_relationship.filter(parcours=parcours)
-        for r in relationships :
-            for sk in r.skills.all() :
-                if sk not in skills :
-                    skills.append(sk)
-    for ce in parcours.parcours_customexercises.all():
-        for sk in ce.skills.all() :
-            if sk not in skills :
-                skills.append(sk)   
-    return skills
+    customexercises = Customexercise.objects.filter(parcourses=parcours)
+    for c in customexercises :
+        skillsInParcours.update(c.skills.all()) # skill des exo perso
+
+    skills = Skill.objects.filter(subject__in = request.user.teacher.subjects.all())
+
+    union_skills = []
+    for s in skills :
+        if s in skillsInParcours :
+            union_skills.append(s)
+
+    return union_skills
+
+# def skills_in_parcours(parcours):
+#     """
+#     version moins rapide sans request
+#     """
+#     skills = []
+#     for exercise in parcours.exercises.all():
+#         relationships = exercise.exercise_relationship.filter(parcours=parcours)
+#         for r in relationships :
+#             for sk in r.skills.all() :
+#                 if sk not in skills :
+#                     skills.append(sk)
+#     for ce in parcours.parcours_customexercises.all():
+#         for sk in ce.skills.all() :
+#             if sk not in skills :
+#                 skills.append(sk)   
+#     return skills
 
 
 def knowledges_in_parcours(parcours):
@@ -287,6 +305,35 @@ def knowledges_in_parcours(parcours):
             if sk not in knowledges :
                 knowledges.append(sk)   
     return knowledges
+
+
+def total_by_skill_by_student(skill,parcours,student) : # résultat d'un élève par comptétnece sur un parcours donné
+    total_skill = 0            
+    scs = student.student_correctionskill.filter(skill = skill, parcours = parcours)
+    nbs = scs.count()
+
+    for sc in scs :
+        total_skill += int(sc.point)
+
+    # Ajout éventuel de résultat sur la compétence sur un exo SACADO
+    try :
+        result_sacado_skill  = Resultggbskill.objects.filter(skill= skill,student=student,parcours = parcours)
+        total_skill += result_sacado_skill.point
+        nbs += 1
+
+    except :
+        pass
+    ################################################################
+
+    if nbs != 0 :
+        tot_s = total_skill//nbs
+    else :
+        tot_s = -10
+
+    return tot_s
+
+
+
 
 
 #######################################################################################################################################################################
@@ -1457,7 +1504,6 @@ def result_parcours(request, id):
 
 
  ########## Sans doute plus utilisée ???? 
-#@user_is_parcours_teacher 
 def result_parcours_theme(request, id, idt):
 
     teacher = Teacher.objects.get(user=request.user)
@@ -1511,15 +1557,10 @@ def result_parcours_theme(request, id, idt):
     context = {  'relationships': relationships, 'customexercises': customexercises,'parcours': parcours, 'students': students,  'themes': themes_tab,'form': form, 'group_id' : group_id , 'stage' : stage, 'communications' : [], 'role' : role  }
 
     return render(request, 'qcm/result_parcours.html', context )
- 
-
-
-
-
 
 def get_items_from_parcours(parcours) :
     """
-    Permet de déterminer les compétences connaissance un parcours
+    Permet de déterminer les compétences dans l'ordre d'apparition du BO dans un parcours
     """
     if parcours.is_folder :
         relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all()).prefetch_related('exercise__supportfile').order_by("order")
@@ -1537,17 +1578,17 @@ def get_items_from_parcours(parcours) :
     skill_set = set()
     for relationship in relationships :
         skill_set.update(set(relationship.skills.all()))
-    skill_tab = list(skill_set) 
+
 
     for ce in  customexercises :
-        for skill in ce.skills.all() :
-            skill_tab.append(skill)
+        skill_set.update(set(ce.skills.all()))
+
+    skill_tab = []
+    for s in Skill.objects.filter(subject__in = parcours.teacher.subjects.all()):
+        if s in skill_set :
+            skill_tab.append(s)
 
     return relationships , skill_tab 
-
-
-
-
 
 def result_parcours_skill(request, id):
 
@@ -1574,10 +1615,6 @@ def result_parcours_skill(request, id):
     context = {  'relationships': relationships,  'students': students, 'parcours': parcours,  'form': form, 'skill_tab' : skill_tab, 'group' : group, 'group_id' : group_id, 'stage' : stage , 'communications' : [] , 'role' : role  }
 
     return render(request, 'qcm/result_parcours_skill.html', context )
-
-
-
-
 
 def result_parcours_knowledge(request, id):
 
@@ -1636,10 +1673,7 @@ def result_parcours_knowledge(request, id):
     context = {  'relationships': relationships,  'students': students, 'parcours': parcours,  'form': form, 'exercise_knowledges' : knowledges, 'group_id' : group_id, 'stage' : stage , 'communications' : [] , 'role' : role  }
 
     return render(request, 'qcm/result_parcours_knowledge.html', context )
-
-
-
-#@user_is_parcours_teacher 
+ 
 def stat_parcours(request, id):
 
     teacher = Teacher.objects.get(user = request.user)
@@ -1782,8 +1816,6 @@ def stat_parcours(request, id):
 
     return render(request, 'qcm/stat_parcours.html', context )
 
-
-
 def check_level_by_point(student, point):
     point = int(point)
     if student.user.school :
@@ -1817,17 +1849,11 @@ def check_level_by_point(student, point):
  
     return rep
  
-
-
-
-
-
-
 def stat_evaluation(request, id):
 
     teacher = Teacher.objects.get(user = request.user)
     parcours = Parcours.objects.get(id=id)
-    skills = skills_in_parcours(parcours)
+    skills = skills_in_parcours(request,parcours)
     knowledges = knowledges_in_parcours(parcours)
     exercises = parcours.exercises.all()
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
@@ -1943,14 +1969,9 @@ def stat_evaluation(request, id):
         student["score_total"] = int(score_total)
 
         for skill in  skills:
-            scs = s.student_correctionskill.filter(skill = skill, parcours = parcours)
-            nbs = scs.count()
-            for sc in scs :
-                total_skill += int(sc.point)
-            try :
-                tot_s = total_skill//nbs
-            except :
-                tot_s = 0
+
+            tot_s = total_by_skill_by_student(skill,parcours,s)
+           
             detail_skill += skill.name + " " +check_level_by_point(s,tot_s) + "<br>" 
 
         student["detail_skill"] = detail_skill
@@ -1960,10 +1981,10 @@ def stat_evaluation(request, id):
             nbk = sks.count()
             for sk in sks :
                 total_knowledge += int(sk.point)
-            try :
+            if nbk !=0  :
                 tot_k = total_knowledge//nbk
-            except :
-                tot_k = 0
+            else :
+                tot_k  = -10
             detail_knowledge += knowledge.name + " "  +check_level_by_point(s,tot_k) + "<br>" 
 
         student["detail_knowledge"] = detail_knowledge 
@@ -1976,14 +1997,6 @@ def stat_evaluation(request, id):
     context = { 'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'communications' : [] , 'role' : role  }
 
     return render(request, 'qcm/stat_parcours.html', context )
-
-
-
-
-
-
-
-
 
 def add_exercice_in_a_parcours(request):
 
@@ -2019,8 +2032,6 @@ def add_exercice_in_a_parcours(request):
 
     return redirect('exercises')
 
- 
- 
 def clone_parcours(request, id, course_on ):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -2053,8 +2064,6 @@ def clone_parcours(request, id, course_on ):
     else :
         return redirect('parcours')
  
-
-
 def ajax_parcours_get_exercise_custom(request):
 
     teacher = Teacher.objects.get(user_id = request.user.id) 
@@ -2067,7 +2076,6 @@ def ajax_parcours_get_exercise_custom(request):
     data['html'] = render_to_string('qcm/ajax_parcours_get_exercise_custom.html', context)
  
     return JsonResponse(data)
- 
  
 def parcours_clone_exercise_custom(request):
 
@@ -2093,9 +2101,6 @@ def parcours_clone_exercise_custom(request):
     data = {}  
     return JsonResponse(data)
 
-
-  
-
 def exercise_custom_show_shared(request):
     
     user = request.user
@@ -2105,8 +2110,6 @@ def exercise_custom_show_shared(request):
         return render(request, 'qcm/list_custom_exercises.html', {  'teacher': teacher , 'customexercises':customexercises, 'parcours': None, 'relationships' : [] ,  'communications': [] , })
     else :
         return redirect('index')   
-
-
  
 def ajax_exercise_error(request):
 
@@ -2124,7 +2127,6 @@ def ajax_exercise_error(request):
     data = {}
     data["htmlg"]= "Envoi réussi, merci."
     return JsonResponse(data) 
-
 
 #@user_is_parcours_teacher
 def parcours_tasks_and_publishes(request, id):
@@ -2148,8 +2150,6 @@ def parcours_tasks_and_publishes(request, id):
     context = {'relationships': relationships,  'parcours': parcours, 'teacher': teacher  , 'today' : today , 'group' : group , 'group_id' : group_id , 'communications' : [] , 'form' : form , 'role' : role , }
     return render(request, 'qcm/parcours_tasks_and_publishes.html', context)
  
-
- 
 def result_parcours_exercise_students(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcours = Parcours.objects.get(pk = id)
@@ -2170,10 +2170,6 @@ def result_parcours_exercise_students(request,id):
     return render(request, 'qcm/result_parcours_exercise_students.html', {'customexercises': customexercises , 'stage':stage ,   'relationships': relationships ,  'parcours': parcours , 'group_id': group_id ,  'group' : group ,  })
 
 
-
-
-
-
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_is_favorite(request):  
 
@@ -2189,8 +2185,6 @@ def ajax_is_favorite(request):
         data["statut"] = "<i class='fa fa-star fa-stack-1x' style='font-size: 12px; color:#FFF' ></i>"
         data["fav"] = 1
     return JsonResponse(data) 
-
-
 
 
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
@@ -2517,7 +2511,6 @@ def ajax_delete_notes(request):
     return JsonResponse(data) 
 
 
-
 @csrf_exempt
 def ajax_skills(request):  
     data = {}
@@ -2532,7 +2525,6 @@ def ajax_skills(request):
         relationship.skills.add(skill)   
 
     return JsonResponse(data) 
-
 
 
 def aggregate_parcours(request):
@@ -2567,8 +2559,6 @@ def ajax_parcoursinfo(request):
 
  
     return JsonResponse(data)
-
-
 
 
 def ajax_detail_parcours(request):
@@ -2675,8 +2665,6 @@ def ajax_detail_parcours(request):
     return JsonResponse(data)
 
 
-
-
 def delete_relationship(request,idr):
 
     relation = Relationship.objects.get(pk = idr) 
@@ -2694,8 +2682,6 @@ def delete_relationship_by_individualise(request,idr, id):
 
     return redirect("individualise_parcours" , relation.parcours.id   ) 
 
-
-
 def remove_students_from_parcours(request):
 
     parcours_id = request.POST.get("parcours_id")
@@ -2709,9 +2695,6 @@ def remove_students_from_parcours(request):
         parcours.students.remove(student)
  
     return redirect("parcours" ) 
-
-
-
 
 #######################################################################################################################################################################
 #######################################################################################################################################################################
@@ -2786,8 +2769,6 @@ def all_levels(user, status):
         datas.append(levels_dict)
     return datas
 
-
-
 def list_exercises(request):
     
     user = request.user
@@ -2822,10 +2803,6 @@ def list_exercises(request):
         return render(request, 'qcm/student_list_exercises.html',
                       {'relationships': relationships, 'nb_exercises': nb_exercises ,     })
 
-
-
-
-
 @user_passes_test(user_is_superuser)
 def admin_list_associations(request,id):
     level = Level.objects.get(pk = id)
@@ -2836,8 +2813,6 @@ def admin_list_associations(request,id):
 
     return render(request, 'qcm/list_associations.html', {'data': data, 'teacher': teacher , 'parcours': None, 'relationships' : [] , 'communications' : []   })
  
-
-
 @user_passes_test(user_is_superuser)
 def gestion_supportfiles(request):
   
@@ -2853,9 +2828,6 @@ def gestion_supportfiles(request):
         lvls.append({ 'name' : level.name , 'nbknowlegde': nbk , 'exotot' : nbe , 'notexo' : nb }) 
 
     return render(request, 'qcm/gestion_supportfiles.html', {'lvls': lvls, 'parcours': None, 'relationships' : [] , 'communications' : [] })
-
-
-
 
 @user_passes_test(user_is_superuser)
 def ajax_update_association(request):
@@ -2891,10 +2863,6 @@ def ajax_update_association(request):
         exercise = Exercise.objects.get(pk=exercise_id) 
         exercise.delete()
     return JsonResponse(data)
-
-
-
-
 
 @user_passes_test(user_is_superuser)
 def admin_list_supportfiles(request,id):
@@ -2937,10 +2905,6 @@ def admin_list_supportfiles(request,id):
 
     return render(request, 'qcm/list_supportfiles.html', {'levels_dict': levels_dict, 'teacher':teacher , 'level':level , 'relationships' : [] , 'communications' : [] , 'parcours' :  None })
 
-
- 
-
-
 def parcours_exercises(request,id):
     user = request.user
     parcours = Parcours.objects.get(pk=id)
@@ -2949,9 +2913,6 @@ def parcours_exercises(request,id):
     relationships = Relationship.objects.filter(parcours=parcours,is_publish=1).order_by("exercise__theme")
 
     return render(request, 'qcm/student_list_exercises.html', {'parcours': parcours  , 'relationships': relationships, })
-
-
-
 
 def exercises_level(request, id):
     exercises = Exercise.objects.filter(level_id=id,supportfile__is_title=0).order_by("theme")
@@ -2962,11 +2923,6 @@ def exercises_level(request, id):
     t_form = TeacherForm()
     s_form = StudentForm()
     return render(request, 'list_exercises.html', {'exercises': exercises, 'level':level , 'themes':themes , 'form':form , 'u_form':u_form , 's_form': s_form , 't_form': t_form , 'levels' : [] })
-
-
-
-
-
 
 @user_passes_test(user_is_superuser)
 def create_supportfile(request):
@@ -2994,8 +2950,6 @@ def create_supportfile(request):
     context = {'form': form,   'teacher': teacher, 'knowledge': None,  'knowledges': [], 'relationships': [],  'supportfiles': [],   'levels': [], 'parcours': None, 'supportfile': None, 'communications' : [] ,  }
 
     return render(request, 'qcm/form_supportfile.html', context)
-
-
 
 @user_passes_test(user_is_superuser)
 def create_supportfile_knowledge(request,id):
@@ -3032,8 +2986,6 @@ def create_supportfile_knowledge(request,id):
 
     return render(request, 'qcm/form_supportfile.html', context)
 
-
-
 @user_passes_test(user_is_superuser)
 def update_supportfile(request, id, redirection=0):
 
@@ -3063,10 +3015,6 @@ def update_supportfile(request, id, redirection=0):
 
         return render(request, 'qcm/form_supportfile.html', context)
 
- 
-
-
-
 @user_passes_test(user_is_superuser)
 def delete_supportfile(request, id):
     if request.user.is_superuser:
@@ -3078,8 +3026,6 @@ def delete_supportfile(request, id):
             messages.error(request, " Des parcours utilisent ce support GGB. Il n'est pas possible de le supprimer.")
 
     return redirect('admin_supportfiles', supportfile.level.id)
-
-
 
 @user_passes_test(user_is_superuser)
 def show_this_supportfile(request, id):
@@ -3096,9 +3042,6 @@ def show_this_supportfile(request, id):
     context = {'supportfile': supportfile, 'start_time': start_time, 'communications' : [] ,  'parcours': parcours}
 
     return render(request, 'qcm/show_supportfile.html', context)
-
-
-
 
 @user_passes_test(user_is_superuser)
 def create_exercise(request, supportfile_id):
@@ -3140,9 +3083,6 @@ def create_exercise(request, supportfile_id):
 
     return render(request, 'qcm/form_exercise.html', context)
 
-
-
-
 def show_exercise(request, id):
     exercise = Exercise.objects.get(id=id)
 
@@ -3164,9 +3104,6 @@ def show_exercise(request, id):
         url = "qcm/show_teacher_writing.html" 
 
     return render(request, url , context)
-
-
-
 
 def show_this_exercise(request, id):
 
@@ -3205,8 +3142,6 @@ def show_this_exercise(request, id):
 
     return render(request, url, context)
 
-
-
 def execute_exercise(request, idp,ide):
 
     parcours = Parcours.objects.get(id= idp)
@@ -3219,10 +3154,6 @@ def execute_exercise(request, idp,ide):
 
     context = {'exercise': exercise,  'start_time' : start_time,  'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today , 'communications' : [] , 'relationships' : [] }
     return render(request, 'qcm/show_relation.html', context)
-
-
-
-
 
 def store_the_score_relation_ajax(request):
 
@@ -5148,9 +5079,80 @@ def export_notes_after_evaluation(request):
         writer.writerow( (str(student.user.last_name).lower() , str(student.user.first_name).lower() , final_mark ) )
     return response
 
+def export_skills_after_evaluation(request):
 
+    parcours_id = request.POST.get("parcours_id")  
+    parcours = Parcours.objects.get(pk = parcours_id)  
+    nb_skill = int(request.POST.get("nb_skill"))
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment;filename=Skills_exercice_{}.csv'.format(parcours.id)
+    response.write(u'\ufeff'.encode('utf8'))
+    writer = csv.writer(response)
+    
+
+    skills = skills_in_parcours(request,parcours)
+
+    label_in_export = ["Nom", "Prénom"]
+    for ski in skills :
+        if not ski.name in label_in_export : 
+            label_in_export.append(ski.name)
 
  
+
+    writer.writerow(label_in_export)
+ 
+    for student in parcours.students.order_by("user__last_name") :
+        skill_level_tab = [str(student.user.last_name).capitalize(),str(student.user.first_name).capitalize()]
+
+        for skill in  skills:
+            total_skill = 0
+ 
+            scs = student.student_correctionskill.filter(skill = skill, parcours = parcours)
+            nbs = scs.count() 
+            offseter = min(nb_skill, nbs)
+
+            if offseter > 0 :
+                result_custom_skills  = scs[:offseter]
+            else :
+                result_custom_skills  = scs
+
+            nbsk = 0
+            for sc in result_custom_skills :
+                total_skill += int(sc.point)
+                nbsk += 1
+
+            # Ajout éventuel de résultat sur la compétence sur un exo SACADO
+            result_skills_set = set()
+            result_skills__ = Resultggbskill.objects.filter(skill= skill,student=student,relationship__parcours = parcours).order_by("-id")
+            result_skills_set.update(set(result_skills__))
+            result_skills = list(result_skills_set)
+            nb_result_skill = len(result_skills)
+            offset = min(nb_skill, nb_result_skill)
+
+            if offset > 0 :
+                result_sacado_skills  = result_skills[:offset]
+            else :
+                result_sacado_skills  = result_skills
+
+            for result_sacado_skill in result_sacado_skills:
+                total_skill += result_sacado_skill.point
+                nbsk += 1
+            ################################################################
+
+            if nbsk != 0 :
+                tot_s = total_skill//nbsk
+                print(student,tot_s)
+                level_skill = get_level_by_point(student,tot_s)
+            else :
+                level_skill = "A"
+
+            skill_level_tab.append(level_skill)
+ 
+        writer.writerow( skill_level_tab )
+    return response
+
+
 def export_note_custom(request,id,idp):
 
     customexercise = Customexercise.objects.get(pk=id)
@@ -5170,7 +5172,6 @@ def export_note_custom(request,id,idp):
             score = "Abs"
         writer.writerow( (full_name , score) )
     return response
-
  
 def export_note(request,idg,idp):
 
@@ -5196,57 +5197,7 @@ def export_note(request,idg,idp):
     return response
 
 
- 
-def export_knowledge(request,idp):
 
-    parcours = Parcours.objects.get(pk=idp)
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment;' + 'filename=Savoir_faire_{}.csv'.format(parcours.title)
-    writer = csv.writer(response)
-    fieldnames = ("Elèves", "Savoir faire", "Scores")
-    writer.writerow(fieldnames)
-    kns = []
-    exercises = parcours.exercises.filter(supportfile__is_title=0)
-    for e in exercises :
-        if e.knowledge not in kns :
-            kns.append(e.knowledge)
-
-    for student in parcours.students.all() :
-        full_name = str(student.user.last_name) +" "+ str(student.user.first_name)  
-        try :
-            resultknowledges = Resultknowledge.objects.filter(student=student, knowledge__in=kns).last() 
-            for r in resultknowledges : 
-                writer.writerow ({"Eleves": full_name, "Savoir faire": r.knowledge.name , "Scores": r.point  })
-        except :
-            pass
-    return response
-
- 
-def export_skill(request,idp):
-
-    parcours = Parcours.objects.get(pk=idp)
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment;' + 'filename=Competences_{}.csv'.format(parcours.title)
-    writer = csv.writer(response)
-    fieldnames = ("Elèves", "Compétences", "Scores")
-    writer.writerow(fieldnames)
-    sks = []
-    exercises = parcours.exercises.filter(supportfile__is_title=0)
-    for e in exercises :
-        for s in e.supportfile.skills.all() :
-            if s not in sks :
-                sks.append(s)
-
-    for student in parcours.students.all() :
-        full_name = str(student.user.last_name) +" "+ str(student.user.first_name)  
-        try :
-            resultlastskills = Resultlastskill.objects.filter(student=student, skills_in=sks).last() 
-            for r in resultlastskills : 
-                writer.writerow ({"Eleves": full_name, "Compétences": r.skill.name , "Scores": r.point  })
-        except :
-            pass
-    return response
- 
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 ##################    Course     
@@ -5454,10 +5405,7 @@ def ajax_parcours_clone_course(request):
             except :
                 pass
 
-
-
     data = {} 
-
 
     return JsonResponse(data)
 
@@ -5512,29 +5460,6 @@ def ajax_course_custom_show_shared(request):
     data['html'] = render_to_string('qcm/course/ajax_list_courses.html', {'courses' : courses, })
  
     return JsonResponse(data)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 @student_can_show_this_course

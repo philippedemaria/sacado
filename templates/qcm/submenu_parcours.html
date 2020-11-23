@@ -3,7 +3,7 @@
 
 
 
-<li><a href="{%  url 'result_parcours_skill'  parcours.id %}"  class="no_button {% if  'result_group_skill' in request.path %} active {% endif %}" > Compétences </a></li>
+<li><a href="{%  url 'result_parcours_skill'  parcours.id %}"  class="no_button {% if  'result_group_skill' or 'result_parcours_skill' in request.path %} active {% endif %}" > Compétences </a></li>
 
 
 
@@ -20,11 +20,6 @@
         <li {% if 'result_parcours_exercise_students/' in request.path %} class="active" {% endif %}><a href="{% url 'result_parcours_exercise_students' parcours.id    %}"  class="no_button" ><i class="fa fa-tasks fa-fw"></i> Lire le suivi par exercice </a> </li>
         {% endif %}
         {% endif %}
-
-
-        <!-- <li class="divider"></li>
-        <li><a href="{% url 'export_knowledge' parcours.id    %}"  class="no_button" ><i class="fa fa-download fa-fw"></i> Exporter les résultats de savoir faire csv</a></li>          
-        <li><a href="{% url 'export_skill' parcours.id    %}"  class="no_button" ><i class="fa fa-download fa-fw"></i> Exporter les résultats de compétences csv</a></li>         -->
     </ul>
 </li> 
 

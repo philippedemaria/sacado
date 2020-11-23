@@ -19,8 +19,6 @@ class Subject(models.Model):
     def __str__(self):
         return "{}".format(self.shortname)
 
-
-
 class Theme(models.Model):
     name = models.CharField(max_length=255, verbose_name="Nom")
     slug = models.CharField(max_length=255, default ="" , editable=False)
@@ -58,12 +56,6 @@ class Theme(models.Model):
         detail["done"] = Relationship.objects.filter(parcours=parcours, exercise__theme = self).exclude(date_limit=None).count()
         detail["in_air"] = Relationship.objects.filter(parcours=parcours, exercise__theme = self,date_limit__gte=today).count()
         return detail
-
-
-
-
-
-
 
 class Level(models.Model):
 
@@ -112,7 +104,6 @@ class Level(models.Model):
 
         nb = n - m
         return nb
-
 
 class Knowledge(models.Model):
     level = models.ForeignKey(Level, related_name="knowledges", default="", on_delete=models.PROTECT, verbose_name="Niveau")
@@ -231,8 +222,6 @@ class Knowledge(models.Model):
             crit = 0
         return crit
 
-
-
 class Skill(models.Model): 
     name = models.CharField(max_length=10000, verbose_name="Nom")
     subject  = models.ForeignKey(Subject, related_name="skill", default="", on_delete=models.PROTECT, null = True ,  verbose_name="Enseignement")
@@ -290,11 +279,34 @@ class Skill(models.Model):
 
             if self.skill_correctionskill.filter(student=student).exists() :
                 ce = self.skill_correctionskill.filter(student=student).last()
-                score_ce = ce.point + 1 
+                score_ce = ce.point 
                 coef += 1
 
             if coef != 0:
                 score = int((score + score_ce)/coef)
+            else :
+                score = ""                
+
+        except ObjectDoesNotExist:
+            score = ""
+
+        return score 
+
+
+    def send_scorekp(self,student,parcours):
+
+        try:
+            coef, score   = 0, 0  
+            for result_s in  self.skill_resultggbskills.filter(student=student,relationship__in = parcours.parcours_relationship.all()):
+                score += result_s.point
+                coef += 1
+
+            for ce in  self.skill_correctionskill.filter(student=student,parcours=parcours) :
+                score += ce.point 
+                coef += 1
+
+            if coef != 0:
+                score = int(score/coef)
             else :
                 score = ""                
 
