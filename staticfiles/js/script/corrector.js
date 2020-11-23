@@ -225,13 +225,12 @@ define(['jquery','bootstrap','ui','bcPicker'], function ($) {
         function annote(toggle,event,type){ 
 
                   	// décale l'abscisse selon la position du clic de la souris
-                  	var abscisse = event.pageX - 420; // - 412
+                  	var abscisse = event.offsetX; // - 412
 
                   	// décale l'ordonnée selon la hauteur du clic de la souris
 
-                    var ordonnee = event.pageY - 90   ; //  - 82
+                    var ordonnee = event.offsetY   ; //  - 82
 
- 
                     // récupération du numéro du toggle
                     var nb = toggle.attr("data-nb");
 
