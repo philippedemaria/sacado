@@ -1241,7 +1241,7 @@ def export_skills(request):
             result_skills_set = set()
             result_skills_ = Resultskill.objects.filter(skill= skill,student=student).order_by("-id")
             result_skills_set.update(set(result_skills_))
-            result_skills__ = Resultggbskill.objects.filter(skill= skill,student=student,relationship__parcours = parcours).order_by("-id")
+            result_skills__ = Resultggbskill.objects.filter(skill= skill,student=student).order_by("-id")
             result_skills_set.update(set(result_skills__))
             result_skills = list(result_skills_set)
             nb_result_skill = len(result_skills)
