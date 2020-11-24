@@ -65,19 +65,15 @@ def new_content_type(s):
         image = "img/"+slugs[i]+".png"
         Content_type.objects.create(name = name, image = image , slug = slug ,verbose_button = verbose_button, display = 1 ,section = s)
 
-
 def get_time(s,e):
     start_time = s.split(",")[0]
     end_time = e.split(".")[0]
     full_time = int(end_time) - int(start_time)
     return  full_time
 
-
-
 def advises(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
     return render(request, 'advises.html', {'teacher': teacher})
-
 
 def convert_seconds_in_time(secondes):
     if secondes < 60:
@@ -98,7 +94,6 @@ def convert_seconds_in_time(secondes):
             minutes = f'0{minutes}'
         return "{}:{}:{}".format(hours, minutes, sec)
 
-
 def send_to_teachers(level) : # envoie d'une notification au enseignant du niveau coché lorsqu'un exercice est posté
     rcv = []
     teachers = Teacher.objects.filter(levels=level)
@@ -112,8 +107,6 @@ def send_to_teachers(level) : # envoie d'une notification au enseignant du nivea
         send_mail("Nouvel exercice SacAdo",  msg , "info@sacado.xyz" , rcv)
     except :
         pass
-
-
 
 def students_from_p_or_g(request,parcours) :
     """
@@ -130,9 +123,6 @@ def students_from_p_or_g(request,parcours) :
     except :
         students = list(parcours.students.order_by("user__last_name"))
     return students
-
-
-
 
 def get_complement(request, teacher, parcours_or_group):
 
@@ -169,8 +159,6 @@ def get_complement(request, teacher, parcours_or_group):
 
     return data
 
-
-
 def get_stage(user):
 
     try :
@@ -184,8 +172,6 @@ def get_stage(user):
         stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }  
     return stage
 
-
-
 def group_has_parcourses(group,is_evaluation ,is_archive ):
     pses_tab = []
 
@@ -196,7 +182,6 @@ def group_has_parcourses(group,is_evaluation ,is_archive ):
                 pses_tab.append(p)
  
     return pses_tab
-
 
 def teacher_has_parcourses_folder(teacher,is_evaluation ,is_archive ):
     """
@@ -212,7 +197,6 @@ def teacher_has_parcourses_folder(teacher,is_evaluation ,is_archive ):
             if p not in parcourses:
                 parcourses.append(p) 
     return parcourses
-
 
 def teacher_has_parcourses(teacher,is_evaluation ,is_archive ):
     """
@@ -306,7 +290,6 @@ def knowledges_in_parcours(parcours):
                 knowledges.append(sk)   
     return knowledges
 
-
 def total_by_skill_by_student(skill,parcours,student) : # résultat d'un élève par comptétnece sur un parcours donné
     total_skill = 0            
     scs = student.student_correctionskill.filter(skill = skill, parcours = parcours)
@@ -331,10 +314,6 @@ def total_by_skill_by_student(skill,parcours,student) : # résultat d'un élève
         tot_s = -10
 
     return tot_s
-
-
-
-
 
 #######################################################################################################################################################################
 #######################################################################################################################################################################
@@ -363,9 +342,6 @@ def associate_parcours(request,id):
     else :
         return redirect("index") 
 
-
-
-
 @csrf_exempt
 def ajax_parcours_default(request):
     data = {}
@@ -375,8 +351,6 @@ def ajax_parcours_default(request):
     data['html'] = render_to_string('qcm/parcours_default_popup.html', context)
  
     return JsonResponse(data)
-
- 
 
 def get_parcours_default(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -468,8 +442,6 @@ def ajax_populate(request):
 
     return JsonResponse(data) 
 
-
-
 def peuplate_parcours(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
     levels =  teacher.levels.all() 
@@ -537,8 +509,6 @@ def peuplate_parcours(request,id):
 
     return render(request, 'qcm/form_peuplate_parcours.html', context)
 
-
- 
 def peuplate_parcours_evaluation(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
     levels =  teacher.levels.all() 
@@ -612,10 +582,6 @@ def peuplate_parcours_evaluation(request,id):
 
     return render(request, 'qcm/form_peuplate_parcours.html', context)
 
-
-
-
-
 #@user_is_parcours_teacher
 def individualise_parcours(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -645,10 +611,6 @@ def individualise_parcours(request,id):
                    'group_id' : group_id , 'group' : group , 'role' : role }
 
     return render(request, 'qcm/form_individualise_parcours.html', context )
-
-
-
-
 
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_individualise(request):  
@@ -783,8 +745,6 @@ def ajax_individualise(request):
 
     return JsonResponse(data) 
 
-
-
 def list_parcours(request):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -800,8 +760,6 @@ def list_parcours(request):
 
     return render(request, 'qcm/list_parcours.html', { 'parcourses' : parcourses , 'communications' : [] , 'relationships' : [],  'parcours' : None , 'group' : None , 'today' : today ,  'teacher' : teacher , 'nb_archive' : nb_archive })
 
-
-
 def list_archives(request):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -813,9 +771,6 @@ def list_archives(request):
         pass   
 
     return render(request, 'qcm/list_archives.html', { 'parcourses' : parcourses , 'parcours' : None , 'teacher' : teacher ,  'communications' : [] , 'relationships' : [], 'today' : today , })
-
-
-
 
 def list_evaluations(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -829,9 +784,6 @@ def list_evaluations(request):
 
     return render(request, 'qcm/list_evaluations.html', { 'parcourses' : parcourses, 'parcours' : None ,  'teacher' : teacher ,  'communications' : [] , 'relationships' : []   ,  'today' : today , 'nb_archive' : nb_archive })
 
-
-
-
 def list_evaluations_archives(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcourses = teacher_has_parcourses(teacher,1 ,1 ) #  is_evaluation ,is_archive      
@@ -842,9 +794,6 @@ def list_evaluations_archives(request):
         pass  
 
     return render(request, 'qcm/list_evaluations_archives.html', { 'parcourses' : parcourses, 'parcours' : None , 'teacher' : teacher , 'communications' : [] ,  'today' : today , 'relationships' : []   })
-
-
-
 
 ##@user_is_group_teacher
 def list_parcours_group(request,id):
@@ -885,9 +834,6 @@ def list_parcours_group(request,id):
 
     return render(request, 'qcm/list_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group': group,  'parcours' : None , 'communications' : [] , 'relationships' : [] , 'role' : role , 'today' : today })
 
-
-
-
 ##@user_is_group_teacher
 def list_sub_parcours_group(request,idg,id):
 
@@ -911,16 +857,6 @@ def list_sub_parcours_group(request,idg,id):
 
     return render(request, 'qcm/list_sub_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group ,   'parcours' : parcours , 'communications' : [] , 'relationships' : [] , 'role' : True , 'today' : today })
 
-
-
-
-
-
-
-
-
-
-
 def all_parcourses(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1).exclude(exercises=None ).exclude(teacher=teacher).order_by("author").prefetch_related('exercises__knowledge__theme').select_related('author')
@@ -931,7 +867,6 @@ def all_parcourses(request):
         inside = False
 
     return render(request, 'qcm/all_parcourses.html', { 'teacher' : teacher ,   'parcourses': parcourses , 'inside' : inside , 'communications' : [] , 'parcours' : None , 'relationships' : []})
-
 
 def ajax_all_parcourses(request):
     teacher = Teacher.objects.get(user= request.user)
@@ -960,8 +895,6 @@ def ajax_all_parcourses(request):
  
     return JsonResponse(data)
 
-
-
 @csrf_exempt
 def ajax_chargethemes_parcours(request):
     level_id =  request.POST.get("id_level")
@@ -978,8 +911,6 @@ def ajax_chargethemes_parcours(request):
     data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : parcourses, })
 
     return JsonResponse(data)
-
-
 
 def create_parcours(request):
 
@@ -1072,9 +1003,7 @@ def create_parcours(request):
 
 
     return render(request, 'qcm/form_parcours.html', context)
-
-
-  
+ 
 def update_parcours(request, id, idg=0 ):
     teacher = Teacher.objects.get(user_id=request.user.id)
     levels = teacher.levels.all()
@@ -1177,8 +1106,6 @@ def update_parcours(request, id, idg=0 ):
 
     return render(request, 'qcm/form_parcours.html', context)
 
-
-
 #@user_is_parcours_teacher 
 def archive_parcours(request, id, idg=0):
 
@@ -1198,8 +1125,6 @@ def archive_parcours(request, id, idg=0):
     else :
         return redirect('list_parcours_group', idg)
 
-
-
 #@user_is_parcours_teacher 
 def unarchive_parcours(request, id, idg=0):
 
@@ -1218,8 +1143,6 @@ def unarchive_parcours(request, id, idg=0):
         return redirect('parcours')
     else :
         return redirect('list_parcours_group', idg)
- 
-
 
 #@user_is_parcours_teacher 
 def delete_parcours(request, id, idg=0):
@@ -1257,8 +1180,6 @@ def delete_parcours(request, id, idg=0):
         return redirect('parcours')
     else :
         return redirect('list_parcours_group', idg)
-
-
 
 def show_parcours(request, id):
     parcours = Parcours.objects.get(id=id)
@@ -1320,10 +1241,6 @@ def show_parcours(request, id):
 
     return render(request, 'qcm/show_parcours.html', context)
 
-
-
-
-
 def show_parcours_student(request, id):
 
 
@@ -1369,10 +1286,6 @@ def show_parcours_student(request, id):
 
         return render(request, 'qcm/show_parcours_student.html', context)
 
-
-
-
-
 def show_parcours_visual(request, id):
     parcours = Parcours.objects.get(id=id)
  
@@ -1389,10 +1302,6 @@ def show_parcours_visual(request, id):
     context = {'relationships': relationships,  'parcours': parcours,   'nb_exo_only': nb_exo_only, 'nb_exercises': nb_exercises,  'communications' : [] ,  }
  
     return render(request, 'qcm/show_parcours_visual.html', context)
-
-
-
-
 
 def replace_exercise_into_parcours(request):
 
@@ -1434,10 +1343,6 @@ def replace_exercise_into_parcours(request):
 
 
     return redirect('show_parcours', parcours_id)
-
-
-
-
 
 #@user_is_parcours_teacher 
 def result_parcours(request, id):
@@ -1501,9 +1406,7 @@ def result_parcours(request, id):
 
     return render(request, 'qcm/result_parcours.html', context )
 
-
-
- ########## Sans doute plus utilisée ???? 
+########## Sans doute plus utilisée ???? 
 def result_parcours_theme(request, id, idt):
 
     teacher = Teacher.objects.get(user=request.user)
@@ -2169,7 +2072,6 @@ def result_parcours_exercise_students(request,id):
 
     return render(request, 'qcm/result_parcours_exercise_students.html', {'customexercises': customexercises , 'stage':stage ,   'relationships': relationships ,  'parcours': parcours , 'group_id': group_id ,  'group' : group ,  })
 
-
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_is_favorite(request):  
 
@@ -2185,7 +2087,6 @@ def ajax_is_favorite(request):
         data["statut"] = "<i class='fa fa-star fa-stack-1x' style='font-size: 12px; color:#FFF' ></i>"
         data["fav"] = 1
     return JsonResponse(data) 
-
 
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_course_sorter(request):  
@@ -2217,8 +2118,6 @@ def ajax_parcours_sorter(request):
     data = {}
     return JsonResponse(data) 
 
- 
-
 @csrf_exempt
 def ajax_sort_exercise(request):  
     try :
@@ -2247,8 +2146,6 @@ def ajax_sort_exercise(request):
         pass
     data = {}
     return JsonResponse(data) 
-
-
 
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_publish(request):  
@@ -2281,7 +2178,6 @@ def ajax_publish(request):
         customexercise_id = request.POST.get("relationship_id")        
         Customexercise.objects.filter(pk = int(customexercise_id)).update(is_publish = statut)    
     return JsonResponse(data) 
-
 
 @csrf_exempt   # PublieDépublie un parcours depuis form_group et show_group
 def ajax_publish_parcours(request):  
@@ -2320,7 +2216,6 @@ def ajax_publish_parcours(request):
     Parcours.objects.filter(pk = int(parcours_id)).update(is_publish = statut)
  
     return JsonResponse(data) 
-
 
 @csrf_exempt
 def ajax_dates(request):  # On soncerve relationship_id par commodité mais c'est relationship_id et non customexercise_id dans tout le script
@@ -2492,7 +2387,6 @@ def ajax_dates(request):  # On soncerve relationship_id par commodité mais c'es
 
     return JsonResponse(data) 
 
-
 @csrf_exempt
 def ajax_notes(request):  
     data = {}
@@ -2500,8 +2394,6 @@ def ajax_notes(request):
     mark =  request.POST.get("mark")
     relationship  = Relationship.objects.filter(pk = relationship_id ).update(is_mark = 1, mark = mark)
     return JsonResponse(data) 
-
-
 
 @csrf_exempt
 def ajax_delete_notes(request):  
@@ -2526,7 +2418,6 @@ def ajax_skills(request):
 
     return JsonResponse(data) 
 
-
 def aggregate_parcours(request):
 
     code = request.POST.get("parcours")
@@ -2537,7 +2428,6 @@ def aggregate_parcours(request):
         parcours.students.add(student)
 
     return redirect("index") 
-
 
 def ajax_parcoursinfo(request):
 
@@ -2559,7 +2449,6 @@ def ajax_parcoursinfo(request):
 
  
     return JsonResponse(data)
-
 
 def ajax_detail_parcours(request):
 
@@ -2664,7 +2553,6 @@ def ajax_detail_parcours(request):
 
     return JsonResponse(data)
 
-
 def delete_relationship(request,idr):
 
     relation = Relationship.objects.get(pk = idr) 
@@ -2673,7 +2561,6 @@ def delete_relationship(request,idr):
 
     return redirect("show_parcours" , relation.parcours.id ) 
     
-
 def delete_relationship_by_individualise(request,idr, id):
 
     relation = Relationship.objects.get(pk = idr) 
