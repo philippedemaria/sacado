@@ -114,6 +114,9 @@ def index(request):
 
             nb_relationships = len(leaf_relationships) + relation_ships.count()
 
+            if len(relationships) == 0 :
+                relationships = []
+
 
             exercise_tab = []
             for r in relationships:
