@@ -97,7 +97,7 @@
                     </div>
                     </a> 
 
-                    <!-- Fenetre accessible par le disc qui montre les sous parcours  -->
+                    <!-- Fenetre accessible par l'icone qui montre les sous parcours  -->
                     <div class="group_show" id="subparcours_show{{parcours.id }}" style="font-size:12px; color:#AAA"> 
                         <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ parcours.color }};">Sous-parcours</h4> 
                         {% for p in parcours.leaf_parcours.all %} 
@@ -132,6 +132,19 @@
                                     {% endif %}                                
                                 {% endif %}
                             </span>
+
+                            <div class="row">
+                                <div class="col-md-12 col-lg-12 col-xs-12">
+                                    <label>est un sous-parcours de</label> <br>
+                                    <select name="is_subparcours" class="select2 form-control">
+                                        {% for p in parcours.this_folder_parcours %}
+                                            <option value="{{ p.id }}">{{ p.name }}</option>
+                                        {% endfor %}    
+                                    </select>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
                     <!-- Fin de la fenetre  -->

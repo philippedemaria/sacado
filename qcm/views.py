@@ -1113,10 +1113,6 @@ def archive_parcours(request, id, idg=0):
     parcours = Parcours.objects.filter(id=id).update(is_archive=1,is_favorite=0,is_publish=0)
     teacher = Teacher.objects.get(user = request.user) 
 
-    if not authorizing_access(teacher, parcours, False ):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
-        return redirect('index')
-
 
     if idg == 99999999999:
         return redirect('index')
@@ -1133,9 +1129,6 @@ def unarchive_parcours(request, id, idg=0):
 
     teacher = Teacher.objects.get(user = request.user)
 
-    if not authorizing_access(teacher, parcours, False ):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
-        return redirect('index')
 
     if idg == 99999999999:
         return redirect('index')
@@ -2109,6 +2102,8 @@ def ajax_parcours_sorter(request):
     try :
         course_ids = request.POST.get("valeurs")
         course_tab = course_ids.split("-") 
+
+        print(course_tab)
      
 
         for i in range(len(course_tab)-1):
