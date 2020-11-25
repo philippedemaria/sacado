@@ -108,8 +108,7 @@ def index(request):
             leaf_relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in= leaf_parcourses, date_limit__gte=today).order_by("date_limit")
 
             if len(set(relation_ships)) > 0 :
-                relation_ships = set(relation_ships).update(set(leaf_relationships))
-                relationships = list(relation_ships)
+                relationships = set(relation_ships).update(set(leaf_relationships))
             else :
                 relationships = set(leaf_relationships)
 
