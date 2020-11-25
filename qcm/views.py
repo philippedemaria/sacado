@@ -281,9 +281,9 @@ def knowledges_in_parcours(parcours):
     for exercise in parcours.exercises.all():
         relationships = exercise.exercise_relationship.filter(parcours=parcours)
         for r in relationships :
-            for k in r.knowledges.all() :
-                if sk not in knowledges :
-                    knowledges.append(sk)
+            sr = r.exercise.knowledge
+            if sr not in knowledges :
+                    knowledges.append(sr)
     for ce in parcours.parcours_customexercises.all():
         for sk in ce.knowledges.all() :
             if sk not in knowledges :
