@@ -137,6 +137,7 @@
                         <input type="type"  
                                 id="codeExo{{relation.id}}"  
                                 data-relationship_id="{{relation.id}}"  
+                                data-custom=0 
                                 maxlength="8"  
                                 style="width:80px" 
                                 placeholder="bm4p8r31" 
@@ -148,7 +149,7 @@
                     </div>
                     <div class="col-sm-6 col-md-4">
                         <label  style="font-size: 10px;">Score min.</label><br>
-                        <input type="number"  id="scoreMin{{relation.id}}"  maxlength="3"  size="3" value="80"  class="details_relation" />%
+                        <input type="number"  id="scoreMin{{relation.id}}"  maxlength="3"  size="3" value="80" data-custom="0"  class="details_relation" />%
                     </div>
                     <div class="col-sm-6 col-md-2">
                         <a href="#" data-parcours_id="{{relation.parcours.id}}"  data-relationship_id="{{relation.id}}" id="save_constraint{{relation.id}}" class="save_constraint btn btn-danger">OK</a>
@@ -206,18 +207,18 @@
                <div class="row">
                     <div class="col-sm-6 col-md-6">
                         <label  style="font-size: 12px;"><i class="fa fa-clock-o"></i> Durée estimée </label><br>
-                        <input type="type" name="duration" data-relationship_id="{{relation.id}}" id="duration{{relation.id}}"  data-type ="2"  value="{{ relation.duration }}" class="details_relation" /> min.
+                        <input type="type" name="duration" data-relationship_id="{{relation.id}}" id="duration{{relation.id}}"  data-type ="2" data-custom=0  value="{{ relation.duration }}" class="details_relation" /> min.
                     </div>
                     {% if relation.exercise.supportfile.is_ggbfile %}
                     <div class="col-sm-6 col-md-6">
                         <label  style="font-size: 12px;"><i class="fa fa-save"></i> Situations </label><br>
-                        <input type="type" name="situation" data-relationship_id="{{relation.id}}" id="situation{{relation.id}}"   data-type ="2"  value="{{ relation.situation  }}" class="details_relation" />
+                        <input type="type" name="situation" data-relationship_id="{{relation.id}}" id="situation{{relation.id}}"   data-type ="2" data-custom=0  value="{{ relation.situation  }}" class="details_relation" />
                         <label  style="font-size: 10px;"> Nombre mini requis  </label>
                     </div>
                     {% else %}
                     <div class="col-sm-6 col-md-6">
                         <label  style="font-size: 12px;">Nouvelle consigne </label><br>
-                        <textarea style="font-size: 10px;width:110px" rows="3" name="situation" data-relationship_id="{{relation.id}}" id="situation{{relation.id}}"   data-type ="2"  class="details_relation form-control">{% if relation.instruction %}{{ relation.instruction  }}{% endif %}</textarea>
+                        <textarea style="font-size: 10px;width:110px" rows="3" name="situation" data-relationship_id="{{relation.id}}" id="situation{{relation.id}}" data-custom=0    data-type ="2"  class="details_relation form-control">{% if relation.instruction %}{{ relation.instruction  }}{% endif %}</textarea>
                     </div>
                     {% endif %}
                 </div> 

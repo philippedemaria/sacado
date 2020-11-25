@@ -1291,6 +1291,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
             $('.details_relation').on('keyup', function (event) {
                 let relationship_id = $(this).attr("data-relationship_id");
+                let custom = $(this).attr("data-custom");
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
                 let situation = $("#situation"+relationship_id).val();
 
@@ -1300,9 +1301,13 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 datas = {   'relationship_id': relationship_id,
                             'situation': situation,
                             'duration' : duration,
+                            'custom' : custom,
                             'type' : type,
                             csrfmiddlewaretoken: csrf_token,
                         } ;
+
+ 
+
                 $.ajax(
                     {
                         type: "POST",

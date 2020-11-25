@@ -235,7 +235,7 @@ body{
                                 {% for p in parcours_group %}
 
                                    <label> 
-                                        <input type="checkbox" name="change_into_parcours" id="change_into_parcours"  value="{{ p.id }}" /> 
+                                        <input type="checkbox" name="change_into_parcours" id="change_into_parcours{{ p.id }}"  value="{{ p.id }}" /> 
                                         {% if p.id == parcours.id %}<b>{{ p.title}} <i class="fa fa-hand-o-right"></i> Parcours actuel</b>{% else %} {{ p.title}} {% endif%}
                                     </label>
                                     <br>
