@@ -114,7 +114,7 @@ def index(request):
 
             nb_relationships = len(leaf_relationships) + relation_ships.count()
 
-            if len(relationships) == 0 :
+            if not relationships :
                 relationships = []
 
 
