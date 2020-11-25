@@ -112,7 +112,7 @@ def index(request):
             else :
                 relationships = set(leaf_relationships)
 
-            nb_relationships = len(leaf_relationships)
+            nb_relationships = len(leaf_relationships) + relation_ships.count()
 
 
             exercise_tab = []
