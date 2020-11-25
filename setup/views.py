@@ -109,10 +109,12 @@ def index(request):
 
             if len(set(relation_ships)) > 0 :
                 relation_ships = set(relation_ships).update(set(leaf_relationships))
+                relationships = list(relation_ships)
             else :
-                relation_ships = set(leaf_relationships)
+                relationships = set(leaf_relationships)
+
             nb_relationships = len(leaf_relationships)
-            relationships = list(relation_ships)
+
 
             exercise_tab = []
             for r in relationships:
