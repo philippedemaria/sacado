@@ -40,7 +40,6 @@ body {
   width:265px !important;
   height: 45px !important;
 }
-
 .navbar-default{
 background-color: transparent !important;
 border-top:  transparent !important;
@@ -3921,7 +3920,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   z-index: 9;
 }
 
-.div_results::-webkit-scrollbar {
+ .div_results::-webkit-scrollbar {
   width: 0px;
   height: 20px;
 }
@@ -3976,27 +3975,6 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   color: #000;
   position: absolute;
 }
-
-
-
-.div_my_copy{
-  left : 0px; 
-  top:25px;
-  padding:5px;
-  font-size: 10px;
-  width:100%;
-  z-index:8;
-  color: #000;
-  position: absolute;
-}
-
-
-
-
-
-
-
-
 
 .nobox {
     position: relative;

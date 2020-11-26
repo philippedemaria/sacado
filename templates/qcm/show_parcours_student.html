@@ -86,21 +86,6 @@
                     <!-- div de résultat SACADO corrigé par le prof -->                    
                     <div class="card_freeze" {% if data.score %} style="opacity:0.8" {% endif %}>
 
-                            {% get_is_submitted relation student as submitter %}
-
-                            {% if submitter.submit %}
-                            <div id="div_my_copy{{ relation.id }}" class="div_my_copy" >
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-12">       
-                                       
-                                            <pre>{{ submitter.answer }} </pre>
-                                       
-                                    </div>
-                                </div>                            
-                            </div>
-                            {% endif %}
-
-
 
                             <div id="div_results{{ relation.id }}" class="div_results" >
                                 <div class="row">
@@ -195,11 +180,9 @@
                                 {{ nb_exo_only|index:forloop.counter0 }}.</span> 
                             <div class="card-score-student">
 
-
-                                {% if submitter.submit %}
-                                    <div style="font-size: 10px; text-align: center; position: absolute; top:0px; left:30%; padding:5px; background-color: #5d4391; color: #FFF; border-radius: 4px">
-                                        <a href="#" class="my_copy_viewer white" data-exercise_id="{{ relation.id }}" > Voir ma copie envoyée avant correction</a>
-                                    </div>
+                                {% get_is_submitted relation student as submitter %}
+                                {% if submitter %}
+                                <div style="font-size: 10px; text-align: center; position: absolute; top:0px; background-color: #5d4391; color: #FFF; border-radius: 4px;z-index: 9">En attente<br> de correction</div>
                                 {% endif %}
 
                                 {% if data.score or data.score > -1 %}
@@ -301,21 +284,6 @@
                 {% get_is_submit customexercise parcours student as submitter %}
                 {% get_all_results_custom customexercise student parcours as data %} 
                     <div class="card_freeze"  {% if score %} style="opacity:0.8" {% endif %}  >
-
-
-                            {% if submitter.submit %}
-                            <div id="div_my_copy{{ customexercise.id }}" class="div_my_copy" >
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-12">       
-                                       
-                                            <pre>{{ submitter.answer }} </pre>
-                                       
-                                    </div>
-                                </div>                            
-                            </div>
-                            {% endif %}
-
-
                         <!-- div de résultat -->
                         {% if data.is_corrected %}
                             <div id="div_results_custom{{ customexercise.id }}" class="div_results" >
@@ -390,13 +358,12 @@
                         <div class="card-body student">
                             <span style="font-size: 40px; padding-left:3px;float:left; padding-top: 10px; {% if not score %} color: {{ parcours.color}} ;  {% endif %} ">
                                 {{ nb_exo_only_c|index:forloop.counter0 }}.</span> 
+                            <div class="card-score-student"  >
 
-                            {% if submitter.submit %}  
-                                <div style="font-size: 8px; text-align: center; position: absolute; top:0px; left:20%; padding:5px; background-color: #5d4391; color: #FFF; border-radius: 4px">
-                                    <a href="#" class="my_copy_viewer white" data-exercise_id="{{ customexercise.id }}" > Voir ma copie envoyée avant correction</a>
-                                </div>
+                            {% if submitter %}
+                            <div style="font-size: 10px; text-align: center; position: absolute; top:0px; background-color: #5d4391; color: #FFF; border-radius: 4px">En attente<br> de correction</div>
                             {% endif %}
- 
+                            </div>
                             {% if customexercise.calculator %}
                               <img src="{% static 'img/calculator.png' %}" class="pull-right" width="35px" />
                             {% else %}
@@ -405,11 +372,11 @@
                         </div> 
                         <div class="card-image"> 
          
-                            <div style="position: absolute; left : 30px; top:41px;" id="annoncement{{customexercise.id}}"   >   
-                                <span class="helper_tip btn btn-default">Consigne
-                                    <div class="helper_tip_text_right">{{customexercise.instruction|insert_tags:45|safe}} </div> 
-                                </span>
-                            </div>
+                          <div style="position: absolute; left : 30px; top:41px;" id="annoncement{{customexercise.id}}"   >   
+                              <span class="helper_tip btn btn-default">Consigne
+                                <div class="helper_tip_text_right">{{customexercise.instruction|insert_tags:45|safe}} </div> 
+                              </span>
+                          </div>
 
 
                             <a href="{% url 'write_custom_exercise' customexercise.id parcours.id %}"> 

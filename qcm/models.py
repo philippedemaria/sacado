@@ -775,17 +775,10 @@ class Relationship(models.Model):
         return data
 
     def is_submit(self,student):
-        data = {}
         submit = False
-        if self.relationship_written_answer.filter(student = student).exclude(is_corrected = 1).exists(): 
-            w_a = self.relationship_written_answer.filter(student = student).exclude(is_corrected = 1).last()
-            submit = True
-            answer = w_a.answer 
-        else :
-            answer =  None 
-        data["submit"] =  submit
-        data["answer"] =  answer   
-        return data
+        if self.relationship_written_answer.filter(student = student).exclude(is_corrected = 1).exists() :
+            submit = True          
+        return submit
 
     def noggb_data(self,student):
         try :
@@ -875,6 +868,7 @@ class Relationship(models.Model):
         except :
             level = 0
         return level
+
 
     def mark_to_this(self,student,parcours_id): # parcours_id n'est pas utilisé mais on le garde pour utiliser la fontion exostante dans item_tags
         data = {}
@@ -1079,17 +1073,10 @@ class Customexercise(ModelWithCode):
         return locker
 
     def is_submit(self,parcours,student):
-        data = {}
         submit = False
         if Customanswerbystudent.objects.filter(customexercise = self, parcours = parcours, student = student).exclude(is_corrected=1).exists() :
-            c_e = Customanswerbystudent.objects.filter(customexercise = self, parcours = parcours, student = student).exclude(is_corrected=1).last()
-            submit = True
-            answer = c_e.answer 
-        else :
-            answer =  None 
-        data["submit"] =  submit
-        data["answer"] =  answer   
-        return data
+            submit = True          
+        return submit
 
     def result_k_s(self,k_s, student, parcours_id,typ):
         Stage = apps.get_model('school', 'Stage')

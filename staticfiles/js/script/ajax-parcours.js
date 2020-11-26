@@ -256,16 +256,6 @@ define(['jquery','bootstrap'], function ($) {
             $('.collapside'+value).toggle(500);
         });
         
-
-        $('.div_my_copy').hide();
-        $(".my_copy_viewer").click(function(){
-            value =  $(this).attr("data-exercise_id"); 
-            $('#div_my_copy'+value).toggle(500);
-        });
-
-
-
-
         // Affiche div_results dans le parcours_show_student des élèves
         $('.div_results').hide();
         $('.div_results_custom').hide();
