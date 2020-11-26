@@ -4233,11 +4233,14 @@ def write_exercise(request,id): # Coté élève
         wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None ) 
         w_a = False
 
+
+
     if request.method == "POST":
         if wForm.is_valid():
             w_f = wForm.save(commit=False)
             w_f.relationship = relationship
             w_f.student = student
+            w_f.answer = wForm.cleaned_data['answer']
             w_f.is_corrected = 0  # si l'élève soumets une production alors elle n'est pas corrigée 
             w_f.save()
 
@@ -4287,13 +4290,14 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
     else :
         form_ans = None
 
+    
 
     if request.method == "POST":
-
         if cForm.is_valid():
             w_f = cForm.save(commit=False)
             w_f.customexercise = customexercise
             w_f.parcours_id = idp
+            w_f.answer = cForm.cleaned_data['answer']
             w_f.student = student
             w_f.is_corrected = 0
             w_f.save()
@@ -4303,8 +4307,6 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
                 for form_image in form_images :
                     if form_image.is_valid():
                         form_image.save()
-
-
 
             ### Envoi de mail à l'enseignant
             msg = "Exercice posté par : "+str(student.user) 

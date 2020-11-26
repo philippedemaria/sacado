@@ -9,7 +9,7 @@ var shell = window.shell;
 if (document.getElementById("submit_code"))
 {
 editor.container.childNodes[0].name = "answer" ; 
-document.getElementById("submit_code").disabled = true;    
+/* document.getElementById("submit_code").disabled = true;  */  
 }
  
 /**
@@ -28,7 +28,7 @@ function runScript() {
     shell.launch(src, false);
     shell.focus();
     shell.cursorToEnd();
-    document.getElementById("submit_code").disabled = false; 
+/*    document.getElementById("submit_code").disabled = false; */
 
 }
 
