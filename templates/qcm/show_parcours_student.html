@@ -182,7 +182,7 @@
 
                                 {% get_is_submitted relation student as submitter %}
                                 {% if submitter %}
-                                <div style="font-size: 10px; text-align: center; position: absolute; top:0px; background-color: #5d4391; color: #FFF; border-radius: 4px;z-index: 9">En attente<br> de correction</div>
+                                <div style="font-size: 10px; text-align: center; position: absolute; top:0px; background-color: {{ relation.parcours.color}}; color: #FFF; border-radius: 4px;z-index: 9">En attente<br> de correction</div>
                                 {% endif %}
 
                                 {% if data.score or data.score > -1 %}
@@ -255,10 +255,12 @@
                                 <i class="fa fa fa-save"></i> {{ relation.situation}}
 
                                 {% if noggb_data.is_corrected %}
-                                    <span class="pull-right selector_div_result" data-relation_id ="{{ relation.id }}"><i class="fa fa-trophy"></i></span>
+                                    <span class="pull-right selector_div_result" data-relation_id ="{{ relation.id }}"  data-custom=0 ><i class="fa fa-trophy"></i></span>
                                 {% else %}
-                                    {% if not relation.exercise.supportfile.is_ggbfile %}  
-                                    <span class="pull-right selector_div_result" data-relation_id ="{{ relation.id }}"><i class="fa fa-copy"></i></span>
+                                    {% if submitter %}
+                                        {% if not relation.exercise.supportfile.is_ggbfile %}  
+                                        <span class="pull-right selector_div_result" data-relation_id ="{{ relation.id }}"  data-custom=0 ><i class="fa fa-copy"></i></span>
+                                        {% endif %}
                                     {% endif %}
                                 {% endif %}
                                 {% if relation.relationship_mastering.all|length > 0 %}
@@ -285,8 +287,9 @@
                 {% get_all_results_custom customexercise student parcours as data %} 
                     <div class="card_freeze"  {% if score %} style="opacity:0.8" {% endif %}  >
                         <!-- div de résultat -->
-                        {% if data.is_corrected %}
+                        {% if submitter %}
                             <div id="div_results_custom{{ customexercise.id }}" class="div_results" >
+                                {% if data %}
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12"> <a href="#" class="div_results_custom_close pull-right" data-customexercise_id="{{customexercise.id}}"><i class="fa fa-times"></i></a>     
                                       {% if data.point %}
@@ -304,7 +307,8 @@
                                         <hr style="padding:0px; margin:10px 0px"/> 
                                       {% endif %}
                                     </div>
-                                </div>                            
+                                </div>  
+                                {% endif %}  
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12">  
                                         <a href="#" data-toggle='modal' data-target='#my_production' 
@@ -326,7 +330,7 @@
                                                 {% endif %}"></i>  </li>
                                           {% endfor %}
                                     </div>
-                                </div>   
+                                </div>  
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12">   
                                         <label  style="font-size: 10px;font-weight: 600;">Savoir faire </label>
@@ -345,6 +349,8 @@
                                     </div>
                                </div>   
                             </div>
+                        {% endif %}                              
+                        {% if data.is_corrected %}
                             <div class="teacher_corrected"  >
                                 {% if data.point %}
                                     <label  style="font-size: 12px;font-weight: 600;">{{ data.point }}/{{ customexercise.mark }} </label>
@@ -361,7 +367,7 @@
                             <div class="card-score-student"  >
 
                             {% if submitter %}
-                            <div style="font-size: 10px; text-align: center; position: absolute; top:0px; background-color: #5d4391; color: #FFF; border-radius: 4px">En attente<br> de correction</div>
+                            <div style="font-size: 10px; text-align: center; position: absolute; top:0px; background-color: {{ parcours.color}}; color: #FFF; border-radius: 4px">En attente<br> de correction</div>
                             {% endif %}
                             </div>
                             {% if customexercise.calculator %}
@@ -421,8 +427,13 @@
                                 {% endif  %}
 
                                 {% if data.is_corrected %}
-                                    <span class="pull-right selector_div_result_custom" data-customexercise_id ="{{ customexercise.id }}"><i class="fa fa-trophy"></i></span>
+                                    <span class="pull-right selector_div_result_custom" data-customexercise_id ="{{ customexercise.id }}"  data-custom=1 ><i class="fa fa-trophy"></i></span>
+                                {% else %}                            
+                                    {% if submitter %}
+                                        <span class="pull-right selector_div_result_custom" data-customexercise_id ="{{ customexercise.id }}"  data-custom=1 ><i class="fa fa-copy"></i></span>
+                                    {% endif %}
                                 {% endif %}
+
                             </div>
                         </div>
                     </div>               
