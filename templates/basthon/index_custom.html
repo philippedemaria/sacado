@@ -67,10 +67,15 @@
               </div>
               {% endif %}
 
+              {% if c_e %}
+                  <a href="#" data-target="#copy_viewer"  data-toggle='modal' class="btn btn-default">
+                      Ma copie envoyée
+                  </a>
+              {% endif %}
           </div>          
       </div>
       <div id="left-div">
-        <div id="editor">{% if c_e %}{{ c_e.answer|safe }}{% endif %}</div>
+        <div id="editor"></div>
         <div style="padding: 1vw 0px 0px 0px; display: flex; float: left;">
           <a id="run" class="btn" title="Exécuter le script">
             <i class="fas fa-cogs fa-fw btn-logo btn-titled"></i>
@@ -123,6 +128,28 @@
       {% endif %}
     </div>
 </form>
+
+
+{% if c_e %}
+<div class="modal fade" id="copy_viewer" tabindex="-1" role="dialog" aria-labelledby="copy_viewer">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class='thin' style="width:100%" >Ma copie envoyée <a href="#" data-dismiss="modal" class="pull-right" ><i class="fa fa-times"></i> </a> </h2>
+            </div>
+            <div class="modal-body">
+                <pre>
+                  {{ c_e.answer |safe }}
+                </pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+
+
  
 {% endblock %}
 

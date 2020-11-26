@@ -52,6 +52,15 @@
                   </a>
               {% endfor  %} 
           </div>
+
+
+          {% if w_a %}
+              <a href="#" data-target="#copy_viewer"  data-toggle='modal' class="btn btn-default">
+                  Ma copie envoyée
+              </a>
+          {% endif %}
+
+
       </div>
       {% endif %}
       <div id="left-div">
@@ -111,6 +120,27 @@
       {% endif %}
     </div>
 </form>
+
+
+{% if w_a %}
+<div class="modal fade" id="copy_viewer" tabindex="-1" role="dialog" aria-labelledby="copy_viewer">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class='thin' style="width:100%" >Ma copie envoyée <a href="#" data-dismiss="modal" class="pull-right" ><i class="fa fa-times"></i> </a> </h2>
+            </div>
+            <div class="modal-body">
+                <pre>
+                  {{ w_a.answer |safe }}
+                </pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+
 
 {% endblock %}
 
