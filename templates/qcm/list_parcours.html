@@ -80,7 +80,7 @@ body{
                                 <span id="is_favorite_id{{ parcours.id }}">{% if parcours.is_favorite %}<i class="fa fa-star fa-stack-1x" style="font-size: 12px; color:#FFF" ></i>{% endif  %}</span>
                             </span>
                             {% if parcours.is_folder %}
-                                <a href="#" class="accordion" data-target="#subparcours{{ forloop.counter }}"  data-subtarget="#subaccordion{{ forloop.counter }}"  data-sub_target="#sub_accordion{{ forloop.counter }}">
+                                <a href="#" class="accordion" data-target_id="{{ forloop.counter }}"  data-subtarget="#subaccordion{{ forloop.counter }}"  data-sub_target="#sub_accordion{{ forloop.counter }}">
                                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-compact-down" fill="{{ parcours.color }}" id="subaccordion{{ forloop.counter }}">
                                       <path fill-rule="evenodd" d="M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67z"/>
                                     </svg>
@@ -92,7 +92,7 @@ body{
                             {% endif %}
                         </td>  
                         <td>
-                            <a href="{% url 'show_parcours' parcours.id %}" > {{ parcours.title }}
+                            <a href="{% url 'show_parcours' parcours.id %}" > {{ parcours.title }} - 
                                 {% get_is_lock parcours today as is_lock %} 
                                 {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillée. Il n'est plus possible de soumettre des exercices</div></span>{% endif %} 
                             </a>
@@ -185,13 +185,13 @@ body{
                             {% endif %}
                         </span>
                         </td>
-                    </tr>
-                    {% for prcrs in parcours.leaf_parcours.all|dictsortreversed:"is_favorite" %}
-                        <tr {% if not prcrs.is_publish %} style="background-color:#F4F4F4;" {% endif  %} id="subparcours{{ forloop.parentloop.counter }}"  class="collapse" >
+                    </tr> 
+                    {% for prcrs in parcours.leaf_parcours.all %}
+                        <tr {% if not prcrs.is_publish %} style="background-color:#F4F4F4;" {% endif  %} class="collapse subparcours{{ forloop.parentloop.counter }}" >
                             <td style="text-align:center">
                                 <svg width="1em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-bar-right" fill="{{ parcours.color }}" >
                                   <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
-                                </svg>
+                                </svg> 
                             </td>  
                             <td>
                                 <a href="{% url 'show_parcours' prcrs.id %}" > {{ prcrs.title }}
@@ -266,26 +266,26 @@ body{
                                 </form>
                             </td>
                             <td>
-                            <form action="" method="POST" enctype='multipart/form-data'>     
-                                {% csrf_token %}
-                                <div class="btn-group"  style="padding:0px;margin:0px;">
-                                    <a href="#" class="btn btn-default publisher"  data-from="1" id="parcours_publisher{{prcrs.id}}" 
-                                        data-is_disabled="{% if prcrs.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
-                                        data-parcours_id="{{prcrs.id}}" data-statut="{{prcrs.is_publish }}">  
-                                        <i class="fa fa-circle-o-notch"></i>
-                                    </a><span class="legend-btn  legend-btn-{% if not prcrs.is_publish %}danger{% else  %}success{% endif  %} size13" id="parcours_statut{{prcrs.id}}"  >  
-                                      {% if prcrs.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
-                                    </span>
-                                </div>
-                            </form>
-                            <span class="label_icon" style="color:{{ prcrs.color   }};">
-                                {% if prcrs.is_evaluation %}
-                                    {{  prcrs.start|date:"d N Y H:i"  }}   
-                                    {% if prcrs.stop %}
-                                       - {{  prcrs.stop|date:"d N Y H:i"  }}     
-                                    {% endif %}                                
-                                {% endif %}
-                            </span>
+                                <form action="" method="POST" enctype='multipart/form-data'>     
+                                    {% csrf_token %}
+                                    <div class="btn-group"  style="padding:0px;margin:0px;">
+                                        <a href="#" class="btn btn-default publisher"  data-from="1" id="parcours_publisher{{prcrs.id}}" 
+                                            data-is_disabled="{% if prcrs.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
+                                            data-parcours_id="{{prcrs.id}}" data-statut="{{prcrs.is_publish }}">  
+                                            <i class="fa fa-circle-o-notch"></i>
+                                        </a><span class="legend-btn  legend-btn-{% if not prcrs.is_publish %}danger{% else  %}success{% endif  %} size13" id="parcours_statut{{prcrs.id}}"  >  
+                                          {% if prcrs.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
+                                        </span>
+                                    </div>
+                                </form>
+                                <span class="label_icon" style="color:{{ prcrs.color   }};">
+                                    {% if prcrs.is_evaluation %}
+                                        {{  prcrs.start|date:"d N Y H:i"  }}   
+                                        {% if prcrs.stop %}
+                                           - {{  prcrs.stop|date:"d N Y H:i"  }}     
+                                        {% endif %}                                
+                                    {% endif %}
+                                </span>
                             </td>
                         </tr>
                     {% endfor  %} 

@@ -682,11 +682,11 @@ define(['jquery','bootstrap'], function ($) {
             $('.collapse').hide() ;
             collapser = 0 ;
             $('.accordion').on('click', function (event) {
-                let target = $(this).attr("data-target");
+                let target_id = $(this).attr("data-target_id");
                 let subtarget = $(this).attr("data-subtarget");
                 let sub_target = $(this).attr("data-sub_target");
 
-                $(target).toggle(500);
+                $(".subparcours"+target_id).toggle(500);
 
                 if (collapser %2 == 0) 
                     { 

@@ -1243,10 +1243,7 @@ def show_parcours_student(request, id):
     today = time_zone_user(user)
     stage = get_stage(user)
 
-    if not authorizing_access_student(student, parcours):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
-        return redirect('index')
-
+ 
     if parcours.is_folder :
 
         parcourses = parcours.leaf_parcours.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)).order_by("ranking")
@@ -4220,10 +4217,7 @@ def write_exercise(request,id): # Coté élève
     student = Student.objects.get(user = request.user)  
     relationship = Relationship.objects.get(pk = id)
 
-
-    if not authorizing_access_student(student, relationship):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
-        return redirect('index')
+ 
 
     today = time_zone_user(student.user)
     if Writtenanswerbystudent.objects.filter(student = student, relationship = relationship ).exists() : 
@@ -4272,9 +4266,7 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
     parcours = Parcours.objects.get(pk = idp)
     today = time_zone_user(student.user)
 
-    if not authorizing_access_student(student, parcours):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
-        return redirect('index')
+ 
 
     if Customanswerbystudent.objects.filter(student = student, customexercise = customexercise ).exists() : 
         c_e = Customanswerbystudent.objects.get(student = student, customexercise = customexercise )
