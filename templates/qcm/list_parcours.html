@@ -31,7 +31,7 @@
         <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
      
      
-            <li> <a href="{% url 'create_parcours' %}"  >  + Nouveau Parcours</a> </li>  
+            <li> <a href="{% url 'create_parcours' 0 %}"  >  + Nouveau Parcours</a> </li>  
             <li> <a href="{% url 'all_parcourses' %}"   > Parcours mutualisés</a></li>
             <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   > Parcours par défaut</a></li>
 
@@ -84,7 +84,7 @@ body{
                                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-compact-down" fill="{{ parcours.color }}" id="subaccordion{{ forloop.counter }}">
                                       <path fill-rule="evenodd" d="M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67z"/>
                                     </svg>
-                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-compact-up collapse" fill="{{ parcours.color }}" id="sub_accordion{{ forloop.counter }}">
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-compact-up collapsed" fill="{{ parcours.color }}" id="sub_accordion{{ forloop.counter }}">
                                       <path fill-rule="evenodd" d="M7.776 5.553a.5.5 0 0 1 .448 0l6 3a.5.5 0 1 1-.448.894L8 6.56 2.224 9.447a.5.5 0 1 1-.448-.894l6-3z"/>
                                     </svg>
 
@@ -187,7 +187,7 @@ body{
                         </td>
                     </tr> 
                     {% for prcrs in parcours.leaf_parcours.all %}
-                        <tr {% if not prcrs.is_publish %} style="background-color:#F4F4F4;" {% endif  %} class="collapse subparcours{{ forloop.parentloop.counter }}" >
+                        <tr {% if not prcrs.is_publish %} style="background-color:#F4F4F4;" {% endif  %} class="collapsed subparcours{{ forloop.parentloop.counter }}" >
                             <td style="text-align:center">
                                 <svg width="1em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-bar-right" fill="{{ parcours.color }}" >
                                   <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
@@ -313,7 +313,7 @@ body{
 
                         <ol><i class="fa fa-hand-o-right"></i> Les parcours par défaut (Recommandé pour une première utilisation) <p> Ces parcours contiennent tous les exercices  de  {% if  group %}{{ group.level }}{% else %}niveau_du_groupe{% endif %} proposés par <span class="sacado">sacado</span>, classés par le thème. Vous pouvez les utiliser directement, leur ajouter, leur supprimer des exercices.<br>Choisir le parcours souhaité <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   ><i class="fa fa-caret-right"></i>  Parcours par défaut</a><p></ol>
                         <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés <p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier un fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur <a href="{% url 'all_parcourses' %}"   ><i class="fa fa-caret-right"></i> Parcours mutualisés</a></p></ol>
-                        <ol><i class="fa fa-hand-o-right"></i>  Les parcours personnalisés <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br>  Créer votre parcours personnalisé dans un premier temps puis sélectionner les exercices de votre choix. <a href="{% url 'create_parcours' %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a></p></ol>
+                        <ol><i class="fa fa-hand-o-right"></i>  Les parcours personnalisés <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br>  Créer votre parcours personnalisé dans un premier temps puis sélectionner les exercices de votre choix. <a href="{% url 'create_parcours' 0 %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a></p></ol>
 
 
 

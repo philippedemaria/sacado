@@ -165,7 +165,7 @@
                         <td>Ordre. <input type="number" id="id_orders" class="form-control" name="orders" min="0" step ="1" > </td>
                     </tr>
                 {% empty %}
-                    <tr><td><small>Pour attribuer cet exercice à un parcours, il faut <a href="{% url 'create_parcours' %}" class="btn-primary">créer un parcours</a>.</small></td></tr>
+                    <tr><td><small>Pour attribuer cet exercice à un parcours, il faut <a href="{% url 'create_parcours' 0 %}" class="btn-primary">créer un parcours</a>.</small></td></tr>
                 {% endfor %}
                 </table>
 

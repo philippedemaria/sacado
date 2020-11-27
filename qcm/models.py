@@ -675,6 +675,15 @@ class Parcours(ModelWithCode):
 
         return submit
 
+
+    def p_is_leaf(self,parcours):
+        test = False
+        if parcours :
+            if self in parcours.leaf_parcours.all() : 
+                test = True
+        return test
+
+
 class Relationship(models.Model):
     exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.PROTECT,  editable= False)
     parcours = models.ForeignKey(Parcours, on_delete=models.PROTECT,  related_name='parcours_relationship',  editable= False)

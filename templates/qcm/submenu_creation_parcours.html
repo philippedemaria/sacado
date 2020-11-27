@@ -1,2 +1,12 @@
 <li> <a href="{% url 'all_parcourses' %}" class="btn btn-new"  > Parcours mutualisés</a></li>
-<li> <a href="{% url 'create_parcours' %}" class="btn btn-new"  > Créer un parcours</a> </li>  
+
+
+{% if parcours  %}
+	{% if parcours.is_folder %}
+	<li> <a href="{% url 'create_parcours' parcours.id %}" class="btn btn-new"  > Créer un parcours</a> </li>  
+	{% else %}
+	<li> <a href="{% url 'create_parcours' 0 %}" class="btn btn-new"  > Créer un parcours</a> </li>  
+	{% endif %}
+{% else %}
+<li> <a href="{% url 'create_parcours' 0 %}" class="btn btn-new"  > Créer un parcours</a> </li>  
+{% endif %}

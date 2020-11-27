@@ -36,13 +36,23 @@
             <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
          
          
-                <li> <a href="{% url 'create_parcours' %}"  >  + Nouveau Parcours</a> </li> 
+                <li> <a href="{% url 'create_parcours' 0 %}"  >  + Nouveau Parcours</a> </li> 
                 <li> <a href="{% url 'all_parcourses' %}"   > Parcours mutualisés</a></li>         
                 <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   > Parcours par défaut</a></li>
 
 
             </ul>
         </li>  
+
+
+        <li>
+            <a href="{% url 'create_folder' group.id %}"  class="btn btn-new helper_tip"> Créer un dossier  <i class="fa fa-question-circle"></i></span>
+                                    <div class="helper_tip_text_flex" >Un dossier permet de regrouper plusieurs parcours. </div>   
+            </a>
+        </li>  
+
+
+
     {% endif %}
 {% endblock %}
 
@@ -215,7 +225,7 @@
                 <div class="box-footer">
                     <div class="row extend">  
                         <div class="col-lg-6 col-xs-5">
-                            <a href="{% url 'update_parcours' parcours.id  group.id  %}"  class="edit"><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span> </a>
+                            <a href="{% url 'update_folder' parcours.id  group.id  %}"  class="edit"><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span> </a>
                         </div> 
                         <div class="col-lg-6 col-xs-5">
                             <a  href="{% url 'result_parcours' parcours.id  %}" class="edit" target="_blank"><i class="fa fa-fw fa-mortar-board"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
@@ -362,7 +372,7 @@
 
                         <ol><i class="fa fa-hand-o-right"></i> Les parcours par défaut (Recommandé pour une première utilisation) <p> Ces parcours contiennent tous les exercices  de  {{ group.level}} proposés par <span class="sacado">sacado</span>, classés par le thème. Vous pouvez les utiliser directement, leur ajouter, leur supprimer des exercices.<br>Choisir le parcours souhaité <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   ><i class="fa fa-caret-right"></i>  Parcours par défaut</a><p></ol>
                         <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés <p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier un fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur <a href="{% url 'all_parcourses' %}"   ><i class="fa fa-caret-right"></i> Parcours mutualisés</a></p></ol>
-                        <ol><i class="fa fa-hand-o-right"></i>  Les parcours personnalisés <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br>  Créer votre parcours personnalisé dans un premier temps puis sélectionner les exercices de votre choix. <a href="{% url 'create_parcours' %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a></p></ol>
+                        <ol><i class="fa fa-hand-o-right"></i>  Les parcours personnalisés <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br>  Créer votre parcours personnalisé dans un premier temps puis sélectionner les exercices de votre choix. <a href="{% url 'create_parcours' 0 %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a></p></ol>
 
 
 

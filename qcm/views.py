@@ -849,13 +849,11 @@ def list_sub_parcours_group(request,idg,id):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
-
-
-    print(group)
-
     parcours_tab = parcours.leaf_parcours.all()
 
     return render(request, 'qcm/list_sub_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group ,   'parcours' : parcours , 'communications' : [] , 'relationships' : [] , 'role' : True , 'today' : today })
+
+
 
 def all_parcourses(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -867,6 +865,9 @@ def all_parcourses(request):
         inside = False
 
     return render(request, 'qcm/all_parcourses.html', { 'teacher' : teacher ,   'parcourses': parcourses , 'inside' : inside , 'communications' : [] , 'parcours' : None , 'relationships' : []})
+
+
+
 
 def ajax_all_parcourses(request):
     teacher = Teacher.objects.get(user= request.user)
@@ -912,7 +913,11 @@ def ajax_chargethemes_parcours(request):
 
     return JsonResponse(data)
 
-def create_parcours(request):
+
+
+
+
+def create_parcours(request,idp=0):
 
     teacher = Teacher.objects.get(user = request.user)
     levels =  teacher.levels.all()    
@@ -933,6 +938,10 @@ def create_parcours(request):
     else :
         sharing = False
 
+    if idp > 0 :
+        parcours_folder = Parcours.objects.get(pk = idp)
+    else :
+        parcours_folder = None
 
     if form.is_valid():
         nf = form.save(commit=False)
@@ -943,18 +952,9 @@ def create_parcours(request):
         form.save_m2m()
         nf.students.set(form.cleaned_data.get('students'))
 
-
-        leaf_parcours =  request.POST.getlist('leaf_parcours')
-        for lp_id in leaf_parcours :
-            parcours = Parcours.objects.get(pk = lp_id)
-            parcours.is_leaf = 1
-            parcours.save()
-
-        folder_parcours =  request.POST.getlist('folder_parcours')
-        for fp_id in folder_parcours :
-            parcours = Parcours.objects.get(pk = fp_id)
-            parcours.is_folder = 1
-            parcours.save()
+        if idp > 0 :
+            parcours_folder = Parcours.objects.get(pk = idp)
+            parcours_folder.leaf_parcours.add(nf)
 
 
         sg_students =  request.POST.getlist('students_sg')
@@ -982,28 +982,30 @@ def create_parcours(request):
 
 
 
-    try :
-        if 'group_id' in request.session :
-            if request.session.get["group_id"] :
-                group_id = request.session["group_id"]
-                group = Group.objects.get(pk = group_id) 
-        else :
-            group_id = None
-            group = None
-            request.session["group_id"]  = None            
-
-    except :
+ 
+    if request.session.has_key("group_id") :
+        group_id = request.session.get("group_id",None)        
+        if group_id :
+            group = Group.objects.get(pk = group_id) 
+    else :
         group_id = None
         group = None
-        request.session["group_id"]  = None
+        request.session["group_id"]  = None            
+
+ 
+    print(request.session.has_key("group_id"))
 
 
-    context = {'form': form,   'teacher': teacher,  'groups': groups,  'levels': levels, 'idg': 0,   'themes' : themes_tab, 'group_id': group_id , 'parcours': None,  'relationships': [], 'share_groups' : share_groups , 
+    context = {'form': form,   'teacher': teacher,  'groups': groups,  'levels': levels, 'idg': 0,  'parcours_folder': parcours_folder ,  'themes' : themes_tab, 'group_id': group_id , 'parcours': None,  'relationships': [], 'share_groups' : share_groups , 
                'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'communications' : [],  'group': group , 'role' : True }
 
 
     return render(request, 'qcm/form_parcours.html', context)
  
+
+
+
+
 def update_parcours(request, id, idg=0 ):
     teacher = Teacher.objects.get(user_id=request.user.id)
     levels = teacher.levels.all()
@@ -1942,11 +1944,13 @@ def clone_parcours(request, id, course_on ):
         relationship.save() 
 
     if course_on == 1 :
+        print("ici")
         courses = Course.objects.filter(parcours = parcours)         
         for course in courses :
             course.pk = None
             course.parcours = parcours
-            course.save() 
+            course.save()
+            print("cloné")
 
 
 
@@ -5887,3 +5891,99 @@ def mastering_custom_done(request):
         nf.save()
 
     return redirect('mastering_custom_student_show', mastering.customexercise.id)
+
+
+##################################################################################################################################################
+##################################################################################################################################################
+##################################################       FOLDER      #############################################################################    
+##################################################################################################################################################
+##################################################################################################################################################
+
+def create_folder(request,idg):
+
+    teacher = Teacher.objects.get(user = request.user) 
+    form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher)
+    group = Group.objects.get(pk = idg)
+
+    parcourses = set()
+    for student in group.students.all() :
+        parcourses.update(student.students_to_parcours.filter(teacher = teacher).exclude(is_folder=1))
+
+    if request.method == "POST" :
+        lp = []            
+        subparcours =  request.POST.getlist('subparcours')
+        for pi in subparcours :
+            p = Parcours.objects.get(pk = pi)
+            lp.append(p)
+
+        if form.is_valid():
+            nf = form.save(commit=False)
+            nf.author = teacher
+            nf.teacher = teacher
+            nf.is_evaluation = 0
+            nf.is_folder = 1
+            nf.save() 
+            nf.leaf_parcours.set(lp)        
+            nf.students.set(group.students.all())
+            return redirect ("list_parcours_group", idg )     
+        else:
+            print(form.errors)
+
+    context = {'form': form,   'teacher': teacher,  'group': group,  'parcours': None, 'parcourses' : parcourses ,  'relationships': [], 'role' : True }
+
+    return render(request, 'qcm/form_folder.html', context)
+ 
+
+
+
+def update_folder(request,id,idg):
+
+    teacher = Teacher.objects.get(user = request.user) 
+    group = Group.objects.get(pk = idg) 
+    parcours = Parcours.objects.get(id=id)
+    form = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher)
+
+    parcourses = set()
+    for student in group.students.all() :
+        parcourses.update(student.students_to_parcours.filter(teacher = teacher).exclude(is_folder=1))
+
+    if request.method == "POST" :
+        lp = []            
+        subparcours =  request.POST.getlist('subparcours')
+        for pi in subparcours :
+            p = Parcours.objects.get(pk = pi)
+            lp.append(p)
+
+        if form.is_valid():
+            nf = form.save(commit=False)
+            nf.author = teacher
+            nf.teacher = teacher
+            nf.is_evaluation = 0
+            nf.is_folder = 1
+            nf.save()   
+            nf.leaf_parcours.set(lp)         
+            nf.students.set(group.students.all())
+            return redirect ("list_parcours_group", idg )     
+        else:
+            print(form.errors)
+
+    context = {'form': form,   'teacher': teacher,  'group': group,  'parcours': parcours, 'parcourses' : parcourses ,   'relationships': [], 'role' : True }
+
+    return render(request, 'qcm/form_folder.html', context)
+ 
+
+
+
+def delete_folder(request,id,idg):
+
+    teacher = Teacher.objects.get(user = request.user) 
+    group = Group.objects.get(pk = idg) 
+    parcours = Parcours.objects.get(id=id) 
+
+    if parcours.leaf_parcours.count() == 0 :
+        parcours.remove()
+    else :
+        messages.error(request, "Le dossier n'est pas vide. La suppression n'est pas possible.")
+
+ 
+    return redirect ("list_parcours_group", idg )  

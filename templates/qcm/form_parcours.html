@@ -8,7 +8,7 @@
     {% if parcours %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
     {% else %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     {% endif %}
 
     <script>
@@ -30,18 +30,28 @@
 
     {% if parcours %}
     <span style="color:{{ parcours.color }}"><i class="fa fa-th"></i> </span> 
+    {% else %}
+
+        {% if parcours_folder %}
+        <span style="color:{{ parcours_folder.color }}"><i class="fa fa-folder"></i> {{ parcours_folder }}</span>   <img src="{% static 'img/angle-right.png' %}"/>  
+        {% endif %}
     {% endif %}
+
+
 
       {% include 'qcm/breadcrumb.html' %}
 
 
 
-    {% if parcours %}
-        <small>Configuration</small>   
-    {% else %}
-         Nouveau parcours 
-    {% endif %}
 
+
+    <small>
+        {% if parcours %}
+            Configuration 
+        {% else %}
+             Nouveau parcours 
+        {% endif %}
+    </small>  
 {% endblock %}
 
 
@@ -249,33 +259,7 @@
                         
                     {% endblock %}
 
-                    {% block evaluation %}
-                    {% if teacher.user.is_superuser %}  
-                    <tr class="leaf">
-                        <td>{{ form.is_leaf.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text" >Si coché, le parcours est insclus dans un pacours existant.</div>
-                            </span></td>
-                        <td>{{ form.is_leaf |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
-                        <td>{{ form.is_leaf.errors }}</td>
-                    </tr>
-
-
-<!--                     <tr id="folder_div">
-                        <td><label>Nom du parcours parent</label></td>
-                        <td colspan=2>{{ form.folder_parcours|add_class:"select2" }} {{ form.folder_parcours.errors }}</td>
-                    </tr> -->
-                    <tr class="folder">
-                        <td><label> Dossier ?</label> <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                            <div class="helper_tip_text" >Création d'un dossier de parcours</div>
-                        </span></td>
-                        <td colspan=2>{{ form.is_folder |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
-                    </tr>
-                    <tr id="leaf_div"  class="folder">
-                        <td><label> Nom des sous-parcours</label></td>
-                        <td colspan=2>{{ form.leaf_parcours  |add_class:"select2" }} {{ form.leaf_parcours.errors }}</td>
-                    </tr>
-                    {% endif %}
-                    {% endblock %}
+ 
 
 
 

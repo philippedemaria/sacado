@@ -59,29 +59,7 @@
 
 
 {% block evaluation %}
-        {% if teacher.user.is_superuser %}  
-        <tr>
-            <td>{{ form.is_leaf.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                    <div class="helper_tip_text" >Si coché, le parcours est insclus dans un pacours existant.</div>
-                </span></td>
-            <td>{{ form.is_leaf |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
-            <td>{{ form.is_leaf.errors }}</td>
-        </tr>
-<!--         <tr id="folder_div">
-            <td><label>Nom du parcours parent</label></td>
-            <td colspan=2>{{ form.folder_parcours|add_class:"select2" }} {{ form.folder_parcours.errors }}</td>
-        </tr>
- -->        <tr>
-            <td><label> Dossier ?</label> <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                        <div class="helper_tip_text" >Création d'un dossier de parcours</div>
-                    </span></td>
-            <td colspan=2>{{ form.is_folder |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
-        </tr>
-        <tr id="leaf_div">
-            <td><label> Nom des sous-parcours</label></td>
-            <td colspan=2>{{ form.leaf_parcours  |add_class:"select2" }} {{ form.leaf_parcours.errors }}</td>
-        </tr>
-        {% endif %} 
+ 
 
         <tr>
             <td>{{ form.duration.label_tag }}

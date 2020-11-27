@@ -415,6 +415,15 @@ def get_all_details(obj,parcours):
 
 
 
+@register.simple_tag 
+def get_is_leaf(obj,parcours): 
+    """
+    retourne le nombre d'exercices par parcours publiés.
+    """
+    return obj.p_is_leaf(parcours)
+
+
+
 @register.simple_tag  
 def get_in_parcours(obj, parcours):
     """

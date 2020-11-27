@@ -10,7 +10,7 @@ urlpatterns = [
     path('archives', list_archives, name='archives'),
     path('evaluations_archives', list_evaluations_archives, name='evaluations_archives'),
 
-    path('parcours_create', create_parcours, name='create_parcours'),
+    path('parcours_create/<int:idp>/', create_parcours, name='create_parcours'),
     path('parcours_create_evaluation', create_evaluation, name='create_evaluation'),
     path('parcours_evaluation_update/<int:id>/<int:idg>/', update_evaluation, name='update_evaluation'),
     path('parcours_evaluation_show/<int:id>/', show_evaluation, name='show_evaluation'), 
@@ -20,6 +20,10 @@ urlpatterns = [
     path('parcours_archive/<int:id>/<int:idg>/', archive_parcours, name='archive_parcours'),
     path('parcours_unarchive/<int:id>/<int:idg>/', unarchive_parcours, name='unarchive_parcours'), 
     path('parcours_show/<int:id>/', show_parcours, name='show_parcours'), 
+
+    path('parcours_folder/<int:idg>/', create_folder, name='create_folder'),
+    path('parcours_update_folder/<int:id>/<int:idg>/', update_folder, name='update_folder'),
+    path('parcours_delete_folder/<int:id>/<int:idg>/', delete_folder, name='delete_folder'),  
 
     path('parcours_tasks_and_publishes/<int:id>/', parcours_tasks_and_publishes, name='parcours_tasks_and_publishes'), # gestion des taches
     path('show_parcours_visual/<int:id>/', show_parcours_visual, name='show_parcours_visual'), 

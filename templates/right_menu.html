@@ -47,7 +47,7 @@
             <table class="table" style="margin-bottom: 0px;font-size:14px;text-align: left">
                 <tr>
                     <td>
-                         <a href="{% url 'create_parcours' %}" title="Parcours vide à remplir par des exercices de votre choix"><i class="fa fa-caret-right"></i> Nouveau parcours <span style="font-size: 10px">(Recommandé)</span></a>
+                         <a href="{% url 'create_parcours' 0 %}" title="Parcours vide à remplir par des exercices de votre choix"><i class="fa fa-caret-right"></i> Nouveau parcours <span style="font-size: 10px">(Recommandé)</span></a>
                     </td>
                 </tr>
                 {% if teacher.user.school %}
