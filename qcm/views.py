@@ -300,9 +300,10 @@ def total_by_skill_by_student(skill,parcours,student) : # résultat d'un élève
 
     # Ajout éventuel de résultat sur la compétence sur un exo SACADO
     try :
-        result_sacado_skill  = Resultggbskill.objects.filter(skill= skill,student=student,parcours = parcours)
-        total_skill += result_sacado_skill.point
-        nbs += 1
+        result_sacado_skills = Resultggbskill.objects.filter(skill= skill,student=student,parcours = parcours)
+        for rss in result_sacado_skills :
+            total_skill += rss.point
+            nbs += 1
 
     except :
         pass
@@ -1892,6 +1893,10 @@ def stat_evaluation(request, id):
     context = { 'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'communications' : [] , 'role' : role  }
 
     return render(request, 'qcm/stat_parcours.html', context )
+
+
+
+
 
 def add_exercice_in_a_parcours(request):
 
