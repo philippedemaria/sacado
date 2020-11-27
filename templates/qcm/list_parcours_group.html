@@ -142,19 +142,6 @@
                                     {% endif %}                                
                                 {% endif %}
                             </span>
-
-                            <div class="row">
-                                <div class="col-md-12 col-lg-12 col-xs-12">
-                                    <label style="color:{{ parcours.color }};">est un sous-parcours de</label> <br>
-                                    <select name="is_subparcours" class="select2 form-control">
-                                        {% for p in parcours.this_folder_parcours %}
-                                            <option value="{{ p.id }}">{{ p.name }}</option>
-                                        {% endfor %}    
-                                    </select>
-                                </div>
-                            </div>
-
-
                         </div>
                     </div>
                     <!-- Fin de la fenetre  -->

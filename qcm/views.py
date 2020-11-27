@@ -5914,6 +5914,8 @@ def create_folder(request,idg):
         subparcours =  request.POST.getlist('subparcours')
         for pi in subparcours :
             p = Parcours.objects.get(pk = pi)
+            p.is_leaf = 1
+            p.save()
             lp.append(p)
 
         if form.is_valid():
@@ -5952,6 +5954,8 @@ def update_folder(request,id,idg):
         subparcours =  request.POST.getlist('subparcours')
         for pi in subparcours :
             p = Parcours.objects.get(pk = pi)
+            p.is_leaf = 1
+            p.save()
             lp.append(p)
 
         if form.is_valid():

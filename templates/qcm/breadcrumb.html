@@ -3,14 +3,26 @@
 {% load item_tags %}
 {% load widget_tweaks %}
 
+
+
+{% if parcours_folder %}
+    <span style="color:{{ parcours_folder.color }}"><i class="fa fa-folder"></i> </span> 
+{% endif %}
+
+
 {% if group %} <a href="{% url 'list_parcours_group' group.id %}" style="color:{{ group.color }}" >{{ group }}</a> <img src="{% static 'img/angle-right.png' %}"/>  {% endif %} 
 
 
+ 
+
 {% if parcours %}
-{% if parcours.is_folder and group %}
-<a href="{% url 'list_sub_parcours_group' group.id parcours.id %}" style="color:{{ parcours.color }}" >{{ parcours|truncatechars:"18" }} </a>   <img src="{% static 'img/angle-right.png' %}"/>  
-{% elif parcours.is_folder and not group %}
-<a href="{% url 'index' %}" style="color:{{ parcours.color }}" >Tableau de bord </a>   <img src="{% static 'img/angle-right.png' %}"/> <span style="color:{{ parcours.color }}" > {{ parcours|truncatechars:"18" }}</span> <img src="{% static 'img/angle-right.png' %}"/>   
+
+
+
+{% if parcours_folder and group %}
+<a href="{% url 'list_sub_parcours_group' group.id parcours.id %}" style="color:{{ parcours_folder.color }}" >{{ parcours_folder|truncatechars:"18" }} </a>   <img src="{% static 'img/angle-right.png' %}"/>  
+{% elif parcours_folder and not group %}
+<a href="{% url 'index' %}" style="color:{{ parcours_folder.color }}" >Tableau de bord </a>   <img src="{% static 'img/angle-right.png' %}"/> <span style="color:{{ parcours_folder.color }}" > {{ parcours_folder|truncatechars:"18" }}</span> <img src="{% static 'img/angle-right.png' %}"/>   
 {% else %} 
 <a href="{% url 'show_parcours' parcours.id %}" style="color:{{ parcours.color }}" >{{ parcours|truncatechars:"18" }} </a>   <img src="{% static 'img/angle-right.png' %}"/>  
 {% endif %} 

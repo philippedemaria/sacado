@@ -28,19 +28,16 @@
 
 {% block page_title %}
 
-    {% if parcours %}
-    <span style="color:{{ parcours.color }}"><i class="fa fa-th"></i> </span> 
-    {% else %}
-
-        {% if parcours_folder %}
-        <span style="color:{{ parcours_folder.color }}"><i class="fa fa-folder"></i> {{ parcours_folder }}</span>   <img src="{% static 'img/angle-right.png' %}"/>  
-        {% endif %}
-    {% endif %}
-
+ 
+ 
 
 
       {% include 'qcm/breadcrumb.html' %}
 
+
+
+ 
+        
 
 
 
