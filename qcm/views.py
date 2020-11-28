@@ -3908,7 +3908,7 @@ def ajax_mark_evaluate(request): # Evaluer un exercice custom par note
     mark =  request.POST.get("mark")
     data = {}
     student = Student.objects.get(user_id = student_id) 
-    if int(request.POST.get("student_id")) == 1 :
+    if int(request.POST.get("custom")) == 1 :
 
         customexercise_id =  int(request.POST.get("customexercise_id"))  
         parcours_id =  int(request.POST.get("parcours_id")) 
@@ -3916,6 +3916,7 @@ def ajax_mark_evaluate(request): # Evaluer un exercice custom par note
         this_custom.update(is_corrected= 1)
         this_custom.update(point= mark)
         exercise =  Customexercise.object.get(pk = customexercise_id)
+        
     else :
 
         relationship_id =  int(request.POST.get("relationship_id"))  
