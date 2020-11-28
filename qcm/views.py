@@ -5926,7 +5926,7 @@ def create_folder(request,idg):
 
     parcourses = set()
     for student in group.students.all() :
-        parcourses.update(student.students_to_parcours.filter(teacher = teacher).exclude(is_folder=1))
+        parcourses.update(student.students_to_parcours.filter(teacher = teacher).exclude(is_folder=1,is_leaf=1))
 
     if request.method == "POST" :
         lp = []            
