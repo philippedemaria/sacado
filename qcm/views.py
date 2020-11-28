@@ -1874,10 +1874,13 @@ def stat_evaluation(request, id):
         for ce in customexercises :
             score_total += float(ce.mark)
             if ce.is_mark :
-                cen = Customanswerbystudent.objects.get(customexercise = ce, student=s, parcours = parcours)
-                if cen.point :
-                    score_custom +=  float(cen.point)
-                    tab_custom.append(float(cen.point))  
+                try:
+                    cen = Customanswerbystudent.objects.get(customexercise = ce, student=s, parcours = parcours)
+                    if cen.point :
+                        score_custom +=  float(cen.point)
+                        tab_custom.append(float(cen.point))
+                except :
+                    pass
  
         student["score_custom"] = score_custom
         student["tab_custom"] = tab_custom
