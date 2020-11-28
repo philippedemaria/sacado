@@ -325,7 +325,7 @@ def total_by_knowledge_by_student(knowledge,relationships, parcours,student) : #
     # Ajout éventuel de résultat sur la compétence sur un exo SACADO
     result_sacado_knowledges = Studentanswer.objects.filter(parcours= parcours,student=student, exercise__knowledge = knowledge) 
     for rsk in result_sacado_knowledges :
-        total_skill += rsk.point
+        total_knowledge += rsk.point
         nbs += 1
 
     ################################################################
