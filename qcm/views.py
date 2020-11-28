@@ -313,6 +313,28 @@ def total_by_skill_by_student(skill,relationships, parcours,student) : # résult
 
     return tot_s
 
+
+def total_by_knowledge_by_student(knowledge,relationships, parcours,student) : # résultat d'un élève par comptétnece sur un parcours donné
+    total_knowledge = 0            
+    sks = s.student_correctionknowledge.filter(knowledge = knowledge, parcours = parcours)
+    nbk = sks.count()
+
+    for sk in sks :
+        total_knowledge += int(sk.point)
+
+    # Ajout éventuel de résultat sur la compétence sur un exo SACADO
+    result_sacado_knowledges = Studentanswer.objects.filter(parcours= parcours,student=student, exercise__knowledge = knowledge) 
+    for rsk in result_sacado_knowledges :
+        total_skill += rsk.point
+        nbs += 1
+
+    ################################################################
+    if nbk !=0  :
+        tot_k = total_knowledge//nbk
+    else :
+        tot_k  = -10
+    return tot_k
+
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 #################   parcours par defaut
@@ -1870,14 +1892,9 @@ def stat_evaluation(request, id):
         student["detail_skill"] = detail_skill
 
         for knowledge in  knowledges :
-            sks = s.student_correctionknowledge.filter(knowledge = knowledge, parcours = parcours)
-            nbk = sks.count()
-            for sk in sks :
-                total_knowledge += int(sk.point)
-            if nbk !=0  :
-                tot_k = total_knowledge//nbk
-            else :
-                tot_k  = -10
+ 
+            tot_k = total_by_knowledge_by_student(knowledge,relationships,parcours,s)
+
             detail_knowledge += knowledge.name + " "  +check_level_by_point(s,tot_k) + "<br>" 
 
         student["detail_knowledge"] = detail_knowledge 
