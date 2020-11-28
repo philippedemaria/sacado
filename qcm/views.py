@@ -3915,8 +3915,8 @@ def ajax_mark_evaluate(request): # Evaluer un exercice custom par note
         this_custom = Customanswerbystudent.objects.filter(parcours_id = parcours_id , customexercise_id = customexercise_id, student = student)
         this_custom.update(is_corrected= 1)
         this_custom.update(point= mark)
-        exercise =  Customexercise.object.get(pk = customexercise_id)
-        
+        exercise =  Customexercise.objects.get(pk = customexercise_id)
+
     else :
 
         relationship_id =  int(request.POST.get("relationship_id"))  
