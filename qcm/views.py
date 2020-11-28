@@ -3907,21 +3907,28 @@ def ajax_mark_evaluate(request): # Evaluer un exercice custom par note
     student_id =  int(request.POST.get("student_id"))
     mark =  request.POST.get("mark")
     data = {}
-
+    student = Student.objects.get(user_id = student_id) 
     if int(request.POST.get("student_id")) == 1 :
 
         customexercise_id =  int(request.POST.get("customexercise_id"))  
         parcours_id =  int(request.POST.get("parcours_id")) 
-        this_custom = Customanswerbystudent.objects.filter(parcours_id = parcours_id , customexercise_id = customexercise_id, student_id = student_id)
+        this_custom = Customanswerbystudent.objects.filter(parcours_id = parcours_id , customexercise_id = customexercise_id, student = student)
         this_custom.update(is_corrected= 1)
         this_custom.update(point= mark)
-
+        exercise =  Customexercise.object.get(pk = customexercise_id)
     else :
 
         relationship_id =  int(request.POST.get("relationship_id"))  
-        this_exercise = Writtenanswerbystudent.objects.filter(relationship_id = relationship_id ,   student_id = student_id)
+        this_exercise = Writtenanswerbystudent.objects.filter(relationship_id = relationship_id ,   student = student)
         this_exercise.update(is_corrected= 1)
         this_exercise.update(point= mark)
+        relationship = Relationship.objects.get(pk = relationship_id)
+        exercise = relationship.exercise.supportfile.annoncement
+
+    if student.user.email :
+        msg = "Vous venez de recevoir la note : "+ str(mark)+" pour l'exercice "+str(exercise) 
+        send_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , [student.user.email] )
+
 
     data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"             
 
@@ -3946,17 +3953,22 @@ def ajax_comment_all_exercise(request): # Ajouter un commentaire à un exercice 
         relationship = Relationship.objects.get(pk = exercise_id)
         Writtenanswerbystudent.objects.filter(relationship = relationship, student = student).update(comment = comment )
         Writtenanswerbystudent.objects.filter(relationship = relationship, student = student).update(is_corrected = 1 )
+        exercise = relationship.exercise.supportfile.annoncement
         if saver == 1:
             Generalcomment.objects.create(comment=comment, teacher = relationship.parcours.teacher)
 
     else  :
         parcours_id =  int(request.POST.get("parcours_id"))     
-        ce = Customexercise.objects.get(pk = exercise_id)
-        Customanswerbystudent.objects.filter(customexercise = ce, student = student, parcours_id = parcours_id).update(comment = comment )
-        Customanswerbystudent.objects.filter(customexercise = ce, student = student, parcours_id = parcours_id).update(is_corrected = 1 )
+        exercise = Customexercise.objects.get(pk = exercise_id)
+        Customanswerbystudent.objects.filter(customexercise = exercise, student = student, parcours_id = parcours_id).update(comment = comment )
+        Customanswerbystudent.objects.filter(customexercise = exercise, student = student, parcours_id = parcours_id).update(is_corrected = 1 )
 
         if saver == 1:
-            Generalcomment.objects.create(comment=comment, teacher = ce.teacher)
+            Generalcomment.objects.create(comment=comment, teacher = exercise.teacher)
+
+    if student.user.email :
+        msg = "Vous venez de recevoir une appréciation pour l'exercice "+str(exercise)+"\n\n  "+str(comment) 
+        send_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , [student.user.email] )
 
     data = {}
     data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"          
@@ -3977,10 +3989,10 @@ def ajax_audio_comment_all_exercise(request): # Ajouter un commentaire à un exe
     id_relationship =  int(request.POST.get("id_relationship"))  
 
     if int(request.POST.get("custom")) == 0 :
-        relationship = Relationship.objects.get(pk = id_relationship)
+        exercise = Relationship.objects.get(pk = id_relationship)
 
-        if Writtenanswerbystudent.objects.filter(student = student , relationship = relationship).exists() :
-            w_a = Writtenanswerbystudent.objects.get(student = student , relationship = relationship) # On récupère la Writtenanswerbystudent
+        if Writtenanswerbystudent.objects.filter(student = student , relationship = exercise).exists() :
+            w_a = Writtenanswerbystudent.objects.get(student = student , relationship = exercise) # On récupère la Writtenanswerbystudent
             form = WAnswerAudioForm(request.POST or None, request.FILES or None,instance = w_a )
         else :
             form = WAnswerAudioForm(request.POST or None, request.FILES or None )
@@ -3988,7 +4000,7 @@ def ajax_audio_comment_all_exercise(request): # Ajouter un commentaire à un exe
         if form.is_valid() :
             nf =  form.save(commit = False)
             nf.audio = audio_text
-            nf.relationship = relationship
+            nf.relationship = exercise
             nf.student = student
             nf.is_corrected = True                     
             nf.save()
@@ -3997,10 +4009,10 @@ def ajax_audio_comment_all_exercise(request): # Ajouter un commentaire à un exe
 
         parcours_id =  int(request.POST.get("id_parcours"))  
         parcours = Parcours.objects.get(pk = parcours_id)
-        customexercise = Customexercise.objects.get(pk = id_relationship)
+        exercise = Customexercise.objects.get(pk = id_relationship)
         
-        if Customanswerbystudent.objects.filter(customexercise  = customexercise, student = student , parcours = parcours).exists() :
-            c_e = Customanswerbystudent.objects.get(customexercise  = customexercise, student = student , parcours = parcours) # On récupère la Customanswerbystudent
+        if Customanswerbystudent.objects.filter(customexercise  = exercise, student = student , parcours = parcours).exists() :
+            c_e = Customanswerbystudent.objects.get(customexercise  = exercise, student = student , parcours = parcours) # On récupère la Customanswerbystudent
             form = CustomAnswerAudioForm(request.POST or None, request.FILES or None,instance = c_e )
         else :
             form = CustomAnswerAudioForm(request.POST or None, request.FILES or None )
@@ -4008,11 +4020,16 @@ def ajax_audio_comment_all_exercise(request): # Ajouter un commentaire à un exe
         if form.is_valid() :
             nf =  form.save(commit = False)
             nf.audio = audio_text
-            nf.customexercise = customexercise
+            nf.customexercise = exercise
             nf.student = student
             nf.parcours = parcours
             nf.is_corrected = True    
             nf.save()
+
+
+    if student.user.email :
+        msg = "Vous venez de recevoir une appréciation orale pour l'exercice "+str(exercise)+"\n\n  "+str(comment) 
+        send_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , [student.user.email] )
 
     data = {}
     data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"          
@@ -4262,7 +4279,7 @@ def write_exercise(request,id): # Coté élève
             w_f.save()
 
             ### Envoi de mail à l'enseignant
-            msg = "Exercice posté par : "+str(student.user) 
+            msg = "Exercice posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(cForm.cleaned_data['answer'])
             if relationship.parcours.teacher.notification :
                 send_mail("SACADO Exercice posté",  msg , "info@sacado.xyz" , [relationship.parcours.teacher.user.email] )
 
@@ -4324,7 +4341,7 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
                         form_image.save()
 
             ### Envoi de mail à l'enseignant
-            msg = "Exercice posté par : "+str(student.user) 
+            msg = "Exercice posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(cForm.cleaned_data['answer'])
             if customexercise.teacher.notification :
                 send_mail("SACADO Exercice posté",  msg , "info@sacado.xyz" , [customexercise.teacher.user.email] )
 
