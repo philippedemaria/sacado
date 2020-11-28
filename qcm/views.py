@@ -191,12 +191,23 @@ def teacher_has_parcourses_folder(teacher,is_evaluation ,is_archive ):
     parcourses = list(teacher.teacher_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive,is_leaf = 0))
 
 
+    parcours_students = set()
+    for parcours in parcourses :
+        parcours_students.update(parcours.students.all())
+
+
+
     for sg in sharing_groups :
-        pcs = group_has_parcourses(sg.group,is_evaluation ,is_archive )
-        for p in pcs :
-            if p not in parcourses:
-                parcourses.append(p) 
+        groups = sg.teacher.groups.filter(student__in = parcours_students)
+        for group in groups :
+            pcs = group_has_parcourses(group,is_evaluation ,is_archive )
+            for p in pcs :
+                if p not in parcourses:
+                    parcourses.append(p) 
+
     return parcourses
+
+
 
 def teacher_has_parcourses(teacher,is_evaluation ,is_archive ):
     """
@@ -780,6 +791,9 @@ def list_parcours(request):
 
     return render(request, 'qcm/list_parcours.html', { 'parcourses' : parcourses , 'communications' : [] , 'relationships' : [],  'parcours' : None , 'group' : None , 'today' : today ,  'teacher' : teacher , 'nb_archive' : nb_archive })
 
+
+
+
 def list_archives(request):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -791,6 +805,8 @@ def list_archives(request):
         pass   
 
     return render(request, 'qcm/list_archives.html', { 'parcourses' : parcourses , 'parcours' : None , 'teacher' : teacher ,  'communications' : [] , 'relationships' : [], 'today' : today , })
+
+
 
 def list_evaluations(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
