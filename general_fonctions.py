@@ -36,6 +36,16 @@ def unescape_html(string):
     string = html.unescape(string)
     return string
 
+
+def escape_chevron(string):
+    '''HTML entity decode'''
+    string = string.replace("<","&lt")
+    string = string.replace(">","&gt")  
+    return string
+
+
+
+
 def dt_naive_to_timezone(naive_date,timezone_user):
 
     try :
