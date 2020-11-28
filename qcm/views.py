@@ -326,7 +326,7 @@ def total_by_knowledge_by_student(knowledge,relationships, parcours,student) : #
     result_sacado_knowledges = Studentanswer.objects.filter(parcours= parcours,student=student, exercise__knowledge = knowledge) 
     for rsk in result_sacado_knowledges :
         total_knowledge += rsk.point
-        nbs += 1
+        nbk += 1
 
     ################################################################
     if nbk !=0  :
