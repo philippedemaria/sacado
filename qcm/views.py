@@ -1777,8 +1777,6 @@ def stat_evaluation(request, id):
         r = Relationship.objects.get(exercise = e, parcours = parcours)
         parcours_duration += r.duration
 
-    customexercises = parcours.parcours_customexercises.order_by("ranking")
-
     form = EmailForm(request.POST or None )
     stats = []
  
@@ -1794,6 +1792,8 @@ def stat_evaluation(request, id):
     students = students_from_p_or_g(request,parcours) 
 
     for s in students :
+        customexercises = parcours.parcours_customexercises.filter(students=s).order_by("ranking")
+
         student = {"percent" : "" , "total_numexo" : "" , "good_answer" : "" , "test_duration" : False ,  "duration" : "" , "average_score" : "" ,"last_connexion" : "" ,"median" : "" ,"score" : "" ,"score_tab" : "" }
         student.update({"total_note":"", "details_note":"" ,  "detail_skill":"" ,  "detail_knowledge":"" , })
         student["name"] = s
