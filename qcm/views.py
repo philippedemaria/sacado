@@ -316,7 +316,7 @@ def total_by_skill_by_student(skill,relationships, parcours,student) : # résult
 
 def total_by_knowledge_by_student(knowledge,relationships, parcours,student) : # résultat d'un élève par comptétnece sur un parcours donné
     total_knowledge = 0            
-    sks = s.student_correctionknowledge.filter(knowledge = knowledge, parcours = parcours)
+    sks = student.student_correctionknowledge.filter(knowledge = knowledge, parcours = parcours)
     nbk = sks.count()
 
     for sk in sks :
