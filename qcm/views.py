@@ -290,7 +290,7 @@ def knowledges_in_parcours(parcours):
                 knowledges.append(sk)   
     return knowledges
 
-def total_by_skill_by_student(skill,parcours,student) : # résultat d'un élève par comptétnece sur un parcours donné
+def total_by_skill_by_student(skill,relationships, parcours,student) : # résultat d'un élève par comptétnece sur un parcours donné
     total_skill = 0            
     scs = student.student_correctionskill.filter(skill = skill, parcours = parcours)
     nbs = scs.count()
@@ -299,9 +299,10 @@ def total_by_skill_by_student(skill,parcours,student) : # résultat d'un élève
         total_skill += int(sc.point)
 
     # Ajout éventuel de résultat sur la compétence sur un exo SACADO
-    result_sacado_skill = Resultggbskill.objects.filter(skill= skill,student=student,parcours = parcours).last()
-    total_skill += result_sacado_skill.point
-    nbs += 1
+    result_sacado_skills = Resultggbskill.objects.filter(skill= skill,student=student, relationship__in = relationships) 
+    for rss in result_sacado_skills :
+        total_skill += rss.point
+        nbs += 1
 
     ################################################################
 
@@ -1862,7 +1863,7 @@ def stat_evaluation(request, id):
 
         for skill in  skills:
 
-            tot_s = total_by_skill_by_student(skill,parcours,s)
+            tot_s = total_by_skill_by_student(skill,relationships,parcours,s)
            
             detail_skill += skill.name + " " +check_level_by_point(s,tot_s) + "<br>" 
 
