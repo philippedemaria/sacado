@@ -980,7 +980,7 @@ def create_parcours(request,idp=0):
         sg_students =  request.POST.getlist('students_sg')
         for s_id in sg_students :
             student = Student.objects.get(user_id = s_id)
-            nf.students.add(s)
+            nf.students.add(student)
 
 
         i = 0

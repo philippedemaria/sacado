@@ -94,7 +94,7 @@
                     <label>Choisir les élèves parmi</label>   <br>  
                         {% for group in groups %}
                         <a data-toggle="collapse" data-target="#demo{{ forloop.counter }}" style="color:{{ group.color}};cursor:pointer">
-                            {{ group.name }} <small><i class="fa fa-caret-down"></i></small> </a> 
+                            {{ group.name|truncatechars:15 }} <small><i class="fa fa-caret-down"></i></small> </a> 
                             {% if group.students.count > 0 %}<label class="pull-right"><input type="checkbox" value="{{ forloop.counter }}" 
                                                                                                 {% if request.session.group_id %}
                                                                                                     {% if  request.session.group_id == group.id %}checked {% endif %}
