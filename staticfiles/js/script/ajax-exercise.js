@@ -311,6 +311,44 @@ define(['jquery', 'bootstrap'], function ($) {
          });
 
 
+
+
+        // Supprimer une image réponse depuis la vue élè
+        $('.correction_viewer').on('click', function () {
+
+            let exercise_id = $(this).attr("data-exercise_id");
+
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let custom = $(this).attr("data-custom");
+
+            if (custom ==  1  ) { var parcours_id = $(this).attr("data-parcours_id"); } else { var parcours_id = 0 ; }
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'exercise_id': exercise_id,
+                        'parcours_id': parcours_id,
+                        'custom' : custom,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../../ajax_correction_viewer",
+                    success: function (data) {
+ 
+                        $("#showing_cor").html(data.html);
+
+                        $(".correction_viewer").removeClass(data.btn_off).addClass(data.btn_on);
+
+                    }
+                }
+            )
+         });
+
+
+
+
+
 });
 
 });

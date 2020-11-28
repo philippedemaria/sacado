@@ -265,8 +265,8 @@ urlpatterns = [
     path('ajax_course_custom_show_shared', ajax_course_custom_show_shared, name='ajax_course_custom_show_shared'),  
 
 
-
     path('ajax_closer_exercise', ajax_closer_exercise, name='ajax_closer_exercise'),
+    path('ajax_correction_viewer', ajax_correction_viewer, name='ajax_correction_viewer'),
     #####################################################################################################################################
     #####################################################################################################################################
 

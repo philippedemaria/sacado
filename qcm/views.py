@@ -3654,13 +3654,13 @@ def ajax_closer_exercise(request):
 
     if custom == 1:
         parcours_id =  int(request.POST.get("parcours_id"))
-        if Customexercise.objects.filter(pk = exercise_id , is_lock = 1).exists() :
-            Customexercise.objects.filter(pk = exercise_id ).update(is_lock = 0).update(date_limit = None)  
+        if Customexercise.objects.filter(pk = exercise_id).exclude(lock = None).exists() :
+            Customexercise.objects.filter(pk = exercise_id ).update(lock = None)   
             data["html"] = "<i class='fa fa-unlock'></i>"    
             data["btn_off"] = "btn-danger"
             data["btn_on"] = "btn-default" 
-        else :   
-            Customexercise.objects.filter(pk = exercise_id ).update(is_lock = 1).update(date_limit = now) 
+        else :    
+            Customexercise.objects.filter(pk = exercise_id ).update(lock = now) 
             data["html"] = "<i class='fa fa-lock'></i>" 
             data["btn_off"] = "btn-default"
             data["btn_on"] = "btn-danger"      
@@ -3675,9 +3675,45 @@ def ajax_closer_exercise(request):
             data["html"] = "<i class='fa fa-lock'></i>"    
             data["btn_off"] = "btn-default"
             data["btn_on"] = "btn-danger"    
-
-
     return JsonResponse(data) 
+
+
+
+def ajax_correction_viewer(request):
+
+    custom =  int(request.POST.get("custom")) 
+    exercise_id =  int(request.POST.get("exercise_id")) 
+
+    data = {}
+
+
+    if custom == 1:
+        parcours_id =  int(request.POST.get("parcours_id"))
+        if Customexercise.objects.filter(pk = exercise_id).exclude(is_publish_cor = 1).exists() :
+            Customexercise.objects.filter(pk = exercise_id ).update(is_publish_cor = 1)   
+            data["html"] = "<i class='fa fa-eye-slash'></i>"    
+            data["btn_off"] = "btn-danger"
+            data["btn_on"] = "btn-default" 
+        else :    
+            Customexercise.objects.filter(pk = exercise_id ).update(is_publish_cor = 0)  
+            data["html"] = "<i class='fa fa-eye'></i>" 
+            data["btn_off"] = "btn-default"
+            data["btn_on"] = "btn-danger"      
+    else :
+        if Relationship.objects.filter(pk = exercise_id,is_correction_visible = 1).exists():
+            Relationship.objects.filter(pk = exercise_id).update(is_correction_visible = 0) 
+            data["html"] = "<i class='fa fa-eye-slash'></i>"    
+            data["btn_off"] = "btn-danger"
+            data["btn_on"] = "btn-default" 
+        else :
+            Relationship.objects.filter(pk = exercise_id).update(is_correction_visible = 1)  
+            data["html"] = "<i class='fa fa-eye'></i>"    
+            data["btn_off"] = "btn-default"
+            data["btn_on"] = "btn-danger"    
+    return JsonResponse(data) 
+
+
+
 
 
 

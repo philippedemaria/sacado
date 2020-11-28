@@ -702,7 +702,7 @@ class Relationship(models.Model):
     is_lock = models.BooleanField(default=0, verbose_name="Exercice cloturé ?")
     is_mark = models.BooleanField(default=0, verbose_name="Notation ?")
     mark = models.CharField(max_length=3, default="", verbose_name="Sur ?")
-
+    is_correction_visible = models.BooleanField(default=0, editable=False  )
 
     def __str__(self):
         try :

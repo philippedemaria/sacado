@@ -40,16 +40,27 @@
     <a href="#" data-toggle='modal' data-target='#consigne' class="btn btn-primary" ><i class="fa fa-eye"></i> Voir l'énoncé </a></small>
 
 
- 
+        <small>
         {% if custom %}
-    		<small> <a href="#" class="btn btn-{% if customexercise.lock %}danger{% else %}default{% endif %} closer_exercise"  
-    							data-exercise_id = "{{ customexercise.id }}"  data-custom= 1  
-    							data-parcours_id = "{{ parcours.id }}"  ><span id="closer"><i class="fa fa-{% if customexercise.lock %}lock{% else %}unlock{% endif %}"></i></span> Clôturer l'exercice et afficher le corrigé </a></small>
-        {% else %}
-    		<small> <a href="#" class="btn btn-{% if relationship.is_lock %}danger{% else %}default{% endif %} closer_exercise" data-custom= 0   
-    							data-exercise_id = "{{ relationship.id }}" ><span id="closer"><i class="fa fa-{% if relationship.is_lock %}lock{% else %}unlock{% endif %}"></i></span> Clôturer l'exercice et afficher le corrigé </a></small>
-        {% endif %}
+    		<a href="#" class="btn btn-{% if customexercise.lock %}danger{% else %}default{% endif %} closer_exercise"  
+    					data-exercise_id = "{{ customexercise.id }}"  data-custom= 1  
+    					data-parcours_id = "{{ parcours.id }}"  ><span id="closer"><i class="fa fa-{% if customexercise.lock %}lock{% else %}unlock{% endif %}"></i></span> Clôturer l'exercice </a>
 
+            <a href="#" class="btn btn-{% if customexercise.is_publish_cor %}danger{% else %}default{% endif %} correction_viewer"  
+                        data-exercise_id = "{{ customexercise.id }}"  data-custom= 1  
+                        data-parcours_id = "{{ parcours.id }}"  ><span id="showing_cor"><i class="fa fa-{% if customexercise.is_publish_cor %}eye{% else %}slash-eye{% endif %}"></i></span> Afficher le corrigé </a>
+
+            
+        {% else %}
+    		<a href="#" class="btn btn-{% if relationship.is_lock %}danger{% else %}default{% endif %} closer_exercise" data-custom= 0   
+    			data-exercise_id = "{{ relationship.id }}" ><span id="closer"><i class="fa fa-{% if relationship.is_lock %}lock{% else %}unlock{% endif %}"></i></span> Clôturer l'exercice  </a>
+
+            <a href="#" class="btn btn-{% if relationship.is_lock %}danger{% else %}default{% endif %} correction_viewer" data-custom= 0   
+                data-exercise_id = "{{ relationship.id }}" ><span id="showing_cor"><i class="fa fa-{% if relationship.exercise.supportfile.correction %}eye{% else %}slash-eye{% endif %}"></i></span> Afficher le corrigé </a>
+
+            
+        {% endif %}
+        </small>
 {% endblock %}
 
 

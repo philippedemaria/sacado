@@ -75,6 +75,8 @@
 
     <div class="col-lg-6 col-xs-12">
         <h3>Corrigé</h3> 
- 
+        {% if relationship.is_correction_visible %}
+            <pre>{{ relationship.exercise.supportfile.correction|safe }}</pre>
+        {% endif %}
     </div> 
 {% endif %}
