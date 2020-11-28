@@ -23,7 +23,7 @@ from django.views.generic import TemplateView
 
 from account.decorators import user_can_read_details, who_can_read_details, can_register, is_manager_of_this_school
 from account.models import User, Teacher, Student, Resultknowledge, Parent
-from group.models import Group
+from group.models import Group, Sharing_group
 from qcm.models import Exercise, Parcours, Relationship, Resultexercise, Studentanswer
 from sendmail.models import Communication
 from socle.models import Level

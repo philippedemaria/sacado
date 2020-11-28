@@ -190,24 +190,13 @@ def teacher_has_parcourses_folder(teacher,is_evaluation ,is_archive ):
     sharing_groups = teacher.teacher_sharingteacher.all()
     parcourses = list(teacher.teacher_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive,is_leaf = 0))
 
-
-    parcours_students = set()
-    for parcours in parcourses :
-        parcours_students.update(parcours.students.all())
-
-
-
     for sg in sharing_groups :
-        groups = sg.teacher.groups.filter(student__in = parcours_students)
-        for group in groups :
-            pcs = group_has_parcourses(group,is_evaluation ,is_archive )
-            for p in pcs :
-                if p not in parcourses:
-                    parcourses.append(p) 
+        pcs = group_has_parcourses(sg.group,is_evaluation ,is_archive )
+        for p in pcs :
+            if p not in parcourses:
+                parcourses.append(p) 
 
     return parcourses
-
-
 
 def teacher_has_parcourses(teacher,is_evaluation ,is_archive ):
     """
@@ -912,8 +901,6 @@ def ajax_all_parcourses(request):
 
     parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1).exclude(exercises=None ).exclude(teacher=teacher).order_by("author").prefetch_related('exercises__knowledge__theme').select_related('author')
     
-
-    print(level_id)
 
     if level_id :
         level = Level.objects.get(pk=int(level_id))
