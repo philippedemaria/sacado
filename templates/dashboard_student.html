@@ -7,38 +7,7 @@
 
 <div class="row">
     <div class="col-md-10 col-lg-10 col-xs-12">
-        {%  if evaluations %} 
-        <div class="row">
-                <div class="col-md-4  col-lg-3  col-sm-6">
-                    {%  for evaluation in  evaluations %} 
-                    <div class="small-box-student" style="background-color:{{evaluation.color }};color:{{evaluation.color|contrast_color }};">
- 
-                        <div class="icon-student">
-                            <small><i class="fa fa-graduation-cap"></i></small>
-                        </div>
-                        <div class="small-box-footer-max">
-                            <h2 class="white thin">{{ evaluation.title }}  </h2>
-                           
-                            <div style="text-align: center; margin-top: 20px; margin-bottom: 20px">
-                             <a href="{% url 'show_parcours_student' evaluation.id  %}" class="btn btn-default btn-accueil"><i class="fa fa-arrow-circle-right"></i> Démarrer</a>
-                            </div>
-                    
 
-                            <p>
-                                <div class="col-md-6  col-lg-6  col-sm-6">
-                                    <i class="fa fa-clock-o"></i>  {{ evaluation.evaluation_duration }} min 
-                                </div>
-                                <div class="col-md-6  col-lg-6  col-sm-6">
-                                    {{ evaluation.nb_exercises }} exercice{{ evaluation.exercises.count|pluralize }} 
-                                </div>
-                            </p>
-                         
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-         </div>
-        {% endif %}
    
 
         {% for parcours in parcourses %}
@@ -121,9 +90,6 @@
                     </div>
                 </div>
                 {% endif %}
-            
-         
-
             {% empty  %}  
             <div class="row">  
                 <div class="col-md-12 col-lg-12 col-sm-12" style="text-align: center">
@@ -137,7 +103,42 @@
             </div> 
         {% endfor  %}   
 
-        
+
+
+        {%  if evaluations %} 
+        <hr/>
+        <h2>Evaluations</h2>
+        <div class="row">
+                {%  for evaluation in  evaluations %}             
+                <div class="col-md-4  col-lg-3  col-sm-6">
+                    <div class="small-box-student" style="background-color:{{evaluation.color }};color:{{evaluation.color|contrast_color }};">
+ 
+                        <div class="icon-student">
+                            <small><i class="fa fa-graduation-cap"></i></small>
+                        </div>
+                        <div class="small-box-footer-max">
+                            <h2 class="white thin">{{ evaluation.title }}  </h2>
+                           
+                            <div style="text-align: center; margin-top: 20px; margin-bottom: 20px">
+                             <a href="{% url 'show_parcours_student' evaluation.id  %}" class="btn btn-default btn-accueil"><i class="fa fa-arrow-circle-right"></i> Démarrer</a>
+                            </div>
+                    
+
+                            <p>
+                                <div class="col-md-6  col-lg-6  col-sm-6">
+                                    <i class="fa fa-clock-o"></i>  {{ evaluation.evaluation_duration }} min 
+                                </div>
+                                <div class="col-md-6  col-lg-6  col-sm-6">
+                                    {{ evaluation.nb_exercises }} exercice{{ evaluation.exercises.count|pluralize }} 
+                                </div>
+                            </p>
+                         
+                        </div>
+                    </div>
+                 </div>    
+                {% endfor %}
+         </div>
+        {% endif %}        
         <div class="row"></div>
 
 
