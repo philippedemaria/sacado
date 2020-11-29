@@ -188,15 +188,17 @@ def teacher_has_parcourses_folder(teacher,is_evaluation ,is_archive ):
     Renvoie les parcours dont le prof est propriétaire et donc les parcours lui sont partagés
     """
     sharing_groups = teacher.teacher_sharingteacher.all()
-    parcourses = list(teacher.teacher_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive,is_leaf = 0))
+    parcourses =  set(teacher.teacher_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive,is_leaf = 0))
+    pacourses_co = teacher.coteacher_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive,is_leaf = 0)
 
+    parcourses.update(pacourses_co)
     for sg in sharing_groups :
         pcs = group_has_parcourses(sg.group,is_evaluation ,is_archive )
-        for p in pcs :
-            if p not in parcourses:
-                parcourses.append(p) 
+        parcourses.update(pcs) 
 
     return parcourses
+
+
 
 def teacher_has_parcourses(teacher,is_evaluation ,is_archive ):
     """

@@ -46,9 +46,9 @@
                             <span class="shared_group"> Co-animation 
                                  <i class="fa fa-info-circle"></i>
                                     <div class="modal_helper_tip_text" > 
-                                        {{ group.teacher }} <small>(Propriétaire)</small><br>
+                                        <small>{{ group.teacher }} (Propriétaire)</small><br>
                                         {% for gs in group.group_sharingteacher.all %}
-                                            {{ gs.teacher }} <small>({% if gs.role %}Editeur{% else %}Lecteur{% endif %})</small>{% if not forloop.last %}<br>{% endif %}
+                                            <small>{{ gs.teacher }} ({% if gs.role %}Editeur{% else %}Lecteur{% endif %})</small>{% if not forloop.last %}<br>{% endif %}
                                         {% endfor %}
                                     </div>
                             </span>
