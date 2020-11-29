@@ -129,10 +129,6 @@ class Student(ModelWithCode):
         ''' résultats de l'étudiant pour les évaluations de savoirs-faire d'un thème donné'''
         return self.results_e.filter(exercise__theme=theme).select_related('exercise')
 
-
-
-
-
     def resultknowledge(self):
         ''' résultats de l'étudiant aux évaluations de savoirs-faire '''
         return self.results_k.all()
@@ -147,7 +143,6 @@ class Student(ModelWithCode):
     def resultknowledge_by_theme(self, theme):
         ''' résultats de l'étudiant pour les évaluations de savoirs-faire d'un thème donné'''
         return self.results_k.filter(knowledge__theme=theme)
-
 
 
     def result_skills(self, skill):
@@ -262,6 +257,86 @@ class Student(ModelWithCode):
             test = False
  
         return test
+
+
+
+    def this_exercise_is_locked(self,exercise, parcours , custom, today):
+        
+        booleen , test , tst , tsst , tsste   = False , False , False  , False  , False 
+
+        if parcours.stop < today :
+            tst = True 
+ 
+        if int(custom) == 1 :
+            if self.student_exerciselocker.filter(customexercise = exercise, custom = 1, lock__lt= today ).exists() :
+                test = True 
+
+            try :
+                if exercise.lock < today :
+                    tsst = True
+            except :   
+                pass 
+
+
+        else :
+            if self.student_exerciselocker.filter(relationship = exercise, custom = 0, lock__lt= today ).exists() :
+                test = True
+
+            try :
+                if exercise.is_lock :
+                    tsste = True       
+            except :   
+                pass
+
+
+        if test and (tsst or tst or tsste) :
+            booleen = True
+ 
+        return booleen
+                
+      
+
+
+    def is_lock_this_parcours(self,parcours,today):
+
+        
+        booleen , test , teest , tst   = False , False , False  , False    
+
+        if parcours.stop < today :
+            tst = True 
+
+        nbe = self.students_relationship.filter(parcours=parcours).count()
+
+        nbc = self.students_customexercises.filter(parcourses = parcours).count()
+ 
+
+        n = 0
+        for el in  self.student_exerciselocker.filter(customexercise__parcourses = parcours, custom = 1, lock__gt= today ) :
+            n +=1
+        if n == nbe :
+            teest = True  
+
+        m = 0
+        for exl in  self.student_exerciselocker.filter(relationship__parcours = parcours, custom = 0, lock__gt= today ) :
+            m +=1
+        if m == nbc :
+            test = True 
+
+
+
+        if tst and (teest or test)  :
+            booleen = True
+ 
+        return booleen
+
+
+
+
+
+
+
+
+
 
 class Teacher(models.Model):
     """

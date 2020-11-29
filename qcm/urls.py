@@ -158,6 +158,9 @@ urlpatterns = [
     path('parcours_mastering_custom_done', mastering_custom_done, name='mastering_custom_done'),    
  
 
+    path('ajax_locker_exercise', ajax_locker_exercise, name='ajax_locker_exercise'), 
+ 
+
     ############################################################################################################ 
     ############################################################################################################  
 

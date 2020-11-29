@@ -9,7 +9,7 @@ from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group , Sharing_group
 from school.models import Stage
-from qcm.models import  Parcours , Studentanswer, Exercise, Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage
+from qcm.models import  Parcours , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage
 from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm
 from socle.models import  Theme, Knowledge , Level , Skill
 from django.http import JsonResponse 
@@ -937,6 +937,29 @@ def ajax_chargethemes_parcours(request):
     return JsonResponse(data)
 
 
+def lock_all_exercises_for_student(dateur,parcours):
+
+    for student in parcours.students.all() :
+        for exercise in  parcours.exercises.all() :
+            relationship = Relationship.objects.get(parcours=parcours, exercise = exercise) 
+            if dateur :
+                result, created = Exerciselocker.objects.get_or_create(student = student , relationship = relationship, custom = 0, defaults={"lock" : dateur})
+                if not created :
+                    Exerciselocker.objects.filter(student = student , relationship = relationship, custom = 0).update(lock = dateur)
+            else :
+                if Exerciselocker.objects.filter(student = student , relationship = relationship, custom = 0).exists():
+                    res = Exerciselocker.objects.get(student = student , relationship = relationship, custom = 0)
+                    res.delete() 
+
+        for ce in Customexercise.objects.filter(parcourses = parcours) :
+            if dateur :    
+                result, created = Exerciselocker.objects.get_or_create(student = student , customexercise = ce, custom = 1, defaults={"lock" : dateur})
+                if not created :
+                    Exerciselocker.objects.filter(student = student , customexercise = ce, custom = 1).update(lock = dateur)
+            else :
+                if Exerciselocker.objects.filter(student = student , customexercise = ce, custom = 1).exists():
+                    res = Exerciselocker.objects.get(student = student ,  customexercise = ce, custom = 1)
+                    res.delete() 
 
 
 
@@ -985,16 +1008,24 @@ def create_parcours(request,idp=0):
             student = Student.objects.get(user_id = s_id)
             nf.students.add(student)
 
+        if nf.stop  :
+            locker = 1
+        else :
+            locker = 0 
 
         i = 0
         for exercise in form.cleaned_data.get('exercises'):
             exercise = Exercise.objects.get(pk=exercise.id)
-            relationship = Relationship.objects.create(parcours=nf, exercise=exercise, order=i,
+            relationship = Relationship.objects.create(parcours=nf, exercise=exercise, order=i, is_lock = locker ,
                                                        duration=exercise.supportfile.duration,
                                                        situation=exercise.supportfile.situation)
             relationship.students.set(form.cleaned_data.get('students'))
             relationship.skills.set(exercise.supportfile.skills.all()) 
+
             i += 1
+
+        lock_all_exercises_for_student(nf.stop,nf)  
+
 
         if request.POST.get("save_and_choose") :
             return redirect('peuplate_parcours', nf.id)
@@ -1009,7 +1040,9 @@ def create_parcours(request,idp=0):
     if request.session.has_key("group_id") :
         group_id = request.session.get("group_id",None)        
         if group_id :
-            group = Group.objects.get(pk = group_id) 
+            group = Group.objects.get(pk = group_id)
+        else :
+            group = None
     else :
         group_id = None
         group = None
@@ -1081,8 +1114,7 @@ def update_parcours(request, id, idg=0 ):
                 parcours.is_folder = 1
                 parcours.save()
 
-
-
+ 
             sg_students =  request.POST.getlist('students_sg')
             for s_id in sg_students :
                 student = Student.objects.get(user_id = s_id)
@@ -1092,8 +1124,15 @@ def update_parcours(request, id, idg=0 ):
                 for exercise in parcours.exercises.all():
                     relationship = Relationship.objects.get(parcours=nf, exercise=exercise)
                     relationship.students.set(form.cleaned_data.get('students'))
+
             except:
                 pass
+
+
+ 
+            lock_all_exercises_for_student(nf.stop,parcours)
+
+
 
             if request.POST.get("save_and_choose") :
                 return redirect('peuplate_parcours', nf.id)
@@ -2479,6 +2518,8 @@ def ajax_detail_parcours(request):
     num_exo =  int(request.POST.get("num_exo"))    
     parcours = Parcours.objects.get(id = parcours_id)
 
+    today = time_zone_user(request.user)
+
     students = students_from_p_or_g(request,parcours)
 
     try :
@@ -2534,7 +2575,7 @@ def ajax_detail_parcours(request):
                 student["nb"] = 0  
             stats.append(student)
 
-        context = {  'parcours': parcours,  'exercise':exercise ,'stats':stats ,  'num_exo':num_exo, 'relationship':relationship, 'communications' : [] , }
+        context = {  'parcours': parcours,  'exercise':exercise ,'stats':stats , 'today': today ,  'num_exo':num_exo, 'relationship':relationship, 'communications' : [] , }
 
         data['html'] = render_to_string('qcm/ajax_detail_parcours.html', context)
 
@@ -2567,12 +2608,18 @@ def ajax_detail_parcours(request):
             average = "" 
 
 
-        context = {  'parcours': parcours,  'customexercise':customexercise ,'average':average , 'students' : students , 'relationship':[], 'num_exo' : num_exo, 'communications' : [] , 'median' : med , 'communications' : [] , }
+        context = {  'parcours': parcours,  'customexercise':customexercise ,'average':average ,  'today': today ,   'students' : students , 'relationship':[], 'num_exo' : num_exo, 'communications' : [] , 'median' : med , 'communications' : [] , }
 
         data['html'] = render_to_string('qcm/ajax_detail_parcours_customexercise.html', context)
 
 
     return JsonResponse(data)
+
+
+
+
+
+
 
 def delete_relationship(request,idr):
 
@@ -2603,6 +2650,40 @@ def remove_students_from_parcours(request):
         parcours.students.remove(student)
  
     return redirect("parcours" ) 
+
+
+
+def ajax_locker_exercise(request):
+
+    custom =  int(request.POST.get("custom"))
+    student_id =  request.POST.get("student_id")
+    exercise_id =  request.POST.get("exercise_id")
+
+    today = time_zone_user(request.user).now()
+
+    data = {}    
+    
+    if custom == 1 :
+        if Exerciselocker.objects.filter(student_id = student_id, customexercise_id = exercise_id, custom = 1).exists() :
+            result =  Exerciselocker.objects.get(student_id = student_id, customexercise_id = exercise_id, custom = 1 )
+            result.delete()
+            lock_result = '<i class="fa fa-unlock text-default"></i>'
+        else :
+            Exerciselocker.objects.create(student_id = student_id, customexercise_id = exercise_id, custom = 1, relationship = None, lock = today )
+            lock_result = '<i class="fa fa-lock text-danger"></i>'
+    else :
+        if Exerciselocker.objects.filter(student_id = student_id, relationship_id = exercise_id, custom = 0).exists() :
+            result =  Exerciselocker.objects.get(student_id = student_id, relationship_id = exercise_id, custom = 0)
+            result.delete()
+            lock_result = '<i class="fa fa-unlock text-default"></i>'
+        else :
+            Exerciselocker.objects.create(student_id = student_id, relationship_id = exercise_id, custom = 0,customexercise = None,lock = today )
+            lock_result = '<i class="fa fa-lock text-danger"></i>'
+ 
+    data["html"] = lock_result
+
+    return JsonResponse(data)
+ 
 
 #######################################################################################################################################################################
 #######################################################################################################################################################################
@@ -3401,6 +3482,9 @@ def create_evaluation(request):
             relationship.skills.set(exercise.supportfile.skills.all()) 
             i += 1
 
+            lock_all_exercises_for_student(nf.lock,nf)
+
+
         if request.POST.get("save_and_choose") :
             return redirect('peuplate_parcours', nf.id)
         else :
@@ -3469,6 +3553,9 @@ def update_evaluation(request, id, idg=0 ):
                     relationship.students.set(form.cleaned_data.get('students'))
             except:
                 pass
+ 
+            lock_all_exercises_for_student(nf.stop,parcours)
+
 
             if request.POST.get("save_and_choose") :
                 return redirect('peuplate_parcours', nf.id)

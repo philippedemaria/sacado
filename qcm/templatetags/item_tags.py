@@ -87,6 +87,11 @@ def get_is_lock(obj,todaytimer):
     return obj.is_lock(todaytimer)
 
 
+@register.simple_tag
+def get_is_lock_for_this_parcours(obj, parcours , today) :
+    return obj.is_lock_this_parcours(parcours , today)
+
+
 
 @register.simple_tag
 def get_is_submitted(obj,student): 
@@ -160,7 +165,6 @@ def get_affect(obj,student):
     teste le nombre d'exercices faits sur un parcours.
     """
     return obj.is_affect(student) 
-
  
 
 @register.simple_tag ##  
@@ -441,6 +445,14 @@ def get_score_student_parcours(obj,student, parcours):
 @register.simple_tag 
 def get_score_student_parcours(obj,student, parcours): 
     return obj.score_student_parcours(student, parcours)
+
+@register.simple_tag  
+def get_this_exercise_is_locked(obj,exercise, parcours , custom, today): 
+    """
+    L'exercice ou la relation est bloqué pour l'objet student
+    """
+    return obj.this_exercise_is_locked(exercise, parcours, custom, today)
+
 
 
 @register.simple_tag  

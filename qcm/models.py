@@ -387,6 +387,7 @@ class Parcours(ModelWithCode):
             pass
         return lock
 
+
     def get_themes(self):
         exercises = self.exercises.all()
         theme_tab, theme_tab_id  = [] , []
@@ -1078,8 +1079,9 @@ class Customexercise(ModelWithCode):
             if self.lock < today :
                 locker = True
         except :
-            pass 
+            pass
         return locker
+
 
     def is_submit(self,parcours,student):
         submit = False
@@ -1260,6 +1262,20 @@ class Correctionknowledgecustomexercise(models.Model): # Evaluation des savoir f
     class Meta:
         unique_together = ['student', 'customexercise','knowledge']
 
+
+
+class Exerciselocker(ModelWithCode):
+
+    relationship = models.ForeignKey(Relationship,  on_delete=models.PROTECT, blank=True, null=True,  related_name='relationship_exerciselocker', editable=False) 
+    customexercise = models.ForeignKey(Customexercise,  on_delete=models.PROTECT, blank=True, null=True,  related_name='customexercise_exerciselocker', editable=False) 
+    custom  = models.BooleanField(default=0, editable=False)    
+    student = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='student_exerciselocker', editable=False)
+    lock = models.DateTimeField(null=True, blank=True, editable=False)
+
+    def __str__(self):        
+        return "{}".format(self.student)
+
+ 
 
 ########################################################################################################################################### 
 ########################################################################################################################################### 

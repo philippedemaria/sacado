@@ -22,15 +22,20 @@
         </div>
     </div>
 
-<div class="content_list">
+<div class="content_list" style="margin-left: 0px;" >
     <div class="row">
         <div class="col-sm-12 col-md-12">
-            <table class="table table-hover" style="width:100%; font-size: 14px">
+            <table class="table table-hover" id='table_locker' style="width:100%; font-size: 14px">
                 <tbody>
                     {% for stat  in stats  %} 
                      {% if relationship %} {% if stat.name in relationship.students.all %}  
-                        <tr> 
-                            <td>{{ stat.name }}</td>
+                        {% get_this_exercise_is_locked   stat.name   relationship  0  today as  this_is_locked     %}
+                        <tr>  
+                            <td>
+                                <span  data-student_id="{{ stat.name.user.id}}" data-exercise_id="{{ relationship.id}}"  class="locker_exercise"  id="locker{{ stat.name.user.id}}"  >
+                                    <i class="fa fa-{% if this_is_locked %}lock text-danger{% else %}unlock text-default{% endif %}"></i>
+                                </span>                                {{ stat.name }}
+                            </td>
                             <td>{{ stat.duration }}</td>
                             <td> 
                                 {% if stat.average_score != "" %}
@@ -75,4 +80,32 @@
     </div>
  
 </div>
- 
+
+<script>
+
+        $(".locker_exercise").on('click', function () {
+
+            let exercise_id = $(this).attr("data-exercise_id"); 
+            let student_id = $(this).attr("data-student_id"); 
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'student_id': student_id,
+                        'custom': 0,
+                        'exercise_id': exercise_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../ajax_locker_exercise",
+                    success: function (data) {
+
+                        $('#locker'+student_id).html(data.html);
+  
+                    }
+                }
+            )
+        });
+</script>

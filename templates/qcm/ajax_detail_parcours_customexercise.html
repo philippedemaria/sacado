@@ -24,10 +24,10 @@
         </div>
     </div>
 
-<div class="content_list">
+<div class="content_list" style="margin-left: 0px;" >
     <div class="row">
         <div class="col-sm-12 col-md-12">
-            <table class="table table-hover" style="width:100%; font-size: 14px">
+            <table class="table table-hover"  id='table_locker' style="width:100%; font-size: 14px">
                 <tbody>
                     <tr> 
                         <td style="width:150px">Nom Prénom</td>
@@ -52,9 +52,15 @@
 
 
                     {% for student  in students  %}  {{ stat }}
-                        {% get_all_results_custom customexercise student parcours as data %}                   
+                        {% get_all_results_custom customexercise student parcours as data %}   
+                        {% get_this_exercise_is_locked student customexercise parcours 1 today  as  this_is_locked     %}           
                         <tr> 
-                            <td>{{ student }}</td>
+                            <td> 
+                                <span  data-student_id="{{ student.user.id}}" data-exercise_id="{{ customexercise.id}}"   class="locker_exercise" id="locker{{ student.user.id}}" >
+                                    <i class="fa fa-{% if this_is_locked  %}lock text-danger{% else %}unlock text-default{% endif %}"></i>
+                                </span>
+                                {{ student }}
+                            </td>
                             {% if customexercise.is_mark %}
                             <td> 
                                 {% if data.point %}{{ data.point }}{% endif %}
@@ -126,4 +132,33 @@
     </div>
  
 </div>
- 
+
+
+<script>
+
+        $(".locker_exercise").on('click', function () {
+
+            let exercise_id = $(this).attr("data-exercise_id"); 
+            let student_id = $(this).attr("data-student_id"); 
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'student_id': student_id,
+                        'custom': 1,
+                        'exercise_id': exercise_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../ajax_locker_exercise",
+                    success: function (data) {
+
+                        $('#locker'+student_id).html(data.html);
+  
+                    }
+                }
+            )
+        });
+</script>

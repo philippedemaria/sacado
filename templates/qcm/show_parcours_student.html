@@ -45,19 +45,6 @@
       
 <section class="content_list"> 
 
-    {% get_is_lock parcours today as is_lock %} 
-    
-    {% if is_lock %}
-    <div class="row">
-        <div class="col-lg-12 col-xs-12">
-            <div class="alert alert-danger">
-                Ce parcours est verrouillé. Il n'est plus possible de soumettre des exercices.
-            </div> 
-        </div>
-    </div>
-    {% endif %} 
-
-
 
     <div class="row">
         <div class="col-lg-{% if courses|length > 0 %}10{% else %}12{% endif %} col-xs-12">
@@ -221,8 +208,8 @@
                                 {% if relation.exercise.supportfile.is_ggbfile %}          
                                 <a href="{% if not is_lock %}{% url 'execute_exercise'  relation.parcours.id  relation.exercise.id   %}{% endif %}">  <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.8" {% endif %}    ></a>
                                 {% else %}
-
-                                    {% if is_lock or relation.is_lock %}
+                                    {% get_this_exercise_is_locked  student relation relation.parcours 0 today as is_blck %}
+                                    {% if is_blck %}
 
                                         <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
                                               <i class="fa fa-lock"></i> <span class="hidden_lock"> {{ customexercise.lock|date:"d-m-Y à H:i" }}</span>
@@ -384,19 +371,27 @@
                               </span>
                           </div>
 
+                            {% get_this_exercise_is_locked  student customexercise parcours  1 today as is_blck %}
 
-                            <a href="{% url 'write_custom_exercise' customexercise.id parcours.id %}"> 
+                            {% if is_blck %}
                                 {% if customexercise.imagefile %} 
                                     <img src="{{ customexercise.imagefile.url }}"  class="image_parcours" >
                                 {% else %}
                                     <img src="{% static 'img/custom_exercise.png' %}"  class="image_parcours" >
                                 {% endif %}
-                            </a>
-                            {% get_is_lock customexercise today as is_block %} 
-                            {% if is_block  %} 
                                 <div class="alert alert-danger" style="position: absolute; z-index:7; top:100px; border-radius: 0px 4px 4px 0px;"> 
                                     <i class="fa fa-lock"></i> 
-                                </div>       
+                                </div>  
+                            {% else %}
+
+
+                                <a href="{% url 'write_custom_exercise' customexercise.id parcours.id %}"> 
+                                    {% if customexercise.imagefile %} 
+                                        <img src="{{ customexercise.imagefile.url }}"  class="image_parcours" >
+                                    {% else %}
+                                        <img src="{% static 'img/custom_exercise.png' %}"  class="image_parcours" >
+                                    {% endif %}
+                                </a>
                             {% endif %}    
 
                             {% if  customexercise.date_limit %}

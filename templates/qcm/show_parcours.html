@@ -53,8 +53,22 @@ body{
         <div class="alert alert-success" id="response">Votre commentaire audio est enregistré</div>
     </div>
 </div>
+
 <form action="" methode="POST">      
 <section class="content_list exercise_sortable" id="miseEnAttenteDashboard">
+ 
+ 
+{% if parcours.stop %}
+<div class="row" >
+    <div class="col-sm-12 col-md-12">
+        <div class="alert alert-danger" >{% if parcours.is_evaluation %}Cette évaluation est verrouillée {% else %}Ce parcours est verrouillé {% endif %} à partir du <b>{{ parcours.stop|date:"d F Y à H:i" }}</b></div>
+    </div>
+</div>
+{% endif %}
+
+
+
+
 
 <input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
     {% for relation in relationships %}
