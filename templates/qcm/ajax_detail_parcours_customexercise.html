@@ -57,7 +57,7 @@
                         <tr> 
                             <td> 
                                 {% if parcours.stop %}
-                                <span  data-student_id="{{ student.user.id}}" data-exercise_id="{{ customexercise.id}}"   class="locker_exercise" id="locker{{ student.user.id}}" >
+                                <span  data-student_id="{{ student.user.id}}" data-exercise_id="{{ customexercise.id}}"   class="locker_exercise" id="locker{{ student.user.id}}" title="Verrouiller/déverrouiller l'exercice pour cet élève" >
                                     <i class="fa fa-{% if this_is_locked  %}lock text-danger{% else %}unlock text-default{% endif %}"></i>
                                 </span>
                                 {% endif %}

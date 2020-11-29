@@ -2577,14 +2577,15 @@ def ajax_detail_parcours(request):
                 student["nb"] = 0  
             stats.append(student)
 
-        context = {  'parcours': parcours,  'exercise':exercise ,'stats':stats , 'today': today ,  'num_exo':num_exo, 'relationship':relationship, 'communications' : [] , }
+ 
+        context = { 'parcours': parcours, 'exercise':exercise ,  'stats': stats ,  'today' : today ,  'num_exo':num_exo , 'relationship':relationship, 'communications' : [] , }
 
         data['html'] = render_to_string('qcm/ajax_detail_parcours.html', context)
 
     else :
         parcours = Parcours.objects.get(pk = parcours_id )
         customexercise = Customexercise.objects.get(id = exercise_id, parcourses = parcours) 
-        students = customexercise.students.order_by("user__last_name") 
+        students = customexercise.students.order_by("user__last_name")  
         duration, score = 0, 0
         tab = []
         cas =  Customanswerbystudent.objects.filter(parcours=parcours, customexercise = customexercise)

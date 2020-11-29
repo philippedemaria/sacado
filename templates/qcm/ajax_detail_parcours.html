@@ -24,16 +24,16 @@
 
 <div class="content_list" style="margin-left: 0px;" >
     <div class="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="col-sm-12 col-md-12"> 
             <table class="table table-hover" id='table_locker' style="width:100%; font-size: 14px">
                 <tbody>
                     {% for stat  in stats  %} 
                      {% if relationship %} {% if stat.name in relationship.students.all %}  
-                        {% get_this_exercise_is_locked   stat.name   relationship  0  today as  this_is_locked     %}
+                        {% get_this_exercise_is_locked   stat.name   relationship  relationship.parcours 0  today as  this_is_locked     %}
                         <tr>  
                             <td>
                                 {% if relationship.parcours.stop %}
-                                <span  data-student_id="{{ stat.name.user.id}}" data-exercise_id="{{ relationship.id}}"  class="locker_exercise"  id="locker{{ stat.name.user.id}}"  >
+                                <span  data-student_id="{{ stat.name.user.id}}" data-exercise_id="{{ relationship.id}}"  class="locker_exercise"  id="locker{{ stat.name.user.id}}" title="Verrouiller/déverrouiller l'exercice pour cet élève"  >
                                     <i class="fa fa-{% if this_is_locked %}lock text-danger{% else %}unlock text-default{% endif %}"></i>
                                 </span>                                
                                 {% endif %}
