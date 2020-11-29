@@ -264,8 +264,11 @@ class Student(ModelWithCode):
         
         booleen , test , tst , tsst , tsste   = False , False , False  , False  , False 
 
-        if parcours.stop < today :
-            tst = True 
+        try :
+            if parcours.stop < today :
+                tst = True
+        except :
+            pass 
  
         if int(custom) == 1 :
             if self.student_exerciselocker.filter(customexercise = exercise, custom = 1, lock__lt= today ).exists() :

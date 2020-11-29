@@ -32,9 +32,12 @@
                         {% get_this_exercise_is_locked   stat.name   relationship  0  today as  this_is_locked     %}
                         <tr>  
                             <td>
+                                {% if relationship.parcours.stop %}
                                 <span  data-student_id="{{ stat.name.user.id}}" data-exercise_id="{{ relationship.id}}"  class="locker_exercise"  id="locker{{ stat.name.user.id}}"  >
                                     <i class="fa fa-{% if this_is_locked %}lock text-danger{% else %}unlock text-default{% endif %}"></i>
-                                </span>                                {{ stat.name }}
+                                </span>                                
+                                {% endif %}
+                                {{ stat.name }}
                             </td>
                             <td>{{ stat.duration }}</td>
                             <td> 
