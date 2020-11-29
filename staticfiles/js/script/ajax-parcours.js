@@ -672,24 +672,20 @@ define(['jquery','bootstrap'], function ($) {
             $('.collapsed').hide() ;
             collapser = 0 ;
             $('.accordion').on('click', function (event) {
+
                 let target = $(this).attr("data-target");
-                let subtarget = $(this).attr("data-subtarget");
-                let sub_target = $(this).attr("data-sub_target");
 
                 $(".subparcours"+target).toggle(500);
 
                 if (collapser %2 == 0) 
                     { 
-                        $(subtarget).hide();
-                        $(sub_target).show();
-                        collapser++; 
+                        $(this).html("").html('<i class="fa fa-chevron-up" ></i>');
                     } 
                 else 
                     {
-                        $(sub_target).hide();
-                        $(subtarget).show();
-                        collapser++; 
+                        $(this).html("").html('<i class="fa fa-chevron-down" ></i>');
                     }
+                collapser++;                     
              }) ;
  
 
