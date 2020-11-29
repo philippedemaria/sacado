@@ -4404,7 +4404,9 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 .btn-accueil  {
   background-color: #FFF ; /* #deeaea*/
   color:#007bff;  /* #657574*/
-  margin : 5px;
+  margin-top: 5px;
+  margin-left: 0px;
+  margin-bottom: 5px;
   min-width: 220px;
   border-radius: 20px;
   opacity: 0.9;

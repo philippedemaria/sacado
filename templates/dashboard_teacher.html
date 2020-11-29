@@ -6,7 +6,6 @@
             <h2 class="thin">Mes groupes</h2>
             <div class="row"></div><hr style="margin-top: 0px">   
             {% for group in groups %}
-
                 {% get_group_parcours_counter group  teacher as data %}
                     <!-- small box -->
                     <div class="small-box" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}">
@@ -36,10 +35,10 @@
                         <!-- Legende de la small-box -->
                         <div class="inner" style="color:white;opacity:0.9"><br/>
                             <span style="color:{{ group.color|contrast_color }};font-size: 35px">{{ group.name |truncatechars:"14" }} </span>{% if group.lock %} <i class="fa fa-lock" style="font-size: 14px" title="Ce groupe est verrouillé" ></i>{% endif %} <br/><br><br>
-                             <span style="color:{{ group.color|contrast_color }};font-size: 16px"><i class="fa fa-barcode"></i> {{ group.code }} </span> 
+                             <span style="color:{{ group.color|contrast_color }};font-size: 16px"> {{ group.code }} </span> 
 
                                 {% if group.is_task_exists %}
-                                    <a  href="{% url 'group_tasks' group.id  %}" class="pull-right" style="color:{{ group.color|contrast_color }}; font-size:12px;margin-top:8px;"> Tâche en cours <i class="fa fa-calendar"></i></a>
+                                    <a  href="{% url 'group_tasks' group.id  %}" class="pull-right" style="color:{{ group.color|contrast_color }}; font-size:13px;margin-top:8px;"><i class="fa fa-calendar-check"></i> Tâche en cours </a>
                                 {% endif %}
                          
                              <br/> <br/>
@@ -58,71 +57,67 @@
  
 
                         <div class="small-box-footer" >
-                            <br>
-                                <a href="{% url 'list_parcours_group' group.id  %}#parcours" class="btn btn-default btn-accueil" style="width:95%"> 
-                                <small>   <i class="fa fa-th"></i> </small>
+                            <div class="row">                                      
+                                <div class="col-lg-12 col-xs-12" style="padding-right:0px;font-size: 12px;margin-bottom:5px; margin-top: 7px">
+                                
                                
-                                   Parcours favoris  <small> ({{ data.nb_parcours_favorite }}) - 
+                                   Parcours favoris  
+
+                                   <small> ({{ data.nb_parcours_favorite }}) - 
                                  {{ data.nb_parcours_visible }} publié{{ data.nb_parcours_visible|pluralize }}  
 
-                                {% if group.is_pending_correction %}
-                                <i class="fa fa-copyright pull-right" style="font-size:12px; margin-top:5px" title="Copies à corriger" ></i> 
-                                {% endif %}
+
 
                                 </small>
-                                </a>
-                            <br>
-                                <a href="{% url 'list_parcours_group' group.id  %}#evaluation" class="btn btn-default btn-accueil" style="width:95%"> 
-                                  <small>   <i class="fa fa-trophy"></i> </small>
-                                    Evaluation{{ data.nb_evaluation_favorite|pluralize }} favorite{{ data.nb_evaluation_favorite|pluralize }} <small> ({{ data.nb_evaluation_favorite }}) - {{  data.nb_evaluation }} passée{{ data.nb_evaluation|pluralize }}</small>
-                                </a>
 
-                            <br><br>
-                        
+                                </div>
+                            </div>
+
+                            <div class="row">                                      
+                                <div class="col-lg-12 col-xs-12" style="padding-right:0px;font-size: 12px">
+                                
+                                    Evaluation{{ data.nb_evaluation_favorite|pluralize }} favorite{{ data.nb_evaluation_favorite|pluralize }} <small> ({{ data.nb_evaluation_favorite }}) - {{  data.nb_evaluation }} passée{{ data.nb_evaluation|pluralize }}</small>
+                                </div>
+                            </div>
+
+                            <div class="row">                                      
+                                <div class="col-lg-12 col-xs-12" style="padding-right:0px; margin-bottom: 18px; margin-top: 15px">
+                                
+
+                                    <a href="{% url 'list_parcours_group' group.id  %}" class="btn btn-default btn-accueil" style="width:280px;color:{{ group.color}}"> 
+                                        Accéder                              
+                                        {% if group.is_pending_correction %}
+                                            <i class="fa fa-copyright pull-right" style="font-size:12px; margin-top:5px" title="Copies à corriger" ></i> 
+                                        {% endif %}
+                                    </a>
+                            
+
+
+                                </div>
+                            </div>
 
                             {% if data.nb_parcours == 0 %}
-                                <div class="row">                              
-
-                                                 
+                                <div class="row">                                      
                                     <div class="col-lg-6 col-xs-6" style="padding-right:0px">
                                         <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:20px; color:{{ group.color|contrast_color }};"><i class="fa fa-arrow-circle-right"></i><span class="small_displayer"> Détails </span></a>    
                                     </div>
-
-
- 
-
                                     <div class="col-lg-6 col-xs-6" style="padding-right:0px">
                                         <a  href="#"  class="label_small_box group_shower" data-group_id="{{group.id }}" style="font-size:20px; color:{{ group.color|contrast_color }};"><i class="fa fa-users"></i><span class="small_displayer"> {{ group.students.count }} élève{{ group.students.count|pluralize }}</span> </a>   
                                     </div>
-
- 
                                 </div>
-
-                 
-
-
                             {% else  %}
-                                <div class="row">  
- 
-                                                          
+                                <div class="row">                    
                                     <div class="col-lg-4 col-xs-4" style="padding-right:0px">
                                         <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};"><i class="fa fa-arrow-circle-right"></i><span class="small_displayer"> Détails </span></a>    
                                     </div>
  
                                     <div class="col-lg-4 col-xs-4" style="padding-right:0px">
                                         <a  href="{% url 'result_group_exercise'  group.id %}" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Lien interne" ><i class="fa fa-mortar-board"></i><span class="small_displayer"> Suivis </span></a><a  href="{% url 'result_group_exercise'  group.id %}" target="_blank" title="Lien externe" > <img src="{% static 'img/external-link_white.png' %}"  width="8px" ></a>
-                                        
                                     </div> 
-
- 
- 
-
-
                                     <div class="col-lg-4 col-xs-4" style="padding-right:0px">
                                         <a  href="#"  class="label_small_box group_shower" data-group_id="{{group.id }}" style="font-size:15px; color:{{ group.color|contrast_color }};"><i class="fa fa-users"></i><span class="small_displayer"> Élève{{ group.students.count|pluralize }}</span> </a>   
                                     </div>
                                 </div>
-
                             {% endif  %}
                         </div>
                     </div>
@@ -153,8 +148,6 @@
                     {% endif %}
                 </div>
             </div>
-
- 
         {% if parcours_tab|length > 0 %}
   
 
@@ -241,15 +234,7 @@
                     </div>
                 {% endfor %}
             {% endfor %}
-
         {% endif %}
-
-
-
-
-
-
-
     </div>
  <!-- ****************************************************************************************-->
  <!-- ****************************************************************************************-->
@@ -263,21 +248,21 @@
 
 
 
-    <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>                
-                    <h3 class="modal-title" id="exampleModalLabel">Liste des élèves - <span id="modal_group_name"></span></h3>
-                </div>
-                <div class="modal-body">
-                    <div id="list_students"></div>
-                </div>
+<div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                
+                <h3 class="modal-title" id="exampleModalLabel">Liste des élèves - <span id="modal_group_name"></span></h3>
+            </div>
+            <div class="modal-body">
+                <div id="list_students"></div>
             </div>
         </div>
     </div>
+</div>
  
 
 
