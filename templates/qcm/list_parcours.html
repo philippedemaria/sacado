@@ -84,9 +84,7 @@ body{
                             {% get_is_lock parcours today as is_lock %}
 
                             {% if parcours.is_folder %}   
-                             <span style="color:{{ parcours.color }}">{{ parcours.title }} 
-                                    <a href="#" class="accordion" data-target="{{ forloop.counter }}"  style="color : {{ parcours.color }}" ><i class="fa fa-chevron-down" ></i></a>
-                            </span>
+                                <a href="#" class="accordion" data-target="{{ forloop.counter }}"  style="color : {{ parcours.color }}; margin-top: 5px" >{{ parcours.title }} <i class="fa fa-chevron-down" ></i></a>
                                 {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillée. Il n'est plus possible de soumettre des exercices</div></span>{% endif %} 
                            
                             {% else %}
