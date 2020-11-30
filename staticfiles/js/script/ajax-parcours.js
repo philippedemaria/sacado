@@ -2,6 +2,7 @@ define(['jquery','bootstrap'], function ($) {
     $(document).ready(function () {
         console.log("chargement JS ajax-parcours.js OK");
 
+
         $(".is_evaluation").attr("checked",false);
 
         // ================================================================ 
