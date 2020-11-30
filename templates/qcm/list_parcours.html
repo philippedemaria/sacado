@@ -80,11 +80,11 @@ body{
                                 <span id="is_favorite_id{{ parcours.id }}">{% if parcours.is_favorite %}<i class="fa fa-star fa-stack-1x" style="font-size: 12px; color:#FFF" ></i>{% endif  %}</span>
                             </span>
                         </td>  
-                        <td>
+                        <td {% if parcours.is_folder %} style="padding-top:15px" {% endif %} >
                             {% get_is_lock parcours today as is_lock %}
 
                             {% if parcours.is_folder %}   
-                                <a href="#" class="accordion" data-target="{{ forloop.counter }}"  style="color : {{ parcours.color }}; margin-top: 5px" >{{ parcours.title }} <i class="fa fa-chevron-down" ></i></a>
+                                <a href="#" class="accordion" data-target="{{ forloop.counter }}"  style="color : {{ parcours.color }}" >{{ parcours.title }} <i class="fa fa-chevron-down" ></i></a>
                                 {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillée. Il n'est plus possible de soumettre des exercices</div></span>{% endif %} 
                            
                             {% else %}
