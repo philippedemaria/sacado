@@ -3036,7 +3036,7 @@ def show_this_supportfile(request, id):
     if supportfile.is_ggbfile :
         url = "show_supportfile.html" 
     elif supportfile.is_python :
-        url = "basthon/index_shower.html"
+        url = "basthon/index_supportfile.html"
     else :
         url = "qcm/show_teacher_writing.html" 
 
