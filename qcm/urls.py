@@ -161,6 +161,7 @@ urlpatterns = [
     path('ajax_locker_exercise', ajax_locker_exercise, name='ajax_locker_exercise'), 
  
 
+    path('ajax_this_course_viewer', ajax_this_course_viewer, name='ajax_this_course_viewer'), 
     ############################################################################################################ 
     ############################################################################################################  
 

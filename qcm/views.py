@@ -5684,6 +5684,18 @@ def ajax_course_viewer(request):
 
 
 
+@csrf_exempt 
+def ajax_this_course_viewer(request):  
+
+    course_id =  request.POST.get("course_id",None)
+    course = Course.objects.get(pk=course_id)
+    data = {}
+ 
+    context = { 'course' : course ,}
+    html = render_to_string('qcm/course/ajax_shower_course.html',context)
+    data['html'] = html       
+
+    return JsonResponse(data)
 
 #######################################################################################################################################################################
 #######################################################################################################################################################################

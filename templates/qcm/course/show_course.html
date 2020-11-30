@@ -63,14 +63,13 @@
             </ul>
             </form>
         </div>
-
-
-
-
         {% for course in courses %}
             <div class="col-md-8 col-xs-12 col-lg-9  admin-content" id="course{{forloop.counter0}}">
-                <h1 class="thin">  {{ course.title }}   <a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 12px" class="pull-right">Modifier ce cours</a></h1><hr>
-
+                <h1 class="thin">  {{ course.title }}   
+                    <a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 12px; margin-right:10px;" class="pull-right">Modifier ce cours</a> 
+                    <a href="#"  data-toggle='modal' data-target='#view_course'  data-course_id="{{ course.id }}"  style="font-size: 12px; margin-right:10px;" class="pull-right course_viewer">Vidéoprojeter ce cours</a>
+                </h1>
+                <hr>
                 {{ course.annoncement|decode|safe }} 
             </div>
         {% empty %} 
@@ -79,6 +78,26 @@
             </div>
         {% endfor %} 
     </div>
+
+ 
+<div class="modal fade" id="view_course" tabindex="-1" role="dialog" aria-labelledby="view_course">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class='thin' id="title_course"> </h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+            </div>
+            <div class="modal-body" id="body_course">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 </section>
 
 
