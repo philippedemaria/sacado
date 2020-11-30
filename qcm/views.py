@@ -3033,6 +3033,17 @@ def show_this_supportfile(request, id):
     start_time = time.time()
     context = {'supportfile': supportfile, 'start_time': start_time, 'communications' : [] ,  'parcours': parcours}
 
+    if supportfile.is_ggbfile :
+        url = "show_supportfile.html" 
+    elif supportfile.is_python :
+        url = "basthon/index_shower.html"
+    else :
+        url = "qcm/show_teacher_writing.html" 
+
+    return render(request, url , context)
+
+
+
     return render(request, 'qcm/show_supportfile.html', context)
 
 @user_passes_test(user_is_superuser)
