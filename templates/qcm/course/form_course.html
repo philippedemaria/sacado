@@ -48,35 +48,23 @@
 
         <div class="row">
             <div class="col-sm-12 col-lg-8">
- 
- 
                 <div class="form-group">
                     {{ form.title.label_tag }} <em>50 caractères max.</em><br>
                     {{ form.title|add_class:"form-control"   }}
-                    {{ form.title.errors }} <br>
+                    {{ form.title.errors }} 
                 </div>
-
                 <div class="form-group">
                     {{ form.annoncement.label_tag }}<br>
                     {{ form.annoncement|add_class:"form-control"   }}
                     {{ form.annoncement.errors }} <br>
                     <small>Astuce : Cliquez sur <img src="{% static 'img/full_screen.png' %}" width="15px" /> dans la barre d'outils pour agrandir en plein écran.</small> 
                 </div>
-
-
                 <div class="form-group">
                     <div class="alert alert-info">
                         Il est possible de créer des sections vidéo-projetables : Cliquer sur l'icone <img src="{% static 'div_projection.png' %}" /> et renseigner le champ "Classes de style" par : projection , puis cliquer sur le bouton vert OK.<br>
- 
                             <img src="{% static 'style_projection.png' %}" /> 
-
                     </div>
                 </div>
-
-
- 
-                
-
                 <div class="row">
                     <div class="col-sm-12 col-lg-8">
                         <div class="form-group">
@@ -85,18 +73,15 @@
                                                                        class="btn btn-default "/></a>
                         </div>
                     </div>
-                {% if course and request.user.user_type == 2 %}
-                        <div class="col-sm-12 col-md-4">
-                            <div class="form-group">
-                                <a href="{% url 'delete_course' course.id  parcours.id %}" class="btn btn-danger"  onclick="return TestDelete('ce contenu')">Supprimer ce cours</a>
-                            </div>
+                    {% if course and request.user.user_type == 2 %}
+                    <div class="col-sm-12 col-md-4">
+                        <div class="form-group">
+                            <a href="{% url 'delete_course' course.id  parcours.id %}" class="btn btn-danger"  onclick="return TestDelete('ce contenu')">Supprimer ce cours</a>
                         </div>
-                
-                {% endif %}
+                    </div>
+                    {% endif %}
                 </div>
             </div>
-
-
             <div class="col-sm-12 col-lg-4">
                 {% if request.user.user_type == 2 %}
                    <label>Lier ce cours à une ou des sections déjà créées</label> <br/>  
@@ -105,9 +90,7 @@
                     <h4 class="thin">Détails</h4>
                     {% include 'qcm/course/content_details.html' %}
                 {% endif %}
-
                 <h4 class="thin">Liens vers</h4>
-
                 <div class="div_links">                
                 {% for relationship in relationships %}
                     <div style="font-size: 16px;margin-top: 5px"> 
