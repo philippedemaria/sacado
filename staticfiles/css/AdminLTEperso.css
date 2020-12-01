@@ -1067,6 +1067,15 @@ width:100%;
     color : #CCC; 
 }
 
+
+.projection iframe{
+  margin-right: auto;
+  margin-left: auto ;
+}
+
+
+
+
  
 
 /* badges */
