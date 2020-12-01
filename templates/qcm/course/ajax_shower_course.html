@@ -7,4 +7,23 @@
  
 <script type="text/javascript">
     MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+
+
+
+
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('.projection').on('click', function () {
+            var content = $(this).html();
+            $("body").append('<div class="projection_div"  id="projection_div" ><span class="pull-right closer_projection_div"><i class="fa fa-times"></i></span>'+content+'</div>');
+        });
+
+
+
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $(document).on('click', ".closer_projection_div", function () {
+             $("#projection_div").remove();
+        });
+ 
+
+
 </script>

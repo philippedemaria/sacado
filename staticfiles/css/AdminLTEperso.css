@@ -1034,7 +1034,40 @@ width:100%;
   border-left: 2px solid #cb2131;
 }
 
+/* vidéo projection */
 
+.projection{
+  border: 1px dashed #CCC;
+  cursor:pointer;  
+  padding: 15px;
+}
+
+
+.projection:hover{
+  border: 1px solid #CCC;  
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+}
+
+.projection_div{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding: 30px;
+    border: 10px solid #5d4391;
+    font-size : 3em ;
+    z-index:1051 !important;
+    overflow: auto;
+    background: #FFF;
+}
+
+.closer_projection_div{
+    cursor:pointer; 
+    color : #CCC; 
+}
+
+ 
 
 /* badges */
 .c2{
