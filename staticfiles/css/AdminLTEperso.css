@@ -1084,6 +1084,7 @@ width:100%;
 }
  
 .projection_div   img {
+  display: block ;
   -webkit-transform: scale(2.5);
   transform: scale(2.5);
   -webkit-transition: .3s ease-in-out;
