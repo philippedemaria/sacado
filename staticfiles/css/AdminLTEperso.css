@@ -1056,7 +1056,6 @@ width:100%;
     bottom: 0;
     padding: 30px;
     border: 10px solid #5d4391;
-    font-size : 3em ;
     z-index:1051 !important;
     overflow: auto;
     background: #FFF;
@@ -1076,7 +1075,7 @@ width:100%;
 
 
 .projection_div *{
-    font-size : 3em ;
+    font-size : 2.5em ;
 }
 
  
