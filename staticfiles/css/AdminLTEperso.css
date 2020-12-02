@@ -1072,13 +1072,19 @@ width:100%;
   margin-left: auto ;
 }
 
-
-
-.projection_div *{
-    font-size : 1.5em ;
+.projection_div ul{
+    font-size : 2em ;
 }
 
+.projection_div p{
+    font-size : 2em ;
+}
+
+.projection_div td{
+    font-size : 2em ;
+}
  
+
 
 /* badges */
 .c2{
