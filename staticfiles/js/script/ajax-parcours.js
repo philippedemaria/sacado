@@ -616,6 +616,22 @@ define(['jquery','bootstrap'], function ($) {
         });
  
 
+        $('.ggbTransform').on('click', function () {
+                // mozilla proposal
+                element.requestFullScreen();
+                document.cancelFullScreen(); 
+                // Webkit (works in Safari and Chrome Canary)
+                element.webkitRequestFullScreen(); 
+                document.webkitCancelFullScreen(); 
+                // Firefox (works in nightly)
+                element.mozRequestFullScreen();
+                document.mozCancelFullScreen();
+                // W3C Proposal
+                element.requestFullscreen();
+                document.exitFullscreen();
+            })
+
+
 
 
 
