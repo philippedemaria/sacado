@@ -1039,7 +1039,6 @@ width:100%;
 .projection{
   border: 1px dashed #CCC;
   cursor:pointer;  
-  padding: 15px;
 }
 
 
@@ -1084,7 +1083,12 @@ width:100%;
     font-size : 2em ;
 }
  
-
+.projection_div   img {
+  -webkit-transform: scale(2.5);
+  transform: scale(2.5);
+  -webkit-transition: .3s ease-in-out;
+  transition: .3s ease-in-out;
+}
 
 /* badges */
 .c2{
