@@ -1068,14 +1068,14 @@ width:100%;
 }
 
 
-.projection iframe{
+.projection_div iframe{
   margin-right: auto;
   margin-left: auto ;
 }
 
 
 
-.projection *{
+.projection_div *{
     font-size : 3em ;
 }
 
