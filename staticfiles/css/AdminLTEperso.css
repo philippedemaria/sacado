@@ -1082,16 +1082,14 @@ width:100%;
 .projection_div td{
     font-size : 2em ;
 }
- 
-.projection_div   img {
-  display: block ;
-  -webkit-transform: scale(2.5);
-  transform: scale(2.5);
-  -webkit-transition: .3s ease-in-out;
-  transition: .3s ease-in-out;
-  transform: translate(30%,10%);
-  transform: scale(2, 2);
+
+
+img .projection_img_live  {
+    width : 400px;
+    -webkit-transition: .3s ease-in-out;
+    transition: .3s ease-in-out;
 }
+
 
 /* badges */
 .c2{

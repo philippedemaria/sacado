@@ -609,11 +609,16 @@ define(['jquery','bootstrap'], function ($) {
         $('.projection').on('click', function () {
             var content = $(this).html();
             $("body").append('<div class="projection_div"  id="projection_div" ><span class="pull-right closer_projection_div"><i class="fa fa-times"></i></span>'+content+'</div>');
+
+            if ( $('.projection_img') ) {    $('.projection_img').addClass("projection_img_live") ; }
+
         });
  
         $(document).on('click', ".closer_projection_div", function () {
              $("#projection_div").remove();
         });
+
+
  
 
         $('.ggbTransform').on('click', function () {
