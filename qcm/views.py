@@ -4423,7 +4423,7 @@ def write_exercise(request,id): # Coté élève
             w_f.save()
 
             ### Envoi de mail à l'enseignant
-            msg = "Exercice posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(cForm.cleaned_data['answer'])
+            msg = "Exercice posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(wForm.cleaned_data['answer'])
             if relationship.parcours.teacher.notification :
                 send_mail("SACADO Exercice posté",  msg , "info@sacado.xyz" , [relationship.parcours.teacher.user.email] )
 
