@@ -1084,8 +1084,8 @@ width:100%;
 }
 
 
-img .projection_img_live  {
-    width : 400px;
+#projection_div .projection_img_live  {
+    width : 800px;
     -webkit-transition: .3s ease-in-out;
     transition: .3s ease-in-out;
 }
