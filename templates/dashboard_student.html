@@ -109,43 +109,34 @@
         <div class="row"></div> 
         <hr/>
         <h2 class='thin'>Evaluations</h2>
-        <div class="row">
-                {%  for evaluation in  evaluations %}             
-                <div class="col-md-4  col-lg-3  col-sm-6">
-                    <div class="small-box-student" style="background-color:{{evaluation.color }};color:{{evaluation.color|contrast_color }};">
- 
-                        <div class="icon-student">
-                            <small><i class="fa fa-graduation-cap"></i></small>
-                        </div>
-                        <div class="small-box-footer-max">
-                            <h2 class="white thin">{{ evaluation.title }}  </h2>
-                           
-                            <div style="text-align: center; margin-top: 20px; margin-bottom: 20px">
-                             <a href="{% url 'show_parcours_student' evaluation.id  %}" class="btn btn-default btn-accueil"><i class="fa fa-arrow-circle-right"></i> Démarrer</a>
-                            </div>
-                    
-
-                            <p>
-                                <div class="col-md-6  col-lg-6  col-sm-6">
-                                    <i class="fa fa-clock-o"></i>  {{ evaluation.evaluation_duration }} min 
-                                </div>
-                                <div class="col-md-6  col-lg-6  col-sm-6">
-                                    {{ evaluation.nb_exercises }} exercice{{ evaluation.exercises.count|pluralize }} 
-                                </div>
-                            </p>
-                         
-                        </div>
+            {%  for evaluation in  evaluations %}             
+                <div class="small-box-student" style="background-color:{{evaluation.color }};color:{{evaluation.color|contrast_color }};">
+                    <div class="icon-student">
+                        <small><i class="fa fa-graduation-cap"></i></small>
                     </div>
-                 </div>    
-                {% endfor %}
-         </div>
-        {% endif %}        
-        <div class="row"></div>
+                    <div class="small-box-footer-max">
+                        <h2 class="white thin">{{ evaluation.title }}  </h2>
+                       
+                        <div style="text-align: center; margin-top: 20px; margin-bottom: 20px">
+                         <a href="{% url 'show_parcours_student' evaluation.id  %}" class="btn btn-default btn-accueil"><i class="fa fa-arrow-circle-right"></i> Démarrer</a>
+                        </div>
+                        <p>
+                            <div class="col-md-6  col-lg-6  col-sm-6">
+                                <i class="fa fa-clock-o"></i>  {{ evaluation.evaluation_duration }} min 
+                            </div>
+                            <div class="col-md-6  col-lg-6  col-sm-6">
+                                {{ evaluation.nb_exercises }} exercice{{ evaluation.exercises.count|pluralize }} 
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
 
-
+        {% endif %}      
         {% if relationships_in_tasks|length > 0 %}
            <!-- Add the bg color to the header using any of the bg-* classes -->
-        <div class="row"></div><hr>
+        <div class="row"></div>
+        <hr>
         <h2 class="thin">Mes tâches en cours</h2>
              {% for relation in relationships_in_tasks %}
                     <div class="card_freeze">
@@ -186,17 +177,6 @@
              {% endfor %}
  
         {% endif %}
-
-
-
-
-
-
-
-
-
-
-
         <div class="row" id="parcours_div">  
             <hr>  
             <div class="col-md-12 col-sm-12">
