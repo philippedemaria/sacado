@@ -608,34 +608,18 @@ define(['jquery','bootstrap'], function ($) {
  
         $('.projection').on('click', function () {
             var content = $(this).html();
-            $("body").append('<div class="projection_div"  id="projection_div" ><span class="pull-right closer_projection_div"><i class="fa fa-times"></i></span>'+content+'</div>');
+            $("body").append('<div class="projection_div"  id="projection_div" ><span class="pull-right closer_projection_div"><i class="fa fa-times fa-2x"></i></span>'+content+'</div>');
 
-            if ( $('.projection_img') ) {    $('.projection_img').addClass("projection_img_live") ; }
+            if ( $('.projection_img') ) {   
+                                            $('.projection_img').removeAttr("style");             
+                                            $('.projection_img').addClass("projection_img_live");
+                                         }
 
         });
  
         $(document).on('click', ".closer_projection_div", function () {
              $("#projection_div").remove();
         });
-
-
- 
-
-        $('.ggbTransform').on('click', function () {
-                // mozilla proposal
-                element.requestFullScreen();
-                document.cancelFullScreen(); 
-                // Webkit (works in Safari and Chrome Canary)
-                element.webkitRequestFullScreen(); 
-                document.webkitCancelFullScreen(); 
-                // Firefox (works in nightly)
-                element.mozRequestFullScreen();
-                document.mozCancelFullScreen();
-                // W3C Proposal
-                element.requestFullscreen();
-                document.exitFullscreen();
-            })
-
 
 
 
