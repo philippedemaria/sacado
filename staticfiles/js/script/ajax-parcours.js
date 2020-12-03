@@ -472,7 +472,8 @@ define(['jquery','bootstrap'], function ($) {
 
 
         $("#details_evaluation").hide();
-             function makeItemAppearDetails($toggle, $item) {
+        
+        function makeItemAppearDetails($toggle, $item) {
                 $toggle.change(function () {
                     if ($toggle.is(":checked")) {
                         $item.show(500);
@@ -483,7 +484,8 @@ define(['jquery','bootstrap'], function ($) {
                     }
                 });
             }
-            makeItemAppearDetails($("#id_is_evaluation"), $("#details_evaluation"));
+
+        makeItemAppearDetails($("#id_is_evaluation"), $("#details_evaluation"));
  
 
         $(".overlay").hide();
@@ -511,9 +513,11 @@ define(['jquery','bootstrap'], function ($) {
             let parcours_id = $(this).attr("data-parcours_id"); 
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
             let value = $("#on_mark"+parcours_id).val(); 
-            if(value=="") {alert("Vous devez renseigner cette valeur"); 
-                                $("#on_mark"+parcours_id).focus();
-                                 return false;}
+
+            if (value=="") { alert("Vous devez renseigner cette valeur"); 
+                            $("#on_mark"+parcours_id).focus();
+                            return false;}
+
             $("#loading_export"+parcours_id).html("<i class='fa fa-spinner fa-pulse fa-fw'></i>");  
                                             
             $.ajax(
@@ -610,10 +614,12 @@ define(['jquery','bootstrap'], function ($) {
             var content = $(this).html();
             $("body").append('<div class="projection_div"  id="projection_div" ><span class="pull-right closer_projection_div"><i class="fa fa-times fa-2x"></i></span>'+content+'</div>');
 
-            if ( $('.projection_img') ) {   
-                                            $('.projection_img').removeAttr("style");             
-                                            $('.projection_img').addClass("projection_img_live");
-                                         }
+ 
+                if($('img').length){ 
+                                    $('.projection_div').find("img").removeAttr("style");             
+                                    $('.projection_div').find("img").addClass("projection_img_live");
+                                    }
+ 
 
         });
  
