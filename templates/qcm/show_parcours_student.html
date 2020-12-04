@@ -239,7 +239,14 @@
                             <div class="card-text" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">
                                 <i class="fa fa-fw fa-barcode"></i> {{ relation.exercise.supportfile.code }}
                                 <i class="fa fa-fw fa-clock-o"></i> {{ relation.duration }} min.
-                                <i class="fa fa fa-save"></i> {{ relation.situation}}
+                                <i class="fa fa-fw fa-save"></i> {{ relation.situation}}
+                                {% if not relation.parcours.is_evaluation %}
+                                {% if relation.relationships_courses.all|length > 0 %}  
+                                    <i class="fa fa-fw fa-dashboard"></i>
+                                {% endif  %}
+                                {% endif  %}
+
+
 
                                 {% if noggb_data.is_corrected %}
                                     <span class="pull-right selector_div_result" data-relation_id ="{{ relation.id }}"  data-custom=0 ><i class="fa fa-trophy"></i></span>
