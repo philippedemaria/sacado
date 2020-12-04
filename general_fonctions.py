@@ -23,8 +23,6 @@ def time_zone_user(user):
     return today
  
 
-
-
 def cleanhtml(raw_html): #nettoie le code des balises HTML
     cleantext = re.sub('<.*?>', '', raw_html)
     cleantext = re.sub('\n', '', cleantext)
@@ -35,6 +33,7 @@ def unescape_html(string):
     '''HTML entity decode'''
     string = html.unescape(string)
     return string
+
 
 
 def escape_chevron(string):

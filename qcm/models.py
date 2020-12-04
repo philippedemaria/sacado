@@ -9,6 +9,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.db.models import Q, Min, Max
 import os.path
 from django.utils import timezone
+from general_fonctions import *
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User 
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
@@ -705,8 +706,9 @@ class Relationship(models.Model):
     is_correction_visible = models.BooleanField(default=0, editable=False  )
 
     def __str__(self):
+
         try :
-            return "{} : {}".format(self.parcours, self.exercise.supportfile.annoncement)
+            return "{} : {}".format(self.parcours, cleanhtml(self.exercise.supportfile.annoncement))
         except :
             return "{}".format(self.parcours)  
 
@@ -1392,7 +1394,6 @@ class Constraint(models.Model):
 ########################################################   Demande d'exo    ############################################################### 
 ########################################################################################################################################### 
 ########################################################################################################################################### 
-
 class Demand(models.Model):
     level = models.ForeignKey(Level, related_name="demand", on_delete=models.PROTECT, verbose_name="Niveau")
     theme = models.ForeignKey(Theme, related_name="demand", on_delete=models.PROTECT, verbose_name="Thème")
@@ -1413,7 +1414,6 @@ class Demand(models.Model):
 ########################################################   Mastering        ############################################################### 
 ########################################################################################################################################### 
 ########################################################################################################################################### 
-
 class Mastering(models.Model):
 
     relationship = models.ForeignKey(Relationship, related_name="relationship_mastering", on_delete=models.PROTECT, verbose_name="Exercice")
@@ -1453,7 +1453,6 @@ class Mastering_done(models.Model):
 ################################################   Mastering  from customexercise       ################################################### 
 ########################################################################################################################################### 
 ########################################################################################################################################### 
-
 class Masteringcustom(models.Model):
 
     customexercise = models.ForeignKey(Customexercise, related_name="customexercise_mastering_custom", on_delete=models.PROTECT, verbose_name="Exercice")
@@ -1479,7 +1478,6 @@ class Masteringcustom(models.Model):
             is_do = True  
         return is_do       
 
-
 class Masteringcustom_done(models.Model):
 
     mastering = models.ForeignKey(Masteringcustom, related_name="mastering_custom_done", editable=False, on_delete=models.PROTECT, verbose_name="Exercice")
@@ -1488,7 +1486,6 @@ class Masteringcustom_done(models.Model):
     
     def __str__(self):
         return "{}".format(self.mastering)
-
 
 ########################################################################################################################################### 
 ########################################################################################################################################### 
@@ -1504,8 +1501,6 @@ class Comment(models.Model): # Commentaire du l'enseignant vers l'élève pour l
     def __str__(self):        
         return "{} : {}".format(self.comment, self.teacher)
 
-
-
 class Generalcomment(models.Model): # Commentaire conservé d'une copie  coté enseignant
 
     teacher = models.ForeignKey(Teacher,  on_delete=models.CASCADE, blank=True,  related_name='teacher_generalcomment', editable=False)
@@ -1513,8 +1508,6 @@ class Generalcomment(models.Model): # Commentaire conservé d'une copie  coté e
 
     def __str__(self):        
         return "{} : {}".format(self.comment, self.teacher)
-
-
 
 class CommonAnnotation(models.Model):
  
@@ -1526,7 +1519,6 @@ class CommonAnnotation(models.Model):
     class Meta:
         abstract = True
 
-
 class Annotation(CommonAnnotation):
 
     writtenanswerbystudent = models.ForeignKey(Writtenanswerbystudent, on_delete=models.CASCADE,related_name='annotations') 
@@ -1536,7 +1528,6 @@ class Annotation(CommonAnnotation):
 
     class Meta:
         unique_together = ['writtenanswerbystudent', 'attr_id']
-
 
 class Customannotation(CommonAnnotation):
 
