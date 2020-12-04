@@ -708,7 +708,7 @@ class Relationship(models.Model):
     def __str__(self):
 
         try :
-            return "{} : {}".format(self.parcours, cleanhtml(self.exercise.supportfile.annoncement))
+            return "{} : {}".format(self.parcours, cleanhtml(unescape_html(self.exercise.supportfile.annoncement)))
         except :
             return "{}".format(self.parcours)  
 
