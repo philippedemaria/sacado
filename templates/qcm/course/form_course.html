@@ -61,9 +61,7 @@
                 </div>
                 <div class="form-group">
                     <div class="alert alert-info">
-                         Il est possible de créer des <b>sections vidéo-projetables</b> : Cliquer sur l'icone <img src="{% static 'img/div_projection.png' %}" /> et choisir "projection" et renseigner le champ "Classes de style" par : projection <img src="{% static 'img/style_projection.png' %}" />  <br/>Cliquer sur le bouton vert OK. Ecrire alors dans cette partie. <br/><br/>
-                         Pour les images rajouter la classe projection_img dans l'onglet Avancé.<br/>
-                         <img src="{% static 'img/projection_img.png' %}" />
+                         Il est possible de créer des <b>sections vidéo-projetables</b> : Cliquer sur l'icone <img src="{% static 'img/div_projection.png' %}" /> et choisir "projection" et renseigner le champ "Classes de style" par : projection <img src="{% static 'img/style_projection.png' %}" />  <br/>Cliquer sur le bouton vert OK. Ecrire alors dans cette partie. 
 
                             
                     </div>
@@ -87,7 +85,7 @@
             </div>
             <div class="col-sm-12 col-lg-4">
                 {% if request.user.user_type == 2 %}
-                   <label>Lier ce cours à une ou des sections déjà créées</label> <br/>  
+                   <label>Lier ce cours à </label> <br/>  
                    {{ form.relationships|add_class:"form-control select2"}} 
                    {{ form.relationships.errors }} 
                     <h4 class="thin">Détails</h4>
@@ -97,8 +95,6 @@
                 <div class="div_links">                
                 {% for relationship in relationships %}
                     <div style="font-size: 16px;margin-top: 5px"> 
-
-                        
 
                         <a href="https://sacado.xyz/qcm/show_this_exercise/{{ relationship.exercise.id }}/" target="_blank" > 
 

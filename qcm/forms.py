@@ -227,10 +227,8 @@ class CourseForm(forms.ModelForm):
 
 	def __init__(self, *args, **kwargs):
 		parcours = kwargs.pop('parcours')
-		print(parcours)
 		super(CourseForm, self).__init__(*args, **kwargs)
-		relations = Relationship.objects.filter(exercise__supportfile__is_title = 1, parcours=parcours)
-		print(relations)
+		relations = Relationship.objects.filter(parcours=parcours)
 		self.fields['relationships'] = forms.ModelMultipleChoiceField(queryset=relations, required=False )
 
 class DemandForm(forms.ModelForm):

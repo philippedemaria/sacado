@@ -1071,17 +1071,17 @@ width:100%;
   margin-left: auto ;
 }
 
-.projection_div ul{
+ 
+
+.projection_div p, 
+.projection_div td, 
+.projection_div ul, 
+.projection_div ol , 
+.projection_div li {
     font-size : 2em ;
 }
 
-.projection_div p{
-    font-size : 2em ;
-}
-
-.projection_div td{
-    font-size : 2em ;
-}
+ 
 
 
 #projection_div .projection_img_live  {
@@ -1089,6 +1089,11 @@ width:100%;
     -webkit-transition: .3s ease-in-out;
     transition: .3s ease-in-out;
 }
+
+
+
+
+
 
 
 /* badges */

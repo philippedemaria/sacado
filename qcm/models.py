@@ -684,7 +684,6 @@ class Parcours(ModelWithCode):
                 test = True
         return test
 
-
 class Relationship(models.Model):
     exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.PROTECT,  editable= False)
     parcours = models.ForeignKey(Parcours, on_delete=models.PROTECT,  related_name='parcours_relationship',  editable= False)
@@ -1262,8 +1261,6 @@ class Correctionknowledgecustomexercise(models.Model): # Evaluation des savoir f
     class Meta:
         unique_together = ['student', 'customexercise','knowledge']
 
-
-
 class Exerciselocker(ModelWithCode):
 
     relationship = models.ForeignKey(Relationship,  on_delete=models.PROTECT, blank=True, null=True,  related_name='relationship_exerciselocker', editable=False) 
@@ -1274,8 +1271,6 @@ class Exerciselocker(ModelWithCode):
 
     def __str__(self):        
         return "{}".format(self.student)
-
- 
 
 ########################################################################################################################################### 
 ########################################################################################################################################### 
@@ -1311,7 +1306,7 @@ class Course(models.Model): # pour les
  
     students = models.ManyToManyField(Student, blank=True,  related_name='students_course', verbose_name="Attribuer à/au")
     creators = models.ManyToManyField(Student, blank=True,  related_name='creators_course', verbose_name="Co auteurs élève") 
-    relationships = models.ManyToManyField(Relationship, blank=True,  related_name='relationships_course', verbose_name="Lier ce cours à ces sections") 
+    relationships = models.ManyToManyField(Relationship, blank=True,  related_name='relationships_courses', verbose_name="Lier ce cours à") 
  
     def __str__(self):
         return self.title 
