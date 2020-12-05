@@ -727,11 +727,11 @@ define(['jquery','bootstrap'], function ($) {
 
                 if (collapser %2 == 0) 
                     { 
-                        $("#pop"+target).removeClass('chevron-down').addClass('chevron-up');
+                        $("#pop"+target).removeClass('fa-chevron-down').addClass('fa-chevron-up');
                     } 
                 else 
                     {
-                        $("#pop"+target).removeClass('chevron-up').addClass('chevron-down');
+                        $("#pop"+target).removeClass('fa-chevron-up').addClass('fa-chevron-down');
                     }
                 collapser++;                     
              }) ;
