@@ -677,7 +677,6 @@ class Parcours(ModelWithCode):
 
         return submit
 
-
     def p_is_leaf(self,parcours):
         test = False
         if parcours :
