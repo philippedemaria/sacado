@@ -995,7 +995,9 @@ def create_parcours(request,idp=0):
         nf = form.save(commit=False)
         nf.author = teacher
         nf.teacher = teacher
-        nf.is_evaluation = 0 
+        nf.is_evaluation = 0
+        if idp > 0 :
+            nf.is_leaf = 1
         nf.save()
         form.save_m2m()
         nf.students.set(form.cleaned_data.get('students'))
@@ -1003,6 +1005,7 @@ def create_parcours(request,idp=0):
         if idp > 0 :
             parcours_folder = Parcours.objects.get(pk = idp)
             parcours_folder.leaf_parcours.add(nf)
+
 
 
         sg_students =  request.POST.getlist('students_sg')
@@ -1099,7 +1102,7 @@ def update_parcours(request, id, idg=0 ):
             nf = form.save(commit=False)
             nf.author = teacher
             nf.teacher = teacher
-            nf.is_evaluation = 0 
+            nf.is_evaluation = 0
             nf.save()
             form.save_m2m()
             nf.students.set(form.cleaned_data.get('students'))

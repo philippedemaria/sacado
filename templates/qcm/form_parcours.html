@@ -266,6 +266,14 @@
                                 <p class="alert alert-danger">{{error}}</p>
                             {% endfor %}</td>
                     </tr>
+                    {% if parcours %}
+                    <tr>
+                        <td>{{ form.is_leaf.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text" >Si coché, le parcours est inclus dans un dossier.</div></td>
+                        <td>{{ form.is_leaf |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                        <td>{{ form.is_leaf.errors }}</td>
+                    </tr>
+                    {% endif  %}
                     {% block evaluation_choices %}     
                     <tr>
                         <td>{{ form.is_favorite.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
