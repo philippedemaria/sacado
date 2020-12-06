@@ -11,15 +11,15 @@
              <td {% if student %}{% if student == stud %} style="background-color: #F0F0F0;"{% endif %}{% endif %}>
                 {% get_done customexercise stud as done %}
                 {% if done %}
-                  
-                <a href="{% url 'correction_exercise' customexercise.id parcours.id  stud.user.id  %}" >
+                {% get_corrected_for_this customexercise stud parcours as  data %}   
+                <a href="{% url 'correction_exercise' customexercise.id parcours.id  stud.user.id  %}" {% if not data.is_corrected %} style="color:#cb2131" {% endif %} >
                                         <!--<a href="#" data-student_id="{{ student.user.id }}" data-relationship_id="{{ customexercise.id }}" data-parcours_id="{{ parcours.id }}" data-custom="1" class="choose_student"> --> 
 
 
                  {{ stud.user.last_name }} {{ stud.user.first_name }} 
 
                     <span id ="evaluate{{ stud.user.id }}">
-                        {% get_corrected_for_this customexercise stud parcours as  data %} 
+                        
                             {% if  data.is_corrected %}
                                 {% if  data.answer %}
                                     <i class="fa fa-check text-success pull-right"></i>
