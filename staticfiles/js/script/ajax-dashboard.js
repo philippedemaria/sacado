@@ -906,7 +906,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                             $($targetStatut+parcours_id).addClass(data.class);
                             $($targetStatut+parcours_id).html("").html(data.label);
 
-                            if( from =="2") { 
+                            if( from =="2" || from =="0") { 
                             $('.disc'+parcours_id).css("background-color",data.style); 
                             }  
                         }
