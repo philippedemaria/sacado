@@ -3160,6 +3160,7 @@ def execute_exercise(request, idp,ide):
     context = {'exercise': exercise,  'start_time' : start_time,  'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today , 'communications' : [] , 'relationships' : [] }
     return render(request, 'qcm/show_relation.html', context)
 
+
 def store_the_score_relation_ajax(request):
 
     time_begin = request.POST.get("start_time",None)
@@ -3232,7 +3233,7 @@ def store_the_score_relation_ajax(request):
                     name_title = relation.exercise.supportfile.annoncement
                 else :
                     name_title = relation.exercise.knowledge.name
-                msg = "Exercice : "+str(unescape_html(cleanhtml(name_title)))+"\n Fait par : "+str(student.user)+"\n Nombre de situations : "+str(numexo)+"\n Score : "+str(score)+"%"+"\n Temps : "+str(convert_seconds_in_time(timer))
+                msg = "Exercice : "+str(unescape_html(cleanhtml(name_title)))+"\n Parcours : "+str(relation.parcours.title)+"\n Fait par : "+str(student.user)+"\n Nombre de situations : "+str(numexo)+"\n Score : "+str(score)+"%"+"\n Temps : "+str(convert_seconds_in_time(timer))
                 rec = []
                 for g in student.students_to_group.filter(teacher = relation.parcours.teacher):
                     if not g.teacher.user.email in rec : 
@@ -4425,7 +4426,7 @@ def write_exercise(request,id): # Coté élève
             w_f.save()
 
             ### Envoi de mail à l'enseignant
-            msg = "Exercice du parcours " +relationship.parcours.title + ", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(wForm.cleaned_data['answer'])
+            msg = "Exercice du parcours " +str(relationship.parcours.title)+ ", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(wForm.cleaned_data['answer'])
             if relationship.parcours.teacher.notification :
                 send_mail("SACADO Exercice posté",  msg , "info@sacado.xyz" , [relationship.parcours.teacher.user.email] )
 
@@ -4487,7 +4488,7 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
                         form_image.save()
 
             ### Envoi de mail à l'enseignant
-            msg = "Exercice du parcours " +parcours.title + ", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(cForm.cleaned_data['answer'])
+            msg = "Exercice du parcours " +str(parcours.title) + ", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(cForm.cleaned_data['answer'])
             if customexercise.teacher.notification :
                 send_mail("SACADO Exercice posté",  msg , "info@sacado.xyz" , [customexercise.teacher.user.email] )
 
