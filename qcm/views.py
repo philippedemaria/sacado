@@ -2276,8 +2276,7 @@ def ajax_publish_parcours(request):
         data["class"] = "legend-btn-success"
         data["noclass"] = "legend-btn-danger"
         data["label"] = "Publié"
-
-    print(data)
+ 
     Parcours.objects.filter(pk = int(parcours_id)).update(is_publish = statut)
  
     return JsonResponse(data) 

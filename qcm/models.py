@@ -910,7 +910,7 @@ class Resultggbskill(models.Model): # Pour récupérer tous les scores des comp�
     student = models.ForeignKey(Student, related_name="student_resultggbskills", default="", on_delete=models.CASCADE, editable=False)
     skill = models.ForeignKey(Skill, related_name="skill_resultggbskills", on_delete=models.CASCADE, editable=False)
     point = models.PositiveIntegerField(default=0)
-    relationship = models.ForeignKey(Relationship,  on_delete=models.PROTECT, blank=True, null=True,  related_name='relationship_resultggbskills', editable=False)
+    relationship = models.ForeignKey(Relationship,  on_delete=models.CASCADE, blank=True, null=True,  related_name='relationship_resultggbskills', editable=False)
 
     def __str__(self):
         return f"{self.skill} : {self.point}"
