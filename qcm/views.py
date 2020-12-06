@@ -2276,7 +2276,7 @@ def ajax_publish_parcours(request):
         data["class"] = "legend-btn-success"
         data["noclass"] = "legend-btn-danger"
         data["label"] = "Publié"
- 
+
     Parcours.objects.filter(pk = int(parcours_id)).update(is_publish = statut)
  
     return JsonResponse(data) 
@@ -4425,7 +4425,7 @@ def write_exercise(request,id): # Coté élève
             w_f.save()
 
             ### Envoi de mail à l'enseignant
-            msg = "Exercice posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(wForm.cleaned_data['answer'])
+            msg = "Exercice du parcours " +relationship.parcours.title + ", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(wForm.cleaned_data['answer'])
             if relationship.parcours.teacher.notification :
                 send_mail("SACADO Exercice posté",  msg , "info@sacado.xyz" , [relationship.parcours.teacher.user.email] )
 
@@ -4487,7 +4487,7 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
                         form_image.save()
 
             ### Envoi de mail à l'enseignant
-            msg = "Exercice posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(cForm.cleaned_data['answer'])
+            msg = "Exercice du parcours " +parcours.title + ", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(cForm.cleaned_data['answer'])
             if customexercise.teacher.notification :
                 send_mail("SACADO Exercice posté",  msg , "info@sacado.xyz" , [customexercise.teacher.user.email] )
 
