@@ -4426,7 +4426,7 @@ def write_exercise(request,id): # Coté élève
             w_f.save()
 
             ### Envoi de mail à l'enseignant
-            msg = "Exercice du parcours " +str(relationship.parcours.title)+ ", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(wForm.cleaned_data['answer'])
+            msg = "Exercice : "+str(unescape_html(cleanhtml(relationship.exercise.supportfile.annoncement)))+"\n Parcours : "+str(relationship.parcours.title)+", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(wForm.cleaned_data['answer'])
             if relationship.parcours.teacher.notification :
                 send_mail("SACADO Exercice posté",  msg , "info@sacado.xyz" , [relationship.parcours.teacher.user.email] )
 
@@ -4488,7 +4488,8 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
                         form_image.save()
 
             ### Envoi de mail à l'enseignant
-            msg = "Exercice du parcours " +str(parcours.title) + ", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(cForm.cleaned_data['answer'])
+            msg = "Exercice : "+str(unescape_html(cleanhtml(customexercise.instruction)))+"\n Parcours : "+str(parcours.title)+", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(cForm.cleaned_data['answer'])
+
             if customexercise.teacher.notification :
                 send_mail("SACADO Exercice posté",  msg , "info@sacado.xyz" , [customexercise.teacher.user.email] )
 
