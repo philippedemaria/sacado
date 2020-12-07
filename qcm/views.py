@@ -5148,7 +5148,10 @@ def export_results_after_evaluation(request):
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
     exercises = parcours.exercises.all()
 
+    
+
     for s in parcours.students.all() :
+        total_numexo_todo = s.students_relationship.filter(parcours = parcours).count() + s.students_customexercises.filter(parcourses = parcours).count()
         #logo = Image('D:/uwamp/www/sacado/static/img/sacadoA1.png')
         logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
         logo_tab = [[logo, "SACADO \nSuivi des acquisitions de savoir faire" ]]
@@ -5157,8 +5160,6 @@ def export_results_after_evaluation(request):
         
         elements.append(logo_tab_tab)
         elements.append(Spacer(0, 0.2*inch))
-
-        total_numexo = s.students_relationship.filter(parcours = parcours).count() + s.students_customexercises.filter(parcourses = parcours).count()
 
         ################################################################
         #  Geston des résultats
@@ -5177,12 +5178,13 @@ def export_results_after_evaluation(request):
         nb_exo_ce = s.student_custom_answer.filter(parcours = parcours ).count()
 
         nb_exo = len(studentanswer_tab) + nb_exo_w + nb_exo_ce
-        duration, score,  good_answer = 0, 0, 0
+        duration, score, total_numexo, good_answer = 0, 0, 0, 0
         score_tab  = []
  
         for studentanswer in  student_tab : 
             duration += int(studentanswer.secondes)
             score += int(studentanswer.point)
+            total_numexo += int(studentanswer.numexo)
             good_answer += int(studentanswer.numexo*studentanswer.point/100)
             score_tab.append(studentanswer.point)
         
@@ -5194,6 +5196,7 @@ def export_results_after_evaluation(request):
                 duration = ""
             average_score = int(average_score)
             good_answer = int(good_answer)
+            total_numexo = int(total_numexo)
             last_connexion = studentanswer.date
             score = int(score)
             percent = math.ceil(int(good_answer)/int(total_numexo) * 100 )   
@@ -5243,7 +5246,7 @@ def export_results_after_evaluation(request):
         ##########################################################################
         #### Nombre d'exercices traités
         ##########################################################################
-        paragraph = Paragraph( "Nombre d'exercices traités : " + str(nb_exo)  , normal )
+        paragraph = Paragraph( "Nombre d'exercices traités : " + str(nb_exo) +  " sur " + str(total_numexo_todo)+" proposés"  , normal )
         elements.append(paragraph)
         elements.append(Spacer(0, 0.1*inch)) 
         ##########################################################################
@@ -5360,7 +5363,7 @@ def export_results_after_evaluation(request):
             exo_sacado = request.POST.get("exo_sacado",0)  
 
             try :
-                sco = round((sc_sacado * float(exo_sacado) + note_student_in_custom * ( float(mark_on) - float(exo_sacado) ))/float(mark_on),1)
+                sco = round( (nb_exo / total_numexo_todo) *  (sc_sacado * float(exo_sacado) + note_student_in_custom * ( float(mark_on) - float(exo_sacado) ))/float(mark_on),1)  
                 if duration : 
                     paragraphsco = Paragraph( "Note globale : " + str(sco) + " / " +str(mark_on)  , normal )
                 else :
