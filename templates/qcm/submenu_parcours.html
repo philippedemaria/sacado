@@ -94,7 +94,7 @@
         </li>
         {% else %} 
         <li {% if 'parcours_stat_evaluation/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'stat_parcours' parcours.id %}" ><i class="fa fa-bar-chart fa-fw"></i> Lire les stats du parcours</a>   
+            <a href="{% url 'stat_evaluation' parcours.id %}" ><i class="fa fa-bar-chart fa-fw"></i> Lire les stats du parcours</a>   
         </li>
         {% endif %} 
 

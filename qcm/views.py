@@ -1636,147 +1636,150 @@ def result_parcours_knowledge(request, id):
 
     return render(request, 'qcm/result_parcours_knowledge.html', context )
  
-def stat_parcours(request, id):
+# def stat_parcours(request, id):
 
-    teacher = Teacher.objects.get(user = request.user)
-    parcours = Parcours.objects.get(id=id)
-    exercises = parcours.exercises.all()
-    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
-    parcours_duration = parcours.duration #durée prévue pour le téléchargement
-    for e in exercises :
-        r = Relationship.objects.get(exercise = e, parcours = parcours)
-        parcours_duration += r.duration
+#     teacher = Teacher.objects.get(user = request.user)
+#     parcours = Parcours.objects.get(id=id)
+#     exercises = parcours.exercises.all()
+#     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
+#     parcours_duration = parcours.duration #durée prévue pour le téléchargement
+#     for e in exercises :
+#         r = Relationship.objects.get(exercise = e, parcours = parcours)
+#         parcours_duration += r.duration
 
 
-    form = EmailForm(request.POST or None )
-    stats = []
+#     form = EmailForm(request.POST or None )
+#     stats = []
  
 
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id'] 
-    access = data['access']
-    if not authorizing_access(teacher, parcours,access):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
-        return redirect('index')
+#     data = get_complement(request, teacher, parcours)
+#     role = data['role']
+#     group = data['group']
+#     group_id = data['group_id'] 
+#     access = data['access']
+#     if not authorizing_access(teacher, parcours,access):
+#         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+#         return redirect('index')
 
-    customexercises = parcours.parcours_customexercises.order_by("ranking")
-    students = students_from_p_or_g(request,parcours) 
+#     customexercises = parcours.parcours_customexercises.order_by("ranking")
+#     students = students_from_p_or_g(request,parcours) 
 
-    for s in students :
-        student = {}
-        student["name"] = s
-        studentanswers = Studentanswer.objects.filter(student=s,  exercise__in= exercises, parcours=parcours).order_by("date")
+#     for s in students :
+#         student = {}
+#         student["name"] = s
+#         studentanswers = Studentanswer.objects.filter(student=s,  exercise__in= exercises, parcours=parcours).order_by("date")
 
-        studentanswer_tab , student_tab  = [], []
-        for studentanswer in studentanswers :
-            if studentanswer.exercise not in studentanswer_tab :
-                studentanswer_tab.append(studentanswer.exercise)
-                student_tab.append(studentanswer)
-        student["nb_exo"] = len(studentanswer_tab)
-        duration, score, total_numexo, good_answer = 0, 0, 0, 0
-        tab, tab_date = [], []
-        student["legal_duration"] = parcours.duration
+#         studentanswer_tab , student_tab  = [], []
+#         for studentanswer in studentanswers :
+#             if studentanswer.exercise not in studentanswer_tab :
+#                 studentanswer_tab.append(studentanswer.exercise)
+#                 student_tab.append(studentanswer)
+#         student["nb_exo"] = len(studentanswer_tab)
+#         duration, score, total_numexo, good_answer = 0, 0, 0, 0
+#         tab, tab_date = [], []
+#         student["legal_duration"] = parcours.duration
 
-        for studentanswer in  student_tab : 
-            duration += int(studentanswer.secondes)
-            score += int(studentanswer.point)
-            total_numexo += int(studentanswer.numexo)
-            good_answer += int(studentanswer.numexo*studentanswer.point/100)
-            tab.append(studentanswer.point)
-            tab_date.append(studentanswer.date)
-            tab_date.sort()
-        try :
-            if len(student_tab)>1 :
-                average_score = int(score/len(student_tab))
-                student["duration"] = convert_seconds_in_time(duration)
-                student["average_score"] = int(average_score)
-                student["good_answer"] = int(good_answer)
-                student["total_numexo"] = int(total_numexo)
-                student["last_connexion"] = studentanswer.date
-                student["score"] = int(score)
-                student["score_tab"] = tab
-                if duration > parcours_duration : 
-                    student["test_duration"] = True
-                else :
-                    student["test_duration"] = False 
-                tab.sort()
-                if len(tab)%2 == 0 :
-                    med = (tab[(len(tab)-1)//2]+tab[(len(tab)-1)//2+1])/2 ### len(tab)-1 , ce -1 est causÃ© par le rang 0 du tableau
-                else:
-                    med = tab[(len(tab)-1)//2+1]
-                student["median"] = int(med)
-                student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100 )   
-            else :
-                average_score = int(score)
-                student["duration"] = convert_seconds_in_time(duration)
-                student["average_score"] = int(score)
-                student["last_connexion"]  = studentanswer.date
-                if duration > parcours_duration : 
-                    student["test_duration"] = True
-                else :
-                    student["test_duration"] = False 
-                student["median"] = int(score)
-                student["score"] = int(score)
-                student["score_tab"] = tab
-                student["good_answer"] = int(good_answer)
-                student["total_numexo"] = int(total_numexo)
-                student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100)        
-        except :
-            student["duration"] = ""
-            student["average_score"] = ""
-            student["last_connexion"] =  ""
-            student["median"] = ""
-            student["score"] = ""
-            student["score_tab"] = []
-            student["test_duration"] = False
-            student["good_answer"] = ""
-            student["total_numexo"] = ""
-            student["percent"] = ""
+#         for studentanswer in  student_tab : 
+#             duration += int(studentanswer.secondes)
+#             score += int(studentanswer.point)
+#             total_numexo += int(studentanswer.numexo)
+#             good_answer += int(studentanswer.numexo*studentanswer.point/100)
+#             tab.append(studentanswer.point)
+#             tab_date.append(studentanswer.date)
+#             tab_date.sort()
+#         try :
+#             if len(student_tab)>1 :
+#                 average_score = int(score/len(student_tab))
+#                 student["duration"] = convert_seconds_in_time(duration)
+#                 student["average_score"] = int(average_score)
+#                 student["good_answer"] = int(good_answer)
+#                 student["total_numexo"] = int(total_numexo)
+#                 student["last_connexion"] = studentanswer.date
+#                 student["score"] = int(score)
+#                 student["score_tab"] = tab
+#                 if duration > parcours_duration : 
+#                     student["test_duration"] = True
+#                 else :
+#                     student["test_duration"] = False 
+#                 tab.sort()
+#                 if len(tab)%2 == 0 :
+#                     med = (tab[(len(tab)-1)//2]+tab[(len(tab)-1)//2+1])/2 ### len(tab)-1 , ce -1 est causÃ© par le rang 0 du tableau
+#                 else:
+#                     med = tab[(len(tab)-1)//2+1]
+#                 student["median"] = int(med)
+#                 student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100 )   
+#             else :
+#                 average_score = int(score)
+#                 student["duration"] = convert_seconds_in_time(duration)
+#                 student["average_score"] = int(score)
+#                 student["last_connexion"]  = studentanswer.date
+#                 if duration > parcours_duration : 
+#                     student["test_duration"] = True
+#                 else :
+#                     student["test_duration"] = False 
+#                 student["median"] = int(score)
+#                 student["score"] = int(score)
+#                 student["score_tab"] = tab
+#                 student["good_answer"] = int(good_answer)
+#                 student["total_numexo"] = int(total_numexo)
+#                 student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100)        
+#         except :
+#             student["duration"] = ""
+#             student["average_score"] = ""
+#             student["last_connexion"] =  ""
+#             student["median"] = ""
+#             student["score"] = ""
+#             student["score_tab"] = []
+#             student["test_duration"] = False
+#             student["good_answer"] = ""
+#             student["total_numexo"] = ""
+#             student["percent"] = ""
 
  
-        total_c, details_c  = 0 , ""
-        for ce in customexercises :
-            if ce.is_mark :
-                cen = ce.customexercise_custom_answer.get(student=student, parcours = parcours) 
-                total_c = total_c + cen.point
-                details_c = details_c + "-" +str(cen.point)  
+#         total_c, details_c  = 0 , ""
+#         for ce in customexercises :
+#             if ce.is_mark :
+#                 cen = ce.customexercise_custom_answer.get(student=student, parcours = parcours) 
+#                 total_c = total_c + cen.point
+#                 details_c = details_c + "-" +str(cen.point)  
 
-        student["total_note"] = total_c
-        student["details_note"] = details_c
+#         student["total_note"] = total_c
+#         student["details_note"] = details_c
 
              
 
 
-        total_knowledge, total_skill, detail_skill, detail_knowledge = 0,0, "",""
-        for ce in customexercises :
-            for skill in  ce.skills.all() :
-                scs = ce.customexercise_correctionskill.get(skill = skill,student=student, parcours = parcours)
-                try :
-                    total_skill += scs.point
-                    detail_skill += detail_skill + "-" +str(scs.point) 
-                except :
-                    total_skill = ""
-            student["total_skill"] = total_skill
-            student["detail_skill"] = detail_skill
+#         total_knowledge, total_skill, detail_skill, detail_knowledge = 0,0, "",""
+#         for ce in customexercises :
+#             for skill in  ce.skills.all() :
+#                 scs = ce.customexercise_correctionskill.get(skill = skill,student=student, parcours = parcours)
+#                 try :
+#                     total_skill += scs.point
+#                     detail_skill += detail_skill + "-" +str(scs.point) 
+#                 except :
+#                     total_skill = ""
+#             student["total_skill"] = total_skill
+#             student["detail_skill"] = detail_skill
 
-            for knowledge in  ce.knowledges.all() :
-                sck = ce.customexercise_correctionknowledge.get(knowledge = knowledge,student=student, parcours = parcours)
-                try :
-                    total_knowledge += sck.point
-                    detail_knowledge += detail_knowledge + "-" +str(sck.point) 
-                except :
-                    total_knowledge = total_knowledge
-            student["total_knowledge"] = total_knowledge
-            student["detail_knowledge"] = detail_knowledge  
+#             for knowledge in  ce.knowledges.all() :
+#                 sck = ce.customexercise_correctionknowledge.get(knowledge = knowledge,student=student, parcours = parcours)
+#                 try :
+#                     total_knowledge += sck.point
+#                     detail_knowledge += detail_knowledge + "-" +str(sck.point) 
+#                 except :
+#                     total_knowledge = total_knowledge
+#             student["total_knowledge"] = total_knowledge
+#             student["detail_knowledge"] = detail_knowledge  
 
 
-        stats.append(student)
+#         stats.append(student)
 
-    context = {  'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'communications' : [] , 'role' : role  }
+#     context = {  'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'communications' : [] , 'role' : role  }
 
-    return render(request, 'qcm/stat_parcours.html', context )
+#     return render(request, 'qcm/stat_parcours.html', context )
+
+
+
 
 def check_level_by_point(student, point):
     point = int(point)
@@ -5087,6 +5090,299 @@ def ajax_delete_constraint(request):
 #################   exports PRONOTE ou autre
 #######################################################################################################################################################################
 #######################################################################################################################################################################
+def get_level(tot,stage):
+    if tot < stage["low"] :
+        clr = "red"
+    elif tot < stage["medium"] : 
+        clr = "yellow"
+    elif tot < stage["up"] : 
+        clr = "green"
+    else  : 
+        clr = "blue" 
+    return clr
+
+
+
+def export_results_after_evaluation(request):
+
+    skill = request.POST.get("skill",None)  
+    knowledge =   request.POST.get("knowledge",None)  
+    print(knowledge,skill)
+    mark  = request.POST.get("mark",None) 
+    mark_on  = request.POST.get("mark_on")  
+    signature  = request.POST.get("signature",None) 
+    parcours_id  = request.POST.get("parcours_id") 
+    parcours = Parcours.objects.get(pk = int(parcours_id) ) 
+    elements = []     
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="'+str(parcours.title)+'.pdf"'
+
+    doc = SimpleDocTemplate(response,   pagesize=A4, 
+                                        topMargin=0.3*inch,
+                                        leftMargin=0.3*inch,
+                                        rightMargin=0.3*inch,
+                                        bottomMargin=0.3*inch     )
+
+    sample_style_sheet = getSampleStyleSheet()
+
+    sacado = ParagraphStyle('sacado', 
+                            fontSize=20, 
+                            leading=26,
+                            borderPadding = 0,
+                            alignment= TA_CENTER,
+                            )
+
+    title = ParagraphStyle('title',  fontSize=20, textColor=colors.HexColor("#00819f"),)                   
+    title_black = ParagraphStyle('title', fontSize=20, )
+    subtitle = ParagraphStyle('title', fontSize=16,  textColor=colors.HexColor("#00819f"),)
+ 
+    normal = ParagraphStyle(name='Normal',fontSize=12,)    
+    red = ParagraphStyle(name='Normal',fontSize=12,  textColor=colors.HexColor("#cb2131"),) 
+    yellow = ParagraphStyle(name='Normal',fontSize=12,  textColor=colors.HexColor("#ffb400"),)
+    green = ParagraphStyle(name='Normal',fontSize=12,  textColor=colors.HexColor("#1bc074"),)
+    blue = ParagraphStyle(name='Normal',fontSize=12,  textColor=colors.HexColor("#005e74"),)
+
+    stage = get_stage(request.user)    
+
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
+    exercises = parcours.exercises.all()
+
+    for s in parcours.students.all() :
+        #logo = Image('D:/uwamp/www/sacado/static/img/sacadoA1.png')
+        logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
+        logo_tab = [[logo, "SACADO \nSuivi des acquisitions de savoir faire" ]]
+        logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
+        logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))
+        
+        elements.append(logo_tab_tab)
+        elements.append(Spacer(0, 0.2*inch))
+
+        ################################################################
+        #  Geston des résultats
+        ################################################################
+        customexercises = parcours.parcours_customexercises.filter(students=s).order_by("ranking")
+
+        studentanswers = Studentanswer.objects.filter(student=s,  exercise__in= exercises, parcours=parcours).order_by("date")
+
+        studentanswer_tab , student_tab  = [], []
+        for studentanswer in studentanswers :
+            if studentanswer.exercise not in studentanswer_tab :
+                studentanswer_tab.append(studentanswer.exercise)
+                student_tab.append(studentanswer)
+
+        nb_exo_w = s.student_written_answer.filter(relationship__exercise__in = studentanswer_tab, relationship__parcours = parcours ).count()
+        nb_exo_ce = s.student_custom_answer.filter(parcours = parcours ).count()
+
+        nb_exo = len(studentanswer_tab) + nb_exo_w + nb_exo_ce
+        duration, score, total_numexo, good_answer = 0, 0, 0, 0
+        score_tab  = []
+ 
+        for studentanswer in  student_tab : 
+            duration += int(studentanswer.secondes)
+            score += int(studentanswer.point)
+            total_numexo += int(studentanswer.numexo)
+            good_answer += int(studentanswer.numexo*studentanswer.point/100)
+            score_tab.append(studentanswer.point)
+        
+        if  len(student_tab) > 0 :
+            average_score = int(score/len(student_tab))
+            if duration > 0 :
+                duration = convert_seconds_in_time(duration)
+            else :
+                duration = ""
+            average_score = int(average_score)
+            good_answer = int(good_answer)
+            total_numexo = int(total_numexo)
+            last_connexion = studentanswer.date
+            score = int(score)
+            percent = math.ceil(int(good_answer)/int(total_numexo) * 100 )   
+        else :
+            average_score = ""
+            duration = ""
+            average_score = ""
+            good_answer = ""
+            total_numexo = ""
+            last_connexion = ""
+            score = ""
+            percent = 0
+
+ 
+        detail_skills, detail_knowledges =  [],[]
+        score_total = 0
+        score_custom = 0
+        for ce in customexercises :
+            score_total += float(ce.mark)
+            score_custom = 0
+            if ce.is_mark :
+                try:
+                    cen = Customanswerbystudent.objects.get(customexercise = ce, student=s, parcours = parcours)
+                    if cen.point :
+                        score_custom +=  float(cen.point)
+                        score_tab.append(float(cen.point))
+                except :
+                    pass
+        try :
+            note_student_in_custom = round(score_custom/score_total,1)
+        except :
+            note_student_in_custom = 0
+
+        ##########################################################################
+        #### Parcours
+        ##########################################################################
+        paragraph = Paragraph( str(parcours.title) , title_black )
+        elements.append(paragraph)
+        elements.append(Spacer(0, 0.2*inch))
+        ##########################################################################
+        #### Elève
+        ##########################################################################
+        paragraph = Paragraph( str(s.user.last_name)+" "+str(s.user.first_name) , title )
+        elements.append(paragraph)
+        elements.append(Spacer(0, 0.4*inch)) 
+
+        ##########################################################################
+        #### Nombre d'exercices traités
+        ##########################################################################
+        paragraph = Paragraph( "Nombre d'exercices traités : " + str(nb_exo)  , normal )
+        elements.append(paragraph)
+        elements.append(Spacer(0, 0.1*inch)) 
+        ##########################################################################
+        #### Nombre d'exercices traités
+        ##########################################################################
+        paragraph = Paragraph( "Durée du travail (h:m:s) : " + str(duration) , normal )
+        elements.append(paragraph)
+        elements.append(Spacer(0, 0.1*inch)) 
+
+
+        if knowledge : 
+            knowledges = knowledges_in_parcours(parcours)
+            ##########################################################################
+            #### Savoir faire ciblés
+            ##########################################################################
+            elements.append(Spacer(0, 0.3*inch)) 
+            paragraph = Paragraph( "Savoir faire ciblés : "   , subtitle )
+            elements.append(paragraph)
+            elements.append(Spacer(0, 0.1*inch)) 
+
+            tableauK = []
+ 
+            for knwldg in knowledges :
+                data = []
+                tab_k = knwldg.name.split("(")
+                if len(tab_k) > 0 :
+                    data.append(tab_k[0])
+                else : 
+                    data.append(knwldg.name[:100])
+                tot_k = total_by_knowledge_by_student(knwldg,relationships,parcours,s)
+                couleur = get_level(tot_k,stage)                
+                if tot_k < 0 :
+                    tot_k, couleur = "NE", "n"
+                if couleur == "red" :
+                    paragraphknowledge = Paragraph(  str(tot_k)  , red )
+                elif couleur == "yellow" :
+                    paragraphknowledge = Paragraph( str(tot_k)  , yellow )
+                elif couleur == "green" :
+                    paragraphknowledge = Paragraph(  str(tot_k)  , green )
+                elif couleur == "blue" :
+                    paragraphknowledge = Paragraph( str(tot_k)  , blue )
+                else :
+                    paragraphknowledge = Paragraph( str(tot_k)  , normal )
+
+
+                data.append(paragraphknowledge)
+                tableauK.append(data) 
+            tk = Table(tableauK)
+            elements.append(tk)
+            elements.append(Spacer(0, 0.05*inch)) 
+
+
+       
+        if skill : 
+            tableauSkill = []
+            skills =  skills_in_parcours(request,parcours) 
+            ##########################################################################
+            #### Compétences ciblées
+            ##########################################################################
+            elements.append(Spacer(0, 0.3*inch)) 
+            paragraph = Paragraph( "Compétences ciblées : "   , subtitle )
+            elements.append(paragraph)
+            elements.append(Spacer(0, 0.1*inch)) 
+
+            for skll in  skills:
+                data = []
+                data.append(skll)
+                tot_s = total_by_skill_by_student(skll,relationships,parcours,s)
+                couleur = get_level(tot_s,stage)                
+                if tot_s < 0 :
+                    tot_s, couleur = "NE", "n"
+
+                if couleur == "red" :
+                    paragraphskill = Paragraph(  str(tot_s)   , red )
+                elif couleur == "yellow" :
+                    paragraphskill = Paragraph( str(tot_s)  , yellow )
+                elif couleur == "green" :
+                    paragraphskill = Paragraph(  str(tot_s)   , green )
+                elif couleur == "blue" :
+                    paragraphskill = Paragraph( str(tot_s)   , blue )
+                else :
+                    paragraphskill = Paragraph( str(tot_s)   , normal )
+
+                data.append(paragraphskill)
+                tableauSkill.append(data) 
+            tSk = Table(tableauSkill)
+            elements.append(tSk)
+            elements.append(Spacer(0, 0.05*inch)) 
+
+
+
+        if mark : 
+            ##########################################################################
+            #### Score par exercice 
+            ##########################################################################
+            elements.append(Spacer(0, 0.3*inch)) 
+            paragraph = Paragraph( "Score par exercice "   , subtitle )
+            elements.append(paragraph)
+            elements.append(Spacer(0, 0.1*inch)) 
+
+            i = 1
+            for score in score_tab :
+                paragraph = Paragraph( "Exercice "+str(i)+" : "+str(score)+"%"  , normal )
+                elements.append(paragraph)
+                elements.append(Spacer(0, 0.1*inch)) 
+                i += 1
+
+            elements.append(Spacer(0, 0.2*inch)) 
+            ##########################################################################
+            #### Note sur
+            ##########################################################################
+            sc_sacado = round(percent * float(mark_on) / 100,1)
+ 
+            exo_sacado = request.POST.get("exo_sacado",0)  
+
+            try :
+                sco = round((sc_sacado * float(exo_sacado) + note_student_in_custom * ( float(mark_on) - float(exo_sacado) ))/float(mark_on),1)
+                if duration : 
+                    paragraphsco = Paragraph( "Note globale : " + str(sco) + " / " +str(mark_on)  , normal )
+                else :
+                    paragraphsco = Paragraph( "Note globale : NE"  , normal )
+                    
+            except :  
+                paragraphsco = Paragraph( "Note globale : NE"  , normal )
+
+            elements.append(paragraphsco)
+            elements.append(Spacer(0, 0.3*inch)) 
+
+        if signature : 
+            paragraph = Paragraph( "Signature parent "   , subtitle )
+            elements.append(paragraph)
+ 
+        elements.append(PageBreak())
+
+    doc.build(elements)
+
+    return response
+
+
 
 def export_notes_after_evaluation(request):
 

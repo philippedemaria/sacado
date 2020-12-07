@@ -34,7 +34,7 @@ urlpatterns = [
     path('parcours_result/<int:id>/', result_parcours, name='result_parcours'), 
     path('parcours_result_theme/<int:id>/<int:idt>/', result_parcours_theme, name='result_parcours_theme'),  # Je ne sais pas si cette route est utilisée ?????
     path('parcours_result_knowledge/<int:id>/', result_parcours_knowledge, name='result_parcours_knowledge'), 
-    path('parcours_stat/<int:id>/', stat_parcours, name='stat_parcours'), 
+    #path('parcours_stat/<int:id>/', stat_parcours, name='stat_parcours'), remplacer par stat_evaluation plus explicite
     path('parcours_detail_task/<int:id>/<int:s>/<int:c>/', detail_task_parcours, name='detail_task_parcours'), #modif idp en id pour la sécurité
     path('parcours_exercises/<int:id>/', parcours_exercises, name='parcours_exercises'),  # student_list_exercises
     path('parcourses_all/', all_parcourses, name='all_parcourses'),
@@ -262,7 +262,7 @@ urlpatterns = [
 
     path('export_notes_after_evaluation', export_notes_after_evaluation, name='export_notes_after_evaluation'),
     path('export_skills_after_evaluation', export_skills_after_evaluation, name='export_skills_after_evaluation'),
-
+    path('export_results_after_evaluation', export_results_after_evaluation, name='export_results_after_evaluation'),
 
     path('ajax/chargethemes_parcours', ajax_chargethemes_parcours, name='ajax_chargethemes_parcours'),
     path('ajax_all_parcourses', ajax_all_parcourses, name='ajax_all_parcourses'),     

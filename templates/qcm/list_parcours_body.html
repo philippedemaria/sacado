@@ -94,7 +94,7 @@
 
                             <a  href="{% url 'result_parcours_knowledge' parcours.id  %}" class="btn btn-subsacado alignLeft" ><i class="fa fa-trophy"></i> Suivi par savoir faire </a>   
                             <a  href="{% url 'result_parcours' parcours.id  %}"  class="btn btn-subsacado alignLeft" ><i class="fa fa-trophy"></i> Suivi par exercice </a>
-                            <a href="{% url 'stat_parcours' parcours.id %}" class="btn btn-subsacado alignLeft"><i class="fa fa-bar-chart"></i> 
+                            <a href="{% url 'stat_evaluation' parcours.id %}" class="btn btn-subsacado alignLeft"><i class="fa fa-bar-chart"></i> 
                                 {% if parcours.is_evaluation %} Résultats{% else  %}Statistiques {% endif %}
                             </a>
 

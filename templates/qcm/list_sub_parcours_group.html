@@ -270,11 +270,9 @@
                             </a> 
                         </div>
                         <div class="col-lg-4 col-xs-4">
-                        {% if parcours.is_evaluation %}  
-                            <a  href="{% url 'stat_evaluation' parcours.id %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon">Résultats</span></a>  
-                        {% else %}
-                            <a  href="{% url 'stat_parcours' parcours.id %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon">Stats</span></a>  
-                        {% endif %}  
+                        
+                            <a  href="{% url 'stat_evaluation' parcours.id %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon">{% if parcours.is_evaluation %}  Résultats{% else %}Stats{% endif %} </span></a>  
+                        
                         </div>
                         {% endif %}                          
                         <div class="col-lg-4 col-xs-4">

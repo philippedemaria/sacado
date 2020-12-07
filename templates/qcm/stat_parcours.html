@@ -52,18 +52,18 @@ body{
     <div class="content_list"> 
         <div class="row">
             <div class="col-sm-12 col-md-12">
-            {% if parcours.is_evaluation %}
+ 
                 
 
                 <table  class="table table-bordered table-hover standard_tab_sort">
                     <thead>
                     <tr>
                         <th>Nom et prénom</th>
-                        <th style="text-align: center;">Ex. remis</th>
+                        <th style="text-align: center;">Exe. traités</th>
                         <th style="text-align: center;">Savoir faire</th>
                         <th style="text-align: center;">Compétences</th>
                         <th style="text-align: center;">Durée</th> 
-                        <th style="text-align: center;">Score en détail </th>
+                        <th style="text-align: center;">Score par exercice </th>
                         <th style="text-align: center;">Note </th>
                     </tr>
                     </thead>
@@ -104,7 +104,8 @@ body{
                                 <td style="text-align: center;{% if stat.test_duration %}color:#FF0000; font-weight:600{% endif %}">{{ stat.duration  }}</td>
                                 <td style="text-align: center;">
                                     {% for s in stat.score_tab  %} {{ s }}{% if not forloop.last %} + {% endif %}{% endfor %}
-                                    {% for s in stat.tab_custom  %} {{ s }}{% if not forloop.last %} + {% endif %}{% endfor %}
+                                    {% for s in stat.tab_custom  %} {{ s }}{% if not forloop.last %} + {% endif %}{% endfor %}<br/> 
+                                    {% if stat.percent  %} Score moyen : {{ stat.average_score }} , score médian : {{ stat.median }} {% endif %}
                                 </td>
                                 <td style="text-align: right;">
                                     {% if stat.total_numexo  %} <b>{{ stat.good_answer  }}</b> / {{ stat.total_numexo  }}<br />{% endif %}
@@ -115,58 +116,7 @@ body{
                         {% endfor %}
                     </tbody>
                 </table>
-            {% else %}
-                <table  class="table table-bordered table-hover standard_tab_sort">
-                    <thead>
-                    <tr>
-                        <th>Nom et prénom</th>
-                        <th style="text-align: center;">Exercices faits</th>
-                        <th style="text-align: center;">Durée totale</th>
-                        <th style="text-align: center;">Score moyen </th>
-                        <th style="text-align: center;">Score médian</th>
-                        <th style="text-align: center;">Dernière connexion</th>
-                    </tr>
-                    </thead>
-                    <tbody>   
-                        {% for stat in stats|dictsort:"name.user.last_name"  %}
-                            <tr class="no_padding">
-                                <td style="width:200px">
-                                    <form  action="" method="POST">{% csrf_token %} 
  
-
-                                        <a href="#" class="detail_student_exercise"  data-student_id="{{  stat.name.user.id }}"  data-parcours_id="{{ parcours.id }}"  >   
-                                        {{ stat.name |truncatechars:"30" }}
-                                        </a> 
-
-
-
-                                    <div class="pull-right"> 
-                                        <a href="#" data-toggle='modal'
-                                            data-target='#writer' 
-                                            class="send_message"   data-student_name="{{ stat.name.user }}"
-                                            data-student_email="{{ stat.name.user.email }}">  
-                                            {% if stat.name.user.email  %}                                      
-                                            <i class="fa fa-inbox" style="font-size:14px"></i> 
-                                            {% else %}
-                                            <span class="icon-stack">
-                                              <i class="icon-inbox"></i>
-                                              <i class="icon-ban-circle icon-stack-base text-error"></i>
-                                            </span>
-                                            {% endif %}
-                                        </a>                                         
-                                    </div>  
-                                    </form>    
-                                </td>
-                                <td style="text-align: center;">{{ stat.nb_exo  }}</td>
-                                <td style="text-align: center;">{{ stat.duration  }}</td>
-                                <td style="text-align: center;">{{ stat.average_score  }}</td>
-                                <td style="text-align: center;">{{ stat.median }}</td>
-                                <td style="text-align: center;">{{ stat.last_connexion|date:"Y m d - H:i"  }} </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% endif %}
 
             </div>
         </div>
@@ -362,5 +312,62 @@ body{
     </div>
 
 
+    <div class="modal fade" id="export_results" tabindex="-1" role="dialog" aria-labelledby="export_results" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>                
+                    <h5 class="modal-title" >Exporter les résultats au format pdf</h5>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'export_results_after_evaluation' %}" method="post" > 
+                        {% csrf_token %}<input type="hidden" name="parcours_id" value="{{ parcours.id }}" id="parcours_id"/>
 
+
+                        <table class="table">
+                            <tr>
+                                <td>Exporter les savoir faire ? </td>
+                                <td><input type="checkbox" name="knowledge"  data-toggle="toggle"  data-onstyle="primary"  data-offstyle="default" data-on="Oui" data-off="Non"/></td>
+                            </tr>
+
+                            <tr>
+                                <td>Exporter les compétences ? </td>
+                                <td><input type="checkbox" name="skill"  data-toggle="toggle"  data-onstyle="primary"  data-offstyle="default" data-on="Oui" data-off="Non"/></td>
+                            </tr>
+                            <tr >
+                                <td>Exporter les notes ? </td>
+                                <td><input type="checkbox" name="mark" id="mark_shower"  data-toggle="toggle"  data-onstyle="primary"  data-offstyle="default" data-on="Oui" data-off="Non"/></td>
+                            </tr>
+                            <tr class="mark_div_in_score">
+                                <td>Noter les exercices SACADO sur (Mettre 0 si aucun)</td>
+                                <td><input type="number" name="exo_sacado" min="0" value="20" /></td>
+                            </tr>
+                            <tr class="mark_div_in_score">
+                                <td>Ramener les notes sur </td>
+                                <td><input type="number" name="mark_on" min="0" value="20" /></td>
+                            </tr>
+                            <tr>
+                                <td>Signature parent ?</td>
+                                <td><input type="checkbox" name="signature" data-toggle="toggle"  data-onstyle="primary"  data-offstyle="default" data-on="Oui" data-off="Non"/></td>
+                            </tr>                            
+                        </table>
+                        <div class="row">
+                            <div class="col-sm-12">  
+                                <div id="mini_loader" class="text-success">Exportation en cours. Action qui peut prendre environ 20s</div>
+                            </div>
+                        </div>   
+                        <hr/>
+                        <div class="row">
+                            <div class="col-sm-12">  
+                                <button type="submit" class="btn btn-primary" id="mini_loader_shower" > Exporter </button>   
+                                <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
+                            </div>
+                        </div>     
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
