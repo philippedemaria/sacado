@@ -5158,6 +5158,8 @@ def export_results_after_evaluation(request):
         elements.append(logo_tab_tab)
         elements.append(Spacer(0, 0.2*inch))
 
+        total_numexo = s.students_relationship.filter(parcours = parcours).count() + s.students_customexercises.filter(parcourses = parcours).count()
+
         ################################################################
         #  Geston des résultats
         ################################################################
@@ -5175,13 +5177,12 @@ def export_results_after_evaluation(request):
         nb_exo_ce = s.student_custom_answer.filter(parcours = parcours ).count()
 
         nb_exo = len(studentanswer_tab) + nb_exo_w + nb_exo_ce
-        duration, score, total_numexo, good_answer = 0, 0, 0, 0
+        duration, score,  good_answer 0, 0, 0
         score_tab  = []
  
         for studentanswer in  student_tab : 
             duration += int(studentanswer.secondes)
             score += int(studentanswer.point)
-            total_numexo += int(studentanswer.numexo)
             good_answer += int(studentanswer.numexo*studentanswer.point/100)
             score_tab.append(studentanswer.point)
         
@@ -5193,7 +5194,6 @@ def export_results_after_evaluation(request):
                 duration = ""
             average_score = int(average_score)
             good_answer = int(good_answer)
-            total_numexo = int(total_numexo)
             last_connexion = studentanswer.date
             score = int(score)
             percent = math.ceil(int(good_answer)/int(total_numexo) * 100 )   
@@ -5365,7 +5365,7 @@ def export_results_after_evaluation(request):
                     paragraphsco = Paragraph( "Note globale : " + str(sco) + " / " +str(mark_on)  , normal )
                 else :
                     paragraphsco = Paragraph( "Note globale : NE"  , normal )
-                    
+
             except :  
                 paragraphsco = Paragraph( "Note globale : NE"  , normal )
 
