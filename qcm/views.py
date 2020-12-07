@@ -5177,7 +5177,7 @@ def export_results_after_evaluation(request):
         nb_exo_ce = s.student_custom_answer.filter(parcours = parcours ).count()
 
         nb_exo = len(studentanswer_tab) + nb_exo_w + nb_exo_ce
-        duration, score,  good_answer 0, 0, 0
+        duration, score,  good_answer = 0, 0, 0
         score_tab  = []
  
         for studentanswer in  student_tab : 
