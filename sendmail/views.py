@@ -179,7 +179,18 @@ def update_communication(request,id): # update
 			new_f = form.save(commit=False)
 			new_f.teacher = request.user
 			new_f.save()
+
+
+			users = User.objects.filter(user_type=2)
+			rcv = []
+			for u in users :
+				if u.email :
+					rcv.append(u.email)
+			send_mail(new_f.subject, cleanhtml(unescape_html(new_f.texte)), "info@sacado.xyz", rcv )
+
+
 			return redirect('communications')
+
 		else :
 			print(form.errors)
 
