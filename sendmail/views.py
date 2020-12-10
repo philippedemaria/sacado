@@ -163,18 +163,10 @@ def create_communication(request): # id du concours
 			except :
 				pass
 
-
 		else :
 			print(form.errors)
  
-
-
 	return redirect('communications')
-
-
-
-
-
 
 
 def update_communication(request,id): # update
