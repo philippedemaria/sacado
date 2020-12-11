@@ -73,5 +73,5 @@ def menu(request):
             'contributeurs': contributeurs,
             'nb_school' : nb_school,
             'schools' : schools,
-            'sacado_asso' : sacado_asso , 
+  
         }
