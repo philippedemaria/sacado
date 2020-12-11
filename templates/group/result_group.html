@@ -41,7 +41,20 @@
     </li>
 
 
-    <li><a href="{%  url 'result_group_skill'  group.id %}"  class="no_button {% if  'result_group_skill' in request.path %} active {% endif %}" > Compétences </a></li>
+
+    {% if sacado_asso %}
+        <li><a href="{%  url 'result_group_skill'  group.id %}"  class="no_button {% if  'result_group_skill' in request.path %} active {% endif %}" > Compétences </a></li>
+    {% else %}
+    <li><a href="#"  class="no_button no_sacado_asso" title="version établissement requise" > Compétences</a>
+
+      </li>
+    {% endif %}
+
+
+
+
+
+
     <li class="dropdown">
       <a href="#" class="dropdown-toggle no_button {% if 'result_group_exercise' in request.path or 'group_theme_exercise' in request.path %} active {% endif %}" data-toggle="dropdown"> Exercices  <b class="caret"></b></a> 
         <ul class="dropdown-menu">
@@ -93,10 +106,10 @@
     </li>
 
 
-    {% if request.user.school %}
+    {% if sacado_asso %}  
     <a href="{% url 'print_statistiques' group.id 0 %}"  class="btn btn-xs btn-default" id="print_stats" ><span id="loading_stats"></span> Statistiques <img src="{% static 'img/pdf.png' %}" width="15px"/></a>
     {% else %}
-    <a href="#"  class="btn btn-xs btn-default" style="cursor:not-allowed" title="Vous n'avez pas l'accès à cette option" > Statistiques <img src="{% static 'img/pdf.png' %}" width="15px"/></a>
+    <a href="#"  class="btn btn-xs btn-default" style="cursor:not-allowed" title="version établissement requise" > Statistiques <img src="{% static 'img/pdf.png' %}" width="15px"/></a>
     {% endif %}
 
 {% endblock %}

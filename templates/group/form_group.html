@@ -112,7 +112,7 @@
             </div>
 
 
-            {% if not teacher.user.school %}
+            {% if not sacado_asso %}
             <hr>
             <div class="row">
                 <div class="col-sm-12 col-md-12">
@@ -124,7 +124,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="row recording" id="teacher_record">
                 <div class="col-sm-12 col-md-12"><hr>
                     <div class="form-group">
@@ -135,7 +134,6 @@
                     </div>
                 </div>
             </div> 
-
             <div class="row recording" id="auto_record">
                 <div class="col-sm-12 col-md-12"><hr>
                     <div class="form-group">
@@ -153,10 +151,7 @@
                     </div>
                 </div>
             </div> 
-
-
                 {% if group %}
-
                     <div class="row collapse" id="collapsed"  >
                         <div class="col-sm-12 col-md-12" style="overflow-y:auto; height: 500px;margin-bottom: 20px">
                             {% if not group.lock %}                              
@@ -197,7 +192,6 @@
                         </div>
                     </div> 
                     <hr> 
-
                 {% else %}
                     <div class="row">
                         <div class="col-sm-12 col-md-12">

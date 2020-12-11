@@ -39,15 +39,18 @@
          
                 {% if parcours %}
                     {% if parcours.is_folder %}
-                    <li> <a href="{% url 'create_parcours' parcours.id %}"  >  + Nouveau Parcours</a> </li> 
+                    <li> <a href="{% url 'create_parcours' parcours.id %}"  >  Nouveau Parcours</a> </li> 
                     {% else %}
-                    <li> <a href="{% url 'create_parcours' 0 %}"  >  + Nouveau Parcours</a> </li>
+                    <li> <a href="{% url 'create_parcours' 0 %}"  >   Nouveau Parcours</a> </li>
                     {% endif  %}
                 {% else %}
-                <li> <a href="{% url 'create_parcours' 0 %}"  >  + Nouveau Parcours</a> </li>
+                <li> <a href="{% url 'create_parcours' 0 %}"  >  Nouveau Parcours</a> </li>
                 {% endif  %}
 
-                <li> <a href="{% url 'all_parcourses' %}"   > Parcours mutualisés</a></li>         
+                <li> {% if sacado_asso %} <a href="{% url 'all_parcourses' %}"   > Parcours mutualisés</a> {% else %}<a href="#"  class="no_sacado_asso" > Parcours mutualisés</a> {% endif %} </li> 
+
+
+
                 <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   > Parcours par défaut</a></li>
 
 
@@ -319,7 +322,14 @@
                     
 
                         <ol><i class="fa fa-hand-o-right"></i> Les parcours par défaut (Recommandé pour une première utilisation) <p> Ces parcours contiennent tous les exercices  de  {{ group.level}} proposés par <span class="sacado">sacado</span>, classés par le thème. Vous pouvez les utiliser directement, leur ajouter, leur supprimer des exercices.<br>Choisir le parcours souhaité <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   ><i class="fa fa-caret-right"></i>  Parcours par défaut</a><p></ol>
-                        <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés <p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier un fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur <a href="{% url 'all_parcourses' %}"   ><i class="fa fa-caret-right"></i> Parcours mutualisés</a></p></ol>
+                        <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés <p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier un fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur 
+
+                            {% if sacado_asso %}
+                                <a href="{% url 'all_parcourses' %}"   ><i class="fa fa-caret-right"></i>  Parcours mutualisés</a>
+                            {% else %}
+                                <a href="#"  class="no_sacado_asso" > <i class="fa fa-caret-right"></i> Parcours mutualisés</a>
+                            {% endif %}
+                        </p></ol>
                         <ol><i class="fa fa-hand-o-right"></i>  Les parcours personnalisés <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br>  Créer votre parcours personnalisé dans un premier temps puis sélectionner les exercices de votre choix. <a href="{% url 'create_parcours' 0 %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a></p></ol>
 
 

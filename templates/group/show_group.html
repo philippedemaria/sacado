@@ -65,7 +65,7 @@
                     <tbody>
                         <form action="" method="POST">   
                         {% for student in group.students.all|dictsort:"user.last_name"  %}
-                            {% if not teacher.user.school %}         
+                            {% if not sacado_asso %}         
                                 {% csrf_token %}        
                                     <tr>
                                         <td><input  type="text" 

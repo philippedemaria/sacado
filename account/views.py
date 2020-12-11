@@ -914,6 +914,8 @@ def register_teacher_from_admin(request):
             u_form = user_form.save(commit=False)
             u_form.password = make_password("sacado2020")
             u_form.user_type = User.TEACHER
+            u_form.is_extra = 1
+            u_form.time_zone = request.user.time_zone
             u_form.school = request.user.school
             u_form.username = get_username(u_form.last_name, u_form.first_name)
             u_form.save()

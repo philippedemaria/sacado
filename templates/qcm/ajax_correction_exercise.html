@@ -135,14 +135,14 @@
                <!--             <a href="#" class="btn btn-primary save_comment" data-saver=1  data-student_id="{{student.user.id}}"  data-relationship_id="{{relationship.id}}" >Enregistrer et conserver</a> -->
 
 
-                        {% if w_a and  teacher.user.school %}  
+                        {% if w_a and  sacado_asso %}  
                         <a href="#" data-toggle='modal' data-target='#audio_comment' class="btn btn-primary" ><i class="fa fa-microphone"></i> Commentaire Audio </a>
-                        {% elif teacher.user.school %}  
+                        {% elif sacado_asso %}  
                         <a href="#" data-toggle='modal' data-target='#audio_comment' class="btn btn-primary" ><i class="fa fa-microphone"></i> Commentaire Audio </a>
                         {% else %}    
                         <a href="#" class="btn btn-primary" ><i class="fa fa-microphone"></i> Commentaire Audio 
                                 <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                    <div class="helper_tip_text" >Version établissement.</div>
+                                    <div class="helper_tip_text" >Version établissement requise.</div>
                                 </span>
 
                         </a>

@@ -50,13 +50,16 @@
                          <a href="{% url 'create_parcours' 0 %}" title="Parcours vide à remplir par des exercices de votre choix"><i class="fa fa-caret-right"></i> Nouveau parcours <span style="font-size: 10px">(Recommandé)</span></a>
                     </td>
                 </tr>
-                {% if teacher.user.school %}
+                
                 <tr>
-                    <td>
+                    <td>{% if sacado_asso %}
                         <a href="{% url 'all_parcourses' %}" title="Parcours déjà existants dans la base de données, créés par des collègues de votre établissement."><i class="fa fa-caret-right"></i> Parcours mutualisés</a>
+                        {% else  %}
+                        <a href="#" class="no_sacado_asso" title="Version établissement requise."><i class="fa fa-caret-right"></i> Parcours mutualisés</a>
+                        {% endif  %}
                     </td>
                 </tr>
-                {% endif  %}
+                
                 <tr>
                     <td>
                         <a href="#" data-toggle="modal" data-target="#parcours_default_modal" title="Parcours contenant tous les exercices de sacado sur le thème choisi."  > <i class="fa fa-caret-right"></i> Parcours par défaut</a>

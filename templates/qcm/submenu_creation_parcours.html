@@ -1,4 +1,4 @@
-<li> <a href="{% url 'all_parcourses' %}" class="btn btn-new"  > Parcours mutualisés</a></li>
+<li> {% if sacado_asso %} <a href="{% url 'all_parcourses' %}"   > Parcours mutualisés</a> {% else %}<a href="#"  class="no_sacado_asso" > Parcours mutualisés</a> {% endif %} </li>
 
 
 {% if parcours  %}

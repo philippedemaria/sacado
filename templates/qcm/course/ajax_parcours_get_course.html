@@ -1,4 +1,4 @@
-    {% if  not  teacher.user.school %}
+    {% if  not  sacado_asso %}
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <div class="alert alert-danger">
@@ -25,7 +25,7 @@
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <div class="form-group">
-                {% if teacher.user.school %}
+                {% if sacado_asso %}
                 <a href="#" class="btn btn-primary clone_to" data-course_id = '{{ course.id }}' data-all_parcours=0  data-dismiss="modal" aria-label="Close" >Cloner ce cours dans mes parcours</a>
 
                 <a href="#" class="btn btn-primary clone_to" data-course_id = '{{ course.id }}' data-all_parcours=1  data-dismiss="modal" aria-label="Close" >Cloner tous les cours de ce parcours dans mes parcours</a>

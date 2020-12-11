@@ -1,25 +1,34 @@
 {% load static %}
 
+ 
 
-
-
-<li><a href="{%  url 'result_parcours_skill'  parcours.id %}"  class="no_button {% if  'result_group_skill' or 'result_parcours_skill' in request.path %} active {% endif %}" > Compétences </a></li>
-
+{% if sacado_asso %}
+<li><a href="{%  url 'result_parcours_skill'  parcours.id %}"  class="no_button {% if  'result_parcours_skill' in request.path %} active {% endif %}" > Compétences </a></li>
+{% else %}
+<li ><a href="#" class="no_button no_sacado_asso"  title="version établissement requise"> Compétences</a></li>
+{% endif %}
 
 
 <li class="dropdown">
         <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if 'parcours_result/' in request.path or  'parcours_result_knowledge/' in request.path  or 'result_parcours_exercise_students/' in request.path %} active {% endif %}"> Suivis d'acquisition <b class="caret"></b> </a>
 
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-        <li {% if 'parcours_result/' in request.path %} class="active" {% endif %}><a href="{% url 'result_parcours' parcours.id  %}"  class="no_button" ><i class="fa fa-mortar-board fa-fw"></i> Lire le suivi par élève </a> </li> 
-        <li {% if 'parcours_result_knowledge/' in request.path %} class="active" {% endif %}><a href="{% url 'result_parcours_knowledge' parcours.id %}"  class="no_button" ><i class="fa fa-trophy fa-fw"></i> Lire le suivi par savoir faire </a> </li>             
-        
 
+        <li {% if 'parcours_result_knowledge/' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'result_parcours_knowledge' parcours.id %}"  class="no_button" >
+                <i class="fa fa-trophy fa-fw"></i> Lire le suivi par savoir faire 
+            </a>
+        </li> 
+
+ 
+
+        <li {% if 'parcours_result/' in request.path %} class="active" {% endif %}><a href="{% url 'result_parcours' parcours.id  %}"  class="no_button" ><i class="fa fa-mortar-board fa-fw"></i> Lire le suivi par élève </a> </li>    
         {% if not parcours.is_folder %}
-        {% if group_id %}
-        <li {% if 'result_parcours_exercise_students/' in request.path %} class="active" {% endif %}><a href="{% url 'result_parcours_exercise_students' parcours.id    %}"  class="no_button" ><i class="fa fa-tasks fa-fw"></i> Lire le suivi par exercice </a> </li>
+            {% if group_id %}
+                <li {% if 'result_parcours_exercise_students/' in request.path %} class="active" {% endif %}><a href="{% url 'result_parcours_exercise_students' parcours.id    %}"  class="no_button" ><i class="fa fa-tasks fa-fw"></i> Lire le suivi par exercice </a> </li>
+            {% endif %}
         {% endif %}
-        {% endif %}
+
     </ul>
 </li> 
 
@@ -60,16 +69,27 @@
         {% if parcours.is_evaluation %}
         <li {% if 'parcours_peuplate_evaluation/' in request.path %} class="active" {% endif %}><a href="{% url 'peuplate_parcours_evaluation' parcours.id   %}"><i class="fa fa-laptop fa-fw"></i> Sélectionner les exercices</a>   </li>
 
-        <li {% if 'parcours_new_exercice_evaluation/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'parcours_create_custom_exercise' parcours.id 0  %}" ><i class="fa fa-plus fa-fw"></i> Ajouter un exercice personnalisé</a> 
-        </li> 
+            {% if sacado_asso %}
+            <li {% if 'parcours_new_exercice_evaluation/' in request.path %} class="active" {% endif %}>
+                <a href="{% url 'parcours_create_custom_exercise' parcours.id 0  %}" ><i class="fa fa-plus fa-fw"></i> Ajouter un exercice personnalisé</a> 
+            </li> 
+            {% else %}
+            <li>
+                <a href="#" class="no_sacado_asso" ><i class="fa fa-plus fa-fw"></i> Ajouter un exercice personnalisé</a> 
+            </li> 
+            {% endif %}
 
         {% else %}         
         <li {% if 'parcours_peuplate/' in request.path %} class="active" {% endif %}><a href="{% url 'peuplate_parcours' parcours.id   %}"><i class="fa fa-laptop fa-fw"></i> Sélectionner les exercices</a>   </li>
-
-        <li {% if 'parcours_new_exercice/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'parcours_create_custom_exercise' parcours.id  1 %}" ><i class="fa fa-plus fa-fw"></i> Ajouter un exercice personnalisé</a> 
-        </li> 
+            {% if sacado_asso %}
+                <li {% if 'parcours_new_exercice/' in request.path %} class="active" {% endif %}>
+                    <a href="{% url 'parcours_create_custom_exercise' parcours.id  1 %}" ><i class="fa fa-plus fa-fw"></i> Ajouter un exercice personnalisé</a> 
+                </li> 
+            {% else %}
+                <li>
+                    <a href="#" class="no_sacado_asso" ><i class="fa fa-plus fa-fw"></i> Ajouter un exercice personnalisé</a> 
+                </li> 
+            {% endif %}
 
 
         {% endif %}
@@ -77,7 +97,10 @@
         <li><a href="#"  class="no_button" id="handler_order_exercises" ><img src="{% static 'img/order_handler.png' %}" style="margin-right:10px; margin-left:3px"/> Organiser les exercices </a> </li>
 
         {% if not parcours.is_evaluation %}
-        <li {% if 'show_course/' in request.path %} class="active" {% endif %}><a href="{% url 'show_course' 0 parcours.id   %}"><i class="fa fa-desktop fa-fw"></i> Voir les cours</a>   </li>
+            {% if sacado_asso %}
+            <li {% if 'show_course/' in request.path %} class="active" {% endif %}><a href="{% url 'show_course' 0 parcours.id   %}"><i class="fa fa-desktop fa-fw"></i> Voir les cours</a>   </li>
+            {% endif %} 
+
         <li {% if 'parcours_tasks_and_publishes/' in request.path %} class="active" {% endif %}><a href="{% url 'parcours_tasks_and_publishes' parcours.id %}" ><i class="fa fa-indent fa-fw"></i> Gérer les sections</a></li>  
         {% endif %} 
 

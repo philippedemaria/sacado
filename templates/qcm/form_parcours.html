@@ -192,7 +192,7 @@
                 <div class="col-sm-6 col-md-6  col-lg-6">
 
                     <div class="form-group">
-                        {% if teacher.user.school %}
+                        {% if sacado_asso %}
                             {% if group %}
                          
                                 {% if teacher.user.id != group.teacher.user.id %}
@@ -215,12 +215,12 @@
                         {% endif %}
                     </div>
 
-
+                    
                     <div class="form-group">
                         {{ form.vignette.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i> <span style="font-size:12px">(facultatif)</span>
                                     <div class="helper_tip_text" >format recommandé: l:450px h:300px <br>La vignette se superpose à la couleur du parcours qui ne sera pas visible selon la taille de l'image. </div>
                                 </span> 
-                    {% if  teacher.user.school %} 
+                    {% if sacado_asso %}
                         {{ form.vignette|add_class:"btn btn-default" }} 
                         {{ form.vignette.errors }}
                     {% else %}  
@@ -229,6 +229,9 @@
                     </div>
                     {% endif %}  
                     </div>
+
+
+
 
                     {% if not parcours.is_folder %} 
                     <div class="form-group"> 

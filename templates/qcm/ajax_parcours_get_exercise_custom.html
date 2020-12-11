@@ -1,4 +1,4 @@
-    {% if  not  teacher.user.school %}
+    {% if  not  sacado_asso %}
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <div class="alert alert-danger">
@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-sm-12 col-md-12">
 
-            {% if teacher.user.school %}
+            {% if sacado_asso %}
             <a href="#" class="btn btn-primary clone_to" data-exercise_id = '{{ customexercise.id }}' data-cloner = 0   data-dismiss="modal" aria-label="Close"  >Cloner cet exercice dans mes exercices</a>
             {% else %}
             <span class="btn btn-primary">Cloner cet exercice dans mes exercices</span>
@@ -36,7 +36,7 @@
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <div class="form-group">
-                {% if teacher.user.school %}
+                {% if sacado_asso %}
                 <a href="#" class="btn btn-primary clone_to" data-exercise_id = '{{ customexercise.id }}' data-cloner = 1  data-dismiss="modal" aria-label="Close" >Cloner cet exercice dans mes parcours</a>
                 {% else %}
                 <span class="btn btn-primary">Cloner cet exercice dans mes parcours</span>

@@ -1967,6 +1967,8 @@ a:focus {
   min-height: 50px;
   border-radius: 0;
 }
+ 
+
 
 .navbar-right > li > a.no_button {
     padding-top: 15px;
@@ -1987,6 +1989,14 @@ a:focus {
 }
 
  
+
+
+a.no_sacado_asso{
+    color : #CCC!important;
+    cursor: not-allowed;
+}
+
+
 
 .layout-top-nav .main-header .navbar {
   margin-left: 0;

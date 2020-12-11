@@ -11,7 +11,7 @@
 
 
 
-<li class='dropdown {% if '/account' in request.path  %}active{% endif %}'>
+<li class='dropdown {% if '/account' in request.path and not 'admin' in    request.path %}active{% endif %}'>
     <a href="#" class="main"  id="account">
         <i class="fa fa-user fa-2x"></i> 
         <div class="captionmenu">Compte</div>
@@ -64,7 +64,7 @@
 
 {% if request.user.is_superuser %}
 
-<li  class='dropdown  {% if '/admin' in request.path  or '/school' in request.path  %} active{% endif %}'>
+<li  class='dropdown  {% if 'admin' in request.path  or 'school' in request.path  %} active{% endif %}'>
     <a href="#"   id="admin" class="main">
         <i class="fa fa-cloud fa-2x"></i> 
         <div class="captionmenu">Admin</div>
@@ -74,7 +74,7 @@
 
 
 {% if request.user.is_manager and not request.user.is_superuser  %} <!-- manager dans un établissement -->
-<li  class='dropdown  {% if '/admin' in request.path or '/school' in request.path  %} active{% endif %}'>
+<li  class='dropdown  {% if 'admin' in request.path or '/school' in request.path %} active{% endif %}'>
     <a href="{% url 'admin_tdb' %}" class="main" >
         <i class="fa fa-cloud fa-2x"></i> 
         <div class="captionmenu">Admin</div>

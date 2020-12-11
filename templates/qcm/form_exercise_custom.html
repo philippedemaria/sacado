@@ -169,7 +169,7 @@ ul#id_skills li{
                             <div class="col-sm-12 col-md-8">
                                 <div class="form-group">
                                    Mutualisé ?  
-                                   {% if not  teacher.user.school %}
+                                   {% if not  sacado_asso %}
                                     <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                         <div class="helper_tip_text">L'exercice ne peut pas être mutualisé. Pour accéder à cette fonctionnalité, il faut utiliser la version établissement.</div>
                                     </span>
@@ -178,10 +178,10 @@ ul#id_skills li{
                             </div>
                             <div class="col-sm-12 col-md-4">
                                 <div class="form-group">
-                                    {% if   teacher.user.school %}
-                                    {{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                    {% if  sacado_asso %}
+                                        {{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                                     {% else %}
-                                    {{ form.is_publish |attr:"disabled" |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                        {{ form.is_publish |attr:"disabled" |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                                     {% endif %}
                                     {{ form.is_publish.errors }}
                                 </div>

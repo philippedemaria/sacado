@@ -149,9 +149,9 @@
                         
 <!--                         <a href="#" class="btn btn-primary save_comment margin_space5" data-saver=1 data-parcours_id="{{ parcours_id}}"   data-student_id="{{student.user.id}}"  data-customexercise_id="{{customexercise.id}}" >Enregistrer et conserver</a> -->
 
-                        {% if c_e and  teacher.user.school %}  
+                        {% if c_e and  sacado_asso %}  
                         <a href="#" data-toggle='modal' data-target='#audio_comment' class="btn btn-primary margin_space5" ><i class="fa fa-microphone"></i> Commentaire Audio </a>
-                        {% elif teacher.user.school %}  
+                        {% elif sacado_asso %}  
                         <a href="#" data-toggle='modal' data-target='#audio_comment' class="btn btn-primary margin_space5" ><i class="fa fa-microphone"></i> Commentaire Audio </a>
                         {% else %}   
                         <a href="#" class="btn btn-primary margin_space5" ><i class="fa fa-microphone"></i> Commentaire Audio 

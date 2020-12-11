@@ -10,7 +10,7 @@ from school.models import School
 def menu(request):
 
     if request.user.is_authenticated:
-
+        sacado_asso = False
         if request.user.time_zone:
             time_zome = request.user.time_zone
             timezone.activate(pytz.timezone(time_zome))
@@ -25,7 +25,11 @@ def menu(request):
             nb_not = nbs + nbe
             levels = Level.objects.all()
             nb_demand = Demand.objects.filter(done=0).count()
-            return {'today': today, 'nb_not': nb_not, 'levels': levels,  'nb_demand' : nb_demand  }
+
+            if teacher.user.is_extra :
+                sacado_asso = True
+
+            return {'today': today, 'nb_not': nb_not, 'levels': levels,  'nb_demand' : nb_demand , 'sacado_asso' : sacado_asso ,  }
 
         elif request.user.is_student:
             student = Student.objects.get(user=request.user)
@@ -38,6 +42,7 @@ def menu(request):
                 'parcours': parcours,
                 'last_exercises_done': last_exercises_done,
                 'groups': groups,
+                'sacado_asso' : sacado_asso , 
             }
 
         elif request.user.is_parent:
@@ -48,6 +53,7 @@ def menu(request):
             return {
                 'this_user': this_user,
                 'last_exercises_done': last_exercises_done,
+                 'sacado_asso' : sacado_asso , 
             }
 
 
@@ -67,4 +73,5 @@ def menu(request):
             'contributeurs': contributeurs,
             'nb_school' : nb_school,
             'schools' : schools,
+            'sacado_asso' : sacado_asso , 
         }

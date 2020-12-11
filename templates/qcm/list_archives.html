@@ -14,7 +14,7 @@
  
 
 {% block page_title %}
-    <i class="fa fa-th"></i> Mes parcours archivés  
+    <i class="fa fa-th"></i> Mes parcours archivés          
 {% endblock %}
 
 {% block page_menu_right %}
@@ -26,8 +26,18 @@
         <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
      
      
-            <li> <a href="{% url 'create_parcours' 0 %}"  >  + Nouveau Parcours</a> </li>  
-            <li> <a href="{% url 'all_parcourses' %}"   > Parcours mutualisés</a></li>
+            <li> <a href="{% url 'create_parcours' 0 %}"  > Nouveau Parcours</a> </li>  
+
+
+            <li>  
+                {% if sacado_asso %}
+                    <a href="{% url 'all_parcourses' %}"   > Parcours mutualisés</a>
+                {% else %}
+                    <a href="#"  class="no_sacado_asso" > Parcours mutualisés</a>
+                {% endif %}
+            </li>
+
+
             <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   > Parcours par défaut</a></li>
 
 
