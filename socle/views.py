@@ -309,3 +309,9 @@ def delete_waiting(request, id):
     waiting = Waiting.objects.get(id=id)
     waiting.delete()
     return redirect('waitings')
+
+
+
+ 
+def ajax_chargewaitings(request):
+    pass
