@@ -13,6 +13,7 @@
 
     <script>
         require(['script/ajax-group']);
+        require(['script/ajax-group-complement']);
     </script>
  
  
@@ -92,13 +93,18 @@
                 </div>
             </div> 
             <div class="row"> 
-                 <div class="col-sm-12 col-md-2">
+
+                {% if sacado_asso %}
+                <div class="col-sm-12 col-md-2">
                        <label>Suivi parent ?</label> <br>
                         {{ form.suiviparent  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                 </div>
                  <div class="col-sm-12 col-md-4" style="font-size: 10px"><br>
                     Si oui, le suivi par les parents est disponible via un code unique et secret sur le tableau de bord élève. 
                 </div>
+                {% endif %}
+
+
                 {% if group %}
                  <div class="col-sm-12 col-md-2">
                        <label>Verrouiller ?</label> <br>
@@ -108,7 +114,6 @@
                     Interdit d'inscrire de nouveaux élèves et ne permet plus l'inscription par lien de connexion. 
                 </div>
                 {% endif %}
-
             </div>
 
 
@@ -118,7 +123,7 @@
                 <div class="col-sm-12 col-md-12">
                     <div class="form-group"><h5><i class="fa fa-users"></i> Inscription des élèves</h5>
                          <ul>
-                            <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_now" /> J'ai la liste de mes élèves et je veux les inscrire maintenant.<br> <small><b>Conseil</b> : Créez-vous un compte élève maintenant pour avoir les vues élève. Utiliser le cadre ci-dessous.</small></label></li>
+                            <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_now" /> J'ai la liste de mes élèves et je veux les inscrire maintenant.<br> <small><b>Conseil</b> : Créez-vous un compte élève maintenant pour avoir la vue élève.  </small></label></li>
                             <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_auto" /> Je veux inscrire mes élèves plus tard et générer un lien d'inscription. <small>Avec ce lien, les élèves pourront s'inscrire seuls. Ce lien est donné après la création du groupe.</small></label></li>
                         </ul>
                     </div>
@@ -137,7 +142,7 @@
             <div class="row recording" id="auto_record">
                 <div class="col-sm-12 col-md-12"><hr>
                     <div class="form-group">
-                        <label>Vous souhaitez générer un lien d'inscription. Ce lien sera de la forme https://sacado.xyz/group/code_du_groupe et sera accessible via les détails du groupe une fois celui-ci créé, depuis votre tableau de bord.
+                        <label>Vous souhaitez générer un lien d'inscription. Ce lien sera accessible depuis votre tableau de bord via les détails du groupe une fois celui-ci créé.
                         </label>
                     </div>
                 </div>

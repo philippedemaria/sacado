@@ -37,10 +37,18 @@
     </a>
 </li>
 <li  class='dropdown {% if 'evaluation' in request.path    %}active{% endif %}'>
+
+    {% if sacado_asso %}
     <a href="{% url 'evaluations' %}" class="main" >
         <i class="fa fa-th fa-trophy fa-2x" aria-hidden="true"></i> 
         <div class="captionmenu">Evaluations</div>
     </a>
+    {% else %}
+    <a href="#" class="main" style="cursor:not-allowed" title="Version établissement requise."  >
+        <i class="fa fa-th fa-trophy fa-2x" aria-hidden="true"></i> 
+        <div class="captionmenu">Evaluations</div>
+    </a>
+    {% endif %}
 </li>
 
  <li  class='dropdown {% if '/exercise' in request.path %}active{% endif %}'>
@@ -51,6 +59,8 @@
 </li> 
 
 <li  class='dropdown  {% if '/sendmail' in request.path %} active{% endif %}'>
+
+    {% if sacado_asso %}
     <a href="{% url 'emails' %}" class="main" >
         {% if nb_not > 0 %}
         <span class="label label-warning notifications">{{nb_not}}</span>
@@ -58,6 +68,13 @@
         <i class="fa fa-inbox fa-2x"></i> 
         <div class="captionmenu">Messages</div>
     </a>
+    {% else %}
+    <a href="#" class="main" style="cursor:not-allowed" title="Version établissement requise."  >
+        <i class="fa fa-inbox fa-2x" aria-hidden="true"></i> 
+        <div class="captionmenu">Messages</div>
+    </a>
+    {% endif %}
+
 </li>
   
 

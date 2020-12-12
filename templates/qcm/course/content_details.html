@@ -22,12 +22,14 @@
       <td>{{ form.is_task|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
       <td> {{ form.is_task.errors }}</td>
     </tr>
+
+    {% if sacado_asso %}
     <tr>
       <td>{{ form.is_paired.label_tag }}<br/>   </td>
       <td>{{ form.is_paired|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
       <td> {{ form.is_paired.errors }}</td>
     </tr>
-
+    {% endif %}
  
     <tr>
       <td>{{ form.notification.label_tag }} </td>

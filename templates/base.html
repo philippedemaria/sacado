@@ -42,12 +42,11 @@
 
     <div class="container">
         <div class="logo float-left">
-            <a class="navbar-brand sacado" href="{% url 'index' %}"><img src="{% static 'img/sacadoA1.png' %}"/> SACADO
+            <a class="navbar-brand sacado" href="#intro"><img src="{% static 'img/sacadoA1.png' %}"/> SACADO
             </a>
         </div>
         <nav class="main-nav float-right d-none d-lg-block">
             <ul>
-                <li class="active"><a href="#intro">Accueil</a></li>
                 <li><a href="#exercises">Exercices</a></li>
                 <li><a href="#teachers">Enseignants</a></li>
                 <li><a href="#students">Élèves</a></li>
@@ -62,7 +61,27 @@
  
 {% block body %}
 {% endblock %}
- 
+
+
+
+<div class="modal fade" id="sacadopopup" tabindex="-1" role="dialog" aria-labelledby="sacadopopup" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="width:1000px;font-size: 16px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 >Sacado - Version établissement</h3>                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                
+
+            </div>
+            <div class="modal-body">
+                 {% include 'sacado_asso.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 
 <div class="modal fade" id="sacadopopup" tabindex="-1" role="dialog" aria-labelledby="sacadopopup">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -94,7 +113,7 @@
         </div>
     </div>
 </div>
-
+-->
 
 
 <div class="modal fade" id="videosacado" tabindex="-1" role="dialog" aria-labelledby="videosacado">

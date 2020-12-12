@@ -71,13 +71,24 @@
 </div>
 </li>
 
-<li class="sans_puce"><a href="{% url 'create_evaluation' %}" class="btn btn-primary full_width">Créer une évaluation</a> </li> 
+<li class="sans_puce">
+{% if asso_sacado %}
+<a href="{% url 'create_evaluation' %}" class="btn btn-primary full_width">Créer une évaluation</a>
+{% else %}
+<a href="#" class="btn btn-default full_width"  style="cursor:not-allowed" title="Version établissement requise." >Créer une évaluation</a> 
+{% endif  %}
+</li> 
 
- 
+
 <hr>
-
+{% if   teacher.user.shool %}
 <li class="sans_puce"><a href="{% url 'create_demand' %}" class="btn btn-default full_width">Demander un exercice</a> </li> 
- 
+{% else %}
+<li class="sans_puce"><a href="#" data-toggle='modal' data-target='#sacado_etablissement'  class="btn btn-warning full_width">Version établissement</a> </li> 
+{% endif %}
+
+
+
 <hr>
 <p style="margin-top:-15px"><strong>Mes parcours favoris</strong></p>
 <div {% if parcourses|length > 8  %} class="div_accordion" {% endif %}>
