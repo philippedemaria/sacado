@@ -1,0 +1,72 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+{% block general_js %}
+    {% if waiting %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-action2.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-index.js' %}"></script>
+    {% endif %}
+{% endblock %}
+
+ 
+
+
+
+ 
+{% block page_title %}
+      Attendus
+{% endblock %}
+
+{% block page_menu_right %}
+ 
+    <li><a href="{% url 'create_waiting' %}" class="btn btn-new pull-right" ><i class="fa fa-plus"></i> Nouvel attendu</a></li>
+    <li><a href="{% url 'create_multi_waiting' %}" class="btn btn-new pull-right" ><i class="fa fa-plus"></i>  Création multiple</a></li>  
+{% endblock %}
+
+
+{% block body  %}   
+<section class="content_main"> 
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table  class="table table-bordered table-hover standard_tab_sort300" style="width:100%">
+                  <thead>
+                      <tr>
+                        <th>Nom</th>                      
+                        <th>Thème</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                        {% for waiting in waitings %}
+                        <tr> 
+                          <td>
+                              <a href="{% url 'update_waiting' waiting.id %}">{{ waiting.name }}   </a> 
+                              <small>
+                              <a href="{% url 'delete_waiting' waiting.id %}"  onclick="return TestDelete('ce savoir faire')"><i class='fa fa-trash pull-right'></i></a>
+                              </small>
+                          </td>
+                          <td >
+                              {{ waiting.theme.name }} 
+                          </td> 
+                        </tr>
+                        {% endfor %}
+                  </tbody>
+            </table>
+        </div>
+      </div>
+ 
+
+</section>
+
+ 
+
+
+
+{% endblock  %}   
+
+
+ 

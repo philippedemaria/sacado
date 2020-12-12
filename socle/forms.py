@@ -1,5 +1,5 @@
 from django import forms 
-from socle.models import   Theme, Knowledge, Level, Skill
+from socle.models import   Theme, Knowledge, Level, Skill, Waiting
  
 
  
@@ -16,6 +16,12 @@ class KnowledgeForm(forms.ModelForm):
 	class Meta:
  		model = Knowledge  
  		fields = '__all__'
+
+
+class WaitingForm(forms.ModelForm):
+	class Meta:
+ 		model = Waiting  
+ 		fields = '__all__' 
 
 
 
@@ -39,6 +45,15 @@ class LevelForm(forms.ModelForm):
 
 
 
+class MultiWaitingForm(forms.ModelForm):
+
+	name = forms.CharField( widget=forms.Textarea )
+	class Meta:
+ 		model = Waiting  
+ 		fields = '__all__'
+
+
+ 		
 
 class MultiKnowledgeForm(forms.ModelForm):
 

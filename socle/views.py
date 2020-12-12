@@ -4,8 +4,8 @@ from django.core import serializers
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.shortcuts import render, redirect
-from socle.models import  Knowledge, Level, Theme, Skill
-from socle.forms import  LevelForm, KnowledgeForm,  ThemeForm,MultiKnowledgeForm , SkillForm, MultiSkillForm  
+from socle.models import  Knowledge, Level, Theme, Skill , Waiting
+from socle.forms import  LevelForm, KnowledgeForm,  ThemeForm,MultiKnowledgeForm , SkillForm, MultiSkillForm , WaitingForm , MultiWaitingForm
 from account.models import Teacher, Student
 from django.contrib import messages
 from account.decorators import user_can_create
@@ -236,3 +236,76 @@ def list_skills(request):
  
     skills = Skill.objects.order_by("subject")
     return render(request, 'socle/list_skills.html', {'communications' : [] ,'skills': skills})
+
+
+
+
+
+@user_is_superuser 
+def list_waitings(request):
+ 
+    waitings = Waiting.objects.all().select_related('theme') 
+
+    return render(request, 'socle/list_waitings.html', {'communications' : [] , 'waitings': waitings})
+
+@user_is_superuser 
+def create_waiting(request):
+
+    form = WaitingForm(request.POST or None  )
+
+    if form.is_valid():
+        form.save()
+        messages.success(request, "L'attendu a été créé avec succès !")
+        return redirect('waitings')
+    else:
+        print(form.errors)
+
+    context = {'form': form,  'communications' : [] , 'waiting': None  }
+
+    return render(request, 'socle/form_waiting.html', context)
+
+@user_is_superuser 
+def create_multi_waiting(request):
+
+    form = MultiWaitingForm(request.POST or None  )
+    if request.method == "POST" :
+        if form.is_valid():
+            theme = form.cleaned_data["theme"]
+            level = form.cleaned_data["level"]
+            names = form.cleaned_data["name"].split("\r")
+            for name in names :
+                Waiting.objects.create( name=cleanhtml(name), theme=theme, level=level )
+ 
+            messages.success(request, "Les attendu ont été créés avec succès !")
+            return redirect('waitings')
+        else:
+            print(form.errors)
+
+    context = {'form': form, 'communications' : [] ,  'waiting': None   }
+
+    return render(request, 'socle/form_waiting.html', context)
+
+
+
+@user_is_superuser
+def update_waiting(request, id):
+
+    waiting = Waiting.objects.get(id=id)
+    waiting_form = WaitingForm(request.POST or None, instance=waiting )
+    if request.method == "POST" :
+        if waiting_form.is_valid():
+            waiting_form.save()
+            messages.success(request, "L'attendu a été créé avec succès !")
+            return redirect('knowledges')
+        else:
+            print(waiting_form.errors)
+
+    context = {'form': waiting_form, 'communications' : [] , 'waiting': waiting,   }
+
+    return render(request, 'socle/form_waiting.html', context )
+
+@user_is_superuser
+def delete_waiting(request, id):
+    waiting = Waiting.objects.get(id=id)
+    waiting.delete()
+    return redirect('waitings')

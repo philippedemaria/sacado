@@ -29,4 +29,12 @@ urlpatterns = [
     path('update_level/<int:id>/', update_level, name='update_level'),
     path('delete_level/<int:id>/', delete_level, name='delete_level'),
 
+
+    path('waitings', list_waitings, name='waitings'),
+    path('create_waiting', create_waiting, name='create_waiting'),
+    path('update_waiting/<int:id>/', update_waiting, name='update_waiting'),
+    path('delete_waiting/<int:id>/', delete_waiting, name='delete_waiting'),
+    path('create_multi_waiting', create_multi_waiting, name='create_multi_waiting'),
+
+    path('ajax/chargewaitings', ajax_chargewaitings, name='ajax_chargewaitings'),
 ]
