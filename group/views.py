@@ -364,7 +364,10 @@ def show_group(request, id ):
     role = data['role']
     access = data['access']
     authorizing_access_group(teacher,group )
-    context = {  'group': group,  'communications' : [] , 'teacher' : group.teacher  }
+
+    students = group.students.order_by("user__last_name")
+
+    context = {  'group': group,  'communications' : [] , 'teacher' : group.teacher , 'students' : students }
 
     return render(request, 'group/show_group.html', context )
 
@@ -550,6 +553,7 @@ def result_group_theme(request, id, idt):
 
     teacher = Teacher.objects.get(user=request.user)
     group = Group.objects.get(id=id)
+    students = group.students.order_by("user__last_name")
 
     authorizing_access_group(teacher,group ) 
  
@@ -565,7 +569,7 @@ def result_group_theme(request, id, idt):
         if len(parcours_tab) == number_of_parcours_of_this_level_by_this_teacher :
             break
     stage = get_stage(group)
-    context = {  'group': group, 'form': form, 'theme': theme,  'stage' : stage  , "knowledges" : knowledges, "teacher" : teacher,  'parcours_tab' : parcours_tab, 'parcours' : None  , 'communications' :  [] , 'relationships':  []   }
+    context = {  'group': group, 'form': form, 'theme': theme, 'students': students, 'stage' : stage  , "knowledges" : knowledges, "teacher" : teacher,  'parcours_tab' : parcours_tab, 'parcours' : None  , 'communications' :  [] , 'relationships':  []   }
 
     return render(request, 'group/result_group.html', context )
 
@@ -583,7 +587,9 @@ def result_group_exercise(request, id):
 
     sender_mail(request,form)
 
-    context = {'group': group, 'form': form , 'stage' : stage  , 'teacher': teacher, 'theme' : None  , 'communications' : [], 'relationships': [] , 'parcours_tab' : [] , 'parcours' : None  }
+    students = group.students.order_by("user__last_name")
+
+    context = {'group': group, 'form': form , 'stage' : stage  , 'students' : students  , 'teacher': teacher, 'theme' : None  , 'communications' : [], 'relationships': [] , 'parcours_tab' : [] , 'parcours' : None  }
 
     return render(request, 'group/result_group_exercise.html', context)
 
@@ -594,7 +600,7 @@ def result_group_skill(request, id):
 
     group = Group.objects.get(id=id)
     skills = Skill.objects.filter(subject=group.subject)
-
+    students = group.students.order_by("user__last_name")
     teacher = Teacher.objects.get(user=request.user)
 
     authorizing_access_group(teacher,group ) 
@@ -602,7 +608,7 @@ def result_group_skill(request, id):
     form = EmailForm(request.POST or None )
     stage = get_stage(group)
 
-    context = {  'group': group,'form': form,'skills': skills , 'teacher': teacher, 'stage' : stage   ,  'theme' : None  , 'communications' : [], 'relationships': [] , 'parcours' : None  }
+    context = {  'group': group,'form': form,'skills': skills , 'students': students ,  'teacher': teacher, 'stage' : stage   ,  'theme' : None  , 'communications' : [], 'relationships': [] , 'parcours' : None  }
 
     return render(request, 'group/result_group_skill.html', context )
 
@@ -616,10 +622,10 @@ def result_group_theme_exercise(request, id, idt):
     theme = Theme.objects.get(id=idt)
     stage = get_stage(group)
     teacher = Teacher.objects.get(user=request.user)
-
+    students = group.students.order_by("user__last_name")
     authorizing_access_group(teacher,group ) 
 
-    context = {  'group': group, 'form': form, 'theme': theme, 'teacher': teacher, "slug" : theme.slug , 'stage' : stage   , 'communications' : [], 'relationships': [] , 'parcours': None  }
+    context = {  'group': group, 'form': form, 'theme': theme, 'students': students, 'teacher': teacher, "slug" : theme.slug , 'stage' : stage   , 'communications' : [], 'relationships': [] , 'parcours': None  }
 
     return render(request, 'group/result_group_theme_exercise.html', context )
 

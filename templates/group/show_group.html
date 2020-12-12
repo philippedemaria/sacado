@@ -64,7 +64,7 @@
                     </thead>
                     <tbody>
                         <form action="" method="POST">   
-                        {% for student in group.students.all|dictsort:"user.last_name"  %}
+                        {% for student in  students   %}
                             {% if not sacado_asso %}         
                                 {% csrf_token %}        
                                     <tr>
@@ -149,7 +149,6 @@
                                             Supprimer
                                         </a> 
                                     </td>
-
                                 </tr>
                             {% endif %}
                         {% endfor %}

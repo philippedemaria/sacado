@@ -165,7 +165,7 @@
                     </tr>
                     </thead>
                     <tbody> 
-                        {% for student in group.students.all|dictsort:"user.last_name" %}
+                        {% for student in  students  %}
                             <tr class="no_padding">
                                 <td style="width:200px">
                                     <form  action="" method="POST">{% csrf_token %} 
