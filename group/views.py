@@ -301,14 +301,10 @@ def update_group(request, id):
 
     teacher = Teacher.objects.get(user= request.user)
     group = Group.objects.get(id=id)
-    students = group.students.order_by("user__last_name")
+    stdnts = group.students.order_by("user__last_name")
 
     authorizing_access_group(teacher,group )
-
-    if group.teacher.user.school :
-        students = Student.objects.filter(user__school=group.teacher.user.school).order_by("user__last_name")
-    else :
-        students = []
+ 
 
     
     form = GroupTeacherForm(request.POST or None, teacher = teacher , instance=group )
@@ -329,7 +325,7 @@ def update_group(request, id):
     else:
         print(form.errors)
 
-    context = {'form': form, 'students': students,  'group': group, 'teacher': teacher, 'students': students, 'communications' : [] , }
+    context = {'form': form,   'group': group, 'teacher': teacher, 'students': stdnts, 'communications' : [] , }
 
     return render(request, 'group/form_group.html', context )
 
