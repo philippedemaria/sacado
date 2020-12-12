@@ -39,6 +39,7 @@
                         <th>Nom</th>                      
                         <th>Thème</th>
                         <th>Niveau</th>
+                        <th>Attendu</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -55,6 +56,9 @@
                           </td> 
                           <td >
                               {{ knowledge.level.name }}
+                          </td>
+                          <td >
+                              {{ knowledge.waiting.name }}
                           </td>
                         </tr>
                         {% endfor %}
