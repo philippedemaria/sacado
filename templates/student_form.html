@@ -28,17 +28,7 @@
         </div>
     </div>
 
-    <div class="col-sm-6 col-md-6">
-        <label>Inscription isolée ?</label>
-        <input type="checkbox"  name="choose_alone" id="choose_alone" value="1"> <label style="font-size: 9px" for="choose_alone"> Choix des niveaux</label>
-        <div id="level_selected">
-            <select name="level_selector" class="form-control select2" id="level_selector">
-            {% for level in levels %}
-                <option value="{{ level.id}}">{{ level.name }}</option>
-            {% endfor %}
-            </select> 
-        </div>
-    </div>
+
 
 
 
