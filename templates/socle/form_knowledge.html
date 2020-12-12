@@ -4,12 +4,17 @@
 
 
 
-{% block general_js %}
+{% block require %}
     {% if knowledge %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-action2.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     {% else %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-index.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
     {% endif %}
+
+    <script>
+        require(['script/ajax-waiting']);
+    </script> 
+
 {% endblock %}
 
 
@@ -35,17 +40,13 @@
 
  
 <section class="content_main">
-
- {% if not knowledge %}  
   <div class="row">
       <div class="col-sm-12 col-md-12">
         <div class="alert alert-danger">
             Dans le cas d'un enregistrement de plusieurs savoir faire, il est OBLIGATOIRE d'inscrire un seul savoir faire par ligne, sans sauter de ligne.
         </div>
       </div>
-  </div> 
-{% endif %}  
-
+  </div>  
   <div class="row">
       <div class="col-sm-12 col-md-12">
    

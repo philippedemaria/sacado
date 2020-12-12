@@ -314,4 +314,15 @@ def delete_waiting(request, id):
 
  
 def ajax_chargewaitings(request):
-    pass
+    id_level =  request.POST.get("id_level")
+    id_theme =  request.POST.get("id_theme")
+
+    data = {}
+    level =  Level.objects.get(pk = int(id_level))
+    theme =  Theme.objects.get(pk = int(id_theme))
+
+    waitings = Waiting.objects.values_list('id', 'name').filter(level=level, theme=theme)
+
+    data['waitings'] = list(waitings)
+ 
+    return JsonResponse(data)

@@ -4,11 +4,11 @@
 
 
 
-{% block general_js %}
+{% block require %}
     {% if skill %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-action2.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     {% else %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-index.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
     {% endif %}
 {% endblock %}
 
