@@ -289,7 +289,7 @@ def create_group(request):
     else:
         print(form.errors)
 
-    context = {'form': form, 'teacher': teacher, 'group': None, 'communications' : [] , }
+    context = {'form': form, 'teacher': teacher, 'group': None, 'communications' : [] , 'students': None,}
 
     return render(request, 'group/form_group.html', context)
 
@@ -301,6 +301,7 @@ def update_group(request, id):
 
     teacher = Teacher.objects.get(user= request.user)
     group = Group.objects.get(id=id)
+    students = group.students.order_by("user__last_name")
 
     authorizing_access_group(teacher,group )
 
@@ -328,7 +329,7 @@ def update_group(request, id):
     else:
         print(form.errors)
 
-    context = {'form': form,  'group': group, 'teacher': teacher, 'students': students, 'communications' : [] , }
+    context = {'form': form, 'students': students,  'group': group, 'teacher': teacher, 'students': students, 'communications' : [] , }
 
     return render(request, 'group/form_group.html', context )
 
