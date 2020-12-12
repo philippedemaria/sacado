@@ -1126,11 +1126,15 @@ def update_parcours(request, id, idg=0 ):
                 nf.students.add(student)
 
 
-            for exercise in parcours.exercises.all():
-                relationship = Relationship.objects.get(parcours=nf, exercise=exercise)
-                relationship.students.set(form.cleaned_data.get('students'))
+            try:
+                for exercise in parcours.exercises.all():
+                    relationship = Relationship.objects.get(parcours=nf, exercise=exercise)
+                    relationship.students.set(form.cleaned_data.get('students'))
+                    relationship.students.set(sg_students)
 
 
+            except:
+                pass
 
 
  
