@@ -106,7 +106,7 @@ class Level(models.Model):
         return nb
 
 class Waiting(models.Model):
-    name = models.CharField(max_length=255, verbose_name="Nom")
+    name = models.CharField(max_length=500, verbose_name="Nom")
     theme  = models.ForeignKey(Theme, related_name="waitings",  on_delete=models.CASCADE, verbose_name="Thème")
     level = models.ForeignKey(Level, related_name="waitings", default="", on_delete=models.CASCADE, verbose_name="Niveau")
 
