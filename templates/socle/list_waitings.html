@@ -38,6 +38,7 @@
                       <tr>
                         <th>Nom</th>                      
                         <th>Thème</th>
+                        <th>Niveau</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -51,6 +52,9 @@
                           </td>
                           <td >
                               {{ waiting.theme.name }} 
+                          </td> 
+                          <td >
+                              {{ waiting.level.name }} 
                           </td> 
                         </tr>
                         {% endfor %}
