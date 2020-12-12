@@ -88,6 +88,13 @@ ul#id_skills li{
                     <div class="col-sm-12 col-md-6">
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
+                                {{ form.title.label_tag }} <small><em>Optionnel</em></small>
+                                {{ form.title |add_class:"form-control"  }}
+                                {{ form.title.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
                                 {{ form.annoncement.label_tag }} <small><em>A privilégier</em></small>
                                 {{ form.annoncement  }}
                                 {{ form.annoncement.errors }}
