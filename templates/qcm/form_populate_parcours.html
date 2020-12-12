@@ -84,16 +84,22 @@
 
 
                                                             <a href="{% url 'update_supportfile'  e.supportfile.id   %}" class="listing" style="font-size: 18px">
-                                                                {{ e.supportfile.annoncement|cleanhtml|capfirst }} 
+                                                                {% if e.supportfile.title %}  
+                                                                    {{ e.supportfile.title|cleanhtml|capfirst }}  
+                                                                {% else %}  
+                                                                    {{ e.supportfile.annoncement|cleanhtml|capfirst }} 
+                                                                {% endif %}
                                                             </a> 
 
                                                         {%  else %}
                                                             <a href="{% url 'show_this_exercise'  e.id   %}" >
                                                             <img src="{{ e.supportfile.imagefile.url }}" class="imagefile">
-                                                            </a> 
-                                                          
+                                                            {% if e.supportfile.title %}  
+                                                                {{ e.supportfile.title|cleanhtml|capfirst }}  
+                                                            {% else %}  
                                                                 {{ e.supportfile.annoncement|cleanhtml|capfirst }} 
-                                                           
+                                                            {% endif %}
+                                                            </a>                                                            
                                                         {% endif %}
                                                          {% if e.calculator %}
                                                           <img src="{% static 'img/calculator.png' %}" width="30px" />

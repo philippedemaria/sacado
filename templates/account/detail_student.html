@@ -152,7 +152,8 @@
                             <td {% if exercise.is_publish %} style="padding:0px" {% endif %}> 
                                 <div {% if exercise.is_publish %} style="border-left: 4px solid #00AC18; padding:10px;min-height:53px"{% endif %} >
                                 <small><strong>{{ theme.name }}</strong></small>
-                                {{exercise.name.knowledge.name }} {% if exercise.name.supportfile.annoncement %} - <em>{{exercise.name.supportfile.annoncement|cleanhtml }} </em> {% endif %}
+                                {{exercise.name.knowledge.name }} 
+                                    {% if exercise.supportfile.title %} - <em> {{ exercise.supportfile.title|cleanhtml|capfirst }}</em> {% else %} - <em>{{exercise.supportfile.annoncement|cleanhtml|capfirst }}</em>  {% endif %}
                                 </div>  
                             </td>
                             <td style="text-align: center">

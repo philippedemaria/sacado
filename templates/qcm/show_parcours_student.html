@@ -52,18 +52,37 @@
                 {%  if relation.exercise.supportfile.is_title %}       
                     <h2 class="listing thin" style="width:100%; clear:both"> 
                         {% if relation.is_header_of_section  %}
-                            <a href="#" data-toggle='modal' data-target='#head_of_section'    data-relation_id='{{ relation.id }}'  class="header_shower" title="Cours associé à cette section">{{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
+                            <a href="#" data-toggle='modal' data-target='#head_of_section'    data-relation_id='{{ relation.id }}'  class="header_shower" title="Cours associé à cette section">
+                            {% if  relation.exercise.supportfile.title %}  
+                                {{  relation.exercise.supportfile.title|cleanhtml|capfirst }}  
+                            {% else %}
+                                {{ relation.exercise.supportfile.annoncement|cleanhtml }}
+                            {% endif %} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
                         {% else %}
-                            {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}
+                            {% if  relation.exercise.supportfile.title %}  
+                                {{  relation.exercise.supportfile.title|cleanhtml|capfirst }}  
+                            {% else %}
+                                {{ relation.exercise.supportfile.annoncement|cleanhtml }}
+                            {% endif %} 
                         {% endif %}
                     </h2>
 
                 {%  elif relation.exercise.supportfile.is_subtitle %}
                     <h3 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> 
                         {% if relation.is_header_of_section %}
-                            <a href="#" data-toggle='modal' data-target='#head_of_section'  data-relation_id='{{ relation.id }}' class="header_shower" title="Cours associé à cette sous-section">{{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
+                            <a href="#" data-toggle='modal' data-target='#head_of_section'  data-relation_id='{{ relation.id }}' class="header_shower" title="Cours associé à cette sous-section"> 
+                                {% if  relation.exercise.supportfile.title %}  
+                                    {{  relation.exercise.supportfile.title|cleanhtml|capfirst }}  
+                                {% else %}
+                                    {{ relation.exercise.supportfile.annoncement|cleanhtml }}
+                                {% endif %} 
+                                <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
                         {% else %}
-                            {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}
+                                {% if  relation.exercise.supportfile.title %}  
+                                    {{  relation.exercise.supportfile.title|cleanhtml|capfirst }}  
+                                {% else %}
+                                    {{ relation.exercise.supportfile.annoncement|cleanhtml }}
+                                {% endif %} 
                         {% endif %}
                     </h3>
                {% else %} 

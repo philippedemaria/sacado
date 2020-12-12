@@ -40,13 +40,17 @@
                             <td >
                                 <a href="{% url 'show_exercise' exercise.id %}" class="sublisting" >
                                     <img src="{{ exercise.supportfile.imagefile.url }}" class="imagefile">
-                                            
-                                    {{ exercise.supportfile.annoncement|cleanhtml|capfirst  }} 
-                                                {% if exercise.supportfile.calculator %}
-                                                  <img src="{% static 'img/calculator.png' %}" width="30px" />
-                                                {% else %}
-                                                  <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
-                                                {% endif  %}   <br>
+                                    {% if exercise.supportfile.title %}
+                                        {{ exercise.supportfile.title|cleanhtml|capfirst  }}   
+                                    {% else %}
+                                        {{ exercise.supportfile.annoncement|cleanhtml|capfirst  }} 
+                                    {% endif %}
+
+                                    {% if exercise.supportfile.calculator %}
+                                      <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                    {% else %}
+                                      <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                    {% endif  %}   <br>
                                     <i class="fa fa-fw fa-barcode"></i>{{ exercise.supportfile.code }}<br>
                                     <i class="fa fa-fw fa-clock-o"></i>{{ exercise.supportfile.duration }} minutes<br>
                                     <i class="fa fa-fw fa-save"></i>{{ exercise.supportfile.situation }} situation{{ exercise.supportfile.situation|pluralize }}

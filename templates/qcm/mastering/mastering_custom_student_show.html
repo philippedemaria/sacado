@@ -51,7 +51,15 @@
             </div>
             <div class="col-sm-12 col-lg-6">
                 <label class="label_select_checkbox">    
-                {{ exercise.supportfile.annoncement|cleanhtml|capfirst }} 
+ 
+
+                {% if   exercise.supportfile.title %}  
+                    {{  exercise.supportfile.title|cleanhtml|capfirst }}  
+                {% else %}  
+                    {{  exercise.supportfile.annoncement|cleanhtml|capfirst }} 
+                {% endif %}
+
+
     
                 {% if exercise.supportfile.calculator %}
                   <img src="{% static 'img/calculator.png' %}" width="30px" />

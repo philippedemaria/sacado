@@ -325,7 +325,11 @@
               Image de la card
           ##############################################################################################################
           ##############################################################################################################-->
-          <a href="#card{{relation.id}}" class="detail_parcours"  data-exercise_id="{{ relation.exercise.id }}" title="{{ relation.exercise.supportfile.annoncement|cleanhtml|safe }}"
+          <a href="#card{{relation.id}}" class="detail_parcours"  data-exercise_id="{{ relation.exercise.id }}" 
+              title="{% if relation.exercise.supportfile.title %}{{ relation.exercise.supportfile.title|cleanhtml|safe }}{% else %}{{ relation.exercise.supportfile.annoncement|cleanhtml|safe }}{% endif %}"
+
+
+
              data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}" data-custom=0 > 
 
                <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours_order"  >  

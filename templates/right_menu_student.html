@@ -31,7 +31,7 @@
 
 
                 <a href="{% url 'execute_exercise' relationship.parcours.id  relationship.exercise.id %}"  class="parcours_displayer"  style="color:#cb2131">
-                 {% if relationship.exercise.supportfile.annoncement  %} {{ relationship.exercise.supportfile.annoncement|cleanhtml }}{% else %}{{ relationship.exercise.knowledge.name }}{% endif %}
+           {% if relationship.exercise.supportfile.title  %} {{ relationship.exercise.supportfile.title  }}{% elif relationship.exercise.supportfile.annoncement  %} {{ relationship.exercise.supportfile.annoncement|cleanhtml }}{% else %}{{ relationship.exercise.knowledge.name }}{% endif %}
                 </a>
             
             </li>
@@ -111,7 +111,7 @@
                 <i class="fa fa-square" style="color: {{ relationship.parcours.color }}"></i>
                 {% endif  %}
           <a href="{% url 'execute_exercise' relationship.parcours.id  relationship.exercise.id %}" style="color:#cb2131">
-           {% if relationship.exercise.supportfile.annoncement  %} {{ relationship.exercise.supportfile.annoncement|cleanhtml }}{% else %}{{ relationship.exercise.knowledge.name }}{% endif %}
+           {% if relationship.exercise.supportfile.title  %} {{ relationship.exercise.supportfile.title  }}{% elif relationship.exercise.supportfile.annoncement  %} {{ relationship.exercise.supportfile.annoncement|cleanhtml }}{% else %}{{ relationship.exercise.knowledge.name }}{% endif %}
           </a>
       </li>
       {% endfor %}

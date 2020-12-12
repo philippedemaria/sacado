@@ -49,7 +49,16 @@
                             <img src="{{ r.exercise.supportfile.imagefile.url }}" class="imagefile">
 
 
-                            {{ r.exercise.supportfile.annoncement|cleanhtml|capfirst  }} 
+ 
+
+                                        {% if  r.exercise.supportfile.title %}  
+                                            {{  r.exercise.supportfile.title|cleanhtml|capfirst }}  
+                                        {% else %}  
+                                            {{  r.exercise.supportfile.annoncement|cleanhtml|capfirst }} 
+                                        {% endif %}
+
+
+
                                         {% if r.exercise.supportfile.calculator %}
                                           <img src="{% static 'img/calculator.png' %}" width="30px" />
                                         {% else %}

@@ -24,7 +24,9 @@
                       <i class="fa fa-square" style="color: {{ relationship.parcours.color }}"></i> 
                       {% endif  %}
                 <a href="{% url 'execute_exercise' relationship.parcours.id  relationship.exercise.id %}"  class="parcours_displayer">
-                 {% if relationship.exercise.supportfile.annoncement  %} {{ relationship.exercise.supportfile.annoncement|cleanhtml }}{% else %}{{ relationship.exercise.knowledge.name }}{% endif %}
+                 {% if relationship.exercise.supportfile.title  %} {{ relationship.exercise.supportfile.annoncement|cleanhtml }}
+                 {% elif relationship.exercise.supportfile.annoncement  %} {{ relationship.exercise.supportfile.annoncement|cleanhtml }}{% else %}{{ relationship.exercise.knowledge.name }}{% endif %}
+
                 </a>
             </li>
             {% endfor %}
@@ -67,7 +69,8 @@
                 <i class="fa fa-square" style="color: {{ relationship.parcours.color }}"></i>
                 {% endif  %}
           <a href="{% url 'execute_exercise' relationship.parcours.id  relationship.exercise.id %}">
-           {% if relationship.exercise.supportfile.annoncement  %} {{ relationship.exercise.supportfile.annoncement|cleanhtml }}{% else %}{{ relationship.exercise.knowledge.name }}{% endif %}
+
+           {% if relationship.exercise.supportfile.title  %} {{ relationship.exercise.supportfile.title  }}{% elif relationship.exercise.supportfile.annoncement  %} {{ relationship.exercise.supportfile.annoncement|cleanhtml }}{% else %}{{ relationship.exercise.knowledge.name }}{% endif %}
           </a>
       </li>
       {% endfor %}

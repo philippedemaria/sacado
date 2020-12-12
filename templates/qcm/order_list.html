@@ -27,10 +27,12 @@
                                 </td>
                                 {% endif %}
                                 <td>
-                                    {% if relation.exercise.supportfile.annoncement %}
-                                    {{ relation.exercise.supportfile.annoncement|cleanhtml }}
+                                    {% if  relationship.exercise.supportfile.title %}  
+                                        {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
+                                    {% elif relation.exercise.supportfile.annoncement %}
+                                        {{ relation.exercise.supportfile.annoncement|cleanhtml }}
                                     {% else %}
-                                    {{ relation.exercise.supportfile.knowledge.name }}
+                                        {{ relation.exercise.supportfile.knowledge.name }}
                                     {% endif %}
                                     <input type="hidden" value="{{ relation.exercise.id }}" class="sorted_exercise_id" data-custom=0 />
                                 </td>

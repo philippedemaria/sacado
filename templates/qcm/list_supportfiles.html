@@ -70,7 +70,11 @@
 
 
                                                     <a href="{% url 'update_supportfile'  supportfile.id   %}" class="listing" style="font-size: 18px">
-                                                        {{ supportfile.annoncement|cleanhtml|capfirst }} 
+                                                                {% if supportfile.title %}  
+                                                                    {{ ssupportfile.title|cleanhtml|capfirst }}  
+                                                                {% else %}  
+                                                                    {{ supportfile.annoncement|cleanhtml|capfirst }} 
+                                                                {% endif %}
                                                     </a>  
 
 

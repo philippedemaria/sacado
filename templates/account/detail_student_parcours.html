@@ -30,7 +30,14 @@
                                             <img src="{{ relation.exercise.supportfile.imagefile.url }}" class="imagefile">
                                         </a>
                                                                    
-                                        <em>{% if relation.exercise.supportfile.annoncement %}{{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}{% else %} {{relation.exercise.knowledge.name|capfirst }}  {% endif %}</em>   
+                                        <em>{% if relation.exercise.supportfile.title %} 
+                                                {{ relation.exercise.supportfile.title|cleanhtml|capfirst }} 
+                                            {% elif relation.exercise.supportfile.annoncement %}
+                                                {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}
+                                            {% else %} 
+                                                {{relation.exercise.knowledge.name|capfirst }}  
+                                            {% endif %}
+                                        </em>   
                                             {% if relation.exercise.supportfile.calculator %}
                                               <img src="{% static 'img/calculator.png' %}" width="30px" />
                                             {% else %}

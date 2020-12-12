@@ -73,7 +73,9 @@ def convert_time(duree) :
 ########################################################################################################
 class Supportfile(models.Model):
 
-    knowledge = models.ForeignKey(Knowledge, on_delete=models.PROTECT,  related_name='supportfiles', verbose_name="Savoir faire associé - Titre")
+
+    title = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
+    knowledge = models.ForeignKey(Knowledge, on_delete=models.PROTECT,  related_name='supportfiles', verbose_name="Savoir faire associé")
     annoncement = RichTextUploadingField( verbose_name="Précision sur le savoir faire")
     author = models.ForeignKey(Teacher, related_name="supportfiles", on_delete=models.PROTECT, editable=False)
 

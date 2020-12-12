@@ -56,7 +56,15 @@
                         <a href="{% url 'show_this_exercise' relationship.exercise.id   %}"  target="_blank">  
                         <img src="{{ relationship.exercise.supportfile.imagefile.url }}" class="imagefile"></a>
                                                             
-                         {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}          
+                         {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}     
+
+
+                        {% if relationship.exercise.supportfile.title %}  
+                            {{ relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
+                        {% else %}  
+                            {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }} 
+                        {% endif %}
+
                     
                         {% if relationship.exercise.supportfile.calculator %}
                           <img src="{% static 'img/calculator.png' %}" width="30px" />
@@ -133,9 +141,17 @@
                 <div class="row"  {% if relationship.is_publish %} style="border-left: 3px solid #00a65a" {% endif %}>                        
                     <div  class="col-sm-12 col-md-12">
                     {% if relationship.exercise.supportfile.is_subtitle %}
-                        <h3>{{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}</h3>
+                        <h3>{% if relationship.exercise.supportfile.title %}  
+                            {{ relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
+                        {% else %}  
+                            {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }} 
+                        {% endif %}</h3>
                     {% else %}
-                        <h2>{{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}</h2>
+                        <h2>{% if relationship.exercise.supportfile.title %}  
+                            {{ relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
+                        {% else %}  
+                            {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }} 
+                        {% endif %}</h2>
                     {% endif %}
                     </div>
                 </div>

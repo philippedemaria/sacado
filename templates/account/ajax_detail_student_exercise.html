@@ -34,7 +34,10 @@
      
                     {% for relationship  in relationships  %} 
                     <tr> 
-                        <td style="font-size:16px">{{ forloop.counter }}. {{ relationship.exercise.knowledge.name|capfirst }}<br><em><span style="font-size:12px">{{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst}}</span></em></td>
+                        <td style="font-size:16px">{{ forloop.counter }}. {{ relationship.exercise.knowledge.name|capfirst }}<br>
+                            <em><span style="font-size:12px"> 
+                                {% if relationship.exercise.supportfile.title %} {{ relationship.exercise.supportfile.title|cleanhtml|capfirst }}{% else %} {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }} {% endif %} 
+                            </span></em></td>
      
                         <td>{% get_score_and_time relationship.exercise student  as studentanswers %} 
                             {% for studentanswer  in studentanswers  %} 

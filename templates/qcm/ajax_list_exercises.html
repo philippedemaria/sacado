@@ -53,7 +53,7 @@
 
 
                                                             <a href="{% url 'update_exercise'  e.id   %}" class="listing" style="font-size: 18px">
-                                                                {{ e.annoncement|cleanhtml|capfirst }} 
+                                                                {% if e.supportfile.title %} {{ e.supportfile.title|cleanhtml|capfirst }}{% else %} {{ e.supportfile.annoncement|cleanhtml|capfirst }} {% endif %} 
                                                             </a> 
 
                                                         {%  else %}
@@ -64,7 +64,7 @@
                                                                 <img src="{{ e.supportfile.imagefile.url }}" class="imagefile">
                                                                 {% endif %}
                                                             </a> 
-                                                              {{ e.supportfile.annoncement|cleanhtml|capfirst }} 
+                                                                {% if e.supportfile.title %} {{ e.supportfile.title|cleanhtml|capfirst }}{% else %} {{ e.supportfile.annoncement|cleanhtml|capfirst }} {% endif %} 
                                                            
                                                         {% endif %}
                                                          {% if e.supportfile.calculator %}

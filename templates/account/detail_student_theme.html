@@ -29,7 +29,15 @@
                                         <img src="{{ relation.name.exercise.supportfile.imagefile.url }}" class="imagefile">
                                     </a>
                            
-                                    <em>{% if relation.name.exercise.supportfile.annoncement %}{{relation.name.exercise.supportfile.annoncement|cleanhtml|capfirst }}{% else %} {{relation.name.exercise.knowledge.name|capfirst }}  {% endif %}</em>   
+                                    <em>
+                                            {% if relation.name.exercise.supportfile.title %} 
+                                                {{ relation.name.exercise.supportfile.title|cleanhtml|capfirst }} 
+                                            {% elif relation.name.exercise.supportfile.annoncement %}
+                                                {{ relation.name.exercise.supportfile.annoncement|cleanhtml|capfirst }}
+                                            {% else %} 
+                                                {{relation.name.exercise.knowledge.name|capfirst }}  
+                                            {% endif %}
+                                    </em>   
                                         {% if relation.name.exercise.supportfile.calculator %}
                                           <img src="{% static 'img/calculator.png' %}" width="30px" />
                                         {% else %}

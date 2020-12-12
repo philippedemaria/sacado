@@ -111,7 +111,15 @@
 
 
                                                 <a href="{% url 'update_supportfile'  e.supportfile.id   %}" target="_blank"  class="listing" style="font-size: 18px">
-                                                    {{ e.supportfile.annoncement|cleanhtml|capfirst }} 
+  
+                                                    {% if e.supportfile.title %}  
+                                                        {{ e.supportfile.title|cleanhtml|capfirst }}  
+                                                    {% else %}  
+                                                        {{ e.supportfile.annoncement|cleanhtml|capfirst }} 
+                                                    {% endif %}
+
+
+
                                                 </a> 
 
                                             {%  else %}
@@ -119,9 +127,12 @@
 
                                                 <a href="{% url 'show_this_exercise'  e.id   %}" target="_blank" class="listing" style="font-size: 18px">     
                                                     <img src="{{ e.supportfile.imagefile.url }}" class="imagefile">
-                                 
-
-                                                            {{ e.supportfile.annoncement|cleanhtml|capfirst }} </a> 
+                                                    {% if e.supportfile.title %}  
+                                                        {{ e.supportfile.title|cleanhtml|capfirst }}  
+                                                    {% else %}  
+                                                        {{ e.supportfile.annoncement|cleanhtml|capfirst }} 
+                                                    {% endif %}
+                                                </a> 
                                                
                                             {% endif %}
                                              {% if e.supportfile.calculator %}

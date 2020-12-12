@@ -81,8 +81,12 @@
                   style="cursor: move;{% if parcours.vignette %}background-image: url('{{ parcours.vignette.url }}'); background-size: cover; {% else %} background-color:{{parcours.color }}{% endif %};">
      
 
-                <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="handler widget-user-header">
+                    <!-- Add signet to folder -->
+                    {% if parcours.is_folder %}
+                        <img src="{% static 'img/signet.png' %}" class="pull-right" />
+                    {% endif  %}
+
                     <div class="group_show  group_show{{parcours.id }}"> 
                         <form action="#" method="POST">
                             {% csrf_token %}

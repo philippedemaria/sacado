@@ -26,7 +26,7 @@
 	 		{% if customexercise %} 
 	        	{{ customexercise.instruction|safe }}
 			{% else  %} 
-	        	{{ relationship.exercise.supportfile.annoncement|safe }} 
+			    {% if relationship.exercise.supportfile.title %} {{ relationship.exercise.supportfile.title|cleanhtml|capfirst }}{% else %} {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }} {% endif %} 
 			{% endif %} 
 	    </div>
 	</div>

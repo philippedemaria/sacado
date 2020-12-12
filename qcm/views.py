@@ -1132,10 +1132,8 @@ def update_parcours(request, id, idg=0 ):
                     relationship.students.set(form.cleaned_data.get('students'))
                     relationship.students.set(sg_students)
 
-
             except:
                 pass
-
 
  
             lock_all_exercises_for_student(nf.stop,parcours)

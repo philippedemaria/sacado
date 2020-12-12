@@ -10,13 +10,15 @@
 {% endblock %}
 
 {% block page_menu_right %}
-{% if supportfile.annoncement %} <li style="margin-top:15px"><em>{{ supportfile.annoncement|safe  }} </em></li>  {% endif %}
+
+{% if supportfile.title %} <li style="margin-top:15px"><em>{{ supportfile.title  }} </em></li>   
+{% else %} <li style="margin-top:15px"><em>{{ supportfile.annoncement|safe  }} </em></li>  {% endif %}
 {% endblock %}
 
 
 {% block body  %}  
 
-
+ 
 
 
 

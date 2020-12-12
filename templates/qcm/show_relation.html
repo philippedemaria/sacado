@@ -11,8 +11,10 @@
 {% endblock %}
 
 {% block page_menu_right %}
-{% if relation.exercise.supportfile.annoncement %} <li style="margin-top:15px"><em><p>{{ relation.exercise.supportfile.annoncement|safe  }} </p></em></li>  {% endif %}
+  {% if relation.exercise.supportfile.title %} <li style="margin-top:15px"><em><p>{{ relation.exercise.supportfile.title  }} </p></em></li>   
+  {% elif relation.exercise.supportfile.annoncement %} <li style="margin-top:15px"><em><p>{{ relation.exercise.supportfile.annoncement|safe  }} </p></em></li>  {% endif %}
 {% endblock %}
+
 
 {% block require %}
   <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3.js' %}"></script>  

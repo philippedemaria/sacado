@@ -33,7 +33,9 @@
             <tbody>
                 {% for relation  in relationships  %} 
                 <tr> 
-                    <td style="font-size:13px">{{ relation.exercise.knowledge.name }}<br><span style="font-size:12px">{{ relation.exercise.supportfile.annoncement|cleanhtml }}</span></td>
+                    <td style="font-size:13px">{{ relation.exercise.knowledge.name }}<br><span style="font-size:12px">
+                            {% if relation.exercise.supportfile.title %} {{ relation.exercise.supportfile.title|cleanhtml|capfirst }}{% else %} {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }} {% endif %}
+                    </span></td>
  
                     <td>
                       {% get_done relation.exercise student as done %}

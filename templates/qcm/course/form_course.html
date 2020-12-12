@@ -100,7 +100,10 @@
 
                             <img src="{{ relationship.exercise.supportfile.imagefile.url }}" width="180px" height="100px"  style="float:left;margin-right: 5px">
 
-                                {% if relationship.exercise.supportfile.annoncement %}
+
+                                {% if relationship.exercise.supportfile.title %}
+                                    {{ relationship.exercise.supportfile.title|cleanhtml|capfirst }}
+                                {% elif relationship.exercise.supportfile.annoncement %}
                                     {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}
                                 {% else %}
                                     {{ relationship.exercise.knowledge.name }}

@@ -11,7 +11,11 @@
             <li class="sans_puce"><i class="fa fa-square" style="color: {{ relationship.parcours.color }}"></i> 
               {{ relationship.date_limit|date:"d.m.y" }} :
                   <a href="{% url 'detail_task_parcours' relationship.parcours.id relationship.exercise.id 0  %}" class="parcours_displayer"> 
-                    {% if relationship.exercise.supportfile.annoncement  %} {{ relationship.exercise.supportfile.annoncement|cleanhtml }}{% else %}{{ relationship.exercise.knowledge.name }}{% endif %}
+                       {% if  relationship.exercise.supportfile.title %}  
+                            {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
+                        {% else %}
+                            {{ relationship.exercise.supportfile.annoncement|cleanhtml }}
+                        {% endif %} 
                   </a>        
             </li>
             {% empty %}

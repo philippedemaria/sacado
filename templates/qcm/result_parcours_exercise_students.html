@@ -48,7 +48,11 @@
                         <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" >  
                         <img src="{{ relationship.exercise.supportfile.imagefile.url }}" class="imagefile"></a>
                                                             
-                         {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}   
+                                    {% if  relationship.exercise.supportfile.title %}  
+                                                    {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
+                                                {% else %}
+                                                    {{ relation.exercise.supportfile.annoncement|cleanhtml }}
+                                                {% endif %}   
 
    
 
@@ -96,9 +100,17 @@
                 <div class="row">                        
                     <div  class="col-sm-12 col-md-12">
                     {% if relationship.exercise.supportfile.is_subtitle %}
-                        <h3>{{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}</h3>
+                        <h3>                    {% if  relationship.exercise.supportfile.title %}  
+                                                    {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
+                                                {% else %}
+                                                    {{ relation.exercise.supportfile.annoncement|cleanhtml }}
+                                                {% endif %}  </h3>
                     {% else %}
-                        <h2>{{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}</h2>
+                        <h2>        {% if  relationship.exercise.supportfile.title %}  
+                                                    {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
+                                                {% else %}
+                                                    {{ relation.exercise.supportfile.annoncement|cleanhtml }}
+                                                {% endif %}  </h2>
                     {% endif %}
                     </div>
                 </div>

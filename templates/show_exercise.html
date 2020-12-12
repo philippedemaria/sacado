@@ -21,7 +21,7 @@
           {% endwith %}
       </div>
 
-      <span style="color:#000;font-weight:400 "> {{ exercise.knowledge.name }}            {% if exercise.supportfile.annoncement %} {{ exercise.supportfile.annoncement|safe }}   {% endif %}</span>
+      <span style="color:#000;font-weight:400 "> {{ exercise.knowledge.name }},     {% if exercise.supportfile.title %} {{ exercise.supportfile.title }}   {% elif exercise.supportfile.annoncement %} {{ exercise.supportfile.annoncement|safe }}   {% endif %}</span>
        
 
     <div class="space20"></div>
