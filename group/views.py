@@ -144,7 +144,8 @@ def include_students(liste, group):
 def include_students_in_a_model(liste,model):
  
     students_tab = liste.split("\r\n")
- 
+    tested = False
+    n = 0
     for student_tab in students_tab :
         details = student_tab.split(";")
         try:
@@ -161,9 +162,15 @@ def include_students_in_a_model(liste,model):
             user = User.objects.create(last_name=str(lname), first_name=str(fname), username=username, password=password, email=email,user_type=0)
             code = str(uuid.uuid4())[:8] # code pour la relation avec les parents
             student = Student.objects.create(user=user, level=group.level, code=code)
-            model.students.add(student)  
+            model.students.add(student)
+            n +=1 
         except:
             pass
+    if n == len(students_tab) :
+        tested = True
+
+    return tested
+
 
 
 def convert_seconds_in_time(secondes):
