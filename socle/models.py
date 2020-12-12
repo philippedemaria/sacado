@@ -105,10 +105,21 @@ class Level(models.Model):
         nb = n - m
         return nb
 
+
+class Waiting(models.Model):
+    name = models.CharField(max_length=255, verbose_name="Nom")
+    theme  = models.ForeignKey(Theme, related_name="waitings",  on_delete=models.CASCADE, verbose_name="Thème")
+
+    def __str__(self):
+        return "{} : {}".format(self.theme,self.name)
+
+
 class Knowledge(models.Model):
-    level = models.ForeignKey(Level, related_name="knowledges", default="", on_delete=models.PROTECT, verbose_name="Niveau")
-    theme = models.ForeignKey(Theme, related_name="knowledges", on_delete=models.PROTECT, verbose_name="Thème")
+    level = models.ForeignKey(Level, related_name="knowledges", default="", on_delete=models.CASCADE, verbose_name="Niveau")
+    theme = models.ForeignKey(Theme, related_name="knowledges", on_delete=models.CASCADE, verbose_name="Thème")
     name = models.CharField(max_length=10000, verbose_name="Nom")
+    waiting  = models.ForeignKey(Waiting, related_name="knowledges", default="",  null = True , on_delete=models.CASCADE, verbose_name="Attendu")
+
 
     def __str__(self):
         return self.name
