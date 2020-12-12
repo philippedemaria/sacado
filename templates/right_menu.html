@@ -72,7 +72,7 @@
 </li>
 
 <li class="sans_puce">
-{% if asso_sacado %}
+{% if sacado_asso %}
 <a href="{% url 'create_evaluation' %}" class="btn btn-primary full_width">Créer une évaluation</a>
 {% else %}
 <a href="#" class="btn btn-default full_width"  style="cursor:not-allowed" title="Version établissement requise." >Créer une évaluation</a> 
@@ -81,7 +81,7 @@
 
 
 <hr>
-{% if   teacher.user.shool %}
+{% if sacado_asso %}
 <li class="sans_puce"><a href="{% url 'create_demand' %}" class="btn btn-default full_width">Demander un exercice</a> </li> 
 {% else %}
 <li class="sans_puce"><a href="#" data-toggle='modal' data-target='#sacado_etablissement'  class="btn btn-warning full_width">Version établissement</a> </li> 
