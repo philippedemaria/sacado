@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+
+
+
+
+{% block body %}
+<section id="pricing">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-12" align="center">
+                <h4 class="title_page">Choisissez le menu qui vous convient</h4>
+            </div>
+        </div> 
+        <div class="row">
+
+
+            <div class="col-sm-6 col-md-6" align="center">
+                <div class="card" >
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-sm-4 col-md-3">
+                                <img src="{% static 'img/menu_autonomie.png' %}" width="60px">
+                            </div>
+                            <div class="col-sm-8 col-md-9">
+                             Menu<div class="sub_header">{{ frml.name }}</div> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="this_price">dès <span class="currency">{{ frml.price }}€</span>/mois</div>
+                        <div class="card-block">
+                            <p class="card-text"><i class="fa fa-th"></i> Parcours d'exercices interactifs auto-corrigés conformes aux attendus des programmes.</p> 
+                            <p class="card-text"><i class="fa fa-desktop"></i> Cours, exemples interactifs adossés aux parcours.</p>
+                            <p class="card-text"><i class="fa fa-database"></i> Accès au contenu de tous les niveaux.</p>
+                            <p class="card-text"><i class="fa fa-tasks"></i> Suivis de progression</p>
+                        </div>
+                        <a href="{% url 'choice_menu' frml.name  %}" class="btn">Choisir ce menu</a>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div class="col-sm-6 col-md-6" align="center">
+
+                <div class="card" >
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-sm-4 col-md-3">
+                                <img src="{% static 'img/menu_accompagnement.png' %}"  width="60px">
+                            </div>
+                            <div class="col-sm-8 col-md-9">
+                             Menu<div class="sub_header">{{ formule.name }}</div> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="this_price">dès <span class="currency">{{ formule.price }}€</span>/mois</div>
+                        <div class="card-block plus">
+                            <p class="card-text">Option <span class="sub_header">{{ frml.name }}</span>  <i class="fa fa-plus"></i></p>
+                        </div>
+                         <small>avec, <b>entre 17h et 20h</b>, du lundi au vendredi </small> 
+                        <div class="card-block plus">
+                            <p class="card-text">Accompagnement d'un enseignant par chat, en illimité.</p>
+                        </div>
+                        <a href="{% url 'choice_menu' 'accompagnement' %}" class="btn">Choisir ce menu</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section> 
+
+
+<section id="faq">
+    <div class="container">
+        <div class="row">
+            <div class="col-ms-12">
+                <h2 class="thin">Foire aux Questions</h2>
+            </div>
+        </div>
+
+        <div id="accordion">
+ 
+            <div   id="headingOne">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                  Que comprend l'adhésion ?
+                </button>
+              </h5>
+            </div>
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+              <div class="card-body">
+                 L'adhésion permet de disposer des parcours éducatifs pour s'exercicer, des cours et des exemples interactifs pour mieux comprendre les notions. Il est nécessaire d'avoir une connexion Intenet. <b>sacado.xyz ne fournit pas de connexion Internet dans son adhésion</b>.
+              </div>
+            </div>
+          <hr/>
+ 
+            <div  id="headingTwo">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="headingTwo">
+                  L'élève peut-il accéder à tous les niveaux ?
+                </button>
+              </h5>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+              <div class="card-body">
+                Oui. Via son tableau de bord chaque enfant peut chercher des parcours dans les niveaux qu'il décide.
+              </div>
+            </div>
+          <hr/>
+ 
+            <div  id="headingThree">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  L'abonnement peut-il être partagé entre plusieurs élèves ?
+                </button>
+              </h5>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+              <div class="card-body">
+                En théorie, non. Le suivi est associé à l'enfant qui se connecte. Si plusieurs enfants utilisent le même comptte, le tableau de bord des suivis ne signifiera plus gand chose. Si vous souhaitez abonner plusieurs enfants, vous devez créer un compte nominatif pour chacun d'entre eux dans lequel ils retrouveront leurs informations personnelles ainsi que le suivi de leur progression. Pour les budgets très serrés, nous contacter : info@sacado.xyz. <br/>sacado.edu est une association à but non lucratif, alors si on peut trouver des arrangements avec les plus modestes, sacado.edu s'engage à le proposer.
+              </div>
+            </div>
+          <hr/>
+          <div  id="headingFour">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                  Quels sont les moyens de paiement acceptés sur sacado.xyz ?
+                </button>
+              </h5>
+            </div>
+            <div id="collapseFour" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+              <div class="card-body">
+                Le site sacado.xyz accepte les paiements par cartes bancaires Visa, Mastercard et American Express et les paiements via PayPal.  
+              </div>
+            </div>
+          <hr/>
+            <div  id="headingFive">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                  Le paiement est-il sécurisé ?
+                </button>
+              </h5>
+            </div>
+            <div id="collapseFive" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+              <div class="card-body">
+                    Vous pouvez payer en ligne en toute confiance, toutes les transactions effectuées sur le site sacado.xyz sont 100% sécurisées par nos partenaires de paiement Paypal et CIC. Nous y portons une attention particulière afin que vous puissiez effectuer votre paiement en toute sécurité. Les coordonnées de votre carte de crédit sont cryptées grâce au protocole SSL (Secure Socket Layer) et aucune donnée bancaire vous concernant n'est jamais divulguée sur le réseau.
+              </div>
+            </div>
+          <hr/>
+            <div  id="headingSix">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                  Comment arrêter mon abonnement ?
+                </button>
+              </h5>
+            </div>
+            <div id="collapseSix" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+              <div class="card-body">
+                L'abonnement SACADO n'est pas un abonnement par reconduction tacite. Vous cevez le reconduire à la fin de chaque période. Si vous ne souhaitez plus profiter des fonctionnalités de l'abonnement, vous pouvez annuler le renouvellement automatique de votre abonnement à tout moment par email à l'adresse info@sacado.xyz.
+              </div>
+            </div>
+ 
+
+
+
+
+
+        </div>
+
+
+
+
+    </div>
+</section> 
+
+ 
+<section id="footer_asso">    
+</section>
+{% endblock %}

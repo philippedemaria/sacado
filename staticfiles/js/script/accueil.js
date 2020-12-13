@@ -240,6 +240,38 @@
             });
 
 
+
+ 
+        $('.family').hide() ;
+
+
+
+        $('#one_child').click(function(){  
+
+                $("#one_child_radio").attr("checked", "checked");
+                $('#children_radio').removeAttr("checked");
+                $('.child').html("").html("1 enfant"); 
+                $("#one_child").addClass("btn-violet").removeClass("btn-violet_border");
+                $("#children").addClass("btn-violet_border").removeClass("btn-violet");
+
+                $('.alone').show() ;
+                $('.family').hide() ;
+            });
+
+
+        $('#children').click(function(){
+
+                $('#children_radio').attr("checked", "checked");
+                $("#one_child_radio").removeAttr("checked");
+                $('.child').html("").html("Famille");
+                $("#children").addClass("btn-violet").removeClass("btn-violet_border");
+                $("#one_child").addClass("btn-violet_border").removeClass("btn-violet");
+                
+                $('.alone').hide() ;
+                $('.family').show() ;
+            });
+
+
     });
 
  

@@ -56,6 +56,7 @@ color : #0056b3;
   font-weight: 100;
 }
 
+
 .content_bgwhite{
     background-color: #FFF;
     margin-left: 0px;
@@ -1385,108 +1386,7 @@ table.table-bordered.dataTable {
   background-color: #2a4c5e;
 }
 
-/* Pricing Section
---------------------------------*/
 
-#pricing {
-  padding: 80px 0;
-}
-
-#pricing .card {
-  border: 0;
-  border-radius: 0px;
-  box-shadow: 0 3px 0px 0 rgba(65, 62, 102, 0.08);
-  transition: all .3s ease-in-out;
-  padding: 36px 0;
-  position: relative;
-}
-
-#pricing .card:after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0%;
-  height: 5px;
-  background-color: #2a4c5e;
-  transition: 0.5s;
-}
-
-#pricing .card:hover {
-  -webkit-transform: scale(1.05);
-  transform: scale(1.05);
-  box-shadow: 0 20px 35px 0 rgba(0, 0, 0, 0.08);
-}
-
-#pricing .card:hover:after {
-  width: 100%;
-}
-
-#pricing .card .card-header {
-  background-color: white;
-  border-bottom: 0px;
-  -moz-text-align-last: center;
-  text-align-last: center;
-}
-
-#pricing .card .card-title {
-  margin-bottom: 16px;
-  color: #535074;
-}
-
-#pricing .card .card-block {
-  padding-top: 0;
-  text-align: center;
-}
-
-#pricing .card .list-group-item {
-  border: 0px;
-  padding: 6px;
-  color: #2a4c5e;
-  font-weight: 300;
-}
-
-#pricing .card h3 {
-  font-size: 64px;
-  margin-bottom: 0px;
-  color: #535074;
-}
-
-#pricing .card h3 .currency {
-  font-size: 30px;
-  position: relative;
-  font-weight: 400;
-  top: -30px;
-  letter-spacing: 0px;
-}
-
-#pricing .card h3 .period {
-  font-size: 16px;
-  color: #6c67a3;
-  letter-spacing: 0px;
-}
-
-#pricing .card .list-group {
-  margin-bottom: 15px;
-}
-
-#pricing .card .btn {
-  text-transform: uppercase;
-  font-size: 13px;
-  font-weight: 500;
-  color: #5f5b96;
-  border-radius: 0;
-  padding: 10px 24px;
-  letter-spacing: 1px;
-  border-radius: 3px;
-  display: inline-block;
-  background: #2a4c5e;
-  color: #fff;
-}
-
-#pricing .card .btn:hover {
-  background: #0a98c0;
-}
 /*--------------------------------------------------------------
 # Cookies
 --------------------------------------------------------------*/
@@ -1856,4 +1756,203 @@ table.table-bordered.dataTable {
   #footer .footer-top .social-links a {
     margin-bottom: 25px;
   }
+}
+
+
+ 
+/*--------------------------------------------------------------
+# Pricing box
+--------------------------------------------------------------*/
+/* Pricing Section
+--------------------------------*/
+
+#pricing{
+margin-top: 90px;
+padding-top: 30px;
+background-color: #f1eef7 ;
+padding-bottom: 100px;
+}
+
+
+#pricing .title_page{
+   color: #5f5b96;
+   font-weight: 100;
+}
+
+
+#pricing .container, #faq .container{
+width: 800px;
+margin-right: auto;
+margin-left: auto;
+}
+
+#pricing .full_container{
+width: 1000px;
+margin-right: auto;
+margin-left: auto;
+}
+
+#pricing .card {
+  border: 0;
+  border-radius: 0px;
+  box-shadow: 0 3px 0px 0 rgba(65, 62, 102, 0.08);
+  transition: all .3s ease-in-out;
+  padding: 20px 0;
+  position: relative;
+  color: #5f5b96;
+}
+
+#pricing .card:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 5px;
+  background-color: #5d4391;
+  transition: 0.5s;
+}
+
+#pricing .card:hover {
+  -webkit-transform: scale(1.05);
+  transform: scale(1.05);
+  box-shadow: 0 20px 35px 0 rgba(0, 0, 0, 0.08);
+}
+
+#pricing .card:hover:after {
+  width: 100%;
+}
+
+#pricing .card .card-header {
+  background-color: white;
+  border-bottom: 0px;
+  -moz-text-align-last: left;
+  text-align-last: left;
+}
+
+#pricing  .sub_header {
+  font-weight: 500;
+  font-variant: small-caps;
+  font-size: 30px;
+  color: #5d4391;
+}
+
+
+
+#pricing .card   .sub_header {
+  font-weight: 500;
+  font-variant: small-caps;
+  font-size: 20px;
+}
+ 
+
+#pricing .card .card-title {
+  margin-bottom: 16px;
+  color: #535074;
+}
+
+#pricing .card .card-text {
+  margin-bottom: 10px;
+}
+
+#pricing .card .card-block {
+  padding-top: 0;
+  text-align: left;
+  background-color: #e3dcef;
+  margin: 30px 0px;
+  padding: 15px;
+}
+
+#pricing .card   .plus {
+  margin: 29px 0px;
+}
+
+#pricing .card .list-group-item {
+  border: 0px;
+  padding: 6px;
+  color: #5d4391;
+  font-weight: 300;
+}
+
+#pricing .this_center{
+  text-align: center;
+}
+
+#pricing .card h3 {
+  font-size: 64px;
+  margin-bottom: 0px;
+  color: #535074;
+}
+
+#pricing .card  .currency {
+  font-size: 40px;
+  position: relative;
+  font-weight: 400;
+  letter-spacing: 0px;
+}
+
+
+#pricing .card .list-group {
+  margin-bottom: 15px;
+}
+
+#pricing .card .btn {
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 500;
+  color: #5f5b96;
+  border-radius: 0;
+  padding: 10px 24px;
+  letter-spacing: 1px;
+  border-radius: 3px;
+  display: inline-block;
+  background: #5d4391;
+  color: #fff;
+}
+
+#pricing .card .btn:hover {
+  background: #aa96cf;
+}
+
+#faq .thin{
+  margin-top: 20px;
+   color: #5d4391; 
+}
+
+#faq .collapsed{
+   color: #5d4391; 
+}
+
+#faq .btn{
+   color: #5d4391; 
+}
+
+#footer_asso{
+  height : 100px;
+  background-color: #f1eef7 ;
+  margin-top: 20px;
+}
+
+
+.btn-violet {
+    color: #f1eef7;
+    background-color: #5d4391;
+    border-color: #5d4391;
+}
+
+.btn-violet:hover {
+    color: #fff;
+    background-color: #aa96cf;
+    border-color: #5d4391;
+}
+
+.btn-violet_border {
+    color: #5d4391;
+    background-color: transparent;
+    border-color: #5d4391;
+}
+.btn-violet_border:hover {
+    color: #fff;
+    background-color: #aa96cf;
+    border-color: #5d4391;
 }

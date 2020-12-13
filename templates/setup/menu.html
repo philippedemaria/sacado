@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+
+
+
+{% block body %}
+
+<section id="pricing">
+    <div class="full_container">
+        <form action="" method="POST">
+
+            <div class="row">
+                <div class="col-sm-12 col-md-12" align="center">
+                        
+                        <img src="{% if name == "autonomie" %}{% static 'img/menu_autonomie.png' %}{% else %}{% static 'img/menu_accompagnement.png' %}{% endif %}" width="60px">
+                    
+                        Menu <span class="sub_header"> {{  name }}</span> <span class="pull-right"><small> <a href="{% url 'student_to_association'  %}">Changer de menu</a></small> </span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-md-12" align="center">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                          <label class="btn btn-violet" id="one_child" >
+                                <input type="radio" name="options" id="one_child_radio" value="1" checked   >  1 enfant
+                          </label>
+                          <label class="btn btn-violet_border" id="children">
+                                <input type="radio" name="options"  id="children_radio" value="10"  >  Famille
+                          </label>
+                    </div>
+                </div>
+            </div> 
+            <div class="row">
+                <div class="col-sm-12 col-md-12" align="center">
+                    <p></p>
+                </div>
+            </div> 
+
+            <div class="row" id = "result_price">
+                 {% for formule in formules %}
+                    <div class="col-sm-4 col-md-4" align="center">
+                        <div class="card">
+
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 child">
+                                    1 enfant
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12">
+                                  <div class="sub_header">Adhésion {{ formule.adhesion }}</div> 
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="currency">
+                                    <span class="alone" id="currency_alone{{ formule.nb_month }}">{{ formule.data.total }}</span>
+                                    <span class="family" id="currency_family{{ formule.nb_month }}">{{ formule.data.totalF }}</span>€ 
+
+
+                                </div>
+                                <div class="card-block">
+                                    <p class="card-text this_center" ><small> Adhésion jusqu'au {{ formule.data.end|date:"d F Y" }} </small></p>
+                                </div>
+                                <a href=" " class="btn">Choisir ce menu</a>                            <br/>
+
+                                <small>Facturé en un seul paiement.<br/> Soit <span class="alone" id="alone_type{{ formule.nb_month }}">{{ formule.price }}</span>
+                                                                              <span class="family"  id="family_type{{ formule.nb_month }}">{{ formule.data.priceF }}</span>
+
+
+
+                                                                            € x {{ formule.data.left_month }} mois.</small>
+
+
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </form>
+
+
+
+    </div>
+</section> 
+
+  
+
+
+
+
+
+
+
+
+<section id="faq">
+ 
+</section> 
+
+ 
+    
+
+{% endblock %}
