@@ -22,9 +22,10 @@
 {% endblock %}
 
 {% block page_menu_right %}
- 
+    <li><a href="{% url 'association_knowledge' %}" class="btn btn-new pull-right" ><i class="fa fa-tasks"></i>  Association</a></li> 
     <li><a href="{% url 'create_knowledge' %}" class="btn btn-new pull-right" ><i class="fa fa-plus"></i> Nouveau savoir faire</a></li>
     <li><a href="{% url 'create_multi_knowledge' %}" class="btn btn-new pull-right" ><i class="fa fa-plus"></i>  Création multiple</a></li>  
+
 {% endblock %}
 
 

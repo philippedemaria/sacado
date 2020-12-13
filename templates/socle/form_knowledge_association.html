@@ -1,0 +1,113 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+
+
+    <script>
+        require(['script/ajax-waiting']);
+    </script> 
+
+{% endblock %}
+
+
+
+
+{% block page_title %}
+     Savoir faire   <img src="{% static 'img/angle-right.png' %}"/>   {% if knowledge %}
+                                                         <small>Modification</small>
+                                                        {% else %}
+                                                         <small>Nouveau savoir faire</small>
+                                                        {% endif %}  
+{% endblock %}
+
+{% block page_menu_right %}
+{% endblock %}
+
+
+
+
+{% block body  %} 
+
+ 
+
+ 
+<section class="content_main">
+  
+  <div class="row">
+      <div class="col-sm-12 col-md-12">
+   
+
+            <form method="post" action="" enctype='multipart/form-data'>
+              {% csrf_token %}
+                      <div class="row">
+                          <div class="col-sm-12 col-md-2">
+                            <div class="form-group">
+                                <label>{{ form.level.label_tag }}</label>
+                                {{ form.level |add_class:"form-control select2"  }}
+                                {{ form.level.errors }}
+                            </div>
+                          </div> 
+                          <div class="col-sm-12 col-md-3">
+                            <div class="form-group">
+                                <label>{{ form.theme.label_tag }}</label>
+                                {{ form.theme |add_class:"form-control select2"  }}
+                                {{ form.theme.errors }}
+                            </div>
+                          </div>  
+                          <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label>{{ form.waiting.label_tag }}</label>
+                                {{ form.waiting |add_class:"form-control select2"  }}
+                                {{ form.waiting.errors }}
+                            </div>
+                          </div>  
+                          <div class="col-sm-12 col-md-1">
+                              <div class="form-group"><br/>
+                                  <button type="submit" class="btn btn-primary">OK</button>
+                              </div>   
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-sm-12 col-md-12">
+                              <table  class="table table-bordered table-hover standard_tab_sort300" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                          <th>Nom</th>                      
+                                          <th>Thème</th>
+                                          <th>Niveau</th>
+                                          <th>Attendu</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                          {% for knowledge in knowledges %}
+                                          <tr> 
+                                            <td><label><input type="checkbox" name="knowledge_ids" value="{{ knowledge.id }}" />
+                                                {{ knowledge.name }}  </label>
+                                            </td>
+                                            <td >
+                                                {{ knowledge.theme.name }} 
+                                            </td> 
+                                            <td >
+                                                {{ knowledge.level.name }}
+                                            </td>
+                                            <td >
+                                                {{ knowledge.waiting.name }}
+                                            </td>
+                                          </tr>
+                                          {% endfor %}
+                                    </tbody>
+                              </table>
+                          </div>
+                      </div>
+
+    
+            </form>
+      </div>
+  </div>
+</section> 
+{% endblock  %}   

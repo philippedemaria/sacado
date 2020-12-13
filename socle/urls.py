@@ -35,6 +35,8 @@ urlpatterns = [
     path('update_waiting/<int:id>/', update_waiting, name='update_waiting'),
     path('delete_waiting/<int:id>/', delete_waiting, name='delete_waiting'),
     path('create_multi_waiting', create_multi_waiting, name='create_multi_waiting'),
+    path('association_knowledge/waitings/', association_knowledge, name='association_knowledge'),
 
+ 
     path('ajax/chargewaitings', ajax_chargewaitings, name='ajax_chargewaitings'),
 ]

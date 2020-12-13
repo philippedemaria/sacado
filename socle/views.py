@@ -133,6 +133,28 @@ def delete_knowledge(request, id):
     return redirect('knowledges')
 
 
+
+@user_is_superuser
+def association_knowledge(request):
+
+    knowledges = Knowledge.objects.filter(waiting=None).select_related('theme', 'level')
+    form = KnowledgeForm(request.POST or None  )
+
+    if request.method == "POST" :
+        waiting_id = request.POST.get("waiting")
+        knowledges_ids = request.POST.getlist("knowledge_ids")
+
+        for k_id in knowledges_ids :
+            Knowledge.objects.filter(pk = k_id).update(waiting_id=waiting_id)
+ 
+
+    context = {'form': form, 'communications' : [] ,  'knowledges': knowledges   }
+
+    return render(request, 'socle/form_knowledge_association.html', context )
+
+
+
+
 @user_is_superuser
 def list_levels(request):
  
