@@ -1763,20 +1763,17 @@ table.table-bordered.dataTable {
 /*--------------------------------------------------------------
 # Pricing box
 --------------------------------------------------------------*/
-
+ 
 /* Pricing Section
 --------------------------------*/
 
 #pricing{
-
 margin-top: 60px;
 padding-top: 100px;
-
 background-color: #f1eef7 ;
 padding-bottom: 100px;
 }
-
-
+ 
 
 #pricing .title_page{
    color: #5f5b96;
@@ -1785,12 +1782,12 @@ padding-bottom: 100px;
 
 
 #pricing .container, #faq .container{
-
 width: 800px;
 margin-right: auto;
 margin-left: auto;
 }
 
+ 
 #pricing .full_container{
 width: 1000px;
 margin-right: auto;

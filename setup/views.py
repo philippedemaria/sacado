@@ -25,6 +25,7 @@ import fileinput
 
 
 
+
 def end_of_contract() :
 
     data = {}
@@ -34,6 +35,7 @@ def end_of_contract() :
         end = date.year
     else :
         end = int(date.year) + 1
+
 
     return end
 
@@ -262,6 +264,7 @@ def choice_menu(request,name):
     end  = end_of_contract()
     context = { 'formules' : formules , 'end' : end , 'name' : name  }
     return render(request, 'setup/menu.html', context)   
+
 
 
 ##############################################  AJAX ############################################################

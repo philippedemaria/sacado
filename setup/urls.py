@@ -19,7 +19,9 @@ urlpatterns = [
 
     path('student_to_association', student_to_association, name='student_to_association'),     
 
+
     path('choice_menu/<slug:name>', choice_menu, name='choice_menu'), 
+
 
 
 ]
