@@ -83,7 +83,7 @@
 
                 <div class="handler widget-user-header">
                     <!-- Add signet to folder -->
-                    {% if parcours.is_folder %}
+                    {% if parcours.is_folder and not parcours.vignette  %}
                         <img src="{% static 'img/signet.png' %}" class="pull-right" />
                     {% endif  %}
 
