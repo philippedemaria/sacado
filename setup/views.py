@@ -24,6 +24,7 @@ from general_fonctions import *
 import fileinput 
 
 
+
 def end_of_contract() :
 
     data = {}
@@ -249,6 +250,7 @@ def test_display(request):
 
 
 def student_to_association(request):
+
     frml = Formule.objects.get(pk=1)
     formule = Formule.objects.get(pk=4)
     context = { 'frml' : frml , 'formule' : formule }
@@ -262,9 +264,8 @@ def choice_menu(request,name):
     return render(request, 'setup/menu.html', context)   
 
 
-
-
 ##############################################  AJAX ############################################################
+
 
 
 

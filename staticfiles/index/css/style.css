@@ -1763,15 +1763,19 @@ table.table-bordered.dataTable {
 /*--------------------------------------------------------------
 # Pricing box
 --------------------------------------------------------------*/
+
 /* Pricing Section
 --------------------------------*/
 
 #pricing{
-margin-top: 90px;
-padding-top: 30px;
+
+margin-top: 60px;
+padding-top: 100px;
+
 background-color: #f1eef7 ;
 padding-bottom: 100px;
 }
+
 
 
 #pricing .title_page{
@@ -1781,6 +1785,7 @@ padding-bottom: 100px;
 
 
 #pricing .container, #faq .container{
+
 width: 800px;
 margin-right: auto;
 margin-left: auto;
@@ -1956,3 +1961,19 @@ margin-left: auto;
     background-color: #aa96cf;
     border-color: #5d4391;
 }
+
+
+.pricing_box .container .card{
+    width: 350px;
+    -webkit-box-shadow: 0 0 10px rgba(184, 168, 214, 0.5);
+    -moz- box-shadow: 0 0 10px rgba(184, 168, 214, 0.5);
+    box-shadow: 0 0 10px rgba(184, 168, 214, 0.5);
+}
+
+.pricing_box .container .card:hover{
+    width: 350px;
+    -webkit-box-shadow: 0 0 20px rgba(91, 65, 139, 0.5);
+    -moz- box-shadow: 0 0 20px rgba(91, 65, 139, 0.5);
+    box-shadow: 0 0 20px rgba(91, 65, 139, 0.5);
+}
+
