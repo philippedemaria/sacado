@@ -115,7 +115,7 @@
                     <div class="group_show" id="subparcours_show{{parcours.id }}" style="font-size:12px; color:#AAA"> 
                         <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ parcours.color }};">Sous-parcours</h4> 
                         {% for p in parcours.leaf_parcours.all %} 
-                            <li class="sans_puce" {% if p.is_publish %} style="color:{{ parcours.color }};"{% endif %}>{{ p.title }} <em> {% if p.is_publish %}, publié  {% else %}, non publié {% endif  %}</em> </li> 
+                            <li class="sans_puce" {% if p.is_publish %} style="color:{{ parcours.color }};"{% endif %}>{{ p.title }}   </li> 
                         {% endfor %}
                     </div>
                     <!-- Fenetre accessible par le disc   -->
@@ -239,7 +239,8 @@
                     </div> 
                     <div class="row">
                         <div class="col-lg-6 col-xs-7">
-                            <a href="#"  class="edit click_subparcours_show"   data-parcours_id="{{parcours.id }}" ><i class="fa fa-fw fa-folder"></i> <span class="label_icon">Sous-parcours</span> </a>
+                           
+                            <a href="#"  class="edit click_subparcours_show"   data-parcours_id="{{parcours.id }}"  {% if parcours.leaf_parcours.all|lenght > 1 %} style="color:#5d4391" {% endif %}><i class="fa fa-fw fa-folder"></i> <span class="label_icon">Sous-parcours</span> </a>
                         </div> 
 
                         <div class="col-lg-6 col-xs-7">
