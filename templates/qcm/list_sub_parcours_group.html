@@ -220,7 +220,7 @@
                         </div> 
                         <div class="col-lg-4 col-xs-4">
                             {% if not parcours.is_evaluation %}
-                                <a href="{% url 'show_course' 0 parcours.id   %}"  class="edit" {% if parcours.is_courses_exists %} style="color:#5d4391" {% endif %} ><i class="fa fa-fw fa-desktop"></i> <span class="label_icon">Cours </span> </a>
+                                <a href="{% url 'show_course' 0 parcours.id   %}"  class="edit" {% if parcours.is_courses_exists %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-desktop"></i> <span class="label_icon">Cours </span> </a>
                             {% else  %}                 
                                 <a href="{% url 'peuplate_parcours_evaluation' parcours.id   %}" class="edit"><i class="fa fa-fw fa-cloud"></i> <span class="label_icon">Sélect.</span>
                                 </a>  
@@ -229,7 +229,7 @@
                         {% if parcours.subparcours.all|length == 0 %}
                             <div class="col-lg-4 col-xs-4">
                             {% if not parcours.is_evaluation %}
-                                <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"  class="edit" {% if parcours.is_sections_exists %} style="color:#5d4391" {% endif %} ><i class="fa fa-fw fa-indent"></i> <span class="label_icon">Section.</span> </a>
+                                <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"  class="edit" {% if parcours.is_sections_exists %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-indent"></i> <span class="label_icon">Section.</span> </a>
                             {% else  %}   
                                 <a href="#" class="edit export_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-upload"></i>  <span class="label_icon">Export</span></a>              
                             {% endif  %}
@@ -252,7 +252,7 @@
                         </div>
                         <div class="col-lg-4 col-xs-4">
                             {% if not parcours.is_evaluation %}
-                            <a  href="{% url 'detail_task_parcours' parcours.id 0 0 %}"   class="edit" {% if parcours.is_task_exists %} style="color:#5d4391" {% endif %}>
+                            <a  href="{% url 'detail_task_parcours' parcours.id 0 0 %}"   class="edit" {% if parcours.is_task_exists %} style="color:{{ parcours.color }}" {% endif %}>
                                 {% if not parcours.is_task_exists %}<i class="fa fa-fw fa-calendar"></i>{% else %}<i class="fa fa-fw fa-calendar-check"></i>{% endif %}
                                  <span class="label_icon">Tâches</span>
                             </a>  
@@ -269,7 +269,7 @@
                     <div class="row">  
                         {% if  not parcours.is_folder %}
                         <div class="col-lg-4 col-xs-4">
-                            <a href="{% url 'individualise_parcours' parcours.id  %}" class="edit" {% if parcours.is_individualized %} style="color:#5d4391" {% endif %} ><i class="fa fa-fw fa-user"></i> <span class="label_icon">Individual.</span>
+                            <a href="{% url 'individualise_parcours' parcours.id  %}" class="edit" {% if parcours.is_individualized %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-user"></i> <span class="label_icon">Individual.</span>
                             </a> 
                         </div>
                         <div class="col-lg-4 col-xs-4">
@@ -279,7 +279,7 @@
                         </div>
                         {% endif %}                          
                         <div class="col-lg-4 col-xs-4">
-                            <a href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}" {% if parcours.students.all|length > 1 %} style="color:#5d4391" {% endif %}><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
+                            <a href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}" {% if parcours.students.all|length > 1 %} style="color:{{ parcours.color }}" {% endif %}><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
                             </a>
                         </div> 
                     </div>
@@ -295,7 +295,7 @@
                     {% endif %} 
                     </div>                     
                     <div class="col-lg-6 col-xs-6">
-                        <a href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}" {% if parcours.students.all|length > 1 %} style="color:#5d4391" {% endif %}><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
+                        <a href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}" {% if parcours.students.all|length > 1 %} style="color:{{ parcours.color }}" {% endif %}><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
                         </a>
                     </div> 
                 </div>
