@@ -10,7 +10,6 @@
 <section id="pricing">
     <div class="full_container">
         <form action="" method="POST">
-
             <div class="row">
                 <div class="col-sm-12 col-md-12" align="center">
                         
@@ -19,7 +18,6 @@
                         Menu <span class="sub_header"> {{  name }}</span> <span class="pull-right"><small> <a href="{% url 'student_to_association'  %}">Changer de menu</a></small> </span>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-sm-12 col-md-12" align="center">
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -37,7 +35,6 @@
                     <p></p>
                 </div>
             </div> 
-
             <div class="row" id = "result_price">
                  {% for formule in formules %}
                     <div class="col-sm-4 col-md-4" align="center">
@@ -68,11 +65,7 @@
 
                                 <small>Facturé en un seul paiement.<br/> Soit <span class="alone" id="alone_type{{ formule.nb_month }}">{{ formule.price }}</span>
                                                                               <span class="family"  id="family_type{{ formule.nb_month }}">{{ formule.data.priceF }}</span>
-
-
-
                                                                             € x {{ formule.data.left_month }} mois.</small>
-
 
                             </div>
                         </div>
