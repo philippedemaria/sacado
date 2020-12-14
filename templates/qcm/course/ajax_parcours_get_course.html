@@ -1,4 +1,6 @@
-    {% if  not  sacado_asso %}
+    
+
+    {% if  not  teacher.sacado %}
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <div class="alert alert-danger">
@@ -25,14 +27,14 @@
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <div class="form-group">
-                {% if sacado_asso %}
+                {% if teacher.sacado %}
                 <a href="#" class="btn btn-primary clone_to" data-course_id = '{{ course.id }}' data-all_parcours=0  data-dismiss="modal" aria-label="Close" >Cloner ce cours dans mes parcours</a>
 
                 <a href="#" class="btn btn-primary clone_to" data-course_id = '{{ course.id }}' data-all_parcours=1  data-dismiss="modal" aria-label="Close" >Cloner tous les cours de ce parcours dans mes parcours</a>
                 {% else %}
-                <span class="btn btn-primary">Cloner ce cours dans mes parcours</span>
+                <span class="btn btn-default">Cloner ce cours dans mes parcours</span>
                 
-                <span class="btn btn-primary">Cloner tous les cours de ce parcours dans mes parcours</span>
+                <span class="btn btn-default">Cloner tous les cours de ce parcours dans mes parcours</span>
                 {% endif  %}
             </div>
         </div>

@@ -380,6 +380,27 @@ class Teacher(models.Model):
             recipient_list=admins_emails,
             context={"teacher": self.user,}, )
 
+
+
+
+    def sacado(self):
+        """
+        L'enseignant est un membre bénéficiaire de sacado
+        """
+        sacado_asso = False
+
+        if self.user.school and self.user.is_extra :
+            sacado_asso = True
+
+        return sacado_asso
+
+
+
+
+
+
+
+
 class Resultknowledge(models.Model):
     student = models.ForeignKey(Student, related_name="results_k", default="", on_delete=models.CASCADE, editable=False)
     knowledge = models.ForeignKey(Knowledge, related_name="results_k", on_delete=models.CASCADE, editable=False)

@@ -5729,12 +5729,17 @@ def ajax_parcours_shower_course(request):
 
 
 def ajax_parcours_get_course(request):
-    teacher = Teacher.objects.get(user_id = request.user.id) 
+    teacher = Teacher.objects.get(user_id = request.user.id)
+
+    sacado_asso = False
+    if teacher.user.school and teacher.user.is_extra :
+        sacado_asso = True
+
     course_id =  int(request.POST.get("course_id"))
     course = Course.objects.get(pk=course_id)
     parcourses =  teacher.teacher_parcours.all()    
 
-    context = {  'course': course , 'parcourses': parcourses , 'teacher' : teacher  }
+    context = {  'course': course , 'parcourses': parcourses , 'teacher' : teacher , 'sacado_asso' : sacado_asso  }
     data = {}
     data['html'] = render_to_string('qcm/course/ajax_parcours_get_course.html', context)
  
@@ -5792,6 +5797,7 @@ def course_custom_show_shared(request):
 def ajax_course_custom_show_shared(request):
     
     teacher = Teacher.objects.get(user= request.user)
+ 
     data = {} 
     level_id = request.POST.get('level_id',None)
 
@@ -5821,7 +5827,7 @@ def ajax_course_custom_show_shared(request):
 
             courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user__is_superuser=1),is_share = 1, parcours__in = parcours_tab )
 
-    data['html'] = render_to_string('qcm/course/ajax_list_courses.html', {'courses' : courses, })
+    data['html'] = render_to_string('qcm/course/ajax_list_courses.html', {'courses' : courses, 'teacher' : teacher  })
  
     return JsonResponse(data)
 
