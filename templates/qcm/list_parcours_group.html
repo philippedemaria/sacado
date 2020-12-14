@@ -245,7 +245,7 @@
                         </div> 
 
                         <div class="col-lg-6 col-xs-7">
-                            <a href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
+                            <a href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}" {% if parcours.students.all|length > 1 %} style="color:#5d4391" {% endif %} ><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
                             </a>
                         </div>                    
                     </div> 
