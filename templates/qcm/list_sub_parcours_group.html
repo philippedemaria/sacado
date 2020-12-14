@@ -126,7 +126,7 @@
                                     data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
                                     <i class="fa fa-circle-o-notch"></i>
                                 </a><span class="legend-btn legend-btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %} size15" id="parcours_statut{{parcours.id}}" style="cursor:auto" >  
-                                  {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
+                                  {% if parcours.is_publish %} Publié  {% else %} Non publié {% endif  %} 
                                 </span>
                             </div>
                         </form>
