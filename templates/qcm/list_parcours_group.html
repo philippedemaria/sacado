@@ -239,8 +239,9 @@
                     </div> 
                     <div class="row">
                         <div class="col-lg-6 col-xs-7">
-                           
-                            <a href="#"  class="edit click_subparcours_show"   data-parcours_id="{{parcours.id }}"  {% if parcours.leaf_parcours.all|lenght > 1 %} style="color:#5d4391" {% endif %}><i class="fa fa-fw fa-folder"></i> <span class="label_icon">Sous-parcours</span> </a>
+
+                            <a href="#"  class="edit click_subparcours_show"   data-parcours_id="{{parcours.id }}"  {% if parcours.leaf_parcours.all|lenght > 1 %} style="color:#5d4391" {% endif %}>
+                                <i class="fa fa-fw fa-folder{% if parcours.leaf_parcours.all|lenght > 1 %}-open{% endif %}"></i> <span class="label_icon">Sous-parcours</span> </a>
                         </div> 
 
                         <div class="col-lg-6 col-xs-7">
