@@ -5403,33 +5403,39 @@ def export_notes_after_evaluation(request):
     fieldnames = ("Nom", "Prénom", "Notes")
     writer.writerow(fieldnames)
 
-
-
-    print(note_sacado,note_totale) 
-
-
     customexercises = parcours.parcours_customexercises.all()
     total_score_custom = 0 
     for ce in customexercises :
         total_score_custom += ce.mark
 
-    print("total_score_custom : "+str(total_score_custom) )
+	
+    nombre_exercices_in_parcours = parcours.parcours_customexercises.count() + parcours.exercises.count()
+
+
+    print(nombre_exercices_in_parcours)
+
 
     for student in parcours.students.order_by("user__last_name") :
-        note_custom = 0
-        customanswers = student.student_custom_answer.filter(parcours=parcours) 
+        note_cstm = 0
+        customanswers = student.student_custom_answer.filter(parcours=parcours)
+
+        distinct_customanswers = student.student_custom_answer.values("customexercise_id").filter(parcours=parcours).distinct().count()
+
         for customanswer in customanswers :
             try :
-                note_custom += float(customanswer.point)
+                note_cstm += float(customanswer.point)
             except :
                 pass
-
-        print("note_sacado : "+str(note_custom))
+        try :
+            note_custom = round(note_cstm/total_score_custom,2)
+        except :
+            note_custom = 0
 
         # Pour prendre en compte les notes SACADO    
         if note_sacado :
             nb_num_exo , good_answer = 0 , 0
             answers = student.answers.filter(parcours=parcours) 
+            distinct_answers = student.answers.values("exercise_id").filter(parcours=parcours).distinct().count()
             for ans in answers :
                 good_answer+= round(ans.numexo*ans.point/100  ,2)
                 nb_num_exo += int(ans.numexo)
@@ -5438,15 +5444,19 @@ def export_notes_after_evaluation(request):
             except :
                 note_s = 0
 
-            print("note_s : ",note_s )
-
             no_sacado_note = False
         else :
             note_s = 0
             note_sacado = 0
             no_sacado_note = True
 
-        final_mark = round( float(note_custom) * (float(note_totale) - float(note_sacado)) + float(note_s) * float(note_sacado), 1)
+        final_mark = float(note_custom) * (float(note_totale) - float(note_sacado)) + float(note_s) * float(note_sacado)
+
+        dtn = (distinct_answers + distinct_customanswers)/nombre_exercices_in_parcours
+
+        print(distinct_answers + distinct_customanswers)
+        print(dtn)
+        final_mark = round( final_mark * dtn , 1)
 
         if len(customanswers) == 0 and no_sacado_note :
             final_mark = "Abs" 
