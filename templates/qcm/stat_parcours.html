@@ -115,7 +115,7 @@ body{
                                 <td style="text-align: right;">
                                     {% if stat.total_numexo  %} <b>{{ stat.good_answer  }}</b> / {{ stat.total_numexo  }}<br />{% endif %}
                                     {% if stat.score_custom  %} <b>{{ stat.score_custom  }}</b> / {{ stat.score_total}} {% endif %}
-                                    {% if stat.percent  %}<small>({{ stat.nb_exo  }}/{{ parcours.nb_exercises }} x </small> {{ stat.percent  }}%) {% endif %} 
+                                    {% if stat.percent  %}<small>({{ stat.nb_exo  }}/{{ parcours.nb_exercises }} <br>x </small> {{ stat.percent  }}%) {% endif %} 
                                 </td>
                             </tr>
                         {% endfor %}
