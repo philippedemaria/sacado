@@ -127,17 +127,24 @@
                         <table class="table">
  
                             <tr>
-                                <td><small><em>Recevoir chaque fois qu'un élève effectue une tache ?</em></small></td>
+                                <td><label><small> Recevoir chaque fois qu'un élève effectue une tache ?</small></label></td>
                                 <td>{{ teacher_form.notification |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}    
                                     {{ teacher_form.notification.errors }}
                                 </td>                            
                             </tr>
                             <tr>
-                                <td><small><em>Recevoir lorsqu'un exercice d'un de mes niveaux préférés est mis en ligne ?</em></small></td>
+                                <td><label><small>Recevoir lorsqu'un exercice d'un de mes niveaux préférés est mis en ligne ?</small></label></td>
                                 <td>{{ teacher_form.exercise_post |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}    
                                     {{ teacher_form.exercise_post.errors }}
                                 </td>                            
                             </tr>
+                            <tr>
+                                <td><label><small>Recevoir des messages de ses élèves via sacado ? <small>le nom de l'émetteur apparait dans le message.</small></small></label></td>
+                                <td>{{ teacher_form.is_mailing |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}    
+                                    {{ teacher_form.is_mailing.errors }}
+                                </td>                            
+                            </tr>
+
                         </table>
 
                     </div>

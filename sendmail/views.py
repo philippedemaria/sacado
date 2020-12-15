@@ -55,7 +55,8 @@ def list_emails(request):
             for student in group.students.order_by("user__last_name"):
                 if student.user.email :
                     users.append(student.user)
-            users.append(group.teacher.user)
+            if group.teacher.is_mailing :
+            	users.append(group.teacher.user)
 
         sent_emails = Email.objects.distinct().filter(author=user).order_by("-today")
         emails = Email.objects.distinct().filter(receivers=user).order_by("-today")
@@ -83,7 +84,7 @@ def create_email(request):
 		form.save_m2m()
 
 		subject = request.POST.get('subject')
-		texte = request.POST.get('texte')
+		texte = request.POST.get('texte') + "\n\n Ce message est envoyé par : "+str(user)
 		receivers = request.POST.getlist('receivers')
 		groups = request.POST.getlist('groups')
 		rcv = []
@@ -105,7 +106,6 @@ def create_email(request):
 		send_mail(subject, cleanhtml(unescape_html(texte)) , "info@sacado.xyz", [str(request.user.email)] )
 
 	else:
-		print(form.errors)
 		messages.errors(request, "Le corps de message est obligatoire !")
 
 	return redirect('emails')
@@ -144,7 +144,7 @@ def list_communications(request):
 
 
 @csrf_exempt
-def create_communication(request): # id du concours
+def create_communication(request):  
 	form = CommunicationForm(request.POST or  None)
 
 	if request.method == "POST":
