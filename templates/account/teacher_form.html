@@ -16,8 +16,10 @@
 {% block page_title %}<i class="fa fa-user"></i> 
     {% if new %}
         Nouvel.le enseignant.e
+    {% elif request.user.is_superuser or request.user.is_manager %}
+        Profil  de {{ teacher.user.last_name}} {{ teacher.user.first_name}}
     {% else %}
-        Mon profil {% if request.user.is_superuser %} de {{ teacher.user.last_name}} {{ teacher.user.first_name}} {% endif %}
+        Mon profil 
     {% endif %}
 {% endblock %}
  
@@ -174,23 +176,31 @@
                 {% endif  %} 
             </div>
             <div class="row" style="margin-top:40px">
-                <div class="col-sm-12 col-md-12">
+                <div class="col-sm-12 col-md-8">
                     <div class="form-group">
                         <input value="Enregistrer" type="submit" class="btn btn-primary"/>
-
                             {% if request.user.is_superuser %}
-                                    <input value="Enregistrer et retour à toute la liste des enseignants" type="submit" name="listing" class="btn btn-info"/>
+                                <input value="Enregistrer et retour à toute la liste des enseignants" type="submit" name="listing" class="btn btn-info"/>
                             {% endif  %} 
-
                         <a href="javascript:history.back()">
                             <input type="button" value="Annuler"
                                    class="btn btn-default "/>
                         </a>
                     </div>   
                 </div>
+
+                {% if request.user.is_manager %}
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <a href="{% url 'dissociate_teacher' teacher.user.id %}" class="btn btn-danger" onclick="return TestRemove('cet enseignant')" > Dissocier ce compte</a>
+                    </div>   
+                </div>
+                {% endif  %} 
+
             </div>
         </form>
     </section>
 {% endblock %}
 
+ 
  

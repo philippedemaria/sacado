@@ -38,7 +38,7 @@
                 <a href="{% url 'csv_full_group'  %}" class="btn btn-default btn-accueil" style="margin-left:10px;width:280px; position: absolute; top:150px;"> Importer  groupes d'élèves </a>      
 
 
-                {% if request.user.school %}
+                {% if request.user.is_superuser %}
                 <a href="{% url 'update_school' request.user.school.id %}" class="small-box-footer"><i
                         class="fa fa-arrow-circle-right"></i> En détails </a>
                 {% endif %}

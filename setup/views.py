@@ -221,7 +221,7 @@ def send_message(request):
         send_mail(subject,
                   message,
                   email,
-                  ["philippe.demaria-lgf@erlm.tn", "brunoserres33@gmail.com", "sacado.sas@gmail.com"])
+                  ["philippe.demaria-lgf@erlm.tn", "brunoserres33@gmail.com", "sacado.asso@gmail.com"])
     return redirect("index")
 
 

@@ -203,7 +203,7 @@ def message_to_teachers_sent(request):
         if u.email:
             rcv.append(u.email)
 
-    send_mail(subject, cleanhtml(unescape_html(message)), 'sacado.sas@gmail.com', rcv)
+    send_mail(subject, cleanhtml(unescape_html(message)), 'sacado.asso@gmail.com', rcv)
     messages.success(request, 'message envoyé')
 
     return redirect("dashboard")  
@@ -864,9 +864,9 @@ def update_teacher(request, pk):
 
 #@can_register
 #@is_manager_of_this_school
-def delete_teacher(request, pk):
+def delete_teacher(request, id):
     if request.POST:
-        teacher = get_object_or_404(Teacher, user_id=pk)
+        teacher = get_object_or_404(Teacher, user_id=id)
         teacher.user.delete()
 
     test = request.POST.get("listing",None)
@@ -876,6 +876,20 @@ def delete_teacher(request, pk):
         return redirect('school_teachers')
     else :
         return redirect('index') 
+
+
+def dissociate_teacher(request, id):
+
+    Teacher.objects.filter(pk=id).update(school = None)
+
+    test = request.POST.get("listing",None)
+    if test :
+        return redirect('list_teacher')
+    elif request.user.is_manager :
+        return redirect('school_teachers')
+    else :
+        return redirect('index') 
+
 
 
 
