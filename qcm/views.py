@@ -5408,12 +5408,7 @@ def export_notes_after_evaluation(request):
     for ce in customexercises :
         total_score_custom += ce.mark
 
-	
     nombre_exercices_in_parcours = parcours.parcours_customexercises.count() + parcours.exercises.count()
-
-
-    print(nombre_exercices_in_parcours)
-
 
     for student in parcours.students.order_by("user__last_name") :
         note_cstm = 0
@@ -5454,8 +5449,7 @@ def export_notes_after_evaluation(request):
 
         dtn = (distinct_answers + distinct_customanswers)/nombre_exercices_in_parcours
 
-        print(distinct_answers + distinct_customanswers)
-        print(dtn)
+
         final_mark = round( final_mark * dtn , 1)
 
         if len(customanswers) == 0 and no_sacado_note :
@@ -5463,6 +5457,8 @@ def export_notes_after_evaluation(request):
 
         writer.writerow( (str(student.user.last_name).lower() , str(student.user.first_name).lower() , final_mark ) )
     return response
+
+
 
 def export_skills_after_evaluation(request):
 
