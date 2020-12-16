@@ -1125,15 +1125,17 @@ def update_parcours(request, id, idg=0 ):
                 student = Student.objects.get(user_id = s_id)
                 nf.students.add(student)
 
-
             try:
                 for exercise in parcours.exercises.all():
                     relationship = Relationship.objects.get(parcours=nf, exercise=exercise)
-                    relationship.students.set(form.cleaned_data.get('students'))
-                    relationship.students.set(sg_students)
+                    if len( form.cleaned_data.get('students') ) >0  : 
+                        relationship.students.set(form.cleaned_data.get('students'))
+                    if len(sg_students) >0  : 
+                        relationship.students.set(sg_students)
 
             except:
                 pass
+
 
  
             lock_all_exercises_for_student(nf.stop,parcours)
