@@ -28,21 +28,9 @@
 
 {% block page_title %}
 
- 
- 
-
-
       {% include 'qcm/breadcrumb.html' %}
 
-
-
- 
-        
-
-
-
-
-    <small>
+    <smal>
         {% if parcours %}
             Configuration 
         {% else %}
@@ -107,15 +95,24 @@
                     <div class="form-group list_choice">         
                     <label>Choisir les élèves parmi</label>   <br>  
                         {% for group in groups %}
-                        <a data-toggle="collapse" data-target="#demo{{ forloop.counter }}" style="color:{{ group.color}};cursor:pointer">
-                            {{ group.name|truncatechars:15 }} <small><i class="fa fa-caret-down"></i></small> </a> 
-                            {% if group.students.count > 0 %}<label class="pull-right"><input type="checkbox" value="{{ forloop.counter }}" 
+                            {% if group.students.count > 0 %}
+                            <a data-toggle="collapse" data-target="#demo{{ forloop.counter }}" style="color:{{ group.color}};cursor:pointer">
+                                {{ group.name|truncatechars:15 }} <small><i class="fa fa-caret-down"></i></small> 
+                            </a> 
+                            <label class="pull-right"><input type="checkbox" value="{{ forloop.counter }}" 
                                                                                                 {% if request.session.group_id %}
                                                                                                     {% if  request.session.group_id == group.id %}checked {% endif %}
                                                                                                 {% else %}
                                                                                                     {% if group.students.count == students_checked  %}checked {% endif %}
                                                                                                 {% endif %}
-                                                                                                class="select_all" /><small> tous  </small> </label>{% endif %}<br>
+                                                                                                class="select_all" /><small> tous  </small> 
+                                                               </label>
+                            {% else %}
+                                <span style="color:{{ group.color}}">
+                                   <small><i class="fa fa-caret-right"></i></small>  {{ group.name|truncatechars:15 }} 
+                                </span> 
+                                <small style="color:#cb2131">Groupe sans élève. Ce parcours ne lui sera pas affecté.</small>
+                            {% endif %}<br>
 
                           <div id="demo{{ forloop.counter }}" class="collapse" >
                                 <div class="form-group">
@@ -181,6 +178,11 @@
                           <div style="height:5px"></div>
                         {% endfor %}
                     </div>
+
+
+
+
+
                     {% if groups|length > 1 %}
                     <div class="form-group" style="font-size:12px">           
                         <i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le parcours est partagé entre ces groupes.

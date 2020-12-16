@@ -4,7 +4,7 @@
 <div class="row" id ="principal_section"> 
     <div class="col-xs-12 col-md-10 col-lg-10" style="margin-top:0px">
         <h2 class="thin">Mes groupes </h2>
-        <div class="row"></div><hr style="margin-top: 0px">   
+        <div class="row"></div><hr style="margin-top: 0px"/>   
         {% for group in groups %}
             {% get_group_parcours_counter group  teacher as data %}
                 <!-- small box -->
@@ -132,6 +132,8 @@
                 </div>
             {% else %}  
 
+
+
                 <div class="row">
                     <div class="col-lg-12 col-xs-12">
                         <p></p>
@@ -155,7 +157,7 @@
             {% for parcours_sort in list_parcours %}  
             <div class="row"></div>
             <h2 class="thin">{% if parcours_sort.grouper %}Mes évaluations non affectées{% else %} Mes parcours non affectés{% endif %}</h2>
-            <div class="row"></div><hr style="margin-top: 0px">             
+            <div class="row"></div><hr style="margin-top: 0px"/>             
                 {% for parcours in parcours_sort.list %}  
                     <div  class="box box-widget widget-user-2"  
                           style="opacity:0.7;{% if parcours.vignette %}background-image: url('{{ parcours.vignette.url }}'); background-size: cover; {% else %} background-color:{{parcours.color }}{% endif %};">
@@ -211,18 +213,16 @@
                         <div class="box-footer">
                             <div class="row extend">                              
                                 <div class="col-lg-3 col-xs-3">
-                                    <a href="{% url 'update_parcours' parcours.id 0 %}" class="edit" > <i class="fa fa-edit"></i><span class="label_icon">Modif.<span> </a><br>
-                                    </a> 
+                                    <a href="{% url 'update_parcours' parcours.id 0 %}" class="edit" > <i class="fa fa-edit"></i><span class="label_icon">Modif.<span></a> 
                                 </div>                             
                                 <div class="col-lg-3 col-xs-3">
-                                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit"><i class="fa fa-cloud"></i><span class="label_icon"> Sélec.</span>
-                                    </a>  
+                                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit"><i class="fa fa-cloud"></i><span class="label_icon"> Sélec.</span></a>  
                                 </div>    
                                 <div class="col-lg-3 col-xs-3">
-                                     <a href="{% url 'show_course' 0 parcours.id   %}"  class="edit"><i class="fa fa-desktop"></i><span class="label_icon"> Cours </span> </a> 
+                                     <a href="{% url 'show_course' 0 parcours.id   %}"  class="edit"><i class="fa fa-desktop"></i><span class="label_icon"> Cours </span></a> 
                                 </div>  
                                 <div class="col-lg-3 col-xs-3">
-                                    <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"  class="edit"><i class="fa fa-indent"></i><span class="label_icon"> Gérer</span> </a> 
+                                    <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"  class="edit"><i class="fa fa-indent"></i><span class="label_icon"> Gérer</span></a> 
                                 </div>  
                             </div>
                         </div>
@@ -235,16 +235,15 @@
             {% endfor %}
         {% endif %}
     </div>
- <!-- ****************************************************************************************-->
- <!-- ****************************************************************************************-->
- <!--    ****************************          Colonne de droite              ****************-->
- <!-- ****************************************************************************************-->
- <!-- ***************************** **********************************************************-->
+     <!-- ****************************************************************************************-->
+     <!-- ****************************************************************************************-->
+     <!--    ****************************          Colonne de droite              ****************-->
+     <!-- ****************************************************************************************-->
+     <!-- ***************************** **********************************************************-->
     <div class="col-xs-12 col-md-12 col-lg-2"> 
         {% include 'right_menu.html' %}
     </div>
 </div>
-
 
 
 <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -262,9 +261,6 @@
         </div>
     </div>
 </div>
- 
-
-
 
 <div class="modal fade" id="parcours_default_modal" tabindex="-1" role="dialog" aria-labelledby="parcours_default_modal">
     <div class="modal-dialog" role="document" style="width:70%">

@@ -1038,9 +1038,6 @@ def create_parcours(request,idp=0):
             return redirect('parcours')
     else:
         print(form.errors)
-
-
-
  
     if request.session.has_key("group_id") :
         group_id = request.session.get("group_id",None)        
@@ -1053,13 +1050,9 @@ def create_parcours(request,idp=0):
         group = None
         request.session["group_id"]  = None            
 
- 
-    print(request.session.has_key("group_id"))
-
 
     context = {'form': form,   'teacher': teacher,  'groups': groups,  'levels': levels, 'idg': 0,  'parcours_folder': parcours_folder ,  'themes' : themes_tab, 'group_id': group_id , 'parcours': None,  'relationships': [], 'share_groups' : share_groups , 
                'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'communications' : [],  'group': group , 'role' : True }
-
 
     return render(request, 'qcm/form_parcours.html', context)
  
@@ -1128,19 +1121,14 @@ def update_parcours(request, id, idg=0 ):
             try:
                 for exercise in parcours.exercises.all():
                     relationship = Relationship.objects.get(parcours=nf, exercise=exercise)
-                    if len( form.cleaned_data.get('students') ) >0  : 
+                    if len( form.cleaned_data.get('students') ) > 0  : 
                         relationship.students.set(form.cleaned_data.get('students'))
-                    if len(sg_students) >0  : 
+                    if len(sg_students) > 0  : 
                         relationship.students.set(sg_students)
-
             except:
                 pass
-
-
  
             lock_all_exercises_for_student(nf.stop,parcours)
-
-
 
             if request.POST.get("save_and_choose") :
                 return redirect('peuplate_parcours', nf.id)
