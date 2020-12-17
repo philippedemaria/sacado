@@ -22,9 +22,11 @@
     {% for skill in skills %}
     	<td>
     		{% get_result_skills_custom student skill as resultskill_custom %}
-    		{% get_result_skills student skill as data %}
+    		{% get_result_skills student skill as data %} 
+
 			{% for r in data.results %}
 				{% with data.relationships|index:forloop.counter0 as looper %}
+
 					{% if r.point %}
 					    <a class="helper_tip white markdown
 					            {% if r.point < 30 %}
@@ -44,6 +46,7 @@
 					          {{ r.point }}
 					    </a>
 					{% endif %} 
+					
 				{% endwith %} 
 	    	{% endfor %} 
 

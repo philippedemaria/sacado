@@ -146,12 +146,24 @@ class Student(ModelWithCode):
 
 
     def result_skills(self, skill):
-        ''' résultats de l'étudiants aux 3 dernières évaluations de compétences de la compétence en paramètre'''
+        ''' résultats de l'étudiant aux 3 dernières évaluations de compétences de la compétence en paramètre'''
         relationships = self.students_relationship.filter(skills = skill).order_by("-id")[:3]
         results = self.results_s.filter(skill=skill).order_by("-id")[:3]
+
+        relationships = list(relationships)
+        if len(relationships) < 3 :
+            for i in range( 3-len(relationships)  ) :
+                relationships.append("")
+
+        results = list(results)
+        if len(results) < 3 :
+            for i in range( 3-len(results)  ) :
+                results.append("")
+
         data = {}
         data["relationships"] = relationships
         data["results"] = results
+
         return data
 
 
