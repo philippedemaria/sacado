@@ -12,114 +12,118 @@
                         <thead>
                             <tr><td></td><td></td><td></td></tr>
                         </thead>
-                        <tbody>
+                        <tbody> 
                             {% for theme in data.themes  %} 
-                                <tr style="background:#e6e2dd">
-                                    <td></td><td><strong>{{data.name}}</strong> : {{theme.name}} </td> <td></td>
+                                <tr style="background:#5d4391; color:white">
+                                    <td><i class="fa fa-caret-right"></i> </td><td><strong>{{data.name}}</strong> : {{theme.name}} </td> <td></td>
                                 </tr>
-                                {% for knowledge in theme.knowledges  %}   
-                                   
-                                    {% if knowledge.exercises|length > 0 %} 
-                                            <tr><td><i class="fa fa-caret-right"></i></td>
-                                                <td class="listingtd">
-                                                    {{ knowledge.name.name|capfirst }} 
-                                                    {% if request.user.is_superuser and '/admin' in request.path %}
-                                                        <a href="{% url 'create_exercise_knowledge' knowledge.name.id %}" class="pull-right edit"><i class='fa fa-plus' style="margin-left:10px;font-size: 10px"></i></a>
-                                                    {% endif %}
-                                                </td><td></td>
-                                            </tr>
-                                            {% for e in knowledge.exercises  %}
-                                                {%  get_is_selected  e  parcours  as  e_is_selected %} 
-                                                <tr>
-                                                    <td>
-                                                        <label class="container_checkbox">
-                                                        <input type="checkbox"  data-exercise_id="{{ e.id }}"  {% if parcours %}  data-parcours_id="{{ parcours.id }}" class="selector_e" {% else %}
-                                                                class="selector_m"  {% endif %} {% if parcours_id %}  data-parcours_id="{{ parcours.id }}" {%endif %} value="{{ e.id }}"
-                                                                name="exercises" id="selector_e{{ e.id }}"  data-statut="{{ e_is_selected }}"
-                                                                {% if e_is_selected %}checked{% endif  %} 
-                                                                 /><span class="checkmark"></span>
-                                                        </label>
-                                                    </td>
-                                                    <td> 
-                                                        <label for="selector_e{{ e.id }}"  class="label_select_checkbox">
+                                {% for waiting in theme.waitings  %} 
+                                    <tr style="background:#aa98cd; cursor: pointer" class="opener out"  id="{{ waiting.name.id }}">
+                                        <td><i class="fa fa-caret-right"></i></td><td>  {{waiting.name.name}}</td> <td></td>
+                                    </tr>
+                                    {% for knowledge in waiting.knowledges  %}   
+                                        {% if knowledge.exercises|length > 0 %} 
+                                                <tr style="cursor: pointer" class="opener_k opened{{ waiting.name.id }} out"  id="{{ knowledge.name.id}}"><td><i class="fa fa-caret-right"></i></td>
+                                                    <td class="listingtd">
+                                                        {{ knowledge.name.name|capfirst }} 
                                                         {% if request.user.is_superuser and '/admin' in request.path %}
-                                                            <a href="{% url 'show_this_exercise'  e.id   %}"  target="_blank" >  
-                                                               {% if ajax %}
-                                                                <img src="{{ e.supportfile.imagefile.url }}" class="imagefile">
-                                                                {% else %}
-                                                                <img src="{{ e.supportfile.imagefile.url }}" class="imagefile">
-                                                                {% endif %}
-                                                            </a>
-
-
-                                                            <a href="{% url 'update_exercise'  e.id   %}" class="listing" style="font-size: 18px">
-                                                                {% if e.supportfile.title %} {{ e.supportfile.title|cleanhtml|capfirst }}{% else %} {{ e.supportfile.annoncement|cleanhtml|capfirst }} {% endif %} 
-                                                            </a> 
-
-                                                        {%  else %}
-                                                            <a href="{% url 'show_this_exercise'  e.id   %}"  target="_blank" >
-                                                               {% if ajax %}
-                                                                <img src="{{ e.supportfile.imagefile.url }}" class="imagefile">
-                                                                {% else %}
-                                                                <img src="{{ e.supportfile.imagefile.url }}" class="imagefile">
-                                                                {% endif %}
-                                                            </a> 
-                                                                {% if e.supportfile.title %} {{ e.supportfile.title|cleanhtml|capfirst }}{% else %} {{ e.supportfile.annoncement|cleanhtml|capfirst }} {% endif %} 
-                                                           
+                                                            <a href="{% url 'create_exercise_knowledge' knowledge.name.id %}" class="pull-right edit"><i class='fa fa-plus' style="margin-left:10px;font-size: 10px"></i></a>
                                                         {% endif %}
-                                                         {% if e.supportfile.calculator %}
-                                                          <img src="{% static 'img/calculator.png' %}" width="30px" />
-                                                        {% else %}
-                                                          <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
-                                                        {% endif  %}   
-                                                             <br>
-                                                                <small>   
-                                                                    <i class="fa fa-fw fa-barcode"></i> {{ e.supportfile.code }}  {% if e.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
-                                                                    <i class="fa fa-fw fa-clock-o"></i> {{ e.supportfile.duration }} minutes {% if e.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
-                                                                    <i class="fa fa-fw fa-save"></i> {{ e.supportfile.situation}} situation{{ e.supportfile.situation|pluralize}} minimum</small>
-                                                        </label>
+                                                    </td><td></td>
+                                                </tr>
+                                                {% for e in knowledge.exercises  %}
+                                                    {%  get_is_selected  e  parcours  as  e_is_selected %} 
+                                                    <tr  class="opener_e openedk{{ knowledge.name.id }}"  >
+                                                        <td>
+                                                            <label class="container_checkbox">
+                                                            <input type="checkbox"  data-exercise_id="{{ e.id }}"  {% if parcours %}  data-parcours_id="{{ parcours.id }}" class="selector_e" {% else %}
+                                                                    class="selector_m"  {% endif %} {% if parcours_id %}  data-parcours_id="{{ parcours.id }}" {%endif %} value="{{ e.id }}"
+                                                                    name="exercises" id="selector_e{{ e.id }}"  data-statut="{{ e_is_selected }}"
+                                                                    {% if e_is_selected %}checked{% endif  %} 
+                                                                     /><span class="checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td> 
+                                                            <label for="selector_e{{ e.id }}"  class="label_select_checkbox">
+                                                            {% if request.user.is_superuser and '/admin' in request.path %}
+                                                                <a href="{% url 'show_this_exercise'  e.id   %}"  target="_blank" >  
+                                                                   {% if ajax %}
+                                                                    <img src="{{ e.supportfile.imagefile.url }}" class="imagefile">
+                                                                    {% else %}
+                                                                    <img src="{{ e.supportfile.imagefile.url }}" class="imagefile">
+                                                                    {% endif %}
+                                                                </a>
+
+
+                                                                <a href="{% url 'update_exercise'  e.id   %}" class="listing" style="font-size: 18px">
+                                                                    {% if e.supportfile.title %} {{ e.supportfile.title|cleanhtml|capfirst }}{% else %} {{ e.supportfile.annoncement|cleanhtml|capfirst }} {% endif %} 
+                                                                </a> 
+
+                                                            {%  else %}
+                                                                <a href="{% url 'show_this_exercise'  e.id   %}"  target="_blank" >
+                                                                   {% if ajax %}
+                                                                    <img src="{{ e.supportfile.imagefile.url }}" class="imagefile">
+                                                                    {% else %}
+                                                                    <img src="{{ e.supportfile.imagefile.url }}" class="imagefile">
+                                                                    {% endif %}
+                                                                </a> 
+                                                                    {% if e.supportfile.title %} {{ e.supportfile.title|cleanhtml|capfirst }}{% else %} {{ e.supportfile.annoncement|cleanhtml|capfirst }} {% endif %} 
+                                                               
+                                                            {% endif %}
+                                                             {% if e.supportfile.calculator %}
+                                                              <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                                            {% else %}
+                                                              <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                                            {% endif  %}   
+                                                                 <br>
+                                                                    <small>   
+                                                                        <i class="fa fa-fw fa-barcode"></i> {{ e.supportfile.code }}  {% if e.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                                                                        <i class="fa fa-fw fa-clock-o"></i> {{ e.supportfile.duration }} minutes {% if e.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                                                                        <i class="fa fa-fw fa-save"></i> {{ e.supportfile.situation}} situation{{ e.supportfile.situation|pluralize}} minimum</small>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            {% get_parcours_from_this_exercise e teacher as  my_parcours_container   %}
+                                                            {% for p in my_parcours_container %}
+                                                                <div class="btn btn-info"  style="font-size: 10px;cursor:default">{{ p.title }} </div>
+                                                            {% endfor %}
+
+                                                            {% if request.user.is_superuser  and '/admin' in request.path %}
+                                                                <a href="{% url 'create_remediation'  e.id   %}" class="pull-right edit" style="margin-left:5px; font-size: 10px"> 
+                                                                    <i class="fa fa-plus thin"></i>   
+                                                                </a> 
+                                                            {% endif %}                                                
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %} 
+                                        
+                                        {% else %} 
+                                                <tr class="opener_e"  ><td></td> 
+                                                    <td>
+                                                        {{ knowledge.name }} 
+                                                        {% if request.user.is_superuser and '/admin' in request.path %}
+                                                        <a href="{% url 'create_exercise_knowledge' knowledge.name.id %}" class="edit"><i class='fa fa-plus pull-right' style="font-size: 10px"></i></a>
+                                                        {% endif %}
                                                     </td>
                                                     <td>
-                                                        {% get_parcours_from_this_exercise e teacher as  my_parcours_container   %}
-                                                        {% for p in my_parcours_container %}
-                                                            <div class="btn btn-info"  style="font-size: 10px;cursor:default">{{ p.title }} </div>
-                                                        {% endfor %}
-
-                                                        {% if request.user.is_superuser  and '/admin' in request.path %}
-                                                            <a href="{% url 'create_remediation'  e.id   %}" class="pull-right edit" style="margin-left:5px; font-size: 10px"> 
-                                                                <i class="fa fa-plus thin"></i>   
-                                                            </a> 
-                                                        {% endif %}                                                
                                                     </td>
                                                 </tr>
-                                            {% endfor %} 
-                                    
-                                    {% else %} 
-                                            <tr><td></td> 
-                                                <td>
-                                                    {{ knowledge.name }} 
-                                                    {% if request.user.is_superuser and '/admin' in request.path %}
-                                                    <a href="{% url 'create_exercise_knowledge' knowledge.name.id %}" class="edit"><i class='fa fa-plus pull-right' style="font-size: 10px"></i></a>
-                                                    {% endif %}
-                                                </td>
-                                                <td>
-                                                </td>
-                                            </tr>
-                                    {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
                                 {% endfor %}
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
-
+ 
             <script>
              $('table.display100').DataTable({
-        "pageLength": 100,
-        "ordering": false,
-            "retrieve": true,
-    "paging": false
-                } );
+                "pageLength": 100,
+                "ordering": false,
+                "retrieve": true,
+                "paging": false
+                });
 
 
         // Affiche dans la modal la liste des élèves du groupe sélectionné
@@ -128,7 +132,6 @@
             let parcours_id = $(this).attr("data-parcours_id"); 
             let exercise_id = $(this).attr("data-exercise_id"); 
             let statut = $(this).attr("data-statut"); 
-
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
  
             $.ajax(
@@ -156,9 +159,6 @@
                 }
             )
         });
-
-
-
 
         $('.selector_m').on('click' ,function () {
 
@@ -198,9 +198,71 @@
                         }
                     }
                 )
-                           
-
         });
+ 
+
+        $('.opener_k').hide() ;
+        $('.opener_e').hide() ;
+ 
+
+        $('.opener').on('click' ,function () { 
+            $('.opener_k').hide() ;
+
+            if( $(this).hasClass("out") )
+            {
+                $(".opener ~ .opened"+this.id).show();
+                $(this).removeClass("out").addClass("in");
+            }
+            else 
+            {
+                $(".opener ~ .opened"+this.id).hide();  
+                $(this).removeClass("in").addClass("out");          
+            }
+ 
+        });
+
+
+
+        $('.opener_k').on('click' ,function () { 
+            $('.opener_e').hide() ;
+
+            if( $(this).hasClass("out") )
+                {
+                $(".opener_k ~ .openedk"+this.id).show();
+                $(this).removeClass("out").addClass("in");
+                }
+            else 
+            {
+                $(".opener_k ~ .openedk"+this.id).hide();  
+                $(this).removeClass("in").addClass("out");          
+            }
+ 
+        });
+
+        /*
+                
+            function opening_div (toggle,target,collapser) {
+
+            $(toggle).on('click' ,function () { 
+                $(collapser).hide() ;
+                id = $(toggle).attr("id")
+                if( $(target+id).hasClass("out") )
+                    {
+                    $(target+id).show();
+                    $(target+id).removeClass("out").addClass("in");
+                    }
+                else 
+                {
+                    $(target+id).hide();  
+                    $(target+id).show();
+                    $(target+id).removeClass("in").addClass("out");          
+                }
+     
+            });
+
+        }
+    */
+ 
  
 
     MathJax.Hub.Queue(["Typeset",MathJax.Hub]);

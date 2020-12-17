@@ -113,6 +113,44 @@ class Waiting(models.Model):
     def __str__(self):
         return "{} : {}".format(self.theme,self.name)
 
+
+    def send_scorek(self,student):
+
+
+        try:
+
+            coef, score , score_ce = 0, 0 , 0            
+            for k in self.knowledges.all():
+
+                if k.results_k.filter(student=student).exists() :
+                    r = k.results_k.filter(student=student).last()
+                    score += int(r.point)
+                    coef += 1
+
+                if k.knowledge_correctionknowledge.filter(student=student).exists() :
+                    ce = k.knowledge_correctionknowledge.filter(student=student).last()
+                    score_ce += ce.point + 1 
+                    coef += 1
+ 
+            if coef != 0:
+                score = int((score + score_ce)/coef)
+            else :
+                score = ""
+
+        except ObjectDoesNotExist:
+            score = ""
+
+        return score
+
+
+
+
+
+
+
+
+
+
 class Knowledge(models.Model):
     level = models.ForeignKey(Level, related_name="knowledges", default="", on_delete=models.CASCADE, verbose_name="Niveau")
     theme = models.ForeignKey(Theme, related_name="knowledges", on_delete=models.CASCADE, verbose_name="Thème")

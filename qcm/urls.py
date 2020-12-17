@@ -34,6 +34,9 @@ urlpatterns = [
     path('parcours_result/<int:id>/', result_parcours, name='result_parcours'), 
     path('parcours_result_theme/<int:id>/<int:idt>/', result_parcours_theme, name='result_parcours_theme'),  # Je ne sais pas si cette route est utilisée ?????
     path('parcours_result_knowledge/<int:id>/', result_parcours_knowledge, name='result_parcours_knowledge'), 
+    path('parcours_result_waiting/<int:id>/', result_parcours_waiting, name='result_parcours_waiting'), 
+
+
     #path('parcours_stat/<int:id>/', stat_parcours, name='stat_parcours'), remplacer par stat_evaluation plus explicite
     path('parcours_detail_task/<int:id>/<int:s>/<int:c>/', detail_task_parcours, name='detail_task_parcours'), #modif idp en id pour la sécurité
     path('parcours_exercises/<int:id>/', parcours_exercises, name='parcours_exercises'),  # student_list_exercises

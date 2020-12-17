@@ -11,7 +11,7 @@ from group.models import Group , Sharing_group
 from school.models import Stage
 from qcm.models import  Parcours , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage
 from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm
-from socle.models import  Theme, Knowledge , Level , Skill
+from socle.models import  Theme, Knowledge , Level , Skill , Waiting
 from django.http import JsonResponse 
 from django.core import serializers
 from django.template.loader import render_to_string
@@ -1543,6 +1543,8 @@ def get_items_from_parcours(parcours) :
 
     return relationships , skill_tab 
 
+
+
 def result_parcours_skill(request, id):
 
     teacher = Teacher.objects.get(user=request.user)
@@ -1568,6 +1570,10 @@ def result_parcours_skill(request, id):
     context = {  'relationships': relationships,  'students': students, 'parcours': parcours,  'form': form, 'skill_tab' : skill_tab, 'group' : group, 'group_id' : group_id, 'stage' : stage , 'communications' : [] , 'role' : role  }
 
     return render(request, 'qcm/result_parcours_skill.html', context )
+
+
+
+
 
 def result_parcours_knowledge(request, id):
 
@@ -1627,6 +1633,82 @@ def result_parcours_knowledge(request, id):
 
     return render(request, 'qcm/result_parcours_knowledge.html', context )
  
+
+
+
+def result_parcours_waiting(request, id):
+
+    teacher = Teacher.objects.get(user=request.user)
+    parcours = Parcours.objects.get(id=id)
+    students = students_from_p_or_g(request,parcours)
+
+    form = EmailForm(request.POST or None)
+ 
+
+    if parcours.is_folder :
+        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all()).prefetch_related('exercise__supportfile').order_by("order")
+
+        custom_set = set()
+        for p in parcours.leaf_parcours.all():
+            cstm = p.parcours_customexercises.all() 
+            custom_set.update(set(cstm))
+        customexercises = list(custom_set)
+
+        knowledge_set = set()
+        for p in parcours.leaf_parcours.all():
+            knw = p.exercises.values_list("knowledge",flat=True).order_by("knowledge").distinct()
+            knowledge_set.update(set(knw))
+        knwldgs = list(knowledge_set)        
+
+    else :
+        relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
+        customexercises = parcours.parcours_customexercises.all() 
+        knwldgs = parcours.exercises.values_list("knowledge_id",flat=True).order_by("knowledge").distinct()
+
+
+    waitings,waiting_ids , wtngs = [], [] , []
+ 
+
+         
+    data = get_complement(request, teacher, parcours)
+    role = data['role']
+    group = data['group']
+    group_id = data['group_id'] 
+    access = data['access'] 
+
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
+        return redirect('index')
+
+    for ce in  customexercises :
+        for knowledge in ce.knowledges.all() :
+            waitings.append(knowledge.waiting)
+
+    for k_id in knwldgs :
+        k = Knowledge.objects.get(pk = k_id)
+        if k.waiting.name not in waiting_ids :
+            waiting_ids.append(k.waiting.name)
+            waitings.append(k.waiting)
+
+
+    stage = get_stage(teacher.user)
+    context = {  'relationships': relationships,  'students': students, 'parcours': parcours,  'form': form, 'exercise_waitings' : waitings, 'group_id' : group_id, 'stage' : stage , 'communications' : [] , 'role' : role  }
+
+    return render(request, 'qcm/result_parcours_waiting.html', context )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # def stat_parcours(request, id):
 
 #     teacher = Teacher.objects.get(user = request.user)
@@ -3274,6 +3356,8 @@ def ajax_level_exercise(request):
 
     parcours_id = request.POST.get('parcours_id', None)
  
+    print(level_ids, theme_ids)
+
 
     if  parcours_id :
         parcours = Parcours.objects.get(id = int(parcours_id))
@@ -3305,18 +3389,25 @@ def ajax_level_exercise(request):
         for theme in themes :
             themes_dict =  {}                
             themes_dict["name"]=theme
-            knowlegdes = Knowledge.objects.filter(theme=theme,level=level).order_by("theme")
-            knowledges_tab  =  []
-            for knowledge in knowlegdes :
-                knowledges_dict  =   {}  
-                knowledges_dict["name"]=knowledge 
-                exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).order_by("theme")
-                exercises_tab    =   []
-                for exercise in exercises :
-                    exercises_tab.append(exercise)
-                knowledges_dict["exercises"]=exercises_tab
-                knowledges_tab.append(knowledges_dict)
-            themes_dict["knowledges"]=knowledges_tab
+            waitings = Waiting.objects.filter(theme=theme,level=level).order_by("theme")
+            waitings_tab  =  []
+            for waiting in waitings :
+                waiting_dict  =   {} 
+                waiting_dict["name"]=waiting 
+                knowlegdes = Knowledge.objects.filter(waiting=waiting).order_by("theme")
+                knowledges_tab  =  []
+                for knowledge in knowlegdes :
+                    knowledges_dict  =   {}  
+                    knowledges_dict["name"]=knowledge 
+                    exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).order_by("theme")
+                    exercises_tab    =   []
+                    for exercise in exercises :
+                        exercises_tab.append(exercise)
+                    knowledges_dict["exercises"]=exercises_tab
+                    knowledges_tab.append(knowledges_dict)
+                waiting_dict["knowledges"]=knowledges_tab
+                waitings_tab.append(waiting_dict)
+            themes_dict["waitings"]=waitings_tab
             themes_tab.append(themes_dict)
         levels_dict["themes"]=themes_tab
         datas.append(levels_dict)

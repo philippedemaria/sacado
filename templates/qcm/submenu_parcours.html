@@ -3,9 +3,53 @@
  
 
 {% if sacado_asso %}
-<li><a href="{%  url 'result_parcours_skill'  parcours.id %}"  class="no_button {% if  'result_parcours_skill' in request.path %} active {% endif %}" > Compétences </a></li>
+<li class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if  'result_parcours_skill' in request.path %} active {% endif %}"> Compétences <b class="caret"></b> </a>
+
+    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+
+        <li {% if  'result_parcours_skill' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'result_parcours_knowledge' parcours.id %}"  class="no_button" >
+                <i class="fa fa-trophy fa-fw"></i> Lire le suivi par compétences
+            </a>
+        </li> 
+
+        <li {% if 'parcours_result/' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'result_parcours_waiting' parcours.id  %}"  class="no_button" >
+                <i class="fa fa-mortar-board fa-fw"></i> Lire le suivi par attendus 
+            </a> 
+        </li>    
+    </ul>
+</li>
+ 
 {% else %}
+
+
+
 <li ><a href="#" class="no_button no_sacado_asso"  title="version établissement requise"> Compétences</a></li>
+
+
+<li class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {no_sacado_asso"> Compétences <b class="caret"></b> </a>
+
+    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+
+        <li>
+            <a href="#"  class="no_button no_sacado_asso" >
+                <i class="fa fa-trophy fa-fw"></i> Lire le suivi par compétences
+            </a>
+        </li> 
+
+        <li>
+            <a href="#"  class="no_button no_sacado_asso" >
+                <i class="fa fa-mortar-board fa-fw"></i> Lire le suivi par attendus 
+            </a> 
+        </li>    
+    </ul>
+</li>
+
+
+
 {% endif %}
 
 
