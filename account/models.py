@@ -110,13 +110,16 @@ class Student(ModelWithCode):
 
         return "{} {}".format(lname, fname)
 
+
     def nb_parcours(self):
         nb = self.students_to_parcours.all().count()
         return nb
 
+
     def resultexercises(self):
         ''' résultats de l'étudiant aux exercices '''
         return self.results_e.all().select_related('exercise__knowledge')
+
 
     def resultexercises_dict(self):
         ''' dictionnaire des résultats de l'étudiant aux exercices
@@ -125,13 +128,16 @@ class Student(ModelWithCode):
         '''
         return {exercise_id: point for exercise_id, point in self.results_e.values_list('exercise_id', 'point')}
 
+
     def resultexercises_by_theme(self, theme):
         ''' résultats de l'étudiant pour les évaluations de savoirs-faire d'un thème donné'''
         return self.results_e.filter(exercise__theme=theme).select_related('exercise')
 
+
     def resultknowledge(self):
         ''' résultats de l'étudiant aux évaluations de savoirs-faire '''
         return self.results_k.all()
+
 
     def resultknowledge_dict(self):
         ''' dictionnaire des résultats de l'étudiant aux évaluations de savoirs-faire
@@ -140,24 +146,26 @@ class Student(ModelWithCode):
         '''
         return {knowledge_id: point for knowledge_id, point in self.results_k.values_list('knowledge_id', 'point')}
 
+
     def resultknowledge_by_theme(self, theme):
         ''' résultats de l'étudiant pour les évaluations de savoirs-faire d'un thème donné'''
         return self.results_k.filter(knowledge__theme=theme)
 
 
     def result_skills(self, skill):
-        ''' résultats de l'étudiant aux 3 dernières évaluations de compétences de la compétence en paramètre'''
-        relationships = self.students_relationship.filter(skills = skill).order_by("-id")[:3]
-        results = self.results_s.filter(skill=skill).order_by("-id")[:3]
+        ''' résultats de l'étudiant aux 3 derniers exercices de compétences de la compétence en paramètre'''
+        n = 3
+        relationships = self.students_relationship.filter(skills = skill).order_by("-id")[:n]
+        results = self.results_s.filter(skill=skill).order_by("-id")[:n]
 
         relationships = list(relationships)
-        if len(relationships) < 3 :
-            for i in range( 3-len(relationships)  ) :
+        if len(relationships) < n :
+            for i in range( n - len(relationships)  ) :
                 relationships.append("")
 
         results = list(results)
-        if len(results) < 3 :
-            for i in range( 3-len(results)  ) :
+        if len(results) < n :
+            for i in range( n - len(results)  ) :
                 results.append("")
 
         data = {}
@@ -167,10 +175,37 @@ class Student(ModelWithCode):
         return data
 
 
+    def result_waitings(self, waiting):
+        ''' résultats de l'étudiant aux 3 derniers exercices '''
+        results = self.results_k.filter(knowledge__waiting = waiting).order_by("-id") 
+        nb = len(results) 
+        somme = 0
+        for r in results:
+            somme += r.point
+        try :
+            avg = int(somme/nb)
+        except :
+            avg = None
+        return avg
+
+
     def result_skills_custom(self, skill):
         data = {}
-        customexercises = self.students_customexercises.filter(skills = skill).order_by("-id")[:3]
-        results = self.student_correctionskill.filter(skill=skill).order_by("-id")[:3]
+        n = 3
+        customexercises = self.students_customexercises.filter(skills = skill).order_by("-id")[:n] 
+        results = self.student_correctionskill.filter(skill=skill).order_by("-id")[:n] 
+
+        customexercises = list(customexercises)
+        if len(customexercises) < n :
+            for i in range( n - len(customexercises)  ) :
+                customexercises.append("")
+
+        results = list(results)
+        if len(results) < n :
+            for i in range( n - len(results)  ) :
+                results.append("")
+
+        data = {}
         data["customexercises"] = customexercises
         data["results"] = results
         return data
@@ -209,13 +244,13 @@ class Student(ModelWithCode):
 
 
     def is_in_parcours(self, parcours):
-
         if self in parcours.students.all() :
             test =  True
         else :
             test = False
 
         return test
+
 
     def has_exercise(self, relationship):
         if self in relationship.students.all() :
@@ -233,7 +268,6 @@ class Student(ModelWithCode):
         return test
  
 
-
     def suiviparent(self):
         test = False
         groups = self.students_to_group.all()
@@ -247,7 +281,6 @@ class Student(ModelWithCode):
     def last_exercise(self):
         studentanswer = self.students_relationship.order_by("id").last()
         return studentanswer
-
 
 
     def is_task_exists(self,parcours):
@@ -269,7 +302,6 @@ class Student(ModelWithCode):
             test = False
  
         return test
-
 
 
     def this_exercise_is_locked(self,exercise, parcours , custom, today):
@@ -309,8 +341,6 @@ class Student(ModelWithCode):
  
         return booleen
                 
-      
-
 
     def is_lock_this_parcours(self,parcours,today):
 

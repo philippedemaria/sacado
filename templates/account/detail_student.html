@@ -137,7 +137,7 @@
                 <thead>
                     <tr style="color:#FFF;background-color: {{ group.color }}">
                         <td>{{ group.name }}<img width="25px" src="{% static 'img/angle-right-white.png' %}"/>    Savoir faire</td>
-                        <td style="width:150px">Score</td>
+                        <td style="width:400px">Score</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -159,16 +159,16 @@
                             <td style="text-align: center">
                                 {% for sta  in exercise.scores  %}     
                                     {% if sta.point != "" %}
-                                        <div class="markdown_div
-                                                {% if sta.score < 30 %}
+                                        <div class="markdown_div 
+                                                {% if sta.point < 30 %}
                                                  red 
-                                                {% elif  sta.score < 60 %}
+                                                {% elif  sta.point < 60 %}
                                                 orange
-                                                {% elif  sta.score < 80 %}
+                                                {% elif  sta.point < 80 %}
                                                 green
                                                 {% else %}
                                                 darkgreen
-                                                {% endif %}">
+                                                {% endif %} white">
                                             <strong>{{ sta.point }}%</strong>
                                             <small>
                                                 <br>situations : {{ sta.numexo }}

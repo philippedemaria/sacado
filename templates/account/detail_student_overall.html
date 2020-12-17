@@ -29,7 +29,7 @@
                                     <td style="text-align: center"> 
                                         {% for sta  in exercise.scores  %}  
                                             {% if sta.point   %}
-                                                <div class="markdown_div
+                                                <div class="markdown_div 
                                                         {% if sta.point < 30 %}
                                                          red 
                                                         {% elif  sta.point < 60 %}
@@ -38,7 +38,7 @@
                                                         green
                                                         {% else %}
                                                         darkgreen
-                                                        {% endif %}">
+                                                        {% endif %} white">
                                                     <strong>{{ sta.point }}%</strong>
                                                     <small>
                                                         <br>situations : {{ sta.numexo }}

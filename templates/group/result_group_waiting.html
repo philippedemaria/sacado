@@ -1,0 +1,46 @@
+{% extends 'group/result_group.html' %}
+{% load item_tags %} 
+ 
+ 
+ 
+
+{% block skill_block %} 
+ 
+        {% for waiting in waitings %}
+             <td style="font-size:12px">
+             	{{ waiting.name }} 
+             </td>
+        {% endfor %}
+  
+{% endblock %}
+
+
+{% block skill_result %} 
+
+    {% for waiting in waitings %}
+    	<td >
+
+    		{% get_result_waitings student waiting as data %}
+
+			{% if data %}
+			    <span class="markdown markdown_bilan square
+		            {% if data < 30 %}
+		            	red 
+		            {% elif data < 60 %}
+		            	orange
+		            {% elif data < 80 %}
+		            	green
+		            {% else %}
+		            	darkgreen
+		            {% endif %}" style="cursor: help" >
+			        {{ data }}
+			    </span>
+			{% endif %} 
+
+	    </td>
+	{% endfor %} 
+
+{% endblock %}
+
+
+ 

@@ -538,6 +538,16 @@ def get_skill_result(obj,  skill ,student):
 
 
 
+@register.simple_tag  
+def get_result_waitings(obj,  waiting): 
+    """
+    renvoie le score par waiting 
+    """
+    return obj.result_waitings(waiting)
+
+
+
+
 
 @register.simple_tag 
 def get_access_to_this_group(obj,  teacher):

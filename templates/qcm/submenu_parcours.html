@@ -10,13 +10,13 @@
 
         <li {% if  'result_parcours_skill' in request.path %} class="active" {% endif %}>
             <a href="{% url 'result_parcours_knowledge' parcours.id %}"  class="no_button" >
-                <i class="fa fa-trophy fa-fw"></i> Lire le suivi par compétences
+                Lire le suivi par compétences
             </a>
         </li> 
 
         <li {% if 'parcours_result/' in request.path %} class="active" {% endif %}>
             <a href="{% url 'result_parcours_waiting' parcours.id  %}"  class="no_button" >
-                <i class="fa fa-mortar-board fa-fw"></i> Lire le suivi par attendus 
+                Lire le suivi par attendus 
             </a> 
         </li>    
     </ul>
@@ -31,13 +31,13 @@
 
         <li>
             <a href="#"  class="no_button no_sacado_asso" >
-                <i class="fa fa-trophy fa-fw"></i> Lire le suivi par compétences
+                Lire le suivi par compétences
             </a>
         </li> 
 
         <li>
             <a href="#"  class="no_button no_sacado_asso" >
-                <i class="fa fa-mortar-board fa-fw"></i> Lire le suivi par attendus 
+                Lire le suivi par attendus 
             </a> 
         </li>    
     </ul>

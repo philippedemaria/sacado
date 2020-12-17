@@ -19,7 +19,7 @@
                     {% for d in datas   %}   
                         <tr style="color:#FFF;background-color: {{ group.color }}; opacity : 0.5;">
                             <td>{{ d.name.name|capfirst }}</td>
-                            <td style="width:370px"></td>
+                            <td style="width:400px"></td>
                         </tr>
                         {% for relation in d.exercises  %}   
                         <tr class="no_padding" {% if not relation.name.is_publish %} style="background-color:#F0F0F0;" {% endif %}>
@@ -49,10 +49,10 @@
                                         <i class="fa fa-fw fa-save"></i> {{ relation.name.exercise.supportfile.situation}} situation{{ relation.name.exercise.supportfile.situation|pluralize}}  minimum
                                     </span>
                             </td>
-                            <td style="width:370px">     
+                            <td>     
                                 {% for sta  in relation.scores  %}  
                                     {% if sta.point   %}
-                                        <div class="markdown_div
+                                        <div class="markdown_div 
                                                 {% if sta.point < 30 %}
                                                  red 
                                                 {% elif  sta.point < 60 %}
@@ -61,7 +61,7 @@
                                                 green
                                                 {% else %}
                                                 darkgreen
-                                                {% endif %}">
+                                                {% endif %} white">
                                             <strong>{{ sta.point }}%</strong>
                                             <small>
                                                 <br>situations : {{ sta.numexo }}

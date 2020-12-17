@@ -115,8 +115,6 @@ class Waiting(models.Model):
 
 
     def send_scorek(self,student):
-
-
         try:
 
             coef, score , score_ce = 0, 0 , 0            
@@ -139,16 +137,7 @@ class Waiting(models.Model):
 
         except ObjectDoesNotExist:
             score = ""
-
         return score
-
-
-
-
-
-
-
-
 
 
 class Knowledge(models.Model):

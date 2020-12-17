@@ -14,7 +14,9 @@ urlpatterns = [
     path('result/<int:id>/', result_group, name='result_group'),
     path('result_group_exercise/<int:id>/', result_group_exercise, name='result_group_exercise'),
     path('result_group_skill/<int:id>/', result_group_skill, name='result_group_skill'),
+    path('result_group_waiting/<int:id>/', result_group_waiting, name='result_group_waiting'),
 
+    
     path('stats/<int:id>/', stat_group, name='stat_group'),
     path('print_statistiques/<int:group_id>/<int:student_id>/', print_statistiques, name='print_statistiques'),
     

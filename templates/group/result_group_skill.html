@@ -28,7 +28,7 @@
 				{% with data.relationships|index:forloop.counter0 as looper %}
 
 					{% if r.point %}
-					    <a class="helper_tip white markdown
+					    <a class="helper_tip  square  markdown
 					            {% if r.point < 30 %}
 					             red 
 					            {% elif r.point < 60 %}
@@ -38,13 +38,10 @@
 					            {% else %}
 					            darkgreen
 					            {% endif %}" style="cursor: help" >
-					        {{ r.point }}
-					        <span class="helper_tip_text_flex"><img src="{{ looper.exercise.supportfile.imagefile.url }}" width="400px" /></span>
+					         
+					        <span class="helper_tip_text_flex"><b>Score = {{ r.point }}%</b><img src="{{ looper.exercise.supportfile.imagefile.url }}" width="400px" /></span>
 					    </a>
-					{% else %}
-					    <a class="markdown"   style="cursor: help" > 
-					          {{ r.point }}
-					    </a>
+ 
 					{% endif %} 
 					
 				{% endwith %} 
@@ -53,7 +50,7 @@
 			{% for r in resultskill_custom.results %}
 				{% with resultskill_custom.customexercises|index:forloop.counter0 as loopp %}
 					{% if r.point %}
-					    <a  title="Exercice personnalisé" class="square helper_tip white markdown
+					    <a  title="Exercice personnalisé" class="square helper_tip markdown
 					            {% if r.point < 30 %}
 					             red 
 					            {% elif r.point < 60 %}
@@ -63,13 +60,10 @@
 					            {% else %}
 					            darkgreen
 					            {% endif %}"  style="cursor: help" >
-					        {{ r.point }}
-					        <span class="helper_tip_text_flex"><img src="{{ loopp.imagefile.url }}" width="400px" /></span>
+					  
+					        <span class="helper_tip_text_flex"><b>Score = {{ r.point }}%</b><img src="{{ loopp.imagefile.url }}" width="400px" /></span>
 					    </a>
-					{% else %}
-					    <a class="markdown"   style="cursor: help" > 
-					          {{ r.point }}
-					    </a>
+ 
 					{% endif %} 
 				{% endwith %} 
 	    	{% endfor %} 

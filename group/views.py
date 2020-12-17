@@ -619,6 +619,26 @@ def result_group_skill(request, id):
 
 
 
+
+#@user_is_group_teacher
+def result_group_waiting(request, id):
+
+    group = Group.objects.get(id=id)
+    students = group.students.order_by("user__last_name")
+    teacher = Teacher.objects.get(user=request.user)
+
+    waitings = group.level.waitings.all() 
+ 
+    authorizing_access_group(teacher,group ) 
+
+    form = EmailForm(request.POST or None )
+    stage = get_stage(group)
+
+    context = {  'group': group,'form': form,'waitings': waitings , 'students': students ,  'teacher': teacher, 'stage' : stage   ,  'theme' : None  , 'communications' : [], 'relationships': [] , 'parcours' : None  }
+
+    return render(request, 'group/result_group_waiting.html', context )
+
+
 #@user_is_group_teacher
 def result_group_theme_exercise(request, id, idt):
     group = Group.objects.get(id=id)

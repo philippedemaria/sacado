@@ -43,6 +43,14 @@
                         <td>
                             <h2> Suivi par savoir faire
 
+
+                        </h2> 
+                        </td>
+                        <td>
+                             Dernière connexion : {{ student.user.last_login|date:"d N Y, H:i"  }}
+
+
+
                                 {% if teacher %}
                                 <small>
                                     <a href="#" data-toggle='modal' class="pull-right btn btn-danger"
@@ -53,10 +61,8 @@
                                 </small>
                                 {% endif %}
 
-                        </h2> 
-                        </td>
-                        <td>
-                             Dernière connexion : {{ student.user.last_login|date:"d N Y, H:i"  }}
+
+                             
                         </td>
                     </tr>    
                     <tr>
@@ -67,7 +73,7 @@
                                 {% get_score2 results knowledge.pk  as score %}
 
                                 {% if score != "" %}
-                                    <a class="markdown
+                                    <a class="markdown  square
                                             {% if score < 30 %}
                                              red 
                                             {% elif score < 60 %}
@@ -78,16 +84,16 @@
                                             darkgreen
                                             {% endif %}"
                                           href="#" data-container="body"
-                                          data-toggle="popover"  style="border : 1px solid #5d4391"
+                                          data-toggle="popover"  
                                           data-trigger="hover" data-placement="bottom"
                                           title="{{ knowledge}}"
                                           data-content="{% for e in knowledge.exercises.all %}{% if e.supportfile.title %} {{ e.supportfile.title|cleanhtml|capfirst }} {% else %} {{ e.supportfile.annoncement|cleanhtml }} {% endif %} {% if not forloop.last %}  +  {% endif %}{% endfor %}">
                                         {{ score }}
                                     </a>
                                 {% else %}
-                                    <a class="markdown"                                                   
+                                    <a class="markdown square"                                                   
                                           href="#" data-container="body"
-                                          data-toggle="popover"   style="border : 1px solid #5d4391"
+                                          data-toggle="popover" 
                                           data-trigger="hover"
                                            data-placement="bottom" 
                                           data-content="{{ knowledge.name }}"> 
@@ -122,7 +128,7 @@
                                 {% get_score resultexercise.exercise student as score %} 
 
                                 {% if score %}
-                                <a class="markdown
+                                <a class="markdown square
                                         {% if score < 30 %}
                                          red 
                                         {% elif score < 60 %}
@@ -133,15 +139,15 @@
                                         darkgreen
                                         {% endif %}"
                                       href="{% url 'show_this_exercise'  resultexercise.exercise.id   %}" data-container="body"
-                                      data-toggle="popover" style="border : 1px solid #CCC"
+                                      data-toggle="popover" 
                                       data-trigger="hover" data-placement="top"
                                       data-content="{{ resultexercise.exercise.knowledge.name }}">
                                     {{ score }}
                                 </a>
                                 {% else %}
-                                    <a class="markdown"                                                   
+                                    <a class="markdown square"                                                   
                                           href="{% url 'show_this_exercise' resultexercise.exercise.id %}" data-container="body"
-                                          data-toggle="popover" style="border : 1px solid #CCC"
+                                          data-toggle="popover"
                                           data-trigger="hover"
                                           data-placement="top"
                                           data-content="{{ resultexercise.exercise.knowledge.name }}"> 
