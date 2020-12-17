@@ -18,7 +18,7 @@
     <span style="color:{{ group.color }}"><i class='fa fa-mortar-board'></i></span>        
      {% include 'group/breadcrumb.html' %} 
 
-     <small>Suivis</small>
+     <small> {% if 'waiting' in request.path %}Bilan des attendus{% elif 'skill' in request.path %}Suivis des compétences {% endif %}</small>
     
     {% if theme %} <img src="{% static 'img/angle-right.png' %}" width="15px"/> <small>{{ theme }}</small>  {% endif %} 
  
@@ -41,14 +41,56 @@
     </li>
 
 
+ 
 
-    {% if sacado_asso %}
-        <li><a href="{%  url 'result_group_skill'  group.id %}"  class="no_button {% if  'result_group_skill' in request.path %} active {% endif %}" > Compétences </a></li>
-    {% else %}
-    <li><a href="#"  class="no_button no_sacado_asso" title="version établissement requise" > Compétences</a>
 
-      </li>
-    {% endif %}
+
+{% if sacado_asso %}
+<li class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if  'result_group_skill' in request.path %} active {% endif %}"> Compétences <b class="caret"></b> </a>
+
+    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+
+        <li {% if  'result_parcours_skill' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'result_group_skill' group.id %}"  class="no_button" >
+               Lire le suivi par compétences
+            </a>
+        </li> 
+
+        <li {% if 'parcours_result/' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'result_group_waiting' group.id  %}"  class="no_button" >
+                Lire le suivi par attendus 
+            </a> 
+        </li>    
+    </ul>
+</li>
+ 
+{% else %}
+
+<li class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {no_sacado_asso"> Compétences <b class="caret"></b> </a>
+
+    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+
+        <li>
+            <a href="#"  class="no_button no_sacado_asso" title="version établissement requise">
+                Lire le suivi par compétences
+            </a>
+        </li> 
+
+        <li>
+            <a href="#"  class="no_button no_sacado_asso" title="version établissement requise">
+                Lire le suivi par attendus 
+            </a> 
+        </li>    
+    </ul>
+</li>
+{% endif %}
+
+
+
+
+
 
 
 
