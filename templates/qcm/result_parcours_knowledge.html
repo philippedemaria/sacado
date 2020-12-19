@@ -1,7 +1,7 @@
 {% extends 'qcm/result_parcours.html' %}
 {% load item_tags %}
 
-{% block sub_page_title %}par savoir faire{% endblock %}
+{% block sub_page_title %}Suivi par savoir faire <small>[5 derniers]</small>{% endblock %}
 
 
 
@@ -22,7 +22,7 @@
  
 	{% for knowledge in exercise_knowledges %}
         <td>
-		{% get_scorek  knowledge  student  as score %}
+		{% get_scorekp  knowledge  student parcours as datas %}
 
 
 		<!-- Requête moins rapide de 2 secondes mais plus précise puis que sélection sur le parcours
@@ -30,25 +30,22 @@
 		 get_score_student_parcours  knowledge  student parcours as score 
 
 		 -->
-
-			{% if score != "" %}
-			    <span class="markdown
-			            {% if score < 30 %}
-			             red 
-			            {% elif score < 60 %}
-			            orange
-			            {% elif score < 80 %}
-			            green
-			            {% else %}
-			            darkgreen
-			            {% endif %}"  >
-				        {{ score }} 
-			    </span>
-			{% else %}
-			    <span class="markdown"> 
-			          {{ score }} 
-			    </span> 
-			{% endif %}
+		 	{% for data in datas %}
+				{% if data.point != "" %}
+				    <span class="markdown
+				            {% if data.point < 30 %}
+				             red 
+				            {% elif data.point < 60 %}
+				            orange
+				            {% elif data.point < 80 %}
+				            green
+				            {% else %}
+				            darkgreen
+				            {% endif %}"  >
+					        {{ data.point }} 
+				    </span>
+				{% endif %}
+			{% endfor %}
 		</td>
 	{% endfor %}
 

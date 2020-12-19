@@ -90,12 +90,12 @@
         <li><a href="{% url 'detail_student_all_views' user.id %}"  class="no_button"  style="font-size:18px;"> Mon suivi</a></li>
     {% elif request.user.user_type == 1 %}
 
-        <li><a href="{% url 'detail_student_all_views' student.user.id  %}"  class="no_button"  style="font-size:18px;{% if 'detail_student_all_views' in request.path %}color:#007EE2{% endif %}"> Synthèse</a></li>
+        <li><a href="{% url 'detail_student_all_views' student.user.id  %}"  class="no_button"  style="font-size:18px;{% if 'detail_student_all_views' in request.path %}color:#007EE2{% endif %}"> Bilan</a></li>
     {% else %}
 
         <li><a href="{% url 'result_group' group.id  %}"  class="no_button"  style="font-size:18px;"> Tout le groupe</a></li>
 
-        <li><a href="{% url 'detail_student_all_views' student.user.id  %}"  class="no_button"  style="font-size:18px;{% if 'detail_student_all_views' in request.path %}color:#007EE2{% endif %}"> Synthèse</a></li>
+        <li><a href="{% url 'detail_student_all_views' student.user.id  %}"  class="no_button"  style="font-size:18px;{% if 'detail_student_all_views' in request.path %}color:#007EE2{% endif %}"> Bilan élève</a></li>
     {% endif %}
 
 
@@ -104,7 +104,7 @@
                 <li {% if 'detail_student/' in request.path %} class="active" {% endif %} ><a href="{% url 'detail_student'  student.user.id  %}" > Général</a></li>
                 <li class="divider"></li>
                 {% for thm in themes %}
-                     <li {% if 'detail_student_theme/' in request.path and thm.id == theme.id %}  class="active" {% endif %}><a href="{% url 'detail_student_theme'  student.user.id  thm.id  %}" > {{ thm }}</a></li>
+                     <li {% if 'detail_student_theme/' in request.path and thm.id == theme.id %}  class="active" {% endif %}><a href="{% url 'detail_student_theme'  student.user.id  thm.id  %}" > {{ thm.name }}</a></li>
                 {% endfor %}
             </ul>
         </li>
@@ -150,10 +150,8 @@
                         {% for exercise in theme.exercises %} 
                         <tr class="no_padding"  {% if not exercise.is_publish %} style="background-color:#F0F0F0"{% endif %} >
                             <td {% if exercise.is_publish %} style="padding:0px" {% endif %}> 
-                                <div {% if exercise.is_publish %} style="border-left: 4px solid #00AC18; padding:10px;min-height:53px"{% endif %} >
-                                <small><strong>{{ theme.name }}</strong></small>
+                                <div {% if exercise.is_publish %} style="border-left: 4px solid #00AC18; padding:10px;min-height:{% if  exercise.scores %}100{% else %}50{% endif %}px"{% endif %} >
                                 {{exercise.name.knowledge.name }} 
-                                    {% if exercise.supportfile.title %} - <em> {{ exercise.supportfile.title|cleanhtml|capfirst }}</em> {% else %} - <em>{{exercise.supportfile.annoncement|cleanhtml|capfirst }}</em>  {% endif %}
                                 </div>  
                             </td>
                             <td style="text-align: center">

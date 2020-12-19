@@ -38,8 +38,8 @@
 					            {% else %}
 					            darkgreen
 					            {% endif %}" style="cursor: help" >
-					         
-					        <span class="helper_tip_text_flex"><b>Score = {{ r.point }}%</b><img src="{{ looper.exercise.supportfile.imagefile.url }}" width="400px" /></span>
+					         {{ r.point }}
+					        <span class="helper_tip_text_flex"> <img src="{{ looper.exercise.supportfile.imagefile.url }}" width="400px" /></span>
 					    </a>
  
 					{% endif %} 

@@ -115,11 +115,13 @@ class Waiting(models.Model):
 
 
     def send_scorek(self,student):
-        try:
 
-            coef, score , score_ce = 0, 0 , 0            
+        data = {}
+        try:
+            coef, score , score_ce  = 0, 0 , 0
             for k in self.knowledges.all():
 
+ 
                 if k.results_k.filter(student=student).exists() :
                     r = k.results_k.filter(student=student).last()
                     score += int(r.point)
@@ -137,7 +139,11 @@ class Waiting(models.Model):
 
         except ObjectDoesNotExist:
             score = ""
-        return score
+
+        data["score"] = score
+        data["nombre"] = coef
+        data["total"] = self.knowledges.count()
+        return data
 
 
 class Knowledge(models.Model):
@@ -165,32 +171,6 @@ class Knowledge(models.Model):
         relationships = Relationship.objects.filter(exercise__knowledge=self , parcours__in = parcours_tab).order_by("exercise").distinct()
       
         return nb 
-
-
-    def send_scorek(self,student):
-
-        try:
-            coef, score , score_ce = 0, 0 , 0
-            if self.results_k.filter(student=student).exists() :
-                r = self.results_k.filter(student=student).last()
-                score = r.point
-                coef += 1
-
-            if self.knowledge_correctionknowledge.filter(student=student).exists() :
-                ce = self.knowledge_correctionknowledge.filter(student=student).last()
-                score_ce = ce.point + 1 
-                coef += 1
-
-            if coef != 0:
-                score = int((score + score_ce)/coef)
-            else :
-                score = ""                
-
-        except ObjectDoesNotExist:
-            score = ""
-
-        return score
-
 
     def exercices_by_knowledge(self,student,group):
 
@@ -259,6 +239,54 @@ class Knowledge(models.Model):
             crit = 0
         return crit
 
+
+    def send_scorek(self,student):
+
+        data = {}
+        try:
+            coef, score , score_ce = 0, 0 , 0
+            if self.results_k.filter(student=student).exists() :
+                r = self.results_k.filter(student=student).last()
+                score = r.point
+                coef += 1
+
+            if self.knowledge_correctionknowledge.filter(student=student).exists() :
+                ce = self.knowledge_correctionknowledge.filter(student=student).last()
+                score_ce = ce.point + 1 
+                coef += 1
+
+            if coef != 0:
+                score = int((score + score_ce)/coef)
+            else :
+                score = ""                
+
+        except ObjectDoesNotExist:
+            score = ""
+
+        data["score"] = score
+        data["nombre"] = coef
+        data["total"] = ""
+        return data
+
+
+
+
+    def send_scorekp(self,student,parcours):
+
+        Writtenanswerbystudent = apps.get_model("qcm","Writtenanswerbystudent")
+
+        tab_set = set()
+        tab = []
+        for r in parcours.parcours_relationship.filter(is_publish=1,exercise__knowledge=self)[:5]:
+            tab_set.update(set(parcours.answers.filter(exercise = r.exercise, student = student).order_by("-id")[:1]))
+
+        tab_set.update(set(Writtenanswerbystudent.objects.filter(relationship__parcours = parcours, relationship__is_publish=1,relationship__exercise__knowledge=self)[:5]))
+ 
+        tab_set.update(set(self.knowledge_correctionknowledge.filter(customexercise__parcourses = parcours, customexercise__is_publish=1)[:5]))
+
+        return tab_set
+
+ 
 class Skill(models.Model): 
     name = models.CharField(max_length=10000, verbose_name="Nom")
     subject  = models.ForeignKey(Subject, related_name="skill", default="", on_delete=models.PROTECT, null = True ,  verbose_name="Enseignement")
@@ -307,6 +335,12 @@ class Skill(models.Model):
 
     def send_scorek(self,student):
 
+        sk_set = set() 
+        sk_set.update(student.students_relationship.filter(is_publish=1,skills=self) )
+        sk_set.update(student.students_customexercises.filter(is_publish=1,skills=self) )
+        total = len(sk_set)
+
+        data = {}
         try:
             coef, score , score_ce = 0, 0 , 0
             if self.results_s.filter(student=student).exists() :
@@ -316,7 +350,7 @@ class Skill(models.Model):
 
             if self.skill_correctionskill.filter(student=student).exists() :
                 ce = self.skill_correctionskill.filter(student=student).last()
-                score_ce = ce.point 
+                score_ce = ce.point + 1 
                 coef += 1
 
             if coef != 0:
@@ -327,10 +361,23 @@ class Skill(models.Model):
         except ObjectDoesNotExist:
             score = ""
 
-        return score 
+
+
+        data["score"] = score
+        data["nombre"] = min(coef,total)
+        data["total"] = total
+        return data
+
 
 
     def send_scorekp(self,student,parcours):
+
+        sk_set = set() 
+        sk_set.update(student.students_relationship.filter(parcours = parcours, is_publish=1,skills=self) )
+        sk_set.update(student.students_customexercises.filter(parcourses = parcours,is_publish=1,skills=self))
+        total = len(sk_set)
+       
+        data = {}
 
         try:
             coef, score   = 0, 0  
@@ -350,4 +397,19 @@ class Skill(models.Model):
         except ObjectDoesNotExist:
             score = ""
 
-        return score 
+
+        data["score"] = score
+        data["nombre"] = min(coef,total)
+        data["total"] = total
+
+        return data
+ 
+
+
+
+
+
+
+
+ 
+ 

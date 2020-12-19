@@ -527,6 +527,17 @@ def get_result_skills(obj,  skill):
     return obj.result_skills(skill)
 
 
+
+@register.simple_tag  
+def get_bilan_skills(obj,  skill): 
+    """
+    renvoie le score par knowledge 
+    """
+    return obj.bilan_skills(skill)
+
+
+
+
  
 @register.simple_tag  
 def get_skill_result(obj,  skill ,student): 

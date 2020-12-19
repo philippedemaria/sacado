@@ -81,7 +81,10 @@ border : 0px!important;
   font-size: 14px;
 }
 
-
+.borderless td, .borderless th {
+    border: none!important;
+    background-color: transparent!important;
+}
 /* Liste des puces par le form django */
 #id_students  ,#id_exercises,#id_courses ,#id_themes   {
   padding-left : 0px ; 
@@ -707,6 +710,7 @@ text-align: right;
       width:150px;
       transition: all 0.5s linear; 
       margin:5px; 
+    }
 
     .imagefile:hover{
       width:500px;
@@ -946,29 +950,60 @@ width:100%;
   position:relative;
   cursor:help;
   color:#DEDEDE;
-
 }
-
 
 
 .markdown_bilan{
-  clear: both;
+  list-style: none;
+  background-color: #F7F7F7;
+  font-size: 12px;
+  padding: 4px 3px;
+  border-radius: 15px;
+  width: 30px;
+  margin: 1px;
   text-align: center; 
+  height:30px;
+  position:relative;
+  cursor:help;
+  color:#DEDEDE;
+}
+ 
+.markdown_detail{
+  list-style: none;
+  background-color: #F7F7F7;
+  font-size: 12px;
+  padding: 4px 3px;
+  border-radius: 15px;
+  width: 70px;
+  margin: 1px;
+  text-align: center; 
+  float: left;
+  height:30px;
+  position:relative;
+  cursor:help;
+  color:#DEDEDE;
+}
+
+.markdown_detail:hover{
+  color:#FFF;
 }
 
 
+
 .markdown > a:hover{
-  color: #555555;
+  color:#FFF;
 }
 
 .square{
    border-radius: 3px; 
 }
 
-.markdown:hover{
-  background-color: #CCC;
+.markdown_bilan:hover{
+  color:#FFF;
 }
-
+.markdown:hover{
+  color:#FFF;
+}
 .markdown:hover .details_exos{
     display:block;
 } 
@@ -1017,23 +1052,33 @@ width:100%;
 } 
 .darkgreen {
   background-color: #1d6718;
-  color: #1d6718;
+  color: #1d6718!important;
 }
 .green {
   background-color: #62d85a;
-  color: #62d85a;
+  color: #62d85a!important;
 }
 
 .orange {
   background-color: #b5a32b;
-  color: #FFF;
+  color: #b5a32b!important;
+}
+ 
+.little_violet {
+  background-color: #e3dcef;
+  color: #4f387a!important;
 }
 
 .red {
   background-color: #b5322b;
-  color: #FFF;
+  color: #b5322b!important;
 }
-
+.red:hover, .orange:hover, .green:hover, .darkgreen:hover {
+  padding-top: 7px;
+  color: #FFF!important;
+  text-decoration: none;
+  font-size : 12px;
+}
 
 .advertise {
   background-color: #f2eded; 
@@ -1100,6 +1145,51 @@ width:100%;
 
 
 
+.bilan_div{
+  padding-top:10px;
+  padding-bottom:10px;
+  border: 1px solid #ddd;
+  margin-left : 0px;
+  margin-right : 0px;
+  margin-bottom: 20px;  
+  background-color: #f4f7f9;
+}
+
+
+a.bilan_title{
+  font-size: 20px;
+  color:#222;
+  cursor: help;
+}
+
+a.bilan_title .fa-angle-down{
+  display: none;
+}
+
+a.bilan_title:hover,a.bilan_title:active,a.bilan_title:focus{
+  font-size: 20px;
+  color: #5d4391;
+  text-decoration: none;
+}
+
+a.bilan_title:hover .fa-angle-right,a.bilan_title:focus .fa-angle-right {
+  display: none;
+}
+
+a.bilan_title:hover .fa-angle-down,a.bilan_title:focus .fa-angle-down {
+  display: inline;
+}
+
+.exercise_details{
+  background-color: #b9a8d7;
+  margin-bottom: 1px;
+  padding: 5px;  
+}
+
+.bilan_details{
+  margin-top:20px;
+  background-color: #FFF; 
+}
 
 
 
@@ -5421,8 +5511,12 @@ a.crud{
   color: #3c8dbc !important;
 }
 .text-green {
-  color: #00a65a !important;
+  color: #62d85a !important;
 }
+.text-darkgreen {
+  color: #1d6718 !important;
+}
+
 .text-gray {
   color: #d2d6de !important;
 }

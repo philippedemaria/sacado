@@ -708,7 +708,7 @@ def detail_student_all_views(request, id):
         if exercise.knowledge not in knowledges:
             knowledges.append(exercise.knowledge)
 
-    parcourses = Parcours.objects.filter(students=student)
+    parcourses = Parcours.objects.filter(students=student,is_folder=0)
     relationships = Relationship.objects.filter(parcours__in=parcourses).exclude(date_limit=None)
 
     done, late, no_done = 0, 0, 0

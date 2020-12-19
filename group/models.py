@@ -2,7 +2,7 @@ from django.db import models
 from datetime import date
 
 from account.models import Student, Teacher, ModelWithCode, generate_code
-from socle.models import Level, Subject
+from socle.models import Level, Subject , Waiting
 from qcm.models import Parcours
 from account.models import ModelWithCode
 from django.apps import apps
@@ -154,6 +154,10 @@ class Group(ModelWithCode):
         return is_shared
 
 
+
+    def waitings(self):
+        return Waiting.objects.filter(level = self.level, theme__subject = self.subject)
+    
 
  
     def authorize_access(self, teacher): 

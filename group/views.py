@@ -858,6 +858,19 @@ def enroll(request, slug):
 
 
 
+def code_couleur(score,teacher):
+
+    stage = Stage.objects.get(school = teacher.user.school) 
+    if score < stage.low :
+        return Image('https://sacado.xyz/static/img/code_red.png')
+    elif score < stage.medium :
+        return Image('https://sacado.xyz/static/img/code_orange.png')
+    elif score < stage.up :
+        return Image('https://sacado.xyz/static/img/code_green.png')
+    else :
+        return Image('https://sacado.xyz/static/img/code_darkgreen.png')
+
+
 
 def print_statistiques(request, group_id, student_id):
 
@@ -892,7 +905,6 @@ def print_statistiques(request, group_id, student_id):
     
  
     subject = group.subject
-
 
     elements = []        
 
@@ -937,11 +949,11 @@ def print_statistiques(request, group_id, student_id):
     for student in students :
         #logo = Image('D:/uwamp/www/sacado/static/img/sacadoA1.png')
         logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
-        logo_tab = [[logo, "SACADO \nSuivi des acquisitions de savoir faire" ]]
+        logo_tab = [[logo, "SACADO \nBilan des acquisitions" ]]
         logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
         logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))
         elements.append(logo_tab_tab)
-        elements.append(Spacer(0, 0.2*inch))
+        elements.append(Spacer(0, 0.1*inch))
 
         if timezone.now().month < 9 :
             scolar_year = str(timezone.now().year-1)+"-"+str(timezone.now().year)
@@ -987,6 +999,7 @@ def print_statistiques(request, group_id, student_id):
         parcourses = student_parcours_studied(student)
 
         knowledges = []
+
         for parcours in parcourses :
             exercises = parcours.exercises.filter(theme__in= themes , level = student.level)
             nb_p += exercises.count()
@@ -1046,23 +1059,28 @@ def print_statistiques(request, group_id, student_id):
         ##########################################################################
         #### Gestion des labels à afficher
         ##########################################################################
-        labels = [str(student.user.last_name)+" "+str(student.user.first_name), str(student.level)+", année scolaire "+scolar_year,"Temps de connexion : "+convert_seconds_in_time(duration), "Score moyen : "+str(average_score)+"%" , "Score médian : "+str(median)+"%" , \
-                "Les savoir faire  ", "Nombre de savoir faire étudiés : "+str(nb_k)+complement, "Nombre de savoir faire proposés : "+str(nb_k_p), "Taux d'étude : "+str(p_k)+"%",\
-                 "Les exercices ", "Nombre d'exercices différents étudiés : "+str(nb_exo)+complt, "Nombre d'exercices proposés : "+str(nb_p), "Taux d'étude : "+str(p_e)+"%",\
-                 "Les tâches ", "Tâches proposées : "+str(t_r),  "Tâches remises en temps : "+str(done), "Tâches remises en retard : "+str(late), "Tâches non remises : "+str(no_done),\
-                 "Suivi par compétences ",]
+        #labels = [str(student.user.last_name)+" "+str(student.user.first_name), "Classe de "+str(student.level)+", année scolaire "+scolar_year,"Temps de connexion : "+convert_seconds_in_time(duration), "Score moyen : "+str(average_score)+"%" , "Score médian : "+str(median)+"%" , \
+        #        "Les savoir faire  ", "Nombre de savoir faire étudiés : "+str(nb_k)+complement, "Nombre de savoir faire proposés : "+str(nb_k_p), "Taux d'étude : "+str(p_k)+"%",\
+        #         "Les exercices ", "Nombre d'exercices différents étudiés : "+str(nb_exo)+complt, "Nombre d'exercices proposés : "+str(nb_p), "Taux d'étude : "+str(p_e)+"%",\
+        #         "Les tâches ", "Tâches proposées : "+str(t_r),  "Tâches remises en temps : "+str(done), "Tâches remises en retard : "+str(late), "Tâches non remises : "+str(no_done),\
+        #         "Bilan des compétences ",]
 
-        spacers , titles,subtitles = [1,4, 5,8,12,17] ,[0],[ 5,9,13,18]
+        labels = [str(student.user.last_name)+" "+str(student.user.first_name), "Classe de "+str(student.level)+", année scolaire "+scolar_year,"Temps de connexion : "+convert_seconds_in_time(duration), "Score moyen : "+str(average_score)+"%, score médian : "+str(median)+"%" , \
+                 "Exercices SACADO proposés : " +str(nb_p) , "dont "+str(nb_exo)+" étudiés "+complt+", soit un taux d'étude de "+str(p_e)+"%",  \
+                 "Tâches demandées : "+str(t_r),  "Remises en temps : "+str(done)+",  remises en retard : "+str(late)+", non remises : "+str(no_done),\
+                 "Bilan des compétences ",]
+
+        spacers , titles,subtitles = [1,3,5,7] ,[0],[4,6,8]
 
         i = 0
         for label in labels :
             if i in spacers : 
-                height = 0.3
+                height = 0.25
             else :
                 height = 0.1
             if i in titles : 
                 style = title
-                height = 0.2
+                height = 0.1
             elif i in subtitles :
                 style = subtitle
                 height = 0.1
@@ -1071,7 +1089,9 @@ def print_statistiques(request, group_id, student_id):
             paragraph = Paragraph( label , style )
             elements.append(paragraph)
             elements.append(Spacer(0, height*inch))
-            i+=1         
+            i+=1   
+
+
         ##########################################################################
         #### Gestion des compétences
         ##########################################################################
@@ -1080,9 +1100,9 @@ def print_statistiques(request, group_id, student_id):
         for skill  in skills :
             try :
                 resultlastskill  = Resultlastskill.objects.get(student = student, skill= skill )
-                sk_tab.append([skill.name, str(resultlastskill.point)+"%" ])
+                sk_tab.append([skill.name, code_couleur(resultlastskill.point,teacher) ])
             except :
-                sk_tab.append([skill.name, str(0)+"%" ])
+                sk_tab.append([skill.name,  "N.E"  ])
             
         try : # Test pour les élèves qui n'auront rien fait, il n'auront pas de th_tab donc il ne faut l'afficher 
             skill_tab = Table(sk_tab, hAlign='LEFT', colWidths=[5.2*inch,1*inch])
@@ -1097,33 +1117,51 @@ def print_statistiques(request, group_id, student_id):
         ##########################################################################
         #### Gestion des themes
         ##########################################################################
-        elements.append(Spacer(0, 0.3*inch))
-        paragraph = Paragraph( "Suivi par thèmes " , style )
+        elements.append(Spacer(0, 0.25*inch))
+        paragraph = Paragraph( "Bilan des attendus" , title )
         elements.append(paragraph)
-        elements.append(Spacer(0, 0.2*inch))
+        elements.append(Spacer(0, 0.15*inch))
 
-        th_tab = []
+        th_tab, bgc_tab = [] , [('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),('BOX', (0,0), (-1,-1), 0.25, colors.black),]
+        bgc = 0        
         for theme  in themes :
-            som_theme = 0
-            resultexercises = Resultexercise.objects.filter(student = student, exercise__theme= theme )
-            for result in resultexercises :
-                som_theme += result.point
-            try :
-                avg_theme = int(som_theme / len(resultexercises))
-                th_tab.append([theme.name, str(avg_theme)+"%" ])
-            except :
-                th_tab.append([theme.name, str(0)+"%" ])
+
+            waiting_set = set(theme.waitings.filter(theme__subject = group.subject, level = group.level)) # on profite de cette boucle pour créer la liste des attendus
+ 
+ 
+            th_tab.append([theme.name,  " " ])
+
+            bgc_tab.append(  ('BACKGROUND', (0,bgc), (-1,bgc), colors.Color(0,0.5,0.62)) )
+
+            for waiting in waiting_set :
+                bgc += 1
+
+                resultwaitings = student.results_e.filter(exercise__knowledge__waiting__name = waiting.name )
+
+                som_ws = 0
+                for result in resultwaitings :
+                    som_ws += result.point
+                try :
+                    avg_ws = int(som_ws / len(resultwaitings))
+                    th_tab.append([waiting.name,  code_couleur(avg_ws,teacher) ])
+                except :
+                    th_tab.append([waiting.name,  "N.E" ])
+                
+            bgc += 1
+
+
             
         try : # Test pour les élèves qui n'auront rien fait, il n'auront pas de th_tab donc il ne faut l'afficher 
-            theme_tab = Table(th_tab, hAlign='LEFT', colWidths=[5.2*inch,1*inch])
-            theme_tab.setStyle(TableStyle([
-                       ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
-                       ('BOX', (0,0), (-1,-1), 0.25, colors.black),
-                       ]))
+            theme_tab = Table(th_tab, hAlign='LEFT', colWidths=[6*inch,1*inch])
+            theme_tab.setStyle(TableStyle(bgc_tab))
         except : 
-            theme_tab = Table(th_tab, hAlign='LEFT', colWidths=[5.2*inch,1*inch])
+            theme_tab = Table(th_tab, hAlign='LEFT', colWidths=[6*inch,1*inch])
 
         elements.append(theme_tab)
+
+
+
+
         loop  = 0
         for theme  in themes :
 
@@ -1153,29 +1191,23 @@ def print_statistiques(request, group_id, student_id):
 
                 for knowledge in knowledges :
                     # Savoir faire
-                    name  = ""
-                    k_tab = knowledge.name.split(" ")
-                    for j in range(len(k_tab)) : 
-                        if j%11 == 0 and j > 1 :
-                            sep = "\n"
-                        else :
-                            sep = " "
-                        name  +=  k_tab[j] + sep
+                    name = split_paragraph(knowledge.name,80)
+
                     ##########################################################################
                     #### Affichage des résultats par knowledge
                     ##########################################################################                    
                     try :      
                         knowledgeResult = Resultknowledge.objects.get(knowledge  = knowledge, student = student)
                         knowledgeResult_nb = Studentanswer.objects.values_list("id",flat=True).filter(exercise__knowledge = knowledge, student=student).count()          
-                        knowledge_tab.append(      ( name , str(knowledgeResult.point)+"%" , knowledgeResult_nb )          )
+                        knowledge_tab.append(      ( name ,  code_couleur(knowledgeResult.point,teacher) , knowledgeResult_nb )          )
                     except : 
-                        knowledge_tab.append(      ( name , 0   , 0  )        )
+                        knowledge_tab.append(      ( name ,   "N.E"  , 0  )        )
                 
                 ##########################################################################
                 # Bordure du savoir faire
                 ##########################################################################
 
-                knowledge_tab_tab = Table(knowledge_tab, hAlign='LEFT', colWidths=[5.6*inch,0.7*inch,1*inch])
+                knowledge_tab_tab = Table(knowledge_tab, hAlign='LEFT', colWidths=[6*inch,0.5*inch,0.8*inch])
                 knowledge_tab_tab.setStyle(TableStyle([
                            ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray),
                            ('BOX', (0,0), (-1,-1), 0.25, colors.gray),

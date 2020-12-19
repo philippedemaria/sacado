@@ -1699,161 +1699,6 @@ def result_parcours_waiting(request, id):
 
 
 
-
-
-
-
-
-
-
-
-
-
-# def stat_parcours(request, id):
-
-#     teacher = Teacher.objects.get(user = request.user)
-#     parcours = Parcours.objects.get(id=id)
-#     exercises = parcours.exercises.all()
-#     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
-#     parcours_duration = parcours.duration #durée prévue pour le téléchargement
-#     for e in exercises :
-#         r = Relationship.objects.get(exercise = e, parcours = parcours)
-#         parcours_duration += r.duration
-
-
-#     form = EmailForm(request.POST or None )
-#     stats = []
- 
-
-#     data = get_complement(request, teacher, parcours)
-#     role = data['role']
-#     group = data['group']
-#     group_id = data['group_id'] 
-#     access = data['access']
-#     if not authorizing_access(teacher, parcours,access):
-#         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
-#         return redirect('index')
-
-#     customexercises = parcours.parcours_customexercises.order_by("ranking")
-#     students = students_from_p_or_g(request,parcours) 
-
-#     for s in students :
-#         student = {}
-#         student["name"] = s
-#         studentanswers = Studentanswer.objects.filter(student=s,  exercise__in= exercises, parcours=parcours).order_by("date")
-
-#         studentanswer_tab , student_tab  = [], []
-#         for studentanswer in studentanswers :
-#             if studentanswer.exercise not in studentanswer_tab :
-#                 studentanswer_tab.append(studentanswer.exercise)
-#                 student_tab.append(studentanswer)
-#         student["nb_exo"] = len(studentanswer_tab)
-#         duration, score, total_numexo, good_answer = 0, 0, 0, 0
-#         tab, tab_date = [], []
-#         student["legal_duration"] = parcours.duration
-
-#         for studentanswer in  student_tab : 
-#             duration += int(studentanswer.secondes)
-#             score += int(studentanswer.point)
-#             total_numexo += int(studentanswer.numexo)
-#             good_answer += int(studentanswer.numexo*studentanswer.point/100)
-#             tab.append(studentanswer.point)
-#             tab_date.append(studentanswer.date)
-#             tab_date.sort()
-#         try :
-#             if len(student_tab)>1 :
-#                 average_score = int(score/len(student_tab))
-#                 student["duration"] = convert_seconds_in_time(duration)
-#                 student["average_score"] = int(average_score)
-#                 student["good_answer"] = int(good_answer)
-#                 student["total_numexo"] = int(total_numexo)
-#                 student["last_connexion"] = studentanswer.date
-#                 student["score"] = int(score)
-#                 student["score_tab"] = tab
-#                 if duration > parcours_duration : 
-#                     student["test_duration"] = True
-#                 else :
-#                     student["test_duration"] = False 
-#                 tab.sort()
-#                 if len(tab)%2 == 0 :
-#                     med = (tab[(len(tab)-1)//2]+tab[(len(tab)-1)//2+1])/2 ### len(tab)-1 , ce -1 est causÃ© par le rang 0 du tableau
-#                 else:
-#                     med = tab[(len(tab)-1)//2+1]
-#                 student["median"] = int(med)
-#                 student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100 )   
-#             else :
-#                 average_score = int(score)
-#                 student["duration"] = convert_seconds_in_time(duration)
-#                 student["average_score"] = int(score)
-#                 student["last_connexion"]  = studentanswer.date
-#                 if duration > parcours_duration : 
-#                     student["test_duration"] = True
-#                 else :
-#                     student["test_duration"] = False 
-#                 student["median"] = int(score)
-#                 student["score"] = int(score)
-#                 student["score_tab"] = tab
-#                 student["good_answer"] = int(good_answer)
-#                 student["total_numexo"] = int(total_numexo)
-#                 student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100)        
-#         except :
-#             student["duration"] = ""
-#             student["average_score"] = ""
-#             student["last_connexion"] =  ""
-#             student["median"] = ""
-#             student["score"] = ""
-#             student["score_tab"] = []
-#             student["test_duration"] = False
-#             student["good_answer"] = ""
-#             student["total_numexo"] = ""
-#             student["percent"] = ""
-
- 
-#         total_c, details_c  = 0 , ""
-#         for ce in customexercises :
-#             if ce.is_mark :
-#                 cen = ce.customexercise_custom_answer.get(student=student, parcours = parcours) 
-#                 total_c = total_c + cen.point
-#                 details_c = details_c + "-" +str(cen.point)  
-
-#         student["total_note"] = total_c
-#         student["details_note"] = details_c
-
-             
-
-
-#         total_knowledge, total_skill, detail_skill, detail_knowledge = 0,0, "",""
-#         for ce in customexercises :
-#             for skill in  ce.skills.all() :
-#                 scs = ce.customexercise_correctionskill.get(skill = skill,student=student, parcours = parcours)
-#                 try :
-#                     total_skill += scs.point
-#                     detail_skill += detail_skill + "-" +str(scs.point) 
-#                 except :
-#                     total_skill = ""
-#             student["total_skill"] = total_skill
-#             student["detail_skill"] = detail_skill
-
-#             for knowledge in  ce.knowledges.all() :
-#                 sck = ce.customexercise_correctionknowledge.get(knowledge = knowledge,student=student, parcours = parcours)
-#                 try :
-#                     total_knowledge += sck.point
-#                     detail_knowledge += detail_knowledge + "-" +str(sck.point) 
-#                 except :
-#                     total_knowledge = total_knowledge
-#             student["total_knowledge"] = total_knowledge
-#             student["detail_knowledge"] = detail_knowledge  
-
-
-#         stats.append(student)
-
-#     context = {  'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'communications' : [] , 'role' : role  }
-
-#     return render(request, 'qcm/stat_parcours.html', context )
-
-
-
-
 def check_level_by_point(student, point):
     point = int(point)
     if student.user.school :
@@ -1861,9 +1706,9 @@ def check_level_by_point(student, point):
         stage = Stage.objects.get(school = school)
 
         if point > stage.up :
-            level = "primary"
+            level = "darkgreen"
         elif point > stage.medium :
-            level = "success"
+            level = "green"
         elif point > stage.low :
             level = "warning"
         elif point > -1 :
@@ -1874,9 +1719,9 @@ def check_level_by_point(student, point):
         stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
 
         if point > stage["up"]  :
-            level = "primary"
+            level = "darkgreen"
         elif point > stage["medium"]  :
-            level = "success"
+            level = "green"
         elif point > stage["low"]  :
             level = "warning"
         elif point > -1 :
@@ -2195,21 +2040,23 @@ def parcours_tasks_and_publishes(request, id):
 def result_parcours_exercise_students(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcours = Parcours.objects.get(pk = id)
-    try :
-        group_id = request.session.get("group_id")
-        group = Group.objects.get(pk = group_id)
-    except :
-        group_id = None
-        group = None
+ 
 
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
+
+    data = get_complement(request, teacher, parcours)
+    role = data['role']
+    group = data['group']
+    group_id = data['group_id'] 
+
+
 
     relationships = Relationship.objects.filter(parcours = parcours, is_publish = 1) 
     customexercises = parcours.parcours_customexercises.filter( is_publish = 1).order_by("ranking")
     stage = get_stage(teacher.user)
 
-    return render(request, 'qcm/result_parcours_exercise_students.html', {'customexercises': customexercises , 'stage':stage ,   'relationships': relationships ,  'parcours': parcours , 'group_id': group_id ,  'group' : group ,  })
+    return render(request, 'qcm/result_parcours_exercise_students.html', {'customexercises': customexercises , 'stage':stage ,   'relationships': relationships ,  'parcours': parcours , 'group_id': group_id ,  'group' : group , 'role' : role , })
 
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_is_favorite(request):  

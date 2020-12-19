@@ -122,3 +122,18 @@ def get_level_by_point(student, point):
             level = 1
     return level
 
+
+def split_paragraph(paragraph,coupe) :
+
+    name  = ""
+    longueur = 0
+    words = paragraph.split(" ")
+    for word in words:
+        if longueur + 1 + len(word) > coupe:
+            name += "\n" + word
+            longueur = 0
+        else:
+            name += " " + word
+            longueur += len(word)
+
+    return name 

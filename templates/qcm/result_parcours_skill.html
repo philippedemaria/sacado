@@ -1,7 +1,7 @@
 {% extends 'qcm/result_parcours.html' %}
 {% load item_tags %}
 
-{% block sub_page_title %}des compétences{% endblock %}
+{% block sub_page_title %}Bilan des compétences{% endblock %}
 
 
 
@@ -22,7 +22,7 @@
  
 	{% for skill in skill_tab %}
         <td>
-		{% get_scorekp  skill  student parcours as score %}
+		{% get_scorekp  skill  student parcours as data %}
 
 
 		<!-- Requête moins rapide de 2 secondes mais plus précise puis que sélection sur le parcours
@@ -30,13 +30,8 @@
 		 get_score_student_parcours  knowledge  student parcours as score 
 
 		 -->
+		 {% include 'qcm/data_score.html' %}
 
-			{% if score != "" %}
-			    <i class="fa fa-square text-{% if score < stage.low %}danger{% elif score < stage.medium %}warning{% elif score < stage.up %}success{% else %}primary{% endif %}"  ></i>
-				        
-			{% else %}
-				<i class="fa fa-square text-default" title="Absent ou non évalué" ></i>
-			{% endif %}
 		</td>
 	{% endfor %}
 

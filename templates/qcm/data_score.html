@@ -1,0 +1,23 @@
+{% load static %}
+{% load item_tags %}
+
+ 
+
+{% if data.score != "" %}
+    <span class="markdown_detail 
+            {% if data.score < 30 %}
+             red 
+            {% elif data.score < 60 %}
+            orange
+            {% elif data.score < 80 %}
+            green
+            {% else %}
+            darkgreen
+            {% endif %} square" title="score s réalisé pour n attendus sur p proposés : s% n/p" >
+            {{ data.score }}%  
+     <small>  {{ data.nombre }}/{{ data.total }}  </small> 
+    </span>
+{% endif %}
+
+
+ 

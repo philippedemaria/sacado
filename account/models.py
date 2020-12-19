@@ -175,6 +175,29 @@ class Student(ModelWithCode):
         return data
 
 
+
+
+
+    def bilan_skills(self, skill):
+        ''' résultats de l'étudiant aux 3 derniers exercices de compétences de la compétence en paramètre'''
+        n = 3
+        results = self.results_s.filter(skill=skill).order_by("-id")[:10] 
+        nb = len(results) 
+        somme , i , coef = 0 , 0, 0
+        for r in results:
+            coef += 2**(nb-i)
+            somme += r.point*2**(nb-i)
+            i +=1
+        try :
+            avg = int(somme/coef)
+        except :
+            avg = None
+        return avg
+
+
+
+
+
     def result_waitings(self, waiting):
         ''' résultats de l'étudiant aux 3 derniers exercices '''
         results = self.results_k.filter(knowledge__waiting = waiting).order_by("-id") 

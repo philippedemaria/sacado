@@ -7,7 +7,7 @@
 {% get_score  relationship.exercise  student as score %}
 
 {% if score != "" %}
-    <a class="markdown helper_tip
+    <a class="helper_tip markdown
             {% if score < stage.low %}
              red 
             {% elif score < stage.medium  %}
