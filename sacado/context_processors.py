@@ -33,7 +33,9 @@ def menu(request):
             return {'today': today, 'nb_not': nb_not, 'levels': levels,  'nb_demand' : nb_demand , 'sacado_asso' : sacado_asso ,  }
 
         elif request.user.is_student:
+
             student = Student.objects.get(user=request.user)
+            groups = student.students_to_group.all()
 
             if student.user.school :
                 sacado_asso = True
@@ -48,7 +50,8 @@ def menu(request):
             return {
                 'student': student,
                 'sacado_asso' : sacado_asso , 
-                'group' : group , 
+                'group' : group ,
+                'groups' : groups,
             }
 
         elif request.user.is_parent:

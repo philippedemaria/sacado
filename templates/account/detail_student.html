@@ -76,8 +76,14 @@
     
             {% endif %}
         {% endif %}
-    {% elif request.user.user_type < 2 %}
-        Suivis de {{ student.user }}  
+    
+
+    {% elif request.user.user_type == 0 %}
+        Mes bilans et suivis
+ 
+
+    {% elif request.user.user_type == 1 %}
+        Bilans et suivis de {{ student.user }}  
     {% endif %}
 
 {% endblock %}

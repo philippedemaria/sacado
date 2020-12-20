@@ -750,7 +750,7 @@ def result_group_waiting(request, id):
     students = group.students.order_by("user__last_name")
     teacher = Teacher.objects.get(user=request.user)
 
-    waitings = group.level.waitings.all() 
+    waitings = group.level.waitings.filter(theme__subject=group.subject)
  
     authorizing_access_group(teacher,group ) 
 
