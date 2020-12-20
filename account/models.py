@@ -95,6 +95,10 @@ class User(AbstractUser):
     def is_teacher(self):
         return self.user_type == self.TEACHER
 
+    @property
+    def is_creator(self):
+        return self.is_staff == True
+
 
 class Student(ModelWithCode):
     """

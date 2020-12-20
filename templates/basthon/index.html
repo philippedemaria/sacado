@@ -16,8 +16,8 @@
 {% endblock %}
 
 
-{% block page_title %}
-   <a href="{% url 'show_parcours_student' relationship.parcours.id %}" style="color:{{ relationship.parcours.color }}"><i class="fab fa-python"></i> {{ relationship.parcours }}</a>
+{% block page_title %}<i class="fab fa-python"></i>       {% include 'breadcrumb_student.html' %}  <img src="{% static 'img/angle-right.png' %}"/>
+   <a href="{% url 'show_parcours_student' relationship.parcours.id %}" style="color:{{ relationship.parcours.color }}"> {{ relationship.parcours }}</a>
 {% endblock %}
  
  

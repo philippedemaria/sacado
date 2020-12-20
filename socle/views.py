@@ -348,3 +348,4 @@ def ajax_chargewaitings(request):
     data['waitings'] = list(waitings)
  
     return JsonResponse(data)
+

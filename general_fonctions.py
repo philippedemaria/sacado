@@ -9,6 +9,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import  redirect
 from school.models import Stage
 
+ 
+
+
 def time_zone_user(user):
     try :
         if user.time_zone :
@@ -21,13 +24,14 @@ def time_zone_user(user):
         today = timezone.now()
 
     return today
- 
+
+
+
 
 def cleanhtml(raw_html): #nettoie le code des balises HTML
     cleantext = re.sub('<.*?>', '', raw_html)
     cleantext = re.sub('\n', '', cleantext)
     return cleantext
-
 
 def unescape_html(string):
     '''HTML entity decode'''
@@ -35,13 +39,11 @@ def unescape_html(string):
     return string
 
 
-
 def escape_chevron(string):
     '''HTML entity decode'''
     string = string.replace("<","&lt")
     string = string.replace(">","&gt")  
     return string
-
 
 
 

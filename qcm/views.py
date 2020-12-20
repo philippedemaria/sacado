@@ -1332,7 +1332,9 @@ def show_parcours_student(request, id):
 
         courses = parcours.course.filter(Q(is_publish=1)|Q(publish_start__lte=today,publish_end__gte=today)).order_by("ranking")
         nb_exercises = Relationship.objects.filter(parcours=parcours, students=student, is_publish=1 ).count() + Customexercise.objects.filter(parcourses = parcours, students=student, is_publish=1 ).count()
-        context = {'relationships': relationships, 'customexercises': customexercises, 'stage' : stage , 'today' : today , 'courses':courses ,  'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only, 'nb_exo_only_c' : nb_exo_only_c ,  'today': today ,   }
+        context = {'relationships': relationships, 'customexercises': customexercises, 'stage' : stage , 'today' : today , 
+                    'courses':courses , 'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only, 
+                    'nb_exo_only_c' : nb_exo_only_c ,  'today': today ,   }
 
         return render(request, 'qcm/show_parcours_student.html', context)
 

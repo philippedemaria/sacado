@@ -3,7 +3,7 @@ from account.models import Student, Teacher, User, Resultknowledge, Resultlastsk
 from account.forms import UserForm
 from group.models import Group, Sharing_group
 from socle.models import Knowledge, Theme, Level, Skill
-from qcm.models import Exercise, Parcours, Relationship, Studentanswer, Resultexercise , Resultggbskill
+from qcm.models import Exercise, Parcours, Relationship, Studentanswer, Resultexercise , Resultggbskill, Customexercise
 from group.forms import GroupForm , GroupTeacherForm
 from sendmail.models import Email
 from sendmail.forms import EmailForm
@@ -21,7 +21,7 @@ from django.contrib.auth.decorators import user_passes_test
 from group.decorators import user_is_group_teacher
 from account.decorators import user_can_create
 from templated_email import send_templated_mail
-
+from django.db.models import Q
 
 ############### bibliothèques pour les impressions pdf  #########################
 import os
@@ -46,6 +46,120 @@ from datetime import datetime
 from general_fonctions import *
 
  
+
+
+def student_dashboard(request,group_id):
+
+    student = Student.objects.get(user=request.user.id)
+    #######Groupes de l'élève. 
+    # si plusieurs matières alors on envoie sur dashboard_group 
+    # si une seule matière alors  sur dashboard
+    groups = student.students_to_group.all()
+
+ 
+
+    if groups.count() > 1  :
+        if int(group_id)  > 0  :
+            template =  "group/dashboard_group.html" 
+        else :
+            template = "dashboard.html" 
+    else :
+        template =  "group/dashboard_group.html" 
+
+ 
+
+    today = time_zone_user(request.user)        
+    timer = today.time()
+
+
+    if int(group_id) > 0 :
+        group = Group.objects.get(pk = group_id)
+        request.session["group_id"] = group_id 
+        parcourses = student.students_to_parcours.filter(is_evaluation=0, is_publish=1,subject = group.subject).exclude(is_leaf=1).order_by("ranking")
+        evaluations = student.students_to_parcours.filter(start__lte=today, is_evaluation=1,subject = group.subject)
+
+    else :
+        group = None
+        parcourses = student.students_to_parcours.filter(is_evaluation=0, is_publish=1).exclude(is_leaf=1).order_by("ranking")
+        evaluations = student.students_to_parcours.filter(start__lte=today, is_evaluation=1)
+   
+
+ 
+
+    customexercises_set = set()
+    nb_custom = 0
+    for p in parcourses :
+        custom_exercises = Customexercise.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcourses = p , date_limit__gte=today).order_by("date_limit")
+        nb_custom += custom_exercises.count()
+        customexercises_set.update(set(custom_exercises))
+    customexercises = list(customexercises_set)
+
+    relation_ships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in=parcourses, date_limit__gte=today).order_by("date_limit")
+
+    leaf_parcourses = Parcours.objects.filter(students=student, is_evaluation=0, is_publish=1,is_leaf=1).order_by("ranking")
+    leaf_relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in= leaf_parcourses, date_limit__gte=today).order_by("date_limit")
+
+    if len(set(relation_ships)) > 0 :
+        relationships = set(relation_ships).update(set(leaf_relationships))
+    else :
+        relationships = set(leaf_relationships)
+
+    nb_relationships = len(leaf_relationships) + relation_ships.count()
+
+    if not relationships :
+        relationships = []
+
+
+    exercise_tab = []
+    for r in relationships:
+        if r not in exercise_tab:
+            exercise_tab.append(r.exercise)
+    num = 0
+    for e in exercise_tab:
+        if Studentanswer.objects.filter(student=student, exercise=e).count() > 0:
+            num += 1
+
+
+    for c in customexercises :
+        if c.customexercise_custom_answer.filter(student=student).count() > 0:
+            num += 1
+
+    try:
+        ratio = int(num / (nb_relationships+nb_custom) * 100)
+    except:
+        ratio = 0
+
+    ratiowidth = int(0.9*ratio)
+
+
+    groups = student.students_to_group.all()
+    exercises = []
+    studentanswers =  student.answers.all()
+    for studentanswer in studentanswers:
+        if not studentanswer.exercise in exercises:
+            exercises.append(studentanswer.exercise)
+
+    relationships_in_late = student.students_relationship.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcourses, is_evaluation=0, date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
+    relationships_in_tasks = student.students_relationship.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcourses, date_limit__gte=today).exclude(exercise__in=exercises).order_by("date_limit")
+    last_exercises_done = student.answers.order_by("-date")[:5]
+
+ 
+    context = {'student_id': student.user.id, 'student': student, 'relationships': relationships, 'timer' : timer ,  'last_exercises_done' : last_exercises_done,
+               'evaluations': evaluations, 'ratio': ratio, 'today' : today ,  'parcourses': parcourses,   'customexercises': customexercises, 'group' : group , 'groups' : groups ,
+               'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late, 
+               'relationships_in_tasks': relationships_in_tasks , }
+
+
+    return template, context
+
+
+
+ 
+
+
+
+
+
 
 def student_parcours_studied(student):  
     parcourses = student.students_to_parcours.all()
@@ -265,6 +379,15 @@ def authorizing_access_group(teacher,group ):
 ####    Group
 #####################################################################################################################################
 #####################################################################################################################################
+
+
+def dashboard_group(request,id):
+
+    template = student_dashboard(request,id)[0]
+    context =  student_dashboard(request,id)[1]
+
+
+    return render(request, template , context )
 
 
 

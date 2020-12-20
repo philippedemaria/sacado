@@ -809,7 +809,6 @@ def register_teacher(request):
 
         if user_form.is_valid():
             user = user_form.save(commit=False)
-            user.is_staff = True
             user.user_type = User.TEACHER
             user.set_password(user_form.cleaned_data["password1"])
             user.save()

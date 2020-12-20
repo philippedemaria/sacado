@@ -6,6 +6,7 @@ from qcm.models import Parcours, Studentanswer, Exercise, Demand
 from sendmail.models import Email
 from socle.models import Level
 from school.models import School
+from group.models import Group
 
 def menu(request):
 
@@ -33,16 +34,21 @@ def menu(request):
 
         elif request.user.is_student:
             student = Student.objects.get(user=request.user)
-            last_exercises_done = Studentanswer.objects.filter(student=student).order_by("-date")[:10]
-            parcours = Parcours.objects.filter(is_publish=1, exercises__level=student.level).exclude(author=None).order_by("ranking")
-            groups = student.students_to_group.all()
+
+            if student.user.school :
+                sacado_asso = True
+
+            group_id = request.session.get("group_id",None)
+
+            if group_id :
+                group = Group.objects.get(pk=group_id)
+            else :
+                group = None
 
             return {
                 'student': student,
-                'parcours': parcours,
-                'last_exercises_done': last_exercises_done,
-                'groups': groups,
                 'sacado_asso' : sacado_asso , 
+                'group' : group , 
             }
 
         elif request.user.is_parent:
@@ -54,6 +60,7 @@ def menu(request):
                 'this_user': this_user,
                 'last_exercises_done': last_exercises_done,
                  'sacado_asso' : sacado_asso , 
+                 'group' : group,
             }
 
 

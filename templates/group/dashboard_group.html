@@ -1,0 +1,273 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+ 
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3.js' %}"></script> 
+    <script>
+        require(['script/ajax-dashboard']);
+        require(['script/ajax-group']);
+    </script>
+{% endblock %}
+
+
+
+{% block page_title %}
+    <span style="color:#5d4391"><i class='fa fa-tachometer-alt'></i> <a href="{% url 'index' %}" style="color:#5d4391">Tableau de bord </a></span>  <img src="{% static 'img/angle-right.png' %}"/> {% include 'breadcrumb_student.html' %}
+{% endblock %}
+
+
+
+   
+
+
+
+{% block body %}
+ 
+<section class="content_main"> 
+ 
+    <div class="row">
+        <div class="col-md-10 col-lg-10 col-xs-12">
+            {% if parcourses|length > 0 %}
+            <h2 class='thin'>Parcours</h2>
+            {% endif %}
+            <!-- ******************************************************************************************** -->
+            <!-- *************************************** Parcours ******************************************* -->
+            {% for parcours in parcourses %}
+                    {% get_percent parcours student as data %}  
+                    {% get_min_score_parcours parcours student as data_min %} 
+                    {% if parcours.vignette %}
+                    <!-- small box -->
+                    <div class="small-box-student" style="background-image: url('{{parcours.vignette.url }}'); background-size: 100% 100%;">
+                        {% if  student.user.school %}
+                            {% if  data_min.boolean %}
+                            <div class="background_badge" >
+                            <i class="fa fa-trophy" style="color:{{ data_min.colored }};font-size: 40px "></i>
+                            </div>
+                            {% endif  %}
+                        {% endif  %}
+
+
+                        <div class="icon-student">
+                             {{ data.pc }}% 
+                        </div>
+                        <div class="small-box-footer-max" style="background-color:{{parcours.color }};color:{{parcours.color|contrast_color }};"  >
+                            <h2 class="white thin"> {{ parcours.title|truncatechars:"19" }} </h2>
+ 
+                            <br> 
+                            <div style="text-align: center;margin-top: 25px">
+                            <a href="{% url 'show_parcours_student' parcours.id %}" class="btn btn-default btn-accueil"> {% get_tasks student parcours  as is_task_exists %} 
+                                    {%  if is_task_exists %}
+                                        <i class="fa fa-calendar-check" style="color:red"></i>
+                                    {% endif %} Accéder aux {% if parcours.is_folder %}parcours{% else  %}exercices{% endif %}</a>
+                            </div>
+                            <div  class="student_vignette_subtitle">    
+                                {{ data.nb }}/{{ data.nb_total }} exercice{{ data.nb_total|pluralize }} étudié{{ data.nb_total|pluralize }} 
+
+                                {% if parcours.course.all|length > 0 %}  
+                                <a href="{% url 'show_course_student' 0 parcours.id %}" class="pull-right white" title="Rappels de cours"  target="_blank"  >
+                                    <i class="fa fa-desktop"></i>  
+                                </a>
+                                {% endif  %}
+
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="small-box-student" style="background-color:{{parcours.color }}">
+                        {% if  student.user.school %}
+                            {% if data_min.boolean %}
+                            <div class="background_badge" >
+                            <i class="fa fa-trophy" style="color:{{ data_min.colored }};font-size: 40px"></i>
+                            </div>
+                            {% endif  %}
+                        {% endif  %}
+ 
+                        <div class="icon-student">
+                             {{  data.pc }}% 
+                        </div>
+                        <div class="small-box-footer-max">
+                            <h2 class="white thin"> {{ parcours.title|truncatechars:"19" }} </h2>
+                            
+                    
+                            <div style="text-align: center;margin-top: 25px">
+                            <a href="{% url 'show_parcours_student' parcours.id %}" class="btn btn-default btn-accueil"> {% get_tasks student parcours  as is_task_exists %} 
+                                    {%  if is_task_exists %}
+                                        <i class="fa fa-calendar-check" style="color:red"></i>
+                                    {% endif %} Accéder aux {% if parcours.is_folder %}parcours {% else  %}exercices{% endif %}</a>
+                            </div>
+                            <div  class="student_vignette_subtitle">    
+                                    {% if parcours.is_folder %}
+                                        {% get_nb_leaf parcours student as nb_leaf %} 
+                                         <i class="fa fa-folder{% if nb_leaf > 0 %}-open{% endif %}"></i> {{ nb_leaf  }} parcours
+                                    {% else  %}
+                                        {{  data.nb  }}/{{ data.nb_total }} exercice{{ data.nb_total|pluralize }} étudié{{ data.nb_total|pluralize }}
+                                    {% endif %}
+                                {% if parcours.course.all|length > 0 %}  
+                                <a href="{% url 'show_course_student' 0 parcours.id %}" class="pull-right white" title="Rappels de cours" target="_blank"  >
+                                    <i class="fa fa-desktop"></i>  
+                                </a>
+                                {% endif  %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% empty  %}  
+                <div class="row">  
+                    <div class="col-md-12 col-lg-12 col-sm-12" style="text-align: center">
+                        <div class="alert alert-danger">
+                            <h1 class="thin"> Votre enseignant n'a pas encore publié de parcours.</h1>
+                            <div style="border-radius: 50%;width:250px;height:250px; margin-right: auto; margin-left: auto; background-color: #FFF;text-align: center">
+                                <img src="{% static 'img/sacado_color.png' %}"   />  
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+
+
+                <div class="row">  
+                    <div class="col-md-12 col-lg-12 col-sm-12">
+                        <a href="#">Demander les parcours d'apprentissage de mon niveau à l'équipe SACADO</a> <small><em>en version beta et gratuite</em></small>
+                    </div>
+                </div> 
+
+            {% endfor  %}   
+
+            <!-- ******************************************************************************************** -->
+            <!-- ************************************* Evaluations ****************************************** -->
+            {%  if evaluations %}
+            <div class="row"></div> 
+            <hr/>
+            <h2 class='thin'>Evaluations</h2>
+                {%  for evaluation in  evaluations %}             
+                    <div class="small-box-student" style="background-color:{{evaluation.color }};color:{{evaluation.color|contrast_color }};">
+                        <div class="icon-student">
+                            <small><i class="fa fa-graduation-cap"></i></small>
+                        </div>
+                        <div class="small-box-footer-max">
+                            <h2 class="white thin">{{ evaluation.title }}  </h2>
+                           
+                            <div style="text-align: center; margin-top: 20px; margin-bottom: 20px">
+                             <a href="{% url 'show_parcours_student' evaluation.id  %}" class="btn btn-default btn-accueil"><i class="fa fa-arrow-circle-right"></i> Démarrer</a>
+                            </div>
+                            <p>
+                                <div class="col-md-6  col-lg-6  col-sm-6">
+                                    <i class="fa fa-clock-o"></i>  {{ evaluation.evaluation_duration }} min 
+                                </div>
+                                <div class="col-md-6  col-lg-6  col-sm-6">
+                                    {{ evaluation.nb_exercises }} exercice{{ evaluation.exercises.count|pluralize }} 
+                                </div>
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}  
+            <!-- ******************************************************************************************** -->
+            <!-- *********************************** Tache à faire ****************************************** -->            
+            {% if relationships_in_tasks|length > 0 %}
+               <!-- Add the bg color to the header using any of the bg-* classes -->
+            <div class="row"></div>
+            <hr>
+            <h2 class="thin">Mes tâches en cours</h2>
+                 {% for relation in relationships_in_tasks %}
+                        <div class="card_freeze">
+                            <div class="card-body student">
+                                <span style="color:{{ relation.parcours.color }}"> {{ relation.parcours }}</span>
+     
+                                {% if relation.exercise.supportfile.calculator %}
+                                  <img src="{% static 'img/calculator.png' %}" class="pull-right" width="35px" />
+                                {% else %}
+                                  <img src="{% static 'img/no_calculator.png' %}" class="pull-right"   width="35px" />
+                                {% endif  %} 
+                            </div>                    
+                            <div class="card-image">
+                                {% if student %}
+                                <a href="{% url 'execute_exercise'  relation.parcours.id  relation.exercise.id   %}">  <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.3" {% endif %}    ></a>
+                                {% else %}
+                                <a href="#" class="detail_parcours"  data-exercise_id="{{ relation.exercise.id }}"  data-num_exo="{{ forloop.counter}}"   data-parcours_id="{{ parcours.id }}">
+                                    <img src="{{ relation.exercise.supportfile.imagefile.url }}" class="image_parcours" {% if not relation.is_publish %} style="opacity:0.3" {% endif %}  >
+                                </a> 
+                                {% endif  %}
+
+
+                                {% if  relation.date_limit %}
+                                    {% get_done relation student as result   %} 
+                                    {% if not result %} 
+                                        <div  class="btn btn-danger"  style="position: absolute; right : 0px; top:120px;">   
+                                              Avant le {{relation.date_limit|date:"d N Y" }}
+                                        </div>
+                                    {% endif %}    
+                                {% endif %}   
+                                <div class="card-text" style="background-color:{{ relation.parcours.color }}">
+                                    <i class="fa fa-barcode"></i> {{ relation.exercise.supportfile.code }}  
+                                    <i class="fa fa-clock-o"></i> {{ relation.duration }} min.
+                                    <i class="fa fa-save"></i> {{ relation.situation}}
+                                </div>
+                            </div>
+                        </div> 
+                 {% endfor %}
+            {% endif %}
+            <!-- ******************************************************************************************** -->
+            <!-- ******************************* Exercices déjà faits *************************************** -->
+            <div class="row"></div>
+            <div class="row" id="parcours_div"> 
+                <div class="col-md-12 col-lg-12 col-sm-12">
+                    <hr>
+                    <h2 class="thin">Mes 10 derniers exercices travaillés </h2>
+
+                            <table class="table" style="background-color:#FFF; width:100%">
+                                {% regroup last_exercises_done by exercise as responses_list %}
+                                <thead>
+                                    <tr style="background-color:#f4f6f9"> 
+                                    <td><span  style="font-weight:100;font-size:20px "> </span> </td>
+                                    <td>Thème</td>
+                                    <td></td>
+                                    <td></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for r in responses_list %}
+                                    <tr>
+                                        <td> 
+                                            <a href="{% url 'show_this_exercise'  r.grouper.id   %}" >  
+                                                <img src="{{ r.grouper.supportfile.imagefile.url }}" class="imagefile">
+                                            </a>
+                                        </td>
+                                        <td style="width:75%"><a href="{% url 'show_this_exercise' r.grouper.id %}">{{ r.grouper }}</a></td>
+                                        <td>{{ r.grouper.theme.name }}</td>
+                                        <td style="width:10%">
+                                            {% for s in r.list  %}
+                                                <div  class="markdown pull-right
+                                                    {% if s.point < 30 %}
+                                                     red 
+                                                    {% elif s.point < 60 %}
+                                                    orange
+                                                    {% elif s.point < 80 %}
+                                                    green
+                                                    {% else %}
+                                                    darkgreen
+                                                    {% endif %}">
+                                                    {{ s.point }}%
+                                                </div> 
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+
+                    </div>
+                </div>    
+            <!-- ******************************************************************************************** -->
+        </div>
+        <div class="col-md-2 col-lg-2 col-xs-12">
+            {% include 'right_menu_student.html' %}
+        </div>  
+    </div>
+</section> 
+
+{% endblock %}
+
+ 

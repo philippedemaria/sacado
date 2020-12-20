@@ -5,7 +5,6 @@ from .views import *
 urlpatterns = [
 
     re_path(r'^$', index, name='index'),
-
     re_path('get_cookie', get_cookie , name='get_cookie'),
 
 
@@ -14,6 +13,7 @@ urlpatterns = [
     path('ajax/change_color_account', ajax_changecoloraccount , name='ajax_changecoloraccount'), 
     path('admin_tdb', admin_tdb, name='admin_tdb'),  
 
-    path('gestion_files', gestion_files, name='gestion_files'),  
+    path('gestion_files', gestion_files, name='gestion_files'),
+
 
 ]
