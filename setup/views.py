@@ -6,6 +6,7 @@ from account.models import  User, Teacher, Student  ,Parent
 from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise
 from group.models import Group, Sharing_group
 from group.views import student_dashboard
+from setup.models import Formule
 from school.models import Stage
 from sendmail.models import Communication
 from socle.models import Level
@@ -21,8 +22,22 @@ import os
 from itertools import chain
 from account.decorators import is_manager_of_this_school
 from general_fonctions import *
- 
+import fileinput 
 
+
+
+
+def end_of_contract() :
+
+    data = {}
+    date = datetime.now()
+
+    if date.month < 6 :
+        end = date.year
+    else :
+        end = int(date.year) + 1
+    return end
+ 
 def index(request):
 
     if request.user.is_authenticated :
@@ -173,9 +188,24 @@ def test_display(request):
     return render(request, 'setup/test_display.html', context)
 
 
+def student_to_association(request):
+
+    frml = Formule.objects.get(pk=1)
+    formule = Formule.objects.get(pk=4)
+    context = { 'frml' : frml , 'formule' : formule }
+    return render(request, 'setup/student_association.html', context)
+
+
+def choice_menu(request,name):
+    formules = Formule.objects.filter(name=name)
+    end  = end_of_contract()
+    context = { 'formules' : formules , 'end' : end , 'name' : name  }
+    return render(request, 'setup/menu.html', context)   
+
+
 
 ##############################################  AJAX ############################################################
-import fileinput
+
 
 
 

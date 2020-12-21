@@ -19,6 +19,8 @@ class Subject(models.Model):
     def __str__(self):
         return "{}".format(self.shortname)
 
+
+
 class Theme(models.Model):
     name = models.CharField(max_length=255, verbose_name="Nom")
     slug = models.CharField(max_length=255, default ="" , editable=False)
@@ -56,6 +58,8 @@ class Theme(models.Model):
         detail["done"] = Relationship.objects.filter(parcours=parcours, exercise__theme = self).exclude(date_limit=None).count()
         detail["in_air"] = Relationship.objects.filter(parcours=parcours, exercise__theme = self,date_limit__gte=today).count()
         return detail
+
+
 
 class Level(models.Model):
 
@@ -105,6 +109,7 @@ class Level(models.Model):
         nb = n - m
         return nb
 
+
 class Waiting(models.Model):
     name = models.CharField(max_length=500, verbose_name="Nom")
     theme  = models.ForeignKey(Theme, related_name="waitings",  on_delete=models.CASCADE, verbose_name="Thème")
@@ -144,6 +149,7 @@ class Waiting(models.Model):
         data["nombre"] = coef
         data["total"] = self.knowledges.count()
         return data
+
 
 
 class Knowledge(models.Model):
@@ -240,6 +246,7 @@ class Knowledge(models.Model):
         return crit
 
 
+
     def send_scorek(self,student):
 
         data = {}
@@ -286,7 +293,7 @@ class Knowledge(models.Model):
 
         return tab_set
 
- 
+
 class Skill(models.Model): 
     name = models.CharField(max_length=10000, verbose_name="Nom")
     subject  = models.ForeignKey(Subject, related_name="skill", default="", on_delete=models.PROTECT, null = True ,  verbose_name="Enseignement")

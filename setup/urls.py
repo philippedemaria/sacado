@@ -16,4 +16,12 @@ urlpatterns = [
     path('gestion_files', gestion_files, name='gestion_files'),
 
 
+
+    path('student_to_association', student_to_association, name='student_to_association'),     
+
+
+    path('choice_menu/<slug:name>', choice_menu, name='choice_menu'), 
+
+
+
 ]
