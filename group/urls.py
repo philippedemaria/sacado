@@ -4,6 +4,7 @@ from .views import *
 
 urlpatterns = [
 
+    path('dashboard/<int:id>', dashboard_group, name='dashboard_group'),
 
     path('', list_groups, name='groups'),
     path('new', create_group, name='create_group'),

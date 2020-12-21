@@ -5,6 +5,7 @@ from django.contrib.auth import   logout
 from account.models import  User, Teacher, Student  ,Parent
 from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise
 from group.models import Group, Sharing_group
+from group.views import student_dashboard
 from school.models import Stage
 from sendmail.models import Communication
 from socle.models import Level
@@ -21,8 +22,6 @@ from itertools import chain
 from account.decorators import is_manager_of_this_school
 from general_fonctions import *
  
-
-
 
 def index(request):
 
@@ -80,87 +79,26 @@ def index(request):
 
             parcours_tab = Parcours.objects.filter(students=None, teacher=teacher, is_favorite=1) ## Parcours favoris non affectés
 
-
+            template = 'dashboard.html'
             context = {'this_user': this_user, 'teacher': teacher, 'groups': groups, 'parcourses': parcourses, 'parcours': None, 'today' : today , 'timer' : timer , 
                        'relationships': relationships, 'communications': communications, 'parcours_tab': parcours_tab,
                        'nb_teacher_level': nb_teacher_level}
-
-
+        
         elif request.user.is_student: ## student
-            student = Student.objects.get(user=request.user.id)
-            parcourses = Parcours.objects.filter(students=student, is_evaluation=0, is_publish=1).exclude(is_leaf=1).order_by("ranking")
 
-            parcours = []
-            customexercises_set = set()
-            nb_custom = 0
-            for p in parcourses :
-                parcours.append(p)
-                custom_exercises = Customexercise.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcourses = p , date_limit__gte=today).order_by("date_limit")
-                nb_custom += custom_exercises.count()
-                customexercises_set.update(set(custom_exercises))
-            customexercises = list(customexercises_set)
-
-
-            relation_ships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).order_by("date_limit")
  
+            #return redirect("dashboard_group", 0)
+            context = student_dashboard(request, 0)[1]
+            template = student_dashboard(request, 0)[0] 
 
-            leaf_parcourses = Parcours.objects.filter(students=student, is_evaluation=0, is_publish=1,is_leaf=1).order_by("ranking")
-            leaf_relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in= leaf_parcourses, date_limit__gte=today).order_by("date_limit")
-
-            if len(set(relation_ships)) > 0 :
-                relationships = set(relation_ships).update(set(leaf_relationships))
-            else :
-                relationships = set(leaf_relationships)
-
-            nb_relationships = len(leaf_relationships) + relation_ships.count()
-
-            if not relationships :
-                relationships = []
-
-
-            exercise_tab = []
-            for r in relationships:
-                if r not in exercise_tab:
-                    exercise_tab.append(r.exercise)
-            num = 0
-            for e in exercise_tab:
-                if Studentanswer.objects.filter(student=student, exercise=e).count() > 0:
-                    num += 1
-
-            for c in customexercises :
-                if Customanswerbystudent.objects.filter(student=student, customexercise=c).count() > 0:
-                    num += 1
-
-            try:
-                ratio = int(num / (nb_relationships+nb_custom) * 100)
-            except:
-                ratio = 0
-
-            ratiowidth = int(0.9*ratio)
-
-
-            evaluations = Parcours.objects.filter(start__lte=today, students=student, is_evaluation=1)
-
-            exercises = []
-            studentanswers = Studentanswer.objects.filter(student = student)
-            for studentanswer in studentanswers:
-                if not studentanswer.exercise in exercises:
-                    exercises.append(studentanswer.exercise)
-
-            relationships_in_late = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, is_evaluation=0, date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
-            relationships_in_tasks = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).exclude(exercise__in=exercises).order_by("date_limit")
-
-            context = {'student_id': student.user.id, 'student': student, 'relationships': relationships, 'timer' : timer , 
-                       'evaluations': evaluations, 'ratio': ratio, 'today' : today ,  'parcourses': parcourses,   'customexercises': customexercises,
-                       'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late, 
-                       'relationships_in_tasks': relationships_in_tasks , }
 
         elif request.user.is_parent:  ## parent
             parent = Parent.objects.get(user=request.user)
             students = parent.students.order_by("user__first_name")
             context = {'parent': parent, 'students': students, 'today' : today ,  }
+            template = 'dashboard.html'
 
-        return render(request, 'dashboard.html', context)
+        return render(request, template , context)
 
 
     else:  ## Anonymous

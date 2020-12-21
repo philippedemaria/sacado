@@ -39,4 +39,6 @@ urlpatterns = [
 
  
     path('ajax/chargewaitings', ajax_chargewaitings, name='ajax_chargewaitings'),
+
+ 
 ]

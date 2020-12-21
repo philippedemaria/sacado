@@ -53,6 +53,7 @@ import html
 from general_fonctions import *
 
 
+
 def new_content_type(s):
     names = ['Pages', 'Questionnaires', 'Activités', 'Tâches',  'Fichiers', 'Urls externes', 'Discussions' , 'Notes',  'Acquis', 'Participants', 'Suivis' ]                
     slugs = ['page', 'test',  'activity', 'task', 'file', 'url', 'discussion', 'mark', 'acquis', 'user', 'suivi' ]   
@@ -1332,9 +1333,13 @@ def show_parcours_student(request, id):
 
         courses = parcours.course.filter(Q(is_publish=1)|Q(publish_start__lte=today,publish_end__gte=today)).order_by("ranking")
         nb_exercises = Relationship.objects.filter(parcours=parcours, students=student, is_publish=1 ).count() + Customexercise.objects.filter(parcourses = parcours, students=student, is_publish=1 ).count()
-        context = {'relationships': relationships, 'customexercises': customexercises, 'stage' : stage , 'today' : today , 'courses':courses ,  'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only, 'nb_exo_only_c' : nb_exo_only_c ,  'today': today ,   }
+        context = {'relationships': relationships, 'customexercises': customexercises, 'stage' : stage , 'today' : today , 
+                    'courses':courses , 'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only, 
+                    'nb_exo_only_c' : nb_exo_only_c ,  'today': today ,   }
 
         return render(request, 'qcm/show_parcours_student.html', context)
+
+
 
 def show_parcours_visual(request, id):
     parcours = Parcours.objects.get(id=id)
@@ -1352,6 +1357,8 @@ def show_parcours_visual(request, id):
     context = {'relationships': relationships,  'parcours': parcours,   'nb_exo_only': nb_exo_only, 'nb_exercises': nb_exercises,  'communications' : [] ,  }
  
     return render(request, 'qcm/show_parcours_visual.html', context)
+
+
 
 def replace_exercise_into_parcours(request):
 
@@ -4445,6 +4452,33 @@ def ajax_delete_custom_answer_image(request):
     Customanswerimage.objects.get(pk = int(image_id)).delete()
     return JsonResponse(data)  
 
+
+
+
+
+
+def asking_parcours_sacado(request,pk):
+    """demande de parcours par un élève"""
+
+    teacher = Teacher.objects.get(pk=2480)
+    student = request.user.student
+    level = student.level
+    group = Group.objects.get(pk = pk)
+    subject = group.subject
+
+    parcourses = teacher.teacher_parcours.filter(level = level, subject = subject)
+
+
+    test = attribute_all_documents_to_student(parcourses, student)
+    print("testeur", test)
+    
+    return redirect("dashboard_group",pk)
+
+
+
+
+
+
 #######################################################################################################################################################################
 ############### VUE ENSEIGNANT
 #######################################################################################################################################################################
@@ -6026,7 +6060,7 @@ def ajax_sort_mastering(request):
 
 @csrf_exempt  # PublieDépublie un exercice depuis organize_parcours
 def ajax_populate_mastering(request): 
-    # Cette fonction est appelé pour les exercices ou pour les customexercices. Du coup pour éviter une erreur, si la relationship n'existe pas on ne fait rien, juste le css
+    # Cette fonction est appelé pour les exercices ou pour les customexercises. Du coup pour éviter une erreur, si la relationship n'existe pas on ne fait rien, juste le css
 
     scale = int(request.POST.get("scale"))
     exercise_id = int(request.POST.get("exercise_id"))

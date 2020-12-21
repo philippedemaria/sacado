@@ -74,7 +74,7 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
             this_user = User.objects.get(pk=self.request.user.id)
             
             today = time_zone_user(this_user)
-            relationships = Relationship.objects.filter(is_publish = 0,start__lte=today)
+            relationships = Relationship.objects.filter(is_publish = 0,start__lte=today,exercise__supportfile__is_title=0)
             for r in relationships :
                 Relationship.objects.filter(id=r.id).update(is_publish = 1)
 
@@ -84,7 +84,7 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
 
                 groups = Group.objects.filter(teacher = teacher)
 
-                relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("parcours")
+                relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today,exercise__supportfile__is_title=0).order_by("parcours")
                 parcourses = Parcours.objects.filter(teacher=teacher)  # parcours non liés à un groupe
 
                 communications = Communication.objects.filter(active=1)
@@ -104,7 +104,7 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
                     parcours.append(p)
  
 
-                relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in=parcours, is_evaluation=0, date_limit__gte=today).order_by("date_limit")
+                relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in=parcours, is_evaluation=0, date_limit__gte=today,exercise__supportfile__is_title=0).order_by("date_limit")
                 exercise_tab = []
                 for r in relationships:
                     if r not in exercise_tab:
@@ -115,7 +115,7 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
                     if Studentanswer.objects.filter(student=student, exercise=e).count() > 0:
                         num += 1
 
-                nb_relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, date_limit__gte=today).count()
+                nb_relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcours, date_limit__gte=today,exercise__supportfile__is_title=0).count()
                 try:
                     ratio = int(num / nb_relationships * 100)
                 except:
@@ -281,11 +281,7 @@ def register_student(request):
             except :
                 pass
 
-            for p in parcours:
-                p.students.add(student)
-                relationships = p.parcours_relationship.all()
-                for r in relationships:
-                    r.students.add(student)
+            attribute_all_documents_to_student(parcours,student) ### Dans general_fonction
 
             user = authenticate(username=username, password=password)
             login(request, user)
@@ -582,11 +578,12 @@ def detail_student_theme(request, id,idt):
 
     for k in knowledges:
         knowledge_dict = {}
-        if Relationship.objects.filter(parcours__in = parcourses, exercise__knowledge = k, students= student).count() > 1 :
+        relationships = Relationship.objects.filter(parcours__in = parcourses, exercise__knowledge = k, students= student,exercise__supportfile__is_title=0)
+        if relationships.count() > 1 :
             knowledge_dict["name"] = k
             # liste des exercices du parcours qui correspondent aux savoir faire k mais un même exercice peut être donné sur deux parcours 
             # différents donc deux relationships pour un même exercice
-            relationships = Relationship.objects.filter(parcours__in = parcourses, exercise__knowledge = k, students= student)
+            
             # merge les relationships identiques
             relations_tab, relations_tab_code = [], []
             for rel in relationships:
@@ -643,15 +640,15 @@ def detail_student_parcours(request, id,idp):
         return redirect('index')
 
     parcours = Parcours.objects.get(pk=idp)
-    parcourses = Parcours.objects.filter(students=student)
+    parcourses = student.students_to_parcours.all()
     themes = student.level.themes.all()
-    relationships = Relationship.objects.filter(parcours = parcours, students = student, is_publish = 1).order_by("order")
+    relationships = parcours.parcours_relationship.filter( students = student, is_publish = 1).order_by("order")
     today = time_zone_user(request.user)
     if request.user.is_teacher:
         students = []
         teacher = Teacher.objects.get(user=request.user)
-        group = Group.objects.filter(students=student, teacher=teacher).last()
-        groups =  student.students_to_group.filter(teacher=teacher)
+        groups =  student.students_to_group.filter(teacher=teacher)        
+        group =  groups.last()
         for g in groups :
             sts = g.students.all().order_by("user__last_name")
             for s in sts :
@@ -671,7 +668,6 @@ def detail_student_parcours(request, id,idp):
 
  
 
-
 #@user_can_read_details
 def detail_student_all_views(request, id):
 
@@ -687,37 +683,36 @@ def detail_student_all_views(request, id):
     studentanswers = student.answers.all()
     themes = student.level.themes.all()
     today = time_zone_user(user)
-    parcourses_tab = []
-    parcourses_student_tab, exercise_tab = [], []
-    parcourses = student.students_to_parcours.all()
+    parcourses_tab, parcourses_set = [] , set()
+    exercise_tab = []
+    prcrs = student.students_to_parcours.filter(is_publish=1)
 
-    parcourses_student_tab.append(parcourses)
-    for parcours in parcourses:
-        if not parcours in parcourses_tab:
-            parcourses_tab.append(parcours)
+    parcourses_set.update(set(prcrs))
 
-    for parcours in parcourses_tab:
-        exercises = parcours.exercises.order_by("theme").prefetch_related('knowledge')
-        for exercise in exercises:
-            if not exercise in exercise_tab:
-                exercise_tab.append(exercise)
+    relations = student.students_relationship.filter(parcours__in=parcourses_set,is_publish=1,exercise__supportfile__is_title=0).order_by("exercise__theme")
+
+    exercises = []
+    for relation in relations:
+        if relation.exercise not in exercises:
+            exercises.append(relation.exercise)
+ 
 
     knowledges = []
+    for relation in relations:
+        if relation.exercise.knowledge not in knowledges:
+            knowledges.append(relation.exercise.knowledge)
 
-    for exercise in exercise_tab:
-        if exercise.knowledge not in knowledges:
-            knowledges.append(exercise.knowledge)
 
-    parcourses = Parcours.objects.filter(students=student,is_folder=0)
-    relationships = Relationship.objects.filter(parcours__in=parcourses).exclude(date_limit=None)
+    parcourses = student.students_to_parcours.filter(is_folder=0)
+    relationships = Relationship.objects.filter(parcours__in=parcourses,is_publish=1,exercise__supportfile__is_title=0).exclude(date_limit=None)
 
     done, late, no_done = 0, 0, 0
     for relationship in relationships :
-        nb_ontime = Studentanswer.objects.filter(student=student, exercise = relationship.exercise ).count()
+        nb_ontime = student.answers.filter(exercise = relationship.exercise ).count()
 
         utc_dt = dt_naive_to_timezone(relationship.date_limit, student.user.time_zone)
 
-        nb = Studentanswer.objects.filter(student=student, exercise = relationship.exercise, date__lte= utc_dt ).count()
+        nb = student.answers.filter(exercise = relationship.exercise, date__lte= utc_dt ).count()
         if nb_ontime == 0:
             no_done += 1
         elif nb > 0:
@@ -753,7 +748,7 @@ def detail_student_all_views(request, id):
     if request.user.is_teacher:
         students = []
         teacher = Teacher.objects.get(user=request.user)
-        group = Group.objects.filter(students=student, teacher=teacher).last()
+        group = student.students_to_group.filter( teacher=teacher).last()
         groups =  student.students_to_group.filter(teacher=teacher)
         for g in groups :
             sts = g.students.all().order_by("user__last_name")
@@ -764,11 +759,13 @@ def detail_student_all_views(request, id):
         sender_mail(request,form)
  
         nav = navigation(group, id)
-        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'students' : students ,  'group' : group , 'communications' : [], 'today' : today , 'form' : form , 
+        context = {'exercises': exercises, 'knowledges': knowledges,  'parcourses': parcourses, 'std': std, 'themes': themes, 'students' : students ,  'group' : group , 'communications' : [], 'today' : today , 'form' : form ,  'groups' : groups ,
                    'student': student, 'parcours': None, 'sprev_id': nav[0], 'snext_id': nav[1] , 'teacher' : teacher }
     else:
         group = Group.objects.filter(students=student).last()
-        context = {'knowledges': knowledges, 'parcourses': parcourses, 'std': std, 'themes': themes, 'communications' : [], 'group' : group ,  'today' : today  , 'teacher' : None , 
+        groups = student.students_to_group.filter(teacher=teacher)
+
+        context = {'exercises': exercises, 'knowledges': knowledges,  'parcourses': parcourses, 'std': std, 'themes': themes, 'communications' : [], 'group' : group ,  'today' : today  , 'teacher' : None , 'groups' : groups ,
                    'student': student, 'parcours': None, 'sprev_id': None, 'snext_id': None}
 
 
@@ -809,7 +806,6 @@ def register_teacher(request):
 
         if user_form.is_valid():
             user = user_form.save(commit=False)
-            user.is_staff = True
             user.user_type = User.TEACHER
             user.set_password(user_form.cleaned_data["password1"])
             user.save()
@@ -1023,7 +1019,7 @@ def register_by_csv(request, key, idg=0):
             except:
                 pass
             print(user)
-        print(destinataires)
+
 
 
         try :
@@ -1361,7 +1357,7 @@ def ajax_detail_student_exercise(request):
     parcours = Parcours.objects.get(pk=parcours_id)
     student = Student.objects.get(user_id=student_id)
 
-    relationships = Relationship.objects.filter(parcours=parcours, students=student).order_by("order")
+    relationships = Relationship.objects.filter(parcours=parcours, students=student,exercise__supportfile__is_title=0).order_by("order")
     studentanswers = Studentanswer.objects.filter(student=student, parcours=parcours).order_by("exercise")
 
     context = {'student': student, 'parcours': parcours, 'studentanswers': studentanswers, 'communications' : [], 
@@ -1387,7 +1383,7 @@ def ajax_detail_student_parcours(request):
         stage = { 'low' : 30, 'medium' : 60 , 'up' :80 }        
 
 
-    relationships = Relationship.objects.filter(parcours=parcours).order_by("order")
+    relationships = Relationship.objects.filter(parcours=parcours,exercise__supportfile__is_title=0).order_by("order")
 
     context = {'student': student, 'relationships': relationships, 'stage' : stage}
 

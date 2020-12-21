@@ -107,6 +107,27 @@ class Group(ModelWithCode):
         return data
 
 
+    def parcours(self):
+        parcours_set = set()
+        for student in self.students.all() :
+            parcours_set.update(student.students_to_parcours.all())
+        return list(parcours_set)
+
+
+    def parcours_visible(self):
+        parcours_set = set()
+        for student in self.students.all() :
+            parcours_set.update(student.students_to_parcours.filter(is_publish = 1))
+        return list(parcours_set)
+
+
+    def folders(self):
+        parcours_set = set()
+        for student in self.students.all() :
+            parcours_set.update(student.students_to_parcours.filter(is_folder=1))
+        return list(parcours_set)
+
+
 
     def sharing_role(self,teacher):
         """

@@ -9,6 +9,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import  redirect
 from school.models import Stage
 
+ 
+
+
 def time_zone_user(user):
     try :
         if user.time_zone :
@@ -21,13 +24,38 @@ def time_zone_user(user):
         today = timezone.now()
 
     return today
- 
+
+
+
+def attribute_all_documents_to_student(parcours,student):
+    """  assigner les documents et renvoie Vrai ou Faux suivant l'attribution """
+    try :
+        for p in parcours:
+            p.students.add(student)
+
+            relationships = p.parcours_relationship.all()
+            for r in relationships:
+                r.students.add(student)
+
+            customexercises = p.parcours_customexercises.all()
+            for c in customexercises:
+                c.students.add(student)
+
+            courses = p.course.all()
+            for course in courses:
+                course.students.add(student)
+
+        test = True
+    except :
+        test = False
+    return test
+
+
 
 def cleanhtml(raw_html): #nettoie le code des balises HTML
     cleantext = re.sub('<.*?>', '', raw_html)
     cleantext = re.sub('\n', '', cleantext)
     return cleantext
-
 
 def unescape_html(string):
     '''HTML entity decode'''
@@ -35,13 +63,11 @@ def unescape_html(string):
     return string
 
 
-
 def escape_chevron(string):
     '''HTML entity decode'''
     string = string.replace("<","&lt")
     string = string.replace(">","&gt")  
     return string
-
 
 
 
