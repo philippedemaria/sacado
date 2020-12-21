@@ -77,11 +77,13 @@ def student_dashboard(request,group_id):
         request.session["group_id"] = group_id 
         parcourses = student.students_to_parcours.filter(is_evaluation=0, is_publish=1,subject = group.subject).exclude(is_leaf=1).order_by("ranking")
         evaluations = student.students_to_parcours.filter(start__lte=today, is_evaluation=1,subject = group.subject)
+        last_exercises_done = student.answers.filter(exercise__knowledge__theme__subject=group.subject).order_by("-date")[:5]
 
     else :
         group = None
         parcourses = student.students_to_parcours.filter(is_evaluation=0, is_publish=1).exclude(is_leaf=1).order_by("ranking")
         evaluations = student.students_to_parcours.filter(start__lte=today, is_evaluation=1)
+        last_exercises_done = student.answers.order_by("-date")[:5]
    
 
  
@@ -141,7 +143,7 @@ def student_dashboard(request,group_id):
 
     relationships_in_late = student.students_relationship.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcourses, is_evaluation=0, date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
     relationships_in_tasks = student.students_relationship.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcourses, date_limit__gte=today).exclude(exercise__in=exercises).order_by("date_limit")
-    last_exercises_done = student.answers.order_by("-date")[:5]
+
 
  
     context = {'student_id': student.user.id, 'student': student, 'relationships': relationships, 'timer' : timer ,  'last_exercises_done' : last_exercises_done,

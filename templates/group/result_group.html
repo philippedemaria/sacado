@@ -18,9 +18,17 @@
     <span style="color:{{ group.color }}"><i class='fa fa-mortar-board'></i></span>        
      {% include 'group/breadcrumb.html' %} 
 
-     <small> {% if 'waiting' in request.path %}Bilan des attendus{% elif 'skill' in request.path %}Bilan des 3 dernières compétences {% endif %}</small>
+     <small> 
+
+        {% if 'waiting' in request.path %}Bilan des attendus
+        {% elif 'skill' in request.path %}Bilan des 3 dernières compétences 
+        {% elif 'result_group_exercise' in request.path %}Suivis des exercices
+        {% endif %}
+
+
+    </small>
     
-    {% if theme %}  <small>{{ theme.name }}</small>  {% endif %} 
+  {% if theme %}  <small>{{ theme.name }}</small>  {% endif %}       
  
 {% endblock %}
 

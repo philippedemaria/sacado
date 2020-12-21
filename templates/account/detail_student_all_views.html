@@ -31,7 +31,7 @@
 </style>
  
 
-{% if knowledges|length > 0 %}
+{% if exercises|length > 0 %}
 <div class="row">
     <div class="col-sm-12 col-md-12">
         <table class="table table-bordered table-hover">
@@ -212,10 +212,10 @@
                 <div class="col-sm-12 col-md-12">
                     <a href="#exercises{{ forloop.counter }}" data-toggle="collapse" class="bilan_title"><i class="fa fa-angle-right"></i><i class="fa fa-angle-down"></i>   Bilan des exercices </a>
                     <div id="exercises{{ forloop.counter }}" class="collapse bilan_details">
-                        {% regroup knowledges by theme as theme_list %}
-                        {% for thme in theme_list %}
+                        {% regroup exercises by theme as theme_list %}
+                        {% for thme in theme_list %}  
                         <div class="bilan_title exercise_details">
-                            <a href="#exercise_details{{ forloop.counter }}" data-toggle="collapse" class="bilan_title "><i class="fa fa-angle-right"></i><i class="fa fa-angle-down"></i>  {{ thme.grouper.name }} </a>
+                            <a href="#exercise_details{{ forloop.counter }}" data-toggle="collapse" class="bilan_title "><i class="fa fa-angle-right"></i><i class="fa fa-angle-down"></i>  {{ thme.grouper.name }}</a>
                         </div>
 
                         <div id="exercise_details{{ forloop.counter }}" class="collapse">
@@ -224,16 +224,16 @@
 
                             <table class="table  table-hover">
 
-                 
-                                {%  get_resultexercises_by_theme student thme.grouper as resultexercises %}  
-                                {% for resultexercise in resultexercises %}  
-                                {% get_score resultexercise.exercise student as score %}
+                                {% for exercise in thme.list %}  
+                                {% get_score exercise student as score %}
                                 <tr>
                                     <td> 
-                                        <img src="{{ resultexercise.exercise.supportfile.imagefile.url }}" class="imagefile">
+                                        {% if exercise.supportfile.imagefile %}
+                                        <img src="{{ exercise.supportfile.imagefile.url }}" class="imagefile">
+                                        {% endif %}
                                     </td>
                                     <td> 
-                                        {{ resultexercise.exercise.knowledge.name }} <br/><br/>
+                                        {{ exercise.id }}  {{ exercise.knowledge.name }} <br/><br/>
 
                                             {% if score %}
                                             <a class="markdown square

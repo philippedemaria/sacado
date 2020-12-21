@@ -1181,9 +1181,8 @@ a.bilan_title:hover .fa-angle-down,a.bilan_title:focus .fa-angle-down {
 }
 
 .exercise_details{
-  background-color: #b9a8d7;
-  margin-bottom: 1px;
-  padding: 5px;  
+  background-color: #eff3f6;
+  padding: 10px;  
 }
 
 .bilan_details{

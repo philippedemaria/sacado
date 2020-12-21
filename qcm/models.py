@@ -35,8 +35,6 @@ def file_directory_path(instance, filename):
 def file_folder_path(instance, filename):
     return "files/{}/{}".format(instance.customexercise.teacher.user.id, filename)
 
-
-
 def directory_path_mastering(instance, filename):
     return "mastering/{}/{}".format(instance.relationship.parcours.teacher.user.id, filename)
  
@@ -182,8 +180,8 @@ class Exercise(models.Model):
     def send_scores(self, student_id):
         score = ""
         student = Student.objects.get(pk=student_id)
-        if Studentanswer.objects.filter(student=student).filter(exercise=self.pk).exists():
-            studentanswers = Studentanswer.objects.filter(student=student, exercise=self.pk)
+        if student.answers.filter(exercise=self.pk).exists():
+            studentanswers = student.answers.filter(exercise=self.pk)
             for studentanswer in studentanswers:
                 score = score + str(studentanswer.point) + " - "
         return score
@@ -192,8 +190,8 @@ class Exercise(models.Model):
     def score_and_time(self, student_id):
         scores_times_tab = []
         student = Student.objects.get(pk=student_id)
-        if Studentanswer.objects.filter(student=student).filter(exercise=self.pk).exists():
-            studentanswers = Studentanswer.objects.filter(student=student, exercise=self.pk)
+        if student.answers.filter(exercise=self.pk).exists():
+            studentanswers = student.answers.filter(exercise=self.pk)
             for studentanswer in studentanswers:
                 scores_times = {}
                 scores_times["score"] = studentanswer.point
@@ -208,7 +206,7 @@ class Exercise(models.Model):
         somme = 0
         for student in parcours.students.all():
             try:
-                studentanswer = Studentanswer.objects.filter(student=student, exercise=self, parcours=parcours).last()
+                studentanswer = student.answers.filter(exercise=self, parcours=parcours).last()
                 somme += studentanswer.point
                 tab.append(studentanswer.point)
             except:
@@ -230,8 +228,8 @@ class Exercise(models.Model):
     def last_score_and_time(self, parcours, student_id):
         student = Student.objects.get(pk=student_id)
         scores_times = {}
-        if Studentanswer.objects.filter(student=student).filter(exercise=self.pk, parcours=parcours).exists():
-            studentanswer = Studentanswer.objects.filter(student=student, exercise=self.pk, parcours=parcours).last()
+        if student.answers.filter(exercise=self.pk, parcours=parcours).exists():
+            studentanswer = student.answers.filter(exercise=self.pk, parcours=parcours).last()
             scores_times["score"] = studentanswer.point
             scores_times["time"] = convert_time(studentanswer.secondes)
         else :
@@ -244,8 +242,8 @@ class Exercise(models.Model):
     def timer(self, parcours, student_id):
         reponse, datetime_object = "", ""
         student = Student.objects.get(pk=student_id)
-        if Studentanswer.objects.filter(student=student).filter(exercise=self.pk, parcours=parcours).exists():
-            studentanswer = Studentanswer.objects.filter(student=student, exercise=self.pk).last()
+        if student.answers.filter(exercise=self.pk, parcours=parcours).exists():
+            studentanswer = student.answers.filter(exercise=self.pk).last()
             reponse = int(studentanswer.secondes)
             if reponse > 59:
                 minutes = int(reponse / 60)
@@ -278,7 +276,7 @@ class Exercise(models.Model):
         return Relationship.objects.filter(exercise=self).exists()
 
     def is_done(self,student):
-        return Studentanswer.objects.filter(student=student, exercise=self).exists()
+        return student.answers.filter(exercise=self).exists()
 
     def nb_task_done(self, group):
         """
@@ -287,8 +285,8 @@ class Exercise(models.Model):
         try:
             studentanswer_tab = []
             for s in group.students.all():
-                studentanswer = Studentanswer.objects.filter(exercise=self, student=s).first()
-                if studentanswer:
+                studentanswer = s.answers.filter(exercise=self).first()
+                if studentanswer :
                     studentanswer_tab.append(studentanswer)
             nb_task_done = len(studentanswer_tab)
         except:

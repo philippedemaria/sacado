@@ -27,6 +27,30 @@ def time_zone_user(user):
 
 
 
+def attribute_all_documents_to_student(parcours,student):
+    """  assigner les documents et renvoie Vrai ou Faux suivant l'attribution """
+    try :
+        for p in parcours:
+            p.students.add(student)
+
+            relationships = p.parcours_relationship.all()
+            for r in relationships:
+                r.students.add(student)
+
+            customexercises = p.parcours_customexercises.all()
+            for c in customexercises:
+                c.students.add(student)
+
+            courses = p.course.all()
+            for course in courses:
+                course.students.add(student)
+
+        test = True
+    except :
+        test = False
+    return test
+
+
 
 def cleanhtml(raw_html): #nettoie le code des balises HTML
     cleantext = re.sub('<.*?>', '', raw_html)
