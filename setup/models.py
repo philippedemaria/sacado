@@ -17,7 +17,6 @@ class MyCronJob(CronJobBase):
         Parcours.objects.filter(stop__lt=today).update(is_publish=0)
 
 
-
 class Formule(models.Model):
 
 	name = models.CharField(max_length=255, verbose_name="Nom")
@@ -31,8 +30,13 @@ class Formule(models.Model):
 	    return "{}".format(self.name)
 
 
+
 	def data(self) :
-		coeff_family = 1.7
+		coeff_two = 1.7
+		coeff_three = 2.5
+		coeff_four = 3.31
+		coeff_more = 4.1
+
 		data = {}
 		date = datetime.now()
 		this_month = date.month
@@ -64,12 +68,28 @@ class Formule(models.Model):
 
 
 		adh =  float(price) 
-		adhf =  adh * coeff_family 
+		adh2 =  adh * coeff_two 
+		adh3 =  adh * coeff_three
+		adh4 =  adh * coeff_four
+		adh5 =  adh * coeff_more
 
 
-		data["left_month"] = left_month         
-		data["total"] = round(left_month * adh,2)
+		data["left_month"] = left_month
 		data["end"] = end
-		data["totalF"] = round( left_month * adhf ,2) 
-		data["priceF"] = round(adhf,2)
+
+		data["total1"] = round(left_month * adh,2)
+		data["price1"] = round(adh,2)
+
+
+		data["total2"] = round( left_month * adh2 ,2)
+		data["price2"] = round(adh2,2)
+
+		data["total3"] = round( left_month * adh3 ,2)
+		data["price3"] = round(adh3,2)
+
+		data["total4"] = round( left_month * adh4 ,2)
+		data["price4"] = round(adh4,2)
+
+		data["total5"] = round( left_month * adh5 ,2)
+		data["price5"] = round(adh5,2)	
 		return data

@@ -243,33 +243,42 @@
 
  
         $('.family').hide() ;
+        $('.one').show() ;
 
 
 
-        $('#one_child').click(function(){  
+        calculate_rate('#one_child', '.one',"1 enfant");
+        calculate_rate('#two_children', '.two',"2 enfants");
+        calculate_rate('#three_children', '.three',"3 enfants");
+        calculate_rate('#four_children', '.four',"4 enfants");
+        calculate_rate('#more_children', '.more',"5 enfants") ;
 
-                $("#one_child_radio").attr("checked", "checked");
-                $('#children_radio').removeAttr("checked");
-                $('.child').html("").html("1 enfant"); 
-                $("#one_child").addClass("btn-violet").removeClass("btn-violet_border");
-                $("#children").addClass("btn-violet_border").removeClass("btn-violet");
 
-                $('.alone').show() ;
+
+        function calculate_rate($target, $number,$n){
+
+
+            $($target).click(function(){
+ 
+                $('.family_selected').removeAttr("checked");
+                $(this).children().attr("checked", "checked");
+                $('.child').html("").html($n); 
+                $(".family_selected").addClass("btn-violet_border").removeClass("btn-violet");                
+                $(this).addClass("btn-violet").removeClass("btn-violet_border");
                 $('.family').hide() ;
+                $($number).show() ;
+
             });
 
+        }
 
-        $('#children').click(function(){
 
-                $('#children_radio').attr("checked", "checked");
-                $("#one_child_radio").removeAttr("checked");
-                $('.child').html("").html("Famille");
-                $("#children").addClass("btn-violet").removeClass("btn-violet_border");
-                $("#one_child").addClass("btn-violet_border").removeClass("btn-violet");
-                
-                $('.alone').hide() ;
-                $('.family').show() ;
-            });
+
+
+
+
+
+
 
 
     });

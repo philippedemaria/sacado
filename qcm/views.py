@@ -2800,8 +2800,10 @@ def admin_list_supportfiles(request,id):
         level = Level.objects.get(pk=id)
         levels_dict = {}
         levels_dict["name"] = level
-
+     
         themes = level.themes.filter(subject__in=teacher.subjects.all()).order_by("id")
+
+
         themes_tab = []
         for theme in themes:
             themes_dict = {}

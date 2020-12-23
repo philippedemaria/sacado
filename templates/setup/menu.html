@@ -21,12 +21,21 @@
             <div class="row">
                 <div class="col-sm-12 col-md-12" align="center">
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                          <label class="btn btn-violet" id="one_child" >
-                                <input type="radio" name="options" id="one_child_radio" value="1" checked   >  1 enfant
-                          </label>
-                          <label class="btn btn-violet_border" id="children">
-                                <input type="radio" name="options"  id="children_radio" value="10"  >  Famille
-                          </label>
+                        <label class="btn btn-violet family_selected" id="one_child" >
+                            <input type="radio" name="options" id="one_child_radio" value="1" checked   >  1 enfant
+                        </label>
+                        <label class="btn btn-violet_border family_selected" id="two_children">
+                            <input type="radio" name="options"  id="two_children_radio" value="10"  >  2 enfants
+                        </label>
+                        <label class="btn btn-violet_border family_selected" id="three_children">
+                            <input type="radio" name="options"  id="three_children_radio" value="10"  >  3 enfants
+                        </label>
+                        <label class="btn btn-violet_border family_selected" id="four_children">
+                            <input type="radio" name="options"  id="four_children_radio" value="10"    >  4 enfants
+                        </label>
+                        <label class="btn btn-violet_border family_selected" id="more_children">
+                            <input type="radio" name="options"  id="more_children_radio" value="10"   >  5 enfants
+                        </label>
                     </div>
                 </div>
             </div> 
@@ -53,8 +62,11 @@
 
                             <div class="card-body">
                                 <div class="currency">
-                                    <span class="alone" id="currency_alone{{ formule.nb_month }}">{{ formule.data.total }}</span>
-                                    <span class="family" id="currency_family{{ formule.nb_month }}">{{ formule.data.totalF }}</span>€ 
+                                    <span class="family one" id="currency_one{{ formule.nb_month }}">{{ formule.data.total1 }}</span>
+                                    <span class="family two" id="currency_two{{ formule.nb_month }}">{{ formule.data.total2 }}</span>
+                                    <span class="family three" id="currency_three{{ formule.nb_month }}">{{ formule.data.total3 }}</span>
+                                    <span class="family four" id="currency_four{{ formule.nb_month }}">{{ formule.data.total4 }}</span>
+                                    <span class="family more" id="currency_more{{ formule.nb_month }}">{{ formule.data.total5 }}</span>€ 
 
 
                                 </div>
@@ -63,8 +75,12 @@
                                 </div>
                                 <a href=" " class="btn">Choisir ce menu</a>                            <br/>
 
-                                <small>Facturé en un seul paiement.<br/> Soit <span class="alone" id="alone_type{{ formule.nb_month }}">{{ formule.price }}</span>
-                                                                              <span class="family"  id="family_type{{ formule.nb_month }}">{{ formule.data.priceF }}</span>
+                                <small>Facturé en un seul paiement.<br/> Soit <span class="family one" id="one_type{{ formule.nb_month }}">{{ formule.data.price1 }}</span>
+                                                                              <span class="family two"  id="two_type{{ formule.nb_month }}">{{ formule.data.price2 }}</span>
+                                                                              <span class="family three"  id="three_type{{ formule.nb_month }}">{{ formule.data.price3 }}</span>
+                                                                              <span class="family four"  id="four_type{{ formule.nb_month }}">{{ formule.data.price4 }}</span>
+                                                                              <span class="family more"  id="more_type{{ formule.nb_month }}">{{ formule.data.price5 }}</span>
+
                                                                             € x {{ formule.data.left_month }} mois.</small>
 
                             </div>
