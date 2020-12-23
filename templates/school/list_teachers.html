@@ -77,10 +77,10 @@
 
 
                                 <td>
-                                    {{ teacher.date_joined|date:"d N Y" }}   
+                                    {{ teacher.date_joined|date:"d m Y" }}   
                                 </td>
                                 <td>
-                                    {{ teacher.last_login|date:"Y N d à H:i" }}   
+                                    {{ teacher.last_login|date:"Y m d à H:i" }}   
                                 </td>
                                 <td>
                                     <a href="{% url 'send_account' teacher.id %}"><i class="fa fa-envelope"></i></a>
