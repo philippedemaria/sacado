@@ -763,7 +763,7 @@ def detail_student_all_views(request, id):
                    'student': student, 'parcours': None, 'sprev_id': nav[0], 'snext_id': nav[1] , 'teacher' : teacher }
     else:
         group = Group.objects.filter(students=student).last()
-        groups = student.students_to_group.filter(teacher=teacher)
+        groups = student.students_to_group.all()
 
         context = {'exercises': exercises, 'knowledges': knowledges,  'parcourses': parcourses, 'std': std, 'themes': themes, 'communications' : [], 'group' : group ,  'today' : today  , 'teacher' : None , 'groups' : groups ,
                    'student': student, 'parcours': None, 'sprev_id': None, 'snext_id': None}
@@ -924,7 +924,7 @@ def register_teacher_from_admin(request):
             u_form = user_form.save(commit=False)
             u_form.password = make_password("sacado2020")
             u_form.user_type = User.TEACHER
-            u_form.is_extra = 1
+            u_form.is_extra = 0
             u_form.time_zone = request.user.time_zone
             u_form.school = request.user.school
             u_form.username = get_username(u_form.last_name, u_form.first_name)
@@ -1001,7 +1001,7 @@ def register_by_csv(request, key, idg=0):
                                                       school=request.user.school, time_zone=request.user.time_zone,
                                                       is_manager=0,
                                                       defaults={'username': username, 'password': password,
-                                                                'is_extra': 1})
+                                                                'is_extra': 0})
                     Teacher.objects.get_or_create(user=user, notification=1, exercise_post=1)
                     group = None
                 else:  # Student
@@ -1094,7 +1094,7 @@ def register_users_by_csv(request,key):
                                                       school=request.user.school, time_zone=request.user.time_zone,
                                                       is_manager=0,
                                                       defaults={'username': username, 'password': password,
-                                                                'is_extra': 1})
+                                                                'is_extra': 0})
                     Teacher.objects.get_or_create(user=user, notification=1, exercise_post=1)
                 else:  # Student
                     user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=0,
