@@ -5128,7 +5128,7 @@ def export_results_after_evaluation(request):
         ################################################################
         customexercises = parcours.parcours_customexercises.filter(students=s).order_by("ranking")
 
-        studentanswers = Studentanswer.objects.filter(student=s,  exercise__in= exercises, parcours=parcours).order_by("date")
+        studentanswers = s.answers.objects.filter(exercise__in= exercises, parcours=parcours).order_by("date")
 
         studentanswer_tab , student_tab  = [], []
         for studentanswer in studentanswers :
