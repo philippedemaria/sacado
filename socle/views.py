@@ -94,9 +94,10 @@ def create_multi_knowledge(request):
         if form.is_valid():
             theme = form.cleaned_data["theme"]
             level = form.cleaned_data["level"]
+            waiting = form.cleaned_data["waiting"]
             names = form.cleaned_data["name"].split("\r")
             for name in names :
-                Knowledge.objects.create(name=cleanhtml(name),theme=theme,level=level)
+                Knowledge.objects.create(name=cleanhtml(name),theme=theme,level=level,waiting=waiting)
  
             messages.success(request, 'Les savoir faire ont été créés avec succès !')
             return redirect('knowledges')
