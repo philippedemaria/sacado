@@ -452,14 +452,19 @@ class Teacher(models.Model):
         L'enseignant est un membre bénéficiaire de sacado
         """
         sacado_asso = False
-
-        if self.user.school and self.user.is_extra :
+        if self.user.school  :
             sacado_asso = True
-
         return sacado_asso
 
 
-
+    def is_creator(self):
+        """
+        L'enseignant est un membre bénéficiaire de sacado
+        """
+        creator = False
+        if self.user.is_creator  :
+            creator = True
+        return creator
 
 
 
