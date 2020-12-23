@@ -5,7 +5,7 @@
     {% load bootstrap3 %}
     {% load widget_tweaks %}
     {% bootstrap_messages %}
- 
+    {% load item_tags %} 
 
     {% load static %}
     <!-- Bootstrap -->
@@ -94,9 +94,22 @@
                         <div class="navbar-header">
                         {% block page_title %}
                             <span style="color:#5d4391"><i class='fa fa-tachometer-alt'></i> Tableau de bord     </span>     
-                                {% if request.user.is_authenticated %}{% if user.is_student %} 
-                                    <a href="#" data-toggle='modal' data-target='#video_sacado' class="btn btn-violet" style="color:#FF0000; font-size:14px; margin-left: 100px"> <i class="fa fa-play"></i> Sacado en vidéo</a>
-                                {% endif %}{% endif %}
+                                {% if request.user.is_authenticated %}
+                                    {% if user.is_teacher %} 
+                                        {% get_com_is_reading user as boolean_reader %}
+                                        {% if not boolean_reader %}        
+                                        <form action="#" method="POST" style="display:inline">
+                                        <a href="#" id="reader_new" data-toggle='modal' data-target='#nouveaute'   class="btn btn-danger" >
+                                            Lire Les nouveautés 
+                                        </a>
+                                        </form>
+                                        {% endif %}
+                                    {% elif user.is_student %} 
+                                        <a href="#" data-toggle='modal' data-target='#video_sacado' class="btn btn-violet" style="color:#FF0000; font-size:14px; margin-left: 100px"> 
+                                            <i class="fa fa-play"></i> Sacado en vidéo
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
                         {% endblock %}
                         </div>
                         <ul class="nav navbar-nav navbar-right">

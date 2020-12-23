@@ -90,7 +90,7 @@ def index(request):
             
             parcourses = teacher.teacher_parcours.filter(is_evaluation=0, is_favorite =1).order_by("-is_publish")
 
-            communications = Communication.objects.values('id', 'subject', 'texte').filter(active=1)
+            communications = Communication.objects.values('id', 'subject', 'texte').filter(active=1).order_by("-id")
 
             parcours_tab = Parcours.objects.filter(students=None, teacher=teacher, is_favorite=1) ## Parcours favoris non affectés
 
