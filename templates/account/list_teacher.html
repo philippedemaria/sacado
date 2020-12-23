@@ -91,14 +91,6 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {% if teacher.is_staff %} 
-                                        <span style="font-size: 8px;color:#FFF"> oui</span> 
-                                        <i class="fa fa-check-circle text-success"></i>{% else %} 
-                                        <span style="font-size: 8px;color:#FFF"> non</span>  
-                                        <i class="fa fa-ban text-danger"></i> 
-                                    {% endif %}
-                                </td>
-                                <td>
                                     {{ teacher.last_login|date:"d N Y" }}   
                                 </td>
                                 <td>
