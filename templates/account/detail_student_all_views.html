@@ -42,12 +42,12 @@
                     </td>
                     <td colspan="2">
                         
-
+                        {% if teacher %}
                        <a href="{% if sacado_asso %}{% url 'print_statistiques' group.id  student.user.id %}{% else %}#{% endif %}" class="btn btn-default">Imprimer le bilan</a>
              
 
 
-                        {% if teacher %}
+
                         <small>
                             <a href="#" data-toggle='modal' class="pull-right btn btn-danger"
                                         data-target='#writer'  
