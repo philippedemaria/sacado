@@ -141,7 +141,6 @@
     {% endblock %}
 </div>
 
-
 <div class="modal fade" id="video_sacado" tabindex="-1" role="dialog" aria-labelledby="video_sacado">
     <div class="modal-dialog" role="document">
         <div class="modal-content" >
@@ -157,10 +156,6 @@
         </div>
     </div>
 </div>
-
-
- 
-
 
 <div class="modal fade" id="remediation_viewer" tabindex="-1" role="dialog" aria-labelledby="remediation_viewer">
     <div class="modal-dialog" role="document" style="width:70%">
@@ -178,7 +173,6 @@
 </div>
 
 {%  if user.is_teacher %}
-
     {%  if communications|length > 0  %}
     <div class="modal fade" id="nouveaute" tabindex="-1" role="dialog" aria-labelledby="nouveaute" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -203,7 +197,6 @@
         </div>
     </div>
     {%  endif  %}
-
     {% if 'qcm/' in request.path and not 'qcm/show' in request.path  %}
         {% include 'qcm/order_list.html' %}
     {%  endif  %}
@@ -344,47 +337,41 @@
         </div> 
         <hr>
     {% endif %}
-
-
-        <h2 class="thin">Gestion SACADO </h2>
-        <hr>
-        <div class="row">
-            <div class="col-lg-12 col-xs-12">
-                <a href="{% url 'levels' %}">Niveaux</a>
-            </div>
+    <h2 class="thin">Gestion SACADO </h2>
+    <hr>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'levels' %}">Niveaux</a>
         </div>
-        <div class="row">
-            <div class="col-lg-12 col-xs-12">
-                <a href="{% url 'themes' %}">Thèmes</a> ,  <a href="{% url 'waitings' %}">Attendus</a>
-            </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'themes' %}">Thèmes</a> ,  <a href="{% url 'waitings' %}">Attendus</a>
         </div>
-        <div class="row">
-            <div class="col-lg-12 col-xs-12">
-                <a href="{% url 'knowledges' %}">Savoir faire</a>
-            </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'knowledges' %}">Savoir faire</a>
         </div>
-        <div class="row">
-            <div class="col-lg-12 col-xs-12">
-                <a href="{% url 'skills' %}">Compétences</a>
-            </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'skills' %}">Compétences</a>
         </div>
-        <hr>
-        <div class="row" style="margin-bottom: 10px">
-            <div class="col-lg-12 col-xs-12">
-                <a href="{% url 'gestion_supportfiles' %}">Supports et exercices</a>
-            </div>
-        </div>
-
+    </div>
+    <hr>
+    <h2 class="thin">Création </h2>
+    <hr>
     {% for level in levels %}
         <div class="row" style="font-size: 12px">
             <div class="col-lg-7 col-xs-7">
-                {{ level.shortname }} <a href="{% url 'admin_supportfiles' level.id %}">Fichiers support</a>  
+                {{ level.shortname }} <a href="{% url 'admin_supportfiles' level.id  %}">Fichiers support</a>  
             </div>  
             <div class="col-lg-5 col-xs-5"> 
                     <img src="{% static 'img/ggb.png' %}" width="15px"> <a href="{% url 'admin_associations'  level.id  %}">Exercices   </a> 
             </div>      
         </div>
-    {% endfor %}
+    {% endfor %} 
     <hr>
     <div class="row">
         <div class="col-lg-12 col-xs-12">
@@ -424,15 +411,34 @@
     </div>
     <hr>
 </div>
+{%  elif request.user.is_extra %}
+<div class="notification-container dismiss"  id="notification-admin">
+    {%  if user.is_manager  %}
+        <div class="row">
+            <div class="col-lg-12 col-xs-12"> 
+                <a href="{% url 'admin_tdb' %}">{{ request.user.school.name }}</a>
+            </div>  
+        </div> 
+        <hr>
+    {% endif %}
+
+
+        <h2 class="thin">Création </h2>
+ 
+        <hr>
+ 
+        {% for level in levels %}
+            <div class="row" style="font-size: 12px">
+                <div class="col-lg-7 col-xs-7">
+                    {{ level.shortname }} <a href="{% url 'admin_supportfiles' level.id subject.id %}">Fichiers support</a>  
+                </div>  
+                <div class="col-lg-5 col-xs-5"> 
+                        <img src="{% static 'img/ggb.png' %}" width="15px"> <a href="{% url 'admin_associations'  level.id  %}">Exercices   </a> 
+                </div>      
+            </div>
+        {% endfor %}    
+</div>
 {% endif %}
-
-
-
- 
- 
-
-
-
 
 
 
