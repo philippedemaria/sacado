@@ -50,8 +50,8 @@ class ParcoursForm(forms.ModelForm):
 
 			self.fields['leaf_parcours']	 = forms.ModelMultipleChoiceField(queryset=leaf_parcourses,  required=False)
 			self.fields['folder_parcours']	 = forms.ModelMultipleChoiceField(queryset=folder_parcourses,  required=False)
-			self.fields['subject']	 = forms.ModelChoiceField(queryset=teacher.subjects.all())
-			self.fields['level']	 = forms.ModelChoiceField(queryset=teacher.levels.all())
+			self.fields['subject']	 = forms.ModelChoiceField(queryset=teacher.subjects.all(),  required=False)
+			self.fields['level']	 = forms.ModelChoiceField(queryset=teacher.levels.all(),  required=False)
 			
 	def clean(self):
 		"""
@@ -94,8 +94,8 @@ class UpdateParcoursForm(forms.ModelForm):
 			self.fields['coteachers']	 = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
 			self.fields['leaf_parcours']	 = forms.ModelMultipleChoiceField(queryset=leaf_parcourses,  required=False)
 			self.fields['folder_parcours']	 = forms.ModelMultipleChoiceField(queryset=folder_parcourses,  required=False)
-			self.fields['subject']	 = forms.ModelChoiceField(queryset=teacher.subjects.all())
-			self.fields['level']	 = forms.ModelChoiceField(queryset=teacher.levels.all())
+			self.fields['subject']	 = forms.ModelChoiceField(queryset=teacher.subjects.all(),  required=False)
+			self.fields['level']	 = forms.ModelChoiceField(queryset=teacher.levels.all(),  required=False)
 			
 	def clean(self):
 		"""
