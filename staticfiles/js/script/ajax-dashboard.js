@@ -13,6 +13,45 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
       });
     }
   });
+
+        // ====================================================================================================================
+        // ====================================================================================================================
+        // ===============================================   Version mobile  ================================================== 
+        // ====================================================================================================================
+        // ====================================================================================================================
+
+
+        $('#mobile_version_button').click(function(event) {
+          if ($('.navbarLeft').hasClass('navbarLeft_none')) {
+            $('.navbarLeft').removeClass('navbarLeft_none').addClass('navbarLeft_show');
+
+            content = $(".navbar-right").html() ;
+
+            $(".navbarRight-nav").append("<hr/>") ;
+            $(".navbarRight-nav").append(content) ;
+            $(".navbarRight-nav").find(".caret").addClass("fa fa-caret-up").removeClass("caret") ;
+          }
+          event.preventDefault();
+        });
+
+        $('#mobile_version_button_closer').click(function(event) {
+          if ($('.navbarLeft').hasClass('navbarLeft_show')) {
+            $('.navbarLeft').removeClass('navbarLeft_show').addClass('navbarLeft_none');
+            $(".navbarRight-nav").html("") ;
+          }
+          event.preventDefault();
+        });
+
+ 
+
+
+
+        // ====================================================================================================================
+        // ====================================================================================================================
+        // =================================   Toggle sur la div des élèves d'un groupe ======================================= 
+        // ====================================================================================================================
+        // ====================================================================================================================
+
  
 
         $('#preloader_groups').hide() ;
@@ -55,6 +94,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
           }
           event.preventDefault();
         });
+
+
 
         $('#closeAccount').click(function(event) {
           if ($('#notification-account').hasClass('selected')) {

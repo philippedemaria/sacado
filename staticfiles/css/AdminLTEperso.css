@@ -36,6 +36,23 @@ body {
  /*height : 100vh ;*/
 }
 
+.full_screen_size{
+  font-size:12px;
+  text-align: center
+}
+
+ 
+.img_size_square_75{
+  width:75px ;
+  height:75px;
+}
+
+.double_bottom_padding{
+  margin-bottom: 20px
+}
+
+
+
 .div_results audio{
   width:265px !important;
   height: 45px !important;
@@ -644,11 +661,6 @@ text-align: right;
     .text-success {
         color: #249a56;
     }
-
-    .dropdown:hover .dropdown-menu {
-      display: block;
-    }
-
 
     a.listing{
       font-size:20px;
@@ -2915,9 +2927,14 @@ li .list_no_indent{
  * -------------------------
  */
 /*Dropdowns in general*/
+
+.no_padding_margin{
+    padding:0px;
+    margin:0px;
+}
 .dropdown-menu {
   box-shadow: none;
-  border-color: #eee;
+  /*border-color: #eee;*/
   -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
     box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
 }

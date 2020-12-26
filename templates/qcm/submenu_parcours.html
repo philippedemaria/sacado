@@ -6,7 +6,7 @@
 <li class="dropdown">
         <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if  'result_parcours_skill' in request.path %} active {% endif %}"> Bilans <b class="caret"></b> </a>
 
-    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+    <ul   class="dropdown-menu clearfix pull-right" role="menu">
 
         <li {% if  'result_parcours_skill' in request.path %} class="active" {% endif %}>
             <a href="{% url 'result_parcours_skill' parcours.id %}"  class="no_button" >
@@ -27,7 +27,7 @@
 <li class="dropdown">
         <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {no_sacado_asso"> Bilans <b class="caret"></b> </a>
 
-    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+    <ul  class="dropdown-menu clearfix pull-right" role="menu">
 
         <li>
             <a href="#"  class="no_button no_sacado_asso" >
@@ -51,7 +51,7 @@
 <li class="dropdown">
         <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if 'parcours_result/' in request.path or  'parcours_result_knowledge/' in request.path  or 'result_parcours_exercise_students/' in request.path %} active {% endif %}"> Suivis d'acquisition <b class="caret"></b> </a>
 
-    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+    <ul   class="dropdown-menu clearfix pull-right" role="menu">
 
         <li {% if 'parcours_result_knowledge/' in request.path %} class="active" {% endif %}>
             <a href="{% url 'result_parcours_knowledge' parcours.id %}"  class="no_button" >
@@ -133,7 +133,7 @@
 
         {% endif %}
 
-        <li><a href="#"  class="no_button" id="handler_order_exercises" ><img src="{% static 'img/order_handler.png' %}" style="margin-right:10px; margin-left:3px"/> Organiser les exercices </a> </li>
+        <li><a href="#"  id="handler_order_exercises" ><img src="{% static 'img/order_handler.png' %}" style="margin-right:10px; margin-left:3px"/> Organiser les exercices </a> </li>
 
         {% if not parcours.is_evaluation %}
             {% if sacado_asso %}
@@ -172,7 +172,7 @@
 <li>
     <form action="" method="POST" enctype='multipart/form-data'>     
         {% csrf_token %}
-        <div class="btn-group"  style="padding:0px;margin:0px;">
+        <div class="btn-group no_padding_margin" >
 
             <a href="#" class="btn btn-default publisher"  data-from="2" id="parcours_publisher{{parcours.id}}" data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
                 <i class="fa fa-circle-o-notch"></i>

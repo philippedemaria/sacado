@@ -640,6 +640,40 @@ table.table-bordered.dataTable {
 
 /* Mobile Navigation */
 
+
+
+
+@media (max-width: 768px) {
+/* enlève l'afficha de la page home*/
+    .no_mobile_exercises{
+      display: none;
+    }
+
+    .notification-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width:300px;
+        display: none;
+        height: 100%;
+        overflow: hidden;
+        background: #FFF;
+        z-index: 1919;
+    }
+
+
+    .modal-lg {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+
+
+
+}
+
+
 .mobile-nav {
   position: fixed;
   top: 0;

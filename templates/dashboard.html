@@ -36,7 +36,7 @@
  
     {% endblock %}
 
- 
+    <link rel="stylesheet" href="{% static 'css/AdminLTEperso.css' %}"> 
     <link rel="stylesheet" href="{% static 'css/navbar-fixed-left.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/slide_menu.css' %}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
@@ -48,7 +48,7 @@
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
  
 
-    <link rel="stylesheet" href="{% static 'css/AdminLTEperso.css' %}">
+
 
 
     <meta charset="UTF-8">
@@ -71,7 +71,7 @@
 </head>
 <body>
 
-<nav class="navbarLeft navbarLeft-fixed-left">
+<nav class="navbarLeft navbarLeft_none  navbarLeft-fixed-left" >
     <ul class="nav navbarLeft-nav">
         {% if request.user.is_authenticated %}
             {% if user.is_teacher %}
@@ -82,6 +82,8 @@
                 {% include 'sideBarMenu/nav_S.html' %}
             {% endif %}
         {% endif %}
+    </ul>
+    <ul class="nav navbarRight-nav">
     </ul>
 </nav>
 
@@ -111,10 +113,11 @@
                                     {% endif %}
                                 {% endif %}
                         {% endblock %}
+                            <a href="#" id="mobile_version_button" class="mobile_version pull-right"><i class="fa fa-bars"></i></a>
                         </div>
                         <ul class="nav navbar-nav navbar-right">
                         {% block page_menu_right %}
-                            <form method="post"  enctype='multipart/form-data' class="pull-right" >{% csrf_token %}
+                            <form method="post"  enctype='multipart/form-data' class="pull-right search_div" >{% csrf_token %}
                                 <input type="hidden"  name="from" id="from" value="{% if '/dashboard'  in request.path %}1{% else %}0{% endif %}"  /> 
                                 <input type="text"  name="search" id="search" class="form-control" placeholder="Recherche par code" /> 
                             </form>

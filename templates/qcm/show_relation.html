@@ -26,55 +26,57 @@
 {% block body  %}  
 
 
-<section class="content_main">
+<section class="content_main content_main_exercise">
  
  
 
 
-    <div class="col-sm-0 col-md-1 col-lg-1" style="font-size:12px;text-align: center">
+    <div class="col-sm-0 col-md-1 col-lg-1 full_screen_size">
+        <div class="calculator double_bottom_padding">
         {% if relation.exercise.supportfile.calculator %}
-          <img src="{% static 'img/calculator.png' %}"  with="80px"  height="80px" />
+          <img src="{% static 'img/calculator.png' %}"  class="img_size_square_75" />
         {% else %}
-          <img src="{% static 'img/no_calculator.png' %}"  with="80px"  height="80px"  />
+          <img src="{% static 'img/no_calculator.png' %}"    class="img_size_square_75" />
         {% endif  %} 
-        <br>
-        <br>
-        {% if relation.duration == 5 %}
-          <img src="{% static 'img/horloge5.png' %}" with="80px"  height="80px"  />
-        {% elif relation.duration == 10 %}
-          <img src="{% static 'img/horloge10.png' %}" with="80px"  height="80px"/>
-        {% elif relation.duration == 15 %}
-          <img src="{% static 'img/horloge15.png' %}" with="80px"  height="80px"  />
-        {% elif relation.duration == 20 %}
-          <img src="{% static 'img/horloge20.png' %}" with="80px"  height="80px"   />
-        {% elif relation.duration == 25 %}
-          <img src="{% static 'img/horloge25.png' %}" with="80px"  height="80px"   />
-        {% elif relation.duration == 30 %}
-          <img src="{% static 'img/horloge30.png' %}" with="80px"  height="80px"  />
-        {% elif relation.duration == 35 %}
-          <img src="{% static 'img/horloge35.png' %}"  with="80px"  height="80px"  />
-        {% elif relation.duration == 40 %}
-          <img src="{% static 'img/horloge40.png' %}" with="80px"  height="80px" />
-        {% elif relation.duration == 45 %}
-          <img src="{% static 'img/horloge45.png' %}"  with="80px"  height="80px"  />
-        {% elif relation.duration == 50 %}
-          <img src="{% static 'img/horloge50.png' %}" with="80px"  height="80px"  />
-        {% elif relation.duration == 55 %}
-          <img src="{% static 'img/horloge55.png' %}" with="80px"  height="80px"  />
-        {% elif relation.duration == 60 %}
-          <img src="{% static 'img/horloge60.png' %}" with="80px"  height="80px"  />
-        {% else %}
-          <img src="{% static 'img/horloge15.png' %}" with="80px"  height="80px"  />
-        {% endif  %} 
-        <p> {{ relation.duration }} minute{{ relation.duration|pluralize }}</p>
-
-
-          <img src="{% static 'img/situation.png' %}" with="75px"  height="75px"  />
-
-
-        <p>{{ relation.situation }} situation{{ relation.situation|pluralize }}</p>
-        <i class="fa fa-barcode fa-4x"></i>
-        <p>{{ relation.exercise.supportfile.code }}</p>
+        </div>
+        <div class="horloge">
+            {% if relation.duration == 5 %}
+              <img src="{% static 'img/horloge5.png' %}"   class="img_size_square_75" />
+            {% elif relation.duration == 10 %}
+              <img src="{% static 'img/horloge10.png' %}"   class="img_size_square_75" />
+            {% elif relation.duration == 15 %}
+              <img src="{% static 'img/horloge15.png' %}"   class="img_size_square_75" />
+            {% elif relation.duration == 20 %}
+              <img src="{% static 'img/horloge20.png' %}"   class="img_size_square_75"  />
+            {% elif relation.duration == 25 %}
+              <img src="{% static 'img/horloge25.png' %}"   class="img_size_square_75"  />
+            {% elif relation.duration == 30 %}
+              <img src="{% static 'img/horloge30.png' %}"   class="img_size_square_75" />
+            {% elif relation.duration == 35 %}
+              <img src="{% static 'img/horloge35.png' %}"    class="img_size_square_75" />
+            {% elif relation.duration == 40 %}
+              <img src="{% static 'img/horloge40.png' %}"   class="img_size_square_75"/>
+            {% elif relation.duration == 45 %}
+              <img src="{% static 'img/horloge45.png' %}"    class="img_size_square_75" />
+            {% elif relation.duration == 50 %}
+              <img src="{% static 'img/horloge50.png' %}"   class="img_size_square_75" />
+            {% elif relation.duration == 55 %}
+              <img src="{% static 'img/horloge55.png' %}"   class="img_size_square_75" />
+            {% elif relation.duration == 60 %}
+              <img src="{% static 'img/horloge60.png' %}"   class="img_size_square_75" />
+            {% else %}
+              <img src="{% static 'img/horloge15.png' %}"   class="img_size_square_75" />
+            {% endif  %} 
+            <p> {{ relation.duration }} minute{{ relation.duration|pluralize }}</p>
+        </div>
+        <div class="situation">
+            <img src="{% static 'img/situation.png' %}"  class="img_size_square_75" />
+            <p>{{ relation.situation }} situation{{ relation.situation|pluralize }}</p>
+        </div>
+        <div class="barcode">
+            <i class="fa fa-barcode fa-4x"></i>
+            <p>{{ relation.exercise.supportfile.code }}</p>
+        </div>
     </div>  
     <div class="col-sm-10 col-md-8 col-lg-8">
 
