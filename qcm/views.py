@@ -2825,8 +2825,6 @@ def admin_list_supportfiles(request,id):
             themes_dict["knowledges"] = knowledges_tab
             themes_tab.append(themes_dict)
         levels_dict["themes"] = themes_tab
- 
-
 
 
     return render(request, 'qcm/list_supportfiles.html', {'levels_dict': levels_dict, 'teacher':teacher , 'level':level , 'relationships' : [] , 'communications' : [] , 'parcours' :  None })
@@ -2953,6 +2951,8 @@ def delete_supportfile(request, id):
 
     return redirect('admin_supportfiles', supportfile.level.id)
 
+
+
 @user_passes_test(user_is_superuser)
 def show_this_supportfile(request, id):
 
@@ -2968,7 +2968,7 @@ def show_this_supportfile(request, id):
     context = {'supportfile': supportfile, 'start_time': start_time, 'communications' : [] ,  'parcours': parcours}
 
     if supportfile.is_ggbfile :
-        url = "show_supportfile.html" 
+        url = "qcm/show_supportfile.html" 
     elif supportfile.is_python :
         url = "basthon/index_supportfile.html"
     else :
@@ -2976,9 +2976,7 @@ def show_this_supportfile(request, id):
 
     return render(request, url , context)
 
-
-
-    return render(request, 'qcm/show_supportfile.html', context)
+ 
 
 @user_passes_test(user_is_superuser)
 def create_exercise(request, supportfile_id):

@@ -11,18 +11,27 @@ define(['jquery', 'bootstrap'], function ($) {
 
             $('#id_is_publish').prop('checked', true);
 
-            $('#id_is_ggbfile').prop('checked', true);            
+            $('#id_is_ggbfile').prop('checked', true); 
+
  
-        $("#click_button").click(function(){ 
+        $("#click_button").on('click', function (){ 
 
             if (!$('#id_is_ggbfile').is(":checked")){
 
                 if (!$('#id_is_python').is(":checked") && !$('#id_is_scratch').is(":checked") && !$('#id_is_file').is(":checked") && !$('#id_is_image').is(":checked") && !$('#id_is_text').is(":checked"))
                 { alert("vous devez sélectionner une type de remise d'exercice") ; return false ; } 
+            } 
+            else
+            {
+                if ($("#id_ggbfile").val() == "") { alert("vous devez uploader un ficher GGB") ; return false ;}
             }
 
 
         });
+
+
+
+
 
 });
 

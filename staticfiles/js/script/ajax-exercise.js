@@ -131,13 +131,6 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
-        $("#click_button").on('click', function () {
-
-            if ($("#id_is_ggbfile").is(":checked")) {
-                if ($("#id_ggbfile").val() == "") { alert("vous devez uploader un ficher GGB") ; return false ;}
-            };
-        });
-
 
 
         // Affiche dans la modal la liste des élèves du groupe sélectionné

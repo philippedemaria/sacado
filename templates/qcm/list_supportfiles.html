@@ -71,7 +71,7 @@
 
                                                     <a href="{% url 'update_supportfile'  supportfile.id   %}" class="listing" style="font-size: 18px">
                                                                 {% if supportfile.title %}  
-                                                                    {{ ssupportfile.title|cleanhtml|capfirst }}  
+                                                                    {{ supportfile.title|cleanhtml|capfirst }}  
                                                                 {% else %}  
                                                                     {{ supportfile.annoncement|cleanhtml|capfirst }} 
                                                                 {% endif %}
