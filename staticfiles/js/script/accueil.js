@@ -240,45 +240,72 @@
             });
 
 
-
- 
+        // Gestion des formulaires de l'adhésion
         $('.family').hide() ;
         $('.one').show() ;
 
+        calculate_rate('#zero_child', '.one',"Moi-même",0);
+        calculate_rate('#one_child', '.one',"1 enfant",1);
+        calculate_rate('#two_children', '.two',"2 enfants",2);
+        calculate_rate('#three_children', '.three',"3 enfants",3);
+        calculate_rate('#four_children', '.four',"4 enfants",4);
+        calculate_rate('#more_children', '.more',"5 enfants",5) ;
 
 
-        calculate_rate('#one_child', '.one',"1 enfant");
-        calculate_rate('#two_children', '.two',"2 enfants");
-        calculate_rate('#three_children', '.three',"3 enfants");
-        calculate_rate('#four_children', '.four',"4 enfants");
-        calculate_rate('#more_children', '.more',"5 enfants") ;
-
-
-
-        function calculate_rate($target, $number,$n){
+        function calculate_rate($target, $number,$n,$nb){
 
 
             $($target).click(function(){
- 
+
+                // Récupérartion des montants
+                data_value = $(this).attr("data_value");
+                data_menus = $(this).attr("data_menus");
+                var menu_id_tab = data_menus.split(",");
+                $.each(menu_id_tab, function (index, value) {
+                    $("#total_price"+value).val(  $("#total_price_"+data_value+value).text()    ) ; 
+                    $("#month_price"+value).val(  $("#payment_"+data_value+value).text()    ) ; 
+                    }); 
+
+                // Afficahge des montants
                 $('.family_selected').removeAttr("checked");
                 $(this).children().attr("checked", "checked");
+                $('.nb_child').val($nb);
                 $('.child').html("").html($n); 
                 $(".family_selected").addClass("btn-violet_border").removeClass("btn-violet");                
                 $(this).addClass("btn-violet").removeClass("btn-violet_border");
                 $('.family').hide() ;
                 $($number).show() ;
-
             });
 
         }
 
+ 
 
 
+        $('#add_parent').on('click', function (event) { 
+
+            nb_parent = $('#id_form-TOTAL_FORMS').val();
+ 
+            var object = $('#formsetZone').html(); 
+
+            $("#formsetZone input").each(function(){ 
+                $(this).attr('id',$(this).attr('id').replace('__prefix__',nb_parent));
+                $(this).attr('name',$(this).attr('name').replace('__prefix__',nb_parent));
+            });
+
+            $("#pasteZone").html(object) ;
+            $("#add_parent").hide(500);
+ 
+        });
 
 
+        $(document).on('click', '.delete_button', function () {
+            $("#pasteZone").html("") ; 
+            $("#add_parent").show(500);
+        });
 
-
-
+        if ($('#id_form-0-cgu')) { $('#id_form-0-cgu').prop('checked', false); } 
+        if ($('#id_cgu')) { $('#id_cgu').prop('checked', false); }
 
 
     });

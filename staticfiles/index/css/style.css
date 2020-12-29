@@ -1802,11 +1802,11 @@ table.table-bordered.dataTable {
 --------------------------------*/
 
 #pricing{
-margin-top: 60px;
-padding-top: 100px;
-background-color: #f1eef7 ;
-padding-bottom: 100px;
-}
+  margin-top: 90px;
+  padding-top: 60px;
+  background-color: #f1eef7 ;
+  padding-bottom: 100px;
+  }
  
 
 #pricing .title_page{
@@ -1816,17 +1816,17 @@ padding-bottom: 100px;
 
 
 #pricing .container, #faq .container{
-width: 800px;
-margin-right: auto;
-margin-left: auto;
-}
+  width: 800px;
+  margin-right: auto;
+  margin-left: auto;
+  }
 
  
 #pricing .full_container{
-width: 1000px;
-margin-right: auto;
-margin-left: auto;
-}
+  width: 1000px;
+  margin-right: auto;
+  margin-left: auto;
+  }
 
 #pricing .card {
   border: 0;
@@ -1857,21 +1857,21 @@ margin-left: auto;
 
 #pricing .card:hover:after {
   width: 100%;
-}
+    }
 
 #pricing .card .card-header {
   background-color: white;
   border-bottom: 0px;
   -moz-text-align-last: left;
   text-align-last: left;
-}
+ }
 
 #pricing  .sub_header {
   font-weight: 500;
   font-variant: small-caps;
   font-size: 30px;
   color: #5d4391;
-}
+ }
 
 
 
@@ -1969,6 +1969,9 @@ margin-left: auto;
   margin-top: 20px;
 }
 
+.violet{
+  color: #5d4391;
+}
 
 .btn-violet {
     color: #f1eef7;
@@ -2008,3 +2011,86 @@ margin-left: auto;
     box-shadow: 0 0 20px rgba(91, 65, 139, 0.5);
 }
 
+#get_detail{
+  margin-top: 90px;
+  padding-top: 30px;
+  background-color: #f1eef7 ;
+  padding-bottom: 100px;
+  }
+ 
+#get_detail .title_page{
+   color: #5f5b96;
+   font-weight: 100;
+}
+
+#get_detail .card {
+  border: 0;
+  border-radius: 0px;
+  transition: all .3s ease-in-out;
+  padding: 20px 0;
+  position: relative;
+  color: #5f5b96;
+  padding : 20px;
+}
+
+#get_detail .card:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 5px;
+  background-color: #5d4391;
+  transition: 0.5s;
+}
+
+#get_detail .card:hover {
+ 
+  box-shadow: 0 20px 35px 0 rgba(0, 0, 0, 0.08);
+}
+
+#get_detail .card:hover:after {
+  width: 100%;
+    }
+
+
+
+#get_detail .sub_header {
+  font-weight: 500;
+  font-variant: small-caps;
+ 
+}
+
+
+#get_detail .small_action {
+  font-size : 12px;
+  cursor: pointer;
+ 
+}
+
+
+#get_detail .btn {
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 500;
+  color: #5f5b96;
+  border-radius: 0;
+  padding: 10px 24px;
+  letter-spacing: 1px;
+  border-radius: 3px;
+  display: inline-block;
+  background: #5d4391;
+  color: #fff;
+}
+
+#get_detail .btn:hover {
+  background: #aa96cf;
+}
+
+#get_detail .card_recapitulatif {
+    border: 0;
+    color: #5f5b96;
+    padding: 20px;
+    background-color: #FFF;
+    border-top: 5px solid #5f5b96;
+}

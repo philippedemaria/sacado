@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+
+{% block body %}
+
+
+<section id="get_detail">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-12 col-md-10">
+                <h4 class="title_page">  L'adhésion {{ formule.adhesion }} 
+                    <span class="sub_header">{{ formule.name }}</span> 
+                    pour 
+                    {% if no_parent %}
+                    <b>moi-même</b> retient mon 
+                    {% else %}
+                    <b>{{ data_post.nb_child }}</b> enfant{{ data_post.nb_child|pluralize }} retient votre 
+                    {% endif %}
+
+                    attention pour un total de {{ data_post.total_price }} €, <small class="title_page"> soit {{ data_post.nb_month }} x {{ data_post.month_price }}€.</small> Elle prend fin le  <b>  {{ data_post.date_end }}</b>.</h4>
+            </div>
+            <div class="col-sm-12 col-md-2">
+                <a href="{% url 'student_to_association'  %}" class="violet small_action"><i class="fa fa-random"></i> Changer de menu</a><br/>
+                <a  href="javascript:history.back()" class="violet small_action"><i class="fa fa-times"></i>  Modifer mes choix</a> 
+            </div>
+        </div> 
+        <hr/>
+        <form action="{% url 'commit_adhesion' %}" method="POST" enctype='multipart/form-data'>
+            {% csrf_token %} 
+
+            {{ userFormset.management_form }}
+            <div id="formsetZone"  style="display:none"> 
+                <div class="card">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <h4 class="title_page violet"><b> Parent</b> <span class="delete_button pull-right small_action">Supprimer ce parent</span> </h4> 
+                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                {{ userFormset.empty_form.last_name.label_tag }}
+                                {{ userFormset.empty_form.last_name |add_class:"form-control id_last_name"  }}
+                                {{ userFormset.empty_form.last_name.errors }}
+                            </div>
+                        </div>  
+                    </div>       
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                {{ userFormset.empty_form.first_name.label_tag }}
+                                {{ userFormset.empty_form.first_name |add_class:"form-control id_first_name"  }}
+                                {{ userFormset.empty_form.first_name.errors }}
+                            </div>
+                        </div>  
+                    </div>       
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                {{ userFormset.empty_form.email.label_tag }} 
+                                {{ userFormset.empty_form.email |add_class:"form-control email" }}
+                                {{ userFormset.empty_form.email.errors }}
+                            </div>
+                        </div>  
+                    </div>       
+                    <div class="row"> 
+                        <div class="col-sm-12 col-md-11">
+                            <div class="form-group">
+                                {{ userFormset.empty_form.username.label_tag }}
+                                {{ userFormset.empty_form.username |add_class:"form-control username"  }}
+                                {{ userFormset.empty_form.username.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-1 col-md-1">
+                            <div class="form-group">
+                                <span class="ajaxresult pull-right"></span>
+                            </div>
+                        </div>  
+                    </div>       
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                {{ userFormset.empty_form.password1.label_tag }} <small><em>Au moins 8 caractères</em></small>
+                                {{ userFormset.empty_form.password1 |add_class:"form-control"  }}
+                                {{ userFormset.empty_form.password1.errors }}
+                            </div>
+                        </div>  
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                {{ userFormset.empty_form.password2.label_tag }}
+                                {{ userFormset.empty_form.password2 |add_class:"form-control"  }}
+                                {{ userFormset.empty_form.password2.errors }}
+                            </div>
+                        </div>
+                    </div>
+                </div>             
+            </div>  
+
+            <input type="hidden" name="total_price" value="{{ data_post.total_price }}" />
+            <input type="hidden" name="month_price" i value="{{ data_post.month_price  }}"  />                
+            <input type="hidden" name="nb_month" value="{{ data_post.nb_month }}"  />
+            <input type="hidden" name="date_end"   value='{{ data_post.date_end  }}'  />
+            <input type="hidden" name="menu_id" value="{{ formule.id}}" />
+            <input type="hidden" name="nb_child"  value="{{ data_post.nb_child }}" />
+            <div class="row">
+                {% for form in userFormset %}
+                <div class="col-sm-12 col-md-6" {% if  forloop.counter > 1 %} style="margin-top:30px" {% endif %}>
+                    <div class="card">
+                        <h4  class="title_page violet">
+                            {% if no_parent %}
+                            <b>Mes coordonnées</b> 
+                            {% else %}
+                            <b>{% if forloop.first %}Parent <span id="add_parent" class="pull-right small_action">Ajouter un parent</span>{% else  %}Enfant{% endif %}</b>
+                            {% endif %}
+                        </h4>
+                        <div class="form-group">
+                            {{ form.last_name.label_tag }}
+                            {{ form.last_name |add_class:"form-control id_last_name"|attr:"required" }}
+                            {{ form.last_name.errors }}
+                        </div>     
+                        <div class="form-group">
+                            {{ form.first_name.label_tag }}
+                            {{ form.first_name |add_class:"form-control id_first_name"|attr:"required" }}
+                            {{ form.first_name.errors }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.email.label_tag }} 
+                            {{ form.email |add_class:"form-control email"|attr:"required" }}
+                            {{ form.email.errors }}
+                        </div>
+                        {% if not forloop.first %}
+                        <div class="form-group">
+                            <label>Niveau préféré :</label>
+                            <select name="level" class="form-control select2">
+                                {% for l in levels %}
+                                    <option value="{{ l.id }}">{{ l.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% else %}
+                            <input name="level" value="" type="hidden" />
+                        {% endif %}
+                        <div class="row"> 
+                            <div class="col-sm-12 col-md-11">
+                                <div class="form-group">
+                                    {{ form.username.label_tag }}
+                                    {{ form.username |add_class:"form-control username"|attr:"required" }}
+                                    {{ form.username.errors }}
+                                </div>
+                            </div>
+                            <div class="col-sm-1 col-md-1">
+                                <div class="form-group">
+                                    <span class="ajaxresult pull-right"></span>
+                                </div>
+                            </div>  
+                        </div>       
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    {{ form.password1.label_tag }} <small><em>Au moins 8 caractères</em></small>
+                                    {{ form.password1 |add_class:"form-control"|attr:"required" }}
+                                    {{ form.password1.errors }}
+                                </div>
+                            </div>  
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    {{ form.password2.label_tag }}
+                                    {{ form.password2 |add_class:"form-control"|attr:"required" }}
+                                    {{ form.password2.errors }}
+                                </div>
+                            </div>
+                        </div> 
+                        {% if forloop.counter == 1 %}
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label>{{ form.cgu|attr:"required" }}   Je reconnais avoir lu et compris les <a href="#" data-target="#cgu" data-toggle='modal'>conditions générales d'utilisation</a> et je les accepte.</label>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if forloop.counter == 1 %}<div class="col-sm-12 col-md-6 col-lg-6" id="pasteZone"></div>{% endif %}
+                {% endfor %}
+            </div>
+            <div class="row" style="margin-top:30px">
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <input type="submit" value="Valider et voir le récapitulatif" class="btn" />
+                </div>
+            </div>
+        </form>
+    </div>
+</section> 
+
+<section id="footer_asso">    
+</section>
+{% endblock %}

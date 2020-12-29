@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import Teacher, User, Student, Parent
+
 from django.core.exceptions import ValidationError
+from django.forms import BaseFormSet
 
 from django.db import transaction
 from django.contrib.auth.hashers import make_password
@@ -21,6 +23,8 @@ class UserForm(UserCreationForm):
         if User.objects.filter(username=username).exists():
             raise ValidationError("Ce nom d'utilisateur est déjà utilisé. Merci d'en choisir un autre.", code='invalid')
         return username
+
+ 
 
 
 class StudentForm(forms.ModelForm):
@@ -99,3 +103,18 @@ class ParentUpdateForm(forms.ModelForm):
         exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined', 'user_type', 'password' , 'cgu']
 
 
+
+
+class BaseUserFormSet(BaseFormSet):
+    def clean(self):
+        """Checks that no two articles have the same title."""
+        if any(self.errors):
+            # Don't bother validating the formset unless each form is valid on its own
+            return
+        titles = []
+        for form in self.forms:
+            if self.can_delete and self._should_delete_form(form):
+                continue
+            username = form.cleaned_data.get('username')
+            if User.objects.filter(username = username):
+                raise ValidationError("Articles in a set must have distinct titles.")

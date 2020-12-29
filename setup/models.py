@@ -32,6 +32,7 @@ class Formule(models.Model):
 
 
 	def data(self) :
+
 		coeff_two = 1.7
 		coeff_three = 2.5
 		coeff_four = 3.31
@@ -77,6 +78,10 @@ class Formule(models.Model):
 		data["left_month"] = left_month
 		data["end"] = end
 
+
+		data["total0"] = round(left_month * adh,2)
+		data["price0"] = round(adh,2)
+
 		data["total1"] = round(left_month * adh,2)
 		data["price1"] = round(adh,2)
 
@@ -93,3 +98,5 @@ class Formule(models.Model):
 		data["total5"] = round( left_month * adh5 ,2)
 		data["price5"] = round(adh5,2)	
 		return data
+
+

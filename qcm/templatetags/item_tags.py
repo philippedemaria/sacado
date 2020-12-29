@@ -654,3 +654,5 @@ def get_noggb_data(obj, student):
     renvoie le résultat d'un exo custom coté élève
     """
     return obj.noggb_data(student)
+
+

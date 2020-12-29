@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
+from django.forms import formset_factory
 from django.contrib.auth.forms import  UserCreationForm,  AuthenticationForm
-from account.forms import  UserForm, TeacherForm, StudentForm
+from account.forms import  UserForm, TeacherForm, StudentForm , BaseUserFormSet
 from django.contrib.auth import   logout
 from account.models import  User, Teacher, Student  ,Parent
 from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise
@@ -24,8 +25,11 @@ from account.decorators import is_manager_of_this_school
 from general_fonctions import *
 import fileinput 
 
-
-
+from django.contrib.auth.hashers import make_password
+from django.core.exceptions import ValidationError
+from django.forms import BaseFormSet
+from django.forms import formset_factory
+ 
 
 def end_of_contract() :
 
@@ -203,6 +207,123 @@ def choice_menu(request,name):
     return render(request, 'setup/menu.html', context)   
 
 
+def details_of_adhesion(request) :
+
+    total_price = request.POST.get("total_price")    
+    month_price = request.POST.get("month_price")
+    nb_month = request.POST.get("nb_month")    
+    date_end = request.POST.get("date_end")
+    menu_id = request.POST.get("menu_id")
+
+    data_post = request.POST
+    levels = Level.objects.all()
+
+    nb_child = int(request.POST.get("nb_child"))
+
+    print(data_post)
+
+    if nb_child == 0 :
+        no_parent = True
+    else :
+        no_parent = False
+
+    formule = Formule.objects.get(pk = int(menu_id))
+
+    userFormset = formset_factory(UserForm, extra = nb_child + 1, max_num= nb_child + 1, formset=BaseUserFormSet)
+
+    context = {  'formule' : formule ,  'no_parent' : no_parent , 'data_post' : data_post ,  'levels' : levels ,  'userFormset' : userFormset, }
+
+    return render(request, 'setup/detail_of_adhesion.html', context)   
+
+
+def commit_adhesion(request) :
+
+    data_post = request.POST
+    data_posted = {}
+    data_posted["total_price"] = data_post.get('total_price')
+    data_posted["month_price"] = data_post.get('month_price')
+    data_posted["nb_month"] = data_post.get('nb_month')
+    data_posted["date_end"] = data_post.get('date_end')
+    data_posted["menu_id"] = data_post.get('menu_id')
+    data_posted["nb_child"] = data_post.get('nb_child')
+
+    nb_child = int(request.POST.get("nb_child"))
+    levels = request.POST.getlist("level")
+
+    userFormset = formset_factory(UserForm, extra = nb_child + 1, max_num = nb_child + 1, formset=BaseUserFormSet)
+    formset = userFormset(data_post)
+
+    formule = Formule.objects.get(pk = int(data_post["menu_id"]))
+
+    users = []
+    if formset.is_valid():
+        i = 0
+        for form in formset :
+            user = dict()
+            user["last_name"]  =  form.cleaned_data["last_name"]
+            user["first_name"] =  form.cleaned_data["first_name"]
+            user["username"]   =  form.cleaned_data["username"]
+            user["password"]   =  make_password(form.cleaned_data["password1"])
+            user["email"]      =  form.cleaned_data["email"]   
+            if levels[i] : 
+                level = Level.objects.get(pk = int(levels[i])).name
+            else :
+                level = ""
+            user["level"]      = level 
+            i += 1
+            users.append(user)
+ 
+
+        request.session["users_of_adhesion"] = users # mise en session des coordonnées des futurs membres
+        request.session["data_posted"] = data_posted # mise en session des détails de l'adhésion
+    else:
+        print("formset.errors : ", formset.errors)   
+
+    context = {'formule' : formule ,  'data_post' : data_post , 'users' : users  }
+ 
+    return render(request, 'setup/commit_adhesion.html', context)   
+
+
+
+
+
+def save_adhesion(request) :
+
+    users_of_adhesion = request.session.get("users_of_adhesion")
+    data_posted = request.session.get("data_posted") 
+ 
+    users_of_adhesion.sort(key = lambda k:k["level"] ) 
+
+    users = []
+
+    for user in users :
+        last_name =  user["last_name"]  
+        first_name = user["first_name"] 
+        username =   user["username"] 
+        password =   user["password"]  
+        email =      user["email"]   
+        level =  user["level"]  
+        if level : #Elève
+            user, created = User.objects.update_or_create(username = username, password = password , user_type = 0 , defaults = { "last_name" : last_name , "first_name" : first_name  , "email" : email })
+            if created :
+                student , create = Student.objects.update_or_create(user = user, defaults = { "task_post" : 1 , "level" : level })
+                if create :
+                    parent.students.add(student)
+
+
+        else : #Parent
+            user, created = User.objects.update_or_create(username = username, password = password , user_type = 1 , defaults = { "last_name" : last_name , "first_name" : first_name  , "email" : email })
+            if created :
+                parent , create = Parent.objects.get_or_create(user = user, task_post = 1)
+                if create :
+                    parent.students.add(student)
+
+
+
+
+    context = {'users_of_adhesion' : users_of_adhesion ,     'data_posted' : data_posted ,   }
+ 
+    return render(request, 'setup/save_adhesion.html', context)  
 
 ##############################################  AJAX ############################################################
 

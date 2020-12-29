@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+
+{% block body %}
+
+
+
+<section id="get_detail">
+    <div class="container"> 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="card_recapitulatif" >  
+                    Menu  <b>{{ formule.name }}</b> <br/>
+                    Adhésion <b>{{ formule.adhesion }}</b> <br/>
+                    Nombre d'enfant : <b>{{ data_post.nb_child }}</b> <br/>
+                    Fin de l'adhésion : <b>{{ data_post.date_end }}</b>  <br/>
+                    Montant totale de l'adhésion : <b>{{ data_post.total_price }}€</b> = {{ data_post.nb_month }} mois x {{ data_post.month_price }}€/mois
+               </div>
+            </div>
+
+        </div> 
+        <hr/>
+ 
+
+        <form action="{% url 'save_adhesion' %}"  >
+                {% csrf_token %}
+                <input type="hidden" name="total_price" value="{{ data_post.total_price }}" />
+                <input type="hidden" name="month_price" i value="{{ data_post.month_price  }}"  />                
+                <input type="hidden" name="nb_month" value="{{ data_post.nb_month }}"  />
+                <input type="hidden" name="date_end"   value='{{ data_post.date_end  }}'  />
+                <input type="hidden" name="menu_id" value="{{ formule.id}}" />
+                <input type="hidden" name="nb_child"  value="{{ data_post.nb_child }}" />
+            <div class="row">
+                {% for user in users %}
+                <div class="col-sm-12 col-md-6" {% if  forloop.counter > 1 %} style="margin-top:30px" {% endif %}>
+                    <div class="card_recapitulatif">
+                        <h4  class="title_page violet"><b>{% if forloop.first %}Parent  {% else  %}Enfant{% endif %}</b></h4>
+                        <div class="form-group">
+                             Nom : <b>{{ user.last_name  }}</b>
+                        </div>     
+                        <div class="form-group">
+                             Prénom :  <b>{{ user.first_name }}</b>
+                        </div>
+                        <div class="form-group">
+                           Courriel : <b>{{ user.email }}</b> 
+                        </div>
+                        {% if user.level != "" %}
+                        <div class="form-group">
+                            Niveau préféré :<b> {{ user.level }} </b>
+                        </div>
+                        {% endif %}
+                        <div class="row"> 
+                            <div class="col-sm-12 col-md-11">
+                                <div class="form-group">
+                                    Identifiant : <b>{{ user.username  }}</b> 
+                                </div>
+                            </div>
+                        </div> 
+                        {% if user.level == "" %}
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    Ce récapitulatif vous sera envoyé à l'adresse courriel renseignée ci-dessus dès le réglement de l'adhésion effectuée.
+                                </div>
+                            </div>  
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if forloop.counter == 1 %}<div class="col-sm-12 col-md-6 col-lg-6" id="pasteZone"></div>{% endif %}
+                {% endfor %}
+            </div>
+            <div class="row" style="margin-top:30px">
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <a href="{% url 'save_adhesion' %}" class="btn" />Confirmer et Payer l'adhésion</a>
+                </div>
+            </div>
+ 
+    </div>
+</section> 
+
+<section id="footer_asso">    
+</section>
+{% endblock %}

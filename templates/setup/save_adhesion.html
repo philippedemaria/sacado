@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+
+{% block body %}
+
+
+<section id="get_detail">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                {{ users_of_adhesion }}
+            </div>
+        </div> 
+        <hr/>
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                {{ data_post }}
+            </div>
+        </div> 
+    </div>
+</section> 
+
+<section id="footer_asso">    
+</section>
+{% endblock %}
