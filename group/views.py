@@ -383,14 +383,9 @@ def authorizing_access_group(teacher,group ):
 #####################################################################################################################################
 
 
-def dashboard_group(request,id):
-
-    template = student_dashboard(request,id)[0]
-    context =  student_dashboard(request,id)[1]
-
-
+def dashboard_group(request, id):
+    template, context = student_dashboard(request,id)
     return render(request, template , context )
-
 
 
 def list_groups(request):
