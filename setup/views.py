@@ -103,13 +103,11 @@ def index(request):
                        'relationships': relationships, 'communications': communications, 'parcours_tab': parcours_tab,
                        'nb_teacher_level': nb_teacher_level}
         
-        elif request.user.is_student: ## student
+        elif request.user.is_student:  ## student
 
- 
-            #return redirect("dashboard_group", 0)
-            context = student_dashboard(request, 0)[1]
-            template = student_dashboard(request, 0)[0] 
+             #return redirect("dashboard_group", 0)
 
+            template, context = student_dashboard(request, 0)
 
         elif request.user.is_parent:  ## parent
             parent = Parent.objects.get(user=request.user)
