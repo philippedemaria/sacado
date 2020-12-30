@@ -126,13 +126,13 @@
                     </div>
                 </div> 
 
-
+                {% if group %} <!-- Dans le cas d'une adhésion isolé, l'élève n'a pas de groupe deonc il ne faut pas afficher cette ligne -->
                 <div class="row">  
                     <div class="col-md-12 col-lg-12 col-sm-12">
                         <a href="{% url 'asking_parcours_sacado' group.id %}">Demander les parcours d'apprentissage de mon niveau à l'équipe SACADO</a> <small><em>en version beta et gratuite</em></small>
                     </div>
                 </div> 
-
+                {% endif %}
             {% endfor  %}   
 
             <!-- ******************************************************************************************** -->

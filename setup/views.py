@@ -126,8 +126,6 @@ def index(request):
         
         elif request.user.is_student:  ## student
 
-             #return redirect("dashboard_group", 0)
-
             template, context = student_dashboard(request, 0)
 
         elif request.user.is_parent:  ## parent
@@ -288,18 +286,12 @@ def commit_adhesion(request) :
                 parents.append(user)
             i += 1
 
-        print(students)
-        print(parents)
-
         # mise en session des coordonnées des futurs membres  et  des détails de l'adhésion
-        if "students_of_adhesion" not in request.session :
-            request.session["parents_of_adhesion"] = parents
-            request.session["students_of_adhesion"] = students
-            request.session["data_posted"] = data_posted 
-        else :
-            parents = request.session.get("parents_of_adhesion") 
-            students = request.session.get("students_of_adhesion") 
-            data_posted = request.session.get("data_posted")  
+ 
+        request.session["parents_of_adhesion"] = parents
+        request.session["students_of_adhesion"] = students
+        request.session["data_posted"] = data_posted 
+ 
         ############################################################
     else:
         print("formset.errors : ", formset.errors)
@@ -460,7 +452,14 @@ def save_adhesion(request) :
         user, created = User.objects.update_or_create(username = username, password = password , user_type = 0 , defaults = { "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : date_end_dateformat })
         student,created_s = Student.objects.update_or_create(user = user, defaults = { "task_post" : 1 , "level" : level })
 
-        students_in.append(student) # pour associé les enfants aux parents
+        group = Group.objects.get(level = level, teacher_id = 2480)
+        group.students.add(student)
+
+
+        parcourses = Parcours.objects.filter(level = level, teacher_id = 2480) # 2480 est SacAdoProf
+        test = attribute_all_documents_to_student(parcourses, student)
+
+        students_in.append(student) # pour associer les enfants aux parents
 
         if nb_child == 0 : # enfant émancipé ou majeur
             Adhesion.objects.update_or_create(user = user, amount = total_price , menu = menu_id, defaults = { "file"  : creation_facture(user,data_posted), "date_end" : date_end_dateformat,  "children" : 0, "duration" : nb_month })

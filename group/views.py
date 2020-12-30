@@ -56,8 +56,6 @@ def student_dashboard(request,group_id):
     # si une seule matière alors  sur dashboard
     groups = student.students_to_group.all()
 
- 
-
     if groups.count() > 1  :
         if int(group_id)  > 0  :
             template =  "group/dashboard_group.html" 
@@ -66,11 +64,8 @@ def student_dashboard(request,group_id):
     else :
         template =  "group/dashboard_group.html" 
 
- 
-
     today = time_zone_user(request.user)        
     timer = today.time()
-
 
     if int(group_id) > 0 :
         group = Group.objects.get(pk = group_id)
@@ -85,9 +80,6 @@ def student_dashboard(request,group_id):
         evaluations = student.students_to_parcours.filter(start__lte=today, is_evaluation=1)
         last_exercises_done = student.answers.order_by("-date")[:5]
    
-
- 
-
     customexercises_set = set()
     nb_custom = 0
     for p in parcourses :
@@ -111,7 +103,6 @@ def student_dashboard(request,group_id):
     if not relationships :
         relationships = []
 
-
     exercise_tab = []
     for r in relationships:
         if r not in exercise_tab:
@@ -132,7 +123,6 @@ def student_dashboard(request,group_id):
         ratio = 0
 
     ratiowidth = int(0.9*ratio)
-
 
     groups = student.students_to_group.all()
 
@@ -948,14 +938,7 @@ def enroll(request, slug):
 
             # Création de Student et affections des parcours
             student = Student.objects.create(user=user, level=group.level)
-            for parcours in parcourses:
-                parcours.students.add(student)
-                relationships = parcours.parcours_relationship.all()
-                for r in relationships:
-                    r.students.add(student)                
-                courses = parcours.course.all()
-                for c in courses:
-                    c.students.add(student)
+            attribute_all_documents_to_student(parcourses, student)
 
             group.students.add(student)
 
