@@ -1932,7 +1932,7 @@ table.table-bordered.dataTable {
   margin-bottom: 15px;
 }
 
-#pricing .card .btn {
+#pricing .card .btn-asso, #get_detail .btn-asso {
   text-transform: uppercase;
   font-size: 13px;
   font-weight: 500;
@@ -2068,20 +2068,7 @@ table.table-bordered.dataTable {
  
 }
 
-
-#get_detail .btn {
-  text-transform: uppercase;
-  font-size: 13px;
-  font-weight: 500;
-  color: #5f5b96;
-  border-radius: 0;
-  padding: 10px 24px;
-  letter-spacing: 1px;
-  border-radius: 3px;
-  display: inline-block;
-  background: #5d4391;
-  color: #fff;
-}
+ 
 
 #get_detail .btn:hover {
   background: #aa96cf;

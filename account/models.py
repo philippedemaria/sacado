@@ -15,6 +15,10 @@ from templated_email import send_templated_mail
 # from account.models import User
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
 
+def file_directory_path(instance, filename):
+    return "factures/{}/{}".format(instance.user.id, filename)
+
+
 def generate_code():
     '''
     Fonction qui génère un code pour les modèles suivantes :
@@ -30,7 +34,7 @@ class ModelWithCode(models.Model):
     '''
     Ajoute un champ code à un modèle
     '''
-    code = models.CharField(max_length=100, unique=True, blank=True, default=generate_code, verbose_name="Code du parcours*")
+    code = models.CharField(max_length=100, unique=True, blank=True, default=generate_code, verbose_name="Code")
 
     class Meta:
         abstract = True
@@ -77,8 +81,9 @@ class User(AbstractUser):
     time_zone = models.CharField(max_length=100, null=True, blank=True, choices=TZ_SET, verbose_name="Fuseau horaire")
     is_extra = models.BooleanField(default=0)
     is_manager = models.BooleanField(default=0)
-    school = models.ForeignKey(School, blank=True, null=True, related_name="users", default=None, on_delete=models.PROTECT)
+    school = models.ForeignKey(School, blank=True, null=True, related_name="users", default=None, on_delete = models.PROTECT)
     cgu = models.BooleanField(default=1)
+    closure = models.DateTimeField(blank=True, null=True, default = None ,  verbose_name="Date de fin d'adhésion")
     
     def __str__(self):
         return "{} {}".format(self.last_name, self.first_name)
@@ -98,6 +103,23 @@ class User(AbstractUser):
     @property
     def is_creator(self):
         return self.is_staff == True
+
+
+
+
+class Adhesion(ModelWithCode):
+    """docstring for Facture"""
+    user = models.ForeignKey(User, blank=True,  null=True, related_name="adhesions", on_delete=models.CASCADE, editable= False)
+    file = models.FileField(upload_to=file_directory_path,verbose_name="fichier", blank=True, null= True, default ="", editable= False)
+    date_start = models.DateTimeField(auto_now_add=True, verbose_name="Date de création", editable= False)
+    date_end = models.DateTimeField( verbose_name="Date de fin", editable= False)
+    amount = models.CharField(max_length=10,  verbose_name="Montant", editable= False)
+    menu = models.CharField(max_length=50,  verbose_name="Menu", editable= False)
+    children = models.PositiveIntegerField( default=1,  verbose_name="Nb enfant", editable= False)
+    duration = models.PositiveIntegerField( default=1,  verbose_name="Durée de l'adhésion", editable= False)    
+
+    def __str__(self):
+        return "{} {}".format(self.user, self.file)
 
 
 class Student(ModelWithCode):
@@ -402,8 +424,6 @@ class Student(ModelWithCode):
         return booleen
 
 
-
-
 class Teacher(models.Model):
     """
     Modèle représentant un enseignant.
@@ -465,9 +485,6 @@ class Teacher(models.Model):
         if self.user.is_creator  :
             creator = True
         return creator
-
-
-
 
 
 class Resultknowledge(models.Model):

@@ -36,32 +36,26 @@
                 <input type="hidden" name="menu_id" value="{{ formule.id}}" />
                 <input type="hidden" name="nb_child"  value="{{ data_post.nb_child }}" />
             <div class="row">
-                {% for user in users %}
-                <div class="col-sm-12 col-md-6" {% if  forloop.counter > 1 %} style="margin-top:30px" {% endif %}>
+                {% for parent in parents %}
+                <div class="col-sm-12 col-md-6" style="margin-top:30px" >
                     <div class="card_recapitulatif">
-                        <h4  class="title_page violet"><b>{% if forloop.first %}Parent  {% else  %}Enfant{% endif %}</b></h4>
+                        <h4  class="title_page violet"><b> Parent  </b></h4>
                         <div class="form-group">
-                             Nom : <b>{{ user.last_name  }}</b>
+                             Nom : <b>{{ parent.last_name  }}</b>
                         </div>     
                         <div class="form-group">
-                             Prénom :  <b>{{ user.first_name }}</b>
+                             Prénom :  <b>{{ parent.first_name }}</b>
                         </div>
                         <div class="form-group">
-                           Courriel : <b>{{ user.email }}</b> 
+                           Courriel : <b>{{ parent.email }}</b> 
                         </div>
-                        {% if user.level != "" %}
-                        <div class="form-group">
-                            Niveau préféré :<b> {{ user.level }} </b>
-                        </div>
-                        {% endif %}
                         <div class="row"> 
                             <div class="col-sm-12 col-md-11">
                                 <div class="form-group">
-                                    Identifiant : <b>{{ user.username  }}</b> 
+                                    Identifiant : <b>{{ parent.username  }}</b> 
                                 </div>
                             </div>
                         </div> 
-                        {% if user.level == "" %}
                         <div class="row">
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
@@ -69,15 +63,47 @@
                                 </div>
                             </div>  
                         </div>
-                        {% endif %}
                     </div>
                 </div>
-                {% if forloop.counter == 1 %}<div class="col-sm-12 col-md-6 col-lg-6" id="pasteZone"></div>{% endif %}
                 {% endfor %}
             </div>
+
+            <div class="row">
+                {% for student in students %}
+                <div class="col-sm-12 col-md-6"  style="margin-top:30px"  >
+                    <div class="card_recapitulatif">
+                        <h4  class="title_page violet"><b> Enfant </b></h4>
+                        <div class="form-group">
+                             Nom : <b>{{ student.last_name  }}</b>
+                        </div>     
+                        <div class="form-group">
+                             Prénom :  <b>{{ student.first_name }}</b>
+                        </div>
+                        <div class="form-group">
+                           Courriel : <b>{{ student.email }}</b> 
+                        </div>
+                        <div class="form-group">
+                            Niveau favori :<b> {{ student.level }} </b>
+                        </div>
+                        <div class="row"> 
+                            <div class="col-sm-12 col-md-11">
+                                <div class="form-group">
+                                    Identifiant : <b>{{ student.username  }}</b> 
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+
+
+
             <div class="row" style="margin-top:30px">
                 <div class="col-sm-12 col-md-6 col-lg-6">
-                    <a href="{% url 'save_adhesion' %}" class="btn" />Confirmer et Payer l'adhésion</a>
+                    <a href="{% url 'save_adhesion' %}" class="btn-asso" />Confirmer et Payer l'adhésion</a>
+                    <a href="javascript:history.back()" class="btn btn-default" />Annuler</a>
                 </div>
             </div>
  

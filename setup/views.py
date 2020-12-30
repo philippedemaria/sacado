@@ -3,7 +3,7 @@ from django.forms import formset_factory
 from django.contrib.auth.forms import  UserCreationForm,  AuthenticationForm
 from account.forms import  UserForm, TeacherForm, StudentForm , BaseUserFormSet
 from django.contrib.auth import   logout
-from account.models import  User, Teacher, Student  ,Parent
+from account.models import  User, Teacher, Student  ,Parent , Adhesion
 from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise
 from group.models import Group, Sharing_group
 from group.views import student_dashboard
@@ -19,6 +19,7 @@ from django.utils import formats, timezone
 import random
 import pytz
 import uuid
+import time
 import os
 from itertools import chain
 from account.decorators import is_manager_of_this_school
@@ -29,7 +30,23 @@ from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 from django.forms import BaseFormSet
 from django.forms import formset_factory
- 
+##############   bibliothèques pour les impressions pdf    #########################
+import os
+from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
+from django.utils import formats, timezone
+from io import BytesIO, StringIO
+from django.http import  HttpResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4, inch, landscape , letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image , PageBreak
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.colors import yellow, red, black, white, blue
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.lib.utils import ImageReader
+from reportlab.lib.enums import TA_JUSTIFY,TA_LEFT,TA_CENTER,TA_RIGHT 
+############## FIN bibliothèques pour les impressions pdf  #########################
+
 
 def end_of_contract() :
 
@@ -47,6 +64,10 @@ def index(request):
     if request.user.is_authenticated :
   
         today = time_zone_user(request.user)
+
+        if request.user.closure : 
+            if request.user.closure < today :
+                return redirect("logout")
 
         ############################################################################################
         #### Mise à jour et affichage des publications  
@@ -218,8 +239,6 @@ def details_of_adhesion(request) :
 
     nb_child = int(request.POST.get("nb_child"))
 
-    print(data_post)
-
     if nb_child == 0 :
         no_parent = True
     else :
@@ -237,23 +256,18 @@ def details_of_adhesion(request) :
 def commit_adhesion(request) :
 
     data_post = request.POST
-    data_posted = {}
-    data_posted["total_price"] = data_post.get('total_price')
-    data_posted["month_price"] = data_post.get('month_price')
-    data_posted["nb_month"] = data_post.get('nb_month')
-    data_posted["date_end"] = data_post.get('date_end')
-    data_posted["menu_id"] = data_post.get('menu_id')
-    data_posted["nb_child"] = data_post.get('nb_child')
-
-    nb_child = int(request.POST.get("nb_child"))
+    nb_child = int(request.POST.get("nb_child"))   
+    menu_id = int(request.POST.get("menu_id"))    
+    data_posted = {"total_price" : data_post.get('total_price'), "month_price" : data_post.get('month_price'), "nb_month" : data_post.get('nb_month'), "date_end" : data_post.get('date_end'), "menu_id" : menu_id , "nb_child" : nb_child }
+ 
     levels = request.POST.getlist("level")
 
     userFormset = formset_factory(UserForm, extra = nb_child + 1, max_num = nb_child + 1, formset=BaseUserFormSet)
     formset = userFormset(data_post)
 
-    formule = Formule.objects.get(pk = int(data_post["menu_id"]))
+    formule = Formule.objects.get(pk = menu_id )
 
-    users = []
+    parents  , students = [] , []
     if formset.is_valid():
         i = 0
         for form in formset :
@@ -261,71 +275,280 @@ def commit_adhesion(request) :
             user["last_name"]  =  form.cleaned_data["last_name"]
             user["first_name"] =  form.cleaned_data["first_name"]
             user["username"]   =  form.cleaned_data["username"]
+            user["password_no_crypted"]   =   form.cleaned_data["password1"] 
             user["password"]   =  make_password(form.cleaned_data["password1"])
             user["email"]      =  form.cleaned_data["email"]   
             if levels[i] : 
                 level = Level.objects.get(pk = int(levels[i])).name
+                user["level"]      = level 
+                students.append(user)
             else :
                 level = ""
-            user["level"]      = level 
+                user["level"]      = level 
+                parents.append(user)
             i += 1
-            users.append(user)
- 
 
-        request.session["users_of_adhesion"] = users # mise en session des coordonnées des futurs membres
-        request.session["data_posted"] = data_posted # mise en session des détails de l'adhésion
+        print(students)
+        print(parents)
+
+        # mise en session des coordonnées des futurs membres  et  des détails de l'adhésion
+        if "students_of_adhesion" not in request.session :
+            request.session["parents_of_adhesion"] = parents
+            request.session["students_of_adhesion"] = students
+            request.session["data_posted"] = data_posted 
+        else :
+            parents = request.session.get("parents_of_adhesion") 
+            students = request.session.get("students_of_adhesion") 
+            data_posted = request.session.get("data_posted")  
+        ############################################################
     else:
-        print("formset.errors : ", formset.errors)   
+        print("formset.errors : ", formset.errors)
 
-    context = {'formule' : formule ,  'data_post' : data_post , 'users' : users  }
+
+
+    context = {'formule' : formule ,  'data_post' : data_posted , 'parents' : parents  , 'students' : students  }
  
     return render(request, 'setup/commit_adhesion.html', context)   
 
 
 
+def creation_facture(user,data_posted):
+    ##################################################################################################################
+    # Création de la facture de l'adhésion au format pdf
+    ##################################################################################################################
 
+    filename = str(user.id)+str(datetime.now().strftime('%Y%m%d'))+".pdf"
+    now = datetime.now().date()
+
+    outfilename = filename+".pdf"
+    outfiledir = "D:/uwamp/www/sacadogit/sacado/static/uploads/factures/{}/".format(user.id) # local
+    #outfiledir = "https://ressources.sacado.xyz/uploads/factures/{}/".format(user.id) # on a server
+    if not os.path.exists(outfiledir):
+        os.makedirs(outfiledir)
+
+    store_path = os.path.join(outfiledir, filename)
+
+    doc = SimpleDocTemplate(store_path,   pagesize=A4, 
+                                        topMargin=0.3*inch,
+                                        leftMargin=0.3*inch,
+                                        rightMargin=0.3*inch,
+                                        bottomMargin=0.3*inch     )
+
+    sample_style_sheet = getSampleStyleSheet()
+
+    sacado = ParagraphStyle('sacado', 
+                            fontSize=26, 
+                            leading=26,
+                            borderPadding = 0,
+                            alignment= TA_CENTER,
+                            )
+
+    elements = []                 
+    title_black = ParagraphStyle('title', fontSize=20, )
+    subtitle = ParagraphStyle('title', fontSize=16,  textColor=colors.HexColor("#00819f"),)
+    normal = ParagraphStyle(name='Normal',fontSize=12,)
+    normalr = ParagraphStyle(name='Normal',fontSize=12,alignment= TA_RIGHT)
+     #### Mise en place du logo
+    logo = Image('D:/uwamp/www/sacadogit/sacado/static/img/sacadoA1.png') # local
+    #logo = Image('https://sacado.xyz/static/img/sacadoA1.png') # on a server
+    logo_tab = [[logo, "SACADO" ]]
+    logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
+    logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))
+    
+    elements.append(logo_tab_tab)
+    elements.append(Spacer(0, 0.2*inch))
+
+    paragraph0 = Paragraph( "Adhésion"   , sacado )
+    elements.append(paragraph0)
+    elements.append(Spacer(0, 1*inch))
+
+    paragraph = Paragraph( "Nom : "+user.last_name   , normal )
+    elements.append(paragraph)
+    elements.append(Spacer(0, 0.1*inch))
+    paragraph1 = Paragraph( "Prénom : "+user.first_name   , normal )
+    elements.append(paragraph1)
+    elements.append(Spacer(0, 0.1*inch))
+    paragraph2 = Paragraph( "Courriel : "+user.email   , normal )
+    elements.append(paragraph2)
+    elements.append(Spacer(0, 0.3*inch))
+
+    date_end = data_posted.get("date_end")
+    total_price = data_posted.get("total_price")
+    month_price = data_posted.get("month_price")
+    nb_month = data_posted.get("nb_month")
+    nb_child = int(data_posted.get("nb_child"))   
+    menu_id = int(data_posted.get("menu_id"))  
+    formule = Formule.objects.get(pk = menu_id )
+
+    para = Paragraph(  "Adhésion : "+formule.adhesion  , normal )
+    elements.append(para)
+    elements.append(Spacer(0, 0.1*inch))
+
+    para1 = Paragraph( "Menu : "+formule.name  , normal )
+    elements.append(para1)
+    elements.append(Spacer(0, 0.3*inch))
+
+    if nb_child > 0 : # enfant
+        pluralise = ""
+        if  nb_child > 1 :
+            pluralise = "s" 
+        para4 = Paragraph( "Nombre d'enfant"+pluralise+" inscrit"+pluralise+" : " +str(nb_child)  , normal )
+        elements.append(para4)
+        elements.append(Spacer(0, 0.1*inch))
+
+        
+        for student in user.parent.students.all() :
+
+            paragraph_msg = Paragraph( "  -  "+ student.user.first_name+ " " + student.user.last_name  , normal )
+            elements.append(paragraph_msg)
+            elements.append(Spacer(0, 0.1*inch))
+
+    elements.append(Spacer(0, 0.1*inch))
+    para2 = Paragraph( "Fin d'adhésion : "+data_posted.get("date_end")  , normal )
+    elements.append(para2)
+    elements.append(Spacer(0, 0.1*inch))
+
+
+    para3 = Paragraph( "Montant de l'adhésion : "+total_price+"€  soit "+nb_month +" x " + month_price+"€"  , normal )
+    elements.append(para3)
+    elements.append(Spacer(0, 0.1*inch))
+ 
+    elements.append(Spacer(0, 2*inch))
+    para0 = Paragraph(  "Soit un paiement de "+total_price+"€ payé le "+str(now) , normalr )
+    elements.append(para0)
+    elements.append(Spacer(0, 0.1*inch))
+
+    doc.build(elements)
+
+    return store_path
+  
 
 def save_adhesion(request) :
 
-    users_of_adhesion = request.session.get("users_of_adhesion")
-    data_posted = request.session.get("data_posted") 
- 
-    users_of_adhesion.sort(key = lambda k:k["level"] ) 
+    parents_of_adhesion = request.session.get("parents_of_adhesion")
+    students_of_adhesion = request.session.get("students_of_adhesion")
+    data_posted = request.session.get("data_posted") # détails de l'adhésion
 
+    date_end = data_posted.get("date_end")
+    total_price = data_posted.get("total_price")
+    month_price = data_posted.get("month_price")
+    nb_month = data_posted.get("nb_month")
+ 
     users = []
 
-    for user in users :
-        last_name =  user["last_name"]  
-        first_name = user["first_name"] 
-        username =   user["username"] 
-        password =   user["password"]  
-        email =      user["email"]   
-        level =  user["level"]  
-        if level : #Elève
-            user, created = User.objects.update_or_create(username = username, password = password , user_type = 0 , defaults = { "last_name" : last_name , "first_name" : first_name  , "email" : email })
-            if created :
-                student , create = Student.objects.update_or_create(user = user, defaults = { "task_post" : 1 , "level" : level })
-                if create :
-                    parent.students.add(student)
+    nb_child = int(data_posted.get("nb_child"))   
+    menu_id = int(data_posted.get("menu_id"))  
+    formule = Formule.objects.get(pk = menu_id )
 
 
-        else : #Parent
-            user, created = User.objects.update_or_create(username = username, password = password , user_type = 1 , defaults = { "last_name" : last_name , "first_name" : first_name  , "email" : email })
-            if created :
-                parent , create = Parent.objects.get_or_create(user = user, task_post = 1)
-                if create :
-                    parent.students.add(student)
+    date_end_format = date_end.split(" ")
+    months = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"]
+    date_end_month = months.index(date_end_format[1])+1 
+
+    date_end_dateformat = str(date_end_format[2])+"-"+str(date_end_month)+"-"+str(date_end_format[0])+" 00:00:00" 
 
 
 
+    ##################################################################################################################
+    # Insertion dans la base de données
+    ##################################################################################################################
+    students_in = []
+    for s in students_of_adhesion :
 
-    context = {'users_of_adhesion' : users_of_adhesion ,     'data_posted' : data_posted ,   }
+        last_name, first_name, username , password , email , level =  s["last_name"]  , s["first_name"] , s["username"] , s["password"] , s["email"] , s["level"]  
+        level = Level.objects.get(name = level)    
+        user, created = User.objects.update_or_create(username = username, password = password , user_type = 0 , defaults = { "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : date_end_dateformat })
+        student,created_s = Student.objects.update_or_create(user = user, defaults = { "task_post" : 1 , "level" : level })
+
+        students_in.append(student) # pour associé les enfants aux parents
+
+        if nb_child == 0 : # enfant émancipé ou majeur
+            Adhesion.objects.update_or_create(user = user, amount = total_price , menu = menu_id, defaults = { "file"  : creation_facture(user,data_posted), "date_end" : date_end_dateformat,  "children" : 0, "duration" : nb_month })
+
+
+    for p in parents_of_adhesion :
+
+        last_name, first_name, username , password , email =  p["last_name"]  , p["first_name"] , p["username"] , p["password"] , p["email"] 
+        user, created = User.objects.update_or_create(username = username, password = password , user_type = 1 , defaults = { "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : date_end_dateformat })
+        parent,create = Parent.objects.update_or_create(user = user, defaults = { "task_post" : 1 })
+        
+        for si in students_in :
+            parent.students.add(si)
+
+        Adhesion.objects.update_or_create(user = user, amount = total_price , menu = menu_id, defaults = { "file"  : creation_facture(user,data_posted), "date_end" : date_end_dateformat,  "children" : 0, "duration" : nb_month })
  
-    return render(request, 'setup/save_adhesion.html', context)  
 
-##############################################  AJAX ############################################################
+    ##################################################################################################################
+    # Envoi du courriel
+    ##################################################################################################################
+    nbc = ""
+    if nb_child > 1 :
+        nbc = "s"
+
+    for p in parents_of_adhesion :
+        msg = "Bonjour "+p["first_name"]+" "+p["last_name"]+",\n\n vous venez de souscrire à une adhésion "+formule.adhesion +" SACADO avec le menu "+formule.name+". \n"
+        msg += "Votre adhésion est effective jusqu'au "+data_posted.get("date_end") +"\n"
+        msg += "Votre identifiant est "+p["username"]+" et votre mot de passe est "+p["password_no_crypted"]+"\n"
+        msg += "Vous avez inscrit "+str(nb_child)+" enfant"+nbc+" :\n"
+        for s in students_of_adhesion :
+            msg += "- "+s["first_name"]+" "+s["last_name"]+", identifiants de connexion : id "+s["username"]+" / mot de passe "+s["password_no_crypted"]+" \n"
+
+        msg += "\n\n Il est possible de retrouver ces détails à partir de votre tableau de bord après votre connexion à https://sacado.xyz"
+
+        msg += "L'équipe SACADO vous remercie de votre confiance.\n\n"
+
+        send_mail("Inscription SACADO", msg, "info@sacado.xyz", [p["email"]])
 
 
+    for s in students_of_adhesion :
+        srcv = []        
+        if s["email"] : 
+            srcv.append(s["email"])
+            smsg = "Bonjour "+s["first_name"]+" "+s["last_name"]+",\n\n vous venez de souscrire à une adhésion "+formule.adhesion +" SACADO avec le menu "+formule.name+". \n"
+            smsg += "Votre identifiant est "+s["username"]+" et votre mot de passe est "+s["password_no_crypted"]+"\n\n"
+            smsg += "Il est possible de retrouver ces détails à partir de votre tableau de bord après votre connexion à https://sacado.xyz"
+            smsg += "L'équipe SACADO vous remercie de votre confiance.\n\n"
+
+            send_mail("Inscription SACADO", smsg, "info@sacado.xyz", srcv)
+
+    # Envoi à SACADO
+    sacado_rcv = ["philippe.demaria83@gmail.com","brunoserres33@gmail.com","sacado.asso@gmail.com"]
+
+    sacado_msg = "Une adhésion "+formule.adhesion +" SACADO avec le menu "+formule.name+" vient d'être souscrite pour "+str(nb_child)+" enfant"+nbc+" \n\n"
+    sacado_msg += "Le montant de l'adhésion est : "+total_price+"€ soit "+nb_month+ " x "+month_price+"€\n\n"
+    sacado_msg += "La date de fin de l'adhésion est : "+date_end+"\n\n"
+    i,j = 1,1
+    for p in parents_of_adhesion :
+        sacado_msg += "Parent "+str(i)+" : "+p["first_name"]+" "+p["last_name"]+" adresse de courriel : "+p["email"]+". \n\n"
+        i+=1
+    for s in students_of_adhesion :
+        if s["email"] :
+            adr = ", adresse de courriel : "+s["email"] 
+        sacado_msg += "Enfant "+str(j)+" : "+s["first_name"]+" "+s["last_name"]+" Niveau :" +s["level"]+adr+"\n\n"         
+        j+=1
+
+    send_mail("Inscription SACADO", sacado_msg, "info@sacado.xyz", sacado_rcv)
+
+    #########################################################
+
+
+    context = {      }
+
+    return render(request, 'setup/save_adhesion.html', context)
+
+
+
+def upload_facture(request,code):
+    """ Téléchargement de facture """
+    pass
+
+
+
+##################################################################################################################
+##################################################################################################################
+##############################################  AJAX  ############################################################
+##################################################################################################################
+##################################################################################################################
 
 
 def ajax_changecoloraccount(request):

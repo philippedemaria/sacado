@@ -90,7 +90,7 @@
                             <div class="card-block">
                                 <p class="card-text this_center" ><small> Adhésion jusqu'au {{ formule.data.end|date:"d F Y" }} </small></p>
                             </div>
-                            <input type="submit" name="sending{{ formule.id }}" class="btn" value="Choisir ce menu" />                            <br/>
+                            <input type="submit" name="sending{{ formule.id }}" class="btn-asso" value="Choisir ce menu" />                            <br/>
 
                             <small>Facturé en un seul paiement.<br/> Soit <span class="family zero" id="payment_zero{{ formule.id }}">{{ formule.data.price1 }}</span>
                                                                           <span class="family one" id="payment_one{{ formule.id }}">{{ formule.data.price1 }}</span>

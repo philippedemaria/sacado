@@ -63,7 +63,6 @@ def menu(request):
                 'this_user': this_user,
                 'last_exercises_done': last_exercises_done,
                  'sacado_asso' : sacado_asso , 
-                 'group' : group,
             }
 
 

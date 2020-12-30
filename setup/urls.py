@@ -22,5 +22,6 @@ urlpatterns = [
     path('details_of_adhesion', details_of_adhesion, name='details_of_adhesion'), 
     path('commit_adhesion', commit_adhesion, name='commit_adhesion'), 
     path('save_adhesion', save_adhesion, name='save_adhesion'), 
-
+    path('upload_facture/<slug:code>', upload_facture, name='upload_facture'), 
 ]
+ 

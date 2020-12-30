@@ -136,12 +136,13 @@
                         </div>
                         {% if not forloop.first %}
                         <div class="form-group">
-                            <label>Niveau préféré :</label>
+                            <label>Niveau favori :</label>
                             <select name="level" class="form-control select2">
                                 {% for l in levels %}
                                     <option value="{{ l.id }}">{{ l.name }}</option>
                                 {% endfor %}
                             </select>
+                            <small>Le niveau favori est le niveau accessible depuis le tableau de bord.</small>
                         </div>
                         {% else %}
                             <input name="level" value="" type="hidden" />
@@ -192,7 +193,7 @@
             </div>
             <div class="row" style="margin-top:30px">
                 <div class="col-sm-12 col-md-6 col-lg-6">
-                    <input type="submit" value="Valider et voir le récapitulatif" class="btn" />
+                    <input type="submit" value="Valider et voir le récapitulatif" class="btn-asso" />
                 </div>
             </div>
         </form>
