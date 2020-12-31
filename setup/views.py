@@ -14,7 +14,7 @@ from socle.models import Level
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.db.models import Count, Q
-from datetime import date, datetime
+from datetime import date, datetime , timedelta
 from django.utils import formats, timezone
 import random
 import pytz
@@ -244,11 +244,18 @@ def details_of_adhesion(request) :
 
     formule = Formule.objects.get(pk = int(menu_id))
 
-    userFormset = formset_factory(UserForm, extra = nb_child + 1, max_num= nb_child + 1, formset=BaseUserFormSet)
 
-    context = {  'formule' : formule ,  'no_parent' : no_parent , 'data_post' : data_post ,  'levels' : levels ,  'userFormset' : userFormset, }
+    if request.user.is_authenticated :
 
-    return render(request, 'setup/detail_of_adhesion.html', context)   
+        adhesion = Adhesion.objects.filter(user = request.user).last()
+        context = {  'formule' : formule ,  'no_parent' : no_parent , 'data_post' : data_post , "nb_child" : nb_child ,  'levels' : levels ,  'adhesion' : adhesion, "renewal" : True }
+        return render(request, 'setup/renewal_adhesion.html', context)   
+
+    else : 
+
+        userFormset = formset_factory(UserForm, extra = nb_child + 1, max_num= nb_child + 1, formset=BaseUserFormSet)
+        context = {  'formule' : formule ,  'no_parent' : no_parent , 'data_post' : data_post ,  'levels' : levels ,  'userFormset' : userFormset, "renewal" : False }
+        return render(request, 'setup/detail_of_adhesion.html', context)   
 
 
 def commit_adhesion(request) :
@@ -304,7 +311,7 @@ def commit_adhesion(request) :
 
 
 
-def creation_facture(user,data_posted):
+def creation_facture(user,data_posted,code):
     ##################################################################################################################
     # Création de la facture de l'adhésion au format pdf
     ##################################################################################################################
@@ -313,8 +320,8 @@ def creation_facture(user,data_posted):
     now = datetime.now().date()
 
     outfilename = filename+".pdf"
-    outfiledir = "D:/uwamp/www/sacadogit/sacado/static/uploads/factures/{}/".format(user.id) # local
-    #outfiledir = "https://ressources.sacado.xyz/uploads/factures/{}/".format(user.id) # on a server
+    #outfiledir = "D:/uwamp/www/sacadogit/sacado/static/uploads/factures/{}/".format(user.id) # local
+    outfiledir = "uploads/factures/{}/".format(user.id) # on a server
     if not os.path.exists(outfiledir):
         os.makedirs(outfiledir)
 
@@ -341,8 +348,8 @@ def creation_facture(user,data_posted):
     normal = ParagraphStyle(name='Normal',fontSize=12,)
     normalr = ParagraphStyle(name='Normal',fontSize=12,alignment= TA_RIGHT)
      #### Mise en place du logo
-    logo = Image('D:/uwamp/www/sacadogit/sacado/static/img/sacadoA1.png') # local
-    #logo = Image('https://sacado.xyz/static/img/sacadoA1.png') # on a server
+    #logo = Image('D:/uwamp/www/sacadogit/sacado/static/img/sacadoA1.png') # local
+    logo = Image('https://sacado.xyz/static/img/sacadoA1.png') # on a server
     logo_tab = [[logo, "SACADO" ]]
     logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
     logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))
@@ -353,6 +360,9 @@ def creation_facture(user,data_posted):
     paragraph0 = Paragraph( "Adhésion"   , sacado )
     elements.append(paragraph0)
     elements.append(Spacer(0, 1*inch))
+    paragraph = Paragraph( "Réf : "+code   , normal )
+    elements.append(paragraph)
+    elements.append(Spacer(0, 0.2*inch))
 
     paragraph = Paragraph( "Nom : "+user.last_name   , normal )
     elements.append(paragraph)
@@ -415,6 +425,8 @@ def creation_facture(user,data_posted):
     return store_path
   
 
+
+
 def save_adhesion(request) :
 
     parents_of_adhesion = request.session.get("parents_of_adhesion")
@@ -445,6 +457,7 @@ def save_adhesion(request) :
     # Insertion dans la base de données
     ##################################################################################################################
     students_in = []
+    code = str(uuid.uuid4())[:8]
     for s in students_of_adhesion :
 
         last_name, first_name, username , password , email , level =  s["last_name"]  , s["first_name"] , s["username"] , s["password"] , s["email"] , s["level"]  
@@ -462,7 +475,7 @@ def save_adhesion(request) :
         students_in.append(student) # pour associer les enfants aux parents
 
         if nb_child == 0 : # enfant émancipé ou majeur
-            Adhesion.objects.update_or_create(user = user, amount = total_price , menu = menu_id, defaults = { "file"  : creation_facture(user,data_posted), "date_end" : date_end_dateformat,  "children" : 0, "duration" : nb_month })
+            Adhesion.objects.update_or_create(user = user, amount = total_price , menu = menu_id, defaults = { "file"  : creation_facture(user,data_posted,code), "date_end" : date_end_dateformat,  "children" : nb_child, "duration" : nb_month })
 
 
     for p in parents_of_adhesion :
@@ -474,8 +487,7 @@ def save_adhesion(request) :
         for si in students_in :
             parent.students.add(si)
 
-        Adhesion.objects.update_or_create(user = user, amount = total_price , menu = menu_id, defaults = { "file"  : creation_facture(user,data_posted), "date_end" : date_end_dateformat,  "children" : 0, "duration" : nb_month })
- 
+        adh, cr = Adhesion.objects.update_or_create(user = user, amount = total_price , menu = menu_id, defaults = { "file"  : creation_facture(user,data_posted,code), "date_end" : date_end_dateformat,  "children" : nb_child, "duration" : nb_month })
 
     ##################################################################################################################
     # Envoi du courriel
@@ -486,6 +498,7 @@ def save_adhesion(request) :
 
     for p in parents_of_adhesion :
         msg = "Bonjour "+p["first_name"]+" "+p["last_name"]+",\n\n vous venez de souscrire à une adhésion "+formule.adhesion +" SACADO avec le menu "+formule.name+". \n"
+        msg += "votre référence d'adhésion est "+code+".\n\n"
         msg += "Votre adhésion est effective jusqu'au "+data_posted.get("date_end") +"\n"
         msg += "Votre identifiant est "+p["username"]+" et votre mot de passe est "+p["password_no_crypted"]+"\n"
         msg += "Vous avez inscrit "+str(nb_child)+" enfant"+nbc+" :\n"
@@ -504,6 +517,7 @@ def save_adhesion(request) :
         if s["email"] : 
             srcv.append(s["email"])
             smsg = "Bonjour "+s["first_name"]+" "+s["last_name"]+",\n\n vous venez de souscrire à une adhésion "+formule.adhesion +" SACADO avec le menu "+formule.name+". \n"
+            smsg += "votre référence d'adhésion est "+code+".\n\n"
             smsg += "Votre identifiant est "+s["username"]+" et votre mot de passe est "+s["password_no_crypted"]+"\n\n"
             smsg += "Il est possible de retrouver ces détails à partir de votre tableau de bord après votre connexion à https://sacado.xyz"
             smsg += "L'équipe SACADO vous remercie de votre confiance.\n\n"
@@ -537,11 +551,71 @@ def save_adhesion(request) :
 
 
 
-def upload_facture(request,code):
-    """ Téléchargement de facture """
-    pass
+def adhesions(request):
+    """ liste des adhésions """
+    adhesions = Adhesion.objects.filter(user = request.user ) 
+    today = time_zone_user(request.user)
+    last_week = today + timedelta(days = 7)
+    context = { "adhesions" : adhesions,  "last_week" : last_week    }
+
+    return render(request, 'setup/list_adhesions.html', context)
 
 
+
+
+def calcul_remboursement(adhesion) :
+
+    today = time_zone_user(adhesion.user)
+    delta = adhesion.date_end - adhesion.date_start
+    nb_days = delta.days 
+
+    delta1 = today - adhesion.date_start
+    nb_day1s = delta1.days
+
+    ratio = 1 - round(nb_day1s/nb_days,2)
+
+    formule = Formule.objects.get(pk= adhesion.menu)
+    adhesion_tab = adhesion.amount.split(",")
+    price = float(adhesion_tab[0]+"."+adhesion_tab[1])
+
+    pluri = ""
+    if nb_day1s > 1 :
+        pluri =  "s"
+
+    nd = str(nb_day1s)+" jour"+pluri
+
+    return round(ratio*price - 5.99,2) , nd
+
+
+
+def delete_adhesion(request):
+
+    pk = int(request.POST.get("adh_id"))
+    adhesion = Adhesion.objects.get(pk=pk)
+
+    remb  = calcul_remboursement(adhesion)[0]
+
+    msg = "Une demande d'annulation vient d'être formulée de la part de "+adhesion.user+". \n"
+    msg += "La référence d'adhésion est "+adhesion.code+" et son id est "+adhesion.id+".\n\n"
+    msg += "Le montant du remboursement est de "+remb+"€ au pro-rata des jours adhérés." 
+
+    send_mail("Demande d'annulation d'adhésion SACADO", msg, "info@sacado.xyz", ["sacado.asso@gmail.com"])
+
+    return redirect("adhesions")
+
+
+
+ 
+
+def ajax_remboursement(request):
+    data_id = int(request.POST.get("data_id"))
+    adhesion = Adhesion.objects.get(pk=data_id)
+    data ={}
+    data["remb"] , data["jour"] = calcul_remboursement(adhesion)
+    return JsonResponse(data)
+
+
+ 
 
 ##################################################################################################################
 ##################################################################################################################
