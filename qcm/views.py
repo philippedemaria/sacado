@@ -4453,8 +4453,7 @@ def ajax_delete_custom_answer_image(request):
     return JsonResponse(data)  
 
 
-
-
+ 
 
 
 def asking_parcours_sacado(request,pk):
@@ -4462,15 +4461,19 @@ def asking_parcours_sacado(request,pk):
 
     teacher = Teacher.objects.get(pk=2480)
     student = request.user.student
-    level = student.level
     group = Group.objects.get(pk = pk)
     subject = group.subject
+    level = group.level
 
     parcourses = teacher.teacher_parcours.filter(level = level, subject = subject)
 
+    msg = "Je souhaiterais utiliser les parcours Sacado de mon niveau car mon enseignant ne les utilise pas. Merci.\n\n"+str(student)
+
+
+    send_mail("Demande de parcours SACADO",  msg , "info@sacado.xyz" , ["brunoserres33@gmail.com", "sacado.asso@gmail.com"] )
 
     test = attribute_all_documents_to_student(parcourses, student)
-    print("testeur", test)
+ 
     
     return redirect("dashboard_group",pk)
 
