@@ -110,7 +110,7 @@ class Group(ModelWithCode):
     def parcours(self):
         parcours_set = set()
         for student in self.students.all() :
-            parcours_set.update(student.students_to_parcours.all())
+            parcours_set.update(student.students_to_parcours.filter( subject = self.subject))
         return list(parcours_set)
 
 
@@ -124,7 +124,18 @@ class Group(ModelWithCode):
     def folders(self):
         parcours_set = set()
         for student in self.students.all() :
-            parcours_set.update(student.students_to_parcours.filter(is_folder=1))
+            parcours_set.update(student.students_to_parcours.filter(is_folder=1, subject = self.subject))
+        return list(parcours_set)
+
+
+    def themes(self):
+        parcours_set = set()
+        for student in self.students.all() :
+            parcours_set.update(student.students_to_parcours.filter(Q(is_folder=1)|Q(is_leaf=0)), subject = self.subject)
+
+
+
+
         return list(parcours_set)
 
 
