@@ -1,0 +1,111 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+    {% if group %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+
+     <script>
+        require(['script/ajax-adhesion']);
+    </script>
+ 
+ 
+{% endblock %}
+
+
+{% block page_title %}  
+    
+    <i class='fa fa-leaf'></i> Renouvellement d'une adhésion
+
+{% endblock %}
+
+
+ 
+
+
+ 
+     
+{% block body %}     
+<section class="content_main"> 
+ 
+    <div class="row">
+        <div class="col-sm-12 col-md-10">
+            <h4 class="title_page">  L'adhésion {{ formule.adhesion }} 
+                <span class="sub_header">{{ formule.name }}</span> 
+                pour 
+                {% if no_parent %}
+                <b>moi-même</b> retient mon 
+                {% else %}
+                <b>{{ data_post.nb_child }}</b> enfant{{ data_post.nb_child|pluralize }} retient votre 
+                {% endif %}
+
+                attention pour un total de {{ data_post.total_price }} €, <small class="title_page"> soit {{ data_post.nb_month }} x {{ data_post.month_price }}€.</small> Elle prend fin le  <b>  {{ data_post.date_end }}</b>.</h4>
+        </div>
+        <div class="col-sm-12 col-md-2">
+            <a href="{% url 'student_to_association'  %}" class="small_action"><i class="fa fa-random"></i> Changer de menu</a><br/>
+            <a  href="javascript:history.back()" class="small_action"><i class="fa fa-times"></i>  Modifer mes choix</a> 
+        </div>
+    </div> 
+    <hr/> 
+    <div class="row">
+        <form action="" method="POST">
+            <div class="col-sm-12 col-md-6">
+
+                <input type="hidden" name="total_price" value="{{ data_post.total_price }}" />
+                <input type="hidden" name="month_price" i value="{{ data_post.month_price  }}"  />                
+                <input type="hidden" name="nb_month" value="{{ data_post.nb_month }}"  />
+                <input type="hidden" name="date_end"   value='{{ data_post.date_end  }}'  />
+                <input type="hidden" name="menu_id" value="{{ formule.id}}" />
+                <input type="hidden" name="nb_child"  value="{{ data_post.nb_child }}" id="nb_child"  />
+
+                je suis 
+
+                <div class="renewal_user selector" ><label>{{ adhesion.user }} <input type="hidden" name="user"  value="{{ adhesion.user.id }}" /></label></div>
+                <div>
+                    et sollicite cette adhésion pour  
+                </div>
+                {% for s in adhesion.user.parent.students.all %}
+                    <div class="renewal_user renewal_student" > 
+                        <label>{{ s }} <input type="checkbox"  name="students"  data_name="{{ s.user }}" class="renewal_user_class" id="renewal{{ s.user.id }}"  value="{{ s.user.id }}" /></label>
+                        <div class="renewal_user_level"> 
+                            <label>Niveau favori :</label>
+                            <select id="level{{ s.user.id }}" name="level" class="form-control select2">
+                                {% for l in levels %}
+                                    <option value="{{ l.id }}">{{ l.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% if data_post.nb_child != adhesion.user.parent.students.all.count %}
+                <div class="renewal_bottom">
+                     <div class="alert alert-danger">Votre choix d'adhésion concerne {{ data_post.nb_child }} enfant{{ data_post.nb_child|pluralize }}. Vous ne pourrez pas sélectionner tous vos enfants.</div>
+                </div>
+                {% endif %}
+                <div class="renewal_bottom">
+                    <a href="#" class="btn btn-primary validate_renewal" >Valider et payer</a>
+                    <a href="javascript:history.back()" class="btn btn-default">Annuler</a>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <p class="thin"><b>Adhésion{{ data_post.nb_child|pluralize }} pour</b></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12" id="show_confirm_renewal">
+                    </div>
+                </div>
+            </div>
+        </form>    
+    </div>
+ 
+</section>            
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+ 
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-accueil.js' %}"></script> 
+    <script>
+        require(['script/ajax-adhesion']);
+    </script>
+{% endblock %}
+
+
+
+{% block page_title %}
+    <i class='fa fa-leaf'></i> Mes adhésions 
+{% endblock %}
+
+{% block page_menu_right %}
+    <a href="#" class="btn btn-new pull-right"> Nouvelle adhésion</a>    
+
+{% endblock %}
+
+
+
+
+{% block body %}
+    <section class="content_main"> 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <form action="" method="POST" enctype='multipart/form-data'>
+                {% csrf_token %}
+                    <table id="standard_tab" class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Menu</th>
+                            <th>Enfant.s </th>
+                            <th>Date de souscription</th>
+                            <th>Fin d'engagement</th>
+                            <th>Montant</th>
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for adh in adhesions %}
+                                <tr>
+                                    <td>
+                                        {{ adh.code }}
+                                    </td>
+                                    <td>
+                                        {{ adh.formule }}
+                                    </td>
+                                    <td>
+                                        {% for s in adh.children_associated %}
+                                            {{ s }} {% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {{ adh.date_start|date:"d N Y à H:i" }}
+                                    </td>
+                                    <td>
+                                        {{ adh.date_end|date:"d N Y" }} <small>[{{ adh.duration}}mois]</small>
+                                    </td>
+                                    <td>
+                                        {{ adh.amount }}€
+                                    </td>
+                                    <td style="font-size : 12px">
+                                        
+                                        <a href="{% url 'student_to_association'     %}"> Renouveler</a> | 
+                                        {% if adh.date_end < last_week %}66{% endif %}
+                                        <a href="{% url 'student_to_association' %}"> Modifier</a> |
+                                        <a href="#" data-toggle='modal' data-target='#remboursement' data_id='{{ adh.id }}' class="adh_select"> Résilier</a> |
+                                        <a href="{{ adh.file.url }}" target="_blank"> Télécharger</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">     
+                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+            </div>
+        </div>
+    </section>
+    </div>
+
+    <div class="modal fade" id="remboursement" tabindex="-1" role="dialog" aria-labelledby="remboursement"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>                
+                    <h5 class="modal-title" id="exampleModalLabel">Demande d'annulation d'adhésion</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Vous souhaitez résilier votre adhésion. <br/><br/><strong>Vous devez renseigner votre adresse pour un retour par courriel postal.</strong><br/>Pourriez-vous justifier votre décision ? Merci. <br/>
+                        Nous vous ferons parvenir au plus vite le montant restant de votre adhésion (par chèque) au pro-rata des jours adhérés. Les frais de gestion s'élèvent à 5.99 €.</p>
+                    <p>
+                        <strong>A ce jour, le montant remboursé est de <span id="remb"></span>€</strong> pour <strong><span id="jour"></span></strong> d'adhésion.
+                    </p>
+                    <form action="{% url 'delete_adhesion'  %}" method="POST" >
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input name="adh_id" type="hidden" id="adh_id" />
+                          <textarea class="form-control" name="message" rows="5" required   placeholder="Ecrire votre message"></textarea>
+                        </div>
+                        <div class="text-center"><button type="submit" class="btn btn-danger">Confirmer la demande d'annulation</button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

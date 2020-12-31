@@ -29,8 +29,6 @@ class Formule(models.Model):
 	def __str__(self):
 	    return "{}".format(self.name)
 
-
-
 	def data(self) :
 
 		coeff_two = 1.7

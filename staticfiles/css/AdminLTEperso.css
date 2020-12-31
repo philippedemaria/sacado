@@ -2018,6 +2018,51 @@ body.hold-transition .main-header .logo {
   padding-left: 35px;
   padding-right: 35px;
 }
+
+ 
+
+
+
+
+.renewal_user{
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  position: relative;
+  color: #5f5b96;
+  width : 300px;
+  margin : 15px 0px;
+  background-color: #f1eef7 ;
+ 
+}
+
+.renewal_student{
+  float: left;
+  margin-right: 15px;
+}
+ 
+.renewal_bottom{
+    clear: both;
+}
+
+
+
+.renewal_user_level{
+  margin-top : 5px;
+
+}
+
+ 
+
+.small_action {
+  font-size : 12px;
+  cursor: pointer;
+ 
+}
+
+
+
+
 /* H1 - H6 font */
 h1,
 h2,

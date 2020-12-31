@@ -40,7 +40,7 @@
                     {% get_min_score_parcours parcours student as data_min %} 
                     {% if parcours.vignette %}
                     <!-- small box -->
-                    <div class="small-box-student" style="background-image: url('{{parcours.vignette.url }}'); background-size: 100% 100%;">
+                    <div class="small-box-student" style="background-image: url('{{parcours.vignette.url }}'); background-size: 100% 50%;">
                         {% if  student.user.school %}
                             {% if  data_min.boolean %}
                             <div class="background_badge" >
@@ -49,29 +49,28 @@
                             {% endif  %}
                         {% endif  %}
 
-
-                        <div class="icon-student">
-                             {{ data.pc }}% 
-                        </div>
                         <div class="small-box-footer-max" style="background-color:{{parcours.color }};color:{{parcours.color|contrast_color }};"  >
-                            <h2 class="white thin"> {{ parcours.title|truncatechars:"19" }} </h2>
- 
+                            <h2 class="thin" style="color:{{parcours.color|contrast_color }};"> {{ parcours.title|truncatechars:"19" }} </h2>
+                            
                             <br> 
-                            <div style="text-align: center;margin-top: 25px">
+                            <div style="text-align: center;margin-top: 5px">
                             <a href="{% url 'show_parcours_student' parcours.id %}" class="btn btn-default btn-accueil"> {% get_tasks student parcours  as is_task_exists %} 
                                     {%  if is_task_exists %}
                                         <i class="fa fa-calendar-check" style="color:red"></i>
                                     {% endif %} Accéder aux {% if parcours.is_folder %}parcours{% else  %}exercices{% endif %}</a>
                             </div>
-                            <div  class="student_vignette_subtitle">    
-                                {{ data.nb }}/{{ data.nb_total }} exercice{{ data.nb_total|pluralize }} étudié{{ data.nb_total|pluralize }} 
-
+                            <div  class="student_vignette_subtitle" style="color:{{parcours.color|contrast_color }};">    
+                                {% if parcours.is_folder %}
+                                        {% get_nb_leaf parcours student as nb_leaf %} 
+                                         <i class="fa fa-folder{% if nb_leaf > 0 %}-open{% endif %}"></i> {{ nb_leaf  }} parcours
+                                {% else  %}
+                                        {{ data.nb }}/{{ data.nb_total }} exercice{{ data.nb_total|pluralize }} étudié{{ data.nb_total|pluralize }} <span style="color:{{parcours.color|contrast_color }};font-size:12px ">{{ data.pc }}% </span>
+                                {% endif %}
                                 {% if parcours.course.all|length > 0 %}  
-                                <a href="{% url 'show_course_student' 0 parcours.id %}" class="pull-right white" title="Rappels de cours"  target="_blank"  >
+                                <a href="{% url 'show_course_student' 0 parcours.id %}" class="pull-right" style="color:{{parcours.color|contrast_color }};" title="Rappels de cours" target="_blank"  >
                                     <i class="fa fa-desktop"></i>  
                                 </a>
                                 {% endif  %}
-
                             </div>
                         </div>
                     </div>
@@ -92,13 +91,13 @@
                             <h2 class="white thin"> {{ parcours.title|truncatechars:"19" }} </h2>
                             
                     
-                            <div style="text-align: center;margin-top: 25px">
+                            <div style="text-align: center;margin-top: 5px">
                             <a href="{% url 'show_parcours_student' parcours.id %}" class="btn btn-default btn-accueil"> {% get_tasks student parcours  as is_task_exists %} 
                                     {%  if is_task_exists %}
                                         <i class="fa fa-calendar-check" style="color:red"></i>
                                     {% endif %} Accéder aux {% if parcours.is_folder %}parcours {% else  %}exercices{% endif %}</a>
                             </div>
-                            <div  class="student_vignette_subtitle">    
+                            <div  class="student_vignette_subtitle" style="color:{{parcours.color|contrast_color }};">    
                                     {% if parcours.is_folder %}
                                         {% get_nb_leaf parcours student as nb_leaf %} 
                                          <i class="fa fa-folder{% if nb_leaf > 0 %}-open{% endif %}"></i> {{ nb_leaf  }} parcours
@@ -106,7 +105,7 @@
                                         {{  data.nb  }}/{{ data.nb_total }} exercice{{ data.nb_total|pluralize }} étudié{{ data.nb_total|pluralize }}
                                     {% endif %}
                                 {% if parcours.course.all|length > 0 %}  
-                                <a href="{% url 'show_course_student' 0 parcours.id %}" class="pull-right white" title="Rappels de cours" target="_blank"  >
+                                <a href="{% url 'show_course_student' 0 parcours.id %}" class="pull-right" style="color:{{parcours.color|contrast_color }};" title="Rappels de cours" target="_blank"  >
                                     <i class="fa fa-desktop"></i>  
                                 </a>
                                 {% endif  %}

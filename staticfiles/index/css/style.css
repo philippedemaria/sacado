@@ -1876,7 +1876,7 @@ table.table-bordered.dataTable {
 
 
 #pricing .card   .sub_header {
-  font-weight: 500;
+  font-weight: 5p00;
   font-variant: small-caps;
   font-size: 20px;
 }
@@ -1900,7 +1900,7 @@ table.table-bordered.dataTable {
 }
 
 #pricing .card   .plus {
-  margin: 29px 0px;
+  margin: 29px 0x;
 }
 
 #pricing .card .list-group-item {

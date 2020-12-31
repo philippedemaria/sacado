@@ -107,8 +107,9 @@ class User(AbstractUser):
 
 
 
-class Adhesion(ModelWithCode):
+class Adhesion(models.Model):
     """docstring for Facture"""
+    code = models.CharField(max_length=50,  verbose_name="Code", editable= False) # Insertion du code de la facture.
     user = models.ForeignKey(User, blank=True,  null=True, related_name="adhesions", on_delete=models.CASCADE, editable= False)
     file = models.FileField(upload_to=file_directory_path,verbose_name="fichier", blank=True, null= True, default ="", editable= False)
     date_start = models.DateTimeField(auto_now_add=True, verbose_name="Date de création", editable= False)
@@ -120,6 +121,16 @@ class Adhesion(ModelWithCode):
 
     def __str__(self):
         return "{} {}".format(self.user, self.file)
+
+    def formule(self):
+        Formule = apps.get_model('setup', 'Formule')
+        return Formule.objects.get(pk = int(self.menu))
+
+
+    def children_associated(self):
+        return self.user.parent.students.all()
+
+
 
 
 class Student(ModelWithCode):

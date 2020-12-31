@@ -1,4 +1,4 @@
-define(['jquery','bootstrap_popover', 'bootstrap','ui', 'ui_sortable'  ], function ($) {
+define(['jquery','bootstrap', 'bootstrap','ui', 'ui_sortable'  ], function ($) {
     
     $(document).ready(function () {
 
