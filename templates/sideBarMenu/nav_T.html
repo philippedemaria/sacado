@@ -95,10 +95,17 @@
         <div class="captionmenu">Admin</div>
     </a>
 </li>
-{% endif  %}
 
+{% elif request.user.is_extra  %} 
 
-{% if request.user.is_manager and not request.user.is_superuser  %} <!-- manager dans un établissement -->
+<li  class='dropdown  {% if 'admin' in request.path or '/school' in request.path %} active{% endif %}'>
+    <a href="{% url 'admin_tdb' %}" class="main" >
+        <i class="fa fa-cloud fa-2x"></i> 
+        <div class="captionmenu">Admin</div>
+    </a>
+</li>
+
+{% elif request.user.is_manager   %} <!-- manager dans un établissement -->
 <li  class='dropdown  {% if 'admin' in request.path or '/school' in request.path %} active{% endif %}'>
     <a href="{% url 'admin_tdb' %}" class="main" >
         <i class="fa fa-cloud fa-2x"></i> 
