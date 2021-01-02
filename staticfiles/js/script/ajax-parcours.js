@@ -213,8 +213,7 @@ define(['jquery','bootstrap'], function ($) {
 
             var parcours_id = $("#id_parcours").val();
 
-            $("#loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");
-                        
+            if($("#loader")) {$("#loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");      }
 
             $.ajax(
                 {
@@ -231,7 +230,7 @@ define(['jquery','bootstrap'], function ($) {
                     success: function (data) {
  
                         $('#content_exercises').html("").html(data.html);
-                        $("#loader").html("").hide(); 
+                        $("#loader").html(""); 
                         
                         }
                 }

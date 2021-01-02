@@ -3289,6 +3289,7 @@ def ajax_level_exercise(request):
             waitings = Waiting.objects.filter(theme=theme,level=level).order_by("theme")
             waitings_tab  =  []
             for waiting in waitings :
+                exercises_counter = 0
                 waiting_dict  =   {} 
                 waiting_dict["name"]=waiting 
                 knowlegdes = Knowledge.objects.filter(waiting=waiting).order_by("theme")
@@ -3297,12 +3298,11 @@ def ajax_level_exercise(request):
                     knowledges_dict  =   {}  
                     knowledges_dict["name"]=knowledge 
                     exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).order_by("theme")
-                    exercises_tab    =   []
-                    for exercise in exercises :
-                        exercises_tab.append(exercise)
-                    knowledges_dict["exercises"]=exercises_tab
+                    knowledges_dict["exercises"]=exercises
+                    exercises_counter +=  exercises.count()
                     knowledges_tab.append(knowledges_dict)
                 waiting_dict["knowledges"]=knowledges_tab
+                waiting_dict["exercises_counter"]=exercises_counter
                 waitings_tab.append(waiting_dict)
             themes_dict["waitings"]=waitings_tab
             themes_tab.append(themes_dict)
