@@ -600,7 +600,11 @@ define(['jquery','bootstrap'], function ($) {
                     },
                     url: "../../ajax_this_course_viewer",
                     success: function (data) {
+
+                        console.log(data.html);
                         $('#body_course').html(data.html);
+                        if( $('#this_course_viewer') ) { $('#this_course_viewer').html(data.html);}
+                        if( $('#this_course_title') ) {$('#this_course_title').html(data.title);}
                     }
                 }
             )

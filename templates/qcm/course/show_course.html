@@ -52,7 +52,7 @@
                 <input type="hidden" value="{{ parcours.id }}" name="parcours_id" id="parcours_id"/>
                 {% for course in courses %}
                     <li class="{% if forloop.first %}active{% endif %} menu_course">
-                        <a href="#" data-target-id="course{{forloop.counter0}}">  <i class="{% if course.is_publish %}fa fa-eye{% else %}fa fa-eye-slash{% endif %}" style="font-size: 12px"></i>  {{ course.title }}
+                        <a href="#" class="course_viewer" data-course_id="{{ course.id }}">  <i class="{% if course.is_publish %}fa fa-eye{% else %}fa fa-eye-slash{% endif %}" style="font-size: 12px"></i>  {{ course.title }}
 
                             {% if course.relationships.count > 0 %} <sup title="Cours lié à une section"><i class="fa fa-paperclip" style="font-size:8px" ></i></sup> {% endif %}
 
@@ -64,20 +64,20 @@
             </ul>
             </form>
         </div>
-        {% for course in courses %}
-            <div class="col-md-8 col-xs-12 col-lg-9  admin-content" id="course{{forloop.counter0}}">
-                <h1 class="thin">  {{ course.title }}   
+        {% if   course  %}
+            <div class="col-md-8 col-xs-12 col-lg-9">
+                <h1 class="thin">  <span id="this_course_title">{{ course.title }}</span>   
                     <a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 12px; margin-right:10px;" class="pull-right">Modifier ce cours</a> 
                     <a href="#"  data-toggle='modal' data-target='#view_course'  data-course_id="{{ course.id }}"  style="font-size: 12px; margin-right:10px;" class="pull-right course_viewer">Vidéoprojeter ce cours</a>
                 </h1>
                 <hr>
-                {{ course.annoncement|decode|safe }} 
+                <div id="this_course_viewer">{{ course.annoncement|decode|safe }} </div>
             </div>
-        {% empty %} 
+        {% else %} 
             <div class="col-md-8 col-xs-12 col-lg-9">
                 <div class="alert alert-danger">Aucun cours n'est associé à ce parcours.</div> 
             </div>
-        {% endfor %} 
+        {% endif %} 
     </div>
 
  

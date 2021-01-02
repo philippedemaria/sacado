@@ -46,28 +46,30 @@
             {% endif %}
 
             <ul class="nav nav-pills nav-stacked admin-menu">
+ 
                 {% for course in courses %}
                     <li class="{% if forloop.first %}active{% endif %} menu_course">
-                        <a href="#" data-target-id="course{{forloop.counter0}}"> {{ course.title }}</a>
-                         
+                        <a href="#" class="course_viewer" data-course_id="{{ course.id }}"> {{ course.title }} </a>
+ 
                     </li>
                 {% endfor %}
+
 
             </ul>
         </div>
 
-
-
-        <div class="col-md-8 col-xs-12 col-lg-9">
-        {% for course in courses %}
-
-            <div class="admin-content" id="course{{forloop.counter0}}">
-                <h1 class="thin">  {{ course.title }}  {% if course.is_paired %}  <a href="{%  url 'update_course' course.id parcours.id %}" class="btn btn-danger pull-right"> Contribuer à ce cours </a> {% endif %}</h1>
+        {% if   course  %}
+            <div class="col-md-8 col-xs-12 col-lg-9">
+                <h1 class="thin">  <span id="this_course_title">{{ course.title }}</span>   </h1>
                 <hr>
-
-                {{ course.annoncement|decode|safe }} 
+                <div id="this_course_viewer">{{ course.annoncement|decode|safe }} </div>
             </div>
-        {% endfor %}
+        {% else %} 
+            <div class="col-md-8 col-xs-12 col-lg-9">
+                <div class="alert alert-danger">Aucun cours n'est associé à ce parcours.</div> 
+            </div>
+        {% endif %} 
+ 
       </div>
          
     </div>

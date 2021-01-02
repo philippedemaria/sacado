@@ -5688,9 +5688,14 @@ def show_course(request, idc , id ):
             courses.update(set(p.course.order_by("ranking"))) 
     else :    
         courses = parcours.course.all().order_by("ranking") 
+
+    if len(courses) > 0 :
+        course = list(courses)[0]
+    else :
+        course = None
  
     
-    context = {  'courses': courses, 'teacher': teacher , 'parcours': parcours , 'group_id' : group_id, 'communications' : [] , 'relationships' : [] , 'group' : group ,  'group_id' : group_id , 'role' : role }
+    context = {  'courses': courses, 'course': course, 'teacher': teacher , 'parcours': parcours , 'group_id' : group_id, 'communications' : [] , 'relationships' : [] , 'group' : group ,  'group_id' : group_id , 'role' : role }
     return render(request, 'qcm/course/show_course.html', context)
 
  
@@ -5823,9 +5828,9 @@ def show_course_student(request, idc , id ):
     parcours = Parcours.objects.get(pk =  id)
     today = time_zone_user(this_user)
     courses = parcours.course.filter(Q(is_publish=1)|Q(publish_start__lte=today),Q(is_publish=1)|Q(publish_end__gte=today)).order_by("ranking")  
- 
+    course = courses.first() 
 
-    context = {  'courses': courses, 'parcours': parcours , 'group_id' : None, 'communications' : []}
+    context = {  'courses': courses,  'course': course, 'parcours': parcours , 'group_id' : None, 'communications' : []}
     return render(request, 'qcm/course/show_course_student.html', context)
  
 
@@ -5986,6 +5991,7 @@ def ajax_this_course_viewer(request):
     context = { 'course' : course ,}
     html = render_to_string('qcm/course/ajax_shower_course.html',context)
     data['html'] = html       
+    data['title'] = course.title   
 
     return JsonResponse(data)
 
