@@ -36,77 +36,42 @@
     {% if datas %}
         <form action="" method="POST"> 
         {% csrf_token %}
-        <ul  class="nav nav-tabs">
-
-            {% for data in datas %}
-            <li>
-                <a  href="#{{ forloop.counter}}a" data-toggle="tab" class="select_exercise"  data-level_id="{{ data.name.id }}"  data-counter="{{ forloop.counter}}"  >{{ data.name.shortname }}</a>
-            </li>
-            {% endfor  %}
-
-            <li> <a href="#my_exercises" data-toggle="tab">Mes exercices</a></li> 
-
-            {% if not '/admin' in request.path %}
-            <li> <a href="{% url 'profile' %}" class="thin" title="Ajouter un niveau à son profil">+</a></li>
-            {% endif %}
-
-
-        </ul>
-        </form>
-        <div class="tab-content clearfix">
-            {% for data in datas %}
-            <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ forloop.counter}}a">
-                <div class="alert alert-info">
-                    <img src="{% static 'img/flechebleue_up.png' %}" style="vertical-align:baseline;"" /> Sélectionner un niveau, Mes exercices, ou + pour ajouter un exercice personnalisé.
-                </div>
-            </div>
-            {% endfor  %}
-            <div class="tab-pane {% if forloop.first %}active{% endif %}" id="my_exercises">
-                <div class="row">
-                    <div class="col-sm-12 col-md-12">
-                        <table class="table  table-hover display100" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <td></td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for customexercise in customexercises  %}
-  
-                                    <tr>
-                                        <td>
-                                            <div class="pull-right" >
-                                            {% for p in customexercise.parcourses.all %}
-                                                 <span class="btn btn-default">{{ p }}</span>{% if not forloop.last %}<br>{% endif %}
-                                            {% endfor %}
-                                            </div>
-                                                <img {% if customexercise.imagefile %} src="{{ customexercise.imagefile.url }}" {% else %}  src="{% static 'img/custom_exercise.png' %}" {% endif %} class="imagefile"  >
-
-                                                <a href="{% url 'parcours_update_custom_exercise'  customexercise.id 0  %}" class="listing" style="font-size: 18px">
-                                                    {{ customexercise.instruction|safe }}
-                                                </a>
-
-
-                                            {% if customexercise.calculator %}
-                                              <img src="{% static 'img/calculator.png' %}" width="30px" />
-                                            {% else %}
-                                              <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
-                                            {% endif  %}
-                                                 <br>
-                                                    <a  href="{% url 'parcours_update_custom_exercise'  customexercise.id 0    %}" class="sublisting"  target="_blank"> <small>
-                                                        <i class="fa fa-fw fa-barcode"></i> {{customexercise.code }} <br>
-                                                        <i class="fa fa-fw fa-clock-o"></i> {{ customexercise.duration }} minutes
-                                        </td>
-
-                                    </tr>
- 
-                                 {% endfor %}
-                            </tbody>
-                        </table>
+            <div class="row">
+                <div class="col-sm-12 col-md-4 col-lg-3">
+                    <div class="form-group">
+                        <label>Enseignements</label>
+                        <select id="id_subject" name="subject" class="form-control select2">
+                            {% for s in teacher.subjects.all %}
+                                <option value="{{s.id}}">{{ s.name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
-            </div>
-
+                <div class="col-sm-12 col-md-4 col-lg-3">
+                    <div class="form-group">
+                        <label>Niveaux des exercices</label>
+                        <select id="id_level" name="level" class="form-control select2" >
+                            <option value=" ">Choisir un niveau</option>
+                            {% for l in teacher.levels.all %}
+                                <option value="{{l.id}}">{{ l.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-6">
+                    <div class="form-group">
+                        <label>Thèmes</label>
+                        <select id="id_theme" name="theme" class="form-control select2" multiple>
+ 
+                        </select>
+                    </div>
+                </div>
+            </div> 
+        </form>
+        <hr/>
+        <div id="loader">
+        </div>
+        <div id="content_exercises">
         </div>
     {% else %}
 

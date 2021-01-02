@@ -2725,7 +2725,7 @@ def list_exercises(request):
 
 
 def ajax_list_exercises_by_level(request):
-    """ Envoie la liste des exerice pour un seul niveau """
+    """ Envoie la liste des exercice pour un seul niveau """
     teacher = request.user.teacher
     data = {} # envoie vers JSON
     datas = [] #dictionnaire pour le recueil des données
@@ -2738,6 +2738,61 @@ def ajax_list_exercises_by_level(request):
     levels_dict["name"]=level 
 
     themes = level.themes.all().order_by("id")
+
+    themes_tab =   []
+    for theme in themes :
+        themes_dict =  {}                
+        themes_dict["name"]=theme
+        waitings = Waiting.objects.filter(theme=theme,level=level).order_by("theme")
+        waitings_tab  =  []
+        for waiting in waitings :
+            exercises_counter = 0
+            waiting_dict  =   {} 
+            waiting_dict["name"]=waiting 
+            knowlegdes = Knowledge.objects.filter(waiting=waiting).order_by("theme")
+            knowledges_tab  =  []
+            for knowledge in knowlegdes :
+                knowledges_dict  =   {}  
+                knowledges_dict["name"]=knowledge 
+                exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).order_by("theme")
+                exercises_counter +=  exercises.count()
+                knowledges_dict["exercises"]=exercises
+                knowledges_tab.append(knowledges_dict)
+            waiting_dict["knowledges"]=knowledges_tab
+            waiting_dict["exercises_counter"]=exercises_counter
+            waitings_tab.append(waiting_dict)
+        themes_dict["waitings"]=waitings_tab
+        themes_tab.append(themes_dict)
+    levels_dict["themes"]=themes_tab
+    datas.append(levels_dict)
+
+    data['html'] = render_to_string('qcm/ajax_list_exercises_by_level.html', { 'datas': datas , "teacher" : teacher })
+ 
+    return JsonResponse(data)
+
+
+
+
+def ajax_list_exercises_by_level_and_theme(request):
+    """ Envoie la liste des exercices pour un seul niveau """
+    teacher = request.user.teacher
+    data = {} # envoie vers JSON
+    datas = [] #dictionnaire pour le recueil des données
+    level_id =  int(request.POST.get("level_id"))  
+    levels_tab,knowledges_tab, exercises_tab    =   [],  [],  []
+
+    level = Level.objects.get(pk=level_id)
+
+    levels_dict = {}
+    levels_dict["name"]=level
+
+    theme_id =  request.POST.get("theme_id", None) 
+
+    if theme_id :
+        theme = Theme.objects.get(pk=int(theme_id))
+        themes = [theme]
+    else :
+        themes = level.themes.all().order_by("id")
 
     themes_tab =   []
     for theme in themes :

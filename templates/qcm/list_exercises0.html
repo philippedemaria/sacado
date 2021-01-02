@@ -1,0 +1,123 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script>
+        require(['script/ajax-list-exercise']);
+    </script> 
+{% endblock %}
+
+
+{% block page_title %}
+    <i class="fa fa-laptop"></i> Les exercices SACADO
+{% endblock %}
+
+{% block page_menu_right %}
+
+
+    <li> <a href="{% url 'exercise_custom_show_shared' %}"   class="btn btn-new"> Exercices personnels mutualisés</a> </li>
+
+
+    {% if request.user.is_superuser and  '/admin' in request.path %}
+    <li ><a href="{% url 'create_supportfile' %}"   class="btn btn-new"><img width="25px" src="{% static 'img/plus.png' %}"/> Nouveau support GGB </a> </li> 
+    {% endif  %}
+
+{% endblock %}
+
+
+{% block body %}
+{% include 'preloader.html' %}
+<section class="content_container">
+    {% if datas %}
+        <form action="" method="POST"> 
+        {% csrf_token %}
+        <ul  class="nav nav-tabs">
+
+            {% for data in datas %}
+            <li>
+                <a  href="#{{ forloop.counter}}a" data-toggle="tab" class="select_exercise"  data-level_id="{{ data.name.id }}"  data-counter="{{ forloop.counter}}"  >{{ data.name.shortname }}</a>
+            </li>
+            {% endfor  %}
+
+            <li> <a href="#my_exercises" data-toggle="tab">Mes exercices</a></li> 
+
+            {% if not '/admin' in request.path %}
+            <li> <a href="{% url 'profile' %}" class="thin" title="Ajouter un niveau à son profil">+</a></li>
+            {% endif %}
+
+
+        </ul>
+        </form>
+        <div class="tab-content clearfix">
+            {% for data in datas %}
+            <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ forloop.counter}}a">
+                <div class="alert alert-info">
+                    <img src="{% static 'img/flechebleue_up.png' %}" style="vertical-align:baseline;"" /> Sélectionner un niveau, Mes exercices, ou + pour ajouter un exercice personnalisé.
+                </div>
+            </div>
+            {% endfor  %}
+            <div class="tab-pane {% if forloop.first %}active{% endif %}" id="my_exercises">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <table class="table  table-hover display100" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for customexercise in customexercises  %}
+                                    <tr>
+                                        <td>
+                                            <div class="pull-right" >
+                                            {% for p in customexercise.parcourses.all %}
+                                                 <span class="btn btn-default">{{ p }}</span>{% if not forloop.last %}<br>{% endif %}
+                                            {% endfor %}
+                                            </div>
+                                                <img {% if customexercise.imagefile %} src="{{ customexercise.imagefile.url }}" {% else %}  src="{% static 'img/custom_exercise.png' %}" {% endif %} class="imagefile"  >
+
+                                                <a href="{% url 'parcours_update_custom_exercise'  customexercise.id 0  %}" class="listing" style="font-size: 18px">
+                                                    {{ customexercise.instruction|safe }}
+                                                </a>
+
+
+                                            {% if customexercise.calculator %}
+                                              <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                            {% else %}
+                                              <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                            {% endif  %}
+                                                 <br>
+                                                    <a  href="{% url 'parcours_update_custom_exercise'  customexercise.id 0    %}" class="sublisting"  target="_blank"> <small>
+                                                        <i class="fa fa-fw fa-barcode"></i> {{customexercise.code }} <br>
+                                                        <i class="fa fa-fw fa-clock-o"></i> {{ customexercise.duration }} minutes
+                                        </td>
+
+                                    </tr>
+ 
+                                 {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    {% else %}
+
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            <div class="alert alert-danger">
+                Avant de visiter les exercices par niveau, vous devez choisir vos <a href="{% url 'profile' %}">niveaux préférés</a>.
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+
+</section>
+{% endblock %}

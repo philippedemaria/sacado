@@ -78,7 +78,8 @@ urlpatterns = [
     path('ajax_parcoursinfo/', ajax_parcoursinfo, name='ajax_parcoursinfo'),    
     path('exercises', list_exercises, name='exercises'),
     path('ajax_list_exercises_by_level', ajax_list_exercises_by_level, name='ajax_list_exercises_by_level'),    
-    
+    path('ajax_list_exercises_by_level_and_theme', ajax_list_exercises_by_level_and_theme, name='ajax_list_exercises_by_level_and_theme'), 
+
     path('ajax/chargethemes', ajax_chargethemes, name='ajax_chargethemes'),
     path('ajax/chargeknowledges', ajax_chargeknowledges, name='ajax_chargeknowledges'),
 
