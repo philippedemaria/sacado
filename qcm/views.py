@@ -2630,11 +2630,8 @@ def all_datas(user, status,level):
     teacher = Teacher.objects.get(user=user)
     datas = []
     levels_tab,knowledges_tab, exercises_tab    =   [],  [],  []
-
-
     levels_dict = {}
     levels_dict["name"]=level 
-
     themes = level.themes.all().order_by("id")
     themes_tab =   []
     for theme in themes :
@@ -2654,7 +2651,6 @@ def all_datas(user, status,level):
         themes_dict["knowledges"]=knowledges_tab
         themes_tab.append(themes_dict)
     levels_dict["themes"]=themes_tab
-
     return levels_dict
 
 def all_levels(user, status):
@@ -2671,25 +2667,25 @@ def all_levels(user, status):
         levels_dict = {}
         levels_dict["name"]=level 
 
-        themes = level.themes.all().order_by("id")
-        themes_tab =   []
-        for theme in themes :
-            themes_dict =  {}                
-            themes_dict["name"]=theme.name 
-            knowlegdes = Knowledge.objects.filter(theme=theme,level=level).order_by("theme")
-            knowledges_tab  =  []
-            for knowledge in knowlegdes :
-                knowledges_dict  =   {}  
-                knowledges_dict["name"]=knowledge 
-                exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).order_by("theme")
-                exercises_tab    =   []
-                for exercise in exercises :
-                    exercises_tab.append(exercise)
-                knowledges_dict["exercises"]=exercises_tab
-                knowledges_tab.append(knowledges_dict)
-            themes_dict["knowledges"]=knowledges_tab
-            themes_tab.append(themes_dict)
-        levels_dict["themes"]=themes_tab
+        # themes = level.themes.all().order_by("id")
+        # themes_tab =   []
+        # for theme in themes :
+        #     themes_dict =  {}                
+        #     themes_dict["name"]=theme.name 
+        #     knowlegdes = Knowledge.objects.filter(theme=theme,level=level).order_by("theme")
+        #     knowledges_tab  =  []
+        #     for knowledge in knowlegdes :
+        #         knowledges_dict  =   {}  
+        #         knowledges_dict["name"]=knowledge 
+        #         exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).order_by("theme")
+        #         exercises_tab    =   []
+        #         for exercise in exercises :
+        #             exercises_tab.append(exercise)
+        #         knowledges_dict["exercises"]=exercises_tab
+        #         knowledges_tab.append(knowledges_dict)
+        #     themes_dict["knowledges"]=knowledges_tab
+        #     themes_tab.append(themes_dict)
+        # levels_dict["themes"]=themes_tab
         datas.append(levels_dict)
     return datas
 
@@ -2726,6 +2722,55 @@ def list_exercises(request):
 
         return render(request, 'qcm/student_list_exercises.html',
                       {'relationships': relationships, 'nb_exercises': nb_exercises ,     })
+
+
+def ajax_list_exercises_by_level(request):
+    """ Envoie la liste des exerice pour un seul niveau """
+    teacher = request.user.teacher
+    data = {} # envoie vers JSON
+    datas = [] #dictionnaire pour le recueil des données
+    level_id =  int(request.POST.get("level_id"))  
+    levels_tab,knowledges_tab, exercises_tab    =   [],  [],  []
+
+    level = Level.objects.get(pk=level_id)
+
+    levels_dict = {}
+    levels_dict["name"]=level 
+
+    themes = level.themes.all().order_by("id")
+
+    themes_tab =   []
+    for theme in themes :
+        themes_dict =  {}                
+        themes_dict["name"]=theme
+        waitings = Waiting.objects.filter(theme=theme,level=level).order_by("theme")
+        waitings_tab  =  []
+        for waiting in waitings :
+            exercises_counter = 0
+            waiting_dict  =   {} 
+            waiting_dict["name"]=waiting 
+            knowlegdes = Knowledge.objects.filter(waiting=waiting).order_by("theme")
+            knowledges_tab  =  []
+            for knowledge in knowlegdes :
+                knowledges_dict  =   {}  
+                knowledges_dict["name"]=knowledge 
+                exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).order_by("theme")
+                exercises_counter +=  exercises.count()
+                knowledges_dict["exercises"]=exercises
+                knowledges_tab.append(knowledges_dict)
+            waiting_dict["knowledges"]=knowledges_tab
+            waiting_dict["exercises_counter"]=exercises_counter
+            waitings_tab.append(waiting_dict)
+        themes_dict["waitings"]=waitings_tab
+        themes_tab.append(themes_dict)
+    levels_dict["themes"]=themes_tab
+    datas.append(levels_dict)
+
+    data['html'] = render_to_string('qcm/ajax_list_exercises_by_level.html', { 'datas': datas , "teacher" : teacher })
+ 
+    return JsonResponse(data)
+
+
 
 @user_passes_test(user_is_superuser)
 def admin_list_associations(request,id):
@@ -3210,8 +3255,6 @@ def ajax_level_exercise(request):
 
     parcours_id = request.POST.get('parcours_id', None)
  
-    print(level_ids, theme_ids)
-
 
     if  parcours_id :
         parcours = Parcours.objects.get(id = int(parcours_id))

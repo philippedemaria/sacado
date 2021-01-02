@@ -1,0 +1,271 @@
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+ 
+		{% for data in datas %} 
+            <div class="row">
+                    <div class="col-sm-12 col-md-12" id="">
+                        <table class="table  table-hover display100" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for theme in data.themes  %}  
+                                    <tr style="background:#5d4391; color:white">
+                                        <td style="width:85%"><i class="fa fa-caret-right"></i> {{theme.name}}</td>
+                                    </tr>
+                                    {% for waiting in theme.waitings  %} 
+                                        <tr style="background:#aa98cd; cursor: pointer; color:white"  class="opener out"   id="{{ waiting.name.id }}">
+                                            <td style="width:85%"><i class="fa fa-caret-right"></i> {{waiting.name.name}} <b><small> {{waiting.exercises_counter}} exercice{{waiting.exercises_counter|pluralize}} disponible{{waiting.exercises_counter|pluralize}} </small></b> </td> 
+                                        </tr>  
+                                        {% for knowledge in waiting.knowledges  %} 
+                                            {% if knowledge.exercises.all|length > 0 %}
+                                                    <tr style="cursor: pointer" class="opener_k opened{{ waiting.name.id }} out"  id="{{ knowledge.name.id}}" >
+                                                        <td class="listingtd"> 
+                                                           <i class="fa fa-caret-right"></i> {{ knowledge.name|capfirst }} <b><small> {{  knowledge.exercises.count }} exercice{{  knowledge.exercises.count|pluralize }}</small></b>
+                                                        </td>
+                                                    </tr>
+                                                    {% for exercise in knowledge.exercises  %}
+                                                        <tr class="opener_e openedk{{ knowledge.name.id }}">
+                                                            <td>
+                                                                <div class="pull-right" >
+                                                                {% get_used_in_parcours exercise.supportfile teacher as uparcours  %}
+                                                                {% for p in uparcours %}
+                                                                     <span class="btn btn-info">{{ p }}</span>{% if not forloop.last %}<br>{% endif %}
+                                                                {% empty %}
+                                                                    <a href="{% url 'show_this_exercise' exercise.id  %}"  class="btn btn-danger" >Non utilisé</a>
+                                                                {% endfor %}
+                                                                </div>
+
+
+                                                                {% if request.user.is_superuser %}
+                                                                    <a href="{% url 'show_this_exercise' exercise.id   %}"  target="_blank"  >
+                                                                        <img src="{{ exercise.supportfile.imagefile.url }}" class="imagefile">
+                                                                    </a>
+                                                                    <a href="{% url 'update_supportfile'  exercise.supportfile.id   %}" class="listing" style="font-size: 18px">
+                                                                        {% if exercise.supportfile.title %}  
+                                                                            {{ exercise.supportfile.title|cleanhtml|capfirst }}  
+                                                                        {% else %}  
+                                                                            {{ exercise.supportfile.annoncement|cleanhtml|capfirst }} 
+                                                                        {% endif %}
+                                                                    </a>
+
+                                                                {%  else %}
+                                                                    <a href="{% url 'show_this_exercise' exercise.id  %}" target="_blank" >
+                                                                        <img src="{{ exercise.supportfile.imagefile.url }}" class="imagefile">
+                                                                    </a>
+                                                                    <a href="{% url 'show_this_exercise'  exercise.id   %}" class="listing" style="font-size: 18px">
+                                                                    {% if exercise.supportfile.title %}  
+                                                                        {{ exercise.supportfile.title|cleanhtml|capfirst }}  
+                                                                    {% else %}  
+                                                                        {{ exercise.supportfile.annoncement|cleanhtml|capfirst }} 
+                                                                    {% endif %}
+                                                                    </a>
+                                                                {% endif %}
+                                                                {% if exercise.supportfile.calculator %}
+                                                                  <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                                                {% else %}
+                                                                  <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                                                {% endif  %}
+                                                                     <br>
+                                                                {% if request.user.is_superuser %}
+                                                                        <a  href="{% url 'update_supportfile'  exercise.supportfile.id  %}" class="sublisting"  target="_blank"> <small>
+                                                                            <i class="fa fa-fw fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                                                                            <i class="fa fa-fw fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+
+                                                                            {% if exercise.supportfile.is_ggbfile %}
+                                                                            <i class="fa fa-fw fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum</small>
+                                                                            {% endif %}
+
+                                                                        </a>
+                                                                {% else %}
+                                                                        <small>
+                                                                            <i class="fa fa-fw fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                                                                            <i class="fa fa-fw fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                                                                            {% if exercise.supportfile.is_ggbfile %}
+                                                                            <i class="fa fa-fw fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum
+                                                                            {% endif %}
+                                                                        </small>
+                                                                {% endif %}
+ 
+                                                            </td>
+
+                                                        </tr>
+                                                    {% endfor %}
+                                            {% else %}
+                                                    <tr class="opener_k opened{{ waiting.name.id }} out"  id="{{ knowledge.name.id}}" >
+                                                        <td>
+                                                             {{ knowledge.name }} <em class="text text-danger">Exercice en cours de création</em>
+                                                        </td>
+                                                    </tr>
+                                            {% endif %}
+                                        {% endfor %}
+
+                                    {% endfor %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+ 
+            </div>
+        {% endfor %}  
+            <script>
+             $('table.display100').DataTable({
+                "pageLength": 100,
+                "ordering": false,
+                "retrieve": true,
+                "paging": false
+                });
+
+
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('.selector_e').on('click' ,function () {
+
+            let parcours_id = $(this).attr("data-parcours_id"); 
+            let exercise_id = $(this).attr("data-exercise_id"); 
+            let statut = $(this).attr("data-statut"); 
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+ 
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'parcours_id': parcours_id,
+                        'exercise_id': exercise_id,
+                        'statut': statut,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../ajax_populate",
+                    success: function (data) {
+                        if (data.no_store) { alert("Vous ne pouvez pas enregistrer cet exercice. Un exercice similaire est déjà dans ce parcours.")}
+                            else
+                            {
+                                $('#is_selected'+exercise_id).html(data.html);   
+                                $('#selector_e'+exercise_id).attr("data-statut",data.statut);                  
+                                $('#selector_e'+exercise_id).removeClass(data.noclass);
+                                $('#selector_e'+exercise_id).addClass(data.class);
+                                $('#selector_e'+exercise_id).focus();
+                            }
+                    }
+                }
+            )
+        });
+
+        $('.selector_m').on('click' ,function () {
+
+            let relationship_id = $("#relationship").val(); 
+            let exercise_id = $(this).attr("data-exercise_id"); 
+            let statut = $(this).attr("data-statut"); 
+            let scale = $("#id_scale").val(); 
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            'relationship_id': relationship_id,
+                            'exercise_id': exercise_id,
+                            'scale': scale,     
+                            'statut': statut,
+                        },
+                        url: "../../ajax_populate_mastering",
+                        success: function (data) {
+
+                            if (data.no_store) { alert("Vous ne pouvez pas enregistrer cet exercice. Un exercice similaire est déjà dans ce parcours.")}
+                                else
+                                { 
+                                    $('#is_selected'+exercise_id).html(data.html);   
+                                    $('#selector_e'+exercise_id).attr("data-statut",data.statut);                  
+                                    $('#selector_e'+exercise_id).removeClass(data.noclass);
+                                    $('#selector_e'+exercise_id).addClass(data.class);
+                                    if(data.statut == "True") 
+                                        { $("#selector_e"+exercise_id).attr('checked', true);  } 
+                                    else { $("#selector_e"+exercise_id).attr('checked', false);  }
+                                }
+
+                            
+
+                        }
+                    }
+                )
+        });
+ 
+
+        $('.opener_k').hide() ;
+        $('.opener_e').hide() ;
+ 
+
+        $('.opener').on('click' ,function () { 
+            $('.opener_k').hide() ;
+
+            if( $(this).hasClass("out") )
+            {
+                $(".opener ~ .opened"+this.id).show();
+                $(this).removeClass("out").addClass("in");
+            }
+            else 
+            {
+                $(".opener ~ .opened"+this.id).hide();  
+                $(this).removeClass("in").addClass("out");          
+            }
+ 
+        });
+
+
+
+        $('.opener_k').on('click' ,function () { 
+            $('.opener_e').hide() ;
+
+            if( $(this).hasClass("out") )
+                {
+                $(".opener_k ~ .openedk"+this.id).show();
+                $(this).removeClass("out").addClass("in");
+                }
+            else 
+            {
+                $(".opener_k ~ .openedk"+this.id).hide();  
+                $(this).removeClass("in").addClass("out");          
+            }
+ 
+        });
+
+        /*
+                
+            function opening_div (toggle,target,collapser) {
+
+            $(toggle).on('click' ,function () { 
+                $(collapser).hide() ;
+                id = $(toggle).attr("id")
+                if( $(target+id).hasClass("out") )
+                    {
+                    $(target+id).show();
+                    $(target+id).removeClass("out").addClass("in");
+                    }
+                else 
+                {
+                    $(target+id).hide();  
+                    $(target+id).show();
+                    $(target+id).removeClass("in").addClass("out");          
+                }
+     
+            });
+
+        }
+    */
+ 
+ 
+
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+
+
+
+                </script>
+ 
+
