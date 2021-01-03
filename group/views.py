@@ -926,6 +926,7 @@ def enroll(request, slug):
             user = user_form.save(commit=False)
             user.user_type = User.STUDENT
             password = request.POST.get("password1")
+            username = request.POST.get("username")
             user.set_password(password)
             user.save()
 
