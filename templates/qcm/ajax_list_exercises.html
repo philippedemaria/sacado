@@ -129,6 +129,17 @@
                 });
 
 
+
+        $('.input-sm').on('keyup', function (event) {  
+
+            if ($('.input-sm').val() != "")
+                { $("tr.opener_e").css("display","table-row")  ; } 
+            else 
+                { $("tr.opener_e").css("display","none")  ; } 
+
+        });
+
+
         // Affiche dans la modal la liste des élèves du groupe sélectionné
         $('.selector_e').on('click' ,function () {
 
