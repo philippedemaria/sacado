@@ -127,7 +127,7 @@ body{
                         </td> 
                         <td>
                             {% if parcours.level %}
-                                {{ parcours.level }}
+                                <small>{{ parcours.level }}</small>
                             {% else %}
                                 {% for l in  parcours.level_list  %}
                                     <small>{{ l }}{% if not forloop.last %}, {% endif %}</small>
