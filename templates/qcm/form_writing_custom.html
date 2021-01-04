@@ -56,15 +56,39 @@
                 </audio>
                 {% endif %}
             {% endfor  %} 
+            {% if customexercise.is_scratch   %} 
+            <hr>              
+            <label>Conseil :</label> Pour réaliser cet exercice, vous devez :
+            <ol>
+                <li>Créer ou utiliser votre compte <a href="https://scratch.mit.edu/projects/editor/?tutorial=getStarted" target="_blank"><img src="{% static 'img/scratch.png' %}" height="20px" /></a>. <em>Utiliser vos identifiants Sacado</em>.       
+                </li>
+                <li>
+                    Prendre une capture d'écran de votre script et la déposer dans la zone de texte ci-dessous.
+                </li>
+                 <li>
+                    Copier le numéro de votre script <img src="{% static 'img/scratch_number.png' %}" height="20px" /> et le coller dans le champ prévu ci-dessous.
+                </li>
+            
+ 
 
+            {% endif %} 
             <hr>             
             <form action="" method="POST" enctype='multipart/form-data'>
                 {% csrf_token %}
                 {% if customexercise.is_image  %} 
                     <div class="col-sm-7 col-lg-7" >
+                    {% if customexercise.is_scratch   %} 
+                        <div class="form-group">
+                            <label>Numéro du script : <small>nombre obligatoire</small></label> <br/>
+                            {{ form.answer |add_class:"form-control"|attr:"placeholder:Numéro du script.  ex. 469542369"|attr:"required"|attr:"rows:1"|attr:"cols:15"}}
+                            {{ form.image.errors }}
+                        </div>
+                        <label>Ajouter les images de vos blocs de briques. Merci.</label>
+                    {% else %}
                         <div class="alert alert-danger">
                             Insérer les images dans l'ordre des pages de votre copie. Merci.
                         </div>
+                    {% endif %}                        
                     {{ form_ans.management_form }}
                         <!-- Les formulaires du formset -->
                         <div id="formsetZone">
@@ -85,7 +109,7 @@
                             <div class="row" id="duplicate{{ forloop.counter0 }}">            
                                 <div class="col-sm-12 col-md-6">
                                     <div class="form-group">
-                                        <label>{{ form.image.label_tag }}</label><br/>
+                                        {% if not customexercise.is_scratch   %}  <label>{{ form.image.label_tag }}</label><br/>{% endif %} 
                                         {{ form.image |add_class:"btn btn-default" }}
                                         {{ form.image.errors }}
                                     </div> 
@@ -103,15 +127,17 @@
                         </div>
                     </div>
                     <div class="col-sm-5 col-lg-5">
-                        {% for img in images %}
-                            <div class="row" id="delete_custom_answer_image{{ img.id }}">
-                                <a href="#" class="btn btn-danger delete_custom_answer_image" data-image_id="{{ img.id }}" data-custom=1 ><i class="fa fa-trash"></i></a>
-                                <img src="{{ img.image.url }}" width="100%"/>
-                            </div>
-                        {% endfor %}
+                        {% if images %}
+                            {% for img in images %}
+                                <div class="row" id="delete_custom_answer_image{{ img.id }}">
+                                    <a href="#" class="btn btn-danger delete_custom_answer_image" data-image_id="{{ img.id }}" data-custom=1 ><i class="fa fa-trash"></i></a>
+                                    <img src="{{ img.image.url }}" width="100%"/>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 {% endif %}
-                {% if   customexercise.is_file  %}   
+                {% if   customexercise.is_file  %}  
                     <div class="form-group">
                         {{ form.file.label_tag }}  <br>
                         {{ form.file|add_class:"btn btn-default"   }}
@@ -126,6 +152,9 @@
                         {{ form.answer.errors }} <br>
                     </div>
                 {% endif %}
+
+
+
                 <div class="row">
                     <div class="col-sm-12 col-lg-8">
                         <div class="form-group">
@@ -153,11 +182,7 @@
             </form> 
         </div>  
         <div class="col-sm-12 col-lg-4">
-            {% if customexercise.is_scratch   %} 
-            <label>Conseil :</label>  Utiliser le site Scratch pour créer votre script. Prendre une capture d'écran et la déposer dans la zone de texte.<br><br>
-            <a href="https://scratch.mit.edu/projects/editor/?tutorial=getStarted" target="_blank">Naviguer vers Scratch <img src="{% static 'img/scratch.png' %}"/></a>
-            <hr>  
-            {% endif %} 
+
             {% if customexercise.skills.all|length > 0 %}              
                 <label>Compétences visées :</label>
                 {% for skill in customexercise.skills.all %}

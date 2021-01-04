@@ -4348,6 +4348,8 @@ def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice no
         if ceForm.is_valid() :
             nf = ceForm.save(commit=False)
             nf.teacher = teacher
+            if nf.is_scratch :
+                nf.is_image = True
             nf.save()
             ceForm.save_m2m()
             nf.parcourses.add(parcours)            
@@ -4380,6 +4382,8 @@ def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exerci
             if ceForm.is_valid() :
                 nf = ceForm.save(commit=False)
                 nf.teacher = teacher
+                if nf.is_scratch :
+                    nf.is_image = True
                 nf.save()
                 ceForm.save_m2m()
             else :
@@ -4400,6 +4404,8 @@ def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exerci
             if ceForm.is_valid() :
                 nf = ceForm.save(commit=False)
                 nf.teacher = teacher
+                if nf.is_scratch :
+                    nf.is_image = True
                 nf.save()
                 ceForm.save_m2m()
                 nf.parcourses.add(parcours)
@@ -4495,7 +4501,8 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
     if Customanswerbystudent.objects.filter(student = student, customexercise = customexercise ).exists() : 
         c_e = Customanswerbystudent.objects.get(student = student, customexercise = customexercise )
         cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None, instance = c_e )
-        images = Customanswerimage.objects.filter(customanswerbystudent = c_e)    
+        images = Customanswerimage.objects.filter(customanswerbystudent = c_e) 
+
     else :
         cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None )
         c_e = False
@@ -4506,14 +4513,14 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
     else :
         form_ans = None
 
-    
+ 
 
     if request.method == "POST":
         if cForm.is_valid():
             w_f = cForm.save(commit=False)
             w_f.customexercise = customexercise
             w_f.parcours_id = idp
-            w_f.answer = escape_chevron(cForm.cleaned_data['answer'])
+            w_f.answer =  escape_chevron(cForm.cleaned_data['answer'])
             w_f.student = student
             w_f.is_corrected = 0
             w_f.save()

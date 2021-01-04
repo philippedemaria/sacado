@@ -130,6 +130,12 @@ define(['jquery', 'bootstrap'], function ($) {
         });
 
 
+        $("#id_is_scratch").on('change', function () { console.log("coucou");
+
+            if ($("#id_is_scratch").is(":checked")) { $("#config_render").hide(500) ;}
+            else { $("#config_render").show(500) ;}
+
+        });
 
 
 
