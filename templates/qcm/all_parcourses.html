@@ -80,7 +80,7 @@
 
      
         {% if inside %}    
-                <table class="table table-bordered table-hover standard_tab_sort"  style="width:100%">
+                <table class="table table-bordered table-striped table-hover standard_tab_sort"  style="width:100%">
                       <thead>
                           <tr>
                             <th style="width:290px">Titre</th>   
@@ -92,8 +92,13 @@
                       <tbody id="parcours_details">
                             {% for parcours in parcourses %}
                             <tr> 
-                                <td style="border-left: {{ parcours.color }}  5px solid">
-                                   <a href="{% url 'show_parcours_visual'  parcours.id %}" class="listing">{{ parcours.title }} <small>[{{ parcours.exercises.count }} exercice{{ parcours.exercises.count|pluralize }}]</small> </a>
+                                <td>
+                                   <a href="{% url 'show_parcours_visual'  parcours.id %}" class="listing">{{ parcours.title }} 
+                                    <div><small><small>
+                                        [{{ parcours.exercises.count }} exercice{{ parcours.exercises.count|pluralize }}]
+                                        [{{ parcours.course.count }} cours]
+                                    </small> </small> </div>
+                                </a>
                                 </td>
                                 <td style="font-size:10px">
                                     {% for data in parcours.get_themes   %} 

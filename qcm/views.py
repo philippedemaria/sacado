@@ -411,7 +411,7 @@ def ajax_chargethemes(request):
     data = {}
     level =  Level.objects.get(pk = ids_level)
 
-    thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject)
+    thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject).order_by("name")
     data['themes'] = list(thms)
  
     return JsonResponse(data)
@@ -931,7 +931,7 @@ def ajax_chargethemes_parcours(request):
     data = {}
     level =  Level.objects.get(pk = level_id)
 
-    thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject)
+    thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject).order_by("name")
     data['themes'] = list(thms)
     parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1, exercises__level_id = level_id ).exclude(teacher=teacher).order_by('author').distinct()
 
@@ -1929,7 +1929,8 @@ def clone_parcours(request, id, course_on ):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcours = Parcours.objects.get(pk=id)
     relationships = Relationship.objects.filter(parcours = parcours) 
-  
+    courses = Course.objects.filter(parcours = parcours)   
+
     parcours.pk = None
     parcours.teacher = teacher
     parcours.is_leaf = 0
@@ -1941,9 +1942,7 @@ def clone_parcours(request, id, course_on ):
         relationship.parcours = parcours
         relationship.save() 
 
-    if course_on == 1 :
- 
-        courses = Course.objects.filter(parcours = parcours)         
+    if course_on == 1 : 
         for course in courses :
             course.pk = None
             course.parcours = parcours
@@ -1955,6 +1954,8 @@ def clone_parcours(request, id, course_on ):
         return redirect('evaluations')
     else :
         return redirect('parcours')
+ 
+
  
 def ajax_parcours_get_exercise_custom(request):
 

@@ -89,6 +89,13 @@ border-radius:0px;
 border : 0px!important;
 }
 
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #f6f6f6;
+}
+
+
+
 .horizontalmargin5{
   margin-left:0px;
   margin-right: 5px;  
