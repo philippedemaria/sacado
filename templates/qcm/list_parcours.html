@@ -126,13 +126,15 @@ body{
                             {% endif %}
                         </td> 
                         <td>
-                            {% if parcours.level %}
-                                <small>{{ parcours.level }}</small>
-                            {% else %}
-                                {% for l in  parcours.level_list  %}
-                                    <small>{{ l }}{% if not forloop.last %}, {% endif %}</small>
-                                {% endfor %}
-                            {% endif %}
+                            <small>
+                                {% if parcours.level %}
+                                    {{ parcours.level }}
+                                {% else %}
+                                    {% for l in  parcours.level_list  %}
+                                        {{ l }}{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </small>
                         </td> 
                         <td>
                             {% for g in  parcours.group_list  %}
