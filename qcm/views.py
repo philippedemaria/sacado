@@ -1929,7 +1929,7 @@ def clone_parcours(request, id, course_on ):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcours = Parcours.objects.get(pk=id)
     relationships = Relationship.objects.filter(parcours = parcours) 
-    courses = Course.objects.filter(parcours = parcours)   
+    courses = Course.objects.filter(parcours = parcours, is_share = 1)
 
     parcours.pk = None
     parcours.teacher = teacher
@@ -1944,9 +1944,11 @@ def clone_parcours(request, id, course_on ):
 
     if course_on == 1 : 
         for course in courses :
+            old_relationships = course.relationships.all()
             course.pk = None
             course.parcours = parcours
             course.save()
+            course.relationships.set(old_relationships)
 
     messages.success(request, "Le parcours est cloné avec succès. Bonne utilisation.")
 
