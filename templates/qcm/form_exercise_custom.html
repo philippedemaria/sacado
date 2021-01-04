@@ -179,11 +179,11 @@ ul#id_skills li{
                             <div class="col-sm-12 col-md-4">
                                 <div class="form-group">
                                     {% if  sacado_asso %}
-                                        {{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                        {{ form.is_share |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                                     {% else %}
-                                        {{ form.is_publish |attr:"disabled" |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                        {{ form.is_share |attr:"disabled" |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                                     {% endif %}
-                                    {{ form.is_publish.errors }}
+                                    {{ form.is_share.errors }}
                                 </div>
                             </div>
                         </div>

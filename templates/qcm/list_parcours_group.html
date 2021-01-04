@@ -113,7 +113,7 @@
 
                     <!-- Fenetre accessible par l'icone qui montre les sous parcours  -->
                     <div class="group_show" id="subparcours_show{{parcours.id }}" style="font-size:12px; color:#AAA"> 
-                        <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ parcours.color }};">Sous-parcours</h4> 
+                        <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ parcours.color }};">Parcours</h4> 
                         {% for p in parcours.leaf_parcours.all %} 
                             <li class="sans_puce" {% if p.is_publish %} style="color:{{ parcours.color }};"{% endif %}>{{ p.title }}   </li> 
                         {% endfor %}
@@ -188,7 +188,7 @@
                             {% if parcours.is_pending_folder_correction %}
                             <i class="fa fa-copyright pull-right" style="font-size:12px;padding-right:5px;color:{{ parcours.color|contrast_color }};" title="Copies à corriger" ></i> 
                             {% endif %}
-                            {{ parcours.title|truncatechars:"18" }} <span style="font-size:12px"> {{ parcours.leaf_parcours.count}} sous-parcours </span>
+                            {{ parcours.title|truncatechars:"18" }} <span style="font-size:12px"> {{ parcours.leaf_parcours.count}} parcours </span>
                         </a>
                         {% else %}
                         <a {% if parcours.is_evaluation%} href="{% url 'show_evaluation'  parcours.id  %}" {% else %} href="{% url 'show_parcours'  parcours.id  %}"{% endif %} style="color:{{ parcours.color|contrast_color }};">
@@ -240,7 +240,7 @@
                     <div class="row extend">
                         <div class="col-lg-6 col-xs-5">
                             <a href="#"  class="edit click_subparcours_show"   data-parcours_id="{{parcours.id }}"  {% if parcours.leaf_parcours.all|length > 1 %} style="color:{{ parcours.color }}" {% endif %}>
-                                <i class="fa fa-fw fa-folder{% if parcours.leaf_parcours.all|length > 1 %}-open{% endif%}"></i> <span class="label_icon">Sous-parcours</span> 
+                                <i class="fa fa-fw fa-folder{% if parcours.leaf_parcours.all|length > 1 %}-open{% endif%}"></i> <span class="label_icon">Parcours</span> 
                             </a>
                         </div> 
 
