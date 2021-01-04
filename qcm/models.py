@@ -459,9 +459,17 @@ class Parcours(ModelWithCode):
 
     def duration_overall(self):
         som = self.duration
-        for d in self.parcours_relationship.values_list('duration',flat=True):
+        for d in self.parcours_relationship.values_list('duration',flat=True).filter(is_publish=1):
             som += d
         return som 
+
+    def duration_reader_course(self):
+        som = 0
+        for c in self.course.values_list('duration',flat=True).filter(is_publish=1):
+            som += c
+        return som 
+
+
 
     def level_by_exercises(self):
         

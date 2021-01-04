@@ -280,12 +280,13 @@ def int_minutes(arg):
         if arg < 60 :
             h = "00"
             m = arg
+            r = str(m)
         else :
             h = int(arg/60)
             m = arg%60
             if m<10 :
                 m = "0"+str(m)
-        r = str(h)+"h. "+str(m)           
+            r = str(h)+"h."+str(m)           
 
     return r
 

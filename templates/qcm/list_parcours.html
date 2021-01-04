@@ -106,7 +106,7 @@ body{
                             <div style="font-size:14px;margin-top:-5px;">
                                 <span style="cursor:pointer" title="Code du parcours">{{ parcours.code }}</span> - {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }} - {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}min. 
                                 {% if parcours.course.all|length > 0 %}
-                                    <i class="fa fa-desktop" title="cours associé"></i>
+                                    <i class="fa fa-desktop" title="cours associé"></i> <small>{{  parcours.duration_reader_course|int_minutes }}min. </small>
                                 {% endif %}  
                       
                             </div> 
@@ -218,7 +218,7 @@ body{
                                 </a>
                                  <div style="font-size:14px;margin-top:-5px;">
                                     <span style="cursor:pointer" title="Code du parcours">{{ prcrs.code }}</span> - {{ prcrs.nb_exercises }} exercice{{ prcrs.nb_exercises|pluralize }} - {% if prcrs.is_evaluation %}{{  prcrs.evaluation_duration|int_minutes  }}{% else %}{{  prcrs.duration_overall|int_minutes }}{% endif %}min. 
-                                    {% if prcrs.course.all|length > 0 %}<i class="fa fa-desktop" title="cours associé"></i>{% endif %}  
+                                    {% if prcrs.course.all|length > 0 %}<i class="fa fa-desktop" title="cours associé"></i>  <small>{{  prcrs.duration_reader_course|int_minutes }}min. </small>{% endif %}  
                                 </div> 
                             </td>  
                             <td>
