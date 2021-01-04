@@ -111,7 +111,6 @@ body{
                       
                             </div> 
                             {% endif %}
- 
                         </td>  
                         <td>
                             {% if not parcours.is_folder %}
@@ -127,9 +126,13 @@ body{
                             {% endif %}
                         </td> 
                         <td>
-                            {% for l in  parcours.level_list  %}
-                                <small>{{ l }}{% if not forloop.last %}, {% endif %}</small>
-                            {% endfor %}
+                            {% if parcours.level %}
+                                {{ parcours.level }}
+                            {% else %}
+                                {% for l in  parcours.level_list  %}
+                                    <small>{{ l }}{% if not forloop.last %}, {% endif %}</small>
+                                {% endfor %}
+                            {% endif %}
                         </td> 
                         <td>
                             {% for g in  parcours.group_list  %}

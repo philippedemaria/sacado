@@ -347,7 +347,7 @@ class Parcours(ModelWithCode):
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
     is_archive = models.BooleanField(default=0, verbose_name="Archivé ?", editable=False)
 
-    level = models.ForeignKey(Level, related_name="level_parcours", on_delete=models.CASCADE, default='', blank=True, null=True, editable=False)
+    level = models.ForeignKey(Level, related_name="level_parcours", on_delete=models.CASCADE, default='', blank=True, null=True)
     linked = models.BooleanField(default=0, editable=False)
     is_favorite = models.BooleanField(default=1, verbose_name="Favori ?")
 

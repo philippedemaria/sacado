@@ -23,6 +23,8 @@ def validation_file(content):
 	        raise forms.ValidationError("Type de fichier non accepté")
 	    return content
 
+
+
 class ParcoursForm(forms.ModelForm):
 
 	class Meta:
@@ -67,6 +69,9 @@ class ParcoursForm(forms.ModelForm):
 		except:
 			pass
 
+
+
+
 class UpdateParcoursForm(forms.ModelForm):
 
 	class Meta:
@@ -94,8 +99,9 @@ class UpdateParcoursForm(forms.ModelForm):
 			self.fields['coteachers']	 = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
 			self.fields['leaf_parcours']	 = forms.ModelMultipleChoiceField(queryset=leaf_parcourses,  required=False)
 			self.fields['folder_parcours']	 = forms.ModelMultipleChoiceField(queryset=folder_parcourses,  required=False)
-			self.fields['subject']	 = forms.ModelChoiceField(queryset=teacher.subjects.all(),  required=False)
+			self.fields['subject']	 = forms.ModelChoiceField(queryset=teacher.subjects.all(),  required=False)			
 			self.fields['level']	 = forms.ModelChoiceField(queryset=teacher.levels.all(),  required=False)
+
 			
 	def clean(self):
 		"""
@@ -110,6 +116,8 @@ class UpdateParcoursForm(forms.ModelForm):
 				raise forms.ValidationError("La date de verrouillage ne peut pas être antérieure à son début.")
 		except:
 			pass
+
+
 
 class ExerciseForm(forms.ModelForm):
 	class Meta:

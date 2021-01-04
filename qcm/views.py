@@ -1931,7 +1931,8 @@ def clone_parcours(request, id, course_on ):
     relationships = Relationship.objects.filter(parcours = parcours) 
   
     parcours.pk = None
-    parcours.teacher = teacher 
+    parcours.teacher = teacher
+    parcours.is_leaf = 0
     parcours.code = str(uuid.uuid4())[:8]  
     parcours.save()
 
@@ -1941,15 +1942,12 @@ def clone_parcours(request, id, course_on ):
         relationship.save() 
 
     if course_on == 1 :
-        print("ici")
+ 
         courses = Course.objects.filter(parcours = parcours)         
         for course in courses :
             course.pk = None
             course.parcours = parcours
             course.save()
-            print("cloné")
-
-
 
     messages.success(request, "Le parcours est cloné avec succès. Bonne utilisation.")
 
