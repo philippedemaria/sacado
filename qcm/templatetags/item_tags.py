@@ -285,8 +285,10 @@ def int_minutes(arg):
             h = int(arg/60)
             m = arg%60
             if m<10 :
-                m = "0"+str(m)
-            r = str(h)+"h."+str(m)           
+                minutes = "0"+str(m)
+            else :
+                minutes = str(m)
+            r = str(h)+"h."+minutes        
 
     return r
 
