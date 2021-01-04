@@ -63,12 +63,12 @@
 
           <!-- Publication  -->
           <div href="#card{{relation.id}}" class="action_content {% if  relation.is_publish %}btn btn-success{% else %}btn btn-danger{% endif %}"  style="position: absolute; right : 0px; top:90px;" id="publisher{{relation.id}}"  data-relationship_id="{{relation.id}}" data-statut="{{relation.is_publish }}" data-custom="0" title="Publier l'exercice" >   
-              {% if  relation.is_publish %}Publié{% elif relation.start %}{{ relation.start }}{% else %}Dépublié{% endif %}
+              {% if  relation.is_publish %}Publié{% elif relation.start %}{{ relation.start|date:"d N Y" }}{% else %}Dépublié{% endif %}
           </div>
 
           <!-- Tache  -->
           <div href="#card{{relation.id}}" class="btn btn-{% if  relation.date_limit %}success{% else %}default{% endif %} select_task"  style="position: absolute; right : 0px; top:120px;" id="pub_task{{relation.id}}" data-relationship_id="{{relation.id}}" data-statut="{{relation.is_task }}"  title="Proposer une tâche pour le" data-custom="0"  >   
-              <span id="loading{{ relation.id }}"></span>{% if  relation.date_limit %}{{relation.date_limit }}{% else %}Tâche ?{% endif %}
+              <span id="loading{{ relation.id }}"></span>{% if  relation.date_limit %}{{relation.date_limit|date:"d N Y" }}{% else %}Tâche ?{% endif %}
           </div>
 
           <!-- Constraint  -->

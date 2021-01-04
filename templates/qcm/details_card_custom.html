@@ -63,12 +63,12 @@
           <!-- Pour ces deux actions, on ne modifie pas relationship_id en customexercise_id pour utiliser la même fonction Jquery dans dashboard.js  -->
           <!-- Publication  -->
           <div href="#customcard{{customexercise.id}}" class="action_content {% if  customexercise.is_publish %}btn btn-success{% else %}btn btn-danger{% endif %}"  style="position: absolute; right : 0px; top:90px;" id="publisher{{customexercise.id}}"  data-relationship_id="{{customexercise.id}}" data-statut="{{customexercise.is_publish }}" data-custom="1" title="Publier l'exercice" >   
-              {% if  customexercise.is_publish %}Publié{% elif customexercise.start %}{{ customexercise.start }}{% else %}Dépublié{% endif %}
+              {% if  customexercise.is_publish %}Publié{% elif customexercise.start %}{{ customexercise.start|date:"d N Y" }}{% else %}Dépublié{% endif %}
           </div>
 
           <!-- Tache  -->
           <div href="#customcard{{customexercise.id}}" class="btn btn-{% if  customexercise.date_limit %}success{% else %}default{% endif %} custom_select_task"  style="position: absolute; right : 0px; top:120px;" id="pub_task{{customexercise.id}}" data-relationship_id="{{customexercise.id}}" data-statut="{{customexercise.is_task }}" data-custom="1"  title="Proposer une tâche pour le" >   
-              <span id="loading{{ customexercise.id }}"></span>{% if  customexercise.date_limit %}{{customexercise.date_limit }}{% else %}Tâche ?{% endif %}
+              <span id="loading{{ customexercise.id }}"></span>{% if  customexercise.date_limit %}{{customexercise.date_limit|date:"d N Y" }}{% else %}Tâche ?{% endif %}
           </div>
  
 
