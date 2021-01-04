@@ -65,6 +65,7 @@ urlpatterns = [
 
     path('parcours_clone_course', ajax_parcours_clone_course, name='ajax_parcours_clone_course'),
     path('parcours_shower_course', ajax_parcours_shower_course, name='ajax_parcours_shower_course'),
+    path('ajax/course_viewer', ajax_course_viewer, name='ajax_course_viewer'),
     path('parcours_get_course', ajax_parcours_get_course, name='ajax_parcours_get_course'),
  
     #####################################  Modifie les relations par parcours et exercices  ##############################################################  
@@ -231,7 +232,7 @@ urlpatterns = [
     path('ajax/constraint_delete', ajax_delete_constraint, name='ajax_delete_constraint'), 
     path('ajax/infoExo', ajax_infoExo, name='ajax_infoExo'),
 
-    path('ajax/course_viewer', ajax_course_viewer, name='ajax_course_viewer'),
+
 
  
     # page de création d'un exercice non auto-corrigé dans un parcours - l'id est celui du parcours.

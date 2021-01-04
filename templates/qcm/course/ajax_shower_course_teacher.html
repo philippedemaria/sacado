@@ -2,8 +2,15 @@
 {% load item_tags %}
 
  
+ 
+<h1 class="thin">  <span id="this_course_title">{{ course.title }} - {{ course.id }}</span>   
+    <a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 12px; margin-right:10px;" class="pull-right">Modifier ce cours</a> 
+    <a href="#"  data-toggle='modal' data-target='#view_course'  data-course_id="{{ course.id }}"  style="font-size: 12px; margin-right:10px;" class="pull-right course_viewer">Vidéoprojeter ce cours</a>
+</h1>
+<hr>
+<div >{{ course.annoncement|decode|safe }} </div>
 
-{{ course.annoncement|safe }} 
+ 
 
  
  

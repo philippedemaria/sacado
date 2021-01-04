@@ -561,7 +561,7 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
-        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        // Affiche connaissant l'exercice  et le cours
         $('.header_shower').on('click', function (event) {
             let relation_id = $(this).attr("data-relation_id");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
@@ -585,9 +585,10 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
-        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        // Affiche  un cours connaissant le parcours et le cours
         $('.course_viewer').on('click', function (event) {
             let course_id = $(this).attr("data-course_id");
+            let parcours_id = $(this).attr("data-parcours_id");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
             $.ajax(
                 {
@@ -595,12 +596,12 @@ define(['jquery','bootstrap'], function ($) {
                     dataType: "json",
                     data: {
                         'course_id': course_id,
+                        'parcours_id': parcours_id,
                         csrfmiddlewaretoken: csrf_token,
                     },
                     url: "../../ajax_this_course_viewer",
                     success: function (data) {
 
-                        console.log(data.html);
                         $('#body_course').html(data.html);
                         if( $('#this_course_viewer') ) { $('#this_course_viewer').html(data.html);}
                         if( $('#this_course_title') ) {$('#this_course_title').html(data.title);}

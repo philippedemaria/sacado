@@ -5806,19 +5806,6 @@ def show_course(request, idc , id ):
  
 
 
- 
-def ajax_parcours_shower_course(request):
-    course_id =  int(request.POST.get("course_id"))
-    course = Course.objects.get(pk=course_id)
-    data = {}
-    data['title'] = course.title
-    context = {  'course': course ,  }
- 
-    data['html'] = render_to_string('qcm/course/ajax_shower_course.html', context)
-
-    return JsonResponse(data)
-
-
 
 def ajax_parcours_get_course(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -5938,6 +5925,73 @@ def show_course_student(request, idc , id ):
     context = {  'courses': courses,  'course': course, 'parcours': parcours , 'group_id' : None, 'communications' : []}
     return render(request, 'qcm/course/show_course_student.html', context)
  
+
+
+ 
+def ajax_parcours_shower_course(request):
+    course_id =  int(request.POST.get("course_id"))
+    course = Course.objects.get(pk=course_id)
+    data = {}
+    data['title'] = course.title
+    context = {  'course': course   }
+ 
+    data['html'] = render_to_string('qcm/course/ajax_shower_course.html', context)
+
+    return JsonResponse(data)
+
+
+
+@csrf_exempt 
+def ajax_course_viewer(request):
+    """ Est ce encore utilisé  ??? """
+
+    relation_id =  request.POST.get("relation_id",None)
+    data = {}
+    if relation_id : 
+        relationship = Relationship.objects.get( id = int(relation_id))
+        courses = Course.objects.filter(relationships = relationship).order_by("ranking")
+
+        if request.user.user_type == 2 :
+            is_teacher = True
+        else : 
+            is_teacher = False 
+        context = { 'courses' : courses , 'parcours' : relationship.parcours , 'is_teacher' : is_teacher }
+        html = render_to_string('qcm/course/course_viewer.html',context)
+        data['html'] = html       
+
+    return JsonResponse(data)
+
+
+@csrf_exempt 
+def ajax_this_course_viewer(request):  
+
+    course_id =  request.POST.get("course_id",None)
+    course = Course.objects.get(pk=course_id)
+    data = {}
+ 
+
+    parcours_id =  int(request.POST.get("parcours_id"))
+    parcours = Parcours.objects.get(pk=parcours_id)
+
+    data = {}
+    data['title'] = course.title
+
+ 
+    if request.user.user_type == 2 :
+        url = 'qcm/course/ajax_shower_course_teacher.html'
+    else :
+        url = 'qcm/course/ajax_shower_course.html'        
+
+
+
+    context = {  'course': course , 'parcours': parcours   }
+ 
+ 
+    html = render_to_string(url, context )
+    data['html'] = html       
+    data['title'] = course.title   
+
+    return JsonResponse(data)
 
 
 #######################################################################################################################################################################
@@ -6064,41 +6118,6 @@ def ajax_demand_done(request) :
 
 
 
-
-@csrf_exempt 
-def ajax_course_viewer(request):  
-
-    relation_id =  request.POST.get("relation_id",None)
-    data = {}
-    if relation_id : 
-        relationship = Relationship.objects.get( id = int(relation_id))
-        courses = Course.objects.filter(relationships = relationship).order_by("ranking")
-
-        if request.user.user_type == 2 :
-            is_teacher = True
-        else : 
-            is_teacher = False 
-        context = { 'courses' : courses , 'parcours' : relationship.parcours , 'is_teacher' : is_teacher }
-        html = render_to_string('qcm/course/course_viewer.html',context)
-        data['html'] = html       
-
-    return JsonResponse(data)
-
-
-
-@csrf_exempt 
-def ajax_this_course_viewer(request):  
-
-    course_id =  request.POST.get("course_id",None)
-    course = Course.objects.get(pk=course_id)
-    data = {}
- 
-    context = { 'course' : course ,}
-    html = render_to_string('qcm/course/ajax_shower_course.html',context)
-    data['html'] = html       
-    data['title'] = course.title   
-
-    return JsonResponse(data)
 
 #######################################################################################################################################################################
 #######################################################################################################################################################################

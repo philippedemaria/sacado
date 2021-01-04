@@ -49,7 +49,7 @@
  
                 {% for course in courses %}
                     <li class="{% if forloop.first %}active{% endif %} menu_course">
-                        <a href="#" class="course_viewer" data-course_id="{{ course.id }}"> {{ course.title }} </a>
+                        <a href="#" class="course_viewer" data-course_id="{{ course.id }}"  data-parcours_id="{{ parcours.id }}" > {{ course.title }} </a>
  
                     </li>
                 {% endfor %}

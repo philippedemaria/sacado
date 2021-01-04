@@ -52,7 +52,7 @@
                 <input type="hidden" value="{{ parcours.id }}" name="parcours_id" id="parcours_id"/>
                 {% for course in courses %}
                     <li class="{% if forloop.first %}active{% endif %} menu_course">
-                        <a href="#" class="course_viewer" data-course_id="{{ course.id }}">  <i class="{% if course.is_publish %}fa fa-eye{% else %}fa fa-eye-slash{% endif %}" style="font-size: 12px"></i>  {{ course.title }}
+                        <a href="#" class="course_viewer" data-course_id="{{ course.id }}" data-parcours_id="{{ parcours.id }}" >  <i class="{% if course.is_publish %}fa fa-eye{% else %}fa fa-eye-slash{% endif %}" style="font-size: 12px"></i>  {{ course.title }}
 
                             {% if course.relationships.count > 0 %} <sup title="Cours lié à une section"><i class="fa fa-paperclip" style="font-size:8px" ></i></sup> {% endif %}
 
@@ -65,13 +65,13 @@
             </form>
         </div>
         {% if   course  %}
-            <div class="col-md-8 col-xs-12 col-lg-9">
+            <div class="col-md-8 col-xs-12 col-lg-9" id="this_course_viewer">
                 <h1 class="thin">  <span id="this_course_title">{{ course.title }}</span>   
                     <a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 12px; margin-right:10px;" class="pull-right">Modifier ce cours</a> 
-                    <a href="#"  data-toggle='modal' data-target='#view_course'  data-course_id="{{ course.id }}"  style="font-size: 12px; margin-right:10px;" class="pull-right course_viewer">Vidéoprojeter ce cours</a>
+                    <a href="#"  data-toggle='modal' data-target='#view_course'  data-course_id="{{ course.id }}" data-parcours_id="{{ parcours.id }}"   style="font-size: 12px; margin-right:10px;" class="pull-right course_viewer">Vidéoprojeter ce cours</a>
                 </h1>
                 <hr>
-                <div id="this_course_viewer">{{ course.annoncement|decode|safe }} </div>
+                <div >{{ course.annoncement|decode|safe }} </div>
             </div>
         {% else %} 
             <div class="col-md-8 col-xs-12 col-lg-9">
