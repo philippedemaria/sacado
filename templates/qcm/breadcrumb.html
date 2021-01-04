@@ -16,7 +16,7 @@
 
 
 {% if parcours_folder and group %}
-<a href="{% url 'list_sub_parcours_group' group.id parcours.id %}" style="color:{{ parcours_folder.color }}" >{{ parcours_folder|truncatechars:"18" }} </a>   <img src="{% static 'img/angle-right.png' %}"/>  
+<a href="{% url 'list_sub_parcours_group' group.id parcours.id %}" style="color:{{ parcours_folder.color }}" >{{ parcours_folder }} </a>   <img src="{% static 'img/angle-right.png' %}"/>  
 {% elif parcours_folder and not group %}
 <a href="{% url 'index' %}" style="color:{{ parcours_folder.color }}" >Tableau de bord </a>   <img src="{% static 'img/angle-right.png' %}"/> <span style="color:{{ parcours_folder.color }}" > {{ parcours_folder|truncatechars:"18" }}</span> <img src="{% static 'img/angle-right.png' %}"/>   
 {% else %} 
