@@ -52,7 +52,7 @@
                 <input type="hidden" value="{{ parcours.id }}" name="parcours_id" id="parcours_id"/>
                 {% for course in courses %}
                     <li class="{% if forloop.first %}active{% endif %} menu_course">
-                        <a href="#" class="course_viewer" data-course_id="{{ course.id }}" data-parcours_id="{{ parcours.id }}" >  <i class="{% if course.is_publish %}fa fa-eye{% else %}fa fa-eye-slash{% endif %}" style="font-size: 12px"></i>  {{ course.title }}
+                        <a href="#" class="course_viewer" data-course_id="{{ course.id }}" data-parcours_id="{{ course.parcours.id }}" >  <i class="{% if course.is_publish %}fa fa-eye{% else %}fa fa-eye-slash{% endif %}" style="font-size: 12px"></i>  {{ course.title }}
 
                             {% if course.relationships.count > 0 %} <sup title="Cours lié à une section"><i class="fa fa-paperclip" style="font-size:8px" ></i></sup> {% endif %}
 
