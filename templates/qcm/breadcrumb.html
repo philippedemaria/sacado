@@ -5,10 +5,6 @@
 
 
 
-{% if parcours_folder %}
-    <span style="color:{{ parcours_folder.color }}"><i class="fa fa-folder"></i> </span> 
-{% endif %}
-
 
 {% if group %} <a href="{% url 'list_parcours_group' group.id %}" style="color:{{ group.color }}" >{{ group }}</a> <img src="{% static 'img/angle-right.png' %}"/>  {% endif %} 
 

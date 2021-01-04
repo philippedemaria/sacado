@@ -18,7 +18,7 @@
  
 
 {% block page_title %}
-       <span style="color:{{ group.color  }}"><i class="fa fa-th"></i></span>  
+       <span style="color:{{ group.color  }}"><i class="fa fa-folder-open"></i></span>  
 
         {% include 'qcm/breadcrumb.html' %}
 {% endblock %}
@@ -77,7 +77,7 @@
 
     {% for parcours_sort in list_parcours %}  
     <div class="row"></div>
-    {% if  parcours_sort.grouper %}<h1 class="thin" id="evaluation">Evaluations favorites</h1>{% else %}<h1 class="thin"> Parcours favoris</h1>{% endif %}  
+    {% if  parcours_sort.grouper %}<h1 class="thin" id="evaluation" >Evaluations favorites</h1>{% else %}<h1 class="thin" > Parcours favoris</h1>{% endif %}  
         <div id="parcours_sortable">
         {% for parcours in parcours_sort.list %}  
   

@@ -76,12 +76,13 @@
 
 {% if role  %}
 {% if parcours.is_folder  %}
-<li class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if 'parcours_show/' in request.path or 'parcours_update/' in request.path or 'parcours_peuplate/' in request.path or 'parcours_tasks_and_publishes/' in request.path  or 'parcours_individualise/' in request.path  or 'parcours_stat/' in request.path   %} active{% endif %}"> Paramètres <b class="caret"></b> </a>
-    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-        <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_parcours' parcours.id 0  %}"><i class="fa fa-cogs fa-fw"></i> Modifier le parcours</a>   </li>
-        <li {% if 'show_course/' in request.path %} class="active" {% endif %}><a href="{% url 'show_course' 0 parcours.id   %}"><i class="fa fa-desktop fa-fw"></i> Voir les cours</a>   </li>
-    </ul>
+ 
+        {% if group %}
+        <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_folder' parcours.id group.id  %}"  class="no_button"> Paramètres</a></li>
+        {% else %}
+        <p><a href="{% url 'index' %}" ><i class="fa fa-plus fa-fw fa-small"></i> pour ajouter des parcours à ce dossier, sélectionner un groupe.</a></p>
+        {% endif %}
+ 
 </li>
 
 {% else %}

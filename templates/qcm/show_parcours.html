@@ -17,11 +17,21 @@
  
 
 {% block page_title %}
-<span style="color:{{ parcours.color }}"><i class="fa fa-th"></i> </span>
+
+<span style="color:{{ parcours.color }}">  
+    {% if parcours.is_folder %}
+    <i class="fa fa-folder-open"></i>
+    {% else %}
+    <i class="fa fa-th"></i> 
+    {% endif %}
+</span>
 
     {% include 'qcm/breadcrumb.html' %}
 
-<small >{{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}</small> </span>
+{% if not parcours.is_folder %}
+<small >{{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}</small> 
+    {% endif %}
+
 {% endblock %}
 
 
@@ -75,7 +85,7 @@ body{
         {%  if relation.exercise.supportfile.is_title %}     
             <h2 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> 
                 {% if relation.is_header_of_section  %}
-                    <a href="#" data-toggle='modal' data-target='#head_of_section'    data-relation_id='{{ relation.id }}'  class="header_shower" title="Cours associé à cette section">                       
+                    <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"    data-relation_id='{{ relation.id }}'  class="header_shower" title="Cours associé à cette section">                       
                         {% if  relation.exercise.supportfile.title %}  
                             {{  relation.exercise.supportfile.title|cleanhtml|capfirst }}  
                         {% else %}
@@ -92,7 +102,7 @@ body{
         {%  elif relation.exercise.supportfile.is_subtitle %}
             <h3 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> 
                 {% if relation.is_header_of_section %}
-                    <a href="#" data-toggle='modal' data-target='#head_of_section'  data-relation_id='{{ relation.id }}' class="header_shower" title="Cours associé à cette sous-section">{{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
+                    <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"  data-relation_id='{{ relation.id }}' class="header_shower" title="Cours associé à cette sous-section">{{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
                 {% else %}
                     {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}
                 {% endif %}
@@ -120,9 +130,28 @@ body{
                     <i class="fa fa-folder-open fa-10x" style="color: {{ parcours.color }}"></i>
                 </div>
                 <div class="col-sm-12 col-md-9" style="margin :40px 0px 0px 0px">
-                    <p>Ce parcours est un dossier. </p>
-                    <p>Pour lui attribuer des parcours, revenir à votre tableau de bord.</p>
-                    <p><a href="{% url 'index' %}" >Choisir ses sous-parcours associés.</a></p>
+
+                    <h1 class="thin" style="color:{{ parcours.color }}" >{{ parcours }} </h1>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6" style="margin :40px 0px 0px 0px">
+                            <p> contient les parcours suivants : </p>
+                            <ul>
+                            {% for p in parcours.leaf_parcours.all %}
+                                <li class="sans_puce" style="margin-bottom : 15px">  <a href="{% url 'show_parcours' p.id %}" style="color: {{ p.color }}"><i class="fa fa-th fa-fw fa-small"></i> {{ p }}</a></li>
+                            {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-sm-12 col-md-6" style="margin :40px 0px 0px 0px">
+                            <p> contient les cours suivants : </p>
+                            <ul>
+                            {% for p in parcours.leaf_parcours.all %}
+                                {% for c in p.course.all %}
+                                    <li class="sans_puce">  <a href="{% url 'show_course' c.id c.parcours.id %}" style="color: {{ c.color }}"><i class="fa fa-desktop fa-fw fa-small"></i> {{ c }}</a></li>
+                                {% endfor %}
+                            {% endfor %}
+                            </ul>
+                        </div>
+                    </div> 
                 </div>
             </div>
 

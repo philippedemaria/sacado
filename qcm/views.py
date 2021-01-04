@@ -870,16 +870,20 @@ def list_sub_parcours_group(request,idg,id):
     parcours = Parcours.objects.get(pk = id) 
     group = Group.objects.get(pk = idg) 
 
+    data = get_complement(request, teacher, parcours)
+    role = data['role']
+    group = data['group']
+    group_id = data['group_id']
     request.session["parcours_id"] = parcours.id
     request.session["group_id"] = group.id
- 
+
     if not authorizing_access(teacher,parcours, True ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
     parcours_tab = parcours.leaf_parcours.all()
 
-    return render(request, 'qcm/list_sub_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group ,   'parcours' : parcours , 'communications' : [] , 'relationships' : [] , 'role' : True , 'today' : today })
+    return render(request, 'qcm/list_sub_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group , 'parcours_folder' : parcours,  'parcours' : parcours , 'communications' : [] , 'relationships' : [] , 'role' : True , 'today' : today })
 
 
 
@@ -1235,6 +1239,8 @@ def delete_parcours(request, id, idg=0):
     else :
         return redirect('list_parcours_group', idg)
 
+
+
 def show_parcours(request, id):
     parcours = Parcours.objects.get(id=id)
     user = User.objects.get(pk=request.user.id)
@@ -1249,7 +1255,6 @@ def show_parcours(request, id):
 
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
-
 
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
     nb_exo_only, nb_exo_visible,nb_exo_only_c, nb_exo_visible_c = [] , []  , [], []
@@ -5944,7 +5949,7 @@ def ajax_parcours_shower_course(request):
 
 @csrf_exempt 
 def ajax_course_viewer(request):
-    """ Est ce encore utilisé  ??? """
+    """ Lis un cours à partir d'une pop up """
 
     relation_id =  request.POST.get("relation_id",None)
     data = {}
