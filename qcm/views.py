@@ -1929,31 +1929,52 @@ def add_exercice_in_a_parcours(request):
 
     return redirect('exercises')
 
-def clone_parcours(request, id, course_on ):
 
+
+def clone_parcours(request, id, course_on ):
+    """ cloner un parcours """
+    
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcours = Parcours.objects.get(pk=id)
     relationships = Relationship.objects.filter(parcours = parcours) 
     courses = Course.objects.filter(parcours = parcours, is_share = 1)
-
+    # clone le parcours
     parcours.pk = None
     parcours.teacher = teacher
     parcours.is_leaf = 0
     parcours.code = str(uuid.uuid4())[:8]  
     parcours.save()
 
-    for relationship in relationships :
-        relationship.pk = None
-        relationship.parcours = parcours
-        relationship.save() 
+    former_relationship_ids = []
 
     if course_on == 1 : 
         for course in courses :
+
             old_relationships = course.relationships.all()
+            # clone le cours associé au parcours
             course.pk = None
             course.parcours = parcours
             course.save()
-            course.relationships.set(old_relationships)
+
+
+            for relationship in old_relationships :
+                # clone l'exercice rattaché au cours du parcours 
+                if not relationship.id in former_relationship_ids :
+                    relationship.pk = None
+                    relationship.parcours = parcours
+                    relationship.save() 
+                course.relationships.add(relationship)
+
+                former_relationship_ids.append(relationship.id)
+
+    # clone tous les exercices rattachés au parcours 
+    for relationship in relationships :
+        try :
+            relationship.pk = None
+            relationship.parcours = parcours
+            relationship.save()  
+        except :
+            pass
 
     messages.success(request, "Le parcours est cloné avec succès. Bonne utilisation.")
 
@@ -2019,9 +2040,9 @@ def ajax_exercise_error(request):
     if request.user :
         usr = request.user
     else :
-        usr = "Non connecté"
+        usr = "non connecté"
 
-    msg = "Message envoyé par "+usr+" :\n\nL'exercice dont l'id est -- "+exercise_id+" --  décrit ci-dessous : \n Savoir faire visé : "+exercise.knowledge.name+ " \n Niveau : "+exercise.level.name+  "  \n Thème : "+exercise.theme.name +" comporte un problème. \n  S'il est identifié par l'utilisateur, voici la description :  \n" + message   
+    msg = "Message envoyé par l'utilisateur "+usr+" :\n\nL'exercice dont l'id est -- "+exercise_id+" --  décrit ci-dessous : \n Savoir faire visé : "+exercise.knowledge.name+ " \n Niveau : "+exercise.level.name+  "  \n Thème : "+exercise.theme.name +" comporte un problème. \n  S'il est identifié par l'utilisateur, voici la description :  \n" + message   
 
     send_mail("Avertissement SacAdo Exercice "+exercise_id,  msg , "info@sacado.xyz" , ["brunoserres33@gmail.com", "philippe.demaria83@gmail.com", str(exercise.supportfile.author.user.email)])
     data = {}

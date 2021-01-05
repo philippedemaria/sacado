@@ -319,7 +319,6 @@
           </div>
           {% endif %}
            <!-- ######################################################################################################## 
-          }
           ############################################################################################################## 
           ##############################################################################################################
               Image de la card
@@ -346,7 +345,7 @@
             <!-- Appel de la fenetre remédiation 
                   Appel ajax vers la modale qui est dans la page dashboard : id="remediation"
             -->
-            <a class="helper_tip white">
+            <a class="helper_tip" style="color:{{ parcours.color|contrast_color }}">
                 <i class="fa fa-search-plus"></i>
                 <span class="helper_tip_card_flex" style="font-size:40px;color:{{ parcours.color }}">
                   {% if not relation.is_publish %}<span style="color:#F5F5F5;">{{ nb_exo_only|index:forloop.counter0 }}.</span>{% else %}{{ nb_exo_visible|index:forloop.counter0 }}.{% endif %}<br>
@@ -354,18 +353,18 @@
                 </span>
             </a>
 
-            <span style="font-size:9px" id="response{{relation.id}}" >{{  relation.relationship_remediation.all|length }}</span>
+            <span style="font-size:9px;color:{{ parcours.color|contrast_color }}" id="response{{relation.id}}" >{{  relation.relationship_remediation.all|length }}</span>
 
 
             {% if sacado_asso %}
             <span class="horizontalmargin5">
-                <span style="cursor:pointer" data-target="#remediation" data-relationship_id="{{ relation.id }}"  data-toggle='modal' class="white remediation" title="Ajouter une vidéo, un fichier" >
+                <span style="cursor:pointer;color:{{ parcours.color|contrast_color }}" data-target="#remediation" data-relationship_id="{{ relation.id }}"  data-toggle='modal' class="white remediation" title="Ajouter une vidéo, un fichier" >
                         <i class="fa fa-paperclip"></i>
                 </span>
             </span>
             {% else %}
             <span class="horizontalmargin5">
-                <span style="cursor:not-allowed"  class="white remediation" title="Version établissement requise." >
+                <span style="cursor:not-allowed;color:{{ parcours.color|contrast_color }}"  class="white remediation" title="Version établissement requise." >
                         <i class="fa fa-paperclip"></i>
                 </span>
             </span>
