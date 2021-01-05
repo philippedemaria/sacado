@@ -2017,13 +2017,13 @@ def ajax_exercise_error(request):
     exercise_id = request.POST.get("exercise_id")
     exercise = Exercise.objects.get(id = int(exercise_id))
     if request.user :
-        usr = request.user.email
+        usr = request.user
     else :
-        usr = "info@sacado.xyz"
+        usr = "Non connecté"
 
-    msg = "L'exercice dont l'id est -- "+exercise_id+" --  décrit ci-dessous : \n Savoir faire visé : "+exercise.knowledge.name+ " \n Niveau : "+exercise.level.name+  "  \n Thème : "+exercise.theme.name +" comporte un problème. \n  S'il est identifié par l'utilisateur, voici la description :  \n" + message   
+    msg = "Message envoyé par "+usr+" :\n\nL'exercice dont l'id est -- "+exercise_id+" --  décrit ci-dessous : \n Savoir faire visé : "+exercise.knowledge.name+ " \n Niveau : "+exercise.level.name+  "  \n Thème : "+exercise.theme.name +" comporte un problème. \n  S'il est identifié par l'utilisateur, voici la description :  \n" + message   
 
-    send_mail("Avertissement SacAdo Exercice "+exercise_id,  msg , request.user.email , ["brunoserres33@gmail.com", "philippe.demaria83@gmail.com", str(exercise.supportfile.author.user.email)])
+    send_mail("Avertissement SacAdo Exercice "+exercise_id,  msg , "info@sacado.xyz" , ["brunoserres33@gmail.com", "philippe.demaria83@gmail.com", str(exercise.supportfile.author.user.email)])
     data = {}
     data["htmlg"]= "Envoi réussi, merci."
     return JsonResponse(data) 
@@ -4578,20 +4578,19 @@ def asking_parcours_sacado(request,pk):
 
     parcourses = teacher.teacher_parcours.filter(level = level, subject = subject)
 
-    msg = "Je souhaiterais utiliser les parcours Sacado de mon niveau car mon enseignant ne les utilise pas. Merci.\n\n"+str(student)
 
+    test = attribute_all_documents_to_student(parcourses, student)
+
+    if test :
+        test_string = "Je viens de récupérer les exercices."
+    else :
+        test_string = "Je ne parviens pas à récupérer les exercices."    
+
+    msg = "Je souhaite utiliser les parcours Sacado de mon niveau de "+str(level)+", mon enseignant ne les utilise pas. "+test_string+" Merci.\n\n"+str(student)
 
     send_mail("Demande de parcours SACADO",  msg , "info@sacado.xyz" , ["brunoserres33@gmail.com", "sacado.asso@gmail.com"] )
 
-    test = attribute_all_documents_to_student(parcourses, student)
- 
-    
     return redirect("dashboard_group",pk)
-
-
-
-
-
 
 #######################################################################################################################################################################
 ############### VUE ENSEIGNANT
