@@ -392,9 +392,9 @@ def get_parcours_default(request):
             i+=1
         n +=1
     if n > 1 :
-        messages.info(request, "Les parcours sont créés avec succès. Penser à leur attribuer des élèves et les à publier.")
+        messages.info(request, "Les parcours sont créés avec succès. Penser à leur attribuer des élèves et à les publier.")
     else :
-        messages.info(request, "Le parcours est créé avec succès. Penser à lui attribuer des élèves et le à publier.")
+        messages.info(request, "Le parcours est créé avec succès. Penser à lui attribuer des élèves et à le publier.")
     return redirect("index") 
 
 #######################################################################################################################################################################

@@ -95,12 +95,12 @@ body{
 
                             {% if parcours.is_folder %}   
                                 <a href="#" class="accordion" data-target="{{ forloop.counter }}"  style="color : {{ parcours.color }}" >{{ parcours.title }} <i class="fa fa-chevron-down" id="pop{{ forloop.counter }}" ></i></a>
-                                {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillée. Il n'est plus possible de soumettre des exercices</div></span>{% endif %} 
+                                {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible de soumettre des exercices.</div></span>{% endif %}
                            
                             {% else %}
 
                             <a href="{% url 'show_parcours' parcours.id %}" > {{ parcours.title }} 
-                                {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillée. Il n'est plus possible de soumettre des exercices</div></span>{% endif %} 
+                                {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible de soumettre des exercices.</div></span>{% endif %}
                             </a>
 
                             <div style="font-size:14px;margin-top:-5px;">
@@ -217,7 +217,7 @@ body{
                                 <a href="{% url 'show_parcours' prcrs.id %}" > {{ prcrs.title }}
                                     {% get_is_lock prcrs today as is_lock %} 
                                     {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i>
-                                                    <div class="helper_tip_text_right">Le parcours est verrouillée. Il n'est plus possible de soumettre des exercices</div>
+                                                    <div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible de soumettre des exercices.</div>
                                                    </span>
                                     {% endif %}     
                                 </a>
@@ -336,7 +336,7 @@ body{
                     
 
                         <ol><i class="fa fa-hand-o-right"></i> Les parcours par défaut (Recommandé pour une première utilisation) <p> Ces parcours contiennent tous les exercices  de  {% if  group %}{{ group.level }}{% else %}niveau_du_groupe{% endif %} proposés par <span class="sacado">sacado</span>, classés par le thème. Vous pouvez les utiliser directement, leur ajouter, leur supprimer des exercices.<br>Choisir le parcours souhaité <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   ><i class="fa fa-caret-right"></i>  Parcours par défaut</a><p></ol>
-                        <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés <p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier un fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur 
+                        <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés <p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier une fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur
 
                             {% if sacado_asso %}
                                 <a href="{% url 'all_parcourses' %}"   ><i class="fa fa-caret-right"></i> Parcours mutualisés</a>
