@@ -267,14 +267,29 @@
               Pop up des compétences d'un exercice
           =============================================================================================================
           =============================================================================================================-->
-          <div id="skill{{ relation.id }}" class="card-skill"> Compétences visées<br>
-              <span   class="select_skill_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>
-                {% for skill in skills %}
+          <div id="skill{{ relation.id }}" class="card-skill"> 
+
+        
+              <div class="row">
+                    <div class="col-sm-12 col-md-12 title"><span   class="select_skill_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>         
+                        Compétences visées  
+                    </div>
+               </div> 
+
+            <hr style="padding:0px; margin:10px 0px"/><br>
+              
+                
+                {% for skill in relation.parcours.subject.skill.all %}
                       <label style="font-size:10px">
                       <input type="checkbox" name="skills" data-relationship_id="{{relation.id}}" value="{{skill.id}}" class="skill_selector" {% if skill in relation.skills.all %} checked {% endif %}  />
                       {{ skill }}
                       </label>{% if not forloop.last %}<br>{% endif %}
+                {% empty %}
+                  <div class="alert alert-danger">Vous devez sélectionner un enseignement pour ce parcours. 
+                      {% if group %}<a href="{% url 'update_parcours' relation.parcours.id group_id  %}">Cliquez ici</a>{% endif %}
+                  </div>
                 {% endfor %}
+
           </div>
            <!--  
           =============================================================================================================

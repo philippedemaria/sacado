@@ -1572,7 +1572,7 @@ table.table-bordered.dataTable {
  color : #F2F1F0;
 }
 
-.card-dateur{
+.card-dateur, .card-skill{
     font-size: 12px;
     position: absolute; 
     padding:10px;
@@ -1587,7 +1587,8 @@ table.table-bordered.dataTable {
     border : 1px solid #e6e2dd;
     opacity : .95;
 }
-.card-dateur .title{
+
+.card-dateur .title, .card-skill .title{
     font-size: 18px;
     color:#271942; 
     font-variant: small-caps; 
