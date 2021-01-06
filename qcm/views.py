@@ -1250,7 +1250,6 @@ def ordering_number(parcours):
     return listing_order , nb_exo_only, nb_exo_visible  
 
 
-
 def show_parcours(request, id):
     """ show parcours coté prof """
     parcours = Parcours.objects.get(id=id)
@@ -1263,31 +1262,8 @@ def show_parcours(request, id):
 
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
-
-    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
-    nb_exo_only, nb_exo_visible,nb_exo_only_c, nb_exo_visible_c = [] , []  , [], []
-    i , j = 0, 0
-    for r in relationships:
-        if not r.exercise.supportfile.is_title and not r.exercise.supportfile.is_subtitle:
-            i += 1
-        nb_exo_only.append(i)
-        if not r.exercise.supportfile.is_title and not r.exercise.supportfile.is_subtitle and r.is_publish != 0:
-            j += 1
-        nb_exo_visible.append(j)
-
-    customexercises = Customexercise.objects.filter(parcourses=parcours).order_by("ranking")
-
-
-    for ce in customexercises:
-        i += 1
-        nb_exo_only_c.append(i)
-        if ce.is_publish :
-            j += 1
-        nb_exo_visible_c.append(j)
  
-
     relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
-
 
     students_p_or_g = students_from_p_or_g(request,parcours)
     parcours_group = []
@@ -1300,16 +1276,46 @@ def show_parcours(request, id):
     nb_students_p_or_g = len(students_p_or_g)
 
     skills = Skill.objects.all()
-    nb_custom_exercises = customexercises.count()
  
-    context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'communications' : [] , 'customexercises' : customexercises , 'today' : today , 
-               'students_from_p_or_g': students_p_or_g,   'nb_exo_visible': nb_exo_visible,  'nb_exo_visible_c': nb_exo_visible_c, 'nb_students_p_or_g' : nb_students_p_or_g ,  'relationships_customexercises': relationships_customexercises,
-               'nb_exo_only': nb_exo_only, 'nb_exo_only_c': nb_exo_only_c, 'group_id': group_id, 'group': group, 'role' : role, 'parcours_group' : parcours_group  }
+    context = { 'parcours': parcours, 'teacher': teacher,  'communications' : [] ,  'today' : today , 'skills': skills,
+               'students_from_p_or_g': students_p_or_g,   'nb_exo_visible': nb_exo_visible , 'nb_students_p_or_g' : nb_students_p_or_g ,  'relationships_customexercises': relationships_customexercises,
+               'nb_exo_only': nb_exo_only,'group_id': group_id, 'group': group, 'role' : role, 'parcours_group' : parcours_group  }
 
     return render(request, 'qcm/show_parcours.html', context)
 
 
 
+
+def ordering_number_for_student(parcours,student):
+    """ créer une seule liste des exercices personnalisés et des exercices sacado coté eleve """
+    listing_ordered = set() 
+    relationships = Relationship.objects.filter(parcours=parcours, students=student, is_publish=1).prefetch_related('exercise__supportfile').order_by("ranking")
+    customexercises = Customexercise.objects.filter(parcourses=parcours, students=student, is_publish=1).order_by("ranking") 
+    listing_ordered.update(relationships)
+    listing_ordered.update(customexercises)
+
+    listing_order = sorted(listing_ordered, key=attrgetter('ranking')) #set trié par ranking
+
+
+    nb_exo_only, nb_exo_visible  = [] , []   
+    i , j = 0, 0
+
+    for item in listing_order :
+        try :
+            if not item.exercise.supportfile.is_title and not item.exercise.supportfile.is_subtitle:
+                i += 1
+            nb_exo_only.append(i)
+            if not item.exercise.supportfile.is_title and not item.exercise.supportfile.is_subtitle and item.is_publish != 0:
+                j += 1
+            nb_exo_visible.append(j)
+        except :
+            i += 1
+            nb_exo_only.append(i)
+            if item.is_publish :
+                j += 1
+            nb_exo_visible.append(j)
+
+    return listing_order , nb_exo_only, nb_exo_visible
 
 
 def show_parcours_student(request, id):
@@ -1332,27 +1338,14 @@ def show_parcours_student(request, id):
 
     else :
 
-        relationships = Relationship.objects.filter(parcours=parcours, students=student, is_publish=1 ).order_by("ranking")
-        customexercises = Customexercise.objects.filter(parcourses = parcours, students=student, is_publish=1 ).order_by("ranking") 
-     
-        nb_exo_only,nb_exo_only_c = [] , [] 
-        i=0
-
-        for r in relationships :
-            if not r.exercise.supportfile.is_title and not r.exercise.supportfile.is_subtitle:
-                i+=1
-            nb_exo_only.append(i)
-
-        for ce in customexercises:
-            i += 1
-            nb_exo_only_c.append(i)
-
+        relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number_for_student(parcours,student)
+        nb_exercises = len(relationships_customexercises)
 
         courses = parcours.course.filter(Q(is_publish=1)|Q(publish_start__lte=today,publish_end__gte=today)).order_by("ranking")
-        nb_exercises = Relationship.objects.filter(parcours=parcours, students=student, is_publish=1 ).count() + Customexercise.objects.filter(parcourses = parcours, students=student, is_publish=1 ).count()
-        context = {'relationships': relationships, 'customexercises': customexercises, 'stage' : stage , 'today' : today , 
+
+        context = { 'stage' : stage , 'relationships_customexercises': relationships_customexercises,
                     'courses':courses , 'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only, 
-                    'nb_exo_only_c' : nb_exo_only_c ,  'today': today ,   }
+                    'today': today ,   }
 
         return render(request, 'qcm/show_parcours_student.html', context)
 

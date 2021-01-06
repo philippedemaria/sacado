@@ -52,54 +52,55 @@
 
     <div class="row">
         <div class="col-lg-{% if courses|length > 0 %}10{% else %}12{% endif %} col-xs-12">
-            {% for relation in relationships %}
-                {%  if relation.exercise.supportfile.is_title %}       
+        {% for rc in relationships_customexercises %}
+ 
+                {% if rc.exercise.supportfile.is_title %}       
                     <h2 class="listing thin" style="width:100%; clear:both"> 
-                        {% if relation.is_header_of_section  %}
-                            <a href="#" data-toggle='modal' data-target='#head_of_section'    data-relation_id='{{ relation.id }}'  class="header_shower" title="Cours associé à cette section">
-                            {% if  relation.exercise.supportfile.title %}  
-                                {{  relation.exercise.supportfile.title|cleanhtml|capfirst }}  
+                        {% if rc.is_header_of_section  %}
+                            <a href="#" data-toggle='modal' data-target='#head_of_section'    data-relation_id='{{ rc.id }}'  class="header_shower" title="Cours associé à cette section">
+                            {% if  rc.exercise.supportfile.title %}  
+                                {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
                             {% else %}
-                                {{ relation.exercise.supportfile.annoncement|cleanhtml }}
+                                {{ rc.exercise.supportfile.annoncement|cleanhtml }}
                             {% endif %} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
                         {% else %}
-                            {% if  relation.exercise.supportfile.title %}  
-                                {{  relation.exercise.supportfile.title|cleanhtml|capfirst }}  
+                            {% if  rc.exercise.supportfile.title %}  
+                                {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
                             {% else %}
-                                {{ relation.exercise.supportfile.annoncement|cleanhtml }}
+                                {{ rc.exercise.supportfile.annoncement|cleanhtml }}
                             {% endif %} 
                         {% endif %}
                     </h2>
 
-                {%  elif relation.exercise.supportfile.is_subtitle %}
+                {% elif rc.exercise.supportfile.is_subtitle %}
                     <h3 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> 
-                        {% if relation.is_header_of_section %}
-                            <a href="#" data-toggle='modal' data-target='#head_of_section'  data-relation_id='{{ relation.id }}' class="header_shower" title="Cours associé à cette sous-section"> 
-                                {% if  relation.exercise.supportfile.title %}  
-                                    {{  relation.exercise.supportfile.title|cleanhtml|capfirst }}  
+                        {% if rc.is_header_of_section %}
+                            <a href="#" data-toggle='modal' data-target='#head_of_section'  data-relation_id='{{ rc.id }}' class="header_shower" title="Cours associé à cette sous-section"> 
+                                {% if  rc.exercise.supportfile.title %}  
+                                    {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
                                 {% else %}
-                                    {{ relation.exercise.supportfile.annoncement|cleanhtml }}
+                                    {{ rc.exercise.supportfile.annoncement|cleanhtml }}
                                 {% endif %} 
                                 <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
                         {% else %}
-                                {% if  relation.exercise.supportfile.title %}  
-                                    {{  relation.exercise.supportfile.title|cleanhtml|capfirst }}  
+                                {% if  rc.exercise.supportfile.title %}  
+                                    {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
                                 {% else %}
-                                    {{ relation.exercise.supportfile.annoncement|cleanhtml }}
+                                    {{ rc.exercise.supportfile.annoncement|cleanhtml }}
                                 {% endif %} 
                         {% endif %}
                     </h3>
-               {% else %} 
-                    {% get_constraint_to_this_relationship  relation  student as    under_score   %}
-                    {%  get_last_score_and_time   relation.exercise   relation.parcours   student    as    data %}
-                    {%  get_noggb_data   relation   student    as    noggb_data %}
+                {% elif rc.exercise %} 
+                    {% get_constraint_to_this_relationship  rc  student as    under_score   %}
+                    {%  get_last_score_and_time   rc.exercise   rc.parcours   student    as    data %}
+                    {%  get_noggb_data   rc   student    as    noggb_data %}
                     <!-- div de résultat SACADO corrigé par le prof -->                    
                     <div class="card_freeze" {% if data.score %} style="opacity:0.8" {% endif %}>
 
 
-                            <div id="div_results{{ relation.id }}" class="div_results" >
+                            <div id="div_results{{ rc.id }}" class="div_results" >
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12"> <a href="#" class="div_results_close pull-right" data-relation_id="{{relation.id}}"><i class="fa fa-times"></i></a>     
+                                    <div class="col-sm-12 col-md-12"> <a href="#" class="div_results_close pull-right" data-relation_id="{{rc.id}}"><i class="fa fa-times"></i></a>     
                                       {% if noggb_data.comment %}
                                         <label  style="font-size: 10px;font-weight: 600">Commentaire :</label> {{ noggb_data.comment }} 
                                         <hr style="padding:0px; margin:10px 0px"/> 
@@ -117,7 +118,7 @@
                                     <div class="col-sm-12 col-md-12"> 
                                         <a href="#" data-toggle='modal' data-target='#my_production' 
                                                         class="read_my_production pull-right" data-student_id="{{ student.user.id}}" data-custom=0 
-                                                        data-exercise_id="{{ relation.id}}">
+                                                        data-exercise_id="{{ rc.id}}">
                                             <b> Voir ma copie</b>
                                         </a>   
                                         <label  style="font-size: 10px;font-weight: 600">Compétences 
@@ -156,16 +157,16 @@
              
                                 <div  class="clear_under_constraint">
                                     <div class="col-xs-12 col-md-12">
-                                        {% if relation.relationship_constraint.all|length == forloop.counter0 %} <br> <br>
+                                        {% if rc.relationship_constraint.all|length == forloop.counter0 %} <br> <br>
                                             <span class="text-red"> Tous les exercices précédents avec 
 
-                                              {% for constraint in relation.relationship_constraint.all %}
+                                              {% for constraint in rc.relationship_constraint.all %}
                                                     {% if forloop.last %}  {{ constraint.scoremin }}% {% endif %} 
                                               {% endfor %}
                                             </span>
                                         {% else %}   
 
-                                              {% for constraint in relation.relationship_constraint.all %}
+                                              {% for constraint in rc.relationship_constraint.all %}
                                                     <div class="text-red"  style="font-size: 12px;"><i class="fa fa-minus-circle"></i> {{ constraint }}</div>
                                               {% endfor %}
 
@@ -174,10 +175,10 @@
                                 </div>
                             </div>
                             <div class="date_under_constraint"><!-- div de la date centrée -->
-                                {% if  relation.date_limit %}
+                                {% if  rc.date_limit %}
                                     {% if not data.score %} 
                                         <div  class="btn btn-danger" >   
-                                              Avant le {{relation.date_limit|date:"d N Y" }}
+                                              Avant le {{rc.date_limit|date:"d N Y" }}
                                         </div>
                                     {% endif %}    
                                 {% endif %}  
@@ -186,13 +187,13 @@
 
 
                         <div class="card-body student">
-                            <span style="font-size: 40px; padding-left:3px;float:left; padding-top: 10px; {% if not data.score %} color: {{ relation.parcours.color}} ;  {% endif %} ">
+                            <span style="font-size: 40px; padding-left:3px;float:left; padding-top: 10px; {% if not data.score %} color: {{ rc.parcours.color}} ;  {% endif %} ">
                                 {{ nb_exo_only|index:forloop.counter0 }}.</span> 
                             <div class="card-score-student">
 
-                                {% get_is_submitted relation student as submitter %}
+                                {% get_is_submitted rc student as submitter %}
                                 {% if submitter %}
-                                <div style="font-size: 10px; text-align: center; position: absolute; top:0px; background-color: {{ relation.parcours.color}}; color: #FFF; border-radius: 4px;z-index: 9">En attente<br> de correction</div>
+                                <div style="font-size: 10px; text-align: center; position: absolute; top:0px; background-color: {{ rc.parcours.color}}; color: #FFF; border-radius: 4px;z-index: 9">En attente<br> de correction</div>
                                 {% endif %}
 
                                 {% if data.score or data.score > -1 %}
@@ -208,7 +209,7 @@
                                             {% endif %}">
                                         {{ data.score }}
                                     </span> 
-                                    {% if relation.exercise.supportfile.is_ggbfile %}
+                                    {% if rc.exercise.supportfile.is_ggbfile %}
                                         <font style="font-size:10px">{{ data.time}}</font>
                                     {% endif %} 
 
@@ -218,7 +219,7 @@
                                     </span>
                                 {% endif %}
                             </div>
-                            {% if relation.exercise.supportfile.calculator %}
+                            {% if rc.exercise.supportfile.calculator %}
                               <img src="{% static 'img/calculator.png' %}" class="pull-right" width="35px" />
                             {% else %}
                               <img src="{% static 'img/no_calculator.png' %}" class="pull-right"   width="35px" />
@@ -228,44 +229,44 @@
 
 
                             {% if student %}
-                                {% if relation.exercise.supportfile.is_ggbfile %}          
-                                <a href="{% if not is_lock %}{% url 'execute_exercise'  relation.parcours.id  relation.exercise.id   %}{% endif %}">  <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.8" {% endif %}    ></a>
+                                {% if rc.exercise.supportfile.is_ggbfile %}          
+                                <a href="{% if not is_lock %}{% url 'execute_exercise'  rc.parcours.id  rc.exercise.id   %}{% endif %}">  <img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not rc.is_publish %} style="opacity:0.8" {% endif %}    ></a>
                                 {% else %}
-                                    {% get_this_exercise_is_locked  student relation relation.parcours 0 today as is_blck %}
+                                    {% get_this_exercise_is_locked  student rc rc.parcours 0 today as is_blck %}
                                     {% if is_blck %}
 
                                         <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
-                                              <i class="fa fa-lock"></i> <span class="hidden_lock"> {{ customexercise.lock|date:"d-m-Y à H:i" }}</span>
+                                              <i class="fa fa-lock"></i> <span class="hidden_lock"> {{ rc.lock|date:"d-m-Y à H:i" }}</span>
                                         </div>
                                         <a href="#"> 
-                                            <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.8" {% endif %}  >
+                                            <img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not rc.is_publish %} style="opacity:0.8" {% endif %}  >
                                         </a>
                                     {% else %}
-                                        <a href="{% url 'write_exercise'  relation.id   %}"> 
-                                            <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.8" {% endif %}  >
+                                        <a href="{% url 'write_exercise'  rc.id   %}"> 
+                                            <img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not rc.is_publish %} style="opacity:0.8" {% endif %}  >
                                         </a>
                                     {% endif %}
                                 {% endif  %}
                             {% else %}
-                            <a href="#" class="detail_parcours"  data-exercise_id="{{ relation.exercise.id }}"  data-num_exo="{{ forloop.counter}}"
+                            <a href="#" class="detail_parcours"  data-exercise_id="{{ rc.exercise.id }}"  data-num_exo="{{ forloop.counter}}"
                                                        data-parcours_id="{{ parcours.id }}">
-                                                        <img src="{{ relation.exercise.supportfile.imagefile.url }}" class="image_parcours" {% if not relation.is_publish %} style="opacity:0.6" {% endif %}  >
+                                                        <img src="{{ rc.exercise.supportfile.imagefile.url }}" class="image_parcours" {% if not rc.is_publish %} style="opacity:0.6" {% endif %}  >
                                                        </a> 
                             {% endif  %}
-                            {% if  relation.date_limit %}
+                            {% if  rc.date_limit %}
                                 {% if not data.score %} 
                                     <div  class="btn btn-danger"  style="position: absolute; right : 0px; top:120px;">   
-                                          Avant le {{relation.date_limit|date:"d N Y" }}
+                                          Avant le {{rc.date_limit|date:"d N Y" }}
                                     </div>
                                 {% endif %}    
                             {% endif %}   
                             <div class="card-text" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">
-                                <i class="fa fa-fw fa-barcode"></i> {{ relation.exercise.supportfile.code }}
-                                <i class="fa fa-fw fa-clock-o"></i> {{ relation.duration }} min.
-                                <i class="fa fa-fw fa-save"></i> {{ relation.situation}}
+                                <i class="fa fa-fw fa-barcode"></i> {{ rc.exercise.supportfile.code }}
+                                <i class="fa fa-fw fa-clock-o"></i> {{ rc.duration }} min.
+                                <i class="fa fa-fw fa-save"></i> {{ rc.situation}}
                                 
-                                {% if not relation.parcours.is_evaluation %}
-                                {% if relation.relationships_courses.all|length > 0 %}  
+                                {% if not rc.parcours.is_evaluation %}
+                                {% if rc.relationships_courses.all|length > 0 %}  
                                     <i class="fa fa-fw fa-desktop"></i>
                                 {% endif  %}
                                 {% endif  %}
@@ -273,21 +274,21 @@
 
 
                                 {% if noggb_data.is_corrected %}
-                                    <span class="pull-right selector_div_result" data-relation_id ="{{ relation.id }}"  data-custom=0 ><i class="fa fa-trophy"></i></span>
+                                    <span class="pull-right selector_div_result" data-relation_id ="{{ rc.id }}"  data-custom=0 ><i class="fa fa-trophy"></i></span>
                                 {% else %}
                                     {% if submitter %}
-                                        {% if not relation.exercise.supportfile.is_ggbfile %}  
-                                        <span class="pull-right selector_div_result" data-relation_id ="{{ relation.id }}"  data-custom=0 ><i class="fa fa-copy"></i></span>
+                                        {% if not rc.exercise.supportfile.is_ggbfile %}  
+                                        <span class="pull-right selector_div_result" data-relation_id ="{{ rc.id }}"  data-custom=0 ><i class="fa fa-copy"></i></span>
                                         {% endif %}
                                     {% endif %}
                                 {% endif %}
-                                {% if relation.relationship_mastering.all|length > 0 %}
-                                <a href="{% url 'mastering_student_show' relation.id %}" target="_blank" class="helper_tip_card" style="color:{{ parcours.color|contrast_color }}">
+                                {% if rc.relationship_mastering.all|length > 0 %}
+                                <a href="{% url 'mastering_student_show' rc.id %}" target="_blank" class="helper_tip_card" style="color:{{ parcours.color|contrast_color }}">
                                     <i class="fa fa-fw fa-sitemap pull-right"></i>
                                     <div class="helper_tip_text_card" >Cet exercice ouvre un parcours de maitrise.</div>
                                 </a>
                                 {% endif  %}
-                                {% if relation.relationship_remediation.all|length > 0 %}
+                                {% if rc.relationship_remediation.all|length > 0 %}
                                     <span class="helper_tip_card"><i class="fa fa-fw fa-paperclip pull-right" style="color:{{ parcours.color|contrast_color }}"></i>
                                     <div class="helper_tip_text_card" >Cet exercice contient une aide extérieure ou une consigne orale.</div>
                                 </span>
@@ -295,23 +296,21 @@
                             </div>
                         </div>
                     </div> 
-                {% endif %}          
-            {% endfor %}
-         
-
-            {% for customexercise in customexercises %}
-                {% get_score_student_for_this customexercise student as score %}
-                {% get_is_submit customexercise parcours student as submitter %}
-                {% get_all_results_custom customexercise student parcours as data %} 
+                {% else %}          
+ 
+ 
+                {% get_score_student_for_this rc student as score %}
+                {% get_is_submit rc parcours student as submitter %}
+                {% get_all_results_custom rc student parcours as data %} 
                     <div class="card_freeze"  {% if score %} style="opacity:0.8" {% endif %}  >
                         <!-- div de résultat -->
                         {% if submitter %}
-                            <div id="div_results_custom{{ customexercise.id }}" class="div_results" >
+                            <div id="div_results_custom{{ rc.id }}" class="div_results" >
                                 {% if data %}
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12"> <a href="#" class="div_results_custom_close pull-right" data-customexercise_id="{{customexercise.id}}"><i class="fa fa-times"></i></a>     
+                                    <div class="col-sm-12 col-md-12"> <a href="#" class="div_results_custom_close pull-right" data-customexercise_id="{{rc.id}}"><i class="fa fa-times"></i></a>     
                                       {% if data.point %}
-                                        <label  style="font-size: 10px;font-weight: 600;">Note : {{ data.point }}/{{ customexercise.mark }} </label><br>
+                                        <label  style="font-size: 10px;font-weight: 600;">Note : {{ data.point }}/{{ rc.mark }} </label><br>
                                       {% endif %}
                                       {% if data.comment %}
                                         <label  style="font-size: 10px;font-weight: 600">Commentaire :</label> {{ data.comment }} 
@@ -331,8 +330,8 @@
                                     <div class="col-sm-12 col-md-12">  
                                         <a href="#" data-toggle='modal' data-target='#my_production' 
                                                         class="read_my_production pull-right" data-student_id="{{ student.user.id}}" data-custom=1 
-                                                        data-exercise_id="{{ customexercise.id}}">
-                                            <b> Voir ma copie {% if customexercise.is_publish_cor %}+ corrigé {% endif %}</b>
+                                                        data-exercise_id="{{ rc.id}}">
+                                            <b> Voir ma copie {% if rc.is_publish_cor %}+ corrigé {% endif %}</b>
                                         </a>  
                                         <label  style="font-size: 10px;font-weight: 600">Compétences</label>
                                           {% for d in data.skills.all %} 
@@ -371,7 +370,7 @@
                         {% if data.is_corrected %}
                             <div class="teacher_corrected"  >
                                 {% if data.point %}
-                                    <label  style="font-size: 12px;font-weight: 600;">{{ data.point }}/{{ customexercise.mark }} </label>
+                                    <label  style="font-size: 12px;font-weight: 600;">{{ data.point }}/{{ rc.mark }} </label>
                                 {% else %}
                                     Exercice non noté
                                 {% endif %}
@@ -381,14 +380,14 @@
 
                         <div class="card-body student">
                             <span style="font-size: 40px; padding-left:3px;float:left; padding-top: 10px; {% if not score %} color: {{ parcours.color}} ;  {% endif %} ">
-                                {{ nb_exo_only_c|index:forloop.counter0 }}.</span> 
+                                {{ nb_exo_only|index:forloop.counter0 }}.</span> 
                             <div class="card-score-student"  >
 
                             {% if submitter %}
                             <div style="font-size: 10px; text-align: center; position: absolute; top:0px; background-color: {{ parcours.color}}; color: #FFF; border-radius: 4px">En attente<br> de correction</div>
                             {% endif %}
                             </div>
-                            {% if customexercise.calculator %}
+                            {% if rc.calculator %}
                               <img src="{% static 'img/calculator.png' %}" class="pull-right" width="35px" />
                             {% else %}
                               <img src="{% static 'img/no_calculator.png' %}" class="pull-right"   width="35px" />
@@ -396,17 +395,17 @@
                         </div> 
                         <div class="card-image"> 
          
-                          <div style="position: absolute; left : 30px; top:41px;" id="annoncement{{customexercise.id}}"   >   
+                          <div style="position: absolute; left : 30px; top:41px;" id="annoncement{{rc.id}}"   >   
                               <span class="helper_tip btn btn-default">Consigne
-                                <div class="helper_tip_text_right">{{customexercise.instruction|insert_tags:45|safe}} </div> 
+                                <div class="helper_tip_text_right">{{rc.instruction|insert_tags:45|safe}} </div> 
                               </span>
                           </div>
 
-                            {% get_this_exercise_is_locked  student customexercise parcours  1 today as is_blck %}
+                            {% get_this_exercise_is_locked  student rc parcours  1 today as is_blck %}
 
                             {% if is_blck %}
-                                {% if customexercise.imagefile %} 
-                                    <img src="{{ customexercise.imagefile.url }}"  class="image_parcours" >
+                                {% if rc.imagefile %} 
+                                    <img src="{{ rc.imagefile.url }}"  class="image_parcours" >
                                 {% else %}
                                     <img src="{% static 'img/custom_exercise.png' %}"  class="image_parcours" >
                                 {% endif %}
@@ -416,53 +415,54 @@
                             {% else %}
 
 
-                                <a href="{% url 'write_custom_exercise' customexercise.id parcours.id %}"> 
-                                    {% if customexercise.imagefile %} 
-                                        <img src="{{ customexercise.imagefile.url }}"  class="image_parcours" >
+                                <a href="{% url 'write_custom_exercise' rc.id parcours.id %}"> 
+                                    {% if rc.imagefile %} 
+                                        <img src="{{ rc.imagefile.url }}"  class="image_parcours" >
                                     {% else %}
                                         <img src="{% static 'img/custom_exercise.png' %}"  class="image_parcours" >
                                     {% endif %}
                                 </a>
                             {% endif %}    
 
-                            {% if  customexercise.date_limit %}
-                                {% if not customexercise.score %} 
+                            {% if  rc.date_limit %}
+                                {% if not rc.score %} 
                                     <div  class="btn btn-danger"  style="position: absolute; right : 0px; top:120px;">   
-                                        Avant le {{customexercise.date_limit|date:"d N Y" }}
+                                        Avant le {{rc.date_limit|date:"d N Y" }}
                                     </div>
                                 {% endif %}    
                             {% endif %} 
               
                             <div class="card-text" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">
-                                <i class="fa fa-fw fa-barcode"></i> {{ customexercise.code }}
-                                <i class="fa fa-fw fa-clock-o"></i> {{ customexercise.duration }} min
+                                <i class="fa fa-fw fa-barcode"></i> {{ rc.code }}
+                                <i class="fa fa-fw fa-clock-o"></i> {{ rc.duration }} min
 
 
 
-                                {% if customexercise.customexercise_remediation.all|length > 0 %}
+                                {% if rc.customexercise_remediation.all|length > 0 %}
                                     <span class="helper_tip_card"><i class="fa fa-fw fa-paperclip" style="color:{{ parcours.color|contrast_color }}"></i>
                                             <div class="helper_tip_text_card" >Cet exercice contient une aide extérieure ou une consigne orale.</div>
                                 </span>
                                 {% endif  %}
 
 
-                               {% if customexercise.customexercise_mastering_custom.all|length > 0 %}
-                                <a href="{% url 'mastering_custom_student_show' customexercise.id %}" target="_blank" style="color:{{ parcours.color|contrast_color }}">
+                               {% if rc.customexercise_mastering_custom.all|length > 0 %}
+                                <a href="{% url 'mastering_custom_student_show' rc.id %}" target="_blank" style="color:{{ parcours.color|contrast_color }}">
                                     <i class="fa fa-fw fa-sitemap pull-right"></i>
                                 </a>
                                 {% endif  %}
 
                                 {% if data.is_corrected %}
-                                    <span class="pull-right selector_div_result_custom" data-customexercise_id ="{{ customexercise.id }}"  data-custom=1 ><i class="fa fa-trophy"></i></span>
+                                    <span class="pull-right selector_div_result_custom" data-customexercise_id ="{{ rc.id }}"  data-custom=1 ><i class="fa fa-trophy"></i></span>
                                 {% else %}                            
                                     {% if submitter %}
-                                        <span class="pull-right selector_div_result_custom" data-customexercise_id ="{{ customexercise.id }}"  data-custom=1 ><i class="fa fa-copy"></i></span>
+                                        <span class="pull-right selector_div_result_custom" data-customexercise_id ="{{ rc.id }}"  data-custom=1 ><i class="fa fa-copy"></i></span>
                                     {% endif %}
                                 {% endif %}
 
                             </div>
                         </div>
-                    </div>               
+                    </div> 
+                {% endif %}             
             {% endfor %}
         </div>
 
@@ -473,7 +473,7 @@
             <ul class="nav nav-pills nav-stacked admin-menu">
                 {% for course in courses %}
                     <li class="{% if forloop.first %}active{% endif %} menu_course">
-                        <a href="#" data-toggle='modal' data-target='#menu_course{{ forloop.counter }}'  data-relation_id='{{ relation.id }}' class="header_shower"> {{ course.title }}</a> 
+                        <a href="#" data-toggle='modal' data-target='#menu_course{{ forloop.counter }}'  data-relation_id='{{ rc.id }}' class="header_shower"> {{ course.title }}</a> 
                     
 
                         <div class="modal fade" id="menu_course{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="menu_course{{ forloop.counter }}">
