@@ -1267,23 +1267,40 @@ def my_profile(request):
         return render(request, 'account/parent_form.html', {'form': form, 'communications' : [],  'user_form': user_form, 'parent': parent, 'today' : today })
 
 
+@csrf_exempt
 def ajax_userinfo(request):
     username = request.POST.get("username")
 
     data = {}
-    try:
-        nb_user = User.objects.filter(username=username).count()
-        if nb_user > 0:
-            data['html'] = "<br><i class='fa fa-times text-danger'></i> Identifiant déjà utilisé."
-            data['test'] = False
-        else:
-            data['html'] = "<br><i class='fa fa-check text-success'></i>"
-            data['test'] = True
-    except:
+    nb_user = User.objects.filter(username=username).count()
+    print(username , nb_user)
+    if nb_user > 0:
         data['html'] = "<br><i class='fa fa-times text-danger'></i> Identifiant déjà utilisé."
         data['test'] = False
+    else:
+        data['html'] = "<br><i class='fa fa-check text-success'></i>"
+        data['test'] = True
 
     return JsonResponse(data)
+
+
+@csrf_exempt
+def ajax_userinfomail(request):
+    email = request.POST.get("email")
+
+    data = {}
+    nb_user = User.objects.filter(email=email).count()
+
+    if nb_user > 0:
+        data['html'] = "<br><i class='fa fa-times text-danger'></i> Identifiant déjà utilisé."
+        data['test'] = False
+    else:
+        data['html'] = "<br><i class='fa fa-check text-success'></i>"
+        data['test'] = True
+
+    return JsonResponse(data)
+
+
 
 
 def ajax_courseinfo(request):

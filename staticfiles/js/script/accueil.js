@@ -10,20 +10,47 @@
         //$(".select2").select2({width: '100%'});
 
         $('#teacher_form .sendit').prop('disabled', true);
+ 
         $("#teacher_form #id_username").on('blur', function () {
-            let userid = $(this).val();
-            console.log(userid);
+            let username = $(this).val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            console.log(username);
             $.ajax({
                 url: '/account/ajax/userinfo/',
                 data: {
-                    'userid': userid
+                    'username': username,
+                    'csrf_token' : csrf_token ,
                 },
-                dataType: 'json',
+                type: "POST",
+                dataType: "json",
                 success: function (data) {
-                    $("#ajaxresultat").text(data["html"]);
+                    $(".ajaxresult").html(data["html"]);
+
+                    if(data["test"]) { $(".sendit").prop("disabled", false ) ;} else { $(".sendit").prop("disabled", true ) ;}
                 }
             });
         });
+
+        $("#teacher_form #id_email").on('blur', function () {
+            let email = $(this).val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            console.log(email);
+            $.ajax({
+                url: '/account/ajax/userinfomail/',
+                data: {
+                    'email': email,
+                    'csrf_token' : csrf_token ,
+                },
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    $(".ajaxresultmail").html(data["html"]);
+
+                    if(data["test"]) { $(".sendit").prop("disabled", false ) ;} else { $(".sendit").prop("disabled", true ) ;}
+                }
+            });
+        });
+
 
 
         somme = 0
@@ -58,6 +85,7 @@
  
         $('#student_form .sendit').prop('disabled', true);
         sommeS = 2
+
         $("#student_form #id_username").on('keyup', function () {
             let username = $(this).val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
@@ -71,9 +99,9 @@
                 },
                 dataType: 'json',
                 success: function (data) {
-                    $("#ajaxresultat").html(data["html"]);
+                    $("#student_form .ajaxresult").html(data["html"]);
                     sommeS = sommeS - 1;
-                }
+                } 
             });
         });
 
@@ -128,7 +156,8 @@
         $('.is_child_exist').prop('disabled', true);
 
         sommeP = 2
-        $("#parent_form #id_username").on('keyup', function () {
+        
+        $("#parent_form #id_username").on('blur', function () {
             let username = $(this).val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
             console.log(username);
@@ -141,7 +170,7 @@
                 },
                 dataType: 'json',
                 success: function (data) {
-                    $("#parent_form .ajaxresultat").html(data["html"]);
+                    $("#parent_form .ajaxresult").html(data["html"]);
                 }
             });
         });

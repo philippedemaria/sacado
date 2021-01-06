@@ -6,13 +6,65 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
-  $(window).on('load', function () {
-    if ($('#preloader').length) {
-      $('#preloader').delay(100).fadeOut('slow', function () {
-        $(this).remove();
-      });
-    }
-  });
+          $(window).on('load', function () {
+            if ($('#preloader').length) {
+              $('#preloader').delay(100).fadeOut('slow', function () {
+                $(this).remove();
+              });
+            }
+          });
+
+        // ====================================================================================================================
+        // ====================================================================================================================
+        // =========================================   check username exist  ================================================== 
+        // ====================================================================================================================
+        // ====================================================================================================================
+
+
+        $("#id_username").on('blur', function () {
+            let username = $(this).val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            console.log(username);
+            $.ajax({
+                url: '/account/ajax/userinfo/',
+
+                data: {
+                    'username': username,
+                    'csrf_token' : csrf_token ,
+                },
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    $("#ajaxresult").html(data["html"]);
+
+                    if(data["test"]) { $("#submitter").attr("disabled", false ) ;} else { $("#submitter").attr("disabled", true ) ;}
+                }
+            });
+        });
+
+
+
+        $("#id_email").on('blur', function () {
+            let email = $(this).val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            console.log(email);
+            $.ajax({
+                url: '/account/ajax/userinfomail/',
+                data: {
+                    'email': email,
+                    'csrf_token' : csrf_token ,
+                },
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    $(".ajaxresultmail").html(data["html"]);
+
+                    if(data["test"]) { $("#submitter").prop("disabled", false ) ;} else { $("#submitter").prop("disabled", true ) ;}
+                }
+            });
+        });
+
+
 
         // ====================================================================================================================
         // ====================================================================================================================

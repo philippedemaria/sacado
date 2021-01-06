@@ -57,6 +57,8 @@ urlpatterns = [
     path('profile', my_profile, name='profile'),
 
     path('ajax/userinfo/', ajax_userinfo, name='ajax_userinfo'),
+    path('ajax/userinfomail/', ajax_userinfomail, name='ajax_userinfomail'),
+
     path('ajax/courseinfo/', ajax_courseinfo, name='ajax_courseinfo'),
     path('ajax/control_code_student/', ajax_control_code_student, name='ajax_control_code_student'),
 
