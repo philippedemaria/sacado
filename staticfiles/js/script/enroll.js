@@ -20,7 +20,7 @@
                 },
                 dataType: 'json',
                 success: function (data) {
-                    $("#ajaxresultat").html(data["html"]);
+                    $("#student_form .ajaxresult").html(data["html"]);
                     sommeS = sommeS - 1;
                 }
             });

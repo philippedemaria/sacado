@@ -155,8 +155,7 @@
 
         $('.is_child_exist').prop('disabled', true);
 
-        sommeP = 2
-        
+        sommeP = 2 ;
         $("#parent_form #id_username").on('blur', function () {
             let username = $(this).val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();

@@ -1273,7 +1273,7 @@ def ajax_userinfo(request):
 
     data = {}
     nb_user = User.objects.filter(username=username).count()
-    print(username , nb_user)
+
     if nb_user > 0:
         data['html'] = "<br><i class='fa fa-times text-danger'></i> Identifiant déjà utilisé."
         data['test'] = False
