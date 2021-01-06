@@ -557,8 +557,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
           event.preventDefault();
         });
  
- 
-
 
         function sorter_exercises($div_class , $exercise_class ) {
 
@@ -595,46 +593,45 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                             }); 
                         }
                     });
-            }
+                }
 
     
- 
-           sorter_exercises('.exercise_sortable' , ".div_exercise_id");
-           sorter_exercises('#exercise_sortable_list' , ".sorted_exercise_id");
+        sorter_exercises('.exercise_sortable' , ".div_exercise_id");
+        sorter_exercises('#exercise_sortable_list' , ".sorted_exercise_id");
 
 
         function sorter_parcours_or_folders($div_class , $exercise_class, $choice ) {
 
-        $($div_class).sortable({
-            start: function( event, ui ) { 
-                   $(ui.item).css("box-shadow", "4px 2px 4px gray");
-               }, 
-            stop: function (event, ui) {
-                var valeurs = "";
-                $($exercise_class ).each(function() {
-                    let parcours_id = $(this).attr("data-parcours_id"); 
-                    valeurs = valeurs + parcours_id +"-";
+            $($div_class).sortable({
+                start: function( event, ui ) { 
+                       $(ui.item).css("box-shadow", "4px 2px 4px gray");
+                   }, 
+                stop: function (event, ui) {
+                    var valeurs = "";
+                    $($exercise_class ).each(function() {
+                        let parcours_id = $(this).attr("data-parcours_id"); 
+                        valeurs = valeurs + parcours_id +"-";
+                    });
+                    $(ui.item).css("box-shadow",  "2px 1px 2px gray");
+
+                    if ($choice) {
+                        this_url =  "../../ajax/parcours_sorter"  ;                   
+                    }
+                    else
+                         {
+                        this_url =  "../../../ajax/parcours_sorter"   ;                  
+                    }
+
+                    $.ajax({
+                            data:   { 'valeurs': valeurs    } ,   
+                            type: "POST",
+                            dataType: "json",
+                            url: this_url,
+                        }); 
+                    }
                 });
-                $(ui.item).css("box-shadow",  "2px 1px 2px gray");
 
-                if ($choice) {
-                    this_url =  "../../ajax/parcours_sorter"  ;                   
-                }
-                else
-                     {
-                    this_url =  "../../../ajax/parcours_sorter"   ;                  
-                }
-
-                $.ajax({
-                        data:   { 'valeurs': valeurs    } ,   
-                        type: "POST",
-                        dataType: "json",
-                        url: this_url,
-                    }); 
-                }
-            });
-
-        }
+            }
 
         sorter_parcours_or_folders('#parcours_sortable',".div_sorter",0) ;
         sorter_parcours_or_folders('#folders_sortable',".div_sorter",1) ;
