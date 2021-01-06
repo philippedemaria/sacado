@@ -49,7 +49,7 @@
             <div class="row">
                 <div style="background-color: #F2F1F0; border : 1px solid #e6e2dd; padding:20px">
                     <div class="panel panel-default exercise_sortable" style="border-radius:5px" id="miseEnAttenteDashboard" > 
-                        {% for relationship in relationships|dictsort:"order" %}  
+                        {% for relationship in relationships|dictsort:"ranking" %}  
                             <div  class="panel-body  {% if not forloop.last %} separation_dashed{% endif %}" 
                                   style="line-height: 30px; {% if not forloop.first %} border-bottom-right-radius:5px; border-bottom-left-radius:5px;{% endif %} 
                                                             {% if not forloop.last %} border-top-right-radius:5px; border-top-left-radius:5px;{% endif %}

@@ -1,6 +1,8 @@
 {% load static %}
 {% load item_tags %}
-{% load widget_tweaks %}                     
+{% load widget_tweaks %}
+
+{% with relation=rc %}
 
 <div class="card_freeze" style="{% if not relation.is_publish %}background-color: #F5F5F5{% else %}background:#FFF{% endif %}" id="card{{relation.id}}">
     <!-- Entete de la card  -->
@@ -457,3 +459,4 @@
     </div>
     <!-- Partie sur laquelle est posée l'image  -->   
 </div> 
+{% endwith %}

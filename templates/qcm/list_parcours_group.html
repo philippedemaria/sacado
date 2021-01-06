@@ -74,7 +74,7 @@
     {% for parcours_sort in list_parcours %}  
     <div class="row"></div>
     {% if  parcours_sort.grouper %}<h1 class="thin" id="evaluation">Evaluations favorites</h1>{% else %}<h1 class="thin"> Dossiers et parcours favoris</h1>{% endif %}  
-        <div id="parcours_sortable">
+        <div id="folders_sortable">
             {% for parcours in parcours_sort.list %}  
       
             <div  class="box box-widget widget-user-2 div_sorter"  {% if not parcours_sort.grouper %} data-parcours_id ="{{parcours.id}}" {% endif %} 

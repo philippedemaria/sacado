@@ -557,107 +557,90 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
           event.preventDefault();
         });
  
-
-         $('#exercise_sortable_list').sortable({
-            cursor: "move",   
-            distance: 10,
-            revert: true,
-            start: function( event, ui ) { 
-                   $(ui.item).css("box-shadow", "10px 5px 10px gray").css("background-color", "#271942").css("color", "#FFF"); 
-               },
-            stop: function (event, ui) {
-
-                let parcours = $("#parcours").val();
-                var valeurs = "";
-                         
-                $(".sorted_exercise_id").each(function() {
-                    cstm = parseInt($(this).attr("data-custom"));
-                    let this_exercise_id = $(this).val();
-                    valeurs = valeurs + this_exercise_id +"-";
-                });
-
-                $(ui.item).css("box-shadow", "0px 0px 0px transparent").css("background-color", "#dbcdf7").css("color", "#271942"); 
-                custom = 0 ; 
-                custom = custom + cstm;
-                $.ajax({
-                        data:   { 'valeurs': valeurs , 'parcours' : parcours,  'custom' : custom,  } ,   
-                        type: "POST",
-                        dataType: "json",
-                        url: "../../ajax/sort_exercise" 
-                    }); 
-                }
-            });
-
-    
-        $('.exercise_sortable').sortable({
-            cursor: "move",
-            swap: true,    
-            animation: 150,
-            distance: 10,
-            revert: true,
-            tolerance: "pointer" , 
-            start: function( event, ui ) { 
-                   $(ui.item).css("box-shadow", "10px 5px 10px gray"); 
-               },
-            stop: function (event, ui) {
-
-
-                let parcours = $("#parcours").val();
-                var valeurs = "";
-      
-                $(".div_exercise_id").each(function() {
-
-                    cstm = parseInt($(this).attr("data-custom"));
-                    let div_exercise_id = $(this).val();
-                    valeurs = valeurs + div_exercise_id +"-";
-       
-                });
-                $(ui.item).css("box-shadow", "0px 0px 0px transparent");  
-
-                var custom = 0;
-                custom = custom + cstm;
-
-                $.ajax({
-                        data:   { 'valeurs': valeurs ,  'custom' : custom, 'parcours' : parcours,  } ,   
-                        type: "POST",
-                        dataType: "json",
-                        url: "../../ajax/sort_exercise" 
-                    }); 
-                }
-            });
  
 
 
+        function sorter_exercises($div_class , $exercise_class ) {
+
+                $($div_class).sortable({
+                    cursor: "move",
+                    swap: true,    
+                    animation: 150,
+                    distance: 10,
+                    revert: true,
+                    tolerance: "pointer" , 
+                    start: function( event, ui ) { 
+                           $(ui.item).css("box-shadow", "10px 5px 10px gray"); 
+                       },
+                    stop: function (event, ui) {
+
+                        let parcours = $("#parcours").val();
+                        var valeurs = "";
+                        var customizes = "";
+
+                        $($exercise_class).each(function() {
+                            cstm = parseInt($(this).attr("data-custom"));
+                            let div_exercise_id = $(this).val();
+                            valeurs = valeurs + div_exercise_id +"-";
+                            customizes = customizes + cstm +"-";
+                        });
+
+                        $(ui.item).css("box-shadow", "0px 0px 0px transparent");  
+
+                        $.ajax({
+                                data:   { 'valeurs': valeurs ,  'parcours' : parcours,'customizes' : customizes } ,    
+                                type: "POST",
+                                dataType: "json",
+                                url: "../../ajax/sort_exercise" 
+                            }); 
+                        }
+                    });
+            }
+
+    
+ 
+           sorter_exercises('.exercise_sortable' , ".div_exercise_id");
+           sorter_exercises('#exercise_sortable_list' , ".sorted_exercise_id");
 
 
-         $('#parcours_sortable').sortable({
+        function sorter_parcours_or_folders($div_class , $exercise_class, $choice ) {
+
+        $($div_class).sortable({
             start: function( event, ui ) { 
                    $(ui.item).css("box-shadow", "4px 2px 4px gray");
                }, 
             stop: function (event, ui) {
                 var valeurs = "";
-                $(".div_sorter").each(function() {
+                $($exercise_class ).each(function() {
                     let parcours_id = $(this).attr("data-parcours_id"); 
                     valeurs = valeurs + parcours_id +"-";
                 });
                 $(ui.item).css("box-shadow",  "2px 1px 2px gray");
 
+                if ($choice) {
+                    this_url =  "../../ajax/parcours_sorter"  ;                   
+                }
+                else
+                     {
+                    this_url =  "../../../ajax/parcours_sorter"   ;                  
+                }
+
                 $.ajax({
                         data:   { 'valeurs': valeurs    } ,   
                         type: "POST",
                         dataType: "json",
-                        url: "../../ajax/parcours_sorter" 
+                        url: this_url,
                     }); 
                 }
             });
 
+        }
+
+        sorter_parcours_or_folders('#parcours_sortable',".div_sorter",0) ;
+        sorter_parcours_or_folders('#folders_sortable',".div_sorter",1) ;
 
 
-
-
-
-
-         $('#course_sortable').sortable({
+        $('#course_sortable').sortable({
             start: function( event, ui ) { 
                    $(ui.item).css("box-shadow", "2px 1px 2px gray").css("background-color", "#271942").css("color", "#FFF"); 
                },
@@ -690,12 +673,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         // ================================================================================================================= 
         // =================================================================================================================
 
-        sorter_mastering("#layer4", "#layer4 .sorter_mastering") ;
-        sorter_mastering("#layer3", "#layer3 .sorter_mastering") ;
-        sorter_mastering("#layer2", "#layer2 .sorter_mastering") ;
-        sorter_mastering("#layer1", "#layer1 .sorter_mastering") ;
-
-
         function sorter_mastering(param0, param1){
 
             $(param0).sortable({
@@ -725,6 +702,13 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 }
             });
         }
+
+        sorter_mastering("#layer4", "#layer4 .sorter_mastering") ;
+        sorter_mastering("#layer3", "#layer3 .sorter_mastering") ;
+        sorter_mastering("#layer2", "#layer2 .sorter_mastering") ;
+        sorter_mastering("#layer1", "#layer1 .sorter_mastering") ;
+
+
 
 
         // =================================================================================================================
@@ -790,40 +774,40 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         // ================================================================================================================== 
         // =================================================================================================================
  
-        $('#form_error_set').hide();  
-        $('#error_set').click(function(event) {
-                 $('#form_error_set').toggle(500);  
+            $('#form_error_set').hide();  
+            $('#error_set').click(function(event) {
+                     $('#form_error_set').toggle(500);  
+                });
+
+
+            $('#error_sender').on('click', function () {
+                 
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+              
+                let message =  $("#message").val()  ;
+                let exercise_id =  $(this).attr("data-exercise_id");   
+                let from =  $(this).attr("data-from");   
+
+                if (message == "") { alert("Vous devez décrire brièvement le problème.") ; return false ; }    
+
+                if (from == "0") { url_to ="../../ajax/exercise_error"} else  { url_to ="../ajax/exercise_error" ; } 
+     
+                $.ajax({
+                    url: url_to,
+                    data: {
+                        'message': message,
+                        'exercise_id': exercise_id,
+                        csrfmiddlewaretoken: csrf_token,                        
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function (data) {
+
+                        $(".verif_sender").html(data.htmlg);
+     
+                    }
+                });
             });
-
-
-        $('#error_sender').on('click', function () {
-             
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-          
-            let message =  $("#message").val()  ;
-            let exercise_id =  $(this).attr("data-exercise_id");   
-            let from =  $(this).attr("data-from");   
-
-            if (message == "") { alert("Vous devez décrire brièvement le problème.") ; return false ; }    
-
-            if (from == "0") { url_to ="../../ajax/exercise_error"} else  { url_to ="../ajax/exercise_error" ; } 
- 
-            $.ajax({
-                url: url_to,
-                data: {
-                    'message': message,
-                    'exercise_id': exercise_id,
-                    csrfmiddlewaretoken: csrf_token,                        
-                },
-                type: "POST",
-                dataType: "json",
-                success: function (data) {
-
-                    $(".verif_sender").html(data.htmlg);
- 
-                }
-            });
-        });
 
 
 
@@ -918,7 +902,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         // ==================================================================================================
         // ==================================================================================================
 
-            function publisher_parcours($actionner,$target,$targetStatut){
+        function publisher_parcours($actionner,$target,$targetStatut){
 
                 $actionner.on('click', function (event) {
                 let parcours_id = $(this).attr("data-parcours_id");

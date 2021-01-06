@@ -81,47 +81,47 @@ body{
 
 
 <input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
-    {% for relation in relationships %}
-        {%  if relation.exercise.supportfile.is_title %}     
+
+
+
+    {% for rc in relationships_customexercises %}
+        {%  if rc.exercise.supportfile.is_title %}     
             <h2 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> 
-                {% if relation.is_header_of_section  %}
-                    <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"    data-relation_id='{{ relation.id }}'  class="header_shower" title="Cours associé à cette section">                       
-                        {% if  relation.exercise.supportfile.title %}  
-                            {{  relation.exercise.supportfile.title|cleanhtml|capfirst }}  
+                {% if rc.is_header_of_section  %}
+                    <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"    data-relation_id='{{ rc.id }}'  class="header_shower" title="Cours associé à cette section">                       
+                        {% if  rc.exercise.supportfile.title %}  
+                            {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
                         {% else %}
-                            {{ relation.exercise.supportfile.annoncement|cleanhtml }}
+                            {{ rc.exercise.supportfile.annoncement|cleanhtml }}
                         {% endif %}   <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
                 {% else %}
-                    {% if  relation.exercise.supportfile.title %}  
-                        {{  relation.exercise.supportfile.title|cleanhtml|capfirst }}  
+                    {% if  rc.exercise.supportfile.title %}  
+                        {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
                     {% else %}
-                        {{ relation.exercise.supportfile.annoncement|cleanhtml }}
+                        {{ rc.exercise.supportfile.annoncement|cleanhtml }}
                     {% endif %}
                 {% endif %}
             </h2>
-        {%  elif relation.exercise.supportfile.is_subtitle %}
+        {%  elif rc.exercise.supportfile.is_subtitle %}
             <h3 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> 
-                {% if relation.is_header_of_section %}
-                    <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"  data-relation_id='{{ relation.id }}' class="header_shower" title="Cours associé à cette sous-section">{{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
+                {% if rc.is_header_of_section %}
+                    <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"  data-relation_id='{{ rc.id }}' class="header_shower" title="Cours associé à cette sous-section">{{ rc.exercise.supportfile.annoncement|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
                 {% else %}
-                    {{ relation.exercise.supportfile.annoncement|cleanhtml|capfirst }}
+                    {{ rc.exercise.supportfile.annoncement|cleanhtml|capfirst }}
                 {% endif %}
             </h3>
         {% else %}  
-            {% include 'qcm/details_card.html' %}
+            {% include 'qcm/details_all_cards.html' %}            
         {% endif %}  
  
 
     {% endfor %}
 
+ 
+ 
 
 
-    {% for customexercise in customexercises %}
-        {% include 'qcm/details_card_custom.html' %}
-    {% endfor %}
-
-
-    {% if customexercises|length == 0 and relationships|length == 0 %}
+    {% if relationships_customexercises|length == 0   %}
         {% if parcours.is_folder %}
             <div class="row">
                 <div class="col-sm-12 col-md-1">

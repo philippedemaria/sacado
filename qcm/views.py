@@ -44,6 +44,7 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.utils import ImageReader
 from reportlab.lib.enums import TA_JUSTIFY,TA_LEFT,TA_CENTER,TA_RIGHT
 from cgi import escape
+from operator import attrgetter
 cm = 2.54
 import os
 import re
@@ -127,8 +128,6 @@ def students_from_p_or_g(request,parcours) :
 
 def get_complement(request, teacher, parcours_or_group):
 
-    data = {}
-
     try :
         group_id = request.session.get("group_id",None)
         if group_id :
@@ -153,12 +152,8 @@ def get_complement(request, teacher, parcours_or_group):
         role = True
         access = True
         
-    data["group_id"] = group_id
-    data["group"] = group
-    data["role"] = role
-    data["access"] = access
+    return role, group , group_id , access
 
-    return data
 
 def get_stage(user):
 
@@ -354,7 +349,7 @@ def associate_parcours(request,id):
         parcours.students.set(group.students.all())
         i  = 0
         for e in exercises:
-            relationship, created = Relationship.objects.get_or_create(parcours = parcours, exercise=e, order = i)
+            relationship, created = Relationship.objects.get_or_create(parcours = parcours, exercise=e, ranking = i)
             relationship.students.set(group.students.all())
             if created :
                 relationship.skills.set(e.supportfile.skills.all()) 
@@ -386,7 +381,7 @@ def get_parcours_default(request):
         exercises = Exercise.objects.filter(level_id=level_id,theme = theme, supportfile__is_title=0)
         i  = 0
         for e in exercises:
-            relationship, created = Relationship.objects.get_or_create(parcours = parcours, exercise=e, order = i)
+            relationship, created = Relationship.objects.get_or_create(parcours = parcours, exercise=e, ranking = i)
             if created :
                 relationship.skills.set(e.supportfile.skills.all()) 
             i+=1
@@ -447,7 +442,7 @@ def ajax_populate(request):
     else:
         statut = 1
         if Relationship.objects.filter(parcours_id=parcours_id , exercise__supportfile = exercise.supportfile ).count() == 0 :
-            relation = Relationship.objects.create(parcours_id=parcours_id, exercise_id = exercise_id, order = 100, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration) 
+            relation = Relationship.objects.create(parcours_id=parcours_id, exercise_id = exercise_id, ranking = 100, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration) 
             relation.skills.set(exercise.supportfile.skills.all())
             students = parcours.students.all()
             relation.students.set(students)
@@ -470,18 +465,15 @@ def peuplate_parcours(request,id):
     levels =  teacher.levels.all() 
     parcours = Parcours.objects.get(id=id)
 
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id']
-    access = data['access']
+    role, group , group_id , access = get_complement(request, teacher, parcours)
+ 
 
     if not authorizing_access(teacher,parcours, access ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
     form = UpdateParcoursForm(request.POST or None , instance=parcours, teacher = parcours.teacher  )
-    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
     """ affiche le parcours existant avant la modif en ajax""" 
     exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme")
     """ fin """
@@ -518,7 +510,7 @@ def peuplate_parcours(request,id):
         for exercise in exercises_posted_ids :
             try :
                 if Relationship.objects.filter(parcours = nf , exercise__supportfile = exercise.supportfile ).count() == 0 :
-                    r = Relationship.objects.create(parcours = nf , exercise = exercise , order =  i, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
+                    r = Relationship.objects.create(parcours = nf , exercise = exercise , ranking =  i, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
                     r.skills.set(exercise.supportfile.skills.all()) 
                     i+=1
                 else :
@@ -538,12 +530,7 @@ def peuplate_parcours_evaluation(request,id):
  
     parcours = Parcours.objects.get(id=id)
 
-
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id']
-    access = data['access']
+    role, group , group_id , access = get_complement(request, teacher, parcours)
 
     if not authorizing_access(teacher,parcours, access ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
@@ -552,7 +539,7 @@ def peuplate_parcours_evaluation(request,id):
 
 
     form = UpdateParcoursForm(request.POST or None , instance=parcours, teacher = teacher  )
-    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
     """ affiche le parcours existant avant la modif en ajax""" 
     exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme")
     """ fin """
@@ -589,7 +576,7 @@ def peuplate_parcours_evaluation(request,id):
         for exercise in exercises_posted_ids :
             try :
                 if Relationship.objects.filter(parcours = nf , exercise__supportfile = exercise.supportfile ).count() == 0 :
-                    r = Relationship.objects.create(parcours = nf , exercise = exercise , order =  i, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
+                    r = Relationship.objects.create(parcours = nf , exercise = exercise , ranking =  i, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
                     r.skills.set(exercise.supportfile.skills.all()) 
                     i+=1
                 else :
@@ -609,16 +596,12 @@ def peuplate_parcours_evaluation(request,id):
 def individualise_parcours(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcours = Parcours.objects.get(pk = id)
-    relationships = Relationship.objects.filter(parcours = parcours).order_by("order")
+    relationships = Relationship.objects.filter(parcours = parcours).order_by("ranking")
     students = parcours.students.all().order_by("user__last_name")
 
     customexercises = Customexercise.objects.filter(parcourses = parcours).order_by("ranking")  
 
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id']
-    access = data['access']
+    role, group , group_id , access = get_complement(request, teacher, parcours)
 
     if not authorizing_access(teacher,parcours, access ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
@@ -833,11 +816,7 @@ def list_parcours_group(request,id):
     request.session["group_id"] = group.id
 
  
-    data = get_complement(request, teacher, group)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id'] 
-    access = data['access'] 
+    role, group , group_id , access = get_complement(request, teacher, group)
 
 
     if not authorizing_access(teacher,group, access ):
@@ -870,10 +849,7 @@ def list_sub_parcours_group(request,idg,id):
     parcours = Parcours.objects.get(pk = id) 
     group = Group.objects.get(pk = idg) 
 
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id']
+    role, group , group_id , access = get_complement(request, teacher, parcours)
     request.session["parcours_id"] = parcours.id
     request.session["group_id"] = group.id
 
@@ -881,7 +857,7 @@ def list_sub_parcours_group(request,idg,id):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
-    parcours_tab = parcours.leaf_parcours.all()
+    parcours_tab = parcours.leaf_parcours.order_by("ranking")
 
     return render(request, 'qcm/list_sub_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group , 'parcours_folder' : parcours,  'parcours' : parcours , 'communications' : [] , 'relationships' : [] , 'role' : True , 'today' : today })
 
@@ -1026,7 +1002,7 @@ def create_parcours(request,idp=0):
         i = 0
         for exercise in form.cleaned_data.get('exercises'):
             exercise = Exercise.objects.get(pk=exercise.id)
-            relationship = Relationship.objects.create(parcours=nf, exercise=exercise, order=i, is_lock = locker ,
+            relationship = Relationship.objects.create(parcours=nf, exercise=exercise, ranking=i, is_lock = locker ,
                                                        duration=exercise.supportfile.duration,
                                                        situation=exercise.supportfile.situation)
             relationship.students.set(form.cleaned_data.get('students'))
@@ -1082,7 +1058,7 @@ def update_parcours(request, id, idg=0 ):
                 themes_tab.append(theme)
 
     groups = Group.objects.filter(teacher=teacher).prefetch_related('students').order_by("level")
-    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
 
 
     share_groups = Sharing_group.objects.filter(teacher  = teacher,role=1).order_by("group__level")
@@ -1241,26 +1217,57 @@ def delete_parcours(request, id, idg=0):
 
 
 
+def ordering_number(parcours):
+
+    listing_ordered = set() 
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
+    customexercises = Customexercise.objects.filter(parcourses=parcours).order_by("ranking") 
+    listing_ordered.update(relationships)
+    listing_ordered.update(customexercises)
+
+    listing_order = sorted(listing_ordered, key=attrgetter('ranking')) #set trié par ranking
+
+
+    nb_exo_only, nb_exo_visible  = [] , []   
+    i , j = 0, 0
+
+    for item in listing_order :
+
+        try :
+            if not item.exercise.supportfile.is_title and not item.exercise.supportfile.is_subtitle:
+                i += 1
+            nb_exo_only.append(i)
+            if not item.exercise.supportfile.is_title and not item.exercise.supportfile.is_subtitle and item.is_publish != 0:
+                j += 1
+            nb_exo_visible.append(j)
+        except :
+            i += 1
+            nb_exo_only.append(i)
+            if item.is_publish :
+                j += 1
+            nb_exo_visible.append(j)
+
+    return listing_order , nb_exo_only, nb_exo_visible  
+
+
+
 def show_parcours(request, id):
+    """ show parcours coté prof """
     parcours = Parcours.objects.get(id=id)
     user = User.objects.get(pk=request.user.id)
     teacher = Teacher.objects.get(user=user)
 
-    today = time_zone_user(user) 
+    today = time_zone_user(user)
 
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id']
+    role, group , group_id , access = get_complement(request, teacher, parcours)
 
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
-    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
     nb_exo_only, nb_exo_visible,nb_exo_only_c, nb_exo_visible_c = [] , []  , [], []
     i , j = 0, 0
     for r in relationships:
-
         if not r.exercise.supportfile.is_title and not r.exercise.supportfile.is_subtitle:
             i += 1
         nb_exo_only.append(i)
@@ -1268,8 +1275,8 @@ def show_parcours(request, id):
             j += 1
         nb_exo_visible.append(j)
 
- 
     customexercises = Customexercise.objects.filter(parcourses=parcours).order_by("ranking")
+
 
     for ce in customexercises:
         i += 1
@@ -1277,28 +1284,33 @@ def show_parcours(request, id):
         if ce.is_publish :
             j += 1
         nb_exo_visible_c.append(j)
+ 
 
+    relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
 
 
     students_p_or_g = students_from_p_or_g(request,parcours)
-
     parcours_group = []
     for s in students_p_or_g :
         pses = s.students_to_parcours.all()
         for p in pses :
             if p not in  parcours_group :
                 parcours_group.append(p)
- 
+
     nb_students_p_or_g = len(students_p_or_g)
 
     skills = Skill.objects.all()
     nb_custom_exercises = customexercises.count()
  
     context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'communications' : [] , 'customexercises' : customexercises , 'today' : today , 
-               'students_from_p_or_g': students_p_or_g,   'nb_exo_visible': nb_exo_visible,  'nb_exo_visible_c': nb_exo_visible_c, 'nb_students_p_or_g' : nb_students_p_or_g , 
+               'students_from_p_or_g': students_p_or_g,   'nb_exo_visible': nb_exo_visible,  'nb_exo_visible_c': nb_exo_visible_c, 'nb_students_p_or_g' : nb_students_p_or_g ,  'relationships_customexercises': relationships_customexercises,
                'nb_exo_only': nb_exo_only, 'nb_exo_only_c': nb_exo_only_c, 'group_id': group_id, 'group': group, 'role' : role, 'parcours_group' : parcours_group  }
 
     return render(request, 'qcm/show_parcours.html', context)
+
+
+
+
 
 def show_parcours_student(request, id):
 
@@ -1320,7 +1332,7 @@ def show_parcours_student(request, id):
 
     else :
 
-        relationships = Relationship.objects.filter(parcours=parcours, students=student, is_publish=1 ).order_by("order")
+        relationships = Relationship.objects.filter(parcours=parcours, students=student, is_publish=1 ).order_by("ranking")
         customexercises = Customexercise.objects.filter(parcourses = parcours, students=student, is_publish=1 ).order_by("ranking") 
      
         nb_exo_only,nb_exo_only_c = [] , [] 
@@ -1349,7 +1361,7 @@ def show_parcours_student(request, id):
 def show_parcours_visual(request, id):
     parcours = Parcours.objects.get(id=id)
  
-    relationships = Relationship.objects.filter(parcours=parcours,  is_publish=1 ).order_by("order")
+    relationships = Relationship.objects.filter(parcours=parcours,  is_publish=1 ).order_by("ranking")
     nb_exo_only = [] 
     i=0
     for r in relationships :
@@ -1406,7 +1418,7 @@ def replace_exercise_into_parcours(request):
 
     return redirect('show_parcours', parcours_id)
 
-#@user_is_parcours_teacher 
+ 
 def result_parcours(request, id):
 
     parcours = Parcours.objects.get(id=id)
@@ -1431,7 +1443,7 @@ def result_parcours(request, id):
         return redirect('index')
 
     if parcours.is_folder :
-        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all()).prefetch_related('exercise').order_by("order")
+        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all()).prefetch_related('exercise').order_by("ranking")
 
         custom_set = set()
         for p in parcours.leaf_parcours.all():
@@ -1440,7 +1452,7 @@ def result_parcours(request, id):
         customexercises = list(custom_set)
 
     else :
-        relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise').order_by("order")
+        relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise').order_by("ranking")
         customexercises = parcours.parcours_customexercises.all() 
 
 
@@ -1476,14 +1488,8 @@ def result_parcours_theme(request, id, idt):
     parcours = Parcours.objects.get(id=id)
     students = students_from_p_or_g(request,parcours)
 
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id'] 
-    access = data['access'] 
+    role, group , group_id , access = get_complement(request, teacher, parcours)
 
- 
- 
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
@@ -1493,7 +1499,7 @@ def result_parcours_theme(request, id, idt):
 
 
     if parcours.is_folder :
-        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all(),exercise__in=exercises).order_by("order")
+        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all(),exercise__in=exercises).order_by("ranking")
 
         custom_set = set()
         for p in parcours.leaf_parcours.all():
@@ -1502,7 +1508,7 @@ def result_parcours_theme(request, id, idt):
         customexercises = list(custom_set)
 
     else :
-        relationships = Relationship.objects.filter(parcours= parcours,exercise__in=exercises ).order_by("order")
+        relationships = Relationship.objects.filter(parcours= parcours,exercise__in=exercises ).order_by("ranking")
         customexercises = parcours.parcours_customexercises.all() 
 
 
@@ -1528,7 +1534,7 @@ def get_items_from_parcours(parcours) :
     Permet de déterminer les compétences dans l'ordre d'apparition du BO dans un parcours
     """
     if parcours.is_folder :
-        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all()).prefetch_related('exercise__supportfile').order_by("order")
+        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all()).prefetch_related('exercise__supportfile').order_by("ranking")
 
         custom_set = set()
         for p in parcours.leaf_parcours.all():
@@ -1537,7 +1543,7 @@ def get_items_from_parcours(parcours) :
         customexercises = list(custom_set)
 
     else :
-        relationships = Relationship.objects.filter(parcours= parcours).prefetch_related('exercise__supportfile').order_by("order")
+        relationships = Relationship.objects.filter(parcours= parcours).prefetch_related('exercise__supportfile').order_by("ranking")
         customexercises = parcours.parcours_customexercises.all() 
 
     skill_set = set()
@@ -1563,11 +1569,7 @@ def result_parcours_skill(request, id):
     parcours = Parcours.objects.get(id=id)
     students = students_from_p_or_g(request,parcours)
 
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id'] 
-    access = data['access'] 
+    role, group , group_id , access = get_complement(request, teacher, parcours)
 
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
@@ -1597,7 +1599,7 @@ def result_parcours_knowledge(request, id):
  
 
     if parcours.is_folder :
-        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all()).prefetch_related('exercise__supportfile').order_by("order")
+        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all()).prefetch_related('exercise__supportfile').order_by("ranking")
 
         custom_set = set()
         for p in parcours.leaf_parcours.all():
@@ -1612,7 +1614,7 @@ def result_parcours_knowledge(request, id):
         knwldgs = list(knowledge_set)        
 
     else :
-        relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
+        relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
         customexercises = parcours.parcours_customexercises.all() 
         knwldgs = parcours.exercises.values_list("knowledge_id",flat=True).order_by("knowledge").distinct()
 
@@ -1620,11 +1622,8 @@ def result_parcours_knowledge(request, id):
 
     knowledges,knowledge_ids = [], []
          
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id'] 
-    access = data['access'] 
+    role, group , group_id , access = get_complement(request, teacher, parcours)
+ 
 
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
@@ -1658,7 +1657,7 @@ def result_parcours_waiting(request, id):
  
 
     if parcours.is_folder :
-        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all()).prefetch_related('exercise__supportfile').order_by("order")
+        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all()).prefetch_related('exercise__supportfile').order_by("ranking")
 
         custom_set = set()
         for p in parcours.leaf_parcours.all():
@@ -1673,7 +1672,7 @@ def result_parcours_waiting(request, id):
         knwldgs = list(knowledge_set)        
 
     else :
-        relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
+        relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
         customexercises = parcours.parcours_customexercises.all() 
         knwldgs = parcours.exercises.values_list("knowledge_id",flat=True).order_by("knowledge").distinct()
 
@@ -1681,12 +1680,8 @@ def result_parcours_waiting(request, id):
     waitings,waiting_ids , wtngs = [], [] , []
  
 
-         
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id'] 
-    access = data['access'] 
+    role, group , group_id , access = get_complement(request, teacher, parcours)
+
 
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
@@ -1751,7 +1746,7 @@ def stat_evaluation(request, id):
     skills = skills_in_parcours(request,parcours)
     knowledges = knowledges_in_parcours(parcours)
     exercises = parcours.exercises.all()
-    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
     parcours_duration = parcours.duration #durée prévue pour le téléchargement
     for e in exercises :
         r = Relationship.objects.get(exercise = e, parcours = parcours)
@@ -1760,11 +1755,9 @@ def stat_evaluation(request, id):
     form = EmailForm(request.POST or None )
     stats = []
  
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id'] 
-    access = data['access']
+    role, group , group_id , access = get_complement(request, teacher, parcours)
+
+
     if not authorizing_access(teacher, parcours,access):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
@@ -1923,7 +1916,7 @@ def add_exercice_in_a_parcours(request):
         except :
             r = 0
 
-        relation = Relationship.objects.create(parcours = parcours , exercise = exercise , order=  r, is_publish= 1 , start= None , date_limit= None, duration= exercise.supportfile.duration, situation= exercise.supportfile.situation ) 
+        relation = Relationship.objects.create(parcours = parcours , exercise = exercise , ranking=  r, is_publish= 1 , start= None , date_limit= None, duration= exercise.supportfile.duration, situation= exercise.supportfile.situation ) 
         relation.skills.set(exercise.supportfile.skills.all())   
         i +=1
 
@@ -2056,10 +2049,7 @@ def parcours_tasks_and_publishes(request, id):
     parcours = Parcours.objects.get(id=id)
     teacher = Teacher.objects.get(user=request.user)
 
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id'] 
+    role, group , group_id , access = get_complement(request, teacher, parcours) 
  
 
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
@@ -2079,11 +2069,7 @@ def result_parcours_exercise_students(request,id):
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id'] 
-
+    role, group , group_id , access = get_complement(request, teacher, parcours)
 
 
     relationships = Relationship.objects.filter(parcours = parcours, is_publish = 1) 
@@ -2129,10 +2115,6 @@ def ajax_parcours_sorter(request):
     try :
         course_ids = request.POST.get("valeurs")
         course_tab = course_ids.split("-") 
-
-        print(course_tab)
-     
-
         for i in range(len(course_tab)-1):
             Parcours.objects.filter( pk = course_tab[i]).update(ranking = i)
     except :
@@ -2140,34 +2122,33 @@ def ajax_parcours_sorter(request):
     data = {}
     return JsonResponse(data) 
 
+
 @csrf_exempt
-def ajax_sort_exercise(request):  
+def ajax_sort_exercise(request):
+    """ tri des exercices""" 
+
     try :
         exercise_ids = request.POST.get("valeurs")
         exercise_tab = exercise_ids.split("-") 
 
         parcours = request.POST.get("parcours")
 
-        custom = request.POST.get("custom")
+        customizes = request.POST.get("customizes")
+        customize_tab = customizes.split("-") 
 
-        if custom == "0" :
-            for i in range(len(exercise_tab)-1):
-                try :
-                    Relationship.objects.filter(parcours = parcours , exercise_id = exercise_tab[i]).update(order = i)
-                except :
-                    pass
-        else :
-            for i in range(len(exercise_tab)-1):
-                try :
-                    Customexercise.objects.filter(pk = exercise_tab[i]).update(ranking = i)
-                except :
-                    pass
- 
 
+        for i in range(len(exercise_tab)-1):
+            if int(customize_tab[i]) == 1 :
+                Customexercise.objects.filter(pk = exercise_tab[i]).update(ranking = i)
+            else :
+                Relationship.objects.filter(parcours = parcours , exercise_id = exercise_tab[i]).update(ranking = i)
     except :
         pass
     data = {}
     return JsonResponse(data) 
+
+
+
 
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_publish(request):  
@@ -3433,7 +3414,7 @@ def ajax_create_title_parcours(request):
         supportfile.save()
 
         exe = Exercise.objects.create(knowledge_id=1, level_id=1, theme_id=1, supportfile=supportfile)
-        relation = Relationship.objects.create(exercise=exe, parcours_id=parcours_id, order=0)
+        relation = Relationship.objects.create(exercise=exe, parcours_id=parcours_id, ranking=0)
 
         parcours = Parcours.objects.get(pk = parcours_id)
         for student in parcours.students.all():
@@ -3556,7 +3537,7 @@ def create_evaluation(request):
         i = 0
         for exercise in form.cleaned_data.get('exercises'):
             exercise = Exercise.objects.get(pk=exercise.id)
-            relationship = Relationship.objects.create(parcours=nf, exercise=exercise, order=i, 
+            relationship = Relationship.objects.create(parcours=nf, exercise=exercise, ranking=i, 
                                                        duration=exercise.supportfile.duration,
                                                        situation=exercise.supportfile.situation)
             relationship.students.set(form.cleaned_data.get('students'))
@@ -3618,7 +3599,7 @@ def update_evaluation(request, id, idg=0 ):
                 themes_tab.append(theme)
 
     groups = Group.objects.filter(teacher=teacher).prefetch_related('students').order_by("level")
-    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
     share_groups = Sharing_group.objects.filter(teacher  = teacher,role=1).order_by("group__level")
     if request.method == "POST":
         if form.is_valid():
@@ -3658,8 +3639,7 @@ def update_evaluation(request, id, idg=0 ):
         group = None
         request.session["group_id"] = None
 
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
+    role, group , group_id , access = get_complement(request, teacher, parcours)
 
 
     students_checked = parcours.students.count()  # nombre d'étudiant dans le parcours
@@ -3698,7 +3678,7 @@ def show_evaluation(request, id):
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
-    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
     nb_exo_only, nb_exo_visible = [], []
     i ,j = 0, 0
     for r in relationships:
@@ -3714,10 +3694,7 @@ def show_evaluation(request, id):
         nb_exo_visible.append(j)
 
 
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id']  
+    role, group , group_id , access = get_complement(request, teacher, parcours) 
 
     customexercises = Customexercise.objects.filter(teacher=teacher,parcourses=parcours).order_by("ranking")
 
@@ -4666,10 +4643,7 @@ def detail_task_parcours(request,id,s,c):
     today = time_zone_user(teacher.user)
     date_today = today.date() 
 
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id'] 
+    role, group , group_id , access = get_complement(request, teacher, parcours)
 
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
@@ -4748,10 +4722,7 @@ def detail_task(request,id,s):
 
     today = time_zone_user(teacher.user) 
 
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id'] 
+    role, group , group_id , access = get_complement(request, teacher, parcours)
 
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
@@ -4831,9 +4802,7 @@ def group_tasks(request,id):
             else :
                 parcourses_tab.append(p)
 
-    data = get_complement(request, teacher, group)
-    role = data["role"]
-    group_id = data["group_id"]
+    role, group , group_id , access = get_complement(request, teacher, group)
 
     relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcourses_tab, date_limit__gte=today,exercise__supportfile__is_title=0).order_by("parcours") 
     context = { 'relationships': relationships , 'group' : group , 'parcours' : None , 'communications' : [] , 'relationships' : [] , 'group_id' : group.id , 'role' : role , }
@@ -4858,10 +4827,7 @@ def group_tasks_all(request,id):
             else :
                 parcourses_tab.append(p)
 
-
-    data = get_complement(request, teacher, group)
-    role = data["role"]
-    group_id = data["group_id"]
+    role, group , group_id , access = get_complement(request, teacher, group)
 
     relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today),  parcours__in=parcourses_tab, exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("parcours") 
     context = { 'relationships': relationships ,    'group' : group , 'parcours' : None , 'relationships' : [] , 'communications' : [] ,  'group_id' : group.id , 'role' : role ,  }
@@ -5139,7 +5105,7 @@ def ajax_create_constraint(request):
     if code == "all" : # si tous les exercices précédents sont cochés
         parcours_id = int(request.POST.get("parcours_id"))
         
-        relationships = Relationship.objects.filter(parcours_id = parcours_id, order__lt= this_relationship.order)
+        relationships = Relationship.objects.filter(parcours_id = parcours_id, order__lt= this_relationship.ranking)
         for relationship in relationships :
             Constraint.objects.get_or_create(code = relationship.exercise.supportfile.code, relationship = this_relationship, defaults={"scoremin" : score , } )
         data["html"] = "<div id='constraint_saving0'><i class='fa fa-minus-circle'></i> Tous les exercices à "+score+"% <a href='#'  class='pull-right delete_constraint' data-relationship_id='"+str(relationship_id)+"' data-is_all=1 ><i class='fa fa-trash'></i> </a></div>"
@@ -5242,7 +5208,7 @@ def export_results_after_evaluation(request):
 
     stage = get_stage(request.user)    
 
-    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("order")
+    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
     exercises = parcours.exercises.all()
    
 
@@ -5701,16 +5667,13 @@ def create_course(request, idc , id ):
     teacher = Teacher.objects.get(user= request.user)
 
 
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id'] 
+    role, group , group_id , access = get_complement(request, teacher, parcours)
     
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
     form = CourseForm(request.POST or None , parcours = parcours )
-    relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("order")
+    relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("ranking")
     if request.method == "POST" :
         if form.is_valid():
             nf =  form.save(commit = False)
@@ -5742,7 +5705,7 @@ def update_course(request, idc, id  ):
     teacher = Teacher.objects.get(user= request.user)
     course = Course.objects.get(id=idc)
     course_form = CourseForm(request.POST or None, instance=course , parcours = parcours )
-    relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("order")
+    relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("ranking")
     if request.user.user_type == 2 :
         teacher = parcours.teacher
     else :
@@ -5763,10 +5726,7 @@ def update_course(request, idc, id  ):
         else :
             print(course_form.errors)
 
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id'] 
+    role, group , group_id , access = get_complement(request, teacher, parcours)
 
 
     context = {'form': course_form,  'course': course, 'teacher': teacher , 'parcours': parcours  , 'relationships': relationships , 'communications' : [] , 'group' : group, 'group_id' : group_id , 'role' : role }
@@ -5804,11 +5764,7 @@ def show_course(request, idc , id ):
     parcours = Parcours.objects.get(pk =  id)
     teacher = Teacher.objects.get(user= request.user)
 
-    data = get_complement(request, teacher, parcours)
-    role = data['role']
-    group = data['group']
-    group_id = data['group_id'] 
-    access = data['access']
+    role, group , group_id , access = get_complement(request, teacher, parcours)
     
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')

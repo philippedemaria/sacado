@@ -697,7 +697,7 @@ class Parcours(ModelWithCode):
 class Relationship(models.Model):
     exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.PROTECT,  editable= False)
     parcours = models.ForeignKey(Parcours, on_delete=models.PROTECT,  related_name='parcours_relationship',  editable= False)
-    order = models.PositiveIntegerField(default=0, editable=False)
+    ranking = models.PositiveIntegerField(default=0, editable=False)
     is_publish = models.BooleanField(default=1)
     start = models.DateTimeField(null=True, blank=True, verbose_name="A partir de")
     date_limit = models.DateTimeField(null=True, blank=True, verbose_name="Date limite du rendu")
