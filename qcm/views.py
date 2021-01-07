@@ -2974,7 +2974,7 @@ def create_supportfile(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
     form = SupportfileForm(request.POST or None,request.FILES or None,teacher = teaher)
     is_ggbfile = request.POST.get("is_ggbfile")
-    if request.user.is_superuser or user.is_extra :
+    if request.user.is_superuser or request.user.is_extra :
         if form.is_valid():
             nf =  form.save(commit = False)
             nf.code = code
@@ -3007,7 +3007,7 @@ def create_supportfile_knowledge(request,id):
 
     is_ggbfile = request.POST.get("is_ggbfile")
 
-    if request.user.is_superuser or user.is_extra : 
+    if request.user.is_superuser or request.user.is_extra : 
         if form.is_valid():
             nf =  form.save(commit = False)
             nf.code = code
@@ -3033,7 +3033,7 @@ def create_supportfile_knowledge(request,id):
 def update_supportfile(request, id, redirection=0):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
-    if request.user.is_superuser or user.is_extra :
+    if request.user.is_superuser or request.user.is_extra :
         supportfile = Supportfile.objects.get(id=id)
         knowledge = supportfile.knowledge
         supportfile_form = UpdateSupportfileForm(request.POST or None, request.FILES or None, instance=supportfile, knowledge = knowledge)
@@ -5778,7 +5778,7 @@ def ajax_parcours_get_course(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
 
     sacado_asso = False
-    if teacher.user.school and teacher.user.is_extra :
+    if teacher.user.school   :
         sacado_asso = True
 
     course_id =  int(request.POST.get("course_id"))
