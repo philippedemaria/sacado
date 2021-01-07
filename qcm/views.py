@@ -1928,6 +1928,9 @@ def clone_parcours(request, id, course_on ):
     parcours.pk = None
     parcours.teacher = teacher
     parcours.is_leaf = 0
+    parcours.is_archive = 0
+    parcours.is_share = 0
+    parcours.is_favorite = 1
     parcours.code = str(uuid.uuid4())[:8]  
     parcours.save()
 
@@ -3671,35 +3674,7 @@ def show_evaluation(request, id):
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
-    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
-    nb_exo_only, nb_exo_visible = [], []
-    i ,j = 0, 0
-    for r in relationships:
-        if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle:
-            i = 0
-        else:
-            i += 1
-        nb_exo_only.append(i)
-        if r.exercise.supportfile.is_title or r.exercise.supportfile.is_subtitle or r.is_publish == 0:
-            j = 0
-        else:
-            j += 1
-        nb_exo_visible.append(j)
-
-
-    role, group , group_id , access = get_complement(request, teacher, parcours) 
-
-    customexercises = Customexercise.objects.filter(teacher=teacher,parcourses=parcours).order_by("ranking")
-
- 
-
-    nb_exo_only_c, nb_exo_visible_c = [] , []
-    for ce in customexercises:
-        i += 1
-        nb_exo_only_c.append(i)
-        if ce.is_publish :
-            j += 1
-        nb_exo_visible_c.append(j)
+    relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
 
 
     students_p_or_g = students_from_p_or_g(request,parcours)
@@ -3709,8 +3684,8 @@ def show_evaluation(request, id):
     skills = Skill.objects.all()
 
     nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count()
-    context = {'relationships': relationships, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'communications' : [] ,  'customexercises': customexercises, 
-                'nb_exo_only_c': nb_exo_only_c,'nb_exo_visible_c': nb_exo_visible_c,
+    
+    context = {'relationships_customexercises': relationships_customexercises, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'communications' : [] ,  
                'students_from_p_or_g': students_p_or_g, 'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible, 'nb_students_p_or_g' : nb_students_p_or_g , 
                'nb_exo_only': nb_exo_only, 'group_id': group_id, 'group': group, 'role' : role }
 

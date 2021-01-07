@@ -47,21 +47,21 @@
             {% for relation in relationships %}
                 {%  if relation.exercise.supportfile.is_title %}       
                     <h2 class="listing thin" style="width:100%; clear:both">                         
-                                {% if  relation.exercise.supportfile.title %}  
-                                    {{  relation.exercise.supportfile.title|cleanhtml|capfirst }}  
-                                {% else %}
-                                    {{ relation.exercise.supportfile.annoncement|cleanhtml }}
-                                {% endif %} </h2>
+                        {% if  relation.exercise.supportfile.title %}  
+                            {{  relation.exercise.supportfile.title|cleanhtml|capfirst }}  
+                        {% else %}
+                            {{ relation.exercise.supportfile.annoncement|cleanhtml }}
+                        {% endif %} 
+                    </h2>
                 {%  elif relation.exercise.supportfile.is_subtitle %}
                     <h3 class="listing thin" style="width:100%; clear:both">                         
-                                {% if  relation.exercise.supportfile.title %}  
-                                    {{  relation.exercise.supportfile.title|cleanhtml|capfirst }}  
-                                {% else %}
-                                    {{ relation.exercise.supportfile.annoncement|cleanhtml }}
-                                {% endif %} </h3>
+                        {% if  relation.exercise.supportfile.title %}  
+                            {{  relation.exercise.supportfile.title|cleanhtml|capfirst }}  
+                        {% else %}
+                            {{ relation.exercise.supportfile.annoncement|cleanhtml }}
+                        {% endif %} 
+                    </h3>
                 {% else %} 
-
-         
                     <div class="card_freeze" {% if data.score %} style="opacity:0.3" {% endif %}>
                         <div class="card-body student">
                             <div style="color:{{ parcours.color }};font-size: 40px;padding-top: 6px">{{ nb_exo_only|index:forloop.counter0 }}.
@@ -82,9 +82,7 @@
                             </div>
                         </div>
                     </div> 
-
                 {% endif %}          
-
             {% endfor %}
         </div>
         <div class="col-sm-12 col-md-2">
