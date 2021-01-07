@@ -2461,7 +2461,7 @@ def ajax_detail_parcours(request):
     students = students_from_p_or_g(request,parcours)
 
     try :
-        relationship = Relationship.objects.get(exercise_id = exercise_id, parcours_id=parcours_id )
+        relationship = Relationship.objects.get(exercise_id = exercise_id, parcours = parcours)
     except :
         relationship = None
     
@@ -2473,7 +2473,7 @@ def ajax_detail_parcours(request):
             student = {}
             student["name"] = s 
 
-            studentanswers = Studentanswer.objects.filter(student=s,exercise=exercise)
+            studentanswers = Studentanswer.objects.filter(student=s, exercise = exercise ,  parcours = parcours)
             duration, score = 0, 0
             tab, tab_date = [], []
             for studentanswer in  studentanswers : 
@@ -2519,12 +2519,12 @@ def ajax_detail_parcours(request):
         data['html'] = render_to_string('qcm/ajax_detail_parcours.html', context)
 
     else :
-        parcours = Parcours.objects.get(pk = parcours_id )
-        customexercise = Customexercise.objects.get(id = exercise_id, parcourses = parcours) 
+        customexercise = Customexercise.objects.get(pk = exercise_id, parcourses = parcours) 
         students = customexercise.students.order_by("user__last_name")  
         duration, score = 0, 0
         tab = []
-        cas =  Customanswerbystudent.objects.filter(parcours=parcours, customexercise = customexercise)
+        cas =  customexercise.customexercise_custom_answer.filter(parcours=parcours)
+        
         for ca in cas  : 
             try :
                 score += int(ca.point)
