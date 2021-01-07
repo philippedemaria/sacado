@@ -3676,15 +3676,15 @@ def show_evaluation(request, id):
 
     relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
 
+    role, group , group_id , access = get_complement(request, teacher, parcours)
 
     students_p_or_g = students_from_p_or_g(request,parcours)
-
     nb_students_p_or_g = len(students_p_or_g)
 
     skills = Skill.objects.all()
 
     nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count()
-    
+
     context = {'relationships_customexercises': relationships_customexercises, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'communications' : [] ,  
                'students_from_p_or_g': students_p_or_g, 'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible, 'nb_students_p_or_g' : nb_students_p_or_g , 
                'nb_exo_only': nb_exo_only, 'group_id': group_id, 'group': group, 'role' : role }
