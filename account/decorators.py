@@ -11,6 +11,15 @@ def user_is_superuser(user):
     return user.is_superuser == 1
 
 
+def user_is_creator(user):
+    test = False
+    if user.is_superuser or user.is_extra :
+        test = True
+    return test
+
+
+
+
 def decide(this_student, role, asker):
     test = False
     if role == 0:  # role = request.user.user_type

@@ -27,7 +27,7 @@ from django.db.models import Q
 from django.core.mail import send_mail
 from group.decorators import user_is_group_teacher 
 from qcm.decorators import user_is_parcours_teacher, user_can_modify_this_course, student_can_show_this_course , user_is_relationship_teacher, user_is_customexercice_teacher 
-from account.decorators import user_can_create, user_is_superuser
+from account.decorators import user_can_create, user_is_superuser, user_is_creator
 ##############bibliothèques pour les impressions pdf  #########################
 import os
 from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
@@ -2892,7 +2892,8 @@ def ajax_update_association(request):
         exercise.delete()
     return JsonResponse(data)
 
-@user_passes_test(user_is_superuser)
+
+@user_passes_test(user_is_creator)
 def admin_list_supportfiles(request,id):
     user = request.user
     teacher = Teacher.objects.get(user=user)
@@ -2952,7 +2953,7 @@ def exercises_level(request, id):
     s_form = StudentForm()
     return render(request, 'list_exercises.html', {'exercises': exercises, 'level':level , 'themes':themes , 'form':form , 'u_form':u_form , 's_form': s_form , 't_form': t_form , 'levels' : [] })
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_creator)
 def create_supportfile(request):
 
     code = str(uuid.uuid4())[:8]
@@ -2979,7 +2980,7 @@ def create_supportfile(request):
 
     return render(request, 'qcm/form_supportfile.html', context)
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_creator)
 def create_supportfile_knowledge(request,id):
 
     code = str(uuid.uuid4())[:8]
@@ -3014,7 +3015,7 @@ def create_supportfile_knowledge(request,id):
 
     return render(request, 'qcm/form_supportfile.html', context)
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_creator)
 def update_supportfile(request, id, redirection=0):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -3043,6 +3044,8 @@ def update_supportfile(request, id, redirection=0):
 
         return render(request, 'qcm/form_supportfile.html', context)
 
+
+
 @user_passes_test(user_is_superuser)
 def delete_supportfile(request, id):
     if request.user.is_superuser:
@@ -3057,7 +3060,7 @@ def delete_supportfile(request, id):
 
 
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_creator)
 def show_this_supportfile(request, id):
 
     if request.user.is_teacher:
@@ -3082,7 +3085,7 @@ def show_this_supportfile(request, id):
 
  
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_creator)
 def create_exercise(request, supportfile_id):
  
     knowledges = Knowledge.objects.all().order_by("level").select_related('level')
