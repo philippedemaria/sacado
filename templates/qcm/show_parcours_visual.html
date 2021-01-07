@@ -122,23 +122,10 @@
         </div>
         {% endif %}  
     </div>  
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
     <div class="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="col-sm-1 col-md-1">
+        </div>
+        <div class="col-sm-11 col-md-11">
             <div class="form-group">
                     <a href="{% url 'clone_parcours' parcours.id 0 %}" class="btn btn-primary">Cloner ce parcours </a>  
                     {% if parcours.course.all|length > 0 %}
@@ -147,11 +134,7 @@
                 <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
             </div>
         </div>
-         
     </div>  
- 
-
-
 </section>
  
    
