@@ -8,6 +8,12 @@
    
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+    <script>
+        require(['script/ajax-supportfile']);
+    </script> 
+
+
 {% endblock %} 
 
   
@@ -27,7 +33,7 @@
  
     <div class="row">
         <div class="col-sm-12 col-md-12">
-            <table class="table  table-hover display100" style="width:100%">
+            <table class="table  table-hover display1000" style="width:100%">
                 <thead> 
                     <tr>
                         <td></td>
@@ -35,24 +41,30 @@
                 </thead> 
                 <tbody>
                     {% for theme in levels_dict.themes  %} 
-                        <tr style="background:#e6e2dd">
-                            <td style="width:85%">{{theme.name}}</td> 
+                        <tr style="background:#d4cdc4; color:white">
+                            <td style="width:85%"> {{theme.name}}</td> 
                         </tr>  
-                        {% for knowledge in theme.knowledges  %} 
-                            {% if knowledge.supportfiles|length > 0 %}
-                                    <tr> 
-                                        <td class="listingtd">
-                                            
-                                            {{ knowledge.name.name|capfirst }} 
-                                            {% if request.user.is_extra and '/admin' in request.path %}                                                       
-                                            <a href="{% url 'create_supportfile_knowledge' knowledge.name.id %}" class="edit"><i class='fa fa-plus pull-right' style="font-size: 10px; margin-right:20px"></i></a>
+                        {% for waiting in theme.waitings  %} 
+                            <tr style="background:#e6e2dd; cursor: pointer; color: black" class="opener out"  id="{{ waiting.name.id }}">
+                                <td style="width:85%"><i class="fa fa-caret-right"></i> {{waiting.name.name}}   <small><b>{{  waiting.exercises_counter }} exercice{{ waiting.exercises_counter|pluralize  }}</b>  </small> </td> 
+                            </tr>  
+
+                            {% for knowledge in waiting.knowledges  %}
+
+                                    <tr style="background:#f4f2f0; cursor: pointer; color: black" class="listingtd opener_k opened{{ waiting.name.id }} out"  id="{{ knowledge.name.id}}"> 
+                                        <td>
+                                            <i class="fa fa-caret-right"></i> 
+                                            {{ knowledge.name.name|capfirst }}  <small><b>{{  knowledge.supportfiles|length  }} exercice{{  knowledge.supportfiles|length|pluralize  }}</small></small>
+                                            {% if request.user.is_superuser and '/admin' in request.path %}                                                       
+                                            <a href="{% url 'create_supportfile_knowledge' knowledge.name.id %}" ><i class='fa fa-plus pull-right' style="margin-right:20px"></i></a>
                                             {% endif %}
                                         </td>
                                     </tr>
 
+                                {% if knowledge.supportfiles|length > 0 %}
 
                                     {% for supportfile in knowledge.supportfiles  %} 
-                                        <tr>
+                                        <tr  class="opener_e openedk{{ knowledge.name.id }}" >
                                             <td>
                                                 <div class="pull-right" > 
 
@@ -61,32 +73,22 @@
                                                 {% empty %}
                                                     <a href="{% url 'show_this_supportfile' supportfile.id  %}"  class="btn btn-danger" target="_blank" >Non utilisé</a>
                                                 {% endfor %}
-
-                                                {% if request.user.is_extra and '/admin' in request.path %}    
                                                    <br><a href="{% url 'create_exercise' supportfile.id %}" class="btn btn-primary"  >Associer/Dissocier un savoir faire à ce support</a>
-                                                {% endif %}
-
                                                 </div>
 
                                                     <a href="{% url 'show_this_supportfile' supportfile.id   %}" target="_blank">  
                                                         <img src="{{ supportfile.imagefile.url }}" class="imagefile">
                                                     </a>
 
-                                                {% if request.user.is_superuser or request.user.teacher == supportfile.author %}  
+
                                                     <a href="{% url 'update_supportfile'  supportfile.id   %}" class="listing" style="font-size: 18px">
-                                                        {% if supportfile.title %}  
-                                                            {{ supportfile.title|cleanhtml|capfirst }}  
-                                                        {% else %}  
-                                                            {{ supportfile.annoncement|cleanhtml|capfirst }} 
-                                                        {% endif %}
-                                                    </a> 
-                                                {% else %}  
-                                                    {% if supportfile.title %}  
-                                                        {{ supportfile.title|cleanhtml|capfirst }}  
-                                                    {% else %}  
-                                                        {{ supportfile.annoncement|cleanhtml|capfirst }} 
-                                                    {% endif %}
-                                                {% endif %}
+                                                                {% if supportfile.title %}  
+                                                                    {{ supportfile.title|cleanhtml|capfirst }}  
+                                                                {% else %}  
+                                                                    {{ supportfile.annoncement|cleanhtml|capfirst }} 
+                                                                {% endif %}
+                                                    </a>  
+
 
                                                     {% if supportfile.calculator %}
                                                       <img src="{% static 'img/calculator.png' %}" width="30px" />
@@ -105,25 +107,10 @@
                                         </tr>
                                     {% endfor %} 
 
-
-
-
-
-
-                            {% else %} 
-                                    <tr> 
-                                        <td>
-                                            {{ knowledge.name }}  
-                                            {% if request.user.is_superuser and '/admin' in request.path %}
-                                            <a href="{% url 'create_supportfile_knowledge' knowledge.name.id %}" class="edit"><i class='fa fa-plus pull-right' style="font-size: 10px; margin-right:20px"></i></a>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                            {% endif %}
+                                {% endif %}
+                            {% endfor %}
                         {% endfor %}
-                        
                     {% endfor %}
-
                 </tbody>
   
             </table>

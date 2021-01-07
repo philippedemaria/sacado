@@ -42,6 +42,14 @@ $('.standard_tab_sort2000').dataTable( {
 } );
 
 
+$('table.display1000').DataTable({
+                "pageLength": 1000,
+                "ordering": false,
+                "retrieve": true,
+                "paging": false
+                });
+
+
  $('table.display_no_details20').DataTable({
 		"pageLength": 20,
 		"ordering": false,

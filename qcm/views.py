@@ -2906,33 +2906,47 @@ def admin_list_supportfiles(request,id):
         levels_dict = {}
         levels_dict["name"] = level
      
-        themes = level.themes.filter(subject__in=teacher.subjects.all()).order_by("id")
+        themes = level.themes.filter(subject__in=teacher.subjects.all()).order_by("subject", "name")
 
-
-        themes_tab = []
-        for theme in themes:
-            themes_dict = {}
-            themes_dict["name"] = theme.name
-            knowlegdes = Knowledge.objects.filter(theme=theme, level=level).order_by("theme")
-            knowledges_tab = []
-            for knowledge in knowlegdes:
-                supportfiles = knowledge.supportfiles.filter(is_title=0).order_by("theme")
-                exercises = Exercise.objects.filter(knowledge=knowledge, level=level, theme=theme,supportfile__in=supportfiles).order_by("theme")
-
-                knowledges_tab.append(
-                    {
-                        "name": knowledge,
-                        "exercises": exercises,
-                        "supportfiles": supportfiles,
-                    }
-                )
-
-            themes_dict["knowledges"] = knowledges_tab
+ 
+        themes_tab =   []
+        for theme in themes :
+            themes_dict =  {}                
+            themes_dict["name"]=theme
+            waitings = theme.waitings.filter(level=level).order_by("theme")
+            waitings_tab  =  []
+            for waiting in waitings :
+                exercises_counter = 0
+                waiting_dict  =   {} 
+                waiting_dict["name"]=waiting 
+                knowlegdes = waiting.knowledges.filter(waiting=waiting).order_by("theme")
+                knowledges_tab  =  []
+                for knowledge in knowlegdes :
+                    knowledges_dict  =   {}  
+                    knowledges_dict["name"]=knowledge 
+                    supportfiles = knowledge.supportfiles.filter(is_title=0).order_by("theme")
+                    exercises = Exercise.objects.filter(knowledge=knowledge, level=level, theme=theme,supportfile__in=supportfiles).order_by("theme")
+ 
+                    knowledges_tab.append(
+                        {
+                            "name": knowledge,
+                            "exercises": exercises,
+                            "supportfiles": supportfiles,
+                        }
+                    )
+                    exercises_counter += exercises.count()
+                waiting_dict["knowledges"]=knowledges_tab
+                waiting_dict["exercises_counter"]=exercises_counter
+                waitings_tab.append(waiting_dict)
+            themes_dict["waitings"]=waitings_tab
             themes_tab.append(themes_dict)
         levels_dict["themes"] = themes_tab
 
 
     return render(request, 'qcm/list_supportfiles.html', {'levels_dict': levels_dict, 'teacher':teacher , 'level':level , 'relationships' : [] , 'communications' : [] , 'parcours' :  None })
+
+
+
 
 def parcours_exercises(request,id):
     user = request.user
