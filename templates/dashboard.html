@@ -433,7 +433,7 @@
         {% for level in levels %}
             <div class="row" style="font-size: 12px">
                 <div class="col-lg-7 col-xs-7">
-                    {{ level.shortname }} <a href="{% url 'admin_supportfiles' level.id subject.id %}">Fichiers support</a>  
+                    {{ level.shortname }} <a href="{% url 'admin_supportfiles' level.id  %}">Fichiers support</a>  
                 </div>  
                 <div class="col-lg-5 col-xs-5"> 
                         <img src="{% static 'img/ggb.png' %}" width="15px"> <a href="{% url 'admin_associations'  level.id  %}">Exercices   </a> 
