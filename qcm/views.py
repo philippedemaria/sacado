@@ -2897,7 +2897,7 @@ def ajax_update_association(request):
 def admin_list_supportfiles(request,id):
     user = request.user
     teacher = Teacher.objects.get(user=user)
-    if user.is_superuser:  # admin and more
+    if user.is_superuser or user.is_extra :  # admin and more
 
         teacher = Teacher.objects.get(user=user)
         datas = []
@@ -2960,7 +2960,7 @@ def create_supportfile(request):
     teacher = Teacher.objects.get(user_id = request.user.id)
     form = SupportfileForm(request.POST or None,request.FILES or None,teacher = teaher)
     is_ggbfile = request.POST.get("is_ggbfile")
-    if request.user.is_superuser :
+    if request.user.is_superuser or user.is_extra :
         if form.is_valid():
             nf =  form.save(commit = False)
             nf.code = code
@@ -2993,7 +2993,7 @@ def create_supportfile_knowledge(request,id):
 
     is_ggbfile = request.POST.get("is_ggbfile")
 
-    if request.user.is_superuser : 
+    if request.user.is_superuser or user.is_extra : 
         if form.is_valid():
             nf =  form.save(commit = False)
             nf.code = code
@@ -3019,7 +3019,7 @@ def create_supportfile_knowledge(request,id):
 def update_supportfile(request, id, redirection=0):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
-    if request.user.is_superuser:
+    if request.user.is_superuser or user.is_extra :
         supportfile = Supportfile.objects.get(id=id)
         knowledge = supportfile.knowledge
         supportfile_form = UpdateSupportfileForm(request.POST or None, request.FILES or None, instance=supportfile, knowledge = knowledge)
@@ -3091,7 +3091,7 @@ def create_exercise(request, supportfile_id):
     knowledges = Knowledge.objects.all().order_by("level").select_related('level')
     supportfile = Supportfile.objects.get(id=supportfile_id)
 
-    if request.user.is_superuser:
+    if request.user.is_superuser or user_is_creator : 
         if request.method == "POST":
             knowledges_id = request.POST.getlist("choice_knowledges")
             knowledges_id_tab = []
