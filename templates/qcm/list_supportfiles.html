@@ -55,7 +55,7 @@
                                         <td>
                                             <i class="fa fa-caret-right"></i> 
                                             {{ knowledge.name.name|capfirst }}  <small><b>{{  knowledge.supportfiles|length  }} exercice{{  knowledge.supportfiles|length|pluralize  }}</small></small>
-                                            {% if request.user.is_superuser and '/admin' in request.path %}                                                       
+                                            {% if request.user.is_superuser and '/admin' in request.path or request.user.is_extra %}                                                       
                                             <a href="{% url 'create_supportfile_knowledge' knowledge.name.id %}" ><i class='fa fa-plus pull-right' style="margin-right:20px"></i></a>
                                             {% endif %}
                                         </td>
