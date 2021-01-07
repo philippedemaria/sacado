@@ -99,7 +99,7 @@
 {% elif request.user.is_extra  %} 
 
 <li  class='dropdown  {% if 'admin' in request.path or '/school' in request.path %} active{% endif %}'>
-    <a href="{% url 'admin_tdb' %}" class="main" >
+    <a href="#"   id="admin" class="main">
         <i class="fa fa-cloud fa-2x"></i> 
         <div class="captionmenu">Admin</div>
     </a>
