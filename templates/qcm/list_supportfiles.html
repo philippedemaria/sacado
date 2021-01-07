@@ -44,7 +44,7 @@
                                         <td class="listingtd">
                                             
                                             {{ knowledge.name.name|capfirst }} 
-                                            {% if request.user.is_superuser and '/admin' in request.path %}                                                       
+                                            {% if request.user.is_extra and '/admin' in request.path %}                                                       
                                             <a href="{% url 'create_supportfile_knowledge' knowledge.name.id %}" class="edit"><i class='fa fa-plus pull-right' style="font-size: 10px; margin-right:20px"></i></a>
                                             {% endif %}
                                         </td>
@@ -61,22 +61,32 @@
                                                 {% empty %}
                                                     <a href="{% url 'show_this_supportfile' supportfile.id  %}"  class="btn btn-danger" target="_blank" >Non utilisé</a>
                                                 {% endfor %}
+
+                                                {% if request.user.is_extra and '/admin' in request.path %}    
                                                    <br><a href="{% url 'create_exercise' supportfile.id %}" class="btn btn-primary"  >Associer/Dissocier un savoir faire à ce support</a>
+                                                {% endif %}
+
                                                 </div>
 
                                                     <a href="{% url 'show_this_supportfile' supportfile.id   %}" target="_blank">  
                                                         <img src="{{ supportfile.imagefile.url }}" class="imagefile">
                                                     </a>
 
-
+                                                {% if request.user.is_superuser or request.user.teacher == supportfile.author %}  
                                                     <a href="{% url 'update_supportfile'  supportfile.id   %}" class="listing" style="font-size: 18px">
-                                                                {% if supportfile.title %}  
-                                                                    {{ supportfile.title|cleanhtml|capfirst }}  
-                                                                {% else %}  
-                                                                    {{ supportfile.annoncement|cleanhtml|capfirst }} 
-                                                                {% endif %}
-                                                    </a>  
-
+                                                        {% if supportfile.title %}  
+                                                            {{ supportfile.title|cleanhtml|capfirst }}  
+                                                        {% else %}  
+                                                            {{ supportfile.annoncement|cleanhtml|capfirst }} 
+                                                        {% endif %}
+                                                    </a> 
+                                                {% else %}  
+                                                    {% if supportfile.title %}  
+                                                        {{ supportfile.title|cleanhtml|capfirst }}  
+                                                    {% else %}  
+                                                        {{ supportfile.annoncement|cleanhtml|capfirst }} 
+                                                    {% endif %}
+                                                {% endif %}
 
                                                     {% if supportfile.calculator %}
                                                       <img src="{% static 'img/calculator.png' %}" width="30px" />
