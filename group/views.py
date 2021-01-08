@@ -349,7 +349,7 @@ def authorizing_access_group(request,teacher,group ):
     if teacher.teacher_sharingteacher.filter(group = group).count() > 0 :
         test = True
 
-    if group.teacher == teacher or test :
+    if group.teacher == teacher or test or request.user.is_manager :
         test = True   
 
     if not test :
