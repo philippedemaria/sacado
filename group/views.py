@@ -142,12 +142,6 @@ def student_dashboard(request,group_id):
 
 
 
- 
-
-
-
-
-
 
 def student_parcours_studied(student):  
     parcourses = student.students_to_parcours.all()
