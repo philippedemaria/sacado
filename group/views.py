@@ -349,7 +349,7 @@ def get_complement(request, teacher, parcours_or_group):
 
 
 
-def authorizing_access_group(teacher,group ):
+def authorizing_access_group(request,teacher,group ):
 
     test = False
     if teacher.teacher_sharingteacher.filter(group = group).count() > 0 :
@@ -416,7 +416,7 @@ def update_group(request, id):
     group = Group.objects.get(id=id)
     stdnts = group.students.order_by("user__last_name")
 
-    authorizing_access_group(teacher,group )
+    authorizing_access_group(request,teacher,group )
  
 
     
@@ -449,7 +449,7 @@ def delete_group(request, id):
     group = Group.objects.get(id=id)
     # Si le prof n'appartient pas à un établissement
     teacher = group.teacher
-    authorizing_access_group(teacher,group )
+    authorizing_access_group(request,teacher,group )
     if not teacher.user.school :
         # Si les élèves n'appartiennent pas à un établissement
         for student in group.students.all():
@@ -473,7 +473,7 @@ def show_group(request, id ):
     data = get_complement(request, teacher, group)
     role = data['role']
     access = data['access']
-    authorizing_access_group(teacher,group )
+    authorizing_access_group(request,teacher,group )
 
     students = group.students.order_by("user__last_name")
 
@@ -623,7 +623,7 @@ def result_group(request, id):
 
     group = Group.objects.get(id=id)
     teacher = Teacher.objects.get(user=request.user)
-    authorizing_access_group(teacher,group )
+    authorizing_access_group(request,teacher,group )
 
     parcourses_tab = []
     parcourses_student_tab, exercise_tab = [] ,  []
@@ -665,7 +665,7 @@ def result_group_theme(request, id, idt):
     group = Group.objects.get(id=id)
     students = group.students.order_by("user__last_name")
 
-    authorizing_access_group(teacher,group ) 
+    authorizing_access_group(request,teacher,group ) 
  
     form = EmailForm(request.POST or None )
     theme = Theme.objects.get(id=idt)
@@ -693,7 +693,7 @@ def result_group_exercise(request, id):
 
     teacher = Teacher.objects.get(user=request.user)
 
-    authorizing_access_group(teacher,group ) 
+    authorizing_access_group(request,teacher,group ) 
 
     sender_mail(request,form)
 
@@ -713,7 +713,7 @@ def result_group_skill(request, id):
     students = group.students.order_by("user__last_name")
     teacher = Teacher.objects.get(user=request.user)
 
-    authorizing_access_group(teacher,group ) 
+    authorizing_access_group(request,teacher,group ) 
 
     form = EmailForm(request.POST or None )
     stage = get_stage(group)
@@ -735,7 +735,7 @@ def result_group_waiting(request, id):
 
     waitings = group.level.waitings.filter(theme__subject=group.subject)
  
-    authorizing_access_group(teacher,group ) 
+    authorizing_access_group(request,teacher,group ) 
 
     form = EmailForm(request.POST or None )
     stage = get_stage(group)
@@ -753,7 +753,7 @@ def result_group_theme_exercise(request, id, idt):
     stage = get_stage(group)
     teacher = Teacher.objects.get(user=request.user)
     students = group.students.order_by("user__last_name")
-    authorizing_access_group(teacher,group ) 
+    authorizing_access_group(request,teacher,group ) 
 
     context = {  'group': group, 'form': form, 'theme': theme, 'students': students, 'teacher': teacher, "slug" : theme.slug , 'stage' : stage   , 'communications' : [], 'relationships': [] , 'parcours': None  }
 
@@ -767,7 +767,7 @@ def stat_group(request, id):
     teacher = Teacher.objects.get(user=request.user)
 
     
-    authorizing_access_group(teacher,group ) 
+    authorizing_access_group(request,teacher,group ) 
 
     stats = []
     for s in group.students.order_by("user__last_name") :
@@ -838,7 +838,7 @@ def task_group(request, id):
     teacher = Teacher.objects.get(user=request.user)
 
     
-    authorizing_access_group(teacher,group ) 
+    authorizing_access_group(request,teacher,group ) 
 
 
     stats = []
@@ -879,7 +879,7 @@ def select_exercise_by_knowledge(request):
     group_id = request.POST.get("group_id")
     group = Group.objects.get(id=int(group_id))
     teacher = Teacher.objects.get(user=request.user)
-    authorizing_access_group(teacher,group ) 
+    authorizing_access_group(request,teacher,group ) 
 
 
     knowledge_id = request.POST.get("knowledge_id")
@@ -899,7 +899,7 @@ def associate_exercise_by_parcours(request,id,idt):
 
     group = Group.objects.get(id = id)
     teacher = Teacher.objects.get(user=request.user)
-    authorizing_access_group(teacher,group )  
+    authorizing_access_group(request,teacher,group )  
        
     theme = Theme.objects.get(id = idt)
     knowledge_id = request.POST.get("knowledge_id_modal") 
@@ -980,7 +980,7 @@ def print_statistiques(request, group_id, student_id):
     teacher = Teacher.objects.get(user=request.user)
 
     
-    authorizing_access_group(teacher,group ) 
+    authorizing_access_group(request,teacher,group ) 
 
 
     if student_id == 0  :
@@ -1328,7 +1328,7 @@ def print_ids(request, id):
     group = Group.objects.get(id=id)
     teacher = Teacher.objects.get(user=request.user)
 
-    authorizing_access_group(teacher,group ) 
+    authorizing_access_group(request,teacher,group ) 
 
 
     response = HttpResponse(content_type='application/pdf')
