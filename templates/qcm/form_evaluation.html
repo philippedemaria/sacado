@@ -64,21 +64,26 @@
         <tr>
             <td>{{ form.duration.label_tag }}
                     <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                        <div class="helper_tip_text" >La durée de l'évaluation est la somme des durées de chaque exercice + le temps de chargement</div>
+                        <div class="helper_tip_text" >La durée de l'évaluation est la somme des durées de chaque exercice + le temps de chargement que vous pouvez choisir</div>
                     </span>
             </td>
             <td>{{ form.duration |add_class:"form-control"|attr:"placeHolder:15:00"|attr:"required"}}</td>
             <td>{{ form.duration.errors}}</td>
         </tr>
         <tr>
-            <td><label>Date de passation</label></td>
+            <td><label>Date de passation</label>  <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text red" >Pour modifier la date, supprimer entièrement la date pour obtenir le calendrier actuel. Sinon avec le format anglais natif, vous risquez des soucis de calendrier.</div>
+                                </span></td>
             <td>{{ form.start|add_class:"form-control datetimepicker"|attr:"required"}}</td>
             <td></td>
         </tr>
         <tr>
             <td>{{ form.stop.label_tag }} 
                     <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                        <div class="helper_tip_text" >Le parcours reste publié mais la soumission des exercices est interdite après la date renseignée. Pour dépublier, utiliser le bouton de publication.</div>
+                        <div class="helper_tip_text" >Le parcours reste publié mais la soumission des exercices est interdite après la date renseignée. Pour dépublier, utiliser le bouton de publication. 
+                            <br/> 
+                            <span class="red">Pour modifier la date, supprimer entièrement la date pour obtenir le calendrier actuel. Sinon avec le format anglais natif, vous risquez des soucis de calendrier.</span>
+                        </div>
                     </span>
             </td>
             <td>{{ form.stop|add_class:"form-control datetimepicker"|attr:"required"}}</td>

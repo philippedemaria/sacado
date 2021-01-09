@@ -175,7 +175,7 @@
                 </div>
                 {% endif  %} 
             </div>
-            <div class="row" style="margin-top:40px">
+            <div class="row" style="margin-top:20px">
                 <div class="col-sm-12 col-md-8">
                     <div class="form-group">
                         <input value="Enregistrer" type="submit" class="btn btn-primary"/>
@@ -188,15 +188,15 @@
                         </a>
                     </div>   
                 </div>
-
-                {% if request.user.is_manager %}
+            {% if request.user.is_manager %}     
+                {% if teacher %}
                 <div class="col-sm-12 col-md-4">
                     <div class="form-group">
-                        <a href="{% url 'dissociate_teacher' teacher.user.id %}" class="btn btn-danger" onclick="return TestRemove('cet enseignant')" > Dissocier ce compte</a>
+                        <a href="{% url 'dissociate_teacher' teacher.user.id %}" class="btn btn-danger" onclick="return TestRemove('cet enseignant')" > Dissocier cet enseignant de mon établissement</a>
                     </div>   
                 </div>
                 {% endif  %} 
-
+            {% endif  %}
             </div>
         </form>
     </section>

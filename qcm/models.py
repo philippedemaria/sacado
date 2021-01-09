@@ -461,6 +461,8 @@ class Parcours(ModelWithCode):
         som = self.duration
         for d in self.parcours_relationship.values_list('duration',flat=True).filter(is_publish=1):
             som += d
+        for e in self.parcours_customexercises.values_list('duration',flat=True).filter(is_publish=1):
+            som += e
         return som 
 
     def duration_reader_course(self):

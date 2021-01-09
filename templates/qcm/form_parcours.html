@@ -226,19 +226,19 @@
                                 {% if teacher.user.id != group.teacher.user.id %}
                                 <div class="alert alert-danger">                                   
                                     <small>Le propriétaire de ce groupe est <b>{{ group.teacher }}</b>. Vous devriez le sélectionner pour qu'il voit ce parcours dans son tableau de bord.</small>
-                                    <label>Parcours co animé avec</label>
+                                    <label>Parcours co animé avec <span style="font-size:12px">(facultatif)</span></label>
                                     {{ form.coteachers|add_class:"form-control select2"}}
                                     {{ form.coteachers.errors }}
                                 </div>                                    
                                 {% endif %}
 
                             {% else %}
-                                <label>Parcours co animé avec</label>
+                                <label>Parcours co animé avec : <span style="font-size:12px">(facultatif)</span></label>
                                 {{ form.coteachers|add_class:"form-control select2"}}
                                 {{ form.coteachers.errors }}
                             {% endif %}
                         {% else %}
-                            <label>Parcours co animé avec <small>(facultatif)</small></label><br>
+                            <label>Parcours co animé avec <span style="font-size:12px">(facultatif)</span></label><br>
                             <div class="alert alert-danger"><small>Co-animation uniquement avec la version établissement.</small></div>
                         {% endif %}
                     </div>
@@ -266,16 +266,28 @@
                         <td>{{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
                         <td>{{ form.is_publish.errors }}</td>
                     </tr>
-
+                    {% block evaluation %}
                     <tr class="publication_div">
-                        <td><label>Date de publication :</label></td>
+                        <td><label>Date de publication :</label>  
+                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text red" >
+                                        Pour modifier la date, supprimer entièrement la date pour obtenir le calendrier actuel. Sinon avec le format anglais natif, vous risquez des soucis de calendrier.
+                                    </div>
+                            </span>
+                        </td>
                         <td>{{ form.start|add_class:"form-control datetimepicker"}}</td>
                         <td></td>
                     </tr>
                     <tr class="publication_div">
                         <td>{{ form.stop.label_tag }} 
                                 <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                    <div class="helper_tip_text" >Le parcours reste publié mais la soumission des exercices est interdite après la date renseignée. Pour dépublier, utiliser le bouton de publication.</div>
+                                    <div class="helper_tip_text" >
+                                        Le parcours reste publié mais la soumission des exercices est interdite après la date renseignée. Pour dépublier, utiliser le bouton de publication.
+                                        <br/> 
+                                        <span class="red">
+                                            Pour modifier la date, supprimer entièrement la date pour obtenir le calendrier actuel. Sinon avec le format anglais natif, vous risquez des soucis de calendrier.
+                                        </span>
+                                    </div>
                                 </span>
                         </td>
                         <td>{{ form.stop|add_class:"form-control datetimepicker"}}</td>
@@ -283,6 +295,7 @@
                                 <p class="alert alert-danger">{{error}}</p>
                             {% endfor %}</td>
                     </tr>
+                    {% endblock %}
                     {% if parcours %}
                     <tr>
                         <td>{{ form.is_leaf.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
@@ -291,6 +304,7 @@
                         <td>{{ form.is_leaf.errors }}</td>
                     </tr>
                     {% endif  %}
+
                     {% block evaluation_choices %}     
                     <tr>
                         <td>{{ form.is_favorite.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>

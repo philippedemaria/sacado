@@ -475,7 +475,7 @@ def peuplate_parcours(request,id):
     form = UpdateParcoursForm(request.POST or None , instance=parcours, teacher = parcours.teacher  )
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
     """ affiche le parcours existant avant la modif en ajax""" 
-    exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme")
+    exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme","knowledge")
     """ fin """
     themes_tab = []
     for level in levels :
@@ -486,7 +486,7 @@ def peuplate_parcours(request,id):
     if request.method == 'POST' :
         level = request.POST.get("level") 
         # modifie les exercices sélectionnés
-        exercises_all = parcours.exercises.filter(supportfile__is_title=0,level=level)
+        exercises_all = parcours.exercises.filter(supportfile__is_title=0,level=level).order_by("theme","knowledge")
         exercises_posted_ids = request.POST.getlist('exercises')
 
         new_list = []
@@ -2747,18 +2747,18 @@ def ajax_list_exercises_by_level(request):
     for theme in themes :
         themes_dict =  {}                
         themes_dict["name"]=theme
-        waitings = Waiting.objects.filter(theme=theme,level=level).order_by("theme")
+        waitings = Waiting.objects.filter(theme=theme,level=level).order_by("name")
         waitings_tab  =  []
         for waiting in waitings :
             exercises_counter = 0
             waiting_dict  =   {} 
             waiting_dict["name"]=waiting 
-            knowlegdes = Knowledge.objects.filter(waiting=waiting).order_by("theme")
+            knowlegdes = Knowledge.objects.filter(waiting=waiting).order_by("name")
             knowledges_tab  =  []
             for knowledge in knowlegdes :
                 knowledges_dict  =   {}  
                 knowledges_dict["name"]=knowledge 
-                exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).order_by("theme")
+                exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).order_by("supportfile__annoncement")
                 exercises_counter +=  exercises.count()
                 knowledges_dict["exercises"]=exercises
                 knowledges_tab.append(knowledges_dict)
@@ -2802,18 +2802,18 @@ def ajax_list_exercises_by_level_and_theme(request):
     for theme in themes :
         themes_dict =  {}                
         themes_dict["name"]=theme
-        waitings = Waiting.objects.filter(theme=theme,level=level).order_by("theme")
+        waitings = Waiting.objects.filter(theme=theme,level=level).order_by("name")
         waitings_tab  =  []
         for waiting in waitings :
             exercises_counter = 0
             waiting_dict  =   {} 
             waiting_dict["name"]=waiting 
-            knowlegdes = Knowledge.objects.filter(waiting=waiting).order_by("theme")
+            knowlegdes = Knowledge.objects.filter(waiting=waiting).order_by("name")
             knowledges_tab  =  []
             for knowledge in knowlegdes :
                 knowledges_dict  =   {}  
                 knowledges_dict["name"]=knowledge 
-                exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).order_by("theme")
+                exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).order_by("supportfile__annoncement")
                 exercises_counter +=  exercises.count()
                 knowledges_dict["exercises"]=exercises
                 knowledges_tab.append(knowledges_dict)
@@ -3362,18 +3362,18 @@ def ajax_level_exercise(request):
         for theme in themes :
             themes_dict =  {}                
             themes_dict["name"]=theme
-            waitings = Waiting.objects.filter(theme=theme,level=level).order_by("theme")
+            waitings = Waiting.objects.filter(theme=theme,level=level).order_by("name")
             waitings_tab  =  []
             for waiting in waitings :
                 exercises_counter = 0
                 waiting_dict  =   {} 
                 waiting_dict["name"]=waiting 
-                knowlegdes = Knowledge.objects.filter(waiting=waiting).order_by("theme")
+                knowlegdes = Knowledge.objects.filter(waiting=waiting).order_by("name")
                 knowledges_tab  =  []
                 for knowledge in knowlegdes :
                     knowledges_dict  =   {}  
                     knowledges_dict["name"]=knowledge 
-                    exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).order_by("theme")
+                    exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).order_by("supportfile__annoncement")
                     knowledges_dict["exercises"]=exercises
                     exercises_counter +=  exercises.count()
                     knowledges_tab.append(knowledges_dict)
