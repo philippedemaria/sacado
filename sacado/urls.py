@@ -29,7 +29,8 @@ urlpatterns = [
                   path('schedule/', include('schedule.urls')),
                   path('school/', include('school.urls')),
                   path('oauth/', include('social_django.urls')),
-                  path('basthon/', include('basthon.urls')),                  
+                  path('basthon/', include('basthon.urls')),    
+                  path('association/', include('association.urls')),         
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

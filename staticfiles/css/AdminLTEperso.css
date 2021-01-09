@@ -35,6 +35,12 @@ body {
   font-size:18px;
  /*height : 100vh ;*/
 }
+hr.divider {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 0;
+    border-top: 1px solid #eee;
+}
 
 .full_screen_size{
   font-size:12px;
@@ -1154,16 +1160,12 @@ width:100%;
 }
 
  
-
-.projection_div p, 
-.projection_div td, 
-.projection_div ul, 
-.projection_div ol , 
-.projection_div li {
+#projection_div  div, 
+#projection_div  p,  
+#projection_div  ol , 
+#projection_div  ul {
     font-size : 2em ;
 }
-
- 
 
 
 #projection_div .projection_img_live  {

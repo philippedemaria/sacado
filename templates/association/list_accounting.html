@@ -1,0 +1,74 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+
+
+
+
+{% block page_title %}
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Transactions
+{% endblock %}
+
+{% block page_menu_right %}
+    <a href="{% url 'create_accounting' %}" class="btn btn-new pull-right"><img width="25px" src="{% static 'img/plus.png' %}"/> Nouvelle transaction</a>  
+{% endblock %}
+
+ 
+
+{% block body %}
+    <section class="content_main"> 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table id="standard_tab" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <td>Code</td>
+                        <td>Montant</td>
+                        <td>Object </td>
+                        <td>Beneficiaire</td>
+                        <td>Débit/crédit</td>
+                        <td>Dates/A valoir</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for accounting in accountings %}
+                            <tr>
+                                <td>
+                                    <span >{{ accounting.code }}</span> 
+                                </td>
+                                <td>
+                                    <a href="{% url 'update_accounting'  accounting.id %}" >{{ accounting.objet }}</a>
+                                    <a href="{% url 'show_accounting'  accounting.id %}" class="pull-right"><i class="fa fa-eye"></i> </a>
+                                </td>
+                                <td>
+                                    <span class="helper_tip"> {{ accounting.beneficiaire }}
+                                        <div class="helper_tip_text" > {{ accounting.observation|safe }}</div>
+                                    </span>
+                                </td>                                
+                                <td style="width:150px">
+                                     {{ accounting.amount }}  <br>
+                                </td>
+                                <td>
+                                    {% if accounting.is_credit %}<span class="text-success">Crédit</span>{% else %}<span class="text-danger">Débit</span>{% endif %}
+                                </td>
+                                <td>
+                                     {{ accounting.date|date:"d N Y" }} / {{ accounting.acting|date:"d N Y" }}
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">     
+                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+            </div>
+        </div>
+    </section>
+    </div>
+{% endblock %}

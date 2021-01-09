@@ -659,3 +659,9 @@ def get_noggb_data(obj, student):
     return obj.noggb_data(student)
 
 
+@register.simple_tag 
+def get_vote(obj, user):
+    """
+    renvoie le résultat d'un exo custom coté élève
+    """
+    return obj.has_vote(user)

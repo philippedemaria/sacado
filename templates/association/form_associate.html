@@ -1,0 +1,131 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+    {% if group %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+
+    <script>
+        require(['script/ajax-association']);
+    </script>
+ 
+ 
+{% endblock %}
+
+
+{% block page_title %}  
+    
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Adhésion proposée
+{% endblock %}
+
+{% block page_menu_right %}
+    
+
+ 
+
+    
+{% endblock %}
+
+ 
+ 
+     
+{% block body %}     
+<div class="content_main">
+    <form action="" method="POST">
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-sm-12 col-md-4">
+                        <div class="form-group">
+                            Quel type de membre souahitez-vous proposer ?
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-3">
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            <label class="btn btn-default">Enseignant inscrit <input type="radio" id="type_of_member0" name="type_of_member" value="0" /></label>
+                            <label class="btn btn-default">Non enseignant <input type="radio" id="type_of_member1" name="type_of_member" value="1" /></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id='existing_user'>
+                    <div class="col-sm-12 col-md-4">
+                        <div class="form-group">
+                            {{ form.user.label_tag }}  
+                            {{ form.user |add_class:"form-control select2" }}
+                            {{ form.user.errors }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id='extra_member'>
+                    <div class="col-sm-12 col-md-3">
+                        <div class="form-group">
+                            {{ form.first_name.label_tag }}  
+                            {{ form.first_name |add_class:"form-control" }}
+                            {{ form.first_name.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-3">
+                        <div class="form-group">
+                            {{ form.last_name.label_tag }}  
+                            {{ form.last_name |add_class:"form-control" }}
+                            {{ form.last_name.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group">
+                            {{ form.email.label_tag }}  
+                            {{ form.email |add_class:"form-control" }}
+                            {{ form.email.errors }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row"> 
+                    <div class="col-sm-12 col-md-4">
+                        <div class="form-group">
+                            {{ form.quality.label_tag }} 
+                            {{ form.quality |add_class:"form-control select2"}} 
+                            {{ form.quality.errors }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row"> 
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                            {{ form.observation.label_tag }}  
+                            {{ form.observation   }}
+                            {{ form.observation.errors }}
+                        </div>
+                    </div>
+                </div>
+
+     
+     
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <div class="form-group">
+                            {% if associate %}
+                            <input value="Modifier" type="submit" class="btn btn-primary" name="submitter"   />
+                            {% else %}
+                            <input value="Proposer au vote" type="submit" class="btn btn-primary"  name="submitter"   />
+                            {% endif %}
+                            <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                                       class="btn btn-default "/></a>
+                        </div>
+                    </div>    
+                </div>
+
+     
+            </div>
+        </div> 
+    </form>       
+{% endblock %}

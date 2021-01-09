@@ -1,0 +1,117 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+
+ 
+
+
+
+
+{% block page_title %}
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Listes des membres 
+{% endblock %}
+
+{% block page_menu_right %}
+    <a href="{% url 'create_associate' %}" class="btn btn-new pull-right"><img width="25px" src="{% static 'img/plus.png' %}"/> Proposer un membre</a>  
+{% endblock %}
+
+
+
+
+{% block body %}
+    <section class="content_main"> 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table id="standard_tab" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <td>Nom</td>
+                        <td>Prénom </td>
+                        <td>Membre</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for associate in associates %}
+                            <tr>
+                                <td>
+                                   <a href="{% url 'update_associate' associate.id  %}">{% if associate.user %} {{ associate.user.last_name }} {% else %} {{ associate.last_name }} {% endif %}</a>
+                                </td>
+                                <td>
+                                   <a href="{% url 'update_associate' associate.id  %}">{% if associate.user %} {{ associate.user.first_name }} {% else %} {{ associate.first_name }} {% endif %}</a>
+                                </td>
+                                <td>
+                                   {{ associate.quality }} 
+                                </td>
+                                 
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <h2 class="thin">Nommination</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <td>Nom</td>
+                        <td>Prénom </td>
+                        <td>Membre</td>
+                        <td>Résultat</td>
+                        <td>Mon vote</td>
+                        <td>Délibération</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for associate in pending_associates %}
+                            <tr>
+                                <td>
+                                   <a href="{% url 'update_associate' associate.id  %}"> {% if associate.user %} {{ associate.user.last_name }} {% else %} {{ associate.last_name }} {% endif %}</a>
+                                </td>
+                                <td>
+                                   <a href="{% url 'update_associate' associate.id  %}">{% if associate.user %} {{ associate.user.first_name }} {% else %} {{ associate.first_name }} {% endif %}</a>
+                                </td>
+                                <td>
+                                   {{ associate.quality }} 
+                                </td>
+                                <td>
+                                   {{ associate.ratio.rate }} 
+                                </td>
+                                <td>
+                                   {% get_vote associate user as votation %}
+                                   {% if votation %}
+                                        {% if votation.choice %} Pour {% else %} Contre , {{ votation.justification }}  {% endif %}
+                                   {% else %}
+                                        <a href="{% url 'create_voting' associate.id  %}" class="btn btn-primary btn-xs">Je vote</a> 
+                                   {% endif %} 
+
+                                </td>
+                                <td>
+                                   {% if associate.ratio.fin %}
+                                        <a href="{% url 'accept_associate' associate.id  %}" class="btn btn-success btn-xs">Accepter</a> 
+
+                                        <a href="{% url 'delete_associate' associate.id  %}" class="btn btn-danger btn-xs">Supprimer</a> 
+                                   {% endif %} 
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">     
+                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+            </div>
+        </div>
+    </section>
+
+
+
+
+{% endblock %}

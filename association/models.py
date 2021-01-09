@@ -1,0 +1,106 @@
+from django.db import models
+from datetime import date
+from ckeditor_uploader.fields import RichTextUploadingField
+from account.models import User 
+from account.models import ModelWithCode
+from django.apps import apps
+from django.utils import   timezone
+from django.db.models import Q
+# Pour créer un superuser, il faut depuis le shell taper :
+# from account.models import User
+# User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
+
+QUALITIES = (
+        ("actif", 'membre actif'),    
+        ("honneur", "membre d'honneur"),
+        ("bienfaiteur", 'membre bienfaiteur'),    
+        ("bénéficiaire", "membre bénéficiaire"),
+    )
+
+
+
+
+
+class Associate(models.Model):
+    """
+    Modèle représentant un associé.
+    """
+    user = models.ForeignKey(User, blank=True, default=True, null=True,   related_name="associated", verbose_name="Membre inscrit",  on_delete=models.CASCADE)
+    quality = models.CharField(max_length=255, default='', choices=QUALITIES, verbose_name="Qualité")
+    date_joined = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=0, editable=False)
+
+    first_name   = models.CharField(max_length=255,  blank=True,default='', null=True,   verbose_name="Nom")
+    last_name = models.CharField(max_length=255,  blank=True, default='' , null=True, verbose_name="Prénom")
+    email = models.CharField(max_length=255,  blank=True, default='', null=True,  verbose_name="Email")
+    observation = RichTextUploadingField( blank=True, default="", null=True, verbose_name="Remarque") 
+
+
+    def __str__(self):
+        lname = self.user.last_name.capitalize()
+        fname = self.user.first_name.capitalize()
+
+        return "{} {}, {}".format(lname, fname, quality)
+
+
+    def has_vote(self, user) :
+        my_vote = False
+        if self.voting.filter(user = user) :
+            my_vote = self.voting.get(user = user)
+        return my_vote
+
+    def ratio(self) :
+        s = self.voting.count()
+        v = 4
+        r = self.voting.filter(choice=1).count()
+        data = {}
+        if s > 0 :
+            rat = r / v * 100
+            data["rate"] = str(r) +"/" +str(v)+ " = "  + str(rat) + "%"
+        else :
+            data["rate"] = "en attente"
+        data["fin"] = ""
+        if s == 4 :
+            data["fin"] = " fin du scrutin"
+        return data
+
+
+
+
+class Voting(models.Model):
+    """
+    Modèle représentant un associé.
+    """
+    associated = models.ForeignKey(Associate, blank=True, related_name="voting", on_delete=models.CASCADE)
+    choice = models.BooleanField(default=0, verbose_name="vote")
+    justification = models.CharField(max_length=255, default='', blank=True ,  verbose_name="justification (facultatif)")
+    date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, blank=True, related_name="votant", on_delete=models.CASCADE, editable=False)
+
+    def __str__(self):
+        lname = self.associated.user.last_name.capitalize()
+        fname = self.associated.user.first_name.capitalize()
+
+        return "{} {}".format(choice)
+
+    class Meta:
+        unique_together = ('associated', 'user')
+
+ 
+class Accounting(ModelWithCode):
+    """ Accounting   """
+ 
+    amount = models.DecimalField(default=0, blank=True , max_digits=10, decimal_places=2)
+    is_credit = models.BooleanField(default=0, )
+    objet = models.CharField(max_length=255, verbose_name="Objet*")
+    beneficiaire = models.CharField(max_length=255, verbose_name="Bénéficiaire*")
+    observation = RichTextUploadingField( blank=True, default="", null=True, verbose_name="Observation")
+    acting = models.DateTimeField(null=True, blank=True, verbose_name="Date d'effet")
+    date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, related_name="accontings", on_delete=models.PROTECT, editable=False)
+
+    def __str__(self):
+        return self.name
+
+     
+

@@ -338,10 +338,22 @@
                 <a href="{% url 'admin_tdb' %}">{{ request.user.school.name }}</a>
             </div>  
         </div> 
-        <hr>
+        <hr class="divider">
     {% endif %}
-    <h2 class="thin">Gestion SACADO </h2>
-    <hr>
+    <p class="thin">Création </p>
+ 
+    {% for level in levels %}
+        <div class="row" style="font-size: 12px">
+            <div class="col-lg-7 col-xs-7">
+                {{ level.shortname }} <a href="{% url 'admin_supportfiles' level.id  %}">Fichiers support</a>  
+            </div>  
+            <div class="col-lg-5 col-xs-5"> 
+                    <img src="{% static 'img/ggb.png' %}" width="15px"> <a href="{% url 'admin_associations'  level.id  %}">Exercices   </a> 
+            </div>      
+        </div>
+    {% endfor %} 
+    <hr class="divider">
+    <p class="thin">Gestion SACADO </p> 
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             <a href="{% url 'levels' %}">Niveaux</a>
@@ -362,20 +374,7 @@
             <a href="{% url 'skills' %}">Compétences</a>
         </div>
     </div>
-    <hr>
-    <h2 class="thin">Création </h2>
-    <hr>
-    {% for level in levels %}
-        <div class="row" style="font-size: 12px">
-            <div class="col-lg-7 col-xs-7">
-                {{ level.shortname }} <a href="{% url 'admin_supportfiles' level.id  %}">Fichiers support</a>  
-            </div>  
-            <div class="col-lg-5 col-xs-5"> 
-                    <img src="{% static 'img/ggb.png' %}" width="15px"> <a href="{% url 'admin_associations'  level.id  %}">Exercices   </a> 
-            </div>      
-        </div>
-    {% endfor %} 
-    <hr>
+    <hr class="divider">
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             <a href="{% url 'schools' %}">Etablissements </a>
@@ -406,13 +405,24 @@
             <a href="{% url 'demands' %}">Demandes d'exercices {% if nb_demand > 0 %} <i class="fa fa-circle text-danger" style="font-size:10px"></i> {% endif %} </a>
         </div>
     </div>
-    <hr>
+    <hr class="divider">
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             <a href="{% url 'advises' %}">Modèles et aides </a>
         </div>
     </div>
-    <hr>
+ 
+
+    <hr class="divider">
+    <p class="thin">L'asso SACADO </p>
+
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'association_index' %}">Tableau de bord </a>
+        </div>
+    </div>
+
+
 </div>
 {%  elif request.user.is_extra %}
 <div class="notification-container dismiss"  id="notification-admin">

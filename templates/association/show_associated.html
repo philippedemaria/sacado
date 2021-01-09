@@ -1,0 +1,61 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+ 
+{% block require %}
+ 
+    {% if group %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+
+    <script>
+        require(['script/ajax-group']);
+    </script>
+ 
+ 
+{% endblock %}
+
+
+
+{% block page_title %}
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Membre 
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+
+{% endblock %}
+ 
+
+{% block body %}
+<div class="content_main">  
+        <div class="row">        
+            <div class="col-sm-12 col-md-12">
+ 
+            </div>
+        </div> 
+        <div class="row">        
+            <div class="col-sm-12 col-md-12">
+                <label> Nom : </label>{% if associate.user %} {{ associate.user.last_name }} {% else %} {{ associate.last_name }} {% endif %}
+            </div>   
+        </div> 
+        <div class="row">        
+            <div class="col-sm-12 col-md-12">
+                <label> Prénom : </label>{% if associate.user %} {{ associate.user.first_name }} {% else %} {{ associate.first_name }} {% endif %}
+            </div>   
+        </div>                           
+        <div class="row">        
+            <div class="col-sm-12 col-md-12">
+                <label> Membre : </label>{{ associate.quality }}
+            </div>   
+        </div> 
+
+ 
+</div> 
+
+
+ 
+{% endblock %}

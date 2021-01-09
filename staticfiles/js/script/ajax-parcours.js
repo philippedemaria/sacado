@@ -614,20 +614,31 @@ define(['jquery','bootstrap'], function ($) {
 
 
  
-        $('.projection').on('click', function () {
+        $('body').on('click', '.projection', function () {
             var content = $(this).html();
             $("body").append('<div class="projection_div"  id="projection_div" ><span class="pull-right closer_projection_div"><i class="fa fa-times fa-2x"></i></span>'+content+'</div>');
 
  
-                if($('img').length){ 
+                if($('#projection_div img').length){ 
                                     $('.projection_div').find("img").removeAttr("style");             
                                     $('.projection_div').find("img").addClass("projection_img_live");
+                                    }
+
+                if($('#projection_div iframe').length) { 
+
+                                    width = 2*parseInt($('#projection_div').find("iframe").attr("width"));
+                                    $('#projection_div').find("iframe").attr("width", width); 
+                                    height = 2*parseInt($('#projection_div').find("iframe").attr("height")); 
+                                    $('#projection_div').find("iframe").attr("height", height);
+
+                                    console.log(width , height) ;
                                     }
  
 
         });
  
-        $(document).on('click', ".closer_projection_div", function () {
+ 
+        $('body').on('click', ".closer_projection_div", function () {
              $("#projection_div").remove();
         });
 

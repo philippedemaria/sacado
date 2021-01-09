@@ -1,0 +1,233 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+ 
+{% block require %}
+ 
+    {% if voting %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+ 
+{% endblock %}
+
+
+
+{% block page_title %}
+ 
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> {{ voting.name }}  
+
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+ 
+
+{% endblock %}
+ 
+
+{% block body %}
+<div class="content_main">  
+        <div class="row">        
+            <div class="col-sm-11 col-md-12">
+                <p style="color:{{ voting.color }}"><strong>Niveau : {{ voting.level.name }}</strong>
+                    {% if not teacher.user.school %} 
+                    <span style="margin-left:50px"><i class="fa fa-warning"></i> les champs modifiés sont directement enregistrés.</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div> 
+        <div class="row">        
+            <div class="col-sm-11 col-md-12">
+                
+
+                <table class="table table-hover standard_tab_sort">
+                    <thead>
+                    <tr>
+                        <td>Nom* </td>
+                        <td>Prénom*</td>
+                        <td>Courriel*</td>
+                        <td>Identifiant* </td>
+                        <td>Dernière connexion</td>
+                        <td><span style="font-size:13px; color:#cb2131">Mot de passe par défaut : <strong>sacado2020</strong></span></td> 
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <form action="" method="POST">   
+                        {% for student in  students   %}
+                            {% if not sacado_asso %}         
+                                {% csrf_token %}        
+                                    <tr>
+                                        <td><input  type="text" 
+                                                    id="studentLastName{{ student.user.id }}" 
+                                                    data-student_id="{{ student.user.id }}" 
+                                                    class="updateStudent" 
+                                                    data-is_name="1" 
+                                                    value="{{ student.user.last_name|lower|title }}" 
+                                                    style="background: #f2f0f0; border: none;width:140px" />
+         
+                                        </td>
+                                        <td><input  type="text" 
+                                                    id="studentFirstName{{ student.user.id }}" 
+                                                    data-student_id="{{ student.user.id }}" 
+                                                    data-is_name="0" 
+                                                    class="updateStudent"  
+                                                    value="{{ student.user.first_name|lower|title }}" 
+                                                    style="background: #f2f0f0; border: none;width:120px" /> 
+                                        </td>
+                                        <td><input  type="text" 
+                                                    id="studentEmail{{ student.user.id }}" 
+                                                    data-student_id="{{ student.user.id }}" 
+                                                    data-is_name="2" 
+                                                    class="updateStudent"  
+                                                    value="{{ student.user.email }}" 
+                                                    style="background: #f2f0f0; border: none;width:310px" /> </td>
+                                        <td><input  type="text" 
+                                                    id="studentUsername{{ student.user.id }}" 
+                                                    data-student_id="{{ student.user.id }}" 
+                                                    data-is_name="3" 
+                                                    class="updateStudent"  
+                                                    value="{{ student.user.username }}" 
+                                                    style="background: #f2f0f0; border: none;width:180px" />
+                                        
+                                        </td>
+                                        <td>
+                                            {% if student.user.last_login %}{{ student.user.last_login|date:"Y m d, H:i"  }}{% else %}Jamais{% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'detail_student_all_views'  student.user.id   %}"  style="font-size: 11px"> 
+                                               voir les résultats  
+                                            </a> 
+                                            <small>|</small> 
+                                            <a  href="{% url 'newpassword_student' student.user.id  voting.id   %}" data-student_id="{{ student.user.id }}" title="mot de passe par défaut : sacado2020" 
+                                                onclick="return Newpassword()" style="font-size:11px; margin-right:5px"  >
+                                                Init. mot de passe
+                                            </a><small>|</small>       
+                                            <a  href="{% url 'delete_student' student.user.id  voting.id %}"
+                                                onclick="return TestDelete('cet élève')" style="font-size:11px"  >
+                                                Supprimer
+                                            </a> 
+                                        </td>
+                                    </tr>
+                            {% else %} 
+                                <tr>
+                                    <td>
+                                        {{ student.user.last_name|lower|title }}
+                                    </td>
+                                    <td>
+                                        {{ student.user.first_name|lower|title }}
+                                    <td>
+                                        {{ student.user.email }}
+                                    </td>
+                                    <td>
+                                        {{ student.user.username }}
+                                    </td>
+                                    <td>
+                                        {% if student.user.last_login %}{{ student.user.last_login|date:"Y m d, H:i"  }}{% else %}Jamais{% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'detail_student_all_views'  student.user.id   %}"  style="font-size: 11px"> 
+                                           voir les résultats  
+                                        </a> 
+                                        <small>|</small> 
+                                        <a  href="{% url 'newpassword_student' student.user.id  voting.id   %}" data-student_id="{{ student.user.id }}" title="mot de passe par défaut : sacado2020" 
+                                            onclick="return Newpassword()" style="font-size:11px; margin-right:5px"  >
+                                            Init. mot de passe
+                                        </a><small>|</small>       
+                                        <a  href="{% url 'delete_student' student.user.id  voting.id %}"
+                                            onclick="alert('Vous avez la version établissement. Contacter le gestion SACADO de votre établissement.'); return false;" style="font-size:11px"  >
+                                            Supprimer
+                                        </a> 
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </form>
+                    </tbody>
+                </table>
+
+
+
+
+            </div>   
+        </div> 
+
+
+
+		{% if voting %}
+ 
+        <div class="row">
+            <div class="col-sm-12 col-md-12 alert alert-info">
+                <div style="font-size: 16px"><i class="fa fa-question-circle"></i>
+                    <b>Lien d'inscription :</b> Les élèves peuvent rejoindre ce votinge via cette URL à leur donner : <strong>https://sacado.xyz/voting/{{ voting.code }}</strong> <a href="https://sacado.xyz/voting/{{ voting.code }}" target="_blank"><img src="{% static 'img/external-link.png' %}"/></a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="form-voting">
+                    <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                               class="btn btn-default "/></a>
+                </div>
+            </div>
+        </div> 
+</div> 
+
+
+
+    <div class="modal fade bd-example-modal-lg" id="help"  tabindex="-1" role="dialog" aria-labelledby="help" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document" style="margin:0px!important">
+ 
+            {% if user.user_type == 2 %}
+                <div class="modal-content help" >
+ 
+                    <div class="helpdiv_help_title_page"  style="left:500px;">
+                        titre de page
+                    </div>
+                    <div class="helpdiv_help_votinge"   style="top:100px">
+                        <br><br><br><br><br><br><br><br><br><img src="{% static 'img/fleche_bottom_left.png' %}" width="40px" />
+                        <div class="help_votinge" style="float:left;width:200px;height:200px" >
+
+                               <br>
+                               <br><i class="fa fa-barcode"></i> Code
+                               <br> 
+                               <br><i class="fa fa-cubes"></i> Niveau
+                               <br> 
+                               <br><i class="fa fa-users"></i> Nombre d'élèves
+                               <br> 
+                               <br>Lien à donner aux élèves pour leur inscription en autonomie.
+
+                        </div>
+                    </div>
+
+
+                    <div class="helpdiv_help_acces"  style="top:45px;right:50px;border-top: 2px #fff solid;padding:10px;width:800PX">
+                        Sous menu contextuel <img src="{% static 'img/fleche_up_right.png' %}" width="40px" style="vertical-align:bottom" />
+                    </div>
+
+
+
+                    <div class="helpdiv_help_list">
+                        <div class="help_list">
+
+                            <br><br><br> Liste des élèves. <br>Cliquer sur un élève pour obtenir sa fiche de suivi.
+                        </div>
+                         <br> <br><img src="{% static 'img/fleche_up_right.png' %}" width="40px" /><br><br><img src="{% static 'img/fleche_bottom_right.png' %}" width="40px" style="vertical-align:middle;"/>
+
+                    </div>
+       
+
+
+                </div>
+            {% endif %}
+        </div>
+    </div>
+  
+{% endblock %}

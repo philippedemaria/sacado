@@ -1,0 +1,99 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+    {% if accounting %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+ 
+ 
+{% endblock %}
+
+
+{% block page_title %}  
+    
+ 
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a>  Transaction 
+  
+{% endblock %}
+
+{% block page_menu_right %}
+    
+    
+{% endblock %}
+
+ 
+ 
+
+{% block body %}     
+<div class="content_main">
+    <form action="" method="POST">
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        {{ form.amount.label_tag }} <font style="font-size:12px">en euros</font>
+                        {{ form.amount |add_class:"form-control" }}
+                        {{ form.amount.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-2">
+                    <div class="form-group">
+                        <label>Débit / Crédit </label>  <br/>
+                        {{ form.is_credit |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Crédit"|attr:"data-off:Débit"}} 
+                        {{ form.is_credit.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3">
+                        {{ form.acting.label_tag }} 
+                        {{ form.acting |add_class:"form-control datetimepicker" }}
+                        {{ form.acting.errors }}
+                </div>
+            </div>
+            <div class="row"> 
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                        {{ form.objet.label_tag }} 
+                        {{ form.objet |add_class:"form-control"  }}
+                        {{ form.objet.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-lg-6">
+                    <div class="form-group">
+                        {{ form.beneficiaire.label_tag }} 
+                        {{ form.beneficiaire |add_class:"form-control" }}
+                        {{ form.beneficiaire.errors }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row"> 
+                <div class="col-sm-12 col-md-12">
+                        {{ form.observation.label_tag }} 
+                        {{ form.observation }}
+                        {{ form.observation.errors }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-8">
+                    <div class="form-group">
+                        <input value="Créer la transaction" type="submit" class="btn btn-primary"   />
+                        <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                                   class="btn btn-default "/></a>
+                    </div>
+                </div>    
+            </div>
+
+ 
+        </div>
+    </div> 
+    </form>
+</div>  
+{% endblock %}

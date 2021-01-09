@@ -1,0 +1,66 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+{% endblock %} 
+
+
+{% block page_title %}
+    <i class="fa fa-cloud"></i> Tableau de bord de l'association</a>
+{% endblock %} 
+
+{% block page_menu_right %}
+    <p>{{ school.name }}</p>
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+    {% if request.user.is_superuser %}
+ 
+    <div class="row">
+        <!-- ./col -->
+        <div class="col-lg-3 col-md-4 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-purple">
+                <div class="inner">
+                     <span style="font-size: 35px">Facturation </span>
+                 </div>
+ 
+
+                <a href="{% url 'list_accountings'  %}" class="small-box-footer"><i
+                        class="fa fa-arrow-circle-right"></i> En détails </a>
+ 
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-purple">
+                <div class="inner">
+                     <span style="font-size: 35px">Membres </span>
+                </div>
+
+                <a href="{% url 'list_associate' %}" class="small-box-footer"><i
+                        class="fa fa-arrow-circle-right"></i> En détails </a>
+            </div>
+        </div>
+
+ 
+
+    
+    </div>
+
+ 
+
+    {% endif %} 
+
+
+</section> 
+{% endblock %}
