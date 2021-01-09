@@ -7,7 +7,7 @@ urlpatterns = [
  
  
     path('knowledges', list_knowledges, name='knowledges'),
-    path('create_knowledge', create_knowledge, name='create_knowledge'),
+    path('create_knowledge/only/', create_knowledge, name='create_knowledge'),
     path('create_multi_knowledge', create_multi_knowledge, name='create_multi_knowledge'),
     path('update_knowledge/<int:id>/', update_knowledge, name='update_knowledge'),
     path('delete_knowledge/<int:id>/', delete_knowledge, name='delete_knowledge'),
