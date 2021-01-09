@@ -75,8 +75,8 @@ body{
                         <th style="width:300px">Nom</th>
                         <th>Modif.</th>
                         <th>Niveau</th>
-                        <th style="width:350px">Mes groupes </th>
-                        <th>Groupes co-animés</th>
+                        <th style="width:350px">Affecté à </th>
+                        <th>Affecté en co-animation</th>
                         <th>Elèves</th>
                         <th style="width:120px">Publication</th>                    
                     </tr> 
@@ -115,14 +115,18 @@ body{
                             {% endif %}
                         </td>  
                         <td>
-                            {% if not parcours.is_folder %}
+                            {% if  parcours.is_folder %}
+                                {% for g in  parcours.group_list  %}
+                                    <a href="{% url 'update_folder' parcours.id g.id %}" style="color:{{ g.color }}"> <i class="fa fa-cogs  fa-xs"></i></a> 
+                                {% endfor %}
+                            {% else %}
                                 {% if parcours.teacher != teacher %}
-                                    <i class="fa fa-edit text-default" aria-hidden="true" ></i></a>
+                                    <i class="fa fa-edit text-default fa-xs" aria-hidden="true" ></i></a>
                                 {% else %}
                                     {% if parcours.is_evaluation %}
-                                    <a href="{% url 'update_evaluation' parcours.id 0 %}"> <i class="fa fa-edit" aria-hidden="true"></i></a> 
+                                    <a href="{% url 'update_evaluation' parcours.id 0 %}"> <i class="fa fa-edit fa-xs" aria-hidden="true"></i></a> 
                                     {% else %}
-                                    <a href="{% url 'update_parcours' parcours.id 0 %}"> <i class="fa fa-edit" aria-hidden="true"></i></a> 
+                                    <a href="{% url 'update_parcours' parcours.id 0 %}"> <i class="fa fa-edit fa-xs" aria-hidden="true"></i></a> 
                                     {% endif %}
                                 {% endif %}
                             {% endif %}
