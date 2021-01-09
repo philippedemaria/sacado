@@ -475,7 +475,7 @@ def peuplate_parcours(request,id):
     form = UpdateParcoursForm(request.POST or None , instance=parcours, teacher = parcours.teacher  )
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
     """ affiche le parcours existant avant la modif en ajax""" 
-    exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme","knowledge")
+    exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme")
     """ fin """
     themes_tab = []
     for level in levels :
@@ -486,7 +486,7 @@ def peuplate_parcours(request,id):
     if request.method == 'POST' :
         level = request.POST.get("level") 
         # modifie les exercices sélectionnés
-        exercises_all = parcours.exercises.filter(supportfile__is_title=0,level=level).order_by("theme","knowledge")
+        exercises_all = parcours.exercises.filter(supportfile__is_title=0,level=level).order_by("theme")
         exercises_posted_ids = request.POST.getlist('exercises')
 
         new_list = []
