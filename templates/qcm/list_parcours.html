@@ -233,14 +233,14 @@ body{
                             </td>  
                             <td>
                                 {% if prcrs.teacher != teacher %}
-                                    <i class="fa fa-edit text-default" aria-hidden="true" ></i></a>
+                                    <i class="fa fa-edit fa-xs text-default" aria-hidden="true" ></i></a>
                                 {% else %}
                                     {% if prcrs.is_evaluation %}
                                     <a href="{% url 'update_evaluation' prcrs.id 0 %}"> 
                                     {% else %}
                                     <a href="{% url 'update_parcours' prcrs.id 0 %}">
                                     {% endif %}
-                                    <i class="fa fa-edit" aria-hidden="true"></i></a>
+                                    <i class="fa fa-edit fa-xs" aria-hidden="true"></i></a>
                                 {% endif %}
                             </td> 
                             <td>
