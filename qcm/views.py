@@ -2924,7 +2924,7 @@ def admin_list_supportfiles(request,id):
                 for knowledge in knowlegdes :
                     knowledges_dict  =   {}  
                     knowledges_dict["name"]=knowledge 
-                    supportfiles = knowledge.supportfiles.filter(is_title=0).order_by("supportfile__annoncement")
+                    supportfiles = knowledge.supportfiles.filter(is_title=0).order_by("annoncement")
                     exercises = Exercise.objects.filter(knowledge=knowledge, level=level, theme=theme,supportfile__in=supportfiles).order_by("supportfile__annoncement")
  
                     knowledges_tab.append(
