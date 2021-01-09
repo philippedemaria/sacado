@@ -71,7 +71,7 @@ class Voting(models.Model):
     """
     Modèle représentant un associé.
     """
-    associated = models.ForeignKey(Associate, blank=True, related_name="voting", on_delete=models.CASCADE)
+    associate = models.ForeignKey(Associate, blank=True, related_name="voting", on_delete=models.CASCADE)
     choice = models.BooleanField(default=0, verbose_name="vote")
     justification = models.CharField(max_length=255, default='', blank=True ,  verbose_name="justification (facultatif)")
     date = models.DateTimeField(auto_now_add=True)
@@ -84,7 +84,7 @@ class Voting(models.Model):
         return "{} {}".format(choice)
 
     class Meta:
-        unique_together = ('associated', 'user')
+        unique_together = ('associate', 'user')
 
  
 class Accounting(ModelWithCode):
