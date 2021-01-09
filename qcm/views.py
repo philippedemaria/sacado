@@ -2913,19 +2913,19 @@ def admin_list_supportfiles(request,id):
         for theme in themes :
             themes_dict =  {}                
             themes_dict["name"]=theme
-            waitings = theme.waitings.filter(level=level).order_by("theme")
+            waitings = theme.waitings.filter(level=level).order_by("name")
             waitings_tab  =  []
             for waiting in waitings :
                 exercises_counter = 0
                 waiting_dict  =   {} 
                 waiting_dict["name"]=waiting 
-                knowlegdes = waiting.knowledges.filter(waiting=waiting).order_by("theme")
+                knowlegdes = waiting.knowledges.filter(waiting=waiting).order_by("name")
                 knowledges_tab  =  []
                 for knowledge in knowlegdes :
                     knowledges_dict  =   {}  
                     knowledges_dict["name"]=knowledge 
-                    supportfiles = knowledge.supportfiles.filter(is_title=0).order_by("theme")
-                    exercises = Exercise.objects.filter(knowledge=knowledge, level=level, theme=theme,supportfile__in=supportfiles).order_by("theme")
+                    supportfiles = knowledge.supportfiles.filter(is_title=0).order_by("supportfile__annoncement")
+                    exercises = Exercise.objects.filter(knowledge=knowledge, level=level, theme=theme,supportfile__in=supportfiles).order_by("supportfile__annoncement")
  
                     knowledges_tab.append(
                         {
