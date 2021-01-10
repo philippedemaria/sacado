@@ -2747,18 +2747,18 @@ def ajax_list_exercises_by_level(request):
     for theme in themes :
         themes_dict =  {}                
         themes_dict["name"]=theme
-        waitings = Waiting.objects.filter(theme=theme,level=level).order_by("name")
+        waitings = theme.waitings.filter(level=level)
         waitings_tab  =  []
         for waiting in waitings :
             exercises_counter = 0
             waiting_dict  =   {} 
             waiting_dict["name"]=waiting 
-            knowlegdes = Knowledge.objects.filter(waiting=waiting).order_by("name")
+            knowlegdes = waiting.knowledges.order_by("name")
             knowledges_tab  =  []
             for knowledge in knowlegdes :
                 knowledges_dict  =   {}  
                 knowledges_dict["name"]=knowledge 
-                exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).order_by("supportfile__annoncement")
+                exercises = knowledge.exercises.filter(supportfile__is_title=0).order_by("supportfile__annoncement")
                 exercises_counter +=  exercises.count()
                 knowledges_dict["exercises"]=exercises
                 knowledges_tab.append(knowledges_dict)
@@ -2802,18 +2802,18 @@ def ajax_list_exercises_by_level_and_theme(request):
     for theme in themes :
         themes_dict =  {}                
         themes_dict["name"]=theme
-        waitings = Waiting.objects.filter(theme=theme,level=level).order_by("name")
+        waitings = theme.waitings.filter(level=level)
         waitings_tab  =  []
         for waiting in waitings :
             exercises_counter = 0
             waiting_dict  =   {} 
             waiting_dict["name"]=waiting 
-            knowlegdes = Knowledge.objects.filter(waiting=waiting).order_by("name")
+            knowlegdes = waiting.knowledges.order_by("name")
             knowledges_tab  =  []
             for knowledge in knowlegdes :
                 knowledges_dict  =   {}  
                 knowledges_dict["name"]=knowledge 
-                exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).order_by("supportfile__annoncement")
+                exercises = knowledge.exercises.filter(supportfile__is_title=0).order_by("supportfile__annoncement")
                 exercises_counter +=  exercises.count()
                 knowledges_dict["exercises"]=exercises
                 knowledges_tab.append(knowledges_dict)
@@ -3362,20 +3362,20 @@ def ajax_level_exercise(request):
         for theme in themes :
             themes_dict =  {}                
             themes_dict["name"]=theme
-            waitings = Waiting.objects.filter(theme=theme,level=level).order_by("name")
+            waitings = theme.waitings.filter(level=level)
             waitings_tab  =  []
             for waiting in waitings :
                 exercises_counter = 0
                 waiting_dict  =   {} 
                 waiting_dict["name"]=waiting 
-                knowlegdes = Knowledge.objects.filter(waiting=waiting).order_by("name")
+                knowlegdes = waiting.knowledges.order_by("name")
                 knowledges_tab  =  []
                 for knowledge in knowlegdes :
                     knowledges_dict  =   {}  
                     knowledges_dict["name"]=knowledge 
-                    exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).order_by("supportfile__annoncement")
-                    knowledges_dict["exercises"]=exercises
+                    exercises = knowledge.exercises.filter(supportfile__is_title=0).order_by("supportfile__annoncement")
                     exercises_counter +=  exercises.count()
+                    knowledges_dict["exercises"]=exercises
                     knowledges_tab.append(knowledges_dict)
                 waiting_dict["knowledges"]=knowledges_tab
                 waiting_dict["exercises_counter"]=exercises_counter
@@ -3384,6 +3384,7 @@ def ajax_level_exercise(request):
             themes_tab.append(themes_dict)
         levels_dict["themes"]=themes_tab
         datas.append(levels_dict)
+     
 
     data['html'] = render_to_string('qcm/ajax_list_exercises.html', { 'datas': datas , "parcours" : parcours, "ajax" : ajax, "teacher" : teacher , "request" : request , 'parcours_id' : parcours_id })
  

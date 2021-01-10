@@ -9,13 +9,7 @@ define(['jquery',  'bootstrap' ], function ($) {
             let data_counter = $(this).attr("data-counter");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
-
-
             $('#'+data_counter+'a').html("<i class='fa fa-spinner fa-pulse fa-4x fa-fw'></i> <b>Chargement des exercices du niveau.</b>");
-
-
-
-            console.log(data_counter) ; 
 
             $.ajax(
                 {
