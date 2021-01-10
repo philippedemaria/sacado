@@ -1160,12 +1160,18 @@ width:100%;
 }
 
  
-#projection_div  div, 
+#projection_div  div,
+#projection_div  table,
 #projection_div  p,  
 #projection_div  ol , 
 #projection_div  ul {
-    font-size : 2em ;
+    font-size : 30px ;
 }
+
+
+
+
+
 
 
 #projection_div .projection_img_live  {
