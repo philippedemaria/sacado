@@ -2044,7 +2044,7 @@ def parcours_tasks_and_publishes(request, id):
 
     supportfiles = Supportfile.objects.filter(title = None)
     for s in supportfiles :
-    	if len(s.annoncement) < 100 :
+    	if len(s.annoncement) < 250 :
             s.title = cleanhtml(s.annoncement)
             s.save()
 
