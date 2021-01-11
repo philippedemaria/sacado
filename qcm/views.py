@@ -3447,9 +3447,9 @@ def ajax_create_title_parcours(request):
 
 
         if supportfile.attach_file != "" :
-            attachment = "<a href='#' target='_blank'>"+ supportfile.annoncement +"</a>"
+            attachment = "<a href='#' target='_blank'>"+ supportfile.title +"</a>"
         else :
-            attachment = supportfile.annoncement
+            attachment = supportfile.title
 
 
         data["html"] = f'''<div class="panel-body separation_dashed" style="line-height: 30px;  border-top-right-radius:5px; border-top-left-radius:5px; background-color : #F2F1F0;id='new_title{exe.id}'">

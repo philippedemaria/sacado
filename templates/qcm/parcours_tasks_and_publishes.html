@@ -18,7 +18,7 @@
 
 
     <small>    
-        <a href="#" class="no_button" data-target="#section_div" data-toggle='modal'>
+        <a href="#" class="btn btn-new" data-target="#section_div" data-toggle='modal'>
          Créer une section
         </a>
     </small>  
@@ -141,7 +141,7 @@
                                     {% else %}
                                             {% if relationship.exercise.supportfile.is_subtitle %}   
                                                 <h3>
-                                                    
+
                                                     {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
 
                                                     {% if relationship.is_header_of_section %} 
@@ -215,7 +215,8 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
-                                  {{ form.attach_file|add_class:"btn btn-default" }}
+                                <label>Fichier attaché : <small>Pour lier un fichier pdf (préférable), à ce titre de section. (facultatif)</small></label>
+                                  {{ form.attach_file|add_class:"btn btn-default" }}<br/> 
                             </div>
                         </div>
                     </div>
