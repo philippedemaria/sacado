@@ -1081,17 +1081,19 @@ def update_parcours(request, id, idg=0 ):
             form.save_m2m()
             nf.students.set(form.cleaned_data.get('students'))
 
-            leaf_parcours =  request.POST.getlist('leaf_parcours')
-            for lp_id in leaf_parcours :
-                parcours = Parcours.objects.get(pk = lp_id)
-                parcours.is_leaf = 1
-                parcours.save()
+            if not parcours.is_leaf :
 
-            folder_parcours =  request.POST.getlist('folder_parcours')
-            for fp_id in folder_parcours :
-                parcours = Parcours.objects.get(pk = fp_id)
-                parcours.is_folder = 1
-                parcours.save()
+	            leaf_parcours =  request.POST.getlist('leaf_parcours')
+	            for lp_id in leaf_parcours :
+	                parcours = Parcours.objects.get(pk = lp_id)
+	                parcours.is_leaf = 1
+	                parcours.save()
+
+	            folder_parcours =  request.POST.getlist('folder_parcours')
+	            for fp_id in folder_parcours :
+	                parcours = Parcours.objects.get(pk = fp_id)
+	                parcours.is_folder = 1
+	                parcours.save()
 
  
             sg_students =  request.POST.getlist('students_sg')

@@ -16,7 +16,9 @@ class School(models.Model):
     country = models.ForeignKey(Country, default='', blank=True, related_name='school', related_query_name="school",
                                 on_delete=models.PROTECT, verbose_name="Pays")
     town = models.CharField(max_length=255, default='', verbose_name="ville")
-   
+    code_acad = models.CharField(max_length=255, default='', verbose_name="Code académique")
+
+
     def __str__(self):
         return "{} - {} - {}".format(self.name, self.town, self.country.name)
 
