@@ -2041,14 +2041,6 @@ def ajax_exercise_error(request):
 #@user_is_parcours_teacher
 def parcours_tasks_and_publishes(request, id):
 
-
-    supportfiles = Supportfile.objects.filter(title = None)
-    for s in supportfiles :
-    	if len(s.annoncement) < 250 :
-            s.title = cleanhtml(s.annoncement)
-            s.save()
-
-
     today = time_zone_user(request.user)
     parcours = Parcours.objects.get(id=id)
     teacher = Teacher.objects.get(user=request.user)
