@@ -134,17 +134,15 @@
                                     </a>
                                     {% if relationship.exercise.supportfile.attach_file != ""  %}  
                                         {% if relationship.exercise.supportfile.is_subtitle %}                        
-                                            <h3><a href="{{ relationship.exercise.supportfile.attach_file.url }}" target='_blank' >{{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}</a> <a href='#'  data-exercise_id='{{ relationship.exercise.id }}'  data-parcours_id='{{parcours.id}}' class='pull-right erase_title'><i class='fa fa-times text-danger'></i></a></h3>
+                                            <h3><a href="{{ relationship.exercise.supportfile.attach_file.url }}" target='_blank' >{{ relationship.exercise.supportfile.title|cleanhtml|capfirst }}</a> <a href='#'  data-exercise_id='{{ relationship.exercise.id }}'  data-parcours_id='{{parcours.id}}' class='pull-right erase_title'><i class='fa fa-times text-danger'></i></a></h3>
                                             {% else %}
-                                            <h2><a href="{{ relationship.exercise.supportfile.attach_file.url }}" target='_blank'  >{{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}</a> <a href='#'  data-exercise_id='{{ relationship.exercise.id }}'  data-parcours_id='{{parcours.id}}' class='pull-right erase_title'><i class='fa fa-times text-danger'></i></a></h2>
+                                            <h2><a href="{{ relationship.exercise.supportfile.attach_file.url }}" target='_blank'  >{{ relationship.exercise.supportfile.title|cleanhtml|capfirst }}</a> <a href='#'  data-exercise_id='{{ relationship.exercise.id }}'  data-parcours_id='{{parcours.id}}' class='pull-right erase_title'><i class='fa fa-times text-danger'></i></a></h2>
                                         {% endif %} 
                                     {% else %}
                                             {% if relationship.exercise.supportfile.is_subtitle %}   
-                                                <h3>{% if  relationship.exercise.supportfile.title %}  
-                                                        {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
-                                                    {% else %}
-                                                        {{ relation.exercise.supportfile.annoncement|cleanhtml }}
-                                                    {% endif %}  
+                                                <h3>
+                                                    
+                                                    {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
 
                                                     {% if relationship.is_header_of_section %} 
                                                          <a href="{% url 'show_course' 0 relationship.parcours.id %}"><i class='fa fa-paperclip pull-right'></i></a>
@@ -153,11 +151,9 @@
                                                     {% endif %}
                                                 </h3>
                                                 {% else %}
-                                                <h2>{% if  relationship.exercise.supportfile.title %}  
-                                                        {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
-                                                    {% else %}
-                                                        {{ relation.exercise.supportfile.annoncement|cleanhtml }}
-                                                    {% endif %}  
+                                                <h2>
+                                                    {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
+
                                                     {% if relationship.is_header_of_section %} 
                                                         <a href="{% url 'show_course' 0 relationship.parcours.id %}"><i class='fa fa-paperclip pull-right'></i></a>
                                                     {% else %}
@@ -204,7 +200,7 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
-                                {{ form.annoncement |add_class:"form-control" }}
+                                {{ form.title |add_class:"form-control" }}
                                 <input type="hidden"  id="parcours_id"  value="{{ parcours.id }}" />
                             </div>
                         </div>

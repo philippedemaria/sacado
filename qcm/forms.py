@@ -226,10 +226,8 @@ class UpdateSupportfileForm(forms.ModelForm):
 class AttachForm(forms.ModelForm):
 	class Meta:
 		model = Supportfile
-		fields = ('attach_file','annoncement','is_subtitle')
-		widgets = {
-          'annoncement': forms.Textarea(attrs={'rows':1}),
-        }
+		fields = ('attach_file','title','is_subtitle')
+ 
 
 class CourseForm(forms.ModelForm):
 	class Meta:

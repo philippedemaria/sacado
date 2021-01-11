@@ -2041,6 +2041,14 @@ def ajax_exercise_error(request):
 #@user_is_parcours_teacher
 def parcours_tasks_and_publishes(request, id):
 
+
+    supportfiles = Supportfile.objects.filter(title = None)
+    for s in supportfiles :
+    	if len(s.annoncement) < 100 :
+            s.title = cleanhtml(s.annoncement)
+            s.save()
+
+
     today = time_zone_user(request.user)
     parcours = Parcours.objects.get(id=id)
     teacher = Teacher.objects.get(user=request.user)
@@ -2056,6 +2064,8 @@ def parcours_tasks_and_publishes(request, id):
     relationships = Relationship.objects.filter(parcours=parcours).order_by("exercise__theme")
     context = {'relationships': relationships,  'parcours': parcours, 'teacher': teacher  , 'today' : today , 'group' : group , 'group_id' : group_id , 'communications' : [] , 'form' : form , 'role' : role , }
     return render(request, 'qcm/parcours_tasks_and_publishes.html', context)
+
+
  
 def result_parcours_exercise_students(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
