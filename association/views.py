@@ -203,6 +203,10 @@ def create_voting(request,id):
         nf.associate_id = id
         nf.save()
 
+        rcv = ["sacado.asso@gmail.com", "association@sacado.xyz"] 
+        msg ="Une proposition de membre est postée par "+str(request.user)+". Rendez-vous sur https://sacado.xyz"
+        send_mail("Proposition de membre", msg , 'info@sacado.xyz', rcv)
+
         return redirect('list_associate')
     else:
         print(form.errors)
