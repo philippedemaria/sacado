@@ -128,6 +128,43 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
+        $(".hide_school").hide() ;
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('.show_school_click').on('click', function (event) { 
+  
+                let school_id = $(this).attr("data-school_id");
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                console.log(school_id) ;
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            'school_id': school_id ,
+                            csrfmiddlewaretoken: csrf_token
+                        },
+                        url: "school/ajax_get_this_school_in_session" ,
+                        success: function (data) {
+
+                            if (!$(".selector_school").children().hasClass('hide_school')) { $(".selector_school").addClass('hide_school'); }
+
+                            if ($(this).children().hasClass('fa-angle-right')) {
+                                $(this).children().removeClass('fa-angle-right').addClass('fa-angle-up');
+
+                              }
+                            else
+                            {
+                                $(this).children().removeClass('fa-angle-up').addClass('fa-angle-right');
+                            }
+
+                            $(".hide_school").hide(500) ;
+                            $("#show_school"+school_id).show(500) ;
+                            event.preventDefault();                            
+                        }
+                    }
+                )
+        });
+
 
   
         $(".overlay").hide();

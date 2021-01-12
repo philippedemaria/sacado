@@ -14,7 +14,9 @@ from account.forms import UserForm , StudentForm ,NewUserSForm
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
 from django.http import JsonResponse
+from general_fonctions import *
 ############### bibliothèques pour les impressions pdf  #########################
 import os
 from django.utils import formats
@@ -34,7 +36,7 @@ cm = 2.54
 
 
 def authorizing_access_school(teacher, school) :
-	if (school == teacher.user.school and teacher.user.is_manager) or teacher.user.is_superuser :
+	if (school in teacher.user.schools.all() and teacher.user.is_manager) or (school == teacher.user.school and teacher.user.is_manager) or teacher.user.is_superuser :
 		return True
 	else :
 		return False
@@ -54,6 +56,18 @@ def get_username(ln, fn):
             i += 1
             un = un + str(i)
     return un
+
+
+
+def this_school_in_session(request):
+
+	school_id = request.session.get("school_id",None)
+
+	if school_id :
+		school = School.objects.get(pk = int(school_id))
+	else :
+		school = request.user.school
+	return school 
 
 
 
@@ -192,11 +206,7 @@ def clear_detail_student(student):
 def school_teachers(request):
 
 
-	if request.session.get("school_id"):
-		school_id = request.session.get("school_id")
-		school = School.objects.get(pk=school_id)
-	else:
-		school = request.user.school
+	school = this_school_in_session(request)
 
 
 	teacher = Teacher.objects.get(user=request.user)
@@ -206,21 +216,17 @@ def school_teachers(request):
 		return redirect('index')
 
 
-
-	teachers = User.objects.filter(school_id = school_id, user_type=2).order_by("last_name")  
+	teachers = User.objects.filter(Q(school=school)|Q(schools=school), user_type=2).order_by("last_name")  
  
 
-	return render(request,'school/list_teachers.html', { 'communications' : [],'teachers':teachers})
+	return render(request,'school/list_teachers.html', { 'communications' : [],'teachers':teachers, "school" : school })
 
 
 
 #@is_manager_of_this_school
 def school_groups(request):
-	if request.session.get("school_id"):
-		school_id = request.session.get("school_id")
-		school = School.objects.get(pk=school_id)
-	else:
-		school = request.user.school
+
+	school = this_school_in_session(request)
 
 	teacher = Teacher.objects.get(user=request.user)
 
@@ -233,17 +239,14 @@ def school_groups(request):
 	users = school.users.all()
 	groups = Group.objects.filter(teacher__user__in=users).order_by("level")
 
-	return render(request, 'school/list_groups.html', { 'communications' : [],'groups': groups})
+	return render(request, 'school/list_groups.html', { 'communications' : [],'groups': groups, "school" : school })
 
 
 
 #@is_manager_of_this_school
 def school_level_groups(request):
-	if request.session.get("school_id") :
-		school_id = request.session.get("school_id")
-		school = School.objects.get(pk = school_id)
-	else :
-		school = request.user.school
+
+	school = this_school_in_session(request)
 
 	teacher = Teacher.objects.get(user=request.user)
 
@@ -255,7 +258,7 @@ def school_level_groups(request):
 
 	groups = Group.objects.filter(teacher__user__in = users).order_by("level") 
 
-	return render(request,'school/list_level_groups.html', { 'communications' : [],'groups':groups})
+	return render(request,'school/list_level_groups.html', { 'communications' : [],'groups':groups, "school" : school })
 
 
 
@@ -264,11 +267,8 @@ def school_level_groups(request):
 #@is_manager_of_this_school
 def school_students(request):
 
-	if request.session.get("school_id") :
-		school_id = request.session.get("school_id")
-		school = School.objects.get(pk = school_id)
-	else :
-		school = request.user.school
+	
+	school = this_school_in_session(request)
 	teacher = Teacher.objects.get(user=request.user)
 
 	if not authorizing_access_school(teacher, school):
@@ -284,11 +284,13 @@ def school_students(request):
 
  
 def new_student(request,slug):
+
+    school = this_school_in_session(request)
     group = Group.objects.get(code=slug)
 
     user_form = NewUserSForm()
     form = StudentForm()
-    return render(request,'school/student_form.html', { 'communications' : [],'group':group, 'user_form' : user_form, 'form' : form })
+    return render(request,'school/student_form.html', { 'communications' : [],'group':group, 'user_form' : user_form, 'form' : form, "school" : school  })
 
 
 
@@ -297,7 +299,8 @@ def new_student(request,slug):
  
 def get_school_students(request):
 
-	school = request.user.school
+	
+	school = this_school_in_session(request)
 	teacher = Teacher.objects.get(user = request.user)
  
 	if not authorizing_access_school(teacher, school):
@@ -325,19 +328,24 @@ def get_school_students(request):
 
 #@is_manager_of_this_school
 def new_student_list(request,slug):
+	
+    school = this_school_in_session(request)
     group = Group.objects.get(code=slug)
     students = group.students.all().order_by("user__last_name")
-    p_students = Student.objects.filter(user__school = request.user.school).order_by("user__last_name")
+
+    p_students = Student.objects.filter(user__school = school).exclude(pk__in = group.students.values_list("user_id",flat=True)).order_by("user__last_name")
     pending_students = []
     for student in p_students :
     	pending_students.append(student)
-    return render(request,'school/new_student_list.html', { 'communications' : [],'group':group, 'students' : students, 'pending_students' : pending_students })
+    return render(request,'school/new_student_list.html', { 'communications' : [],'group':group, 'students' : students, 'pending_students' : pending_students, "school" : school  })
 
  
 
 
 #@is_manager_of_this_school
 def push_student_group(request):
+	
+	school = this_school_in_session(request)	
 	group_id = request.POST.get("group_id")
 	group = Group.objects.get(pk=group_id)
 
@@ -357,7 +365,8 @@ def push_student_group(request):
 
 #@is_manager_of_this_school
 def new_group(request):
-	school = request.user.school
+	
+	school = this_school_in_session(request)
 	teachers = Teacher.objects.filter(user__school=school)
 
 	teacher = Teacher.objects.get(user=request.user)
@@ -392,7 +401,8 @@ def new_group(request):
 
 #@is_manager_of_this_school
 def update_group_school(request,id):
-	school = request.user.school
+	
+	school = this_school_in_session(request)
 	group = Group.objects.get(id=id)
 	teachers = Teacher.objects.filter(user__school=school).exclude(user =  group.teacher.user)
 	form = GroupForm(request.POST or None, school = school, instance = group)
@@ -428,7 +438,8 @@ def update_group_school(request,id):
 
 #@is_manager_of_this_school
 def delete_student_group(request,id,ids):
-	school = request.user.school
+	
+	school = this_school_in_session(request)
 
 	teacher = Teacher.objects.get(user=request.user)
 	if not authorizing_access_school(teacher, school):
@@ -446,7 +457,8 @@ def delete_student_group(request,id,ids):
 
 #@is_manager_of_this_school
 def delete_all_students_group(request,id):
-	school = request.user.school
+	
+	school = this_school_in_session(request)
 
 	teacher = Teacher.objects.get(user=request.user)
 	if not authorizing_access_school(teacher, school):
@@ -465,7 +477,7 @@ def delete_all_students_group(request,id):
 @csrf_exempt
 def ajax_subject_teacher(request):
  	
-    school = request.user.school
+    school = this_school_in_session(request)	
     subject_id =  int(request.POST.get("subject_id"))
     subject =  Subject.objects.get(pk = subject_id)
     data = {}
@@ -490,7 +502,8 @@ def ajax_subject_teacher(request):
 
 #@is_manager_of_this_school
 def delete_school_students(request):
-	school = request.user.school
+	
+	school = this_school_in_session(request)
 
 	teacher = Teacher.objects.get(user=request.user)
 	if not authorizing_access_school(teacher, school):
@@ -509,6 +522,8 @@ def delete_school_students(request):
 
 #@is_manager_of_this_school
 def delete_selected_students(request):
+	
+	school = this_school_in_session(request)
 	user_ids = request.POST.getlist("user_ids")
 	for user_id in user_ids :
 		user = User.objects.get(pk=user_id)
@@ -524,13 +539,15 @@ def delete_selected_students(request):
 #@is_manager_of_this_school
 def new_group_many(request):
 
-	school = request.user.school
+	
+	school = this_school_in_session(request)
 
 	teacher = Teacher.objects.get(user=request.user)
 	if not authorizing_access_school(teacher, school):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. ")
 		return redirect('index')
 
+	print("ici")
 
 	GroupFormSet = formset_factory(GroupForm , extra=2) 
 	group_formset  = GroupFormSet(request.POST or None, form_kwargs={'school': school, })
@@ -540,6 +557,8 @@ def new_group_many(request):
 				f.save()
 			messages.success(request, "Groupes créés avec succès.")
 			return redirect('school_groups')
+		else :
+			print(group_formset.errors)
  
 	return render(request,'school/many_group_form.html', {'formset' : group_formset , 'school': school , 'communications' : [] , 'group' : None  })
 
@@ -557,7 +576,8 @@ def new_group_many(request):
 #@is_manager_of_this_school
 def manage_stage(request):
 
-	school = request.user.school
+	
+	school = this_school_in_session(request)
 	stage = Stage.objects.get(school = school)
 	stage_form = StageForm(request.POST or None, instance = stage)
 
@@ -575,7 +595,7 @@ def manage_stage(request):
 
 	eca , ac , dep = stage.medium - stage.low ,  stage.up - stage.medium ,  100 - stage.up
 
-	context =  {'stage_form': stage_form , 'stage': stage , 'eca': eca , 'ac': ac , 'dep': dep , 'communications' : []  }  
+	context =  {'stage_form': stage_form , 'stage': stage , 'eca': eca , 'ac': ac , 'dep': dep , 'communications' : [] , "school" : school  }  
 
 
 
@@ -595,7 +615,8 @@ def manage_stage(request):
 def send_account(request, id):
 	rcv = []
 	if id == 0:
-		school = request.user.school
+	
+		school = this_school_in_session(request)
 		for u in school.users.all():
 			rcv.append(u.email)
 	else:
@@ -619,7 +640,8 @@ def pdf_account(request,id):
 	response['Content-Disposition'] = 'attachment; filename="compte_sacado.pdf"'
 	p = canvas.Canvas(response)
 	teachers = []
-	school = request.user.school
+	
+	school = this_school_in_session(request)
 	if id == 0:
 		for u in school.users.filter(user_type=2):
 			teachers.append(u)
@@ -674,6 +696,8 @@ def csv_full_group(request):
     """
     Enregistrement par csv : key est le code du user_type : 0 pour student, 2 pour teacher
     """
+	
+    school = this_school_in_session(request)
     if request.method == "POST":
         # try:
         csv_file = request.FILES["csv_file"]
@@ -718,7 +742,7 @@ def csv_full_group(request):
                     	group_history.append(group_name)
 
                 user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=0,
-                                                           school=request.user.school, 
+                                                           school= school, 
                                                            time_zone=request.user.time_zone, is_manager=0,
                                                            defaults={'username': username, 'password': password, 'cgu' : 1 ,
                                                                      'is_extra': 0})
@@ -731,22 +755,25 @@ def csv_full_group(request):
         return redirect('admin_tdb')
     else:
  
-        context = { 'communications' : []   , }
+        context = { 'communications' : []  , "school" : school  }
         return render(request, 'school/csv_full_group.html', context )
+
+ 
+
+
+
 
 
 def group_to_teacher(request):
 
-    school = request.user.school
+    school = this_school_in_session(request)
     teacher = Teacher.objects.get(user = request.user)
     if not authorizing_access_school(teacher, school):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
-    groups = Group.objects.filter(teacher__user__school = school).order_by("level")  
-    teachers = Teacher.objects.filter(user__school = school)
-
- 
+    groups = group_to_school(school)  
+    teachers = Teacher.objects.filter(Q(user__school=school)|Q(user__schools=school)).order_by("user__last_name")
 
     if request.method == "POST" :
         group_ids = request.POST.getlist("groups")
@@ -761,3 +788,12 @@ def group_to_teacher(request):
     context = {'groups': groups,  'teachers': teachers ,   'communications' : [] , 'school' : school  }
 
     return render(request, 'school/group_to_teacher.html', context )
+
+
+
+def ajax_get_this_school_in_session(request):
+	""" Place school_id en session """
+	school_id = request.POST.get("school_id",None)
+	request.session["school_id"] = school_id
+	data = {}
+	return JsonResponse(data)

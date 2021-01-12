@@ -47,6 +47,6 @@ urlpatterns = [
 
 
     path('ajax_subject_teacher', ajax_subject_teacher, name='ajax_subject_teacher'),
-    
+    path('ajax_get_this_school_in_session', ajax_get_this_school_in_session, name='ajax_get_this_school_in_session'),
 
 ]

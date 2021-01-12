@@ -94,9 +94,6 @@ def index(request):
 
         if request.user.is_teacher:
 
-            if request.user.is_manager and request.user.school :
-                request.session["school_id"] = request.user.school.id 
-
             teacher = Teacher.objects.get(user=request.user)
 
             grps = Group.objects.filter(teacher=teacher)
@@ -656,7 +653,14 @@ def change_color(filename, color, code):
 
 @is_manager_of_this_school
 def admin_tdb(request):
+
     school = request.user.school
+    schools = request.user.schools.all()
+
+    schools_tab = [school]
+    for s in schools :
+        schools_tab.append(s)
+
     nb_teachers = User.objects.filter(school=school, user_type=2).count()
     nb_students = User.objects.filter(school=school, user_type=0).count()
     nb_groups = Group.objects.filter(teacher__user__school=school).count()
@@ -671,9 +675,18 @@ def admin_tdb(request):
     except:
         stage = {"low": 50, "medium": 70, "up": 85}
         eca, ac, dep = 20, 15, 15
+    
+    if len(schools_tab) == 1 :
+        school_id = request.user.school.id
+        request.session["school_id"] = school_id
+    else :
+        if request.session.get("school_id",None) :
+            school_id = int(request.session.get("school_id",None))
+        else :
+            school_id = 0
 
-    return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers, 'nb_students': nb_students,
-                                                    'nb_groups': nb_groups, 'school': school, 'stage': stage,
+    return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers, 'nb_students': nb_students, 'school_id' : school_id , "school" : school , 
+                                                    'nb_groups': nb_groups, 'schools_tab': schools_tab, 'stage': stage,
                                                     'eca': eca, 'ac': ac, 'dep': dep , 'communications' : [],
                                                     })
 

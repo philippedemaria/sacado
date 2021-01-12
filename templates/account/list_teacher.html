@@ -60,10 +60,10 @@
                     <tbody>
                         {% for teacher in teachers %}
                             <tr>
-                                <td>
+                                <td style="min-width:200px">
                                     <a href="{% url 'update_teacher' teacher.id %}">{{ teacher.last_name }}  {{ teacher.first_name }}</a>   
                                 </td>
-                                <td>
+                                <td style="min-width:200px">
                                     {{ teacher.email }}   
                                 </td>
                                 <td>
@@ -93,8 +93,14 @@
                                 <td>
                                     {{ teacher.last_login|date:"Y m d" }}   
                                 </td>
-                                <td>
-                                    {% if teacher.school %}<i class="fa fa-university"></i>{{ teacher.school.country }}{% else %} isolé{% endif %}   
+                                <td style="font-size: 14px; min-width:400px">
+                                    {% if teacher.school %}<i class="fa fa-university fa-xs"></i> {{ teacher.school.name }} {{ teacher.school.country }}{% else %} isolé{% endif %}
+                                    {% if teacher.schools.all|length > 0 %}<br/>{% endif %}
+
+                                    {% for s in teacher.schools.all %}<i class="fa fa-university fa-xs"></i>  {{ s.name }} {{ s.country }}
+                                        {% if not forloop.last %}<br/> {% endif %}
+                                    {% endfor %}
+
                                 </td>
                             </tr>
                         {% endfor %}

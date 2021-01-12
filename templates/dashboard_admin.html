@@ -8,6 +8,9 @@
    
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script>   
+        require(['script/ajax-dashboard']);
+    </script>
 {% endblock %} 
 
 
@@ -16,114 +19,124 @@
 {% endblock %} 
 
 {% block page_menu_right %}
-    <p>{{ school.name }}</p>
+ {% if schools_tab|length == 1 %} {{ request.user.school.name }}{% endif %}
 {% endblock %}
 
 
 {% block body %}
 <section class="content_main"> 
     {% if request.user.is_manager %}
+
+    <form  action="" method="POST" >        
+        {% csrf_token %}
  
-    <div class="row">
-        <!-- ./col -->
-        <div class="col-lg-3 col-md-4 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-purple">
-                <div class="inner">
-                     <span style="font-size: 35px">Établissement </span>
-                 </div>
-                 <p style="padding-left:5px">{{ school }}</p>
+            {% for school in schools_tab %}
+                {% with school.get_data as data %}
 
-                    <br><br>
-                <a href="{% url 'csv_full_group'  %}" class="btn btn-default btn-accueil" style="margin-left:10px;width:280px; position: absolute; top:150px;"> Importer  groupes d'élèves </a>      
-
-
-                {% if request.user.is_superuser %}
-                <a href="{% url 'update_school' request.user.school.id %}" class="small-box-footer"><i
-                        class="fa fa-arrow-circle-right"></i> En détails </a>
-                {% endif %}
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-4 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-purple">
-                <div class="inner">
-                     <span style="font-size: 35px">Enseignants </span>
-                    
-                </div>
+                    {% if schools_tab|length > 1 %}
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-xs-12">
+                            <h1 class="thin"><a href="#" class="show_school_click" data-school_id="{{ school.id }}"> <i class="fa fa-angle-right"></i> {{ school }}</a></h1>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-xs-12" style="height : 35px">
+                             
+                        </div>
+                    </div>
+                    {% endif %}
 
 
-                <br><br><br><br>
-                <a href="{% url 'group_to_teacher'  %}" class="btn btn-default btn-accueil" style="margin-left:10px;width:280px;position: absolute; top:150px;"> Attribuer des groupes existants </a>      
-                <div class="icon">
-                    {{ nb_teachers }} 
-                </div>
-                <a href="{% url 'school_teachers' %}" class="small-box-footer"><i
-                        class="fa fa-arrow-circle-right"></i> En détails </a>
-            </div>
-        </div>
+                    <div class="selector_school {% if school.id != school_id %}hide_school{% endif %}" id = "show_school{{ school.id }}">
+                    <div class="row">
+                        <!-- ./col -->
+                 
 
-        <div class="col-lg-3 col-md-4 col-xs-6">
-            <div class="small-box bg-purple">
-                <div class="inner">
-                     <span style="font-size: 35px">Groupes </span>
-                </div>
-                <div class="icon">
-                    {{ nb_groups }} 
-                </div>
-                <a href="{% url 'school_groups' %}" class="small-box-footer"><i
-                        class="fa fa-arrow-circle-right"></i> En détails </a>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-xs-6">
-            <div class="small-box bg-purple">
-                <div class="inner">
-                     <span style="font-size: 35px">Élèves </span>
+                        <div class="col-lg-3 col-md-4 col-xs-6">
+                            <!-- small box -->
+                            <div class="small-box bg-purple">
+                                <div class="inner">
+                                     <span style="font-size: 35px">Enseignants </span>
+                                    
+                                </div>
+
+
+       
+                                <a href="{% url 'group_to_teacher'  %}" class="btn btn-default btn-accueil" style="margin-left:10px;width:280px;position: absolute; top:150px;"> Attribuer des groupes existants </a>      
+                                <div class="icon">
+                                    {{ data.nbt }} 
+                                </div>
+                                <a href="{% url 'school_teachers' %}" class="small-box-footer"><i
+                                        class="fa fa-arrow-circle-right"></i> En détails </a>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-xs-6">
+                            <div class="small-box bg-purple">
+                                <div class="inner">
+                                     <span style="font-size: 35px">Groupes </span>
+                                </div>
+                                <div class="icon">
+                                    {{ data.nbg }} 
+                                </div>
+                                <a href="{% url 'school_groups' %}" class="small-box-footer"><i
+                                        class="fa fa-arrow-circle-right"></i> En détails </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-xs-6">
+                            <div class="small-box bg-purple">
+                                <div class="inner">
+                                     <span style="font-size: 35px">Élèves </span>
+                 
+                                </div>
+                                <div class="icon">
+                                    {{ data.nbs }}  
+                                </div>
+                                <a href="{% url 'csv_full_group'  %}" class="btn btn-default btn-accueil" style="margin-left:10px;width:280px; position: absolute; top:150px;"> Importer  groupes d'élèves </a> 
+
+
+                                <a href="{% url 'school_students' %}" class="small-box-footer"><i
+                                        class="fa fa-arrow-circle-right"></i> En détails </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 ">
+                            <h2 class="thin">Seuils d'acquisition des savoir faire et compétences  <a href="{% url 'manage_stage' %}" style="font-size : 14px">Modifier</a></h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 ">
+                            {% if  data %}
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-danger" role="progressbar" style="width:{{ data.low   }}%">
+                                    Maitrise insuffisante < {{ data.low }}%
+                                </div>
+                                <div class="progress-bar progress-bar-warning" role="progressbar" style="width:{{ data.eca }}%">
+                                    Maitrise fragile  < {{ data.medium }}%
+                                </div>
+                                <div class="progress-bar progress-bar-success" role="progressbar" style="width:{{ data.ac }}%">
+                                    Bonne maitrise < {{ data.up }}%
+                                </div>
+                                <div class="progress-bar progress-bar-primary" role="progressbar" style="width:{{ data.dep }}%">
+                                    Très bonne maitrise
+                                </div>
+                            </div>
+                            {% else %}
+                                <div class="alert alert-danger">
+                                    Seuils non renseignés
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    </div>
+                    {% if not forloop.last %}<hr/>{% endif %}
+                {% endwith %} 
+
+            {% endfor %}
  
-                </div>
-                <div class="icon">
-                    {{ nb_students }}  
-                </div>
-                <a href="{% url 'school_students' %}" class="small-box-footer"><i
-                        class="fa fa-arrow-circle-right"></i> En détails </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-12 col-md-12 ">
-            <h2 class="thin">Seuils d'acquisition des savoir faire et compétences  <a href="{% url 'manage_stage' %}" style="font-size : 14px">Modifier</a></h2>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12 col-md-12 ">
-            {% if stage %}
-            <div class="progress">
-                <div class="progress-bar progress-bar-danger" role="progressbar" style="width:{{ stage.low   }}%">
-                    Maitrise insuffisante < {{ stage.low }}%
-                </div>
-                <div class="progress-bar progress-bar-warning" role="progressbar" style="width:{{ eca }}%">
-                    Maitrise fragile  < {{ stage.medium }}%
-                </div>
-                <div class="progress-bar progress-bar-success" role="progressbar" style="width:{{ ac }}%">
-                    Bonne maitrise < {{ stage.up }}%
-                </div>
-                <div class="progress-bar progress-bar-primary" role="progressbar" style="width:{{ dep }}%">
-                    Très bonne maitrise
-                </div>
-            </div>
-            {% else %}
-                <div class="alert alert-danger">
-                    Seuils non renseignés
-                </div>
-            {% endif %}
-
-
-        </div>
-    </div>
-
- 
+    </form>
 
     {% endif %} 
 

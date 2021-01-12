@@ -92,36 +92,46 @@
             </div>
             <div class="row">
                 <div class="col-sm-12 col-md-6">
-                    <div class="{% if teacher.subjects.all.count == 0 %} alert alert-danger{% else %}form-group{% endif %}">
-                        <label>{{ teacher_form.subjects.label_tag }} {% if teacher.subjects.count == 0 %} <i class="fa fa-warning"></i> Renseigner{% endif %} </label>
-                        {{ teacher_form.subjects  |add_class:"form-control select2" }}
-                        {{ teacher_form.subjects.errors }}
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-6">
                     <div class="form-group">
-                        <div class="alert alert-info">
-                             <small>Choisir votre ou vos enseignement pour sélectionner les exercices correspondants.</small>
+                        <div class="{% if teacher.subjects.all.count == 0 %} alert alert-danger{% else %}form-group{% endif %}">
+                            <label>{{ teacher_form.subjects.label_tag }} {% if teacher.subjects.count == 0 %} <i class="fa fa-warning"></i> Renseigner{% endif %} 
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" >Choisir votre ou vos enseignement pour sélectionner les exercices correspondants.</div>
+                                </span> 
+                            </label>
+                            {{ teacher_form.subjects  |add_class:"form-control select2" }}
+                            {{ teacher_form.subjects.errors }}
                         </div>
                     </div>
-                </div>
-            </div>              
-            <div class="row">
-                <div class="col-sm-12 col-md-6">
-                    <div class="{% if teacher.levels.all.count == 0 %} alert alert-danger{% else %}form-group{% endif %}">
-                        <label>{{ teacher_form.levels.label_tag }} {% if teacher.levels.count == 0 %} <i class="fa fa-warning"></i> Renseigner{% endif %} </label>
-                        {{ teacher_form.levels  |add_class:"form-control select2" }}
-                        {{ teacher_form.levels.errors }}
+                    <div class="form-group">
+                        <div class="{% if teacher.levels.all.count == 0 %} alert alert-danger{% else %}form-group{% endif %}">
+                            <label>{{ teacher_form.levels.label_tag }} {% if teacher.levels.count == 0 %} <i class="fa fa-warning"></i> Renseigner{% endif %}  
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" >Choisir votre ou vos niveaux préférés qui apparaitront dans votre espace personnalisé. Sans choix, vous ne pouvez pas sélectionner d'exercices.</div>
+                                </span> 
+                            </label>
+                            {{ teacher_form.levels  |add_class:"form-control select2" }}
+                            {{ teacher_form.levels.errors }}
+                        </div> 
                     </div>
                 </div>
+                {% if  teacher  %}
                 <div class="col-sm-12 col-md-6">
                     <div class="form-group">
-                        <div class="alert alert-info">
-                             <small>Choisir votre ou vos niveaux préférés qui apparaitront dans votre espace personnalisé. Sans choix, vous ne pouvez pas sélectionner d'exercices.</small>
-                        </div>
+                        <label>Groupes en charge</label>
+                        <ul>
+                        {% for g in teacher.groups.all %}
+                            <li class="sanspuce"><small>{{ g.name }} - {{ g.level.name }} - {{ g.subject.name }}</small></li>
+                        {% endfor %}
+                        </ul>
                     </div>
                 </div>
-            </div> 
+                {% endif %}
+
+
+
+
+            </div>
             <div class="row">
                 <div class="col-sm-12 col-md-6">
                     <div class="form-group">
@@ -167,10 +177,16 @@
                             {{ user_form.is_extra.errors }}
                         </div>
                         <div class="form-group"> 
-                            <label>Etablissement </label><a href="{% url 'create_school' %}" class="pull-right" style="font-size: 12px">+ Nouvel établissement</a>
+                            <label>Etablissement principal</label><a href="{% url 'create_school' %}" class="pull-right" style="font-size: 12px">+ Nouvel établissement</a>
                             {{ user_form.school|add_class:"form-control select2"   }}
                             {{ user_form.school.errors }}
                         </div>
+                        <div class="form-group"> 
+                            <label>Autre établissement en gestion</label> <small>(facultatif)</small></a>
+                            {{ user_form.schools|add_class:"form-control select2"   }}
+                            {{ user_form.schools.errors }}
+                        </div>
+
                     </div>
                 </div>
                 {% endif  %} 

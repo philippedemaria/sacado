@@ -1081,8 +1081,7 @@ def update_parcours(request, id, idg=0 ):
             form.save_m2m()
             nf.students.set(form.cleaned_data.get('students'))
 
-            if not parcours.is_leaf :
-
+            if parcours.is_leaf :
 	            leaf_parcours =  request.POST.getlist('leaf_parcours')
 	            for lp_id in leaf_parcours :
 	                parcours = Parcours.objects.get(pk = lp_id)

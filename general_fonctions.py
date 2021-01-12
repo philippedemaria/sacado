@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.http import HttpResponseRedirect
 from django.shortcuts import  redirect
 from school.models import Stage
-
+from operator import attrgetter
  
 
 
@@ -163,3 +163,22 @@ def split_paragraph(paragraph,coupe) :
             longueur += len(word)
 
     return name 
+
+
+
+def group_to_school(school):
+    """ renvoie les groupes d'un établissement donné """
+    users = set(school.users.filter(user_type= 0))
+    us = school.schools_to_users.filter(user_type= 0)
+
+    users.update(us)
+
+    school_group_set = set()
+
+    for user in users :
+        school_group_set.update(user.student.students_to_group.all())
+
+
+    school_group_set_sorted = sorted(school_group_set , key=attrgetter('level_id'))   
+
+    return list(school_group_set_sorted)

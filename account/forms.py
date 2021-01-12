@@ -53,7 +53,7 @@ class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = '__all__'
-        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined', 'user_type', 'is_extra', 'password','school','cgu']
+        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined', 'user_type', 'is_extra', 'password','school','cgu','schools']
 
 
 
@@ -85,7 +85,7 @@ class NewUserSForm(forms.ModelForm):
     class Meta:
         model = User
         fields = '__all__'
-        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined',   'username', 'user_type', 'is_manager',  'is_extra',  'time_zone', 'password' ,'cgu']
+        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined',   'username', 'user_type', 'is_manager',  'is_extra',  'time_zone', 'password' ,'cgu','schools']
 
 
 
@@ -100,7 +100,7 @@ class ParentUpdateForm(forms.ModelForm):
     class Meta:
         model = Parent
         fields = '__all__'
-        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined', 'user_type', 'password' , 'cgu']
+        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined', 'user_type', 'password' , 'cgu','schools']
 
 
 
@@ -117,4 +117,4 @@ class BaseUserFormSet(BaseFormSet):
                 continue
             username = form.cleaned_data.get('username')
             if User.objects.filter(username = username):
-                raise ValidationError("Articles in a set must have distinct titles.")
+                raise ValidationError("Deux utilisateurs doivent avoir des identifiants différents.")

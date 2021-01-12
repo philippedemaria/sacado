@@ -32,8 +32,8 @@ from sendmail.forms import EmailForm
 from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ParentUpdateForm, ManagerUpdateForm, NewUserTForm,ManagerForm
 from templated_email import send_templated_mail
 from general_fonctions import *
-
-
+from school.views import this_school_in_session
+ 
 
 def list_teacher(request):
     teachers = User.objects.filter(user_type=User.TEACHER)
@@ -227,7 +227,7 @@ def register_student_from_admin(request):
             u_form = user_form.save(commit=False)
             u_form.password = make_password("sacado2020")
             u_form.user_type = User.STUDENT
-            u_form.school = request.user.school
+            u_form.school = this_school_in_session(request)
             u_form.username = get_username(u_form.last_name, u_form.first_name)
             u_form.save()
 
@@ -339,7 +339,7 @@ def update_student_by_admin(request, id):
     """
     Upadta par un admin d'un établissement
     """
-    school = request.user.school
+    school = this_school_in_session(request)
     user = get_object_or_404(User, pk=id)
     today = time_zone_user(user)
     student = Student.objects.get(user=user)
@@ -935,7 +935,7 @@ def register_teacher_from_admin(request):
             u_form.user_type = User.TEACHER
             u_form.is_extra = 0
             u_form.time_zone = request.user.time_zone
-            u_form.school = request.user.school
+            u_form.school = this_school_in_session(request)
             u_form.username = get_username(u_form.last_name, u_form.first_name)
             u_form.save()
             teacher = teacher_form.save(commit=False)
@@ -1007,7 +1007,7 @@ def register_by_csv(request, key, idg=0):
 
                 if key == User.TEACHER:  # Enseignant
                     user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,
-                                                      school=request.user.school, time_zone=request.user.time_zone,
+                                                      school=this_school_in_session(request), time_zone=request.user.time_zone,
                                                       is_manager=0,
                                                       defaults={'username': username, 'password': password,
                                                                 'is_extra': 0})
@@ -1015,7 +1015,7 @@ def register_by_csv(request, key, idg=0):
                     group = None
                 else:  # Student
                     user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=0,
-                                                               school=request.user.school,
+                                                               school=this_school_in_session(request),
                                                                time_zone=request.user.time_zone, is_manager=0,
                                                                defaults={'username': username, 'password': password,
                                                                          'is_extra': 0})
@@ -1100,14 +1100,14 @@ def register_users_by_csv(request,key):
 
                 if key == User.TEACHER:  # Enseignant
                     user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,
-                                                      school=request.user.school, time_zone=request.user.time_zone,
+                                                      school=this_school_in_session(request), time_zone=request.user.time_zone,
                                                       is_manager=0,
                                                       defaults={'username': username, 'password': password,
                                                                 'is_extra': 0})
                     Teacher.objects.get_or_create(user=user, notification=1, exercise_post=1)
                 else:  # Student
                     user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=0,
-                                                               school=request.user.school,
+                                                               school=this_school_in_session(request),
                                                                time_zone=request.user.time_zone, is_manager=0,
                                                                defaults={'username': username, 'password': password,
                                                                          'is_extra': 0})

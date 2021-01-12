@@ -17,7 +17,7 @@
 
 
 {% block page_menu_right %}
-
+ {{ school.name }}
 {% endblock %}
 
 
@@ -33,6 +33,9 @@
         {% csrf_token %}
  
         <input type="hidden" name="group" value="{{ group.id }}" />
+
+
+        <input type="hidden" name="school" value="{{ school.id }}" />
 
         <div class="row">
             <div class="col-sm-12 col-md-2">

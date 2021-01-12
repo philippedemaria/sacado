@@ -665,3 +665,12 @@ def get_vote(obj, user):
     renvoie le résultat d'un exo custom coté élève
     """
     return obj.has_vote(user)
+
+
+
+@register.simple_tag 
+def get_group_in_this_school(obj, school):
+    """
+    obj = teacher , renvoie les groupes de cet enseignant dans l'école
+    """
+    return obj.group_in_this_school(school)

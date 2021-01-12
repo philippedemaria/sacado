@@ -42,6 +42,35 @@ class School(models.Model):
 
 
 
+    def get_data(self) :
+
+        Group = apps.get_model('group', 'Group')
+        nbg = Group.objects.filter(teacher__user__school=self).count()
+        try:
+            stage = self.aptitude.first()
+            if stage:
+                eca, ac, dep , low , medium , up  = stage.medium - stage.low, stage.up - stage.medium, 100 - stage.up , stage.low , stage.medium , stage.up 
+            else:
+                eca, ac, dep , low , medium , up   = 20, 15, 15 , 50 , 70, 85 
+        except:
+            eca, ac, dep , low , medium , up  = 20, 15, 15 , 50 , 70, 85
+
+
+        nbt, nbs = 0, 0
+        for u in self.users.all():
+            if u.is_teacher:
+                nbt += 1
+            elif u.is_student:
+                nbs += 1
+        data_nb = {"nbt": nbt, "nbs": nbs}
+
+        data_nb.update({"nbg": nbg , "low": low , "eca": eca, "ac": ac , "dep": dep, "medium": medium , "up": up  })
+ 
+        return data_nb
+
+
+
+
 # Niveau d'aquisition 
 class Stage(models.Model):
     school = models.ForeignKey(School, on_delete=models.PROTECT, related_name='aptitude', editable=False)

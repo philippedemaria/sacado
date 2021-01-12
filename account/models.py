@@ -5,11 +5,13 @@ from django.apps import apps
 from django.contrib.auth.models import AbstractUser
 from django.core.mail import send_mail
 from django.db import models
+from django.db.models import Q
 
 from socle.models import Level, Knowledge, Skill, Subject
 from school.models import School
 
 from templated_email import send_templated_mail
+from general_fonctions import *
 
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User
@@ -82,6 +84,7 @@ class User(AbstractUser):
     is_extra = models.BooleanField(default=0)
     is_manager = models.BooleanField(default=0)
     school = models.ForeignKey(School, blank=True, null=True, related_name="users", default=None, on_delete = models.PROTECT)
+    schools = models.ManyToManyField(School, related_name="schools_to_users", blank=True,  verbose_name="Autres établissement à administrer")
     cgu = models.BooleanField(default=1)
     closure = models.DateTimeField(blank=True, null=True, default = None ,  verbose_name="Date de fin d'adhésion")
     
@@ -496,6 +499,9 @@ class Teacher(models.Model):
         if self.user.is_creator  :
             creator = True
         return creator
+
+
+ 
 
 
 class Resultknowledge(models.Model):
