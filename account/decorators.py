@@ -86,10 +86,10 @@ def is_manager_of_this_school(function):
     def wrap(request, *args, **kwargs):
 
         school = this_school_in_session(request)
-        users = User.objects.filter( Q(school=school)| Q(schools=school)).filter( is_manager=1)
-        user = request.user
+        users = User.objects.filter( Q(school=school)| Q(schools=school),pk = request.user.id ).filter( is_manager=1)
+ 
 
-        if user in users or user.is_superuser :
+        if request.user in users or request.user.is_superuser :
             return function(request, *args, **kwargs)
         else:
             #raise PermissionDenied
