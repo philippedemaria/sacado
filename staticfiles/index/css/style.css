@@ -57,6 +57,20 @@ color : #0056b3;
 }
 
 
+.helper_tip {
+  position: relative;
+  opacity:1;
+  color:gray;
+  cursor:pointer;
+  font-size: 14px!important;
+
+}
+.helper_tip:hover {
+  color:#5d4391 ;
+}
+
+ 
+
 .content_bgwhite{
     background-color: #FFF;
     margin-left: 0px;
