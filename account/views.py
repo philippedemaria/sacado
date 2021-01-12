@@ -203,7 +203,7 @@ def message_to_teachers_sent(request):
         if u.email:
             rcv.append(u.email)
 
-    send_mail(subject, cleanhtml(unescape_html(message)), 'sacado.asso@gmail.com', rcv)
+    send_mail(subject, cleanhtml(unescape_html(message)), 'info@sacado.xyz', rcv)
     messages.success(request, 'message envoyé')
 
     return redirect("dashboard")  
