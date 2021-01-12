@@ -9,29 +9,41 @@ define(['jquery', 'bootstrap'], function ($) {
         var totalForms = parseInt(total_form.val())  ;
         var FormToDuplicate = totalForms - 1 ;
           
-    $('.add_more').on('click', function (event) {
+        $(document).on('click', '.add_more', function (event) {
 
-console.log(totalForms); 
+            var tr_object = $('#duplicate').clone();
+            tr_object.attr("id","duplicate"+totalForms) 
+            tr_object.attr("style","display:block") 
+    
+            tr_object.appendTo("#formsetZone");
+
+     
+            $(tr_object).find('.delete_button').html('<a href="javascript:void(0)" class="btn btn-danger remove_more" >Supprimer</a>'); 
+
+
+            $("#formsetZone input").each(function(){ 
+                $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));
+                $(this).attr('name',$(this).attr('name').replace('__prefix__',totalForms));
+            });
+            $("#formsetZone select").each(function(){ 
+                $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));
+                $(this).attr('name',$(this).attr('name').replace('__prefix__',totalForms));
+            });
  
-        var tr_object = $('#duplicate').clone();
-        tr_object.attr("id","duplicate"+totalForms) 
-        tr_object.attr("style","display:block") 
- 
 
-        tr_object.appendTo("#formsetZone");
+            total_form.val(totalForms+1);
 
- 
-        $(tr_object).find('.delete_button').html('<a href="javascript:void(0)" class="btn btn-danger remove_more" >Supprimer</a>'); 
+            });
 
-        total_form.val(totalForms+1)
 
-    });
 
         $(document).on('click', '.remove_more', function () {
  
             $('#duplicate'+totalForms).remove();
             total_form.val(FormToDuplicate)
         });
+
+
                 
     });
 
