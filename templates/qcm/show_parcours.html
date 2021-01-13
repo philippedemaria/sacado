@@ -32,13 +32,13 @@
 <small >{{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}</small> 
     {% endif %}
 
-
-
-    {% if user.is_testeur %} 
-        <a href="#" data-toggle='modal' data-target='#reporting' class="btn btn-primary">
-            Rapport d'erreurs
+    {% if user.is_testeur or user.is_superuser %} 
+        <a href="#" data-toggle='modal' data-target='#reporting'>
+            <sup><i class="fa fa-comment fa-xs"></i></sup>
         </a>
     {% endif %} 
+
+
 
 
 {% endblock %}
@@ -49,6 +49,9 @@
 {% block page_menu_right %}
 
     {% include 'qcm/submenu_parcours.html' %}
+
+
+
  
 {% endblock %}
 
