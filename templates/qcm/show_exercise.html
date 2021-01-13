@@ -4,15 +4,20 @@
 {% load item_tags %}
  
 {% block page_title %}
-      {{ exercise.knowledge.name }}
+
+      {% if exercise.supportfile.title %}
+        {{ exercise.supportfile.title|cleanhtml  }}
+      {% else %}
+        {{ exercise.knowledge.name|cleanhtml }}
+      {% endif %}
+
+
 {% endblock %}
+
+
 
 {% block page_menu_right %}
 
-
-
-{% if exercise.supportfile.title %} <li style="margin-top:15px"><em><p>{{ exercise.supportfile.title|safe  }} </p></em></li>  
-{% elif exercise.supportfile.annoncement %} <li style="margin-top:15px"><em><p>{{ exercise.supportfile.annoncement|safe  }} </p></em></li>  {% endif %}
 {% endblock %}
               
 

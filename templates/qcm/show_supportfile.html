@@ -8,13 +8,18 @@
 
  
 {% block page_title %}
-      {{ supportfile.title  }} 
+
+      {% if supportfile.title %}
+        {{ supportfile.title|cleanhtml  }}
+      {% else %}
+        {{ supportfile.knowledge.name|cleanhtml }}
+      {% endif %}
 {% endblock %}
 
 
 
 {% block page_menu_right %}
- <li style="margin-top:15px"><em>{{ supportfile.knowledge.name }}</em></li> 
+ 
 {% endblock %}
 
 
