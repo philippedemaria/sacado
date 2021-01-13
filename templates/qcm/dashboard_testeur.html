@@ -45,7 +45,7 @@
         </div>
         <div class="col-lg-10 col-md-10 col-xs-12 report_list">
             {% for s in supportfiles %}
-                <a href="{% url 'show_this_supportfile'  s.id %}" class="btn btn-test" target="_blank"> {{ s.title }} </a>
+                <a href="{% url 'show_this_supportfile'  s.id %}" class="btn btn-test" target="_blank"> {{ s.level.name }} > {{ s.theme.subject.name }} > {{ s.title }}   </a>
             {% endfor %}
         </div>
     </div>

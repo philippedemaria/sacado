@@ -6607,7 +6607,7 @@ def admin_testeur(request):
             reporting_c.append(r.id)
 
     parcourses = Parcours.objects.filter(teacher__user_id = 2480).exclude(pk__in=reporting_s).order_by("level")
-    supportfiles = Supportfile.objects.exclude(pk__in=reporting_p).order_by("level")
+    supportfiles = Supportfile.objects.filter(is_title=0).exclude(pk__in=reporting_p).order_by("level")
     courses = Course.objects.filter(teacher__user_id = 2480).exclude(pk__in=reporting_c).order_by("parcours")
     form_reporting = DocumentReportForm(request.POST or None )
 
