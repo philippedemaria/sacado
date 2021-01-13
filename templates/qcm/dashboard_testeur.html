@@ -27,7 +27,7 @@
 
 {% block body %}
 <section class="content_main"> 
-    {% if request.user.is_testeur or request.user.is_superuser %}
+    {% if  user.is_testeur or  user.is_superuser %}
  
     <div class="row">
         <div class="col-lg-2 col-md-2 col-xs-12">

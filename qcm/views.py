@@ -6630,13 +6630,14 @@ def reporting(request ):
         nf.document = request.POST["document"]
         nf.save()
 
-
         rec = ["nicolas.villemain@claudel.org" , "brunoserres33@gmail.com " , "sacado.asso@gmail.com"]
-        send_mail("SACADO "+nf.document+" à modifier", str(nf.document)+" dont l'id: "+str(nf.document_id)+" à modifier \n\n A modifier : \n"+str(nf.report)+" "+str(request.user) , "info@sacado.xyz" , rec )
-
+        if nf.report != "<p>RAS</p>" :
+            send_mail("SACADO "+nf.document+" à modifier", str(nf.document)+" #"+str(nf.document_id)+" doit recevoir les modifications suivantes : \n\n "+str(cleanhtml(nf.report))+"\n\n"+str(request.user) , "info@sacado.xyz" , rec )
+        else :
+            DocumentReport.objects.filter(pk=int(nf.document_id)).update(is_done=1)
+            send_mail("SACADO "+nf.document+" #"+str(nf.document_id)+" vérifié", str(nf.document)+" dont l'id: "+str(nf.document_id)+" est validé sans erreur par "+str(request.user) , "info@sacado.xyz" , rec )
 
     return redirect('admin_testeur')
-
 
 
 @user_passes_test(user_is_testeur)
