@@ -270,6 +270,15 @@ li label:hover{
   cursor: pointer;
 }
 
+
+ /****************************************** test **************************************/
+
+
+
+
+
+
+
  /****************************************** details_card selectors **************************************/
 
 .select_details, .sharer, .details_relation,.action_content, .select_task, .custom_select_details, .custom_sharer, .custom_select_task{
@@ -2012,7 +2021,13 @@ body.hold-transition .main-header .logo {
 }
 
 
-
+.report_list {
+  margin-bottom: 15px;
+  margin-right: 0px;
+  height:340px; 
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 
 
 
@@ -4799,6 +4814,18 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 }
 
 
+.btn-test  {
+  color : #b300b3!important;
+  border-radius: 20px; /*radius des boutons*/
+  border: 1px solid #b300b3;
+  margin-right: 5px;
+}
+.btn-test:hover,
+.btn-test:active,
+.btn-test.hover {
+  background-color: #b300b3!important;/*   #dd4b39!important;*/
+  color: white!important;
+}
  
 .size18 {
     font-size : 18px !important;

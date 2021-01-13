@@ -1,0 +1,143 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+    <script>
+        require(['script/ajax-reporting']);
+    </script> 
+
+{% endblock %} 
+
+
+{% block page_title %}
+    <i class="fa fa-cloud"></i> Tableau de bord de test  <small>Cliquez sur le document à tester</small>
+{% endblock %} 
+
+{% block page_menu_right %}
+    <p>{{ school.name }}</p>
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+    {% if request.user.is_testeur %}
+ 
+    <div class="row">
+        <div class="col-lg-2 col-md-2 col-xs-12">
+            <!-- small box -->
+            <div class="small-box bg-fuchsia" style="width: 240px;">
+                <div class="inner">
+                    <div style="font-size: 35px;margin-bottom: 35px;">Exercices </div>
+                    <small>Vérifier :<br/> - l'orthographe, <br/> - leur faisabilité, <br/> - leur ergonomie</small>
+                 </div>
+
+                 <a href="{% url 'reporting_list' 0 %}"  class="small-box-footer"  >Reporting</a>
+
+
+            </div>
+        </div>
+        <div class="col-lg-10 col-md-10 col-xs-12 report_list">
+            {% for s in supportfiles %}
+                <a href="{% url 'show_this_supportfile'  s.id %}" class="btn btn-test" target="_blank"> {{ s.title }} </a>
+            {% endfor %}
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <!-- ./col -->
+        <div class="col-lg-2 col-md-2 col-xs-12">
+            <!-- small box -->
+            <div class="small-box bg-aqua-active" style="width: 240px;">
+                <div class="inner">
+                    <div style="font-size: 35px;margin-bottom: 35px;">Parcours </div>
+                    <small>Vérifier :<br/> - la cohérence des exercices, <br/> - la progressivité des exercices, <br/> - la pertinence des exercices</small>
+                </div>
+
+                 <a href="{% url 'reporting_list' 1 %}"  class="small-box-footer"  >Reporting</a>
+
+
+            </div>
+        </div>
+        <div class="col-lg-10 col-md-10 col-xs-12 report_list">
+            {% for p in parcourses %}
+                <a href="{% url 'show_parcours'  p.id %}" class="btn btn-new" target="_blank"> {{ p.title }} - {{ p.level }} - {{ p.subject }} </a>
+            {% endfor %}
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-lg-2 col-md-2 col-xs-12">
+            <!-- small box -->
+            <div class="small-box bg-orange" style="width: 240px;">
+                <div class="inner">
+                    <div style="font-size: 35px;margin-bottom: 35px;">Cours </div>
+                    <small>Vérifier: <br/> - l'orthographe, <br/> - leur syntaxe, <br/> - les explications, <br/> - les animations, <br/> - leur pertinence</small>
+                </div>
+
+                 <a href="{% url 'reporting_list' 2 %}"  class="small-box-footer"  >Reporting</a>
+
+            </div>
+        </div>
+        <div class="col-lg-10 col-md-10 col-xs-12 report_list">
+            {% for c in courses %}
+                <a href="#" data-toggle='modal' data-target='#reporting' class="btn btn-new-evaluation shower_course" data-course_id='{{ c.id}}'  >
+                    {{ c.title }}
+                </a>
+            {% endfor %}
+        </div>
+    </div> 
+
+    {% endif %} 
+
+
+</section>
+
+
+ 
+<div class="modal fade" id="reporting" tabindex="-1" role="dialog" aria-labelledby="reporting"> 
+    <div class="modal-dialog" role="document"  style="width: 95%;" >
+        <div class="modal-content" style="padding-top :0px;">
+            <div class="modal-header">
+                <h3>Rapport d'erreurs
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                </h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12 col-md-7">
+                        <div id="get_course_title">
+                        </div>
+                        <hr/>
+                        <div id="get_course_body">
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-5">
+                        <form action="{% url 'reporting' %}" method="POST" enctype='multipart/form-data'> 
+                          {% csrf_token %} 
+
+                          <label>Rapport d'erreurs</label>        
+                            {{ form_reporting.report }}
+
+                            <input name="document" value="course" type="hidden" /> 
+                            <input name="document_id"  value="{{ parcours.id }}" type="hidden" id="document_id" />
+                            <input name="user"  value="{{ user.id }}" type="hidden" />
+
+                            <input class="btn btn-primary" type="submit"/>          
+                            <a href="javascript:history.back()"><input type="button" value="Annuler" data-dismiss="modal" aria-label="Close" class="btn btn-default "/></a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>           
+</div>
+{% endblock %}

@@ -242,6 +242,16 @@ urlpatterns = [
     path('parcours_show_custom_exercise/<int:id>/<int:idp>',  show_custom_exercise, name='show_custom_exercise'), # vue enseignant de l'exercice
 
 
+
+    #####################################################################################################################################
+    ####################################### Testeurs 
+    #####################################################################################################################################
+    path('admin_testeur',  admin_testeur, name='admin_testeur'), 
+    path('reporting',  reporting, name='reporting'), 
+    path('reporting_list/<int:code>',  reporting_list, name='reporting_list'), 
+    path('repaired_reporting/<int:pk>/<int:code>',  repaired_reporting, name='repaired_reporting'), 
+
+
     #####################################################################################################################################
     ####################################### Correction 
     #####################################################################################################################################

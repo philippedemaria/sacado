@@ -3,22 +3,23 @@
 {% load widget_tweaks %}
 {% load item_tags %}
  
+ 
+
 
  
 {% block page_title %}
-      {{ supportfile.knowledge.name }}
+      {{ supportfile.title  }} 
 {% endblock %}
+
+
 
 {% block page_menu_right %}
-
-{% if supportfile.title %} <li style="margin-top:15px"><em>{{ supportfile.title  }} </em></li>   
-{% else %} <li style="margin-top:15px"><em>{{ supportfile.annoncement|safe  }} </em></li>  {% endif %}
+ <li style="margin-top:15px"><em>{{ supportfile.knowledge.name }}</em></li> 
 {% endblock %}
+
 
 
 {% block body  %}  
-
- 
 
 
 
@@ -42,8 +43,8 @@
         {% else %}
           <img src="{% static 'img/no_calculator.png' %}"  with="80px"  height="80px"  />
         {% endif  %} 
-<br>
-<br>
+        <br>
+        <br>
         {% if supportfile.duration == 5 %}
           <img src="{% static 'img/horloge5.png' %}" with="80px"  height="80px"  />
         {% elif supportfile.duration == 10 %}
@@ -84,36 +85,50 @@
     <div class="col-sm-12 col-md-8 col-lg-8">
 
       <form action="{% url 'content_is_done' supportfile.id %}" method="POST" enctype='multipart/form-data'> 
-{% csrf_token %}  
-      <div id="preloader">
-          <div class="alert alert-danger" role="alert" id="message_alert">
-              <i class="fa fa-warning"></i> Si vous voyez ce message après 15 secondes, l'exercice ne s'est pas chargé correctement. Rechargez votre page.<br> Sous Windows, appuyez simultanement sur CTRL et la touche F5
+          {% csrf_token %}  
+          <div id="preloader">
+              <div class="alert alert-danger" role="alert" id="message_alert">
+                  <i class="fa fa-warning"></i> Si vous voyez ce message après 15 secondes, l'exercice ne s'est pas chargé correctement. Rechargez votre page.<br> Sous Windows, appuyez simultanement sur CTRL et la touche F5
+              </div>
           </div>
-      </div>
 
-        <div class='justify-content-center'>
-            <div class = 'col-auto' id='ggb_applet_container' style="display:none"></div>
-        </div>
-
-     
-                <div class="form-group">
-   
-                    <a href="javascript:history.back()"><input type="button" value="Annuler"
-                                                               class="btn btn-default "/></a>
-
+          <div class='justify-content-center'>
+              <div class = 'col-auto' id='ggb_applet_container' style="display:none"></div>
+          </div>
 
      
-                </div>
+          <div class="form-group">
+              <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+          </div>
           
       </form>
-
-
-
     </div> 
 
-    
-  
-                    <!-- Additional Javascript for Geogebra exercises -->
+
+
+    {% if user.is_testeur %} 
+    <div class="col-sm-12 col-md-3 col-lg-3">
+
+        <form action="{% url 'reporting' %}" method="POST" enctype='multipart/form-data'> 
+          {% csrf_token %} 
+
+          <label>Rapport d'erreurs</label>        
+            {{ form_reporting.report }}
+
+            <input name="document" value="supportfile" type="hidden" /> 
+            <input name="document_id"  value="{{ supportfile.id }}" type="hidden" />
+            <input name="user"  value="{{ user.id }}" type="hidden" />
+
+            <input class="btn btn-primary" type="submit"/>          
+            <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+        </form>
+
+    </div> 
+    {% endif %} 
+
+
+
+        <!-- Additional Javascript for Geogebra exercises -->
         <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script>
    <!-- <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script> -->
         <script type="text/javascript">
@@ -146,8 +161,6 @@
             var applet = new GGBApplet('5.0', parameters,true);
             // Geogebra applet creation
             applet.inject('ggb_applet_container', 'preferHTML5'); 
-
-
         </script>
 
  

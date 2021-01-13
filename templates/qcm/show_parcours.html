@@ -32,6 +32,15 @@
 <small >{{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}</small> 
     {% endif %}
 
+
+
+    {% if user.is_testeur %} 
+        <a href="#" data-toggle='modal' data-target='#reporting' class="btn btn-primary">
+            Rapport d'erreurs
+        </a>
+    {% endif %} 
+
+
 {% endblock %}
 
 
@@ -64,15 +73,163 @@ body{
     </div>
 </div>
 
+
+
 <form action="" methode="POST">      
-<section class="content_list exercise_sortable" id="miseEnAttenteDashboard">
+    <section class="content_list exercise_sortable" id="miseEnAttenteDashboard">
+     
+     
+    {% if parcours.stop %}
+        <div class="row" >
+            <div class="col-sm-12 col-md-12">
+                <div class="alert alert-danger" >{% if parcours.is_evaluation %}Cette évaluation est verrouillée {% else %}Ce parcours est verrouillé {% endif %} à partir du <b>{{ parcours.stop|date:"d F Y à H:i" }}</b></div>
+            </div>
+        </div>
+    {% endif %}
+
  
+
+
+
+        <input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
+
+
+
+        {% for rc in relationships_customexercises %}
+            {%  if rc.exercise.supportfile.is_title %}     
+                <h2 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> 
+                    {% if rc.is_header_of_section  %}
+                        <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"    data-relation_id='{{ rc.id }}'  class="header_shower" title="Cours associé à cette section">                       
+                            {% if  rc.exercise.supportfile.title %}  
+                                {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
+                            {% else %}
+                                {{ rc.exercise.supportfile.annoncement|cleanhtml }}
+                            {% endif %}   <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
+                    {% else %}
+                        {% if  rc.exercise.supportfile.title %}  
+                            {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
+                        {% else %}
+                            {{ rc.exercise.supportfile.annoncement|cleanhtml }}
+                        {% endif %}
+                    {% endif %}
+                </h2>
+            {%  elif rc.exercise.supportfile.is_subtitle %}
+                <h3 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> 
+                    {% if rc.is_header_of_section %}
+                        <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"  data-relation_id='{{ rc.id }}' class="header_shower" title="Cours associé à cette sous-section">{{ rc.exercise.supportfile.title|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
+                    {% else %}
+                        {{ rc.exercise.supportfile.title|cleanhtml|capfirst }}
+                    {% endif %}
+                </h3>
+            {% else %}  
+                {% include 'qcm/details_all_cards.html' %}            
+            {% endif %}  
+     
+
+        {% endfor %}
+
+     
+     
+
+
+        {% if relationships_customexercises|length == 0   %}
+            {% if parcours.is_folder %}
+                <div class="row">
+                    <div class="col-sm-12 col-md-1">
+                    </div>
+                    <div class="col-sm-12 col-md-2" style="margin :40px 0px 0px 0px">
+                        <i class="fa fa-folder-open fa-10x" style="color: {{ parcours.color }}"></i>
+                    </div>
+                    <div class="col-sm-12 col-md-9" style="margin :40px 0px 0px 0px">
+
+                        <h1 class="thin" style="color:{{ parcours.color }}" >{{ parcours }} </h1>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6" style="margin :40px 0px 0px 0px">
+                                <p> contient les parcours suivants : </p>
+                                <ul>
+                                {% for p in parcours.leaf_parcours.all %}
+                                    <li class="sans_puce" style="margin-bottom : 15px">  <a href="{% url 'show_parcours' p.id %}" style="color: {{ p.color }}"><i class="fa fa-th fa-fw fa-small"></i> {{ p }}</a></li>
+                                {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="col-sm-12 col-md-6" style="margin :40px 0px 0px 0px">
+                                <p> contient les cours suivants : </p>
+                                <ul>
+                                {% for p in parcours.leaf_parcours.all %}
+                                    {% for c in p.course.all %}
+                                        <li class="sans_puce">  <a href="{% url 'show_course' c.id c.parcours.id %}" style="color: {{ c.color }}"><i class="fa fa-desktop fa-fw fa-small"></i> {{ c }}</a></li>
+                                    {% endfor %}
+                                {% endfor %}
+                                </ul>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+
+
+            {% else %}
+                <div class="row">
+                    <div class="col-sm-3 col-md-3" style="margin:40px">
+                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-danger"> Associer des exercices SACADO à {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
+                    </div> 
+                    <div class="col-sm-3 col-md-3" style="margin:40px">
+                    <a href="{% url 'parcours_create_custom_exercise' parcours.id 0  %}" class="btn btn-danger"> Créer un exercice personnalisé dans {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
+                    </div> 
+                </div> 
+            {% endif %}
+        {% endif %}
+
+
+
+        {% if sacado_asso %}
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="form-group">
+                    {% if parcours.teacher != teacher  and  parcours.is_share %}
+                        <a href="{% url 'clone_parcours' parcours.id 0 %}" class="btn btn-primary">Cloner ce parcours </a>    
+                        <a href="{% url 'clone_parcours' parcours.id 1 %}" class="btn btn-primary">Cloner ce parcours avec le cour associé</a>  
+                    {% endif %} 
+                    <input type="button" value="Retour" class="btn btn-default" onclick="javascript:history.back()"/>
+                </div>
+            </div>
+        </div>  
+        {% endif %}  
+
+    </section>
+</form>
  
-{% if parcours.stop %}
-<div class="row" >
-    <div class="col-sm-12 col-md-12">
-        <div class="alert alert-danger" >{% if parcours.is_evaluation %}Cette évaluation est verrouillée {% else %}Ce parcours est verrouillé {% endif %} à partir du <b>{{ parcours.stop|date:"d F Y à H:i" }}</b></div>
-    </div>
+
+
+
+
+{% if user.is_testeur %} 
+<div class="modal fade" id="reporting" tabindex="-1" role="dialog" aria-labelledby="reporting"> 
+    <div class="modal-dialog" role="document" >
+        <div class="modal-content" style="padding-top :0px;">
+            <div class="modal-header">
+                <h3>Rapport d'erreurs
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                </h3>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'reporting' %}" method="POST" enctype='multipart/form-data'> 
+                  {% csrf_token %} 
+
+                  <label>Rapport d'erreurs</label>        
+                    {{ form_reporting.report }}
+
+                    <input name="document" value="parcours" type="hidden" /> 
+                    <input name="document_id"  value="{{ parcours.id }}" type="hidden" />
+                    <input name="user"  value="{{ user.id }}" type="hidden" />
+
+                    <input class="btn btn-primary" type="submit"/>          
+                    <a href="javascript:history.back()"><input type="button" value="Annuler" data-dismiss="modal" aria-label="Close" class="btn btn-default "/></a>
+                </form>
+            </div>
+        </div>
+    </div>           
 </div>
 {% endif %}
 
@@ -80,114 +237,7 @@ body{
 
 
 
-<input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
 
-
-
-    {% for rc in relationships_customexercises %}
-        {%  if rc.exercise.supportfile.is_title %}     
-            <h2 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> 
-                {% if rc.is_header_of_section  %}
-                    <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"    data-relation_id='{{ rc.id }}'  class="header_shower" title="Cours associé à cette section">                       
-                        {% if  rc.exercise.supportfile.title %}  
-                            {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
-                        {% else %}
-                            {{ rc.exercise.supportfile.annoncement|cleanhtml }}
-                        {% endif %}   <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
-                {% else %}
-                    {% if  rc.exercise.supportfile.title %}  
-                        {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
-                    {% else %}
-                        {{ rc.exercise.supportfile.annoncement|cleanhtml }}
-                    {% endif %}
-                {% endif %}
-            </h2>
-        {%  elif rc.exercise.supportfile.is_subtitle %}
-            <h3 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> 
-                {% if rc.is_header_of_section %}
-                    <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"  data-relation_id='{{ rc.id }}' class="header_shower" title="Cours associé à cette sous-section">{{ rc.exercise.supportfile.title|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
-                {% else %}
-                    {{ rc.exercise.supportfile.title|cleanhtml|capfirst }}
-                {% endif %}
-            </h3>
-        {% else %}  
-            {% include 'qcm/details_all_cards.html' %}            
-        {% endif %}  
- 
-
-    {% endfor %}
-
- 
- 
-
-
-    {% if relationships_customexercises|length == 0   %}
-        {% if parcours.is_folder %}
-            <div class="row">
-                <div class="col-sm-12 col-md-1">
-                </div>
-                <div class="col-sm-12 col-md-2" style="margin :40px 0px 0px 0px">
-                    <i class="fa fa-folder-open fa-10x" style="color: {{ parcours.color }}"></i>
-                </div>
-                <div class="col-sm-12 col-md-9" style="margin :40px 0px 0px 0px">
-
-                    <h1 class="thin" style="color:{{ parcours.color }}" >{{ parcours }} </h1>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-6" style="margin :40px 0px 0px 0px">
-                            <p> contient les parcours suivants : </p>
-                            <ul>
-                            {% for p in parcours.leaf_parcours.all %}
-                                <li class="sans_puce" style="margin-bottom : 15px">  <a href="{% url 'show_parcours' p.id %}" style="color: {{ p.color }}"><i class="fa fa-th fa-fw fa-small"></i> {{ p }}</a></li>
-                            {% endfor %}
-                            </ul>
-                        </div>
-                        <div class="col-sm-12 col-md-6" style="margin :40px 0px 0px 0px">
-                            <p> contient les cours suivants : </p>
-                            <ul>
-                            {% for p in parcours.leaf_parcours.all %}
-                                {% for c in p.course.all %}
-                                    <li class="sans_puce">  <a href="{% url 'show_course' c.id c.parcours.id %}" style="color: {{ c.color }}"><i class="fa fa-desktop fa-fw fa-small"></i> {{ c }}</a></li>
-                                {% endfor %}
-                            {% endfor %}
-                            </ul>
-                        </div>
-                    </div> 
-                </div>
-            </div>
-
-
-        {% else %}
-            <div class="row">
-                <div class="col-sm-3 col-md-3" style="margin:40px">
-                <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-danger"> Associer des exercices SACADO à {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
-                </div> 
-                <div class="col-sm-3 col-md-3" style="margin:40px">
-                <a href="{% url 'parcours_create_custom_exercise' parcours.id 0  %}" class="btn btn-danger"> Créer un exercice personnalisé dans {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
-                </div> 
-            </div> 
-        {% endif %}
-    {% endif %}
-
-
-
-    {% if sacado_asso %}
-    <div class="row">
-        <div class="col-sm-12 col-md-12">
-            <div class="form-group">
-                {% if parcours.teacher != teacher  and  parcours.is_share %}
-                    <a href="{% url 'clone_parcours' parcours.id 0 %}" class="btn btn-primary">Cloner ce parcours </a>    
-                    <a href="{% url 'clone_parcours' parcours.id 1 %}" class="btn btn-primary">Cloner ce parcours avec le cour associé</a>  
-                {% endif %} 
-                <input type="button" value="Retour" class="btn btn-default" onclick="javascript:history.back()"/>
-            </div>
-        </div>
-    </div>  
-    {% endif %}  
-
-</section>
-</form>
-
- 
  
 <div class="modal fade" id="head_of_section" tabindex="-1" role="dialog" aria-labelledby="head_of_section">
     <div class="modal-dialog" role="document"  style="width:95%;">

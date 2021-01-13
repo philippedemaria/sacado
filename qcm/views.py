@@ -9,8 +9,8 @@ from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group , Sharing_group
 from school.models import Stage
-from qcm.models import  Parcours , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage
-from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm
+from qcm.models import  Parcours , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage , DocumentReport
+from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm
 from socle.models import  Theme, Knowledge , Level , Skill , Waiting
 from django.http import JsonResponse 
 from django.core import serializers
@@ -27,7 +27,7 @@ from django.db.models import Q
 from django.core.mail import send_mail
 from group.decorators import user_is_group_teacher 
 from qcm.decorators import user_is_parcours_teacher, user_can_modify_this_course, student_can_show_this_course , user_is_relationship_teacher, user_is_customexercice_teacher 
-from account.decorators import user_can_create, user_is_superuser, user_is_creator
+from account.decorators import user_can_create, user_is_superuser, user_is_creator , user_is_testeur
 ##############bibliothèques pour les impressions pdf  #########################
 import os
 from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
@@ -229,6 +229,8 @@ def teacher_has_permisson_to_parcourses(request,teacher,parcours):
     test_has_permisson = teacher_has_permisson_to_share_inverse_parcourses(request,teacher,parcours)
 
     if test_has_permisson or parcours in teacher_has_parcourses(teacher,0,0) or parcours in teacher_has_parcourses(teacher,0,1) or parcours in teacher_has_parcourses(teacher,1,0) or parcours in teacher_has_parcourses(teacher,1,1):
+        has_permisson = True
+    elif request.user.is_superuser or request.user.is_creator or request.user.is_testeur :
         has_permisson = True
     else :
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
@@ -1277,8 +1279,11 @@ def show_parcours(request, id):
     nb_students_p_or_g = len(students_p_or_g)
 
     skills = Skill.objects.all()
+
+
+    form_reporting = DocumentReportForm(request.POST or None )
  
-    context = { 'parcours': parcours, 'teacher': teacher,  'communications' : [] ,  'today' : today , 'skills': skills,
+    context = { 'parcours': parcours, 'teacher': teacher,  'communications' : [] ,  'today' : today , 'skills': skills,  'form_reporting': form_reporting, 'user' : user ,
                'students_from_p_or_g': students_p_or_g,   'nb_exo_visible': nb_exo_visible , 'nb_students_p_or_g' : nb_students_p_or_g ,  'relationships_customexercises': relationships_customexercises,
                'nb_exo_only': nb_exo_only,'group_id': group_id, 'group': group, 'role' : role, 'parcours_group' : parcours_group  }
 
@@ -3077,7 +3082,7 @@ def delete_supportfile(request, id):
 
 
 
-@user_passes_test(user_is_creator)
+@user_passes_test(user_is_testeur)
 def show_this_supportfile(request, id):
 
     if request.user.is_teacher:
@@ -3086,10 +3091,14 @@ def show_this_supportfile(request, id):
     else :
         parcours = None
 
+
+    user = request.user    
+    form_reporting = DocumentReportForm(request.POST or None )
+ 
     supportfile = Supportfile.objects.get(id=id)
     request.session['level_id'] = supportfile.level.id
     start_time = time.time()
-    context = {'supportfile': supportfile, 'start_time': start_time, 'communications' : [] ,  'parcours': parcours}
+    context = {'supportfile': supportfile, 'start_time': start_time, 'communications' : [] ,  'parcours': parcours , "user" :  user , "form_reporting" :  form_reporting , }
 
     if supportfile.is_ggbfile :
         url = "qcm/show_supportfile.html" 
@@ -6576,3 +6585,75 @@ def delete_folder(request,id,idg):
 
  
     return redirect ("list_parcours_group", idg )  
+
+
+#######################################################################################################################################################################
+#######################################################################################################################################################################
+#################   Testeurs
+#######################################################################################################################################################################
+#######################################################################################################################################################################
+@user_passes_test(user_is_testeur)
+def admin_testeur(request):
+
+    user = request.user
+    reporting_s , reporting_p , reporting_c = [] , [] , []
+    reportings = DocumentReport.objects.exclude(is_done=1)
+    for r in reportings :
+        if r.document == "supportfile" :
+            reporting_s.append(r.id)
+        if r.document == "parcours" :
+            reporting_p.append(r.id)
+        if r.document == "cours" :
+            reporting_c.append(r.id)
+
+    parcourses = Parcours.objects.filter(teacher__user_id = 2480).exclude(pk__in=reporting_s).order_by("level")
+    supportfiles = Supportfile.objects.exclude(pk__in=reporting_p).order_by("level")
+    courses = Course.objects.filter(teacher__user_id = 2480).exclude(pk__in=reporting_c).order_by("parcours")
+    form_reporting = DocumentReportForm(request.POST or None )
+
+    context = { "user" :  user , "parcourses" :  parcourses , "supportfiles" :  supportfiles , "courses" :  courses ,  "form_reporting" :  form_reporting , }
+ 
+    return render(request, 'qcm/dashboard_testeur.html', context)
+
+
+
+
+@user_passes_test(user_is_testeur)
+def reporting(request ):
+
+    user = request.user    
+    form_reporting = DocumentReportForm(request.POST or None )
+    print(request.POST)
+    if form_reporting.is_valid() :
+        nf = form_reporting.save(commit=False)
+        nf.user = request.user
+        nf.document = request.POST["document"]
+        nf.save()
+
+
+        rec = ["nicolas.villemain@claudel.org" , "brunoserres33@gmail.com " , "sacado.asso@gmail.com"]
+        send_mail("SACADO "+nf.document+" à modifier", str(nf.document)+" dont l'id: "+str(nf.document_id)+" à modifier \n\n A modifier : \n"+str(nf.report)+" "+str(request.user) , "info@sacado.xyz" , rec )
+
+
+    return redirect('admin_testeur')
+
+
+
+@user_passes_test(user_is_testeur)
+def reporting_list(request, code ):
+
+    tab = ["supportfile","parcours","course"]
+    user = request.user  
+    reportings = DocumentReport.objects.filter(document=tab[code], is_done=0).exclude(report="<p>RAS</p>")
+
+    context = { "user" :  user , "reportings" : reportings , "doc" : tab[code] , "code" : code }
+ 
+    return render(request, 'qcm/reporting_list.html', context)
+ 
+
+
+@user_passes_test(user_is_testeur)
+def repaired_reporting(request, pk,code ):
+
+    DocumentReport.objects.filter(pk=pk).update(is_done=1)
+    return redirect( 'admin_testeur', code)

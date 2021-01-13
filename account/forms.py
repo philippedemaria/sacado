@@ -53,7 +53,7 @@ class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = '__all__'
-        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined', 'user_type', 'is_extra', 'password','school','cgu','schools']
+        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined', 'user_type', 'is_extra', 'password','school','cgu','schools','is_testeur']
 
 
 
@@ -68,7 +68,7 @@ class ManagerUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = '__all__'
-        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined',  'user_type', 'password','cgu']
+        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined',  'user_type', 'password','cgu','school','schools','is_testeur']
 
 
 class NewUserTForm(forms.ModelForm):

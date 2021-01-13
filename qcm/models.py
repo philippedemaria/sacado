@@ -2,7 +2,7 @@ import uuid
 from django.db import models
 from datetime import date, datetime, timedelta
 from django.utils import timezone
-from account.models import Student, Teacher, ModelWithCode, generate_code
+from account.models import Student, Teacher, ModelWithCode, generate_code, User
 from socle.models import  Knowledge, Level , Theme, Skill , Subject
 from django.apps import apps
 from ckeditor_uploader.fields import RichTextUploadingField
@@ -1550,3 +1550,26 @@ class Customannotation(CommonAnnotation):
 
     class Meta:
         unique_together = ['customanswerbystudent', 'attr_id']    
+
+
+########################################################################################################################################### 
+########################################################################################################################################### 
+######################################################   Test des documents       ######################################################### 
+########################################################################################################################################### 
+########################################################################################################################################### 
+
+class DocumentReport(models.Model):
+
+    document = models.CharField(max_length=100, editable= False)   
+    document_id = models.PositiveIntegerField(default=3, editable= False)  
+    report = RichTextUploadingField( blank=True, default="RAS",  verbose_name="Remarque*") 
+    user = models.ForeignKey(User,  on_delete=models.CASCADE, blank=True,  related_name='user_document_report', editable= False) 
+    date_created = models.DateTimeField(auto_now_add=True)
+    is_done = models.BooleanField( default=0,  verbose_name="Fait") 
+
+
+    def __str__(self):
+        return "{}".format(self.document)
+
+ 
+ 

@@ -87,6 +87,7 @@ class User(AbstractUser):
     schools = models.ManyToManyField(School, related_name="schools_to_users", blank=True,  verbose_name="Autres établissement à administrer")
     cgu = models.BooleanField(default=1)
     closure = models.DateTimeField(blank=True, null=True, default = None ,  verbose_name="Date de fin d'adhésion")
+    is_testeur = models.BooleanField(default=0)
     
     def __str__(self):
         return "{} {}".format(self.last_name, self.first_name)

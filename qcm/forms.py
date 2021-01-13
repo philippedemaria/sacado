@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from .models import Parcours, Exercise, Remediation, Relationship, Supportfile, Course, Comment, Demand, Mastering,Mastering_done, Writtenanswerbystudent, Customexercise,Customanswerimage , Customanswerbystudent, Masteringcustom, Masteringcustom_done, Remediationcustom
+from .models import Parcours, Exercise, Remediation, Relationship, DocumentReport, Supportfile, Course, Comment, Demand, Mastering,Mastering_done, Writtenanswerbystudent, Customexercise,Customanswerimage , Customanswerbystudent, Masteringcustom, Masteringcustom_done, Remediationcustom
 from account.models import Student , Teacher
 from socle.models import Knowledge, Skill
 from group.models import Group
@@ -241,6 +241,7 @@ class CourseForm(forms.ModelForm):
 		relations = Relationship.objects.filter(parcours=parcours)
 		self.fields['relationships'] = forms.ModelMultipleChoiceField(queryset=relations, required=False )
 
+
 class DemandForm(forms.ModelForm):
 	class Meta:
 		model = Demand
@@ -372,4 +373,12 @@ class CommentForm(forms.ModelForm):
 	class Meta:
 		model = Comment
 		fields = ('comment',)
+
  
+
+class DocumentReportForm (forms.ModelForm):
+
+	class Meta:
+		model = DocumentReport
+		fields = '__all__'
+		exclude = ("done",)

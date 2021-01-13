@@ -104,7 +104,14 @@
         <div class="captionmenu">Admin</div>
     </a>
 </li>
-
+{% elif request.user.is_testeur   %} <!-- manager dans un établissement -->
+<li  class='dropdown  {% if 'admin' in request.path or '/school' in request.path %} active{% endif %}'>
+    <a href="{% url 'admin_testeur' %}" class="main" >
+        <i class="fa fa-cloud fa-2x"></i> 
+        <div class="captionmenu">Admin</div>
+    </a>
+</li>
+ 
 {% elif request.user.is_manager   %} <!-- manager dans un établissement -->
 <li  class='dropdown  {% if 'admin' in request.path or '/school' in request.path %} active{% endif %}'>
     <a href="{% url 'admin_tdb' %}" class="main" >

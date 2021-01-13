@@ -21,6 +21,14 @@ def user_is_creator(user):
 
 
 
+def user_is_testeur(user):
+    test = False
+    if user.is_superuser or user.is_extra or user.is_testeur :
+        test = True
+    return test
+
+
+
 def this_school_in_session(request):
 
     school_id = request.session.get("school_id",None) 

@@ -1,0 +1,67 @@
+ {% extends 'dashboard.html' %}
+{% load static %}
+
+
+
+
+{% block require %}
+ 
+
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+ 
+{% endblock %} 
+
+
+
+{% block page_title %} 
+  <a href="{% url 'admin_testeur' %}"> <i class="fa fa-cloud"></i></a> Reporting de {{ doc }}
+{% endblock  %}
+
+{% block body  %}    
+<section class="content_main">
+ 
+  
+  <div class="row"> 
+    <div class="col-sm-12 col-md-12">
+        <table  class="table table-bordered table-hover standard_tab_1000" style="width:100%">
+              <thead>
+                  <tr>
+                    <th>Lien</th>                  
+                    <th>Rapport</th>
+                    <th>Date</th>
+                    <th>Rapporteur</th>
+                    <th></th>
+                  </tr>
+              </thead>
+              <tbody>
+                    {% for r in reportings %}
+                    <tr> 
+                      <td>
+                        {% if r.document == "supportfile" %}
+                          <a href="{% url 'update_supportfile'  r.document_id  %}" class="btn btn-test" target="_blank"> aller à </a>
+                        {% elif r.document == "parcours" %}
+                          <a href="{% url 'update_parcours'  r.document_id 0  %}" class="btn btn-new" target="_blank"> aller à </a>
+                        {% else %}
+                          Course id : {{ r.document_id }}
+                        {% endif %}
+                      </td> 
+                      <td>
+                        {{ r.report|safe }}
+                      </td> 
+                      <td>
+                        {{ r.date_created|date:"Y N d" }}
+                      </td> 
+                      <td>
+                        {{ r.user.first_name }}
+                      </td> 
+                      <td>
+                          <a href="{% url 'repaired_reporting' r.id code %}" class="btn btn-primary">Done !</a>
+                      </td> 
+                    </tr>
+                    {% endfor %}
+              </tbody>
+        </table>
+    </div>
+  </div>
+</section> 
+{% endblock %}
