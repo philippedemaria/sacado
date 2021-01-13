@@ -141,5 +141,15 @@
     {% endif %} 
 
 
+
+    {% if request.user.is_testeur %}
+    <hr/>
+    <h1 class="sacado"> Espace sacado, Tester les documents</h1>
+
+    <a href="{% url 'admin_testeur' %}"   > Interface de gestion des tests  </a>
+
+    {% endif %} 
+
+
 </section> 
 {% endblock %}
