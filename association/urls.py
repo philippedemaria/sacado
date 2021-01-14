@@ -19,6 +19,21 @@ urlpatterns = [
     path('update_associate/<int:id>/', update_associate, name='update_associate'),
     path('delete_associate/<int:id>/', delete_associate, name='delete_associate'),
     path('accept_associate/<int:id>/', accept_associate, name='accept_associate'), 
-    
+
+ 
+    path('create_section', create_section, name='create_section'),
+    path('update_section/<int:id>/', update_section, name='update_section'),
+    path('delete_section/<int:id>/', delete_section, name='delete_section'),
+
+
+
+    path('list_documents', list_documents, name='list_documents'),
+    path('create_document', create_document, name='create_document'),
+    path('update_document/<int:id>/', update_document, name='update_document'),
+    path('delete_document/<int:id>/', delete_document, name='delete_document'),
+ 
+    path('ajax_shower_document', ajax_shower_document, name='ajax_shower_document'),
+
+
 ]
  

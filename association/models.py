@@ -104,3 +104,32 @@ class Accounting(ModelWithCode):
 
      
 
+########################################################################################################################################### 
+########################################################################################################################################### 
+############################################################   Documents    ############################################################### 
+########################################################################################################################################### 
+########################################################################################################################################### 
+class Section(models.Model): # pour l'asso' 
+
+    title = models.CharField(max_length=255, default='',  blank=True, verbose_name="Titre")    
+ 
+ 
+    def __str__(self):
+        return self.title 
+
+
+class Document(models.Model): # pour l'asso' 
+
+ 
+    title = models.CharField(max_length=255, default='',  blank=True, verbose_name="Titre")    
+    annoncement = RichTextUploadingField( blank=True, verbose_name="Texte*") 
+    user = models.ForeignKey(User, related_name = "documents", on_delete=models.CASCADE, editable=False )
+    section = models.ForeignKey(Section, related_name = "sections", on_delete=models.CASCADE, verbose_name="Section") 
+    ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True,  verbose_name="Ordre", editable=False )
+
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date de création")
+    date_modified = models.DateTimeField(auto_now=True, verbose_name="Date de modification") 
+ 
+ 
+    def __str__(self):
+        return self.title 

@@ -1,0 +1,85 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+ 
+{% endblock %}
+ 
+
+{% block page_title %}
+    Nouvelle section
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+{% endblock %}
+
+
+
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+    <form action="" method="POST">
+
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-sm-12 col-lg-6">
+
+ 
+                <div class="form-group">
+                    {{ form.title.label_tag }} <em>50 caractères max.</em><br>
+                    {{ form.title|add_class:"form-control"   }}
+                    {{ form.title.errors }} 
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-12 col-lg-8">
+                        <div class="form-group">
+                            <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+                            <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                                       class="btn btn-default "/></a>
+                        </div>
+                    </div>
+ 
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-lg-6">
+                <label>Section existantes</label>
+                <table id="standard_tab" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>Titre</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for section in sections %}
+                            <tr>
+                                <td>
+                                   <a href="{% url 'update_section' section.id %}">{{ section.title }}</a> 
+
+                                   <a href="{% url 'delete_section' section.id %}" class="pull-right"   onclick="return TestDelete('cette section')" ><small>Supprimer</small></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+
+
+        </div>
+    </form>  
+</section>
+{% endblock %} 

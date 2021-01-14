@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from association.models import Accounting,Associate , Voting
-from association.forms import AccountingForm,AssociateForm,VotingForm
+from association.models import Accounting,Associate , Voting , Document, Section
+from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm
 
 
 from django.http import JsonResponse
@@ -97,7 +97,7 @@ def update_accounting(request, id):
 
     context = {'form': form,  'accounting': accounting, 'teacher': teacher,  }
 
-    return render(request, 'accounting/form_accounting.html', context )
+    return render(request, 'association/form_accounting.html', context )
 
 
 
@@ -228,3 +228,134 @@ def show_voting(request, id):
     context = {  'voting': voting,   }
 
     return render(request, 'association/show_voting.html', context)
+
+
+
+
+#####################################################################################################################################
+#####################################################################################################################################
+####    accounting
+#####################################################################################################################################
+#####################################################################################################################################
+ 
+
+@user_passes_test(user_is_superuser) 
+def create_section(request):
+
+    sections = Section.objects.all()
+    form = SectionForm(request.POST or None )
+
+    if form.is_valid():
+        form.save()
+
+        return redirect('create_document')
+    else:
+        print(form.errors)
+
+    context = {'form': form, 'sections' : sections }
+
+    return render(request, 'association/form_section.html', context)
+
+
+
+@user_passes_test(user_is_superuser)
+def update_section(request, id):
+
+    sections = Section.objects.all()
+    section = Section.objects.get(id=id)
+    
+    form = SectionForm(request.POST or None, instance=section )
+
+    if form.is_valid():
+        form.save()
+        return redirect('list_documents')
+    else:
+        print(form.errors)
+
+    context = {'form': form,  'section': section, 'sections' : sections   }
+
+    return render(request, 'association/form_section.html', context )
+
+
+
+@user_passes_test(user_is_superuser)
+def delete_section(request, id):
+
+    section = Section.objects.get(id=id)
+    section.delete()
+    return redirect('create_section')
+    
+ 
+
+
+
+
+
+@user_passes_test(user_is_superuser)
+def list_documents(request):
+    documents = Document.objects.order_by("section", "date_modified")
+    document =  documents.first()
+    return render(request, 'association/show_document.html', { 'documents': documents , 'document': document  })
+
+
+@user_passes_test(user_is_superuser) 
+def create_document(request):
+ 
+    form = DocumentForm(request.POST or None )
+
+    if form.is_valid():
+        nf = form.save(commit = False)
+        nf.user = request.user
+        nf.save()
+
+        return redirect('list_documents')
+    else:
+        print(form.errors)
+
+    context = {'form': form, }
+
+    return render(request, 'association/form_document.html', context)
+
+
+
+@user_passes_test(user_is_superuser)
+def update_document(request, id):
+
+ 
+    document = Document.objects.get(id=id)
+    
+    form = DocumentForm(request.POST or None, instance=document )
+
+    if form.is_valid():
+        nf = form.save(commit = False)
+        nf.user = request.user
+        nf.save()
+        return redirect('list_documents')
+    else:
+        print(form.errors)
+
+    context = {'form': form,  'document': document,  }
+
+    return render(request, 'association/form_document.html', context )
+
+
+
+@user_passes_test(user_is_superuser)
+def delete_document(request, id):
+
+    document = Document.objects.get(id=id)
+    document.delete()
+    return redirect('list_documents')
+
+
+ 
+def ajax_shower_document(request):
+    document_id =  int(request.POST.get("document_id"))
+    document =  Document.objects.get(pk=document_id)
+    data = {}
+ 
+    context = {  'document': document   }
+ 
+    data['html'] = render_to_string('association/ajax_shower_document.html', context)
+
+    return JsonResponse(data)

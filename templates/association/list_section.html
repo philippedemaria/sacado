@@ -1,0 +1,53 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+
+
+
+
+{% block page_title %}
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Sections
+{% endblock %}
+
+{% block page_menu_right %}
+    <a href="{% url 'create_section' %}" class="btn btn-new pull-right"><img width="25px" src="{% static 'img/plus.png' %}"/> Nouvelle section</a>  
+{% endblock %}
+
+ 
+
+{% block body %}
+    <section class="content_main"> 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table id="standard_tab" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <td>Titre</td>
+ 
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for section in sections %}
+                            <tr>
+                                <td>
+                                    <span >{{ section.title }}</span> 
+                                </td>
+                               
+                            </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">     
+                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+            </div>
+        </div>
+    </section>
+    </div>
+{% endblock %}

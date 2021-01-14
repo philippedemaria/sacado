@@ -358,6 +358,33 @@ li.menu_course > a {
  
 }
  
+
+li.menu_document_section  {
+  font-size: 16px;
+  color: #FFF;
+  background-color: #5d4391 ;
+}
+li.menu_document{
+  list-style-type: none;
+  background-color: #dbcdf7;
+  color: #5d4391;
+}
+
+li.menu_document > a {
+  font-size: 16px;
+  color: #5d4391;
+}
+li.menu_document:active {
+  font-size: 16px;
+  color: #FFF;
+  background-color: #5d4391 ;
+}
+li.menu_document:hover, li.menu_document:hover > a {
+  font-size: 16px;
+  color: #FFF;
+  background-color: #8c73bf ;
+}
+
 /* ********************************************************************************************************
  * Select mastering  
  *********************************************************************************************************/

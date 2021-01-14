@@ -1,0 +1,80 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    <script>
+        require(['script/ajax-document']);
+    </script> 
+
+{% endblock %}
+
+ 
+
+{% block page_title %}
+    <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Documents    
+{% endblock %}
+
+
+{% block page_menu_right %}
+
+            <a href="{% url 'create_section' %}" class="btn btn-new pull-right">Nouvelle section </a> 
+
+            <a href="{% url 'create_document' %}" class="btn btn-new pull-right">Nouveau document </a>  
+{% endblock %}
+
+
+
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}    
+
+<section class="content_main">  
+
+ 
+
+    <div class="row">
+        <div class="col-md-4 col-xs-12 col-lg-3">
+ 
+ 
+ 
+            <form action="" method="POST"> 
+            {% csrf_token %}
+            <ul class="nav nav-pills nav-stacked admin-menu" >
+                <input type="hidden" value="{{ parcours.id }}" name="parcours_id" id="parcours_id"/>
+                {% regroup documents by section as list_sections %}
+                {% for section in list_sections %}
+                    <li class="menu_document_section">
+                         <h2 class="thin"> {{ section.grouper }}</h2> 
+                    </li>
+                    {% for document in section.list %}
+                        <li class="menu_document">
+                            <a href="#" class="document_viewer" data-document_id="{{ document.id }}">{{ document.title }}</a>
+                        </li>
+                    {% endfor %}
+                {% endfor %}
+
+            </ul>
+            </form>
+        </div>
+        <div class="col-md-8 col-xs-12 col-lg-9" id="this_document_body">
+            {% if document %}
+                {% include 'association/ajax_shower_document.html' %}
+            {% endif  %}
+        </div>
+    </div>
+ 
+
+
+
+</section>
+
+
+
+{% endblock %} 
