@@ -47,7 +47,7 @@
                                                                     <a href="{% url 'show_this_exercise' exercise.id   %}"  target="_blank"  >
                                                                         <img src="{{ exercise.supportfile.imagefile.url }}" class="imagefile">
                                                                     </a>
-                                                                    <a href="{% url 'update_supportfile'  exercise.supportfile.id   %}" class="listing" style="font-size: 18px">
+                                                                    <a href="{% url 'update_supportfile'  exercise.supportfile.id   %}" class="listing"  target="_blank" style="font-size: 18px">
                                                                         {% if exercise.supportfile.title %}  
                                                                             {{ exercise.supportfile.title|cleanhtml|capfirst }}  
                                                                         {% else %}  
@@ -59,7 +59,7 @@
                                                                     <a href="{% url 'show_this_exercise' exercise.id  %}" target="_blank" >
                                                                         <img src="{{ exercise.supportfile.imagefile.url }}" class="imagefile">
                                                                     </a>
-                                                                    <a href="{% url 'show_this_exercise'  exercise.id   %}" class="listing" style="font-size: 18px">
+                                                                    <a href="{% url 'show_this_exercise'  exercise.id   %}" class="listing"  target="_blank" style="font-size: 18px">
                                                                     {% if exercise.supportfile.title %}  
                                                                         {{ exercise.supportfile.title|cleanhtml|capfirst }}  
                                                                     {% else %}  
