@@ -44,8 +44,8 @@
 <div class="col-sm-12 col-md-12">
     <section class="content_main"> 
         <form action="" method="POST"> 
-                                <input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
-          {% csrf_token %} 
+            <input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
+            {% csrf_token %} 
             <div class="row">
                 <div style="background-color: #F2F1F0; border : 1px solid #e6e2dd; padding:20px">
                     <div class="panel panel-default exercise_sortable" style="border-radius:5px" id="miseEnAttenteDashboard" > 

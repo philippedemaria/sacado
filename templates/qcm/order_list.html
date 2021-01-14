@@ -16,20 +16,27 @@
                 <ul id="exercise_sortable_list">
                     {% for relation in relationships_customexercises|dictsort:"ranking" %}
                         {% if relation.exercise %}
-                        <li class="sorted_list">
+                        <li class="sorted_list  {% if  relation.exercise.supportfile.is_title %}bg-gray-active{% endif %}">
                             <table>
                                 <tr>
                                     <td style="width:20px">
-                                        <i class="fa fa-sort"></i><br><br>{{forloop.counter }}.
+                                        <i class="fa fa-sort"></i>
+ 
+                                            <br><br> {{forloop.counter }}. 
+ 
                                     </td>
                                     {% if relation.exercise.supportfile.imagefile %}
                                     <td style="width:210px">
                                         <img src="{{ relation.exercise.supportfile.imagefile.url }}" width="200px">
                                     </td>
                                     {% endif %}
-                                    <td>
-                                        {% if  relationship.exercise.supportfile.title %}  
-                                            {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
+                                    <td> 
+                                        {% if  relation.exercise.supportfile.is_title %} 
+                                            <h1 class="thin">{{  relation.exercise.supportfile.title|cleanhtml|capfirst }}</h1>
+                                        {% elif  relation.exercise.supportfile.is_title %} 
+                                            <h3 class="thin">{{  relation.exercise.supportfile.title|cleanhtml|capfirst }}</h3>    
+                                        {% elif  relation.exercise.supportfile.title %}  
+                                            {{  relation.exercise.supportfile.title|cleanhtml|capfirst }}  
                                         {% elif relation.exercise.supportfile.annoncement %}
                                             {{ relation.exercise.supportfile.annoncement|cleanhtml }}
                                         {% else %}
@@ -45,7 +52,7 @@
                             <table>
                                 <tr>
                                     <td style="width:20px">
-                                        <i class="fa fa-sort"></i><br><br>{{forloop.counter }}.
+                                        <i class="fa fa-sort"></i><br><br>{{forloop.counter }}.  
                                     </td>
                                     {% if relation.imagefile %}
                                     <td style="width:210px">
@@ -58,7 +65,7 @@
                                     {% endif %}
                                     <td>
                                         {% if relation.instruction %}
-                                        {{  relation.instruction|cleanhtml }}
+                                        {{  relation.instruction|truncatewords:"30"|safe }}
                                         {% endif %}
                                         <input type="hidden" value="{{ relation.id }}" class="sorted_exercise_id" data-custom=1  />
                                     </td>

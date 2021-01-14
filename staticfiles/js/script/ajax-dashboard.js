@@ -672,6 +672,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                             customizes = customizes + cstm +"-";
                         });
 
+                        console.log(valeurs) ;
+                        console.log(customizes) ;
+
                         $(ui.item).css("box-shadow", "0px 0px 0px transparent");  
 
                         $.ajax({

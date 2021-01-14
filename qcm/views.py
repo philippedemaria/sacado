@@ -2131,11 +2131,14 @@ def ajax_parcours_sorter(request):
 def ajax_sort_exercise(request):
     """ tri des exercices""" 
 
+
+
     try :
-        exercise_ids = request.POST.get("valeurs")
-        exercise_tab = exercise_ids.split("-") 
 
         parcours = request.POST.get("parcours")
+
+        exercise_ids = request.POST.get("valeurs")
+        exercise_tab = exercise_ids.split("-") 
 
         customizes = request.POST.get("customizes")
         customize_tab = customizes.split("-") 
