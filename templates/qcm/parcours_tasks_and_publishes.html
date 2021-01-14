@@ -49,7 +49,7 @@
             <div class="row">
                 <div style="background-color: #F2F1F0; border : 1px solid #e6e2dd; padding:20px">
                     <div class="panel panel-default exercise_sortable" style="border-radius:5px" id="miseEnAttenteDashboard" > 
-                        {% for relationship in relationships|dictsort:"ranking" %}  
+                        {% for relationship in relationships_customexercises|dictsort:"ranking" %}  
                             <div  class="panel-body  {% if not forloop.last %} separation_dashed{% endif %}" 
                                   style="line-height: 30px; {% if not forloop.first %} border-bottom-right-radius:5px; border-bottom-left-radius:5px;{% endif %} 
                                                             {% if not forloop.last %} border-top-right-radius:5px; border-top-left-radius:5px;{% endif %}
@@ -57,8 +57,116 @@
                                                             {% if relationship.is_publish %} border-left: #1fd14c solid 2px; {% endif %} 
                                                             {% if relationship.exercise.supportfile.is_title  %} background-color : #F2F1F0;{% endif %}" 
                                   id="new_title{{ relationship.exercise.id }}" >
-                                <input type="hidden" value="{{ relationship.exercise.id }}" name="input_exercise_id" class="div_exercise_id"/><!--  sert à classer les thèmes  -->
-                                {% if not relationship.exercise.supportfile.is_title %}
+                                {% if  relationship.exercise %}                                  
+                                    <input type="hidden" value="{{ relationship.exercise.id }}" data-custom=0  name="input_exercise_id" class="div_exercise_id"/><!--  sert à classer les exercices  -->
+                                    {% if not relationship.exercise.supportfile.is_title %}
+                                        <div class="header_exercise">
+                                            <div class="pull-right"> 
+                                                  <a href="#" class="btn btn-{% if not relationship.is_publish %}danger{% else  %}success{% endif  %} action_content" style="margin-left:5px;" id="publisher{{relationship.id}}"  data-relationship_id="{{relationship.id}}" data-statut="{{relationship.is_publish }}" >  
+                                                 {% if relationship.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
+                                                  </a>
+                                                  <a href="#collapside{{ forloop.counter}}" class="btn btn-default" style="margin-left:5px;" id="date_limit{{relationship.id}}" data-toggle="collapse"  >  
+                                                 Tâche ?
+                                                  </a>
+                                            </div>
+                                                <span id="pub_task{{relationship.id}}">{% if relationship.date_limit > today %}<span class="label label-success">Tâche</span>{% endif %}</span> 
+
+
+                                            {% if relationship.is_publish %}
+                                            <i class="fas fa-grip-vertical fa-xs"
+                                               style="color:MediumSeaGreen;padding-right:10px;cursor: move;"></i>
+                                            {% else %}
+                                            <i class="fas fa-grip-vertical fa-xs"
+                                               style="color:SlateGrey;padding-right:10px;cursor: move;"></i>
+                                            {% endif %}
+
+                                                {% if  relationship.exercise.supportfile.title %}  
+                                                    <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" class="listing" target="_blank" >{{  relationship.exercise.supportfile.title|cleanhtml|capfirst }} </a> 
+                                                {% elif relationship.exercise.supportfile.annoncement %}
+                                                <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" class="listing" target="_blank" >  {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}</a>
+                                                {% else %}
+                                                <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" class="listing" target="_blank" >  {{ relationship.exercise.knowledge.name|capfirst }}</a>
+                                                {% endif %}
+
+
+
+                                                <a data-toggle="collapse" href="#collapside{{ forloop.counter}}"><i class="fa fa-caret-down"></i></a> 
+                                        </div>          
+                                        <div id="collapside{{ forloop.counter}}" class="collapse" style="clear:both">  
+
+                                                <div class="pull-right"  style="margin-top:20px">
+                                                      <div id="starter{{relationship.id}}" style="display:{% if relationship.is_publish %}none{% else %}block{% endif  %} " >
+                                                      A partir de ?<br/>
+                                                      <input type="type" name="starter" data-relationship_id="{{relationship.id}}" data-type ="0" value="{{ relationship.start|date:"Y-m-d" }}" class="datepicker dates" />
+                                                      </div>
+                                                      Tâche pour le ?<br/>
+                                                      <input type="type" name="dateur" data-relationship_id="{{relationship.id}}" data-type ="1" value="{{ relationship.date_limit|date:"Y-m-d" }}" class="datepicker dates" />
+                                                </div>
+                                                 
+                                                <a href="{% url 'show_this_exercise' relationship.exercise.id   %}"  target="_blank" >  
+                                                <img src="{{ relationship.exercise.supportfile.imagefile.url }}" class="imagefile"></a>
+                                                                                    
+                                                    {% if  relationship.exercise.supportfile.title %}  
+                                                        {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
+                                                    {% else %}
+                                                        {{ relation.exercise.supportfile.annoncement|cleanhtml }}
+                                                    {% endif %}      
+                                            
+                                                {% if relationship.exercise.supportfile.calculator %}
+                                                  <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                                {% else %}
+                                                  <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                                {% endif  %}  <br>
+                                                <span style="font-size:16px;">    
+                                                    <i class="fa fa-fw fa-barcode"></i> {{ relationship.exercise.supportfile.code }} {% if relationship.exercise.knowledge.name|make_list|length < 140 %}<br>{% endif %}
+                                                    <i class="fa fa-fw fa-clock-o"></i> {{ relationship.exercise.supportfile.duration }} minutes {% if relationship.exercise.knowledge.name|make_list|length < 140 %}<br>{% endif %}
+                                                    <i class="fa fa-fw fa-save"></i> {{ relationship.exercise.supportfile.situation}} situation{{ relationship.exercise.supportfile.situation|pluralize}}  minimum
+                                                </span>
+                                        </div>   
+                                    {% else %}
+                                        <a href="" style="cursor:move;" class="move_inside">
+                                            {% if relationship.is_publish %}
+                                            <i class="fas fa-grip-vertical fa-xs"
+                                               style="color:MediumSeaGreen;vertical-align: text-top;padding-right:10px;"></i>
+                                            {% else %}
+                                            <i class="fas fa-grip-vertical fa-xs"
+                                               style="color:SlateGrey;vertical-align: text-bottom;padding-right:10px;"></i>
+                                            {% endif %}
+                                        </a>
+                                        {% if relationship.exercise.supportfile.attach_file != ""  %}  
+                                            {% if relationship.exercise.supportfile.is_subtitle %}                        
+                                                <h3><a href="{{ relationship.exercise.supportfile.attach_file.url }}" target='_blank' >{{ relationship.exercise.supportfile.title|cleanhtml|capfirst }}</a> <a href='#'  data-exercise_id='{{ relationship.exercise.id }}'  data-parcours_id='{{parcours.id}}' class='pull-right erase_title'><i class='fa fa-times text-danger'></i></a></h3>
+                                                {% else %}
+                                                <h2><a href="{{ relationship.exercise.supportfile.attach_file.url }}" target='_blank'  >{{ relationship.exercise.supportfile.title|cleanhtml|capfirst }}</a> <a href='#'  data-exercise_id='{{ relationship.exercise.id }}'  data-parcours_id='{{parcours.id}}' class='pull-right erase_title'><i class='fa fa-times text-danger'></i></a></h2>
+                                            {% endif %} 
+                                        {% else %}
+                                                {% if relationship.exercise.supportfile.is_subtitle %}   
+                                                    <h3>
+
+                                                        {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
+
+                                                        {% if relationship.is_header_of_section %} 
+                                                             <a href="{% url 'show_course' 0 relationship.parcours.id %}"><i class='fa fa-paperclip pull-right'></i></a>
+                                                        {% else %}
+                                                            <a href='#'  data-exercise_id='{{ relationship.exercise.id }}'  data-parcours_id='{{parcours.id}}' class='pull-right erase_title'><i class='fa fa-times text-danger'></i></a>
+                                                        {% endif %}
+                                                    </h3>
+                                                    {% else %}
+                                                    <h2>
+                                                        {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
+
+                                                        {% if relationship.is_header_of_section %} 
+                                                            <a href="{% url 'show_course' 0 relationship.parcours.id %}"><i class='fa fa-paperclip pull-right'></i></a>
+                                                        {% else %}
+                                                           <a href='#'  data-exercise_id='{{ relationship.exercise.id }}'  data-parcours_id='{{parcours.id}}' class='pull-right erase_title'><i class='fa fa-times text-danger'></i></a>
+                                                        {% endif %}
+                                                    </h2>
+                                                {% endif %}
+                                               
+                                        {% endif %}
+                                    {% endif %}
+                                {% else %} 
+                                    <input type="hidden" value="{{ relationship.id }}" data-custom=1  name="input_exercise_id" class="div_exercise_id"/><!--  sert à classer les exercices  -->
                                     <div class="header_exercise">
                                         <div class="pull-right"> 
                                               <a href="#" class="btn btn-{% if not relationship.is_publish %}danger{% else  %}success{% endif  %} action_content" style="margin-left:5px;" id="publisher{{relationship.id}}"  data-relationship_id="{{relationship.id}}" data-statut="{{relationship.is_publish }}" >  
@@ -79,13 +187,9 @@
                                            style="color:SlateGrey;padding-right:10px;cursor: move;"></i>
                                         {% endif %}
 
-                                            {% if  relationship.exercise.supportfile.title %}  
-                                                <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" class="listing" target="_blank" >{{  relationship.exercise.supportfile.title|cleanhtml|capfirst }} </a> 
-                                            {% elif relationship.exercise.supportfile.annoncement %}
-                                            <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" class="listing" target="_blank" >  {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}</a>
-                                            {% else %}
-                                            <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" class="listing" target="_blank" >  {{ relationship.exercise.knowledge.name|capfirst }}</a>
-                                            {% endif %}
+ 
+                                             {{  relationship.instruction|cleanhtml|truncatewords:"20"|capfirst }}   
+                                             
 
 
 
@@ -102,68 +206,20 @@
                                                   <input type="type" name="dateur" data-relationship_id="{{relationship.id}}" data-type ="1" value="{{ relationship.date_limit|date:"Y-m-d" }}" class="datepicker dates" />
                                             </div>
                                              
-                                            <a href="{% url 'show_this_exercise' relationship.exercise.id   %}"  target="_blank" >  
-                                            <img src="{{ relationship.exercise.supportfile.imagefile.url }}" class="imagefile"></a>
+           
                                                                                 
-                                                {% if  relationship.exercise.supportfile.title %}  
-                                                    {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
-                                                {% else %}
-                                                    {{ relation.exercise.supportfile.annoncement|cleanhtml }}
-                                                {% endif %}      
+ 
+                                            {{  relationship.instruction|safe }}  
+ 
                                         
-                                            {% if relationship.exercise.supportfile.calculator %}
+                                            {% if relationship.calculator %}
                                               <img src="{% static 'img/calculator.png' %}" width="30px" />
                                             {% else %}
                                               <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
-                                            {% endif  %}  <br>
-                                            <span style="font-size:16px;">    
-                                                <i class="fa fa-fw fa-barcode"></i> {{ relationship.exercise.supportfile.code }} {% if relationship.exercise.knowledge.name|make_list|length < 140 %}<br>{% endif %}
-                                                <i class="fa fa-fw fa-clock-o"></i> {{ relationship.exercise.supportfile.duration }} minutes {% if relationship.exercise.knowledge.name|make_list|length < 140 %}<br>{% endif %}
-                                                <i class="fa fa-fw fa-save"></i> {{ relationship.exercise.supportfile.situation}} situation{{ relationship.exercise.supportfile.situation|pluralize}}  minimum
-                                            </span>
-                                    </div>   
-                                {% else %}
-                                    <a href="" style="cursor:move;" class="move_inside">
-                                        {% if relationship.is_publish %}
-                                        <i class="fas fa-grip-vertical fa-xs"
-                                           style="color:MediumSeaGreen;vertical-align: text-top;padding-right:10px;"></i>
-                                        {% else %}
-                                        <i class="fas fa-grip-vertical fa-xs"
-                                           style="color:SlateGrey;vertical-align: text-bottom;padding-right:10px;"></i>
-                                        {% endif %}
-                                    </a>
-                                    {% if relationship.exercise.supportfile.attach_file != ""  %}  
-                                        {% if relationship.exercise.supportfile.is_subtitle %}                        
-                                            <h3><a href="{{ relationship.exercise.supportfile.attach_file.url }}" target='_blank' >{{ relationship.exercise.supportfile.title|cleanhtml|capfirst }}</a> <a href='#'  data-exercise_id='{{ relationship.exercise.id }}'  data-parcours_id='{{parcours.id}}' class='pull-right erase_title'><i class='fa fa-times text-danger'></i></a></h3>
-                                            {% else %}
-                                            <h2><a href="{{ relationship.exercise.supportfile.attach_file.url }}" target='_blank'  >{{ relationship.exercise.supportfile.title|cleanhtml|capfirst }}</a> <a href='#'  data-exercise_id='{{ relationship.exercise.id }}'  data-parcours_id='{{parcours.id}}' class='pull-right erase_title'><i class='fa fa-times text-danger'></i></a></h2>
-                                        {% endif %} 
-                                    {% else %}
-                                            {% if relationship.exercise.supportfile.is_subtitle %}   
-                                                <h3>
+                                            {% endif  %}  
 
-                                                    {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
 
-                                                    {% if relationship.is_header_of_section %} 
-                                                         <a href="{% url 'show_course' 0 relationship.parcours.id %}"><i class='fa fa-paperclip pull-right'></i></a>
-                                                    {% else %}
-                                                        <a href='#'  data-exercise_id='{{ relationship.exercise.id }}'  data-parcours_id='{{parcours.id}}' class='pull-right erase_title'><i class='fa fa-times text-danger'></i></a>
-                                                    {% endif %}
-                                                </h3>
-                                                {% else %}
-                                                <h2>
-                                                    {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
-
-                                                    {% if relationship.is_header_of_section %} 
-                                                        <a href="{% url 'show_course' 0 relationship.parcours.id %}"><i class='fa fa-paperclip pull-right'></i></a>
-                                                    {% else %}
-                                                       <a href='#'  data-exercise_id='{{ relationship.exercise.id }}'  data-parcours_id='{{parcours.id}}' class='pull-right erase_title'><i class='fa fa-times text-danger'></i></a>
-                                                    {% endif %}
-                                                </h2>
-                                            {% endif %}
-                                           
-                                    {% endif %}
-
+                                    </div>
                                 {% endif %}
                             </div>
                         {% endfor %}

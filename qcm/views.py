@@ -2044,6 +2044,8 @@ def ajax_exercise_error(request):
     data["htmlg"]= "Envoi réussi, merci."
     return JsonResponse(data) 
 
+
+
 #@user_is_parcours_teacher
 def parcours_tasks_and_publishes(request, id):
 
@@ -2054,14 +2056,23 @@ def parcours_tasks_and_publishes(request, id):
     role, group , group_id , access = get_complement(request, teacher, parcours) 
  
 
+    relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
+
+
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
     form = AttachForm(request.POST or None, request.FILES or None)
 
-    relationships = Relationship.objects.filter(parcours=parcours).order_by("exercise__theme")
-    context = {'relationships': relationships,  'parcours': parcours, 'teacher': teacher  , 'today' : today , 'group' : group , 'group_id' : group_id , 'communications' : [] , 'form' : form , 'role' : role , }
+ 
+
+
+    context = {'relationships_customexercises': relationships_customexercises,  'parcours': parcours, 'teacher': teacher  , 'today' : today , 'group' : group , 'group_id' : group_id , 'communications' : [] , 'form' : form , 'role' : role , }
     return render(request, 'qcm/parcours_tasks_and_publishes.html', context)
+
+
+
+
 
 
  
@@ -2081,6 +2092,7 @@ def result_parcours_exercise_students(request,id):
     stage = get_stage(teacher.user)
 
     return render(request, 'qcm/result_parcours_exercise_students.html', {'customexercises': customexercises , 'stage':stage ,   'relationships': relationships ,  'parcours': parcours , 'group_id': group_id ,  'group' : group , 'role' : role , })
+
 
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_is_favorite(request):  
