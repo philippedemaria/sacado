@@ -55,7 +55,7 @@
                     </li>
                     {% for document in section.list %}
                         <li class="menu_document">
-                            <a href="#" class="document_viewer" data-document_id="{{ document.id }}">{{ document.title }} <span class="pull-right">{{ document.date_modified}}</span> </a>
+                            <a href="#" class="document_viewer" data-document_id="{{ document.id }}">{{ document.title }} <span class="pull-right"><small>{{ document.date_modified|date:"Y N D"}}</small></span> </a>
                         </li>
                     {% endfor %}
                 {% endfor %}
