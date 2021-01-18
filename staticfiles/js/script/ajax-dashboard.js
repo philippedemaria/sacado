@@ -194,6 +194,32 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         });
 
 
+
+
+        $('#tools').click(function(event) {
+          if ($('#notification-tools').hasClass('dismiss')) {
+            $('#notification-tools').removeClass('dismiss').addClass('selected').show();
+            $('#notification-account').removeClass('selected').addClass('dismiss');
+            $('#notification-admin').removeClass('selected').addClass('dismiss');
+          }
+          event.preventDefault();
+        });
+
+
+
+        $('#closeTools').click(function(event) {
+          if ($('#notification-tools').hasClass('selected')) {
+            $('#notification-tools').removeClass('selected').addClass('dismiss');
+          }
+          event.preventDefault();
+        });
+
+
+
+
+
+
+
         var pub = 0 ;
 
         $('#admin').click(function(event) { 

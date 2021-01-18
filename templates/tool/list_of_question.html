@@ -1,0 +1,29 @@
+{% load static %}
+
+<li class="sorted_list {% if question %}{% if not question.is_publish %} no_published {% endif %}{% endif %}">
+	<input type="hidden" value="{{ question.id }}" class="sorted_question_id"   />
+    <div class="row"> 
+        <div class="col-xs-12 col-md-12">
+            <label>{{ forloop.counter }}. {{ question.title|truncatechars:"20"}} {% if question %}{% if not question.is_publish %} <i class="fa fa-eye-slash"></i> {% endif %}{% endif %}</label>
+        </div>
+    </div>
+    <div class="row"> 
+        <div class="col-xs-2 col-md-2" class="delete_question_div"><hr style="border-color: transparent"/>
+
+            <a href="#" class="update_question delete_question" data-question_id="{{ question.id }}"  data-quizz_id="{{ quizz.id }}"  data-kind="{{ question.kind }}"   ><i class="fa fa-edit"></i></a> 
+
+            <a href="{% url 'delete_question' question.id quizz.id %}"  class="delete_question" onclick="return TestDelete('cette question')"><i class="fa fa-trash"></i></a>
+        </div>
+        <div class="col-xs-10 col-md-30">
+            {% if question.kind == 1 %}
+                <img src="{% static 'img/quizz_thumb_vf.png' %}" width="90%" />
+            {% elif question.kind == 2 %}
+                <img src="{% static 'img/quizz_thumb_type.png' %}" width="90%" />
+            {% elif question.kind == 3 %}
+                <img src="{% static 'img/quizz_thumb_qcm.png' %}" width="90%" />
+            {% elif question.kind == 4 %} 
+                <img src="{% static 'img/quizz_thumb_qcs.png' %}" width="90%" />
+            {% endif   %}  
+        </div>
+    </div>
+</li>

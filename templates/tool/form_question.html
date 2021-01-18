@@ -1,0 +1,122 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script>
+        require(['script/ajax-quizz']);
+    </script> 
+{% endblock %}
+ 
+
+{% block page_title %}
+   Outils pédagogiques 
+   <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small>Créateur de quizz</small> 
+   <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small>{{ quizz.title }}</small>
+   <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small><span id="type_of_question_in_title"></span></small>
+{% endblock %}
+
+
+{% block page_menu_right %}
+
+    <a href="{% url 'show_quizz' quizz.id %}" target="_blank" class="btn btn-new">Voir le quizz</a>
+{% endblock %}
+
+
+
+{% block body %}
+<link rel="stylesheet" href="{% static 'css/uploader.css' %}">
+<section class="content_main"> 
+
+        <div class="row">
+            <div class="col-sm-12 col-md-2">
+                <form action="#" method="POST"  >
+                    <div class="list_question">
+                        <ul id="questions_sortable_list">
+                            {% for question in questions %}
+                                {% include 'tool/list_of_question.html' %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </form>
+                 <div class="question_bank" >
+                    <a href="#" data-toggle='modal' data-target='#question_choice' class="btn btn-question full_width" >Banque de questions</a> 
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-md-10" >  
+ 
+                <form action="#" method="POST" id="question_form" enctype='multipart/form-data'>
+                <input type="hidden" name="quizz_id" id="quizz" value="{{ quizz.id }}" />  
+                    <div  id="body_question"> 
+                    {% include 'tool/type_of_question.html' %}
+                    </div>
+                </form>
+
+            </div>
+        </div>
+  
+</section>
+
+
+<div class="modal fade" id="question_choice" tabindex="-1" role="dialog" aria-labelledby="quizz_choice">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h1 class='thin'  >Création du quizz</h1>
+            </div>
+            <div class="modal-body">
+                <form action="#" method="POST"  enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6"> 
+                            <a href="#" data-value="0" class="selector_question close" data-dismiss="modal" aria-label="Close">
+                                <div class="card">
+                                    Vrai / Faux
+                                </div>
+                            </a>
+                        </div>    
+                        <div class="col-sm-12 col-md-6">
+                            <a href="#" data-value="1" class="selector_question close" data-dismiss="modal" aria-label="Close">
+                                <div class="card">
+                                    Réponse rédigée
+                                </div>
+                            </a>
+                        </div>    
+                        <div class="col-sm-12 col-md-6"> 
+                            <a href="#" data-value="2" class="selector_question close" data-dismiss="modal" aria-label="Close">
+                                <div class="card">
+                                    QCM
+                                </div>
+                            </a>
+                        </div>    
+                        <div class="col-sm-12 col-md-6"> 
+                            <a href="#" data-value="3" class="selector_question close" data-dismiss="modal" aria-label="Close">
+                                <div class="card">
+                                    QCS
+                                </div>
+                            </a>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12"> 
+                            <div class="form-group">
+                                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                            </div>
+                        </div>    
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %} 

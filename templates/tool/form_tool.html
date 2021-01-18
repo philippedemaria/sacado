@@ -1,0 +1,78 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+{% endblock %}
+
+ 
+
+{% block page_title %}
+    Nouvel outil
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+
+            <a href="{% url 'list_tools' %}" class="btn btn-new pull-right">Liste de outils</a>  
+ 
+{% endblock %}
+
+ 
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+    <form action="" method="POST"  enctype='multipart/form-data'>
+
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-sm-12 col-lg-12">
+
+                <div class="form-group">  
+                    {{ form.title.label_tag }}  
+                    {{ form.title|add_class:"form-control"   }}
+                    {{ form.title.errors }} 
+                </div>
+                <div class="form-group">
+                    {{ form.remark.label_tag }} <em>50 caractères max.</em><br>
+                    {{ form.remark   }}
+                    {{ form.remark.errors }} 
+                </div>
+                <div class="form-group">
+                    {{ form.imagefile.label_tag }} <br>
+                    {{ form.imagefile|add_class:"btn btn-default"  }}
+                    {{ form.imagefile.errors }} 
+                </div>
+ 
+                <div class="row">
+                    <div class="col-sm-12 col-lg-8">
+                        <div class="form-group">
+                            <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+                            <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                                       class="btn btn-default "/></a>
+                        </div>
+                    </div>
+                    {% if tool and request.user.user_type == 2 %}
+                    <div class="col-sm-12 col-md-4">
+                        <div class="form-group">
+                            <a href="{% url 'delete_tool' tool.id %}" class="btn btn-danger"  onclick="return TestDelete('cet outil')">Supprimer cet outil</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+ 
+        </div>
+    </form>  
+</section>
+{% endblock %} 

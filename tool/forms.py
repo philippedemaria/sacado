@@ -1,0 +1,83 @@
+import datetime
+from django import forms
+from .models import Tool , Question  , Choice  , Quizz
+from account.models import Student , Teacher
+from socle.models import Knowledge, Skill
+from group.models import Group
+from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
+from django.forms import MultiWidget, TextInput , CheckboxInput
+from django.template.defaultfilters import filesizeformat
+from django.conf import settings
+
+from itertools import groupby
+from django.forms.models import ModelChoiceIterator, ModelChoiceField, ModelMultipleChoiceField
+
+
+def validation_file(content):
+	if content :
+		content_type = content.content_type.split('/')[0]
+		if content_type in settings.CONTENT_TYPES:
+			if content._size > settings.MAX_UPLOAD_SIZE:
+				raise forms.ValidationError("Taille max : {}. Taille trop volumineuse {}".format(filesizeformat(settings.MAX_UPLOAD_SIZE), filesizeformat(content._size)))
+		else:
+			raise forms.ValidationError("Type de fichier non accepté")
+		return content
+
+
+class ToolForm(forms.ModelForm):
+
+ 
+	class Meta:
+		model = Tool
+		fields = '__all__'
+
+ 
+
+ 
+
+class QuestionForm(forms.ModelForm):
+
+	class Meta:
+		model = Question
+		fields = '__all__'
+		widgets = {
+            'is_correct' : CheckboxInput(),   
+        }
+
+	def clean_content(self):
+		content = self.cleaned_data['imagefile']
+		validation_file(content)  
+
+
+
+class QuizzForm(forms.ModelForm):
+ 
+	class Meta:
+		model = Quizz
+		fields = '__all__'
+
+	def __init__(self, *args, **kwargs):
+		teacher = kwargs.pop('teacher')
+		super(QuizzForm, self).__init__(*args, **kwargs)
+ 
+		self.fields['levels'] = forms.ModelMultipleChoiceField(queryset=teacher.levels.all(), required=False)
+		self.fields['subject'] = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)
+ 
+ 
+
+	def clean_content(self):
+		content = self.cleaned_data['imagefile']
+		validation_file(content) 
+
+
+
+
+class ChoiceForm(forms.ModelForm):
+	class Meta:
+		model = Choice
+		fields = '__all__'
+ 
+
+	def clean_content(self):
+		content = self.cleaned_data['imagefile']
+		validation_file(content) 
