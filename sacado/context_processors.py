@@ -67,20 +67,14 @@ def menu(request):
 
 
     else:
-        nb_teacher = Teacher.objects.all().count()
-        nb_exercise = Exercise.objects.all().count()
-        nb_student = Student.objects.all().count()
-        nb_parcours = Parcours.objects.all().count()
+ 
+ 
+ 
         contributeurs = User.objects.filter(is_superuser=1)
-        nb_school = School.objects.all().count()
-        schools = School.objects.all()
+ 
+ 
         return {
-            'nb_teacher': nb_teacher,
-            'nb_exercise': nb_exercise,
-            'nb_student': nb_student,
-            'nb_parcours': nb_parcours,
+ 
             'contributeurs': contributeurs,
-            'nb_school' : nb_school,
-            'schools' : schools,
   
         }

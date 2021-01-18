@@ -4,12 +4,13 @@ from django.contrib.auth.forms import  UserCreationForm,  AuthenticationForm
 from account.forms import  UserForm, TeacherForm, StudentForm , BaseUserFormSet
 from django.contrib.auth import   logout
 from account.models import  User, Teacher, Student  ,Parent , Adhesion
-from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise
+from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise, Customanswerbystudent,Writtenanswerbystudent
 from group.models import Group, Sharing_group
 from group.views import student_dashboard
 from setup.models import Formule
 from school.models import Stage
 from sendmail.models import Communication
+from school.models import School
 from socle.models import Level
 from django.http import JsonResponse
 from django.core.mail import send_mail
@@ -145,14 +146,23 @@ def index(request):
         except:
             pass
 
+        nb_teacher = Teacher.objects.all().count()
+        nb_student = Student.objects.all().count()
+
+        schools = School.objects.all()
+
+        today_start = datetime.date(datetime.now())
+        print(today_start)
+        nb_student_answers = Studentanswer.objects.filter(date__gte= today_start).count() + Customanswerbystudent.objects.filter(date__gte= today_start).count() + Writtenanswerbystudent.objects.filter(date__gte= today_start).count()
+        
         exercise_nb = Exercise.objects.filter(supportfile__is_title=0).count()
-        exercises = Exercise.objects.filter(supportfile__is_title=0)
+        exercises = Exercise.objects.filter(supportfile__is_title=0, supportfile__is_ggbfile = 1 )
 
         i = random.randint(1, len(exercises))
         exercise = exercises[i]
 
-        context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 
-                   'cookie': cookie, 'nb_exercise': exercise_nb, 'exercise': exercise, }
+        context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 'schools' : schools,'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,
+                   'cookie': cookie, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, }
 
 
 
