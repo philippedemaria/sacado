@@ -51,7 +51,7 @@
             <div class="col-sm-12 col-md-10" >  
  
                 <form action="#" method="POST" id="question_form" enctype='multipart/form-data'>
-                <input type="hidden" name="quizz_id" id="quizz" value="{{ quizz.id }}" />  
+                <input type="hidden" name="quizz_id" id="quizz_id" value="{{ quizz.id }}" />{% csrf_token %}  
                     <div  id="body_question"> 
                     {% include 'tool/type_of_question.html' %}
                     </div>

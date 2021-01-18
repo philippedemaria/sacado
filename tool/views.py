@@ -189,18 +189,9 @@ def list_questions(request):
  
 def create_question(request,id):
  
-    form = QuestionForm(request.POST or None, request.FILES or None )
     quizz = Quizz.objects.get(pk = id)
     questions = quizz.questions.order_by("ranking")
-
-    if form.is_valid():
-        nf.save()
-
-        return redirect('create_question')
-    else:
-        print(form.errors)
-
-    context = {'form': form, 'quizz': quizz, 'questions': questions, }
+    context = { 'quizz': quizz, 'questions': questions, }
 
     return render(request, 'tool/form_question.html', context)
 
@@ -227,23 +218,25 @@ def show_question(request,id):
 def get_question_type(request):
 
     data = {} 
-    value = int(request.POST.get("value"))
+    kind = int(request.POST.get("kind"))
+
+    print(kind)
 
     type_tab = ["","Vrai/Faux","Réponse rédigée",'QCM',"QCS"]
 
     classes = []
-    if value == 1 :
+    if kind == 1 :
         classes = [ {"bgcolor" : "bgcolorBlue" ,"texte" : "VRAI" } , { "bgcolor" :"bgcolorRed","texte" : "FAUX" } ]
 
-    elif value > 2 :
+    elif kind > 2 :
         classes = ["bgcolorRed","bgcolorBlue","bgcolorOrange","bgcolorGreen"] 
 
 
-    context = { 'value' : value , 'classes' : classes }
+    context = { 'kind' : kind , 'classes' : classes }
 
     data['html'] = render_to_string('tool/type_of_question.html', context)
 
-    data['title'] = type_tab[value]
+    data['title'] = type_tab[kind]
 
     return JsonResponse(data)
 
@@ -251,25 +244,22 @@ def get_question_type(request):
 def get_an_existing_question(request):
 
     data = {} 
-    value = int(request.POST.get("value"))
+    kind = int(request.POST.get("kind"))
     question_id = int(request.POST.get("question_id"))
     question = Question.objects.get(pk= question_id)
     type_tab = ["","Vrai/Faux","Réponse rédigée",'QCM',"QCS"]
     quizz_id = int(request.POST.get("quizz_id"))
 
 
-    context = {  'value' : value ,  'question' : question ,    }
+    context = {  'kind' : kind ,  'question' : question ,    }
 
     data['html'] = render_to_string('tool/type_of_question.html', context)
 
-    data['title'] = type_tab[value]
+    data['title'] = type_tab[kind]
 
 
 
     return JsonResponse(data)
-
-
-
 
 
 
@@ -278,7 +268,7 @@ def send_question(request):
 
  
     data_posted = request.POST
-    type_of_question = int(data_posted.get("value"))
+    kind = int(data_posted.get("kind"))
     quizz_id = int(data_posted.get("quizz_id"))
 
     title =  cleanhtml(unescape_html(data_posted.get("title")) )
@@ -300,24 +290,30 @@ def send_question(request):
 
     quizz =  Quizz.objects.get(pk = quizz_id)
 
-    if type_of_question == 1 : # Vrai/Faux
+    ##Donne le rang du dernier slide et compte le nombre de slide pour ajouter 1 pour afficher le numéro de la suivante.
+    list_questions = quizz.questions.order_by("ranking")
+    last_question = list_questions.last()
+    ranking = int(last_question.ranking) + 1
+    nbq = list_questions.count()  + 1
+
+    if kind == 1 : # Vrai/Faux
         is_correct = data_posted.get("is_correct",None)  
         if is_correct == 1 :
             is_correct = True
         else :
             is_correct = False
-        question = Question.objects.create(title=title, duration= duration , point= point , calculator= calculator  ,imagefile=imagefile ,  is_publish=is_publish , kind=type_of_question , is_correct = is_correct )
+        question = Question.objects.create(title=title, duration= duration , point= point , calculator = calculator  ,imagefile=imagefile ,  is_publish=is_publish , kind=kind , ranking=ranking , is_correct = is_correct )
 
 
-    elif type_of_question == 2 : # Réponse tapée
+    elif kind == 2 : # Réponse tapée
         answer =  data_posted.get("answer") 
-        question = Question.objects.create(title=title, duration= duration , point= point , calculator= calculator  ,imagefile=imagefile ,  is_publish=is_publish , kind=type_of_question  )
-        Choice.objects.get_or_create(answer=answer, imageanswer = None , is_correct = 1)
-
+        question = Question.objects.create(title=title, duration= duration , point= point , calculator= calculator  ,imagefile=imagefile ,  is_publish=is_publish , kind=kind , ranking=ranking  )
+        choice = Choice.objects.create(answer=answer, imageanswer = None , is_correct = 1)
+        question.choices.add(choice)    
 
     else : # QCM
         answers =  data_posted.getlist("answers")
-        question = Question.objects.create(title=title, duration= duration , point= point , calculator= calculator  ,imagefile=imagefile ,  is_publish=is_publish , kind=type_of_question   )
+        question = Question.objects.create(title=title, duration= duration , point= point , calculator= calculator  ,imagefile=imagefile ,  is_publish=is_publish , kind=kind , ranking=ranking  )
 
         is_correct_tab =  data_posted.getlist("is_correct")
         i=1
@@ -326,14 +322,14 @@ def send_question(request):
                 is_correct = True
             else :
                 is_correct = False
-            Choice.objects.get_or_create(answer=answer, imageanswer = None , is_correct = is_correct)
+            choice = Choice.objects.create(answer=answer, imageanswer = None , is_correct = is_correct)
             question.choices.add(choice)
             i+=1
 
-    question.quizzes.add(quizz)     
-
-    context = {  'value' : 0 ,    }
-    context_liste = {  'question' : question ,  'quizz' : quizz ,  }
+    question.quizzes.add(quizz)
+   
+    context = {  'kind' : 0 ,    }
+    context_liste = {  'question' : question ,  'quizz' : quizz , 'from_ajax' : True , 'nbq' : nbq }
 
     data = {}
     data['html'] = render_to_string('tool/type_of_question.html', context)
@@ -344,7 +340,7 @@ def send_question(request):
 
 
 
-@csrf_exempt
+@csrf_exempt  
 def ajax_update_question(request):
 
  
@@ -422,7 +418,7 @@ def ajax_update_question(request):
             Choice.objects.filter(pk = choice.id).update(answer=answers[i], imageanswer = None , is_correct = is_correct)    
             i+=1
  
-    context = {  'value' : 0 ,    }
+    context = {  'kind' : 0 ,    }
     context_liste = {  'question' : question ,  'quizz' : quizz ,  }
 
     data = {}
@@ -435,17 +431,7 @@ def ajax_update_question(request):
 
 
 
-
-
-
-
-
-
-
-
-
- 
-@csrf_exempt # tri les questions
+@csrf_exempt 
 def question_sorter(request):  
     try :
         question_ids = request.POST.get("valeurs")

@@ -64,7 +64,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
         // Affiche dans la modal le modèle pour récupérer un exercice custom
         $('body').on('click', '.selector_question' , function (event) {
 
-            let value = $(this).attr("data-value");
+            let kind = $(this).attr("data-kind");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
             $.ajax(
@@ -72,7 +72,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
                     type: "POST",
                     dataType: "json",
                     data: {
-                        'value': value,
+                        'kind': kind,
                         csrfmiddlewaretoken: csrf_token
                     },
                     url: "../get_question_type",
@@ -114,10 +114,10 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
                     url: "../send_question",
                     success: function (data) {
 
-                        console.log(data.question) ;
+ 
 
                         $('#body_question').html(data.html);
-                        $('#list_question').append(data.question);
+                        $('#questions_sortable_list').append(data.question);
 
  
                     }
@@ -150,32 +150,12 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
 
         }
 
-
         checked_and_checked( '#checking_zone1' ,  '#check1', "#id_is_correct1", '#noCheck1') ;
         checked_and_checked( '#checking_zone2' ,  '#check2', "#id_is_correct2", '#noCheck2') ;
         checked_and_checked( '#checking_zone3' ,  '#check3', "#id_is_correct3", '#noCheck3') ;
         checked_and_checked( '#checking_zone4' ,  '#check4', "#id_is_correct4", '#noCheck4') ;
 
  
-
-
-
-
-
-
-        $('body').on('click', "#span_wrong2" , function (event) {    
-              checked_and_no_checked("#id_answer2_is_correct", '#span_wrong2', '#circle2') ;
-        });
-        $('body').on('click', "#span_wrong3" , function (event) {    
-              checked_and_no_checked("#id_answer3_is_correct", '#span_wrong3', '#circle3') ;
-        });
-        $('body').on('click', "#span_wrong4" , function (event) {    
-              checked_and_no_checked("#id_answer4_is_correct", '#span_wrong4', '#circle4') ;
-        });
- 
-
- 
-         
 
 
         function change_bg_and_select( cible, cible_div , classe ){
@@ -185,21 +165,21 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
 
                 if (  comment.length > 0   )
                 { 
-                  $(cible_div).css("background-color","#e21b3c") ; 
+                  $(cible_div).addClass(classe) ; 
                   $(cible).css("color","white") ;
                 }
                 else
                 {
-                   $(cible_div).css("background-color","transparent") ; 
+                   $(cible_div).removeClass(classe) ; 
                   $(cible).css("color","#666") ;
                 }
              });
         }
 
-       change_bg_and_select( "#answer1", "#answer1_div" , "#e21b3c" );
-       change_bg_and_select( "#answer2", "#answer2_div" , "bgColorBlue" );
-       change_bg_and_select( "#answer3", "#answer3_div" , "bgColorOrange" );
-       change_bg_and_select( "#answer4", "#answer4_div" , "bgColorGreen" );
+       change_bg_and_select( "#answer1", "#answer1_div" , "bgcolorRed" );
+       change_bg_and_select( "#answer2", "#answer2_div" , "bgcolorBlue" );
+       change_bg_and_select( "#answer3", "#answer3_div" , "bgcolorOrange" );
+       change_bg_and_select( "#answer4", "#answer4_div" , "bgcolorGreen" );
 
 
 
@@ -273,7 +253,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
                     data: {
                         'quizz_id': quizz_id,
                         'question_id': question_id,
-                        'value': kind,
+                        'kind': kind,
                         csrfmiddlewaretoken: csrf_token
                     },
                     url: "../get_an_existing_question",

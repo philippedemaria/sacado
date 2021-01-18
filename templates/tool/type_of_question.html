@@ -3,12 +3,12 @@
 {% load widget_tweaks %}
 {% load item_tags %}
 
-<input type="hidden" name="value" id="value" value="{{value}}"   /> 
-
-{% if value == 0 or not value %}
+<input type="hidden" name="kind" id="kind" value="{{ kind }}"   /> 
+      
+{% if kind == 0 or not kind %}
 <div class="row"   >
     <div class="col-sm-12 col-md-6" align="center"> 
-        <a href="#" data-value="1" class="selector_question" >
+        <a href="#" data-kind="1" class="selector_question" >
             <div class="quizz_card">
                 <h1>Vrai / Faux</h1>
                 <i class="fa fa-check text-success fa-2x"></i>                <i class="fa fa-times text-danger fa-2x"></i>
@@ -16,7 +16,7 @@
         </a>
     </div>    
     <div class="col-sm-12 col-md-6" align="center">
-        <a href="#" data-value="2" class="selector_question">
+        <a href="#" data-kind="2" class="selector_question">
             <div class="quizz_card">
                 <h1>Réponse rédigée</h1>
                 <i class="fa fa-edit fa-5x"></i>
@@ -26,7 +26,7 @@
     </div>
 <div class="row" >
     <div class="col-sm-12 col-md-6" align="center"> 
-        <a href="#" data-value="3" class="selector_question">
+        <a href="#" data-kind="3" class="selector_question">
             <div class="quizz_card">
                 <h1>QCM</h1>
                 <i class="fa fa-check text-success"></i> -------- <br/> 
@@ -37,7 +37,7 @@
         </a>
     </div>    
     <div class="col-sm-12 col-md-6" align="center"> 
-        <a href="#" data-value="4" class="selector_question">
+        <a href="#" data-kind="4" class="selector_question">
             <div class="quizz_card">
                 <h1>QCS</h1>
                 <i class="fa fa-times text-danger"></i> -------- <br/>
@@ -59,7 +59,7 @@
     <div class="col-sm-6 col-md-2" align="center" >  
         <div class="quizz_assets">
             <label>Durée</label><br/>
-            <input type="number" step="5"  min="50" class="quizz_input quizz_input50" name="duration" id="id_duration" value="{% if question %}{{ question.duration  }}{% else %}20{% endif %}"   ><label>s. </label>
+            <input type="number" step="5"  min="5" class="quizz_input quizz_input50" name="duration" id="id_duration" value="{% if question %}{{ question.duration  }}{% else %}20{% endif %}"   ><label>s. </label>
         </div>
         <div class="quizz_assets">
             <label>Point</label><br>
@@ -69,11 +69,11 @@
     <div class="col-sm-6 col-md-2" align="center" > 
         <div class="quizz_assets">
            <label>Calculatrice</label><br>
-           <input  type="checkbox"  name="calculator" id="id_calculator" {% if question %}{% if question.calculator  %}checked{% endif %}{% endif %}  />
+           <input  type="checkbox"  name="calculator" id="id_calculator" value="1"  {% if question %}{% if question.calculator  %}checked{% endif %}{% endif %}  />
         </div>
         <div class="quizz_assets">
             <label>Publication</label><br>
-            <input type="checkbox" name="is_publish" id="id_is_publish" {% if question %}{% if question.is_publish  %}checked{% endif %}{% endif %}  />
+            <input type="checkbox" name="is_publish" id="id_is_publish" value="1"  {% if question %}{% if question.is_publish  %}checked{% endif %}{% endif %}  />
         </div>
     </div>
     <div class="col-sm-12 col-md-8" align="center" > 
@@ -86,7 +86,7 @@
 </div>
 
 <div class="row margin40" >
-      {% if value == 1 %} <!-- VRAI / FAUX -->
+      {% if kind == 1 %} <!-- VRAI / FAUX -->
 
           {% for classe in classes %} 
           <div class="col-sm-6 col-md-6 quizz_line_answer">  
@@ -109,7 +109,7 @@
 
 
 
-      {% elif value == 2 %} <!-- Réponse rédigée -->
+      {% elif kind == 2 %} <!-- Réponse rédigée -->
           <div class="col-sm-12 col-md-12" align="center">  
               <textarea class="quizz_font30 quizz_box_answer" name="answers" id="answer{{ forloop.counter }}" placeholder="Ecrire la réponse attendue"></textarea>
           </div>
@@ -140,10 +140,10 @@
 </div>
 <div class="col-sm-12 col-md-12 quizz_submit">
     <div class="form-group">
-        <input value="Enregistrer cette question" type="submit" class="btn btn-primary btn-lg"/>
+        <a href="#" id="submit_question" class="btn btn-primary btn-lg" >Enregistrer cette question</a>
 
  
-        <a href="#" data-value="0" class="btn btn-default selector_question">Changer de type de question</a>
+        <a href="#" data-kind="0" class="btn btn-default  btn-lg selector_question">Changer de type de question</a>
 
 
     </div>

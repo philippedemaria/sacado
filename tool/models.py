@@ -106,7 +106,7 @@ class Question(models.Model):
 
     is_correction = models.BooleanField(default=0, verbose_name="Correction ?")
 
-    quizzes = models.ManyToManyField(Quizz,    related_name="questions",  verbose_name="Enseignant en co-animation") 
+    quizzes = models.ManyToManyField(Quizz, blank=True,    related_name="questions" , editable=False) 
 
     duration = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
     point = models.PositiveIntegerField(default=1000, blank=True, verbose_name="Point")
