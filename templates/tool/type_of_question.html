@@ -1,0 +1,159 @@
+ 
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% if value == 0 %}
+
+ 
+<div class="row" >
+    <div class="col-sm-12 col-md-6"> 
+        <a href="#" data-value="1" class="selector_question" >
+            <div class="card">
+                Vrai / Faux
+            </div>
+        </a>
+    </div>    
+    <div class="col-sm-12 col-md-6">
+        <a href="#" data-value="2" class="selector_question">
+            <div class="card">
+                Réponse rédigée
+            </div>
+        </a>
+    </div>    
+    </div>
+<div class="row" >
+    <div class="col-sm-12 col-md-6"> 
+        <a href="#" data-value="3" class="selector_question">
+            <div class="card">
+                QCM
+            </div>
+        </a>
+    </div>    
+    <div class="col-sm-12 col-md-6"> 
+        <a href="#" data-value="4" class="selector_question">
+            <div class="card">
+                QCS
+            </div>
+        </a>
+    </div>   
+</div>
+
+{% else %}
+<div class="row" >
+    <div class="col-sm-12 col-md-12" >  
+        <textarea class="quizz_box quizz_font40" name="title" id="id_title" placeholder="Ecrire votre question ici">{% if question %}{{ question.title  }}{% endif %}</textarea>
+    </div>
+</div>
+<div class="row margin40" >
+    <div class="col-sm-6 col-md-2" align="center" >  
+        <div class="quizz_assets">
+            <label>Durée</label><br/>
+            <input type="number" step="5"  min="50" class="quizz_input quizz_input50" name="duration" id="id_duration" value="{% if question %}{{ question.duration  }}{% else %}20{% endif %}"   ><label>s. </label>
+        </div>
+        <div class="quizz_assets">
+            <label>Point</label><br>
+            <input type="number" step="200"  min="200"  max="2000" class="quizz_input" name="point" id="id_point" value="{% if question %}{{ question.point  }}{% else %}1000{% endif %}" />
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-2" align="center" > 
+        <div class="quizz_assets">
+           <label>Calculatrice</label><br>
+           <input  type="checkbox"  name="calculator" id="id_calculator" {% if question %}{% if question.calculator  %}checked{% endif %}{% endif %}  />
+        </div>
+        <div class="quizz_assets">
+            <label>Publication</label><br>
+            <input type="checkbox" name="is_publish" id="id_is_publish" {% if question %}{% if question.is_publish  %}checked{% endif %}{% endif %}  />
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-8" align="center" > 
+        <div id="drop_zone" class="drop-zone">
+          <p class="title">Déposer votre image ici <br/><i class="fa fa-file-image-o"></i></p>
+          <div class="preview-container"></div>
+        </div>
+        <input id="id_imagefile"  type="file" multiple="" name="testfile">
+    </div>  
+</div>
+
+<div class="row margin40" >
+      {% if value == 1 %} <!-- VRAI / FAUX -->
+
+          {% for classe in classes %} 
+          <div class="col-sm-6 col-md-6 quizz_line_answer">  
+              <div class="row quizz_box_answer {{ classe }}" id="answer{{ forloop.counter }}_div">
+                  <div class="col-sm-2 col-md-1"> 
+                  </div>
+                  <div class="col-sm-8 col-md-9"> 
+                       
+                  </div>
+                  <div class="col-sm-2 col-md-2 checking_zone"> 
+                      <span class="noCheck" id="noCheck{{ forloop.counter }}"><i class="fa fa-circle fa-3x white"></i></span>
+                      <input type="checkbox" class="checkbox_no_display"  name="is_correct" id="id_is_correct{{ forloop.counter }}" {% if question %}{% if question.is_correct  %}checked{% endif %}{% endif %}  />
+                      <span class="check" id="check{{ forloop.counter }}" ><i class="fa fa-check-circle fa-3x white"></i></span>
+                  </div>
+
+              </div>
+          </div>
+          {% endfor %}
+
+
+
+
+      {% elif value == 2 %} <!-- Réponse rédigée -->
+          <div class="col-sm-12 col-md-12" align="center">  
+              <textarea class="quizz_font30 quizz_box_answer" name="answers" id="answer{{ forloop.counter }}" placeholder="Ecrire la réponse attendue"></textarea>
+          </div>
+      {% else %} <!-- QCM/QCS -->
+
+          {% for classe in classes %} 
+          <div class="col-sm-6 col-md-6 quizz_line_answer">  
+              <div class="row quizz_box_answer" id="answer{{ forloop.counter }}_div">
+                  <div class="col-sm-2 col-md-1 {{ classe }}"> 
+                  </div>
+                  <div class="col-sm-8 col-md-9"> 
+                      <textarea class="quizz_font30 quizz_answer" name="answers" id="answer{{ forloop.counter }}" placeholder="Ecrire votre réponse ici"></textarea>
+                  </div>
+
+                  <div class="col-sm-2 col-md-2 checking_zone"> 
+                      <span class="noCheck" id="noCheck{{ forloop.counter }}"><i class="fa fa-circle fa-3x white"></i></span>
+                      <input type="checkbox" class="checkbox_no_display"  name="is_correct" id="id_is_correct{{ forloop.counter }}" {% if question %}{% if question.is_correct  %}checked{% endif %}{% endif %}  />
+                      <span class="check" id="check{{ forloop.counter }}" ><i class="fa fa-check-circle fa-3x white"></i></span>
+                  </div>
+
+              </div>
+          </div>
+          {% endfor %}
+
+      {% endif %}
+
+
+</div>
+<div class="col-sm-12 col-md-12 quizz_submit">
+    <div class="form-group">
+        <input value="Enregistrer cette question" type="submit" class="btn btn-primary btn-lg"/>
+
+ 
+        <a href="#" data-value="0" class="btn btn-default selector_question">Changer de type de question</a>
+
+
+    </div>
+</div> 
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="{% static 'js/lib/jquery.smartuploader.js' %}"></script>
+<script>
+$("#id_imagefile").withDropZone("#drop_zone", {
+  action: {
+    name: "image",
+    params: {
+      preview: true,
+    }
+  },
+});
+</script>
+
+{% endif %} 

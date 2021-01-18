@@ -35,7 +35,7 @@
         <div class="row">
             <div class="col-sm-12 col-md-2">
                 <form action="#" method="POST"  >
-                    <div class="list_question">
+                    <div class="quizz_list_question">
                         <ul id="questions_sortable_list">
                             {% for question in questions %}
                                 {% include 'tool/list_of_question.html' %}
@@ -44,7 +44,7 @@
                     </div>
                 </form>
                  <div class="question_bank" >
-                    <a href="#" data-toggle='modal' data-target='#question_choice' class="btn btn-question full_width" >Banque de questions</a> 
+                    <a href="#" data-toggle='modal' data-target='#question_choice' class="btn btn-quizz_bank" >Banque de questions</a> 
                 </div>
             </div>
 
@@ -53,7 +53,7 @@
                 <form action="#" method="POST" id="question_form" enctype='multipart/form-data'>
                 <input type="hidden" name="quizz_id" id="quizz" value="{{ quizz.id }}" />  
                     <div  id="body_question"> 
- 
+                    {% include 'tool/type_of_question.html' %}
                     </div>
                 </form>
 

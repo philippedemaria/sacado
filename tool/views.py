@@ -228,12 +228,17 @@ def get_question_type(request):
 
     data = {} 
     value = int(request.POST.get("value"))
+
     type_tab = ["","Vrai/Faux","Réponse rédigée",'QCM',"QCS"]
 
-    form = QuestionForm(request.POST or None, request.FILES or None )
-    form_choice = ChoiceForm(request.POST or None, request.FILES or None )
+    classes = []
+    if value == 1 :
+        classes = ["bgcolorBlue" , "bgcolorRed"]
+    elif value > 2 :
+        classes = ["bgcolorRed","bgcolorBlue","bgcolorOrange","bgcolorGreen"] 
 
-    context = { 'form' : form , 'value' : value ,  'form_choice' : form_choice ,  }
+
+    context = { 'value' : value , 'classes' : classes }
 
     data['html'] = render_to_string('tool/type_of_question.html', context)
 
@@ -252,11 +257,7 @@ def get_an_existing_question(request):
     quizz_id = int(request.POST.get("quizz_id"))
 
 
- 
-    form = QuestionForm(request.POST or None, request.FILES or None, instance=question )
- 
-
-    context = { 'form' : form , 'value' : value ,  'question' : question ,    }
+    context = {  'value' : value ,  'question' : question ,    }
 
     data['html'] = render_to_string('tool/type_of_question.html', context)
 

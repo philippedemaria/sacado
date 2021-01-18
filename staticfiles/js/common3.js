@@ -35,7 +35,7 @@ requirejs.config({
         popper: 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min',
         fonctions_jquery: "script/fonctions-jquery",
         fonctions: "script/fonctions",
-
+        uploader: "lib/jquery.smartuploader",
     },
     shim: {
         "bootstrap": {
@@ -66,7 +66,9 @@ requirejs.config({
         "bcPicker": {
             deps: ['jquery',]
         },
-
+        "uploader": {
+            deps: ['jquery',]
+        },
         mathjax: {
             exports: "MathJax",
             init: function () {
@@ -87,4 +89,4 @@ requirejs.config({
     }
 });
 
-require(['jquery', 'bootstrap', 'bootstrap_popover', 'bcPicker', 'mathjax',  'datatables', 'datatables_bootstrap',  'ckeditor', 'ckeditor_init', 'config_select2', 'config_datepicker', 'config_toggle',  'config_colorpicker', 'fonctions_jquery', 'fonctions',   'config_datatable', 'multiselect', 'ui',]);
+require(['jquery', 'bootstrap', 'uploader', 'bootstrap_popover', 'bcPicker', 'mathjax',  'datatables', 'datatables_bootstrap',  'ckeditor', 'ckeditor_init', 'config_select2', 'config_datepicker', 'config_toggle',  'config_colorpicker', 'fonctions_jquery', 'fonctions',   'config_datatable', 'multiselect', 'ui',]);

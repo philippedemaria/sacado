@@ -1,4 +1,4 @@
-define(['jquery',  'bootstrap', 'ui' , 'ui_sortable'], function ($) {
+define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($) {
     $(document).ready(function () {
  
     $("#loading").hide(500); 
@@ -125,27 +125,44 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable'], function ($) {
             )
          });
  
+ 
 
-        function checked_and_no_checked(cible, span_wrong, circle){ 
-                if($(cible).is(":checked"))  
-                    {  console.log("checked --> no checked") ;
-                        $(cible).removeAttr('checked') ;
-                        $(span_wrong).children().addClass("selected_check");
-                        $(circle).children().removeClass("selected_checked");
+
+        function checked_and_checked(clic, check, cible,  nockeck){ 
+
+            $('body').on('click', clic , function (event) {     console.log( $(cible).is(":checked") ) ;
+
+                if( $(cible).is(":checked")  )  
+                    {   
+                        $(cible).removeAttr("checked");
+                        $(check).removeAttr("style");
+                        $(nockeck).removeAttr("style");
+                        console.log("il est no checked"  ) ;
                     } 
                 else 
-                    {  console.log("no checked --> checked") ;
-                        $(cible).attr('checked',true) ;
-                        $(span_wrong).children().removeClass("selected_check");
-                        $(circle).children().addClass("selected_checked");
+                    {   
+                        $(cible).attr("checked",true);
+                        $(check).css("display","block");
+                        $(nockeck).css("display","none");
+                        console.log( "il est   checked"  ) ;
                     }
- 
+            });
+
         }
 
 
-        $('body').on('click', "#span_wrong1" , function (event) {    
-              checked_and_no_checked("#id_answer1_is_correct", '#span_wrong1', '#circle1') ;
-        });
+        checked_and_checked( '.checking_zone' ,  '#check1', "#id_is_correct1", '#noCheck1') ;
+        checked_and_checked( '.checking_zone' ,  '#check2', "#id_is_correct2", '#noCheck2') ;
+        checked_and_checked( '.checking_zone' ,  '#check3', "#id_is_correct3", '#noCheck3') ;
+        checked_and_checked( '.checking_zone' ,  '#check4', "#id_is_correct4", '#noCheck4') ;
+
+ 
+
+
+
+
+
+
         $('body').on('click', "#span_wrong2" , function (event) {    
               checked_and_no_checked("#id_answer2_is_correct", '#span_wrong2', '#circle2') ;
         });
@@ -156,9 +173,6 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable'], function ($) {
               checked_and_no_checked("#id_answer4_is_correct", '#span_wrong4', '#circle4') ;
         });
  
-
-
-
 
  
          
@@ -171,18 +185,18 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable'], function ($) {
 
                 if (  comment.length > 0   )
                 { 
-                  $(cible_div).addClass(classe) ;
+                  $(cible_div).css("background-color","#e21b3c") ; 
                   $(cible).css("color","white") ;
                 }
                 else
                 {
-                   $(cible_div).removeClass(classe) ;
+                   $(cible_div).css("background-color","transparent") ; 
                   $(cible).css("color","#666") ;
                 }
              });
         }
 
-       change_bg_and_select( "#answer1", "#answer1_div" , "bgColorRed" );
+       change_bg_and_select( "#answer1", "#answer1_div" , "#e21b3c" );
        change_bg_and_select( "#answer2", "#answer2_div" , "bgColorBlue" );
        change_bg_and_select( "#answer3", "#answer3_div" , "bgColorOrange" );
        change_bg_and_select( "#answer4", "#answer4_div" , "bgColorGreen" );
@@ -249,7 +263,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable'], function ($) {
             let kind = $(this).attr("data-kind");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
-console.log(kind+"  "+quizz_id+"  "+question_id+"  ");
+ 
 
 
             $.ajax(
@@ -272,6 +286,11 @@ console.log(kind+"  "+quizz_id+"  "+question_id+"  ");
                 }
             )
          });
+ 
+ 
+
+
+ 
  
 
 
