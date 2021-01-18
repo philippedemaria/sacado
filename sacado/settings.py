@@ -100,6 +100,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'basthon',
     'association',
+    'tool',
     ]
 
 

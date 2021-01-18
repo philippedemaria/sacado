@@ -190,6 +190,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         $('#closeAccount').click(function(event) {
           if ($('#notification-account').hasClass('selected')) {
             $('#notification-account').removeClass('selected').addClass('dismiss');
+            $('#notification-tools').removeClass('selected').addClass('dismiss');
           }
           event.preventDefault();
         });
@@ -212,7 +213,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         $('#closeTools').click(function(event) {
           if ($('#notification-tools').hasClass('selected')) {
             $('#notification-tools').removeClass('selected').addClass('dismiss');
- 
+            $('#notification-account').removeClass('selected').addClass('dismiss');
+            $('#notification-admin').removeClass('selected').addClass('dismiss');
           }
           event.preventDefault();
         });
