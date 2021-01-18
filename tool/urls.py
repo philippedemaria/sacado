@@ -20,7 +20,9 @@ urlpatterns = [
     path('show_quizz/<int:id>', show_quizz, name='show_quizz'), 
 
 
+
     path('list_questions', list_questions, name='list_questions'),
+
     path('create_question/<int:id>', create_question, name='create_question'),
 
     path('delete_question/<int:id>/<int:idquizz>', delete_question, name='delete_question'),

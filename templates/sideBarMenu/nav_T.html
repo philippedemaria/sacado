@@ -76,6 +76,16 @@
 
 
 
+ 
+<li class='dropdown {% if '/account' in request.path and not 'admin' in    request.path %}active{% endif %}'>
+    <a href="#" class="main"  id="tools">
+        <i class="fa fa-cubes fa-2x"></i> 
+        <div class="captionmenu">Outils péda.</div>
+    </a>
+</li>
+
+
+
 <li  class='dropdown  {% if '/sendmail' in request.path %} active{% endif %}'>
 
     {% if sacado_asso %}
