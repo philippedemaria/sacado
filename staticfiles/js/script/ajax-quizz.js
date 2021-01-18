@@ -144,17 +144,17 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
                         $(cible).attr("checked",true);
                         $(check).css("display","block");
                         $(nockeck).css("display","none");
-                        console.log( "il est   checked"  ) ;
+                        console.log( "il est checked"  ) ;
                     }
             });
 
         }
 
 
-        checked_and_checked( '.checking_zone' ,  '#check1', "#id_is_correct1", '#noCheck1') ;
-        checked_and_checked( '.checking_zone' ,  '#check2', "#id_is_correct2", '#noCheck2') ;
-        checked_and_checked( '.checking_zone' ,  '#check3', "#id_is_correct3", '#noCheck3') ;
-        checked_and_checked( '.checking_zone' ,  '#check4', "#id_is_correct4", '#noCheck4') ;
+        checked_and_checked( '#checking_zone1' ,  '#check1', "#id_is_correct1", '#noCheck1') ;
+        checked_and_checked( '#checking_zone2' ,  '#check2', "#id_is_correct2", '#noCheck2') ;
+        checked_and_checked( '#checking_zone3' ,  '#check3', "#id_is_correct3", '#noCheck3') ;
+        checked_and_checked( '#checking_zone4' ,  '#check4', "#id_is_correct4", '#noCheck4') ;
 
  
 

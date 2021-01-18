@@ -233,7 +233,8 @@ def get_question_type(request):
 
     classes = []
     if value == 1 :
-        classes = ["bgcolorBlue" , "bgcolorRed"]
+        classes = [ {"bgcolor" : "bgcolorBlue" ,"texte" : "VRAI" } , { "bgcolor" :"bgcolorRed","texte" : "FAUX" } ]
+
     elif value > 2 :
         classes = ["bgcolorRed","bgcolorBlue","bgcolorOrange","bgcolorGreen"] 
 
@@ -277,7 +278,7 @@ def send_question(request):
 
  
     data_posted = request.POST
-    type_of_question = int(data_posted.get("type_of_question"))
+    type_of_question = int(data_posted.get("value"))
     quizz_id = int(data_posted.get("quizz_id"))
 
     title =  cleanhtml(unescape_html(data_posted.get("title")) )

@@ -6,7 +6,7 @@
 .drop-zone {
   cursor: pointer;
   user-select: none;
-  color: #666;
+  color: #666!important;
   font-size: 18px;
   width: 400px;
   padding: 10px 0;
@@ -16,6 +16,7 @@
   border-radius: 5px;
   background: white;
 }
+ 
 
 .drop-zone.hover {
   background: #f1eef7;

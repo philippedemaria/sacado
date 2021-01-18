@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap');
 /********************************************* bleu :  #005e74 ************************************/
 /********************************************* violet hover :  #5d4391 ************************************/
+/********************************************* violet light :  #f1eef7 ************************************/
 /********************************************* vert : #1bc074 *******************************************/
 /********************************************* orange: #ffb400 ***************************************/
 /********************************************* rouge: #cb2131 ***************************************/
@@ -290,6 +291,8 @@ li label:hover{
     align-items: center;
     border-radius: 5px;
     align-items: center;
+    line-height : 90px;
+    border : 1px solid #F0F0F0 ;
 }
 
 .quizz_box_answer {
@@ -327,6 +330,28 @@ li label:hover{
     border-radius: 5px;
 }
 
+.quizz_card {
+    width : 300px;
+    text-align: center;
+    color : #666;
+    padding: 20px;
+    -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
+    box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
+    position: relative;
+    border: 1px solid #e6e2dd;
+    height : 200px;
+    margin-top: 60px;
+}
+.quizz_card:hover {
+    background: #f1eef7;
+    -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .5);
+    box-shadow: 2px 2px 6px rgba(79, 73, 66, .5);
+}
+a.selector_question:hover {
+    color : #666;
+    text-decoration: none;
+}
+
 .quizz_submit{
   margin-top: 40px ;
 }
@@ -344,12 +369,17 @@ li label:hover{
 .quizz_assets {
     width: 100px;
     height:50px;
-    -webkit-box-shadow:2px 2px 6px rgba(79, 73, 66, .5);
-    box-shadow: 2px 2px 6px rgba(79, 73, 66, .5);
+    border : 1PX solid #F0F0F0;
     border-radius: 25px;
     display: block;
     margin-top: 50px
   }
+
+.quizz_assets:hover {
+    background: #f1eef7;
+  }
+
+
 
 .quizz_input{
   border-color: transparent!important;
@@ -386,7 +416,7 @@ li label:hover{
 
 .question_bank {
   padding-top: 30px;  
-  text-align: right ;
+    width: 200px;
  
 } 
 
@@ -465,7 +495,16 @@ li label:hover{
 }
  
 
+#questions_sortable_list {
+    margin-left: 0px;
+    padding-left: 0px;
+    width: 200px;
+}
 
+
+.padding10{
+    padding-top: 20px;
+}
 
  /****************************************** details_card selectors **************************************/
 
