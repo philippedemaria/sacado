@@ -1,0 +1,103 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+ 
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+
+    <script>
+        require(['script/ajax-quizz']);
+    </script> 
+
+{% endblock %}
+
+
+
+{% block page_title %}
+        <a href="{% url 'index' %}" ><i class="fa fa-cloud"></i> </a> Les outils pédagogiques
+{% endblock %}
+
+{% block page_menu_right %}
+
+    {% if request.user.is_superuser %}
+        <a href="" data-toggle="modal" data-target="#toolChoice" class="btn btn-new pull-right"> Créer un outil</a>  
+    {% endif %}
+ 
+{% endblock %}
+
+
+
+
+{% block body %}
+
+ 
+ 
+
+    <section class="content_main"> 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table id="standard_tab" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th style="width:30px">Choix</th>
+                        <th>Vue</th>
+                        <th>Titre</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for tool in tools %}
+                            <tr id="this_tool_id{{ tool.id }}">
+                                <td style="line-height: 200px">
+                                     <input type="checkbox" name="get_this_tools" class="get_this_tool" data-tool_id="{{ tool.id }}"/>
+                                </td>
+                                <td style="line-height: 200px">
+                                     <img src="{{ quizz.vignette.url }}" width="300px" /> 
+                                </td>
+                                <td style="line-height: 200px">
+                                   <a href="{% url 'show_tool' tool.id  %}">{{ tool.title }}</a> 
+                           
+                                    {% if request.user.is_superuser %}
+                                        <a href="{% url 'delete_tool'  tool.id %}"  class="pull-right" onclick="return TestDelete('cet outil')">Supprimer</a> 
+                                        <span class="pull-right">|</span>                                        
+                                        <a href="{% url 'update_tool'  tool.id %}" class="pull-right" >Modifier</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+ 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">     
+                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+            </div>
+        </div>
+    </section>
+
+
+<div class="modal fade" id="toolChoice" tabindex="-1" role="dialog" aria-labelledby="toolChoice">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h1 class='thin'  >Création de l'outil</h1>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'create_tool'  %}" method="POST"  enctype='multipart/form-data'>
+
+                    {% include 'tool/form_tool_items.html' %}
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -31,12 +31,16 @@ class Tool(models.Model):
     """
     title = models.CharField(max_length=255, default='',  blank=True, verbose_name="Titre")  
     remark = RichTextUploadingField( blank=True, verbose_name="Texte*") 
-    teacher = models.ForeignKey(Teacher, related_name = "tools", on_delete=models.CASCADE, editable=False ) 
+    teachers = models.ManyToManyField(Teacher, related_name = "tools", blank=True,   editable=False ) 
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date de création")
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date de modification") 
     imagefile = models.ImageField(upload_to=tool_directory_path,   verbose_name="Image", default="")
     teachers = models.ManyToManyField(Teacher, blank=True,   related_name="teacher_tools")
- 
+    is_publish = models.BooleanField(default=1, verbose_name="Publié ?")
+    is_asso = models.BooleanField(default=1, verbose_name="Nécessite l'adhésion SACADO ?")
+
+
+
     def __str__(self):
         return self.title 
 

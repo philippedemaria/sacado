@@ -50,21 +50,20 @@ from general_fonctions import *
  
  
 def list_tools(request):
-    tools = Tool.objects.all()
-    return render(request, 'tool/list_tools.html', {'tools': tools  })
+    tools = Tool.objects.filter(is_publish=1)
+    form = ToolForm(request.POST or None, request.FILES or None   )
+    return render(request, 'tool/list_tools.html', {'form': form , 'tools' : tools })
 
 
 
 def create_tool(request):
 
     teacher = request.user.teacher 
-    form = ToolForm(request.POST or None, request.FILES or None, initial = { "teacher" : teacher , }  )
+    form = ToolForm(request.POST or None, request.FILES or None,   )
  
 
     if form.is_valid():
-        nf = form.save(commit = False)
-        nf.teacher = teacher
-        nf.save()
+        form.save()
         messages.success(request, "Félicitations... Votre compte sacado est maintenant configuré et votre premier toole créé !")
 
         return redirect('list_tools')
@@ -84,12 +83,10 @@ def update_tool(request, id):
     tool = Tool.objects.get(id=id)
     teacher = request.user.teacher 
   
-    form = ToolForm(request.POST or None, request.FILES or None, instance = quizz,teacher = teacher  )
+    form = ToolForm(request.POST or None, request.FILES or None, instance = tool  )
 
     if form.is_valid():
-        nf = form.save(commit = False)
-        nf.teacher = teacher
-        nf.save()
+        form.save()
         return redirect('list_tools')
     else:
         print(form.errors)
@@ -268,6 +265,8 @@ def send_question(request):
 
  
     data_posted = request.POST
+
+    print(data_posted)
     kind = int(data_posted.get("kind"))
     quizz_id = int(data_posted.get("quizz_id"))
 
@@ -316,13 +315,16 @@ def send_question(request):
         question = Question.objects.create(title=title, duration= duration , point= point , calculator= calculator  ,imagefile=imagefile ,  is_publish=is_publish , kind=kind , ranking=ranking  )
 
         is_correct_tab =  data_posted.getlist("is_correct")
+        imageanswer =  data_posted.getlist("imageanswers")
+
         i=1
         for answer in answers :
             if str(i) in is_correct_tab:
                 is_correct = True
             else :
                 is_correct = False
-            choice = Choice.objects.create(answer=answer, imageanswer = None , is_correct = is_correct)
+            imageanswer = imageanswers[i-1]
+            choice = Choice.objects.create(answer=answer, imageanswer = imageanswer , is_correct = is_correct)
             question.choices.add(choice)
             i+=1
 

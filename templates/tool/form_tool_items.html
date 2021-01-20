@@ -1,0 +1,54 @@
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+
+{% csrf_token %}
+<div class="row">
+    <div class="col-sm-12 col-md-12">  
+        {{ form.title.label_tag }}
+        {{ form.title|add_class:"form-control" }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-6">  
+        {{ form.is_asso.label_tag }}<br/>
+        {{ form.is_asso |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
+    </div>
+    <div class="col-sm-12 col-md-6">  
+        {{ form.is_publish.label_tag }}<br/>
+        {{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-12">  
+        {{ form.remark.label_tag }}
+        {{ form.remark }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-12"> 
+        <div class="form-group"> 
+            {{ form.imagefile.label_tag }}  
+            {{ form.imagefile|add_class:"btn btn-default" }}
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-8"> 
+        <div class="form-group">
+            <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+            <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+        </div>
+    </div>
+    {% if tool and request.user.user_type == 2 %}
+    <div class="col-sm-12 col-md-4">
+        <div class="form-group">
+            <a href="{% url 'delete_tool' tool.id %}" class="btn btn-danger"  onclick="return TestDelete('cet outil')">Supprimer cet outil</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+ 
+ 
+
+ 

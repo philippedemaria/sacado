@@ -181,6 +181,27 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
        change_bg_and_select( "#answer3", "#answer3_div" , "bgcolorOrange" );
        change_bg_and_select( "#answer4", "#answer4_div" , "bgcolorGreen" );
 
+ 
+ 
+        
+            $('body').on('click',  "#id_imageanswer1"  , function (event) {  
+
+                console.log($("#id_imageanswer1").val()) ;console.log("ok") ;
+
+                    $('body').on('change',  "#id_imageanswer1"  , function (event) { 
+
+                        $("#image_set1").html(  "<i class='fa fa-times white'></i>"  ); 
+
+                        console.log("okiiiiiiiiiiiii") ;
+ 
+                });
+            });
+       // upload_by_clic( "#get_image1", "#id_imageanswer1" , "image_set1" );
+       // upload_by_clic( "#get_image2", "#id_imageanswer2" , "image_set2" );
+       // upload_by_clic( "#get_image3", "#id_imageanswer3" , "image_set3" );
+       // upload_by_clic( "#get_image4", "#id_imageanswer4" , "image_set4" );
+ 
+
 
 
         // Selecteur du vrai faux
