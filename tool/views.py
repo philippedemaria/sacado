@@ -14,7 +14,6 @@ from django.views.decorators.csrf import csrf_exempt
  
 from templated_email import send_templated_mail
 from django.db.models import Q
-from django.contrib.auth.decorators import  permission_required,user_is_superuser
 
 ############### bibliothèques pour les impressions pdf  #########################
 import os
@@ -55,7 +54,7 @@ def list_tools(request):
     return render(request, 'tool/list_tools.html', {'form': form , 'tools' : tools })
 
 
-@user_passes_test(user_is_superuser)
+
 def create_tool(request):
 
     teacher = request.user.teacher 
@@ -74,8 +73,6 @@ def create_tool(request):
     return render(request, 'tool/form_tool.html', context)
 
 
-
-@user_passes_test(user_is_superuser)
 def update_tool(request, id):
 
  
@@ -96,7 +93,7 @@ def update_tool(request, id):
 
 
 
-@user_passes_test(user_is_superuser) 
+
 def delete_tool(request, id):
 
     tool = Tool.objects.get(id=id)
