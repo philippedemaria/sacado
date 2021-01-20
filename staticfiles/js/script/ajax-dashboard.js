@@ -180,6 +180,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
           if ($('#notification-account').hasClass('dismiss')) {
             $('#notification-account').removeClass('dismiss').addClass('selected').show();
             $('#notification-admin').removeClass('selected').addClass('dismiss');
+            $('#notification-outil_peda').removeClass('selected').addClass('dismiss');
           }
           event.preventDefault();
         });
@@ -189,9 +190,39 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         $('#closeAccount').click(function(event) {
           if ($('#notification-account').hasClass('selected')) {
             $('#notification-account').removeClass('selected').addClass('dismiss');
+            $('#notification-tools').removeClass('selected').addClass('dismiss');
           }
           event.preventDefault();
         });
+
+
+
+
+ 
+        $('#tools').click(function(event) {
+          if ($('#notification-tools').hasClass('dismiss')) {
+            $('#notification-tools').removeClass('dismiss').addClass('selected').show();
+            $('#notification-account').removeClass('selected').addClass('dismiss');
+            $('#notification-admin').removeClass('selected').addClass('dismiss');
+ 
+          }
+          event.preventDefault();
+        });
+
+ 
+        $('#closeTools').click(function(event) {
+          if ($('#notification-tools').hasClass('selected')) {
+            $('#notification-tools').removeClass('selected').addClass('dismiss');
+            $('#notification-account').removeClass('selected').addClass('dismiss');
+            $('#notification-admin').removeClass('selected').addClass('dismiss');
+          }
+          event.preventDefault();
+        });
+
+
+
+
+
 
 
         var pub = 0 ;

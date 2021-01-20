@@ -1,0 +1,10 @@
+{% load item_tags %}
+ 
+
+    <h1 class="thin">  {{ document.title }} 
+        <a href="{% url 'update_document' document.id %}" style="font-size: 12px; margin-right:10px;" class="pull-right">Modifier ce document</a> 
+    </h1>
+    <hr>
+    <div >{{ document.annoncement|decode|safe }} </div>
+ 
+  

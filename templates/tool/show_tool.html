@@ -1,0 +1,43 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+ 
+
+{% block require %}
+ 
+    {% if group %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+
+    <script>
+        require(['script/ajax-group']);
+    </script>
+ 
+ 
+{% endblock %}
+
+
+
+{% block page_title %}
+        {% if tool.imagefile %}<img src="{{ tool.imagefile.url }}" height="40px">{% endif %}   {{ tool.title }}
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+{% endblock %}
+ 
+
+{% block body %}
+<div class="content_main">  
+    <div class="row">        
+        <div class="col-sm-12 col-md-12">
+            {{ tool.remark }}
+        </div>
+    </div>   
+</div>
+
+  
+{% endblock %}

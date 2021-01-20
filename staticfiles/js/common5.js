@@ -34,7 +34,7 @@ requirejs.config({
         popper: 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min',
         fonctions_jquery: "script/fonctions-jquery",
         fonctions: "script/fonctions",
- 
+        uploader: "lib/jquery.smartuploader",
 
     },
     shim: {
@@ -90,7 +90,7 @@ requirejs.config({
     }
 });
 
-require(['jquery', 'bootstrap', 'bootstrap_popover', 'bcPicker', 'mathjax', 'ckeditor',  'datatables', 'datatables_bootstrap',
+require(['jquery', 'bootstrap', 'bootstrap_popover', 'bcPicker', 'mathjax', 'ckeditor',  'datatables', 'uploader', 'uploader',
     'config_select2', 'config_datepicker', 'config_toggle', 'config_colorpicker', 'fonctions_jquery', 'fonctions',   'config_datatable',
     'multiselect', 'ui', 'slimscroll', 'chart']);
 

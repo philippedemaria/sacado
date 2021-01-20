@@ -7,7 +7,7 @@ from sendmail.models import Email
 from socle.models import Level
 from school.models import School
 from group.models import Group
-
+from tool.models import Tool
 def menu(request):
 
     if request.user.is_authenticated:
@@ -27,10 +27,12 @@ def menu(request):
             levels = Level.objects.all()
             nb_demand = Demand.objects.filter(done=0).count()
 
+            mytools = Tool.objects.filter(is_publish=1, teachers = teacher)
+
             if teacher.user.school :
                 sacado_asso = True
 
-            return {'today': today, 'nb_not': nb_not, 'levels': levels,  'nb_demand' : nb_demand , 'sacado_asso' : sacado_asso ,  }
+            return {'today': today, 'nb_not': nb_not, 'levels': levels,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso ,  }
 
         elif request.user.is_student:
 

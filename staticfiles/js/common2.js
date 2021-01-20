@@ -37,7 +37,7 @@ requirejs.config({
         popper: 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min',
         fonctions_jquery: "script/fonctions-jquery",
         fonctions: "script/fonctions",
- 
+        uploader: "lib/jquery.smartuploader",
 
     },
     shim: {
@@ -90,7 +90,7 @@ requirejs.config({
 });
 
 require(['jquery', 'bootstrap', 'bootstrap_popover',  'bcPicker',  'mathjax' ,  'ckeditor', 'ckeditor_init', 'ckeditor_jquery',  'datatables', 'datatables_bootstrap',
-    'config_select2', 'config_datepicker', 'config_toggle', 'config_colorpicker', 'fonctions_jquery', 'fonctions',   'config_datatable',
+    'config_select2', 'config_datepicker', 'config_toggle', 'config_colorpicker', 'fonctions_jquery', 'fonctions',   'uploader', 'uploader',
     'multiselect', 'ui', 'slimscroll', 'chart']);
 
 // suppression de admin dans le chargement  : 'admin', 

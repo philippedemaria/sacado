@@ -1,0 +1,46 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+{% endblock %}
+
+ 
+
+{% block page_title %}
+    Nouvel outil
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+
+            <a href="{% url 'list_tools' %}" class="btn btn-new pull-right">Liste de outils</a>  
+ 
+{% endblock %}
+
+ 
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+    <form action="" method="POST"  enctype='multipart/form-data'>
+
+ 
+
+
+                            {% include 'tool/form_tool_items.html' %}
+
+ 
+ 
+ 
+    </form>  
+</section>
+{% endblock %} 

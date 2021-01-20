@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap');
 /********************************************* bleu :  #005e74 ************************************/
 /********************************************* violet hover :  #5d4391 ************************************/
+/********************************************* violet light :  #f1eef7 ************************************/
 /********************************************* vert : #1bc074 *******************************************/
 /********************************************* orange: #ffb400 ***************************************/
 /********************************************* rouge: #cb2131 ***************************************/
@@ -269,11 +270,279 @@ li label:hover{
 }
 
 
- /****************************************** test **************************************/
+ /****************************************** Quizz **************************************/
+#body_question{
+  height :87vh;
+}
+
+.quizz_box {
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+    border: none;
+    color: #666;
+    background: transparent;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    resize: none;
+    -webkit-box-shadow:2px 2px 6px rgba(79, 73, 66, .255);
+    box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
+    align-items: center;
+    border-radius: 5px;
+    align-items: center;
+    line-height : 90px;
+    border : 1px solid #F0F0F0 ;
+}
+
+.quizz_box_answer {
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+    border: none;
+    color: #666;
+    background: transparent;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    resize: none;
+    align-items: center;
+    border-radius: 5px;
+    -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
+    box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);   
+}
+
+.quizz_line_answer { 
+    margin-bottom: 20px; 
+}
+
+.quizz_answer {
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+    border: none;
+    color: #666;
+    background: transparent;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    resize: none;
+
+    align-items: center;
+    border-radius: 5px;
+}
+
+.quizz_card {
+    width : 300px;
+    text-align: center;
+    color : #666;
+    padding: 20px;
+    -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
+    box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
+    position: relative;
+    border: 1px solid #e6e2dd;
+    height : 200px;
+    margin-top: 60px;
+}
+.quizz_card:hover {
+    background: #f1eef7;
+    -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .5);
+    box-shadow: 2px 2px 6px rgba(79, 73, 66, .5);
+}
+a.selector_question:hover {
+    color : #666;
+    text-decoration: none;
+}
+
+.quizz_submit{
+  margin-top: 40px ;
+}
+
+.quizz_font40 {
+    font-size : 40px ;
+  }
+ 
+.quizz_font30 {
+    font-size : 30px ;
+    text-align: left;
+  }
+ 
+ 
+.quizz_assets {
+    width: 100px;
+    height:50px;
+    border : 1PX solid #F0F0F0;
+    border-radius: 25px;
+    display: block;
+    margin-top: 50px;
+    -webkit-box-shadow: 1px 1px 2px rgba(79, 73, 66, .2);
+    box-shadow: 1px 1px 2px  rgba(79, 73, 66, .2);
+  }
+
+.quizz_assets:hover {
+    background: #f1eef7;
+    -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .5);
+    box-shadow: 2px 2px 6px rgba(79, 73, 66, .5);
+  }
 
 
 
+.quizz_input{
+  border-color: transparent!important;
+   text-align: right!important;
+   width:65px!important;
+   font-weight: bold;
+}
+.quizz_input50 {
+    width: 50px!important;
+  }
 
+
+.quizz_list_question{
+  height: 80vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+}
+
+
+.quizz_list_question::-webkit-scrollbar {
+  width: 0px;
+  height: 20px;
+}
+.quizz_list_question::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 10px;
+}
+.quizz_list_question::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+
+.question_bank {
+  padding-top: 30px;  
+    width: 200px;
+ 
+} 
+
+.btn-quizz_bank{
+  background-color: #5d4391;  
+  border-color: #5d4391;
+  color: #FFF ; 
+  width : 195px; 
+} 
+ 
+
+.btn-quizz_bank:hover{
+  background-color: #a996cf;  
+  border-color: #5d4391;
+  color: #5d4391 ;  
+} 
+
+
+.margin40{
+   margin-top: 40px; 
+}
+
+
+.no_published{
+  background-color: #ffb3b3; 
+}
+
+
+.bgcolorRed{
+  background-color: #e21b3c!important; 
+  height : 90px;
+}
+
+.bgcolorBlue{
+    background-color: #1368ce!important;  
+   height : 90px;
+}
+.bgcolorOrange{
+    background-color: #d89e00!important; 
+   height : 90px; 
+}
+.bgcolorGreen{
+    background-color: #26890c!important; 
+    height : 90px; 
+}
+
+ 
+.checking_zone{
+  padding-top : 20px;
+  text-align: center;
+}
+
+.checking_zone .check{
+    display : none; 
+    cursor: pointer ;
+}
+
+.checking_zone:hover .check{
+    display : block; 
+}
+
+.checking_zone:hover .noCheck{
+    display : none; 
+    cursor: pointer ;
+}
+
+.answers_box{
+  position: absolute ; 
+  width: 100%;  
+  bottom: 0px ;
+
+}
+
+.checkbox_no_display{
+    display : none; 
+}
+ 
+
+#questions_sortable_list {
+    margin-left: 0px;
+    padding-left: 0px;
+    width: 200px;
+}
+
+
+.padding20{
+    padding-top: 20px;
+}
+
+.answer_margin20{
+    margin-top: 35px;
+    display: none;
+}
+ 
+.quizz_line_answer:hover .answer_margin20{
+    display: block;
+    cursor: pointer ;
+}
+
+ 
+.image_set{
+  font-size:10px!important;
+  color: #FFF!important;
+}
+
+.get_image {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+.get_image input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  height: 100%;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  font-size: 200px !important;
+  direction: ltr;
+  cursor: pointer;
+}
 
 
 
@@ -393,7 +662,7 @@ li.menu_document:hover, li.menu_document:hover > a {
   float: left;
   margin: 10px ;
   margin-top: 15px;
-  -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, .255);
+  -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
     box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
     position:relative;
     width:180px;
@@ -407,7 +676,7 @@ li.menu_document:hover, li.menu_document:hover > a {
   float: left;
   margin: 10px ;
   margin-top: 15px;
-  -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, .255);
+  -webkit-box-shadow:2px 2px 6px rgba(79, 73, 66, .255);
     box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
     position:relative;
     width:180px;
