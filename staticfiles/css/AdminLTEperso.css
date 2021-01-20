@@ -520,11 +520,6 @@ a.selector_question:hover {
     cursor: pointer ;
 }
 
- 
-.image_set{
-  font-size:10px!important;
-  color: #FFF!important;
-}
 
 .get_image {
   position: relative;
@@ -544,7 +539,9 @@ a.selector_question:hover {
   cursor: pointer;
 }
 
-
+.quizz_box_answer .preview{
+    display: none;
+}
 
  /****************************************** details_card selectors **************************************/
 

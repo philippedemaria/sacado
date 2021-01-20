@@ -97,7 +97,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
 
             var n = $( "input:checked" ).length; console.log(n) ;
 
-            if (($("#type_of_question").val() == "4")&& (n>1)) { 
+            if (($("#kind").val() == "4")&& (n>1)) { 
 
                 alert("Vous avez choisi le type QCS. Vous ne pouvez renseigner qu'une seule bonne réponse. Choisissez le type QCM sinon.") ;
                 return false ;
@@ -127,80 +127,61 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
  
  
 
+        // Sélectionne le choix de la réponse écrite vraie
+        function checked_and_checked(nb){ 
 
-        function checked_and_checked(clic, check, cible,  nockeck){ 
+            $('body').on('click', '#checking_zone'+nb , function (event) {     console.log( $("#id_is_correct"+nb).is(":checked") ) ;
 
-            $('body').on('click', clic , function (event) {     console.log( $(cible).is(":checked") ) ;
-
-                if( $(cible).is(":checked")  )  
+                if( $("#id_is_correct"+nb).is(":checked")  )  
                     {   
-                        $(cible).removeAttr("checked");
-                        $(check).removeAttr("style");
-                        $(nockeck).removeAttr("style");
+                        $("#id_is_correct"+nb).removeAttr("checked");
+                        $('#check'+nb).removeAttr("style");
+                        $('#noCheck'+nb).removeAttr("style");
                         console.log("il est no checked"  ) ;
                     } 
                 else 
                     {   
-                        $(cible).attr("checked",true);
-                        $(check).css("display","block");
-                        $(nockeck).css("display","none");
+                        $("#id_is_correct"+nb).attr("checked",true);
+                        $('#check'+nb).css("display","block");
+                        $('#noCheck'+nb).css("display","none");
                         console.log( "il est checked"  ) ;
                     }
             });
 
         }
 
-        checked_and_checked( '#checking_zone1' ,  '#check1', "#id_is_correct1", '#noCheck1') ;
-        checked_and_checked( '#checking_zone2' ,  '#check2', "#id_is_correct2", '#noCheck2') ;
-        checked_and_checked( '#checking_zone3' ,  '#check3', "#id_is_correct3", '#noCheck3') ;
-        checked_and_checked( '#checking_zone4' ,  '#check4', "#id_is_correct4", '#noCheck4') ;
+        checked_and_checked( '1') ;
+        checked_and_checked( '2') ;
+        checked_and_checked( '3') ;
+        checked_and_checked( '4') ;
 
  
 
+        // Sélectionne la couleur de fond lorsque la réponse est écrite
+        function change_bg_and_select( nb, classe ){
 
-        function change_bg_and_select( cible, cible_div , classe ){
-            $('body').on('keyup', cible , function (event) {   
+            $('body').on('keyup', "#answer"+nb , function (event) {   
                 
-                    var comment =  $(cible).val()  ;
+                    var comment =  $("#answer"+nb).val()  ;
 
                 if (  comment.length > 0   )
                 { 
-                  $(cible_div).addClass(classe) ; 
-                  $(cible).css("color","white") ;
+                  $("#answer"+nb+"_div").addClass(classe) ; 
+                  $("#answer"+nb).css("color","white") ;
                 }
                 else
                 {
-                   $(cible_div).removeClass(classe) ; 
-                  $(cible).css("color","#666") ;
+                   $("#answer"+nb+"_div").removeClass(classe) ; 
+                  $("#answer"+nb).css("color","#666") ;
                 }
              });
         }
 
-       change_bg_and_select( "#answer1", "#answer1_div" , "bgcolorRed" );
-       change_bg_and_select( "#answer2", "#answer2_div" , "bgcolorBlue" );
-       change_bg_and_select( "#answer3", "#answer3_div" , "bgcolorOrange" );
-       change_bg_and_select( "#answer4", "#answer4_div" , "bgcolorGreen" );
+       change_bg_and_select( "1",  "bgcolorRed" );
+       change_bg_and_select( "2",  "bgcolorBlue" );
+       change_bg_and_select( "3",  "bgcolorOrange" );
+       change_bg_and_select( "4",  "bgcolorGreen" );
 
- 
- 
-        
-            $('body').on('click',  "#id_imageanswer1"  , function (event) {  
-
-                console.log($("#id_imageanswer1").val()) ;console.log("ok") ;
-
-                    $('body').on('change',  "#id_imageanswer1"  , function (event) { 
-
-                        $("#image_set1").html(  "<i class='fa fa-times white'></i>"  ); 
-
-                        console.log("okiiiiiiiiiiiii") ;
- 
-                });
-            });
-       // upload_by_clic( "#get_image1", "#id_imageanswer1" , "image_set1" );
-       // upload_by_clic( "#get_image2", "#id_imageanswer2" , "image_set2" );
-       // upload_by_clic( "#get_image3", "#id_imageanswer3" , "image_set3" );
-       // upload_by_clic( "#get_image4", "#id_imageanswer4" , "image_set4" );
- 
 
 
 

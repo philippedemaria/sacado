@@ -114,21 +114,22 @@
               <textarea class="quizz_font30 quizz_box_answer" name="answers" id="answer{{ forloop.counter }}" placeholder="Ecrire la réponse attendue"></textarea>
           </div>
       {% else %} <!-- QCM/QCS -->
-
+ 
           {% for classe in classes %} 
           <div class="col-sm-6 col-md-6 quizz_line_answer">  
               <div class="row quizz_box_answer" id="answer{{ forloop.counter }}_div">
-
-
                   <div class="col-sm-2 col-md-1 {{ classe }} get_image"> 
-
-                      <i class="fa fa-file-image-o white answer_margin20" ></i>
-                      <input id="id_imageanswer{{ forloop.counter }}" type="file" name="imageanswers">
-                      <span id="image_set{{ forloop.counter }}" class="image_set"></span>
-
+        
+                      <i class="fa fa-file-image-o white answer_margin20"></i>
+                     
+                      <input id="id_imageanswer{{ forloop.counter }}" type="file"  name="imageanswers"  onchange="previewFile('{{ forloop.counter }}','{{ classe }}' )" />
+ 
+              
                   </div>
                   <div class="col-sm-8 col-md-9"> 
                       <textarea class="quizz_font30 quizz_answer" name="answers" id="answer{{ forloop.counter }}" placeholder="Ecrire votre réponse ici"></textarea>
+                       <img src="" height="90px" class="preview" id="preview{{ forloop.counter }}" > 
+                       <a href="#" id="delete_img{{ forloop.counter }}" class="preview pull-right white" onclick="noPreviewFile('{{ forloop.counter }}','{{ classe }}')"><i class="fa fa-times white answer_margin20"></i></a>
                   </div>
 
                   <div class="col-sm-2 col-md-2 checking_zone" id="checking_zone{{ forloop.counter }}"> 
@@ -169,6 +170,38 @@ $("#id_imagefile").withDropZone("#drop_zone", {
     }
   },
 });
+
+
+  function previewFile(nb,classe) {
+
+        const preview = document.getElementById('preview'+nb);
+        const file = $("#id_imageanswer"+nb)[0].files[0];
+        const reader = new FileReader();
+
+        $("#preview"+nb).val("") ;  
+        $("#answer"+nb+"_div").addClass(classe) ;
+        $("#answer"+nb).addClass("preview") ;
+        $("#preview"+nb).removeClass("preview") ; 
+        $("#delete_img"+nb).removeClass("preview") ; 
+
+    reader.addEventListener("load", function () {
+      // convert image file to base64 string
+      preview.src = reader.result;
+    }, false);
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function noPreviewFile(nb,classe) {
+
+        $("#preview"+nb).val("") ;  
+        $("#answer"+nb+"_div").removeClass(classe) ;
+        $("#answer"+nb).removeClass("preview") ;
+        $("#preview"+nb).addClass("preview") ; 
+        $("#delete_img"+nb).addClass("preview") ;      
+  }
 
 </script>
 
