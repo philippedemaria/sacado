@@ -21,7 +21,7 @@ def quizz_directory_path(instance, filename):
     return "quizzes/{}/{}".format(instance.teacher.user.id, filename)
 
 def tool_directory_path(instance, filename):
-    return "tool/{}/{}".format(instance.id, filename)
+    return "tool/asso/{}".format( filename)
 
 
 
@@ -35,7 +35,6 @@ class Tool(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date de création")
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date de modification") 
     imagefile = models.ImageField(upload_to=tool_directory_path,   verbose_name="Image", default="")
-    teachers = models.ManyToManyField(Teacher, blank=True,   related_name="teacher_tools")
     is_publish = models.BooleanField(default=1, verbose_name="Publié ?")
     is_asso = models.BooleanField(default=1, verbose_name="Nécessite l'adhésion SACADO ?")
 

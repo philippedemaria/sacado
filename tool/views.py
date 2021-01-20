@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from tool.models import Tool , Question  , Choice  , Quizz
 from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm  
-
+from account.decorators import  user_is_testeur
 
 from django.http import JsonResponse
 from django.core import serializers
@@ -55,7 +55,7 @@ def list_tools(request):
     return render(request, 'tool/list_tools.html', {'form': form , 'tools' : tools })
 
 
-
+@user_passes_test(user_is_superuser)
 def create_tool(request):
 
     teacher = request.user.teacher 
@@ -64,7 +64,6 @@ def create_tool(request):
 
     if form.is_valid():
         form.save()
-        messages.success(request, "Félicitations... Votre compte sacado est maintenant configuré et votre premier toole créé !")
 
         return redirect('list_tools')
     else:
@@ -76,7 +75,7 @@ def create_tool(request):
 
 
 
- 
+@user_passes_test(user_is_superuser)
 def update_tool(request, id):
 
  
@@ -97,7 +96,7 @@ def update_tool(request, id):
 
 
 
- 
+@user_passes_test(user_is_superuser) 
 def delete_tool(request, id):
 
     tool = Tool.objects.get(id=id)
