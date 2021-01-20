@@ -36,5 +36,13 @@ urlpatterns = [
     path('ajax_update_question', ajax_update_question, name='ajax_update_question'),
     path('send_question', send_question, name='send_question'), 
     path('question_sorter', question_sorter, name='question_sorter'), 
+
+
+    ############## Ajax
+    path('get_this_tool', get_this_tool, name='get_this_tool'),
+
+
+
+
 ]
  

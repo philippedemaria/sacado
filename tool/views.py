@@ -49,7 +49,8 @@ from general_fonctions import *
  
  
 def list_tools(request):
-    tools = Tool.objects.filter(is_publish=1)
+    teacher = request.user.teacher
+    tools = Tool.objects.filter(is_publish=1).exclude(teachers = teacher)
     form = ToolForm(request.POST or None, request.FILES or None   )
     return render(request, 'tool/list_tools.html', {'form': form , 'tools' : tools })
 
@@ -57,7 +58,7 @@ def list_tools(request):
 
 def create_tool(request):
 
-    teacher = request.user.teacher 
+
     form = ToolForm(request.POST or None, request.FILES or None,   )
  
 
@@ -77,8 +78,8 @@ def update_tool(request, id):
 
  
     tool = Tool.objects.get(id=id)
-    teacher = request.user.teacher 
-  
+ 
+    teacher = request.user.teacher   
     form = ToolForm(request.POST or None, request.FILES or None, instance = tool  )
 
     if form.is_valid():
@@ -108,6 +109,18 @@ def show_tool(request, id ):
     context = {  'tool': tool,   }
 
     return render(request, 'tool/show_tool.html', context )
+
+def get_this_tool(request):
+
+    data = {} 
+    tool_id = int(request.POST.get("tool_id"))
+
+    tool = Tool.objects.get(pk=tool_id) 
+    tool.teachers.add(request.user.teacher)
+
+    data['html'] =  "<div class='row'><div class='col-lg-12 col-xs-12'><a href= /tool/show/"+tool.id+" >zsz</a></div></div>"
+ 
+    return JsonResponse(data)
 
 
 ############################################################################################################
@@ -268,8 +281,10 @@ def send_question(request):
 
     title =  cleanhtml(unescape_html(data_posted.get("title")) )
     calculator =  data_posted.get("calculator", None) 
-    if not calculator :
+    if calculator :
         calculator = 1
+    else :
+        calculator = 0
     duration =  data_posted.get("duration", None)
     if not duration :
         duration = 20
@@ -277,8 +292,8 @@ def send_question(request):
     if not point :
         point = 1000
     is_publish =  data_posted.get("is_publish", None) 
-    if not is_publish :
-        is_publish = True
+    if is_publish :
+        is_publish = True 
     else : 
         is_publish = False
     imagefile =  data_posted.get("imagefile") 
@@ -287,8 +302,12 @@ def send_question(request):
 
     ##Donne le rang du dernier slide et compte le nombre de slide pour ajouter 1 pour afficher le numéro de la suivante.
     list_questions = quizz.questions.order_by("ranking")
-    last_question = list_questions.last()
-    ranking = int(last_question.ranking) + 1
+    if len(list_questions) > 0 :
+        last_question = list_questions.last()
+        ranking = int(last_question.ranking) + 1
+    else :
+        ranking =   1
+
     nbq = list_questions.count()  + 1
 
     if kind == 1 : # Vrai/Faux
@@ -319,7 +338,10 @@ def send_question(request):
                 is_correct = True
             else :
                 is_correct = False
-            imageanswer = imageanswers[i-1]
+            try :
+                imageanswer = imageanswers[i-1]
+            except :
+                imageanswer = ""
             choice = Choice.objects.create(answer=answer, imageanswer = imageanswer , is_correct = is_correct)
             question.choices.add(choice)
             i+=1
