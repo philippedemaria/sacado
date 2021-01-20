@@ -14,7 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
  
 from templated_email import send_templated_mail
 from django.db.models import Q
-from django.contrib.auth.decorators import  permission_required,user_passes_test
+from django.contrib.auth.decorators import  permission_required,user_is_superuser
 
 ############### bibliothèques pour les impressions pdf  #########################
 import os
