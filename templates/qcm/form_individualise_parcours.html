@@ -125,7 +125,7 @@
                             </span>
 
 
-                        {%  for s in  relationship.students.all %}
+                        {%  for s in  relationship.students.all|dictsort:"user.last_name" %}
 
                             {% get_exercise s relationship as has_it %}
                             <span class="btn btn-{% if not s in students %}default{% else %}{% if has_it %}success{% else  %}danger{% endif  %}{% endif  %} select_student selected_student{{relationship.exercise.id}}" 

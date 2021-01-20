@@ -599,7 +599,7 @@ def individualise_parcours(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcours = Parcours.objects.get(pk = id)
     relationships = Relationship.objects.filter(parcours = parcours).order_by("ranking")
-    students = parcours.students.all().order_by("user__last_name")
+    students = parcours.students.all()
 
     customexercises = Customexercise.objects.filter(parcourses = parcours).order_by("ranking")  
 
@@ -1017,6 +1017,9 @@ def create_parcours(request,idp=0):
 
         if request.POST.get("save_and_choose") :
             return redirect('peuplate_parcours', nf.id)
+        elif request.session.has_key("group_id") :
+            group_id = request.session.get("group_id")
+            return redirect('list_parcours_group' , group_id)
         else:
             return redirect('parcours')
     else:
@@ -1744,12 +1747,13 @@ def stat_evaluation(request, id):
     parcours = Parcours.objects.get(id=id)
     skills = skills_in_parcours(request,parcours)
     knowledges = knowledges_in_parcours(parcours)
-    exercises = parcours.exercises.all()
-    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
+    #exercises = parcours.exercises.all()
+    relationships = Relationship.objects.filter(parcours=parcours,is_publish = 1,exercise__supportfile__is_title=0)
     parcours_duration = parcours.duration #durée prévue pour le téléchargement
-    for e in exercises :
-        r = Relationship.objects.get(exercise = e, parcours = parcours)
+    exercises = []
+    for r in relationships :
         parcours_duration += r.duration
+        exercises.append(r.exercise)
 
     form = EmailForm(request.POST or None )
     stats = []
@@ -1769,7 +1773,8 @@ def stat_evaluation(request, id):
         student = {"percent" : "" , "total_numexo" : "" , "good_answer" : "" , "test_duration" : False ,  "duration" : "" , "average_score" : "" ,"last_connexion" : "" ,"median" : "" ,"score" : "" ,"score_tab" : "" }
         student.update({"total_note":"", "details_note":"" ,  "detail_skill":"" ,  "detail_knowledge":"" , })
         student["name"] = s
-        studentanswers = Studentanswer.objects.filter(student=s,  exercise__in= exercises, parcours=parcours).order_by("date")
+
+        studentanswers =  Studentanswer.objects.filter(student=s,  exercise__in = exercises , parcours=parcours).order_by("-date")
 
         studentanswer_tab , student_tab  = [], []
         for studentanswer in studentanswers :
@@ -1777,13 +1782,15 @@ def stat_evaluation(request, id):
                 studentanswer_tab.append(studentanswer.exercise)
                 student_tab.append(studentanswer)
 
-        nb_exo_w = s.student_written_answer.filter(relationship__exercise__in = studentanswer_tab, relationship__parcours = parcours ).count()
-        nb_exo_ce = s.student_custom_answer.filter(parcours = parcours ).count()
-
-        student["nb_exo"] = len(studentanswer_tab) + nb_exo_w + nb_exo_ce
+        nb_exo_w = s.student_written_answer.filter(relationship__exercise__in = studentanswer_tab, relationship__parcours = parcours, relationship__is_publish = 1 ).count()
+        nb_exo_ce = s.student_custom_answer.filter(parcours = parcours, customexercise__is_publish = 1 ).count()
+        nb_exo  = len(studentanswer_tab) + nb_exo_w + nb_exo_ce
+        student["nb_exo"] = nb_exo
         duration, score, total_numexo, good_answer = 0, 0, 0, 0
         tab, tab_date = [], []
         student["legal_duration"] = parcours.duration
+        total_nb_exo = len(relationships)
+        student["total_nb_exo"] = total_nb_exo       
 
         for studentanswer in  student_tab : 
             duration += int(studentanswer.secondes)
@@ -1812,11 +1819,12 @@ def stat_evaluation(request, id):
                     student["test_duration"] = False 
                 tab.sort()
                 if len(tab)%2 == 0 :
-                    med = (tab[(len(tab)-1)//2]+tab[(len(tab)-1)//2+1])/2 ### len(tab)-1 , ce -1 est causé par le rang 0 du tableau
+                    med = (tab[len(tab)//2-1]+tab[(len(tab))//2])/2 ### len(tab)-1 , ce -1 est causé par le rang 0 du tableau
                 else:
-                    med = tab[(len(tab)-1)//2+1]
+                    med = tab[(len(tab)-1)//2]
                 student["median"] = int(med)
-                student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100 )   
+                student["percent"] = math.ceil( int(good_answer)/int(total_numexo) * 100 )  
+                student["ajust"] = math.ceil( (nb_exo / total_nb_exo ) * int(good_answer)/int(total_numexo) * 100  )   
             else :
                 try :
                     average_score = int(score)
@@ -1836,6 +1844,7 @@ def stat_evaluation(request, id):
                     student["good_answer"] = int(good_answer)
                     student["total_numexo"] = int(total_numexo)
                     student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100)
+                    student["ajust"] = math.ceil( (nb_exo / total_nb_exo ) * int(good_answer)/int(total_numexo) * 100  )   
                 except :
                     pass         
         except :
