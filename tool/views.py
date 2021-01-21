@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from tool.models import Tool , Question  , Choice  , Quizz
 from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm  
 from account.decorators import  user_is_testeur
+from sacado.settings import MEDIA_ROOT
 
 from django.http import JsonResponse
 from django.core import serializers
@@ -268,11 +269,20 @@ def get_an_existing_question(request):
     return JsonResponse(data)
 
 
+# Pour envoyer les fichiers vers le dossier 
+def handle_uploaded_file(f):
+    with open( MEDIA_ROOT , 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+
 
 @csrf_exempt
 def send_question(request):
 
- 
+    data_files = request.FILES
+    print(data_files)
+
     data_posted = request.POST
 
     print(data_posted)
@@ -296,7 +306,7 @@ def send_question(request):
         is_publish = True 
     else : 
         is_publish = False
-    imagefile =  data_posted.get("imagefile") 
+    imagefile =  data_files.get("imagefile") 
 
     quizz =  Quizz.objects.get(pk = quizz_id)
 
@@ -330,7 +340,7 @@ def send_question(request):
         question = Question.objects.create(title=title, duration= duration , point= point , calculator= calculator  ,imagefile=imagefile ,  is_publish=is_publish , kind=kind , ranking=ranking  )
 
         is_correct_tab =  data_posted.getlist("is_correct")
-        imageanswer =  data_posted.getlist("imageanswers")
+        imageanswer_tab =  data_files.getlist("image_answers")
 
         i=1
         for answer in answers :
@@ -339,7 +349,8 @@ def send_question(request):
             else :
                 is_correct = False
             try :
-                imageanswer = imageanswers[i-1]
+                imageanswer = imageanswer_tab[i-1]
+                handle_uploaded_file(imageanswer)
             except :
                 imageanswer = ""
             choice = Choice.objects.create(answer=answer, imageanswer = imageanswer , is_correct = is_correct)

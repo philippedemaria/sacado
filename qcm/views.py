@@ -1186,10 +1186,10 @@ def unarchive_parcours(request, id, idg=0):
 
 #@user_is_parcours_teacher 
 def delete_parcours(request, id, idg=0):
-    parcours = Parcours.objects.get(id=id)
-    parcours.students.clear()
-    parcours.parcours_relationship.all()
 
+    parcours = Parcours.objects.get(id=id)
+    parcours_is_evaluation = parcours.is_evaluation
+    parcours.students.clear()
 
     teacher = Teacher.objects.get(user = request.user)
 
@@ -1201,6 +1201,9 @@ def delete_parcours(request, id, idg=0):
     for r in parcours.parcours_relationship.all() :
         r.students.clear()
         r.skills.clear()
+        ls = r.relationship_exerciselocker.all()
+        for l in ls :
+            l.delete()
         r.delete()
 
     for c in parcours.course.all() :
@@ -1216,6 +1219,8 @@ def delete_parcours(request, id, idg=0):
 
     if idg == 99999999999:
         return redirect('index')
+    elif idg == 0 and parcours_is_evaluation :
+        return redirect('evaluations')
     elif idg == 0 :
         return redirect('parcours')
     else :
