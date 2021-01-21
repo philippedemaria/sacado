@@ -84,7 +84,6 @@
         <input id="id_imagefile"  type="file" multiple="" name="imagefile">
     </div>  
 </div>
-
 <div class="row margin40" >
       {% if kind == 1 %} <!-- VRAI / FAUX -->
 
@@ -111,7 +110,7 @@
 
       {% elif kind == 2 %} <!-- Réponse rédigée -->
           <div class="col-sm-12 col-md-12" align="center">  
-              <textarea class="quizz_font30 quizz_box_answer" name="answers" id="answer{{ forloop.counter }}" placeholder="Ecrire la réponse attendue"></textarea>
+              <textarea class="quizz_font30 quizz_box_answer" name="answers" id="answer" placeholder="Ecrire la réponse attendue"></textarea>
           </div>
       {% else %} <!-- QCM/QCS -->
  

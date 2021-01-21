@@ -91,27 +91,64 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
         // Soumission de la question.
         $('body').on('click', '#submit_question' , function (event) {
 
-
+            // obliger un titre
             if ($("#id_title").val() == "") { alert("Vous devez renseigner la question") ; $("#id_title").focus() ; return false ;}
 
+            // obliger une réponse
+            if ($("#kind").val() == "1") { 
+                if ($(".checkbox_no_display").length == 0) { alert("Vous devez choisir LA bonne réponse.") ;  return false ;}
+            }
+            else if ($("#kind").val() == "2") 
+            { 
+                if ($("#answer").length  == 0) { alert("Vous devez écrire la réponse attendue.") ;  return false ;}
+            }
+            else 
+            { 
+                if ($(".checkbox_no_display").length  == 0) { alert("Vous devez choisir au moins une réponse vraie.") ;  return false ;}
+            }
 
-            var n = $( "input:checked" ).length; console.log(n) ;
 
+            // obliger qu'une seule réponse dans le QCS
+            var n = $( "input:checked" ).length;  
             if (($("#kind").val() == "4")&& (n>1)) { 
-
                 alert("Vous avez choisi le type QCS. Vous ne pouvez renseigner qu'une seule bonne réponse. Choisissez le type QCM sinon.") ;
                 return false ;
             }
 
-            var datas = $("#question_form").serialize();
+            var formData = new FormData($("#question_form")[0]);
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            // Chargement des images de question
+            var imagefile = $("#id_imagefile")[0].files[0];
+            if (imagefile)
+            {
+                formData.append('imagefile[]', imagefile, imagefile.name);                
+            }
+
+            // Chargement des images de réponses
+            if ( $("#kind").val() > 2 )
+            {
+                    for (var j = 1; j < 4; j++) { 
+                        var imagefiles = $("#id_imageanswer"+j)[0].files;
+                        if (imagefiles.length > 0 )
+
+                            {   console.log("ici");
+                                imagefile = imagefiles[0] ; 
+                                formData.append('imagefiles[]', imagefile, imagefile.name);  
+                            } 
+                    }                
+            }
+
+
+
 
             $.ajax(
                 {
                     type: "POST",
-                    dataType: "json",
-                    data: datas,
+                    data: formData,
                     url: "../send_question",
+                    contentType: false, 
+                    processData: false,
                     success: function (data) {
 
  

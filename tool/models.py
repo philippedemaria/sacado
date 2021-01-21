@@ -12,10 +12,10 @@ from django.db.models import Q
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
 
 def choice_directory_path(instance, filename):
-    return "choices/{}/{}".format(instance.question.id, filename) 
+    return "choices/{}".format(filename) 
 
 def question_directory_path(instance, filename):
-    return "questions/{}/{}".format(instance.teacher.user.id, filename)
+    return "questions/{}".format(filename)
 
 def quizz_directory_path(instance, filename):
     return "quizzes/{}/{}".format(instance.teacher.user.id, filename)

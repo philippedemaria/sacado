@@ -271,7 +271,7 @@ def get_an_existing_question(request):
 
 # Pour envoyer les fichiers vers le dossier 
 def handle_uploaded_file(f):
-    with open( MEDIA_ROOT , 'wb+') as destination:
+    with open( MEDIA_ROOT+str(f.name) , 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
 
@@ -281,11 +281,12 @@ def handle_uploaded_file(f):
 def send_question(request):
 
     data_files = request.FILES
-    print(data_files)
+    print("data_files", data_files)
 
     data_posted = request.POST
 
-    print(data_posted)
+    print("data_posted", data_posted)
+
     kind = int(data_posted.get("kind"))
     quizz_id = int(data_posted.get("quizz_id"))
 
@@ -306,8 +307,9 @@ def send_question(request):
         is_publish = True 
     else : 
         is_publish = False
-    imagefile =  data_files.get("imagefile") 
-
+    imagefile =  data_files.get("imagefile", None) 
+    if imagefile : 
+        handle_uploaded_file(imagefile)
     quizz =  Quizz.objects.get(pk = quizz_id)
 
     ##Donne le rang du dernier slide et compte le nombre de slide pour ajouter 1 pour afficher le numéro de la suivante.
@@ -349,11 +351,12 @@ def send_question(request):
             else :
                 is_correct = False
             try :
-                imageanswer = imageanswer_tab[i-1]
-                handle_uploaded_file(imageanswer)
+                image_answer = imageanswer_tab[i-1]
+                if image_answer : 
+                    handle_uploaded_file(image_answer)
             except :
                 imageanswer = ""
-            choice = Choice.objects.create(answer=answer, imageanswer = imageanswer , is_correct = is_correct)
+            choice = Choice.objects.create(answer=answer, imageanswer = image_answer , is_correct = is_correct)
             question.choices.add(choice)
             i+=1
 
