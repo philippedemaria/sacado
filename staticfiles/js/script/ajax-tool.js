@@ -37,26 +37,56 @@ define(['jquery',  'bootstrap'], function ($) {
             var screen_size = $(window).width()  ;
  
 
-            if($('#projection_div iframe').length) { 
+            if($('iframe').length) { 
 
-                width = 2*parseInt($('#projection_div').find("iframe").attr("width"));
-                height = 2*parseInt($('#projection_div').find("iframe").attr("height")); 
+                width = 2.5*parseInt($('body').find("iframe").attr("width"));
+                height = 2.5*parseInt($('body').find("iframe").attr("height")); 
                 coeff = width/height                                    
 
                 if (width < screen_size){
-                    $('#projection_div').find("iframe").attr("width", width); 
-                    $('#projection_div').find("iframe").attr("height", height);
+                    $('body').find("iframe").attr("width", width); 
+                    $('body').find("iframe").attr("height", height);
                 }
                 else{
-                    new_size = 0.9*screen_size ; 
-                    $('#projection_div').find("iframe").attr("width", new_size ); 
-                    $('#projection_div').find("iframe").attr("height", new_size / coeff );
+                    new_size = 0.8*screen_size ; 
+                    $('body').find("iframe").attr("width", new_size ); 
+                    $('body').find("iframe").attr("height", new_size / coeff );
                 }
             }
        
 
  
+     
+        $('body').on('click', '.projection', function () {
+
+            var content = $(this).html();
+            var screen_size = $(window).width()  ;
  
+     
+                if (!$('#projection_div') ) {
+                        $("body").append('<div class="projection_div"  id="projection_div" ><span class="pull-right closer_projection_div"><i class="fa fa-times fa-2x"></i></span>'+content+'</div>');                
+                    }                  
+         
+ 
+                if($('#projection_div iframe').length) { 
+
+                        width = 2.5*parseInt($('#projection_div').find("iframe").attr("width"));
+                        height = 2.5*parseInt($('#projection_div').find("iframe").attr("height")); 
+                        coeff = width/height ;                                    
+
+                        if (width < screen_size){
+                            $('#projection_div').find("iframe").attr("width", width); 
+                            $('#projection_div').find("iframe").attr("height", height);
+                        }
+                        else{
+                            new_size = 0.9*screen_size ; 
+                            $('#projection_div').find("iframe").attr("width", new_size ); 
+                            $('#projection_div').find("iframe").attr("height", new_size / coeff );
+                        }
+                    }
+ 
+
+        });
 
 
  

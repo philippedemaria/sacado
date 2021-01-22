@@ -637,7 +637,7 @@ define(['jquery','bootstrap'], function ($) {
 
                                     width = 2*parseInt($('#projection_div').find("iframe").attr("width"));
                                     height = 2*parseInt($('#projection_div').find("iframe").attr("height")); 
-                                    coeff = width/height                                    
+                                    coeff = width/height   ;                                 
 
                                     if (width < screen_size){
                                         $('#projection_div').find("iframe").attr("width", width); 
