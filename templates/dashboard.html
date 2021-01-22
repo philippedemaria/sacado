@@ -337,7 +337,8 @@
     </div>
     <hr class="divider"> 
     <p class="thin">Présentations & Quizz </p>
- 
+    
+    {% if request.user.is_superuser %} 
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             <a href=" " class="no_sacado_asso" >Créer une présentation</a>
@@ -345,16 +346,20 @@
     </div>
     <div class="row">
         <div class="col-lg-12 col-xs-12">
-            <a href="{%  url 'list_quizzes' %}" >Mes quizz</a>
+            <a href="{%  url 'list_quizzes' %}"   >Mes quizz</a>
         </div>
     </div>
+    {% else %}
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            Bientôt...
+        </div>
+    </div>
+    {% endif %}
+
+
     <hr class="divider"> 
     <p class="thin">Mes outils péda. <a href="{% url 'list_tools' %}" class="pull-right"  > Choisir  </a></p>
- 
-
-
-
-
 
     <div id="list_of_tools">
     {% for tool in mytools %}
@@ -365,8 +370,6 @@
         </div>
     {% endfor %}
     </div>
-
- 
 </div>
 
 

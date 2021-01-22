@@ -119,7 +119,9 @@ def get_this_tool(request):
     tool = Tool.objects.get(pk=tool_id) 
     tool.teachers.add(request.user.teacher)
 
-    data['html'] =  "<div class='row'><div class='col-lg-12 col-xs-12'><a href= /tool/show/"+tool.id+" >zsz</a></div></div>"
+    data['html'] =  "<div class='row'><div class='col-lg-12 col-xs-12'><a href= /tool/show/"+str(tool.id)+" >"+str(tool.title)+"</a></div></div>"
+
+    print(data)
  
     return JsonResponse(data)
 
@@ -226,20 +228,37 @@ def get_question_type(request):
 
     data = {} 
     kind = int(request.POST.get("kind"))
+    question_id =  request.POST.get("question_id",None)
 
-    print(kind)
-
+    # les type commencent à 1 donc garder une object occurence vide en début de liste
     type_tab = ["","Vrai/Faux","Réponse rédigée",'QCM',"QCS"]
+
+    bgcolors = ["bgcolorRed","bgcolorBlue","bgcolorOrange","bgcolorGreen"] 
 
     classes = []
-    if kind == 1 :
-        classes = [ {"bgcolor" : "bgcolorBlue" ,"texte" : "VRAI" } , { "bgcolor" :"bgcolorRed","texte" : "FAUX" } ]
 
-    elif kind > 2 :
-        classes = ["bgcolorRed","bgcolorBlue","bgcolorOrange","bgcolorGreen"] 
+    if kind == 1 : # VF
+        classes = [ {"bgcolor" : bgcolors[2] ,"choice" : "VRAI" } , { "bgcolor" : bgcolors[1] ,"choice" : "FAUX" } ]
+
+    # Pour le kind = 2 il n'y a pas de bgcolor car question rédigée
+
+    elif kind > 2 : # QCM/QCS
+           
+        if question_id: # Pour l'update
+            question_id = int(question_id)
+            question = Question.objects.get(pk= question_id)
+            i = 0
+            for choice in question.choices.all() :
+                classes.append({"bgcolor" : bgcolors[i]  ,"choice" : choice })
+                i +=1
+
+        else : # création
+            question = None
+            for i in range(4) : 
+                classes.append({"bgcolor" : bgcolors[i]  ,"choice" : None })
 
 
-    context = { 'kind' : kind , 'classes' : classes }
+    context = { 'kind' : kind , 'question' : question  , 'classes' : classes }
 
     data['html'] = render_to_string('tool/type_of_question.html', context)
 
@@ -247,26 +266,7 @@ def get_question_type(request):
 
     return JsonResponse(data)
 
-
-def get_an_existing_question(request):
-
-    data = {} 
-    kind = int(request.POST.get("kind"))
-    question_id = int(request.POST.get("question_id"))
-    question = Question.objects.get(pk= question_id)
-    type_tab = ["","Vrai/Faux","Réponse rédigée",'QCM',"QCS"]
-    quizz_id = int(request.POST.get("quizz_id"))
-
-
-    context = {  'kind' : kind ,  'question' : question ,    }
-
-    data['html'] = render_to_string('tool/type_of_question.html', context)
-
-    data['title'] = type_tab[kind]
-
-
-
-    return JsonResponse(data)
+ 
 
 
 # Pour envoyer les fichiers vers le dossier 
@@ -281,11 +281,7 @@ def handle_uploaded_file(f):
 def send_question(request):
 
     data_files = request.FILES
-    print("data_files", data_files)
-
     data_posted = request.POST
-
-    print("data_posted", data_posted)
 
     kind = int(data_posted.get("kind"))
     quizz_id = int(data_posted.get("quizz_id"))
@@ -355,7 +351,7 @@ def send_question(request):
                 if image_answer : 
                     handle_uploaded_file(image_answer)
             except :
-                imageanswer = ""
+                image_answer = ""
             choice = Choice.objects.create(answer=answer, imageanswer = image_answer , is_correct = is_correct)
             question.choices.add(choice)
             i+=1
@@ -379,7 +375,7 @@ def ajax_update_question(request):
 
  
     data_posted = request.POST
-    type_of_question = int(data_posted.get("type_of_question"))
+    kind = int(data_posted.get("kind"))
     quizz_id = int(data_posted.get("quizz_id"))
     quizz =  Quizz.objects.get(pk = quizz_id)    
     question_id = int(data_posted.get("question_id"))
@@ -407,22 +403,22 @@ def ajax_update_question(request):
     ranking = quizz.questions.count() + 1
 
  
-    if type_of_question == 1 : # Vrai/Faux
+    if kind == 1 : # Vrai/Faux
         is_correct = data_posted.get("is_correct",None)  
         if is_correct == 1 :
             is_correct = True
         else :
             is_correct = False
 
-        question =  Question.objects.filter(pk = question.id).update(title= title, duration= duration , point= point , calculator= calculator  ,   is_publish=is_publish , kind=type_of_question,  is_correct = is_correct )
+        question =  Question.objects.filter(pk = question.id).update(title= title, duration= duration , point= point , calculator= calculator  ,   is_publish=is_publish ,  is_correct = is_correct )
         if imagefile :
             Question.objects.filter(pk = question.id).update(  imagefile= imagefile    ) 
 
 
-    elif type_of_question == 2 : # Réponse tapée
+    elif kind == 2 : # Réponse tapée
  
 
-        question =  Question.objects.filter(pk = question.id).update(title=title, duration= duration , point= point , calculator= calculator  ,   is_publish=is_publish , kind=type_of_question )
+        question =  Question.objects.filter(pk = question.id).update(title=title, duration= duration , point= point , calculator= calculator  ,   is_publish=is_publish )
         if imagefile :
             Question.objects.filter(pk = question.id).update(  imagefile= imagefile    ) 
 
