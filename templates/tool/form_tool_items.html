@@ -19,12 +19,14 @@
         {{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
     </div>
 </div>
+<hr/>
 <div class="row">
-    <div class="col-sm-12 col-md-12">  
-        {{ form.url.label_tag }}<br/>
+    <div class="col-sm-12 col-md-12 alert-danger">  
+        {{ form.url.label_tag }} <em>A ne renseigner qu'avec grande prudence et après avoir mis en place l'url.</em><br/>
         {{ form.url|add_class:"form-control"}}
     </div>
 </div>
+<hr/>
 <div class="row">
     <div class="col-sm-12 col-md-12">  
         {{ form.remark.label_tag }}
