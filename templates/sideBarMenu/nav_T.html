@@ -67,14 +67,14 @@
 </li>
 
 
-{% if request.user.is_superuser %}
+ 
 <li class='dropdown {% if '/tool' in request.path and not 'admin' in    request.path %}active{% endif %}'>
     <a href="#" class="main"  id="tools">
         <i class="fa fa-cubes fa-2x"></i> 
         <div class="captionmenu">Outils péda.</div>
     </a>
 </li>
-{% endif %}
+ 
 
 
 <li  class='dropdown  {% if '/sendmail' in request.path %} active{% endif %}'>
