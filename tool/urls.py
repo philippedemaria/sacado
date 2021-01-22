@@ -31,7 +31,7 @@ urlpatterns = [
 
     ############## Ajax
     path('get_question_type', get_question_type, name='get_question_type'),
- 
+    path('delete_my_tool', delete_my_tool, name='delete_my_tool'),
 
     path('ajax_update_question', ajax_update_question, name='ajax_update_question'),
     path('send_question', send_question, name='send_question'), 

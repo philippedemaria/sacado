@@ -32,7 +32,7 @@ define(['jquery',  'bootstrap'], function ($) {
             )
          });
 
-
+ 
 
             var screen_size = $(window).width()  ;
  

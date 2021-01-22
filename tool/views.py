@@ -119,9 +119,19 @@ def get_this_tool(request):
     tool = Tool.objects.get(pk=tool_id) 
     tool.teachers.add(request.user.teacher)
 
-    data['html'] =  "<div class='row'><div class='col-lg-12 col-xs-12'><a href= /tool/show/"+str(tool.id)+" >"+str(tool.title)+"</a></div></div>"
+    data['html'] =  "<div class='row' id='this_this_tool'  ><div class='col-lg-12 col-xs-12'><a href= /tool/show/"+str(tool.id)+" >"+str(tool.title)+"</a></div></div>"
+ 
+ 
+    return JsonResponse(data)
 
-    print(data)
+
+def delete_my_tool(request):
+
+    data = {} 
+    tool_id = int(request.POST.get("tool_id"))
+
+    tool = Tool.objects.get(pk=tool_id) 
+    tool.teachers.remove(request.user.teacher)
  
     return JsonResponse(data)
 
