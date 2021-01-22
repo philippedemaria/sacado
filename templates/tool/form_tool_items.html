@@ -21,6 +21,12 @@
 </div>
 <div class="row">
     <div class="col-sm-12 col-md-12">  
+        {{ form.url.label_tag }}<br/>
+        {{ form.url|add_class:"form-control"}}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-12">  
         {{ form.remark.label_tag }}
         {{ form.remark }}
     </div>

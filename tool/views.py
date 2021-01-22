@@ -51,7 +51,11 @@ from general_fonctions import *
  
 def list_tools(request):
     teacher = request.user.teacher
-    tools = Tool.objects.filter(is_publish=1).exclude(teachers = teacher)
+
+    if request.user.is_superuser :
+        tools = Tool.objects.all()
+    else :
+        tools = Tool.objects.filter(is_publish=1).exclude(teachers = teacher)
     form = ToolForm(request.POST or None, request.FILES or None   )
     return render(request, 'tool/list_tools.html', {'form': form , 'tools' : tools })
 
@@ -107,9 +111,14 @@ def delete_tool(request, id):
 def show_tool(request, id ):
 
     tool = Tool.objects.get(id=id)
+    if tool.url != "" :
+        url = tool.url
+    else :
+        url = 'tool/show_tool.html'
     context = {  'tool': tool,   }
 
-    return render(request, 'tool/show_tool.html', context )
+    return render(request, url , context )
+
 
 def get_this_tool(request):
 
