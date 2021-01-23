@@ -100,7 +100,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
             }
             else if ($("#kind").val() == "2") 
             { 
-                if ($("#answer").length  == 0) { alert("Vous devez écrire la réponse attendue.") ;  return false ;}
+                if ($("#answers").length  == 0) { alert("Vous devez écrire la réponse attendue.") ;  return false ;}
             }
             else 
             { 
@@ -109,7 +109,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
 
 
             // obliger qu'une seule réponse dans le QCS
-            var n = $( "input:checked" ).length;  
+            var n = $( "input:checked" ).length;  console.log(n) ; 
             if (($("#kind").val() == "4")&& (n>1)) { 
                 alert("Vous avez choisi le type QCS. Vous ne pouvez renseigner qu'une seule bonne réponse. Choisissez le type QCM sinon.") ;
                 return false ;
@@ -221,30 +221,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
 
 
 
-
-        // Selecteur du vrai faux
-        $('body').on('click', '.selector_answer' , function (event) {   
-            
-            var classList = $(this).attr("class").split(/\s+/) ;  
-
-            if ( classList.indexOf("quizz_true") !== -1    )
-            { 
-                $(".true_sentence").attr('checked',true) ;
-                $(".wrong_sentence").attr('checked',false) ;
-                $("#span_true").css('display','block') ;
-                $("#span_wrong").css('display','none') ;
-            }
-            else
-            {
-                $(".wrong_sentence").attr('checked',true) ;
-                $(".true_sentence").attr('checked',false) ;
-                $("#span_true").css('display','none') ;
-                $("#span_wrong").css('display','block') ;
-            }
-
-
-         });
-
+ 
 
         $('#questions_sortable_list').sortable({
             start: function( event, ui ) { 
@@ -281,10 +258,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
             let question_id = $(this).attr("data-question_id");
             let kind = $(this).attr("data-kind");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-
  
-
-
             $.ajax(
                 {
                     type: "POST",
@@ -295,7 +269,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
                         'kind': kind,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: "../get_an_existing_question",
+                    url: "../get_question_type",
                     success: function (data) {
 
                         $('#body_question').html(data.html);
@@ -308,7 +282,9 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
  
  
 
-
+            $('.carousel').carousel({
+              interval: 1000 * 10 
+            });
  
  
 

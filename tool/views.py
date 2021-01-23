@@ -248,6 +248,11 @@ def get_question_type(request):
     data = {} 
     kind = int(request.POST.get("kind"))
     question_id =  request.POST.get("question_id",None)
+    if question_id: # Pour l'update
+        question_id = int(question_id)
+        question = Question.objects.get(pk= question_id)
+    else :
+        question = None
 
     # les type commencent à 1 donc garder une object occurence vide en début de liste
     type_tab = ["","Vrai/Faux","Réponse rédigée",'QCM',"QCS"]
@@ -257,24 +262,20 @@ def get_question_type(request):
     classes = []
 
     if kind == 1 : # VF
-        classes = [ {"bgcolor" : bgcolors[2] ,"choice" : "VRAI" } , { "bgcolor" : bgcolors[1] ,"choice" : "FAUX" } ]
+        classes = [ {"bgcolor" : bgcolors[1] ,"answer" : "VRAI"   } , { "bgcolor" : bgcolors[0] ,"answer" : "FAUX"  } ]
 
     # Pour le kind = 2 il n'y a pas de bgcolor car question rédigée
-
     elif kind > 2 : # QCM/QCS
            
         if question_id: # Pour l'update
-            question_id = int(question_id)
-            question = Question.objects.get(pk= question_id)
             i = 0
             for choice in question.choices.all() :
-                classes.append({"bgcolor" : bgcolors[i]  ,"choice" : choice })
+                classes.append({"labelcolor" : bgcolors[i]  , "bgcolor" : bgcolors[i]  ,"answer" : choice, "is_correct" : choice.is_correct })
                 i +=1
 
         else : # création
-            question = None
             for i in range(4) : 
-                classes.append({"bgcolor" : bgcolors[i]  ,"choice" : None })
+                classes.append({"labelcolor" : bgcolors[i]  ,  "bgcolor" : None  ,"answer" : None, "is_correct" : None })
 
 
     context = { 'kind' : kind , 'question' : question  , 'classes' : classes }
@@ -295,69 +296,22 @@ def handle_uploaded_file(f):
             destination.write(chunk)
 
 
+ 
 
-@csrf_exempt
-def send_question(request):
-
-    data_files = request.FILES
-    data_posted = request.POST
-
-    kind = int(data_posted.get("kind"))
-    quizz_id = int(data_posted.get("quizz_id"))
-
-    title =  cleanhtml(unescape_html(data_posted.get("title")) )
-    calculator =  data_posted.get("calculator", None) 
-    if calculator :
-        calculator = 1
-    else :
-        calculator = 0
-    duration =  data_posted.get("duration", None)
-    if not duration :
-        duration = 20
-    point =  data_posted.get("point", None) 
-    if not point :
-        point = 1000
-    is_publish =  data_posted.get("is_publish", None) 
-    if is_publish :
-        is_publish = True 
-    else : 
-        is_publish = False
-    imagefile =  data_files.get("imagefile", None) 
-    if imagefile : 
-        handle_uploaded_file(imagefile)
-    quizz =  Quizz.objects.get(pk = quizz_id)
-
-    ##Donne le rang du dernier slide et compte le nombre de slide pour ajouter 1 pour afficher le numéro de la suivante.
-    list_questions = quizz.questions.order_by("ranking")
-    if len(list_questions) > 0 :
-        last_question = list_questions.last()
-        ranking = int(last_question.ranking) + 1
-    else :
-        ranking =   1
-
-    nbq = list_questions.count()  + 1
+@csrf_exempt  
+def from_ajax_create_question(kind,  ranking, title, calculator, duration, point ,  is_publish, imagefile, is_correct, is_correct_tab,imageanswer_tab,answers):
 
     if kind == 1 : # Vrai/Faux
-        is_correct = data_posted.get("is_correct",None)  
-        if is_correct == 1 :
-            is_correct = True
-        else :
-            is_correct = False
         question = Question.objects.create(title=title, duration= duration , point= point , calculator = calculator  ,imagefile=imagefile ,  is_publish=is_publish , kind=kind , ranking=ranking , is_correct = is_correct )
 
-
     elif kind == 2 : # Réponse tapée
-        answer =  data_posted.get("answer") 
+
         question = Question.objects.create(title=title, duration= duration , point= point , calculator= calculator  ,imagefile=imagefile ,  is_publish=is_publish , kind=kind , ranking=ranking  )
-        choice = Choice.objects.create(answer=answer, imageanswer = None , is_correct = 1)
+        choice = Choice.objects.create(answer=answers[0], imageanswer = None , is_correct = 1)
         question.choices.add(choice)    
 
     else : # QCM
-        answers =  data_posted.getlist("answers")
         question = Question.objects.create(title=title, duration= duration , point= point , calculator= calculator  ,imagefile=imagefile ,  is_publish=is_publish , kind=kind , ranking=ranking  )
-
-        is_correct_tab =  data_posted.getlist("is_correct")
-        imageanswer_tab =  data_files.getlist("image_answers")
 
         i=1
         for answer in answers :
@@ -374,6 +328,117 @@ def send_question(request):
             choice = Choice.objects.create(answer=answer, imageanswer = image_answer , is_correct = is_correct)
             question.choices.add(choice)
             i+=1
+    return question
+
+
+@csrf_exempt  
+def from_ajax_udate_question(kind,  ranking, question, title, calculator, duration, point ,  is_publish, imagefile, is_correct, is_correct_tab,imageanswer_tab,answers):
+
+    if kind == 1 : # Vrai/Faux
+        question =  Question.objects.filter(pk = question.id).update(title= title, duration= duration , point= point , calculator= calculator  ,   is_publish=is_publish ,  is_correct = is_correct )
+        if imagefile :
+            Question.objects.filter(pk = question.id).update(  imagefile= imagefile    ) 
+
+    else :
+
+        question =  Question.objects.filter(pk = question.id).update(title=title, duration= duration , point= point , calculator= calculator  ,   is_publish=is_publish )
+        if imagefile :
+            Question.objects.filter(pk = question.id).update(  imagefile= imagefile    )  
+
+        if kind == 2 : # Réponse tapée
+            for choice in question.choice.all():
+                Choice.objects.filter(pk = choice.id).update(answer=answers[0], imageanswer = None , is_correct = 1)
+        else : # QCM
+            i=1
+            for choice in question.choices.all() :
+                if str(i) in is_correct_tab:
+                    is_correct = True
+                else :
+                    is_correct = False
+                try :
+                    image_answer = imageanswer_tab[i-1]
+                    if image_answer : 
+                        handle_uploaded_file(image_answer)
+                except :
+                    image_answer = ""
+                Choice.objects.filter(pk = choice.id).update(answer=answers[i-1], imageanswer = image , is_correct = is_correct)    
+                i+=1
+ 
+    return question
+
+
+
+
+
+@csrf_exempt
+def send_question(request):
+
+    data_files = request.FILES
+    data_posted = request.POST
+
+    ### le type
+    kind = int(data_posted.get("kind"))
+
+    ### le quizz
+    quizz_id =  data_posted.get("quizz_id",None) 
+    quizz =  Quizz.objects.get(pk = quizz_id)
+
+    ### la question
+    question_id =  data_posted.get("quetion_id",None)
+    if question_id :
+        question = Question .objects.get(pk = int(question_id))
+    else :
+        question = None
+
+    ### titre ####################################
+    title =  cleanhtml(unescape_html(data_posted.get("title")) )
+    ### calculatrice ####################################
+    calculator =  data_posted.get("calculator", None) 
+    if calculator :
+        calculator = 1
+    else :
+        calculator = 0
+    ### durée ####################################
+    duration =  data_posted.get("duration", None)
+    if not duration :
+        duration = 20
+    ### point attribué ####################################
+    point =  data_posted.get("point", None) 
+    if not point :
+        point = 1000
+    ### publication ####################################
+    is_publish =  data_posted.get("is_publish", None) 
+    if is_publish :
+        is_publish = True 
+    else : 
+        is_publish = False
+    ### question imagée ####################################        
+    imagefile =  data_files.get("imagefile", None) 
+    if imagefile : 
+        handle_uploaded_file(imagefile)
+
+    ## Donne le rang du dernier slide et compte le nombre de slide pour ajouter 1 pour afficher le numéro de la suivante.
+    list_questions = quizz.questions.order_by("ranking")
+    if len(list_questions) > 0 :
+        last_question = list_questions.last()
+        ranking = int(last_question.ranking) + 1
+    else :
+        ranking =   1
+    ## Nombre de questions dans le quizz    ####################################
+    nbq = list_questions.count()  + 1
+
+    is_correct = data_posted.get("is_correct",0) 
+ 
+
+    answers =  data_posted.getlist("answers", [])
+    is_correct_tab =  data_posted.getlist("is_corrects",[])
+    imageanswer_tab =  data_files.getlist("image_answers",[])
+ 
+    if question :
+        question = from_ajax_udate_question(kind,ranking,  question, title, calculator, duration, point ,  is_publish, imagefile, is_correct, is_correct_tab,imageanswer_tab,answers)
+    else :
+        question = from_ajax_create_question(kind, ranking,  title, calculator, duration, point ,  is_publish, imagefile, is_correct, is_correct_tab,imageanswer_tab,answers)
+
 
     question.quizzes.add(quizz)
    
@@ -387,94 +452,6 @@ def send_question(request):
     return JsonResponse(data)
 
 
-
-
-@csrf_exempt  
-def ajax_update_question(request):
-
- 
-    data_posted = request.POST
-    kind = int(data_posted.get("kind"))
-    quizz_id = int(data_posted.get("quizz_id"))
-    quizz =  Quizz.objects.get(pk = quizz_id)    
-    question_id = int(data_posted.get("question_id"))
-    question =  Question.objects.get(pk = question_id)
-
-
-    title =  cleanhtml(unescape_html(data_posted.get("title")) )
-    calculator =  data_posted.get("calculator", None) 
-    if not calculator :
-        calculator = 1
-    duration =  data_posted.get("duration", None)
-    if not duration :
-        duration = 20
-    point =  data_posted.get("point", None) 
-    if not point :
-        point = 1000
-    is_publish =  data_posted.get("is_publish", None) 
-    if not is_publish :
-        is_publish = True
-    else : 
-        is_publish = False
-    imagefile =  data_posted.get("imagefile") 
-
-
-    ranking = quizz.questions.count() + 1
-
- 
-    if kind == 1 : # Vrai/Faux
-        is_correct = data_posted.get("is_correct",None)  
-        if is_correct == 1 :
-            is_correct = True
-        else :
-            is_correct = False
-
-        question =  Question.objects.filter(pk = question.id).update(title= title, duration= duration , point= point , calculator= calculator  ,   is_publish=is_publish ,  is_correct = is_correct )
-        if imagefile :
-            Question.objects.filter(pk = question.id).update(  imagefile= imagefile    ) 
-
-
-    elif kind == 2 : # Réponse tapée
- 
-
-        question =  Question.objects.filter(pk = question.id).update(title=title, duration= duration , point= point , calculator= calculator  ,   is_publish=is_publish )
-        if imagefile :
-            Question.objects.filter(pk = question.id).update(  imagefile= imagefile    ) 
-
-        answer =  data_posted.get("answer")
-        for choice in question.choice.all():
-            Choice.objects.filter(pk = choice.id).update(answer=answer, imageanswer = None , is_correct = 1)
-
-
-    else : # QCM
-
-
-        answers =  data_posted.getlist("answers")
- 
-        Question.objects.filter(pk = question.id).update( title = title,  duration = duration , point = point ,  calculator = calculator  ,    is_publish =is_publish   )
-        if imagefile :
-            Question.objects.filter(pk = question.id).update(  imagefile= imagefile    )  
-
-
-        is_correct_tab =  data_posted.getlist("is_correct")
-        i=1
-
-        for choice in question.choices.all() :
-            if str(i) in is_correct_tab:
-                is_correct = True
-            else :
-                is_correct = False
-            Choice.objects.filter(pk = choice.id).update(answer=answers[i], imageanswer = None , is_correct = is_correct)    
-            i+=1
- 
-    context = {  'kind' : 0 ,    }
-    context_liste = {  'question' : question ,  'quizz' : quizz ,  }
-
-    data = {}
-    data['html'] = render_to_string('tool/type_of_question.html', context)
-    data['question'] = render_to_string('tool/list_of_question.html', context_liste)
- 
-    return JsonResponse(data)
 
 
 

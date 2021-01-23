@@ -39,21 +39,21 @@
                 <table id="standard_tab" class="table table-bordered table-hover">
                     <thead>
                     <tr>
-                        <td>Titre</td>
-                        <td>  </td>
-                        <td>  </td>
+                        <th>Titre</th>
+                        <th>Code pour les élèves</th>
+                        <th>  </th>
                     </tr>
                     </thead>
                     <tbody>
                         {% for quizz in quizzes %}
                             <tr>
                                 <td>
-                                   <a href="{% url 'create_question' quizz.id  %}">{{ quizz.title }}</a> 
+                                   <a href="{% url 'create_question' quizz.id  %}"> {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="200px" />{% endif %}{{ quizz.title }}</a> 
+                                </td>
+                                <td>
+                                    {{ quizz.code }} 
                                 </td>
  
-                                <td>
-                                    {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="200px" />{% endif %}
-                                </td>
                                 <td>
                                   <a href="{% url 'show_quizz'  quizz.id %}" ><i class="fa fa-play"></i></a>
 

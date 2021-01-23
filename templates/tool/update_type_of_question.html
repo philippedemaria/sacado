@@ -87,112 +87,54 @@
 <div class="row margin40" > 
       {% if kind == 1 %} <!-- VRAI / FAUX --> 
 
-          {% for classe in classes %}  
+          {% for classe in classes %} 
           <div class="col-sm-6 col-md-6 quizz_line_answer">  
               <div class="row quizz_box_answer {{ classe.bgcolor }}" id="answer{{ forloop.counter }}_div">
                   <div class="col-sm-2 col-md-1"> 
                   </div>
                   <div class="col-sm-8 col-md-9" > 
-                      <h1 class="quizz_font30 quizz_answer white padding20"> {{ classe.answer }}</h1>
+                      <h1 class="quizz_font30 quizz_answer white padding20"> {{ classe.texte }}</h1>
                   </div>
                   <div class="col-sm-2 col-md-2 checking_zone" id="checking_zone{{ forloop.counter }}"> 
-                      <span class="noCheck" id="noCheck{{ forloop.counter }}"
-                              {% if question %}
-                                  {% if  forloop.counter ==  1  %}
-                                      {% if question.is_correct  %}
-                                          style="display:none;"  
-                                      {% else  %}
-                                          style="display:block;"
-                                      {% endif %}
-                                  {% else  %}
-                                      {% if not question.is_correct  %}
-                                          style="display:none;"  
-                                      {% else  %}
-                                          style="display:block;"
-                                      {% endif %}
-                                  {% endif %}
-                              {% endif %} >
-                          <i class="fa fa-circle fa-3x white"></i>
-                      </span>
-                      <input type="checkbox" class="checkbox_no_display" value="1"  name="is_correct" 
-                              id="id_is_correct{{ forloop.counter }}" 
-                              {% if question %}
-                                  {% if question.is_correct and forloop.counter ==  1  %}
-                                      checked
-                                  {% elif not question.is_correct and forloop.counter == 2  %}
-                                      checked
-                                  {% endif %}
-                              {% endif %}  />
-
-                      <span class="check" id="check{{ forloop.counter }}" 
-                              {% if question %}
-                                  {% if  forloop.counter ==  1  %}
-                                      {% if question.is_correct  %}
-                                          style="display:block;"  
-                                      {% else  %}
-                                          style="display:none;"
-                                      {% endif %}
-                                  {% else  %}
-                                      {% if not question.is_correct  %}
-                                          style="display:block;"  
-                                      {% else  %}
-                                          style="display:none;"
-                                      {% endif %}
-                                  {% endif %}
-                              {% endif %} >
-                          <i class="fa fa-check-circle fa-3x white"></i>
-                      </span>
+                      <span class="noCheck" id="noCheck{{ forloop.counter }}"><i class="fa fa-circle fa-3x white"></i></span>
+                      <input type="checkbox" class="checkbox_no_display" value="1"  name="is_correct" id="id_is_correct{{ forloop.counter }}" {% if question %}{% if question.is_correct  %}checked{% endif %}{% endif %}  />
+                      <span class="check" id="check{{ forloop.counter }}" ><i class="fa fa-check-circle fa-3x white"></i></span>
                   </div>
 
               </div> 
           </div>
           {% endfor %}
 
+
+
+
       {% elif kind == 2 %} <!-- Réponse rédigée -->
-          <div class="col-sm-12 col-md-12" align="center"> 
-              <textarea class="quizz_font30 quizz_box_answer" name="answers" id="answers" placeholder="Ecrire la réponse attendue">{% if question %}{% for choice in question.choices.all  %}{{ choice.answer}}{% endfor %}{% endif %}</textarea>
+          <div class="col-sm-12 col-md-12" align="center">  
+              <textarea class="quizz_font30 quizz_box_answer" name="answers" id="answer" placeholder="Ecrire la réponse attendue">{% if question %}{% if question.choice  %}{{question.choice.answer}}{% endif %}{% endif %}</textarea>
           </div>
       {% else %} <!-- QCM/QCS -->
  
           {% for classe in classes %} 
           <div class="col-sm-6 col-md-6 quizz_line_answer">  
-              <div class="row quizz_box_answer {% if classe.bgcolor %}{{ classe.bgcolor }}{% endif %}" id="answer{{ forloop.counter }}_div">
-                  <div class="col-sm-2 col-md-1 {{ classe.labelcolor }} get_image"> 
+              <div class="row quizz_box_answer" id="answer{{ forloop.counter }}_div">
+                  <div class="col-sm-2 col-md-1 {{ classe }} get_image"> 
         
                       <i class="fa fa-file-image-o white answer_margin20"></i>
                      
-                      <input id="id_imageanswer{{ forloop.counter }}" type="file"  name="image_answers"  onchange="previewFile('{{ forloop.counter }}','{{ classe.bgcolor }}' )" />
+                      <input id="id_imageanswer{{ forloop.counter }}" type="file"  name="image_answers"  onchange="previewFile('{{ forloop.counter }}','{{ classe }}' )" />
  
               
                   </div>
                   <div class="col-sm-8 col-md-9"> 
-                      <textarea class="quizz_font30 quizz_answer {% if classe.bgcolor %}white{% endif %}"  name="answers" id="answer{{ forloop.counter }}" placeholder="Ecrire votre réponse ici">{% if classe.answer %}{{ classe.answer }}{% endif %}</textarea>
+                      <textarea class="quizz_font30 quizz_answer" name="answers" id="answer{{ forloop.counter }}" placeholder="Ecrire votre réponse ici"></textarea>
                        <img src="" height="90px" class="preview" id="preview{{ forloop.counter }}" > 
-                       <a href="#" id="delete_img{{ forloop.counter }}" class="preview pull-right white" onclick="noPreviewFile('{{ forloop.counter }}','{{ classe.bgcolor }}')"><i class="fa fa-times white answer_margin20"></i></a>
+                       <a href="#" id="delete_img{{ forloop.counter }}" class="preview pull-right white" onclick="noPreviewFile('{{ forloop.counter }}','{{ classe }}')"><i class="fa fa-times white answer_margin20"></i></a>
                   </div>
 
                   <div class="col-sm-2 col-md-2 checking_zone" id="checking_zone{{ forloop.counter }}"> 
-                      <span class="noCheck" id="noCheck{{ forloop.counter }}"
-
-                              {% if classe.is_correct %}
-                                      style="display:none;"  
-                                  {% else  %}
-                                      style="display:block;"
-                              {% endif %}
-
-
-
-                      ><i class="fa fa-circle fa-3x white"></i></span>
-                      <input type="checkbox" class="checkbox_no_display"  value="1" name="is_corrects" id="id_is_correct{{ forloop.counter }}" {% if question %}{% if question.is_correct  %}checked{% endif %}{% endif %}  />
-                      <span class="check" id="check{{ forloop.counter }}"
-
-                              {% if classe.is_correct %}
-                                      style="display:block;"  
-                                  {% else  %}
-                                      style="display:none;"
-                              {% endif %}
-
-                       ><i class="fa fa-check-circle fa-3x white"></i></span>
+                      <span class="noCheck" id="noCheck{{ forloop.counter }}"><i class="fa fa-circle fa-3x white"></i></span>
+                      <input type="checkbox" class="checkbox_no_display"  value="1" name="is_correct" id="id_is_correct{{ forloop.counter }}" {% if question %}{% if question.is_correct  %}checked{% endif %}{% endif %}  />
+                      <span class="check" id="check{{ forloop.counter }}" ><i class="fa fa-check-circle fa-3x white"></i></span>
                   </div>
 
               </div>
@@ -205,7 +147,6 @@
 </div>
 <div class="col-sm-12 col-md-12 quizz_submit">
     <div class="form-group">
-
         <a href="#" id="submit_question" class="btn btn-primary btn-lg" >Enregistrer cette question</a>
 
  

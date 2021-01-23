@@ -440,23 +440,29 @@ a.selector_question:hover {
 
 
 .margin40{
-   margin-top: 40px; 
+  margin-top: 40px; 
 }
 
 
 .no_published{
-  background-color: #ffb3b3; 
+  background-color: #ffb3b3!important; 
+
+}
+.no_published a{
+  color: #ffb3b3;
 }
 
+.quizz_box_answer textarea{
+  height: 86px;
+}
 
 .bgcolorRed{
   background-color: #e21b3c!important; 
   height : 90px;
 }
-
 .bgcolorBlue{
-    background-color: #1368ce!important;  
-   height : 90px;
+  background-color: #1368ce!important;  
+  height : 90px;
 }
 .bgcolorOrange{
     background-color: #d89e00!important; 
@@ -467,33 +473,28 @@ a.selector_question:hover {
     height : 90px; 
 }
 
+
  
 .checking_zone{
   padding-top : 20px;
   text-align: center;
 }
-
 .checking_zone .check{
     display : none; 
     cursor: pointer ;
 }
-
 .checking_zone:hover .check{
     display : block; 
 }
-
 .checking_zone:hover .noCheck{
     display : none; 
     cursor: pointer ;
 }
-
 .answers_box{
   position: absolute ; 
   width: 100%;  
   bottom: 0px ;
-
 }
-
 .checkbox_no_display{
     display : none; 
 }
@@ -543,10 +544,44 @@ a.selector_question:hover {
     display: none;
 }
 
+a.delete_question{
+  color : #CCC;
+}
+a.delete_question:hover{
+  color : #F0F0F0;
+}
+
+
 .delete_my_tool{
   font-size : 12px;
 }
 
+
+.consigne_diapo{
+    margin-left: auto;
+    margin-right: auto;
+    width : 80%;
+    min-height: 600px;
+  }
+.carousel-control.left {
+    background-image: -webkit-linear-gradient(left, rgb(93, 67, 145,0.5) 50%, rgb(93, 67, 145,1) 100%);
+    background-image: -o-linear-gradient(left, rgb(93, 67, 145,0.5) 50%, rgb(93, 67, 145,1)100%);
+    background-image: -webkit-gradient(linear, left top, right top, from(rgba(93, 67, 145,1)), to(rgba(93, 67, 145, .0001)));
+    background-image: linear-gradient(to right, rgb(93, 67, 145,0.5) 50%, rgb(93, 67, 145,1) FFF%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFF', endColorstr='#5d439', GradientType=1);
+    background-repeat: repeat-x;
+}
+
+.carousel-control.right {
+    right: 0;
+    left: auto;
+    background-image: -webkit-linear-gradient(left, rgba(93, 67, 145, .0001) 5%,  rgb(93, 67, 145,0.5) 40%);
+    background-image: -o-linear-gradient(left, rgba(93, 67, 145, .0001) 5%,  rgb(93, 67, 145,0.5) 40%);
+    background-image: -webkit-gradient(linear, left top, right top, from(rgba(93, 67, 145, .0001)), to rgb(93, 67, 145,0.5)));
+    background-image: linear-gradient(to right, rgba(93, 67, 145, .0001) 5%, rgb(93, 67, 145,0.5) 40%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFF', endColorstr='#5d439', GradientType=1);
+    background-repeat: repeat-x;
+}
 
  /****************************************** details_card selectors **************************************/
 

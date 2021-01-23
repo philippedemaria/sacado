@@ -4,163 +4,118 @@
 {% load item_tags %}
 
 
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script>
+        require(['script/ajax-quizz']);
+    </script> 
+{% endblock %}
+
+
+
+{% block page_title %}
+   Outils pédagogiques 
+   <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small>Vue du quizz</small> 
+   <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small> {{ quizz.title }}</small>
+{% endblock %}
+
+
+{% block page_menu_right %}
+    <a href="{% url 'list_quizzes' %}" target="_blank" class="btn btn-new">Mode jeu</a>
+    <a href="{% url 'list_quizzes' %}" target="_blank" class="btn btn-new">Mes quizz</a>
+{% endblock %}
+
+
+
+
+
 
 {% block body %}
 
 
-    <div class="slide">
-        <div class="row slide_head">  
-            <div class="col-sm-12 col-md-12"align="center">
- 
-                    <h1 class="thin">{{ question.title }}dddd</h1>
- 
-            </div>
-        </div>
-        <div class="row slide_body">  
-            <div class="col-sm-12 col-md-2" align="left">
-                <div class="chrono" id="chrono{{ forloop.counter }}" data-time="{{ question.duration }}">
+
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+
+         <div class="item consigne_diapo active ">
+
+            <div class="row">  
+                <div class="col-sm-12 col-md-12">
+                    <h1 style="font-size:6em" class="thin">La durée de cette question est  {{ question.duration }} secondes.
+
+                    </h1>
                 </div>
-            </div>
-            <div class="col-sm-12 col-md-8" align="center">
-
-                 <img src="{% if question.calculator %}{% static 'img/calculator.png' %}{% else %}{% static 'img/no_calculator.png' %}{% endif %}" /> 
-
-                 {% if question.imagefile %} <img src="{{ question.imagefile.url }}" />{% endif %}
-
-
-            </div>
-            <div class="col-sm-12 col-md-2" align="right">
-                 n réponses
-            </div>
-        </div> 
-        <div class="row slide_answer"> 
-            <div class="row">
-                <!-- Rouge --> 
-                <div class="col-sm-6 col-md-6">
-                    <div class="slide_quizz_answer bgColorRed">
-        
-                      s
-                    </div>
-                </div>
-
-                <!-- Blue --> 
-                <div class="col-sm-6 col-md-6">
-                    <div class="slide_quizz_answer bgColorBlue">
-             z
-                    </div>
-                </div>
-            </div>
-            <!-- Orange --> 
-            <div class="row">
-                <div class="col-sm-6 col-md-6">
-                    <div class="slide_quizz_answer bgColorOrange">
-                            z
-                    </div>
-                </div>
-                <!-- Green --> 
-                <div class="col-sm-6 col-md-6">
-                    <div class="slide_quizz_answer bgColorGreen">
-              z
-                    </div>
-                </div>
-            </div>
-        </div> 
-    </div> 
-
-
-
-
-
-
- 
-    <div class="row">  
-        <div class="col-sm-12 col-md-12">
-            <div class="form-group">
-                <textarea name="title" cols="40" rows="10" maxlength="255" class="quizz font40 text-center" id="id_title" placeholder="Ecrire votre question ici" >{% if question %}{{ question.title }}{% endif %}</textarea>
             </div> 
+
+
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12 col-md-2" align="center" >
-            <div class="quizz_assets">
-                <label>Durée</label>
-                <input type="number" name="duration" min="5" step="5" placeholder="20" class="quizz_input quizz_input_time" id="id_duration" value="{% if question %}{{ question.duration }}{% endif %}"> <label>s.</label>
-            </div>
+
+
+
+        {% for question in questions %}
+            <div class="item consigne_diapo">
+
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12">
+                        <h1 style="font-size:6em" class="thin">La durée de cette question est  {{ question.duration }} secondes. <br/> 
+                            {% if question.kind == 1 %}
+                                Cette question est un vrai/faux
+                            {% elif question.kind == 2 %}
+                                Vous devez répondre en écrivant la bonne réponse.
+                            {% elif question.kind == 3 %}
+                                Vous devez choisir <b>la ou les bonnes réponses</b> parmi les 4 réponses proposées.
+                            {% else %}
+                                Vous devez choisir la <b>seule bonne</b> réponse parmi les 4 réponses proposées.
+                            {% endif %}
+                        </h1>
+                    </div>
+                </div> 
+
  
-        </div> 
-
-        <div class="col-sm-12 col-md-2" align="center" >
-            <div class="quizz_assets">
-                <label>Calculatrice</label>
-                <input type="checkbox" name="calculator" value="1" id="id_calculator" {% if question %}{% if question.calculator %} checked{% endif %}{% endif %} />
-            </div> 
-        </div> 
-
-        <div class="col-sm-12 col-md-8" align="center">
-            <div class="form-group">
-                 {% if question.vignette.url %} <img src="{{ question.vignette.url }}" /> {% endif %}
-
             </div>
-        </div>
-    </div> 
-    <div class="row">       
-        {% if value == 1 %}
-        <div class="col-sm-12 col-md-6"> 
-            <div class="form-group selector_answer quizz_true">
-                <div class="col-sm-1 col-md-1">  
-                    <img src="{% static 'img/quizz_blue_plain.png' %}" />
-                </div>
-                <div class="col-sm-11 col-md-9" style="padding-top: 20px">  
-                    <h1 class="thin">Vrai</h1>
-                </div>
-                <div class="col-sm-1 col-md-2" class="selector_check"> 
-                    <input name="is_correct"  id="id_is_correct" type="radio"  class="true_sentence selected_this" value="1" {% if question %}{% if question.is_correct %} checked{% endif %}{% endif %} />                 
-                    <span id='span_true' class="this_is_true"><i class="fa fa-check-circle white fa-3x"></i></span>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-6"> 
-            <div class="form-group selector_answer quizz_false">
-                <div class="col-sm-1 col-md-1">  
-                    <img src="{% static 'img/quizz_red_plain.png' %}" />
-                </div>
-                <div class="col-sm-11 col-md-9" style="padding-top: 20px">  
-                    <h1 class="thin">Faux</h1>
-                </div>
-                <div class="col-sm-1 col-md-2" class="selector_check">  
-                    <input name="is_correct"  id="id_is_wrong" type="radio"  class="wrong_sentence selected_this" value="2" {% if question %}{% if not question.is_correct %} checked{% endif %}{% endif %} />
-                    <span id='span_wrong' class="this_is_wrong"><i class="fa fa-check-circle white fa-3x"></i></span>
-                </div>
-            </div>
-        </div>
-        {% elif value == 2 %}
-        <div class="col-sm-12 col-md-12" align="center"> 
-            <div class="form-group contour">
-                <textarea name="answer" id="answer" class="quizz font30" placeholder="Taper ici la réponse attendue"  >{% if question.choices  %} {% for qc in question.choices.all %} qc  {% endfor %}{% endif %}</textarea>
-            </div>
-        </div>
-        {% else %}
-                {% for qc in question.choices.all %}
 
-                <div class="col-sm-12 col-md-6"> 
-                    <div class="form-group selector_answer no_cursor {% if question %}white {% cycle  'bgColorRed' 'bgColorBlue' 'bgColorOrange' 'bgColorGreen' %} {% endif %}" >
-                        <div class="col-sm-1 col-md-1">  
-                            <img src="../../static/img/quizz_{{ forloop.counter}}_plain.png" />
-                        </div>
-                        <div class="col-sm-11 col-md-9">  
-                            <textarea name="answers" id="answer{{ forloop.counter}}"  class="quizz font30" placeholder="Taper ici une proposition"  >{{ qc.answer }}</textarea>
-                        </div>
-                        <div class="col-sm-1 col-md-2 selector_check">
-                            <span id='circle{{ forloop.counter}}' ><i class="fa fa-circle white fa-3x no_display {% if qc.is_correct %} selected_checked {% endif %}"></i></span>
-                            <input name="is_correct"  id="id_answer{{ forloop.counter}}_is_correct"  type="checkbox"  class="selected_this" value="1" {% if qc.is_correct %} checked {% endif %} />
-                            <span id='span_wrong{{ forloop.counter}}' class="span_answer" ><i class="fa fa-check-circle white fa-3x {% if not qc.is_correct %}selected_check{% endif %}"></i></span>
+            <div class="item consigne_diapo">
+
+                <div class="row slide_body">  
+                    <div class="col-sm-12 col-md-6" align="left">
+                        <img src="{% if question.calculator %}{% static 'img/calculator.png' %}{% else %}{% static 'img/no_calculator.png' %}{% endif %}" height="50px" />
+                    </div>
+                    <div class="col-sm-12 col-md-6" align="RIGHT">
+                        <div class="chrono" id="chrono{{ forloop.counter }}" data-time="{{ question.duration }}">
                         </div>
                     </div>
-                </div>
-                {% endfor %}
-        {% endif %}
-     </div>  
- 
- 
+                </div> 
 
+ 
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12"align="center">
+                            <h1 style="font-size:6em" class="thin">{{ question.title }} </h1>
+                    </div>
+                </div>
+
+                {% if question.imagefile %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12"align="center">
+                         <img src="{{ question.imagefile.url }}" />
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+
+
+  </div>
+
+  <!-- Left and right controls -->
+  <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#myCarousel" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
 {% endblock %} 
