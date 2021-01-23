@@ -29,7 +29,7 @@ urlpatterns = [
     path('ajax_remboursement__123526', ajax_remboursement, name='ajax_remboursement'), 
 
 
-    path('quizz/<slug:code>', play_quizz, name='play_quizz'), 
+    path('play_quizz', play_quizz, name='play_quizz'), 
 
 ]
  
