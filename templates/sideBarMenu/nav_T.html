@@ -26,7 +26,7 @@
     </a>
 </li>
 
-<li class='dropdown {% if not '/account'  in request.path and not '/parcours'  in request.path and not '/school'  in request.path and not '/sendmail'  in request.path and not '/qcm'  in request.path  %}active{% endif %}'>
+<li class='dropdown {% if not '/account'  in request.path and not '/tool'  in request.path and not '/parcours'  in request.path and not '/school'  in request.path and not '/sendmail'  in request.path and not '/qcm'  in request.path  %}active{% endif %}'>
     <a href="{% url 'index' %}" class="main" >
         <i class="fa fa-tachometer-alt fa-2x"></i> 
         <div class="captionmenu">Tableau de bord</div>
