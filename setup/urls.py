@@ -16,7 +16,6 @@ urlpatterns = [
     path('gestion_files', gestion_files, name='gestion_files'),
 
 
-
     path('student_to_association__123526', student_to_association, name='student_to_association'),     
     path('choice_menu__123526/<slug:name>', choice_menu, name='choice_menu'), 
     path('details_of_adhesion__123526', details_of_adhesion, name='details_of_adhesion'), 
@@ -27,6 +26,10 @@ urlpatterns = [
     
     path('delete_adhesion__123526', delete_adhesion, name='delete_adhesion'), 
 
-    path('ajax_remboursement__123526', ajax_remboursement, name='ajax_remboursement'),    
+    path('ajax_remboursement__123526', ajax_remboursement, name='ajax_remboursement'), 
+
+
+    path('quizz/<slug:code>', play_quizz, name='play_quizz'), 
+
 ]
  

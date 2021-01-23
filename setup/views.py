@@ -723,4 +723,12 @@ def get_cookie(request):
     return redirect('index')
 
 
- 
+def play_quizz(request,code):
+
+    context = {}
+    return render(request, 'tool/play_quizz.html', context)
+
+
+
+
+
