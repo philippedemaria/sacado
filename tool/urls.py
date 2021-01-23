@@ -20,6 +20,8 @@ urlpatterns = [
     path('delete_quizz/<int:id>', delete_quizz, name='delete_quizz'),
     path('show_quizz/<int:id>', show_quizz, name='show_quizz'), 
 
+    path('play_quizz_now', play_quizz_now, name='play_quizz_now'), 
+
 
 
     path('list_questions', list_questions, name='list_questions'),

@@ -224,6 +224,24 @@ def show_quizz(request,id):
     return render(request, 'tool/show_quizz.html', context)
 
 
+
+ 
+def play_quizz_now(request,code):
+ 
+    quizz = Quizz.objects.get(code = code)
+    questions = quizz.questions.order_by("ranking")
+    context = {  "quizz" : quizz , "questions" : questions }
+
+    return render(request, 'tool/show_quizz.html', context)
+
+
+
+
+
+
+
+
+
 ############################################################################################################
 ############################################################################################################
 ########## Question

@@ -15,14 +15,16 @@
 
 {% block page_title %}
    Outils pédagogiques 
-   <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small>Créateur de quizz</small> 
-   <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small>{{ quizz.title }}</small>
+   <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small>Créateur de quizz</small>
+   {% if quizz %}
+   <img width="25px" src="{% static 'img/angle-right.png' %}"/> <a href="{% url 'update_quizz' quizz.id %}"> <small>{{ quizz.title }}</small></a>
+   {% endif  %}
    <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small><span id="type_of_question_in_title"></span></small>
 {% endblock %}
 
 
 {% block page_menu_right %}
-
+    <a href="{% url 'list_quizzes'  %}" target="_blank" class="btn btn-new">Mes quizz</a>
     <a href="{% url 'show_quizz' quizz.id %}" target="_blank" class="btn btn-new">Voir le quizz</a>
 {% endblock %}
 
