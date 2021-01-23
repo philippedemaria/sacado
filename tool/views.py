@@ -171,7 +171,7 @@ def create_quizz(request):
         nf = form.save(commit = False)
         nf.teacher = teacher
         nf.save()
-
+        form.save_m2m()
         return redirect('create_question' , nf.pk )
     else:
         print(form.errors)
@@ -181,9 +181,31 @@ def create_quizz(request):
 
     return render(request, 'tool/form_quizz.html', context)
 
+
  
+def update_quizz(request,id):
+    
+    teacher = request.user.teacher 
+    quizz = Quizz.objects.get(pk= id)
+    form = QuizzForm(request.POST or None, request.FILES or None , instance = quizz , teacher = teacher  )
+ 
+    if form.is_valid():
+        nf = form.save(commit = False)
+        nf.teacher = teacher
+        nf.save()
+        form.save_m2m()
+
+        return redirect('list_quizzes' )
+    else:
+        print(form.errors)
+
+    context = {'form': form,   }
+
+    return render(request, 'tool/form_quizz.html', context)
+
+
+
 def delete_quizz(request,id):
- 
  
     quizz = Quizz.objects.get(pk= id)
     if quizz.teacher == request.user.teacher :

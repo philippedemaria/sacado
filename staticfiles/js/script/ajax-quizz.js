@@ -249,7 +249,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
             });
 
 
-
+        $('[type=checkbox]').prop('checked', false);     
 
         // Affiche une question
         $('body').on('click', '.update_question' , function (event) {   

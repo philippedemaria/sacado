@@ -62,7 +62,7 @@ class QuizzForm(forms.ModelForm):
  
 		self.fields['levels'] = forms.ModelMultipleChoiceField(queryset=teacher.levels.all(), required=False)
 		self.fields['subject'] = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)
- 
+		self.fields['groups'] = forms.ModelMultipleChoiceField(queryset=teacher.groups.all(), required=False)
  
 
 	def clean_content(self):

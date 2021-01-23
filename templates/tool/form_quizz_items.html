@@ -1,0 +1,100 @@
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}        
+
+
+
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-sm-12 col-md-12">  
+            {{ form.title.label_tag }}
+            {{ form.title|add_class:"form-control" }}
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12"> 
+            <div class="form-group"> 
+                {{ form.vignette.label_tag }} <label><small>Factultatif</small></label>
+                {{ form.vignette|add_class:"btn btn-default" }}
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top:15px">
+        <div class="col-sm-12 col-md-12"> 
+            <table class="table">
+                <tr>
+                    <td>{{ form.is_publish.label_tag }} </td>
+                    <td> {{ form.is_publish|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+                </tr>
+                <tr>
+                    <td>{{ form.is_share.label_tag }} </td>
+                    <td> {{ form.is_share|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+                </tr>
+                <tr>
+                    <td class="no_border">{{ form.is_numeric.label_tag }} </td>
+                    <td>{{ form.is_numeric|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Smartphone"|attr:"data-off:Papier"|attr:"data-width:130" }}  </td>
+                </tr>                                
+                <tr>
+                    <td class="no_border">{{ form.is_mark.label_tag }} </td>
+                    <td>{{ form.is_mark|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <hr class="divider">
+
+
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <label>Attribuer à mes groupes</label>
+            {{ form.groups|add_class:"form-control select2" }}
+        </div>
+    </div>
+
+
+    <hr class="divider">
+
+    <p>Options facultatives</p>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-6">  
+            <label>Enseignement : <small>Factultatif</small></label>
+            {{ form.subject|add_class:"form-control select2" }}
+        </div>
+        <div class="col-sm-12 col-md-6"> 
+            <label>Niveaux : <small>Factultatif</small></label>
+            {{ form.levels|add_class:"form-control select2" }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-2" id="loading"> 
+        </div>
+
+        <div class="col-sm-12 col-md-10"> 
+            <label>Thèmes : <small>Factultatif</small></label>
+            <select id="id_theme" name="theme" class="form-control select2" multiple>
+            </select>
+        </div>
+    </div>
+
+
+
+
+    <hr class="divider">
+
+
+
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12"> 
+            <div class="form-group">
+                <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+            </div>
+        </div>    
+    </div>
+
+ 

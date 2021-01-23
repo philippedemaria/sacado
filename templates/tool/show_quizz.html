@@ -14,7 +14,7 @@
 
 
 {% block page_title %}
-   Outils pédagogiques 
+   <a href="{% url 'list_quizzes' %}" ><i class="fa fa-cubes"></i> </a> Outils pédagogiques 
    <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small>Vue du quizz</small> 
    <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small> {{ quizz.title }}</small>
 {% endblock %}
@@ -32,7 +32,13 @@
 
 {% block body %}
 
-
+<div class="row" align="center">  
+    <div class="col-sm-12 col-md-12">
+        <div class="alert alert-danger">
+            <h3>Visulaisation du quizz. Chaque slide dure 10 secondes, utiliser les boutons si vous voulez activer les passages.</h3>
+        </div>    
+    </div>
+</div> 
 
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
   <!-- Wrapper for slides -->
@@ -40,10 +46,15 @@
 
          <div class="item consigne_diapo active ">
 
-            <div class="row">  
+            <div class="row" align="center">  
                 <div class="col-sm-12 col-md-12">
-                    <h1 style="font-size:6em" class="thin">La durée de cette question est  {{ question.duration }} secondes.
-
+                    <h1 style="font-size:4em" class="thin">Préparez vous, le questionnaire va débuter. <br/><br/>Vous devez vous munir
+                        {% if quizz.is_questions   %}
+                            du terminal de votre choix et vous connectez à l'adresse https://play.sacado.xyz/{{ quizz.code}}
+                        {% else %}
+                            de votre feuille de réponse et d'un stylo.
+                        {% endif  %}
+                        L'utilisation de la calculatrice est précisée pour chaque question. 
                     </h1>
                 </div>
             </div> 
@@ -58,7 +69,7 @@
 
                 <div class="row">  
                     <div class="col-sm-12 col-md-12">
-                        <h1 style="font-size:6em" class="thin">La durée de cette question est  {{ question.duration }} secondes. <br/> 
+                        <h1 style="font-size:5em" class="thin">La durée de cette question est  {{ question.duration }} secondes. <br/> 
                             {% if question.kind == 1 %}
                                 Cette question est un vrai/faux
                             {% elif question.kind == 2 %}

@@ -1,7 +1,7 @@
 from django.db import models
 from datetime import date
 from ckeditor_uploader.fields import RichTextUploadingField
- 
+from group.models import Group
 from socle.models import *
 from account.models import Student, Teacher, ModelWithCode 
 from django.apps import apps
@@ -82,8 +82,11 @@ class Quizz(ModelWithCode):
     is_share = models.BooleanField(default=0, verbose_name="Mutualisé ?")
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
 
-    is_questions = models.BooleanField(default=0, editable=False ) 
-    is_mark = models.BooleanField(default=0, verbose_name="Type de réponse") 
+    is_questions = models.BooleanField(default=0, editable=False )  # presentation ou questionnaire
+    is_numeric = models.BooleanField(default=0,   verbose_name="Type de réponse" )    # réponse sur papier ou sur smartphone
+    is_mark = models.BooleanField(default=0, verbose_name="Récupérer les notes ?") 
+
+    groups = models.ManyToManyField(Group, blank=True, related_name="quizz" , editable=False) 
 
     def __str__(self):
         return self.title 

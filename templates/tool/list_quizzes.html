@@ -9,6 +9,7 @@
 
     <script>
         require(['script/ajax-quizz']);
+        require(['script/ajax-quizz-complement']);
     </script> 
 
 {% endblock %}
@@ -16,7 +17,7 @@
 
 
 {% block page_title %}
-        <a href="{% url 'index' %}" ><i class="fa fa-cloud"></i> </a> Les quizz
+        <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> </a> Les quizz
 {% endblock %}
 
 {% block page_menu_right %}
@@ -41,27 +42,32 @@
                     <tr>
                         <th>Titre</th>
                         <th>Code pour les élèves</th>
+                        <th>Groupes attribués</th>
                         <th>  </th>
                     </tr>
                     </thead>
                     <tbody>
                         {% for quizz in quizzes %}
                             <tr>
-                                <td>
-                                   <a href="{% url 'create_question' quizz.id  %}"> {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="200px" />{% endif %}{{ quizz.title }}</a> 
+                                <td style="line-height: 200px">
+                                   <a href="{% url 'update_quizz' quizz.id  %}"> {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="200px" />{% endif %}{{ quizz.title }}</a> 
                                 </td>
-                                <td>
+                                <td style="line-height: 200px">
                                     {{ quizz.code }} 
                                 </td>
- 
-                                <td>
-                                  <a href="{% url 'show_quizz'  quizz.id %}" ><i class="fa fa-play"></i></a>
+                                <td style="line-height: 200px"> 
+                                    {% for g in quizz.groups.all %} {{ g }} {% if not forloop.last %}, {% endif %} {% endfor %}
+                                </td>
+                                <td > 
+                                  <a href="{% url 'create_question'  quizz.id %}" target="_blank" ><i class="fa fa-plus"></i> Ajouter des questions</a>  <br/><br/>
 
+                                  <a href="https://sacado.xyz/quizz/{{ quizz.code }}" target="_blank" ><i class="fa fa-play"></i>  Mode jeu</a> <br/><br/>
 
-                                  <a href="{% url 'delete_quizz'  quizz.id %}"  onclick="return TestDelete('ce quizz')"><i class="fa fa-trash"></i></a>
+                                  <a href="{% url 'show_quizz'  quizz.id %}" ><i class="fa fa-eye"></i>  Voir le quizz</a> <br/><br/>
+                                  <a href="{% url 'delete_quizz'  quizz.id %}"  onclick="return TestDelete('ce quizz')"><i class="fa fa-trash"></i>  Supprimer</a>
                                 </td>
                             </tr>
-                        {% endfor %}
+                        {% endfor %} 
                     </tbody>
                 </table>
             </div>
@@ -86,86 +92,9 @@
             </div>
             <div class="modal-body">
                 <form action="{% url 'create_quizz' %}" method="POST"  enctype='multipart/form-data'>
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">  
-                            {{ form.title.label_tag }}
-                            {{ form.title|add_class:"form-control" }}
  
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12"> 
-                            <div class="form-group"> 
-                                {{ form.vignette.label_tag }} <label><small>Factultatif</small></label>
-                                {{ form.vignette|add_class:"btn btn-default" }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:15px">
-                        <div class="col-sm-12 col-md-12"> 
-                            <table class="table">
-                                <tr class="no_border">
-                                    <td>{{ form.is_publish.label_tag }} </td>
-                                    <td> {{ form.is_publish|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
-                                </tr>
-                                <tr class="no_border">
-                                    <td>{{ form.is_share.label_tag }} </td>
-                                    <td> {{ form.is_share|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
-                                </tr>
-                                <tr class="no_border">
-                                    <td>{{ form.is_mark.label_tag }} </td>
-                                    <td>{{ form.is_mark|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Smartphone"|attr:"data-off:Papier"|attr:"data-width:130" }}  </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <hr class="divider">
-
-
-
-                    <div class="row">
-                        <div class="col-sm-12 col-md-6">  
-                            <label>Enseignement : <small>Factultatif</small></label>
-                            {{ form.subject|add_class:"form-control select2" }}
-                        </div>
-                        <div class="col-sm-12 col-md-6"> 
-                            <label>Niveaux : <small>Factultatif</small></label>
-                            {{ form.levels|add_class:"form-control select2" }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-2" id="loading"> 
-                        </div>
- 
-                        <div class="col-sm-12 col-md-10"> 
-                            <label>Thèmes : <small>Factultatif</small></label>
-                            <select id="id_theme" name="theme" class="form-control select2" multiple>
-                            </select>
-                        </div>
-                    </div>
-
-
-
- 
-                    <hr class="divider">
- 
-
- 
-
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12"> 
-                            <div class="form-group">
-                                <input value="Enregistrer" type="submit" class="btn btn-primary"/>
-                                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
-                            </div>
-                        </div>    
-                    </div>
-
+                    {% include 'tool/form_quizz_items.html' %}
                 </form>
-
-
             </div>
         </div>
     </div>

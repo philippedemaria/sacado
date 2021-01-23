@@ -85,8 +85,9 @@
     </div>  
 </div>
 <div class="row margin40" > 
-      {% if kind == 1 %} <!-- VRAI / FAUX --> 
 
+  {% if quizz.is_questions  %}
+      {% if kind == 1 %} <!-- VRAI / FAUX --> 
           {% for classe in classes %}  
           <div class="col-sm-6 col-md-6 quizz_line_answer">  
               <div class="row quizz_box_answer {{ classe.bgcolor }}" id="answer{{ forloop.counter }}_div">
@@ -147,7 +148,6 @@
               </div> 
           </div>
           {% endfor %}
-
       {% elif kind == 2 %} <!-- Réponse rédigée -->
           <div class="col-sm-12 col-md-12" align="center"> 
               <textarea class="quizz_font30 quizz_box_answer" name="answers" id="answers" placeholder="Ecrire la réponse attendue">{% if question %}{% for choice in question.choices.all  %}{{ choice.answer}}{% endfor %}{% endif %}</textarea>
@@ -198,11 +198,12 @@
               </div>
           </div>
           {% endfor %}
-
       {% endif %}
-
+  {% endif %}
 
 </div>
+
+
 <div class="col-sm-12 col-md-12 quizz_submit">
     <div class="form-group">
 

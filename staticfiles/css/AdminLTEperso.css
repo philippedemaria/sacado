@@ -58,14 +58,7 @@ hr.divider {
 
 
 
-.table tr i.fa-trash{
-  display:none;
-}
-
-.table tr:hover i.fa-trash{
-  display:inline;
-}
-
+ 
 
 
 .div_results audio{
