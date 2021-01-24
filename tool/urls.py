@@ -20,9 +20,7 @@ urlpatterns = [
     path('delete_quizz/<int:id>', delete_quizz, name='delete_quizz'),
     path('show_quizz/<int:id>', show_quizz, name='show_quizz'), 
 
-    path('play_quizz_now', play_quizz_now, name='play_quizz_now'), 
-
-
+    path('play_quizz_teacher/<int:id>', play_quizz_teacher, name='play_quizz_teacher'), 
 
     path('list_questions', list_questions, name='list_questions'),
 

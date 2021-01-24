@@ -5,6 +5,7 @@ from account.forms import  UserForm, TeacherForm, StudentForm , BaseUserFormSet
 from django.contrib.auth import   logout
 from account.models import  User, Teacher, Student  ,Parent , Adhesion
 from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise, Customanswerbystudent,Writtenanswerbystudent
+from tool.models import Quizz, Question, Choice
 from group.models import Group, Sharing_group
 from group.views import student_dashboard
 from setup.models import Formule
@@ -26,7 +27,7 @@ from itertools import chain
 from account.decorators import is_manager_of_this_school
 from general_fonctions import *
 import fileinput 
-
+import random
 from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 from django.forms import BaseFormSet
@@ -729,6 +730,48 @@ def play_quizz(request):
     return render(request, 'tool/play_quizz.html', context)
 
 
+ 
+ 
+def play_quizz_login(request):
 
 
+    code = request.POST.get("code")
+ 
+    if Quizz.objects.filter(code = code).count() == 1:
 
+        quizz = Quizz.objects.get(code = code)
+        groups = quizz.groups.all()
+        student_set = set()
+        for group in groups :
+            student_set.update(group.students.all())
+        students = list(student_set)
+        random.shuffle(students)
+ 
+
+        context = { "quizz" : quizz , "students" : students , }
+        return render(request, 'tool/play_quizz_login.html', context)
+    else :
+        context = { 'error' : True}
+        return render(request, 'tool/play_quizz.html', context)
+    
+
+
+def play_quizz_start(request):
+
+    student_id = request.POST.get("student_id")
+    student = Student.objects.get(pk = student_id)
+
+    quizz_id = request.POST.get("quizz_id")
+    quizz = Quizz.objects.get(pk = quizz_id)
+    
+    n = request.POST.get("n",0)
+
+    quizz.students.add(student)
+   
+    questions = list(quizz.questions.order_by("ranking"))
+    print(n)
+    print(questions)
+    question = questions[n]    
+    n +=1
+    context = {  "quizz" : quizz , "question" : question , "n" : n}
+    return render(request, 'tool/play_quizz_start.html', context)

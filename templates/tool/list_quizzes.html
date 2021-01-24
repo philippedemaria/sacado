@@ -61,7 +61,7 @@
                                 <td > 
                                   <a href="{% url 'create_question'  quizz.id %}" target="_blank" ><i class="fa fa-plus"></i> Ajouter des questions</a>  <br/><br/>
 
-                                  <a href="{% url 'play_quizz'   %}" target="_blank" ><i class="fa fa-play"></i>  Mode jeu</a> <br/><br/>
+                                  <a href="{% url 'play_quizz_teacher'  quizz.id   %}" target="_blank" ><i class="fa fa-play"></i>  Mode jeu</a> <br/><br/>
 
                                   <a href="{% url 'show_quizz'  quizz.id %}" ><i class="fa fa-eye"></i>  Voir le quizz</a> <br/><br/>
                                   <a href="{% url 'delete_quizz'  quizz.id %}"  onclick="return TestDelete('ce quizz')"><i class="fa fa-trash"></i>  Supprimer</a>

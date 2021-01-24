@@ -85,13 +85,28 @@ class Quizz(ModelWithCode):
     is_questions = models.BooleanField(default=0, editable=False )  # presentation ou questionnaire
     is_numeric = models.BooleanField(default=0,   verbose_name="Type de réponse" )    # réponse sur papier ou sur smartphone
     is_mark = models.BooleanField(default=0, verbose_name="Récupérer les notes ?") 
+    is_lock = models.BooleanField(default=0, verbose_name="Verrouiller ?") 
 
     groups = models.ManyToManyField(Group, blank=True, related_name="quizz" , editable=False) 
+ 
 
     def __str__(self):
         return self.title 
 
+ 
 
+
+class Player(models.Model):
+
+    student = models.ForeignKey(Student,  null=True, blank=True,   related_name='player', on_delete=models.PROTECT,  editable= False)
+    quizz = models.ForeignKey(Quizz,  null=True, blank=True, related_name='player', on_delete=models.PROTECT, editable= False)
+    scoretotal = models.PositiveIntegerField(default=0, editable=False)
+ 
+    def __str__(self):
+        return self.student 
+
+    class Meta:
+        unique_together = ('student', 'quizz')
 
 
 
@@ -121,14 +136,25 @@ class Question(models.Model):
     is_correct = models.BooleanField(default=0, verbose_name="Réponse correcte ?")
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
 
+    students = models.ManyToManyField(Student, blank=True, through="Questionplayer", related_name="question",   editable=False)
 
 
     def __str__(self):
         return self.title 
 
 
+class Questionplayer(models.Model):
+
+    student = models.ForeignKey(Student,  null=True, blank=True,   related_name='student_player', on_delete=models.PROTECT,  editable= False)
+    question = models.ForeignKey(Question,  null=True, blank=True, related_name='question_player', on_delete=models.PROTECT, editable= False)
+    answer = models.CharField( max_length=255, verbose_name="Réponse")  
+    score = models.PositiveIntegerField(default=0, editable=False)
+    timer = models.CharField(max_length=255, editable=False)  
+
+    def __str__(self):
+        return self.student 
 
 
-
-
+    class Meta:
+        unique_together = ('student', 'question')
 

@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap');
+body {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    justify-content: center;
+    text-align: center;
+    flex: 1 0 auto;
+    animation: 14s ease 0s infinite alternate none running dyjhSq;
+    background-color: rgb(69, 163, 229);
+    padding: 0px 0.625rem;
+}
+.title{
+  font-size: 130px;
+  font-weight: bold ;
+  font-family:'Amatic Sc';
+  color:#FFF;
+}
+.bottom_space{
+  margin-bottom: 20px;
+}
+.form-control{
+  width:250px;
+  height : 50px;
+  font-size: 20px;
+  text-align: center;
+}
+button{
+  background-color: #5d4391;
+  color: #FFF;
+}
+
+button:hover{
+  background-color: #f1eef7;
+  color: #5d4391;
+  cursor: pointer;
+}
+
+.space_round{
+  margin: 20px;
+  border-radius: 5px ; 
+}
+
+
+
+.bg1 { background-color: rgb(69, 163, 229); }
+.bg2 { background-color: rgb(68, 68, 228) }
+.bg3 { background-color: rgb(228, 68, 108) ;}
+.bg4 { background-color: rgb(188, 68, 228) ;}
+.bg5 { background-color: rgb(228, 68, 68) ;}
+.bg6 { background-color: rgb(228, 188, 68) ;}
+.bg7 { background-color: rgb(108, 228, 68) ;}
+.bg8 { background-color: rgb(68, 228, 188) ;}
+
+
+.button_answer{
+  height:90px;
+}
+
+
