@@ -36,6 +36,9 @@ requirejs.config({
         fonctions_jquery: "script/fonctions-jquery",
         fonctions: "script/fonctions",
         uploader: "lib/jquery.smartuploader",
+        websocketbridge: "lib/websocketbridge",
+
+
     },
     shim: {
         "bootstrap": {
@@ -89,4 +92,6 @@ requirejs.config({
     }
 });
 
-require(['jquery', 'bootstrap', 'uploader', 'bootstrap_popover', 'bcPicker', 'mathjax',  'datatables', 'datatables_bootstrap',  'ckeditor', 'ckeditor_init', 'config_select2', 'config_datepicker', 'config_toggle',  'config_colorpicker', 'fonctions_jquery', 'fonctions',   'config_datatable', 'multiselect', 'ui',]);
+require(['jquery', 'bootstrap', 'uploader', 'bootstrap_popover', 'bcPicker', 'mathjax',  'datatables', 'datatables_bootstrap',   'websocketbridge' ,
+    'ckeditor', 'ckeditor_init', 'config_select2', 'config_datepicker', 'config_toggle',  'config_colorpicker', 'fonctions_jquery', 
+    'fonctions',   'config_datatable', 'multiselect', 'ui',]);

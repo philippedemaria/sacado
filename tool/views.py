@@ -406,8 +406,6 @@ def from_ajax_udate_question(kind,  ranking, question, title, calculator, durati
 
 
 
-
-
 @csrf_exempt
 def send_question(request):
 

@@ -13,9 +13,9 @@
     </head>
     <body>
 
-      {% block form %}
-      <h1 class="title">SACADO Quizz Play</h1>
-      <form action="{% url 'play_quizz_login' %}" method="POST">
+        {% block form %}
+        <h1 class="title">SACADO Quizz Play</h1>
+        <form action="{% url 'play_quizz_login' %}" method="POST">
             {% csrf_token %}
             <div class="row bottom_space">  
                 <div class="col-sm-12 col-md-12" align="center">
@@ -27,8 +27,8 @@
                     <button type="submit"  class="form-control" >Rentre dans le quizz</button>
                 </div>
             </div> 
-      </form>
-    {% endblock %}
+        </form>
+        {% endblock %}
 
     {% block script %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>

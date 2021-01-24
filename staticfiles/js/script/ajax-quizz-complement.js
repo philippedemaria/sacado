@@ -16,6 +16,9 @@ define(['jquery',  'bootstrap' ], function ($) {
 
         $('[type=checkbox]').prop('checked', false); 
 
+
+ 
+
  
     });
 });

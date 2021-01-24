@@ -15,10 +15,12 @@
     {% for student in students %}
         <input type="hidden" value="{{ quizz.id }}" name="quizz_id"  />
         <input type="hidden" value="{{ student.user.id }}" name="student_id"  />
+        <input type="hidden" value="{{ student }}" id="student_name"  />
         <button type="submit" class="form-control space_round" >{{ student }}</button>
 
     {% endfor  %}
 </form>
+
 {% endblock %}
  
  

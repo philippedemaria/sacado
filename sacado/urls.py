@@ -31,8 +31,7 @@ urlpatterns = [
                   path('oauth/', include('social_django.urls')),
                   path('basthon/', include('basthon.urls')),    
                   path('association/', include('association.urls')),
-                  path('tool/', include('tool.urls')),          
-                  path('realtime/', include('realtime.urls')),   
+                  path('tool/', include('tool.urls')),            
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

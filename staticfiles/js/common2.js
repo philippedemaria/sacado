@@ -38,6 +38,7 @@ requirejs.config({
         fonctions_jquery: "script/fonctions-jquery",
         fonctions: "script/fonctions",
         uploader: "lib/jquery.smartuploader",
+        websocketbridge: "lib/websocketbridge",
 
     },
     shim: {
@@ -90,7 +91,7 @@ requirejs.config({
 });
 
 require(['jquery', 'bootstrap', 'bootstrap_popover',  'bcPicker',  'mathjax' ,  'ckeditor', 'ckeditor_init', 'ckeditor_jquery',  'datatables', 'datatables_bootstrap',
-    'config_select2', 'config_datepicker', 'config_toggle', 'config_colorpicker', 'fonctions_jquery', 'fonctions',   'uploader', 'uploader',
+    'config_select2', 'config_datepicker', 'config_toggle', 'config_colorpicker', 'fonctions_jquery', 'fonctions',   'uploader',   'websocketbridge' ,
     'multiselect', 'ui', 'slimscroll', 'chart']);
 
 // suppression de admin dans le chargement  : 'admin', 
