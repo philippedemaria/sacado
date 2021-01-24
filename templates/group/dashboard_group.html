@@ -40,7 +40,7 @@
                     {% get_min_score_parcours parcours student as data_min %} 
                     {% if parcours.vignette %}
                     <!-- small box -->
-                    <div class="small-box-student" style="background-image: url('{{parcours.vignette.url }}'); background-size: 100% 50%;">
+                    <div class="small-box-student" style="background-image: url('{{parcours.vignette.url }}'); background-size: 100% 100%;">
                         {% if  student.user.school %}
                             {% if  data_min.boolean %}
                             <div class="background_badge" >
