@@ -101,6 +101,8 @@ INSTALLED_APPS = [
     'basthon',
     'association',
     'tool',
+    'channels',
+    'realtime',
     ]
 
 
@@ -178,7 +180,7 @@ TEMPLATES = [
 
 
 WSGI_APPLICATION = 'sacado.wsgi.application'
-
+ASGI_APPLICATION = 'sacado.asgi.application'
 
 DATABASES = {
     'default': {
