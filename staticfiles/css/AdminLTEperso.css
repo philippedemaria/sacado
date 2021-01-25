@@ -617,22 +617,27 @@ a.delete_question:hover{
   padding-top: 30px;
 }
 
-#play_quizz_teacher #undertitle{
-  background-color : #F0F0F0 ; 
-  border-radius: 10px;
-  padding: 20px;
-  margin-bottom: 30px;
-  color :  #382857 ; 
-}
 
-#play_quizz_teacher .row {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    margin-right: 0px; 
-    margin-left: 0px; 
-}
+
+  #play_quizz_teacher #undertitle{
+    background-color : #F0F0F0 ; 
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    color :  #382857 ; 
+  }
+
+  #play_quizz_teacher .row {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      margin-right: 0px; 
+      margin-left: 0px; 
+  }
+ 
+
+
 
 
  /****************************************** details_card selectors **************************************/
@@ -1669,6 +1674,28 @@ font-family: "Montserrat", sans-serif;
 .light{
   font-weight: 300;
 }
+
+ 
+
+@media (max-width:950px){
+
+  #play_quizz_teacher #undertitle h1.light{
+      font-size: 1.5rem!important;
+  }
+ 
+
+}
+
+@media (max-width:650px){
+
+  #play_quizz_teacher #undertitle h1.light{
+      font-size : 1.5rem!important;
+  }
+ 
+}
+
+
+
 
 .content_bgwhite{
     background-color: #FFF;

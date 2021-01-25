@@ -6,7 +6,7 @@ from channels.layers import get_channel_layer
 
 
 @receiver(post_save, sender=Player)
-def announce_new_user(sender, instance, created, **kwargs):
+def announce_new_player(sender, instance, created, **kwargs):
     if created:
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
