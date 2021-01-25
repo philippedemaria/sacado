@@ -12,4 +12,5 @@ def announce_new_player(sender, instance, created, **kwargs):
         async_to_sync(channel_layer.group_send)(
             "gossip", {"type": "player.gossip",
                        "event": "New Player",
-                       "first": instance.student.user.first_name})
+                       "player": instance.student.user.first_name
+                       })

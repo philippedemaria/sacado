@@ -7,7 +7,7 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     <script>
-        require(['script/ajax-quizz']);
+        require(['script/quizz-slider']);
     </script> 
 {% endblock %}
 
@@ -21,7 +21,7 @@
 
 
 {% block page_menu_right %}
-    <a href="{% url 'list_quizzes' %}" target="_blank" class="btn btn-new">Mode jeu</a>
+    <a href="{% url 'play_quizz_teacher' quizz.id %}" target="_blank" class="btn btn-new">Mode jeu</a>
     <a href="{% url 'list_quizzes' %}" target="_blank" class="btn btn-new">Mes quizz</a>
 {% endblock %}
 
@@ -31,102 +31,115 @@
 
 
 {% block body %}
-
-<div class="row" align="center">  
-    <div class="col-sm-12 col-md-12">
-        <div class="alert alert-danger">
-            <h3>Visulaisation du quizz. Chaque slide dure 10 secondes, utiliser les boutons si vous voulez activer les passages.</h3>
-        </div>    
-    </div>
-</div> 
-
-<div id="myCarousel" class="carousel slide" data-ride="carousel">
-  <!-- Wrapper for slides -->
-  <div class="carousel-inner">
-
-         <div class="item consigne_diapo active ">
-
-            <div class="row" align="center">  
-                <div class="col-sm-12 col-md-12">
-                    <h1 style="font-size:4em" class="thin">Préparez vous, le questionnaire va débuter. <br/><br/>Vous devez vous munir
-                        {% if quizz.is_questions   %}
-                            du terminal de votre choix et vous connectez à l'adresse https://play.sacado.xyz/{{ quizz.code}}
-                        {% else %}
-                            de votre feuille de réponse et d'un stylo.
-                        {% endif  %}
-                        L'utilisation de la calculatrice est précisée pour chaque question. 
-                    </h1>
-                </div>
-            </div> 
-
-
+ 
+ 
+  <div class="row" align="center">  
+        <div class="col-sm-12 col-md-3" align="center"  >
+            <div id="start_quizz">
+                <button  class='btn btn-primary'><i class='fa fa-play'></i> Lecture automatique</button>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6" align="center" >
+            {% for question in questions %}
+                <button id="question{{ forloop.counter }}" class="btn btn-default"> Q{{ forloop.counter }} </button> 
+            {% endfor %}
         </div>
 
 
 
-        {% for question in questions %}
-            <div class="item consigne_diapo">
+        <div class="col-sm-12 col-md-3 nav" align="center"  >
+            <button data-nav="prev" class="btn btn-default"><i class="fa fa-caret-left"></i> Précedent</button>  
+            <button data-nav="next" class="btn btn-default"><i class="fa fa-caret-right"></i> Suivant</button>    
+        </div>
+  </div> 
 
-                <div class="row">  
-                    <div class="col-sm-12 col-md-12">
-                        <h1 style="font-size:5em" class="thin">La durée de cette question est  {{ question.duration }} secondes. <br/> 
-                            {% if question.kind == 1 %}
-                                Cette question est un vrai/faux
-                            {% elif question.kind == 2 %}
-                                Vous devez répondre en écrivant la bonne réponse.
-                            {% elif question.kind == 3 %}
-                                Vous devez choisir <b>la ou les bonnes réponses</b> parmi les 4 réponses proposées.
-                            {% else %}
-                                Vous devez choisir la <b>seule bonne</b> réponse parmi les 4 réponses proposées.
-                            {% endif %}
-                        </h1>
-                    </div>
-                </div> 
+    <div class="wrapper_slider">
+  <!-- Wrapper for slides -->
+        <div class="slider">
 
- 
-            </div>
+            <ul>
+                <li class="my_slide">
+                    <input type="hidden" value="3" id="introduction" /> 
+                    <div class="row consigne_diapo"  align="center">  
+                        <div class="col-sm-12 col-md-12">
+                            <h1 style="font-size:4em" class="thin"> 
+                                {{ quizz.title}}
+                            </h1>
+                            {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="700px" />{% endif %}
+                        </div>
+                    </div> 
+                </li>
 
-            <div class="item consigne_diapo">
 
-                <div class="row slide_body">  
-                    <div class="col-sm-12 col-md-6" align="left">
-                        <img src="{% if question.calculator %}{% static 'img/calculator.png' %}{% else %}{% static 'img/no_calculator.png' %}{% endif %}" height="50px" />
-                    </div>
-                    <div class="col-sm-12 col-md-6" align="RIGHT">
-                        <div class="chrono" id="chrono{{ forloop.counter }}" data-time="{{ question.duration }}">
+                {% for question in questions %}
+                <li class="my_slide">
+                    <input type="hidden" value="3" id="inter_slide{{ forloop.counter }}" /> 
+                    <div class="row consigne_diapo"  align="center">  
+                        <div class="col-sm-12 col-md-12">
+                            <h1 style="font-size:4em" class="thin"><b>Question {{forloop.counter}}.</b><br/>La durée de cette question est <br/>  <b>{{ question.duration }} secondes</b>. <br/> 
+                                {% if question.kind == 1 %}
+                                    Cette question est un <br/><b>vrai/faux</b>
+                                {% elif question.kind == 2 %}
+                                    Vous devez répondre en écrivant <br/><b>la bonne réponse</b>.
+                                {% elif question.kind == 3 %}
+                                    Vous devez choisir <br/><b>la ou les bonnes réponses</b><br/> parmi les 4 réponses proposées.
+                                {% else %}
+                                    Vous devez choisir la <br/><b>seule bonne réponse</b><br/>  parmi les 4 réponses proposées.
+                                {% endif %}
+                            </h1>
+                        </div>
+                    </div> 
+                </li>
+                <li class="my_slide">
+                    <input type="hidden" value="{{ question.duration }}" id="duration{{ forloop.counter }}" /> 
+                    <div class="row">  
+                        <div class="col-sm-12 col-md-6" align="left">
+                            <img src="{% if question.calculator %}{% static 'img/calculator.png' %}{% else %}{% static 'img/no_calculator.png' %}{% endif %}" height="50px" />
+                        </div>
+                        <div class="col-sm-12 col-md-6" align="right">
+                            <div class="chrono" id="chrono{{ forloop.counter }}" > 
+                                {{ question.duration }}
+                            </div>
+                        </div>
+                    </div> 
+
+     
+                    <div class="row">  
+                        <div class="col-sm-12 col-md-12"align="center">
+                            <h1 style="font-size:5em" class="thin"><b>Q{{forloop.counter}}.</b> {{ question.title }} </h1>
                         </div>
                     </div>
-                </div> 
 
+                    {% if question.imagefile %}
+                    <div class="row">  
+                        <div class="col-sm-12 col-md-12"align="center">
+                             <img src="{{ question.imagefile.url }}" />
+                        </div>
+                    </div>
+                    {% endif %}
+                </li>
+                {% endfor %}
+                <li class="my_slide">
+                    <input type="hidden" value="3" id="final_question" /> 
+                    <div class="row consigne_diapo"  align="center">  
+                        <div class="col-sm-12 col-md-12">
+                            <h1 style="font-size:4em" class="thin">
+                                <br/><br/>
+                                <b> -- FIN -- </b>
+                                <br/><br/>
+                                Posez vos stylos
+                                <br/><br/>
+                            </h1>
+                        </div>
+                    </div> 
+                </li>
+
+
+
+
+
+            </ul>
+        </div>
+    </div>
  
-                <div class="row">  
-                    <div class="col-sm-12 col-md-12"align="center">
-                            <h1 style="font-size:6em" class="thin">{{ question.title }} </h1>
-                    </div>
-                </div>
-
-                {% if question.imagefile %}
-                <div class="row">  
-                    <div class="col-sm-12 col-md-12"align="center">
-                         <img src="{{ question.imagefile.url }}" />
-                    </div>
-                </div>
-                {% endif %}
-            </div>
-        {% endfor %}
-
-
-
-  </div>
-
-  <!-- Left and right controls -->
-  <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-    <span class="glyphicon glyphicon-chevron-left"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="right carousel-control" href="#myCarousel" data-slide="next">
-    <span class="glyphicon glyphicon-chevron-right"></span>
-    <span class="sr-only">Next</span>
-  </a>
-</div>
 {% endblock %} 

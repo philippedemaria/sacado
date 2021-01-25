@@ -87,6 +87,10 @@ class Quizz(ModelWithCode):
     is_mark = models.BooleanField(default=0, verbose_name="Récupérer les notes ?") 
     is_lock = models.BooleanField(default=0, verbose_name="Verrouiller ?") 
 
+
+    interslide = models.PositiveIntegerField(default=10, blank=True, verbose_name="Temps entre les questions")
+ 
+
     groups = models.ManyToManyField(Group, blank=True, related_name="quizz" , editable=False) 
  
 
