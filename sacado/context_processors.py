@@ -21,9 +21,9 @@ def menu(request):
  
         if request.user.is_teacher:
             teacher = request.user.teacher
-            nbs = Studentanswer.objects.filter(parcours__teacher=teacher, date=today).count()
+            #nbs = Studentanswer.objects.filter(parcours__teacher=teacher, date=today).count()
             nbe = Email.objects.distinct().filter(receivers=request.user, today=today).count()
-            nb_not = nbs + nbe
+            #nb_not = nbs + nbe
             levels = Level.objects.all()
             nb_demand = Demand.objects.filter(done=0).count()
 
@@ -32,7 +32,7 @@ def menu(request):
             if teacher.user.school :
                 sacado_asso = True
 
-            return {'today': today, 'nb_not': nb_not, 'levels': levels,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso ,  }
+            return {'today': today, 'nbe': nbe, 'levels': levels,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso ,  }
 
         elif request.user.is_student:
 
