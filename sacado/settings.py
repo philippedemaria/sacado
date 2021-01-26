@@ -41,6 +41,7 @@ if PRODUCTION:
     CONN_MAX_AGE = os.environ.get('CONN_MAX_AGE')
     SESSION_SAVE_EVERY_REQUEST = True
 
+
 else:
     # configuration développement
     #DEBUG = False # False comme en production
