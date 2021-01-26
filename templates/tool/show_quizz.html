@@ -15,8 +15,8 @@
 
 {% block page_title %}
    <a href="{% url 'list_quizzes' %}" ><i class="fa fa-cubes"></i> </a> Outils pédagogiques 
-   <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small>Vue du quizz</small> 
-   <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small> {{ quizz.title }}</small>
+   <img width="25px" src="{% static 'img/angle-right.png' %}"/> Quizz 
+ 
 {% endblock %}
 
 
@@ -41,7 +41,7 @@
         </div>
         <div class="col-sm-12 col-md-6" align="center" >
             {% for question in questions %}
-                <button id="question{{ forloop.counter }}" class="btn btn-default"> Q{{ forloop.counter }} </button> 
+                <button id="question{{ forloop.counter }}" class="btn btn-default thisquestion"> Q{{ forloop.counter }} </button> 
             {% endfor %}
         </div>
 

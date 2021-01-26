@@ -60,7 +60,9 @@ define(['jquery',  'bootstrap' ], function ($) {
             });
 
 
-                var starter_play = 0;
+                var starter_play = 0 ,
+                    step  = 0 ; 
+
                 $('#start_quizz').on('click', function(){
  
 
@@ -83,7 +85,7 @@ define(['jquery',  'bootstrap' ], function ($) {
 
 
 
-                    step  = 0 ;
+
                     function auto_play(){
 
                             if (currentSlide === slideQuantity) // Si on arrive au bout du nombre de slides, le quizz s'arrete.
@@ -99,7 +101,7 @@ define(['jquery',  'bootstrap' ], function ($) {
                             var pxValue = - (currentSlide -1) * slideWidth ; // décalage pour l'animation du slide.
                             slideBox.animate({'left' : pxValue});            // Animation du slide.
 
-                            $(".btn").removeClass("btn-primary").addClass("btn-default")  ;   // Couleurs des boutons
+                            $(".thisquestion").removeClass("btn-primary").addClass("btn-default")  ;   // Couleurs des boutons
 
                             if ( step === 0 )  // Introduction du quizz
                             {
@@ -112,11 +114,13 @@ define(['jquery',  'bootstrap' ], function ($) {
                                 this_slide = parseInt( (currentSlide-1)/2) ; // Sélection du temps entre les dipa ou de la diapo
                                 if ( step%2 === 0 ) 
                                     {
-                                        duree = $("#inter_slide"+this_slide).val() * 1000 ;                            
+                                        duree = $("#inter_slide"+this_slide).val() * 1000 ;                   
                                     }
                                     else   
                                     {
-                                        duree = $("#duration"+this_slide).val() * 1000 ;                        
+                                        duree = $("#duration"+this_slide).val() * 1000 ;
+                                        cdown = countdown(duree,this_slide) ;
+
                                     }
 
 
@@ -134,6 +138,24 @@ define(['jquery',  'bootstrap' ], function ($) {
                             step ++ ;
 
                         }
+ 
+
+                var now = 0;
+                function countdown(countDown,this_slide){
+ 
+                    
+                    var countDown = parseInt((countDown - now)/1000) ;
+                    $("#chrono"+this_slide).innerHTML =  countDown  ;
+                    now ++ ;
+
+                    console.log(countDown) ;
+                    console.log(now) ;
+
+                    //setInterval( countdown(countDown,this_slide) , 1000);
+
+    
+
+                    }
 
  
 
