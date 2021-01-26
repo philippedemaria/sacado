@@ -61,30 +61,29 @@ define(['jquery',  'bootstrap' ], function ($) {
 
 
                 var starter_play = 0 ,
-                    step  = 0 ; 
+                    step         = 0 ,
+                    now          = 0 ,
+                    step_count   = 0;
 
                 $('#start_quizz').on('click', function(){
  
 
-                        if (starter_play%2 ===0) {
+                        if ( starter_play%2 === 0 ) {
 
                             $("#start_quizz").html("").html("<button  class='btn btn-danger'><i class='fa fa-stop'></i> Arrêter</button>") ;
                             auto_play() ;
-
                         }
                         else
                         {  
 
                             $("#start_quizz").html("").html("<button  class='btn btn-default'><i class='fa fa-play'></i> Démarrer</button>") ;
-                             clearInterval(interval);
+                            clearInterval(interval);    
                         }
-                            starter_play++ ;
+                        
+                        starter_play++ ;
 
-                       })  
+                    })  
  
-
-
-
 
                     function auto_play(){
 
@@ -108,18 +107,33 @@ define(['jquery',  'bootstrap' ], function ($) {
                                 this_slide =  0 ; 
                                 duree = $("#introduction").val() * 1000 ; // Durée de l'introduction
                                 $("#question1").addClass("btn-primary").removeClass("btn-default")  ;    // Couleurs des boutons
+                                step ++ ;
+                                interval = setTimeout(auto_play, parseInt(duree) ); // la fonction auto_play se relance avec un temps différent
                             }
                             else  // Lecture des diapo des questions
                             {
                                 this_slide = parseInt( (currentSlide-1)/2) ; // Sélection du temps entre les dipa ou de la diapo
                                 if ( step%2 === 0 ) 
                                     {
-                                        duree = $("#inter_slide"+this_slide).val() * 1000 ;                   
+                                        duree = $("#inter_slide"+this_slide).val() * 1000 ;
+                                        step ++ ;
+                                        interval = setTimeout(auto_play, parseInt(duree) ); // la fonction auto_play se relance avec un temps différent             
                                     }
                                     else   
-                                    {
+                                    {   
                                         duree = $("#duration"+this_slide).val() * 1000 ;
-                                        cdown = countdown(duree,this_slide) ;
+
+                                        var interval = setInterval(function() {
+                                            duree = duree - 1000;
+                                            document.getElementById("countdown"+this_slide).textContent = duree/1000;
+
+                                            // Changement de la couleur selon le temps restant
+                                            if (duree <= 10000) { $("#countdown"+this_slide).addClass("countdownOrange") ; }
+                                            if (duree <= 5000) { $("#countdown"+this_slide).removeClass("countdownOrange").addClass("countdownRed") ; }
+                                            if (duree <= 0) { auto_play() ; clearInterval(interval); }
+
+                                        }, 1000);
+
 
                                     }
 
@@ -131,35 +145,18 @@ define(['jquery',  'bootstrap' ], function ($) {
                                  // Seule la question en cours en bleu
                                 $("#question"+this_question).addClass("btn-primary").removeClass("btn-default")  ;  
 
-                                }
- 
+                            }
 
-                            interval = setTimeout(auto_play, parseInt(duree) ); // la fonction auto_play se relance avec un temps différent
-                            step ++ ;
-
+                            
                         }
  
 
-                var now = 0;
-                function countdown(countDown,this_slide){
- 
-                    
-                    var countDown = parseInt((countDown - now)/1000) ;
-                    $("#chrono"+this_slide).innerHTML =  countDown  ;
-                    now ++ ;
-
-                    console.log(countDown) ;
-                    console.log(now) ;
-
-                    //setInterval( countdown(countDown,this_slide) , 1000);
-
-    
-
-                    }
 
  
 
-                    
+ 
+
+
 
 
 

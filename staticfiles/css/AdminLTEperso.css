@@ -641,16 +641,25 @@ li.my_slide{
 
 
 
-.chrono{
+.countdown{
    background-color: #5d4391;  
    border-radius: 50%;
    width :60px;
    height:60px;
    color : #FFF;
-   font-size : 30px;    
+   font-size : 35px;    
    text-align: center ;
+   font-weight: bold; 
+   padding-top: 10px;
 }
 
+.countdownRed{
+  background-color: #e21b3c ; 
+}
+
+.countdownOrange{
+  background-color: #d89e00 ; 
+}
 
 
 #play_quizz_teacher{
