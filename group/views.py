@@ -373,6 +373,35 @@ def list_groups(request):
     return render(request, 'group/list_group.html', {'groups': groups, 'communications' : [] , })
 
 
+
+def create_student_profile_inside(request, nf) : 
+
+    first_name = str(request.user.first_name).replace(" ", "")
+    last_name  = str(request.user.last_name).replace(" ","") 
+    username  =  request.user.username + "Test"
+    password = make_password("sacado2020")  
+    email =  request.user.email 
+    user,created = User.objects.get_or_create(username=username , defaults= { 'last_name' : last_name, 'first_name' : first_name,  'password' : password , 'email' : email, 'user_type' : 0})
+
+    if created :
+        mesg = "Vous avez demandé un profil élève. Identifiant : "+username+"\n\n Mot de passe : sacado2020 \n\n Merci." 
+        send_mail("Identifiant Profil élève",  mesg , "info@sacado.xyz" , [email] )
+        code = str(uuid.uuid4())[:8]                 
+        student = Student.objects.create(user=user, level=nf.level, code=code)
+
+        print("ici")
+
+    else :
+        print(user)
+        student = Student.objects.get(user=user)
+        print("là")
+
+    st = True   
+    nf.students.add(student)
+
+    return st
+
+
  
 def create_group(request):
     teacher = Teacher.objects.get(user_id=request.user.id)
@@ -386,11 +415,19 @@ def create_group(request):
         stdts = request.POST.get("students")
         if stdts : 
             if len(stdts) > 0 :
-                include_students(stdts,nf)
+                tested = include_students(stdts,nf)
+                if not tested :
+                    messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
+        st = False
 
+        eleveTest = request.POST.get("eleveTest",None)    
+        if eleveTest :
+            st = create_student_profile_inside(request, nf)          
 
-        if  teacher.groups.count() == 1 :
-            messages.success(request, "Félicitations... Votre compte sacado est maintenant configuré et votre premier groupe créé !")
+        msg = "Félicitations... Votre compte sacado est maintenant configuré et votre premier groupe créé !" 
+        if st :
+            msg = msg + " Vous avez demandé un profil élève. Un mail contenant vos identifiant vous est envoyé." 
+        messages.success(request, msg )
 
         return redirect('index')
     else:
@@ -411,8 +448,6 @@ def update_group(request, id):
     stdnts = group.students.order_by("user__last_name")
 
     authorizing_access_group(request,teacher,group )
- 
-
     
     form = GroupTeacherForm(request.POST or None, teacher = teacher , instance=group )
 
@@ -427,7 +462,18 @@ def update_group(request, id):
                 tested = include_students(stdts,group)
                 if not tested :
                     messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
-        
+        st = False
+
+        eleveTest = request.POST.get("eleveTest",None)    
+        if eleveTest :
+            st = create_student_profile_inside(request, nf)          
+
+        msg = "Félicitations... Votre premier groupe est modifié." 
+        if st :
+            msg = msg + " Vous avez demandé un profil élève. Un mail contenant vos identifiant vous est envoyé." 
+        messages.success(request, msg )
+
+
         return redirect('index')
     else:
         print(form.errors)

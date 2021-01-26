@@ -95,23 +95,36 @@
             <div class="row"> 
 
                 {% if sacado_asso %}
-                <div class="col-sm-12 col-md-2">
-                       <label>Suivi parent ?</label> <br>
+                <div class="col-sm-12 col-md-4">
+                       <label>Suivi parent ?
+                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" > Si oui, le suivi par les parents est disponible via un code unique et secret sur le tableau de bord élève. </div>
+                            </span>
+                        </label> <br>
                         {{ form.suiviparent  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
-                </div>
-                 <div class="col-sm-12 col-md-4" style="font-size: 10px"><br>
-                    Si oui, le suivi par les parents est disponible via un code unique et secret sur le tableau de bord élève. 
                 </div>
                 {% endif %}
 
+ 
+                <div class="col-sm-12 col-md-4">
+                       <label>Profil élève ? <small>(Conseillé)</small>
+                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" > Création d'un compte élève pour ce groupe si compte élève inexistant, attribue votre compte élève au groupe si existant.</div>
+                            </span>
+                        </label> <br>
+                        <input type="checkbox" name="eleveTest" value="1"  data-toggle="toggle" data-onstyle="primary" data-offstyle="default" data-on="Oui" data-off="Non" />
+                </div>
+ 
+
 
                 {% if group %}
-                 <div class="col-sm-12 col-md-2">
-                       <label>Verrouiller ?</label> <br>
+                 <div class="col-sm-12 col-md-4">
+                       <label>Verrouiller ?  
+                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text" > Interdit d'inscrire de nouveaux élèves et ne permet plus l'inscription par lien de connexion. </div>
+                            </span>
+                        </label> <br>
                         {{ form.lock  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
-                </div>
-                 <div class="col-sm-12 col-md-4" style="font-size: 10px"><br>
-                    Interdit d'inscrire de nouveaux élèves et ne permet plus l'inscription par lien de connexion. 
                 </div>
                 {% endif %}
             </div>
