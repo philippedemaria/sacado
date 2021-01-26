@@ -46,7 +46,7 @@ else:
     #DEBUG = False # False comme en production
     DEBUG = True # True en développpement
     ALLOWED_HOSTS = ["*"]
-    SECRET_KEY = '85umr_$zf2bd58xl)nzf)i*jh)o5h*dp%*3e@pqg+ijem=t1xq'
+    SECRET_KEY = "tfnn%*5i8ak_d@pv^t3m_)pvli+c%v451bc^c%253cnb*cu)p-qdm$$6%(kak$3m4s=5qz6fs-1b^tf^_69m"
 
     # configuation bdd
     MYSQL_DATABASE = 'sacado11112020'
