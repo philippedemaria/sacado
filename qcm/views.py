@@ -2051,9 +2051,9 @@ def ajax_exercise_error(request):
     else :
         usr = "non connecté"
 
-    msg = "Message envoyé par l'utilisateur "+usr+" :\n\nL'exercice dont l'id est -- "+exercise_id+" --  décrit ci-dessous : \n Savoir faire visé : "+exercise.knowledge.name+ " \n Niveau : "+exercise.level.name+  "  \n Thème : "+exercise.theme.name +" comporte un problème. \n  S'il est identifié par l'utilisateur, voici la description :  \n" + message   
+    msg = "Message envoyé par l'utilisateur #"+str(usr.id)+", "+usr.last_name+" :\n\nL'exercice dont l'id est -- "+str(exercise_id)+" --  décrit ci-dessous : \n Savoir faire visé : "+exercise.knowledge.name+ " \n Niveau : "+exercise.level.name+  "  \n Thème : "+exercise.theme.name +" comporte un problème. \n  S'il est identifié par l'utilisateur, voici la description :  \n" + message   
 
-    send_mail("Avertissement SacAdo Exercice "+exercise_id,  msg , "info@sacado.xyz" , ["brunoserres33@gmail.com", "philippe.demaria83@gmail.com", str(exercise.supportfile.author.user.email)])
+    send_mail("Avertissement SacAdo Exercice "+str(exercise_id),  msg , "info@sacado.xyz" , ["brunoserres33@gmail.com", "philippe.demaria83@gmail.com", str(exercise.supportfile.author.user.email)])
     data = {}
     data["htmlg"]= "Envoi réussi, merci."
     return JsonResponse(data) 
