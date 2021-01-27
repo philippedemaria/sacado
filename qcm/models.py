@@ -487,14 +487,10 @@ class Parcours(ModelWithCode):
         return name
 
     def group_list(self):
-        students = self.students.all() # tous les élèves du parcours
-        group_tab = []
-        for s  in students : 
-            groups = s.students_to_group.filter(teacher = self.teacher) # Pour chaque élèves à quel groupe du prof il appartient 
-            for group  in groups :
-                if group not in group_tab:
-                    group_tab.append(group) 
-        return group_tab 
+        Group = apps.get_model("group.Group")
+        group_ids = set(self.students.values_list('students_to_group', flat=True))
+        groups = Group.objects.filter(teacher=self.teacher, pk__in=group_ids)
+        return groups
 
     def shared_group_list(self):
 
