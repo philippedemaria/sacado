@@ -8,7 +8,7 @@ from django.db import models
 from django.db.models import Q
 
 from socle.models import Level, Knowledge, Skill, Subject
-from school.models import School
+from school.models import School, Country
 
 from templated_email import send_templated_mail
 from general_fonctions import *
@@ -88,7 +88,8 @@ class User(AbstractUser):
     cgu = models.BooleanField(default=1)
     closure = models.DateTimeField(blank=True, null=True, default = None ,  verbose_name="Date de fin d'adhésion")
     is_testeur = models.BooleanField(default=0)
-    
+    country = models.ForeignKey(Country, blank=True, null=True, related_name="countries", default=None, on_delete = models.PROTECT)
+
     def __str__(self):
         return "{} {}".format(self.last_name, self.first_name)
 

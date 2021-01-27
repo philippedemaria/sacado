@@ -21,7 +21,7 @@
 
 <li class='dropdown {% if '/account' in request.path and not 'admin' in    request.path %}active{% endif %}'>
     <a href="#" class="main"  id="account">
-        <i class="fa fa-user fa-2x"></i> 
+        <i class="fa fa-user fa-2x {% if not user.country  %} text-danger{% endif %}"></i> 
         <div class="captionmenu">Compte</div>
     </a>
 </li>

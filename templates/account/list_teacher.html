@@ -94,7 +94,7 @@
                                     {{ teacher.last_login|date:"Y m d" }}   
                                 </td>
                                 <td style="font-size: 14px; min-width:400px">
-                                    {% if teacher.school %}<i class="fa fa-university fa-xs"></i> {{ teacher.school.name }} {{ teacher.school.country }}{% else %} isolé{% endif %}
+                                    {% if teacher.school %}<i class="fa fa-university fa-xs"></i> {{ teacher.school.name }} {{ teacher.school.country }}{% else %} isolé {{ teacher.user.country }}{% endif %}
                                     {% if teacher.schools.all|length > 0 %}<br/>{% endif %}
 
                                     {% for s in teacher.schools.all %}<i class="fa fa-university fa-xs"></i>  {{ s.name }} {{ s.country }}

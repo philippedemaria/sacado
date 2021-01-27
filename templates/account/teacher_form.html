@@ -46,6 +46,13 @@
                         {{ user_form.username.errors }}
                     </div>
                 </div>
+                <div class="col-sm-12 col-md-offset-2 col-md-4">
+                    <div class="form-group {% if not teacher.user.country  %} alert alert-danger{% endif %}"> 
+                        <label>Pays :  {% if not teacher.user.country  %} A renseigner{% endif %}</label>
+                        {{ user_form.country |add_class:"form-control" }}
+                        {{ user_form.country.errors }}
+                    </div>
+                </div>
             </div>
             {% endif %}
 
