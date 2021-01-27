@@ -191,7 +191,7 @@
                 </div>
                 <div class="modal-body">
                     {% for c in communications %}
-                        <h5> {{ c.subject }}</h5>
+                        <h5> {{ c.subject }} <span class="pull-right">{{ c.today|date:"d N Y" }}</span></h5>
                         {{ c.texte|safe }}
                         <hr>
                     {% endfor %}
