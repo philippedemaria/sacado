@@ -445,7 +445,7 @@ def update_group(request, id):
 
     teacher = Teacher.objects.get(user= request.user)
     group = Group.objects.get(id=id)
-    stdnts = group.students.order_by("user__last_name")
+    stdnts = group.students.exclude(user__username = request.user.username).order_by("user__last_name")
 
     authorizing_access_group(request,teacher,group )
     
@@ -492,7 +492,7 @@ def delete_group(request, id):
     authorizing_access_group(request,teacher,group )
     if not teacher.user.school :
         # Si les élèves n'appartiennent pas à un établissement
-        for student in group.students.all():
+        for student in group.students.exclude(user__username = request.user.username) :
             if not student.user.school :
                 if Group.objects.filter(students=student).exclude(pk=group.id) == 0 : 
                     #Si les élèves n'appartiennent pas à un autre groupe
@@ -515,7 +515,7 @@ def show_group(request, id ):
     access = data['access']
     authorizing_access_group(request,teacher,group )
 
-    students = group.students.order_by("user__last_name")
+    students = group.students.exclude(user__username = request.user.username).order_by("user__last_name")
 
     context = {  'group': group,  'communications' : [] , 'teacher' : group.teacher , 'students' : students }
 
@@ -602,7 +602,7 @@ def student_remove_from_school(request):
 
     group.students.remove(student)
 
-    groups = student.students_to_group.all()
+    groups = student.students_to_group.exclude(user__username = request.user.username)
     gr = ""
     for g in groups :
         gr = gr +str(g.name)+" "
@@ -667,7 +667,7 @@ def result_group(request, id):
 
     parcourses_tab = []
     parcourses_student_tab, exercise_tab = [] ,  []
-    for student in group.students.order_by("user__id"):
+    for student in group.students.exclude(user__username = request.user.username).order_by("user__id"):
         parcourses = student_parcours_studied(student) 
         if parcourses in parcourses_student_tab :
             break
@@ -703,7 +703,7 @@ def result_group_theme(request, id, idt):
 
     teacher = Teacher.objects.get(user=request.user)
     group = Group.objects.get(id=id)
-    students = group.students.order_by("user__last_name")
+    students = group.students.exclude(user__username = request.user.username).order_by("user__last_name")
 
     authorizing_access_group(request,teacher,group ) 
  
@@ -737,7 +737,7 @@ def result_group_exercise(request, id):
 
     sender_mail(request,form)
 
-    students = group.students.order_by("user__last_name")
+    students = group.students.exclude(user__username = request.user.username).order_by("user__last_name")
 
     context = {'group': group, 'form': form , 'stage' : stage  , 'students' : students  , 'teacher': teacher, 'theme' : None  , 'communications' : [], 'relationships': [] , 'parcours_tab' : [] , 'parcours' : None  }
 
@@ -750,7 +750,7 @@ def result_group_skill(request, id):
 
     group = Group.objects.get(id=id)
     skills = Skill.objects.filter(subject=group.subject)
-    students = group.students.order_by("user__last_name")
+    students = group.students.exclude(user__username = request.user.username).order_by("user__last_name")
     teacher = Teacher.objects.get(user=request.user)
 
     authorizing_access_group(request,teacher,group ) 
@@ -770,7 +770,7 @@ def result_group_skill(request, id):
 def result_group_waiting(request, id):
 
     group = Group.objects.get(id=id)
-    students = group.students.order_by("user__last_name")
+    students = group.students.exclude(user__username = request.user.username).order_by("user__last_name")
     teacher = Teacher.objects.get(user=request.user)
 
     waitings = group.level.waitings.filter(theme__subject=group.subject)
@@ -792,7 +792,7 @@ def result_group_theme_exercise(request, id, idt):
     theme = Theme.objects.get(id=idt)
     stage = get_stage(group)
     teacher = Teacher.objects.get(user=request.user)
-    students = group.students.order_by("user__last_name")
+    students = group.students.exclude(user__username = request.user.username).order_by("user__last_name")
     authorizing_access_group(request,teacher,group ) 
 
     context = {  'group': group, 'form': form, 'theme': theme, 'students': students, 'teacher': teacher, "slug" : theme.slug , 'stage' : stage   , 'communications' : [], 'relationships': [] , 'parcours': None  }
@@ -810,7 +810,7 @@ def stat_group(request, id):
     authorizing_access_group(request,teacher,group ) 
 
     stats = []
-    for s in group.students.order_by("user__last_name") :
+    for s in group.students.exclude(user__username = request.user.username).order_by("user__last_name") :
         student = {}
         student["name"] = s 
         parcours = Parcours.objects.filter(students=s,is_publish=1)
@@ -1024,7 +1024,7 @@ def print_statistiques(request, group_id, student_id):
 
 
     if student_id == 0  :
-        students = group.students.order_by("user__last_name")
+        students = group.students.exclude(user__username = request.user.username).order_by("user__last_name")
         title_of_report = group.name+"_"+str(timezone.now().date())
 
         knows = Knowledge.objects.filter(level = group.level).order_by("level")
@@ -1375,7 +1375,7 @@ def print_ids(request, id):
     response['Content-Disposition'] = 'attachment; filename="identifiants_groupe'+group.name+'.pdf"'
     p = canvas.Canvas(response)
     i = 1
-    for student in group.students.all() :
+    for student in group.students.exclude(user__username = request.user.username) :
 
     # Create the HttpResponse object with the appropriate PDF headers.
         string0 = "Bonjour {} {},".format(student.user.first_name, student.user.last_name) 
@@ -1419,7 +1419,7 @@ def export_skills(request):
 
     writer.writerow(label_in_export)
 
-    for student in group.students.order_by("user__last_name") :
+    for student in group.students.exclude(user__username = request.user.username).order_by("user__last_name") :
         skill_level_tab = [str(student.user.last_name).capitalize(),str(student.user.first_name).capitalize()]
 
         for skill in  skills:

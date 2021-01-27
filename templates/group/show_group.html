@@ -39,11 +39,13 @@
 {% block body %}
 <div class="content_main">  
         <div class="row">        
-            <div class="col-sm-11 col-md-12">
+            <div class="col-sm-12 col-md-12">
                 <p style="color:{{ group.color }}"><strong>Niveau : {{ group.level.name }}</strong>
                     {% if not teacher.user.school %} 
                     <span style="margin-left:50px"><i class="fa fa-warning"></i> les champs modifiés sont directement enregistrés.</span>
                     {% endif %}
+
+                    <span style="margin-left:50px">Si vous avez créé votre profil élève lors de la création du groupe, il n'apparait pas dans vos listes.</span>
                 </p>
             </div>
         </div> 
