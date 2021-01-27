@@ -331,6 +331,10 @@ class Exercise(models.Model):
         parcours = self.exercises_parcours.filter(teacher=teacher)
         return parcours
 
+ 
+
+ 
+
 class Parcours(ModelWithCode):
 
     title = models.CharField(max_length=255, verbose_name="Titre")
@@ -355,6 +359,8 @@ class Parcours(ModelWithCode):
     duration = models.PositiveIntegerField(default=2, blank=True, verbose_name="Temps de chargement (min.)")
     start = models.DateTimeField(null=True, blank=True, verbose_name="Date de début de publication")
     stop = models.DateTimeField(null=True, blank=True, verbose_name="Verrouillé à partir de")
+
+    maxexo = models.IntegerField(  default=-1,  blank=True, null=True,  verbose_name="Nombre max de réalisation par exercice")
 
     vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Vignette d'accueil", blank=True, default ="")
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
@@ -707,6 +713,8 @@ class Relationship(models.Model):
     students = models.ManyToManyField(Student, blank=True, related_name='students_relationship', editable=False)
     instruction = models.TextField(blank=True,  null=True,  editable=False)
 
+    maxexo = models.PositiveIntegerField(  default=0,  blank=True, null=True,  editable=False)
+
     is_lock = models.BooleanField(default=0, verbose_name="Exercice cloturé ?")
     is_mark = models.BooleanField(default=0, verbose_name="Notation ?")
     mark = models.CharField(max_length=3, default="", verbose_name="Sur ?")
@@ -900,6 +908,27 @@ class Relationship(models.Model):
             data["marked"] = ""            
 
         return data
+
+
+    def is_available(self,student) :
+        data = {}
+        is_ok = True
+        nbs = Studentanswer.objects.filter(parcours=self.parcours , exercise= self.exercise,student = student ).count()
+        print(nbs)
+        print(self.maxexo)
+        nbleft = self.maxexo - nbs
+        if nbleft == 0  :
+            is_ok = False
+        data["is_ok"] = is_ok
+        data["nbleft"] = nbleft      
+        return data
+
+
+
+
+
+
+
 
 class Studentanswer(models.Model):
 

@@ -674,8 +674,8 @@ def admin_tdb(request):
 
     nb_teachers = User.objects.filter(school=school, user_type=2).count()
     nb_students = User.objects.filter(school=school, user_type=0).count()
-    nb_groups = Group.objects.filter(teacher__user__school=school).count()
-
+    nb_groups = Group.objects.filter(Q(teacher__user__school=school)|Q(teacher__user__schools=school)).count()
+ 
     try:
         stage = Stage.objects.get(school=school)
         if stage:

@@ -772,7 +772,7 @@ def group_to_teacher(request):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
-    groups = group_to_school(school)  
+    groups = Group.objects.filter(Q(teacher__user__school=school)|Q(teacher__user__schools=school)).order_by('level_id') 
     teachers = Teacher.objects.filter(Q(user__school=school)|Q(user__schools=school)).order_by("user__last_name")
 
     if request.method == "POST" :

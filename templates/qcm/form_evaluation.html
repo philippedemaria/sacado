@@ -59,15 +59,21 @@
 
 
 {% block evaluation %}
- 
+        <tr>
+            <td><label>Nombre de réalisation max</label>  <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text red" >Ce nombre détermine le nombre maximum de fois que chaque exercice peut être fait. Ce maximum peut être déterminé exercice par exercice après la création. <br/> Laisser -1  pour ne pas borner le nombre de réalisation.</div>
+                                </span></td>
+            <td>{{ form.maxexo|attr:"min:1"|attr:"max:10"|attr:"step:1"}}</td>
+            <td></td>
+        </tr>
 
         <tr>
             <td>{{ form.duration.label_tag }}
                     <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                        <div class="helper_tip_text" >La durée de l'évaluation est la somme des durées de chaque exercice + le temps de chargement que vous pouvez choisir</div>
+                        <div class="helper_tip_text" >La durée de l'évaluation est la somme des durées de chaque exercice + le temps de chargement que vous pouvez choisir.</div>
                     </span>
             </td>
-            <td>{{ form.duration |add_class:"form-control"|attr:"placeHolder:15:00"|attr:"required"}}</td>
+            <td>{{ form.duration  |attr:"placeHolder:15:00"|attr:"required"}}</td>
             <td>{{ form.duration.errors}}</td>
         </tr>
         <tr>
@@ -77,6 +83,8 @@
             <td>{{ form.start|add_class:"form-control datetimepicker"|attr:"required"}}</td>
             <td></td>
         </tr>
+
+
         <tr>
             <td>{{ form.stop.label_tag }} 
                     <span class="helper_tip"> <i class="fa fa-question-circle"></i>

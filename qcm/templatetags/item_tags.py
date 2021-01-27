@@ -86,6 +86,15 @@ def get_is_lock(obj,todaytimer):
     """Bloque un exercice dans une évaluation si celui-ci a une date de verrou"""
     return obj.is_lock(todaytimer)
 
+ 
+
+
+@register.simple_tag
+def get_available(obj,student): 
+    """ Détermine si un exercice est enregistrable pour un élève lors d'une évaluation au vue du nombre de tentatives"""
+    return obj.is_available(student)
+
+
 
 @register.simple_tag
 def get_is_lock_for_this_parcours(obj, parcours , today) :

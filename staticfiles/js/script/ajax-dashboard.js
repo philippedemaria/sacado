@@ -1183,7 +1183,30 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
+        // ==================================================================================================
+        // ==================================================================================================
+        // =============  Maxexo
+        // ==================================================================================================
+        // ==================================================================================================
+ 
 
+            $('.maxexo').on('change', function (event) {
+                let relationship_id = $(this).attr("data-relationship_id");
+                let maxexo = $(this).val();
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            'relationship_id': relationship_id,
+                            'maxexo': maxexo,
+                            csrfmiddlewaretoken: csrf_token
+                        },
+                        url: "../../ajax/maxexo" , 
+                        })
+                    });
+ 
 
         // ==================================================================================================
         // ==================================================================================================
@@ -1460,7 +1483,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 });
 
 
-            $('.details_relation').on('keyup', function (event) {
+            $('.details_relation').on('change', function (event) {
                 let relationship_id = $(this).attr("data-relationship_id");
                 let custom = $(this).attr("data-custom");
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();

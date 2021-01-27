@@ -26,7 +26,7 @@
 
 
 <section class="content_main content_main_exercise">
- 
+    {% get_available relation student  as available %} <!-- Si le nombre de tentative est dépassée ou pas -->
     <div class="col-sm-0 col-md-1 col-lg-1 full_screen_size">
         <div class="calculator double_bottom_padding">
         {% if relation.exercise.supportfile.calculator %}
@@ -69,6 +69,17 @@
             <img src="{% static 'img/situation.png' %}"  class="img_size_square_75" />
             <p>{{ relation.situation }} situation{{ relation.situation|pluralize }}</p>
         </div>
+        <div class="situation" >
+        {% if  relation.maxexo > -1 %}
+
+            <div class="available">
+                <b> {{ available.nbleft }}</b>  
+            </div>
+            <p>Réalisation{{ available.nbleft|pluralize  }} restante{{ available.nbleft|pluralize  }}</p>
+
+        {% endif  %} 
+        </div>
+
         <div class="barcode">
             <i class="fa fa-barcode fa-4x"></i>
             <p>{{ relation.exercise.supportfile.code }}</p>
@@ -110,11 +121,21 @@
                   <div class="form-group">  
                     {% if user.user_type == 0 %}  
                         {% get_is_lock parcours today as is_lock %} 
+ 
                         {% if not is_lock %}
-                          <input  class="btn btn-primary"   type="submit" id="submit_button_relation"  value="Enregistrer le résultat"  />
+                            {% if available.is_ok %}
+                                <input  class="btn btn-primary"   type="submit" id="submit_button_relation"  value="Enregistrer le résultat"  />
+                            {% else %}
+                                <b>Vous avez atteint la limite des réalisations.</b>
+                            {% endif %}
                         {% else %}  
 
-                          <div class="alert alert-danger"><small><b>Soumisssion interdite.</b> <a href="{% url 'profile' %}">Vous n'avez peut être pas renseigné votre fuseau horaire</a> ou avez dépassé la date permise. Contacter votre enseignant. </small></div>
+                          <div class="alert alert-danger">
+                            <small>
+                              <b>Soumisssion interdite.</b> 
+                              <a href="{% url 'profile' %}">Vous n'avez peut être pas renseigné votre fuseau horaire</a> ou avez dépassé la date permise. Contacter votre enseignant. 
+                            </small>
+                          </div>
 
                         {% endif %}               
                     {% endif %}   

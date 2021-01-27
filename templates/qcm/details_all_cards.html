@@ -206,15 +206,26 @@
               <hr style="padding:0px; margin:10px 0px"/> 
 
                <div class="row">
-                    <div class="col-sm-6 col-md-6">
+                    <div class="col-sm-6 col-md-5">
                         <label  style="font-size: 12px;"><i class="fa fa-clock-o"></i> Durée estimée </label><br>
-                        <input type="type" name="duration" data-relationship_id="{{rc.id}}" id="duration{{rc.id}}"  data-type ="2" data-custom=0  value="{{ rc.duration }}" class="details_relation" /> min.
+                        <input type="number" name="duration" min="1" max="120" step="1" data-relationship_id="{{rc.id}}" id="duration{{rc.id}}"  data-type ="2" data-custom=0  value="{{ rc.duration }}" class="details_relation" /> min.
                     </div>
                     {% if rc.exercise.supportfile.is_ggbfile %}
-                    <div class="col-sm-6 col-md-6">
+                    <div class="col-sm-6 col-md-7">
                         <label  style="font-size: 12px;"><i class="fa fa-save"></i> Situations </label><br>
-                        <input type="type" name="situation" data-relationship_id="{{rc.id}}" id="situation{{rc.id}}"   data-type ="2" data-custom=0  value="{{ rc.situation  }}" class="details_relation" />
-                        <label  style="font-size: 10px;"> Nombre mini requis  </label>
+                        <label  style="font-size: 10px;">
+                        <input type="number" name="situation" data-relationship_id="{{rc.id}}" id="situation{{rc.id}}" min="1" max="10" step="1"  data-type ="2" data-custom=0  value="{{ rc.situation  }}" class="details_relation" /> Nbre mini requis</label><br>
+
+                        {% if parcours.is_evaluation %}  
+                        <label  style="font-size: 12px;">Réalisations</label><br>
+                        <input type="number" name="maxexo" min="1" max="10" step="1" data-relationship_id="{{rc.id}}" id="maxexo{{rc.id}}"   data-type ="2" data-custom=0  value="{{ rc.maxexo  }}" class="maxexo" />
+ 
+  
+                        <span class="helper_tip"> <label  style="font-size: 10px;"> Nbre maxi </label><i class="fa fa-question-circle"></i>
+                            <div class="helper_tip_text red" >Ce nombre détermine le nombre maximum de fois que chaque exercice peut être fait. Ce maximum peut être déterminé exercice par exercice après la création. <br/> Laisser 0 pour ne pas borner le nombre de réalisation.</div>
+                        </span>
+                        {% endif %}   
+
                     </div>
                     {% else %}
                     <div class="col-sm-6 col-md-6">

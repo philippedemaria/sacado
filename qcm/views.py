@@ -444,7 +444,8 @@ def ajax_populate(request):
     else:
         statut = 1
         if Relationship.objects.filter(parcours_id=parcours_id , exercise__supportfile = exercise.supportfile ).count() == 0 :
-            relation = Relationship.objects.create(parcours_id=parcours_id, exercise_id = exercise_id, ranking = 100, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration) 
+            relation = Relationship.objects.create(parcours_id=parcours_id, exercise_id = exercise_id, ranking = 100, maxexo = parcours.maxexo ,
+                                                                            situation = exercise.supportfile.situation , duration = exercise.supportfile.duration) 
             relation.skills.set(exercise.supportfile.skills.all())
             students = parcours.students.all()
             relation.students.set(students)
@@ -461,6 +462,9 @@ def ajax_populate(request):
             data["no_store"] = True
 
     return JsonResponse(data) 
+
+
+
 
 def peuplate_parcours(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -989,8 +993,6 @@ def create_parcours(request,idp=0):
             parcours_folder = Parcours.objects.get(pk = idp)
             parcours_folder.leaf_parcours.add(nf)
 
-
-
         sg_students =  request.POST.getlist('students_sg')
         for s_id in sg_students :
             student = Student.objects.get(user_id = s_id)
@@ -1009,7 +1011,6 @@ def create_parcours(request,idp=0):
                                                        situation=exercise.supportfile.situation)
             relationship.students.set(form.cleaned_data.get('students'))
             relationship.skills.set(exercise.supportfile.skills.all()) 
-
             i += 1
 
         lock_all_exercises_for_student(nf.stop,nf)  
@@ -2422,6 +2423,8 @@ def ajax_dates(request):  # On soncerve relationship_id par commodité mais c'es
 
     return JsonResponse(data) 
 
+
+
 @csrf_exempt
 def ajax_notes(request):  
     data = {}
@@ -2429,6 +2432,17 @@ def ajax_notes(request):
     mark =  request.POST.get("mark")
     relationship  = Relationship.objects.filter(pk = relationship_id ).update(is_mark = 1, mark = mark)
     return JsonResponse(data) 
+
+
+@csrf_exempt
+def ajax_maxexo(request):  
+    data = {}
+    relationship_id = request.POST.get("relationship_id")
+    maxexo =  request.POST.get("maxexo")
+    Relationship.objects.filter(pk = relationship_id ).update(maxexo = maxexo)
+    return JsonResponse(data) 
+
+
 
 @csrf_exempt
 def ajax_delete_notes(request):  
@@ -3246,10 +3260,11 @@ def execute_exercise(request, idp,ide):
     relation = Relationship.objects.get(parcours=parcours, exercise=exercise)
     request.session['level_id'] = exercise.level.id
     start_time =  time.time()
+    student = request.user.student
     today = time_zone_user(request.user)
     timer = today.time()
 
-    context = {'exercise': exercise,  'start_time' : start_time,  'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today , 'communications' : [] , 'relationships' : [] }
+    context = {'exercise': exercise,  'start_time' : start_time,  'student' : student,  'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today , 'communications' : [] , 'relationships' : [] }
     return render(request, 'qcm/show_relation.html', context)
 
 

@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.apps import apps
 from datetime import datetime , timedelta
+from django.db.models import Q
 
 
 class Country(models.Model):
@@ -45,7 +46,7 @@ class School(models.Model):
     def get_data(self) :
 
         Group = apps.get_model('group', 'Group')
-        nbg = Group.objects.filter(teacher__user__school=self).count()
+        nbg = Group.objects.filter(Q(teacher__user__school=self)|Q(teacher__user__schools=self)).count()
         try:
             stage = self.aptitude.first()
             if stage:
