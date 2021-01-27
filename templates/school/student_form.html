@@ -8,11 +8,11 @@
 
 
 {% block require %}
-{% if school %}
-<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-action2.js' %}"></script>
-{% else %}
-<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
-{% endif %}
+    {% if school %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
 {% endblock %} 
 
 
