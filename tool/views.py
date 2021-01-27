@@ -3,7 +3,7 @@ from tool.models import Tool , Question  , Choice  , Quizz
 from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm  
 from account.decorators import  user_is_testeur
 from sacado.settings import MEDIA_ROOT
-
+from socle.models import Knowledge, Waiting
 from django.http import JsonResponse
 from django.core import serializers
 from django.template.loader import render_to_string
@@ -292,6 +292,33 @@ def get_question_type(request):
     else :
         question = None
 
+    quizz_id =  request.POST.get("quizz_id",None)
+    quizz = Quizz.objects.get(pk= quizz_id)
+
+
+    datas = []
+    if len(quizz.themes.all()) > 0 :
+        waitings = Waiting.objects.filter(theme__in = quizz.themes)
+    elif len(quizz.levels.all()) > 0 :
+        waitings = Waiting.objects.filter(level_in = quizz.levels)
+    elif  quizz.subject :
+        waitings = Waiting.objects.filter(theme__subject = quizz.subject)
+    else   :
+        waitings = Waiting.objects.all()
+
+    for w in waitings :
+        data = {}
+        data["waiting"] = w.name
+        k_tab = []
+        for k in  w.knowledges.all() :
+            kw_k = {'id' : k.id , 'name' : k.name }
+            k_tab.append(kw_k)
+        data["knowledges"] = k_tab
+        datas.append(data)
+
+        
+
+
     # les type commencent à 1 donc garder une object occurence vide en début de liste
     type_tab = ["","Vrai/Faux","Réponse rédigée",'QCM',"QCS"]
 
@@ -316,7 +343,7 @@ def get_question_type(request):
                 classes.append({"labelcolor" : bgcolors[i]  ,  "bgcolor" : None  ,"answer" : None, "is_correct" : None })
 
 
-    context = { 'kind' : kind , 'question' : question  , 'classes' : classes }
+    context = { 'kind' : kind , 'question' : question  , 'classes' : classes , 'datas' : datas }
 
     data['html'] = render_to_string('tool/type_of_question.html', context)
 

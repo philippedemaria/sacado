@@ -84,7 +84,8 @@
         <input id="id_imagefile"  type="file" multiple="" name="imagefile">
     </div>  
 </div>
-<div class="row margin40" > 
+
+<div class="row" > 
 
 
       {% if kind == 1 %} <!-- VRAI / FAUX --> 
@@ -203,7 +204,20 @@
 
 </div>
 
+<div class="row" >
+    <div class="col-sm-12 col-md-12" >   
+         <select name="knowledge" class="form-control select2">
+              {%  for data in datas %} 
+              <optgroup label="{{ data.waiting }}">
+                  {%  for knowledge in data.knowledges %}
+                      <option value="{{ knowledge.id }}">{{ knowledge.name }}</option> 
+                  {% endfor %}
+              </optgroup>
+              {% endfor %}
 
+         </select>
+    </div>
+</div>
 <div class="col-sm-12 col-md-12 quizz_submit">
     <div class="form-group">
 

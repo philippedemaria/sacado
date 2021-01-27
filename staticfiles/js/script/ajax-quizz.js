@@ -65,7 +65,8 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
         $('body').on('click', '.selector_question' , function (event) {
 
             let kind = $(this).attr("data-kind");
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let quizz_id = $("#quizz_id").val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();  console.log(quizz_id) ; 
 
             $.ajax(
                 {
@@ -73,6 +74,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
                     dataType: "json",
                     data: {
                         'kind': kind,
+                        'quizz_id': quizz_id,
                         csrfmiddlewaretoken: csrf_token
                     },
                     url: "../get_question_type",
