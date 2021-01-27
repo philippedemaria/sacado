@@ -30,7 +30,7 @@ from reportlab.lib.colors import yellow, red, black, white, blue
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.utils import ImageReader
 from reportlab.lib.enums import TA_JUSTIFY,TA_LEFT,TA_CENTER,TA_RIGHT
-from cgi import escape
+from html import escape
 cm = 2.54
 #################################################################################
 import re
