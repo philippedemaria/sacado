@@ -123,11 +123,13 @@
                         {% get_is_lock parcours today as is_lock %} 
  
                         {% if not is_lock %}
+                          
                             {% if available.is_ok %}
                                 <input  class="btn btn-primary"   type="submit" id="submit_button_relation"  value="Enregistrer le résultat"  />
                             {% else %}
                                 <b>Vous avez atteint la limite des réalisations.</b>
                             {% endif %}
+
                         {% else %}  
 
                           <div class="alert alert-danger">

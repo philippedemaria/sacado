@@ -914,19 +914,14 @@ class Relationship(models.Model):
         data = {}
         is_ok = True
         nbs = Studentanswer.objects.filter(parcours=self.parcours , exercise= self.exercise,student = student ).count()
-        print(nbs)
-        print(self.maxexo)
         nbleft = self.maxexo - nbs
         if nbleft == 0  :
             is_ok = False
         data["is_ok"] = is_ok
-        data["nbleft"] = nbleft      
+        data["nbleft"] = nbleft
+        if self.maxexo == -1   :
+            is_ok = True
         return data
-
-
-
-
-
 
 
 
