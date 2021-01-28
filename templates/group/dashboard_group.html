@@ -30,6 +30,25 @@
  
     <div class="row">
         <div class="col-md-10 col-lg-10 col-xs-12">
+            {% if reponses|length > 0 %}
+
+                {% for reponse in reponses %}
+
+                    <form method="POST" action="{% url 'check_response_from_mail' %}" >
+                        {{ response.answer|safe }}<br/>
+                        J'ai pris connaissance de la réponse.
+                        <input required type="checkbox" name="is_read" value="1">
+                        <input required type="hidden"  name="response_id" value="{{ response.id }}">
+                        <input value="Envoyer" type="submit" class="btn btn-primary"/>
+                    </form>
+                    <hr/>
+
+
+                {% endfor %}
+            
+
+            {% endif %}
+
             {% if parcourses|length > 0 %}
             <h2 class='thin'>Parcours</h2>
             {% endif %}

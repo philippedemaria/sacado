@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Teacher, User, Student, Parent
+from .models import Teacher, User, Student, Parent , Response
 
 from django.core.exceptions import ValidationError
 from django.forms import BaseFormSet
@@ -118,3 +118,9 @@ class BaseUserFormSet(BaseFormSet):
             username = form.cleaned_data.get('username')
             if User.objects.filter(username = username):
                 raise ValidationError("Deux utilisateurs doivent avoir des identifiants différents.")
+
+
+class ResponseForm(forms.ModelForm):
+    class Meta:
+        model = Response
+        fields = '__all__'

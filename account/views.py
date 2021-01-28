@@ -29,7 +29,7 @@ from sendmail.models import Communication
 from socle.models import Level
 from socle.models import Theme
 from sendmail.forms import EmailForm
-from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ParentUpdateForm, ManagerUpdateForm, NewUserTForm,ManagerForm
+from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ParentUpdateForm, ManagerUpdateForm, NewUserTForm,ManagerForm , Response
 from templated_email import send_templated_mail
 from general_fonctions import *
 from school.views import this_school_in_session
@@ -655,9 +655,6 @@ def detail_student_theme(request, id,idt):
     return render(request, 'account/detail_student_theme.html', context)
 
 
-
-
-
 #@who_can_read_details
 def detail_student_parcours(request, id,idp):
     student = Student.objects.get(user_id=id)
@@ -693,8 +690,6 @@ def detail_student_parcours(request, id,idp):
 
     return render(request, 'account/detail_student_parcours.html', context)
 
-
- 
 
 #@user_can_read_details
 def detail_student_all_views(request, id):
@@ -801,7 +796,54 @@ def detail_student_all_views(request, id):
 
 
 
+##############################################################################################################
+##
+##    Response from mail after exercise error
+##
+############################################################################################################## 
 
+
+
+def response_from_mail(request,user_id):
+ 
+    user = User.objects.get(pk=user_id)
+    form = ResponseForm(request.POST or None)
+
+    context = { 'user' : user , }
+
+
+    if request.method == "POST" :
+ 
+        message = request.POST.get("message",None)
+        response = request.POST.get("response",None)
+        msg = "Bonjour, \n vous venez d'envoyer le message suivant :\n\n" + message + " \n\n Voici notre réponse.\n\n " + response  + "\n\n Merci pour votre aide."
+        if user.email :
+            send_mail("ERREUR SUR UN EXERCICE SACADO",  msg , 'info@sacado.xyz' ,  [user.email] )
+            send_mail("ERREUR SUR UN EXERCICE SACADO",  msg , 'info@sacado.xyz' , ["philippe.demaria-lgf@erlm.tn", "brunoserres33@gmail.com"])
+        else :
+            if form.is_valid():
+                nf = form.save(commit=False)
+                nf.admin = request.user
+                nf.user = user
+                nf.save()
+
+ 
+        return redirect("index")
+
+    else :
+
+        return render(request, 'account/response_from_mail.html', context )
+
+
+
+
+def check_response_from_mail(request):
+ 
+    is_read = request.POST.get("is_read",None)
+    response_id = request.POST.get("response_id",None)
+    Response.objects.filter(pk= response_id).update(is_read = 1)
+
+    return redirect("index")
 
 
 

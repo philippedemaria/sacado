@@ -74,4 +74,8 @@ urlpatterns = [
 
     path('register_student_from_admin/', register_student_from_admin, name='register_student_from_admin'), 
 
+    # quand on répond à un élève pour un exercice défaillant
+    path('response_from_mail/<int:user_id>', response_from_mail, name='response_from_mail'),
+    path('check_response_from_mail', check_response_from_mail, name='check_response_from_mail'),
+
 ]

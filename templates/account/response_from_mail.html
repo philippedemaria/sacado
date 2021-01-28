@@ -1,0 +1,65 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block require %}
+ 
+{% endblock %}
+
+{% block page_title %}
+    <i class="fa fa-user"></i> Répondre à un mail
+{% endblock %}
+ 
+{% block page_menu_right %}
+{% endblock %}
+
+
+{% block body %}
+    
+<section class="content_main">
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="form-group">
+                    <h2>Message envoyé par  {{ user.first_name }} {{ user.last_name }}, {% if user.school %} {{ user.school.name }},  {{ user.school.country.name }}{% endif %}</h2>
+                    
+                </div>
+            </div>
+        </div>        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="form-group">
+                    <label>Copier le message reçu par mail ici</label>
+                    <textarea required name="message" class="form-control" rows="5" placeholder="Recopie le message reçu"></textarea>
+                </div>
+            </div>
+        </div>
+         
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="form-group">
+                    <label>Ta réponse ici</label>
+                    <textarea required name="response" class="form-control" rows="5" placeholder="Ecris ta réponse."></textarea>
+                </div>
+            </div>
+        </div>     
+
+             
+        <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <input value="Envoyer" type="submit" class="btn btn-primary"/>
+                        <a href="javascript:history.back()">
+                            <input type="button" value="Annuler"
+                                   class="btn btn-default "/>
+                        </a>
+                    </div>   
+                </div>
+        </div>
+    </form>
+</section>
+ 
+ 
+{% endblock %}
+
+ 

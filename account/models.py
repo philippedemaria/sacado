@@ -553,3 +553,16 @@ class Parent(models.Model):
             child += s.user.last_name + " " + s.user.first_name + "-"
 
         return "{} {} - {}".format(lname, fname, child)
+
+
+class Response(models.Model):
+
+    admin = models.ForeignKey(User, blank=True,  null=True, related_name="response", on_delete=models.CASCADE, editable= False)
+    user = models.ForeignKey(User, blank=True,  null=True, related_name="user_response", on_delete=models.CASCADE, editable= False)
+    response = models.TextField(blank=True,  null=True )
+    message = models.TextField(blank=True,  null=True )
+    date_created = models.DateTimeField(auto_now=True, editable= False)
+    is_read = models.BooleanField(default=0, editable= False)
+
+    def __str__(self):
+        return f"{self.response}"
