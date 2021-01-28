@@ -30,15 +30,20 @@
  
     <div class="row">
         <div class="col-md-10 col-lg-10 col-xs-12">
-            {% if reponses|length > 0 %}
+            {% if responses|length > 0 %}
 
-                {% for reponse in reponses %}
+                {% for response in responses %}
 
-                    <form method="POST" action="{% url 'check_response_from_mail' %}" >
-                        {{ response.answer|safe }}<br/>
+                    <form method="POST" action="{% url 'check_response_from_mail' %}" class="alert alert-danger" >
+                        {% csrf_token %}
+                        <div style="background: #F7F7F7; border:solid 1px #CCC;padding:20px;">
+                            {{ response.response|safe }}
+                        </div>   <br/>
+
+
                         J'ai pris connaissance de la réponse.
                         <input required type="checkbox" name="is_read" value="1">
-                        <input required type="hidden"  name="response_id" value="{{ response.id }}">
+                        <input required type="hidden"  name="response_id" value="{{ response.id }}"><br/>
                         <input value="Envoyer" type="submit" class="btn btn-primary"/>
                     </form>
                     <hr/>

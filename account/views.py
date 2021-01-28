@@ -22,14 +22,14 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
 from account.decorators import user_can_read_details, who_can_read_details, can_register, is_manager_of_this_school
-from account.models import User, Teacher, Student, Resultknowledge, Parent
+from account.models import User, Teacher, Student, Resultknowledge, Parent , Response
 from group.models import Group, Sharing_group
 from qcm.models import Exercise, Parcours, Relationship, Resultexercise, Studentanswer
 from sendmail.models import Communication
 from socle.models import Level
 from socle.models import Theme
 from sendmail.forms import EmailForm
-from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ParentUpdateForm, ManagerUpdateForm, NewUserTForm,ManagerForm , Response
+from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ParentUpdateForm, ManagerUpdateForm, NewUserTForm,ManagerForm , ResponseForm
 from templated_email import send_templated_mail
 from general_fonctions import *
 from school.views import this_school_in_session
@@ -810,7 +810,7 @@ def response_from_mail(request,user_id):
     form = ResponseForm(request.POST or None)
 
     context = { 'user' : user , }
-
+    print("ici")
 
     if request.method == "POST" :
  
@@ -827,7 +827,7 @@ def response_from_mail(request,user_id):
                 nf.user = user
                 nf.save()
 
- 
+        print("là")
         return redirect("index")
 
     else :
