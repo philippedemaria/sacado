@@ -33,7 +33,35 @@ from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentFor
 from templated_email import send_templated_mail
 from general_fonctions import *
 from school.views import this_school_in_session
+import uuid
+
+
+
+def get_username(request ,ln, fn):
+    """
+    retourne un username
+    """
+    ok = True
+    i = 0
+    code = str(uuid.uuid4())[:3] 
+
+    if request.user.school :
+        suffixe = request.user.school.country.name[2]
+    else :
+        suffixe = ""    
+    un = str(ln) + "." + str(fn)[0] + "_" + suffixe + code 
+
+    while ok:
  
+        if User.objects.filter(username=un).count() == 0:
+            ok = False
+        else:
+            i += 1
+            un = un + str(i)
+ 
+    return un 
+
+
 
 def list_teacher(request):
     teachers = User.objects.filter(user_type=User.TEACHER)
@@ -228,7 +256,7 @@ def register_student_from_admin(request):
             u_form.password = make_password("sacado2020")
             u_form.user_type = User.STUDENT
             u_form.school = this_school_in_session(request)
-            u_form.username = get_username(u_form.last_name, u_form.first_name)
+            u_form.username = get_username(request, u_form.last_name, u_form.first_name)
             u_form.save()
 
             student = Student.objects.create(user=u_form, level=group.level, task_post=1)
@@ -897,26 +925,6 @@ def dissociate_teacher(request, id):
 
 
 
-
-def get_username(ln, fn):
-    """
-    retourne un username
-    """
-    ok = True
-    i = 0
-    un = str(ln) + "." + str(fn)[0]
-    print(un)
-    while ok:
-        print("testeur")
-        if User.objects.filter(username=un).count() == 0:
-            ok = False
-        else:
-            i += 1
-            un = un + str(i)
-        print(un)
-    return un
-
-
 #@can_register
 #@is_manager_of_this_school
 def register_teacher_from_admin(request):
@@ -936,7 +944,7 @@ def register_teacher_from_admin(request):
             u_form.is_extra = 0
             u_form.time_zone = request.user.time_zone
             u_form.school = this_school_in_session(request)
-            u_form.username = get_username(u_form.last_name, u_form.first_name)
+            u_form.username = get_username(request , u_form.last_name, u_form.first_name)
             u_form.save()
             teacher = teacher_form.save(commit=False)
             teacher.user = u_form
@@ -988,13 +996,14 @@ def register_by_csv(request, key, idg=0):
         lines = file_data.split("\r\n")
         # loop over the lines and save them in db. If error , store as string and then display
         destinataires = []
+
         for line in lines:
             try:
                 # loop over the lines and save them in db. If error , store as string and then display
                 fields = line.split(";")
                 ln = str(fields[0]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
                 fn = str(fields[1]).lower().capitalize()
-                username = get_username(ln, fn)
+                username = get_username(request , ln, fn)
                 password = make_password("sacado2020")
                 try:
                     if fields[2] != "":
@@ -1088,7 +1097,7 @@ def register_users_by_csv(request,key):
                 fields = line.split(";")
                 ln = str(fields[0]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
                 fn = str(fields[1]).lower().capitalize()
-                username = get_username(ln, fn)
+                username = get_username(request , ln, fn)
                 password = make_password("sacado2020")
                 try:
                     if fields[2] != "":

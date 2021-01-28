@@ -45,7 +45,33 @@ import pytz
 from datetime import datetime 
 from general_fonctions import *
 
+
+
+
+def get_username(request ,ln, fn):
+    """
+    retourne un username
+    """
+    ok = True
+    i = 0
+    code = str(uuid.uuid4())[:3] 
+
+    if request.user.school :
+        suffixe = request.user.school.country.name[2]
+    else :
+        suffixe = ""    
+    un = str(ln) + "." + str(fn)[0] + "_" + suffixe + code 
+
+    while ok:
  
+        if User.objects.filter(username=un).count() == 0:
+            ok = False
+        else:
+            i += 1
+            un = un + str(i)
+ 
+    return un  
+
 
 
 def student_dashboard(request,group_id):
@@ -184,7 +210,7 @@ def count_unique(datas):
     return nb
 
 
-def include_students(liste, group):
+def include_students(request , liste, group):
 
     students_tab = liste.split("\r\n")
 
@@ -194,10 +220,24 @@ def include_students(liste, group):
             fname = str(cleanhtml(details[0].replace(" ", ""))).strip()
             lname = str(cleanhtml(details[1].replace(" ", ""))).strip()
             password = make_password("sacado2020")
-            username = lname + fname
+            username = get_username(request,fname , lname)
+
 
             try:
-                email = cleanhtml(details[2])
+                for c in details[2] :
+                    if c == "@":
+                        email = cleanhtml(details[2])
+                    else :
+                        username = cleanhtml(details[2])
+            except IndexError:
+                email = ""
+            
+            try:
+                for car in details[3] :
+                    if car == "@":
+                        email = cleanhtml(details[3])
+                    else :
+                        username = cleanhtml(details[3])
             except IndexError:
                 email = ""
 
@@ -237,7 +277,10 @@ def include_students(liste, group):
 
 
 
-def include_students_in_a_model(liste,model):
+
+
+
+def include_students_in_a_model(request, liste,model):
  
     students_tab = liste.split("\r\n")
     tested = False
@@ -248,13 +291,34 @@ def include_students_in_a_model(liste,model):
             fname = cleanhtml(details[0].replace(" ", ""))
             lname = cleanhtml(details[1].replace(" ", ""))
             password = make_password("sacado2020")
-            username = str(lname).strip()+str(fname).strip()
+            username = get_username(request,fname , lname)
 
             try:
-                email = cleanhtml(details[2])
-                send_mail("Inscription SacAdo", "Bonjour "+fname+", \n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : "+username+"\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , "saca_do_not_reply@sacado.xyz" , [email])
+                for c in details[2] :
+                    if c == "@":
+                        email = cleanhtml(details[2])
+                    else :
+                        username = cleanhtml(details[2])
             except IndexError:
                 email = ""
+                
+
+            try:
+                for car in details[3] :
+                    if car == "@":
+                        email = cleanhtml(details[3])
+                    else :
+                        username = cleanhtml(details[3])
+            except IndexError:
+                email = ""
+ 
+
+            if email != "" :
+                send_mail("Inscription SacAdo", "Bonjour "+fname+", \n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : "+username+"\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , "saca_do_not_reply@sacado.xyz" , [email])
+
+
+
+
             user = User.objects.create(last_name=str(lname), first_name=str(fname), username=username, password=password, email=email,user_type=0)
             code = str(uuid.uuid4())[:8] # code pour la relation avec les parents
             student = Student.objects.create(user=user, level=group.level, code=code)
@@ -389,12 +453,8 @@ def create_student_profile_inside(request, nf) :
         code = str(uuid.uuid4())[:8]                 
         student = Student.objects.create(user=user, level=nf.level, code=code)
 
-        print("ici")
-
     else :
-        print(user)
         student = Student.objects.get(user=user)
-        print("là")
 
     st = True   
     nf.students.add(student)
@@ -415,7 +475,7 @@ def create_group(request):
         stdts = request.POST.get("students")
         if stdts : 
             if len(stdts) > 0 :
-                tested = include_students(stdts,nf)
+                tested = include_students(request , stdts,nf)
                 if not tested :
                     messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
         st = False
@@ -459,7 +519,7 @@ def update_group(request, id):
         stdts = request.POST.get("students")
         if stdts : 
             if len(stdts) > 0 :
-                tested = include_students(stdts,group)
+                tested = include_students(request , stdts,group)
                 if not tested :
                     messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
         st = False
