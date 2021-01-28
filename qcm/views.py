@@ -2053,7 +2053,9 @@ def ajax_exercise_error(request):
         usr = "non connecté"
 
     msg = "Message envoyé par l'utilisateur #"+str(usr.id)+", "+usr.last_name+" :\n\nL'exercice dont l'id est -- "+str(exercise_id)+" --  décrit ci-dessous : \n Savoir faire visé : "+exercise.knowledge.name+ " \n Niveau : "+exercise.level.name+  "  \n Thème : "+exercise.theme.name +" comporte un problème. \n  S'il est identifié par l'utilisateur, voici la description :  \n" + message   
-    response = "\n\n Cliquer ici pour répondre https://sacado.xyz/account/response_from_mail/"+str(usr.id)
+    response = "\n\n Cliquer ici pour répondre https://sacado.xyz/account/response_from_mail/"+str(usr.id)+"\n\n Cliquer ici pour voir l'exercice en question https://sacado.xyz/qcm/show_this_exercise/"+str(exercise_id)+"/"
+
+
     send_mail("Avertissement SacAdo Exercice "+str(exercise_id),  msg + response , "info@sacado.xyz" , ["brunoserres33@gmail.com", "philippe.demaria83@gmail.com", str(exercise.supportfile.author.user.email)])
     data = {}
     data["htmlg"]= "Envoi réussi, merci."
