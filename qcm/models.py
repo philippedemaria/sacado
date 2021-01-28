@@ -713,7 +713,7 @@ class Relationship(models.Model):
     students = models.ManyToManyField(Student, blank=True, related_name='students_relationship', editable=False)
     instruction = models.TextField(blank=True,  null=True,  editable=False)
 
-    maxexo = models.PositiveIntegerField(  default=0,  blank=True, null=True,  editable=False)
+    maxexo = models.IntegerField(  default=-1,  blank=True, null=True,  verbose_name="Nombre max de réalisation par exercice")
 
     is_lock = models.BooleanField(default=0, verbose_name="Exercice cloturé ?")
     is_mark = models.BooleanField(default=0, verbose_name="Notation ?")
