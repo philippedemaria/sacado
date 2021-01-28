@@ -2615,6 +2615,7 @@ def delete_relationship(request,idr):
 
     relation = Relationship.objects.get(pk = idr) 
     if relation.parcours.teacher.user == request.user  :
+        
         relation.delete()
 
     return redirect("show_parcours" , relation.parcours.id ) 

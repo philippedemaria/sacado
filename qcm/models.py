@@ -1297,8 +1297,8 @@ class Correctionknowledgecustomexercise(models.Model): # Evaluation des savoir f
 
 class Exerciselocker(ModelWithCode):
 
-    relationship = models.ForeignKey(Relationship,  on_delete=models.PROTECT, blank=True, null=True,  related_name='relationship_exerciselocker', editable=False) 
-    customexercise = models.ForeignKey(Customexercise,  on_delete=models.PROTECT, blank=True, null=True,  related_name='customexercise_exerciselocker', editable=False) 
+    relationship = models.ForeignKey(Relationship,  on_delete=models.CASCADE, blank=True, null=True,  related_name='relationship_exerciselocker', editable=False) 
+    customexercise = models.ForeignKey(Customexercise,  on_delete=models.CASCADE, blank=True, null=True,  related_name='customexercise_exerciselocker', editable=False) 
     custom  = models.BooleanField(default=0, editable=False)    
     student = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='student_exerciselocker', editable=False)
     lock = models.DateTimeField(null=True, blank=True, editable=False)
