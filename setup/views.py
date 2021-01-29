@@ -202,7 +202,7 @@ def send_message(request):
                   [email])
         send_mail(subject,
                   message,
-                  email,
+                  'info@sacado.xyz',
                   ["philippe.demaria-lgf@erlm.tn", "brunoserres33@gmail.com", "sacado.asso@gmail.com"])
     return redirect("index")
 
