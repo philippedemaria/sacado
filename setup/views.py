@@ -198,13 +198,16 @@ def send_message(request):
     if message:
         send_mail(subject,
                   "Bonjour, vous venez d'envoyer le message suivant :\n\n" + message + " \n\n Ceci est un mail automatique. Ne pas répondre.",
-                  'sacado.sas@gmail.com',
+                  'info@sacado.xyz',
                   [email])
         send_mail(subject,
                   message,
                   email,
                   ["philippe.demaria-lgf@erlm.tn", "brunoserres33@gmail.com", "sacado.asso@gmail.com"])
     return redirect("index")
+
+
+
 
 
 def inscription(request):
