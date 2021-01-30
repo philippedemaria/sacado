@@ -364,19 +364,19 @@ def handle_uploaded_file(f):
  
 
 @csrf_exempt  
-def from_ajax_create_question(kind,  ranking, title, calculator, duration, point ,  is_publish, imagefile, is_correct, is_correct_tab,imageanswer_tab,answers):
+def from_ajax_create_question(kind,  ranking, title, calculator, duration, point , knowledge_id ,  is_publish, imagefile, is_correct, is_correct_tab,imageanswer_tab,answers):
 
     if kind == 1 : # Vrai/Faux
-        question = Question.objects.create(title=title, duration= duration , point= point , calculator = calculator  ,imagefile=imagefile ,  is_publish=is_publish , kind=kind , ranking=ranking , is_correct = is_correct )
+        question = Question.objects.create(title=title, duration= duration , point= point , knowledge_id= knowledge_id ,  calculator = calculator  ,imagefile=imagefile ,  is_publish=is_publish , kind=kind , ranking=ranking , is_correct = is_correct )
 
     elif kind == 2 : # Réponse tapée
 
-        question = Question.objects.create(title=title, duration= duration , point= point , calculator= calculator  ,imagefile=imagefile ,  is_publish=is_publish , kind=kind , ranking=ranking  )
+        question = Question.objects.create(title=title, duration= duration , point= point , calculator= calculator  ,  knowledge_id= knowledge_id ,imagefile=imagefile ,  is_publish=is_publish , kind=kind , ranking=ranking  )
         choice = Choice.objects.create(answer=answers[0], imageanswer = None , is_correct = 1)
         question.choices.add(choice)    
 
     else : # QCM
-        question = Question.objects.create(title=title, duration= duration , point= point , calculator= calculator  ,imagefile=imagefile ,  is_publish=is_publish , kind=kind , ranking=ranking  )
+        question = Question.objects.create(title=title, duration= duration , point= point , calculator= calculator  ,  knowledge_id= knowledge_id ,imagefile=imagefile ,  is_publish=is_publish , kind=kind , ranking=ranking  )
 
         i=1
         for answer in answers :
@@ -397,16 +397,16 @@ def from_ajax_create_question(kind,  ranking, title, calculator, duration, point
 
 
 @csrf_exempt  
-def from_ajax_udate_question(kind,  ranking, question, title, calculator, duration, point ,  is_publish, imagefile, is_correct, is_correct_tab,imageanswer_tab,answers):
+def from_ajax_udate_question(kind,  ranking, question, title, calculator, duration, point ,  is_publish, imagefile, knowledge_id, is_correct, is_correct_tab,imageanswer_tab,answers):
 
     if kind == 1 : # Vrai/Faux
-        question =  Question.objects.filter(pk = question.id).update(title= title, duration= duration , point= point , calculator= calculator  ,   is_publish=is_publish ,  is_correct = is_correct )
+        Question.objects.filter(pk = question.id).update(title= title, duration= duration , point= point , calculator= calculator  , knowledge_id= knowledge_id ,   is_publish=is_publish ,  is_correct = is_correct )
         if imagefile :
             Question.objects.filter(pk = question.id).update(  imagefile= imagefile    ) 
 
     else :
 
-        question =  Question.objects.filter(pk = question.id).update(title=title, duration= duration , point= point , calculator= calculator  ,   is_publish=is_publish )
+        Question.objects.filter(pk = question.id).update(title=title, duration= duration , point= point , calculator= calculator  ,  knowledge_id = knowledge_id ,   is_publish=is_publish )
         if imagefile :
             Question.objects.filter(pk = question.id).update(  imagefile= imagefile    )  
 
@@ -426,7 +426,7 @@ def from_ajax_udate_question(kind,  ranking, question, title, calculator, durati
                         handle_uploaded_file(image_answer)
                 except :
                     image_answer = ""
-                Choice.objects.filter(pk = choice.id).update(answer=answers[i-1], imageanswer = image , is_correct = is_correct)    
+                Choice.objects.filter(pk = choice.id).update(answer=answers[i-1], imageanswer = image_answer , is_correct = is_correct)    
                 i+=1
  
     return question
@@ -445,13 +445,6 @@ def send_question(request):
     ### le quizz
     quizz_id =  data_posted.get("quizz_id",None) 
     quizz =  Quizz.objects.get(pk = quizz_id)
-
-    ### la question
-    question_id =  data_posted.get("quetion_id",None)
-    if question_id :
-        question = Question .objects.get(pk = int(question_id))
-    else :
-        question = None
 
     ### titre ####################################
     title =  cleanhtml(unescape_html(data_posted.get("title")) )
@@ -496,27 +489,27 @@ def send_question(request):
     answers =  data_posted.getlist("answers", [])
     is_correct_tab =  data_posted.getlist("is_corrects",[])
     imageanswer_tab =  data_files.getlist("image_answers",[])
- 
-    if question :
-        question = from_ajax_udate_question(kind,ranking,  question, title, calculator, duration, point ,  is_publish, imagefile, is_correct, is_correct_tab,imageanswer_tab,answers)
-    else :
-        question = from_ajax_create_question(kind, ranking,  title, calculator, duration, point ,  is_publish, imagefile, is_correct, is_correct_tab,imageanswer_tab,answers)
 
+    question_id =  data_posted.get("question_id",None)
+    knowledge_id =  data_posted.get("knowledge_id",None)
+    if question_id :
+        question = Question.objects.get(pk = int(question_id))
+        new = False
+        from_ajax_udate_question(kind,ranking,  question , title, calculator, duration, point ,  is_publish, imagefile, knowledge_id , is_correct, is_correct_tab,imageanswer_tab,answers)
+    else :
+        question = from_ajax_create_question(kind, ranking,  title, calculator, duration, point ,  is_publish, imagefile, knowledge_id , is_correct, is_correct_tab,imageanswer_tab,answers)
+        new = True
 
     question.quizzes.add(quizz)
    
     context = {  'kind' : 0 ,    }
     context_liste = {  'question' : question ,  'quizz' : quizz , 'from_ajax' : True , 'nbq' : nbq }
 
-    data = {}
+    data = {'new' : new}
     data['html'] = render_to_string('tool/type_of_question.html', context)
     data['question'] = render_to_string('tool/list_of_question.html', context_liste)
  
     return JsonResponse(data)
-
-
-
-
 
 
 
@@ -533,3 +526,51 @@ def question_sorter(request):
 
     data = {}
     return JsonResponse(data)  
+
+ 
+def play_printing_teacher(request, id):
+
+    quizz = Quizz.objects.get(id=id)
+ 
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="fiche_reponse_'+str(quizz.id)+'.pdf"'
+    p = canvas.Canvas(response)
+
+    p.setFont("Helvetica", 16)
+    p.drawString(75, 800, quizz.title +"                                    "+quizz.title )    
+
+    p.setFont("Helvetica", 12)
+    p.drawString(75, 770, "Classe  : ________________________           Classe  : _______________________ " )  
+    p.drawString(75, 740, "Nom :  _________________________            Nom :  _________________________" )  
+
+    for i in range(1,quizz.questions.count()+1) :
+        p.setFont("Helvetica", 12)  
+        string0 = str(i)+". _____________________________          " + str(i)+". _____________________________" 
+        p.drawString(75, 740-30*i, string0)
+
+
+    p.line(75, 740-30*(i+1) ,550,740-30*(i+1) )
+
+    p.setFont("Helvetica", 16)
+    p.drawString(75, 740-30*(i+2), quizz.title +"                                    "+quizz.title )    
+
+    p.setFont("Helvetica", 12)
+    p.drawString(75, 740-30*(i+3), "Classe  : ________________________           Classe  : _______________________ " )  
+    p.drawString(75, 740-30*(i+4), "Nom :  _________________________            Nom :  _________________________" )  
+
+    for j in range(1,quizz.questions.count()+1) :
+        p.setFont("Helvetica", 12)  
+        string0 = str(j)+". _____________________________          " + str(i)+". _____________________________" 
+        p.drawString(75, 740-30*(i+4)-30*j, string0)
+
+
+    p.line(75, 740-30*(i+5)-30*j ,550,740-30*(i+5)-30*j )
+
+
+
+    p.line(300, 800  ,300,740-30*(i+5)-30*j )
+ 
+    p.showPage()
+    p.save()
+    return response 

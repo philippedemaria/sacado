@@ -156,7 +156,11 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
  
 
                         $('#body_question').html(data.html);
-                        $('#questions_sortable_list').append(data.question);
+                        
+                        if (data.new) {
+                        $('#questions_sortable_list').append(data.question);                            
+                        }
+
 
  
                     }

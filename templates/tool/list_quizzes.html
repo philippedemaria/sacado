@@ -55,12 +55,13 @@
                                 {% for g in quizz.groups.all %} {{ g }} {% if not forloop.last %}, {% endif %} {% endfor %}
                             </td>
                             <td > 
-                              <a href="{% url 'create_question'  quizz.id %}" target="_blank" ><i class="fa fa-plus"></i> Ajouter des questions</a>  <br/><br/>
+                                <div class="quizz_action"><a href="{% url 'create_question'  quizz.id %}" target="_blank" ><i class="fa fa-plus"></i> Ajouter des questions</a> </div>  
 
-                              <a href="{% url 'play_quizz_teacher'  quizz.id   %}" target="_blank" ><i class="fa fa-play"></i>  Mode jeu</a> <br/><br/>
+                                <div class="quizz_action"><a href="{% url 'play_printing_teacher'  quizz.id   %}" target="_blank"  class="quizz_action"><i class="fa fa-print"></i> Créer pour imprimer les fiches réponses</a> </div>    
+                                <div class="quizz_action"><a href="{% url 'play_quizz_teacher'  quizz.id   %}" target="_blank"  class="quizz_action"><i class="fa fa-play"></i> <em> Mode jeu</em></a> A venir  </div>   
 
-                              <a href="{% url 'show_quizz'  quizz.id %}" ><i class="fa fa-eye"></i>  Mode présentation</a> <br/><br/>
-                              <a href="{% url 'delete_quizz'  quizz.id %}"  onclick="return TestDelete('ce quizz')"><i class="fa fa-trash"></i>  Supprimer</a>
+                                <div class="quizz_action"><a href="{% url 'show_quizz'  quizz.id %}"  class="quizz_action"><i class="fa fa-eye"></i>  Mode présentation</a>  </div>  
+                                <div class="quizz_action"><a href="{% url 'delete_quizz'  quizz.id %}"  class="quizz_action"  onclick="return TestDelete('ce quizz')"><i class="fa fa-trash"></i>  Supprimer</a> </div>  
                             </td>
                         </tr>
                     {% endfor %} 

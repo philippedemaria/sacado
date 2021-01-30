@@ -28,6 +28,8 @@ define(['jquery',  'bootstrap' ], function ($) {
 
        $('.nav button').on('click', function(){ 
 
+        $(".instruction").hide();
+
                var whichButton = $(this).data('nav'); 
                console.log(whichButton);
 
@@ -42,7 +44,6 @@ define(['jquery',  'bootstrap' ], function ($) {
                                 currentSlide++ ; 
                             }
                         transition(currentSlide, slideWidth )  ;
-
 
                    } else if (whichButton === 'prev') {
 
@@ -66,6 +67,8 @@ define(['jquery',  'bootstrap' ], function ($) {
                     step_count   = 0;
 
                 $('#start_quizz').on('click', function(){
+
+                            $(".instruction").show();
  
 
                         if ( starter_play%2 === 0 ) {

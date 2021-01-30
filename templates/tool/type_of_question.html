@@ -4,7 +4,7 @@
 {% load item_tags %}
 
 <input type="hidden" name="kind" id="kind" value="{{ kind }}"   /> 
-      
+<input type="hidden" value="{{ question.id }}" name="question_id"   />
 {% if kind == 0 or not kind %}
 <div class="row"   >
     <div class="col-sm-12 col-md-6" align="center"> 
@@ -78,7 +78,7 @@
     </div>
     <div class="col-sm-12 col-md-8" align="center" > 
         <div id="drop_zone" class="drop-zone">
-          <p class="title">Déposer votre image ici <br/><i class="fa fa-file-image-o"></i></p>
+          <p class="title">Déposer votre image ici <div style="font-size:20px">MAX : 700px par 600px</div></p>
           <div class="preview-container"></div>
         </div>
         <input id="id_imagefile"  type="file" multiple="" name="imagefile">
@@ -201,13 +201,13 @@
 
 </div>
 
-<div class="row" >
+<div class="row" >  
     <div class="col-sm-12 col-md-12" >   
-         <select name="knowledge" class="form-control select2">
+         <select name="knowledge_id" id="knowledge_id" class="form-control select2">
               {%  for data in datas %} 
               <optgroup label="{{ data.waiting }}">
                   {%  for knowledge in data.knowledges %}
-                      <option value="{{ knowledge.id }}">{{ knowledge.name }}</option> 
+                      <option value="{{ knowledge.id }}" {% if question %}{% if question.knowledge.id == knowledge.id  %} selected {% endif %}{% endif %}>{{ knowledge.name }}</option> 
                   {% endfor %}
               </optgroup>
               {% endfor %}
@@ -228,9 +228,7 @@
 </div> 
 
  
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script src="{% static 'js/lib/jquery.smartuploader.js' %}"></script>
+ 
 <script>
 $("#id_imagefile").withDropZone("#drop_zone", {
   action: {
@@ -240,6 +238,9 @@ $("#id_imagefile").withDropZone("#drop_zone", {
     }
   },
 });
+
+
+$("#knowledge_id").select2() ; 
 
 
   function previewFile(nb,classe) {

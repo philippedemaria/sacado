@@ -441,6 +441,11 @@ a.selector_question:hover {
   border-radius: 10px;
 }
 
+.quizz_action{
+  margin-bottom:15px;
+}
+
+
 
 .question_bank {
   padding-top: 30px;  
