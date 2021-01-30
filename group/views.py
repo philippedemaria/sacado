@@ -508,7 +508,7 @@ def update_group(request, id):
 
     teacher = Teacher.objects.get(user= request.user)
     group = Group.objects.get(id=id)
-    stdnts = group.students.exclude(user__username = request.user.username).order_by("user__last_name")
+    stdnts = group.students.exclude(user__username = request.user.username).exclude(user__username__contains= request.user.username+"Test").order_by("user__last_name")
 
     authorizing_access_group(request,teacher,group )
     
@@ -555,16 +555,25 @@ def delete_group(request, id):
     authorizing_access_group(request,teacher,group )
     if not teacher.user.school :
         # Si les élèves n'appartiennent pas à un établissement
-        for student in group.students.exclude(user__username = request.user.username) :
+        for student in group.students.exclude(user__username = request.user.username).exclude(user__username__contains= request.user.username+"Test") :
             if not student.user.school :
                 if Group.objects.filter(students=student).exclude(pk=group.id) == 0 : 
                     #Si les élèves n'appartiennent pas à un autre groupe
                     student.student_user.delete()
                     student.delete() # alors on les supprime
+        for student in group.students.filter(user__username = request.user.username,user__username__contains= request.user.username+"Test") :
+            if not student.user.school :
+                if Group.objects.filter(students=student).exclude(pk=group.id) == 0 : 
+                    student.student_user.delete()
+       
         group.delete()
+        request.session.pop('group', None)
+        request.session.pop('group_id', None)
         return redirect('index')
     else :
         group.delete()
+        request.session.pop('group', None)
+        request.session.pop('group_id', None)
         return redirect('school_groups')        
 
  
@@ -578,7 +587,7 @@ def show_group(request, id ):
     access = data['access']
     authorizing_access_group(request,teacher,group )
 
-    students = group.students.exclude(user__username = request.user.username).order_by("user__last_name")
+    students = group.students.exclude(user__username = request.user.username).exclude( user__username__contains= request.user.username+"Test").order_by("user__last_name")
 
     context = {  'group': group,  'communications' : [] , 'teacher' : group.teacher , 'students' : students }
 

@@ -22,7 +22,7 @@
                             {% for s in data.students %} 
                                 <a href="{% url 'detail_student_all_views'  s.user__id   %}" class="small_users"> {{s.user__last_name|lower|capfirst}} {{s.user__first_name|lower|capfirst}}</a>{% if not forloop.last %}, {% endif %}
                             {% empty %}
-                                Aucun élève 
+                                Aucun élève (excepté votre compte test éventuellement)
                             {% endfor %}
                         </font>
                         <div style="clear:both"></div>
@@ -102,7 +102,21 @@
                                     <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:20px; color:{{ group.color|contrast_color }};"><i class="fa fa-arrow-circle-right"></i><span class="small_displayer"> Détails </span></a>    
                                 </div>
                                 <div class="col-lg-6 col-xs-6" style="padding-right:0px">
-                                    <a  href="#"  class="label_small_box group_shower" data-group_id="{{group.id }}" style="font-size:20px; color:{{ group.color|contrast_color }};"><i class="fa fa-users"></i><span class="small_displayer"> {{ group.students.count }} élève{{ group.students.count|pluralize }}</span> </a>   
+                                    <a  href="#"  class="label_small_box group_shower" data-group_id="{{group.id }}" style="font-size:20px; color:{{ group.color|contrast_color }};"><i class="fa fa-users"></i><span class="helper_tip small_displayer" style="color:{{ group.color|contrast_color }};"> {{ data.snt }} élève{{ data.snt|pluralize }}
+
+
+                                        {% if data.profiltest %}
+                                                    <div class="helper_tip_text" >
+                                                        Votre profil élève n'est pas pris en compte dans la liste de vos élèves.
+                                                    </div>
+                                        {% else  %}
+                                                    <div class="helper_tip_text" >
+                                                        Vous n'avez pas de profil élève pour ce groupe
+                                                    </div>
+                                        {% endif  %}
+
+
+                                    </span> </a>   
                                 </div>
                             </div>
                         {% else  %}
@@ -115,7 +129,20 @@
                                     <a  href="{% url 'result_group_exercise'  group.id %}" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Lien interne" ><i class="fa fa-mortar-board"></i><span class="small_displayer"> Suivis </span></a><a  href="{% url 'result_group_exercise'  group.id %}" target="_blank" title="Lien externe" > <img src="{% static 'img/external-link_white.png' %}"  width="8px" ></a>
                                 </div> 
                                 <div class="col-lg-4 col-xs-4" style="padding-right:0px">
-                                    <a  href="#"  class="label_small_box group_shower" data-group_id="{{group.id }}" style="font-size:15px; color:{{ group.color|contrast_color }};"><i class="fa fa-users"></i><span class="small_displayer"> Élève{{ group.students.count|pluralize }}</span> </a>   
+                                    <a  href="#"  class="label_small_box group_shower" data-group_id="{{group.id }}" style="font-size:15px; color:{{ group.color|contrast_color }};"><i class="fa fa-users"></i>
+                                        <span class="helper_tip small_displayer"  style="color:{{ group.color|contrast_color }};"> Élève{{ data.snt|pluralize }}
+
+                                    {% if data.profiltest %}
+                                                <div class="helper_tip_text" >
+                                                     Votre profil élève n'est pas pris en compte dans la liste de vos élèves.
+                                                </div> 
+                                        {% else  %}
+                                                    <div class="helper_tip_text" >
+                                                        Vous n'avez pas de profil élève pour ce groupe
+                                                    </div>
+                                    {% endif  %}
+                                        </span> 
+                                    </a>   
                                 </div>
                             </div>
                         {% endif  %}

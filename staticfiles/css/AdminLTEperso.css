@@ -5113,7 +5113,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 .shared_group{
   font-size:12px; 
   position: absolute; 
-  top: 150px
+  top: 150px;
 }
 
 .modal_helper_tip_text {

@@ -74,11 +74,22 @@ class Group(ModelWithCode):
         """
         Donne le nombre total de parcours/évaluations, le nombre de visibles et de publiés du groupe
         """
-        students = self.students.order_by("user__last_name")
+        unameTest = teacher.user.username+"Test"
+        students = self.students.exclude(user__username=unameTest).order_by("user__last_name")
+        snt = students.count()
+
+        if self.students.filter(user__username__contains=unameTest).count() == 1 : 
+            profilTest = True
+        else :
+            profilTest = False
+
+
+
+
 
         parcourses = []
-        for student in self.students.all():
-            for p in student.students_to_parcours.filter(Q(author=teacher)|Q(teacher=teacher)|Q(coteachers=teacher)).exclude(is_leaf=1) :
+        for student in students:
+            for p in student.students_to_parcours.filter(Q(author=teacher)|Q(teacher=teacher)|Q(coteachers=teacher),level = self.level).exclude(is_leaf=1) :
                 if p not in parcourses  :
                     parcourses.append(p)
 
@@ -96,15 +107,18 @@ class Group(ModelWithCode):
             if parcours.is_evaluation and parcours.is_favorite :
                 nbef += 1
 
-        data["count_students"] = students.values("user").count()
+        data["count_students"] = snt
         data["students"] = students.values("user__id", "user__last_name", "user__first_name")
         data["nb_parcours"] = nb
         data["nb_parcours_visible"] = nbp
         data["nb_parcours_favorite"] = nbf
         data["nb_evaluation_favorite"] = nbef 
-        data["nb_evaluation"] = nbe 
+        data["nb_evaluation"] = nbe
+        data["students_no_test"] = snt
+        data["profiltest"] = profilTest                 
 
         return data
+
 
 
     def parcours(self):

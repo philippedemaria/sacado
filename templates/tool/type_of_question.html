@@ -174,16 +174,13 @@
 
                   <div class="col-sm-2 col-md-2 checking_zone" id="checking_zone{{ forloop.counter }}"> 
                       <span class="noCheck" id="noCheck{{ forloop.counter }}"
-
-                              {% if classe.is_correct %}
-                                      style="display:none;"  
-                                  {% else  %}
-                                      style="display:block;"
-                              {% endif %}
-
-
-
-                      ><i class="fa fa-circle fa-3x white"></i></span>
+                          {% if classe.is_correct %}
+                                  style="display:none;"  
+                              {% else  %}
+                                  style="display:block;"
+                          {% endif %}>
+                          <i class="fa fa-circle fa-3x white"></i>
+                      </span>
                       <input type="checkbox" class="checkbox_no_display"  value="1" name="is_corrects" id="id_is_correct{{ forloop.counter }}" {% if question %}{% if question.is_correct  %}checked{% endif %}{% endif %}  />
                       <span class="check" id="check{{ forloop.counter }}"
 
