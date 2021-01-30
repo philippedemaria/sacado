@@ -22,63 +22,59 @@
 
 {% block page_menu_right %}
 
-     <a href="#" data-toggle='modal' data-target='#quizz_choice'  class="btn btn-new pull-right"><img width="25px" src="{% static 'img/plus.png' %}"/> Créer un quizz</a>  
+     <a href="#" data-toggle='modal' data-target='#quizz_choice'  class="btn btn-new pull-right">  Créer un quizz</a>  
 
- 
 {% endblock %}
 
 
 
 
 {% block body %}
+<section class="content_main"> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table id="standard_tab" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Code <span class="sacado">SACADO Quizz Play</span></th>
+                    <th>Groupes attribués</th>
+                    <th>  </th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for quizz in quizzes %}
+                        <tr>
+                            <td style="line-height: 200px">
+                               <a href="{% url 'update_quizz' quizz.id  %}"> {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="200px" />{% endif %}{{ quizz.title }}</a> 
+                            </td>
+                            <td style="line-height: 200px; font-size:30px">
+                                 {{ quizz.code }}  
+                            </td>
+                            <td style="line-height: 200px"> 
+                                {% for g in quizz.groups.all %} {{ g }} {% if not forloop.last %}, {% endif %} {% endfor %}
+                            </td>
+                            <td > 
+                              <a href="{% url 'create_question'  quizz.id %}" target="_blank" ><i class="fa fa-plus"></i> Ajouter des questions</a>  <br/><br/>
 
- 
+                              <a href="{% url 'play_quizz_teacher'  quizz.id   %}" target="_blank" ><i class="fa fa-play"></i>  Mode jeu</a> <br/><br/>
 
-    <section class="content_main"> 
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <table id="standard_tab" class="table table-bordered table-hover">
-                    <thead>
-                    <tr>
-                        <th>Titre</th>
-                        <th>Code <span class="sacado">SACADO Quizz Play</span></th>
-                        <th>Groupes attribués</th>
-                        <th>  </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        {% for quizz in quizzes %}
-                            <tr>
-                                <td style="line-height: 200px">
-                                   <a href="{% url 'update_quizz' quizz.id  %}"> {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="200px" />{% endif %}{{ quizz.title }}</a> 
-                                </td>
-                                <td style="line-height: 200px">
-                                    {{ quizz.code }} 
-                                </td>
-                                <td style="line-height: 200px"> 
-                                    {% for g in quizz.groups.all %} {{ g }} {% if not forloop.last %}, {% endif %} {% endfor %}
-                                </td>
-                                <td > 
-                                  <a href="{% url 'create_question'  quizz.id %}" target="_blank" ><i class="fa fa-plus"></i> Ajouter des questions</a>  <br/><br/>
-
-                                  <a href="{% url 'play_quizz_teacher'  quizz.id   %}" target="_blank" ><i class="fa fa-play"></i>  Mode jeu</a> <br/><br/>
-
-                                  <a href="{% url 'show_quizz'  quizz.id %}" ><i class="fa fa-eye"></i>  Mode présentation</a> <br/><br/>
-                                  <a href="{% url 'delete_quizz'  quizz.id %}"  onclick="return TestDelete('ce quizz')"><i class="fa fa-trash"></i>  Supprimer</a>
-                                </td>
-                            </tr>
-                        {% endfor %} 
-                    </tbody>
-                </table>
-            </div>
+                              <a href="{% url 'show_quizz'  quizz.id %}" ><i class="fa fa-eye"></i>  Mode présentation</a> <br/><br/>
+                              <a href="{% url 'delete_quizz'  quizz.id %}"  onclick="return TestDelete('ce quizz')"><i class="fa fa-trash"></i>  Supprimer</a>
+                            </td>
+                        </tr>
+                    {% endfor %} 
+                </tbody>
+            </table>
         </div>
- 
-        <div class="row">
-            <div class="col-sm-12 col-md-12">     
-                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
-            </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">     
+                <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
         </div>
-    </section>
+    </div>
+</section>
 
 
 <div class="modal fade" id="quizz_choice" tabindex="-1" role="dialog" aria-labelledby="quizz_choice">
