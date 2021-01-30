@@ -835,7 +835,7 @@ def list_parcours_group(request,id):
 
     for student in students :
         if access :
-            pcs = Parcours.objects.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),students= student, is_favorite=1 ).exclude(is_leaf=1).order_by("is_evaluation","ranking")
+            pcs = Parcours.objects.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),students= student, is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation","ranking")
         else :
             pcs = student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), is_favorite=1 ).exclude(is_leaf=1).order_by("is_evaluation","ranking")
         for parcours in pcs : 
@@ -6565,6 +6565,8 @@ def create_folder(request,idg):
             nf.teacher = teacher
             nf.is_evaluation = 0
             nf.is_folder = 1
+            nf.level = group.level
+            nf.subject = group.subject
             nf.save() 
             nf.leaf_parcours.set(lp)        
             nf.students.set(group.students.all())

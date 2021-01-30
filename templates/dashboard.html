@@ -8,6 +8,8 @@
     {% load item_tags %} 
 
     {% load static %}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8;X-Content-Type-Options=nosniff" />
+
     <!-- Bootstrap -->
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}"/>
     <!-- Font Awesome -->
@@ -47,11 +49,7 @@
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
  
-
-
-
-
-    <meta charset="UTF-8">
+ 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -523,7 +521,7 @@
 
 
 {% block require %}
-        <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3_mini.js' %}"></script>  
+        <script type="application/javascript"  src="{% static 'js/require.js' %}" data-main="{% static 'js/common3_mini.js' %}"></script>  
 {% endblock %}
  
 <script>
