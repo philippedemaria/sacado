@@ -18,7 +18,10 @@
                         {% endif %}
                         </h1>
                         <div class="small-box-footer-max">
-                            <span class="white thin" style="color:{{group.subject.color|contrast_color }}; font-size:14px;">{{ group.teacher.user.civilite }} {{ group.teacher.user.last_name }}</span>
+                            <span class="white thin" style="color:{{group.subject.color|contrast_color }}; font-size:14px;">{{ group.teacher.user.civilite }} {{ group.teacher.user.last_name }}
+                            </span>
+                            <span class="white thin pull-right"  style="color:{{group.subject.color|contrast_color }}; font-size:14px;">{{ group.level.name }}  
+                            </span>
                             <br> 
                             <br> 
                             <br> 
@@ -28,8 +31,10 @@
                                         <i class="fa fa-calendar-check" style="color:red"></i>
                                     {% endif %} Accéder</a>
                             </div>
-                            <div  class="student_vignette_subtitle">    
-                                <i class="fa fa-folder{% if group.themes|length > 0 %}-open{% endif %}"></i> {{ group.themes|length }}   thèmes proposés
+                            <div  class="student_vignette_subtitle"> 
+                                {% with group.themes|length as lgt %}   
+                                    <i class="fa fa-folder{% if lgt > 0 %}-open{% endif %}"></i> {{ lgt }}   thème{{ lgt|pluralize }} proposé{{ lgt|pluralize }}
+                                {% endwith %}
                             </div>
                         </div>
                     </div>

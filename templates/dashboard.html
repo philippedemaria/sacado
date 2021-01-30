@@ -228,7 +228,7 @@
     <hr>
     <div class="row">
         <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
-            <a href="{% url 'profile' %}" class="{% if not user.country  %} text-danger{% endif %}">Profil & Notification {% if not user.country  %} <br/> > Renseigner le pays{% endif %}</a> 
+            <a href="{% url 'profile' %}" class="{% if not user.country and user.user_type == 2 %} text-danger{% endif %}">Profil & Notification {% if not user.country and user.user_type == 2  %} <br/> > Renseigner le pays{% endif %}</a> 
         </div>
     </div>
     <div class="row">
@@ -247,7 +247,7 @@
         <div class="row">
             <div class="col-lg-12 col-xs-12" style=" padding-top: 10px;">
                 {% for g in groups %}
-                <li class="sanspuce"><a href="{% url 'dashboard_group' g.id %}"><i class="fa fa-square" style="color:{{ g.subject.color }}"></i> {{ g.subject.shortname }}</a></li>
+                <li class="sanspuce"><a href="{% url 'dashboard_group' g.id %}"><i class="fa fa-square" style="color:{{ g.subject.color }}"></i> {{ g.subject.shortname }}  <small class="pull-right">({{ g.level.name }})</small></a></li>
                 {% endfor %}
             </div>
         </div>
