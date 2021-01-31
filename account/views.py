@@ -578,7 +578,7 @@ def detail_student(request, id):
             context = {'datas': datas, 'parcourses': parcourses, 'group': group, 'sprev_id': nav[0], 'snext_id': nav[1], 'parcours' : None, 'students' : students ,  'today' : today ,  
                    'themes': themes, 'student': student , 'communications' : [], }
         else :
-            messages.error(request, "Erreur...Cet élève n'est pas associé à un groupe.")
+            messages.error(request, "Erreur...L'élève "+str(student.user.first_name)+" "+str(student.user.last_name)+" n'est pas associé à un groupe.")
             return redirect('index')
 
     else:
@@ -653,7 +653,7 @@ def detail_student_theme(request, id,idt):
                    'sprev_id': nav[0], 'snext_id': nav[1], 'communications': [], 'parcourses': parcourses, 'today' : today ,
                    'themes': themes}
         else :
-            messages.error(request, "Erreur...Cet élève n'est pas associé à un groupe.")
+            messages.error(request, "Erreur...L'élève "+str(student.user.first_name)+" "+str(student.user.last_name)+" n'est pas associé à un groupe.")
             return redirect('index') 
 
     else:
@@ -694,7 +694,7 @@ def detail_student_parcours(request, id,idp):
             context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'sprev_id': nav[0], 'students' : students , 'group' : group , 'communications' : [], 
                    'snext_id': nav[1], 'parcourses': parcourses, 'student': student}
         else :
-            messages.error(request, "Erreur...Cet élève n'est pas associé à un groupe.")
+            messages.error(request, "Erreur...L'élève "+str(student.user.first_name)+" "+str(student.user.last_name)+" n'est pas associé à un groupe.")
             return redirect('index') 
 
     else:
@@ -799,6 +799,7 @@ def detail_student_all_views(request, id):
             context = {'exercises': exercises, 'knowledges': knowledges,  'parcourses': parcourses, 'std': std, 'themes': themes, 'students' : students ,  'group' : group , 'communications' : [], 'today' : today , 'form' : form ,  'groups' : groups ,
                    'student': student, 'parcours': None, 'sprev_id': nav[0], 'snext_id': nav[1] , 'teacher' : teacher }
         else :
+            messages.error(request, "Erreur...L'élève "+str(student.user.first_name)+" "+str(student.user.last_name)+" n'est pas associé à un groupe.")
             return redirect("index")
     else:
         group = Group.objects.filter(students=student).last()
