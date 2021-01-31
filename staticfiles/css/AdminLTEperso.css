@@ -697,7 +697,45 @@ li.my_slide{
   }
  
 
+ 
+#built_diaporama .wrapper_slider{
+  width:1200px;
+  margin : auto;
+  padding: 10px;
+ 
+  overflow: hidden;
+}
+ 
 
+#built_diaporama #ul_slider {
+  list-style: none;
+  width: 12000px!important; 
+  position: relative;
+  left : 0px; 
+  padding: 0; 
+  margin: 0;
+  overflow: hidden;
+}
+
+
+#built_diaporama #ul_slider li {
+  float: left!important;
+}
+ 
+
+#built_diaporama #ul_slider li.my_slide{
+    margin-left: auto;
+    margin-right: auto;
+    width : 1200px;
+    min-height: 600px;
+  }
+
+
+#built_diaporama #ul_slider .consigne_diapo *  {
+    font-size : 30px;
+  }
+
+ 
 
 
  /****************************************** details_card selectors **************************************/

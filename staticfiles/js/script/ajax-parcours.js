@@ -639,15 +639,15 @@ define(['jquery','bootstrap'], function ($) {
                                     height = 2*parseInt($('#projection_div').find("iframe").attr("height")); 
                                     coeff = width/height   ;                                 
 
-                                    if (width < screen_size){
-                                        $('#projection_div').find("iframe").attr("width", width); 
-                                        $('#projection_div').find("iframe").attr("height", height);
-                                    }
-                                    else{
+                                    // if (width < screen_size){
+                                    //     $('#projection_div').find("iframe").attr("width", width); 
+                                    //     $('#projection_div').find("iframe").attr("height", height);
+                                    // }
+                                    // else{
                                         new_size = 0.9*screen_size ; 
                                         $('#projection_div').find("iframe").attr("width", new_size ); 
                                         $('#projection_div').find("iframe").attr("height", new_size / coeff );
-                                    }
+                                    //}
                     }
  
 
@@ -769,6 +769,123 @@ define(['jquery','bootstrap'], function ($) {
                 collapser++;                     
              }) ;
  
+
+
+        // ====================================================================================================================
+        // ====================================================================================================================
+        // ============================================      DIAPORAMA DE COURS       ========================================= 
+        // ====================================================================================================================
+        // ====================================================================================================================
+
+        $('.reset_slider').on('click', function (event) {
+
+            slides = $('#ul_slider').children(":gt(0)") ;
+
+           $.each( slides , function( i, val ) { 
+                 val.remove() ;
+                }) ;
+
+        })
+
+
+        // Affiche  un cours connaissant le parcours et le cours
+        $('.built_diaporama').on('click', function (event) {
+     
+               slides = $('#this_course_viewer .projection') ;
+
+               $.each( slides , function( i, val ) { 
+                    $("#ul_slider").append("<li class='my_slide'><div class='consigne_diapo'><div class='col-sm-12 col-md-12'>" + val.innerHTML +"</div></div></li>" );
+                    })
+
+
+
+                var slideBox = $('#ul_slider'),
+                    slideWidth = 1200 ,
+                    slideQuantity = slideBox.children('li').length,
+                    currentSlide = 1 ,
+                    currentQuestion = 1 ;
+
+                slideBox.css('width', slideWidth*slideQuantity);
+
+             
+                function transition(currentSlideInput, slideWidthInput){
+
+                    var pxValue = -(currentSlideInput -1) * slideWidthInput ; 
+                    slideBox.animate({
+                        'left' : pxValue
+                    }) ;
+
+                    console.log(currentSlideInput+" "+slideWidthInput+" "+slideQuantity) ; 
+
+                }
+
+
+               this_course_title = $('#this_course_title').text() ;
+               $('.this_slider_title').text(this_course_title) ;
+
+
+               $('.nav button').on('click', function(){ 
+
+         
+                       var whichButton = $(this).data('nav'); 
+                       console.log(whichButton);
+
+                           if (whichButton === 'next') {
+
+                                if (currentSlide === slideQuantity)
+                                    { 
+                                        currentSlide = 1 ; 
+                                    }
+                                else 
+                                    { 
+                                        currentSlide++ ; 
+                                    }
+                                transition(currentSlide, slideWidth )  ;
+
+                           } else if (whichButton === 'prev') {
+
+                                if (currentSlide === 1)
+                                    { 
+                                        currentSlide = slideQuantity ; 
+                                    }
+                                else 
+                                    { 
+                                        currentSlide-- ; 
+                                    }
+                                transition(currentSlide, slideWidth ) ;
+                           }
+
+                    });
+
+
+                var screen_size = 1100  ;
+
+                if($('#ul_slider iframe').length) { 
+
+                        width = 2*parseInt($('#ul_slider').find("iframe").attr("width"));
+                        height = 2*parseInt($('#ul_slider').find("iframe").attr("height")); 
+                        coeff = width/height   ;                                 
+
+
+                        new_size = screen_size ; 
+                        $('#ul_slider').find("iframe").attr("width", new_size ); 
+                        $('#ul_slider').find("iframe").attr("height", new_size / coeff );
+                              
+                    }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     });

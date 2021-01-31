@@ -60,7 +60,9 @@ requirejs.config({
         "ckeditor_jquery": {
             deps: ['jquery', 'ckeditor']
         },
- 
+        "uploader": {
+            deps: ['jquery' ]
+        },
         "config_toggle": {
             deps: ['jquery','toggle']
         },

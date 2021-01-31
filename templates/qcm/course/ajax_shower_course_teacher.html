@@ -1,11 +1,18 @@
 {% load static %}
 {% load item_tags %}
 
+
  
- 
-<h1 class="thin">  <span id="this_course_title">{{ course.title }} - {{ course.id }}</span>   
+<h1 class="thin">  <span id="this_course_title">{{ course.title }}</span>   
     <a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 12px; margin-right:10px;" class="pull-right">Modifier ce cours</a> 
     <a href="#"  data-toggle='modal' data-target='#view_course'  data-course_id="{{ course.id }}"  style="font-size: 12px; margin-right:10px;" class="pull-right course_viewer">Vidéoprojeter ce cours</a>
+    <a href="#" data-toggle='modal' data-target='#built_diaporama'  data-course_id="{{ course.id }}"  style="font-size: 12px; margin-right:10px;" class="pull-right built_diaporama"> Diaporama 
+        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+             <div class="helper_tip_text" >Pour cette option, le cours doit contenir des sections projetables (encadré gris en pointillés)  qu'il convient de créer dans son cours. </div>
+        </span> 
+
+
+    </a>
 </h1>
 <hr>
 <div >{{ course.annoncement|decode|safe }} </div>
@@ -33,6 +40,105 @@
              $("#projection_div").remove();
         });
  
+
+        $('.reset_slider').on('click', function (event) {
+
+            slides = $('#ul_slider').children(":gt(0)") ;
+
+           $.each( slides , function( i, val ) { 
+                 val.remove() ;
+                }) ;
+
+        })
+
+
+        // Affiche  un cours connaissant le parcours et le cours
+        $('.built_diaporama').on('click', function (event) {
+     
+               slides = $('#this_course_viewer .projection') ;
+
+               $.each( slides , function( i, val ) { 
+                    $("#ul_slider").append("<li class='my_slide'><div class='consigne_diapo'><div class='col-sm-12 col-md-12'>" + val.innerHTML +"</div></div></li>" );
+                    })
+
+
+
+                var slideBox = $('#ul_slider'),
+                    slideWidth = 1200 ,
+                    slideQuantity = slideBox.children('li').length,
+                    currentSlide = 1 ,
+                    currentQuestion = 1 ;
+
+                slideBox.css('width', slideWidth*slideQuantity);
+
+             
+                function transition(currentSlideInput, slideWidthInput){
+
+                    var pxValue = -(currentSlideInput -1) * slideWidthInput ; 
+                    slideBox.animate({
+                        'left' : pxValue
+                    }) ;
+
+                    console.log(currentSlideInput+" "+slideWidthInput+" "+slideQuantity) ; 
+
+                }
+
+
+               this_course_title = $('#this_course_title').text() ;
+               $('.this_slider_title').text(this_course_title) ;
+
+
+               $('.nav button').on('click', function(){ 
+
+         
+                       var whichButton = $(this).data('nav'); 
+                       console.log(whichButton);
+
+                           if (whichButton === 'next') {
+
+                                if (currentSlide === slideQuantity)
+                                    { 
+                                        currentSlide = 1 ; 
+                                    }
+                                else 
+                                    { 
+                                        currentSlide++ ; 
+                                    }
+                                transition(currentSlide, slideWidth )  ;
+
+                           } else if (whichButton === 'prev') {
+
+                                if (currentSlide === 1)
+                                    { 
+                                        currentSlide = slideQuantity ; 
+                                    }
+                                else 
+                                    { 
+                                        currentSlide-- ; 
+                                    }
+                                transition(currentSlide, slideWidth ) ;
+                           }
+
+                    });
+
+
+                var screen_size = 1100  ;
+
+                if($('#ul_slider iframe').length) { 
+
+                        width = 2*parseInt($('#ul_slider').find("iframe").attr("width"));
+                        height = 2*parseInt($('#ul_slider').find("iframe").attr("height")); 
+                        coeff = width/height   ;                                 
+
+
+                        new_size = screen_size ; 
+                        $('#ul_slider').find("iframe").attr("width", new_size ); 
+                        $('#ul_slider').find("iframe").attr("height", new_size / coeff );
+                              
+                    }
+        });
+
+
 
 
 </script>
