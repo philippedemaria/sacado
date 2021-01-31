@@ -13,7 +13,9 @@
 
     <script>
         require(['script/ajax-group']);
+        {% if not group %}
         require(['script/ajax-group-complement']);
+        {% endif %}
     </script>
  
  
