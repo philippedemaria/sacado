@@ -197,13 +197,13 @@ def send_message(request):
 
     if message:
         send_mail(subject,
-                  "Bonjour, vous venez d'envoyer le message suivant :\n\n" + message + " \n\n Ceci est un mail automatique. Ne pas répondre.",
+                  "Bonjour, vous venez d'envoyer le message suivant :\n\n" + message+" \n\n" + email +" \n\n Ceci est un mail automatique. Ne pas répondre.",
                   'info@sacado.xyz',
                   [email])
         send_mail(subject,
-                  message,
+                    message+" \n\n" + email ,
                   'info@sacado.xyz',
-                  ["philippe.demaria-lgf@erlm.tn", "brunoserres33@gmail.com", "sacado.asso@gmail.com"])
+                  [email, "philippe.demaria83@gmail.com", "brunoserres33@gmail.com", "association@sacado.xyz"])
     return redirect("index")
 
 
