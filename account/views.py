@@ -69,24 +69,23 @@ def list_teacher(request):
 
 
 def navigation(group, id):
-    
-    sprev_id = False
-    snext_id = False
-    if group :
-        students_ids = group.students.values_list('user__id', flat=True).order_by("user__last_name")
-        index = list(students_ids).index(id)
+    students_ids = group.students.values_list('user__id', flat=True).order_by("user__last_name")
+    index = list(students_ids).index(id)
 
-        if len(students_ids) > 1:
-            if index == 0:
-                sprev_id = False
-                snext_id = students_ids[1]
-            elif index == len(students_ids) - 1:
-                sprev_id = students_ids[index - 1]
-                snext_id = False
-            else:
-                sprev_id = students_ids[index - 1]
-                snext_id = students_ids[index + 1]
- 
+    if len(students_ids) > 1:
+        if index == 0:
+            sprev_id = False
+            snext_id = students_ids[1]
+        elif index == len(students_ids) - 1:
+            sprev_id = students_ids[index - 1]
+            snext_id = False
+        else:
+            sprev_id = students_ids[index - 1]
+            snext_id = students_ids[index + 1]
+    else:
+        sprev_id = False
+        snext_id = False
+
     return sprev_id, snext_id
 
 
@@ -573,10 +572,15 @@ def detail_student(request, id):
             sts = g.students.all().order_by("user__last_name")
             for s in sts :
                 students.append(s)
-                
-        nav = navigation(group, id)
-        context = {'datas': datas, 'parcourses': parcourses, 'group': group, 'sprev_id': nav[0], 'snext_id': nav[1], 'parcours' : None, 'students' : students ,  'today' : today ,  
+
+        if group :
+            nav = navigation(group, id)
+            context = {'datas': datas, 'parcourses': parcourses, 'group': group, 'sprev_id': nav[0], 'snext_id': nav[1], 'parcours' : None, 'students' : students ,  'today' : today ,  
                    'themes': themes, 'student': student , 'communications' : [], }
+        else :
+            messages.error(request, "Erreur...Cet élève n'est pas associé à un groupe.")
+            return redirect('index')
+
     else:
         group = Group.objects.filter(students=student).first()
         
@@ -643,16 +647,21 @@ def detail_student_theme(request, id,idt):
             for s in sts :
                 students.append(s)
 
-        nav = navigation(group, id)
-        context = {'datas': datas, 'student': student, 'theme': theme, 'group': group, 'parcours': None, 'students' : students ,  
+        if group :
+            nav = navigation(group, id)
+            context = {'datas': datas, 'student': student, 'theme': theme, 'group': group, 'parcours': None, 'students' : students ,  
                    'sprev_id': nav[0], 'snext_id': nav[1], 'communications': [], 'parcourses': parcourses, 'today' : today ,
                    'themes': themes}
+        else :
+            messages.error(request, "Erreur...Cet élève n'est pas associé à un groupe.")
+            return redirect('index') 
 
     else:
         group = Group.objects.filter(students=student).first()
         context = {'datas': datas, 'student': student, 'theme': theme, 'group': group, 'parcours': None,
                    'communications': [], 'parcourses': parcourses, 'themes': themes, 'sprev_id': None, 'today' : today ,
                    'snext_id': None, }
+
     return render(request, 'account/detail_student_theme.html', context)
 
 
@@ -680,10 +689,14 @@ def detail_student_parcours(request, id,idp):
             for s in sts :
                 students.append(s)
 
-
-        nav = navigation(group, id)
-        context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'sprev_id': nav[0], 'students' : students , 'group' : group , 'communications' : [], 
+        if group :
+            nav = navigation(group, id)
+            context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'sprev_id': nav[0], 'students' : students , 'group' : group , 'communications' : [], 
                    'snext_id': nav[1], 'parcourses': parcourses, 'student': student}
+        else :
+            messages.error(request, "Erreur...Cet élève n'est pas associé à un groupe.")
+            return redirect('index') 
+
     else:
         group = Group.objects.filter(students=student).last()
         context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'parcourses': parcourses,  'sprev_id': None , 'group' : group , 'communications' : [], 'today' : today ,
@@ -781,10 +794,12 @@ def detail_student_all_views(request, id):
 
         form = EmailForm(request.POST or None)       
         sender_mail(request,form)
- 
-        nav = navigation(group, id)
-        context = {'exercises': exercises, 'knowledges': knowledges,  'parcourses': parcourses, 'std': std, 'themes': themes, 'students' : students ,  'group' : group , 'communications' : [], 'today' : today , 'form' : form ,  'groups' : groups ,
+        if group :
+            nav = navigation(group, id)
+            context = {'exercises': exercises, 'knowledges': knowledges,  'parcourses': parcourses, 'std': std, 'themes': themes, 'students' : students ,  'group' : group , 'communications' : [], 'today' : today , 'form' : form ,  'groups' : groups ,
                    'student': student, 'parcours': None, 'sprev_id': nav[0], 'snext_id': nav[1] , 'teacher' : teacher }
+        else :
+            return redirect("index")
     else:
         group = Group.objects.filter(students=student).last()
         groups = student.students_to_group.all()
@@ -827,8 +842,7 @@ def response_from_mail(request,user_id):
                 nf.admin = request.user
                 nf.user = user
                 nf.save()
-
-        print("là")
+ 
         return redirect("index")
 
     else :
