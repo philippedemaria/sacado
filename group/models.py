@@ -83,10 +83,6 @@ class Group(ModelWithCode):
         else :
             profilTest = False
 
-
-
-
-
         parcourses = []
         for student in students:
             for p in student.students_to_parcours.filter(Q(author=teacher)|Q(teacher=teacher)|Q(coteachers=teacher),level = self.level).exclude(is_leaf=1) :

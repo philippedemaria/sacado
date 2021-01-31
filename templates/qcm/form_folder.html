@@ -62,11 +62,18 @@
         <div class="col-sm-12 col-md-8">
             {% csrf_token %}
             <div class="row">
-                <div class="col-sm-12 col-md-5 col-lg-5">
+                <div class="col-sm-12 col-md-6 col-lg-6">
                     <div class="form-group">
                         {{ form.title.label_tag }} <label> <small>(Inférieur à 18 lettres)</small></label>
                         {{ form.title |add_class:"form-control" }}
                         {{ form.title.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3">
+                    <div class="form-group">
+                        {{ form.level.label_tag }} 
+                        {{ form.level |add_class:"form-control select2" }}
+                        {{ form.level.errors }}
                     </div>
                 </div>
                 <div class="col-sm-12  col-md-3  col-lg-3">
