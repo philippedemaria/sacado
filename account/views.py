@@ -677,7 +677,7 @@ def detail_student_parcours(request, id,idp):
     parcours = Parcours.objects.get(pk=idp)
     parcourses = student.students_to_parcours.all()
     themes = student.level.themes.all()
-    relationships = parcours.parcours_relationship.filter( students = student, is_publish = 1).order_by("order")
+    relationships = parcours.parcours_relationship.filter( students = student, is_publish = 1).order_by("ranking")
     today = time_zone_user(request.user)
     if request.user.is_teacher:
         students = []
@@ -688,6 +688,8 @@ def detail_student_parcours(request, id,idp):
             sts = g.students.all().order_by("user__last_name")
             for s in sts :
                 students.append(s)
+
+        print(group)
 
         if group :
             nav = navigation(group, id)
@@ -1450,7 +1452,7 @@ def ajax_detail_student_exercise(request):
     parcours = Parcours.objects.get(pk=parcours_id)
     student = Student.objects.get(user_id=student_id)
 
-    relationships = Relationship.objects.filter(parcours=parcours, students=student,exercise__supportfile__is_title=0).order_by("order")
+    relationships = Relationship.objects.filter(parcours=parcours, students=student,exercise__supportfile__is_title=0).order_by("ranking")
     studentanswers = Studentanswer.objects.filter(student=student, parcours=parcours).order_by("exercise")
 
     context = {'student': student, 'parcours': parcours, 'studentanswers': studentanswers, 'communications' : [], 
@@ -1476,7 +1478,7 @@ def ajax_detail_student_parcours(request):
         stage = { 'low' : 30, 'medium' : 60 , 'up' :80 }        
 
 
-    relationships = Relationship.objects.filter(parcours=parcours,exercise__supportfile__is_title=0).order_by("order")
+    relationships = Relationship.objects.filter(parcours=parcours,exercise__supportfile__is_title=0).order_by("ranking")
 
     context = {'student': student, 'relationships': relationships, 'stage' : stage}
 

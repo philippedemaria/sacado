@@ -51,7 +51,7 @@
                         <small>
                             <a href="#" data-toggle='modal' class="pull-right btn btn-danger"
                                         data-target='#writer'  
-                                        class="send_message" >  
+                                        class="send_message" {% if not student.user.email %} disabled {% endif %} >  
                                 Ecrire un message à {{ student.user }}
                             </a>
                         </small>
