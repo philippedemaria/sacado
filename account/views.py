@@ -69,23 +69,24 @@ def list_teacher(request):
 
 
 def navigation(group, id):
-    students_ids = group.students.values_list('user__id', flat=True).order_by("user__last_name")
-    index = list(students_ids).index(id)
+    
+    sprev_id = False
+    snext_id = False
+    if group :
+        students_ids = group.students.values_list('user__id', flat=True).order_by("user__last_name")
+        index = list(students_ids).index(id)
 
-    if len(students_ids) > 1:
-        if index == 0:
-            sprev_id = False
-            snext_id = students_ids[1]
-        elif index == len(students_ids) - 1:
-            sprev_id = students_ids[index - 1]
-            snext_id = False
-        else:
-            sprev_id = students_ids[index - 1]
-            snext_id = students_ids[index + 1]
-    else:
-        sprev_id = False
-        snext_id = False
-
+        if len(students_ids) > 1:
+            if index == 0:
+                sprev_id = False
+                snext_id = students_ids[1]
+            elif index == len(students_ids) - 1:
+                sprev_id = students_ids[index - 1]
+                snext_id = False
+            else:
+                sprev_id = students_ids[index - 1]
+                snext_id = students_ids[index + 1]
+ 
     return sprev_id, snext_id
 
 
