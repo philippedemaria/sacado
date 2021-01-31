@@ -98,9 +98,9 @@
 
         <li><a href="{% url 'detail_student_all_views' student.user.id  %}"  class="no_button"  style="font-size:18px;{% if 'detail_student_all_views' in request.path %}color:#007EE2{% endif %}"> Bilan</a></li>
     {% else %}
-
+        {% if group %}
         <li><a href="{% url 'result_group_exercise' group.id  %}"  class="no_button"  style="font-size:18px;"> Tout le groupe</a></li>
-
+        {% endif %}
         <li><a href="{% url 'detail_student_all_views' student.user.id  %}"  class="no_button"  style="font-size:18px;{% if 'detail_student_all_views' in request.path %}color:#007EE2{% endif %}"> Bilan élève</a></li>
     {% endif %}
 
