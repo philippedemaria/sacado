@@ -1096,7 +1096,7 @@ def register_by_csv(request, key, idg=0):
 
             except:
                 pass
-            print(user)
+
 
 
 
