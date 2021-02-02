@@ -1281,9 +1281,8 @@ def delete_parent(request, id):
 
 
 def my_profile(request):
-
-    user = User.objects.get(id=request.user.id)
-    today = time_zone_user(user)    
+    user = request.user
+    today = time_zone_user(user)
     if user.is_superuser :
         user_form = ManagerUpdateForm(request.POST or None, request.FILES or None, instance=user)        
     else :
