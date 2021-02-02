@@ -183,7 +183,7 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
 
             exercises = Exercise.objects.filter(supportfile__is_title=0)
 
-            i = random.randint(1, len(exercises))
+            i = random.randrange(0, len(exercises))
             exercise = exercises[i]
 
             context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form,

@@ -159,7 +159,7 @@ def index(request):
         exercise_nb = Exercise.objects.filter(supportfile__is_title=0).count()
         exercises = Exercise.objects.filter(supportfile__is_title=0, supportfile__is_ggbfile = 1 )
 
-        i = random.randint(1, len(exercises))
+        i = random.randrange(0, len(exercises))
         exercise = exercises[i]
 
         context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 'schools' : schools,'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,
