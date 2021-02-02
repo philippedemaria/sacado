@@ -880,7 +880,7 @@ def close_an_account(request):
 
 
 def close_my_account(request, id):
-    user = get_object_or_404(User, user_id=id)
+    user = request.user
     today = time_zone_user(user)
     user.delete()
     return redirect('index')
