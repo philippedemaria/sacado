@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from tool.models import Tool , Question  , Choice  , Quizz
-from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm  
+from tool.models import Tool , Question  , Choice  , Quizz , Diaporama  , Slide
+from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm,  DiaporamaForm , SlideForm    
 from account.decorators import  user_is_testeur
 from sacado.settings import MEDIA_ROOT
 from socle.models import Knowledge, Waiting
@@ -153,8 +153,8 @@ def delete_my_tool(request):
 
 def list_quizzes(request):
 
-    quizzes = Quizz.objects.all()
     teacher = request.user.teacher 
+    quizzes = Quizz.objects.filter(is_questions=1, teacher =teacher )
 
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher)
     return render(request, 'tool/list_quizzes.html', {'quizzes': quizzes , 'form': form,   })
@@ -170,6 +170,7 @@ def create_quizz(request):
     if form.is_valid():
         nf = form.save(commit = False)
         nf.teacher = teacher
+        nf.is_questions = 1
         nf.save()
         form.save_m2m()
         return redirect('create_question' , nf.pk )
@@ -177,7 +178,7 @@ def create_quizz(request):
         print(form.errors)
 
 
-    context = {'form': form, 'form_question' : form_question  }
+    context = {'form': form,  }
 
     return render(request, 'tool/form_quizz.html', context)
 
@@ -192,6 +193,7 @@ def update_quizz(request,id):
     if form.is_valid():
         nf = form.save(commit = False)
         nf.teacher = teacher
+        nf.is_questions = 1
         nf.save()
         form.save_m2m()
 
@@ -236,10 +238,162 @@ def play_quizz_teacher(request,id):
 
 
 
+############################################################################################################
+############################################################################################################
+########## diaporama
+############################################################################################################
+############################################################################################################
+
+def list_diaporama(request):
+
+    teacher = request.user.teacher 
+    diaporamas = Diaporama.objects.filter(teacher =teacher )
+
+
+    form = DiaporamaForm(request.POST or None, request.FILES or None ,teacher = teacher)
+    return render(request, 'tool/list_diaporama.html', {'diaporamas': diaporamas , 'form': form,   })
+
+
+ 
+def create_diaporama(request):
+    
+    teacher = request.user.teacher 
+    form = DiaporamaForm(request.POST or None, request.FILES or None , teacher = teacher  )
+ 
+
+    if form.is_valid():
+        nf = form.save(commit = False)
+        nf.teacher = teacher
+        nf.interslide = 0
+        nf.save()
+        form.save_m2m()
+        return redirect('create_slide' , nf.pk )
+    else:
+        print(form.errors)
+
+
+    context = {'form': form,  }
+
+    return render(request, 'tool/form_diaporama.html', context)
+
+
+ 
+def update_diaporama(request,id):
+    
+    teacher = request.user.teacher
+    diaporama = Diaporama.objects.get(pk= id)
+    form = DiaporamaForm(request.POST or None, request.FILES or None , instance = diaporama , teacher = teacher  )
+ 
+    if form.is_valid():
+        nf = form.save(commit = False)
+        nf.teacher = teacher
+        nf.interslide = 0
+        nf.save()
+        form.save_m2m()
+
+        return redirect('list_diaporama' )
+    else:
+        print(form.errors)
+
+    context = {'form': form,   }
+
+    return render(request, 'tool/form_diaporama.html', context)
+
+def show_diaporama(request,id):
+ 
+    diaporama = Diaporama.objects.get(pk= id)
+ 
+    context = {  "diaporama" : diaporama  }
+
+    return render(request, 'tool/show_diaporama.html', context)
+
+
+def delete_diaporama(request,id):
+ 
+    diaporama = Diaporama.objects.get(pk= id)
+    diaporama.delete() 
+ 
+    return redirect ('list_diaporama')
+############################################################################################################
+############################################################################################################
+########## Slides
+############################################################################################################
+############################################################################################################
+ 
+
+ 
+def create_slide(request,id):
+ 
+    diaporama = Diaporama.objects.get(pk = id)
+    teacher = request.user.teacher
+    form = SlideForm(request.POST or None   )
+
+    slides = diaporama.slides.order_by("ranking")
+    context = { 'diaporama': diaporama, 'slides': slides, 'form': form, }
+
+    return render(request, 'tool/form_slide.html', context)
+
+ 
+def delete_slide(request,id,idp):
+ 
+    slide = Slide.objects.get(pk= id)
+    slide.delete() 
+ 
+    return redirect ('create_slide', idp)
+
+ 
+
+@csrf_exempt
+def send_slide(request):
+
+    ### le quizz
+    diaporama_id =  request.POST.get("diaporama_id",None) 
+    diaporama =  Diaporama.objects.get(pk = diaporama_id)
+
+    list_slides = diaporama.slides.order_by("ranking")
+    if len(list_slides) > 0 :
+        last_slide = list_questions.last()
+        ranking = int(last_slide.ranking) + 1
+    else :
+        ranking =   1
+    ## Nombre de questions dans le quizz    ####################################
+    nbq = list_slides.count()  + 1
+
+    form = SlideForm(request.POST or None   )
+    if form.is_valid():
+        slide = form.save(commit=False)
+        slide.ranking = ranking
+        slide.save() 
+        form.save_m2m()        
+        new = True
+        diaporama.slides.add(slide)
+
+    context = {    }
+    context_liste = {  'slide' : slide ,  'diaporama' : diaporama , 'from_ajax' : True , 'nbq' : nbq }
+
+    data = {'new' : new}
+    data['html'] = render_to_string('tool/type_of_slide.html', context)
+    data['question'] = render_to_string('tool/list_of_slide.html', context_liste)
+ 
+    return JsonResponse(data)
 
 
 
+@csrf_exempt 
+def slide_sorter(request):  
+    try :
+        slide_ids = request.POST.get("valeurs")
+        slide_tab = question_ids.split("-") 
 
+        for i in range(len(slide_tab)-1):
+            Slide.objects.filter(  pk = slide_tab[i]).update(ranking = i)
+    except :
+        pass
+
+    data = {}
+    return JsonResponse(data)  
+
+ 
 ############################################################################################################
 ############################################################################################################
 ########## Question
@@ -365,6 +519,7 @@ def handle_uploaded_file(f):
 
 @csrf_exempt  
 def from_ajax_create_question(kind,  ranking, title, calculator, duration, point , knowledge_id ,  is_publish, imagefile, is_correct, is_correct_tab,imageanswer_tab,answers):
+
 
     if kind == 1 : # Vrai/Faux
         question = Question.objects.create(title=title, duration= duration , point= point , knowledge_id= knowledge_id ,  calculator = calculator  ,imagefile=imagefile ,  is_publish=is_publish , kind=kind , ranking=ranking , is_correct = is_correct )
@@ -492,11 +647,15 @@ def send_question(request):
 
     question_id =  data_posted.get("question_id",None)
     knowledge_id =  data_posted.get("knowledge_id",None)
+
+
     if question_id :
         question = Question.objects.get(pk = int(question_id))
         new = False
         from_ajax_udate_question(kind,ranking,  question , title, calculator, duration, point ,  is_publish, imagefile, knowledge_id , is_correct, is_correct_tab,imageanswer_tab,answers)
     else :
+        print(kind,ranking,  title, calculator, duration, point ,  is_publish, imagefile, knowledge_id , is_correct, is_correct_tab,imageanswer_tab,answers)
+
         question = from_ajax_create_question(kind, ranking,  title, calculator, duration, point ,  is_publish, imagefile, knowledge_id , is_correct, is_correct_tab,imageanswer_tab,answers)
         new = True
 
