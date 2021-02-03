@@ -1,0 +1,66 @@
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}        
+
+
+
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-sm-12 col-md-6">  
+            <div class="form-group"> 
+            <label>Titre : </label>
+            {{ form.title|add_class:"form-control" }}
+
+            </div>
+            <div class="form-group"> 
+                {{ form.vignette.label_tag }} <label><small>(Facultatif)</small></label>
+                {{ form.vignette|add_class:"btn btn-default" }}
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6"> 
+            <table class="table">
+                <tr>
+                    <td>            <label>Publiée : </label>  <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                    <div class="helper_tip_text" >Si publié, vos élèves peuvent le lire en autonomie. </div>
+                                </span> 
+                    </td>
+                    <td> {{ form.is_publish|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+                </tr>
+                <tr>
+                    <td>  <label>Mutualisée : </label>  <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                    <div class="helper_tip_text" >Si Mutualisé, vos collègues peuvent le lire.</div>
+                                </span> 
+                    </td>
+                    <td> {{ form.is_share|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+                </tr>
+ 
+            </table>
+        </div>
+    </div>
+    <hr class="divider">
+
+
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <label>Attribuer à mes groupes</label>
+            {{ form.groups|add_class:"form-control select2" }}
+        </div>
+    </div>
+
+
+    <hr class="divider">
+
+
+
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12"> 
+            <div class="form-group">
+                <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+            </div>
+        </div>    
+    </div>
+
+ 

@@ -1,0 +1,66 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script>
+        require(['script/ajax-diaporama']);
+    </script> 
+{% endblock %}
+ 
+
+{% block page_title %}
+   Outils pédagogiques 
+   <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small>Créateur de présentation
+   </small>
+   {% if diaporama %}
+   <img width="25px" src="{% static 'img/angle-right.png' %}"/> <a href="{% url 'update_diaporama' diaporama.id %}"> <small>{{ diaporama.title }}</small></a>
+   {% endif  %}
+   <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small><span id="type_of_question_in_title"></span></small>
+{% endblock %}
+
+
+{% block page_menu_right %}
+    <a href="{% url 'list_diaporama'  %}" target="_blank" class="btn btn-new">Mes présentation</a>
+    <a href="{% url 'show_diaporama' diaporama.id %}" target="_blank" class="btn btn-new">Voir la présentation</a>
+{% endblock %}
+
+
+
+{% block body %}
+<link rel="stylesheet" href="{% static 'css/uploader.css' %}">
+<section class="content_list"> 
+
+        <div class="row">
+            <div class="col-sm-12 col-md-2">
+                <form action="#" method="POST"  >
+                    <div class="quizz_list_question">
+                        <ul id="slides_sortable_list">
+                            {% for slide in slides %}
+                                {% include 'tool/list_of_slide.html' %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </form>
+ 
+            </div>
+
+            <div class="col-sm-12 col-md-10" >  
+ 
+                {% include 'tool/type_of_slide.html' %}
+
+            </div>
+        </div>
+  
+</section>
+
+
+ 
+ 
+
+
+{% endblock %} 

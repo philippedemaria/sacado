@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from .models import Tool , Question  , Choice  , Quizz
+from .models import Tool , Question  , Choice  , Quizz , Diaporama , Slide
 from account.models import Student , Teacher
 from socle.models import Knowledge, Skill
 from group.models import Group
@@ -81,3 +81,35 @@ class ChoiceForm(forms.ModelForm):
 	def clean_content(self):
 		content = self.cleaned_data['imagefile']
 		validation_file(content) 
+
+
+
+
+
+class DiaporamaForm(forms.ModelForm):
+ 
+	class Meta:
+		model = Diaporama
+		fields = '__all__'
+
+	def __init__(self, *args, **kwargs):
+		teacher = kwargs.pop('teacher')
+		super(DiaporamaForm, self).__init__(*args, **kwargs)
+ 
+		self.fields['levels'] = forms.ModelMultipleChoiceField(queryset=teacher.levels.all(), required=False)
+		self.fields['subject'] = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)
+		self.fields['groups'] = forms.ModelMultipleChoiceField(queryset=teacher.groups.all(), required=False)
+ 
+
+	def clean_content(self):
+		content = self.cleaned_data['imagefile']
+		validation_file(content) 
+ 
+
+class SlideForm(forms.ModelForm):
+
+	class Meta:
+		model = Slide
+		fields = '__all__'
+ 
+ 

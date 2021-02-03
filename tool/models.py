@@ -3,7 +3,7 @@ from datetime import date
 from ckeditor_uploader.fields import RichTextUploadingField
 from group.models import Group
 from socle.models import *
-from account.models import Student, Teacher, ModelWithCode 
+from account.models import Student, Teacher, ModelWithCode , User
 from django.apps import apps
 from django.utils import   timezone
 from django.db.models import Q
@@ -116,6 +116,8 @@ class Question(models.Model):
     """
     Modèle représentant un associé.
     """
+    quizzes       = models.ManyToManyField(Quizz, blank=True, related_name="questions" , editable=False) 
+
     title         = models.TextField(max_length=255, default='',  blank=True, verbose_name="Réponse écrite")
     calculator    = models.BooleanField(default=0, verbose_name="Calculatrice ?")
     date_modified = models.DateTimeField(auto_now=True)
@@ -129,7 +131,6 @@ class Question(models.Model):
     is_radio   = models.BooleanField(default=0, verbose_name="Type de réponse ?")
 
     is_correction = models.BooleanField(default=0, verbose_name="Correction ?")
-    quizzes       = models.ManyToManyField(Quizz, blank=True, related_name="questions" , editable=False) 
     duration      = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
     point         = models.PositiveIntegerField(default=1000, blank=True, verbose_name="Point")
 
@@ -156,4 +157,46 @@ class Questionplayer(models.Model):
 
     class Meta:
         unique_together = ('student', 'question')
+
+
+class Slide(models.Model):
+    """
+    Modèle représentant un associé.
+    """
+    title         = models.CharField( max_length=255, default="",  verbose_name="Titre") 
+    content      = RichTextUploadingField(  default="", verbose_name="Texte ")
+    ranking    = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
+    duration   = models.PositiveIntegerField(default=10, blank=True, verbose_name="Temps entre les questions")
+    is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
+ 
+
+    def __str__(self):
+        return self.title 
+
+
+class Diaporama(ModelWithCode):
+    """
+    Modèle représentant un associé.
+    """
+    title         = models.CharField( max_length=255, verbose_name="Titre du quizz") 
+    teacher       = models.ForeignKey(Teacher, related_name="teacher_presentation", blank=True, on_delete=models.CASCADE, editable=False ) 
+    students      = models.ManyToManyField(Student, related_name="user_presentation", blank=True , editable=False ) 
+    date_modified = models.DateTimeField(auto_now=True)
+
+    #### pour donner une date de remise - Tache 
+    levels    = models.ManyToManyField(Level, related_name="presentation", blank=True)
+    themes    = models.ManyToManyField(Theme, related_name="presentation", blank=True)
+    subject   = models.ForeignKey(Subject, related_name="presentation", blank=True, null = True, on_delete=models.CASCADE)
+ 
+    vignette   = models.ImageField(upload_to=quizz_directory_path, verbose_name="Vignette d'accueil", blank=True, null = True , default ="")
+
+    is_share   = models.BooleanField(default=0, verbose_name="Mutualisé ?")
+    is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
+ 
+    groups     = models.ManyToManyField(Group, blank=True, related_name="presentation" , editable=False) 
+    slides  = models.ManyToManyField(Slide, blank=True, related_name="diapositive" , editable=False) 
+ 
+    def __str__(self):
+        return self.title 
+
 

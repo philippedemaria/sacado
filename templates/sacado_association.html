@@ -1,0 +1,244 @@
+{% load widget_tweaks %}
+{% load static %}
+
+
+
+ 
+
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Actu</a>
+    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Statuts</a>
+    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Membres</a>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <!-- Les actu -->
+	 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+	    {%  if communications|length > 0  %}
+	        {% for c in communications %}
+	            <h5> {{ c.subject }} <span class="pull-right">{{ c.today|date:"d N Y" }}</span></h5>
+	            {{ c.texte|safe }}
+	            <hr>
+	        {% endfor %}
+	        <div class="text-center">
+	            <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
+	        </div>
+	    {%  endif  %} 
+	</div>
+
+    <!-- Les Statuts -->
+	<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+
+			<h5>ARTICLE PREMIER - NOM</h5>
+			Il est fondé entre les adhérents aux présents statuts et ceux qui y adhéreront ultérieurement une association à but non lucratif régie par la loi du 1er juillet 1901 et le décret du 16 août 1901, tels que
+			modifiés à tout moment, et leurs textes d’applications.
+			L’association a pour dénomination : sacado.xyz (ci-après, l’ ”Association ”) et son titre court : sacado
+
+
+
+			<h5>ARTICLE 2. OBJET</h5>
+ 
+			<ul> L’association sacado.xyz a pour objet de promouvoir une réflexion sur les outils pédagogiques numériques en proposant : 
+			
+			<li> le travail coopératif et la co-formation des enseignants ;</li> 
+			<li> l’utilisation du numérique pour l’accompagnement des élèves dans leur apprentissage;</li> 
+			<li> plus généralement, toute activité pouvant se rattacher directement ou indirectement à l'un
+			des objets spécifiés, ou à tout autre objet similaire ou connexe, de nature à favoriser,
+			directement ou indirectement les buts poursuivis par l'association, son extension et son
+			développement.</li> 
+			</ul>
+			<h5>ARTICLE 3. SIÈGE SOCIAL</h5>
+			<p>Le siège social est situé à l'adresse : 2 B AVENUE de la pinède, La Capte, 83400 Hyères</p>
+
+			<p>Il pourra être transféré par simple décision du bureau à une autre adresse située dans la même région et le
+			Président disposera, à cet égard, de tout pouvoir pour modifier les statuts en conséquence.</p>
+			<p>Il pourra être transféré en tout autre lieu par décision de l’Assemblée Générale Extraordinaire.</p>
+			<h5>ARTICLE 4. DURÉE</h5>
+			<p>La durée de l’Association est indéterminée.</p>
+			<h5>ARTICLE 5. MOYENS D’ACTIONS</h5>
+			<ul>Les moyens d’action de l’Association sont notamment :
+			<li>  De développer une plateforme numérique d’apprentissage dont le nom est SacAdo et l’url :
+			https://sacado.xyz/</li> 
+			<li>  De mettre les contenus de cette plateforme à disposition des enseignants qui pourront créer et gérer
+			des parcours éducatifs en ligne et ainsi permettre à leurs élèves de travailler et de suivre l’acquisition
+			de savoir-faire, attendus et compétences édictés par les programmes de l’Education Nationale
+			française.</li> 
+			<li>  D’utiliser tout autre moyen tendant à promouvoir les buts fixés par l’Association, en conformité avec les
+			textes législatifs et règlementaires.</li> 
+			</ul>
+			<h5>ARTICLE 6. MEMBRES DE L’ASSOCIATION</h5>
+			<ul> L'Association se compose des :
+			<li> Membres Fondateurs , désignés en annexe 1</li>
+			<li> Membres Actifs</li>
+			</ul> 
+			<ul>Il s’agit de personnes physiques de droit privé ou de droit public, qui s’investissent pour le bon
+			fonctionnement de l’association.
+			<li> Membres d’Honneur
+			Les Membres d'Honneur sont des personnes physiques qui soutiennent l'action de l'association sans en
+			être adhérents.</li>
+			<li> Membres Bienfaiteurs
+			Les Membres Bienfaiteurs sont des personnes morales ou physiques qui soutiennent financièrement
+			l'action de l'association sans nécessairement en être adhérents.</li>
+			<li> Membres Bénéficiaires
+			Ce sont les personnes morales ou physiques qui utilisent, après inscription, la plateforme
+			d’apprentissage développée par l’association.
+			Les membres Fondateurs sont des membres Actifs de droit.
+			Le détail des dénominations est donné dans le règlement intérieur.
+			Les Membres Fondateurs et les Autres Membres sont ci-après désignés individuellement "Membre" et
+			collectivement "Membres”.</li>
+			</ul>
+			<h5>ARTICLE 7. ACQUISITION ET PERTE DE LA QUALITÉ DE MEMBRES</h5>
+			<ul>
+			<li>  La candidature d’un nouveau membre Actif, d’Honneur ou Bienfaiteur est soumise à l’approbation ou à
+			la validation du bureau de l’association et à l’acquittement d’une cotisation dont le montant est spécifié
+			dans le règlement intérieur de l’association.</li>
+			<li>  Une personne physique ou morale s’inscrivant à la plateforme sacado.xyz obtient automatiquement le
+			statut de Membre Bénéficiaire de l’association.</li>
+			</ul>
+
+			<ul>La qualité de membre se perd par :
+			<li>  La démission;</li>
+			<li>  Le décès;</li>
+			<li>  La radiation prononcée par le bureau pour le non-paiement de la cotisation à une date fixée ou pour
+			motif grave. Toutefois, ce membre reste redevable de cette somme envers l’Association.</li>
+			</ul>
+			<h5>ARTICLE 8. COTISATIONS</h5>
+			<p>Tous les détails concernant les cotisations sont précisés dans le règlement intérieur.</p>
+			<p>L’Association propose aux établissements scolaires, mais non à leurs enseignants, de cotiser une
+			redevance dépendant du nombre d’élèves scolarisés dans leur enceinte pour bénéficier d’un suivi et d’une
+			gestion administrative.</p>
+			<p>Aucune cotisation ne sera demandée à un enseignant inscrit à titre individuel. Il peut ainsi bénéficier de la
+			plateforme d'apprentissage en ligne, à condition d'en faire un usage à but non lucratif.</p>
+			<h5>ARTICLE 9. AFFILIATION</h5>
+			<p>Cette association peut adhérer à d’autres associations, unions ou regroupements par décision du bureau.</p>
+			<h5>ARTICLE 10. RESSOURCES</h5>
+			<ol>Les ressources de l'association comprennent :
+			<li> Les subventions de l'Etat, des départements et des communes.</li>
+			<li> Toutes les ressources autorisées par les lois et règlements en vigueur.</li>
+			<li> Les cotisations des membres.</li>
+			Les ressources couvrent les frais de fonctionnement de l’Association, d’hébergement de serveurs, de
+			gestion et de maintenance des services proposés en ligne. Par ailleurs, ces ressources pourront permettre
+			un développement de l’offre proposée sur la plateforme ou de tout autre moyen tel que défini à l'article
+			5.
+			</ol>
+			<h5>ARTICLE 11. ASSEMBLEE GENERALE ORDINAIRE</h5>
+			<p>L'assemblée générale ordinaire est constituée du Conseil d’Administration dans son ensemble ainsi que de
+			tout membre actif désireux d’y assister. En cas d’impossibilité d’un des membres du conseil
+			d’administration, il revient au président de décider de la dispense de ce dernier ou du report de
+			l'assemblée générale.</p>
+			<p>L'assemblée générale ordinaire est constituée du Conseil d’Administration dans son ensemble ainsi que de
+			tout membre actif désireux d’y assister. En cas d’impossibilité d’un des membres du Conseil
+			d’Administration, il revient au président de décider de la dispense de ce dernier ou du report de l'assemblée
+			générale.</p>
+			<p>Elle se réunit chaque année au mois d'août en présentiel. Les membres du CA peuvent utiliser un outil de
+			visioconférence au cas où ils seraient dans l’impossibilité de se réunir en présentiel.
+			Quinze jours au moins avant la date fixée, les membres du conseil d’administration sont convoqués par les
+			soins du président. L'ordre du jour figure sur les convocations.</p>
+			<p>Le président, assisté des membres du conseil, préside l'assemblée et expose la situation morale ou l’activité
+			de l'association.</p>
+			<p>Le trésorier rend compte de sa gestion et soumet les comptes annuels (bilan, compte de résultat et annexe)
+			à l'approbation de l'assemblée.</p>
+			<p>L’assemblée générale valide ou rejette la proposition du conseil d’administration fixant le montant des
+			cotisations annuelles et du droit d’entrée à verser par les différentes catégories de membres.
+			Ne peuvent être abordés que les points inscrits à l'ordre du jour.</p>
+			<ol>Les décisions sont prises par la procédure suivante :
+			<li> Le conseil d’administration fait une proposition.</li>
+			<li> La proposition est soumise au vote de l’assemblée générale.</li>
+			<li> Le vote est validé à la majorité absolue. En cas d’invalidation une discussion est engagée et la
+			procédure est reprise au point 1.</li>
+			<li> Si aucun accord n’est trouvé, le président suspend le vote et valide une des propositions du
+			conseil d’administration.</li> 
+			</ol>
+			<p>Les votes sont effectués à main levée.
+			Les décisions des l’assemblée générale s’impose à tous les membres.</p>
+			<h5>ARTICLE 12. ASSEMBLEE GENERALE EXTRAORDINAIRE</h5>
+			<p>Sur demande d’un des membres du Conseil d’Administration, ou de la moitié plus un des membres actifs,
+			le président peut convoquer une assemblée générale extraordinaire, suivant les modalités prévues pour
+			l’assemblée générale, et selon l’ordre du jour fixé par le président suite à la demande extraordinaire.</p>
+			<h5>ARTICLE 13. CONSEIL D'ADMINISTRATION</h5>
+			<p>Le conseil d’administration a pour rôle de préparer les propositions faites durant l’assemblée générale. Les
+			propositions sont retenues à l’unanimité ou par la président en cas de désaccord prolongé.
+			Le Conseil d’Administration est constitué de son Bureau, dénommé ci-après à l’article 14, ainsi que ,
+			facultativement, de deux membres actifs maximum désignés par le bureau à l’unanimité après
+			candidature de ces derniers.</p>
+			<h5>ARTICLE 14. LE BUREAU</h5>
+			<ol>Le conseil d'administration élit parmi ses membres, à main levée, un bureau composé de :
+			<li> Un président, <br>
+			Le président entérine les décisions du Bureau. Il est ordonnateur des dépenses et finances de l’Association.
+			Le Président est investi des pouvoirs les plus étendus pour diriger l'Association et pour l'administrer, dans
+			les limites de son objet et sous réserve des pouvoirs attribués à l’assemblée générale par les statuts.
+			Il arrête les comptes de l’exercice écoulé et décide le budget. Il gère le patrimoine de l’Association et le
+			personnel. Pour les besoins de ses activités, l’Association pourra, sur décision du Président :
+			● avoir recours à des bénévoles ; et/ou
+			● embaucher des salariés ou stagiaires.
+			Le Bureau assure la gestion courante de l’Association. Il peut se réunir sur convocation du Président.
+			Le Président a le pouvoir de représenter l’Association dans tous les actes de la vie civile. Il a qualité pour
+			agir en justice au nom de l’Association.</li>
+			<li> Un vice-président<br>
+			Le vice-président assure l’intérim lors de vacance du Président ou lors d’une impossibilité de prendre les
+			décisions pour gérer l’Association. Les prérogatives du Président lui sont alors dévolues.</li>
+			<li> Un secrétaire<br>
+			Le Secrétaire (ou le Président, en l'absence de Secrétaire) établit ou fait établir les procès-verbaux des
+			réunions du Bureau, ou de ses membres chargés de la gestion courante, et de l’Assemblée. Il tient le registre
+			prévu par l’article 5 de la loi du 1er juillet 1901.</li>
+			<li>  Un trésorier<br>
+			Le Trésorier établit ou fait établir, sous sa responsabilité, les comptes de l’Association. Il est chargé de l’appel
+			des cotisations. Il procède, sous le contrôle du Président, au paiement et à la réception de toutes sommes. Il
+			établit un rapport sur la situation financière de l’association et le présente à l’assemblée générale annuelle.
+			Les membres du Bureau sont élus par vote à main levée par les membres du Consiel d’administration de
+			l’association.</li>
+			</ol>
+			<p>Le mandat du Bureau est de trois année scolaire.</p>
+			<h5>ARTICLE 15. INDEMNITÉS</h5>
+			<p>Toutes les fonctions, y compris celles des membres du Bureau, sont gratuites et bénévoles. Seuls les frais
+			occasionnés par l’accomplissement de leur mandat sont remboursés sur justificatifs. Le rapport financier
+			présenté à l’assemblée générale ordinaire présente, par bénéficiaire, les remboursements de frais de
+			mission, de déplacement ou de représentation, de fonctionnement.</p>
+			<h5>ARTICLE 16. RÈGLEMENT INTÉRIEUR</h5>
+			<p>Un règlement intérieur peut être établi par le Bureau, qui le fait alors approuver par l'assemblée générale.
+			Ce règlement éventuel est destiné à fixer les divers points non prévus par les présents statuts, notamment
+			ceux qui ont trait à l'administration interne de l'association.</p>
+			<h5>ARTICLE 17. MODIFICATION DES STATUTS</h5>
+			<p>Le Conseil d’administration peut soumettre au vote de tous les membres actifs de l’association une
+			modification des statuts à l’aide d’un vote en ligne, sans nécessairement convoquer une AGE en
+			présentiel.</p>
+			<p>Le départ d’un des membres du bureau se fait par départ volontaire ou décision du président. Un nouveau
+			membre du bureau est élu à l’unanimité par le conseil d’administration suite à la proposition du président.</p>
+			<h5>ARTICLE 18. DISSOLUTION</h5>
+			<p>En cas de dissolution prononcée selon les modalités prévues à l’article 13, un ou plusieurs liquidateurs
+			sont nommés, et l'actif net, s'il y a lieu, est dévolu à un organisme ayant un but non lucratif
+			conformément aux décisions de l’assemblée générale extraordinaire qui statue sur la dissolution. L’actif
+			net ne peut être dévolu à un membre de l’association, même partiellement, sauf reprise d’un apport.</p>
+			<h5>ARTICLE 19. LIBÉRALITÉS</h5>
+			<p>Le rapport et les comptes annuels, tels que définis à l’article 12 (y compris ceux des comités locaux) sont
+			adressés chaque année au Préfet du département.</p>
+			<p>L’association s’engage à présenter ses registres et pièces de comptabilité sur toute réquisition des
+			autorités administratives en ce qui concerne l’emploi des libéralités qu’elle serait autorisée à recevoir, à
+			laisser visiter ses établissements par les représentants de ces autorités compétentes et à leur rendre
+			compte du fonctionnement desdits établissements.</p>
+			<h5>ARTICLE 20. PROPRIÉTÉ INTELLECTUELLE</h5>
+			<p>Les supports d’exercice et exercices sont propriétés de leur concepteurs comme renseignés dans la base de
+			données. La Plateforme, les supports d’exercices et les exercices sont mis à la disposition de l’Association
+			gratuitement.</p>
+			<p>Tout nouveau support enregistré dans la base de données de la Plateforme est mis à disposition de
+			l’Association gratuitement.</p>
+
+	</div>
+	<!-- Les membres -->
+	<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+
+ 		<ul>Membres actifs
+			<li>Audrey Ledoux</li> 			
+			<li>Bruno Serres</li>
+			<li>Nicolas villemain</li>
+			<li>Philippe Demaria</li>
+		</ul>
+ 		<ul>Membres d'honneur
+			<li>Pascale Louvrier</li>
+			<li>Raphael Chay</li>
+			<li>Medhi Boulifa</li>
+		</ul>
+	</div>
+</div>

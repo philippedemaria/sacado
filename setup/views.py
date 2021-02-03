@@ -153,7 +153,10 @@ def index(request):
         schools = School.objects.all()
 
         today_start = datetime.date(datetime.now())
-        print(today_start)
+
+        communications = Communication.objects.filter(active= 1).order_by("-today")
+
+
         nb_student_answers = Studentanswer.objects.filter(date__gte= today_start).count() + Customanswerbystudent.objects.filter(date__gte= today_start).count() + Writtenanswerbystudent.objects.filter(date__gte= today_start).count()
         
         exercise_nb = Exercise.objects.filter(supportfile__is_title=0).count()
@@ -162,7 +165,7 @@ def index(request):
         i = random.randrange(0, len(exercises))
         exercise = exercises[i]
 
-        context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 'schools' : schools,'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,
+        context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 'schools' : schools,'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
                    'cookie': cookie, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, }
 
 

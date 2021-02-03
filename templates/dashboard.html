@@ -336,12 +336,12 @@
         </div>
     </div>
     <hr class="divider"> 
-    <p class="thin">Présentations & Quizz </p>
+    <p class="thin">Diaporamas & Quizz </p>
     
     {% if request.user.is_superuser %} 
     <div class="row">
         <div class="col-lg-12 col-xs-12">
-            <a href=" " class="no_sacado_asso" >Créer une présentation</a>
+            <a href="{%  url 'list_diaporama' %}" >Mes diaporamas</a>
         </div>
     </div>
     <div class="row">

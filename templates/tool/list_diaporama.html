@@ -1,0 +1,95 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+ 
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+
+    <script>
+        require(['script/ajax-diaporama']);
+        require(['script/ajax-diaporama-complement']);
+    </script> 
+
+{% endblock %}
+
+
+
+{% block page_title %}
+        <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> </a> Les présentations
+{% endblock %}
+
+{% block page_menu_right %}
+
+     <a href="#" data-toggle='modal' data-target='#quizz_choice'  class="btn btn-new pull-right">  Créer une présentation</a>  
+
+{% endblock %}
+
+
+
+
+{% block body %}
+<section class="content_main"> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table id="standard_tab" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Groupes attribués</th>
+                    <th>  </th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for diaporama in diaporamas %}
+                        <tr>
+                            <td>
+                               <a href="{% url 'update_diaporama' diaporama.id  %}"> {% if diaporama.vignette %}<img src="{{ diaporama.vignette.url }}" width="200px" />{% endif %}{{ diaporama.title }}</a> 
+                            </td>
+                            <td> 
+                                {% for g in diaporama.groups.all %} {{ g }} {% if not forloop.last %}, {% endif %} {% endfor %}
+                            </td>
+                            <td > 
+                                <div class="quizz_action"><a href="{% url 'create_slide'  diaporama.id %}" target="_blank" ><i class="fa fa-plus"></i> Ajouter des diapositives</a> </div>  
+
+ 
+
+                                <div class="quizz_action"><a href="{% url 'show_diaporama'  diaporama.id %}"  class="quizz_action"><i class="fa fa-eye"></i>  Lire le diaporama</a>  </div>  
+                                <div class="quizz_action"><a href="{% url 'delete_diaporama'  diaporama.id %}"  class="quizz_action"  onclick="return TestDelete('ce diaporama')"><i class="fa fa-trash"></i>  Supprimer</a> </div>  
+                            </td>
+                        </tr>
+                    {% endfor %} 
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">     
+                <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+        </div>
+    </div>
+</section>
+
+
+<div class="modal fade" id="quizz_choice" tabindex="-1" role="dialog" aria-labelledby="quizz_choice">
+    <div class="modal-dialog" role="document" style="width: 750px;">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h1 class='thin'  >Création de la présentation</h1>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'create_diaporama' %}" method="POST"  enctype='multipart/form-data'>
+ 
+                    {% include 'tool/form_diaporama_items.html' %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
