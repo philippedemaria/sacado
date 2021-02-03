@@ -154,7 +154,7 @@ def delete_my_tool(request):
 def list_quizzes(request):
 
     teacher = request.user.teacher 
-    quizzes = Quizz.objects.filter(is_questions=1, teacher =teacher )
+    quizzes = Quizz.objects.filter(teacher =teacher )
 
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher)
     return render(request, 'tool/list_quizzes.html', {'quizzes': quizzes , 'form': form,   })
