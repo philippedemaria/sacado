@@ -302,8 +302,9 @@ def update_diaporama(request,id):
 def show_diaporama(request,id):
  
     diaporama = Diaporama.objects.get(pk= id)
+    slides = diaporama.slides.order_by("ranking")
  
-    context = {  "diaporama" : diaporama  }
+    context = {  "diaporama" : diaporama ,'slides' : slides }
 
     return render(request, 'tool/show_diaporama.html', context)
 
@@ -343,16 +344,39 @@ def delete_slide(request,id,idp):
 
  
 
+ 
+def update_slide(request,id,idp):
+ 
+    diaporama = Diaporama.objects.get(pk = idp)
+
+    slide= Slide.objects.get(pk = id)
+    teacher = request.user.teacher
+    form = SlideForm(request.POST or None , instance = slide  )
+    if form.is_valid():
+        form.save()     
+        return redirect ('create_slide', idp)
+
+    slides = diaporama.slides.order_by("ranking")
+    context = { 'diaporama': diaporama, 'slides': slides, 'form': form, 'slide': slide, }
+
+    return render(request, 'tool/form_slide.html', context)
+
+
+
+
 @csrf_exempt
 def send_slide(request):
 
     ### le quizz
-    diaporama_id =  request.POST.get("diaporama_id",None) 
+    diaporama_id =  request.POST.get("diaporama_id",None)
+    print(diaporama_id)     
     diaporama =  Diaporama.objects.get(pk = diaporama_id)
+
+
 
     list_slides = diaporama.slides.order_by("ranking")
     if len(list_slides) > 0 :
-        last_slide = list_questions.last()
+        last_slide = list_slides.last()
         ranking = int(last_slide.ranking) + 1
     else :
         ranking =   1
@@ -364,7 +388,7 @@ def send_slide(request):
         slide = form.save(commit=False)
         slide.ranking = ranking
         slide.save() 
-        form.save_m2m()        
+        form.save_m2m()      
         new = True
         diaporama.slides.add(slide)
 
@@ -373,7 +397,7 @@ def send_slide(request):
 
     data = {'new' : new}
     data['html'] = render_to_string('tool/type_of_slide.html', context)
-    data['question'] = render_to_string('tool/list_of_slide.html', context_liste)
+    data['slide'] = render_to_string('tool/list_of_slide.html', context_liste)
  
     return JsonResponse(data)
 
@@ -381,9 +405,11 @@ def send_slide(request):
 
 @csrf_exempt 
 def slide_sorter(request):  
+
+
     try :
         slide_ids = request.POST.get("valeurs")
-        slide_tab = question_ids.split("-") 
+        slide_tab = slide_ids.split("-") 
 
         for i in range(len(slide_tab)-1):
             Slide.objects.filter(  pk = slide_tab[i]).update(ranking = i)
@@ -393,6 +419,7 @@ def slide_sorter(request):
     data = {}
     return JsonResponse(data)  
 
+ 
  
 ############################################################################################################
 ############################################################################################################

@@ -1,0 +1,82 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+ 
+
+{% block require %}
+ 
+
+
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+
+
+    <script>
+        require(['script/diaporama-slider']);
+    </script>
+ 
+ 
+{% endblock %}
+
+
+
+{% block page_title %}
+         {{ diaporama.title }} <img src="{% static 'img/angle-right.png' %}"/>   <span id="slide_id"></span>
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+        <span class="nav">
+            <!-- <button  class='btn btn-primary'><i class='fa fa-play'></i> Lecture automatique</button> -->
+            <button data-nav="prev" class="btn btn-default"><i class="fa fa-caret-left"></i> Précedent</button>  
+            <button data-nav="next" class="btn btn-default"><i class="fa fa-caret-right"></i> Suivant</button>    
+        </span>
+ 
+{% endblock %}
+ 
+
+{% block body %}
+ 
+  
+
+    <div class="wrapper_slider">
+  <!-- Wrapper for slides -->
+        <div class="slider">
+
+            <ul>
+                <li class="my_slide">
+                    <input type="hidden" value="3" id="introduction" /> 
+                    <div class="row consigne_diapo"  align="center">  
+                        <div class="col-sm-12 col-md-12">
+                            <h1 style="font-size:4em" class="thin"> 
+                                {{ diaporama.title}}
+                            </h1>
+                        </div>
+                    </div> 
+                </li>
+
+
+                {% for slide in  slides  %}
+                <li class="my_slide">
+ 
+                    <div class="row"  align="center">  
+                        <div class="col-sm-12 col-md-12">
+                             <h1 style="font-size:4em" class="thin">                           
+                                {{ slide.content|safe }}
+                            </h1>
+                        </div>
+                    </div> 
+                </li>
+                 
+                {% endfor %}
+ 
+
+
+
+
+
+            </ul>
+        </div>
+    </div>
+  
+{% endblock %}

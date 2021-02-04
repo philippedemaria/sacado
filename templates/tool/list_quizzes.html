@@ -55,9 +55,9 @@
                                 {% for g in quizz.groups.all %} {{ g }} {% if not forloop.last %}, {% endif %} {% endfor %}
                             </td>
                             <td > 
-                                <div class="quizz_action"><a href="{% url 'create_question'  quizz.id %}" target="_blank" ><i class="fa fa-plus"></i> Ajouter des questions</a> </div>  
+                                <div class="quizz_action"><a href="{% url 'create_question'  quizz.id %}" ><i class="fa fa-plus"></i> Ajouter des questions</a> </div>  
 
-                                <div class="quizz_action"><a href="{% url 'play_printing_teacher'  quizz.id   %}" target="_blank"  class="quizz_action"><i class="fa fa-print"></i> Créer pour imprimer les fiches réponses</a> </div>    
+                                <div class="quizz_action"><a href="{% url 'play_printing_teacher'  quizz.id   %}"  class="quizz_action"><i class="fa fa-print"></i> Créer les fiches réponses imprimables</a> </div>    
                                 <div class="quizz_action"><a href="{% url 'play_quizz_teacher'  quizz.id   %}" target="_blank"  class="quizz_action"><i class="fa fa-play"></i> <em> Mode jeu</em></a> A venir  </div>   
 
                                 <div class="quizz_action"><a href="{% url 'show_quizz'  quizz.id %}"  class="quizz_action"><i class="fa fa-eye"></i>  Mode présentation</a>  </div>  

@@ -25,8 +25,8 @@ urlpatterns = [
     path('delete_diaporama/<int:id>', delete_diaporama, name='delete_diaporama'),
 
     path('create_slide/<int:id>', create_slide, name='create_slide'),
+    path('update_slide/<int:id>/<int:idp>', update_slide, name='update_slide'),
     path('delete_slide/<int:id>/<int:idp>', delete_slide, name='delete_slide'),
-
 
 
     path('play_printing_teacher/<int:id>', play_printing_teacher, name='play_printing_teacher'), 

@@ -19,13 +19,15 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-6 col-md-2">
+<!--         <div class="col-sm-6 col-md-2">
             <div class="form-group">
-                {{ form.duration.label_tag }}
+                {{ form.duration.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" >0, si transition manuelle.</div>
+                                </span>
                 {{ form.duration |add_class:"form-control" }}
                 {{ form.duration.errors }}
             </div>
-        </div>
+        </div> -->
         <div class="col-sm-6 col-md-3">
             <div class="form-group">
                 {{ form.is_publish.label_tag }}<br/>
@@ -46,13 +48,28 @@
     <div class="row">
         <div class="col-sm-12 col-md-12"> 
             <div class="form-group">
-                <input value="Enregistrer" id="submit_slide" class="btn btn-primary btn-lg"/>
                 <input value="{{ diaporama.id }}" id="diaporama_id" name="diaporama_id" type="hidden"  />
                 {% if slide %}
                 <input value="{{ slide.id }}" id="slide_id" name="slide_id" type="hidden"  />
+                <input value="Enregistrer"  type="submit"  class="btn btn-primary btn-lg"/>
+                {% else %}
+                <input value="Enregistrer"  id="submit_slide"  class="btn btn-primary btn-lg"/>
                 {% endif %}
             </div>
         </div>    
     </div>
 </form>
- 
+
+
+{% if slide %}
+
+<script>
+  
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+    $("[data-toggle='toggle']").bootstrapToggle();
+
+</script>
+
+
+
+{% endif %}

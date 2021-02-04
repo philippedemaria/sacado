@@ -130,12 +130,12 @@ body{
                                     {% endif %}
                                     {% if stat.percent  %}
                                          <span class="helper_tip"> {{ stat.percent  }}% <i class="fa fa-question-circle"></i> 
-                                            <div class="helper_tip_text" > Score brut rapportée aux meilleurs scores</div>
+                                            <div class="helper_tip_text" > Score rapporté aux meilleurs scores</div>
                                         </span> 
                                     {% endif %}                                     
                                     {% if stat.ajust  %}
                                          <span class="helper_tip"> <b> {{ stat.ajust  }}%</b> <i class="fa fa-question-circle"></i> 
-                                            <div class="helper_tip_text" > Score rapporté : nb_exo / nb_exercises x pourcentage , soit {{ stat.nb_exo  }}/{{ stat.total_nb_exo }} x {{ stat.percent  }}%</div>
+                                            <div class="helper_tip_text" > Score rapporté à tous les exercices proposés : nb exo / nb exo dus x score brut, soit {{ stat.nb_exo  }}/{{ stat.total_nb_exo }} x {{ stat.percent  }}%</div>
                                         </span>   
                                     {% endif %} 
  
@@ -383,7 +383,7 @@ body{
                         </table>
                         <div class="row">
                             <div class="col-sm-12">  
-                                <div id="mini_loader" class="text-success">Exportation en cours. Action qui peut prendre environ 20s</div>
+                                <div id="mini_loader" class="text-success">Exportation en cours. Action qui peut prendre quelques minutes.</div>
                             </div>
                         </div>   
                         <hr/>

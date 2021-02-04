@@ -1,4 +1,4 @@
-define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($) {
+define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' ], function ($) {
     $(document).ready(function () {
  
     $("#loading").hide(500); 
@@ -57,9 +57,16 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
                     success: function (data) {
 
                         $('#body_question').html(data.html);
-                        
+                        $('#id_title').val("");
+                        $('#id_content').val(""); 
+
                         if (data.new) {
-                        $('#slides_sortable_list').append(data.slide);                            
+                            $('#slides_sortable_list').append(data.slide);  
+                        }
+
+                        else {
+                            $('#slide'+data.id).append(data.name);  
+                            $('#fa'+data.id).addClass(data.class).removeClass(data.noclass);  
                         }
 
                     }
@@ -69,7 +76,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
  
  
 
-        $('#questions_sortable_list').sortable({
+        $('#slides_sortable_list').sortable({
             start: function( event, ui ) { 
                    $(ui.item).css("box-shadow", "2px 1px 2px gray").css("background-color", "#271942").css("color", "#FFF"); 
                },
@@ -85,6 +92,11 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
 
                 $(ui.item).css("box-shadow", "0px 0px 0px transparent").css("background-color", "#dbcdf7").css("color", "#271942"); 
 
+
+                console.log(valeurs) ; 
+
+
+
                 $.ajax({
                         data:   { 'valeurs': valeurs ,   } ,   
                         type: "POST",
@@ -95,10 +107,10 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
             });
 
 
-            $('[type=checkbox]').prop('checked', false);     
+ 
 
             // Affiche une question
-            $('body').on('click', '.update_question' , function (event) {   
+            $('body').on('click', '.update_slide' , function (event) {   
                 
                 let diaporama_id = $(this).attr("data-diaporama_id");
                 let slide_id = $(this).attr("data-slide_id");
@@ -116,15 +128,13 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
                         url: "../get_slide_type",
                         success: function (data) {
 
-                            $('#body_question').html(data.html);
+                            $('#body_slide').html(data.html);
      
      
                         }
                     }
                 )
              });
- 
- 
 
  
     });

@@ -306,18 +306,9 @@
               "langage":"en",
               "filename":"{{ exercise.supportfile.ggbfile.url }}",
                "appletOnLoad" :  function(applet) { 
-
                         applet.setValue("situation",{{ relation.situation }});
-
                 }
-
         };
-
- 
-
-
-
-
         var applet = new GGBApplet('5.0', parameters,true);
         // Geogebra applet creation
         applet.inject('ggb_applet_container', 'preferHTML5');  
