@@ -355,10 +355,6 @@ def push_student_group(request):
 		student = Student.objects.get(pk=student_id)	
 		group.students.add(student)
 	return redirect('school_groups')
-
-
-
-
  
 
 
@@ -385,7 +381,7 @@ def new_group(request):
 
 			try :
 				if stdts :
-					tested = include_students(stdts,group)
+					tested = include_students(request , stdts,group)
 			except :
 				pass
 
@@ -422,7 +418,7 @@ def update_group_school(request,id):
 			stdts = request.POST.get("students")
 			try :
 				if len(stdts) > 0 :
-					tested = include_students(stdts,group)
+					tested = include_students(request,stdts,group)
 
 			except :
 				pass
