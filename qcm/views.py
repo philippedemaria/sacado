@@ -1747,6 +1747,130 @@ def check_level_by_point(student, point):
  
     return rep
  
+
+
+
+def get_student_result_from_eval(s, parcours, exercises,relationships,skills, knowledges,parcours_duration) : 
+
+    customexercises = parcours.parcours_customexercises.filter(students=s).order_by("ranking")
+
+    student = {"percent" : "" , "total_numexo" : "" , "good_answer" : "" , "test_duration" : False ,  "duration" : "" , "average_score" : "" ,"last_connexion" : "" ,"median" : "" ,"score" : "" ,"score_tab" : "" }
+    student.update({"total_note":"", "details_note":"" ,  "detail_skill":"" ,  "detail_knowledge":"" , "ajust":"" , })
+    student["name"] = s
+
+    studentanswers =  Studentanswer.objects.filter(student=s,  exercise__in = exercises , parcours=parcours).order_by("-date")
+
+    studentanswer_tab , student_tab  = [], []
+    for studentanswer in studentanswers :
+        if studentanswer.exercise not in studentanswer_tab :
+            studentanswer_tab.append(studentanswer.exercise)
+            student_tab.append(studentanswer)
+
+    nb_exo_w = s.student_written_answer.filter(relationship__exercise__in = studentanswer_tab, relationship__parcours = parcours, relationship__is_publish = 1 ).count()
+    nb_exo_ce = s.student_custom_answer.filter(parcours = parcours, customexercise__is_publish = 1 ).count()
+    nb_exo  = len(studentanswer_tab) + nb_exo_w + nb_exo_ce
+    student["nb_exo"] = nb_exo
+    duration, score, total_numexo, good_answer = 0, 0, 0, 0
+    tab, tab_date = [], []
+    student["legal_duration"] = parcours.duration
+    total_nb_exo = len(relationships)
+    student["total_nb_exo"] = total_nb_exo       
+
+    for studentanswer in  student_tab : 
+        duration += int(studentanswer.secondes)
+        score += int(studentanswer.point)
+        total_numexo += int(studentanswer.numexo)
+        good_answer += int(studentanswer.numexo*studentanswer.point/100)
+        tab.append(studentanswer.point)
+        tab_date.append(studentanswer.date)
+        tab_date.sort()
+    try :
+        if len(student_tab)>1 :
+            average_score = int(score/len(student_tab))
+            if duration > 0 :
+                student["duration"] = convert_seconds_in_time(duration)
+            else :
+                student["duration"] = ""
+            student["average_score"] = int(average_score)
+            student["good_answer"] = int(good_answer)
+            student["total_numexo"] = int(total_numexo)
+            student["last_connexion"] = studentanswer.date
+            student["score"] = int(score)
+            student["score_tab"] = tab
+            if duration > parcours_duration : 
+                student["test_duration"] = True
+            else :
+                student["test_duration"] = False 
+            tab.sort()
+            if len(tab)%2 == 0 :
+                med = (tab[len(tab)//2-1]+tab[(len(tab))//2])/2 ### len(tab)-1 , ce -1 est causé par le rang 0 du tableau
+            else:
+                med = tab[(len(tab)-1)//2]
+            student["median"] = int(med)
+            student["percent"] = math.ceil( int(good_answer)/int(total_numexo) * 100 )  
+            student["ajust"] = math.ceil( (nb_exo / total_nb_exo ) * int(good_answer)/int(total_numexo) * 100  )   
+        else :
+            try :
+                average_score = int(score)
+                if duration > 0 :
+                    student["duration"] = convert_seconds_in_time(duration)
+                else :
+                    student["duration"] = ""
+                student["average_score"] = int(score)
+                student["last_connexion"]  = studentanswer.date
+                if duration > parcours_duration : 
+                    student["test_duration"] = True
+                else :
+                    student["test_duration"] = False 
+                student["median"] = int(score)
+                student["score"] = int(score)
+                student["score_tab"] = tab
+                student["good_answer"] = int(good_answer)
+                student["total_numexo"] = int(total_numexo)
+                student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100)
+                student["ajust"] = math.ceil( (nb_exo / total_nb_exo ) * int(good_answer)/int(total_numexo) * 100  )   
+            except :
+                pass         
+    except :
+        pass
+
+    details_c , score_custom , tab_custom , score_total = "" , 0 , [] , 0
+    total_knowledge, total_skill, detail_skill, detail_knowledge = 0,0, "",""
+    for ce in customexercises :
+        score_total += float(ce.mark)
+        if ce.is_mark :
+            try:
+                cen = Customanswerbystudent.objects.get(customexercise = ce, student=s, parcours = parcours)
+                if cen.point :
+                    score_custom +=  float(cen.point)
+                    tab_custom.append(float(cen.point))
+            except :
+                pass
+
+    student["score_custom"] = score_custom
+    student["tab_custom"] = tab_custom
+    student["score_total"] = int(score_total)
+
+    for skill in  skills:
+
+        tot_s = total_by_skill_by_student(skill,relationships,parcours,s)
+       
+        detail_skill += skill.name + " " +check_level_by_point(s,tot_s) + "<br>" 
+
+    student["detail_skill"] = detail_skill
+
+    for knowledge in  knowledges :
+
+        tot_k = total_by_knowledge_by_student(knowledge,relationships,parcours,s)
+
+        detail_knowledge += knowledge.name + " "  +check_level_by_point(s,tot_k) + "<br>" 
+
+    student["detail_knowledge"] = detail_knowledge 
+
+    return student
+
+
+
 def stat_evaluation(request, id):
 
     teacher = Teacher.objects.get(user = request.user)
@@ -1774,123 +1898,7 @@ def stat_evaluation(request, id):
     students = students_from_p_or_g(request,parcours) 
 
     for s in students :
-        customexercises = parcours.parcours_customexercises.filter(students=s).order_by("ranking")
-
-        student = {"percent" : "" , "total_numexo" : "" , "good_answer" : "" , "test_duration" : False ,  "duration" : "" , "average_score" : "" ,"last_connexion" : "" ,"median" : "" ,"score" : "" ,"score_tab" : "" }
-        student.update({"total_note":"", "details_note":"" ,  "detail_skill":"" ,  "detail_knowledge":"" , })
-        student["name"] = s
-
-        studentanswers =  Studentanswer.objects.filter(student=s,  exercise__in = exercises , parcours=parcours).order_by("-date")
-
-        studentanswer_tab , student_tab  = [], []
-        for studentanswer in studentanswers :
-            if studentanswer.exercise not in studentanswer_tab :
-                studentanswer_tab.append(studentanswer.exercise)
-                student_tab.append(studentanswer)
-
-        nb_exo_w = s.student_written_answer.filter(relationship__exercise__in = studentanswer_tab, relationship__parcours = parcours, relationship__is_publish = 1 ).count()
-        nb_exo_ce = s.student_custom_answer.filter(parcours = parcours, customexercise__is_publish = 1 ).count()
-        nb_exo  = len(studentanswer_tab) + nb_exo_w + nb_exo_ce
-        student["nb_exo"] = nb_exo
-        duration, score, total_numexo, good_answer = 0, 0, 0, 0
-        tab, tab_date = [], []
-        student["legal_duration"] = parcours.duration
-        total_nb_exo = len(relationships)
-        student["total_nb_exo"] = total_nb_exo       
-
-        for studentanswer in  student_tab : 
-            duration += int(studentanswer.secondes)
-            score += int(studentanswer.point)
-            total_numexo += int(studentanswer.numexo)
-            good_answer += int(studentanswer.numexo*studentanswer.point/100)
-            tab.append(studentanswer.point)
-            tab_date.append(studentanswer.date)
-            tab_date.sort()
-        try :
-            if len(student_tab)>1 :
-                average_score = int(score/len(student_tab))
-                if duration > 0 :
-                    student["duration"] = convert_seconds_in_time(duration)
-                else :
-                    student["duration"] = ""
-                student["average_score"] = int(average_score)
-                student["good_answer"] = int(good_answer)
-                student["total_numexo"] = int(total_numexo)
-                student["last_connexion"] = studentanswer.date
-                student["score"] = int(score)
-                student["score_tab"] = tab
-                if duration > parcours_duration : 
-                    student["test_duration"] = True
-                else :
-                    student["test_duration"] = False 
-                tab.sort()
-                if len(tab)%2 == 0 :
-                    med = (tab[len(tab)//2-1]+tab[(len(tab))//2])/2 ### len(tab)-1 , ce -1 est causé par le rang 0 du tableau
-                else:
-                    med = tab[(len(tab)-1)//2]
-                student["median"] = int(med)
-                student["percent"] = math.ceil( int(good_answer)/int(total_numexo) * 100 )  
-                student["ajust"] = math.ceil( (nb_exo / total_nb_exo ) * int(good_answer)/int(total_numexo) * 100  )   
-            else :
-                try :
-                    average_score = int(score)
-                    if duration > 0 :
-                        student["duration"] = convert_seconds_in_time(duration)
-                    else :
-                        student["duration"] = ""
-                    student["average_score"] = int(score)
-                    student["last_connexion"]  = studentanswer.date
-                    if duration > parcours_duration : 
-                        student["test_duration"] = True
-                    else :
-                        student["test_duration"] = False 
-                    student["median"] = int(score)
-                    student["score"] = int(score)
-                    student["score_tab"] = tab
-                    student["good_answer"] = int(good_answer)
-                    student["total_numexo"] = int(total_numexo)
-                    student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100)
-                    student["ajust"] = math.ceil( (nb_exo / total_nb_exo ) * int(good_answer)/int(total_numexo) * 100  )   
-                except :
-                    pass         
-        except :
-            pass
-
-        details_c , score_custom , tab_custom , score_total = "" , 0 , [] , 0
-        total_knowledge, total_skill, detail_skill, detail_knowledge = 0,0, "",""
-        for ce in customexercises :
-            score_total += float(ce.mark)
-            if ce.is_mark :
-                try:
-                    cen = Customanswerbystudent.objects.get(customexercise = ce, student=s, parcours = parcours)
-                    if cen.point :
-                        score_custom +=  float(cen.point)
-                        tab_custom.append(float(cen.point))
-                except :
-                    pass
- 
-        student["score_custom"] = score_custom
-        student["tab_custom"] = tab_custom
-        student["score_total"] = int(score_total)
-
-        for skill in  skills:
-
-            tot_s = total_by_skill_by_student(skill,relationships,parcours,s)
-           
-            detail_skill += skill.name + " " +check_level_by_point(s,tot_s) + "<br>" 
-
-        student["detail_skill"] = detail_skill
-
-        for knowledge in  knowledges :
- 
-            tot_k = total_by_knowledge_by_student(knowledge,relationships,parcours,s)
-
-            detail_knowledge += knowledge.name + " "  +check_level_by_point(s,tot_k) + "<br>" 
-
-        student["detail_knowledge"] = detail_knowledge 
-
-                    
-
+        student = get_student_result_from_eval(s, parcours, exercises,relationships,skills, knowledges,parcours_duration) 
         stats.append(student)
 
 
@@ -5252,13 +5260,20 @@ def export_results_after_evaluation(request):
     blue = ParagraphStyle(name='Normal',fontSize=12,  textColor=colors.HexColor("#005e74"),)
 
     stage = get_stage(request.user)    
+    exercises = []
+    relationships = Relationship.objects.filter(parcours=parcours,is_publish = 1,exercise__supportfile__is_title=0).prefetch_related('exercise__supportfile').order_by("ranking")
+    parcours_duration = parcours.duration #durée prévue pour le téléchargement
+    for r in relationships :
+        parcours_duration += r.duration
+        exercises.append(r.exercise)
 
-    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
-    exercises = parcours.exercises.all()
-   
 
-    for s in parcours.students.all() :
-        total_numexo_todo = s.students_relationship.filter(parcours = parcours).count() + s.students_customexercises.filter(parcourses = parcours).count()
+    for s in parcours.students.order_by("user__last_name") :
+        skills =  skills_in_parcours(request,parcours) 
+        knowledges = knowledges_in_parcours(parcours)
+        data_student = get_student_result_from_eval(s, parcours, exercises,relationships,skills, knowledges,parcours_duration) 
+
+ 
         #logo = Image('D:/uwamp/www/sacado/static/img/sacadoA1.png')
         logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
         logo_tab = [[logo, "SACADO \nSuivi des acquisitions de savoir faire" ]]
@@ -5268,74 +5283,6 @@ def export_results_after_evaluation(request):
         elements.append(logo_tab_tab)
         elements.append(Spacer(0, 0.2*inch))
 
-        ################################################################
-        #  Geston des résultats
-        ################################################################
-        customexercises = parcours.parcours_customexercises.filter(students=s).order_by("ranking")
-
-        studentanswers = s.answers.filter(exercise__in= exercises, parcours=parcours).order_by("date")
-
-        studentanswer_tab , student_tab  = [], []
-        for studentanswer in studentanswers :
-            if studentanswer.exercise not in studentanswer_tab :
-                studentanswer_tab.append(studentanswer.exercise)
-                student_tab.append(studentanswer)
-
-        nb_exo_w = s.student_written_answer.filter(relationship__exercise__in = studentanswer_tab, relationship__parcours = parcours ).count()
-        nb_exo_ce = s.student_custom_answer.filter(parcours = parcours ).count()
-
-        nb_exo = len(studentanswer_tab) + nb_exo_w + nb_exo_ce
-        duration, score, total_numexo, good_answer = 0, 0, 0, 0
-        score_tab  = []
- 
-        for studentanswer in  student_tab : 
-            duration += int(studentanswer.secondes)
-            score += int(studentanswer.point)
-            total_numexo += int(studentanswer.numexo)
-            good_answer += int(studentanswer.numexo*studentanswer.point/100)
-            score_tab.append(studentanswer.point)
-        
-        if  len(student_tab) > 0 :
-            average_score = int(score/len(student_tab))
-            if duration > 0 :
-                duration = convert_seconds_in_time(duration)
-            else :
-                duration = ""
-            average_score = int(average_score)
-            good_answer = int(good_answer)
-            total_numexo = int(total_numexo)
-            last_connexion = studentanswer.date
-            score = int(score)
-            percent = math.ceil(int(good_answer)/int(total_numexo) * 100 )   
-        else :
-            average_score = ""
-            duration = ""
-            average_score = ""
-            good_answer = ""
-            total_numexo = ""
-            last_connexion = ""
-            score = ""
-            percent = 0
-
- 
-        detail_skills, detail_knowledges =  [],[]
-        score_total = 0
-        score_custom = 0
-        for ce in customexercises :
-            score_total += float(ce.mark)
-            score_custom = 0
-            if ce.is_mark :
-                try:
-                    cen = Customanswerbystudent.objects.get(customexercise = ce, student=s, parcours = parcours)
-                    if cen.point :
-                        score_custom +=  float(cen.point)
-                        score_tab.append(float(cen.point))
-                except :
-                    pass
-        try :
-            note_student_in_custom = round(score_custom/score_total,1)
-        except :
-            note_student_in_custom = 0
 
         ##########################################################################
         #### Parcours
@@ -5353,19 +5300,18 @@ def export_results_after_evaluation(request):
         ##########################################################################
         #### Nombre d'exercices traités
         ##########################################################################
-        paragraph = Paragraph( "Nombre d'exercices traités : " + str(nb_exo) +  " sur " + str(total_numexo_todo)+" proposés"  , normal )
+        paragraph = Paragraph( "Nombre d'exercices traités : " + str(data_student["nb_exo"]) +  " sur " + str(data_student["total_nb_exo"])+" proposés"  , normal )
         elements.append(paragraph)
         elements.append(Spacer(0, 0.1*inch)) 
         ##########################################################################
         #### Nombre d'exercices traités
         ##########################################################################
-        paragraph = Paragraph( "Durée du travail (h:m:s) : " + str(duration) , normal )
+        paragraph = Paragraph( "Durée du travail (h:m:s) : " + str(data_student["duration"]) , normal )
         elements.append(paragraph)
         elements.append(Spacer(0, 0.1*inch)) 
 
 
         if knowledge : 
-            knowledges = knowledges_in_parcours(parcours)
             ##########################################################################
             #### Savoir faire ciblés
             ##########################################################################
@@ -5378,11 +5324,7 @@ def export_results_after_evaluation(request):
  
             for knwldg in knowledges :
                 data = []
-                tab_k = knwldg.name.split("(")
-                if len(tab_k) > 0 :
-                    data.append(tab_k[0])
-                else : 
-                    data.append(knwldg.name[:100])
+                data.append(knwldg.name[:80])
                 tot_k = total_by_knowledge_by_student(knwldg,relationships,parcours,s)
                 couleur = get_level(tot_k,stage)                
                 if tot_k < 0 :
@@ -5409,7 +5351,6 @@ def export_results_after_evaluation(request):
        
         if skill : 
             tableauSkill = []
-            skills =  skills_in_parcours(request,parcours) 
             ##########################################################################
             #### Compétences ciblées
             ##########################################################################
@@ -5446,6 +5387,7 @@ def export_results_after_evaluation(request):
 
 
         if mark : 
+
             ##########################################################################
             #### Score par exercice 
             ##########################################################################
@@ -5455,7 +5397,7 @@ def export_results_after_evaluation(request):
             elements.append(Spacer(0, 0.1*inch)) 
 
             i = 1
-            for score in score_tab :
+            for score in data_student["score_tab"] :
                 paragraph = Paragraph( "Exercice "+str(i)+" : "+str(score)+"%"  , normal )
                 elements.append(paragraph)
                 elements.append(Spacer(0, 0.1*inch)) 
@@ -5465,20 +5407,20 @@ def export_results_after_evaluation(request):
             ##########################################################################
             #### Note sur
             ##########################################################################
-            sc_sacado = round(percent * float(mark_on) / 100,1)
- 
+
             exo_sacado = request.POST.get("exo_sacado",0)  
 
-            try :
-                sco = round( (nb_exo / total_numexo_todo) *  (sc_sacado * float(exo_sacado) + note_student_in_custom * ( float(mark_on) - float(exo_sacado) ))/float(mark_on),1)  
-                if duration : 
-                    paragraphsco = Paragraph( "Note globale : " + str(sco) + " / " +str(mark_on)  , normal )
-                else :
-                    paragraphsco = Paragraph( "Note globale : NE"  , normal )
+            if data_student["percent"] != "" :
 
-            except :  
+                final_mark = float(data_student["score_total"]) * (float(mark_on) - float(exo_sacado)) + float(data_student["percent"]) * float(exo_sacado)/100
+
+                coefficient = data_student["nb_exo"]  /  data_student["total_nb_exo"] 
+                final_mark = math.ceil( coefficient *  final_mark)
+                paragraphsco = Paragraph( "Note globale : " + str(final_mark)  , normal )
+            else :
                 paragraphsco = Paragraph( "Note globale : NE"  , normal )
 
+ 
             elements.append(paragraphsco)
             elements.append(Spacer(0, 0.3*inch)) 
 
@@ -5491,6 +5433,7 @@ def export_results_after_evaluation(request):
     doc.build(elements)
 
     return response
+
 
 
 
@@ -5507,62 +5450,33 @@ def export_notes_after_evaluation(request):
     response.write(u'\ufeff'.encode('utf8'))
     writer = csv.writer(response)
     
-    fieldnames = ("Nom", "Prénom", "Notes")
+    fieldnames = ("Nom", "Prénom", "Situations proposées", "Réponse juste", "Score rapporté aux meilleurs scores SACADO" , "Score rapporté à tous les exercices SACADO proposés" , "Note proposée"  )
     writer.writerow(fieldnames)
 
-    customexercises = parcours.parcours_customexercises.all()
-    total_score_custom = 0 
-    for ce in customexercises :
-        total_score_custom += ce.mark
+    skills = skills_in_parcours(request,parcours)
+    knowledges = knowledges_in_parcours(parcours)
+    relationships = Relationship.objects.filter(parcours=parcours,is_publish = 1,exercise__supportfile__is_title=0)
+    parcours_duration = parcours.duration #durée prévue pour le téléchargement
+    exercises = []
+    for r in relationships :
+        parcours_duration += r.duration
+        exercises.append(r.exercise)
 
-    nombre_exercices_in_parcours = parcours.parcours_customexercises.count() + parcours.exercises.count()
 
     for student in parcours.students.order_by("user__last_name") :
-        note_cstm = 0
-        customanswers = student.student_custom_answer.filter(parcours=parcours)
+        data_student = get_student_result_from_eval(student, parcours, exercises,relationships,skills, knowledges,parcours_duration)  
 
-        distinct_customanswers = student.student_custom_answer.values("customexercise_id").filter(parcours=parcours).distinct().count()
+        if data_student["percent"] != "" :
 
-        for customanswer in customanswers :
-            try :
-                note_cstm += float(customanswer.point)
-            except :
-                pass
-        try :
-            note_custom = round(note_cstm/total_score_custom,2)
-        except :
-            note_custom = 0
+            final_mark = float(data_student["score_total"]) * (float(note_totale) - float(note_sacado)) + float(data_student["percent"]) * float(note_sacado)/100
 
-        # Pour prendre en compte les notes SACADO    
-        if note_sacado :
-            nb_num_exo , good_answer = 0 , 0
-            answers = student.answers.filter(parcours=parcours) 
-            distinct_answers = student.answers.values("exercise_id").filter(parcours=parcours).distinct().count()
-            for ans in answers :
-                good_answer+= round(ans.numexo*ans.point/100  ,2)
-                nb_num_exo += int(ans.numexo)
-            try :
-                note_s = round(good_answer / nb_num_exo,2)
-            except :
-                note_s = 0
+            coefficient = data_student["nb_exo"]  /  data_student["total_nb_exo"] 
+            final_mark = math.ceil( coefficient *  final_mark)
 
-            no_sacado_note = False
         else :
-            note_s = 0
-            note_sacado = 0
-            no_sacado_note = True
+            final_mark = "NR" 
 
-        final_mark = float(note_custom) * (float(note_totale) - float(note_sacado)) + float(note_s) * float(note_sacado)
-
-        dtn = (distinct_answers + distinct_customanswers)/nombre_exercices_in_parcours
-
-
-        final_mark = round( final_mark * dtn , 1)
-
-        if len(customanswers) == 0 and no_sacado_note :
-            final_mark = "Abs" 
-
-        writer.writerow( (str(student.user.last_name).lower() , str(student.user.first_name).lower() , final_mark ) )
+        writer.writerow( (str(student.user.last_name).lower() , str(student.user.first_name).lower() , data_student["total_nb_exo"] , data_student["nb_exo"],  data_student["percent"] , data_student["ajust"] , final_mark ) )
     return response
 
 
