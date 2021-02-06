@@ -8,7 +8,7 @@ define(['jquery',  'bootstrap' ], function ($) {
 
 
         var slideBox = $('.slider ul'),
-            slideWidth = 800 ,
+            slideWidth = 1000 ,
             slideQuantity = $('.slider ul').children('li').length,
             currentSlide = 1 ,
             currentQuestion = 1 ;
@@ -22,6 +22,9 @@ define(['jquery',  'bootstrap' ], function ($) {
             slideBox.animate({
                 'left' : pxValue
             })
+            this_question = parseInt( (currentSlideInput+1)/2)-1 ;
+
+            $("#question"+this_question).removeClass("btn-default").addClass("btn-primary") ;
         }
 
 
@@ -31,7 +34,6 @@ define(['jquery',  'bootstrap' ], function ($) {
         $(".instruction").hide();
 
                var whichButton = $(this).data('nav'); 
-               console.log(whichButton);
 
                    if (whichButton === 'next') {
 

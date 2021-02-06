@@ -208,8 +208,6 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
         function checked_and_checked(nb){ 
                 qtype = $("#qtype").val() ;
 
-console.log(qtype);
-
                 if( $("#check"+nb).hasClass("checked")  )  
                     {   
                         $('#check'+nb).removeClass("checked");
@@ -225,10 +223,7 @@ console.log(qtype);
                         $('#noCheck'+nb).css("display","none");
                         $("#id_choice-"+nb+"-is_correct").prop("checked", true);                     
                     }
-
-console.log($(".checked").length);
-
-
+ 
                 if (qtype==4 && $(".checked").length > 1 ) { 
                     alert("Vous avez choisi un QCS dans lequel une seule réponse est autorisée. Optez pour le QCM alors.") ; 
                     $('#check'+nb).removeClass("checked");
@@ -289,7 +284,7 @@ console.log($(".checked").length);
                         data:   { 'valeurs': valeurs ,   } ,   
                         type: "POST",
                         dataType: "json",
-                        url: "../question_sorter" 
+                        url: "../../question_sorter" 
                     }); 
                 }
             });

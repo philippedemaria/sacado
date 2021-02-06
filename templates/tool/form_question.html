@@ -27,7 +27,7 @@
 
 {% block page_menu_right %}
     <a href="{% url 'list_quizzes'  %}" target="_blank" class="btn btn-new">Mes quizz</a>
-    <a href="{% url 'show_quizz' quizz.id %}" target="_blank" class="btn btn-new">Voir le quizz</a>
+    <a href="{% url 'show_quizz' quizz.id %}" target="_blank" class="btn btn-new">Lire le quizz</a>
 {% endblock %}
 
 
@@ -62,7 +62,7 @@
                         </ul>
                     </div>
                 </form>
-                
+
 <!--                  <div class="question_bank" >
                     <a href="#" data-toggle='modal' data-target='#question_choice' class="btn btn-quizz_bank" >Banque de questions</a> 
                 </div> -->
@@ -122,22 +122,16 @@
                         {% endblock %}
                     </div>
 
-
+                    {% if qtype > 0 %}
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">                            
-                                {% if qtype > 0 %}
-                                    <input value="Enregistrer" type="submit" class="btn btn-primary  btn-lg" id="click_button" />
-                                    <a href="{% url 'create_question'  quizz.id  0 %}"><input type="button" value="Changer de type de question" class="btn btn-default btn-lg"/></a>
-                                {% else %}
-                                    {% if quizz.questions.count > 0 %}
-                                    <a href="{% url 'create_question'  quizz.id  0 %}" class="btn btn-primary  btn-lg" ><i class="fa fa-eye"></i> Visionner le quizz</a>
-                                    {% endif %}
-                                {% endif %}
+                                <input value="Enregistrer" type="submit" class="btn btn-primary  btn-lg" id="click_button" />
+                                <a href="{% url 'create_question'  quizz.id  0 %}"><input type="button" value="Changer de type de question" class="btn btn-default btn-lg"/></a> 
                             </div>                            
                         </div>
                     </div>
-
+                    {% endif %}
 
 
                 </form>

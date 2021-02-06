@@ -77,11 +77,11 @@
                     <div class="row consigne_diapo"  align="center">  
                         <div class="col-sm-12 col-md-12">
                             <h1 style="font-size:3em" class="thin"><b>Question {{forloop.counter}}.</b><span class="instruction"><br/>La durée de cette question est <br/>  <b>{{ question.duration }} secondes</b>.</span> <br/> 
-                                {% if question.kind == 1 %}
+                                {% if question.qtype == 1 %}
                                     Répondre à cette question par <br/><b>Vrai</b> ou <b>Faux</b>
-                                {% elif question.kind == 2 %}
+                                {% elif question.qtype == 2 %}
                                     Vous devez répondre en écrivant <br/><b>la bonne réponse</b>.
-                                {% elif question.kind == 3 %}
+                                {% elif question.qtype == 3 %}
                                      Vous devez choisir <br/><b>la ou les bonnes réponses</b><br/> parmi les 4 réponses proposées. 
                                 {% else %}
                                      Vous devez choisir la <br/><b>seule bonne réponse</b><br/>  parmi les 4 réponses proposées. 
@@ -93,10 +93,21 @@
                 <li class="my_slide">
                     <input type="hidden" value="{{ question.duration }}" id="duration{{ forloop.counter }}" /> 
                     <div class="row">  
-                        <div class="col-sm-12 col-md-6" align="left">
+                        <div class="col-sm-2 col-md-2" align="left">
                             <img src="{% if question.calculator %}{% static 'img/calculator.png' %}{% else %}{% static 'img/no_calculator.png' %}{% endif %}" height="50px" />
                         </div>
-                        <div class="col-sm-12 col-md-6" align="right">
+                        <div class="col-sm-8 col-md-8" align="center">
+                                {% if question.qtype == 1 %}
+                                    <b>Vrai  ou  Faux ?</b>
+                                {% elif question.qtype == 2 %}
+                                    <b>Ecrire la bonne réponse</b>.
+                                {% elif question.qtype == 3 %}
+                                    <b> Choisir  la ou les bonnes réponses</b>. 
+                                {% else %}
+                                    <b> Choisir la seule bonne réponse</b>. 
+                                {% endif %}
+                        </div>
+                        <div class="col-sm-2 col-md-2" align="right">
                             <div class="countdown instruction" id="countdown{{ forloop.counter }}" > 
                                 {{ question.duration }}
                             </div>
@@ -104,7 +115,7 @@
                     </div> 
                     <div class="row">  
                         <div class="col-sm-12 col-md-12"align="center">
-                            <h1 style="font-size:3.5em" class="thin"><b>Q{{forloop.counter}}.</b> {{ question.title }} </h1>
+                            <h1 style="font-size:3.5em" class="thin"> {{ question.title }} </h1>
                         </div>
                     </div>
                     {% if question.imagefile %}
@@ -116,38 +127,17 @@
                     {% endif %}
 
                     <hr/> 
-                    {% if question.kind > 0 %}
-                        {% if question.kind == 1 %}
-                        
-                        <div class="row">  
-                            <div class="col-sm-12 col-md-12" align="center">
-                                <h1 style="font-size:1.5em" class="thin alert alert-danger">Consigne : Répondre par Vrai ou Faux</h1>
-                            </div>
-                        </div>
-                        {% elif question.kind == 2 %}
- 
-                        <div class="row">  
-                            <div class="col-sm-12 col-md-12" align="center">
-                                <h1 style="font-size:1.5em" class="thin alert alert-danger">Consigne : Rédige la bonne réponse</h1>
-                            </div>
-                        </div>
-                        {% else %}
-
-                        <div class="row">  
-                            <div class="col-sm-12 col-md-12" align="center">
-                                <h1 style="font-size:1.5em" class="thin alert alert-danger">Choisis {% if question.kind == 4 %}la bonne réponse {% elif question.kind == 3  %}la ou les bonnes réponses{% endif %}</h1>
-                            </div>
-                        </div>
- 
+                    {% if question.qtype > 2 %}   
+                         
                         {% for choice in question.choices.all %}
                             {% cycle 'bgcolorRed' 'bgcolorBlue' 'bgcolorOrange' 'bgcolorGreen' as rowcolor silent %} 
                             {% cycle 'A' 'B' 'C' 'D'  as choice_letter silent %}
-                            <div class="col-sm-12 col-md-6" style="margin-bottom: 20px;font-size:1.5em; border : 1px solid #CCC">
-                                <div class="row quizz_box_answer3" >
-                                    <div class="col-sm-2 col-md-1 {{ rowcolor }} get_image" style="padding-top: 20px;color:#FFF; padding-left:7px"> 
-                                        {{ choice_letter }}     
+                            <div class="col-sm-12 col-md-6" style="padding-right: 20px;margin-bottom: 20px;font-size:1.2em; border : 1px solid #CCC; border-radius : 10px ">
+                                <div class="row" >
+                                    <div class="col-sm-2 col-md-1 {{ rowcolor }} get_image" style="padding-top: 20px;color:#FFF; padding-left:10px; border-radius : 10px 0px 0px 10px"> 
+                                        <b>{{ choice_letter }} </b>    
                                     </div>
-                                    <div class="col-sm-10 col-md-11" style="font-size:1.5em"> 
+                                    <div class="col-sm-10 col-md-11" style="font-size:{% if choice.answer|length > 30 %}1{% else  %}1.5{% endif %}em"> 
                                         {{ choice.answer }}
                                     </div>
                                 </div>  
@@ -155,7 +145,6 @@
                         {% endfor %}
                         {% resetcycle %}
                         {% resetcycle %}
-                        {% endif %}
  
                     {% endif %}
 

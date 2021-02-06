@@ -78,8 +78,7 @@ class Question(models.Model):
 
     def __str__(self):
         return self.title 
-
-
+ 
 
 
 class Choice(models.Model):
@@ -90,7 +89,7 @@ class Choice(models.Model):
     imageanswer = models.ImageField(upload_to=choice_directory_path,  null=True,  blank=True, verbose_name="Image", default="")
     answer      = models.TextField(max_length=255, default='', null=True,  blank=True, verbose_name="Réponse écrite")
     is_correct  = models.BooleanField(default=0, verbose_name="Réponse correcte ?")
-    question  = models.ForeignKey(Question, related_name="choice", blank=True, null = True,  on_delete=models.CASCADE)
+    question  = models.ForeignKey(Question, related_name="choices", blank=True, null = True,  on_delete=models.CASCADE)
     def __str__(self):
         return self.answer 
 

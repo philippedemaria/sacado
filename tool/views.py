@@ -221,7 +221,7 @@ def delete_quizz(request,id):
 def show_quizz(request,id):
  
     quizz = Quizz.objects.get(pk= id)
-    questions = quizz.questions.order_by("ranking")
+    questions = quizz.questions.filter(is_publish=1).order_by("ranking")
     context = {  "quizz" : quizz , "questions" : questions }
 
     return render(request, 'tool/show_quizz.html', context)
