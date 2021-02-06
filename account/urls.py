@@ -24,8 +24,7 @@ urlpatterns = [
 
     path('list_teacher', list_teacher, name='list_teacher'),
 
-    path('close_an_account', close_an_account, name='close_an_account'),
-    path('close_my_account/<int:id>', close_my_account, name='close_my_account'),
+    path('close_my_account/', close_my_account, name='close_my_account'),
 
     path('updatepassword', updatepassword, name='updatepassword'),
 

@@ -872,18 +872,15 @@ def check_response_from_mail(request):
 ############################################################################################################## 
 
 
-def close_an_account(request):
-    user = request.user
-    today = time_zone_user(user)
-    return render(request, 'account/close_my_account.html', {'user': user, 'communications' : [], 'today' : today  ,  })
-
-
-
-def close_my_account(request, id):
-    user = request.user
-    today = time_zone_user(user)
-    user.delete()
-    return redirect('index')
+def close_my_account(request):
+    if request.POST:
+        user = request.user
+        user.delete()
+        return redirect('index')
+    else:
+        user = request.user
+        today = time_zone_user(user)
+        return render(request, 'account/close_my_account.html', {'user': user, 'communications': [], 'today': today, })
 
 #########################################Teacher #######################################################################
  
