@@ -873,7 +873,7 @@ def check_response_from_mail(request):
 
 
 def close_my_account(request):
-    if request.POST:
+    if request.method == 'POST':
         user = request.user
         user.delete()
         return redirect('index')
