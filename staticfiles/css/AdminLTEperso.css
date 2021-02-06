@@ -296,7 +296,7 @@ li label:hover{
 
  /****************************************** Quizz **************************************/
 #body_question{
-  height :87vh;
+  margin-bottom: 40px;
 }
 
 .quizz_box {

@@ -12,17 +12,28 @@ urlpatterns = [
     path('delete/<int:id>', delete_tool, name='delete_tool'),
     path('show/<int:id>', show_tool, name='show_tool'), 
 
-    path('list_quizzes', list_quizzes, name='list_quizzes'),
+    path('my_quizz/list', list_quizzes, name='list_quizzes'),
     path('create_quizz/new', create_quizz, name='create_quizz'),
     path('update_quizz/<int:id>', update_quizz, name='update_quizz'),
     path('delete_quizz/<int:id>', delete_quizz, name='delete_quizz'),
     path('show_quizz/<int:id>', show_quizz, name='show_quizz'), 
+
+
+    path('create_question/<int:idq>/<int:qtype>', create_question, name='create_question'),
+    path('update_question/<int:id>/<int:idq>', update_question, name='update_question'),   
+    path('delete_question/<int:id>/<int:idq>', delete_question  , name='delete_question'),
+
+
+
 
     path('list_diaporama', list_diaporama, name='list_diaporama'),
     path('create_diaporama/new', create_diaporama, name='create_diaporama'),
     path('update_diaporama/<int:id>', update_diaporama, name='update_diaporama'),
     path('show_diaporama/<int:id>', show_diaporama, name='show_diaporama'),     
     path('delete_diaporama/<int:id>', delete_diaporama, name='delete_diaporama'),
+
+
+
 
     path('create_slide/<int:id>', create_slide, name='create_slide'),
     path('update_slide/<int:id>/<int:idp>', update_slide, name='update_slide'),
@@ -41,11 +52,11 @@ urlpatterns = [
 
 
     ############## Ajax
-    path('get_question_type', get_question_type, name='get_question_type'),
     path('delete_my_tool', delete_my_tool, name='delete_my_tool'),
 
  
-    path('send_question', send_question, name='send_question'), 
+    path('ajax_chargeknowledges', ajax_chargeknowledges, name='ajax_chargeknowledges'),
+ 
     path('question_sorter', question_sorter, name='question_sorter'), 
 
 

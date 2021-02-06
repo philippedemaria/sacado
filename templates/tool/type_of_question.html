@@ -3,277 +3,321 @@
 {% load widget_tweaks %}
 {% load item_tags %}
 
-<input type="hidden" name="kind" id="kind" value="{{ kind }}"   /> 
-<input type="hidden" value="{{ question.id }}" name="question_id"   />
-{% if kind == 0 or not kind %}
-<div class="row"   >
-    <div class="col-sm-12 col-md-6" align="center"> 
-        <a href="#" data-kind="1" class="selector_question" >
-            <div class="quizz_card">
-                <h1>Vrai / Faux</h1>
-                <i class="fa fa-check text-success fa-2x"></i>                <i class="fa fa-times text-danger fa-2x"></i>
+
+{% if quizz.is_random  %}
+
+      <input type="hidden" name="kind" id="kind" value="5"   /> 
+        <div class="row" >
+            <div class="col-sm-12 col-md-3" >  
+                <div class="form-group">
+                    <label>Nombre de questions souhaitées</label>
+                    <input type="number" name="number_of_questions" min=0 step=1  class="form-control" value=5  />
+                </div>
             </div>
-        </a>
-    </div>    
-    <div class="col-sm-12 col-md-6" align="center">
-        <a href="#" data-kind="2" class="selector_question">
-            <div class="quizz_card">
-                <h1>Réponse rédigée</h1>
-                <i class="fa fa-edit fa-5x"></i>
+        </div>
+        <div class="row" >
+            <div class="col-sm-12 col-md-12" > 
+                <div class="form-group">
+                    <p>Attendus ciblés</p>
+                    {%  for waiting in  waitings %}
+                        <div class="row" >
+                            <div class="col-sm-12 col-md-12" > 
+                                <label><input type="checkbox" id="id_waiting{{waiting.id}}" name="waitings" value="{{ waiting.id }}"/> {{ waiting.name }} </label>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-        </a>
-    </div>    
-    </div>
-<div class="row" >
-    <div class="col-sm-12 col-md-6" align="center"> 
-        <a href="#" data-kind="3" class="selector_question">
-            <div class="quizz_card">
-                <h1>QCM</h1>
-                <i class="fa fa-check text-success"></i> -------- <br/> 
-                <i class="fa fa-check text-success"></i> -------- <br/>               
-                <i class="fa fa-times text-danger"></i> -------- <br/>
-                <i class="fa fa-times text-danger"></i> -------- <br/>
+
+        </div>
+                
+        <div class="row" >
+            <div class="col-sm-12 col-md-12" > 
+                <div class="form-group">
+                    <p>Savoir faire ciblés</p>
+                    {%  for knowledge in  knowledges %}
+                        <div class="row" >
+                            <div class="col-sm-12 col-md-12" > 
+                                <label for="id_knowledge{{knowledge.id}}"><input type="checkbox" id="id_knowledge{{knowledge.id}}" name="knowledges" value="{{ knowledge.id }}"/> {{ knowledge.name }} </label>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
             </div>
-        </a>
-    </div>    
-    <div class="col-sm-12 col-md-6" align="center"> 
-        <a href="#" data-kind="4" class="selector_question">
-            <div class="quizz_card">
-                <h1>QCS</h1>
-                <i class="fa fa-times text-danger"></i> -------- <br/>
-                <i class="fa fa-check text-success"></i> -------- <br/>               
-                <i class="fa fa-times text-danger"></i> -------- <br/>
-                <i class="fa fa-times text-danger"></i> -------- <br/>
+        </div>
+
+
+
+        <div class="row" >
+            <div class="col-sm-12 col-md-12" > 
+                <div class="form-group">
+                    <a href="#" id="submit_question" class="btn btn-primary btn-lg" >Créer les questions</a>
+                </div>
             </div>
-        </a>
-    </div>   
-</div>
-
-{% else %}
-<div class="row" >
-    <div class="col-sm-12 col-md-12" >  
-        <textarea class="quizz_box quizz_font40" name="title" id="id_title" placeholder="Ecrire votre question ici" rows=1>{% if question %}{{ question.title  }}{% endif %}</textarea>
-    </div>
-</div>
-<div class="row margin40" >
-    <div class="col-sm-6 col-md-2" align="center" >  
-        <div class="quizz_assets">
-            <label>Durée</label><br/>
-            <input type="number" step="5"  min="5" class="quizz_input quizz_input50" name="duration" id="id_duration" value="{% if question %}{{ question.duration  }}{% else %}20{% endif %}"   ><label>s. </label>
         </div>
-        <div class="quizz_assets">
-            <label>Point</label><br>
-            <input type="number" step="200"  min="200"  max="2000" class="quizz_input" name="point" id="id_point" value="{% if question %}{{ question.point  }}{% else %}1000{% endif %}" />
+
+{% else  %}
+    <input type="hidden" name="kind" id="kind" value="{{ kind }}"   /> 
+    <input type="hidden" value="{{ question.id }}" name="question_id"   /> 
+    {% if kind == 0 or not kind %}
+        <div class="row">
+            <div class="col-sm-12 col-md-6" align="center"> 
+                <a href="#" data-kind="1" class="selector_question" >
+                    <div class="quizz_card">
+                        <h1>Vrai / Faux</h1>
+                        <i class="fa fa-check text-success fa-2x"></i>                <i class="fa fa-times text-danger fa-2x"></i>
+                    </div>
+                </a>
+            </div>    
+            <div class="col-sm-12 col-md-6" align="center">
+                <a href="#" data-kind="2" class="selector_question">
+                    <div class="quizz_card">
+                        <h1>Réponse rédigée</h1>
+                        <i class="fa fa-edit fa-5x"></i>
+                    </div>
+                </a>
+            </div>    
         </div>
-    </div>
-    <div class="col-sm-6 col-md-2" align="center" > 
-        <div class="quizz_assets">
-           <label>Calculatrice</label><br>
-           <input  type="checkbox"  name="calculator" id="id_calculator" value="1"  {% if question %}{% if question.calculator  %}checked{% endif %}{% endif %}  />
+        <div class="row">
+            <div class="col-sm-12 col-md-6" align="center"> 
+                <a href="#" data-kind="3" class="selector_question">
+                    <div class="quizz_card">
+                        <h1>QCM</h1>
+                        <i class="fa fa-check text-success"></i> -------- <br/> 
+                        <i class="fa fa-check text-success"></i> -------- <br/>               
+                        <i class="fa fa-times text-danger"></i> -------- <br/>
+                        <i class="fa fa-times text-danger"></i> -------- <br/>
+                    </div>
+                </a>
+            </div>    
+            <div class="col-sm-12 col-md-6" align="center"> 
+                <a href="#" data-kind="4" class="selector_question">
+                    <div class="quizz_card">
+                        <h1>QCS</h1>
+                        <i class="fa fa-times text-danger"></i> -------- <br/>
+                        <i class="fa fa-check text-success"></i> -------- <br/>               
+                        <i class="fa fa-times text-danger"></i> -------- <br/>
+                        <i class="fa fa-times text-danger"></i> -------- <br/>
+                    </div>
+                </a>
+            </div>   
         </div>
-        <div class="quizz_assets">
-            <label>Publication</label><br>
-            <input type="checkbox" name="is_publish" id="id_is_publish" value="1"  {% if question %}{% if question.is_publish  %}checked{% endif %}{% endif %}  />
+    {% else %}
+        <div class="row" >
+            <div class="col-sm-12 col-md-12" >  
+                <textarea class="quizz_box quizz_font40" name="title" id="id_title" placeholder="Ecrire votre question ici" rows=1>{% if question %}{{ question.title  }}{% endif %}</textarea>
+            </div>
         </div>
-    </div>
-    <div class="col-sm-12 col-md-8" align="center" > 
-        <div id="drop_zone" class="drop-zone">
-          <p class="title">Déposer votre image ici <div style="font-size:20px">MAX : 700px par 600px</div></p>
-          <div class="preview-container"></div>
+        <div class="row margin40" >
+            <div class="col-sm-6 col-md-2" align="center" >  
+                <div class="quizz_assets">
+                    <label>Durée</label><br/>
+                    <input type="number" step="5"  min="5" class="quizz_input quizz_input50" name="duration" id="id_duration" value="{% if question %}{{ question.duration  }}{% else %}20{% endif %}"   ><label>s. </label>
+                </div>
+                <div class="quizz_assets">
+                    <label>Point</label><br>
+                    <input type="number" step="200"  min="200"  max="2000" class="quizz_input" name="point" id="id_point" value="{% if question %}{{ question.point  }}{% else %}1000{% endif %}" />
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-2" align="center" > 
+                <div class="quizz_assets">
+                   <label>Calculatrice</label><br>
+                   <input  type="checkbox"  name="calculator" id="id_calculator" value="1"  {% if question %}{% if question.calculator  %}checked{% endif %}{% endif %}  />
+                </div>
+                <div class="quizz_assets">
+                    <label>Publication</label><br>
+                    <input type="checkbox" name="is_publish" id="id_is_publish" value="1"  {% if question %}{% if question.is_publish  %}checked{% endif %}{% endif %}  />
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-8" align="center" > 
+                <div id="drop_zone" class="drop-zone">
+                  <p class="title">Déposer votre image ici <div style="font-size:20px">MAX : 700px par 600px</div></p>
+                  <div class="preview-container"></div>
+                </div>
+                <input id="id_imagefile"  type="file" multiple="" name="imagefile">
+            </div>  
         </div>
-        <input id="id_imagefile"  type="file" multiple="" name="imagefile">
-    </div>  
-</div>
+        <div class="row" > 
+            {% if kind == 1 %} <!-- VRAI / FAUX --> 
+                {% for classe in classes %}  
+                <div class="col-sm-6 col-md-6 quizz_line_answer">  
+                    <div class="row quizz_box_answer {{ classe.bgcolor }}" id="answer{{ forloop.counter }}_div">
+                        <div class="col-sm-2 col-md-1"> 
+                        </div>
+                        <div class="col-sm-8 col-md-9" > 
+                            <h1 class="quizz_font30 quizz_answer white padding20"> {{ classe.answer }}</h1>
+                        </div>
+                        <div class="col-sm-2 col-md-2 checking_zone" id="checking_zone{{ forloop.counter }}"> 
+                            <span class="noCheck" id="noCheck{{ forloop.counter }}"
+                                    {% if question %}
+                                        {% if  forloop.counter ==  1  %}
+                                            {% if question.is_correct  %}
+                                                style="display:none;"  
+                                            {% else  %}
+                                                style="display:block;"
+                                            {% endif %}
+                                        {% else  %}
+                                            {% if not question.is_correct  %}
+                                                style="display:none;"  
+                                            {% else  %}
+                                                style="display:block;"
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %} >
+                                <i class="fa fa-circle fa-3x white"></i>
+                            </span>
+                            <input type="checkbox" class="checkbox_no_display" value="1"  name="is_correct" 
+                                    id="id_is_correct{{ forloop.counter }}" 
+                                    {% if question %}
+                                        {% if question.is_correct and forloop.counter ==  1  %}
+                                            checked
+                                        {% elif not question.is_correct and forloop.counter == 2  %}
+                                            checked
+                                        {% endif %}
+                                    {% endif %}  />
 
-<div class="row" > 
+                            <span class="check" id="check{{ forloop.counter }}" 
+                                    {% if question %}
+                                        {% if  forloop.counter ==  1  %}
+                                            {% if question.is_correct  %}
+                                                style="display:block;"  
+                                            {% else  %}
+                                                style="display:none;"
+                                            {% endif %}
+                                        {% else  %}
+                                            {% if not question.is_correct  %}
+                                                style="display:block;"  
+                                            {% else  %}
+                                                style="display:none;"
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %} >
+                                <i class="fa fa-check-circle fa-3x white"></i>
+                            </span>
+                        </div>
 
-
-      {% if kind == 1 %} <!-- VRAI / FAUX --> 
-          {% for classe in classes %}  
-          <div class="col-sm-6 col-md-6 quizz_line_answer">  
-              <div class="row quizz_box_answer {{ classe.bgcolor }}" id="answer{{ forloop.counter }}_div">
-                  <div class="col-sm-2 col-md-1"> 
-                  </div>
-                  <div class="col-sm-8 col-md-9" > 
-                      <h1 class="quizz_font30 quizz_answer white padding20"> {{ classe.answer }}</h1>
-                  </div>
-                  <div class="col-sm-2 col-md-2 checking_zone" id="checking_zone{{ forloop.counter }}"> 
-                      <span class="noCheck" id="noCheck{{ forloop.counter }}"
-                              {% if question %}
-                                  {% if  forloop.counter ==  1  %}
-                                      {% if question.is_correct  %}
-                                          style="display:none;"  
-                                      {% else  %}
-                                          style="display:block;"
-                                      {% endif %}
-                                  {% else  %}
-                                      {% if not question.is_correct  %}
-                                          style="display:none;"  
-                                      {% else  %}
-                                          style="display:block;"
-                                      {% endif %}
-                                  {% endif %}
-                              {% endif %} >
-                          <i class="fa fa-circle fa-3x white"></i>
-                      </span>
-                      <input type="checkbox" class="checkbox_no_display" value="1"  name="is_correct" 
-                              id="id_is_correct{{ forloop.counter }}" 
-                              {% if question %}
-                                  {% if question.is_correct and forloop.counter ==  1  %}
-                                      checked
-                                  {% elif not question.is_correct and forloop.counter == 2  %}
-                                      checked
-                                  {% endif %}
-                              {% endif %}  />
-
-                      <span class="check" id="check{{ forloop.counter }}" 
-                              {% if question %}
-                                  {% if  forloop.counter ==  1  %}
-                                      {% if question.is_correct  %}
-                                          style="display:block;"  
-                                      {% else  %}
-                                          style="display:none;"
-                                      {% endif %}
-                                  {% else  %}
-                                      {% if not question.is_correct  %}
-                                          style="display:block;"  
-                                      {% else  %}
-                                          style="display:none;"
-                                      {% endif %}
-                                  {% endif %}
-                              {% endif %} >
-                          <i class="fa fa-check-circle fa-3x white"></i>
-                      </span>
-                  </div>
-
-              </div> 
-          </div>
-          {% endfor %}
-      {% elif kind == 2 %} <!-- Réponse rédigée -->
-          <div class="col-sm-12 col-md-12" align="center"> 
-              <textarea class="quizz_font30 quizz_box_answer" name="answers" id="answers" placeholder="Ecrire la réponse attendue">{% if question %}{% for choice in question.choices.all  %}{{ choice.answer}}{% endfor %}{% endif %}</textarea>
-          </div>
-      {% else %} <!-- QCM/QCS -->
- 
-          {% for classe in classes %} 
-          <div class="col-sm-6 col-md-6 quizz_line_answer">  
-              <div class="row quizz_box_answer {% if classe.bgcolor %}{{ classe.bgcolor }}{% endif %}" id="answer{{ forloop.counter }}_div">
-                  <div class="col-sm-2 col-md-1 {{ classe.labelcolor }} get_image"> 
-        
-                      <i class="fa fa-file-image-o white answer_margin20"></i>
-                     
-                      <input id="id_imageanswer{{ forloop.counter }}" type="file"  name="image_answers"  onchange="previewFile('{{ forloop.counter }}','{{ classe.bgcolor }}' )" />
- 
+                    </div> 
+                </div>
+                {% endfor %}
+            {% elif kind == 2 %} <!-- Réponse rédigée -->
+                <div class="col-sm-12 col-md-12" align="center"> 
+                    <textarea class="quizz_font30 quizz_box_answer" name="answers" id="answers" placeholder="Ecrire la réponse attendue">{% if question %}{% for choice in question.choices.all  %}{{ choice.answer}}{% endfor %}{% endif %}</textarea>
+                </div>
+            {% else %} <!-- QCM/QCS -->
+       
+                {% for classe in classes %} 
+                <div class="col-sm-6 col-md-6 quizz_line_answer">  
+                    <div class="row quizz_box_answer {% if classe.bgcolor %}{{ classe.bgcolor }}{% endif %}" id="answer{{ forloop.counter }}_div">
+                        <div class="col-sm-2 col-md-1 {{ classe.labelcolor }} get_image"> 
               
-                  </div>
-                  <div class="col-sm-8 col-md-9"> 
-                      <textarea class="quizz_font30 quizz_answer {% if classe.bgcolor %}white{% endif %}"  name="answers" id="answer{{ forloop.counter }}" placeholder="Ecrire votre réponse ici">{% if classe.answer %}{{ classe.answer }}{% endif %}</textarea>
-                       <img src="" height="90px" class="preview" id="preview{{ forloop.counter }}" > 
-                       <a href="#" id="delete_img{{ forloop.counter }}" class="preview pull-right white" onclick="noPreviewFile('{{ forloop.counter }}','{{ classe.bgcolor }}')"><i class="fa fa-times white answer_margin20"></i></a>
-                  </div>
+                            <i class="fa fa-file-image-o white answer_margin20"></i>
+                           
+                            <input id="id_imageanswer{{ forloop.counter }}" type="file"  name="image_answers"  onchange="previewFile('{{ forloop.counter }}','{{ classe.bgcolor }}' )" />
+       
+                    
+                        </div>
+                        <div class="col-sm-8 col-md-9"> 
+                            <textarea class="quizz_font30 quizz_answer {% if classe.bgcolor %}white{% endif %}"  name="answers" id="answer{{ forloop.counter }}" placeholder="Ecrire votre réponse ici">{% if classe.answer %}{{ classe.answer }}{% endif %}</textarea>
+                             <img src="" height="90px" class="preview" id="preview{{ forloop.counter }}" > 
+                             <a href="#" id="delete_img{{ forloop.counter }}" class="preview pull-right white" onclick="noPreviewFile('{{ forloop.counter }}','{{ classe.bgcolor }}')"><i class="fa fa-times white answer_margin20"></i></a>
+                        </div>
 
-                  <div class="col-sm-2 col-md-2 checking_zone" id="checking_zone{{ forloop.counter }}"> 
-                      <span class="noCheck" id="noCheck{{ forloop.counter }}"
-                          {% if classe.is_correct %}
-                                  style="display:none;"  
-                              {% else  %}
-                                  style="display:block;"
-                          {% endif %}>
-                          <i class="fa fa-circle fa-3x white"></i>
-                      </span>
-                      <input type="checkbox" class="checkbox_no_display"  value="1" name="is_corrects" id="id_is_correct{{ forloop.counter }}" {% if question %}{% if question.is_correct  %}checked{% endif %}{% endif %}  />
-                      <span class="check" id="check{{ forloop.counter }}"
+                        <div class="col-sm-2 col-md-2 checking_zone" id="checking_zone{{ forloop.counter }}"> 
+                            <span class="noCheck" id="noCheck{{ forloop.counter }}"
+                                {% if classe.is_correct %}
+                                        style="display:none;"  
+                                    {% else  %}
+                                        style="display:block;"
+                                {% endif %}>
+                                <i class="fa fa-circle fa-3x white"></i>
+                            </span>
+                            <input type="checkbox" class="checkbox_no_display"  value="1" name="is_corrects" id="id_is_correct{{ forloop.counter }}" {% if question %}{% if question.is_correct  %}checked{% endif %}{% endif %}  />
+                            <span class="check" id="check{{ forloop.counter }}"
 
-                              {% if classe.is_correct %}
-                                      style="display:block;"  
-                                  {% else  %}
-                                      style="display:none;"
-                              {% endif %}
+                                    {% if classe.is_correct %}
+                                            style="display:block;"  
+                                        {% else  %}
+                                            style="display:none;"
+                                    {% endif %}
 
-                       ><i class="fa fa-check-circle fa-3x white"></i></span>
-                  </div>
+                             ><i class="fa fa-check-circle fa-3x white"></i></span>
+                        </div>
 
-              </div>
-          </div>
-          {% endfor %}
-      {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="row" >  
+            <div class="col-sm-12 col-md-12" >   
+                 <select name="knowledge_id" id="knowledge_id" class="form-control select2">
+                      {%  for data in datas %} 
+                      <optgroup label="{{ data.waiting }}">
+                          {%  for knowledge in data.knowledges %}
+                              <option value="{{ knowledge.id }}" {% if question %}{% if question.knowledge.id == knowledge.id  %} selected {% endif %}{% endif %}>{{ knowledge.name }}</option> 
+                          {% endfor %}
+                      </optgroup>
+                      {% endfor %}
 
+                 </select>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-12 quizz_submit">
+            <div class="form-group">
+                <a href="#" id="submit_question" class="btn btn-primary btn-lg" >Enregistrer cette question</a>
+                <a href="#" data-kind="0" class="btn btn-default  btn-lg selector_question">Changer de type de question</a>
+            </div>
+        </div> 
 
-</div>
+        <script>
 
-<div class="row" >  
-    <div class="col-sm-12 col-md-12" >   
-         <select name="knowledge_id" id="knowledge_id" class="form-control select2">
-              {%  for data in datas %} 
-              <optgroup label="{{ data.waiting }}">
-                  {%  for knowledge in data.knowledges %}
-                      <option value="{{ knowledge.id }}" {% if question %}{% if question.knowledge.id == knowledge.id  %} selected {% endif %}{% endif %}>{{ knowledge.name }}</option> 
-                  {% endfor %}
-              </optgroup>
-              {% endfor %}
-
-         </select>
-    </div>
-</div>
-<div class="col-sm-12 col-md-12 quizz_submit">
-    <div class="form-group">
-
-        <a href="#" id="submit_question" class="btn btn-primary btn-lg" >Enregistrer cette question</a>
-
- 
-        <a href="#" data-kind="0" class="btn btn-default  btn-lg selector_question">Changer de type de question</a>
-
-
-    </div>
-</div> 
-
- 
- 
-<script>
-$("#id_imagefile").withDropZone("#drop_zone", {
-  action: {
-    name: "image",
-    params: {
-      preview: true,
-    }
-  },
-});
+        $("#id_imagefile").withDropZone("#drop_zone", {
+            action: {
+              name: "image",
+              params: {
+                preview: true,
+              }
+            },
+          });
 
 
-$("#knowledge_id").select2() ; 
+        $("#knowledge_id").select2() ; 
 
 
-  function previewFile(nb,classe) {
+        function previewFile(nb,classe) {
 
-        const preview = document.getElementById('preview'+nb);
-        const file = $("#id_imageanswer"+nb)[0].files[0];
-        const reader = new FileReader();
+                const preview = document.getElementById('preview'+nb);
+                const file = $("#id_imageanswer"+nb)[0].files[0];
+                const reader = new FileReader();
 
-        $("#preview"+nb).val("") ;  
-        $("#answer"+nb+"_div").addClass(classe) ;
-        $("#answer"+nb).addClass("preview") ;
-        $("#preview"+nb).removeClass("preview") ; 
-        $("#delete_img"+nb).removeClass("preview") ; 
+                $("#preview"+nb).val("") ;  
+                $("#answer"+nb+"_div").addClass(classe) ;
+                $("#answer"+nb).addClass("preview") ;
+                $("#preview"+nb).removeClass("preview") ; 
+                $("#delete_img"+nb).removeClass("preview") ; 
 
-    reader.addEventListener("load", function () {
-      // convert image file to base64 string
-      preview.src = reader.result;
-    }, false);
+            reader.addEventListener("load", function () {
+              // convert image file to base64 string
+              preview.src = reader.result;
+            }, { passive: false });
 
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  }
+            if (file) {
+              reader.readAsDataURL(file);
+            }
+          }
 
-  function noPreviewFile(nb,classe) {
+         
 
-        $("#preview"+nb).val("") ;  
-        $("#answer"+nb+"_div").removeClass(classe) ;
-        $("#answer"+nb).removeClass("preview") ;
-        $("#preview"+nb).addClass("preview") ; 
-        $("#delete_img"+nb).addClass("preview") ;      
-  }
+        function noPreviewFile(nb,classe) {
 
-</script>
+                $("#preview"+nb).val("") ;  
+                $("#answer"+nb+"_div").removeClass(classe) ;
+                $("#answer"+nb).removeClass("preview") ;
+                $("#preview"+nb).addClass("preview") ; 
+                $("#delete_img"+nb).addClass("preview") ;      
+          }
 
+        </script>
+    {% endif %} 
 {% endif %} 

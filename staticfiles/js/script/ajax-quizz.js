@@ -20,7 +20,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
                         'id_subject': id_subject,                        
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url : "../qcm/ajax/chargethemes_parcours",
+                    url : "../../qcm/ajax/chargethemes_parcours",
                     success: function (data) {
 
                         themes = data["themes"];
@@ -60,175 +60,215 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
 
 
 
- 
-        // Affiche dans la modal le modèle pour récupérer un exercice custom
-        $('body').on('click', '.selector_question' , function (event) {
 
-            let kind = $(this).attr("data-kind");
-            let quizz_id = $("#quizz_id").val();
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();  console.log(quizz_id) ; 
+
+        $('input[name=waitings]').on('click', function (event) {
+
+            let waitings = $(this).val();
+            let id_subject = $("#id_subject").val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            $("#loading").html("<i class='fa fa-spinner fa-pulse fa-fw'></i>");
+            $("#loading").show(); 
+
+            console.log(waitings) ;
 
             $.ajax(
                 {
                     type: "POST",
                     dataType: "json",
+                    traditional: true,
                     data: {
-                        'kind': kind,
-                        'quizz_id': quizz_id,
+                        'waitings': waitings,                     
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: "../get_question_type",
+                    url : "../../tool/ajax_chargeknowledges",
                     success: function (data) {
 
-                        $('#body_question').html(data.html);
-                        $('#type_of_question_in_title').html(data.title);
+                        knowledges = data["knowledges"];
  
+ 
+
+                        for (let i = 0; i < knowledges.length; i++) {
+                                
+                                console.log(knowledges[i]);
+                                let knowledges_id = knowledges[i][0];
+                                
+                                $('hidden_knowledges').hide(500);
+                                $('knowledge'+knowledges_id).show(500);
+                            }
+                      
+                  
+
+ 
+
+                        $("#loading").hide(500); 
                     }
                 }
             )
-         });
-
-
- 
-        // Soumission de la question.
-        $('body').on('click', '#submit_question' , function (event) {
-
-            // obliger un titre
-            if ($("#id_title").val() == "") { alert("Vous devez renseigner la question") ; $("#id_title").focus() ; return false ;}
-
-            // obliger une réponse
-            if ($("#kind").val() == "1") { 
-                if ($(".checkbox_no_display").length == 0) { alert("Vous devez choisir LA bonne réponse.") ;  return false ;}
-            }
-            else if ($("#kind").val() == "2") 
-            { 
-                if ($("#answers").length  == 0) { alert("Vous devez écrire la réponse attendue.") ;  return false ;}
-            }
-            else 
-            { 
-                if ($(".checkbox_no_display").length  == 0) { alert("Vous devez choisir au moins une réponse vraie.") ;  return false ;}
-            }
-
-
-            // obliger qu'une seule réponse dans le QCS
-            var n = $( "input:checked" ).length;  console.log(n) ; 
-            if (($("#kind").val() == "4")&& (n>1)) { 
-                alert("Vous avez choisi le type QCS. Vous ne pouvez renseigner qu'une seule bonne réponse. Choisissez le type QCM sinon.") ;
-                return false ;
-            }
-
-            var formData = new FormData($("#question_form")[0]);
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-
-            // Chargement des images de question
-            var imagefile = $("#id_imagefile")[0].files[0];
-            if (imagefile)
-            {
-                formData.append('imagefile[]', imagefile, imagefile.name);                
-            }
-
-            // Chargement des images de réponses
-            if ( $("#kind").val() > 2 )
-            {
-                    for (var j = 1; j < 4; j++) { 
-                        var imagefiles = $("#id_imageanswer"+j)[0].files;
-                        if (imagefiles.length > 0 )
-
-                            {   console.log("ici");
-                                imagefile = imagefiles[0] ; 
-                                formData.append('imagefiles[]', imagefile, imagefile.name);  
-                            } 
-                    }                
-            }
+        });
 
 
 
 
-            $.ajax(
-                {
-                    type: "POST",
-                    data: formData,
-                    url: "../send_question",
-                    contentType: false, 
-                    processData: false,
-                    success: function (data) {
+        $("#div_is_mark").hide(); 
 
- 
-
-                        $('#body_question').html(data.html);
-                        
-                        if (data.new) {
-                        $('#questions_sortable_list').append(data.question);                            
+            function makeItemAppear($toggle, $item) {
+                    $toggle.change(function () {
+                        if ($toggle.is(":checked")) {
+                            $item.show(500);
+                        } else {
+                            $item.hide(500);
                         }
-
-
- 
-                    }
+                    });
                 }
-            )
-         });
  
- 
+        makeItemAppear($("#id_is_numeric"), $("#div_is_mark"));
 
-        // Sélectionne le choix de la réponse écrite vraie
+
+
+
+
+        // Fonction de sélection du Vrai faux
+        function checked_vf(){ 
+            if( $("#check1").hasClass("checked")  )  
+                {   
+                    // Gestion du check
+                    $('#check1').removeClass("checked");
+                    $('#check2').addClass("checked");
+                    // affiche du fa
+                    $('#check1').css("display","none");
+                    $('#noCheck1').css("display","block");
+                    $('#check2').css("display","block");
+                    $('#noCheck2').css("display","none");
+                    $("#id_is_correct").prop("checked", false); 
+                } 
+            else 
+                {   
+                    // Gestion du check
+                    $('#check1').addClass("checked");
+                    $('#check2').removeClass("checked");
+                    // affiche du fa
+                    $('#check2').css("display","none");
+                    $('#noCheck2').css("display","block");
+                    $('#check1').css("display","block");
+                    $('#noCheck1').css("display","none");
+                    $("#id_is_correct").prop("checked", true); 
+                }             
+        }
+
+        $('body').on('click', '#vf_zone1' , function (event) {  
+            checked_vf() ;
+        }); 
+        $('body').on('click', '#vf_zone2' , function (event) {  
+            checked_vf() ;
+        }); 
+
+        // Fonction de sélection du de la calculatrice ou de la publication
+        $('body').on('click', '#check_calculator' , function (event) {  
+            check_assets("#id_calculator"); 
+        }); 
+        $('body').on('click', '#check_publish' , function (event) {  
+            check_assets("#id_is_publish"); 
+        }); 
+
+
+
+        function check_assets(cible){
+
+            if ($(cible).is(":checked"))
+            {
+             $(cible).prop("checked", false); 
+            }
+            else
+            {
+             $(cible).prop("checked", true); 
+            }  
+        }
+
+
+
+        $("#id_calculator").prop("checked", false);   
+        $("#id_is_publish").prop("checked", true); 
+
+
+        $('body').on('click', '#checking_zone0' , function (event) {  
+            checked_and_checked(0) ;
+        });
+        $('body').on('click', '#checking_zone1' , function (event) {  
+            checked_and_checked(1) ;
+        });
+        $('body').on('click', '#checking_zone2' , function (event) {  
+            checked_and_checked(2) ;
+        });
+        $('body').on('click', '#checking_zone3' , function (event) {  
+            checked_and_checked(3) ;
+        });
+
+
         function checked_and_checked(nb){ 
+                qtype = $("#qtype").val() ;
 
-            $('body').on('click', '#checking_zone'+nb , function (event) {     console.log( $("#id_is_correct"+nb).is(":checked") ) ;
+console.log(qtype);
 
-                if( $("#id_is_correct"+nb).is(":checked")  )  
+                if( $("#check"+nb).hasClass("checked")  )  
                     {   
-                        $("#id_is_correct"+nb).removeAttr("checked");
-                        $('#check'+nb).removeAttr("style");
-                        $('#noCheck'+nb).removeAttr("style");
-                        console.log("il est no checked"  ) ;
+                        $('#check'+nb).removeClass("checked");
+                        $('#check'+nb).css("display","none");
+                        $('#noCheck'+nb).css("display","block");
+                        $("#id_choice-"+nb+"-is_correct").prop("checked", false);                         
+
                     } 
                 else 
                     {   
-                        $("#id_is_correct"+nb).attr("checked",true);
+                        $('#check'+nb).addClass("checked");
                         $('#check'+nb).css("display","block");
                         $('#noCheck'+nb).css("display","none");
-                        console.log( "il est checked"  ) ;
+                        $("#id_choice-"+nb+"-is_correct").prop("checked", true);                     
                     }
-            });
 
-        }
+console.log($(".checked").length);
 
-        checked_and_checked( '1') ;
-        checked_and_checked( '2') ;
-        checked_and_checked( '3') ;
-        checked_and_checked( '4') ;
 
+                if (qtype==4 && $(".checked").length > 1 ) { 
+                    alert("Vous avez choisi un QCS dans lequel une seule réponse est autorisée. Optez pour le QCM alors.") ; 
+                    $('#check'+nb).removeClass("checked");
+                    $('#check'+nb).css("display","none");
+                    $('#noCheck'+nb).css("display","block");
+                    $("#id_choice-"+nb+"-is_correct").prop("checked", false);                         
+                    return false;
+                }
+            }
  
 
         // Sélectionne la couleur de fond lorsque la réponse est écrite
         function change_bg_and_select( nb, classe ){
 
-            $('body').on('keyup', "#answer"+nb , function (event) {   
+            $('body').on('keyup', "#id_choice-"+nb+"-answer" , function (event) {   
                 
-                    var comment =  $("#answer"+nb).val()  ;
+                    var comment =  $("#id_choice-"+nb+"-answer").val()  ;
 
                 if (  comment.length > 0   )
                 { 
                   $("#answer"+nb+"_div").addClass(classe) ; 
-                  $("#answer"+nb).css("color","white") ;
+                  $("#id_choice-"+nb+"-answer").css("color","white") ;
                 }
                 else
                 {
                    $("#answer"+nb+"_div").removeClass(classe) ; 
-                  $("#answer"+nb).css("color","#666") ;
+                  $("#id_choice-"+nb+"-answer").css("color","#666") ;
                 }
              });
         }
 
-       change_bg_and_select( "1",  "bgcolorRed" );
-       change_bg_and_select( "2",  "bgcolorBlue" );
-       change_bg_and_select( "3",  "bgcolorOrange" );
-       change_bg_and_select( "4",  "bgcolorGreen" );
+       change_bg_and_select( 0,  "bgcolorRed" );
+       change_bg_and_select( 1,  "bgcolorBlue" );
+       change_bg_and_select( 2,  "bgcolorOrange" );
+       change_bg_and_select( 3,  "bgcolorGreen" );
 
 
 
  
-
+       // Trie des diapositives
         $('#questions_sortable_list').sortable({
             start: function( event, ui ) { 
                    $(ui.item).css("box-shadow", "2px 1px 2px gray").css("background-color", "#271942").css("color", "#FFF"); 
@@ -253,39 +293,99 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
                     }); 
                 }
             });
-
-
-        $('[type=checkbox]').prop('checked', false);     
-
-        // Affiche une question
-        $('body').on('click', '.update_question' , function (event) {   
-            
-            let quizz_id = $(this).attr("data-quizz_id");
-            let question_id = $(this).attr("data-question_id");
-            let kind = $(this).attr("data-kind");
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
  
-            $.ajax(
-                {
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        'quizz_id': quizz_id,
-                        'question_id': question_id,
-                        'kind': kind,
-                        csrfmiddlewaretoken: csrf_token
-                    },
-                    url: "../get_question_type",
-                    success: function (data) {
+       // Prévisualisation des images
+        $("#id_imagefile").withDropZone("#drop_zone", {
+            action: {
+              name: "image",
+              params: {
+                preview: true,
+              }
+            },
+          });
 
-                        $('#body_question').html(data.html);
- 
- 
-                    }
-                }
-            )
+
+        // Chargement d'une image dans la réponse possible.
+        $('body').on('change', '#id_choice-0-imageanswer' , function (event) {  
+            previewFile(0,"bgcolorRed") ;
+         });
+
+        $('body').on('change', '#id_choice-1-imageanswer' , function (event) {   
+            previewFile(1,"bgcolorBlue") ;
          });
  
+        $('body').on('change', '#id_choice-2-imageanswer' , function (event) {   
+            previewFile(2,"bgcolorOrange") ;
+         });
+ 
+        $('body').on('change', '#id_choice-3-imageanswer' , function (event) {   
+            previewFile(3,"bgcolorGreen") ;
+         });      
+
+ 
+        function previewFile(nb,classe) {
+
+            const preview = $('#preview'+nb);
+            const file = $('#id_choice-'+nb+'-imageanswer')[0].files[0];
+            const reader = new FileReader();
+
+
+            $("#preview"+nb).val("") ;  
+            $("#answer"+nb+"_div").addClass(classe) ;
+            $("#id_choice-"+nb+"-answer").addClass("preview") ;
+            $("#preview"+nb).removeClass("preview") ; 
+            $("#delete_img"+nb).removeClass("preview") ; 
+
+            reader.addEventListener("load", function (e) {
+                                                var image = e.target.result ; 
+                                                $("#preview"+nb).attr("src", image );
+                                            }) ;
+
+            if (file) { console.log(file) ;
+              reader.readAsDataURL(file);
+            }            
+
+          }
+ 
+         
+        // Chargement d'une image dans la réponse possible.
+        $('body').on('click', '#delete_img0' , function (event) {  
+            noPreviewFile(0,"bgcolorRed") ;
+         });
+
+        $('body').on('click', '#delete_img1' , function (event) {   
+            noPreviewFile(1,"bgcolorBlue") ;
+         });
+ 
+        $('body').on('click', '#delete_img2' , function (event) {   
+            noPreviewFile(2,"bgcolorOrange") ;
+         });
+ 
+        $('body').on('click', '#delete_img3' , function (event) {   
+            noPreviewFile(3,"bgcolorGreen") ;
+         }); 
+
+
+        function noPreviewFile(nb,classe) {
+
+                $("#preview"+nb).attr("src", "" );
+                $("#answer"+nb+"_div").removeClass(classe) ;
+                $("#id_choice-"+nb+"-answer").removeClass("preview") ;
+                $("#preview"+nb).addClass("preview") ; 
+                $("#delete_img"+nb).addClass("preview") ;      
+          }
+
+
+
+
+
+
+
+
+
+
+
+
 
  
     });

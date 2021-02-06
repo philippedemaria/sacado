@@ -47,6 +47,41 @@ class Tool(models.Model):
 
 
 
+
+
+class Question(models.Model):
+    """
+    Modèle représentant un associé.
+    """
+
+
+    title         = models.TextField(max_length=255, default='',  blank=True, verbose_name="Réponse écrite")
+    calculator    = models.BooleanField(default=0, verbose_name="Calculatrice ?")
+    date_modified = models.DateTimeField(auto_now=True)
+    #### pour donner une date de remise - Tache     
+    qtype         = models.PositiveIntegerField(default=3, editable=False)
+
+    knowledge  = models.ForeignKey(Knowledge, related_name="question", blank=True, null = True,  on_delete=models.CASCADE) 
+
+    imagefile  = models.ImageField(upload_to=question_directory_path, blank=True, verbose_name="Image", default="")
+    is_publish = models.BooleanField(default=1, verbose_name="Publié ?")
+    is_radio   = models.BooleanField(default=0, verbose_name="Type de réponse ?")
+
+    is_correction = models.BooleanField(default=0, verbose_name="Correction ?")
+    duration      = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
+    point         = models.PositiveIntegerField(default=1000, blank=True, verbose_name="Point")
+
+ 
+    is_correct = models.BooleanField(default=1, verbose_name="Réponse correcte ?")
+    ranking    = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
+    students   = models.ManyToManyField(Student, blank=True, through="Questionplayer", related_name="question",   editable=False)
+
+    def __str__(self):
+        return self.title 
+
+
+
+
 class Choice(models.Model):
     """
     Modèle représentant un associé.
@@ -55,12 +90,9 @@ class Choice(models.Model):
     imageanswer = models.ImageField(upload_to=choice_directory_path,  null=True,  blank=True, verbose_name="Image", default="")
     answer      = models.TextField(max_length=255, default='', null=True,  blank=True, verbose_name="Réponse écrite")
     is_correct  = models.BooleanField(default=0, verbose_name="Réponse correcte ?")
-
+    question  = models.ForeignKey(Question, related_name="choice", blank=True, null = True,  on_delete=models.CASCADE)
     def __str__(self):
         return self.answer 
-
-
-
 
 
 class Quizz(ModelWithCode):
@@ -85,12 +117,13 @@ class Quizz(ModelWithCode):
     is_numeric   = models.BooleanField(default=0,   verbose_name="Type de réponse" )    # réponse sur papier ou sur smartphone
     is_mark      = models.BooleanField(default=0, verbose_name="Récupérer les notes ?") 
     is_lock      = models.BooleanField(default=0, verbose_name="Verrouiller ?") 
+    is_random    = models.BooleanField(default=0, verbose_name="Aléatoire ?") 
 
     interslide   = models.PositiveIntegerField(default=10, blank=True, verbose_name="Temps entre les questions")
- 
+
 
     groups       = models.ManyToManyField(Group, blank=True, related_name="quizz" , editable=False) 
- 
+    questions    = models.ManyToManyField(Question, blank=True, related_name="quizz" , editable=False)  
 
     def __str__(self):
         return self.title 
@@ -111,36 +144,6 @@ class Player(models.Model):
         unique_together = ('student', 'quizz')
 
 
-
-class Question(models.Model):
-    """
-    Modèle représentant un associé.
-    """
-    quizzes       = models.ManyToManyField(Quizz, blank=True, related_name="questions" , editable=False) 
-
-    title         = models.TextField(max_length=255, default='',  blank=True, verbose_name="Réponse écrite")
-    calculator    = models.BooleanField(default=0, verbose_name="Calculatrice ?")
-    date_modified = models.DateTimeField(auto_now=True)
-    #### pour donner une date de remise - Tache     
-    kind         = models.PositiveIntegerField(default=3, editable=False)
-
-    knowledge  = models.ForeignKey(Knowledge, related_name="question", blank=True, null = True,  on_delete=models.CASCADE) 
-
-    imagefile  = models.ImageField(upload_to=question_directory_path, blank=True, verbose_name="Image", default="")
-    is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
-    is_radio   = models.BooleanField(default=0, verbose_name="Type de réponse ?")
-
-    is_correction = models.BooleanField(default=0, verbose_name="Correction ?")
-    duration      = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
-    point         = models.PositiveIntegerField(default=1000, blank=True, verbose_name="Point")
-
-    choices    = models.ManyToManyField(Choice, blank=True, related_name="questions",  verbose_name="Réponse") 
-    is_correct = models.BooleanField(default=0, verbose_name="Réponse correcte ?")
-    ranking    = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
-    students   = models.ManyToManyField(Student, blank=True, through="Questionplayer", related_name="question",   editable=False)
-
-    def __str__(self):
-        return self.title 
 
 
 class Questionplayer(models.Model):

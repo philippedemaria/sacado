@@ -42,6 +42,14 @@
                     <td> {{ form.is_share|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
                 </tr>
                 <tr>
+                    <td class="no_border">{{ form.is_random.label_tag }}  <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                    <div class="helper_tip_text" >Génération de questions aléatoires selon la matière, le niveaux et les thèmes renseignés.</div>
+                                </span>  
+                    </td>
+                    <td>{{ form.is_random|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
+                    </td>
+                </tr>   
+                <tr>
                     <td class="no_border">{{ form.is_numeric.label_tag }}  <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
                                     <div class="helper_tip_text" >Papier si réponse sur feuille, Smartphone si réponse avec smartphone, mode jeu.</div>
                                 </span>  
@@ -49,7 +57,7 @@
                     <td>{{ form.is_numeric|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Smartphone"|attr:"data-off:Papier"|attr:"data-width:130" }}
                     </td>
                 </tr>                                
-                <tr>
+                <tr id="div_is_mark">
                     <td class="no_border">{{ form.is_mark.label_tag }} </td>
                     <td>{{ form.is_mark|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
                 </tr>
@@ -70,15 +78,15 @@
 
     <hr class="divider">
 
-    <p>Options facultatives mais fortement recommandé</p>
+    <label>Options facultatives mais fortement recommandé surtout pour la génération de questions aléatoires</label>
 
     <div class="row">
         <div class="col-sm-12 col-md-6">  
-            <label>Enseignement : <small>Factultatif</small></label>
+            <label>Enseignement :  </label>
             {{ form.subject|add_class:"form-control select2" }}
         </div>
         <div class="col-sm-12 col-md-6"> 
-            <label>Niveaux : <small>Factultatif</small></label>
+            <label>Niveaux : </label>
             {{ form.levels|add_class:"form-control select2" }}
         </div>
     </div>
@@ -87,7 +95,7 @@
         </div>
 
         <div class="col-sm-12 col-md-10"> 
-            <label>Thèmes : <small>Factultatif</small></label>
+            <label>Thèmes : </label>
             <select id="id_theme" name="theme" class="form-control select2" multiple>
             </select>
         </div>
