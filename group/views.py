@@ -549,7 +549,7 @@ def update_group(request, id):
 
 
 def delete_group(request, id):
-    group = Group.objects.get(id=id)
+    group = Group.objects.get(id=id, teacher_id=request.user.id)
     # Si le prof n'appartient pas à un établissement
     teacher = group.teacher
     authorizing_access_group(request,teacher,group )
