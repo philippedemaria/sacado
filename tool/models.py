@@ -54,7 +54,6 @@ class Question(models.Model):
     Modèle représentant un associé.
     """
 
-
     title         = models.TextField(max_length=255, default='',  blank=True, verbose_name="Réponse écrite")
     calculator    = models.BooleanField(default=0, verbose_name="Calculatrice ?")
     date_modified = models.DateTimeField(auto_now=True)

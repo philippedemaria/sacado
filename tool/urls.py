@@ -47,7 +47,9 @@ urlpatterns = [
 
     path('create_question/<int:id>', create_question, name='create_question'),
 
-    path('delete_question/<int:id>/<int:idquizz>', delete_question, name='delete_question'),
+    path('delete_question/<int:id>/<int:idq>', delete_question, name='delete_question'),
+
+    path('remove_question/<int:id>/<int:idq>', remove_question, name='remove_question'), # from a quizz
     path('show_question/<int:id>', show_question, name='show_question'), 
 
 
@@ -63,7 +65,7 @@ urlpatterns = [
     ############## Ajax
     path('get_this_tool', get_this_tool, name='get_this_tool'),
 
-
+    path('remove_slide/<int:id>/<int:idquizz>', remove_slide, name='remove_slide'), # from a quizz
  
     path('send_slide', send_slide, name='send_slide'), 
     path('slide_sorter', slide_sorter, name='slide_sorter'), 

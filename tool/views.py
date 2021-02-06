@@ -332,10 +332,23 @@ def update_question(request,id,idq):
 
  
 def delete_question(request,id,idq):
- 
+
     question = Question.objects.get(pk= id)
-    question.delete() 
+    if question.quizz.count() == 0 :
+        question.delete()
+    else :
+        messages.error(request, "  !!!  Cette question est utiolisée dans un quizz  !!! Suppression interdite.")
     return redirect ('create_question', idq, 0)
+
+ 
+def remove_question(request,id,idq):
+
+    quizz = Quizz.objects.get(pk = idq)
+    if quizz.teacher == request.user.teacher :
+        question = Question.objects.get(pk = id)
+        quizz.questions.remove(question)
+    return redirect ('create_question', idq, 0)
+
 
 
  
@@ -501,7 +514,8 @@ def show_diaporama(request,id):
 def delete_diaporama(request,id):
  
     diaporama = Diaporama.objects.get(pk= id)
-    diaporama.delete() 
+    if diaporama.teacher == request.user.teacher :
+        diaporama.delete() 
  
     return redirect ('list_diaporama')
 ############################################################################################################
@@ -525,13 +539,25 @@ def create_slide(request,id):
 
  
 def delete_slide(request,id,idp):
- 
+
     slide = Slide.objects.get(pk= id)
-    slide.delete() 
+    if slide.diapositive.count() == 0 :
+        slide.delete()
+    else :
+        messages.error(request, "  !!!  Cette question est utiolisée dans un quizz  !!! Suppression interdite.")
  
     return redirect ('create_slide', idp)
 
+
  
+def remove_slide(request,id,idq):
+
+    diaporama = Diaporama.objects.get(pk = idq)
+    if diaporama.teacher == request.user.teacher :
+        slide = Slide.objects.get(pk= id)
+        diaporama.slides.remove(question)
+    return redirect ('create_question', idq, 0)
+
 
  
 def update_slide(request,id,idp):

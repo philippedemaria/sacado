@@ -17,7 +17,7 @@
 
             <a href="{% url 'update_question' question.id quizz.id %}" class="delete_question" ><i class="fa fa-edit"></i></a> 
 
-            <a href="{% url 'delete_question' question.id quizz.id %}"  class="delete_question" onclick="return TestDelete('cette question')"><i class="fa fa-trash"></i></a>
+            <a href="{% url 'remove_question' question.id quizz.id %}"  class="delete_question" onclick="return TestDelete('cette question')"><i class="fa fa-trash"></i></a>
         </div>
         <div class="col-xs-10 col-md-30">
             {% if question.qtype == 1 %}
