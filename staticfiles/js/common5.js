@@ -62,7 +62,9 @@ requirejs.config({
         "admin": {
             deps: ['jquery']
         },
- 
+        "uploader": {
+            deps: ['jquery' ]
+        },
         "config_toggle": {
             deps: [ 'jquery', 'bootstrap','toggle']
         },
@@ -90,7 +92,7 @@ requirejs.config({
     }
 });
 
-require(['jquery', 'bootstrap', 'bootstrap_popover', 'bcPicker', 'mathjax', 'ckeditor',  'datatables', 'uploader', 'uploader',
+require(['jquery', 'bootstrap', 'bootstrap_popover', 'bcPicker', 'mathjax', 'ckeditor',  'datatables', 'uploader',   
     'config_select2', 'config_datepicker', 'config_toggle', 'config_colorpicker', 'fonctions_jquery', 'fonctions',   'config_datatable',
     'multiselect', 'ui', 'slimscroll', 'chart']);
 

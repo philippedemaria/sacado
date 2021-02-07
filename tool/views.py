@@ -236,6 +236,31 @@ def play_quizz_teacher(request,id):
     return render(request, 'tool/play_quizz_teacher.html', context)
 
 
+
+
+
+
+
+############################################################################################################
+############################################################################################################
+########## Question
+############################################################################################################
+############################################################################################################
+
+
+def create_quizz_random(request,id):
+ 
+    quizz = Quizz.objects.get(pk= id)
+    noq = request.POST.get('noq')
+    knowledge_ids = request.POST.getlist('knowledges') 
+    
+
+    return redirect("list_quizzes")
+
+
+
+ 
+
 ############################################################################################################
 ############################################################################################################
 ########## Question
@@ -254,24 +279,12 @@ def create_question(request,idq,qtype):
     quizz = Quizz.objects.get(pk = idq)
     questions = quizz.questions.order_by("ranking")
 
-    levels = quizz.levels.all()
-    themes = quizz.themes.all()
-    subject = quizz.subject
-    waitings , knowledges = [] ,  []
-    if len(levels) > 0 and len(themes) > 0  :
-        waitings = Waiting.objects.filter(theme__subject = subject , level__in=levels, theme__in=themes )
-        knowledges = Knowledge.objects.filter(theme__subject = subject ,level__in=levels, theme__in=themes )
-    elif len(levels) > 0 :
-        waitings = Waiting.objects.filter(theme__subject = subject ,level__in=levels)
-        knowledges = Knowledge.objects.filter(theme__subject = subject ,level__in=levels)
-    elif len(themes) > 0 :
-        waitings = Waiting.objects.filter(theme__subject = subject ,theme__in=themes)
-        knowledges = Knowledge.objects.filter(theme__subject = subject ,theme__in=themes)
+    form = QuestionForm(request.POST or None, request.FILES or None, quizz = quizz)
 
-    form = QuestionForm(request.POST or None, request.FILES or None)
-
-    form_ans = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct') , extra=4)
-
+    
+    if qtype > 2 :
+        formSet = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct') , extra=4)
+        form_ans = formSet(request.POST or None,  request.FILES or None)
     if request.method == "POST"  :
         print("create_question")  
         if form.is_valid():
@@ -282,8 +295,8 @@ def create_question(request,idq,qtype):
             form.save_m2m() 
             quizz.questions.add(nf)
             if qtype > 2 :
-                form_answers = form_ans(request.POST or None,  request.FILES or None, instance = nf)
-                for form_answer in form_answers :
+                form_ans = formSet(request.POST or None,  request.FILES or None, instance = nf)
+                for form_answer in form_ans :
                     if form_answer.is_valid():
                         form_answer.save()
 
@@ -291,7 +304,72 @@ def create_question(request,idq,qtype):
 
  
     bgcolors = ["bgcolorRed","bgcolorBlue","bgcolorOrange","bgcolorGreen"] 
-    context = { 'quizz': quizz, 'questions': questions,  'waitings': waitings, 'knowledges': knowledges, 'form' : form, 'qtype' : qtype  }
+    context = { 'quizz': quizz, 'questions': questions,  'form' : form, 'qtype' : qtype  }
+
+
+    if quizz.is_random :
+        knowledges = Knowledge.objects.filter(theme__subject=quizz.subject ,theme__in=quizz.themes.all() , level__in =quizz.levels.all())
+        context.update( {  'title_type_of_question' : "Questions aléatoires" , "knowledges" : knowledges  })
+        template = 'tool/quizz_random.html'
+ 
+    #Choix des questions
+    elif qtype == 0 :
+        context.update( {  'title_type_of_question' : "Choisir un type de question"   })
+        template = 'tool/choice_type_of_question.html'
+
+    #Vrai/Faux
+    elif qtype == 1 :
+        context.update( {   'title_type_of_question' : "Vrai / faux"   })
+        template = 'tool/question_vf.html'
+
+    #Réponse rédigée
+    elif qtype == 2 :
+        context.update( {    'title_type_of_question' : "Réponse rédigée"   })
+        template = 'tool/form_question.html'
+
+    #QCM ou QCS
+    elif qtype == 3 or qtype == 4  :
+ 
+        context.update( {  'bgcolors' : bgcolors  ,  'title_type_of_question' : "QCM" , 'form_ans' : form_ans   , 'question' : None  })
+        template = 'tool/question_qcm.html'
+
+
+    return render(request, template , context)
+
+
+
+
+ 
+def update_question(request,id,idq,qtype):
+ 
+    quizz = Quizz.objects.get(pk = idq)
+    questions = quizz.questions.order_by("ranking")
+
+    question = Question.objects.get(pk = id)
+    form = QuestionForm(request.POST or None, request.FILES or None, instance = question,  quizz = quizz)
+
+    
+    if qtype > 2 :
+        formSet = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct') , extra=0)
+        form_ans = formSet(request.POST or None,  request.FILES or None, instance = question)
+
+    if request.method == "POST"  :  
+        if form.is_valid():
+            nf         = form.save(commit=False) 
+            nf.teacher = request.user.teacher
+            nf.qtype   = qtype
+            nf.save()
+            form.save_m2m() 
+            if qtype > 2 :
+                for form_answer in form_ans :
+                    if form_answer.is_valid():
+                        form_answer.save()
+
+            return redirect('create_question' , idq,0)
+
+ 
+    bgcolors = ["bgcolorRed","bgcolorBlue","bgcolorOrange","bgcolorGreen"] 
+    context = { 'quizz': quizz, 'questions': questions,  'form' : form, 'qtype' : qtype  }
 
     #Choix des questions
     if qtype == 0 :
@@ -311,21 +389,11 @@ def create_question(request,idq,qtype):
     #QCM ou QCS
     elif qtype == 3 or qtype == 4  :
  
-        context.update( {  'bgcolors' : bgcolors  ,  'title_type_of_question' : "QCM" , 'form_ans' : form_ans    })
-        template = 'tool/question_qcm.html'
+        context.update( {  'bgcolors' : bgcolors  ,  'title_type_of_question' : "QCM" , 'form_ans' : form_ans , 'question' : question    })
+        template = 'tool/question_qcm.html' 
 
 
     return render(request, template , context)
-
-
-
-
- 
-def update_question(request,id,idq):
- 
-    question = Question.objects.get(pk= id)
-  
-    return redirect ('create_question', idq, 0)
 
 
 

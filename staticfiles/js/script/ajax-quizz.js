@@ -1,6 +1,8 @@
-define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($) {
+define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle'], function ($) {
     $(document).ready(function () {
  
+
+
     $("#loading").hide(500); 
     console.log(" ajax-quizz chargé ");
   // Affiche dans la modal la liste des élèves du groupe sélectionné
@@ -24,7 +26,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
                     success: function (data) {
 
                         themes = data["themes"];
-                        $('select[name=theme]').empty("");
+                        $('select[name=themes]').empty("");
                         if (themes.length >0)
 
                         { for (let i = 0; i < themes.length; i++) {
@@ -37,7 +39,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
                                         'value': Number(themes_id),
                                         'html': themes_name
                                     });
-                                    $('select[name=theme]').append(option);
+                                    $('select[name=themes]').append(option);
                                 }
                         }
                         else
@@ -46,7 +48,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
                                         'value': 0,
                                         'html': "Aucun contenu disponible"
                                     });
-                            $('select[name=theme]').append(option);
+                            $('select[name=themes]').append(option);
                         }
 
 
@@ -186,7 +188,6 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
         }
 
 
-
         $("#id_calculator").prop("checked", false);   
         $("#id_is_publish").prop("checked", true); 
 
@@ -213,7 +214,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
                         $('#check'+nb).removeClass("checked");
                         $('#check'+nb).css("display","none");
                         $('#noCheck'+nb).css("display","block");
-                        $("#id_choice-"+nb+"-is_correct").prop("checked", false);                         
+                        $("#id_choices-"+nb+"-is_correct").prop("checked", false);                         
 
                     } 
                 else 
@@ -221,7 +222,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
                         $('#check'+nb).addClass("checked");
                         $('#check'+nb).css("display","block");
                         $('#noCheck'+nb).css("display","none");
-                        $("#id_choice-"+nb+"-is_correct").prop("checked", true);                     
+                        $("#id_choices-"+nb+"-is_correct").prop("checked", true);                     
                     }
  
                 if (qtype==4 && $(".checked").length > 1 ) { 
@@ -229,7 +230,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
                     $('#check'+nb).removeClass("checked");
                     $('#check'+nb).css("display","none");
                     $('#noCheck'+nb).css("display","block");
-                    $("#id_choice-"+nb+"-is_correct").prop("checked", false);                         
+                    $("#id_choices-"+nb+"-is_correct").prop("checked", false);                         
                     return false;
                 }
             }
@@ -238,29 +239,29 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
         // Sélectionne la couleur de fond lorsque la réponse est écrite
         function change_bg_and_select( nb, classe ){
 
-            $('body').on('keyup', "#id_choice-"+nb+"-answer" , function (event) {   
+            $('body').on('keyup', "#id_choices-"+nb+"-answer" , function (event) {   
                 
-                    var comment =  $("#id_choice-"+nb+"-answer").val()  ;
+                    var comment =  $("#id_choices-"+nb+"-answer").val()  ;
 
                 if (  comment.length > 0   )
                 { 
                   $("#answer"+nb+"_div").addClass(classe) ; 
-                  $("#id_choice-"+nb+"-answer").css("color","white") ;
+                  $("#id_choices-"+nb+"-answer").css("color","white") ;
                 }
                 else
                 {
                    $("#answer"+nb+"_div").removeClass(classe) ; 
-                  $("#id_choice-"+nb+"-answer").css("color","#666") ;
+                  $("#id_choices-"+nb+"-answer").css("color","#666") ;
                 }
              });
         }
 
-       change_bg_and_select( 0,  "bgcolorRed" );
-       change_bg_and_select( 1,  "bgcolorBlue" );
-       change_bg_and_select( 2,  "bgcolorOrange" );
-       change_bg_and_select( 3,  "bgcolorGreen" );
+ 
 
-
+           var arr = [ "bgcolorRed","bgcolorBlue","bgcolorOrange","bgcolorGreen"];  
+            $.each(arr , function (index, value){  
+                change_bg_and_select( index,  value );
+            });
 
  
        // Trie des diapositives
@@ -301,19 +302,19 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
 
 
         // Chargement d'une image dans la réponse possible.
-        $('body').on('change', '#id_choice-0-imageanswer' , function (event) {  
+        $('body').on('change', '#id_choices-0-imageanswer' , function (event) {  
             previewFile(0,"bgcolorRed") ;
          });
 
-        $('body').on('change', '#id_choice-1-imageanswer' , function (event) {   
+        $('body').on('change', '#id_choices-1-imageanswer' , function (event) {   
             previewFile(1,"bgcolorBlue") ;
          });
  
-        $('body').on('change', '#id_choice-2-imageanswer' , function (event) {   
+        $('body').on('change', '#id_choices-2-imageanswer' , function (event) {   
             previewFile(2,"bgcolorOrange") ;
          });
  
-        $('body').on('change', '#id_choice-3-imageanswer' , function (event) {   
+        $('body').on('change', '#id_choices-3-imageanswer' , function (event) {   
             previewFile(3,"bgcolorGreen") ;
          });      
 
@@ -321,13 +322,13 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
         function previewFile(nb,classe) {
 
             const preview = $('#preview'+nb);
-            const file = $('#id_choice-'+nb+'-imageanswer')[0].files[0];
+            const file = $('#id_choices-'+nb+'-imageanswer')[0].files[0];
             const reader = new FileReader();
 
 
             $("#preview"+nb).val("") ;  
             $("#answer"+nb+"_div").addClass(classe) ;
-            $("#id_choice-"+nb+"-answer").addClass("preview") ;
+            $("#id_choices-"+nb+"-answer").addClass("preview") ;
             $("#preview"+nb).removeClass("preview") ; 
             $("#delete_img"+nb).removeClass("preview") ; 
 
@@ -365,21 +366,12 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader'], function ($)
 
                 $("#preview"+nb).attr("src", "" );
                 $("#answer"+nb+"_div").removeClass(classe) ;
-                $("#id_choice-"+nb+"-answer").removeClass("preview") ;
+                $("#id_choices-"+nb+"-answer").removeClass("preview") ;
                 $("#preview"+nb).addClass("preview") ; 
                 $("#delete_img"+nb).addClass("preview") ;      
           }
 
-
-
-
-
-
-
-
-
-
-
+ 
 
 
  

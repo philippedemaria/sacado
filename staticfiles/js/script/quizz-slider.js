@@ -4,8 +4,8 @@ define(['jquery',  'bootstrap' ], function ($) {
  
         console.log(" ajax-slider chargé ");
 
-
-
+ 
+ 
 
         var slideBox = $('.slider ul'),
             slideWidth = 1000 ,
@@ -24,6 +24,7 @@ define(['jquery',  'bootstrap' ], function ($) {
             })
             this_question = parseInt( (currentSlideInput+1)/2)-1 ;
 
+            $(".this_question").addClass("btn-default").removeClass("btn-primary") ;
             $("#question"+this_question).removeClass("btn-default").addClass("btn-primary") ;
         }
 

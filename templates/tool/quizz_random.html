@@ -1,0 +1,90 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+ 
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    <script>
+        require(['script/quizz-random']);
+    </script> 
+{% endblock %}
+
+
+
+{% block page_title %}
+        <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> </a>  Les quizz <img src="{% static 'img/angle-right.png' %}"/>  {{ title_type_of_question }}
+{% endblock %}
+
+{% block page_menu_right %}
+
+    <a href="{% url 'list_quizzes' %}" class="btn btn-new pull-right" >  Mes quizz </a> 
+    <a href="{% url 'show_quizz' quizz.id %}" target="_blank" class="btn btn-new pull-right">Lire le quizz</a>
+{% endblock %}
+ 
+
+
+
+{% block body %}
+<section class="content_list"> 
+    <form action="{% url 'create_quizz_random' quizz.id %}" method="POST" id="question_form"  enctype='multipart/form-data' >
+    {% csrf_token %}    
+    <div class="row">
+        <div class="col-sm-12 col-md-2">
+            <div class="form-group">
+                <h3>{{ quizz.subject}}  </h3> 
+            </div>
+             <div class="form-group">
+                {% for l in quizz.levels.all %} <li class="sanspuce">{{ l.name }}</li> {% endfor %}   
+            </div>
+             <div class="form-group">
+                {% for t in quizz.themes.all %} <li class="sanspuce">{{ t.name }}</li> {% endfor %}   
+            </div>
+            <div class="form-group">
+                <label>Nombre de questions souhaitées</label>
+                <input type="number" name="noq" min=0 step=1  class="form-control" value=5  />
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-10" >  
+            <div class="row" >
+                <div class="col-sm-12 col-md-12" > 
+                    <div class="form-group">
+                        <p>Choisir les attendus et/ou savoir faire des questions</p>
+                        {%  regroup knowledges by waiting as waiting_list %}
+                        <table class="table  table-hover display1000" style="width:100%">
+                            <thead>
+                                <tr><td></td></tr>
+                            </thead>
+                            <tbody> 
+                                {% for waiting in  waiting_list %}
+                                    <tr style="background:#aa98cd; cursor: pointer" class="opener out">
+                                        <td><label><input type="checkbox" id="id_waiting{{ waiting.grouper.id }}" class="selector_w"   data-id="{{ waiting.grouper.id }}" /> {{ waiting.grouper.name }} </label></td>
+                                    </tr>
+                                    {% for knowledge in  waiting.list  %}   
+                                        <tr style="cursor: pointer" class="open w{{  waiting.grouper.id  }}"  id="{{ knowledge.name.id}}">
+                                            <td> 
+                                                <label><input type="checkbox" id="id_knowledge{{knowledge.id}}"  class="open kw{{  waiting.grouper.id  }}"  name="knowledges" value="{{ knowledge.id }}"/> {{ knowledge.name }} </label>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row" >
+                <div class="col-sm-12 col-md-12" > 
+                    <div class="form-group">                                
+                        <input value="Générer les questions" type="submit" class="btn btn-primary  btn-lg" id="click_button" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</section>
+{% endblock %} 

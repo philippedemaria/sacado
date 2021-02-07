@@ -127,12 +127,26 @@
                     {% endif %}
 
                     <hr/> 
+
+                    {% if question.qtype == 1 %}   
+ 
+                            <div class="col-sm-12 col-md-6 bgcolorBlue white" style="border-radius : 10px ">
+                                <h1>VRAI </h1>  
+                            </div> 
+ 
+                            <div class="col-sm-12 col-md-6 bgcolorRed white" style="border-radius : 10px ">
+                                <h1>FAUX </h1>  
+                            </div> 
+                    {% endif %}
+
+
+
                     {% if question.qtype > 2 %}   
                          
                         {% for choice in question.choices.all %}
                             {% cycle 'bgcolorRed' 'bgcolorBlue' 'bgcolorOrange' 'bgcolorGreen' as rowcolor silent %} 
                             {% cycle 'A' 'B' 'C' 'D'  as choice_letter silent %}
-                            <div class="col-sm-12 col-md-6" style="padding-right: 20px;margin-bottom: 20px;font-size:1.2em; border : 1px solid #CCC; border-radius : 10px ">
+                            <div class="col-sm-12 col-md-6" style="padding-right: 20px;margin-bottom: 20px;font-size:1.2em; border : 1px solid #F0F0F0; border-radius : 10px ">
                                 <div class="row" >
                                     <div class="col-sm-2 col-md-1 {{ rowcolor }} get_image" style="padding-top: 20px;color:#FFF; padding-left:10px; border-radius : 10px 0px 0px 10px"> 
                                         <b>{{ choice_letter }} </b>    

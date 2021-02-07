@@ -44,6 +44,26 @@ class QuestionForm(forms.ModelForm):
             'is_correct' : CheckboxInput(),   
         }
 
+
+	def __init__(self, *args, **kwargs):
+		quizz = kwargs.pop('quizz')
+		super(QuestionForm, self).__init__(*args, **kwargs)
+
+		levels = quizz.levels.all()
+		themes = quizz.themes.all()
+		subject = quizz.subject
+		knowledges = []
+		if len(levels) > 0 and len(themes) > 0  :
+			knowledges = Knowledge.objects.filter(theme__subject = subject ,level__in=levels, theme__in=themes )
+		elif len(levels) > 0 :
+			knowledges = Knowledge.objects.filter(theme__subject = subject ,level__in=levels)
+		elif len(themes) > 0 :
+			knowledges = Knowledge.objects.filter(theme__subject = subject ,theme__in=themes)
+
+		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges, required=False)
+
+
+
 	def clean_content(self):
 		content = self.cleaned_data['imagefile']
 		validation_file(content)  

@@ -46,9 +46,6 @@ class Tool(models.Model):
 
 
 
-
-
-
 class Question(models.Model):
     """
     Modèle représentant un associé.

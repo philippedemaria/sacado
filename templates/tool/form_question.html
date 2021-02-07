@@ -6,10 +6,20 @@
 
 
 {% block require %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% if question %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common5.js' %}"></script>
     <script>
+        require(['script/ajax-quizz-update']);
         require(['script/ajax-quizz']);
     </script> 
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    <script>
+        require(['script/ajax-quizz-complement']);
+        require(['script/ajax-quizz']);
+    </script> 
+    {% endif %}
+ 
 {% endblock %}
  
 
@@ -45,10 +55,10 @@
                         <h3>{{ quizz.subject}}  </h3> 
                     </div>
                      <div class="form-group">
-                        {% for l in quizz.levels.all %} <li class="sanspuce">{{ l }}</li> {% endfor %}   
+                        {% for l in quizz.levels.all %} <li class="sanspuce">{{ l.name }}</li> {% endfor %}   
                     </div>
                      <div class="form-group">
-                        {% for t in quizz.themes.all %} <li class="sanspuce">{{ t }}</li> {% endfor %}   
+                        {% for t in quizz.themes.all %} <li class="sanspuce">{{ t.name }}</li> {% endfor %}   
                     </div>
 
                 {% else  %}
@@ -120,9 +130,20 @@
                         {% block type_of_choices %}    
 
                         {% endblock %}
+                        {% if qtype > 0 %}
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">  
+                                    <label>Savoir ciblé <small>(<em>déduits de la matière, du niveau et du thème renseignés lors de la crétion du quizz</em>)</small></label>                          
+                                    {{ form.knowledge|add_class:"form-control select2"  }} 
+                                </div>                            
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
 
                     {% if qtype > 0 %}
+
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">                            

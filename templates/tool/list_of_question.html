@@ -15,7 +15,7 @@
     <div class="row"> 
         <div class="col-xs-2 col-md-2" class="delete_question_div"><hr style="border-color: transparent"/>
 
-            <a href="{% url 'update_question' question.id quizz.id %}" class="delete_question" ><i class="fa fa-edit"></i></a> 
+            <a href="{% url 'update_question' question.id quizz.id question.qtype %}" class="delete_question" ><i class="fa fa-edit"></i></a> 
 
             <a href="{% url 'remove_question' question.id quizz.id %}"  class="delete_question" onclick="return TestDelete('cette question')"><i class="fa fa-trash"></i></a>
         </div>
