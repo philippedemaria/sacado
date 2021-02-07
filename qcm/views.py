@@ -5055,7 +5055,7 @@ def json_create_remediation(request,idr,idp,typ):
 @csrf_exempt  
 def json_delete_remediation(request,id,idp,typ):
 
-    parcours = Parcours.Objects.get(pk=idp) 
+    parcours = Parcours.objects.get(pk=idp) 
 
     if parcours.teacher == request.user.teacher :
         if typ == 0 :
