@@ -5053,15 +5053,18 @@ def json_create_remediation(request,idr,idp,typ):
 
 
 @csrf_exempt  
-def json_delete_remediation(request, id,typ):
+def json_delete_remediation(request,id,idp,typ):
 
-    if typ == 0 :
-        remediation = Remediation.objects.get(id=id)
-    else :
-        remediation = Remediationcustom.objects.get(id=id)
-    remediation.delete()
+    parcours = Parcours.Objects.get(pk=idp) 
 
-    return redirect( 'show_parcours', remediation.relationship.parcours.id )
+    if parcours.teacher == request.user.teacher :
+        if typ == 0 :
+            remediation = Remediation.objects.get(id=id)
+        else :
+            remediation = Remediationcustom.objects.get(id=id)  
+        remediation.delete()
+
+    return redirect( 'show_parcours', idp )
 
  
 
