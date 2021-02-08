@@ -53,8 +53,8 @@ $('table.display1000').DataTable({
                 "pageLength": 1000,
                 "ordering": false,
                 "retrieve": true,
-                "paging": false
-                "info":     false
+                "paging": false,
+                "info":  false
                 });
 
 
