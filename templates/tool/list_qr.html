@@ -1,0 +1,98 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script>
+        require(['script/ajax-list-associations']);
+    </script> 
+{% endblock %} 
+
+  
+{% block page_title %}
+    <img src="{% static 'img/ggb.png' %}" width="25px"> Les questions aléatoires  <img width="25px" src="{% static 'img/angle-right.png' %}"/> {{ level.name }}
+{% endblock %}
+
+{% block page_menu_right %}
+ 
+
+{% endblock %}
+
+
+{% block body %}
+<section class="content_container">  
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <form action="" method="POST" enctype='multipart/form-data'> 
+            {% csrf_token %}
+                <table class="table  table-hover standard_tab_1000" style="width:100%">
+                    <thead> 
+                        <tr>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </thead> 
+                    <tbody>
+                        {% for theme in data.themes  %} 
+                            <tr style="background:#5d4391; color:#FFF">
+                                <td>{{theme.name}}</td>                             
+                                <td></td>
+                            </tr>   
+                            {% for waiting in theme.waitings  %} 
+                                <tr style="background:#8c73bf; color:#FFF"> 
+                                    <td>{{ waiting.name.name|capfirst }}</td>
+                                    <td></td>
+                                </tr>
+                                {% for knowledge in waiting.knowledges   %} 
+                                    <tr style="background:#d4cbe7">
+                                        <td>{{ knowledge.name }}</td>
+                                        <td>
+                                            <a href="{% url 'create_qrandom_admin' knowledge.name.id %}"><i class="fa fa-plus"></i></a>
+                                        </td>
+                                    </tr> 
+ 
+
+                                    {% for qr in  knowledge.qrandoms    %} 
+                                        <tr>
+                                            <td><a href="{% url 'update_qrandom_admin' knowledge.name.id qr.id %}">{{ qr.texte|safe }}</a> 
+                                                <small><label>Variables aléatoires :</label>{% for v in qr.variables.all %} 
+                                                     {{ v.name }}
+                                                    {% if v.variable_img.all|length > 0 %}
+                                                        {% for vv in v.variable_img.all %}
+                                                            <img src="{{ vv.image.url}}" width="70px"/>
+                                                        {% endfor %}
+                                                    {% elif v.words  %} 
+                                                        {{ v.words }}
+                                                    {% else %} 
+                                                        {% if v.is_integer %}
+                                                            $ \in \mathbb{N} $,
+                                                        {% else %}
+                                                            $\not \in \mathbb{N}$, 
+                                                        {% endif %}
+                                                        $\in [{{ v.minimum }};{{v.maximum }}]$ 
+                                                    {% endif %} 
+                                                    </small>
+                                                {% endfor %}
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'show_qrandom_admin' qr.id  %}"><i class="fa fa-eye"></i></a>                                                
+                                                <a href="{% url 'delete_qrandom' qr.id %}" onclick="return TestDelete('cette question')"><i class="fa fa-trash text-danger"></i></a>
+                                            </td>
+                                        </tr> 
+                                    {% endfor %}  
+                                {% endfor %}    
+                            {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

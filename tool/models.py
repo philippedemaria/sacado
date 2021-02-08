@@ -7,6 +7,8 @@ from account.models import Student, Teacher, ModelWithCode , User
 from django.apps import apps
 from django.utils import   timezone
 from django.db.models import Q
+from random import uniform , randint
+from sacado.settings import MEDIA_ROOT
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
@@ -23,7 +25,8 @@ def quizz_directory_path(instance, filename):
 def tool_directory_path(instance, filename):
     return "tool/asso/{}".format( filename)
 
-
+def variable_directory_path(instance, filename):
+    return "tool/variable_qr/{}".format(filename)
 
 class Tool(models.Model):
     """
@@ -42,6 +45,69 @@ class Tool(models.Model):
 
     def __str__(self):
         return self.title 
+
+
+
+class Qrandom(models.Model):
+    title      = models.CharField(max_length=50,  blank=True, verbose_name="Titre")
+    texte      = RichTextUploadingField(  blank=True, verbose_name="Enoncé")
+    knowledge  = models.ForeignKey(Knowledge, related_name="qrandom", blank=True, null = True,  on_delete=models.CASCADE) 
+    is_publish = models.BooleanField(default=1, verbose_name="Publié ?")
+    teacher   = models.ForeignKey(Teacher, related_name = "qrandom", blank=True,   editable=False ,  on_delete=models.CASCADE) 
+    def __str__(self):
+        return self.title
+
+
+    def instruction(self):
+
+        var_dict = {}
+        for v in self.variables.all():
+            if v.variable_img.count() > 0 :
+                vi_tab = list(v.variable_img.all())
+                n_aleatoire = random.randint(0,len(vi_tab)-1)
+                variable = "<img src='"+MEDIA_ROOT+"/"+vi_tab[n_aleatoire]+"' width='400px'/>"
+
+            elif v.words :  
+                word_tab = v.words.split(";")
+                n_aleatoire = random.randint(0,len(word_tab)-1)
+                variable =  word_tab[n_aleatoire]
+            else :
+                if v.is_integer :
+                    variable = randint(v.minimum,v.maximum)
+                else :
+                    variable = uniforme(v.minimum,v.maximum)
+            var_dict[v.name] = variable
+
+        txt = self.texte
+        for key,value in var_dict.items() :
+            txt = txt.replace("__"+str(key)+"__",str(value))
+
+        return txt
+
+            
+
+class Variable(models.Model):
+
+    name  = models.CharField(max_length=50,  blank=True, verbose_name="variable")
+    qrandom  = models.ForeignKey(Qrandom, related_name="variables", blank=True, null = True,  on_delete=models.CASCADE)
+    ## Variable numérique
+    is_integer = models.BooleanField(default=1, verbose_name="Valeur entière ?")        
+    maximum = models.IntegerField(default=10)
+    minimum = models.IntegerField(default=0)
+    ## Variable littérale
+    words  = models.CharField(max_length=255,  blank=True, verbose_name="Liste de valeurs")
+
+    def __str__(self):
+        return self.name 
+
+
+class VariableImage(models.Model):
+
+    variable  = models.ForeignKey(Variable, related_name="variable_img", blank=True, null = True,  on_delete=models.CASCADE)
+    image  = models.ImageField(upload_to=variable_directory_path,   verbose_name="Image", default="")
+
+    def __str__(self):
+        return self.variable.name 
 
 
 
@@ -110,7 +176,7 @@ class Quizz(ModelWithCode):
 
     is_questions = models.BooleanField(default=0, editable=False )  # presentation ou questionnaire
     is_numeric   = models.BooleanField(default=0,   verbose_name="Type de réponse" )    # réponse sur papier ou sur smartphone
-    is_mark      = models.BooleanField(default=0, verbose_name="Récupérer les notes ?") 
+    is_mark      = models.BooleanField(default=0, verbose_name="Récupérer les réponses ?") 
     is_lock      = models.BooleanField(default=0, verbose_name="Verrouiller ?") 
     is_random    = models.BooleanField(default=0, verbose_name="Aléatoire ?") 
 
@@ -119,7 +185,8 @@ class Quizz(ModelWithCode):
 
     groups       = models.ManyToManyField(Group, blank=True, related_name="quizz" , editable=False) 
     questions    = models.ManyToManyField(Question, blank=True, related_name="quizz" , editable=False)  
-
+    qrandoms    = models.ManyToManyField(Qrandom, blank=True, related_name="quizz" , editable=False)  
+    
     def __str__(self):
         return self.title 
 

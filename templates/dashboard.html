@@ -405,20 +405,24 @@
  
     {% for level in levels %}
         <div class="row" style="font-size: 12px">
-            <div class="col-lg-7 col-xs-7">
-                {{ level.shortname }} <a href="{% url 'admin_supportfiles' level.id  %}">Fichiers support</a>  
+            <div class="col-lg-3 col-xs-3">
+                <small>{{ level.shortname }} </small> 
+            </div>           
+            <div class="col-lg-4 col-xs-4">
+                <img src="{% static 'img/ggb.png' %}" width="15px"> <a href="{% url 'admin_supportfiles' level.id  %}">Support</a>  
             </div>  
-            <div class="col-lg-5 col-xs-5"> 
-                    <img src="{% static 'img/ggb.png' %}" width="15px"> <a href="{% url 'admin_associations'  level.id  %}">Exercices   </a> 
-            </div>      
+            <div class="col-lg-3 col-xs-3"> 
+                <a href="{% url 'admin_associations'  level.id  %}">Exercices   </a> 
+            </div> 
+            <div class="col-lg-1 col-xs-1"> 
+                 <a href="{% url 'admin_qrandom'  level.id  %}">QA   </a> 
+            </div> 
         </div>
     {% endfor %} 
     <hr class="divider">
-
- 
     <div class="row">
         <div class="col-lg-12 col-xs-12">
-            <a href="{% url 'admin_testeur' %}">Reporting et tests</a>
+            <small><a href="{% url 'admin_testeur' %}">Reporting et tests</a></small>
         </div>
     </div>
     <hr class="divider">
@@ -505,8 +509,17 @@
 
         <h2 class="thin">Création </h2>
  
-        <hr>
+        <hr class="divider">
+
  
+        <div class="row">
+            <div class="col-lg-12 col-xs-12">
+                <a href="{% url 'create_qrandom' %}">Questions aléatoires</a>
+            </div>
+        </div>
+        <hr class="divider">
+
+
         {% for level in levels %}
             <div class="row" style="font-size: 12px">
                 <div class="col-lg-7 col-xs-7">

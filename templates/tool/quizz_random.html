@@ -66,7 +66,11 @@
                                     {% for knowledge in  waiting.list  %}   
                                         <tr style="cursor: pointer" class="open w{{  waiting.grouper.id  }}"  id="{{ knowledge.name.id}}">
                                             <td> 
-                                                <label><input type="checkbox" id="id_knowledge{{knowledge.id}}"  class="open kw{{  waiting.grouper.id  }}"  name="knowledges" value="{{ knowledge.id }}"/> {{ knowledge.name }} </label>
+                                                <label>
+                                                    <input type="checkbox" id="id_knowledge{{knowledge.id}}"  class="open kw{{  waiting.grouper.id  }}"  name="knowledges" value="{{ knowledge.id }}"/> 
+                                                    {{ knowledge.name }} <small><b>[{{ knowledge.qrandom.count }} quest. aléa.]</b></small>
+
+                                                </label>
                                             </td>
                                         </tr>
                                     {% endfor %}

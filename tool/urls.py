@@ -56,7 +56,10 @@ urlpatterns = [
 
  
     path('ajax_chargeknowledges', ajax_chargeknowledges, name='ajax_chargeknowledges'),
- 
+    path('ajax_chargewaitings', ajax_chargewaitings, name='ajax_chargewaitings'),
+
+
+
     path('question_sorter', question_sorter, name='question_sorter'), 
 
 
@@ -73,10 +76,14 @@ urlpatterns = [
     path('create_quizz_random/<int:id>', create_quizz_random, name='create_quizz_random'),
 
 
- 
+    path('list_qrandom', list_qrandom, name='list_qrandom'),
+    path('create_qrandom', create_qrandom, name='create_qrandom'),
+    path('update_qrandom/<int:id>', update_qrandom, name='update_qrandom'),
+    path('delete_qrandom/<int:id>', delete_qrandom, name='delete_qrandom'),
 
-
-
-
+    path('admin_qrandom/<int:id_level>', admin_qrandom, name='admin_qrandom'),
+    path('create_qrandom_admin/<int:id_knowledge>/new', create_qrandom_admin, name='create_qrandom_admin'),
+    path('update_qrandom_admin/<int:id_knowledge>/<int:id>', update_qrandom_admin, name='update_qrandom_admin'),
+    path('show_qrandom_admin/<int:id>', show_qrandom_admin, name='show_qrandom_admin'),
+    path('show_quizz_random/<int:id>', show_quizz_random, name='show_quizz_random'), 
 ]
- 

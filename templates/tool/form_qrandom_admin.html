@@ -1,0 +1,222 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+{% block require %}
+
+    {% if qrandom %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common5.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    {% endif %}
+
+     <script>
+        require(['script/ajax-qrandom']);
+    </script> 
+ 
+{% endblock %}
+ 
+
+{% block page_title %}
+ <small> <a href="{% url 'admin_qrandom' knowledge.level.id  %}">Q Aléatoire</a> <img width="25px" src="{% static 'img/angle-right.png' %}"/> {{ knowledge.level.name }}  <img width="25px" src="{% static 'img/angle-right.png' %}"/>{{ knowledge.theme.name }} <img width="25px" src="{% static 'img/angle-right.png' %}"/> {{ knowledge.name }} </small>
+{% endblock %}
+
+
+{% block page_menu_right %}
+
+{% endblock %}
+
+
+
+{% block body %}
+
+<section class="content_list"> 
+    <form action="#" method="POST" enctype='multipart/form-data' >
+    <input type="hidden" name="knowledge" value="{{ knowledge.id }}">
+    {% csrf_token %}    
+        <div class="col-sm-12 col-md-6" >  
+                <div class="row">
+                    <div class="col-sm-10 col-md-9 col-lg-9">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label>Titre</label>
+                                {{ form.title|add_class:"form-control"  }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-md-3 col-lg-3">
+                        <div class="form-group">
+                            <label>Publiée ?</label><br/>
+                            {{ form.is_publish|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label>Enoncé</label>
+                    {{ form.texte|add_class:"form-control"  }}
+                </div>
+                {% block body_socle %}
+ 
+                {% endblock %} 
+                <div class="row" style="margin-top:20px">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">                            
+                            <input value="Enregistrer" type="submit" class="btn btn-primary"  />
+                            <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                        </div>                            
+                    </div>
+                </div>
+        </div>
+        <div class="col-sm-12 col-md-6" >
+            <h4>Mes variables aléatoires</h4> 
+            <p class="alert alert-danger">Les variables aléatoires doivent être encadrées par __ (2 tirets du bas)  dans le texte. <br/>Exemple, la variable a est appelée par __a__.</p>
+            {{ form_var.management_form }} 
+
+
+            <script id="imageToClone" type="text/template">
+                <div class="row" id="duplicateImage">
+                    <div class="col-sm-1 col-md-1" >
+                        <div class="form-group">
+                        </div>
+                    </div>
+                    <div class="col-sm-9 col-md-8" > 
+                        <div class="form-group">
+                             <input type="file" name="images-__var__"  id="id_images-__var__-__nbr__"  accept="image/*" class="images btn btn-default" />
+                        </div>
+                    </div>
+                    <div class="col-sm-1 col-md-1" > 
+                        <div class="form-group">
+                           <div class="delete_button_image" id="id_delete_button_image"></div>
+                        </div>
+                    </div>
+                </div>
+            </script>  
+
+ 
+
+            <script id="rowToClone" type="text/template">
+                <div id="duplicate" class="qrandom">  
+                    <div class="row" >
+                        <div class="col-sm-3 col-md-3" > 
+                            <div class="form-group">
+                                <label>Nom : </label> {{ form_var.empty_form.name|add_class:"form-control" }} 
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-md-3" > 
+                            <div class="form-group">
+                                <label>Nombre entier ?</label> <br/>
+                                {{ form_var.empty_form.is_integer|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }} 
+                            </div> 
+                        </div>
+                        <div class="col-sm-3 col-md-2" > 
+                                <div class="form-group">
+                                    <label>Min.</label> 
+                                    {{ form_var.empty_form.minimum|add_class:"form-control" }} 
+                                </div> 
+                        </div>
+                        <div class="col-sm-3 col-md-2" > 
+                            <div class="form-group">
+                                <label>Max.</label> 
+                                {{ form_var.empty_form.maximum|add_class:"form-control" }} 
+                            </div> 
+                        </div>
+                        <div class="col-sm-3 col-md-2">
+                            <div class="form-group" > <br/>
+                               <div class="delete_button"></div>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="hidden" value="0" id="id_images-TOTAL__prefix__"  name="images-TOTAL__prefix__" >
+                        <div class="col-sm-1 col-md-1" align="right">
+                            <div class="form-group"><br/>
+                                <a href="#"  class="btn btn-info add_more_image" >+ <i class="fa fa-image"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-sm-11 col-md-11" >
+                            <div class="form-group">
+                                <label>Liste de mots séparés par des ; </label>  <br/> 
+                                {{ form_var.empty_form.words|add_class:"form-control" }} 
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="row" id="cloningZone">                            
+ 
+                    </div>
+                </div>
+            </script>                            
+            <div id="formsetZone">
+                {% for form in form_var %}
+                <div id="duplicate0" class="qrandom">  
+                    <div class="row" >
+                        <div class="col-sm-3 col-md-3" > 
+                            <div class="form-group">
+                                <label>Nom : </label> {{ form.name|add_class:"form-control" }} 
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-md-3" > 
+                            <div class="form-group">
+                                <label>Nombre entier ?</label> <br/>
+                                {{ form.is_integer|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }} 
+                            </div> 
+                        </div>
+                        <div class="col-sm-3 col-md-2" > 
+                                <div class="form-group">
+                                    <label>Min.</label> 
+                                    {{ form.minimum|add_class:"form-control" }} 
+                                </div> 
+                        </div>
+                        <div class="col-sm-3 col-md-2" > 
+                            <div class="form-group">
+                                <label>Max.</label> 
+                                {{ form.maximum|add_class:"form-control" }} 
+                            </div> 
+                        </div>
+                        <div class="col-sm-3 col-md-2">
+                            <div class="form-group" > <br/>
+                               <div class="delete_button"></div>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-1 col-md-1" >
+                            <div class="form-group"><br/>
+                                <a href="#"  class="btn btn-info add_more_image" >+ <i class="fa fa-image"></i></a>
+                            </div>
+                        </div>                        
+                        <div class="col-sm-11 col-md-11" >
+                            <div class="form-group">
+                                <label>Liste de mots séparés par des ; </label>  <br/> 
+                                {{ form.words|add_class:"form-control" }} 
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row" id="cloningZone0">                            
+                        <input type="hidden" value="0" id="id_images-TOTAL0" >
+                    </div>
+                </div>
+                {% endfor %}   
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-md-6 controls">
+                    <a href="#" id="new_item" class="btn btn-info add_more" >+  variable</a>
+                </div>
+            </div>
+
+        </div>            
+
+
+
+
+ 
+ 
+    </form>
+</section>
+ 
+{% endblock %} 

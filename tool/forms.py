@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from .models import Tool , Question  , Choice  , Quizz , Diaporama , Slide
+from .models import Tool , Question  , Choice  , Quizz , Diaporama , Slide , Qrandom ,Variable 
 from account.models import Student , Teacher
 from socle.models import Knowledge, Skill
 from group.models import Group
@@ -131,5 +131,30 @@ class SlideForm(forms.ModelForm):
 	class Meta:
 		model = Slide
 		fields = '__all__'
+ 
+
+
+ 
+
+class QrandomForm(forms.ModelForm):
+ 
+	class Meta:
+		model = Qrandom
+		fields = '__all__'
+
+
+	def clean_content(self):
+		content = self.cleaned_data['imagefile']
+		validation_file(content) 
+ 
+
+
+class VariableForm(forms.ModelForm):
+
+	class Meta:
+		model = Variable
+		fields = '__all__'
+
+
  
  

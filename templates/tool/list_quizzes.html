@@ -17,7 +17,7 @@
 
 
 {% block page_title %}
-        <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> </a> Les quizz
+        <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> Les quizz</a> 
 {% endblock %}
 
 {% block page_menu_right %}
@@ -46,7 +46,18 @@
                     {% for quizz in quizzes %}
                         <tr>
                             <td style="line-height: 200px">
-                               <a href="{% url 'update_quizz' quizz.id  %}"> {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="200px" />{% endif %}{{ quizz.title }}</a> 
+                               <a href="{% url 'update_quizz' quizz.id  %}"> {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="200px" />{% endif %}{{ quizz.title }}</a>
+                               {% if quizz.is_random %}
+
+                                <span class="helper_tip"  style="line-height: 30px"> <i class="fa fa-random" style="font-size:12px"></i> 
+                                    <div class="helper_tip_text" >Questions aléatoires </div>
+                                </span> 
+                               {% endif %}
+
+
+
+
+
                             </td>
                             <td style="line-height: 200px; font-size:30px">
                                  {{ quizz.code }}  
@@ -55,12 +66,25 @@
                                 {% for g in quizz.groups.all %} {{ g }} {% if not forloop.last %}, {% endif %} {% endfor %}
                             </td>
                             <td > 
-                                <div class="quizz_action"><a href="{% url 'create_question'  quizz.id 0 %}" ><i class="fa fa-plus"></i> Ajouter des questions</a> </div>  
-
+                                <div class="quizz_action"><a href="{% url 'create_question'  quizz.id 0 %}" ><i class="fa fa-plus"></i> Ajouter des questions</a> 
+                                    <small>
+                                        {% if quizz.is_random %}
+                                        {{ quizz.qrandoms.count }}
+                                        {% else %}
+                                        {{ quizz.questions.count }}
+                                        {% endif  %} en cours
+                                    </small> 
+                                </div>  
+                                {% if quizz.qrandoms.count > 0 or quizz.questions.count > 0 %}
                                 <div class="quizz_action"><a href="{% url 'play_printing_teacher'  quizz.id   %}"  class="quizz_action"><i class="fa fa-print"></i> Créer les fiches réponses imprimables</a> </div>    
                                 <div class="quizz_action"><a href="{% url 'play_quizz_teacher'  quizz.id   %}" target="_blank"  class="quizz_action"><i class="fa fa-play"></i> <em> Mode jeu</em></a> A venir  </div>   
-
-                                <div class="quizz_action"><a href="{% url 'show_quizz'  quizz.id %}"  class="quizz_action"><i class="fa fa-eye"></i>  Mode présentation</a>  </div>  
+                                <div class="quizz_action">
+                                    <a href="{% if quizz.is_random %}{% url 'show_quizz_random'  quizz.id %}{% else %}{% url 'show_quizz'  quizz.id %}{% endif %}" 
+                                        class="quizz_action"><i class="fa fa-eye"></i>  Mode présentation</a>  
+                                </div> 
+                                {% else  %}
+                                <div class="alert alert-danger"><br/>Aucune question actuellement<br/> <br/></div> 
+                                {% endif  %}
                                 <div class="quizz_action"><a href="{% url 'delete_quizz'  quizz.id %}"  class="quizz_action"  onclick="return TestDelete('ce quizz')"><i class="fa fa-trash"></i>  Supprimer</a> </div>  
                             </td>
                         </tr>

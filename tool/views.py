@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from tool.models import Tool , Question  , Choice  , Quizz , Diaporama  , Slide
-from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm,  DiaporamaForm , SlideForm    
+from tool.models import Tool , Question  , Choice  , Quizz , Diaporama  , Slide ,Qrandom ,Variable , VariableImage
+from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm,  DiaporamaForm , SlideForm,QrandomForm, VariableForm 
+from socle.models import Level, Waiting
 from account.decorators import  user_is_testeur
 from sacado.settings import MEDIA_ROOT
 from socle.models import Knowledge, Waiting
@@ -15,7 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.forms import inlineformset_factory
 from templated_email import send_templated_mail
 from django.db.models import Q
-
+from random import  randint
 ############### bibliothèques pour les impressions pdf  #########################
 import os
 from django.utils import formats, timezone
@@ -236,31 +237,6 @@ def play_quizz_teacher(request,id):
     return render(request, 'tool/play_quizz_teacher.html', context)
 
 
-
-
-
-
-
-############################################################################################################
-############################################################################################################
-########## Question
-############################################################################################################
-############################################################################################################
-
-
-def create_quizz_random(request,id):
- 
-    quizz = Quizz.objects.get(pk= id)
-    noq = request.POST.get('noq')
-    knowledge_ids = request.POST.getlist('knowledges') 
-    
-
-    return redirect("list_quizzes")
-
-
-
- 
-
 ############################################################################################################
 ############################################################################################################
 ########## Question
@@ -286,7 +262,6 @@ def create_question(request,idq,qtype):
         formSet = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct') , extra=4)
         form_ans = formSet(request.POST or None,  request.FILES or None)
     if request.method == "POST"  :
-        print("create_question")  
         if form.is_valid():
             nf         = form.save(commit=False) 
             nf.teacher = request.user.teacher
@@ -431,20 +406,6 @@ def show_question(request,id):
 ############################ Ajax  ####################################################################################
 #######################################################################################################################
  
-
- 
-# Pour envoyer les fichiers vers le dossier 
-def handle_uploaded_file(f):
-    with open( MEDIA_ROOT+str(f.name) , 'wb+') as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
-
-
- 
-
- 
-
-
 @csrf_exempt 
 def question_sorter(request):  
     try :
@@ -700,18 +661,283 @@ def slide_sorter(request):
  
  
 
+
+
 @csrf_exempt 
-def ajax_chargeknowledges(request):  
+def ajax_chargewaitings(request):  
 
-    try :
-        slide_ids = request.POST.get("valeurs")
-        slide_tab = slide_ids.split("-") 
+    id_level =  request.POST.get("id_level")
+    id_theme =  request.POST.get("id_theme")
+    data = {}
 
-        for i in range(len(slide_tab)-1):
-            Slide.objects.filter(  pk = slide_tab[i]).update(ranking = i)
-    except :
-        pass
+    level =  Level.objects.get(pk = id_level)
+
+    waitings = level.waitings.values_list('id', 'name').filter(theme_id=id_theme) 
+    data['waitings'] = list(waitings)
+ 
+    return JsonResponse(data)
+
+
+
+@csrf_exempt 
+def ajax_chargeknowledges(request): 
+
+    id_waiting =  request.POST.get("id_waiting")
 
     data = {}
-    return JsonResponse(data)  
+    waiting =  Waiting.objects.get(pk = id_waiting)
+
+    knowledges = waiting.knowledges.values_list('id', 'name')
+    data['knowledges'] = list(knowledges)
+ 
+    return JsonResponse(data)
+
+
+
+############################################################################################################
+############################################################################################################
+########## Question Random
+############################################################################################################
+############################################################################################################
+def all_datas(level):
+
+    levels_dict = {}
+ 
+    themes = level.themes.order_by("id")
+    themes_tab =   []
+    for theme in themes :
+        themes_dict =  {}                
+        themes_dict["name"]=theme
+        waitings = theme.waitings.filter(level=level)
+        waitings_tab  =  []
+        for waiting in waitings :
+            qrs_counter = 0
+            waiting_dict  =   {} 
+            waiting_dict["name"]=waiting 
+            knowlegdes = waiting.knowledges.order_by("name")
+            knowledges_tab  =  []
+            for knowledge in knowlegdes :
+                knowledges_dict  =   {}  
+                knowledges_dict["name"]=knowledge 
+                qrandoms = knowledge.qrandom.all()
+                qrs_counter +=  qrandoms.count()
+                knowledges_dict["qrandoms"]=qrandoms
+                knowledges_tab.append(knowledges_dict)
+            waiting_dict["knowledges"]=knowledges_tab
+            waiting_dict["qrs_counter"]=qrs_counter
+            waitings_tab.append(waiting_dict)
+        themes_dict["waitings"]=waitings_tab
+        themes_tab.append(themes_dict)
+    levels_dict["themes"]=themes_tab
+
+    return levels_dict 
+ 
+
+
+def show_quizz_random(request,id):
+ 
+ 
+    quizz = Quizz.objects.get(pk= id)
+    qrandoms = quizz.qrandoms.filter(is_publish=1) 
+    context = {  "quizz" : quizz , "qrandoms" : qrandoms }
+ 
+    return render(request, 'tool/show_quizz_random.html', context)
+
+
+
+def create_quizz_random(request,id):
+ 
+    quizz = Quizz.objects.get(pk= id)
+    noq = request.POST.get('noq',5)
+    knowledge_ids = request.POST.getlist('knowledges') 
+    qrandoms_list = list(Qrandom.objects.filter(knowledge_id__in = knowledge_ids))
+
+    nb_historic = []
+    qrandoms   = []
+
+    while len(nb_historic) < int(noq) or len(qrandoms_list) > 0 :
+        nb_aleatoire = randint(0,len(qrandoms_list)-1)
+        if nb_aleatoire not in nb_historic :
+            nb_historic.append(nb_aleatoire)
+            quizz.qrandoms.add(qrandoms_list[nb_aleatoire])
+
+
+    context = { 'quizz' : quizz ,   "qrandoms" : qrandoms  }
+
+    return render(request, 'tool/list_quizz.html', context)
+ 
+
+
+def list_qrandom(request):
+
+    if request.user.is_superuser :
+        qrandoms = Qrandom.objects.all()
+        context = {  "qrandoms" : qrandoms  }
+        return render(request, 'tool/list_qrandom.html', context)
+    else :
+        return redirect('index')
+
+
+
+def create_qrandom(request):
+
+    teacher = request.user.teacher
+    if request.user.is_superuser :
+        form = QrandomForm(request.POST or None )
+        formSet = inlineformset_factory( Qrandom , Variable , fields=('name','qrandom', 'is_integer','minimum','maximum', 'words') , extra=1)
+
+        if request.method == "POST"  :
+            if form.is_valid():
+                qr = form.save(commit = False)
+                qr.teacher = teacher
+                qr.save()
+                form_var = formSet(request.POST or None,  instance = qr) 
+                for form_v in form_var :
+                    if form_v.is_valid():
+                        var = form_v.save()
+                    else :
+                        print(form_v.errors)
+                    files = request.FILES.getlist("images-"+var.name)
+                    for file in files :
+                        VariableImage.objects.create(variable = var , image = file)
+ 
+
+                return redirect('create_qrandom' )
+        context = {  "form" : form , "form_var" : formSet ,'teacher' : teacher,'qrandom' : None }
+        return render(request, 'tool/form_qrandom.html', context)
+
+    else :
+        return redirect('index')
+
+    
+ 
+
+
+def update_qrandom(request,id):
+
+    teacher = request.user.teacher
+    if request.user.is_superuser :
+        qr = Qrandom.objects.get(pk=id)
+        form = QrandomForm(request.POST or None , instance = qr )
+        formSet = inlineformset_factory( Qrandom , Variable , fields=('name','qrandom', 'is_integer','minimum','maximum','words') , extra=0)
+        form_var = formSet(request.POST or None,  request.FILES or None , instance = qr) 
+        if request.method == "POST"  :
+            if form.is_valid():
+                qr = form.save(commit = False)
+                qr.teacher = teacher
+                qr.save()
+                
+                for form_v in form_var :
+                    if form_v.is_valid():
+                        form_v.save()
+                    else :
+                        print(form_v.errors)
+
+                return redirect('list_qrandom')
+        context = {  "form" : form , "form_var" : form_var ,'teacher' : teacher ,'qrandom' : qr }
+        return render(request, 'tool/form_qrandom.html', context)
+        
+    else :
+        return redirect('index')
+
+
+
+def delete_qrandom(request,id):
+
+    if request.user.is_superuser :
+        qr = Qrandom.objects.get(pk= id)
+        qr.delete()
+    else :
+        return redirect('index')
+ 
+    return redirect("list_qrandom")
+
+ 
+ 
+
+ 
+def admin_qrandom(request,id_level):
+
+    if request.user.is_superuser :
+        level = Level.objects.get(pk = id_level)
+        data = all_datas(level)
+        return render(request, 'tool/list_qr.html', {'data': data ,'level': level   })
+    else :
+        return redirect('index')
+
+
+
+
+def create_qrandom_admin(request,id_knowledge):
+
+    teacher = request.user.teacher
+    if request.user.is_superuser :
+        knowledge = Knowledge.objects.get(pk=id_knowledge)
+        form = QrandomForm(request.POST or None )
+        formSet = inlineformset_factory( Qrandom , Variable , fields=('name','qrandom', 'is_integer','minimum','maximum', 'words') , extra=1)
+
+        if request.method == "POST"  :
+            if form.is_valid():
+                qr = form.save(commit = False)
+                qr.teacher = teacher
+                qr.save()
+                form_var = formSet(request.POST or None,  instance = qr) 
+                for form_v in form_var :
+                    if form_v.is_valid():
+                        var = form_v.save()
+                    else :
+                        print(form_v.errors)
+                    files = request.FILES.getlist("images-"+var.name)
+                    for file in files :
+                        VariableImage.objects.create(variable = var , image = file)
+ 
+
+                return redirect('create_qrandom_admin' , id_knowledge)
+        context = {  "form" : form , "form_var" : formSet ,'teacher' : teacher,'qrandom' : None , 'knowledge' : knowledge }
+        return render(request, 'tool/form_qrandom_admin.html', context)
+
+    else :
+        return redirect('index')
+
+
+
+
+
+def update_qrandom_admin(request,id_level,id):
+
+    teacher = request.user.teacher
+    if request.user.is_superuser :
+        form = QrandomForm(request.POST or None )
+        formSet = inlineformset_factory( Qrandom , Variable , fields=('name','qrandom', 'is_integer','minimum','maximum', 'words') , extra=1)
+
+        if request.method == "POST"  :
+            if form.is_valid():
+                qr = form.save(commit = False)
+                qr.teacher = teacher
+                qr.save()
+                form_var = formSet(request.POST or None,  instance = qr) 
+                for form_v in form_var :
+                    if form_v.is_valid():
+                        var = form_v.save()
+                    else :
+                        print(form_v.errors)
+                    files = request.FILES.getlist("images-"+var.name)
+                    for file in files :
+                        VariableImage.objects.create(variable = var , image = file)
+ 
+
+                return redirect('create_qrandom' )
+        context = {  "form" : form , "form_var" : formSet ,'teacher' : teacher,'qrandom' : None }
+        return render(request, 'tool/form_qrandom_admin.html', context)
+
+    else :
+        return redirect('index')
+
+
+def show_qrandom_admin(request,id):
+
+    qrandom = Qrandom.objects.get(pk = id)
+ 
+    return render(request, 'tool/show_qr.html', {'qrandom': qrandom      })
+
 

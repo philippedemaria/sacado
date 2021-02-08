@@ -757,6 +757,28 @@ li.my_slide{
   }
 
  
+ /****************************************** qrandom **************************************/
+
+
+.qrandom{
+  border-radius: 5px;
+  border : 1px solid #EEE;
+  background-color: #F7F7F7;
+  padding:10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
  /****************************************** details_card selectors **************************************/

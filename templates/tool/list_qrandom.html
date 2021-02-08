@@ -1,0 +1,81 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+ 
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+
+    <script>
+        require(['script/ajax-quizz']);
+        require(['script/ajax-quizz-complement']);
+    </script> 
+
+{% endblock %}
+
+
+
+{% block page_title %}
+       <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> Outils péda. </a> <img width="25px" src="{% static 'img/angle-right.png' %}"/>  Les questions aléatoires
+{% endblock %}
+
+{% block page_menu_right %}
+
+     <a href="{% url 'create_qrandom' %}" class="btn btn-new pull-right">  Créer une question</a>  
+
+{% endblock %}
+
+
+
+
+{% block body %}
+<section class="content_main"> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table id="standard_tab" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Texte</th>
+                    <th>variables</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for qrandom in qrandoms %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'delete_qrandom'  qrandom.id %}"  class="quizz_action pull-right"  onclick="return TestDelete('cette question')"><i class="fa fa-trash"></i>  </a>                                
+                                <a href="{% url 'update_qrandom' qrandom.id  %}"> {{ qrandom.title }}</a><br/>
+                                <small>{{ qrandom.knowledge.theme.subject.name }},{{ qrandom.knowledge.waiting.name }}, {{ qrandom.knowledge.name }}</small>
+                            </td>
+                            <td > 
+                                {% for v in qrandom.variables.all %} 
+                                    <small>{{ v.name }}
+                                    {% if v.variable_img.all|length > 0 %}
+                                        {% for vv in v.variable_img.all %}
+                                            <img src="{{ vv.image.url}}" width="70px"/>
+                                        {% endfor %}
+                                    {% elif v.words  %} 
+                                        {{ v.words }}
+                                    {% else %} 
+                                        {% if v.is_integer %}
+                                            $ \in \mathbb{N} $,
+                                        {% else %}
+                                            $\not \in \mathbb{N}$, 
+                                        {% endif %}
+                                        $\in [{{ v.minimum }};{{v.maximum }}]$ 
+                                    {% endif %} 
+                                    </small>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %} 
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+ 
+
+{% endblock %}

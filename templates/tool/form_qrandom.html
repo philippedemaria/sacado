@@ -1,0 +1,98 @@
+{% extends 'tool/form_qrandom_admin.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+{% block require %}
+
+    {% if qrandom %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+
+     <script>
+        require(['script/ajax-qrandom']);
+    </script> 
+{% endblock %}
+ 
+
+{% block page_title %}
+   Créateur de question randomisée
+{% endblock %}
+
+
+
+
+
+{% block page_menu_right %}
+    {% if qrandom %}
+    <a href="{% url 'create_qrandom'  %}" class="btn btn-new">Nouvelle question</a>
+    {% endif %}
+
+    <a href="{% url 'list_qrandom'  %}" class="btn btn-new">Liste des questions</a>
+{% endblock %}
+
+
+
+
+
+
+{% block body_socle %}
+<div class="row">
+    <div class="col-sm-12 col-md-4 col-lg-6">
+        <div class="form-group">
+            <select id="id_subject" name="subject" class="form-control select2">
+                <option value=" ">Choisir un enseignement</option>
+                {% for s in teacher.subjects.all %}
+                    <option value="{{s.id}}">{{ s.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4 col-lg-6">
+        <div class="form-group">
+            <select id="id_level" name="level" class="form-control select2" >
+                <option value=" ">Choisir un niveau</option>
+                {% for l in levels %}
+                    <option value="{{l.id}}">{{ l.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="form-group">
+            <select id="id_theme" name="theme" class="form-control select2">
+                <option value=" ">Choisir un thème</option>
+            </select>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="form-group">
+            <select id="id_waiting" name="waiting" class="form-control select2">
+                <option value=" ">Choisir un attendu</option>
+            </select>
+        </div>
+    </div>
+</div>
+{% if qrandom %}
+<div class="row" >
+    <div class="col-sm-12 col-md-12" >  
+        <label>Savoir faire ciblé : {{qrandom.knowledge }}</label>
+    </div>
+</div>
+{% endif  %}
+<div class="row" >
+    <div class="col-sm-12 col-md-12" >  
+        {{ form.knowledge|add_class:"form-control select2"  }}
+    </div>
+</div>
+{% endblock  %}
+
+      

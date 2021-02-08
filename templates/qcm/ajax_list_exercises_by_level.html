@@ -17,7 +17,7 @@
                             <tbody>
                                 {% for theme in data.themes  %}  
                                     <tr style="background:#5d4391; color:white">
-                                        <td style="width:85%"><i class="fa fa-caret-right"></i> {{theme.name}}</td>
+                                        <td style="width:85%"> {{theme.name}}</td>
                                     </tr>
                                     {% for waiting in theme.waitings  %} 
                                         <tr style="background:#aa98cd; cursor: pointer; color:white"  class="opener out"   id="{{ waiting.name.id }}">
