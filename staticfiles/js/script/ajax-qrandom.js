@@ -242,7 +242,7 @@ define(['jquery', 'bootstrap' ], function ($) {
 
 
         $("#id_calculator").prop("checked",false);
-
+        $("#id_tool").prop("checked",false);
 
     });
 

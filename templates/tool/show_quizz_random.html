@@ -7,91 +7,97 @@
 
 {% block body_quizz %}
  
- 
-    {% for qrandom in qrandoms %}
-    <li class="my_slide">
-        <input type="hidden" value="{{ qrandom.duration }}" id="inter_slide{{ forloop.counter }}" /> 
-        <div class="row consigne_diapo"  align="center">  
-            <div class="col-sm-12 col-md-12">
-                <h1 style="font-size:3em" class="thin"><b>Question {{forloop.counter}}.</b> <span class="instruction"><br/>dd La durée de cette question est <br/>  <b>{{ qrandom.duration }} secondes</b>.</span> <br/> 
-                    {% if qrandom.qtype == 1 %}
-                        Répondre à cette question par <br/><b>Vrai</b> ou <b>Faux</b>
-                    {% elif qrandom.qtype == 2 %}
-                        Vous devez répondre en écrivant <br/><b>la bonne réponse</b>.
-                    {% elif qrandom.qtype == 3 %}
-                         Vous devez choisir <br/><b>la ou les bonnes réponses</b><br/> parmi les 4 réponses proposées. 
-                    {% else %}
-                         Vous devez choisir la <br/><b>seule bonne réponse</b><br/>  parmi les 4 réponses proposées. 
-                    {% endif %}
-                </h1>
-            </div>
-        </div> 
-    </li>
-    <li class="my_slide">
-        <input type="hidden" value="{{ qrandom.duration }}" id="duration{{ forloop.counter }}" /> 
-        <div class="row">  
-            <div class="col-sm-2 col-md-2" align="left">
-                <img src="{% if qrandom.calculator %}{% static 'img/calculator.png' %}{% else %}{% static 'img/no_calculator.png' %}{% endif %}" height="50px" />
-            </div>
-            <div class="col-sm-8 col-md-8" align="center">
-                    {% if qrandom.qtype == 1 %}
-                        <b>Vrai  ou  Faux ?</b>
-                    {% elif qrandom.qtype == 2 %}
-                        <b>Ecrire la bonne réponse</b>.
-                    {% elif qrandom.qtype == 3 %}
-                        <b> Choisir  la ou les bonnes réponses</b>. 
-                    {% else %}
-                        <b> Choisir la seule bonne réponse</b>. 
-                    {% endif %}
-            </div>
-            <div class="col-sm-2 col-md-2" align="right">
-                <div class="countdown instruction" id="countdown{{ forloop.counter }}" > 
-                    {{ qrandom.duration }}
+    {{  quizz.nb_slide  }}
+    
+        {% for qrandom in qrandoms %}
+        <li class="my_slide">
+            <input type="hidden" value="{{ qrandom.duration }}" id="inter_slide{{ forloop.counter }}" /> 
+            <div class="row consigne_diapo"  align="center">  
+                <div class="col-sm-12 col-md-12">
+                    <h1 style="font-size:3em" class="thin"><b>Question {{forloop.counter}}.</b> <span class="instruction"><br/>dd La durée de cette question est <br/>  <b>{{ qrandom.duration }} secondes</b>.</span> <br/> 
+                        {% if qrandom.qtype == 1 %}
+                            Répondre à cette question par <br/><b>Vrai</b> ou <b>Faux</b>
+                        {% elif qrandom.qtype == 2 %}
+                            Vous devez répondre en écrivant <br/><b>la bonne réponse</b>.
+                        {% elif qrandom.qtype == 3 %}
+                             Vous devez choisir <br/><b>la ou les bonnes réponses</b><br/> parmi les 4 réponses proposées. 
+                        {% else %}
+                             Vous devez choisir la <br/><b>seule bonne réponse</b><br/>  parmi les 4 réponses proposées. 
+                        {% endif %}
+                    </h1>
+                </div>
+            </div> 
+        </li>
+        <li class="my_slide">
+            <input type="hidden" value="{{ qrandom.duration }}" id="duration{{ forloop.counter }}" /> 
+            <div class="row">  
+                <div class="col-sm-2 col-md-2" align="left">
+                    <img src="{% if qrandom.calculator %}{% static 'img/calculator.png' %}{% else %}{% static 'img/no_calculator.png' %}{% endif %}" height="50px" />
+                </div>
+                <div class="col-sm-8 col-md-8" align="center">
+                        {% if qrandom.qtype == 1 %}
+                            <b>Vrai  ou  Faux ?</b>
+                        {% elif qrandom.qtype == 2 %}
+                            <b>Ecrire la bonne réponse</b>.
+                        {% elif qrandom.qtype == 3 %}
+                            <b> Choisir  la ou les bonnes réponses</b>. 
+                        {% else %}
+                            <b> Choisir la seule bonne réponse</b>. 
+                        {% endif %}
+                </div>
+                <div class="col-sm-2 col-md-2" align="right">
+                    <div class="countdown instruction" id="countdown{{ forloop.counter }}" > 
+                        {{ qrandom.duration }}
+                    </div>
+                </div>
+            </div> 
+            <div class="row">  
+                <div class="col-sm-12 col-md-12 qr_enonce" align="center">
+                     {{ qrandom.instruction|safe }} 
                 </div>
             </div>
-        </div> 
-        <div class="row">  
-            <div class="col-sm-12 col-md-12 qr_enonce" align="center">
-                 {{ qrandom.instruction|safe }} 
-            </div>
-        </div>
- 
+     
+                {% if qrandom.tool and quizz.is_numeric %}  
+                    <div class="row" style="margin-bottom:  20px; margin-top: 20px;"> 
+                        <div class="col-sm-12 col-md-12" align="center">
+                            <button class="btn btn-default" id="sqrt_tool">$\sqrt{x}$</button> 
+                            <button class="btn btn-default" id="pow_tool">$x^{n}$</button> 
+                        </div> 
+                    </div> 
+                {% endif %}
 
 
-        {% if qrandom.qtype == 1 %}   
+                {% if qrandom.qtype == 1 %}   
+                    <div class="row"> 
+                        <div class="col-sm-12 col-md-6 bgcolorBlue white" style="border-radius : 10px ">
+                            <h1>VRAI </h1>  
+                        </div> 
 
-                <div class="col-sm-12 col-md-6 bgcolorBlue white" style="border-radius : 10px ">
-                    <h1>VRAI </h1>  
-                </div> 
+                        <div class="col-sm-12 col-md-6 bgcolorRed white" style="border-radius : 10px ">
+                            <h1>FAUX </h1>  
+                        </div> 
+                    </div>
+                {% elif qrandom.qtype > 2 %}   
+                     
+                    {% for choice in qrandom.choices.all %}
+                        {% cycle 'bgcolorRed' 'bgcolorBlue' 'bgcolorOrange' 'bgcolorGreen' as rowcolor silent %} 
+                        {% cycle 'A' 'B' 'C' 'D'  as choice_letter silent %}
+                        <div class="col-sm-12 col-md-6" style="padding-right: 20px;margin-bottom: 20px;font-size:1.2em; border : 1px solid #F0F0F0; border-radius : 10px">
+                            <div class="row" >
+                                <div class="col-sm-2 col-md-1 {{ rowcolor }} get_image" style="padding-top: 20px;color:#FFF; padding-left:10px; border-radius : 10px 0px 0px 10px"> 
+                                    <b>{{ choice_letter }} </b>    
+                                </div>
+                                <div class="col-sm-10 col-md-11" style="font-size:{% if choice.answer|length > 30 %}1{% else  %}1.5{% endif %}em"> 
+                                    {{ choice.answer }}
+                                </div>
+                            </div>  
+                        </div> 
+                    {% endfor %}
+                    {% resetcycle %}
+                    {% resetcycle %}
 
-                <div class="col-sm-12 col-md-6 bgcolorRed white" style="border-radius : 10px ">
-                    <h1>FAUX </h1>  
-                </div> 
-        {% endif %}
-
-
-
-        {% if qrandom.qtype > 2 %}   
-             
-            {% for choice in qrandom.choices.all %}
-                {% cycle 'bgcolorRed' 'bgcolorBlue' 'bgcolorOrange' 'bgcolorGreen' as rowcolor silent %} 
-                {% cycle 'A' 'B' 'C' 'D'  as choice_letter silent %}
-                <div class="col-sm-12 col-md-6" style="padding-right: 20px;margin-bottom: 20px;font-size:1.2em; border : 1px solid #F0F0F0; border-radius : 10px ">
-                    <div class="row" >
-                        <div class="col-sm-2 col-md-1 {{ rowcolor }} get_image" style="padding-top: 20px;color:#FFF; padding-left:10px; border-radius : 10px 0px 0px 10px"> 
-                            <b>{{ choice_letter }} </b>    
-                        </div>
-                        <div class="col-sm-10 col-md-11" style="font-size:{% if choice.answer|length > 30 %}1{% else  %}1.5{% endif %}em"> 
-                            {{ choice.answer }}
-                        </div>
-                    </div>  
-                </div> 
-            {% endfor %}
-            {% resetcycle %}
-            {% resetcycle %}
-
-        {% endif %}
-    </li>
-    {% endfor %}
+                {% endif %}
+        </li>
+        {% endfor %}
  
 {% endblock %} 

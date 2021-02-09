@@ -16,8 +16,9 @@
      <script>
         require(['script/ajax-qrandom']);
     </script> 
- <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
-<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+<!--   -->   
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
 {% endblock %}
  
 
@@ -39,57 +40,59 @@
     <input type="hidden" name="knowledge" value="{{ knowledge.id }}">
     {% csrf_token %}    
         <div class="col-sm-12 col-md-6" >  
-                <div class="row">
-                    <div class="col-sm-10 col-md-9 col-lg-9">
-                        <div class="form-group">
-                            <div class="form-group">
-                                <label>Titre</label>
-                                {{ form.title|add_class:"form-control"  }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-2 col-md-3 col-lg-3">
-                        <div class="form-group">
-                            <label>Publiée ?</label><br/>
-                            {{ form.is_publish|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
-                        </div>
+            <div class="row">
+                <div class="col-sm-10 col-md-9 col-lg-9">
+                    <div class="form-group">
+                        <label>Titre</label>
+                        {{ form.title|add_class:"form-control"  }}
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-10 col-md-4 col-lg-4">
-                        <div class="form-group">
-                            <div class="form-group">
-                                <label>Durée estimée <small>(en sec.)</small></label>
-                                {{ form.duration|add_class:"form-control"|attr:"max:500"|attr:"min:5"|attr:"step:5" }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-0 col-md-5 col-lg-5">
-                    </div>
-                    <div class="col-sm-10 col-md-3 col-lg-3">
-                        <div class="form-group">
-                            <div class="form-group">
-                                <label>Calculatrice ?</label>
-                                {{ form.calculator|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
-                            </div>
-                        </div>
+                <div class="col-sm-2 col-md-3 col-lg-3">
+                    <div class="form-group">
+                        <label>Publiée ?</label><br/>
+                        {{ form.is_publish|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Enoncé</label>
-                    {{ form.texte|add_class:"form-control"  }}
-                </div>
-                {% block body_socle %}
- 
-                {% endblock %} 
-                <div class="row" style="margin-top:20px">
-                    <div class="col-sm-12 col-md-12">
-                        <div class="form-group">                            
-                            <input value="Enregistrer" type="submit" class="btn btn-primary"  />
-                            <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
-                        </div>                            
+            </div>
+            <div class="row">
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <label>Durée estimée <small>(en sec.)</small></label>
+                        {{ form.duration|add_class:"form-control"|attr:"max:500"|attr:"min:5"|attr:"step:5" }}
                     </div>
                 </div>
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        {{ form.tool.label_tag }} <label></label><br/>
+                        {{ form.tool|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <label>Calculatrice ?</label><br/>
+                        {{ form.calculator|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="form-group">
+                        <label>Enoncé</label>
+                        {{ form.texte|add_class:"form-control"  }}
+                    </div>
+                </div>
+            </div>
+            {% block body_socle %}
+
+            {% endblock %} 
+            <div class="row" style="margin-top:20px">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group">                            
+                        <input value="Enregistrer" type="submit" class="btn btn-primary"  />
+                        <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                    </div>                            
+                </div>
+            </div>
         </div>
         <div class="col-sm-12 col-md-6" >
             <h4>Mes variables aléatoires</h4> 

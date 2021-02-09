@@ -125,28 +125,35 @@
                             </div>
                         </div>
                         {% endif %}
-
                         <hr/> 
 
-                        {% if question.qtype == 1 %}   
-     
-                                <div class="col-sm-12 col-md-6 bgcolorBlue white" style="border-radius : 10px ">
-                                    <h1>VRAI </h1>  
+
+                        {% if question.tool and quizz.is_numeric %}  
+                            <div class="row" style="margin-bottom:  20px; margin-top: 20px;"> 
+                                <div class="col-sm-12 col-md-12" align="center">
+                                    <button class="btn btn-default" id="sqrt_tool">$\sqrt{x}$</button> 
+                                    <button class="btn btn-default" id="pow_tool">$x^{n}$</button> 
                                 </div> 
-     
-                                <div class="col-sm-12 col-md-6 bgcolorRed white" style="border-radius : 10px ">
-                                    <h1>FAUX </h1>  
-                                </div> 
+                            </div> 
                         {% endif %}
 
 
+                        {% if question.qtype == 1 %}   
+                            <div class="row"> 
+                                <div class="col-sm-12 col-md-6 bgcolorBlue white" style="border-radius : 10px ">
+                                    <h1>VRAI </h1>  
+                                </div> 
 
-                        {% if question.qtype > 2 %}   
+                                <div class="col-sm-12 col-md-6 bgcolorRed white" style="border-radius : 10px ">
+                                    <h1>FAUX </h1>  
+                                </div> 
+                            </div>
+                        {%  elif question.qtype > 2 %}   
                              
                             {% for choice in question.choices.all %}
                                 {% cycle 'bgcolorRed' 'bgcolorBlue' 'bgcolorOrange' 'bgcolorGreen' as rowcolor silent %} 
                                 {% cycle 'A' 'B' 'C' 'D'  as choice_letter silent %}
-                                <div class="col-sm-12 col-md-6" style="padding-right: 20px;margin-bottom: 20px;font-size:1.2em; border : 1px solid #F0F0F0; border-radius : 10px ">
+                                <div class="col-sm-12 col-md-6" style="padding-right: 20px;margin-bottom: 20px;font-size:1.2em; border : 1px solid #F0F0F0; border-radius : 10px">
                                     <div class="row" >
                                         <div class="col-sm-2 col-md-1 {{ rowcolor }} get_image" style="padding-top: 20px;color:#FFF; padding-left:10px; border-radius : 10px 0px 0px 10px"> 
                                             <b>{{ choice_letter }} </b>    
@@ -159,7 +166,6 @@
                             {% endfor %}
                             {% resetcycle %}
                             {% resetcycle %}
-     
                         {% endif %}
                     </li>
                     {% endfor %}

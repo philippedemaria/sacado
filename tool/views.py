@@ -17,6 +17,7 @@ from django.forms import inlineformset_factory
 from templated_email import send_templated_mail
 from django.db.models import Q
 from random import  randint
+import  math
 ############### bibliothèques pour les impressions pdf  #########################
 import os
 from django.utils import formats, timezone
@@ -738,7 +739,24 @@ def show_quizz_random(request,id):
  
  
     quizz = Quizz.objects.get(pk= id)
-    qrandoms = quizz.qrandoms.filter(is_publish=1) 
+    list_qr = list(quizz.qrandoms.filter(is_publish=1))
+    qrandoms = []
+    nb_lqr = len(list_qr) 
+    if nb_lqr == 1 :
+        for i in range(quizz.nb_slide) :
+            qrandoms.append(list_qr[0])  
+    else :
+        for i in range( nb_lqr ) :
+            qrandoms.append(list_qr[i])
+
+        nleft = math.abs(quizz.nb_slide - nb_lqr)
+
+        for i in range(nleft) :
+            random = randint(0, len(qrandoms)-1)
+            qrandoms.append(list_qr[random]) 
+
+        qrandoms.shuffle()
+
     context = {  "quizz" : quizz , "qrandoms" : qrandoms }
  
     return render(request, 'tool/show_quizz_random.html', context)
@@ -748,18 +766,14 @@ def show_quizz_random(request,id):
 def create_quizz_random(request,id):
  
     quizz = Quizz.objects.get(pk= id)
-    noq = int(request.POST.get('noq',5)) 
-    knowledge_ids = request.POST.getlist('knowledges') 
+    noq = int(request.POST.get('noq',1)) 
+    knowledge_ids = request.POST.getlist('knowledges')
     qrandoms_list = list(Qrandom.objects.filter(knowledge_id__in = knowledge_ids))
-
-    if len(qrandoms_list) == 1 :
-        for i in range(noq) :
-            quizz.qrandoms.add(qrandoms_list[0])
-    else :
-        for i in range(noq) :
-            nb_aleatoire = randint(0,len(qrandoms_list)-1)
-            quizz.qrandoms.add(qrandoms_list[nb_aleatoire])
-            
+    lenq = len(qrandoms_list) 
+    for i in range(lenq) :
+        quizz.qrandoms.add(qrandoms_list[i])
+    Quizz.objects.filter(pk=quizz.id).update(nb_slide = noq )
+ 
     return redirect('list_quizzes' )
  
 

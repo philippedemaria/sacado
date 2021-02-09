@@ -57,6 +57,7 @@ class Qrandom(models.Model):
     ####  type de question
     qtype      = models.PositiveIntegerField(default=2, editable=False)
     calculator = models.BooleanField(default=0, verbose_name="Calculatrice ?")
+    tool       = models.BooleanField(default=0, verbose_name="Barre d'outils ?")
     duration   = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
 
 
@@ -185,6 +186,7 @@ class Quizz(ModelWithCode):
     is_mark      = models.BooleanField(default=0, verbose_name="Récupérer les réponses ?") 
     is_lock      = models.BooleanField(default=0, verbose_name="Verrouiller ?") 
     is_random    = models.BooleanField(default=0, verbose_name="Aléatoire ?") 
+    nb_slide     = models.PositiveIntegerField(default=0, editable=False)  # Nombre de diapositive si le quizz est randomisé
 
     interslide   = models.PositiveIntegerField(default=10, blank=True, verbose_name="Temps entre les questions")
 
