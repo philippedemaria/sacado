@@ -55,9 +55,9 @@ class Qrandom(models.Model):
     is_publish = models.BooleanField(default=1, verbose_name="Publié ?")
     teacher    = models.ForeignKey(Teacher, related_name = "qrandom", blank=True,   editable=False ,  on_delete=models.CASCADE) 
     ####  type de question
-    qtype      = models.PositiveIntegerField(default=2, editable=False)
-    calculator = models.BooleanField(default=0, verbose_name="Calculatrice ?")
-
+    #qtype      = models.PositiveIntegerField(default=2, editable=False)
+    #calculator = models.BooleanField(default=0, verbose_name="Calculatrice ?")
+    #duration   = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
 
 
     def __str__(self):
