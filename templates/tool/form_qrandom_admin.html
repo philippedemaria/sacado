@@ -16,7 +16,8 @@
      <script>
         require(['script/ajax-qrandom']);
     </script> 
- 
+ <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
 {% endblock %}
  
 
@@ -54,8 +55,26 @@
                         </div>
                     </div>
                 </div>
-
-
+                <div class="row">
+                    <div class="col-sm-10 col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label>Durée estimée <small>(en sec.)</small></label>
+                                {{ form.duration|add_class:"form-control"|attr:"max:500"|attr:"min:5"|attr:"step:5" }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-0 col-md-5 col-lg-5">
+                    </div>
+                    <div class="col-sm-10 col-md-3 col-lg-3">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label>Calculatrice ?</label>
+                                {{ form.calculator|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label>Enoncé</label>
                     {{ form.texte|add_class:"form-control"  }}

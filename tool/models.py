@@ -53,7 +53,13 @@ class Qrandom(models.Model):
     texte      = RichTextUploadingField(  blank=True, verbose_name="Enoncé")
     knowledge  = models.ForeignKey(Knowledge, related_name="qrandom", blank=True, null = True,  on_delete=models.CASCADE) 
     is_publish = models.BooleanField(default=1, verbose_name="Publié ?")
-    teacher   = models.ForeignKey(Teacher, related_name = "qrandom", blank=True,   editable=False ,  on_delete=models.CASCADE) 
+    teacher    = models.ForeignKey(Teacher, related_name = "qrandom", blank=True,   editable=False ,  on_delete=models.CASCADE) 
+    ####  type de question
+    qtype      = models.PositiveIntegerField(default=2, editable=False)
+    calculator = models.BooleanField(default=0, verbose_name="Calculatrice ?")
+    duration   = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
+
+
     def __str__(self):
         return self.title
 
@@ -120,7 +126,7 @@ class Question(models.Model):
     title         = models.TextField(max_length=255, default='',  blank=True, verbose_name="Réponse écrite")
     calculator    = models.BooleanField(default=0, verbose_name="Calculatrice ?")
     date_modified = models.DateTimeField(auto_now=True)
-    #### pour donner une date de remise - Tache     
+    ####  type de question
     qtype         = models.PositiveIntegerField(default=3, editable=False)
 
     knowledge  = models.ForeignKey(Knowledge, related_name="question", blank=True, null = True,  on_delete=models.CASCADE) 

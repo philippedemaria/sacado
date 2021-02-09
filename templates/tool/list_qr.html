@@ -59,25 +59,40 @@
 
                                     {% for qr in  knowledge.qrandoms    %} 
                                         <tr>
-                                            <td><a href="{% url 'update_qrandom_admin' knowledge.name.id qr.id %}">{{ qr.texte|safe }}</a> 
-                                                <small><label>Variables aléatoires :</label>{% for v in qr.variables.all %} 
-                                                     {{ v.name }}
-                                                    {% if v.variable_img.all|length > 0 %}
-                                                        {% for vv in v.variable_img.all %}
-                                                            <img src="{{ vv.image.url}}" width="70px"/>
-                                                        {% endfor %}
-                                                    {% elif v.words  %} 
-                                                        {{ v.words }}
-                                                    {% else %} 
-                                                        {% if v.is_integer %}
-                                                            $ \in \mathbb{N} $,
-                                                        {% else %}
-                                                            $\not \in \mathbb{N}$, 
-                                                        {% endif %}
-                                                        $\in [{{ v.minimum }};{{v.maximum }}]$ 
-                                                    {% endif %} 
-                                                    </small>
-                                                {% endfor %}
+                                            <td>
+                                                <div style="float:left; margin-right: 10px;  padding-right: 10px; border-right: 2px solid #CCC">
+
+                                                <a href="{% url 'update_qrandom_admin' knowledge.name.id qr.id %}">{{ qr.instruction|safe }}</a> 
+
+                                                </div>
+
+
+                                                <div style="float:left; margin-right: 10px;  padding-right: 10px; border-right: 2px solid #CCC">
+
+                                                 {{ qr.texte|safe }} 
+
+                                                </div>
+
+                                                <small><label>Variables aléatoires :</label>
+                                                    {% for v in qr.variables.all %} 
+                                                        <span  style="margin :  0px 5px ;   padding: 0px 5px ; border-right: 2px solid #CCC">{{ v.name }}
+                                                        {% if v.variable_img.all|length > 0 %}
+                                                            {% for vv in v.variable_img.all %}
+                                                                <img src="{{ vv.image.url}}" width="70px"/>
+                                                            {% endfor %}
+                                                        {% elif v.words  %} 
+                                                            $\in$ { {{ v.words }} }
+                                                        {% else %} 
+                                                            {% if v.is_integer %}
+                                                                $ \in \mathbb{N} $,
+                                                            {% else %}
+                                                                $\not \in \mathbb{N}$, 
+                                                            {% endif %}
+                                                            $\in [{{ v.minimum }};{{v.maximum }}]$ 
+                                                        {% endif %} 
+                                                        </span>
+                                                    {% endfor %}
+                                                </small>
                                             </td>
                                             <td>
                                                 <a href="{% url 'show_qrandom_admin' qr.id  %}"><i class="fa fa-eye"></i></a>                                                

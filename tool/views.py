@@ -278,7 +278,7 @@ def create_question(request,idq,qtype):
             return redirect('create_question' , idq,0)
 
  
-    bgcolors = ["bgcolorRed","bgcolorBlue","bgcolorOrange","bgcolorGreen"] 
+    bgcolors = ["bgcolorRed", "bgcolorBlue","bgcolorOrange", "bgcolorGreen"] 
     context = { 'quizz': quizz, 'questions': questions,  'form' : form, 'qtype' : qtype  }
 
 
@@ -748,23 +748,19 @@ def show_quizz_random(request,id):
 def create_quizz_random(request,id):
  
     quizz = Quizz.objects.get(pk= id)
-    noq = request.POST.get('noq',5)
+    noq = int(request.POST.get('noq',5)) 
     knowledge_ids = request.POST.getlist('knowledges') 
     qrandoms_list = list(Qrandom.objects.filter(knowledge_id__in = knowledge_ids))
 
-    nb_historic = []
-    qrandoms   = []
-
-    while len(nb_historic) < int(noq) or len(qrandoms_list) > 0 :
-        nb_aleatoire = randint(0,len(qrandoms_list)-1)
-        if nb_aleatoire not in nb_historic :
-            nb_historic.append(nb_aleatoire)
+    if len(qrandoms_list) == 1 :
+        for i in range(noq) :
+            quizz.qrandoms.add(qrandoms_list[0])
+    else :
+        for i in range(noq) :
+            nb_aleatoire = randint(0,len(qrandoms_list)-1)
             quizz.qrandoms.add(qrandoms_list[nb_aleatoire])
-
-
-    context = { 'quizz' : quizz ,   "qrandoms" : qrandoms  }
-
-    return render(request, 'tool/list_quizz.html', context)
+            
+    return redirect('list_quizzes' )
  
 
 

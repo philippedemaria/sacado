@@ -2,10 +2,6 @@ define(['jquery', 'bootstrap' ], function ($) {
     $(document).ready(function () {
         console.log("chargement JS ajax-qrandom.js OK");
 
-
-        $("[input='checkbox']").prop("checked",false);
-
- 
         $('#id_level').on('change', function (event) {
             let id_level = $(this).val();
             let id_subject = $("#id_subject").val();
@@ -245,8 +241,9 @@ define(['jquery', 'bootstrap' ], function ($) {
         });
 
 
+        $("#id_calculator").prop("checked",false);
 
-                
+
     });
 
 });
