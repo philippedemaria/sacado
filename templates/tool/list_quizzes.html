@@ -67,8 +67,12 @@
                             </td>
                             <td > 
                                 <div class="quizz_action"><a href="{% url 'create_question'  quizz.id 0 %}" ><i class="fa fa-plus"></i> Ajouter des questions</a> 
-                                    <span style="font-size:10px"> 
-                                        <b>  {{ quizz.nb_slide }}  question{{ quizz.nb_slide |pluralize }}</b>
+                                    <span style="font-size:10px">
+                                        <b>{% if quizz.is_random %}
+                                        {{ quizz.nb_slide }}
+                                        {% else %}
+                                        {{ quizz.questions.all|length }}
+                                        {% endif  %} question{% if quizz.quizz.nb_slide > 1 or quizz.questions.all|length > 1 %}s{% endif %}</b>
                                     </span>
                                 </div>  
                                 {% if quizz.qrandoms.count > 0 or quizz.questions.count > 0 %}
