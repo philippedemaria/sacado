@@ -139,7 +139,7 @@
 
 
                         {% if question.qtype == 1 %}   
-                            <div class="row"> 
+                   
                                 <div class="col-sm-12 col-md-6 bgcolorBlue white" style="border-radius : 10px ">
                                     <h1>VRAI </h1>  
                                 </div> 
@@ -147,7 +147,7 @@
                                 <div class="col-sm-12 col-md-6 bgcolorRed white" style="border-radius : 10px ">
                                     <h1>FAUX </h1>  
                                 </div> 
-                            </div>
+                           
                         {%  elif question.qtype > 2 %}   
                              
                             {% for choice in question.choices.all %}
