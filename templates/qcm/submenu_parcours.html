@@ -80,7 +80,10 @@
         {% if group %}
         <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_folder' parcours.id group.id  %}"  class="no_button"> Paramètres</a></li>
         {% else %}
-        <p><a href="{% url 'index' %}" ><i class="fa fa-plus fa-fw fa-small"></i> pour ajouter des parcours à ce dossier, sélectionner un groupe.</a></p>
+        <li><a href="{% url 'index' %}" class="helper_tip no_button"><i class="fa fa-plus fa-fw fa-small"></i> 
+                <div class="helper_tip_text" >pour ajouter des parcours à ce dossier, sélectionner un groupe.</div>
+            </a>
+        </li>
         {% endif %}
  
 </li>
