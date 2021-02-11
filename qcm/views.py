@@ -1052,6 +1052,10 @@ def update_parcours(request, id, idg=0 ):
     levels = teacher.levels.all()
  
     parcours = Parcours.objects.get(id=id)
+
+    p_set = set(parcours.leaf_parcours.all())
+
+
     form = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher)
 
     """ affiche le parcours existant avant la modif en ajax"""
@@ -1087,19 +1091,9 @@ def update_parcours(request, id, idg=0 ):
             form.save_m2m()
             nf.students.set(form.cleaned_data.get('students'))
 
-            if parcours.is_leaf :
-	            leaf_parcours =  request.POST.getlist('leaf_parcours')
-	            for lp_id in leaf_parcours :
-	                parcours = Parcours.objects.get(pk = lp_id)
-	                parcours.is_leaf = 1
-	                parcours.save()
-
-	            folder_parcours =  request.POST.getlist('folder_parcours')
-	            for fp_id in folder_parcours :
-	                parcours = Parcours.objects.get(pk = fp_id)
-	                parcours.is_folder = 1
-	                parcours.save()
-
+            for p in p_set :
+                p.leaf_parcours.add(nf)
+ 
  
             sg_students =  request.POST.getlist('students_sg')
             for s_id in sg_students :
