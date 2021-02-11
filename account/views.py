@@ -48,8 +48,9 @@ def get_username(request ,ln, fn):
     if request.user.school :
         suffixe = request.user.school.country.name[2]
     else :
-        suffixe = ""    
-    un = str(ln) + "." + str(fn)[0] + "_" + suffixe + code 
+        suffixe = ""
+    name = str(ln).replace(" ","_")    
+    un = name + "." + str(fn)[0] + "_" + suffixe + code 
 
     while ok:
  
@@ -961,8 +962,14 @@ def delete_teacher(request, id):
 
 def dissociate_teacher(request, id):
 
-    Teacher.objects.filter(pk=id).update(school = None)
-    teacher = Teacher.objects.get(pk=id)
+    teacher = Teacher.objects.get(user_id=id)
+    this_user = request.user
+
+    if teacher.user.school == this_user.school and  this_user.is_manager :
+
+        Teacher.objects.filter(pk=id).update(user__school = None)
+        print("ici")
+
 
     msg = "Bonjour cher collègue, vous venez d'être dissocié de votre établissement d'affectation. Votre compte reste actif avec vos identifiants habituels. Vous pourrez utiliser Sacado dans votre prochaine affectation. Cordialement."
 

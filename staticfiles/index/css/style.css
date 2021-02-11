@@ -224,7 +224,7 @@ table.table-bordered.dataTable {
   position: absolute;
   top :120px;
   left: 40%;
-  padding-top: 35px;
+  padding-top: 30px;
   cursor: pointer;
   z-index: 50;
 }

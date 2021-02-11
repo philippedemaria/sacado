@@ -17,7 +17,39 @@ define(['jquery',  'bootstrap' ], function ($) {
         $('[type=checkbox]').prop('checked', false); 
 
 
- 
+
+
+
+
+        $('.generated_quizz').on('click', function (event) {
+
+            let gq_id = $(this).data("gq_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional: true,
+                    data: {
+                        'gq_id': gq_id,                     
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url : "../ajax_show_generated",
+                    success: function (data) {
+
+                        $("#body_gq").html("").html(data.html);
+                    }
+                }
+            )
+        });
+
+
+
+
+
+
+
 
  
     });
