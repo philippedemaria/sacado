@@ -3,16 +3,10 @@ from account.models import Teacher, Student
 from django.core.exceptions import PermissionDenied
 from group.models import Sharing_group
 from django.contrib import messages
-
+from django.shortcuts import render, redirect
 
 def user_is_parcours_teacher(function):
 	def wrap(request, *args, **kwargs):
-
-		print("====================================") 
-		print("====================================")   
-		print(request.user) 
-		print("====================================")   
-		print("====================================") 	
 
 		kid = kwargs['id']
 		if kid > 0 :
@@ -46,11 +40,7 @@ def user_can_modify_this_course(function):
 	def wrap(request, *args, **kwargs):
 		parcours = Parcours.objects.get(pk=kwargs['id'])
 		course = Course.objects.get(pk=kwargs['idc'])
-		print("====================================") 
-		print("====================================")   
-		print(request.user) 
-		print("====================================")   
-		print("====================================") 
+
 		if request.user.user_type == 2 : 
 			teacher = Teacher.objects.get(user= request.user)
 			if parcours.teacher == teacher or parcours.author == teacher :
@@ -74,11 +64,6 @@ def student_can_show_this_course(function):
 	def wrap(request, *args, **kwargs):
 		parcours = Parcours.objects.get(pk=kwargs['id'])
 
-		print("====================================") 
-		print("====================================")   
-		print(request.user) 
-		print("====================================")   
-		print("====================================") 
 		if request.user.user_type == 0 :  
 			student = Student.objects.get(user= request.user)
 			if student in parcours.students.all() :
@@ -94,12 +79,7 @@ def student_can_show_this_course(function):
 def user_is_relationship_teacher(function):
 	def wrap(request, *args, **kwargs):
 		relationship = Relationship.objects.get(pk=kwargs['id'])
-
-		print("====================================") 
-		print("====================================")   
-		print(request.user) 
-		print("====================================")   
-		print("====================================") 	
+	
 		teacher = Teacher.objects.get(user= request.user)
 		if relationship.parcours.teacher == teacher   :
 			return function(request, *args, **kwargs)
@@ -113,11 +93,7 @@ def user_is_relationship_teacher(function):
 def user_is_customexercice_teacher(function):
 	def wrap(request, *args, **kwargs):
 		customexercise = Customexercise.objects.get(pk=kwargs['id'])
-		print("====================================") 
-		print("====================================")   
-		print(request.user) 
-		print("====================================")   
-		print("====================================") 
+
 		teacher = Teacher.objects.get(user= request.user)
 		if customexercise.teacher == teacher   :
 			return function(request, *args, **kwargs)
@@ -127,3 +103,17 @@ def user_is_customexercice_teacher(function):
 
 	return wrap
  
+
+
+def parcours_exists(function):
+	def wrap(request, *args, **kwargs):
+
+		print(kwargs['id'])
+
+		if Parcours.objects.filter(pk=kwargs['id']).count() == 0 :
+			messages.error(request, "Le parcours demandé n'existe pas")
+			return redirect("index")
+		else :
+			return function(request, *args, **kwargs)
+
+	return wrap 
