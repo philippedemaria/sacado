@@ -2258,13 +2258,15 @@ def ajax_publish_parcours(request):
     return JsonResponse(data) 
 
 @csrf_exempt
-def ajax_dates(request):  # On soncerve relationship_id par commodité mais c'est relationship_id et non customexercise_id dans tout le script
+def ajax_dates(request):  # On conserve relationship_id par commodité mais c'est relationship_id et non customexercise_id dans tout le script
     data = {}
     relationship_id = request.POST.get("relationship_id")
-    typ = int(request.POST.get("type"))
     duration =  request.POST.get("duration") 
     custom =  request.POST.get("custom") 
     try :
+        typp =  request.POST.get("type")
+        if typp : 
+            typ = int(typp)
         if typ == 0 : # Date de publication
             date = request.POST.get("dateur") 
             if date :
