@@ -106,7 +106,7 @@ def create_email(request):
 		send_mail(subject, cleanhtml(unescape_html(texte)) , "info@sacado.xyz", [str(request.user.email)] )
 
 	else:
-		messages.errors(request, "Le corps de message est obligatoire !")
+		messages.error(request, "Le corps de message est obligatoire !")
 
 	return redirect('emails')
 
