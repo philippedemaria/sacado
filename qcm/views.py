@@ -26,7 +26,7 @@ from datetime import datetime , timedelta
 from django.db.models import Q
 from django.core.mail import send_mail
 from group.decorators import user_is_group_teacher 
-from qcm.decorators import user_is_parcours_teacher, user_can_modify_this_course, student_can_show_this_course , user_is_relationship_teacher, user_is_customexercice_teacher 
+from qcm.decorators import user_is_parcours_teacher, user_can_modify_this_course, student_can_show_this_course , user_is_relationship_teacher, user_is_customexercice_teacher , parcours_exists
 from account.decorators import user_can_create, user_is_superuser, user_is_creator , user_is_testeur
 ##############bibliothèques pour les impressions pdf  #########################
 import os
@@ -598,7 +598,8 @@ def peuplate_parcours_evaluation(request,id):
 
     return render(request, 'qcm/form_peuplate_parcours.html', context)
 
-#@user_is_parcours_teacher
+
+
 def individualise_parcours(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcours = Parcours.objects.get(pk = id)
@@ -847,7 +848,7 @@ def list_parcours_group(request,id):
 
     return render(request, 'qcm/list_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group': group,  'parcours' : None , 'communications' : [] , 'relationships' : [] , 'role' : role , 'today' : today })
 
-##@user_is_group_teacher
+@parcours_exists
 def list_sub_parcours_group(request,idg,id):
 
     teacher = Teacher.objects.get(user_id = request.user.id)
@@ -1046,7 +1047,7 @@ def create_parcours(request,idp=0):
 
 
 
-
+@parcours_exists
 def update_parcours(request, id, idg=0 ):
     teacher = Teacher.objects.get(user_id=request.user.id)
     levels = teacher.levels.all()
@@ -1163,7 +1164,7 @@ def archive_parcours(request, id, idg=0):
     else :
         return redirect('list_parcours_group', idg)
 
-#@user_is_parcours_teacher 
+@parcours_exists
 def unarchive_parcours(request, id, idg=0):
 
 
@@ -1179,7 +1180,7 @@ def unarchive_parcours(request, id, idg=0):
     else :
         return redirect('list_parcours_group', idg)
 
-#@user_is_parcours_teacher 
+@parcours_exists
 def delete_parcours(request, id, idg=0):
 
     parcours = Parcours.objects.get(id=id)
@@ -1255,7 +1256,7 @@ def ordering_number(parcours):
 
     return listing_order , nb_exo_only, nb_exo_visible  
 
-
+@parcours_exists
 def show_parcours(request, id):
     """ show parcours coté prof """
     parcours = Parcours.objects.get(id=id)
@@ -1326,9 +1327,8 @@ def ordering_number_for_student(parcours,student):
 
     return listing_order , nb_exo_only, nb_exo_visible
 
-
+@parcours_exists
 def show_parcours_student(request, id):
-
 
     parcours = Parcours.objects.get(id=id)
     user = request.user
@@ -1359,8 +1359,9 @@ def show_parcours_student(request, id):
         return render(request, 'qcm/show_parcours_student.html', context)
 
 
-
+@parcours_exists
 def show_parcours_visual(request, id):
+
     parcours = Parcours.objects.get(id=id)
  
     relationships = Relationship.objects.filter(parcours=parcours,  is_publish=1 ).order_by("ranking")
@@ -1420,7 +1421,7 @@ def replace_exercise_into_parcours(request):
 
     return redirect('show_parcours', parcours_id)
 
- 
+@parcours_exists 
 def result_parcours(request, id):
 
     parcours = Parcours.objects.get(id=id)
@@ -1483,6 +1484,7 @@ def result_parcours(request, id):
     return render(request, 'qcm/result_parcours.html', context )
 
 ########## Sans doute plus utilisée ???? 
+@parcours_exists
 def result_parcours_theme(request, id, idt):
 
     teacher = Teacher.objects.get(user=request.user)
@@ -1564,7 +1566,7 @@ def get_items_from_parcours(parcours) :
     return relationships , skill_tab 
 
 
-
+@parcours_exists
 def result_parcours_skill(request, id):
 
     teacher = Teacher.objects.get(user=request.user)
@@ -1590,7 +1592,7 @@ def result_parcours_skill(request, id):
 
 
 
-
+@parcours_exists
 def result_parcours_knowledge(request, id):
 
     teacher = Teacher.objects.get(user=request.user)
@@ -1648,7 +1650,7 @@ def result_parcours_knowledge(request, id):
  
 
 
-
+@parcours_exists
 def result_parcours_waiting(request, id):
 
     teacher = Teacher.objects.get(user=request.user)
@@ -1864,7 +1866,7 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
     return student
 
 
-
+@parcours_exists
 def stat_evaluation(request, id):
 
     teacher = Teacher.objects.get(user = request.user)
@@ -1939,7 +1941,7 @@ def add_exercice_in_a_parcours(request):
     return redirect('exercises')
 
 
-
+@parcours_exists
 def clone_parcours(request, id, course_on ):
     """ cloner un parcours """
     
@@ -2065,7 +2067,7 @@ def ajax_exercise_error(request):
 
 
 
-#@user_is_parcours_teacher
+@parcours_exists
 def parcours_tasks_and_publishes(request, id):
 
     today = time_zone_user(request.user)
@@ -2093,8 +2095,7 @@ def parcours_tasks_and_publishes(request, id):
 
 
 
-
- 
+@parcours_exists
 def result_parcours_exercise_students(request,id):
     teacher = Teacher.objects.get(user_id = request.user.id)
     parcours = Parcours.objects.get(pk = id)
@@ -3005,7 +3006,7 @@ def admin_list_supportfiles(request,id):
 
 
 
-
+@parcours_exists
 def parcours_exercises(request,id):
     user = request.user
     parcours = Parcours.objects.get(pk=id)
