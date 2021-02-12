@@ -543,10 +543,10 @@ def new_group_many(request):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. ")
 		return redirect('index')
 
-	print("ici")
 
 	GroupFormSet = formset_factory(GroupForm , extra=2) 
 	group_formset  = GroupFormSet(request.POST or None, form_kwargs={'school': school, })
+	print(group_formset)
 	if request.method == "POST" :	
 		if group_formset.is_valid():
 			for f in group_formset :
