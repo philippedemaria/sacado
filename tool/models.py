@@ -183,7 +183,7 @@ class Quizz(ModelWithCode):
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
 
     is_questions = models.BooleanField(default=0, editable=False )  # presentation ou questionnaire
-    is_numeric   = models.BooleanField(default=0,   verbose_name="Type de réponse" )    # réponse sur papier ou sur smartphone
+    is_numeric   = models.BooleanField(default=0, verbose_name="Type de réponse" )    # réponse sur papier ou sur smartphone
     is_mark      = models.BooleanField(default=0, verbose_name="Récupérer les réponses ?") 
     is_lock      = models.BooleanField(default=0, verbose_name="Verrouiller ?") 
     is_random    = models.BooleanField(default=0, verbose_name="Aléatoire ?") 
@@ -206,7 +206,7 @@ class Quizz(ModelWithCode):
 
 
 
-class Generate_quizz(models.Model):
+class Generate_quizz(ModelWithCode):
     """
     Modèle qui récupère le quizz de questions aléatoires question par question.
     """
