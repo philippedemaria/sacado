@@ -815,8 +815,8 @@ def list_evaluations_archives(request):
 ##@user_is_group_teacher
 def list_parcours_group(request,id):
 
-    teacher = Teacher.objects.get(user_id = request.user.id)
-    today = time_zone_user(teacher.user)
+    teacher = request.user.teacher
+    today = time_zone_user(request.user)
     group = Group.objects.get(pk = id) 
 
     request.session["group_id"] = group.id

@@ -674,7 +674,7 @@ def student_remove_from_school(request):
 
     group.students.remove(student)
 
-    groups = student.students_to_group.exclude(user__username = request.user.username)
+    groups = student.students_to_group.exclude(students__user__username = request.user.username)
     gr = ""
     for g in groups :
         gr = gr +str(g.name)+" "
