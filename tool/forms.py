@@ -41,7 +41,7 @@ class QuestionForm(forms.ModelForm):
 		model = Question
 		fields = '__all__'
 		widgets = {
-            'is_correct' : CheckboxInput(),   
+            'is_correct' : CheckboxInput(),  
         }
 
 

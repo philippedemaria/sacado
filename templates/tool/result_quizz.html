@@ -1,0 +1,69 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+ 
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script>
+        require(['script/ajax-quizz-complement']);
+    </script> 
+{% endblock %}
+
+
+{% block page_title %}
+        <a href="{% url 'list_quizzes' %}" ><i class="fa fa-cubes"></i> Résultats du quizz </a>  <img width="25px" src="{% static 'img/angle-right.png' %}"/> {{ quizz.title}}
+{% endblock %}
+
+
+{% block page_menu_right %}
+  
+{% endblock %}
+
+
+
+{% block body %} 
+<section class="content_main"> 
+    <div class="row">
+        <div class="col-sm-12 col-md-8">
+            {% for qr in g_quizz.generate_qr.all %}
+            <div class="row">    
+                <div class="card" style="padding:15px">
+                <h4 >Question {{ qr.ranking }}. </h4>
+                {{ qr.qr_text|safe }}
+                </div> 
+
+                {% for student in g_quizz.group.students.all|dictsort:"user.last_name" %}
+                    {% get_is_correct_answer_quizz_random qr student  as is_correct %}
+                    <button class="btn btn-{% if is_correct == 'A' %}default{% elif is_correct  %}success{% else %}danger{%  endif %}">{{ student.user }}</button>    
+                {% endfor %}
+            </div>
+            <hr/>
+            {% endfor %}
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Score</th>
+                    <th>SF</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for student in g_quizz.group.students.all %}
+                    {% get_score_quizz_random student g_quizz as data_global %}
+                        <tr>
+                            <td>{{ student.user }}</td>
+                            <td style="text-align: center;"><input type="text" name="mark" value="{{ data_global.score  }}" style="text-align: center;width:40px; border:transparent" /></td>
+                            <td style="text-align: center;"><input type="text" name="mark" value=" " style="text-align: center;width:40px; border:transparent" /></td>
+                        </tr>
+                    {% endfor %}
+            </table>
+
+        </div>
+    </div>
+</section>
+{% endblock %}  
+
+ 

@@ -683,3 +683,28 @@ def get_group_in_this_school(obj, school):
     obj = teacher , renvoie les groupes de cet enseignant dans l'école
     """
     return obj.group_in_this_school(school)
+
+
+@register.simple_tag 
+def get_quizz_generated(obj, group):
+    """
+    obj = quizz ,  historique des quizz
+    """
+    return obj.quizz_generated(group)  
+
+
+@register.simple_tag 
+def get_is_correct_answer_quizz_random(obj, student):
+    """
+    obj = qr ,  prédicat : question juste ou fausse par élève
+    """
+    return obj.is_correct_answer_quizz_random(student)  
+
+
+
+@register.simple_tag 
+def get_score_quizz_random(obj, g_quizz):
+    """
+    obj = student ,  renvoie par élève le score total au quizz et le niveau de knowledge
+    """
+    return obj.score_quizz_random(g_quizz)  

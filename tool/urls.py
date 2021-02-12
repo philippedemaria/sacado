@@ -18,7 +18,6 @@ urlpatterns = [
     path('delete_quizz/<int:id>', delete_quizz, name='delete_quizz'),
     path('show_quizz/<int:id>', show_quizz, name='show_quizz'), 
 
-
     path('create_question/<int:idq>/<int:qtype>', create_question, name='create_question'),
     path('update_question/<int:id>/<int:idq>', update_question, name='update_question'),   
     path('delete_question/<int:id>/<int:idq>', delete_question  , name='delete_question'),
@@ -39,7 +38,12 @@ urlpatterns = [
 
 
     path('play_printing_teacher/<int:id>', play_printing_teacher, name='play_printing_teacher'), 
-    path('play_quizz_teacher/<int:id>', play_quizz_teacher, name='play_quizz_teacher'), 
+    path('play_quizz_teacher/<int:id>/<int:idg>', play_quizz_teacher, name='play_quizz_teacher'),
+
+
+    path('show_quizz_group/<int:id>/<int:idg>', show_quizz_group, name='show_quizz_group'), 
+    path('show_quizz_random_group/<int:id>/<int:idg>', show_quizz_random_group, name='show_quizz_random_group'), 
+
 
     path('list_questions', list_questions, name='list_questions'),
 
@@ -75,7 +79,6 @@ urlpatterns = [
     ############## Random_quizz
     path('create_quizz_random/<int:id>', create_quizz_random, name='create_quizz_random'),
 
-
     path('list_qrandom', list_qrandom, name='list_qrandom'),
     path('create_qrandom', create_qrandom, name='create_qrandom'),
     path('update_qrandom/<int:id>', update_qrandom, name='update_qrandom'),
@@ -86,4 +89,12 @@ urlpatterns = [
     path('update_qrandom_admin/<int:id_knowledge>/<int:id>', update_qrandom_admin, name='update_qrandom_admin'),
     path('show_qrandom_admin/<int:id>', show_qrandom_admin, name='show_qrandom_admin'),
     path('show_quizz_random/<int:id>', show_quizz_random, name='show_quizz_random'), 
+
+
+    path('ajax_show_generated', ajax_show_generated, name='ajax_show_generated'),
+    path('result_quizz/<int:id>', result_quizz, name='result_quizz'), 
+
+    path('delete_historic_quizz/<int:id>', delete_historic_quizz, name='delete_historic_quizz'), 
+
+ 
 ]

@@ -79,9 +79,9 @@
                             <br> 
                             <div style="text-align: center;margin-top: 5px">
                             <a href="{% url 'show_parcours_student' parcours.id %}" class="btn btn-default btn-accueil"> {% get_tasks student parcours  as is_task_exists %} 
-                                    {%  if is_task_exists %}
-                                        <i class="fa fa-calendar-check" style="color:red"></i>
-                                    {% endif %} Accéder aux {% if parcours.is_folder %}parcours{% else  %}exercices{% endif %}</a>
+                                {%  if is_task_exists %}
+                                    <i class="fa fa-calendar-check" style="color:red"></i>
+                                {% endif %} Accéder aux {% if parcours.is_folder %}parcours{% else  %}exercices{% endif %}</a>
                             </div>
                             <div  class="student_vignette_subtitle" style="color:{{parcours.color|contrast_color }};">    
                                 {% if parcours.is_folder %}
@@ -129,8 +129,8 @@
                                         {{  data.nb  }}/{{ data.nb_total }} exercice{{ data.nb_total|pluralize }} étudié{{ data.nb_total|pluralize }}
                                     {% endif %}
                                 {% if parcours.course.all|length > 0 %}  
-                                <a href="{% url 'show_course_student' 0 parcours.id %}" class="pull-right" style="color:{{parcours.color|contrast_color }};" title="Rappels de cours" target="_blank"  >
-                                    <i class="fa fa-desktop"></i>  
+                                <a href="{% url 'show_course_student' 0 parcours.id %}" class="pull-right" style="font-size:12px; color:{{parcours.color|contrast_color }};" title="Rappels de cours" target="_blank"  >
+                                     Cours   
                                 </a>
                                 {% endif  %}
                             </div>

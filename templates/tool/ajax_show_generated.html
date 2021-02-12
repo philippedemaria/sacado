@@ -1,0 +1,24 @@
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+<div class="row">
+	<div class="col-sm-12 col-md-12" >  
+		<h2>{{ g_quizz.title}}</h2>
+	</div>
+</div>
+<hr/>
+<div class="row">
+	<div class="col-sm-12 col-md-12" >  
+		{% for gq in g_quizz.generate_qr.all %}
+		    <div class="card" style="padding:15px">
+		    <h4>Question {{ gq.ranking }}. </h4>
+		    {{ gq.qr_text|safe }}
+		    </div> 
+
+		{% endfor %}
+		</div>
+	</div>
+</div>
+<script>
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>

@@ -1,10 +1,19 @@
 define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle'], function ($) {
     $(document).ready(function () {
- 
+
+
+    console.log(" ajax-quizz chargé ");
+
+
+
+    $('.confirm_create_historic').on('click', function (event) {
+        if (!confirm('En créant cette présentation, vous allez créer son historique accessible ci-contre après la présentation')) return false;
+    }) ; 
+
 
 
     $("#loading").hide(500); 
-    console.log(" ajax-quizz chargé ");
+
   // Affiche dans la modal la liste des élèves du groupe sélectionné
         $('#id_levels').on('change', function (event) {
             let id_level = $(this).val();

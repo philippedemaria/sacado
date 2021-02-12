@@ -432,12 +432,37 @@ class Student(ModelWithCode):
         if m == nbc :
             test = True 
 
-
-
         if tst and (teest or test)  :
             booleen = True
  
         return booleen
+
+
+
+    def score_quizz_random(self, g_quizz) :
+
+        data = {}
+        qrs = g_quizz.generate_qr.all() # toutes les questions
+        score = self.quizz_student_answers.filter(  qrandom__in= qrs, is_correct = 1).count()
+        nbre_total = self.quizz_student_answers.filter( qrandom__in= qrs).count()
+        try :
+            percent = 100 * score/nbre_total
+            data["score"] = score
+        except :
+            percent = "A"
+            data["score"] = "A"
+        return data
+
+
+ 
+
+
+
+
+
+
+
+
 
 
 class Teacher(models.Model):

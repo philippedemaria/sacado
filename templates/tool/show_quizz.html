@@ -21,7 +21,7 @@
 
 
 {% block page_menu_right %}
-    <a href="{% url 'play_quizz_teacher' quizz.id %}" target="_blank" class="btn btn-new">Mode jeu</a>
+    <a href="{% url 'play_quizz_teacher' quizz.id  group.id  %}" target="_blank" class="btn btn-new">Mode jeu</a>
     <a href="{% url 'list_quizzes' %}" target="_blank" class="btn btn-new">Mes quizz</a>
 {% endblock %}
 

@@ -53,7 +53,7 @@ class Qrandom(models.Model):
     texte      = RichTextUploadingField(  blank=True, verbose_name="Enoncé")
     knowledge  = models.ForeignKey(Knowledge, related_name="qrandom", blank=True, null = True,  on_delete=models.CASCADE) 
     is_publish = models.BooleanField(default=1, verbose_name="Publié ?")
-    teacher    = models.ForeignKey(Teacher, related_name = "qrandom", blank=True,   editable=False ,  on_delete=models.CASCADE) 
+    teacher    = models.ForeignKey(Teacher, related_name = "qrandom", blank=True,   editable=False ,  on_delete=models.CASCADE)
     ####  type de question
     qtype      = models.PositiveIntegerField(default=2, editable=False)
     calculator = models.BooleanField(default=0, verbose_name="Calculatrice ?")
@@ -129,6 +129,7 @@ class Question(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
     ####  type de question
     qtype         = models.PositiveIntegerField(default=3, editable=False)
+    answer        = models.CharField(max_length=255, null = True,   blank=True, verbose_name="Réponse attendu")
 
     knowledge  = models.ForeignKey(Knowledge, related_name="question", blank=True, null = True,  on_delete=models.CASCADE) 
 
@@ -193,10 +194,74 @@ class Quizz(ModelWithCode):
 
     groups       = models.ManyToManyField(Group, blank=True, related_name="quizz" , editable=False) 
     questions    = models.ManyToManyField(Question, blank=True, related_name="quizz" , editable=False)  
-    qrandoms    = models.ManyToManyField(Qrandom, blank=True, related_name="quizz" , editable=False)  
+    qrandoms     = models.ManyToManyField(Qrandom, blank=True, related_name="quizz" , editable=False)  
     
     def __str__(self):
         return self.title 
+
+
+    def quizz_generated(self,group):
+        return self.generate_quizz.filter(group=group).order_by("-date_created")
+
+
+
+
+class Generate_quizz(models.Model):
+    """
+    Modèle qui récupère le quizz de questions aléatoires question par question.
+    """
+    quizz        = models.ForeignKey(Quizz,  related_name="generate_quizz",  on_delete=models.CASCADE, editable=False) 
+    group        = models.ForeignKey(Group,  null=True, blank=True, related_name='generate_quizz', on_delete=models.CASCADE, editable= False)
+    date_created = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.quizz.title 
+
+
+class Generate_qr(models.Model):
+    """
+    Modèle qui récupère les questions du quizz généré.
+    """
+    gquizz       = models.ForeignKey(Generate_quizz,  related_name="generate_qr",  on_delete=models.CASCADE, editable=False) 
+    qr_text      = models.TextField( editable=False) 
+    ranking      = models.PositiveIntegerField(default = 1 , editable=False)    
+ 
+    def __str__(self):
+        return self.qr_text
+
+
+    def is_correct_answer_quizz_random(self , student) :
+
+        test = False
+        quizz_student_answers = self.quizz_student_answers.filter(student = student)
+        if quizz_student_answers.count() == 0:
+            test = "A"
+        else :
+            for qsa in quizz_student_answers :
+                if quizz_student_answer : 
+                    test = quizz_student_answer.is_correct
+            
+        return test
+
+
+class Quizz_student_answer(models.Model):
+    """
+    Modèle qui récupère les réponses numérique.
+    """
+    qrandom     = models.ForeignKey(Generate_qr, null=True, blank=True, related_name="quizz_student_answers",  on_delete=models.CASCADE, editable=False) # Si le quizz est aléatoire ce champ est complété sinon laissé vide
+    question    = models.ForeignKey(Question, null=True, blank=True, related_name="quizz_student_answers",  on_delete=models.CASCADE, editable=False) # Si le quizz est aléatoire ce champ est complété sinon laissé vide
+    anwser      = models.CharField( max_length=255, editable=False) 
+    is_correct  = models.BooleanField(default=0, editable=False) 
+    student     = models.ForeignKey(Student,  related_name="quizz_student_answers",  on_delete=models.CASCADE, editable=False)
+    duration    = models.PositiveIntegerField(default=20, blank=True, editable=False) 
+
+    def __str__(self):
+        return self.is_correct
+ 
+
+    class Meta:
+        unique_together = ('qrandom', 'student')
+
+
 
  
 
@@ -236,8 +301,8 @@ class Slide(models.Model):
     """
     Modèle représentant un associé.
     """
-    title         = models.CharField( max_length=255, default="",  verbose_name="Titre") 
-    content      = RichTextUploadingField(  default="", verbose_name="Texte ")
+    title      = models.CharField( max_length=255, default="",  verbose_name="Titre") 
+    content    = RichTextUploadingField(  default="", verbose_name="Texte ")
     ranking    = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
     duration   = models.PositiveIntegerField(default=0, blank=True, verbose_name="Durée d'affichage")
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")

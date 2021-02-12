@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from tool.models import Tool , Question  , Choice  , Quizz , Diaporama  , Slide ,Qrandom ,Variable , VariableImage
-from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm,  DiaporamaForm , SlideForm,QrandomForm, VariableForm 
+from tool.models import Tool , Question  , Choice  , Quizz , Diaporama  , Slide ,Qrandom ,Variable , VariableImage , Generate_quizz , Generate_qr , Quizz_student_answer 
+from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm,  DiaporamaForm , SlideForm,QrandomForm, VariableForm
+from group.models import Group 
 from socle.models import Level, Waiting
 from account.decorators import  user_is_testeur
 from sacado.settings import MEDIA_ROOT
@@ -17,7 +18,7 @@ from django.forms import inlineformset_factory
 from templated_email import send_templated_mail
 from django.db.models import Q
 from random import  randint
-import  math
+import math
 ############### bibliothèques pour les impressions pdf  #########################
 import os
 from django.utils import formats, timezone
@@ -40,8 +41,6 @@ import pytz
 from datetime import datetime 
 from general_fonctions import *
 
- 
- 
 
 #####################################################################################################################################
 #####################################################################################################################################
@@ -229,13 +228,67 @@ def show_quizz(request,id):
     return render(request, 'tool/show_quizz.html', context)
 
 
-def play_quizz_teacher(request,id):
  
+def show_quizz_group(request,id,idg):
+
+    group = Group.objects.get(pk= idg)
+    quizz = Quizz.objects.get(pk= id)
+    questions = quizz.questions.filter(is_publish=1).order_by("ranking")
+    context = {  "quizz" : quizz , "questions" : questions , "group" : group  }
+
+    return render(request, 'tool/show_quizz.html', context)
+
+
+
+
+
+def play_quizz_teacher(request,id,idg):
+
     quizz = Quizz.objects.get(pk= id)
     questions = quizz.questions.order_by("ranking")
     context = {  "quizz" : quizz , "questions" : questions }
 
     return render(request, 'tool/play_quizz_teacher.html', context)
+
+
+
+
+
+
+def result_quizz(request,id):
+ 
+    g_quizz = Generate_quizz.objects.get(pk= id, quizz__teacher = request.user.teacher)
+    context = {  "g_quizz" : g_quizz }
+
+    return render(request, 'tool/result_quizz.html', context)
+
+
+
+
+
+
+def delete_historic_quizz(request,id):
+
+    g_quizz = Generate_quizz.objects.get(pk= id)
+
+    if g_quizz.teacher == request.user.teacher :
+        g_quizz.delete()
+
+    return redirect("list_quizzes")
+
+
+
+def ajax_show_generated(request):
+
+    gq_id = request.POST.get("gq_id")
+    data = {}  
+    g_quizz = Generate_quizz.objects.get(pk= gq_id, quizz__teacher = request.user.teacher) 
+    context = { "g_quizz" : g_quizz   }
+
+    data['html'] = render_to_string('tool/ajax_show_generated.html', context)
+
+    return JsonResponse(data)  
+
 
 
 ############################################################################################################
@@ -735,9 +788,8 @@ def all_datas(level):
  
 
 
-def show_quizz_random(request,id):
- 
- 
+def get_qr(id,group) :
+
     quizz = Quizz.objects.get(pk= id)
     list_qr = list(quizz.qrandoms.filter(is_publish=1))
     qrandoms = []
@@ -754,12 +806,41 @@ def show_quizz_random(request,id):
         for i in range(nleft) :
             random = randint(0, len(qrandoms)-1)
             qrandoms.append(list_qr[random]) 
-
         qrandoms.shuffle()
+ 
+    if group :
+        gquizz = Generate_quizz.objects.create(quizz = quizz ,  group = group)
+        i=1 
+        for qrandom in qrandoms :
+            qr_text  = qrandom.instruction()
+            Generate_qr.objects.create(gquizz = gquizz ,  qr_text = qr_text , ranking = i  )
+            i+=1    
 
+    return qrandoms
+
+
+def show_quizz_random(request,id):
+
+
+    quizz = Quizz.objects.get(pk= id)
+    qrandoms = get_qr(id, None)  
+ 
     context = {  "quizz" : quizz , "qrandoms" : qrandoms }
  
     return render(request, 'tool/show_quizz_random.html', context)
+
+
+
+def show_quizz_random_group(request,id,idg):
+ 
+    group = Group.objects.get(pk= idg)
+    quizz = Quizz.objects.get(pk= id)
+    qrandoms = get_qr(id,group)  
+
+    context = {  "quizz" : quizz , "qrandoms" : qrandoms , "group" : group }
+ 
+    return render(request, 'tool/show_quizz_random.html', context)
+
 
 
 

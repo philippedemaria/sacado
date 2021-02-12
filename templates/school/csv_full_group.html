@@ -14,7 +14,7 @@
  
  
 {% block page_title %}
-    <i class='fa fa-users'></i> {{ school.name}} <img src="{% static 'img/angle-right.png' %}"/>    Importation de classes et élèves par csv
+    <i class='fa fa-users'></i> {{ school.name}} <img src="{% static 'img/angle-right.png' %}"/>    Initialisation des groupes et des élèves
 {% endblock %}
  
 
@@ -35,9 +35,15 @@
 <section class="content_main"> 
 
     <div class="alert alert-danger alert-dismissible" role="alert" id="alert_intro">
-        <strong>Avant de lancer votre fichier csv, assurez-vous que tous les élèves ont été supprimés de la base de données.</strong> <br>
+        <strong>MODE EXPERT. <br/>Avant de lancer votre fichier csv, assurez-vous que tous les élèves ont été supprimés de la base de données.</strong> <br>
 
-        <i class="fa fa-warning fa-2x"></i> Votre fichier csv doit être <strong>encodé en utf-8</strong> et les données doivent vérifier le format imposé (comme exemple). Ces données doivent être séparées d'un <strong>point virgule (;)</strong>.  Cinq champs sont demandés :
+        <i class="fa fa-warning fa-2x"></i> Votre fichier csv doit être <strong>encodé en utf-8</strong> et les données doivent vérifier le format imposé (ci-dessous). Ces données doivent être séparées d'un <strong>point virgule (;)</strong>.  
+        <div style="margin:20px 0px; color:#207247">
+        <img src="{% static 'img/excel.png' %}" height="50px"/> Utilisateur Excel : choisir Enregistrer sous : CSV UTF-8 (délimité par des virgules) (*.csv)
+        </div>
+
+
+        Cinq champs sont demandés :
             <ul style="margin:10px">
                 <li>Classe</li>
                 <li>Code du niveau <i class="fa fa-warning"></i> Noter le code du niveau : CP = 1 | CE1 = 2 | CE2 = 3 ..... 6ème = 6 | 5ème = 7 | ... 2nde = 10 | Term = 12</li>
