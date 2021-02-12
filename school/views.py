@@ -609,19 +609,21 @@ def manage_stage(request):
 
 #@is_manager_of_this_school
 def send_account(request, id):
-	rcv = []
+
 	if id == 0:
-	
 		school = this_school_in_session(request)
-		for u in school.users.all():
-			rcv.append(u.email)
+		for user in school.users.filter(user_type=2):
+			if user.email : 
+				msg = f'Bonjour, votre compte Sacado est disponible.\r\n\r\nVotre identifiant est {user.username} \r\n\r\n\ Pour une première connexion, le mot de passe est : sacado2020 . Il faut le modifier lors de la première connexion.\r\n\r\n Dans le cas contraire, utilisez votre mot de passe habituel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.'
+				send_mail('Compte Sacado', msg ,'info@sacado.xyz', [user.email])
+
 	else:
 		user = User.objects.get(id=id)
-		rcv.append(user.email)
-	send_mail('Compte   Sacado',
-	f'Bonjour, votre compte Sacado est disponible.\r\n\r\nVotre identifiant est {user.username} \r\n\r\n\Votre mot de passe est secret. Pour une première connexion, le mot de passe est : sacado2020 . Il faut le modifier lors de la première connexion.\r\n\r\n Dans le cas contraire, utilisez votre mot de passe habituel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
-	'info@sacado.xyz',
-	rcv)
+		if user.email : 
+			msg = f'Bonjour, votre compte Sacado est disponible.\r\n\r\nVotre identifiant est {user.username} \r\n\r\n\ Pour une première connexion, le mot de passe est : sacado2020 . Il faut le modifier lors de la première connexion.\r\n\r\n Dans le cas contraire, utilisez votre mot de passe habituel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.'
+			send_mail('Compte Sacado', msg ,'info@sacado.xyz', [user.email])
+
+	
 
 	return redirect('school_teachers') 
 
