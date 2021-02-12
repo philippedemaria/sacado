@@ -5155,7 +5155,7 @@ def ajax_create_constraint(request):
     if code == "all" : # si tous les exercices précédents sont cochés
         parcours_id = int(request.POST.get("parcours_id"))
         
-        relationships = Relationship.objects.filter(parcours_id = parcours_id, order__lt= this_relationship.ranking)
+        relationships = Relationship.objects.filter(parcours_id = parcours_id, ranking__lt= this_relationship.ranking)
         for relationship in relationships :
             Constraint.objects.get_or_create(code = relationship.exercise.supportfile.code, relationship = this_relationship, defaults={"scoremin" : score , } )
         data["html"] = "<div id='constraint_saving0'><i class='fa fa-minus-circle'></i> Tous les exercices à "+score+"% <a href='#'  class='pull-right delete_constraint' data-relationship_id='"+str(relationship_id)+"' data-is_all=1 ><i class='fa fa-trash'></i> </a></div>"
