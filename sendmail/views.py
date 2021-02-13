@@ -113,15 +113,18 @@ def create_email(request):
 
 @user_is_email_teacher
 def delete_email(request,id):
-    email = Email.objects.get(id=id)
-    email.receivers.clear()
-    email.delete()
+
+	if Email.objects.filter(id=id).count() == 1 :
+	    email = Email.objects.get(id=id)
+	    email.receivers.clear()
+	    email.delete()
     return redirect('emails')
 
 
 
 
 def show_email(request):
+
 	email_id = int(request.POST.get("email_id"))
 	email = Email.objects.get(id=email_id)
 	data = {} 
@@ -206,11 +209,12 @@ def update_communication(request,id): # update
 
 
 def delete_communication(request, id):
-    communication = Communication.objects.get(id=id)
-    communication.delete()
+
+ 
+	if Communication.objects.filter(id=id).count() == 1 :
+	    communication = Communication.objects.get(id=id)
+	    communication.delete()
     return redirect('communications')
-
-
  
 
 

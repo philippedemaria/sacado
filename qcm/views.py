@@ -813,6 +813,7 @@ def list_evaluations_archives(request):
 
     return render(request, 'qcm/list_evaluations_archives.html', { 'parcourses' : parcourses, 'parcours' : None , 'teacher' : teacher , 'communications' : [] ,  'today' : today , 'relationships' : []   })
 
+
 ##@user_is_group_teacher
 def list_parcours_group(request,id):
 
@@ -822,9 +823,7 @@ def list_parcours_group(request,id):
 
     request.session["group_id"] = group.id
 
- 
     role, group , group_id , access = get_complement(request, teacher, group)
-
 
     if not authorizing_access(teacher,group, access ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
@@ -845,8 +844,8 @@ def list_parcours_group(request,id):
             if len(parcours_tab) == teacher.teacher_parcours.count() :
                 break
 
-
     return render(request, 'qcm/list_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group': group,  'parcours' : None , 'communications' : [] , 'relationships' : [] , 'role' : role , 'today' : today })
+
 
 @parcours_exists
 def list_sub_parcours_group(request,idg,id):
