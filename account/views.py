@@ -324,6 +324,8 @@ def register_student(request):
                         from_email="info@sacado.xyz",
                         recipient_list=[user_form.cleaned_data['email'], ],
                         context={"student": user, }, )
+            else:
+                messages.error(request, "Erreur lors de l'enregistrement. Vous devez spécifier un groupe...")     
 
         else:
             messages.error(request, "Erreur lors de l'enregistrement. Reprendre l'inscription...")
