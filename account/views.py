@@ -966,21 +966,21 @@ def delete_teacher(request, id):
 
 def dissociate_teacher(request, id):
 
-    teacher = Teacher.objects.get(user_id=id)
+    user = User.objects.get(pk=id)
     this_user = request.user
 
-    if teacher.user.school == this_user.school and  this_user.is_manager :
+    if user == this_user or  this_user.is_manager :
 
-        Teacher.objects.filter(pk=id).update(user__school = None)
+        User.objects.filter(pk=id).update(school = None)
         print("ici")
 
 
     msg = "Bonjour cher collègue, vous venez d'être dissocié de votre établissement d'affectation. Votre compte reste actif avec vos identifiants habituels. Vous pourrez utiliser Sacado dans votre prochaine affectation. Cordialement."
 
-    if teacher.user.email :
+    if user.email :
         send_mail('Disociation de compte à un établissement', msg ,
                       'info@sacado.xyz',
-                      [teacher.user.email, ])
+                      [user.email, ])
 
 
     test = request.POST.get("listing",None)
