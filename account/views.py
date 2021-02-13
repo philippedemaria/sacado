@@ -302,26 +302,28 @@ def register_student(request):
                     parcours = Parcours.objects.filter(teacher=group.teacher, level=group.level)
                 else :
                     parcours = []
+                    group = None
             #######################################################################################
-            user.save()
-            student = Student.objects.create(user=user, level=group.level)
-            try :
-                group.students.add(student)
-            except :
-                pass
+            if group :
+                user.save()
+                student = Student.objects.create(user=user, level=group.level)
+                try :
+                    group.students.add(student)
+                except :
+                    pass
 
-            attribute_all_documents_to_student(parcours,student) ### Dans general_fonction
+                attribute_all_documents_to_student(parcours,student) ### Dans general_fonction
 
-            user = authenticate(username=username, password=password)
-            login(request, user)
-            request.session["user_id"] = request.user.id
-            messages.success(request, "Inscription réalisée avec succès !")               
-            if user_form.cleaned_data['email']:
-                send_templated_mail(
-                    template_name="student_registration",
-                    from_email="info@sacado.xyz",
-                    recipient_list=[user_form.cleaned_data['email'], ],
-                    context={"student": user, }, )
+                user = authenticate(username=username, password=password)
+                login(request, user)
+                request.session["user_id"] = request.user.id
+                messages.success(request, "Inscription réalisée avec succès !")               
+                if user_form.cleaned_data['email']:
+                    send_templated_mail(
+                        template_name="student_registration",
+                        from_email="info@sacado.xyz",
+                        recipient_list=[user_form.cleaned_data['email'], ],
+                        context={"student": user, }, )
 
         else:
             messages.error(request, "Erreur lors de l'enregistrement. Reprendre l'inscription...")
