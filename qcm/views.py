@@ -3265,7 +3265,7 @@ def show_this_exercise(request, id):
     return render(request, url, context)
 
 
-@parcours_exists
+
 def execute_exercise(request, idp,ide):
 
     parcours = Parcours.objects.get(id= idp)
