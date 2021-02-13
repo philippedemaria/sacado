@@ -5015,7 +5015,6 @@ def ajax_remediation(request):
         context = {'form': form,  'customexercise' : customexercise ,  'remediations' : remediations , 'relationship' : None , 'parcours_id' : parcours_id   } 
 
     else :
-        
         relationship_id =  int(request.POST.get("relationship_id"))
         relationship = Relationship.objects.get( id = relationship_id)
 
@@ -5478,17 +5477,20 @@ def export_notes_after_evaluation(request):
 
 
     for student in parcours.students.order_by("user__last_name") :
-        data_student = get_student_result_from_eval(student, parcours, exercises,relationships,skills, knowledges,parcours_duration)  
-
+        data_student = get_student_result_from_eval(student, parcours, exercises,relationships,skills, knowledges,parcours_duration) 
+        
         if data_student["percent"] != "" :
 
-            final_mark = float(data_student["score_total"]) * (float(note_totale) - float(note_sacado)) + float(data_student["percent"]) * float(note_sacado)/100
+            try :
+                final_mark = float(data_student["score_total"]) * (float(note_totale) - float(note_sacado)) + float(data_student["percent"]) * float(note_sacado)/100
 
-            coefficient = data_student["nb_exo"]  /  data_student["total_nb_exo"] 
-            final_mark = math.ceil( coefficient *  final_mark)
+                coefficient = data_student["nb_exo"]  /  data_student["total_nb_exo"] 
+                final_mark = math.ceil( coefficient *  final_mark)
+            except :
+                final_mark = "NE" 
 
         else :
-            final_mark = "NR" 
+            final_mark = "NE" 
 
         writer.writerow( (str(student.user.last_name).lower() , str(student.user.first_name).lower() , data_student["total_nb_exo"] , data_student["nb_exo"],  data_student["percent"] , data_student["ajust"] , final_mark ) )
     return response
