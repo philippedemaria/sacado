@@ -118,7 +118,7 @@ def delete_email(request,id):
 	    email = Email.objects.get(id=id)
 	    email.receivers.clear()
 	    email.delete()
-    return redirect('emails')
+	return redirect('emails')
 
 
 
@@ -210,12 +210,12 @@ def update_communication(request,id): # update
 
 def delete_communication(request, id):
 
- 
+
 	if Communication.objects.filter(id=id).count() == 1 :
 	    communication = Communication.objects.get(id=id)
 	    communication.delete()
-    return redirect('communications')
- 
+	return redirect('communications')
+
 
 
 
