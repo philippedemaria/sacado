@@ -112,7 +112,7 @@ def index(request):
 
             relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("date_limit").order_by("parcours")
             
-            parcourses = teacher.teacher_parcours.filter(is_evaluation=0, is_favorite =1).order_by("-is_publish")
+            parcourses = teacher.teacher_parcours.filter(is_evaluation=0, is_favorite =1,is_folder=0 ).order_by("-is_publish")
 
             communications = Communication.objects.values('id', 'subject', 'texte', 'today').filter(active=1).order_by("-id")
 

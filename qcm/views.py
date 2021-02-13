@@ -1328,6 +1328,7 @@ def ordering_number_for_student(parcours,student):
 
     return listing_order , nb_exo_only, nb_exo_visible
 
+
 @parcours_exists
 def show_parcours_student(request, id):
 
