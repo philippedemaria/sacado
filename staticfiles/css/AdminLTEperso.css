@@ -5526,6 +5526,20 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   background: transparent;
   color: #fff;
 }
+
+.btn-outline-danger {
+  border: 1px solid #dd4b39;
+  background: transparent;
+  color: #dd4b39!important;
+  margin-right: 15px;
+  border-radius: 20px;
+}
+.btn-outline-danger:hover,
+.btn-outline-danger:focus,
+.btn-outline-danger:active {
+  background-color: #dd4b39!important;
+  color:#FFF!important;
+}
 .btn-outline:hover,
 .btn-outline:focus,
 .btn-outline:active {
