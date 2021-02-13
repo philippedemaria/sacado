@@ -982,8 +982,8 @@ def create_qrandom_admin(request,id_knowledge):
                     for file in files :
                         VariableImage.objects.create(variable = var , image = file)
  
-
                 return redirect('create_qrandom_admin' , id_knowledge)
+
         context = {  "form" : form , "form_var" : formSet ,'teacher' : teacher,'qrandom' : None , 'knowledge' : knowledge }
         return render(request, 'tool/form_qrandom_admin.html', context)
 
@@ -994,31 +994,34 @@ def create_qrandom_admin(request,id_knowledge):
 
 
 
-def update_qrandom_admin(request,id_level,id):
+def update_qrandom_admin(request,id_knowledge,id):
 
     teacher = request.user.teacher
     if request.user.is_superuser :
-        form = QrandomForm(request.POST or None )
-        formSet = inlineformset_factory( Qrandom , Variable , fields=('name','qrandom', 'is_integer','minimum','maximum', 'words') , extra=1)
+        knowledge = Knowledge.objects.get(pk=id_knowledge)
+        qr = Qrandom.objects.get(pk = id)
+        form = QrandomForm(request.POST or None , instance =  qr )
+        formSet = inlineformset_factory( Qrandom , Variable , fields=('name','qrandom', 'is_integer','minimum','maximum', 'words') , extra=0)
+        form_var = formSet(request.POST or None,  instance = qr)
 
         if request.method == "POST"  :
             if form.is_valid():
                 qr = form.save(commit = False)
                 qr.teacher = teacher
                 qr.save()
-                form_var = formSet(request.POST or None,  instance = qr) 
                 for form_v in form_var :
                     if form_v.is_valid():
                         var = form_v.save()
-                    else :
-                        print(form_v.errors)
-                    files = request.FILES.getlist("images-"+var.name)
-                    for file in files :
-                        VariableImage.objects.create(variable = var , image = file)
+                    try :
+                        files = request.FILES.getlist("images-"+var.name)
+                        for file in files :
+                            VariableImage.objects.create(variable = var , image = file)
+                    except :
+                        pass
  
+                return redirect('admin_qrandom' , knowledge.level.id)
 
-                return redirect('create_qrandom' )
-        context = {  "form" : form , "form_var" : formSet ,'teacher' : teacher,'qrandom' : None }
+        context = {  "form" : form , "form_var" : form_var ,'teacher' : teacher,'qrandom' : None , 'knowledge' : knowledge }
         return render(request, 'tool/form_qrandom_admin.html', context)
 
     else :

@@ -74,7 +74,7 @@ def get_time(s,e):
     return  full_time
 
 def advises(request):
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     return render(request, 'advises.html', {'teacher': teacher})
 
 def convert_seconds_in_time(secondes):
@@ -341,7 +341,7 @@ def total_by_knowledge_by_student(knowledge,relationships, parcours,student) : #
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 def associate_parcours(request,id):
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     group = Group.objects.get(pk = id)
     theme_theme_ids = request.POST.getlist("themes")
     for theme_id in theme_theme_ids :
@@ -373,7 +373,7 @@ def ajax_parcours_default(request):
     return JsonResponse(data)
 
 def get_parcours_default(request):
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     level_id = request.POST.get("level_selected_id")
     theme_ids = request.POST.getlist("themes")
     n = 0
@@ -467,7 +467,7 @@ def ajax_populate(request):
 
 
 def peuplate_parcours(request,id):
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     levels =  teacher.levels.all() 
     parcours = Parcours.objects.get(id=id)
 
@@ -531,7 +531,7 @@ def peuplate_parcours(request,id):
     return render(request, 'qcm/form_peuplate_parcours.html', context)
 
 def peuplate_parcours_evaluation(request,id):
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     levels =  teacher.levels.all() 
  
     parcours = Parcours.objects.get(id=id)
@@ -601,7 +601,7 @@ def peuplate_parcours_evaluation(request,id):
 
 
 def individualise_parcours(request,id):
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     parcours = Parcours.objects.get(pk = id)
     relationships = Relationship.objects.filter(parcours = parcours).order_by("ranking")
     students = parcours.students.all()
@@ -760,7 +760,7 @@ def ajax_individualise(request):
 
 def list_parcours(request):
 
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     today = time_zone_user(teacher.user)
 
     parcourses = teacher_has_parcourses_folder(teacher,0 ,0 ) #  is_evaluation ,is_archive 
@@ -778,7 +778,7 @@ def list_parcours(request):
 
 def list_archives(request):
 
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     parcourses = teacher_has_parcourses(teacher,0 ,1 ) #  is_evaluation ,is_archive  
     today = time_zone_user(teacher.user)
     try :
@@ -791,7 +791,7 @@ def list_archives(request):
 
 
 def list_evaluations(request):
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     today = time_zone_user(teacher.user)
     parcourses = teacher_has_parcourses(teacher,1 ,0 ) #  is_evaluation ,is_archive    
     nb_archive = len(teacher_has_parcourses(teacher,1 ,1))  
@@ -803,7 +803,7 @@ def list_evaluations(request):
     return render(request, 'qcm/list_evaluations.html', { 'parcourses' : parcourses, 'parcours' : None ,  'teacher' : teacher ,  'communications' : [] , 'relationships' : []   ,  'today' : today , 'nb_archive' : nb_archive })
 
 def list_evaluations_archives(request):
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     parcourses = teacher_has_parcourses(teacher,1 ,1 ) #  is_evaluation ,is_archive      
     today = time_zone_user(teacher.user)
     try :
@@ -851,7 +851,7 @@ def list_parcours_group(request,id):
 @parcours_exists
 def list_sub_parcours_group(request,idg,id):
 
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     today = time_zone_user(teacher.user)
     parcours = Parcours.objects.get(pk = id) 
     group = Group.objects.get(pk = idg) 
@@ -871,7 +871,7 @@ def list_sub_parcours_group(request,idg,id):
 
 
 def all_parcourses(request):
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1).exclude(exercises=None ).exclude(teacher=teacher).order_by("author").prefetch_related('exercises__knowledge__theme').select_related('author')
 
     if request.user.school != None :
@@ -885,7 +885,8 @@ def all_parcourses(request):
 
 
 def ajax_all_parcourses(request):
-    teacher = Teacher.objects.get(user= request.user)
+
+    teacher = request.user.teacher
     data = {} 
     level_id = request.POST.get('level_id',None)
 
@@ -955,7 +956,7 @@ def lock_all_exercises_for_student(dateur,parcours):
 
 def create_parcours(request,idp=0):
 
-    teacher = Teacher.objects.get(user = request.user)
+    teacher = request.user.teacher
     levels =  teacher.levels.all()    
     form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher)
  
@@ -1154,7 +1155,7 @@ def archive_parcours(request, id, idg=0):
 
 
     parcours = Parcours.objects.filter(id=id).update(is_archive=1,is_favorite=0,is_publish=0)
-    teacher = Teacher.objects.get(user = request.user) 
+    teacher = request.user.teacher 
 
 
     if idg == 99999999999:
@@ -1170,7 +1171,7 @@ def unarchive_parcours(request, id, idg=0):
 
     parcours = Parcours.objects.filter(id=id).update(is_archive=0,is_favorite=0,is_publish=0)
 
-    teacher = Teacher.objects.get(user = request.user)
+    teacher = request.user.teacher
 
 
     if idg == 99999999999:
@@ -1187,7 +1188,7 @@ def delete_parcours(request, id, idg=0):
     parcours_is_evaluation = parcours.is_evaluation
     parcours.students.clear()
 
-    teacher = Teacher.objects.get(user = request.user)
+    teacher = request.user.teacher
 
     if not authorizing_access(teacher, parcours, False ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
@@ -1426,7 +1427,7 @@ def result_parcours(request, id):
 
     parcours = Parcours.objects.get(id=id)
     students = students_from_p_or_g(request,parcours) # liste des élèves d'un parcours donné 
-    teacher = Teacher.objects.get(user = request.user)
+    teacher = request.user.teacher
 
     try :
         group_id = request.session["group_id"]
@@ -1653,7 +1654,7 @@ def result_parcours_knowledge(request, id):
 @parcours_exists
 def result_parcours_waiting(request, id):
 
-    teacher = Teacher.objects.get(user=request.user)
+    teacher = request.user.teacher
     parcours = Parcours.objects.get(id=id)
     students = students_from_p_or_g(request,parcours)
 
@@ -1869,7 +1870,7 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
 @parcours_exists
 def stat_evaluation(request, id):
 
-    teacher = Teacher.objects.get(user = request.user)
+    teacher = request.user.teacher
     parcours = Parcours.objects.get(id=id)
     skills = skills_in_parcours(request,parcours)
     knowledges = knowledges_in_parcours(parcours)
@@ -1908,35 +1909,36 @@ def stat_evaluation(request, id):
 
 def add_exercice_in_a_parcours(request):
 
-    e= request.POST.get('exercise')
-    exercise = Exercise.objects.get(id=int(e))
+    e = request.POST.get('exercise',None)
+    if e :
+        exercise = Exercise.objects.get(id=int(e))
 
-    exercises_parcours = request.POST.get('exercises_parcours') 
-    p_tab_ids = []
-    for p in exercises_parcours.split("-"):
-        if p != "" :
-            p_tab_ids.append(int(p))
+        exercises_parcours = request.POST.get('exercises_parcours') 
+        p_tab_ids = []
+        for p in exercises_parcours.split("-"):
+            if p != "" :
+                p_tab_ids.append(int(p))
 
-    for p_id in p_tab_ids :
-        parcours = Parcours.objects.get(pk=p_id)
-        try :
-            rel = Relationship.objects.get(parcours = parcours , exercise = exercise).delete() 
-        except :
-            pass    
+        for p_id in p_tab_ids :
+            parcours = Parcours.objects.get(pk=p_id)
+            try :
+                rel = Relationship.objects.get(parcours = parcours , exercise = exercise).delete() 
+            except :
+                pass    
 
-    ps= request.POST.getlist('parcours') 
-    orders = request.POST.getlist('orders') 
-    i=0
-    for p in ps :
-        parcours = Parcours.objects.get(id=int(p))
-        try:
-            r = int(orders[i])
-        except :
-            r = 0
+        ps= request.POST.getlist('parcours') 
+        orders = request.POST.getlist('orders') 
+        i=0
+        for p in ps :
+            parcours = Parcours.objects.get(id=int(p))
+            try:
+                r = int(orders[i])
+            except :
+                r = 0
 
-        relation = Relationship.objects.create(parcours = parcours , exercise = exercise , ranking=  r, is_publish= 1 , start= None , date_limit= None, duration= exercise.supportfile.duration, situation= exercise.supportfile.situation ) 
-        relation.skills.set(exercise.supportfile.skills.all())   
-        i +=1
+            relation = Relationship.objects.create(parcours = parcours , exercise = exercise , ranking=  r, is_publish= 1 , start= None , date_limit= None, duration= exercise.supportfile.duration, situation= exercise.supportfile.situation ) 
+            relation.skills.set(exercise.supportfile.skills.all())   
+            i +=1
 
     return redirect('exercises')
 
@@ -1945,7 +1947,7 @@ def add_exercice_in_a_parcours(request):
 def clone_parcours(request, id, course_on ):
     """ cloner un parcours """
     
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     parcours = Parcours.objects.get(pk=id)
     relationships = Relationship.objects.filter(parcours = parcours) 
     courses = Course.objects.filter(parcours = parcours, is_share = 1)
@@ -2001,7 +2003,7 @@ def clone_parcours(request, id, course_on ):
  
 def ajax_parcours_get_exercise_custom(request):
 
-    teacher = Teacher.objects.get(user_id = request.user.id) 
+    teacher = request.user.teacher 
     exercise_id =  int(request.POST.get("exercise_id"))
     customexercise = Customexercise.objects.get(pk=exercise_id)
     parcourses =  teacher.teacher_parcours.all()    
@@ -2014,7 +2016,7 @@ def ajax_parcours_get_exercise_custom(request):
  
 def parcours_clone_exercise_custom(request):
 
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     exercise_id =  int(request.POST.get("exercise_id"))
     customexercise = Customexercise.objects.get(pk=exercise_id)
 
@@ -2097,7 +2099,7 @@ def parcours_tasks_and_publishes(request, id):
 
 @parcours_exists
 def result_parcours_exercise_students(request,id):
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     parcours = Parcours.objects.get(pk = id)
  
 
@@ -3030,7 +3032,7 @@ def exercises_level(request, id):
 def create_supportfile(request):
 
     code = str(uuid.uuid4())[:8]
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     form = SupportfileForm(request.POST or None,request.FILES or None,teacher = teaher)
     is_ggbfile = request.POST.get("is_ggbfile")
     if request.user.is_superuser or request.user.is_extra :
@@ -3058,7 +3060,7 @@ def create_supportfile_knowledge(request,id):
 
     code = str(uuid.uuid4())[:8]
     knowledge = Knowledge.objects.get(id = id)
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     form = SupportfileKForm(request.POST or None,request.FILES or None, knowledge = knowledge )
     levels = Level.objects.all()
     supportfiles = Supportfile.objects.filter(is_title=0).order_by("level")
@@ -3091,7 +3093,7 @@ def create_supportfile_knowledge(request,id):
 @user_passes_test(user_is_creator)
 def update_supportfile(request, id, redirection=0):
 
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     if request.user.is_superuser or request.user.is_extra :
         supportfile = Supportfile.objects.get(id=id)
         knowledge = supportfile.knowledge
@@ -3261,10 +3263,16 @@ def show_this_exercise(request, id):
 
     return render(request, url, context)
 
+
+@parcours_exists
 def execute_exercise(request, idp,ide):
 
     parcours = Parcours.objects.get(id= idp)
     exercise = Exercise.objects.get(id= ide)
+    if Relationship.objects.filter(parcours=parcours, exercise=exercise).count() == 0 :
+        messages.error("Cet exercercice n'est plus disponible.")
+        return redirect("index")
+
     relation = Relationship.objects.get(parcours=parcours, exercise=exercise)
     request.session['level_id'] = exercise.level.id
     start_time =  time.time()
@@ -3567,7 +3575,7 @@ def ajax_search_exercise(request):
     knowledges = Knowledge.objects.filter(name__contains= code)
 
     if request.user.user_type == 2 :
-        teacher = Teacher.objects.get(user_id = request.user.id)
+        teacher = request.user.teacher
         parcours = parcours.teacher_parcours.all()
 
     elif request.user.user_type == 0 :
@@ -3592,7 +3600,7 @@ def create_evaluation(request):
     if not request.user.is_authenticated :
         redirect('index')
 
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     levels =  teacher.levels.all()    
     form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher)
 
@@ -3952,7 +3960,7 @@ def ajax_remove_annotation(request):
     data = {}
     custom =  int(request.POST.get("custom"))
     attr_id = request.POST.get("attr_id") 
-    teacher = Teacher.objects.get(user = request.user)
+    teacher = request.user.teacher
     answer_id = request.POST.get("answer_id") 
     try :
         if custom :
@@ -4339,7 +4347,7 @@ def ajax_create_or_update_appreciation(request):
     data = {}
     comment_id = request.POST.get("comment_id",None)
     comment = request.POST.get("comment",None)
-    teacher = Teacher.objects.get(user = request.user)
+    teacher = request.user.teacher
 
     # Choix du formulaire à compléter
     if comment_id :
@@ -4814,7 +4822,7 @@ def detail_task(request,id,s):
 
 def all_my_tasks(request):
     today = time_zone_user(request.user) 
-    teacher = Teacher.objects.get(user = request.user) 
+    teacher = request.user.teacher 
     parcourses = Parcours.objects.filter(is_publish=  1,teacher=teacher ) 
     relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today,exercise__supportfile__is_title=0).order_by("parcours") 
     context = {'relationships': relationships, 'parcourses': parcourses, 'parcours': None,  'communications' : [] , 'relationships' : [] , 'group_id' : None  , 'role' : False , }
@@ -4824,7 +4832,7 @@ def all_my_tasks(request):
 
 def these_all_my_tasks(request):
     today = time_zone_user(request.user) 
-    teacher = Teacher.objects.get(user = request.user) 
+    teacher = request.user.teacher 
     parcourses = Parcours.objects.filter(is_publish=  1,teacher=teacher ) 
     relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("parcours") 
     context = {'relationships': relationships, 'parcourses': parcourses, 'parcours': None,  'communications' : [] ,  'relationships' : [] ,'group_id' : None  , 'role' : False , } 
@@ -4935,7 +4943,7 @@ def create_remediation(request,idr): # Pour la partie superadmin
 def update_remediation(request,idr, id): # Pour la partie superadmin
 
     remediation = Remediation.objects.get(id=id)
-    teacher = Teacher.objects.get(user = request.user)
+    teacher = request.user.teacher
     exercise = Exercise.objects.get(pk=ide) 
     form = RemediationUpdateForm(request.POST or None, request.FILES or None, instance=remediation, teacher = teacher  )
  
@@ -5610,7 +5618,7 @@ def export_note(request,idg,idp):
 
 def list_courses(request):
 
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     courses = Course.objects.filter(teacher = teacher)
 
     return render(request, 'qcm/course/list_course.html', {'courses': courses,  })
@@ -5749,7 +5757,7 @@ def show_course(request, idc , id ):
 
 
 def ajax_parcours_get_course(request):
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
 
     sacado_asso = False
     if teacher.user.school   :
@@ -5769,7 +5777,7 @@ def ajax_parcours_get_course(request):
  
 def ajax_parcours_clone_course(request):
 
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     course_id =  int(request.POST.get("course_id"))
     course = Course.objects.get(pk=course_id)
     all_parcours = request.POST.get("all_parcours")
@@ -5953,7 +5961,7 @@ def list_demands(request):
 
 
 def create_demand(request):
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     form = DemandForm(request.POST or None  )
     if request.method == "POST" :
         if form.is_valid():
@@ -6302,7 +6310,7 @@ def create_mastering_custom(request,id,idp):
     masterings_t = Masteringcustom.objects.filter(customexercise = customexercise , scale = 3).order_by("ranking")
     masterings_d = Masteringcustom.objects.filter(customexercise = customexercise , scale = 2).order_by("ranking")
     masterings_u = Masteringcustom.objects.filter(customexercise = customexercise , scale = 1).order_by("ranking")
-    teacher = Teacher.objects.get(user_id = request.user.id)
+    teacher = request.user.teacher
     if request.method == "POST" :
         exercise_id = request.POST.get("exercises",None)
         if form.is_valid():
@@ -6456,7 +6464,7 @@ def mastering_custom_done(request):
 
 def create_folder(request,idg):
 
-    teacher = Teacher.objects.get(user = request.user) 
+    teacher = request.user.teacher 
     form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher)
     group = Group.objects.get(pk = idg)
 
@@ -6497,7 +6505,7 @@ def create_folder(request,idg):
 
 def update_folder(request,id,idg):
 
-    teacher = Teacher.objects.get(user = request.user) 
+    teacher = request.user.teacher 
     group = Group.objects.get(pk = idg) 
     parcours = Parcours.objects.get(id=id)
     form = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher)
@@ -6534,18 +6542,21 @@ def update_folder(request,id,idg):
  
 
 
-
+@parcours_exists
 def delete_folder(request,id,idg):
 
-    teacher = Teacher.objects.get(user = request.user) 
+    teacher = request.user.teacher 
     group = Group.objects.get(pk = idg) 
     parcours = Parcours.objects.get(id=id) 
 
-    if parcours.leaf_parcours.count() == 0 :
-        parcours.remove()
+    if parcours.teacher == teacher or request.user.is_superuser :
+        if parcours.leaf_parcours.count() == 0 :
+            parcours.remove()
+        else :
+            messages.error(request, "Le dossier n'est pas vide. La suppression n'est pas possible.")
+    
     else :
-        messages.error(request, "Le dossier n'est pas vide. La suppression n'est pas possible.")
-
+        messages.error(request, "Vous ne pouvez pas supprimer ce dossier. Contacter le propriétaire.")
  
     return redirect ("list_parcours_group", idg )  
 
