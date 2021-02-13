@@ -910,11 +910,12 @@ def ajax_all_parcourses(request):
  
     return JsonResponse(data)
 
+
 @csrf_exempt
 def ajax_chargethemes_parcours(request):
     level_id =  request.POST.get("id_level")
     id_subject =  request.POST.get("id_subject")
-    teacher = Teacher.objects.get(user= request.user)
+    teacher = request.user.teacher
 
     data = {}
     level =  Level.objects.get(pk = level_id)

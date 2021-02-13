@@ -27,6 +27,7 @@ define(['jquery','bootstrap'], function ($) {
         // Affiche dans la modal la liste des élèves du groupe sélectionné
         $('#id_level').on('change', function (event) {
             let id_level = $(this).val();
+            if (id_level == " ") { alert("Sélectionner un niveau") ; return false ;}
             let id_subject = $("#id_subject").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
@@ -78,8 +79,12 @@ define(['jquery','bootstrap'], function ($) {
 
   // Affiche dans la modal la liste des élèves du groupe sélectionné
         $('#level_id').on('change', function (event) {
+
             let id_level = $(this).val();
+            if (id_level == " ") { alert("Sélectionner un niveau") ; return false ;}
+
             let id_subject = $("#id_subject").val();
+
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
             $("#loading").html("<i class='fa fa-spinner fa-pulse fa-fw'></i>");
             $("#loading").show(); 
@@ -136,6 +141,7 @@ define(['jquery','bootstrap'], function ($) {
             if (  $('select[name=level]').val() > 0 )
             {
                     let level_id = $('#level_id').val();
+                    if (id_level == " ") { alert("Sélectionner un niveau") ; return false ;}
                     let theme_id = $(this).val();
                     let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
                     $("#loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");
@@ -337,7 +343,7 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
-        // Affiche dans la modal la liste des élèves du groupe sélectionné
+ 
         $('.selector_e').on('click' ,function () {
 
             let parcours_id = $(this).attr("data-parcours_id"); 
