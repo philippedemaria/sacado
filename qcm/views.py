@@ -6084,9 +6084,6 @@ def create_mastering(request,id):
 
     relationship = Relationship.objects.get(pk = id)
     stage = get_stage(request.user)
-
-
-    stage = Stage.objects.get(school= relationship.parcours.teacher.user.school)
     form = MasteringForm(request.POST or None, request.FILES or None, relationship = relationship )
 
     masterings_q = Mastering.objects.filter(relationship = relationship , scale = 4).order_by("ranking")
@@ -6119,7 +6116,7 @@ def create_mastering(request,id):
 def parcours_mastering_delete(request,id,idm):
 
     m = Mastering.objects.get(pk = idm)
-
+    teacher = request.user.teacher
     if not teacher_has_permisson_to_parcourses(request,teacher,m.relationship.parcours) :
         return redirect('index')
 
