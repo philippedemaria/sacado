@@ -6081,7 +6081,11 @@ def ajax_demand_done(request) :
 #######################################################################################################################################################################
 
 def create_mastering(request,id):
+
     relationship = Relationship.objects.get(pk = id)
+    stage = get_stage(request.user)
+
+
     stage = Stage.objects.get(school= relationship.parcours.teacher.user.school)
     form = MasteringForm(request.POST or None, request.FILES or None, relationship = relationship )
 
@@ -6089,7 +6093,7 @@ def create_mastering(request,id):
     masterings_t = Mastering.objects.filter(relationship = relationship , scale = 3).order_by("ranking")
     masterings_d = Mastering.objects.filter(relationship = relationship , scale = 2).order_by("ranking")
     masterings_u = Mastering.objects.filter(relationship = relationship , scale = 1).order_by("ranking")
-    teacher = Teacher.objects.get(user= request.user)
+    teacher = request.user.teacher
 
     if not teacher_has_permisson_to_parcourses(request,teacher,relationship.parcours) :
         return redirect('index')
