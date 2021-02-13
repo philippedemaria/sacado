@@ -534,7 +534,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         // ====================================================================================================================
         $("#level_selected_id").on('change', function () { 
             let level_selected_id = $(this).val();
-
+            if (level_selected_id == " ") { alert("Sélectionner un niveau") ; return false ;}
             let data_url = $(this).attr("data-url"); 
             if (data_url == "yes") { url =  'qcm/ajax/parcours_default' ; } else { url =  'ajax/parcours_default' ; } 
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();

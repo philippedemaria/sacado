@@ -6,6 +6,9 @@ define(['jquery',  'bootstrap' ], function ($) {
         $('.select_exercise').on('click', function (event) {
 
             let level_id = $(this).attr("data-level_id");
+
+            if (level_id == " ") { alert("Sélectionner un niveau") ; return false ;}
+
             let data_counter = $(this).attr("data-counter");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
@@ -34,6 +37,7 @@ define(['jquery',  'bootstrap' ], function ($) {
   // Affiche dans la modal la liste des élèves du groupe sélectionné
         $('#id_level').on('change', function (event) {
             let id_level = $(this).val();
+            if (id_level == " ") { alert("Sélectionner un niveau") ; return false ;}
             let id_subject = $("#id_subject").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
             $("#loading").html("<i class='fa fa-spinner fa-pulse fa-fw'></i>");

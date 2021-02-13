@@ -2816,7 +2816,7 @@ def ajax_list_exercises_by_level(request):
             exercises_counter = 0
             waiting_dict  =   {} 
             waiting_dict["name"]=waiting 
-            knowlegdes = waiting.knowledges.order_by("name")
+            knowlegdes = waiting.knowledges.prefetch_related('exercises').order_by("name")
             knowledges_tab  =  []
             for knowledge in knowlegdes :
                 knowledges_dict  =   {}  
@@ -2871,7 +2871,7 @@ def ajax_list_exercises_by_level_and_theme(request):
             exercises_counter = 0
             waiting_dict  =   {} 
             waiting_dict["name"]=waiting 
-            knowlegdes = waiting.knowledges.order_by("name")
+            knowlegdes = waiting.knowledges.prefetch_related('exercises').order_by("name")
             knowledges_tab  =  []
             for knowledge in knowlegdes :
                 knowledges_dict  =   {}  
