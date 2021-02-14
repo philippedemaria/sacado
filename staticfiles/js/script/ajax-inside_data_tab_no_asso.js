@@ -10,9 +10,9 @@ define(['jquery','bootstrap_popover', 'bootstrap' ], function ($) {
 
         $('.dataTables_length').append("  <a href='#'  title='Version établissement requise'   class='btn btn-default pull-right'><i class='fa fa-print'></i></a>  ") ;        
 
-        $('.dataTables_length').append("  <a href='#'  title='Version établissement requise' class='btn btn-default pull-right'>Exporter les notes vers Pronote</a>  ") ;
+        $('.dataTables_length').append("  <a href='#'  title='Version établissement requise' class='btn btn-default pull-right'>Exporter les notes</a>  ") ;
 
-        $('.dataTables_length').append("  <a href='#'  title='Version établissement requise'   class='btn btn-default pull-right'>Exporter les compétences vers Pronote</a>  ") ;
+        $('.dataTables_length').append("  <a href='#'  title='Version établissement requise'   class='btn btn-default pull-right'>Exporter les compétences</a>  ") ;
 
 
 
