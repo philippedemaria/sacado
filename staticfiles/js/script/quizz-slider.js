@@ -71,27 +71,26 @@ define(['jquery',  'bootstrap' ], function ($) {
 
                 $('#start_quizz').on('click', function(){
 
-                         $(".instruction").show();
- 
+                        $(".instruction").show();
                         if ( starter_play%2 === 0 ) {
                             $("#start_quizz").html("").html("<button  class='btn btn-danger'><i class='fa fa-stop'></i> Arrêter</button>") ;
+                            auto_play() ;                         
                         }
                         else
                         {  
                             $("#start_quizz").html("").html("<button  class='btn btn-default'><i class='fa fa-play'></i> Démarrer</button>") ;
+                            auto_stop() ;  
                         }
 
-                        auto_play() ;                        
                         starter_play++ ;
-
                         console.log(starter_play) ;
-
-                    })  
+                })  
  
+
+
 
                     function timer(cible , this_slide , duree  ){
                                 
- 
                         var interval = setInterval(function() {
                             duree = duree - 1000;
                             document.getElementById(cible+this_slide).textContent = duree/1000;
@@ -106,10 +105,9 @@ define(['jquery',  'bootstrap' ], function ($) {
 
 
 
+
+
                     function auto_play(){
-
-
-                        if ( starter_play%2 === 0 ) {
 
 
                             if (currentSlide === slideQuantity) // Si on arrive au bout du nombre de slides, le quizz s'arrete.
@@ -124,9 +122,6 @@ define(['jquery',  'bootstrap' ], function ($) {
 
                             var pxValue = - (currentSlide -1) * slideWidth ; // décalage pour l'animation du slide.
                             slideBox.animate({'left' : pxValue});            // Animation du slide.
-
-
-                                console.log(currentSlide);
 
 
                             $(".thisquestion").removeClass("btn-primary").addClass("btn-default")  ;   // Couleurs des boutons
@@ -169,13 +164,9 @@ define(['jquery',  'bootstrap' ], function ($) {
                             }
 
                             step++ ;
-                        }
-                        
+ 
                     }
 
-
-
- 
 
  
 

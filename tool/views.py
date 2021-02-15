@@ -344,14 +344,18 @@ def get_qr(quizz_id,group_id,mode) :
             qrandoms.append(list_qr[random]) 
         qrandoms.shuffle()
  
-
-    gquizz  = Generate_quizz.objects.create(quizz  = quizz  ,  group_id = group_id ,is_game=mode)
-    i=1 
-    for qrandom in qrandoms :
-        qr_text  = qrandom.instruction()
-        gqr = Generate_qr.objects.create( gquizz = gquizz ,  qr_text = qr_text , ranking = i  )
-        i+=1  
-
+    if get_save_new_gquizz(quizz) :
+        gquizz  = Generate_quizz.objects.create(quizz  = quizz  ,  group_id = group_id ,is_game=mode)
+        i=1 
+        for qrandom in qrandoms :
+            qr_text  = qrandom.instruction()
+            qr_duration  = qrandom.instruction()
+            gqr = Generate_qr.objects.create( gquizz = gquizz ,  qr_text = qr_text , ranking = i , qrandom = qrandom )
+            i+=1  
+    else :
+ 
+        gquizz   = Generate_quizz.objects.filter(quizz  = quizz  ,  group_id = group_id ,is_game=mode).last()
+        qrandoms   = gquizz.generate_qr.filter( gquizz = gquizz )[:quizz.interslide]
 
 
     return quizz ,  gquizz , qrandoms
@@ -359,7 +363,7 @@ def get_qr(quizz_id,group_id,mode) :
 
 
 
-def get_date_play(id,idg,mode) :
+def get_date_play(id,idg,mode) : # pour les questionnaires non randomisés
 
     quizz = Quizz.objects.get(pk= id)
     save = get_save_new_gquizz(quizz) 
@@ -390,42 +394,40 @@ def show_quizz_group(request,id,idg):
 ############################################################################################################
 
 def play_quizz_teacher(request,id,idg):
-    """ Lancer d'un play quizz """
-    group = Group.objects.get(pk = idg)
-    if quizz.is_random :
-        quizz , gquizz , qrandoms = get_qr(id,idg,1) 
-        students = gquizz.students.all()
-        nb_student = students.count()
-        context = {  "quizz" : quizz , "gquizz" : gquizz , "qrandoms" : qrandoms, "nb_students" : 0 , "nb_student" : nb_student , "students" : students , 'idg' : idg  }
+    """ Lancer d'un play quizz 
+        idg > 0 si c'est un groupe sinon
+        idg = 0 signifie que c'est un gquizz déjà fait.
+    """
+
+
+    if idg > 0 : 
+        quizz = Quizz.objects.get(pk= id)
+        group = Group.objects.get(pk = idg)
+        if quizz.is_random :
+            quizz , gquizz , qrandoms = get_qr(id,idg,1) 
+            students = gquizz.students.all()
+            nb_student = students.count()
+            context = {  "quizz" : quizz , "gquizz" : gquizz , "qrandoms" : qrandoms, "nb_students" : 0 , "nb_student" : nb_student , "students" : students , 'idg' : idg  }
+        else :
+            questions = quizz.questions.order_by("ranking")
+            quizz , gquizz = get_date_play(id,idg,1)
+            students = gquizz.students.all()
+            nb_student = students.count()
+            context = {  "quizz" : quizz , "gquizz" : gquizz , "questions" : questions, "nb_students" : 0  , "nb_student" : nb_student , "students" : students , 'idg' : idg    }
+    
     else :
-        questions = quizz.questions.order_by("ranking")
-        quizz , gquizz = get_date_play(id,idg,1)
+        gquizz = Generate_quizz.objects.get(pk= id)
         students = gquizz.students.all()
         nb_student = students.count()
-        context = {  "quizz" : quizz , "gquizz" : gquizz , "questions" : questions, "nb_students" : 0  , "nb_student" : nb_student , "students" : students , 'idg' : idg    }
+        if gquizz.quizz.is_random :          
+            qrandoms = gquizz.generate_qr.filter( qr_text = qr_text , ranking = i , qrandom = qrandom )     
+            context = {  "quizz" : quizz , "gquizz" : gquizz , "qrandoms" : qrandoms, "nb_students" : 0 , "nb_student" : nb_student , "students" : students , 'idg' : idg  }
+        else :
+            questions = gquizz.quizz.questions.order_by("ranking")
+            context = {  "quizz" : quizz , "gquizz" : gquizz , "questions" : questions, "nb_students" : 0  , "nb_student" : nb_student , "students" : students , 'idg' : idg    }
+
 
     return render(request, 'tool/play_quizz_teacher.html', context)
-
-
-def replay_gquizz_teacher(request,idq,idg):
-    """ Lancer d'un play quizz """
-    gquizz = Generate_quizz.objects.get(pk= idq)
-    group = Group.objects.get(pk = idg)
-    if quizz.is_random :
-        students = gquizz.students.all()  
-        qrandoms = gquizz.qrandoms.order_by("ranking")      
-        nb_student = students.count()
-        context = {  "gquizz" : gquizz , "qrandoms" : qrandoms, "nb_students" : 0 , "nb_student" : nb_student , "students" : students , 'idg' : idg  }
-    else :
-        questions = quizz.questions.order_by("ranking")
-        students = gquizz.students.all()
-        nb_student = students.count()
-        context = {  "gquizz" : gquizz , "questions" : questions, "nb_students" : 0  , "nb_student" : nb_student , "students" : students , 'idg' : idg    }
-
-    return render(request, 'tool/replay_quizz_teacher.html', context)
-
-
-
 
 
 def launch_play_quizz(request,id,idg):
@@ -443,7 +445,7 @@ def launch_play_quizz(request,id,idg):
         questions = quizz.questions.filter(is_publish=1).order_by("ranking")
         context = {  "quizz" : quizz , "questions" : questions , "group" : group  }
 
-        return render(request, 'tool/launch_play_quizz.html', context)
+    return render(request, 'tool/launch_play_quizz.html', context)
 
 
 

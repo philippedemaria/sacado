@@ -144,8 +144,8 @@ class Question(models.Model):
     students   = models.ManyToManyField(Student, blank=True, through="Questionplayer", related_name="questions",   editable=False)
 
     def __str__(self):
-        return self.title 
- 
+        return self.title
+
 
 class Choice(models.Model):
     """
@@ -219,8 +219,17 @@ class Generate_qr(models.Model):
     """
     gquizz       = models.ForeignKey(Generate_quizz,  related_name="generate_qr",  on_delete=models.CASCADE, editable=False) 
     qr_text      = models.TextField( editable=False) 
+    qrandom      = models.ManyToManyField(Qrandom, blank=True, related_name="generate_qr" , editable=False)  
     ranking      = models.PositiveIntegerField(default = 1 , editable=False)    
     students     = models.ManyToManyField(Student, blank=True, through="Questionplayer", related_name="generate_qr",   editable=False)
+
+ 
+
+
+
+
+
+
 
     def __str__(self):
         return self.qr_text

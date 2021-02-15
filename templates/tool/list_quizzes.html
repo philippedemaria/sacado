@@ -85,7 +85,7 @@
                                                             </a> 
                                                             <small style="margin-right:10px"  class="pull-right" >{{ gq.date_created|date:"d-m-Y" }}</small>
                                                             {% if gq.is_game %}
-                                                            <a href="{% url 'replay_gquizz_teacher'  gq.id  g.id  %}" style="margin-right:20px"  class="pull-right">
+                                                            <a href="{% url 'play_quizz_teacher'  gq.id  0 %}" style="margin-right:20px"  class="pull-right">
                                                                <i class="fa fa-gamepad"></i>
                                                             </a>
                                                             {% else %}
