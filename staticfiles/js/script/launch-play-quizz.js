@@ -10,9 +10,10 @@ define(['jquery',  'bootstrap', ], function ($) {
  
 
         $("#display_results").hide() ;
-        $("#command_results").on('click', function(){
+        // Afficher les résultats
+        $(".command_results").on('click', function(){
 
-
+                let all = $(this).attr("data-all");
                 let question_id = $(this).attr("data-question_id");
                 let random = $(this).attr("data-random");
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
@@ -24,9 +25,10 @@ define(['jquery',  'bootstrap', ], function ($) {
                         data: {
                             'question_id': question_id,
                             'random': random,
+                            'all': all,
                             csrfmiddlewaretoken: csrf_token
                         },
-                        url: "../../quizz_show_result",
+                        url: "../../ajax_quizz_show_result",
                         success: function (data) {
 
                             $("#last_slide").hide() ;
