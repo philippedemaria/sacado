@@ -1,11 +1,7 @@
 define(['jquery',  'bootstrap' ], function ($) {
     $(document).ready(function () {
- 
- 
-        console.log(" ajax-slider chargé ");
 
- 
- 
+        console.log(" quizz-slider chargé ");
 
         var slideBox = $('.slider ul'),
             slideWidth = 1000 ,
@@ -28,11 +24,38 @@ define(['jquery',  'bootstrap' ], function ($) {
             $("#question"+this_question).removeClass("btn-default").addClass("btn-primary") ;
         }
 
+//======================================================================================================
+//====================== Vue en plein écran
+//======================================================================================================
+        $("#stop_quizz").hide();
+        // fermer le plein écran
+        $('#stop_quizz').on('click', function(){ 
+
+            $("#content_title_page").show(500);
+            $("#navbarLeft").show(500);
+            $("#stop_quizz").hide(500);
+            $("#starter_quizz").show(500);
+
+        });
+        // Vue en plein écran
+        $('#starter_quizz').on('click', function(){ 
+
+            $("#content_title_page").hide(500);
+            $("#navbarLeft").hide(500);
+            $("#stop_quizz").show(500);
+            $("#starter_quizz").hide(500);
+            document.fullScreenElement && null !== document.fullScreenElement || !document.mozFullScreen && !document.webkitIsFullScreen ? document.documentElement.requestFullScreen ? document.documentElement.requestFullScreen() : document.documentElement.mozRequestFullScreen ? document.documentElement.mozRequestFullScreen() : document.documentElement.webkitRequestFullScreen && document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT) : document.cancelFullScreen ? document.cancelFullScreen() : document.mozCancelFullScreen ? document.mozCancelFullScreen() : document.webkitCancelFullScreen && document.webkitCancelFullScreen()
+       
+       });
+//======================================================================================================
+//====================== Vue en plein écran
+//======================================================================================================
 
 
        $('.nav button').on('click', function(){ 
 
         $(".instruction").hide();
+        $(".starter_in").hide();
 
                var whichButton = $(this).data('nav'); 
 
@@ -40,7 +63,8 @@ define(['jquery',  'bootstrap' ], function ($) {
 
                         if (currentSlide === slideQuantity)
                             { 
-                                currentSlide = 1 ; 
+                                currentSlide = 1 ;                                     
+                                
                             }
                         else 
                             { 
@@ -52,7 +76,8 @@ define(['jquery',  'bootstrap' ], function ($) {
 
                         if (currentSlide === 1)
                             { 
-                                currentSlide = slideQuantity ; 
+                                currentSlide = slideQuantity ;                                     
+ 
                             }
                         else 
                             { 
@@ -72,22 +97,25 @@ define(['jquery',  'bootstrap' ], function ($) {
                 $('#start_quizz').on('click', function(){
 
                         $(".instruction").show();
+                        $(".starter_in").show();
+                        this_slide = parseInt( (currentSlide-1)/2) ; 
+                        these_slide = 1+parseInt( (currentSlide-1)/2) ; 
                         if ( starter_play%2 === 0 ) {
                             $("#start_quizz").html("").html("<button  class='btn btn-danger'><i class='fa fa-stop'></i> Arrêter</button>") ;
+                            if( $("#stoper_quizz") ) { $("#stoper_quizz").attr("id","#counterdown"+this_slide); }
+                            if( $("#stoper_introduction") ) { $("#stoper_quizz").attr("id","#counterdown"+these_slide); }
                             auto_play() ;                         
                         }
-                        else
+                        else // arret du compteur
                         {  
                             $("#start_quizz").html("").html("<button  class='btn btn-default'><i class='fa fa-play'></i> Démarrer</button>") ;
-                            auto_stop() ;  
+                            $("#counterdown"+this_slide).attr("id","stoper_quizz");
+                            $("#countdown"+these_slide).attr("id","stoper_introduction");
                         }
 
                         starter_play++ ;
-                        console.log(starter_play) ;
                 })  
  
-
-
 
                     function timer(cible , this_slide , duree  ){
                                 
@@ -101,9 +129,11 @@ define(['jquery',  'bootstrap' ], function ($) {
                             if (duree <= 0) { auto_play() ; clearInterval(interval); }
 
                         }, 1000)
+
+
+                            var pxValue = - (currentSlide -1) * slideWidth ; // décalage pour l'animation du slide.
+                            slideBox.animate({'left' : pxValue});            // Animation du slide.                        
                     }
-
-
 
 
 
@@ -114,14 +144,14 @@ define(['jquery',  'bootstrap' ], function ($) {
                                 { 
                                     $("#start_quizz").html("").html("<button  class='btn btn-default'><i class='fa fa-play'></i> Démarrer</button>") ;
                                     clearInterval(interval);
+                                    $("#content_title_page").show(500);
                                 }
                             else  // Si on avance d'une slide à chaque fois.
                                 { 
                                     currentSlide++ ;
                                 }
 
-                            var pxValue = - (currentSlide -1) * slideWidth ; // décalage pour l'animation du slide.
-                            slideBox.animate({'left' : pxValue});            // Animation du slide.
+
 
 
                             $(".thisquestion").removeClass("btn-primary").addClass("btn-default")  ;   // Couleurs des boutons
@@ -166,12 +196,6 @@ define(['jquery',  'bootstrap' ], function ($) {
                             step++ ;
  
                     }
-
-
- 
-
-
-
 
 
     });

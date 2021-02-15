@@ -124,8 +124,14 @@ button:hover{
   background-color: #FFF;
 }
 
-
-.starter_in{
-  width: 150px!important;
-  border-radius: 20px;
+.countdown{
+   background-color: #5d4391;  
+   border-radius: 50%;
+   width :60px;
+   height:60px;
+   color : #FFF;
+   font-size : 35px;    
+   text-align: center ;
+   font-weight: bold; 
+   padding-top: 5px;
 }
