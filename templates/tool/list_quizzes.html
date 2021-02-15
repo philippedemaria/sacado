@@ -84,19 +84,13 @@
                                                                 <i class="fa fa-trash"></i>
                                                             </a> 
                                                             <small style="margin-right:10px"  class="pull-right" >{{ gq.date_created|date:"d-m-Y" }}</small>
+                                                            <small style="margin-right:20px"  class="pull-right" >
                                                             {% if gq.is_game %}
-                                                            <a href="{% url 'play_quizz_teacher'  gq.id  0 %}" style="margin-right:20px"  class="pull-right">
                                                                <i class="fa fa-gamepad"></i>
-                                                            </a>
                                                             {% else %}
-                                                            <a href="{% if quizz.is_random %}
-                                                                        {% url 'show_quizz_random_group'  quizz.id  g.id %}
-                                                                     {% else %}
-                                                                         {% url 'show_quizz_group'  quizz.id  g.id %}
-                                                                     {% endif %}" style="margin-right:20px"  class="pull-right">
                                                                <i class="fa fa-play fa-xs"></i> 
-                                                            </a>
-                                                            {% endif %} 
+                                                            {% endif %}
+                                                            </small> 
                                                             <a  {% if quizz.is_random %}
                                                                     {% if quizz.is_numeric %}
                                                                         href="{% url 'result_quizz'  gq.id %}" 

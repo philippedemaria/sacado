@@ -4,34 +4,40 @@
 {% load item_tags %}
 
 
+
+
 {% block script %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
-    <script>
-        require(['script/quizz-slider']);
-    </script> 
+<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+<script>
+    require(['script/launch-play-quizz']); 
+</script> 
 {% endblock %}
  
  
 {% block my_css %}
-<link href="{% static 'css/play_this_quizz.css' %}" rel="stylesheet">
+
+<link href="{% static 'css/play_quizz.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+          integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+{% endblock %}
+
+
+{% block body_id %}
 {% endblock %}
 
 
 
-
 {% block form %}
-
+ 
 
     <div class="wrapper_slider">
-  <!-- Wrapper for slides -->
         <div class="slider">
-
             <ul>
                 <li class="my_slide my_slide_instruction">
-                    <input type="hidden" value="{{ gquizz.quizz.interslide }}" id="inter_slide" /> 
+                    <input type="hidden" value="{{ quizz.interslide }}" id="inter_slide" /> 
                     <div class="row consigne_diapo"  align="center">  
                         <div class="col-sm-12 col-md-12">
-                            <h1 style="font-size:3em" class="thin"><br/>La durée de cette question est <br/>  <b>{{ question.duration }} secondes</b>.</span> <br/> 
+                            <h1 style="font-size:3em" class="thin"><br/>La durée de cette question est <br/>  <b>{{ question.duration }} secondes</b>.  <br/> 
                                 {% if question.qtype == 1 %}
                                     Répondre à cette question par <br/><b>Vrai</b> ou <b>Faux</b>
                                 {% elif question.qtype == 2 %}
@@ -42,11 +48,16 @@
                                      Vous devez choisir la <br/><b>seule bonne réponse</b><br/>  parmi les 4 réponses proposées. 
                                 {% endif %}
                             </h1>
+                            <div class="starter_in" > Démarrage dans 
+                                <span class="counterdown instruction" id="countdown" > 
+                                    {{ quizz.interslide }}
+                                </span> s
+                            </div>
                         </div>
                     </div> 
                 </li>
                 <li class="my_slide">
-                    <input type="hidden" value="{{ question.duration }}" id="duration{{ forloop.counter }}" /> 
+                    <input type="hidden" value="{{ question.duration }}" id="duration" /> 
                     <div class="row">  
                         <div class="col-sm-2 col-md-2" align="left">
                             <img src="{% if question.calculator %}{% static 'img/calculator.png' %}{% else %}{% static 'img/no_calculator.png' %}{% endif %}" height="50px" />
@@ -63,40 +74,44 @@
                                 {% endif %}
                         </div>
                         <div class="col-sm-2 col-md-2" align="right">
-                            <div class="countdown instruction" id="countdown{{ forloop.counter }}" > 
+                            <div class="countdown instruction" id="counterdown" > 
                                 {{ question.duration }}
                             </div>
                         </div>
                     </div> 
-                    <div class="row">  
-                        <div class="col-sm-12 col-md-12"align="center">
-                            <h1 style="font-size:3.5em" class="thin"> {{ question.title }} </h1>
-                        </div>
-                    </div>
                     {% if question.imagefile %}
                     <div class="row">  
                         <div class="col-sm-12 col-md-12"align="center">
-                             <img src="{{ question.imagefile.url }}" height="300px"  />
+                            <h1 style="font-size:3.5em" class="thin">  
+                                {{ question.title|safe }} 
+                            </h1>
+                        </div>
+                    </div>
+                    <div class="row">  
+                        <div class="col-sm-12 col-md-12"align="center">
+                            <img src="{{ question.imagefile.url }}" height="300px"  />
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="row">  
+                        <div class="col-sm-12 col-md-12"align="center">
+                            <h1 style="font-size:7em" class="thin">  
+                                {{ question.title|safe }} 
+                            </h1>
                         </div>
                     </div>
                     {% endif %}
-                    <hr/> 
-
- 
-
-
                     {% if question.qtype == 1 %}   
-               
-                            <div class="col-sm-12 col-md-6 bgcolorBlue white" style="border-radius : 10px ">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-6 bgcolorBlue white" style="border-radius : 10px ">
                                 <h1>VRAI </h1>  
                             </div> 
 
-                            <div class="col-sm-12 col-md-6 bgcolorRed white" style="border-radius : 10px ">
+                            <div class="col-sm-6 col-md-6 bgcolorRed white" style="border-radius : 10px ">
                                 <h1>FAUX </h1>  
                             </div> 
-                       
+                        </div>
                     {%  elif question.qtype > 2 %}   
-                         
                         {% for choice in question.choices.all %}
                             {% cycle 'bgcolorRed' 'bgcolorBlue' 'bgcolorOrange' 'bgcolorGreen' as rowcolor silent %} 
                             {% cycle 'A' 'B' 'C' 'D'  as choice_letter silent %}
@@ -116,15 +131,30 @@
                     {% endif %}
                 </li>
                 <li class="my_slide my_slide_instruction">
-                    <input type="hidden" value="{{ gquizz.quizz.interslide }}" id="inter_slide" /> 
-                    <div class="row consigne_diapo"  align="center">  
-                        <div class="col-sm-12 col-md-12">
-                            <h1 style="font-size:6em" class="thin"><br/>Résultats</h1>
-
-                            <h1 style="font-size:3em" class="thin"><br/>Afficher ?</h1>
-                        </div>
-                    </div> 
-                </li>
+                    <form method="POST"> 
+                        {% csrf_token %}
+                        <div class="row consigne_diapo"  align="center">
+                            <div class="col-sm-12 col-md-12" id="last_slide" >
+                                <h1 style="font-size:6em" class="thin">Résultats</h1>
+                                <div style="font-size:1.5em;margin-top: 60px;margin-bottom: 60px" >
+                                    <a href="#" class="command_results" data-all="1" data-question_id="{{ question.id }}" data-random="{% if quizz.is_random %}1{% else %}0{% endif %}">
+                                        Afficher tous ?
+                                    </a>
+                                    <a href="#" class="command_results" data-all="0" data-question_id="{{ question.id }}" data-random="{% if quizz.is_random %}1{% else %}0{% endif %}">
+                                        Afficher le podium ?
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12" id="display_results" >
+     
+                            </div>
+                            <div class="col-sm-12 col-md-12"  >
+                                <input type="hidden" name="quizz_nav" value="{{ quizz_nav }}" />
+                                <button type="submit" class="btn btn-default">Question suivante ?</button>
+                            </div>
+                        </div> 
+                    </form>  
+                </li> 
             </ul>
         </div>
     </div>

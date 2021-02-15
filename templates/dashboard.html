@@ -71,7 +71,7 @@
 </head>
 <body>
 
-<nav class="navbarLeft navbarLeft_none  navbarLeft-fixed-left" >
+<nav class="navbarLeft navbarLeft_none  navbarLeft-fixed-left" id="navbarLeft" >
     <ul class="nav navbarLeft-nav">
         {% if request.user.is_authenticated %}
             {% if user.is_teacher %}
@@ -88,7 +88,7 @@
 </nav>
 
 <div class="content-wrapper">
-    <div class="content_title">
+    <div class="content_title" id="content_title_page">
         <h1 class="thin">
             <nav class="navbar navbar-default">
                 <div class="container-fluid">

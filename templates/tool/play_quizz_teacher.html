@@ -1,12 +1,16 @@
 {% load static %}
 
+
 <html>
     <head>
         <title>SacAdo Quizz Play</title>
         <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}"/>
         <link href="{% static 'index/lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
         <link href="{% static 'css/AdminLTEperso.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+          integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
         {% block my_css %}
+
         {% endblock %}
     </head>
     <body {% block body_id %} id="play_quizz_teacher" {% endblock %}>
@@ -36,7 +40,7 @@
 
             <div class="row">  
                 <div class="col-sm-12 col-md-1 white" align="center">
-                    <div class="small_round violet nb_players" id="nb_players">{{ nb_student }}</div>en jeu
+                    <div class="small_round violet nb_players" id="nb_players">{{ nb_student }}</div>actif{{ nb_student|pluralize }}
                 </div>
                 <div class="col-sm-12 col-md-10" style="padding:50px;">
                     {% for student in students %}
@@ -44,7 +48,14 @@
                     {% endfor %}
                 </div>
                 <div class="col-sm-12 col-md-1" align="center">
-                    <a href="{% url 'launch_play_quizz' gquizz.quizz.id idg %}" class="btn btn-default btn-lg margin50">Début</a>
+                    <a href="{% url 'launch_play_quizz' gquizz.quizz.id idg %}" class="btn btn-default btn-lg margin50"  style="margin-bottom:20px;">Démarrer</a>
+                    <span style="color: #FFF" class="helper_tip" > <i class="fa fa-question-circle"></i> 
+                                    <div class="helper_tip_text" >Cliquer sur la touche F11 pour passer en plein écran. </div>
+                    </span>
+
+                    </a>
+
+
                 </div>
             </div> 
  

@@ -4,18 +4,9 @@
 {% load item_tags %}
 
 
-{% block page_menu_right %}
-    <a href="{% url 'play_quizz_teacher' gquizz.id   group.id  %}" target="_blank" class="btn btn-new">Mode jeu</a>
-    <a href="{% url 'list_quizzes' %}"  class="btn btn-new">Mes quizz</a>
-{% endblock %}
-
-
- 
 
 {% block body_quizz %}
  
- 
-    
         {% for qrandom in qrandoms %}
         <li class="my_slide">
 
@@ -67,8 +58,12 @@
                 </div>
             </div> 
             <div class="row">  
-                <div class="col-sm-12 col-md-12 qr_enonce" align="center">
-                     {{ qrandom.instruction|safe }} 
+                <div class="col-sm-12 col-md-12 qr_enonce" align="center">  
+                    {% if save %}
+                        {{ qrandom.instruction|safe }} 
+                    {% else %}
+                        {{ qrandom.title|safe }} 
+                    {% endif %}
                 </div>
             </div>
      

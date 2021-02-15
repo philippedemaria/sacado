@@ -141,7 +141,7 @@ class Question(models.Model):
  
     is_correct = models.BooleanField(default=1, verbose_name="Réponse correcte ?")
     ranking    = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
-    students   = models.ManyToManyField(Student, blank=True, through="Questionplayer", related_name="questions",   editable=False)
+    students   = models.ManyToManyField(Student, blank=True, through="Answerplayer", related_name="questions",   editable=False)
 
     def __str__(self):
         return self.title
@@ -210,7 +210,7 @@ class Generate_quizz(ModelWithCode):
     is_game      = models.BooleanField(default=0, editable= False) 
     students     = models.ManyToManyField(Student, blank=True,  related_name="gquizz",   editable=False)
     def __str__(self):
-        return self.quizz.name 
+        return self.quizz.title 
 
  
 class Generate_qr(models.Model):
@@ -219,17 +219,9 @@ class Generate_qr(models.Model):
     """
     gquizz       = models.ForeignKey(Generate_quizz,  related_name="generate_qr",  on_delete=models.CASCADE, editable=False) 
     qr_text      = models.TextField( editable=False) 
-    qrandom      = models.ManyToManyField(Qrandom, blank=True, related_name="generate_qr" , editable=False)  
+    qrandom      = models.ForeignKey(Qrandom, blank=True, null=True, related_name="generate_qr" ,  on_delete=models.CASCADE , editable=False)  
     ranking      = models.PositiveIntegerField(default = 1 , editable=False)    
-    students     = models.ManyToManyField(Student, blank=True, through="Questionplayer", related_name="generate_qr",   editable=False)
-
- 
-
-
-
-
-
-
+    students     = models.ManyToManyField(Student, blank=True, through="Answerplayer", related_name="generate_qr",   editable=False)
 
     def __str__(self):
         return self.qr_text
@@ -248,27 +240,9 @@ class Generate_qr(models.Model):
             
         return test
 
-
-class Quizz_student_answer(models.Model):
-    """
-    Modèle qui récupère les réponses numérique.
-    """
-    qrandom     = models.ForeignKey(Generate_qr, null=True, blank=True, related_name="quizz_student_answers",  on_delete=models.CASCADE, editable=False) # Si le quizz est aléatoire ce champ est complété sinon laissé vide
-    question    = models.ForeignKey(Question, null=True, blank=True, related_name="quizz_student_answers",  on_delete=models.CASCADE, editable=False) # Si le quizz est aléatoire ce champ est complété sinon laissé vide
-    anwser      = models.CharField( max_length=255, editable=False) 
-    is_correct  = models.BooleanField(default=0, editable=False) 
-    student     = models.ForeignKey(Student,  related_name="quizz_student_answers",  on_delete=models.CASCADE, editable=False)
-    duration    = models.PositiveIntegerField(default=20, blank=True, editable=False) 
-
-    def __str__(self):
-        return self.is_correct
  
 
-    class Meta:
-        unique_together = ('qrandom', 'student')
-
-
-class Questionplayer(models.Model):
+class Answerplayer(models.Model):
 
     student  = models.ForeignKey(Student,  null=True, blank=True,   related_name='questions_player', on_delete=models.CASCADE,  editable= False)
     question = models.ForeignKey(Question,  null=True, blank=True, related_name='questions_player', on_delete=models.CASCADE, editable= False)
@@ -276,6 +250,7 @@ class Questionplayer(models.Model):
     answer   = models.CharField( max_length=255, verbose_name="Réponse")  
     score    = models.PositiveIntegerField(default=0, editable=False)
     timer    = models.CharField(max_length=255, editable=False)  
+    is_correct  = models.BooleanField(default=0, editable=False) 
 
     def __str__(self):
         return self.student 

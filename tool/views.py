@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from tool.models import Tool , Question  , Choice  , Quizz , Diaporama  , Slide ,Qrandom ,Variable , VariableImage , Generate_quizz , Generate_qr , Quizz_student_answer 
+from tool.models import Tool , Question  , Choice  , Quizz , Diaporama  , Slide ,Qrandom ,Variable , VariableImage , Generate_quizz , Generate_qr , Answerplayer
 from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm,  DiaporamaForm , SlideForm,QrandomForm, VariableForm
 from group.models import Group 
 from socle.models import Level, Waiting
@@ -19,6 +19,7 @@ from templated_email import send_templated_mail
 from django.db.models import Q
 from random import  randint
 import math
+import json
 ############### bibliothèques pour les impressions pdf  #########################
 import os
 from django.utils import formats, timezone
@@ -312,7 +313,7 @@ def ajax_show_generated(request):
 
 
 def get_save_new_gquizz(quizz) :
-
+    """ permet un enregistrement d'un nouveau quizz généré toutes les hours = 1 """
     save = True
     remainig_time = datetime.now() - timedelta(hours = 1) # 0.25 pour 1/4 d'heure , 0.5 pour 1/2 heure
     if Generate_quizz.objects.filter(date_created__gt= remainig_time, quizz__teacher = quizz.teacher ).count() > 0 :
@@ -324,8 +325,10 @@ def get_save_new_gquizz(quizz) :
 
 def get_qr(quizz_id,group_id,mode) :
 
+    """ fonction qui génére un historique de questions aléatoires à partir du modèle du quizz"""
+
     quizz = Quizz.objects.get(pk= quizz_id)
-    no_save = get_save_new_gquizz(quizz) 
+    save = get_save_new_gquizz(quizz) 
 
     list_qr = list(quizz.qrandoms.filter(is_publish=1))
     qrandoms = []
@@ -343,40 +346,54 @@ def get_qr(quizz_id,group_id,mode) :
             random = randint(0, len(qrandoms)-1)
             qrandoms.append(list_qr[random]) 
         qrandoms.shuffle()
+    
  
-    if get_save_new_gquizz(quizz) :
+    if save :
         gquizz  = Generate_quizz.objects.create(quizz  = quizz  ,  group_id = group_id ,is_game=mode)
         i=1 
         for qrandom in qrandoms :
             qr_text  = qrandom.instruction()
-            qr_duration  = qrandom.instruction()
             gqr = Generate_qr.objects.create( gquizz = gquizz ,  qr_text = qr_text , ranking = i , qrandom = qrandom )
             i+=1  
     else :
- 
+        qrandoms = []
         gquizz   = Generate_quizz.objects.filter(quizz  = quizz  ,  group_id = group_id ,is_game=mode).last()
-        qrandoms   = gquizz.generate_qr.filter( gquizz = gquizz )[:quizz.interslide]
+        gqrs   = gquizz.generate_qr.all()[:quizz.interslide]
+        for gqr in gqrs :
+            gqr_dict                = dict()
+            gqr_dict["duration"]    = gqr.qrandom.duration
+            gqr_dict["qtype"]       = gqr.qrandom.qtype
+            gqr_dict["tool"]        = gqr.qrandom.tool
+            gqr_dict["calculator"]  = gqr.qrandom.calculator
+            gqr_dict["title"]       = gqr.qr_text
+            gqr_dict["id"]          = gqr.id
+            qrandoms.append(gqr_dict)
+
+    return quizz ,  gquizz , qrandoms , save
 
 
-    return quizz ,  gquizz , qrandoms
 
 
+def get_date_play(quizz_id,group_id,mode) : # pour les questionnaires non randomisés
 
+    """ fonction qui génére un quizz à partir du modèle du quizz"""
 
-def get_date_play(id,idg,mode) : # pour les questionnaires non randomisés
-
-    quizz = Quizz.objects.get(pk= id)
-    save = get_save_new_gquizz(quizz) 
- 
-    gquizz = Generate_quizz.objects.create(quizz_id = id ,  group_id = idg ,is_game=mode)
- 
-    return quizz , gquizz
+    quizz = Quizz.objects.get(pk= quizz_id)
+    save = get_save_new_gquizz(quizz)
+    if save :
+        gquizz = Generate_quizz.objects.create(quizz_id = quizz_id ,  group_id = group_id ,is_game=mode)
+    else :
+        gquizz   = Generate_quizz.objects.filter(quizz_id = quizz_id ,  group_id = group_id ,is_game=mode).last() 
+    return quizz , gquizz , save
   
 
 
  
 def show_quizz_group(request,id,idg):
+
     """ show quizz d'un groupe classe """
+
+
     group = Group.objects.get(pk= idg)
     quizz = Quizz.objects.get(pk= id)
     get_date_play(id,idg,0)
@@ -394,56 +411,49 @@ def show_quizz_group(request,id,idg):
 ############################################################################################################
 
 def play_quizz_teacher(request,id,idg):
-    """ Lancer d'un play quizz 
-        idg > 0 si c'est un groupe sinon
-        idg = 0 signifie que c'est un gquizz déjà fait.
-    """
-
-
-    if idg > 0 : 
-        quizz = Quizz.objects.get(pk= id)
-        group = Group.objects.get(pk = idg)
-        if quizz.is_random :
-            quizz , gquizz , qrandoms = get_qr(id,idg,1) 
-            students = gquizz.students.all()
-            nb_student = students.count()
-            context = {  "quizz" : quizz , "gquizz" : gquizz , "qrandoms" : qrandoms, "nb_students" : 0 , "nb_student" : nb_student , "students" : students , 'idg' : idg  }
-        else :
-            questions = quizz.questions.order_by("ranking")
-            quizz , gquizz = get_date_play(id,idg,1)
-            students = gquizz.students.all()
-            nb_student = students.count()
-            context = {  "quizz" : quizz , "gquizz" : gquizz , "questions" : questions, "nb_students" : 0  , "nb_student" : nb_student , "students" : students , 'idg' : idg    }
-    
+    """ Lancer d'un play quizz """
+    quizz = Quizz.objects.get(pk=id)
+    if quizz.is_random :
+        quizz , gquizz , qrandoms, save = get_qr(id,idg,1) 
+        students = gquizz.students.all() # Affichage du nom des élèves.
+        nb_student = students.count()    # Nombres d'élèves.
     else :
-        gquizz = Generate_quizz.objects.get(pk= id)
-        students = gquizz.students.all()
-        nb_student = students.count()
-        if gquizz.quizz.is_random :          
-            qrandoms = gquizz.generate_qr.filter( qr_text = qr_text , ranking = i , qrandom = qrandom )     
-            context = {  "quizz" : quizz , "gquizz" : gquizz , "qrandoms" : qrandoms, "nb_students" : 0 , "nb_student" : nb_student , "students" : students , 'idg' : idg  }
-        else :
-            questions = gquizz.quizz.questions.order_by("ranking")
-            context = {  "quizz" : quizz , "gquizz" : gquizz , "questions" : questions, "nb_students" : 0  , "nb_student" : nb_student , "students" : students , 'idg' : idg    }
-
-
+        quizz , gquizz , save = get_date_play(id,idg,1)
+        students = gquizz.students.all()   # Affichage du nom des élèves.
+        nb_student = students.count()      # Nombres d'élèves.
+    context = {"quizz" : quizz , "gquizz" : gquizz ,   "nb_student" : nb_student , "students" : students , 'idg' : idg , 'save' : save}
     return render(request, 'tool/play_quizz_teacher.html', context)
+
+
 
 
 def launch_play_quizz(request,id,idg):
     """ Lancer d'un play quizz """
     quizz = Quizz.objects.get(pk= id)
-    group = Group.objects.get(pk = idg)
-    if quizz.is_random :
-        group = Group.objects.get(pk= idg)
-        quizz = Quizz.objects.get(pk= id)
-        qrandoms = quizz.qrandoms.filter(is_publish=1).order_by("ranking")
-        context = {  "quizz" : quizz , "qrandoms" : qrandoms , "group" : group  }
+    quizz_questions = request.session.get("quizz_questions",None)
+
+    if quizz_questions :
+        questions = request.session["quizz_questions"]
     else :
-        group = Group.objects.get(pk= idg)
-        quizz = Quizz.objects.get(pk= id)
-        questions = quizz.questions.filter(is_publish=1).order_by("ranking")
-        context = {  "quizz" : quizz , "questions" : questions , "group" : group  }
+        if quizz.is_random :
+            group = Group.objects.get(id = idg)
+            quizz ,  gquizz , questions , save = get_qr(id,idg,0)
+        else :
+            quizz , gquizz , save = get_date_play(id,idg,1)
+            questions = quizz.questions.order_by("ranking")
+ 
+
+    quizz_nav = int(request.POST.get("quizz_nav",0))
+
+    if quizz_nav == len(questions) :
+        quizz_nav = None
+    else :
+        question = questions[quizz_nav]
+    quizz_nav += 1
+
+
+    context = {   "quizz" : quizz , "gquizz" : gquizz , "question" : question , "idg" : idg  , "save" : save , "quizz_nav" : quizz_nav }
+
 
     return render(request, 'tool/launch_play_quizz.html', context)
 
@@ -451,6 +461,7 @@ def launch_play_quizz(request,id,idg):
 
 
 
+   
 
 
 
@@ -494,6 +505,31 @@ def play_quizz_student(request):
  
 
 
+ 
+@csrf_exempt 
+def ajax_quizz_show_result(request):  
+ 
+    all_results = request.POST.get("all",None)
+    question_id = request.POST.get("question_id",None)
+    random = int(request.POST.get("random",0))
+    data = {}
+
+    if random == 0 :
+        anwsers = Answerplayer.objects.filter(question_id = question_id, is_correct = 1 ).order_by("-score")
+        no_anwsers = Answerplayer.objects.filter(question_id = question_id, is_correct = 0 ).order_by("-score")
+    else :
+        anwsers = Answerplayer.objects.filter(qrandom_id = question_id, is_correct = 1 ).order_by("id")
+        no_anwsers = Answerplayer.objects.filter(qrandom_id = question_id, is_correct = 0 ).order_by("-score")
+
+    if all_results == "0" :
+        anwsers = anwsers[:3]
+        no_anwsers = None
+
+    context = { "anwsers" : anwsers , "no_anwsers" : no_anwsers , }
+
+    data['html'] = render_to_string('tool/show_quizz_results.html', context)
+
+    return JsonResponse(data)  
 
 ############################################################################################################
 ############################################################################################################
@@ -961,22 +997,22 @@ def ajax_chargeknowledges(request):
 
 
 def show_quizz_random(request,id):
-
-    quizz , gquizz , qrandoms = get_qr(id, None,0)  
+    """ Vue pour l'enseignant """
+    quizz , gquizz , qrandoms , save = get_qr(id, None,0)  
  
-    context = {  "gquizz" : gquizz , "qrandoms" : qrandoms }
+    context = {  "quizz" : quizz , "gquizz" : gquizz , "qrandoms" : qrandoms  , "save" : save }
+
  
     return render(request, 'tool/show_quizz_random.html', context)
 
 
 
 def show_quizz_random_group(request,id,idg):
- 
+    """ Vue pour le groupe en vidéo projection """
     group = Group.objects.get(id = idg)
-    quizz ,  gquizz , qrandoms = get_qr(id,idg,0)
+    quizz ,  gquizz , qrandoms , save = get_qr(id,idg,0)
 
-    print(qrandoms)
-    context = {   "quizz" : quizz , "gquizz" : gquizz , "qrandoms" : qrandoms , "group" : group }
+    context = {   "quizz" : quizz , "gquizz" : gquizz , "qrandoms" : qrandoms , "group" : group  , "save" : save }
  
     return render(request, 'tool/show_quizz_random.html', context)
 
