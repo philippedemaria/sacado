@@ -38,8 +38,49 @@ cm = 2.54
 #################################################################################
 import re
 import pytz
-from datetime import datetime 
+from datetime import datetime , timedelta
 from general_fonctions import *
+
+
+
+#################################################################################
+#   Fonctions
+#################################################################################
+def all_datas(level):
+
+    levels_dict = {}
+ 
+    themes = level.themes.order_by("id")
+    themes_tab =   []
+    for theme in themes :
+        themes_dict =  {}                
+        themes_dict["name"]=theme
+        waitings = theme.waitings.filter(level=level)
+        waitings_tab  =  []
+        for waiting in waitings :
+            qrs_counter = 0
+            waiting_dict  =   {} 
+            waiting_dict["name"]=waiting 
+            knowlegdes = waiting.knowledges.order_by("name")
+            knowledges_tab  =  []
+            for knowledge in knowlegdes :
+                knowledges_dict  =   {}  
+                knowledges_dict["name"]=knowledge 
+                qrandoms = knowledge.qrandom.all()
+                qrs_counter +=  qrandoms.count()
+                knowledges_dict["qrandoms"]=qrandoms
+                knowledges_tab.append(knowledges_dict)
+            waiting_dict["knowledges"]=knowledges_tab
+            waiting_dict["qrs_counter"]=qrs_counter
+            waitings_tab.append(waiting_dict)
+        themes_dict["waitings"]=waitings_tab
+        themes_tab.append(themes_dict)
+    levels_dict["themes"]=themes_tab
+
+    return levels_dict 
+ 
+
+
 
 
 #####################################################################################################################################
@@ -220,7 +261,7 @@ def delete_quizz(request,id):
 
  
 def show_quizz(request,id):
- 
+    """ permet à un prof de voir son quizz """
     quizz = Quizz.objects.get(pk= id)
     questions = quizz.questions.filter(is_publish=1).order_by("ranking")
     context = {  "quizz" : quizz , "questions" : questions }
@@ -228,31 +269,9 @@ def show_quizz(request,id):
     return render(request, 'tool/show_quizz.html', context)
 
 
+
+
  
-def show_quizz_group(request,id,idg):
-
-    group = Group.objects.get(pk= idg)
-    quizz = Quizz.objects.get(pk= id)
-    questions = quizz.questions.filter(is_publish=1).order_by("ranking")
-    context = {  "quizz" : quizz , "questions" : questions , "group" : group  }
-
-    return render(request, 'tool/show_quizz.html', context)
-
-
-
-
-
-def play_quizz_teacher(request,id,idg):
-
-    quizz = Quizz.objects.get(pk= id)
-    questions = quizz.questions.order_by("ranking")
-    context = {  "quizz" : quizz , "questions" : questions }
-
-    return render(request, 'tool/play_quizz_teacher.html', context)
-
-
-
-
 
 
 def result_quizz(request,id):
@@ -266,12 +285,11 @@ def result_quizz(request,id):
 
 
 
-
 def delete_historic_quizz(request,id):
 
     g_quizz = Generate_quizz.objects.get(pk= id)
 
-    if g_quizz.teacher == request.user.teacher :
+    if g_quizz.quizz.teacher == request.user.teacher :
         g_quizz.delete()
 
     return redirect("list_quizzes")
@@ -288,6 +306,190 @@ def ajax_show_generated(request):
     data['html'] = render_to_string('tool/ajax_show_generated.html', context)
 
     return JsonResponse(data)  
+
+
+
+
+
+def get_save_new_gquizz(quizz) :
+
+    save = True
+    remainig_time = datetime.now() - timedelta(hours = 1) # 0.25 pour 1/4 d'heure , 0.5 pour 1/2 heure
+    if Generate_quizz.objects.filter(date_created__gt= remainig_time, quizz__teacher = quizz.teacher ).count() > 0 :
+        save = False
+    return save
+
+
+
+
+def get_qr(quizz_id,group_id,mode) :
+
+    quizz = Quizz.objects.get(pk= quizz_id)
+    no_save = get_save_new_gquizz(quizz) 
+
+    list_qr = list(quizz.qrandoms.filter(is_publish=1))
+    qrandoms = []
+    nb_lqr = len(list_qr) 
+    if nb_lqr == 1 :
+        for i in range(quizz.nb_slide) :
+            qrandoms.append(list_qr[0])  
+    else :
+        for i in range( nb_lqr ) :
+            qrandoms.append(list_qr[i])
+
+        nleft = math.abs(quizz.nb_slide - nb_lqr)
+
+        for i in range(nleft) :
+            random = randint(0, len(qrandoms)-1)
+            qrandoms.append(list_qr[random]) 
+        qrandoms.shuffle()
+ 
+
+    gquizz  = Generate_quizz.objects.create(quizz  = quizz  ,  group_id = group_id ,is_game=mode)
+    i=1 
+    for qrandom in qrandoms :
+        qr_text  = qrandom.instruction()
+        gqr = Generate_qr.objects.create( gquizz = gquizz ,  qr_text = qr_text , ranking = i  )
+        i+=1  
+
+
+
+    return quizz ,  gquizz , qrandoms
+
+
+
+
+def get_date_play(id,idg,mode) :
+
+    quizz = Quizz.objects.get(pk= id)
+    save = get_save_new_gquizz(quizz) 
+ 
+    gquizz = Generate_quizz.objects.create(quizz_id = id ,  group_id = idg ,is_game=mode)
+ 
+    return quizz , gquizz
+  
+
+
+ 
+def show_quizz_group(request,id,idg):
+    """ show quizz d'un groupe classe """
+    group = Group.objects.get(pk= idg)
+    quizz = Quizz.objects.get(pk= id)
+    get_date_play(id,idg,0)
+    questions = quizz.questions.filter(is_publish=1).order_by("ranking")
+    context = {  "quizz" : quizz , "questions" : questions , "group" : group  }
+
+    return render(request, 'tool/show_quizz.html', context)
+
+
+
+############################################################################################################
+############################################################################################################
+########## Play quizz
+############################################################################################################
+############################################################################################################
+
+def play_quizz_teacher(request,id,idg):
+    """ Lancer d'un play quizz """
+    group = Group.objects.get(pk = idg)
+    if quizz.is_random :
+        quizz , gquizz , qrandoms = get_qr(id,idg,1) 
+        students = gquizz.students.all()
+        nb_student = students.count()
+        context = {  "quizz" : quizz , "gquizz" : gquizz , "qrandoms" : qrandoms, "nb_students" : 0 , "nb_student" : nb_student , "students" : students , 'idg' : idg  }
+    else :
+        questions = quizz.questions.order_by("ranking")
+        quizz , gquizz = get_date_play(id,idg,1)
+        students = gquizz.students.all()
+        nb_student = students.count()
+        context = {  "quizz" : quizz , "gquizz" : gquizz , "questions" : questions, "nb_students" : 0  , "nb_student" : nb_student , "students" : students , 'idg' : idg    }
+
+    return render(request, 'tool/play_quizz_teacher.html', context)
+
+
+def replay_gquizz_teacher(request,idq,idg):
+    """ Lancer d'un play quizz """
+    gquizz = Generate_quizz.objects.get(pk= idq)
+    group = Group.objects.get(pk = idg)
+    if quizz.is_random :
+        students = gquizz.students.all()  
+        qrandoms = gquizz.qrandoms.order_by("ranking")      
+        nb_student = students.count()
+        context = {  "gquizz" : gquizz , "qrandoms" : qrandoms, "nb_students" : 0 , "nb_student" : nb_student , "students" : students , 'idg' : idg  }
+    else :
+        questions = quizz.questions.order_by("ranking")
+        students = gquizz.students.all()
+        nb_student = students.count()
+        context = {  "gquizz" : gquizz , "questions" : questions, "nb_students" : 0  , "nb_student" : nb_student , "students" : students , 'idg' : idg    }
+
+    return render(request, 'tool/replay_quizz_teacher.html', context)
+
+
+
+
+
+def launch_play_quizz(request,id,idg):
+    """ Lancer d'un play quizz """
+    quizz = Quizz.objects.get(pk= id)
+    group = Group.objects.get(pk = idg)
+    if quizz.is_random :
+        group = Group.objects.get(pk= idg)
+        quizz = Quizz.objects.get(pk= id)
+        qrandoms = quizz.qrandoms.filter(is_publish=1).order_by("ranking")
+        context = {  "quizz" : quizz , "qrandoms" : qrandoms , "group" : group  }
+    else :
+        group = Group.objects.get(pk= idg)
+        quizz = Quizz.objects.get(pk= id)
+        questions = quizz.questions.filter(is_publish=1).order_by("ranking")
+        context = {  "quizz" : quizz , "questions" : questions , "group" : group  }
+
+        return render(request, 'tool/launch_play_quizz.html', context)
+
+
+
+
+
+
+
+
+def this_student_can_play(student,gquizz):
+    """ Vérifie qu'un joueur peut participer au quiz"""
+    can_play = False
+    groups = gquizz.quizz.groups.all()
+    group_set = set()
+    for group in groups :
+        group_set.update(group.students.all())
+    if student in group_set :
+        can_play = True
+    return can_play
+
+
+ 
+ 
+
+def play_quizz_student(request):
+    """ Lancer le play quizz élève """
+    if request.method == 'POST' :
+        code = request.POST.get("code",None)
+        if None :
+            return redirect("play_quizz_student")
+        else :
+            student = request.user.student
+            if Generate_quizz.objects.filter(code= code).count() == 1 :
+                gquizz = Generate_quizz.objects.get(code= code)
+                if this_student_can_play(student,gquizz):
+                    gquizz.students.add(student)
+                    # Envoi du signal vers le client get_new_player(gquizz)
+                    context = { 'student' : request.user.student , }
+                    return render(request, 'tool/play_quizz_start.html', context)
+            else :
+                messages.error(request,"vous n'êtes pas autorisé à participer à ce quizz")
+
+
+    context = {}
+    return render(request, 'tool/play_quizz_student.html', context)
+
+ 
 
 
 
@@ -753,79 +955,14 @@ def ajax_chargeknowledges(request):
 ########## Question Random
 ############################################################################################################
 ############################################################################################################
-def all_datas(level):
 
-    levels_dict = {}
- 
-    themes = level.themes.order_by("id")
-    themes_tab =   []
-    for theme in themes :
-        themes_dict =  {}                
-        themes_dict["name"]=theme
-        waitings = theme.waitings.filter(level=level)
-        waitings_tab  =  []
-        for waiting in waitings :
-            qrs_counter = 0
-            waiting_dict  =   {} 
-            waiting_dict["name"]=waiting 
-            knowlegdes = waiting.knowledges.order_by("name")
-            knowledges_tab  =  []
-            for knowledge in knowlegdes :
-                knowledges_dict  =   {}  
-                knowledges_dict["name"]=knowledge 
-                qrandoms = knowledge.qrandom.all()
-                qrs_counter +=  qrandoms.count()
-                knowledges_dict["qrandoms"]=qrandoms
-                knowledges_tab.append(knowledges_dict)
-            waiting_dict["knowledges"]=knowledges_tab
-            waiting_dict["qrs_counter"]=qrs_counter
-            waitings_tab.append(waiting_dict)
-        themes_dict["waitings"]=waitings_tab
-        themes_tab.append(themes_dict)
-    levels_dict["themes"]=themes_tab
-
-    return levels_dict 
- 
-
-
-def get_qr(id,group) :
-
-    quizz = Quizz.objects.get(pk= id)
-    list_qr = list(quizz.qrandoms.filter(is_publish=1))
-    qrandoms = []
-    nb_lqr = len(list_qr) 
-    if nb_lqr == 1 :
-        for i in range(quizz.nb_slide) :
-            qrandoms.append(list_qr[0])  
-    else :
-        for i in range( nb_lqr ) :
-            qrandoms.append(list_qr[i])
-
-        nleft = math.abs(quizz.nb_slide - nb_lqr)
-
-        for i in range(nleft) :
-            random = randint(0, len(qrandoms)-1)
-            qrandoms.append(list_qr[random]) 
-        qrandoms.shuffle()
- 
-    if group :
-        gquizz = Generate_quizz.objects.create(quizz = quizz ,  group = group)
-        i=1 
-        for qrandom in qrandoms :
-            qr_text  = qrandom.instruction()
-            Generate_qr.objects.create(gquizz = gquizz ,  qr_text = qr_text , ranking = i  )
-            i+=1    
-
-    return qrandoms
 
 
 def show_quizz_random(request,id):
 
-
-    quizz = Quizz.objects.get(pk= id)
-    qrandoms = get_qr(id, None)  
+    quizz , gquizz , qrandoms = get_qr(id, None,0)  
  
-    context = {  "quizz" : quizz , "qrandoms" : qrandoms }
+    context = {  "gquizz" : gquizz , "qrandoms" : qrandoms }
  
     return render(request, 'tool/show_quizz_random.html', context)
 
@@ -833,11 +970,11 @@ def show_quizz_random(request,id):
 
 def show_quizz_random_group(request,id,idg):
  
-    group = Group.objects.get(pk= idg)
-    quizz = Quizz.objects.get(pk= id)
-    qrandoms = get_qr(id,group)  
+    group = Group.objects.get(id = idg)
+    quizz ,  gquizz , qrandoms = get_qr(id,idg,0)
 
-    context = {  "quizz" : quizz , "qrandoms" : qrandoms , "group" : group }
+    print(qrandoms)
+    context = {   "quizz" : quizz , "gquizz" : gquizz , "qrandoms" : qrandoms , "group" : group }
  
     return render(request, 'tool/show_quizz_random.html', context)
 

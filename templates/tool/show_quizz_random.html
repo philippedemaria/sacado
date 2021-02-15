@@ -3,6 +3,13 @@
 {% load widget_tweaks %}
 {% load item_tags %}
 
+
+{% block page_menu_right %}
+    <a href="{% url 'play_quizz_teacher' gquizz.id   group.id  %}" target="_blank" class="btn btn-new">Mode jeu</a>
+    <a href="{% url 'list_quizzes' %}"  class="btn btn-new">Mes quizz</a>
+{% endblock %}
+
+
  
 
 {% block body_quizz %}
@@ -11,10 +18,11 @@
     
         {% for qrandom in qrandoms %}
         <li class="my_slide">
-            <input type="hidden" value="{{ qrandom.duration }}" id="inter_slide{{ forloop.counter }}" /> 
+
+            <input type="hidden" value="{{ quizz.interslide }}" id="inter_slide{{ forloop.counter }}" /> 
             <div class="row consigne_diapo"  align="center">  
                 <div class="col-sm-12 col-md-12">
-                    <h1 style="font-size:3em" class="thin"><b>Question {{forloop.counter}}.</b> <span class="instruction"><br/>dd La durée de cette question est <br/>  <b>{{ qrandom.duration }} secondes</b>.</span> <br/> 
+                    <h1 style="font-size:3em" class="thin"><b>Question {{forloop.counter}}.</b> <span class="instruction"><br/>La durée de cette question est <br/>  <b>{{ qrandom.duration }} secondes</b>.</span> <br/> 
                         {% if qrandom.qtype == 1 %}
                             Répondre à cette question par <br/><b>Vrai</b> ou <b>Faux</b>
                         {% elif qrandom.qtype == 2 %}
@@ -25,6 +33,13 @@
                              Vous devez choisir la <br/><b>seule bonne réponse</b><br/>  parmi les 4 réponses proposées. 
                         {% endif %}
                     </h1>
+                                
+                    <div class="starter_in" > Démarrage dans 
+                        <span class="counterdown instruction" id="countdown{{ forloop.counter }}" > 
+                            {{ quizz.interslide }}
+                        </span> s
+                    </div>
+
                 </div>
             </div> 
         </li>
@@ -46,7 +61,7 @@
                         {% endif %}
                 </div>
                 <div class="col-sm-2 col-md-2" align="right">
-                    <div class="countdown instruction" id="countdown{{ forloop.counter }}" > 
+                    <div class="countdown instruction" id="counterdown{{ forloop.counter }}" > 
                         {{ qrandom.duration }}
                     </div>
                 </div>

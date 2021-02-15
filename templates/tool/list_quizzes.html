@@ -58,14 +58,14 @@
                                             <label style="color:{{g.color}}"> {{ g }} </label><br/>
                                             <span  class="sanspuce historic_li"  style="color:{{g.color}};border:1px solid {{g.color}}; border-radius:20px; width:70px;margin-right: 10px;">
                                                 
-                                                <a href="{% if quizz.is_random %}{% url 'show_quizz_random_group'  quizz.id  g.id %}{% else %}{% url 'show_quizz_group'  quizz.id g.id %}{% endif %}" style="color:{{g.color}}"
+                                                <a href="{% if quizz.is_random %}{% url 'show_quizz_random_group'  quizz.id  g.id %}{% else %}{% url 'show_quizz_group'  quizz.id  g.id %}{% endif %}" style="color:{{g.color}}"
                                                    class="quizz_action {% if quizz.is_random %} confirm_create_historic{% endif %}">
                                                    <i class="fa fa-play fa-xs"></i>  Quizz
                                                 </a>
 
                                             </span>
                                             <span class="sanspuce historic_li"  style="border:1px solid {{g.color}}; border-radius:20px; width:70px">
-                                                <a href="{% url 'play_quizz_teacher'  quizz.id   g.id  %}" target="_blank"  class="quizz_action no_sacado_asso" title="Bientôt" 
+                                                <a href="{% url 'play_quizz_teacher'  quizz.id   g.id  %}" target="_blank"  class="quizz_action" 
                                                     style="color:{{g.color}}"><i class="fa fa-gamepad"></i> 
                                                     <em> 
                                                         <span class="sacado" style="font-size:12px">SACADO Quizz Play</span>
@@ -77,15 +77,28 @@
                                         <div class="col-sm-6 col-md-6 quizz_historic_div">
                                                 <form method="POST">
                                                     {% get_quizz_generated quizz g as generated_historic %} 
-                                                    {% if quizz.is_random %}
                                                         {% for gq in generated_historic %} 
                                                         <li class="sanspuce historic_li btn-new">
-                                                                <a href="{% url 'delete_historic_quizz' gq.id %}" class="pull-right" 
-                                                                   onclick="return TestDelete('cet historique et tous les résultats associés')">
-                                                                    <i class="fa fa-trash"></i>
-                                                                </a> 
-                                                                <small style="margin-right:10px"  class="pull-right" >{{ gq.date_created|date:"d-m-Y" }}</small>
-                                                                <a  {% if quizz.is_numeric %}
+                                                            <a href="{% url 'delete_historic_quizz' gq.id %}" class="pull-right" 
+                                                               onclick="return TestDelete('cet historique et tous les résultats associés')">
+                                                                <i class="fa fa-trash"></i>
+                                                            </a> 
+                                                            <small style="margin-right:10px"  class="pull-right" >{{ gq.date_created|date:"d-m-Y" }}</small>
+                                                            {% if gq.is_game %}
+                                                            <a href="{% url 'replay_gquizz_teacher'  gq.id  g.id  %}" style="margin-right:20px"  class="pull-right">
+                                                               <i class="fa fa-gamepad"></i>
+                                                            </a>
+                                                            {% else %}
+                                                            <a href="{% if quizz.is_random %}
+                                                                        {% url 'show_quizz_random_group'  quizz.id  g.id %}
+                                                                     {% else %}
+                                                                         {% url 'show_quizz_group'  quizz.id  g.id %}
+                                                                     {% endif %}" style="margin-right:20px"  class="pull-right">
+                                                               <i class="fa fa-play fa-xs"></i> 
+                                                            </a>
+                                                            {% endif %} 
+                                                            <a  {% if quizz.is_random %}
+                                                                    {% if quizz.is_numeric %}
                                                                         href="{% url 'result_quizz'  gq.id %}" 
                                                                     {% else %}
                                                                         href="#" 
@@ -93,19 +106,14 @@
                                                                         data-target='#historic_modal' 
                                                                         class="generated_quizz" 
                                                                         data-gq_id="{{ gq.id }}"
-                                                                    {% endif %} >
-                                                                    {{ gq.code }}
-                                                                </a>
-                                                                 
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    href="{% url 'result_quizz'  gq.id %}"
+                                                                {% endif %}>
+                                                                {{ gq.code }}
+                                                            </a>       
                                                         </li>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        {% if quizz.is_numeric %}
-                                                        <li class="sanspuce">
-                                                            <a href="{% url 'result_quizz'  quizz.id %}" class="btn-new historic_li" > {{ quizz.code }}</a>
-                                                        </li>
-                                                        {% endif %} 
-                                                    {% endif %}
+                                                    {% endfor %}
                                                 </form>
                                         </div>
                                     </div>

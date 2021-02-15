@@ -36,11 +36,6 @@ urlpatterns = [
     path('update_slide/<int:id>/<int:idp>', update_slide, name='update_slide'),
     path('delete_slide/<int:id>/<int:idp>', delete_slide, name='delete_slide'),
 
-
-    path('play_printing_teacher/<int:id>', play_printing_teacher, name='play_printing_teacher'), 
-    path('play_quizz_teacher/<int:id>/<int:idg>', play_quizz_teacher, name='play_quizz_teacher'),
-
-
     path('show_quizz_group/<int:id>/<int:idg>', show_quizz_group, name='show_quizz_group'), 
     path('show_quizz_random_group/<int:id>/<int:idg>', show_quizz_random_group, name='show_quizz_random_group'), 
 
@@ -62,11 +57,7 @@ urlpatterns = [
     path('ajax_chargeknowledges', ajax_chargeknowledges, name='ajax_chargeknowledges'),
     path('ajax_chargewaitings', ajax_chargewaitings, name='ajax_chargewaitings'),
 
-
-
     path('question_sorter', question_sorter, name='question_sorter'), 
-
-
 
     path('get_this_tool', get_this_tool, name='get_this_tool'),
 
@@ -97,4 +88,14 @@ urlpatterns = [
     path('delete_historic_quizz/<int:id>', delete_historic_quizz, name='delete_historic_quizz'), 
 
  
+
+    ############## Play
+    path('play_printing_teacher/<int:id>', play_printing_teacher, name='play_printing_teacher'), 
+    path('play_quizz_teacher/<int:id>/<int:idg>', play_quizz_teacher, name='play_quizz_teacher'),
+    path('replay_gquizz_teacher/<int:idq>/<int:idg>', replay_gquizz_teacher, name='replay_gquizz_teacher'),
+    path('launch_play_quizz/<int:id>/<int:idg>', launch_play_quizz, name='launch_play_quizz'),
+
+
+
+    path('play_quizz_student', play_quizz_student, name='play_quizz_student'),
 ]

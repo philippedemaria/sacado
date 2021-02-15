@@ -9,6 +9,7 @@ from django.utils import   timezone
 from django.db.models import Q
 from random import uniform , randint
 from sacado.settings import MEDIA_ROOT
+
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
@@ -45,7 +46,6 @@ class Tool(models.Model):
 
     def __str__(self):
         return self.title 
-
 
 
 class Qrandom(models.Model):
@@ -92,7 +92,6 @@ class Qrandom(models.Model):
         return txt
 
             
-
 class Variable(models.Model):
 
     name  = models.CharField(max_length=50,  blank=True, verbose_name="variable")
@@ -115,8 +114,6 @@ class VariableImage(models.Model):
 
     def __str__(self):
         return self.variable.name 
-
-
 
 
 class Question(models.Model):
@@ -144,12 +141,11 @@ class Question(models.Model):
  
     is_correct = models.BooleanField(default=1, verbose_name="Réponse correcte ?")
     ranking    = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
-    students   = models.ManyToManyField(Student, blank=True, through="Questionplayer", related_name="question",   editable=False)
+    students   = models.ManyToManyField(Student, blank=True, through="Questionplayer", related_name="questions",   editable=False)
 
     def __str__(self):
         return self.title 
  
-
 
 class Choice(models.Model):
     """
@@ -204,19 +200,19 @@ class Quizz(ModelWithCode):
         return self.generate_quizz.filter(group=group).order_by("-date_created")
 
 
-
-
 class Generate_quizz(ModelWithCode):
     """
-    Modèle qui récupère le quizz de questions aléatoires question par question.
+    Modèle qui récupère le quizz à partir du modèle de quizz choisi.
     """
     quizz        = models.ForeignKey(Quizz,  related_name="generate_quizz",  on_delete=models.CASCADE, editable=False) 
     group        = models.ForeignKey(Group,  null=True, blank=True, related_name='generate_quizz', on_delete=models.CASCADE, editable= False)
     date_created = models.DateTimeField(auto_now=True)
+    is_game      = models.BooleanField(default=0, editable= False) 
+    students     = models.ManyToManyField(Student, blank=True,  related_name="gquizz",   editable=False)
     def __str__(self):
-        return self.quizz.title 
+        return self.quizz.name 
 
-
+ 
 class Generate_qr(models.Model):
     """
     Modèle qui récupère les questions du quizz généré.
@@ -224,7 +220,8 @@ class Generate_qr(models.Model):
     gquizz       = models.ForeignKey(Generate_quizz,  related_name="generate_qr",  on_delete=models.CASCADE, editable=False) 
     qr_text      = models.TextField( editable=False) 
     ranking      = models.PositiveIntegerField(default = 1 , editable=False)    
- 
+    students     = models.ManyToManyField(Student, blank=True, through="Questionplayer", related_name="generate_qr",   editable=False)
+
     def __str__(self):
         return self.qr_text
 
@@ -262,39 +259,17 @@ class Quizz_student_answer(models.Model):
         unique_together = ('qrandom', 'student')
 
 
-
- 
-
-
-class Player(models.Model):
-
-    student    = models.ForeignKey(Student,  null=True, blank=True,   related_name='player', on_delete=models.PROTECT,  editable= False)
-    quizz      = models.ForeignKey(Quizz,  null=True, blank=True, related_name='player', on_delete=models.PROTECT, editable= False)
-    scoretotal = models.PositiveIntegerField(default=0, editable=False)
- 
-    def __str__(self):
-        return self.student 
-
-    class Meta:
-        unique_together = ('student', 'quizz')
-
-
-
-
 class Questionplayer(models.Model):
 
-    student  = models.ForeignKey(Student,  null=True, blank=True,   related_name='student_player', on_delete=models.PROTECT,  editable= False)
-    question = models.ForeignKey(Question,  null=True, blank=True, related_name='question_player', on_delete=models.PROTECT, editable= False)
+    student  = models.ForeignKey(Student,  null=True, blank=True,   related_name='questions_player', on_delete=models.CASCADE,  editable= False)
+    question = models.ForeignKey(Question,  null=True, blank=True, related_name='questions_player', on_delete=models.CASCADE, editable= False)
+    qrandom = models.ForeignKey(Generate_qr,  null=True, blank=True, related_name='questions_player', on_delete=models.CASCADE, editable= False)
     answer   = models.CharField( max_length=255, verbose_name="Réponse")  
     score    = models.PositiveIntegerField(default=0, editable=False)
     timer    = models.CharField(max_length=255, editable=False)  
 
     def __str__(self):
         return self.student 
-
-
-    class Meta:
-        unique_together = ('student', 'question')
 
 
 class Slide(models.Model):
