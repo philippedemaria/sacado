@@ -1,0 +1,132 @@
+{% extends 'tool/play_quizz_teacher.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block script %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    <script>
+        require(['script/quizz-slider']);
+    </script> 
+{% endblock %}
+ 
+ 
+{% block my_css %}
+<link href="{% static 'css/play_this_quizz.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+
+
+{% block form %}
+
+
+    <div class="wrapper_slider">
+  <!-- Wrapper for slides -->
+        <div class="slider">
+
+            <ul>
+                <li class="my_slide my_slide_instruction">
+                    <input type="hidden" value="{{ gquizz.quizz.interslide }}" id="inter_slide" /> 
+                    <div class="row consigne_diapo"  align="center">  
+                        <div class="col-sm-12 col-md-12">
+                            <h1 style="font-size:3em" class="thin"><br/>La durée de cette question est <br/>  <b>{{ question.duration }} secondes</b>.</span> <br/> 
+                                {% if question.qtype == 1 %}
+                                    Répondre à cette question par <br/><b>Vrai</b> ou <b>Faux</b>
+                                {% elif question.qtype == 2 %}
+                                    Vous devez répondre en écrivant <br/><b>la bonne réponse</b>.
+                                {% elif question.qtype == 3 %}
+                                     Vous devez choisir <br/><b>la ou les bonnes réponses</b><br/> parmi les 4 réponses proposées. 
+                                {% else %}
+                                     Vous devez choisir la <br/><b>seule bonne réponse</b><br/>  parmi les 4 réponses proposées. 
+                                {% endif %}
+                            </h1>
+                        </div>
+                    </div> 
+                </li>
+                <li class="my_slide">
+                    <input type="hidden" value="{{ question.duration }}" id="duration{{ forloop.counter }}" /> 
+                    <div class="row">  
+                        <div class="col-sm-2 col-md-2" align="left">
+                            <img src="{% if question.calculator %}{% static 'img/calculator.png' %}{% else %}{% static 'img/no_calculator.png' %}{% endif %}" height="50px" />
+                        </div>
+                        <div class="col-sm-8 col-md-8" align="center">
+                                {% if question.qtype == 1 %}
+                                    <b>Vrai  ou  Faux ?</b>
+                                {% elif question.qtype == 2 %}
+                                    <b>Ecrire la bonne réponse</b>.
+                                {% elif question.qtype == 3 %}
+                                    <b> Choisir  la ou les bonnes réponses</b>. 
+                                {% else %}
+                                    <b> Choisir la seule bonne réponse</b>. 
+                                {% endif %}
+                        </div>
+                        <div class="col-sm-2 col-md-2" align="right">
+                            <div class="countdown instruction" id="countdown{{ forloop.counter }}" > 
+                                {{ question.duration }}
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="row">  
+                        <div class="col-sm-12 col-md-12"align="center">
+                            <h1 style="font-size:3.5em" class="thin"> {{ question.title }} </h1>
+                        </div>
+                    </div>
+                    {% if question.imagefile %}
+                    <div class="row">  
+                        <div class="col-sm-12 col-md-12"align="center">
+                             <img src="{{ question.imagefile.url }}" height="300px"  />
+                        </div>
+                    </div>
+                    {% endif %}
+                    <hr/> 
+
+ 
+
+
+                    {% if question.qtype == 1 %}   
+               
+                            <div class="col-sm-12 col-md-6 bgcolorBlue white" style="border-radius : 10px ">
+                                <h1>VRAI </h1>  
+                            </div> 
+
+                            <div class="col-sm-12 col-md-6 bgcolorRed white" style="border-radius : 10px ">
+                                <h1>FAUX </h1>  
+                            </div> 
+                       
+                    {%  elif question.qtype > 2 %}   
+                         
+                        {% for choice in question.choices.all %}
+                            {% cycle 'bgcolorRed' 'bgcolorBlue' 'bgcolorOrange' 'bgcolorGreen' as rowcolor silent %} 
+                            {% cycle 'A' 'B' 'C' 'D'  as choice_letter silent %}
+                            <div class="col-sm-12 col-md-6" style="padding-right: 20px;margin-bottom: 20px;font-size:1.2em; border : 1px solid #F0F0F0; border-radius : 10px">
+                                <div class="row" >
+                                    <div class="col-sm-2 col-md-1 {{ rowcolor }} get_image" style="padding-top: 20px;color:#FFF; padding-left:10px; border-radius : 10px 0px 0px 10px"> 
+                                        <b>{{ choice_letter }} </b>    
+                                    </div>
+                                    <div class="col-sm-10 col-md-11" style="font-size:{% if choice.answer|length > 30 %}1{% else  %}1.5{% endif %}em"> 
+                                        {{ choice.answer }}
+                                    </div>
+                                </div>  
+                            </div> 
+                        {% endfor %}
+                        {% resetcycle %}
+                        {% resetcycle %}
+                    {% endif %}
+                </li>
+                <li class="my_slide my_slide_instruction">
+                    <input type="hidden" value="{{ gquizz.quizz.interslide }}" id="inter_slide" /> 
+                    <div class="row consigne_diapo"  align="center">  
+                        <div class="col-sm-12 col-md-12">
+                            <h1 style="font-size:6em" class="thin"><br/>Résultats</h1>
+
+                            <h1 style="font-size:3em" class="thin"><br/>Afficher ?</h1>
+                        </div>
+                    </div> 
+                </li>
+            </ul>
+        </div>
+    </div>
+ 
+{% endblock %} 

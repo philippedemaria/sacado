@@ -15,7 +15,7 @@
 
 </li>
 
-<li class='dropdown {% if '/myaccount' in request.path %}active{% endif %}'>
+<li class="dropdown {% if '/myaccount' in request.path %}active{% endif %}">
     <a href="#" class="main" id="account">
         <i class="fa fa-user fa-2x"></i> 
         <div class="captionmenu">Compte</div>
@@ -29,10 +29,10 @@
     </a>
 </li>
 
-<li  class='dropdown {% if 'exercise' in request.path %}
+<li  class="dropdown {% if 'exercise' in request.path %}
 active
 {% endif %} 
-'>
+">
     <a href="{% url 'detail_student_all_views' user.id %}" class="main" >
         <i class="fa fa-trophy fa-2x"></i>
         <div class="captionmenu">Suivis</div>
@@ -52,10 +52,17 @@ active
 </li> -->
 
 
-<li  class='dropdown  {% if '/sendmail' in request.path %} active{% endif %}'>
+<li  class="dropdown  {% if '/sendmail' in request.path %} active{% endif %}">
     <a href="{% url 'emails' %}" class="main" >
         <i class="fa fa-inbox fa-2x"></i> 
         <div class="captionmenu">Messages</div>
     </a>
 </li>
- 
+
+<li  class="dropdown  {% if '/tool' in request.path %} active{% endif %}">
+    <a href="{% url 'play_quizz_student' %}" class="main" >
+        <i class="fa fa-gamepad fa-2x"></i> 
+        <div class="captionmenu">Quizz</div>
+    </a>
+</li>
+  

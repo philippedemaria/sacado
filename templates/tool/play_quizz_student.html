@@ -1,39 +1,43 @@
+{% load bootstrap3 %}
 {% load static %}
-
+{% bootstrap_messages %}
 <html>
     <head>
         <title>SacAdo Quizz Play</title>
         <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}"/>
- 
+        
+        <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}"/>
         <link href="{% static 'css/AdminLTEperso.css' %}" rel="stylesheet">
         <link href="{% static 'css/play_quizz.css' %}" rel="stylesheet">
-   
 
-
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+          integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
     </head>
     <body>
-
+ 
         {% block form %}
-        <h1 class="title">SACADO Quizz Play</h1>
-        <form action="{% url 'play_quizz_login' %}" method="POST">
+        <h1 class="sacado title more_space">SACADO Quizz Play</h1>
+        <form action="#" method="POST">
             {% csrf_token %}
-            <div class="row bottom_space">  
+            <div class="row more_space">  
                 <div class="col-sm-12 col-md-12" align="center">
-                    <input type="text" name="code" id="code" class="form-control" placeholder="Tape le code" required />
+                    <input type="text" name="code" id="code" class="play_quizz_box" placeholder="Tape le code" required />
                 </div>
             </div> 
-            <div class="row">  
+            <div class="row more_space">  
                 <div class="col-sm-12 col-md-12" align="center">
-                    <button type="submit"  class="form-control" >Rentre dans le quizz</button>
+                    <button type="submit"  class="play_quizz_enter" >Rentre dans le quizz</button>
                 </div>
             </div> 
         </form>
         {% endblock %}
 
+
+
     {% block script %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     <script>
-        require(['script/ajax-quizz-complement']);
+        require(['script/ajax-play-quizz']);
     </script> 
     {% endblock %}
 

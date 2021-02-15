@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap');
+ 
+
+.my_slide_instruction{
+  margin : 50px;
+  padding: 50px;
+  border-radius: 50px;
+  background-color: #FFF;
+  min-height : 600px;
+}

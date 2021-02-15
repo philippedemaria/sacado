@@ -1,11 +1,14 @@
-define(['jquery',  'bootstrap' ], function ($) {
+define(['jquery',  'bootstrap', ], function ($) {
     $(document).ready(function () {
  
- 
-        console.log(" ajax-slider chargé ");
+        console.log(" ajax-quizz-teacher chargé "); 
 
+        var i = 0;
+        setInterval(function(){
+            $("body").removeClass("bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8").addClass("bg"+(i++%8 + 1));
+        }, 4000);
  
- 
+
 
         var slideBox = $('.slider ul'),
             slideWidth = 1000 ,
@@ -71,46 +74,27 @@ define(['jquery',  'bootstrap' ], function ($) {
 
                 $('#start_quizz').on('click', function(){
 
-                         $(".instruction").show();
+                            $(".instruction").show();
  
+
                         if ( starter_play%2 === 0 ) {
+
                             $("#start_quizz").html("").html("<button  class='btn btn-danger'><i class='fa fa-stop'></i> Arrêter</button>") ;
+                            auto_play() ;
                         }
                         else
                         {  
+
                             $("#start_quizz").html("").html("<button  class='btn btn-default'><i class='fa fa-play'></i> Démarrer</button>") ;
+                            clearInterval(interval);    
                         }
-
-                        auto_play() ;                        
+                        
                         starter_play++ ;
-
-                        console.log(starter_play) ;
 
                     })  
  
 
-                    function timer(cible , this_slide , duree  ){
-                                
- 
-                        var interval = setInterval(function() {
-                            duree = duree - 1000;
-                            document.getElementById(cible+this_slide).textContent = duree/1000;
-
-                            // Changement de la couleur selon le temps restant
-                            if (duree <= 10000) { $("#"+cible+this_slide).addClass("countdownOrange") ; }
-                            if (duree <= 5000) { $("#"+cible+this_slide).removeClass("countdownOrange").addClass("countdownRed") ; }
-                            if (duree <= 0) { auto_play() ; clearInterval(interval); }
-
-                        }, 1000)
-                    }
-
-
-
                     function auto_play(){
-
-
-                        if ( starter_play%2 === 0 ) {
-
 
                             if (currentSlide === slideQuantity) // Si on arrive au bout du nombre de slides, le quizz s'arrete.
                                 { 
@@ -125,40 +109,43 @@ define(['jquery',  'bootstrap' ], function ($) {
                             var pxValue = - (currentSlide -1) * slideWidth ; // décalage pour l'animation du slide.
                             slideBox.animate({'left' : pxValue});            // Animation du slide.
 
-
-                                console.log(currentSlide);
-
-
                             $(".thisquestion").removeClass("btn-primary").addClass("btn-default")  ;   // Couleurs des boutons
 
                             if ( step === 0 )  // Introduction du quizz
                             {
                                 this_slide =  0 ; 
-                                duree = $("#inter_slide1").val() * 1000 ;
+                                duree = $("#introduction").val() * 1000 ; // Durée de l'introduction
                                 $("#question1").addClass("btn-primary").removeClass("btn-default")  ;    // Couleurs des boutons
-                                timer("countdown" , 1 , duree  )
-
+                                step ++ ;
+                                interval = setTimeout(auto_play, parseInt(duree) ); // la fonction auto_play se relance avec un temps différent
                             }
                             else  // Lecture des diapo des questions
                             {
-
-
-                                this_slide = parseInt( (currentSlide-1)/2) ; // Sélection du temps entre les diapos ou de la diapo
-
+                                this_slide = parseInt( (currentSlide-1)/2) ; // Sélection du temps entre les dipa ou de la diapo
                                 if ( step%2 === 0 ) 
                                     {
-                                        this_slide++;
                                         duree = $("#inter_slide"+this_slide).val() * 1000 ;
-                                        timer("countdown" , this_slide , duree  )
-
+                                        step ++ ;
+                                        interval = setTimeout(auto_play, parseInt(duree) ); // la fonction auto_play se relance avec un temps différent             
                                     }
                                     else   
                                     {   
                                         duree = $("#duration"+this_slide).val() * 1000 ;
-                                        timer("counterdown" , this_slide , duree  )
+
+                                        var interval = setInterval(function() {
+                                            duree = duree - 1000;
+                                            document.getElementById("countdown"+this_slide).textContent = duree/1000;
+
+                                            // Changement de la couleur selon le temps restant
+                                            if (duree <= 10000) { $("#countdown"+this_slide).addClass("countdownOrange") ; }
+                                            if (duree <= 5000) { $("#countdown"+this_slide).removeClass("countdownOrange").addClass("countdownRed") ; }
+                                            if (duree <= 0) { auto_play() ; clearInterval(interval); }
+
+                                        }, 1000);
+
 
                                     }
-                           
+
 
                                  // Couleurs des boutons déjà des questions déjà travaillées
                                 currentQuestion++ ; 
@@ -166,19 +153,12 @@ define(['jquery',  'bootstrap' ], function ($) {
                                 for (col=1;col<this_question;col++){ $("#question"+col).addClass("btn-success").removeClass("btn-default")  ;  }
                                  // Seule la question en cours en bleu
                                 $("#question"+this_question).addClass("btn-primary").removeClass("btn-default")  ;  
+
                             }
 
-                            step++ ;
+                            
                         }
-                        
-                    }
-
-
-
  
-
- 
-
 
 
 
