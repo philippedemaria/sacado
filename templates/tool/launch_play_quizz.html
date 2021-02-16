@@ -28,7 +28,11 @@
 
 
 {% block form %}
- 
+<form method="POST"> 
+
+    {% csrf_token %}
+    <input type="hidden" value="{{ question.id }}" id="question_id" /> 
+    <input type="hidden" value="{{ gquizz.id }}" id="gquizz_id" /> 
 
     <div class="wrapper_slider">
         <div class="slider">
@@ -131,32 +135,30 @@
                     {% endif %}
                 </li>
                 <li class="my_slide my_slide_instruction">
-                    <form method="POST"> 
-                        {% csrf_token %}
-                        <div class="row consigne_diapo"  align="center">
-                            <div class="col-sm-12 col-md-12" id="last_slide" >
-                                <h1 style="font-size:6em" class="thin">Résultats</h1>
-                                <div style="font-size:1.5em;margin-top: 60px;margin-bottom: 60px" >
-                                    <a href="#" class="command_results" data-all="1" data-question_id="{{ question.id }}" data-random="{% if quizz.is_random %}1{% else %}0{% endif %}">
-                                        Afficher tous ?
-                                    </a>
-                                    <a href="#" class="command_results" data-all="0" data-question_id="{{ question.id }}" data-random="{% if quizz.is_random %}1{% else %}0{% endif %}">
-                                        Afficher le podium ?
-                                    </a>
-                                </div>
+                    <div class="row consigne_diapo"  align="center">
+                        <div class="col-sm-12 col-md-12" id="last_slide" >
+                            <h1 style="font-size:6em" class="thin">Résultats</h1>
+                            <div style="font-size:1.5em;margin-top: 60px;margin-bottom: 60px" >
+                                <a href="#" class="command_results" data-all="1" data-question_id="{{ question.id }}" data-random="{% if quizz.is_random %}1{% else %}0{% endif %}">
+                                    Afficher tous ?
+                                </a>
+                                <a href="#" class="command_results" data-all="0" data-question_id="{{ question.id }}" data-random="{% if quizz.is_random %}1{% else %}0{% endif %}">
+                                    Afficher le podium ?
+                                </a>
                             </div>
-                            <div class="col-sm-12 col-md-12" id="display_results" >
-     
-                            </div>
-                            <div class="col-sm-12 col-md-12"  >
-                                <input type="hidden" name="quizz_nav" value="{{ quizz_nav }}" />
-                                <button type="submit" class="btn btn-default">Question suivante ?</button>
-                            </div>
-                        </div> 
-                    </form>  
+                        </div>
+                        <div class="col-sm-12 col-md-12" id="display_results" >
+ 
+                        </div>
+                        <div class="col-sm-12 col-md-12"  >
+                            <input type="hidden" name="quizz_nav" value="{{ quizz_nav }}" />
+                            <button type="submit" class="btn btn-default">Question suivante ?</button>
+                        </div>
+                    </div> 
+                    
                 </li> 
             </ul>
         </div>
     </div>
- 
+</form>   
 {% endblock %} 

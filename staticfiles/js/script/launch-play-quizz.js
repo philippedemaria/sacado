@@ -37,8 +37,6 @@ define(['jquery',  'bootstrap', ], function ($) {
                         }
                     }
                 )
-
-
             })        
 
 
@@ -58,16 +56,18 @@ define(['jquery',  'bootstrap', ], function ($) {
 
 
         function timer(cible ,  duree  ){
-
-        
-                    console.log(cible) ;
-                    console.log(currentSlide) ;
-                    console.log(slideQuantity) ;
-                    
+ 
+                    console.log(currentSlide +" --- " + duree);
 
             var interval = setInterval(function() {
                 duree = duree - 1000;
                 document.getElementById(cible).textContent = duree/1000;
+
+                if (( currentSlide == 2 ) && ( duree == 2000 )) {
+                         
+                        ajaxFn() ;
+                        console.log("send");                        
+                }
 
                 // Changement de la couleur selon le temps restant
                 if (duree <= 10000) { $("#"+cible).addClass("countdownOrange") ; }
@@ -85,16 +85,15 @@ define(['jquery',  'bootstrap', ], function ($) {
 
 
         function auto_play() { 
-                if ( currentSlide === 1 ) 
+                if ( currentSlide == 1 ) 
                     {
                         duree = $("#inter_slide").val() * 1000 ;
                         timer("countdown" , duree  )
-
                     }
                 else if ( currentSlide === 2 )   
                     {   
                         duree = $("#duration").val() * 1000 ;
-                        timer("counterdown"  , duree  )  
+                        timer("counterdown"  , duree  ) 
                     }
                 else     
                     {   
@@ -104,6 +103,31 @@ define(['jquery',  'bootstrap', ], function ($) {
                     }
  
              }
+
+
+        // envoie un signal pour généré la question sur l'interface élève
+        var ajaxFn = function () {
+
+                let gquizz_id   = $("#gquizz_id").val();
+                let question_id = $("#question_id").val();
+                let csrf_token  = $("input[name='csrfmiddlewaretoken']").val();
+
+                $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        data:{
+                                'question_id': question_id,
+                                'gquizz_id'  : gquizz_id,
+                                csrfmiddlewaretoken: csrf_token
+                            },
+                        url: "../../ajax_display_question_for_student",
+                    });
+            }
+         
+ 
+
+
+
 
 
 

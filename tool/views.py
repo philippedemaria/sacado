@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from tool.models import Tool , Question  , Choice  , Quizz , Diaporama  , Slide ,Qrandom ,Variable , VariableImage , Generate_quizz , Generate_qr , Answerplayer
+from tool.models import Tool , Question  , Choice  , Quizz , Diaporama  , Slide ,Qrandom ,Variable , VariableImage , Generate_quizz , Generate_qr , Answerplayer , Display_question 
 from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm,  DiaporamaForm , SlideForm,QrandomForm, VariableForm
 from group.models import Group 
 from socle.models import Level, Waiting
@@ -451,17 +451,10 @@ def launch_play_quizz(request,id,idg):
         question = questions[quizz_nav]
     quizz_nav += 1
 
-
     context = {   "quizz" : quizz , "gquizz" : gquizz , "question" : question , "idg" : idg  , "save" : save , "quizz_nav" : quizz_nav }
-
 
     return render(request, 'tool/launch_play_quizz.html', context)
 
-
-
-
-
-   
 
 
 
@@ -477,7 +470,6 @@ def this_student_can_play(student,gquizz):
     return can_play
 
 
- 
  
 
 def play_quizz_student(request):
@@ -504,8 +496,6 @@ def play_quizz_student(request):
 
  
 
-
- 
 @csrf_exempt 
 def ajax_quizz_show_result(request):  
  
@@ -529,7 +519,51 @@ def ajax_quizz_show_result(request):
 
     data['html'] = render_to_string('tool/show_quizz_results.html', context)
 
-    return JsonResponse(data)  
+    return JsonResponse(data) 
+
+
+
+
+
+@csrf_exempt 
+def ajax_start_playing_student(request):  
+ 
+    data = {}
+    if random == 0 :
+        anwsers = Answerplayer.objects.filter(question_id = question_id, is_correct = 1 ).order_by("-score")
+        no_anwsers = Answerplayer.objects.filter(question_id = question_id, is_correct = 0 ).order_by("-score")
+    else :
+        anwsers = Answerplayer.objects.filter(qrandom_id = question_id, is_correct = 1 ).order_by("id")
+        no_anwsers = Answerplayer.objects.filter(qrandom_id = question_id, is_correct = 0 ).order_by("-score")
+
+    if all_results == "0" :
+        anwsers = anwsers[:3]
+        no_anwsers = None
+
+    context = { "anwsers" : anwsers , "no_anwsers" : no_anwsers , }
+
+    data['html'] = render_to_string('tool/show_quizz_results.html', context)
+
+    return JsonResponse(data) 
+
+
+
+@csrf_exempt 
+def ajax_display_question_for_student(request):  
+ 
+    data = {}
+    
+    gquizz_id   = request.POST.get("gquizz_id",None)
+    question_id = request.POST.get("question_id",None)
+
+    if gquizz_id and question_id :
+        timestamp = datetime.now().timestamp()
+        Display_question.objects.create(gquizz_id = gquizz_id, question_id = question_id, timestamp = timestamp )
+
+    return JsonResponse(data) 
+
+
+
 
 ############################################################################################################
 ############################################################################################################

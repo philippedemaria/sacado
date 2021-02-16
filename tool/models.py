@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import date
+from datetime import date, datetime
 from ckeditor_uploader.fields import RichTextUploadingField
 from group.models import Group
 from socle.models import *
@@ -9,6 +9,7 @@ from django.utils import   timezone
 from django.db.models import Q
 from random import uniform , randint
 from sacado.settings import MEDIA_ROOT
+from time import strftime
 
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User
@@ -246,7 +247,7 @@ class Answerplayer(models.Model):
 
     student  = models.ForeignKey(Student,  null=True, blank=True,   related_name='questions_player', on_delete=models.CASCADE,  editable= False)
     question = models.ForeignKey(Question,  null=True, blank=True, related_name='questions_player', on_delete=models.CASCADE, editable= False)
-    qrandom = models.ForeignKey(Generate_qr,  null=True, blank=True, related_name='questions_player', on_delete=models.CASCADE, editable= False)
+    qrandom  = models.ForeignKey(Generate_qr,  null=True, blank=True, related_name='questions_player', on_delete=models.CASCADE, editable= False)
     answer   = models.CharField( max_length=255, verbose_name="Réponse")  
     score    = models.PositiveIntegerField(default=0, editable=False)
     timer    = models.CharField(max_length=255, editable=False)  
@@ -291,9 +292,24 @@ class Diaporama(ModelWithCode):
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
  
     groups     = models.ManyToManyField(Group, blank=True, related_name="presentation" , editable=False) 
-    slides  = models.ManyToManyField(Slide, blank=True, related_name="diapositive" , editable=False) 
+    slides     = models.ManyToManyField(Slide, blank=True, related_name="diapositive" , editable=False) 
  
     def __str__(self):
         return self.title 
+
+
+ 
+
+class Display_question(models.Model):
+    """
+    ENvoie un signale pour déclencher  l'interface élève et la vue de la question.
+    """
+    gquizz      = models.ForeignKey(Generate_quizz,  related_name="display_questions",  on_delete=models.CASCADE, editable=False) 
+    question_id = models.PositiveIntegerField( default=0, ) 
+    timestamp   = models.CharField( max_length=255) 
+
+    def __str__(self):
+        return self.gquizz_id 
+
 
 

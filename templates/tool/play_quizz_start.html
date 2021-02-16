@@ -1,82 +1,104 @@
-{% extends 'tool/play_quizz_student.html' %}
+{% load bootstrap3 %}
 {% load static %}
+{% bootstrap_messages %}
+<html>
+    <head>
+        <title>SacAdo Quizz Play</title>
+        <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}"/>
+        
+        <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}"/>
+        <link href="{% static 'css/AdminLTEperso.css' %}" rel="stylesheet">
+        <link href="{% static 'css/play_quizz.css' %}" rel="stylesheet">
 
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+          integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    </head>
+    <body>
+  
 
-{% block form %}
-
-<form action="{% url 'play_quizz_start' %}" method="POST">
-    {% csrf_token %}
-    {% if n %}
-        <h1>{{ question.title }}</h1>
-        {% if question.kind == 1 %}
-                <div class="row bottom_space">  
+        <form action="{% url 'play_quizz_start' %}" method="POST"  >
+            {% csrf_token %}
+            <div id="get_the_question_in_the_form">
+            {% if n %}
+                <h1>{{ question.title }}</h1>
+                {% if question.kind == 1 %}
+                        <div class="row bottom_space">  
+                            <div class="col-sm-12 col-md-12" >
+                                <button type="submit" name="answers"  value="1" class="button_answer bgcolorBlue" >Vrai</button>
+                            </div>
+                        </div> 
+                        <div class="row">  
+                            <div class="col-sm-12 col-md-12" >
+                                <button type="submit"  name="answers"  value="0"   class="button_answer bgcolorRed" >Faux</button>
+                            </div>
+                        </div> 
+                {% elif question.kind == 2 %}
+                        <div class="row bottom_space">  
+                            <div class="col-sm-12 col-md-12" align="center">
+                                <input type="text" name="answers"  class="quizz_box_answer" placeholder="Ecris ta réponse" required />
+                            </div>
+                        </div> 
+                {% elif question.kind == 3 %}
+                        <div class="row bottom_space">  
+                            <div class="col-sm-12 col-md-6" >
+                                <button type="submit" name="answers"  value="1" class="button_answer bgcolorRed" ></button>
+                            </div>  
+                            <div class="col-sm-12 col-md-6" >
+                                <button type="submit"  name="answers"  value="2"   class="button_answer bgcolorBlue" ></button>
+                            </div>
+                        </div> 
+                        <div class="row bottom_space">  
+                            <div class="col-sm-12 col-md-6" >
+                                <button type="submit" name="answers"  value="3" class="button_answer bgcolorOrange" ></button>
+                            </div>  
+                            <div class="col-sm-12 col-md-6" >
+                                <button type="submit"  name="answers"  value="4"   class="button_answer bgcolorGreen" ></button>
+                            </div>
+                        </div> 
+                {% else %}
+                        <div class="row bottom_space">  
+                            <div class="col-sm-12 col-md-6" >
+                                <button type="submit" name="answers"  value="1" class="button_answer bgcolorRed" ></button>
+                            </div>  
+                            <div class="col-sm-12 col-md-6" >
+                                <button type="submit"  name="answers"  value="2"   class="button_answer bgcolorBlue" ></button>
+                            </div>
+                        </div> 
+                        <div class="row bottom_space">  
+                            <div class="col-sm-12 col-md-6" >
+                                <button type="submit" name="answers"  value="3" class="button_answer bgcolorOrange" ></button>
+                            </div>  
+                            <div class="col-sm-12 col-md-6" >
+                                <button type="submit"  name="answers"  value="4"   class="button_answer bgcolorGreen" ></button>
+                            </div>
+                        </div> 
+                {% endif %}
+            {% else %}
+                <div class="row">  
                     <div class="col-sm-12 col-md-12" >
-                        <button type="submit" name="answers"  value="1" class="button_answer bgcolorBlue" >Vrai</button>
+                        <h1 class="subtitle sacado">Bonjour {{ student.user.first_name }},<br/>le quizz va débuter</h1>
                     </div>
                 </div> 
                 <div class="row">  
                     <div class="col-sm-12 col-md-12" >
-                        <button type="submit"  name="answers"  value="0"   class="button_answer bgcolorRed" >Faux</button>
+                        <i class="fa fa-gamepad fa-10x white"></i>
                     </div>
                 </div> 
-        {% elif question.kind == 2 %}
-                <div class="row bottom_space">  
-                    <div class="col-sm-12 col-md-12" align="center">
-                        <input type="text" name="answers"  class="quizz_box_answer" placeholder="Ecris ta réponse" required />
-                    </div>
-                </div> 
-        {% elif question.kind == 3 %}
-                <div class="row bottom_space">  
-                    <div class="col-sm-12 col-md-6" >
-                        <button type="submit" name="answers"  value="1" class="button_answer bgcolorRed" ></button>
-                    </div>  
-                    <div class="col-sm-12 col-md-6" >
-                        <button type="submit"  name="answers"  value="2"   class="button_answer bgcolorBlue" ></button>
-                    </div>
-                </div> 
-                <div class="row bottom_space">  
-                    <div class="col-sm-12 col-md-6" >
-                        <button type="submit" name="answers"  value="3" class="button_answer bgcolorOrange" ></button>
-                    </div>  
-                    <div class="col-sm-12 col-md-6" >
-                        <button type="submit"  name="answers"  value="4"   class="button_answer bgcolorGreen" ></button>
-                    </div>
-                </div> 
-        {% else %}
-                <div class="row bottom_space">  
-                    <div class="col-sm-12 col-md-6" >
-                        <button type="submit" name="answers"  value="1" class="button_answer bgcolorRed" ></button>
-                    </div>  
-                    <div class="col-sm-12 col-md-6" >
-                        <button type="submit"  name="answers"  value="2"   class="button_answer bgcolorBlue" ></button>
-                    </div>
-                </div> 
-                <div class="row bottom_space">  
-                    <div class="col-sm-12 col-md-6" >
-                        <button type="submit" name="answers"  value="3" class="button_answer bgcolorOrange" ></button>
-                    </div>  
-                    <div class="col-sm-12 col-md-6" >
-                        <button type="submit"  name="answers"  value="4"   class="button_answer bgcolorGreen" ></button>
-                    </div>
-                </div> 
-        {% endif %}
-    {% else %}
-        <div class="row">  
-            <div class="col-sm-12 col-md-12" >
-                <h1 class="subtitle sacado">Bonjour {{ student.user.first_name }},<br/>le quizz va débuter</h1>
+            {% endif  %}
             </div>
-        </div> 
-        <div class="row">  
-            <div class="col-sm-12 col-md-12" >
-                <i class="fa fa-gamepad fa-10x white"></i>
-            </div>
-        </div> 
-    {% endif  %}
 
-
-</form>
-{% endblock %}
+        </form>
  
+
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script>
+        require(['script/play-quizz-student']);
+    </script> 
+
+
+    </body>
+</html>
+
  
       
  
