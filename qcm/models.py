@@ -699,8 +699,8 @@ class Parcours(ModelWithCode):
 
 
 class Relationship(models.Model):
-    exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.PROTECT,  editable= False)
-    parcours = models.ForeignKey(Parcours, on_delete=models.PROTECT,  related_name='parcours_relationship',  editable= False)
+    exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.CASCADE,  editable= False)
+    parcours = models.ForeignKey(Parcours, on_delete=models.CASCADE,  related_name='parcours_relationship',  editable= False)
     ranking = models.PositiveIntegerField(default=0, editable=False)
     is_publish = models.BooleanField(default=1)
     start = models.DateTimeField(null=True, blank=True, verbose_name="A partir de")
@@ -927,8 +927,8 @@ class Relationship(models.Model):
 
 class Studentanswer(models.Model):
 
-    parcours = models.ForeignKey(Parcours,  on_delete=models.PROTECT, blank=True, null=True,  related_name='answers', editable=False)
-    exercise = models.ForeignKey(Exercise,  on_delete=models.PROTECT, blank=True,  related_name='ggbfile_studentanswer', editable=False) 
+    parcours = models.ForeignKey(Parcours,  on_delete=models.CASCADE, blank=True, null=True,  related_name='answers', editable=False)
+    exercise = models.ForeignKey(Exercise,  on_delete=models.CASCADE, blank=True,  related_name='ggbfile_studentanswer', editable=False) 
     student = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='answers', editable=False)
     point  = models.PositiveIntegerField(default=0 )  
     numexo  = models.PositiveIntegerField(default=10 )  
@@ -952,7 +952,7 @@ class Resultexercise(models.Model):  # Last result
     student = models.ForeignKey(Student, related_name="results_e", default="",
                                 on_delete=models.CASCADE, editable=False)
     exercise = models.ForeignKey(Exercise, related_name="results_e",
-                                 on_delete=models.PROTECT, editable=False)
+                                 on_delete=models.CASCADE, editable=False)
     point = models.PositiveIntegerField(default=0)
 
     def __str__(self):
@@ -963,7 +963,7 @@ class Resultexercise(models.Model):  # Last result
 
 class Writtenanswerbystudent(models.Model): # Commentaire pour les exercices non autocorrigé coté enseignant
 
-    relationship = models.ForeignKey(Relationship,  on_delete=models.PROTECT,   related_name='relationship_written_answer', editable=False)
+    relationship = models.ForeignKey(Relationship,  on_delete=models.CASCADE,   related_name='relationship_written_answer', editable=False)
     student = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='student_written_answer', editable=False)
     date = models.DateTimeField(auto_now_add=True)
     # rendus
