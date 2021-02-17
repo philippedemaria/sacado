@@ -2095,3 +2095,9 @@ table.table-bordered.dataTable {
     background-color: #FFF;
     border-top: 5px solid #5f5b96;
 }
+
+.modal-maxsize{
+  max-width:95%!important; 
+  margin:1.75rem auto;
+}
+
