@@ -17,7 +17,7 @@
 {% block my_css %}
 
 <link href="{% static 'css/play_quizz.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
           integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
 {% endblock %}
 
@@ -38,7 +38,7 @@
         <div class="slider">
             <ul>
                 <li class="my_slide my_slide_instruction">
-                    <input type="hidden" value="{{ quizz.interslide }}" id="inter_slide" /> 
+                    <input type="hidden" value="{{ gquizz.quizz.interslide }}" id="inter_slide" /> 
                     <div class="row consigne_diapo"  align="center">  
                         <div class="col-sm-12 col-md-12">
                             <h1 style="font-size:3em" class="thin"><br/>La durée de cette question est <br/>  <b>{{ question.duration }} secondes</b>.  <br/> 
@@ -54,7 +54,7 @@
                             </h1>
                             <div class="starter_in" > Démarrage dans 
                                 <span class="counterdown instruction" id="countdown" > 
-                                    {{ quizz.interslide }}
+                                    {{ gquizz.quizz.interslide }}
                                 </span> s
                             </div>
                         </div>
@@ -139,10 +139,10 @@
                         <div class="col-sm-12 col-md-12" id="last_slide" >
                             <h1 style="font-size:6em" class="thin">Résultats</h1>
                             <div style="font-size:1.5em;margin-top: 60px;margin-bottom: 60px" >
-                                <a href="#" class="command_results" data-all="1" data-question_id="{{ question.id }}" data-random="{% if quizz.is_random %}1{% else %}0{% endif %}">
+                                <a href="#" class="command_results" data-all="1" data-question_id="{{ question.id }}" data-random="{% if gquizz.quizz.is_random %}1{% else %}0{% endif %}">
                                     Afficher tous ?
                                 </a>
-                                <a href="#" class="command_results" data-all="0" data-question_id="{{ question.id }}" data-random="{% if quizz.is_random %}1{% else %}0{% endif %}">
+                                <a href="#" class="command_results" data-all="0" data-question_id="{{ question.id }}" data-random="{% if gquizz.quizz.is_random %}1{% else %}0{% endif %}">
                                     Afficher le podium ?
                                 </a>
                             </div>

@@ -63,10 +63,10 @@ define(['jquery',  'bootstrap', ], function ($) {
                 duree = duree - 1000;
                 document.getElementById(cible).textContent = duree/1000;
 
-                if (( currentSlide == 2 ) && ( duree == 2000 )) {
+                if (( currentSlide == 2 ) && ( duree == 1000 )) {
                          
                         ajaxFn() ;
-                        console.log("send");                        
+                       
                 }
 
                 // Changement de la couleur selon le temps restant
@@ -111,6 +111,8 @@ define(['jquery',  'bootstrap', ], function ($) {
                 let gquizz_id   = $("#gquizz_id").val();
                 let question_id = $("#question_id").val();
                 let csrf_token  = $("input[name='csrfmiddlewaretoken']").val();
+
+ 
 
                 $.ajax({
                         type: "POST",

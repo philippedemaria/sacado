@@ -156,7 +156,7 @@ class Choice(models.Model):
     imageanswer = models.ImageField(upload_to=choice_directory_path,  null=True,  blank=True, verbose_name="Image", default="")
     answer      = models.TextField(max_length=255, default='', null=True,  blank=True, verbose_name="Réponse écrite")
     is_correct  = models.BooleanField(default=0, verbose_name="Réponse correcte ?")
-    question  = models.ForeignKey(Question, related_name="choices", blank=True, null = True,  on_delete=models.CASCADE)
+    question    = models.ForeignKey(Question, related_name="choices", blank=True, null = True,  on_delete=models.CASCADE)
     def __str__(self):
         return self.answer 
 
@@ -245,6 +245,7 @@ class Generate_qr(models.Model):
 
 class Answerplayer(models.Model):
 
+    gquizz       = models.ForeignKey(Generate_quizz,  related_name="answerplayer",  on_delete=models.CASCADE ) 
     student  = models.ForeignKey(Student,  null=True, blank=True,   related_name='questions_player', on_delete=models.CASCADE,  editable= False)
     question = models.ForeignKey(Question,  null=True, blank=True, related_name='questions_player', on_delete=models.CASCADE, editable= False)
     qrandom  = models.ForeignKey(Generate_qr,  null=True, blank=True, related_name='questions_player', on_delete=models.CASCADE, editable= False)
@@ -307,9 +308,9 @@ class Display_question(models.Model):
     gquizz      = models.ForeignKey(Generate_quizz,  related_name="display_questions",  on_delete=models.CASCADE, editable=False) 
     question_id = models.PositiveIntegerField( default=0, ) 
     timestamp   = models.CharField( max_length=255) 
-
+    students  = models.ForeignKey(Student,  null=True, blank=True,   related_name='display_questions', on_delete=models.CASCADE,  editable= False)
     def __str__(self):
-        return self.gquizz_id 
+        return self.gquizz.quizz.title 
 
 
 

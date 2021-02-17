@@ -65,6 +65,9 @@ button:hover{
 
 .button_answer{
   height:90px;
+  width:100%;
+  font-size:90px;
+  border-radius : 30px;
 }
 
 
@@ -136,3 +139,47 @@ button:hover{
    padding-top: 5px;
 }
 
+.student_display {
+    margin-left: auto;
+    margin-right: auto;
+    margin : 50px 0px;
+    padding: 20px;
+    border-radius: 50px;
+    background-color: #FFF;
+    opacity:0.5;
+    width : 100%;
+}
+
+.student_display *{
+    font-size: 40px;
+    font-weight: 100;
+}
+
+.student_answer{
+    background-color: #FFF;
+    font-size: 80px;
+    font-weight: 100;
+}
+.btn-super{
+    font-size: 50px;
+    font-weight: 100;
+    border-radius: 50%; 
+    width :100px;
+    height:100px;
+}
+
+.max_height{
+  line-height: 300px;
+  height: 300px;
+}
+
+.med_height{
+  line-height: 150px;
+  height: 150px;
+}
+
+
+
+form{
+  width : 90%;
+}

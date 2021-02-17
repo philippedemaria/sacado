@@ -1,0 +1,82 @@
+{% load bootstrap3 %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+<div id="student_display_question">  
+    <div class="student_display"> 
+    {{ question.title|safe }}
+    </div>
+    <input type="hidden" id="question_id" name="question_id" value="{{ question.id }}" required />
+    <input type="hidden" id="gquizz_id" name="gquizz"  value="{{ gquizz_id }}" required />
+    <input type="hidden" id="timestamp" name="timestamp"  value="{{timestamp }}" required />
+
+    {% if question.qtype == 1 %}
+        <div class="row bottom_space">  
+            <div class="col-sm-6 col-md-6" >
+                <button type="submit" name="answers"  value="1" class="button_answer bgcolorBlue max_height" >Vrai</button>
+            </div>
+            <div class="col-sm-6 col-md-6" >
+                <button type="submit"  name="answers"  value="0"   class="button_answer bgcolorRed max_height" >Faux</button>
+            </div>
+        </div> 
+    {% elif question.qtype == 2 %}
+        <div class="row bottom_space">  
+            <div class="col-sm-11 col-md-11" align="center">
+                {{ form.answer|attr:"placeholder:Ecris ta réponse"|add_class:"quizz_box_answer student_answer" }}
+            </div>
+            <div class="col-sm-1 col-md-1" align="center">
+                <button type="submit"  class="btn btn-default btn-super"><i class="fa fa-check text-success"></i></button>
+            </div>
+        </div> 
+    {% elif question.qtype == 3 %}
+        <div class="row bottom_space">  
+            <div class="col-sm-6 col-md-6" >
+                <button type="submit" name="answers"  value="1" class="button_answer bgcolorRed med_height" ></button>
+            </div>  
+            <div class="col-sm-6 col-md-6" >
+                <button type="submit"  name="answers"  value="2"   class="button_answer bgcolorBlue med_height" ></button>
+            </div>
+        </div> 
+        <div class="row bottom_space">  
+            <div class="col-sm-6 col-md-6" >
+                <button type="submit" name="answers"  value="3" class="button_answer bgcolorOrange med_height" ></button>
+            </div>  
+            <div class="col-sm-6 col-md-6" >
+                <button type="submit"  name="answers"  value="4"   class="button_answer bgcolorGreen med_height" ></button>
+            </div>
+        </div> 
+    {% else %}
+        <div class="row bottom_space">  
+            <div class="col-sm-6 col-md-6" >
+                <button type="submit" name="answers"  value="1" class="button_answer bgcolorRed med_height" ></button>
+            </div>  
+            <div class="col-sm-6 col-md-6" >
+                <button type="submit"  name="answers"  value="2"   class="button_answer bgcolorBlue med_height" ></button>
+            </div>
+        </div> 
+        <div class="row bottom_space">  
+            <div class="col-sm-6 col-md-6" >
+                <button type="submit" name="answers"  value="3" class="button_answer bgcolorOrange med_height" ></button>
+            </div>  
+            <div class="col-sm-6 col-md-6" >
+                <button type="submit"  name="answers"  value="4"   class="button_answer bgcolorGreen med_height" ></button>
+            </div>
+        </div> 
+    {% endif %}
+</div>
+
+
+<script>
+
+    function aFn(){
+        $("#after_the_question").show(500) ;
+        $("#student_display_question").hide(500) ; 
+    }
+
+    var duration = parseInt({{ question.duration }}) * 1000  ;
+    setTimeout(aFn, duration);
+
+
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>

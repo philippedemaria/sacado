@@ -16,67 +16,19 @@
     <body>
   
 
-        <form action="{% url 'play_quizz_start' %}" method="POST"  >
+        <form action="{% url 'store_student_answer' %}" method="POST">
+            <input type="hidden" id="gquizz_id" name="gquizz_id"  value="{{ gquizz.id }}" required />
+
+
+
             {% csrf_token %}
             <div id="get_the_question_in_the_form">
-            {% if n %}
-                <h1>{{ question.title }}</h1>
-                {% if question.kind == 1 %}
-                        <div class="row bottom_space">  
-                            <div class="col-sm-12 col-md-12" >
-                                <button type="submit" name="answers"  value="1" class="button_answer bgcolorBlue" >Vrai</button>
-                            </div>
-                        </div> 
-                        <div class="row">  
-                            <div class="col-sm-12 col-md-12" >
-                                <button type="submit"  name="answers"  value="0"   class="button_answer bgcolorRed" >Faux</button>
-                            </div>
-                        </div> 
-                {% elif question.kind == 2 %}
-                        <div class="row bottom_space">  
-                            <div class="col-sm-12 col-md-12" align="center">
-                                <input type="text" name="answers"  class="quizz_box_answer" placeholder="Ecris ta réponse" required />
-                            </div>
-                        </div> 
-                {% elif question.kind == 3 %}
-                        <div class="row bottom_space">  
-                            <div class="col-sm-12 col-md-6" >
-                                <button type="submit" name="answers"  value="1" class="button_answer bgcolorRed" ></button>
-                            </div>  
-                            <div class="col-sm-12 col-md-6" >
-                                <button type="submit"  name="answers"  value="2"   class="button_answer bgcolorBlue" ></button>
-                            </div>
-                        </div> 
-                        <div class="row bottom_space">  
-                            <div class="col-sm-12 col-md-6" >
-                                <button type="submit" name="answers"  value="3" class="button_answer bgcolorOrange" ></button>
-                            </div>  
-                            <div class="col-sm-12 col-md-6" >
-                                <button type="submit"  name="answers"  value="4"   class="button_answer bgcolorGreen" ></button>
-                            </div>
-                        </div> 
-                {% else %}
-                        <div class="row bottom_space">  
-                            <div class="col-sm-12 col-md-6" >
-                                <button type="submit" name="answers"  value="1" class="button_answer bgcolorRed" ></button>
-                            </div>  
-                            <div class="col-sm-12 col-md-6" >
-                                <button type="submit"  name="answers"  value="2"   class="button_answer bgcolorBlue" ></button>
-                            </div>
-                        </div> 
-                        <div class="row bottom_space">  
-                            <div class="col-sm-12 col-md-6" >
-                                <button type="submit" name="answers"  value="3" class="button_answer bgcolorOrange" ></button>
-                            </div>  
-                            <div class="col-sm-12 col-md-6" >
-                                <button type="submit"  name="answers"  value="4"   class="button_answer bgcolorGreen" ></button>
-                            </div>
-                        </div> 
-                {% endif %}
-            {% else %}
+ 
                 <div class="row">  
                     <div class="col-sm-12 col-md-12" >
-                        <h1 class="subtitle sacado">Bonjour {{ student.user.first_name }},<br/>le quizz va débuter</h1>
+                        <h1 class="subtitle sacado">Bonjour {{ student.user.first_name }},<br/>
+                        {% if starter %}le quizz va débuter{% else %}En attente de la question {% endif %}
+                        </h1>
                     </div>
                 </div> 
                 <div class="row">  
@@ -84,8 +36,28 @@
                         <i class="fa fa-gamepad fa-10x white"></i>
                     </div>
                 </div> 
-            {% endif  %}
+ 
             </div>
+
+            <div id="after_the_question">
+ 
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" >
+                        <h1 class="subtitle sacado"> 
+                         En attente de la prochaine question  
+                        </h1>
+                    </div>
+                </div> 
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" >
+                        <i class="fa fa-gamepad fa-10x white"></i>
+                    </div>
+                </div> 
+ 
+            </div>
+
+
+
 
         </form>
  

@@ -48,7 +48,7 @@
                     {% endfor %}
                 </div>
                 <div class="col-sm-12 col-md-1" align="center">
-                    <a href="{% url 'launch_play_quizz' gquizz.quizz.id idg %}" class="btn btn-default btn-lg margin50"  style="margin-bottom:20px;">Démarrer</a>
+                    <a href="{% url 'launch_play_quizz' gquizz.quizz.id  idg %}" class="btn btn-default btn-lg margin50"  style="margin-bottom:20px;">Démarrer</a>
                     <span style="color: #FFF" class="helper_tip" > <i class="fa fa-question-circle"></i> 
                                     <div class="helper_tip_text" >Cliquer sur la touche F11 pour passer en plein écran. </div>
                     </span>
@@ -67,7 +67,7 @@
 
 
     {% block script %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common_just_jquery.js' %}"></script>
     <script>
         require(['script/ajax-quizz-teacher']); 
     </script> 

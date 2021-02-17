@@ -1,0 +1,65 @@
+{% extends 'tool/play_quizz_teacher.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+
+{% block script %}
+<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+<script>
+    require(['script/launch-play-quizz']); 
+</script> 
+{% endblock %}
+ 
+ 
+{% block my_css %}
+
+<link href="{% static 'css/play_quizz.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+          integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+{% endblock %}
+
+
+{% block body_id %}
+{% endblock %}
+
+
+
+{% block form %}
+<form method="POST"> 
+
+    {% csrf_token %}
+    <input type="hidden" value="{{ question.id }}" id="question_id" /> 
+    <input type="hidden" value="{{ gquizz.id }}" id="gquizz_id" /> 
+
+    <div class="wrapper_slider">
+        <div class="slider">
+            <ul>
+ 
+                <li class="my_slide my_slide_instruction">
+                    <div class="row consigne_diapo"  align="center">
+                        <div class="col-sm-12 col-md-12" id="last_slide" >
+                            <h1 style="font-size:6em" class="thin">Résultats</h1>
+                            <div style="font-size:1.5em;margin-top: 60px;margin-bottom: 60px" >
+                                <a href="#" class="command_results" data-all="1" data-question_id="{{ question.id }}" data-random="{% if gquizz.quizz.is_random %}1{% else %}0{% endif %}">
+                                    Afficher tous ?
+                                </a>
+                                <a href="#" class="command_results" data-all="0" data-question_id="{{ question.id }}" data-random="{% if gquizz.quizz.is_random %}1{% else %}0{% endif %}">
+                                    Afficher le podium ?
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12" id="display_results" >
+ 
+                        </div>
+ 
+                    </div> 
+                    
+                </li> 
+            </ul>
+        </div>
+    </div>
+</form>   
+{% endblock %} 
