@@ -179,6 +179,12 @@ def group_has_parcourses(group,is_evaluation ,is_archive ):
  
     return pses_tab
 
+
+
+
+
+
+
 def teacher_has_parcourses_folder(teacher,is_evaluation ,is_archive ):
     """
     Renvoie les parcours dont le prof est propriétaire et donc les parcours lui sont partagés
@@ -191,6 +197,15 @@ def teacher_has_parcourses_folder(teacher,is_evaluation ,is_archive ):
     for sg in sharing_groups :
         pcs = group_has_parcourses(sg.group,is_evaluation ,is_archive )
         parcourses.update(pcs) 
+
+    return parcourses
+
+
+def teacher_has_own_parcourses_and_folder(teacher,is_evaluation,is_archive ):
+    """
+    Renvoie les parcours et les dossiers dont le prof est propriétaire
+    """
+    parcourses =  teacher.teacher_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive,is_leaf = 0)
 
     return parcourses
 
@@ -764,7 +779,7 @@ def list_parcours(request):
     today = time_zone_user(teacher.user)
 
     parcourses = teacher_has_parcourses_folder(teacher,0 ,0 ) #  is_evaluation ,is_archive 
-    nb_archive =  len(teacher_has_parcourses_folder(teacher,0 ,1)) 
+    nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,0,1 )   ) 
 
     try :
         del request.session["group_id"]
@@ -794,7 +809,7 @@ def list_evaluations(request):
     teacher = request.user.teacher
     today = time_zone_user(teacher.user)
     parcourses = teacher_has_parcourses(teacher,1 ,0 ) #  is_evaluation ,is_archive    
-    nb_archive = len(teacher_has_parcourses(teacher,1 ,1))  
+    nb_archive = len( teacher_has_own_parcourses_and_folder(teacher,1,1 )  )  
     try :
         del request.session["group_id"]
     except:
@@ -1159,10 +1174,8 @@ def update_parcours(request, id, idg=0 ):
 #@user_is_parcours_teacher 
 def archive_parcours(request, id, idg=0):
 
-
     parcours = Parcours.objects.filter(id=id).update(is_archive=1,is_favorite=0,is_publish=0)
     teacher = request.user.teacher 
-
 
     if idg == 99999999999:
         return redirect('index')
@@ -1174,11 +1187,8 @@ def archive_parcours(request, id, idg=0):
 @parcours_exists
 def unarchive_parcours(request, id, idg=0):
 
-
     parcours = Parcours.objects.filter(id=id).update(is_archive=0,is_favorite=0,is_publish=0)
-
     teacher = request.user.teacher
-
 
     if idg == 99999999999:
         return redirect('index')
