@@ -143,13 +143,16 @@ body{
                             </small>
                         </td> 
                         <td>
+
                             {% for g in  parcours.groups.all  %}
                                 {% get_parcours_group_students_count parcours g as nb_st %}
                                     <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
                             {% empty %}
-                                {% if parcours.students.count %}
-
-
+                                {% if parcours.groups.count == 0 %}
+                                    <a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-xs btn-danger">
+                                        <i class="fa fa-edit"></i> Renseigner les groupes associés
+                                    </a>
+                                {% elif parcours.students.count %}
                                     <small>
                                     {% if parcours.shared_group_list|length == 0  %}
                                         <form action="#" method="POST">
@@ -171,6 +174,7 @@ body{
                                     </a>
                                 {% endif %}
                             {% endfor %} 
+
                         </td>
                         <td>
 
