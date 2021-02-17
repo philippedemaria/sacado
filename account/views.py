@@ -1290,6 +1290,9 @@ def delete_parent(request, id):
 
 def my_profile(request):
     user = request.user
+    is_manager = user.is_manager
+    is_extra   = user.is_extra
+    is_testeur = user.is_testeur
     today = time_zone_user(user)
     if user.is_superuser :
         user_form = ManagerUpdateForm(request.POST or None, request.FILES or None, instance=user)        
@@ -1303,11 +1306,15 @@ def my_profile(request):
         teacher_form = TeacherForm(request.POST or None, request.FILES or None, instance=teacher)
         if request.method == "POST":
             if all((user_form.is_valid(), teacher_form.is_valid())):
-                teacher = teacher_form.save(commit=False)
-                teacher.user = user
+                teacher       = teacher_form.save(commit=False)
+                teacher.user  = user
                 teacher.save()
                 teacher_form.save_m2m()
-                user_form.save()
+                uf            = user_form.save(commit=False) 
+                uf.is_manager = is_manager
+                uf.is_extra   = is_extra
+                uf.is_testeur = is_testeur
+                uf.save()
                 messages.success(request, 'Votre profil a été changé avec succès !')
                 if teacher.groups.count() == 0:
                     return redirect('index')
