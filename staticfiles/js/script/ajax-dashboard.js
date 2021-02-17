@@ -4,8 +4,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         console.log("dashboard chargé celui-ci.");
 
 
-
-
           $(window).on('load', function () {
             if ($('#preloader').length) {
               $('#preloader').delay(100).fadeOut('slow', function () {
@@ -623,6 +621,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     url: "sendmail/ajax/reader_communication/",
                     success: function (data) {
                         $('#reader_new').removeClass('btn-danger').addClass('btn-default');
+                        $('#advises').hide(500);
                     }
                 }
             )
