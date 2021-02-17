@@ -143,7 +143,7 @@ body{
                             </small>
                         </td> 
                         <td>
-                            {% for g in  parcours.group_list  %}
+                            {% for g in  parcours.groups.all  %}
                                 {% get_parcours_group_students_count parcours g as nb_st %}
                                     <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
                             {% empty %}

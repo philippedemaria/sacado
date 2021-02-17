@@ -1,9 +1,7 @@
 from django.db import models
 from datetime import date
-
 from account.models import Student, Teacher, ModelWithCode, generate_code
 from socle.models import Level, Subject , Waiting
-from qcm.models import Parcours
 from account.models import ModelWithCode
 from django.apps import apps
 from django.utils import   timezone

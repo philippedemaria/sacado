@@ -1,6 +1,8 @@
 import uuid
 from django.db import models
 from datetime import date, datetime, timedelta
+
+from group.models import  Group
 from django.utils import timezone
 from account.models import Student, Teacher, ModelWithCode, generate_code, User
 from socle.models import  Knowledge, Level , Theme, Skill , Subject
@@ -339,7 +341,8 @@ class Parcours(ModelWithCode):
     teacher = models.ForeignKey(Teacher, related_name="teacher_parcours", on_delete=models.CASCADE, default='', blank=True, editable=False)
     coteachers = models.ManyToManyField(Teacher, blank=True,  related_name="coteacher_parcours",  verbose_name="Enseignant en co-animation")
     subject = models.ForeignKey(Subject, related_name="subject_parcours", on_delete=models.CASCADE, default='', blank=True, null=True, verbose_name="Enseignement")
-
+    
+    groups = models.ManyToManyField(Group,  blank=True,  related_name="group_parcours", editable=False)
 
     exercises = models.ManyToManyField(Exercise, blank=True, through="Relationship", related_name="exercises_parcours")
     students = models.ManyToManyField(Student, blank=True, related_name='students_to_parcours', verbose_name="Elèves")

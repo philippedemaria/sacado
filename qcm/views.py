@@ -989,8 +989,9 @@ def create_parcours(request,idp=0):
             nf.is_leaf = 1
         nf.save()
         form.save_m2m()
-        nf.students.set(form.cleaned_data.get('students'))
 
+        nf.groups.set(request.POST.getlist('groups'))
+ 
         if idp > 0 :
             parcours_folder = Parcours.objects.get(pk = idp)
             parcours_folder.leaf_parcours.add(nf)
@@ -1020,6 +1021,8 @@ def create_parcours(request,idp=0):
 
         if request.POST.get("save_and_choose") :
             return redirect('peuplate_parcours', nf.id)
+        elif idp == 0 :
+            return redirect('parcours')
         elif request.session.has_key("group_id") :
             group_id = request.session.get("group_id")
             return redirect('list_parcours_group' , group_id)
@@ -1091,7 +1094,10 @@ def update_parcours(request, id, idg=0 ):
             nf.is_evaluation = 0
             nf.save()
             form.save_m2m()
-            nf.students.set(form.cleaned_data.get('students'))
+
+            nf.groups.clear()
+            nf.groups.set(request.POST.getlist('groups'))
+            
 
             for p in p_set :
                 p.leaf_parcours.add(nf)

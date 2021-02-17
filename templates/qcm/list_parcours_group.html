@@ -207,7 +207,13 @@
                         {% endif %}
 
                         {% if parcours.group_list|length > 1 %}
-                        <span class="shared" style="color:{{ parcours.color }};">Parcours partagé entre plusieurs groupes</span>
+                        <span class="shared helper_tip" style="color:{{ parcours.color }};">Parcours partagé entre plusieurs groupes <i class="fa fa-question-circle"></i>
+                            <div class="helper_tip_text" >
+                                {% for g in parcours.group_list %}
+                                    {{ g }}{% if not forloop.last %}, {% endif%}
+                                {% endfor %}
+                            </div>
+                        </span>
                         {% endif %} 
                     </div>
                 </div>
