@@ -917,7 +917,11 @@ def register_teacher(request):
 #@can_register
 #@is_manager_of_this_school
 def update_teacher(request, pk):
+
     user = get_object_or_404(User, pk=pk)
+    is_manager = user.is_manager
+    is_extra   = user.is_extra
+    is_testeur = user.is_testeur
     teacher = get_object_or_404(Teacher, user=user)
     today = time_zone_user(user)
     user_form = ManagerUpdateForm(request.POST or None, instance=user)
@@ -928,8 +932,11 @@ def update_teacher(request, pk):
         teacher.user = user
         teacher.save()
         teacher_form.save_m2m()
-        user_form.save()
-
+        uf = user_form.save(commit=False)
+        uf.is_manager = is_manager
+        uf.is_extra   = is_extra
+        uf.is_testeur = is_testeur
+        uf.save()
         messages.success(request, "Actualisation réussie !")
 
         test = request.POST.get("listing",None)
