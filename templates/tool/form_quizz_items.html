@@ -51,11 +51,12 @@
                 </tr>   
                 <tr>
                     <td class="no_border">{{ form.is_numeric.label_tag }}  <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-                                    <div class="helper_tip_text" >Papier si réponse sur feuille, Numrérique si réponse avec smartphone, tablette, ordinateur ou mode jeu.</div>
-                                </span>  
+                                    <div class="helper_tip_text" >Papier si réponse sur feuille, Numérique si réponse avec smartphone, tablette, ordinateur ou mode jeu.</div>
+                                </span> <small>La version numérique ne fonction pas encore.</small> 
                     </td>
                     <td>{{ form.is_numeric|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Numérique"|attr:"data-off:Papier"|attr:"data-width:130" }}
                     </td>
+
                 </tr>                                
                 <tr id="div_is_mark">
                     <td class="no_border">{{ form.is_mark.label_tag }} </td>

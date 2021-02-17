@@ -18,6 +18,15 @@ define(['jquery',  'bootstrap' ], function ($) {
 
 
 
+        $('#div_is_mark').hide() ; 
+
+
+
+        $('#id_is_numeric').on('change', function (event) {
+            $('#div_is_mark').toggle(300) ; 
+        });
+
+
 
 
 
