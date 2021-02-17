@@ -30,7 +30,7 @@
    {% endif  %}
    <img width="25px" src="{% static 'img/angle-right.png' %}"/> 
    <small> 
-    {{ title_type_of_question }} 
+     {{ title_type_of_question }} 
    </small>
 {% endblock %}
 
@@ -124,7 +124,7 @@
                                 </div>
                                 <div class="col-sm-12 col-md-8" align="center" > 
                                     <div id="drop_zone" class="drop-zone">
-                                        {% if question.imagefile  %}
+                                        {% if question  %}
                                             <p  style="font-size:18px">Remplacer votre image ici. MAX : 700px par 600px</p>
                                             <img src="{{ question.imagefile.url }}" width="300px" />
                                         {% else %} 
