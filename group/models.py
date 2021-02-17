@@ -23,6 +23,7 @@ class Group(ModelWithCode):
     level = models.ForeignKey(Level, on_delete=models.PROTECT, related_name="groups", verbose_name="Niveau*")
     assign = models.BooleanField(default=1)
     suiviparent = models.BooleanField(default=0)
+    studentprofile = models.BooleanField(default=0)
     lock = models.BooleanField(default=0)
     teachers = models.ManyToManyField(Teacher, blank=True,   editable=False, through="Sharing_group", related_name="teacher_group")
     subject = models.ForeignKey(Subject, default = "" ,  null=True, on_delete=models.PROTECT, related_name="subject_group", verbose_name="Matière*")
@@ -74,11 +75,10 @@ class Group(ModelWithCode):
         """
         Donne le nombre total de parcours/évaluations, le nombre de visibles et de publiés du groupe
         """
-        unameTest = teacher.user.username+"Test"
-        students = self.students.exclude(user__username=unameTest).order_by("user__last_name")
+        students = self.students.exclude(user__username__contains= "_e-test").order_by("user__last_name")
         snt = students.count()
 
-        if self.students.filter(user__username__contains=unameTest).count() == 1 : 
+        if self.students.filter(user__username__contains="_e-test").count() == 1 : 
             profilTest = True
         else :
             profilTest = False
@@ -88,7 +88,6 @@ class Group(ModelWithCode):
             for p in student.students_to_parcours.filter(Q(author=teacher)|Q(teacher=teacher)|Q(coteachers=teacher),level = self.level).exclude(is_leaf=1) :
                 if p not in parcourses  :
                     parcourses.append(p)
-
 
         data, nb, nbf, nbp, nbef , nbe = {}, 0, 0, 0, 0, 0
         for parcours in parcourses :

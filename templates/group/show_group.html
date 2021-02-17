@@ -13,8 +13,11 @@
     <script>
         require(['script/ajax-group']);
     </script>
- 
- 
+    {% if not teacher.user.school %} 
+     <script>
+        require(['script/ajax-group_show_inside_data_tab']);
+    </script>
+    {% endif %}
 {% endblock %}
 
 
@@ -37,22 +40,32 @@
  
 
 {% block body %}
-<div class="content_main">  
-        <div class="row">        
-            <div class="col-sm-12 col-md-12">
-                <p style="color:{{ group.color }}"><strong>Niveau : {{ group.level.name }}</strong>
-                    {% if not teacher.user.school %} 
-                    <span style="margin-left:50px"><i class="fa fa-warning"></i> les champs modifiés sont directement enregistrés.</span>
-                    {% endif %}
+<div class="content_main"> 
 
-                    <span style="margin-left:50px">Si vous avez créé votre profil élève lors de la création du groupe, il n'apparait pas dans vos listes.</span>
-                </p>
+        <div class="row">        
+            <div class="col-sm-12 col-md-3">
+                <p style="color:{{ group.color }}"><strong>Niveau : {{ group.level.name }}</strong></p>
             </div>
-        </div> 
+ 
+            <div class="col-sm-12 col-md-7"> 
+                <form action="" method="POST"> 
+                    {% csrf_token %}
+                    <p style="color:{{ group.color }}"> 
+                        {% for sp in  studentprofiles   %}
+                        <span class="profile_student_incognito" id="profile_incognito{{ sp.user.id }}" >Id élève : {{ sp.user.username }} 
+                            <a href="#" class="delete_student_profile edit" data-student_id="{{ sp.user.id }}" onclick="return TestDelete('votre profil élève')">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </span>
+                        {% endfor %}
+                    </p>
+                </form>
+            </div>
+        </div>
+ 
+ 
         <div class="row">        
             <div class="col-sm-11 col-md-12">
-                
-
                 <table class="table table-hover standard_tab_sort">
                     <thead>
                     <tr>

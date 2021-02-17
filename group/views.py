@@ -73,6 +73,30 @@ def get_username(request ,ln, fn):
     return un  
 
 
+def get_username_teacher(request ,ln):
+    """
+    retourne un username
+    """
+    ok = True
+    i = 0
+    code = str(uuid.uuid4())[:3] 
+    if request.user.school :
+        suffixe = request.user.school.country.name[2]
+    else :
+        suffixe = ""
+    name = str(ln).replace(" ","_")    
+    un = name + "_" + suffixe + code 
+
+    while ok:
+        if User.objects.filter(username=un).count() == 0:
+            ok = False
+        else:
+            i += 1
+            un = un + str(i)
+ 
+    return un 
+
+
 
 def student_dashboard(request,group_id):
 
@@ -430,6 +454,8 @@ def authorizing_access_group(request,teacher,group ):
 #####################################################################################################################################
 
 
+
+
 def dashboard_group(request, id):
     template, context = student_dashboard(request,id)
     return render(request, template , context )
@@ -445,13 +471,15 @@ def create_student_profile_inside(request, nf) :
 
     first_name = str(request.user.first_name).replace(" ", "")
     last_name  = str(request.user.last_name).replace(" ","") 
-    username  =  request.user.username + "Test"
-    password = make_password("sacado2020")  
-    email =  request.user.email 
+    name       = last_name + "_e-test"
+    username   =  get_username_teacher(request,name)
+    password   = make_password("sacado2020")  
+    email      =  request.user.email
+
     user,created = User.objects.get_or_create(username=username , defaults= { 'last_name' : last_name, 'first_name' : first_name,  'password' : password , 'email' : email, 'user_type' : 0})
 
     if created :
-        mesg = "Vous avez demandé un profil élève. Identifiant : "+username+"\n\n Mot de passe : sacado2020 \n\n Merci." 
+        mesg = "Vous avez demandé un profil élève. Identifiant : "+username+"\n\n Mot de passe : sacado2020 \n\n Ce mot de passe est générique. N'oubliez pas de le modifier. \n\n Merci." 
         send_mail("Identifiant Profil élève",  mesg , "info@sacado.xyz" , [email] )
         code = str(uuid.uuid4())[:8]                 
         student = Student.objects.create(user=user, level=nf.level, code=code)
@@ -483,7 +511,7 @@ def create_group(request):
                     messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
         st = False
 
-        eleveTest = request.POST.get("eleveTest",None)    
+        eleveTest = request.POST.get("studentprofile",None)    
         if eleveTest :
             st = create_student_profile_inside(request, nf)          
 
@@ -508,7 +536,7 @@ def update_group(request, id):
 
     teacher = Teacher.objects.get(user= request.user)
     group = Group.objects.get(id=id)
-    stdnts = group.students.exclude(user__username = request.user.username).exclude(user__username__contains= request.user.username+"Test").order_by("user__last_name")
+    stdnts = group.students.exclude(user__username = request.user.username).exclude(user__username__contains=  "_e-test").order_by("user__last_name")
 
     authorizing_access_group(request,teacher,group )
     
@@ -527,11 +555,11 @@ def update_group(request, id):
                     messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
         st = False
 
-        eleveTest = request.POST.get("eleveTest",None)    
+        eleveTest = request.POST.get("studentprofile",None)    
         if eleveTest :
             st = create_student_profile_inside(request, nf)          
 
-        msg = "Félicitations... Votre premier groupe est modifié." 
+        msg = "Votre groupe est modifié." 
         if st :
             msg = msg + " Vous avez demandé un profil élève. Un mail contenant vos identifiant vous est envoyé." 
         messages.success(request, msg )
@@ -555,13 +583,13 @@ def delete_group(request, id):
     authorizing_access_group(request,teacher,group )
     if not teacher.user.school :
         # Si les élèves n'appartiennent pas à un établissement
-        for student in group.students.exclude(user__username = request.user.username).exclude(user__username__contains= request.user.username+"Test") :
+        for student in group.students.exclude(user__username = request.user.username).exclude(user__username__contains= "_e-test") :
             if not student.user.school :
                 if Group.objects.filter(students=student).exclude(pk=group.id) == 0 : 
                     #Si les élèves n'appartiennent pas à un autre groupe
                     student.student_user.delete()
                     student.delete() # alors on les supprime
-        for student in group.students.filter(user__username = request.user.username,user__username__contains= request.user.username+"Test") :
+        for student in group.students.filter(user__username = request.user.username,user__username__contains= "_e-test") :
             if not student.user.school :
                 if Group.objects.filter(students=student).exclude(pk=group.id) == 0 : 
                     student.student_user.delete()
@@ -586,10 +614,11 @@ def show_group(request, id ):
     role = data['role']
     access = data['access']
     authorizing_access_group(request,teacher,group )
+    studentprofiles = group.students.filter(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test")).order_by("user__last_name")
+    print(studentprofiles)
+    students = group.students.exclude( user__username__contains= "_e-test").order_by("user__last_name")
 
-    students = group.students.exclude(user__username = request.user.username).exclude( user__username__contains= request.user.username+"Test").order_by("user__last_name")
-
-    context = {  'group': group,  'communications' : [] , 'teacher' : group.teacher , 'students' : students }
+    context = {  'group': group,  'communications' : [] , 'teacher' : group.teacher , 'students' : students , 'studentprofiles' : studentprofiles }
 
     return render(request, 'group/show_group.html', context )
 
@@ -657,6 +686,37 @@ def student_select_to_school(request):
 
     data['html'] =  "<tr id='tr_school"+str(student.user.id)+"'><td>"+str(student.user.last_name)+"</td><td>"+str(student.user.first_name)+"</td><td>"+str(student.user.username)+"</td><td><a class='btn btn-xs btn-danger' data_student_id='"+str(student.user.id)+"' data_group_id='"+str(group.id)+"' ><i class='fa fa-trash'></i></a></td></tr>"
     return JsonResponse(data)
+
+
+
+
+def ajax_delete_student_profiles(request):
+    """ suppression du compte élève du prof """
+    student_id = request.POST.get("student_id", None)
+    student = get_object_or_404(Student, user_id=student_id)
+    results = Resultknowledge.objects.filter(student=student)
+    for r in results :
+        r.delete()
+
+    res = Resultexercise.objects.filter(student=student)
+    for re in res :
+        re.delete()
+        
+    ress = Studentanswer.objects.filter(student=student)
+    for rs in ress :
+        rs.delete()
+
+    for g in student.students_to_group.all():
+        g.studentprofile = False
+        g.save()
+    data={}
+    student.user.delete()
+    return JsonResponse(data)
+
+
+
+
+
 
 
 def student_remove_from_school(request):

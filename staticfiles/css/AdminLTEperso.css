@@ -60,7 +60,12 @@ hr.divider {
   color: #5d4391 ;
 }
 
-
+.profile_student_incognito{
+  border : 1px solid #CCC;
+  border-radius: 5px;
+  background-color: #F0F0F0;
+  padding: 3px  10px ;
+}
  
 
 

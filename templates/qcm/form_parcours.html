@@ -217,7 +217,7 @@
  
                     <div class="form-group">
                         <label>Niveau d'enseignement :</label>  
-                        {{ form.level|add_class:"form-control select2"}}
+                        {{ form.level|add_class:"form-control select2"|attr:"required"}}
                         {{ form.level.errors }}
                     </div>
 

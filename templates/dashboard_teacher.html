@@ -65,9 +65,11 @@
 
                                <small> ({{ data.nb_parcours_favorite }}) - 
                              {{ data.nb_parcours_visible }} publié{{ data.nb_parcours_visible|pluralize }}  
-
-
-
+                             {% if data.nb_parcours_favorite == 0 %}
+                                <span class="helper_tip"> <span style="font-size:12px"><i class="fa fa-warning"></i> </span>
+                                    <div class="helper_tip_text" >Si vous avez créé un dossier ou un parcours, il semble que vous n'ayez pas renseigné le niveau. Ou alors aucun n'est encore en favori.</div>
+                                </span> 
+                             {% endif %}
                             </small>
 
                             </div>

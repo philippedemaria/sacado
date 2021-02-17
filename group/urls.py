@@ -37,6 +37,8 @@ urlpatterns = [
     path('ajax/chargelisting', chargelisting, name='chargelisting'),
     path('ajax/chargelistgroup', chargelistgroup, name='chargelistgroup'),
 
+    path('ajax_delete_student_profiles', ajax_delete_student_profiles, name='ajax_delete_student_profiles'),
+
     path('ajax/select_exercise_by_knowledge',  select_exercise_by_knowledge, name='select_exercise_by_knowledge'),
 
     path('aggregate_group',  aggregate_group, name='aggregate_group'), 
@@ -44,6 +46,7 @@ urlpatterns = [
     path('export_skills',  export_skills, name='export_skills'), 
     
     path('<slug:slug>', enroll , name='enroll'),
+
 
 
 ]

@@ -114,7 +114,7 @@
                                 <div class="helper_tip_text" >Ce compte vous donne la vue élève de ce groupe. si vous avez déjà un compte élève, votre compte élève est associé à ce groupe. <br/>Si création, vous recevrez les identifiants par mail. <br/><i class="fa fa-warning"></i> Ce compte n'apparait pas dans votre liste d'élèves.</div>
                             </span>
                         </label> <br>
-                        <input type="checkbox" name="eleveTest" value="1"  data-toggle="toggle" data-onstyle="primary" data-offstyle="default" data-on="Oui" data-off="Non" />
+                        {{ form.studentprofile  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                 </div>
  
 
