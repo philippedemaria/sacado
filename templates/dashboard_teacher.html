@@ -242,25 +242,25 @@
                         <div class="box-footer">
                             <div class="row extend">                              
                                 <div class="col-lg-3 col-xs-3">
-                                    <a href="{% url 'update_parcours' parcours.id 0 %}" class="edit" > <i class="fa fa-edit"></i><span class="label_icon tool_tip">Modif.
-                                            <div class="helper_tip_text red" >
-                                                Pour modifier la date, supprimer entièrement la date pour obtenir le calendrier actuel. Sinon avec le format anglais natif, vous risquez des soucis de calendrier.
+                                    <a href="{% url 'update_parcours' parcours.id 0 %}" class="edit" > <i class="fa fa-edit"></i><span class="label_icon tool_tip">Conf.
+                                            <div class="tool_tip_text" >
+                                                <small>Configurer les paramètres.</small>
                                             </div>
                                         <span></a> 
                                 </div>                             
                                 <div class="col-lg-3 col-xs-3">
                                     <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit"><i class="fa fa-cloud"></i><span class="label_icon tool_tip"> Sélec.
-                                        <div class="tool_tip_text">Sélectionner les exercices du parcours</div>
+                                        <div class="tool_tip_text"><small>Sélectionner les exercices du parcours</small></div>
                                     </span></a>  
                                 </div>    
                                 <div class="col-lg-3 col-xs-3">
                                      <a href="{% url 'show_course' 0 parcours.id   %}"  class="edit"><i class="fa fa-desktop"></i><span class="label_icon tool_tip"> Cours 
-                                        <div class="tool_tip_text">Créer un cours attaché à ce parcours</div>
+                                        <div class="tool_tip_text"><small>Créer un cours attaché</small></div>
                                      </span></a> 
                                 </div>  
                                 <div class="col-lg-3 col-xs-3">
                                     <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"  class="edit"><i class="fa fa-indent"></i><span class="label_icon tool_tip"> Gérer
-                                        <div class="tool_tip_text">Gérer les sections du parcours</div>
+                                        <div class="tool_tip_text"><small>Gérer les sections comme des chapitres</small></div>
                                     </span></a> 
                                 </div>  
                             </div>
