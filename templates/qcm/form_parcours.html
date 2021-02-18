@@ -319,7 +319,12 @@
                         <td>{{ form.is_share |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
                         <td>{{ form.is_share.errors }}</td>
                     </tr>
-                        
+                    <tr>
+                        <td>{{ form.is_achievement.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text" >Permet aux élèves de regarder l'avancement (en %) de leurs camarades sur le parcours.</div></td>
+                        <td>{{ form.is_achievement |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                        <td>{{ form.is_achievement.errors }}</td>
+                    </tr> 
                     {% endblock %}
             </table>
         </div>

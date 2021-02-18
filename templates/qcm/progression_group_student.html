@@ -18,7 +18,7 @@
 
     {% include 'qcm/breadcrumb.html' %}
 
-        <small>Avancements <small> 
+        <small>avancements <small> 
  {% endblock %}
 
 
@@ -40,7 +40,7 @@
                     <thead>
                     <tr>
                         <td style="width:300px">Elèves</td>
-                        <td>Avancement sur {{ parcours.exercises.count }} exercice{{ parcours.exercises.count|pluralize }}</td>
+                        <td>Avancement des exercices</td>
                     </tr>
                     </thead>
                     <tbody>
@@ -53,14 +53,16 @@
                                 <td>
                                     <div class="progress">
                                         <div class="progress-bar
-                                            {% if data.percent < 30 %}
-                                                progress-bar-danger
-                                            {% elif data.percent < 60 %}
-                                                progress-bar-warning
-                                            {% elif data.percent < 90 %}
-                                                progress-bar-success
+                                            {% if s.user.student == student %}
+                                                {% if data.percent < 30 %}
+                                                    progress-bar-danger
+                                                {% elif data.percent < 60 %}
+                                                    progress-bar-warning
+                                                {% elif data.percent < 90 %}
+                                                    progress-bar-success
+                                                {% endif %}
                                             {% endif %}" role="progressbar"  aria-valuemin="0" aria-valuemax="100" style="width:{{ data.percent }}%">
-                                            {{ data.nb }} <small>soit</small> {{ data.percent }}%
+                                             {{ data.percent }}%
                                         </div>
                                     </div>
                                 </td>

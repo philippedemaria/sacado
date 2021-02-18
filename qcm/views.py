@@ -915,6 +915,18 @@ def parcours_progression(request,id,idg):
 
 
 
+def parcours_progression_student(request,id):
+
+    parcours = Parcours.objects.get(id=id)
+    student = request.user.student
+    if parcours.is_achievement : 
+ 
+        students = parcours.students.order_by("user__last_name")
+        context = {'students': students, 'parcours': parcours, 'student':student,  }
+        return render(request, 'qcm/progression_group_student.html', context)
+    else :
+        messages.error(request,"accès interdit")
+        return redirect('index')
 
 
 

@@ -120,7 +120,7 @@ class Supportfile(models.Model):
 
     correction = RichTextUploadingField( blank=True, default="", null=True, verbose_name="Corrigé")
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
-    
+
     def __str__(self): 
         knowledge = self.knowledge.name[:20]       
         return "{} > {} > {}".format(self.level.name, self.theme.name, knowledge)
@@ -350,6 +350,7 @@ class Parcours(ModelWithCode):
     is_share = models.BooleanField(default=0, verbose_name="Mutualisé ?")
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
     is_archive = models.BooleanField(default=0, verbose_name="Archivé ?", editable=False)
+    is_achievement = models.BooleanField(default=0, verbose_name="Avancement ?")
 
     level = models.ForeignKey(Level, related_name="level_parcours", on_delete=models.CASCADE, default='', blank=True, null=True)
     linked = models.BooleanField(default=0, editable=False)
