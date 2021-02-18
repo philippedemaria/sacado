@@ -339,10 +339,11 @@ def include_students_in_a_model(request, liste,model):
             except IndexError:
                 email = ""
  
-
-            if email != "" :
-                send_mail("Inscription SacAdo", "Bonjour "+fname+", \n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : "+username+"\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , "saca_do_not_reply@sacado.xyz" , [email])
-
+            try :
+                if email != "" :
+                    send_mail("Inscription SacAdo", "Bonjour "+fname+", \n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : "+username+"\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , "saca_do_not_reply@sacado.xyz" , [email])
+            except :
+                pass
 
 
 
@@ -480,7 +481,10 @@ def create_student_profile_inside(request, nf) :
 
     if created :
         mesg = "Vous avez demandé un profil élève. Identifiant : "+username+"\n\n Mot de passe : sacado2020 \n\n Ce mot de passe est générique. N'oubliez pas de le modifier. \n\n Merci." 
-        send_mail("Identifiant Profil élève",  mesg , "info@sacado.xyz" , [email] )
+        try :
+            send_mail("Identifiant Profil élève",  mesg , "info@sacado.xyz" , [email] )
+        except :
+            pass
         code = str(uuid.uuid4())[:8]                 
         student = Student.objects.create(user=user, level=nf.level, code=code)
 
@@ -779,12 +783,14 @@ def sender_mail(request,form):
 
             for r in nf.receivers.all():
                 rcv.append(r.email)
-            print("sending")
-            send_mail( cleanhtml(subject), cleanhtml(texte) , "info@sacado.xyz" , rcv)
+            try :
+                send_mail( cleanhtml(subject), cleanhtml(texte) , "info@sacado.xyz" , rcv)
+            except :
+                pass
 
         else :
             print(form.errors)
-            print("no_sending")
+ 
 
 
 
@@ -1116,11 +1122,14 @@ def enroll(request, slug):
             group.students.add(student)
 
             messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation. Connectez-vous avec vos identifiants en cliquant sur le bouton bleu Se connecter.")
-            # if user_form.cleaned_data['email']:
-            #     send_mail('Création de compte sur Sacado',
-            #               'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.',
-            #               'info@sacado.xyz',
-            #               [request.POST.get("email")])
+            try :    
+                if user_form.cleaned_data['email']:
+                    send_mail('Création de compte sur Sacado',
+                              'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.',
+                              'info@sacado.xyz',
+                              [request.POST.get("email")])
+            except :
+                pass
 
             return redirect('index')    
         else:
