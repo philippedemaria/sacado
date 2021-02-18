@@ -87,6 +87,9 @@
 
             <!-- Add the bg color to the header using any of the bg-* classes -->
             <div class="handler widget-user-header">
+                
+
+<!-- 
                 <div class="group_show  group_show{{parcours.id }}"> 
                     <form action="#" method="POST">
                         {% csrf_token %}
@@ -104,7 +107,7 @@
                     </font>
                     <div style="clear:both"></div>
                 </div>
-
+-->
                 <a href="#" data-parcours_id="{{parcours.id }}" class="overlay_show white">
                 <div class="disc disc{{parcours.id }}" style="background-color:{% if parcours.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %};"> 
                      <i class="fa fa-circle-o-notch"></i>
@@ -298,8 +301,13 @@
                         </div>
                         {% endif %}                          
                         <div class="col-lg-4 col-xs-4">
-                            <a href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}" {% if parcours.students.all|length > 1 %} style="color:{{ parcours.color }}" {% endif %}><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
+<!--                             <a href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}" {% if parcours.students.all|length > 1 %} style="color:{{ parcours.color }}" {% endif %}><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
                             </a>
+  -->
+                            <a href="{% url 'parcours_progression' parcours.id  group.id %}" class="edit" ><i class="fa fa-navicon fa-fw"></i> <span class="label_icon tool_tip">Avants
+                                <div class="tool_tip_text"><label><small>Avancement des exercices du groupe </small></label></div>
+                            </span>
+                            </a> 
                         </div> 
                     </div>
                 {% else %}

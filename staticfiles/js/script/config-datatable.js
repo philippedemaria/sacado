@@ -21,6 +21,11 @@ $('.standard_tab_sort').dataTable( {
     "pageLength": 50,
     "info":     false
 } );
+
+$('.display_info').dataTable( {
+    "order": [],
+    "pageLength": 50,
+} );
  
  $('table.display').DataTable({
 		"pageLength": 50,

@@ -1,0 +1,83 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2_mini.js' %}"></script>
+    <script>
+        require(['script/ajax-parcours']);
+    </script> 
+{% endblock %}
+
+ 
+
+{% block page_title %}
+    <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-navicon"></i> </span>
+
+    {% include 'qcm/breadcrumb.html' %}
+
+        <small>Avancements <small> 
+ {% endblock %}
+
+
+
+{% block page_menu_right %}
+  
+  {% include 'qcm/submenu_parcours.html' %}
+ 
+{% endblock %}
+
+
+
+
+
+{% block body  %} 
+ 
+<section class="content_list"> 
+    <div class="row">    
+       <div class="col-sm-12 col-md-12">
+            <form action="" method="POST" enctype='multipart/form-data'>
+                <table class="table table-bordered table-hover display_info">
+                    <thead>
+                    <tr>
+                        <td style="width:300px">Elèves</td>
+                        <td>Avancement sur {{ parcours.exercises.count }} exercice{{ parcours.exercises.count|pluralize }}</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in students %}
+                        {% get_percent_done s  parcours as data %}
+                            <tr>
+                                <td>
+                                    {{ s.user.last_name }} {{ s.user.first_name }}
+                                </td>
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar
+                                            {% if data.percent < 30 %}
+                                                progress-bar-danger
+                                            {% elif data.percent < 60 %}
+                                                progress-bar-warning
+                                            {% elif data.percent < 90 %}
+                                                progress-bar-success
+                                            {% endif %}" role="progressbar"  aria-valuemin="0" aria-valuemax="100" style="width:{{ data.percent }}%">
+                                            {{ data.nb }} <small>soit</small> {{ data.percent }}%
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</section>
+
+
+{% endblock  %}   
+
+
+ 

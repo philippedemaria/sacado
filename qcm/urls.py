@@ -37,7 +37,7 @@ urlpatterns = [
     path('parcours_result_waiting/<int:id>/', result_parcours_waiting, name='result_parcours_waiting'), 
 
 
-    #path('parcours_stat/<int:id>/', stat_parcours, name='stat_parcours'), remplacer par stat_evaluation plus explicite
+    path('parcours_progression/<int:id>/<int:idg>', parcours_progression, name='parcours_progression'),
     path('parcours_detail_task/<int:id>/<int:s>/<int:c>/', detail_task_parcours, name='detail_task_parcours'), #modif idp en id pour la sécurité
     path('parcours_exercises/<int:id>/', parcours_exercises, name='parcours_exercises'),  # student_list_exercises
     path('parcourses_all/', all_parcourses, name='all_parcourses'),

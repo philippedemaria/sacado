@@ -874,7 +874,7 @@ def list_sub_parcours_group(request,idg,id):
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
     request.session["parcours_id"] = parcours.id
-    request.session["group_id"] = group.id
+    request.session["group_id"] = group_id
 
     if not authorizing_access(teacher,parcours, True ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
@@ -883,6 +883,45 @@ def list_sub_parcours_group(request,idg,id):
     parcours_tab = parcours.leaf_parcours.order_by("ranking")
 
     return render(request, 'qcm/list_sub_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group , 'parcours_folder' : parcours,  'parcours' : parcours , 'communications' : [] , 'relationships' : [] , 'role' : True , 'today' : today })
+
+
+
+
+
+
+def parcours_progression(request,id,idg):
+
+    parcours = Parcours.objects.get(id=id)
+    teacher = request.user.teacher
+    role, group , group_id , access = get_complement(request, teacher, parcours)
+ 
+
+    if not authorizing_access(teacher,parcours, True ):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+    if idg :
+        group = Group.objects.get(id = idg) 
+        students_group = group.students.all()
+        students_parcours = parcours.students.order_by("user__last_name")
+        students = [student for student in students_parcours if student   in students_group] # Intersection des listes
+        group_id = idg
+    else :
+        students = parcours.students.order_by("user__last_name")
+
+    context = {'students': students, 'parcours': parcours, 'communications':[], 'group' : group , 'role' : role , 'teacher': teacher, 'group_id' : group_id   }
+
+    return render(request, 'qcm/progression_group.html', context)
+
+
+
+
+
+
+
+
+
+
+
 
 
 

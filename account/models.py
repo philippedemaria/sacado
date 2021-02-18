@@ -317,6 +317,24 @@ class Student(ModelWithCode):
         return test
 
 
+
+    def percent_done(self, parcours):
+        """ POurcentage d'exercices faits dans un parcours par un élève donné """
+        nb_total_relationships = self.students_relationship.filter(parcours = parcours).count()
+        nb_sta = self.answers.filter(parcours= parcours ).values("exercise").distinct().count()
+        try :
+            percent = int((nb_sta/nb_total_relationships) *100)
+        except :
+            percent = 0 
+        data = {}
+        data["nb"] =  nb_sta
+        data["percent"] =  percent
+        return data
+
+
+
+
+
     def has_exercise(self, relationship):
         if self in relationship.students.all() :
             test =  True

@@ -90,7 +90,9 @@ hr.divider {
   padding: 3px  10px ;
 }
  
-
+form{
+  margin:0px;
+}
 
 .div_results audio{
   width:265px !important;
@@ -231,7 +233,9 @@ border : 0px!important;
     font-family:  'Roboto', Helvetica, Arial, sans-serif;
 }
 
-
+a.detail_student_parcours{
+  line-height: 18px;
+}
 
 .admin-content{
 
@@ -5372,7 +5376,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   -webkit-box-shadow: none;
   box-shadow: none;
   border: 1px solid transparent;
-  padding: 4px 12px;  
+  padding: 7px 12px;  
   border-radius: 3px; /*radius des boutons*/
 }
 .btn.uppercase {

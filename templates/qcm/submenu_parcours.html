@@ -147,11 +147,11 @@
         <li {% if 'parcours_tasks_and_publishes/' in request.path %} class="active" {% endif %}><a href="{% url 'parcours_tasks_and_publishes' parcours.id %}" ><i class="fa fa-indent fa-fw"></i> Gérer les sections</a></li>  
         {% endif %} 
 
-        {% if group_id %}
+
         <li {% if 'parcours_individualise/' in request.path %} class="active" {% endif %}>
             <a href="{% url 'individualise_parcours' parcours.id  %}" ><i class="fa fa-user fa-fw"></i> Individualiser les exercices</a> 
         </li> 
-        {% endif %} 
+
 
 
         {% if parcours.is_evaluation %}
@@ -163,7 +163,17 @@
             <a href="{% url 'stat_evaluation' parcours.id %}" ><i class="fa fa-bar-chart fa-fw"></i> Lire les stats du parcours</a>   
         </li>
         {% endif %} 
+ 
 
+        {% if group_id %}
+            <li {% if 'parcours_progression/' in request.path %} class="active" {% endif %}>
+                <a href="{% url 'parcours_progression' parcours.id group_id  %}" ><i class="fa fa-navicon fa-fw"></i> Lire les avancements</a> 
+            </li> 
+        {% else %}
+            <li {% if 'parcours_progression/' in request.path %} class="active" {% endif %}>
+                <a href="{% url 'parcours_progression' parcours.id 0  %}" ><i class="fa fa-navicon fa-fw"></i> Lire les avancements</a> 
+            </li> 
+        {% endif  %}
     </ul>
 </li>
 {% endif %}

@@ -143,6 +143,12 @@ def get_last_score_and_time(obj,parcours,student):
     return obj.last_score_and_time(parcours,student) 
 
 
+@register.simple_tag  
+def get_percent_done(obj,parcours): 
+    """
+    retourne le pourcentage d'exercice fait dans un parcours par élève.
+    """
+    return obj.percent_done(parcours) 
 
 
 @register.simple_tag  
@@ -151,6 +157,8 @@ def get_is_selected(obj,parcours):
     retourne si un exercice est choisi dans un parcours.
     """
     return obj.is_selected(parcours) 
+
+
 
 @register.simple_tag 
 def get_percent(obj,student): 
