@@ -908,6 +908,12 @@ def register_teacher(request):
             #teacher.notify_registration()
             #teacher.notify_registration_to_admins()
 
+            msg = "Bonjour "+ user.first_name +" " + user.last_name+",\n\n Votre compte Sacado est maintenant disponible.\n\nVotre identifiant est : "+user.username+".\n\nPour vous connecter, redirigez-vous vers  https://sacado.xyz .\n\nCeci est un mail automatique. Merci de ne pas répondre."
+            msg_ = "Bonjour,\n\n Un enseignant vient de rejoindre SacAdo : " + user.last_name + "  "+user.first_name 
+            if user.email :
+                send_mail('Nouvel enseignant', msg ,'info@sacado.xyz',[user.email, ])
+                send_mail('Nouvel enseignant', msg_ ,'info@sacado.xyz',["brunoserres33@gmail.com","philippe.demaria83@gmail.com" ])
+
         else:
             messages.error(request, user_form.errors)
 
@@ -926,11 +932,11 @@ def update_teacher(request, pk):
     teacher_form = TeacherForm(request.POST or None, instance=teacher)
     new = False
     if all((user_form.is_valid(), teacher_form.is_valid())):
+        user_form.save()
         teacher = teacher_form.save(commit=False)
         teacher.user = user
         teacher.save()
         teacher_form.save_m2m()
-        user_form.save()
         messages.success(request, "Actualisation réussie !")
 
         test = request.POST.get("listing",None)

@@ -1116,11 +1116,11 @@ def enroll(request, slug):
             group.students.add(student)
 
             messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation. Connectez-vous avec vos identifiants en cliquant sur le bouton bleu Se connecter.")
-            if user_form.cleaned_data['email']:
-                send_mail('Création de compte sur Sacado',
-                          'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.',
-                          'info@sacado.xyz',
-                          [request.POST.get("email")])
+            # if user_form.cleaned_data['email']:
+            #     send_mail('Création de compte sur Sacado',
+            #               'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.',
+            #               'info@sacado.xyz',
+            #               [request.POST.get("email")])
 
             return redirect('index')    
         else:
