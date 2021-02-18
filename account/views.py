@@ -905,8 +905,15 @@ def register_teacher(request):
             login(request, user)
             teacher = Teacher.objects.create(user=user)
 
-            teacher.notify_registration()
-            teacher.notify_registration_to_admins()
+            #teacher.notify_registration()
+            #teacher.notify_registration_to_admins()
+
+            msg = "Bonjour "+ teacher.first_name +" " + teacher.last_name",\n\n Votre compte Sacado est maintenant disponible.\n\nVotre identifiant est : "+teacher.username+".\n\nPour vous connecter, redirigez-vous vers  https://sacado.xyz .\n\nCeci est un mail automatique. Merci de ne pas répondre."
+            msg_ = "Bonjour,\n\n Un enseignant vient de rejoindre SacAdo : " + user.last_name + "  "+user.first_name 
+            if user.email :
+                send_mail('Nouvel enseignant', msg ,'info@sacado.xyz',[user.email, ])
+                send_mail('Nouvel enseignant', msg_ ,'info@sacado.xyz',["brunoserres33@gmail.com","philippe.demaria83@gmail.com" ])
+
         else:
             messages.error(request, user_form.errors)
 
@@ -940,7 +947,7 @@ def update_teacher(request, pk):
         messages.success(request, "Actualisation réussie !")
 
         test = request.POST.get("listing",None)
-        print(test)
+ 
         if test :
             return redirect('list_teacher')
         elif request.user.is_manager :
@@ -979,7 +986,7 @@ def dissociate_teacher(request, id):
     if user == this_user or  this_user.is_manager :
 
         User.objects.filter(pk=id).update(school = None)
-        print("ici")
+ 
 
 
     msg = "Bonjour cher collègue, vous venez d'être dissocié de votre établissement d'affectation. Votre compte reste actif avec vos identifiants habituels. Vous pourrez utiliser Sacado dans votre prochaine affectation. Cordialement."

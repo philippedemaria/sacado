@@ -456,15 +456,6 @@ class Student(ModelWithCode):
 
  
 
-
-
-
-
-
-
-
-
-
 class Teacher(models.Model):
     """
     Modèle représentant un enseignant.
