@@ -24,7 +24,8 @@
     <div class="row" >
         <div class="col-xs-12 col-md-12" >
             <div class="alert alert-danger" >
-                Attention, la suppression de votre compte supprime <strong>intégralement</strong> toutes les données qui lui sont associées. <a href="https://www.cnil.fr/fr/reglement-europeen-protection-donnees/" target="_blank">(Article 17 , chapitre III , RGPD)</a>
+                Attention, la suppression de votre compte supprime <strong>intégralement</strong> toutes les données qui lui sont associées. 
+                <a href="https://www.cnil.fr/fr/reglement-europeen-protection-donnees/" target="_blank" >(Article 17 , chapitre III , RGPD)</a>
             </div>
         </div>
     </div>
@@ -33,7 +34,7 @@
             {% if user %}
             <form method="post" action="{% url 'close_my_account' %}">{% csrf_token %}
                 <button class="btn btn-danger">Clôturer mon compte</button>
-                <a href="javascript:history.back()" class="btn btn-default">Annuler</a>
+                <a href="javascript:history.back()" class="btn btn-default"  onclick="return TestDelete('ce compte')" >Annuler</a>
             </form>
             {% endif %}
 
