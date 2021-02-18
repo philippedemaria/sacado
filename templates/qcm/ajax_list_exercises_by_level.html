@@ -4,116 +4,119 @@
 {% load item_tags %}
 
 
- 
-		{% for data in datas %} 
+  
+
             <div class="row">
                     <div class="col-sm-12 col-md-12" id="">
-                        <table class="table  table-hover display100" style="width:100%">
+                        <table class="table  table-hover display1000" style="width:100%">
                             <thead>
                                 <tr>
                                     <td></td>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {% for theme in data.themes  %}  
-                                    <tr style="background:#5d4391; color:white">
-                                        <td style="width:85%"> {{theme.name}}</td>
-                                    </tr>
-                                    {% for waiting in theme.waitings  %} 
-                                        <tr style="background:#aa98cd; cursor: pointer; color:white"  class="opener out"   id="{{ waiting.name.id }}">
-                                            <td style="width:85%"><i class="fa fa-caret-right"></i> {{waiting.name.name}} <b><small> {{waiting.exercises_counter}} exercice{{waiting.exercises_counter|pluralize}} disponible{{waiting.exercises_counter|pluralize}} </small></b> </td> 
-                                        </tr>  
-                                        {% for knowledge in waiting.knowledges  %} 
-                                            {% if knowledge.exercises.all|length > 0 %}
-                                                    <tr style="cursor: pointer" class="opener_k opened{{ waiting.name.id }} out"  id="{{ knowledge.name.id}}" >
-                                                        <td class="listingtd"> 
-                                                           <i class="fa fa-caret-right"></i> {{ knowledge.name|capfirst }} <b><small> {{  knowledge.exercises.count }} exercice{{  knowledge.exercises.count|pluralize }}</small></b>
-                                                        </td>
-                                                    </tr>
-                                                    {% for exercise in knowledge.exercises  %}
-                                                        <tr class="opener_e openedk{{ knowledge.name.id }}">
-                                                            <td>
-                                                                <div class="pull-right" >
-                                                                {% get_used_in_parcours exercise.supportfile teacher as uparcours  %}
-                                                                {% for p in uparcours %}
-                                                                     <span class="btn btn-info">{{ p }}</span>{% if not forloop.last %}<br>{% endif %}
-                                                                {% empty %}
-                                                                    <a href="{% url 'show_this_exercise' exercise.id  %}"  class="btn btn-danger" >Non utilisé</a>
-                                                                {% endfor %}
-                                                                </div>
+                            <tbody>                    
+                            {% regroup exercises by theme as theme_list %} 
+                            {% for theme in theme_list  %} 
+                                <tr style="background:#d4cdc4; color:white">
+                                    <td style="width:85%"> {{theme.grouper.name}}</td> 
+                                </tr> 
+                                {% regroup theme.list by knowledge.waiting as waiting_list %} 
+                                {% for waiting in waiting_list  %}
+                                    <tr style="background:#e6e2dd; cursor: pointer; color: black" class="opener out"  id="{{ waiting.grouper.id }}">
+                                        <td style="width:85%"><i class="fa fa-caret-right"></i> {{waiting.grouper.name}}   <small><b>{{  waiting.grouper.exercises_counter }} exercice{{ waiting.grouper.exercises_counter|pluralize  }}</b>  </small> </td> 
+                                    </tr>  
+                                    {% regroup waiting.list by knowledge as knowledge_list %} 
+                                    {% for knowledge in knowledge_list  %}
+                                        {% if knowledge_list|length > 0 %}
+                                                <tr style="cursor: pointer" class="opener_k opened{{ waiting.grouper.id }} out"  id="{{ knowledge.grouper.id}}" >
+                                                    <td class="listingtd"> 
+                                                       <i class="fa fa-caret-right"></i> {{ knowledge.grouper.name|capfirst }} <b><small> {{  knowledge.grouper.exercises.count }} exercice{{  knowledge.exercises.count|pluralize }}</small></b>
+                                                    </td>
+                                                </tr>
+                                                {% for exercise in knowledge.list  %}
+                                                    <tr class="opener_e openedk{{ knowledge.grouper.id }}">
+                                                        <td>
+                                                            <div class="pull-right" >
+                                                            {% get_used_in_parcours exercise.supportfile teacher as uparcours  %}
+                                                            {% for p in uparcours %}
+                                                                 <span class="btn btn-info">{{ p }}</span>{% if not forloop.last %}<br>{% endif %}
+                                                            {% empty %}
+                                                                <a href="{% url 'show_this_exercise' exercise.id  %}"  class="btn btn-danger" >Non utilisé</a>
+                                                            {% endfor %}
+                                                            </div>
 
 
-                                                                {% if request.user.is_superuser %}
-                                                                    <a href="{% url 'show_this_exercise' exercise.id   %}"  target="_blank"  >
-                                                                        <img src="{{ exercise.supportfile.imagefile.url }}" class="imagefile">
-                                                                    </a>
-                                                                    <a href="{% url 'update_supportfile'  exercise.supportfile.id   %}" class="listing"  target="_blank" style="font-size: 18px">
-                                                                        {% if exercise.supportfile.title %}  
-                                                                            {{ exercise.supportfile.title|cleanhtml|capfirst }}  
-                                                                        {% else %}  
-                                                                            {{ exercise.supportfile.annoncement|cleanhtml|capfirst }} 
-                                                                        {% endif %}
-                                                                    </a>
-
-                                                                {%  else %}
-                                                                    <a href="{% url 'show_this_exercise' exercise.id  %}" target="_blank" >
-                                                                        <img src="{{ exercise.supportfile.imagefile.url }}" class="imagefile">
-                                                                    </a>
-                                                                    <a href="{% url 'show_this_exercise'  exercise.id   %}" class="listing"  target="_blank" style="font-size: 18px">
+                                                            {% if request.user.is_superuser %}
+                                                                <a href="{% url 'show_this_exercise' exercise.id   %}"  target="_blank"  >
+                                                                    <img src="{{ exercise.supportfile.imagefile.url }}" class="imagefile">
+                                                                </a>
+                                                                <a href="{% url 'update_supportfile'  exercise.supportfile.id   %}" class="listing"  target="_blank" style="font-size: 18px">
                                                                     {% if exercise.supportfile.title %}  
                                                                         {{ exercise.supportfile.title|cleanhtml|capfirst }}  
                                                                     {% else %}  
                                                                         {{ exercise.supportfile.annoncement|cleanhtml|capfirst }} 
                                                                     {% endif %}
+                                                                </a>
+
+                                                            {%  else %}
+                                                                <a href="{% url 'show_this_exercise' exercise.id  %}" target="_blank" >
+                                                                    <img src="{{ exercise.supportfile.imagefile.url }}" class="imagefile">
+                                                                </a>
+                                                                <a href="{% url 'show_this_exercise'  exercise.id   %}" class="listing"  target="_blank" style="font-size: 18px">
+                                                                {% if exercise.supportfile.title %}  
+                                                                    {{ exercise.supportfile.title|cleanhtml|capfirst }}  
+                                                                {% else %}  
+                                                                    {{ exercise.supportfile.annoncement|cleanhtml|capfirst }} 
+                                                                {% endif %}
+                                                                </a>
+                                                            {% endif %}
+                                                            {% if exercise.supportfile.calculator %}
+                                                              <img src="{% static 'img/calculator.png' %}" width="30px" />
+                                                            {% else %}
+                                                              <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                                                            {% endif  %}
+                                                                 <br>
+                                                            {% if request.user.is_superuser %}
+                                                                    <a  href="{% url 'update_supportfile'  exercise.supportfile.id  %}" class="sublisting"  target="_blank"> <small>
+                                                                        <i class="fa fa-fw fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                                                                        <i class="fa fa-fw fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+
+                                                                        {% if exercise.supportfile.is_ggbfile %}
+                                                                        <i class="fa fa-fw fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum</small>
+                                                                        {% endif %}
+
                                                                     </a>
-                                                                {% endif %}
-                                                                {% if exercise.supportfile.calculator %}
-                                                                  <img src="{% static 'img/calculator.png' %}" width="30px" />
-                                                                {% else %}
-                                                                  <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
-                                                                {% endif  %}
-                                                                     <br>
-                                                                {% if request.user.is_superuser %}
-                                                                        <a  href="{% url 'update_supportfile'  exercise.supportfile.id  %}" class="sublisting"  target="_blank"> <small>
-                                                                            <i class="fa fa-fw fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
-                                                                            <i class="fa fa-fw fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                                                            {% else %}
+                                                                    <small>
+                                                                        <i class="fa fa-fw fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                                                                        <i class="fa fa-fw fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                                                                        {% if exercise.supportfile.is_ggbfile %}
+                                                                        <i class="fa fa-fw fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum
+                                                                        {% endif %}
+                                                                    </small>
+                                                            {% endif %}
 
-                                                                            {% if exercise.supportfile.is_ggbfile %}
-                                                                            <i class="fa fa-fw fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum</small>
-                                                                            {% endif %}
-
-                                                                        </a>
-                                                                {% else %}
-                                                                        <small>
-                                                                            <i class="fa fa-fw fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
-                                                                            <i class="fa fa-fw fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
-                                                                            {% if exercise.supportfile.is_ggbfile %}
-                                                                            <i class="fa fa-fw fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum
-                                                                            {% endif %}
-                                                                        </small>
-                                                                {% endif %}
- 
-                                                            </td>
-
-                                                        </tr>
-                                                    {% endfor %}
-                                            {% else %}
-                                                    <tr class="opener_k opened{{ waiting.name.id }} out"  id="{{ knowledge.name.id}}" >
-                                                        <td>
-                                                             {{ knowledge.name }} <em class="text text-danger">Exercice en cours de création</em>
                                                         </td>
-                                                    </tr>
-                                            {% endif %}
-                                        {% endfor %}
 
+                                                    </tr>
+                                                {% endfor %}
+                                        {% else %}
+                                                <tr class="opener_k opened{{ waiting.name.id }} out"  id="{{ knowledge.name.id}}" >
+                                                    <td>
+                                                         {{ knowledge.name }} <em class="text text-danger">Exercice en cours de création</em>
+                                                    </td>
+                                                </tr>
+                                        {% endif %}
                                     {% endfor %}
+
                                 {% endfor %}
+                            {% endfor %} 
                             </tbody>
                         </table>
                     </div>
  
             </div>
-        {% endfor %}  
+ 
             <script>
              $('table.display100').DataTable({
                 "pageLength": 100,
@@ -179,36 +182,8 @@
  
         });
 
-        /*
-                
-            function opening_div (toggle,target,collapser) {
-
-            $(toggle).on('click' ,function () { 
-                $(collapser).hide() ;
-                id = $(toggle).attr("id")
-                if( $(target+id).hasClass("out") )
-                    {
-                    $(target+id).show();
-                    $(target+id).removeClass("out").addClass("in");
-                    }
-                else 
-                {
-                    $(target+id).hide();  
-                    $(target+id).show();
-                    $(target+id).removeClass("in").addClass("out");          
-                }
-     
-            });
-
-        }
-    */
- 
- 
-
     MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-
-
-
-                </script>
+</script>
  
 
+                                

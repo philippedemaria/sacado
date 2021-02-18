@@ -151,6 +151,11 @@ class Waiting(models.Model):
         return data
 
 
+    def exercises_counter(self):
+        Exercise = apps.get_model('qcm', 'Exercise')
+        return Exercise.objects.filter(knowledge__waiting = self).count()
+
+
 
 class Knowledge(models.Model):
     level = models.ForeignKey(Level, related_name="knowledges", default="", on_delete=models.CASCADE, verbose_name="Niveau")

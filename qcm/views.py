@@ -545,6 +545,8 @@ def peuplate_parcours(request,id):
 
     return render(request, 'qcm/form_peuplate_parcours.html', context)
 
+
+
 def peuplate_parcours_evaluation(request,id):
     teacher = request.user.teacher
     levels =  teacher.levels.all() 
@@ -2811,106 +2813,144 @@ def list_exercises(request):
                       {'relationships': relationships, 'nb_exercises': nb_exercises ,     })
 
 
+# def ajax_list_exercises_by_level(request):
+#     """ Envoie la liste des exercice pour un seul niveau """
+#     teacher = request.user.teacher
+#     data = {} # envoie vers JSON
+#     datas = [] #dictionnaire pour le recueil des données
+#     level_id =  int(request.POST.get("level_id"))  
+#     levels_tab,knowledges_tab, exercises_tab    =   [],  [],  []
+
+#     level = Level.objects.get(pk=level_id)
+
+#     levels_dict = {}
+#     levels_dict["name"]=level 
+
+#     themes = level.themes.all().order_by("id")
+
+#     themes_tab =   []
+#     for theme in themes :
+#         themes_dict =  {}                
+#         themes_dict["name"]=theme
+#         waitings = theme.waitings.filter(level=level)
+#         waitings_tab  =  []
+#         for waiting in waitings :
+#             exercises_counter = 0
+#             waiting_dict  =   {} 
+#             waiting_dict["name"]=waiting 
+#             knowlegdes = waiting.knowledges.prefetch_related('exercises').order_by("name")
+#             knowledges_tab  =  []
+#             for knowledge in knowlegdes :
+#                 knowledges_dict  =   {}  
+#                 knowledges_dict["name"]=knowledge 
+#                 exercises = knowledge.exercises.filter(supportfile__is_title=0).order_by("supportfile__ranking")
+#                 exercises_counter +=  exercises.count()
+#                 knowledges_dict["exercises"]=exercises
+#                 knowledges_tab.append(knowledges_dict)
+#             waiting_dict["knowledges"]=knowledges_tab
+#             waiting_dict["exercises_counter"]=exercises_counter
+#             waitings_tab.append(waiting_dict)
+#         themes_dict["waitings"]=waitings_tab
+#         themes_tab.append(themes_dict)
+#     levels_dict["themes"]=themes_tab
+#     datas.append(levels_dict)
+
+#     data['html'] = render_to_string('qcm/ajax_list_exercises_by_level.html', { 'datas': datas , "teacher" : teacher })
+ 
+#     return JsonResponse(data)
+
+
 def ajax_list_exercises_by_level(request):
     """ Envoie la liste des exercice pour un seul niveau """
     teacher = request.user.teacher
-    data = {} # envoie vers JSON
-    datas = [] #dictionnaire pour le recueil des données
     level_id =  int(request.POST.get("level_id"))  
-    levels_tab,knowledges_tab, exercises_tab    =   [],  [],  []
+ 
 
     level = Level.objects.get(pk=level_id)
-
-    levels_dict = {}
-    levels_dict["name"]=level 
-
-    themes = level.themes.all().order_by("id")
-
-    themes_tab =   []
-    for theme in themes :
-        themes_dict =  {}                
-        themes_dict["name"]=theme
-        waitings = theme.waitings.filter(level=level)
-        waitings_tab  =  []
-        for waiting in waitings :
-            exercises_counter = 0
-            waiting_dict  =   {} 
-            waiting_dict["name"]=waiting 
-            knowlegdes = waiting.knowledges.prefetch_related('exercises').order_by("name")
-            knowledges_tab  =  []
-            for knowledge in knowlegdes :
-                knowledges_dict  =   {}  
-                knowledges_dict["name"]=knowledge 
-                exercises = knowledge.exercises.filter(supportfile__is_title=0).order_by("supportfile__annoncement")
-                exercises_counter +=  exercises.count()
-                knowledges_dict["exercises"]=exercises
-                knowledges_tab.append(knowledges_dict)
-            waiting_dict["knowledges"]=knowledges_tab
-            waiting_dict["exercises_counter"]=exercises_counter
-            waitings_tab.append(waiting_dict)
-        themes_dict["waitings"]=waitings_tab
-        themes_tab.append(themes_dict)
-    levels_dict["themes"]=themes_tab
-    datas.append(levels_dict)
-
-    data['html'] = render_to_string('qcm/ajax_list_exercises_by_level.html', { 'datas': datas , "teacher" : teacher })
+ 
+ 
+    exercises = Exercise.objects.filter(level_id = level_id , supportfile__is_title=0).order_by("theme","knowledge__waiting","supportfile__ranking")
+ 
+    data = {}
+    data['html'] = render_to_string('qcm/ajax_list_exercises_by_level.html', { 'exercises': exercises  , "teacher" : teacher , "level_id" : level_id })
  
     return JsonResponse(data)
+
 
 
 
 
 def ajax_list_exercises_by_level_and_theme(request):
-    """ Envoie la liste des exercices pour un seul niveau """
+    """ Envoie la liste des exercice pour un seul niveau """
     teacher = request.user.teacher
-    data = {} # envoie vers JSON
-    datas = [] #dictionnaire pour le recueil des données
-    level_id =  int(request.POST.get("level_id"))  
-    levels_tab,knowledges_tab, exercises_tab    =   [],  [],  []
+    level_id =  int(request.POST.get("level_id",0))  
+    theme_id =  int(request.POST.get("theme_id", 0) )
 
     level = Level.objects.get(pk=level_id)
-
-    levels_dict = {}
-    levels_dict["name"]=level
-
-    theme_id =  request.POST.get("theme_id", None) 
-
-    if theme_id :
-        theme = Theme.objects.get(pk=int(theme_id))
-        themes = [theme]
-    else :
-        themes = level.themes.all().order_by("id")
-
-    themes_tab =   []
-    for theme in themes :
-        themes_dict =  {}                
-        themes_dict["name"]=theme
-        waitings = theme.waitings.filter(level=level)
-        waitings_tab  =  []
-        for waiting in waitings :
-            exercises_counter = 0
-            waiting_dict  =   {} 
-            waiting_dict["name"]=waiting 
-            knowlegdes = waiting.knowledges.prefetch_related('exercises').order_by("name")
-            knowledges_tab  =  []
-            for knowledge in knowlegdes :
-                knowledges_dict  =   {}  
-                knowledges_dict["name"]=knowledge 
-                exercises = knowledge.exercises.filter(supportfile__is_title=0).order_by("supportfile__annoncement")
-                exercises_counter +=  exercises.count()
-                knowledges_dict["exercises"]=exercises
-                knowledges_tab.append(knowledges_dict)
-            waiting_dict["knowledges"]=knowledges_tab
-            waiting_dict["exercises_counter"]=exercises_counter
-            waitings_tab.append(waiting_dict)
-        themes_dict["waitings"]=waitings_tab
-        themes_tab.append(themes_dict)
-    levels_dict["themes"]=themes_tab
-    datas.append(levels_dict)
-
-    data['html'] = render_to_string('qcm/ajax_list_exercises_by_level.html', { 'datas': datas , "teacher" : teacher })
+ 
+ 
+    exercises = Exercise.objects.filter(level_id = level_id , theme_id = theme_id ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","supportfile__ranking")
+ 
+    data= {}
+    data['html'] = render_to_string('qcm/ajax_list_exercises_by_level.html', { 'exercises': exercises  , "teacher" : teacher , "level_id" : level_id })
  
     return JsonResponse(data)
+
+
+
+
+
+# def ajax_list_exercises_by_level_and_theme(request):
+#     """ Envoie la liste des exercices pour un seul niveau """
+#     teacher = request.user.teacher
+#     data = {} # envoie vers JSON
+#     datas = [] #dictionnaire pour le recueil des données
+#     level_id =  int(request.POST.get("level_id"))  
+#     levels_tab,knowledges_tab, exercises_tab    =   [],  [],  []
+
+#     level = Level.objects.get(pk=level_id)
+
+#     levels_dict = {}
+#     levels_dict["name"]=level
+
+#     theme_id =  request.POST.get("theme_id", None) 
+
+#     if theme_id :
+#         theme = Theme.objects.get(pk=int(theme_id))
+#         themes = [theme]
+#     else :
+#         themes = level.themes.all().order_by("id")
+
+#     themes_tab =   []
+#     for theme in themes :
+#         themes_dict =  {}                
+#         themes_dict["name"]=theme
+#         waitings = theme.waitings.filter(level=level)
+#         waitings_tab  =  []
+#         for waiting in waitings :
+#             exercises_counter = 0
+#             waiting_dict  =   {} 
+#             waiting_dict["name"]=waiting 
+#             knowlegdes = waiting.knowledges.prefetch_related('exercises').order_by("name")
+#             knowledges_tab  =  []
+#             for knowledge in knowlegdes :
+#                 knowledges_dict  =   {}  
+#                 knowledges_dict["name"]=knowledge 
+#                 exercises = knowledge.exercises.filter(supportfile__is_title=0).order_by("supportfile__annoncement")
+#                 exercises_counter +=  exercises.count()
+#                 knowledges_dict["exercises"]=exercises
+#                 knowledges_tab.append(knowledges_dict)
+#             waiting_dict["knowledges"]=knowledges_tab
+#             waiting_dict["exercises_counter"]=exercises_counter
+#             waitings_tab.append(waiting_dict)
+#         themes_dict["waitings"]=waitings_tab
+#         themes_tab.append(themes_dict)
+#     levels_dict["themes"]=themes_tab
+#     datas.append(levels_dict)
+
+#     data['html'] = render_to_string('qcm/ajax_list_exercises_by_level.html', { 'datas': datas , "teacher" : teacher })
+ 
+#     return JsonResponse(data)
 
 
 
@@ -2983,51 +3023,10 @@ def admin_list_supportfiles(request,id):
     if user.is_superuser or user.is_extra :  # admin and more
 
         teacher = Teacher.objects.get(user=user)
-        datas = []
-
         level = Level.objects.get(pk=id)
-        levels_dict = {}
-        levels_dict["name"] = level
-     
-        themes = level.themes.filter(subject__in=teacher.subjects.all()).order_by("subject", "name")
-
+        supportfiles = Supportfile.objects.filter(level = level , is_title=0).order_by("ranking")
  
-        themes_tab =   []
-        for theme in themes :
-            themes_dict =  {}                
-            themes_dict["name"]=theme
-            waitings = theme.waitings.filter(level=level).order_by("name")
-            waitings_tab  =  []
-            for waiting in waitings :
-                exercises_counter = 0
-                waiting_dict  =   {} 
-                waiting_dict["name"]=waiting 
-                knowlegdes = waiting.knowledges.filter(waiting=waiting).order_by("name")
-                knowledges_tab  =  []
-                for knowledge in knowlegdes :
-                    knowledges_dict  =   {}  
-                    knowledges_dict["name"]=knowledge 
-                    supportfiles = knowledge.supportfiles.filter(is_title=0).order_by("annoncement")
-                    exercises = Exercise.objects.filter(knowledge=knowledge, level=level, theme=theme,supportfile__in=supportfiles).order_by("supportfile__annoncement")
- 
-                    knowledges_tab.append(
-                        {
-                            "name": knowledge,
-                            "exercises": exercises,
-                            "supportfiles": supportfiles,
-                        }
-                    )
-                    exercises_counter += exercises.count()
-                waiting_dict["knowledges"]=knowledges_tab
-                waiting_dict["exercises_counter"]=exercises_counter
-                waitings_tab.append(waiting_dict)
-            themes_dict["waitings"]=waitings_tab
-            themes_tab.append(themes_dict)
-        levels_dict["themes"] = themes_tab
-
-
-    return render(request, 'qcm/list_supportfiles.html', {'levels_dict': levels_dict, 'teacher':teacher , 'level':level , 'relationships' : [] , 'communications' : [] , 'parcours' :  None })
-
+    return render(request, 'qcm/list_supportfiles.html', {'supportfiles': supportfiles, 'teacher':teacher , 'level':level , 'relationships' : [] , 'communications' : [] , 'parcours' :  None })
 
 
 @parcours_exists
@@ -3049,6 +3048,8 @@ def exercises_level(request, id):
     t_form = TeacherForm()
     s_form = StudentForm()
     return render(request, 'list_exercises.html', {'exercises': exercises, 'level':level , 'themes':themes , 'form':form , 'u_form':u_form , 's_form': s_form , 't_form': t_form , 'levels' : [] })
+
+
 
 @user_passes_test(user_is_creator)
 def create_supportfile(request):
@@ -3184,7 +3185,26 @@ def show_this_supportfile(request, id):
 
     return render(request, url , context)
 
- 
+
+
+
+@csrf_exempt
+def ajax_sort_supportfile(request):
+    """ tri des supportfiles""" 
+
+
+    exercise_ids = request.POST.get("valeurs")
+    exercise_tab = exercise_ids.split("-") 
+    for i in range(len(exercise_tab)-1):
+        print(exercise_tab[i])
+        Supportfile.objects.filter( pk = exercise_tab[i]).update(ranking = i)
+
+
+
+    data = {}
+    return JsonResponse(data) 
+
+
 
 @user_passes_test(user_is_creator)
 def create_exercise(request, supportfile_id):
@@ -3418,13 +3438,12 @@ def ajax_theme_exercice(request):
 
 def ajax_level_exercise(request):
 
+
     teacher = Teacher.objects.get(user= request.user)
     data = {} 
-    level_ids = request.POST.getlist('level_id')
+    level_id = request.POST.get('level_id')
     theme_ids = request.POST.getlist('theme_id')
-
     parcours_id = request.POST.get('parcours_id', None)
- 
 
     if  parcours_id :
         parcours = Parcours.objects.get(id = int(parcours_id))
@@ -3435,52 +3454,12 @@ def ajax_level_exercise(request):
         ajax = False
         parcours_id = None
 
-    datas = []
-    levels_dict = {}
-    levels_tab,knowledges_tab, exercises_tab    =   [],  [],  []
-
-    for level_id in level_ids :
-        level = Level.objects.get(pk=level_id)
-        levels_dict = {}
-        levels_dict["name"]=level 
  
-        try :
-            if theme_ids[0] != "" :
-                themes = Theme.objects.filter(id__in=theme_ids).order_by("id")
-            else :
-                themes = level.themes.all().order_by("id")
-        except :
-            themes = level.themes.all().order_by("id")
-
-        themes_tab =   []
-        for theme in themes :
-            themes_dict =  {}                
-            themes_dict["name"]=theme
-            waitings = theme.waitings.filter(level=level)
-            waitings_tab  =  []
-            for waiting in waitings :
-                exercises_counter = 0
-                waiting_dict  =   {} 
-                waiting_dict["name"]=waiting 
-                knowlegdes = waiting.knowledges.order_by("name")
-                knowledges_tab  =  []
-                for knowledge in knowlegdes :
-                    knowledges_dict  =   {}  
-                    knowledges_dict["name"]=knowledge 
-                    exercises = knowledge.exercises.filter(supportfile__is_title=0).order_by("supportfile__annoncement")
-                    exercises_counter +=  exercises.count()
-                    knowledges_dict["exercises"]=exercises
-                    knowledges_tab.append(knowledges_dict)
-                waiting_dict["knowledges"]=knowledges_tab
-                waiting_dict["exercises_counter"]=exercises_counter
-                waitings_tab.append(waiting_dict)
-            themes_dict["waitings"]=waitings_tab
-            themes_tab.append(themes_dict)
-        levels_dict["themes"]=themes_tab
-        datas.append(levels_dict)
+ 
+    exercises = Exercise.objects.filter(level_id = level_id , theme_id__in= theme_ids ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","supportfile__ranking")
+ 
      
-
-    data['html'] = render_to_string('qcm/ajax_list_exercises.html', { 'datas': datas , "parcours" : parcours, "ajax" : ajax, "teacher" : teacher , "request" : request , 'parcours_id' : parcours_id })
+    data['html'] = render_to_string('qcm/ajax_list_exercises.html', { 'exercises': exercises , "parcours" : parcours, "ajax" : ajax, "teacher" : teacher , 'parcours_id' : parcours_id })
  
     return JsonResponse(data)
 

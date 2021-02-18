@@ -208,7 +208,7 @@ urlpatterns = [
     path('asking_parcours_sacado/<int:pk>', asking_parcours_sacado, name='asking_parcours_sacado'), # pk est la clé du group 
 
 
-
+    path('ajax/sort_supportfile', ajax_sort_supportfile, name='ajax_sort_supportfile'), 
     path('ajax_search_exercise', ajax_search_exercise, name='ajax_search_exercise'),
     path('ajax_knowledge_exercise', ajax_knowledge_exercise, name='ajax_knowledge_exercise'),
     path('ajax_theme_exercice', ajax_theme_exercice, name='ajax_theme_exercice'),

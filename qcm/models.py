@@ -119,7 +119,8 @@ class Supportfile(models.Model):
     is_text = models.BooleanField(default=0, verbose_name="Texte ?")
 
     correction = RichTextUploadingField( blank=True, default="", null=True, verbose_name="Corrigé")
-
+    ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
+    
     def __str__(self): 
         knowledge = self.knowledge.name[:20]       
         return "{} > {} > {}".format(self.level.name, self.theme.name, knowledge)

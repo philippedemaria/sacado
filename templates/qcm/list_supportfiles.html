@@ -30,44 +30,49 @@
 {% block body %}
 <section class="content_container">
 
- 
+<form method="POST">
     <div class="row">
         <div class="col-sm-12 col-md-12">
-            <table class="table  table-hover display1000" style="width:100%">
+            <table class="table  table-hover display1000" style="width:100%;background-color: #d4cdc4" >
                 <thead> 
                     <tr>
                         <th></th>
                     </tr>
                 </thead> 
-                <tbody>
-                    {% for theme in levels_dict.themes  %} 
+                <tbody  id="supportfile_ranking">  
+                    {% regroup supportfiles by theme as theme_list %}
+ 
+                    {% for theme in theme_list  %} 
                         <tr style="background:#d4cdc4; color:white">
-                            <td style="width:85%"> {{theme.name}}</td> 
-                        </tr>  
-                        {% for waiting in theme.waitings  %} 
+                            <td style="width:85%"> {{theme.grouper.name}}</td> 
+                        </tr> 
+
+                        {% regroup theme.list by knowledge.waiting as waiting_list %} 
+                        {% for waiting in waiting_list  %}
+                        
                             <tr style="background:#e6e2dd; cursor: pointer; color: black" class="opener out"  id="{{ waiting.name.id }}">
-                                <td style="width:85%"><i class="fa fa-caret-right"></i> {{waiting.name.name}}   <small><b>{{  waiting.exercises_counter }} exercice{{ waiting.exercises_counter|pluralize  }}</b>  </small> </td> 
+                                <td style="width:85%"><i class="fa fa-caret-right"></i> {{waiting.grouper.name}}   <small><b>{{  waiting.grouper.exercises_counter }} exercice{{ waiting.grouper.exercises_counter|pluralize  }}</b>  </small> </td> 
                             </tr>  
-
-                            {% for knowledge in waiting.knowledges  %}
-
+                            {% regroup waiting.list by knowledge as knowledge_list %} 
+                            {% for knowledge in knowledge_list  %}
+ 
                                     <tr style="background:#f4f2f0; cursor: pointer; color: black" class="listingtd opener_k opened{{ waiting.name.id }} out"  id="{{ knowledge.name.id}}"> 
                                         <td>
-                                            <i class="fa fa-caret-right"></i> 
-                                            {{ knowledge.name.name|capfirst }}  <small><b>{{  knowledge.supportfiles|length  }} exercice{{  knowledge.supportfiles|length|pluralize  }}</small></small>
+                                            <i class="fa fa-caret-right"></i>  
+                                            {{ knowledge.grouper.name|capfirst }}  <small><b>{{  knowledge.supportfiles|length  }} exercice{{  knowledge.supportfiles|length|pluralize  }}</b></small> 
                                             {% if request.user.is_superuser and '/admin' in request.path or request.user.is_extra %}                                                       
-                                            <a href="{% url 'create_supportfile_knowledge' knowledge.name.id %}" ><i class='fa fa-plus pull-right' style="margin-right:20px"></i></a>
+                                            <a href="{% url 'create_supportfile_knowledge' knowledge.grouper.id %}" ><i class='fa fa-plus pull-right' style="margin-right:20px"></i></a>
                                             {% endif %}
                                         </td>
                                     </tr>
 
-                                {% if knowledge.supportfiles|length > 0 %}
+                                {% if knowledge.list|length > 0 %}
 
-                                    {% for supportfile in knowledge.supportfiles  %} 
-                                        <tr  class="opener_e openedk{{ knowledge.name.id }}" >
-                                            <td>
+                                    {% for supportfile in knowledge.list  %} 
+                                        <tr  class="opener_e openedk{{ knowledge.name.id }} this_supportfile" style="background:#fff; cursor: move;" >
+                                            <td> 
+                                                <input type="hidden" value="{{ supportfile.id }}" name="this_supportfile_id" ><!--  sert à classer les thèmes  -->   
                                                 <div class="pull-right" > 
-
                                                 {% for e in supportfile.levels_used %}
                                                     <span class="subtitle">{{ e.level.name }}</span>{% if not forloop.last %}<br>{% endif %}
                                                 {% empty %}
@@ -109,8 +114,12 @@
 
                                 {% endif %}
                             {% endfor %}
+
                         {% endfor %}
-                    {% endfor %}
+
+
+
+                    {% endfor %}  
                 </tbody>
   
             </table>
@@ -119,8 +128,12 @@
 
         </div>
     </div>
-  
+</form>  
  
 
 </section>
-{% endblock %}
+{% endblock %}                        
+
+ 
+
+ 

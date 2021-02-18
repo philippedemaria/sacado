@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap'], function ($) {
+define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
     $(document).ready(function () {
         console.log("chargement JS ajax-supportfile.js OK --");
 
@@ -136,7 +136,52 @@ define(['jquery', 'bootstrap'], function ($) {
  
 
 
+        function sorter_supportfiles($div_class , $exercise_class ) {
+
+                $($div_class).sortable({
+                    cursor: "move",
+                    swap: true,    
+                    animation: 150,
+                    distance: 50,
+                    revert: true,
+                    tolerance: "pointer" , 
+                    start: function( event, ui ) { 
+                           $(ui.item).css("box-shadow", "10px 5px 10px gray"); 
+                       },
+                    stop: function (event, ui) {
+
+ 
+                        var valeurs = "";
+ 
+
+                        $($exercise_class).each(function() {
+ 
+                            let div_exercise_id = $(this).find('input').val();
+                            valeurs = valeurs + div_exercise_id +"-";
+ 
+                        });
+
+                        console.log(valeurs) ;
+ 
+
+                        $(ui.item).css("box-shadow", "0px 0px 0px transparent");  
+
+                        $.ajax({
+                                data:   { 'valeurs': valeurs  } ,    
+                                type: "POST",
+                                dataType: "json",
+                                url: "../ajax/sort_supportfile" 
+                            }); 
+                        }
+                    });
+                }
+
+    
+        sorter_supportfiles(  '#supportfile_ranking' ,".this_supportfile");
         
+ 
+ 
+
 
 
     });
