@@ -905,8 +905,8 @@ def register_teacher(request):
             login(request, user)
             teacher = Teacher.objects.create(user=user)
 
-            teacher.notify_registration()
-            teacher.notify_registration_to_admins()
+            #teacher.notify_registration()
+            #teacher.notify_registration_to_admins()
 
         else:
             messages.error(request, user_form.errors)
