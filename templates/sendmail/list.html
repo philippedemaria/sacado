@@ -65,17 +65,31 @@
 
         <div class="content_main">
             <div class="col-md-2" id="sub_menu_left">
+                <form  action="" method="POST">
                 <a href="#"  data-toggle='modal' data-target='#newEmail'   class="btn btn-xs btn-danger"><i class="fa fa-plus"></i> Nouveau message</a> <hr>
                 <ul class="nav nav-pills nav-stacked admin-menu">
-                    <li><a href="#" class="nav-link active" data-target-id="home">Réception <span class="pull-right">({{ emails|length }})</span></a> </li>
+                    <li>Messages </li> 
+                    <li  class="active"><a href="#" class="nav-link active" data-target-id="home">Réception <span class="pull-right">({{ emails|length }})</span></a> </li>
                     <li ><a href="#" class="nav-link" data-target-id="profile">Envoi <span class="pull-right"> ({{ sent_emails|length }})</span></a> </li>
                     {% if request.user.user_type == 2 %}
                       <hr>
                       <li>Notifications </li> 
-                      <li  class="active"><a href="#" class="nav-link" data-target-id="notification">Exercices faits <span class="pull-right">(50)</span></a> </li>
-                      <li ><a href="#" class="nav-link" data-target-id="task">Tâches  <span class="pull-right">(50)</span></a> </li>
+                      <li>
+                          
+                              <a href="#" class="nav-link" data-target-id="notification" data-teacher_id="{{ request.user.id }}" id="notifs">
+                                Exercices faits
+                                <span id="is_pending"> 
+                                    {% if is_pending_studentanswers %}
+                                        <i class="fa fa-info-circle text-warning" aria-hidden="true"></i> 
+                                    {% endif  %}
+                                </span>
+                              </a>
+                          
+                      </li>
+                      <li ><a href="#" class="nav-link" data-target-id="task">Tâches  </a> </li>
                     {% endif  %}
                 </ul>
+                </form> 
             </div>
             <div class="col-md-10" id="flex"> 
                 <div class="admin-content" id="home" >
