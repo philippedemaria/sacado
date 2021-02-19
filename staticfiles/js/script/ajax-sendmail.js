@@ -128,6 +128,31 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('#notifs').on('click', function (event) {
+ 
+
+            let teacher_id = $(this).attr("data-teacher_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+ 
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'teacher_id': teacher_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "ajax/pending_notification/",
+                    success: function (data) {
+                    $("#is_pending").remove(""); 
+                    }
+                }
+            )
+        });
+
 
 
     });

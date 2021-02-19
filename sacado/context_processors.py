@@ -29,10 +29,17 @@ def menu(request):
 
             mytools = Tool.objects.filter(is_publish=1, teachers = teacher)
 
+            ### Exercice traités non vus par l'enseignant -> un point orange dans la barre de menu sur message
+            is_pending_studentanswers = False
+            pending_s = Studentanswer.objects.filter(parcours__teacher = teacher, is_reading = 0)
+            if pending_s  :
+                is_pending_studentanswers = True
+ 
+            ### Permet de vérifier qu'un enseignant est dans un établissement sacado
             if teacher.user.school :
                 sacado_asso = True
 
-            return {'today': today, 'nbe': nbe, 'levels': levels,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso ,  }
+            return {'today': today, 'nbe': nbe, 'levels': levels,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso , "is_pending_studentanswers" : is_pending_studentanswers  }
 
         elif request.user.is_student:
 

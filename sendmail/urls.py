@@ -16,4 +16,8 @@ urlpatterns = [
     path('ajax/show_communication/', show_communication, name='show_communication'),
     path('ajax/show_communication/', show_communication, name='show_communication'),
     path('ajax/reader_communication/', reader_communication, name='reader_communication'),
+
+
+    path('ajax/pending_notification/', pending_notification, name='pending_notification'),
+    
 ]

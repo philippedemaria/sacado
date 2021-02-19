@@ -36,7 +36,7 @@ def list_emails(request):
                 if student.user.email :
                     users.append(student.user)
 
-        studentanswers = Studentanswer.objects.filter(student__user__in =  users).order_by("-date")[:50]
+        studentanswers = Studentanswer.objects.filter(student__user__in =  users).order_by("-date")[:100]
         tasks = Relationship.objects.filter(parcours__teacher = teacher,  exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")[:50] 
         sent_emails = Email.objects.distinct().filter(author=user).order_by("-today")
         emails = Email.objects.distinct().filter(receivers=user).order_by("-today")
@@ -136,6 +136,18 @@ def show_email(request):
 		data['html'] = ""		
 
 	return JsonResponse(data)
+
+
+
+def pending_notification(request):
+
+	teacher_id = int(request.POST.get("teacher_id"))
+	data = {} 
+	Studentanswer.objects.filter(parcours__teacher_id = teacher_id).update(is_reading = 1)
+	return JsonResponse(data)
+
+
+
 
 
 def list_communications(request):

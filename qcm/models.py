@@ -936,6 +936,7 @@ class Studentanswer(models.Model):
     numexo  = models.PositiveIntegerField(default=10 )  
     date = models.DateTimeField(default=timezone.now)
     secondes = models.CharField(max_length=255, editable=False)
+    is_reading = models.BooleanField( default=0, editable=False ) 
 
     def __str__(self):        
         return "{}".format(self.exercise.knowledge.name)
