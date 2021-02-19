@@ -2919,7 +2919,7 @@ def ajax_list_exercises_by_level(request):
     level = Level.objects.get(pk=level_id)
  
  
-    exercises = Exercise.objects.filter(level_id = level_id , supportfile__is_title=0).order_by("theme","knowledge__waiting","supportfile__ranking")
+    exercises = Exercise.objects.filter(level_id = level_id , supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
  
     data = {}
     data['html'] = render_to_string('qcm/ajax_list_exercises_by_level.html', { 'exercises': exercises  , "teacher" : teacher , "level_id" : level_id })
@@ -2939,7 +2939,7 @@ def ajax_list_exercises_by_level_and_theme(request):
     level = Level.objects.get(pk=level_id)
  
  
-    exercises = Exercise.objects.filter(level_id = level_id , theme_id = theme_id ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","supportfile__ranking")
+    exercises = Exercise.objects.filter(level_id = level_id , theme_id = theme_id ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
  
     data= {}
     data['html'] = render_to_string('qcm/ajax_list_exercises_by_level.html', { 'exercises': exercises  , "teacher" : teacher , "level_id" : level_id })
@@ -3507,7 +3507,7 @@ def ajax_level_exercise(request):
 
  
  
-    exercises = Exercise.objects.filter(level_id = level_id , theme_id__in= theme_ids ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","supportfile__ranking")
+    exercises = Exercise.objects.filter(level_id = level_id , theme_id__in= theme_ids ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
  
      
     data['html'] = render_to_string('qcm/ajax_list_exercises.html', { 'exercises': exercises , "parcours" : parcours, "ajax" : ajax, "teacher" : teacher , 'parcours_id' : parcours_id })
