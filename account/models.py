@@ -136,8 +136,6 @@ class Adhesion(models.Model):
         return self.user.parent.students.all()
 
 
-
-
 class Student(ModelWithCode):
     """
     Modèle représentant un élève.
@@ -472,8 +470,6 @@ class Student(ModelWithCode):
         return data
 
 
- 
-
 class Teacher(models.Model):
     """
     Modèle représentant un enseignant.
@@ -494,25 +490,31 @@ class Teacher(models.Model):
         """
         Envoie un email à l'enseignant l'informant de la réussite de son inscription
         """
-        if self.user.email != '':
-            send_templated_mail(
-                template_name="teacher_registration",
-                from_email="info@sacado.xyz",
-                recipient_list=[self.user.email, ],
-                context={"teacher": self.user, }, )
+        try :
+            if self.user.email != '':
+                send_templated_mail(
+                    template_name="teacher_registration",
+                    from_email="info@sacado.xyz",
+                    recipient_list=[self.user.email, ],
+                    context={"teacher": self.user, }, )
+        except :
+            pass
 
 
     def notify_registration_to_admins(self):
         """
         Envoie un email aux administrateurs informant de l'inscription d'un nouvel enseignant
         """
-        admins = User.objects.filter(is_superuser=1)
-        admins_emails = list(admins.values_list('email', flat=True))
-        send_templated_mail(
-            template_name="teacher_registration_notify_admins",
-            from_email="info@sacado.xyz",
-            recipient_list=admins_emails,
-            context={"teacher": self.user,}, )
+        try :
+            admins = User.objects.filter(is_superuser=1)
+            admins_emails = list(admins.values_list('email', flat=True))
+            send_templated_mail(
+                template_name="teacher_registration_notify_admins",
+                from_email="info@sacado.xyz",
+                recipient_list=admins_emails,
+                context={"teacher": self.user,}, )
+        except :
+            pass
 
 
 

@@ -9,9 +9,14 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import  redirect
 from school.models import Stage
 from operator import attrgetter
- 
+from django.core.mail import send_mail 
 
 
+def sending_mail(ob , m , a ,r) :
+    try : 
+        send_mail(ob, m, a, r)
+    except :
+        pass
 
 
 def time_zone_user(user):

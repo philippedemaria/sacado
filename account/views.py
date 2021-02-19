@@ -63,6 +63,7 @@ def get_username(request ,ln, fn):
     return un 
 
 
+                 
 
 def list_teacher(request):
     teachers = User.objects.filter(user_type=User.TEACHER)
@@ -232,7 +233,8 @@ def message_to_teachers_sent(request):
         if u.email:
             rcv.append(u.email)
 
-    send_mail(subject, cleanhtml(unescape_html(message)), 'info@sacado.xyz', rcv)
+    sending_mail(subject, cleanhtml(unescape_html(message)), 'info@sacado.xyz', rcv)
+ 
     messages.success(request, 'message envoyé')
 
     return redirect("dashboard")  
@@ -449,10 +451,9 @@ def newpassword_student(request, id,idg):
     user = student.user
     user.set_password("sacado2020")
     user.save()
-    try :
-        send_mail('Réinitialisation de mot de passe Sacado', "Bonjour, votre mot de passe est réinitialisé. Il est générique. Votre identifiant est : "+user.username+"\n\n Votre mot de passe est : sacado2020.\n\n  Pour plus de sécurité, vous devez le modifier dès votre connexion.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz et cliquez sur le bouton bleu Se connecter.\n Ceci est un mail automatique. Ne pas répondre.", 'info@sacado.xyz', [user.email])
-    except :
-        pass
+
+    sending_mail('Réinitialisation de mot de passe Sacado', "Bonjour, votre mot de passe est réinitialisé. Il est générique. Votre identifiant est : "+user.username+"\n\n Votre mot de passe est : sacado2020.\n\n  Pour plus de sécurité, vous devez le modifier dès votre connexion.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz et cliquez sur le bouton bleu Se connecter.\n Ceci est un mail automatique. Ne pas répondre.", 'info@sacado.xyz', [user.email])
+ 
     if idg > 0 :
         return redirect('show_group', idg )
     else :
@@ -491,15 +492,14 @@ def sender_mail(request,form):
             nf.author =  request.user
             nf.save()
             nf.receivers.add(student_user)
-
             for r in nf.receivers.all():
                 rcv.append(r.email)
-            print("sending")
-            send_mail( cleanhtml(subject), cleanhtml(texte) , "info@sacado.xyz" , rcv)
+            sending_mail( cleanhtml(subject), cleanhtml(texte) , "info@sacado.xyz" , rcv)
+ 
 
         else :
             print(form.errors)
-            print("no_sending")
+ 
 
 
 def logged_user_has_permission_to_this_student(user_reader, student) :
@@ -694,8 +694,7 @@ def detail_student_parcours(request, id,idp):
             for s in sts :
                 students.append(s)
 
-        print(group)
-
+ 
         if group :
             nav = navigation(group, id)
             context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'sprev_id': nav[0], 'students' : students , 'group' : group , 'communications' : [], 
@@ -842,8 +841,10 @@ def response_from_mail(request,user_id):
         response = request.POST.get("response",None)
         msg = "Bonjour, \n vous venez d'envoyer le message suivant :\n\n" + message + " \n\n Voici notre réponse.\n\n " + response  + "\n\n Merci pour votre aide."
         if user.email :
-            send_mail("ERREUR SUR UN EXERCICE SACADO",  msg , 'info@sacado.xyz' ,  [user.email] )
-            send_mail("ERREUR SUR UN EXERCICE SACADO",  msg , 'info@sacado.xyz' , ["philippe.demaria-lgf@erlm.tn", "brunoserres33@gmail.com"])
+ 
+            sending_mail("ERREUR SUR UN EXERCICE SACADO",  msg , 'info@sacado.xyz' ,  [user.email] )
+            sending_mail("ERREUR SUR UN EXERCICE SACADO",  msg , 'info@sacado.xyz' , ["philippe.demaria-lgf@erlm.tn", "brunoserres33@gmail.com"])
+ 
         else :
             if form.is_valid():
                 nf = form.save(commit=False)
@@ -905,14 +906,17 @@ def register_teacher(request):
             login(request, user)
             teacher = Teacher.objects.create(user=user)
 
-            #teacher.notify_registration()
-            #teacher.notify_registration_to_admins()
+            try :
+                teacher.notify_registration()
+                teacher.notify_registration_to_admins()
+                # msg = "Bonjour "+ user.first_name +" " + user.last_name+",\n\n Votre compte Sacado est maintenant disponible.\n\nVotre identifiant est : "+user.username+".\n\nPour vous connecter, redirigez-vous vers  https://sacado.xyz .\n\nCeci est un mail automatique. Merci de ne pas répondre."
+                # msg_ = "Bonjour,\n\n Un enseignant vient de rejoindre SacAdo : " + user.last_name + "  "+user.first_name 
+                # if user.email :
+                #     send_mail('Nouvel enseignant', msg ,'info@sacado.xyz',[user.email, ])
+                #     send_mail('Nouvel enseignant', msg_ ,'info@sacado.xyz',["brunoserres33@gmail.com","philippe.demaria83@gmail.com" ])
+            except :
+                pass
 
-            # msg = "Bonjour "+ user.first_name +" " + user.last_name+",\n\n Votre compte Sacado est maintenant disponible.\n\nVotre identifiant est : "+user.username+".\n\nPour vous connecter, redirigez-vous vers  https://sacado.xyz .\n\nCeci est un mail automatique. Merci de ne pas répondre."
-            # msg_ = "Bonjour,\n\n Un enseignant vient de rejoindre SacAdo : " + user.last_name + "  "+user.first_name 
-            # if user.email :
-            #     send_mail('Nouvel enseignant', msg ,'info@sacado.xyz',[user.email, ])
-            #     send_mail('Nouvel enseignant', msg_ ,'info@sacado.xyz',["brunoserres33@gmail.com","philippe.demaria83@gmail.com" ])
 
         else:
             messages.error(request, user_form.errors)
@@ -981,13 +985,14 @@ def dissociate_teacher(request, id):
         User.objects.filter(pk=id).update(school = None)
  
 
-
+ 
     msg = "Bonjour cher collègue, vous venez d'être dissocié de votre établissement d'affectation. Votre compte reste actif avec vos identifiants habituels. Vous pourrez utiliser Sacado dans votre prochaine affectation. Cordialement."
 
     if user.email :
-        send_mail('Disociation de compte à un établissement', msg ,
+        sending_mail('Disociation de compte à un établissement', msg ,
                       'info@sacado.xyz',
                       [user.email, ])
+
 
 
     test = request.POST.get("listing",None)
@@ -1025,10 +1030,12 @@ def register_teacher_from_admin(request):
             teacher.user = u_form
             teacher.save()
             teacher_form.save_m2m()
-            send_mail('Création de compte sur Sacado',
-                      f'Bonjour {teacher.user}, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {u_form.username} \r\n\r\nVotre mot de passe est : sacado2020 \r\n\r\nVous pourrez le modifier une fois connecté à votre espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
-                      'info@sacado.xyz',
-                      [u_form.email, ])
+
+            sending_mail('Création de compte sur Sacado',
+                          f'Bonjour {teacher.user}, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {u_form.username} \r\n\r\nVotre mot de passe est : sacado2020 \r\n\r\nVous pourrez le modifier une fois connecté à votre espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
+                          'info@sacado.xyz',
+                          [u_form.email, ])
+ 
             return redirect('school_teachers')
         else:
             messages.error(request, user_form.errors)
@@ -1115,13 +1122,14 @@ def register_by_csv(request, key, idg=0):
 
 
 
-        try :
-            send_mail('Création de compte sur Sacado',
+
+
+        sending_mail('Création de compte sur Sacado',
               f'Bonjour {user}, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {user.username} \r\n\r\nVotre mot de passe est : sacado2020 \r\n\r\nVous pourrez le modifier une fois connecté à votre espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
               'info@sacado.xyz',
               destinataires)
-        except :
-            pass
+
+
 
 
         if key == User.TEACHER:
@@ -1222,7 +1230,9 @@ def updatepassword(request):
             userport = form.save()
             update_session_auth_hash(request, userport) # Important!
             messages.success(request, 'Votre mot de passe a été modifié avec succès !')
-            send_mail('Changement de mot de passe sur sacAdo', 'Bonjour, votre nouveau mot de passe sacado est '+str(request.POST.get("new_password1"))+'. Pour vous connecter, redirigez-vous vers https://sacado.xyz .', 'info@sacado.xyz', [request.user.email])
+
+            sending_mail('Changement de mot de passe sur sacAdo', 'Bonjour, votre nouveau mot de passe sacado est '+str(request.POST.get("new_password1"))+'. Pour vous connecter, redirigez-vous vers https://sacado.xyz .', 'info@sacado.xyz', [request.user.email])
+
             return redirect('logout')
         else :
             print(form.errors)  
@@ -1259,9 +1269,10 @@ def register_parent(request):
             
                 user = authenticate(username=username, password = password)
                 login(request, user)
-                messages.success(request, "Inscription réalisée avec succès !")               
+                messages.success(request, "Inscription réalisée avec succès !")            
                 if user_form.cleaned_data['email'] :
-                    send_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n\n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.', 'info@sacado.xyz', [request.POST.get("email")])
+                    sending_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n\n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.', 'info@sacado.xyz', [request.POST.get("email")])
+       
         else:
             messages.error(request, "Erreur lors de l'enregistrement. Reprendre l'inscription...")
     return redirect('index')

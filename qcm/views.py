@@ -105,10 +105,9 @@ def send_to_teachers(level) : # envoie d'une notification au enseignant du nivea
                 rcv.append(t.user.email)
 
     msg = "Un nouvel exercice vient d'être publié sur SacAdo sur le niveau "+str(level)
-    try :
-        send_mail("Nouvel exercice SacAdo",  msg , "info@sacado.xyz" , rcv)
-    except :
-        pass
+
+    sending_mail("Nouvel exercice SacAdo",  msg , "info@sacado.xyz" , rcv)
+ 
 
 def students_from_p_or_g(request,parcours) :
     """
@@ -2128,14 +2127,14 @@ def ajax_exercise_error(request):
         usr = request.user
         msg = "Message envoyé par l'utilisateur #"+str(usr.id)+", "+usr.last_name+" :\n\nL'exercice dont l'id est -- "+str(exercise_id)+" --  décrit ci-dessous : \n Savoir faire visé : "+exercise.knowledge.name+ " \n Niveau : "+exercise.level.name+  "  \n Thème : "+exercise.theme.name +" comporte un problème. \n  S'il est identifié par l'utilisateur, voici la description :  \n" + message   
         response = "\n\n Cliquer ici pour répondre https://sacado.xyz/account/response_from_mail/"+str(usr.id)+"\n\n Cliquer ici pour voir l'exercice en question https://sacado.xyz/qcm/show_this_exercise/"+str(exercise_id)+"/"
-        send_mail("Avertissement SacAdo Exercice "+str(exercise_id),  msg + response , "info@sacado.xyz" , ["brunoserres33@gmail.com", "philippe.demaria83@gmail.com", str(exercise.supportfile.author.user.email)])
+        sending_mail("Avertissement SacAdo Exercice "+str(exercise_id),  msg + response , "info@sacado.xyz" , ["brunoserres33@gmail.com", "philippe.demaria83@gmail.com", str(exercise.supportfile.author.user.email)])
 
     else :
         usr = "non connecté"
         msg = "Message envoyé par l'utilisateur #Non connecté :\n\nL'exercice dont l'id est -- "+str(exercise_id)+" --  décrit ci-dessous : \n Savoir faire visé : "+exercise.knowledge.name+ " \n Niveau : "+exercise.level.name+  "  \n Thème : "+exercise.theme.name +" comporte un problème. \n  S'il est identifié par l'utilisateur, voici la description :  \n" + message   
         response = "\n\n Cliquer ici pour voir l'exercice en question https://sacado.xyz/qcm/show_this_exercise/"+str(exercise_id)+"/"
 
-        send_mail("Avertissement SacAdo Exercice "+str(exercise_id),  msg + response , "info@sacado.xyz" , ["brunoserres33@gmail.com", "philippe.demaria83@gmail.com"])
+        sending_mail("Avertissement SacAdo Exercice "+str(exercise_id),  msg + response , "info@sacado.xyz" , ["brunoserres33@gmail.com", "philippe.demaria83@gmail.com"])
 
 
     data = {}
@@ -2392,8 +2391,8 @@ def ajax_dates(request):  # On conserve relationship_id par commodité mais c'es
                         if  s.user.email :                  
                             rec.append(s.user.email)
 
-                send_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "info@sacado.xyz" , rec ) 
-                send_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "info@sacado.xyz" , [r.parcours.teacher.user.email] )   
+                sending_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "info@sacado.xyz" , rec ) 
+                sending_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "info@sacado.xyz" , [r.parcours.teacher.user.email] )   
 
             else :
                 if custom == "0" : 
@@ -2420,8 +2419,8 @@ def ajax_dates(request):  # On conserve relationship_id par commodité mais c'es
                     if s.task_post : 
                         if  s.user.email :                  
                             rec.append(s.user.email)
-                send_mail("SacAdo. Annulation de tâche à effectuer",  msg , "info@sacado.xyz" , rec ) 
-                send_mail("SacAdo. Annulation de tâche à effectuer",  msg , "info@sacado.xyz" , [r.parcours.teacher.user.email] ) 
+                sending_mail("SacAdo. Annulation de tâche à effectuer",  msg , "info@sacado.xyz" , rec ) 
+                sending_mail("SacAdo. Annulation de tâche à effectuer",  msg , "info@sacado.xyz" , [r.parcours.teacher.user.email] ) 
 
         else :
             if custom == "0" :
@@ -2445,8 +2444,8 @@ def ajax_dates(request):  # On conserve relationship_id par commodité mais c'es
                     if  s.user.email :                  
                         rec.append(s.user.email)
 
-            send_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "info@sacado.xyz" , rec ) 
-            send_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "info@sacado.xyz" , [r.parcours.teacher.user.email] ) 
+            sending_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "info@sacado.xyz" , rec ) 
+            sending_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "info@sacado.xyz" , [r.parcours.teacher.user.email] ) 
 
             data["dateur"] = date  
 
@@ -3456,7 +3455,8 @@ def store_the_score_relation_ajax(request):
                         rec.append(g.teacher.user.email)
  
                 if g.teacher.notification :
-                    send_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , rec )
+                    sending_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , rec )
+                    pass
 
             except:
                 pass
@@ -4225,7 +4225,7 @@ def ajax_mark_evaluate(request): # Evaluer un exercice custom par note
 
     if student.user.email :
         msg = "Vous venez de recevoir la note : "+ str(mark)+" pour l'exercice "+str(exercise) 
-        send_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , [student.user.email] )
+        sending_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , [student.user.email] )
 
 
     data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"             
@@ -4266,7 +4266,7 @@ def ajax_comment_all_exercise(request): # Ajouter un commentaire à un exercice 
 
     if student.user.email :
         msg = "Vous venez de recevoir une appréciation pour l'exercice "+str(exercise)+"\n\n  "+str(comment) 
-        send_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , [student.user.email] )
+        sending_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , [student.user.email] )
 
     data = {}
     data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"          
@@ -4327,7 +4327,7 @@ def ajax_audio_comment_all_exercise(request): # Ajouter un commentaire à un exe
 
     if student.user.email :
         msg = "Vous venez de recevoir une appréciation orale pour l'exercice "+str(exercise)+"\n\n  "+str(comment) 
-        send_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , [student.user.email] )
+        sending_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , [student.user.email] )
 
     data = {}
     data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"          
@@ -4585,7 +4585,8 @@ def write_exercise(request,id): # Coté élève
             ### Envoi de mail à l'enseignant
             msg = "Exercice : "+str(unescape_html(cleanhtml(relationship.exercise.supportfile.annoncement)))+"\n Parcours : "+str(relationship.parcours.title)+", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(wForm.cleaned_data['answer'])
             if relationship.parcours.teacher.notification :
-                send_mail("SACADO Exercice posté",  msg , "info@sacado.xyz" , [relationship.parcours.teacher.user.email] )
+                sending_mail("SACADO Exercice posté",  msg , "info@sacado.xyz" , [relationship.parcours.teacher.user.email] )
+                pass
 
             return redirect('show_parcours_student' , relationship.parcours.id )
 
@@ -4649,7 +4650,8 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
             msg = "Exercice : "+str(unescape_html(cleanhtml(customexercise.instruction)))+"\n Parcours : "+str(parcours.title)+", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(cForm.cleaned_data['answer'])
 
             if customexercise.teacher.notification :
-                send_mail("SACADO Exercice posté",  msg , "info@sacado.xyz" , [customexercise.teacher.user.email] )
+                sending_mail("SACADO Exercice posté",  msg , "info@sacado.xyz" , [customexercise.teacher.user.email] )
+                pass
 
             return redirect('show_parcours_student' , idp )
 
@@ -4696,7 +4698,7 @@ def asking_parcours_sacado(request,pk):
 
     msg = "Je souhaite utiliser les parcours Sacado de mon niveau de "+str(level)+", mon enseignant ne les utilise pas. "+test_string+" Merci.\n\n"+str(student)
 
-    send_mail("Demande de parcours SACADO",  msg , "info@sacado.xyz" , ["brunoserres33@gmail.com", "sacado.asso@gmail.com"] )
+    sending_mail("Demande de parcours SACADO",  msg , "info@sacado.xyz" , ["brunoserres33@gmail.com", "sacado.asso@gmail.com"] )
 
     return redirect("dashboard_group",pk)
 
@@ -6024,10 +6026,10 @@ def create_demand(request):
             nf.save()
             messages.success(request, 'La demande a été envoyée avec succès !')
             rec = ['brunoserres33@gmal.com', 'philippe.demaria83@gmal.com', ]
-            send_mail("SacAdo Demande d'exercice",  "Demande d'exercice.... voir dans Demande d'exercices sur https://sacado.xyz" , "info@sacado.xyz" , rec )
+            sending_mail("SacAdo Demande d'exercice",  "Demande d'exercice.... voir dans Demande d'exercices sur https://sacado.xyz" , "info@sacado.xyz" , rec )
 
             sender = [teacher.user.email,]
-            send_mail("SacAdo Demande d'exercice",  "Votre demande d'exercice est en cours de traitement." , "info@sacado.xyz" , sender )
+            sending_mail("SacAdo Demande d'exercice",  "Votre demande d'exercice est en cours de traitement." , "info@sacado.xyz" , sender )
 
 
             return redirect('index')
@@ -6115,7 +6117,7 @@ def ajax_demand_done(request) :
 
     rec = [demand.teacher.user.email]
 
-    send_mail("SacAdo Demande d'exercice",  "Bonjour " + str(demand.teacher.user.get_full_name())+ ", \n\n Votre exercice est créé. \n\n Pour tester votre exercice, https://sacado.xyz/qcm/show_exercise/"+str(code)  +"\n\n Bonne utilisation de sacado." , "info@sacado.xyz" , rec )
+    sending_mail("SacAdo Demande d'exercice",  "Bonjour " + str(demand.teacher.user.get_full_name())+ ", \n\n Votre exercice est créé. \n\n Pour tester votre exercice, https://sacado.xyz/qcm/show_exercise/"+str(code)  +"\n\n Bonne utilisation de sacado." , "info@sacado.xyz" , rec )
     data={}
     return JsonResponse(data)
 
@@ -6652,7 +6654,6 @@ def reporting(request ):
 
     user = request.user    
     form_reporting = DocumentReportForm(request.POST or None )
-    print(request.POST)
     if form_reporting.is_valid() :
         nf = form_reporting.save(commit=False)
         nf.user = request.user
@@ -6661,10 +6662,10 @@ def reporting(request ):
 
         rec = ["nicolas.villemain@claudel.org" , "brunoserres33@gmail.com " , "sacado.asso@gmail.com"]
         if nf.report != "<p>RAS</p>" :
-            send_mail("SACADO "+nf.document+" à modifier", str(nf.document)+" #"+str(nf.document_id)+" doit recevoir les modifications suivantes : \n\n "+str(cleanhtml(nf.report))+"\n\n"+str(request.user) , "info@sacado.xyz" , rec )
+            sending_mail("SACADO "+nf.document+" à modifier", str(nf.document)+" #"+str(nf.document_id)+" doit recevoir les modifications suivantes : \n\n "+str(cleanhtml(nf.report))+"\n\n"+str(request.user) , "info@sacado.xyz" , rec )
         else :
             DocumentReport.objects.filter(pk=int(nf.document_id)).update(is_done=1)
-            send_mail("SACADO "+nf.document+" #"+str(nf.document_id)+" vérifié", str(nf.document)+" dont l'id: "+str(nf.document_id)+" est validé sans erreur par "+str(request.user) , "info@sacado.xyz" , rec )
+            sending_mail("SACADO "+nf.document+" #"+str(nf.document_id)+" vérifié", str(nf.document)+" dont l'id: "+str(nf.document_id)+" est validé sans erreur par "+str(request.user) , "info@sacado.xyz" , rec )
 
     return redirect('admin_testeur')
 
