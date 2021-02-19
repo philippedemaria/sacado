@@ -1014,7 +1014,7 @@ def register_teacher_from_admin(request):
 
     user_form = ManagerForm(request.POST or None)
     teacher_form = TeacherForm(request.POST or None)
- 
+    school = this_school_in_session(request)
     new = False
     if request.method == 'POST':
         if all((user_form.is_valid(),teacher_form.is_valid())):
@@ -1023,7 +1023,7 @@ def register_teacher_from_admin(request):
             u_form.user_type = User.TEACHER
             u_form.is_extra = 0
             u_form.time_zone = request.user.time_zone
-            u_form.school = this_school_in_session(request)
+            u_form.school = school
             u_form.username = get_username(request , u_form.last_name, u_form.first_name)
             u_form.save()
             teacher = teacher_form.save(commit=False)
@@ -1042,8 +1042,8 @@ def register_teacher_from_admin(request):
     else:
         new = True
 
-    return render(request, 'account/teacher_form.html', 
-                  {'user_form': user_form, 'communications': [] ,  
+    return render(request, 'account/teacher_form.html',
+                  {'user_form': user_form, 'communications': [] ,   "school" : school ,
                    'teacher_form': teacher_form,
                    'new': new, })
 
@@ -1059,6 +1059,9 @@ def register_by_csv(request, key, idg=0):
     """
     if idg > 0:
         group = Group.objects.get(pk=idg)
+        is_teacher = False
+    else :
+        is_teacher = True
     if request.method == "POST":
         # try:
         csv_file = request.FILES["csv_file"]
@@ -1142,7 +1145,7 @@ def register_by_csv(request, key, idg=0):
         else:
             group = Group.objects.get(pk=idg)
 
-        return render(request, 'account/csv_teachers_or_students.html', {'key': key, 'idg': idg, 'communications' : [],  'group': group})
+        return render(request, 'account/csv_teachers_or_students.html', {'key': key, 'idg': idg, 'communications' : [],  'group': group ,  'is_teacher': is_teacher })
 
 
 

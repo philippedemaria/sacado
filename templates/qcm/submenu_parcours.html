@@ -188,7 +188,7 @@
         {% csrf_token %}
         <div class="btn-group no_padding_margin" >
 
-            <a href="#" class="btn btn-default publisher"  data-from="2" id="parcours_publisher{{parcours.id}}" data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
+            <a href="#" class="btn btn-default btn-publisher publisher"  data-from="2" id="parcours_publisher{{parcours.id}}" data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
                 <i class="fa fa-circle-o-notch"></i>
             </a><span class="legend-btn legend-btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" id="parcours_statut{{parcours.id}}" style="cursor:auto"  >  
               {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 

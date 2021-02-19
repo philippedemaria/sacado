@@ -679,8 +679,24 @@ def pdf_account(request,id):
 	return response 
 
 
+def get_school(request):
+	""" permet à un enseignant de rejoindre un établissement"""
+	if request.method == "POST":
+		token = request.POST.get("token",None)
+		school_id = request.POST.get("school_id",None)
+		school = School.objects.get(pk=school_id)
 
- 
+		if token == school.code_acad+"_"+str(school.id) :
+
+			User.objects.filter(pk=request.user.id).update(school = school)
+			messages.success(request,"Rattachement à l'établissement " +school.name+ " réussi")
+		else :
+			messages.error(request,"Echec du rattachement à l'établissement " +school.name )
+		return redirect("index")
+
+	schools = School.objects.order_by("name")
+	context = {  "schools" : schools  }
+	return render(request, 'school/get_school.html', context )
 ###############################################################################################
 ###############################################################################################
 ######  Création par csv

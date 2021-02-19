@@ -22,6 +22,9 @@ urlpatterns = [
     path('level_groups', school_level_groups, name='school_level_groups'),
     
 
+    path('get_school', get_school, name='get_school'),
+
+
     path('new_student/<slug:slug>', new_student , name='new_student'),
     path('new_student_list/<slug:slug>', new_student_list , name='new_student_list'),
     path('push_student_group', push_student_group , name='push_student_group'),

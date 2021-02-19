@@ -5376,8 +5376,11 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   -webkit-box-shadow: none;
   box-shadow: none;
   border: 1px solid transparent;
-  padding: 7px 12px;  
+  padding: 4px 12px;  
   border-radius: 3px; /*radius des boutons*/
+}
+.btn-publisher{
+  padding: 7px 12px;  
 }
 .btn.uppercase {
   text-transform: uppercase;
