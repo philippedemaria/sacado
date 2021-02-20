@@ -231,13 +231,12 @@ class Generate_qr(models.Model):
     def is_correct_answer_quizz_random(self , student) :
 
         test = False
-        quizz_student_answers = self.quizz_student_answers.filter(student = student)
+        quizz_student_answers = self.questions_player.filter(student = student)
         if quizz_student_answers.count() == 0:
             test = "A"
         else :
             for qsa in quizz_student_answers :
-                if quizz_student_answer : 
-                    test = quizz_student_answer.is_correct
+                test = quizz_student_answer.is_correct
             
         return test
 

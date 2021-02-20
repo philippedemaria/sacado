@@ -12,14 +12,15 @@
 
 
 {% block page_title %}
-        <a href="{% url 'list_quizzes' %}" ><i class="fa fa-cubes"></i> Résultats du quizz </a>  <img width="25px" src="{% static 'img/angle-right.png' %}"/> {{ quizz.title}}
+    <a href="{% url 'list_quizzes' %}" ><i class="fa fa-cubes"></i> Résultats</a>  <img width="25px" src="{% static 'img/angle-right.png' %}"/> {{ g_quizz.quizz.title}} <img width="25px" src="{% static 'img/angle-right.png' %}"/> 
+    <small>{{ g_quizz.quizz.code}}</small>
 {% endblock %}
+
 
 
 {% block page_menu_right %}
-  
+    <a href="{% url 'list_quizzes' %}" class="btn btn-new pull-right">Liste de mes quizz</a>  
 {% endblock %}
-
 
 
 {% block body %} 

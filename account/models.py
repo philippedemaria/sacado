@@ -459,8 +459,8 @@ class Student(ModelWithCode):
 
         data = {}
         qrs = g_quizz.generate_qr.all() # toutes les questions
-        score = self.quizz_student_answers.filter(  qrandom__in= qrs, is_correct = 1).count()
-        nbre_total = self.quizz_student_answers.filter( qrandom__in= qrs).count()
+        score = self.questions_player.filter(  qrandom__in= qrs, is_correct = 1).count()
+        nbre_total = self.questions_player.filter( qrandom__in= qrs).count()
         try :
             percent = 100 * score/nbre_total
             data["score"] = score
