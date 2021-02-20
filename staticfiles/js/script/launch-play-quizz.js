@@ -28,7 +28,7 @@ define(['jquery',  'bootstrap', ], function ($) {
                             'all': all,
                             csrfmiddlewaretoken: csrf_token
                         },
-                        url: "../../ajax_quizz_show_result",
+                        url: "ajax_quizz_show_result",
                         success: function (data) {
 
                             $("#last_slide").hide() ;
@@ -61,7 +61,8 @@ define(['jquery',  'bootstrap', ], function ($) {
 
             var interval = setInterval(function() {
                 duree = duree - 1000;
-                document.getElementById(cible).textContent = duree/1000;
+                //document.getElementById(cible).textContent = 
+                $("#"+cible).text(duree/1000) ;
 
                 if (( currentSlide == 2 ) && ( duree == 1000 )) {
                          
@@ -122,7 +123,7 @@ define(['jquery',  'bootstrap', ], function ($) {
                                 'gquizz_id'  : gquizz_id,
                                 csrfmiddlewaretoken: csrf_token
                             },
-                        url: "../../ajax_display_question_for_student",
+                        url: "ajax_display_question_for_student",
                     });
             }
          

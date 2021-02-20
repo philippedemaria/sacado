@@ -357,7 +357,6 @@ def get_qr(quizz_id,group_id,mode) :
             i+=1  
     else :
         qrandoms = []
-        print(quizz.id, group_id, mode)
         gquizz   = Generate_quizz.objects.filter(quizz  = quizz  ,  group_id = group_id ,is_game=mode).last()
         gqrs   = gquizz.generate_qr.all()[:quizz.interslide]
         for gqr in gqrs :
@@ -414,11 +413,9 @@ def play_quizz_teacher(request,id,idg):
     """ Lancer d'un play quizz """
     if request.session.get("gquizz_questions",None) :
         del request.session["gquizz_questions"] 
-        print("clear  gquizz_questions ")
 
     if request.session.get("gquizz_id",None) :
         del request.session["gquizz_id"]
-        print("clear  gquizz_id ")
 
     quizz = Quizz.objects.get(pk=id)
     if quizz.is_random :
@@ -435,33 +432,35 @@ def play_quizz_teacher(request,id,idg):
 
 
 
-def launch_play_quizz(request,id,idg):
+def launch_play_quizz(request):
     """ Lancer d'un play quizz """
-    quizz            = Quizz.objects.get(pk= id)
+
+    gquizz_id = request.POST.get("gquizz_id",None)
+    group_id  = request.POST.get("group_id",None)
+    gquizz = Generate_quizz.objects.get(pk = gquizz_id) 
+    #####################################################################################
+    ### les variables  group_id , gquizz  sont définies
+    #####################################################################################
+    #####################################################################################
+    ######## Mise en session des questions
+    #####################################################################################
+    #####################################################################################
     gquizz_questions = request.session.get("gquizz_questions",None)
-    gquizz_id        = request.session.get("gquizz_id",None)
-    #####################################################################################
-    #####################################################################################
-    ######## Mise en session du quizz
-    #####################################################################################
-    #####################################################################################
     if gquizz_questions :
         questions = gquizz_questions
-        gquizz    = Generate_quizz.objects.get(pk = gquizz_id)
         save      = False
     else :
-        if quizz.is_random :
-            group = Group.objects.get(id = idg)
-            quizz ,  gquizz , questions , save = get_qr(id,idg,1)
+        if gquizz.quizz.is_random :
+            quizz_n , gquizz_n ,  questions ,  save = get_qr( gquizz.quizz.id , group_id , 1) ## les variables  quizz_n ,  gquizz_n  ne sont pas utilisées
         else :
-            quizz , gquizz ,  quests , save = get_date_play(id,idg,1)
-            questions = []
-            for q in quests :
-                questions.append(q.id) 
+            quizz_n , gquizz_n , quests , save = get_date_play(gquizz.quizz.id , group_id , 1)## les variables  quizz_n ,  gquizz_n  ne sont pas utilisées
+            questions = []                                                                    ## Création des questions pour être passées en session
+            for q in quests :                                                                 ## Pas d'object en JSON donc cette manip
+                questions.append(q.id)                                                        ## vraiment pas top !
 
         request.session["gquizz_questions"] = questions
-        request.session["gquizz_id"]        = gquizz.id
-
+    #####################################################################################
+    ### les variables  gquizz_questions , save sont définies
     #####################################################################################
     #####################################################################################
     ######## Navigation dans le quizz
@@ -469,17 +468,18 @@ def launch_play_quizz(request,id,idg):
     #####################################################################################
     quizz_nav = int(request.POST.get("quizz_nav",0))
     if quizz_nav == len(questions) :
-        context = { 'gquizz' : gquizz , }
+        context = { 'gquizz' : gquizz , 'group_id' : group_id }
         return render(request, 'tool/results_play_quizz.html', context)
     else :
-        if quizz.is_random :
+        if gquizz.quizz.is_random :
             question = questions[quizz_nav]
         else :
             nav = questions[quizz_nav]
             question = Question.objects.get(pk = nav) 
+
     quizz_nav += 1
 
-    context = {   "quizz" : quizz , "gquizz" : gquizz , "question" : question , "idg" : idg  , "save" : save , "quizz_nav" : quizz_nav }
+    context = {   "gquizz" : gquizz , "question" : question , "group_id" : group_id  , "save" : save , "quizz_nav" : quizz_nav }
 
     return render(request, 'tool/launch_play_quizz.html', context)
 
@@ -532,17 +532,21 @@ def ajax_quizz_show_result(request):
     data = {}
 
     if random == 0 :
-        anwsers = Answerplayer.objects.filter(question_id = question_id, is_correct = 1 ).order_by("-score")
-        no_anwsers = Answerplayer.objects.filter(question_id = question_id, is_correct = 0 ).order_by("-score")
+        answers = Answerplayer.objects.filter(question_id = question_id, is_correct = 1 ).order_by("-score")
+        no_answers = Answerplayer.objects.filter(question_id = question_id, is_correct = 0 ).order_by("-score")
     else :
-        anwsers = Answerplayer.objects.filter(qrandom_id = question_id, is_correct = 1 ).order_by("id")
-        no_anwsers = Answerplayer.objects.filter(qrandom_id = question_id, is_correct = 0 ).order_by("-score")
+        answers = Answerplayer.objects.filter(qrandom_id = question_id, is_correct = 1 ).order_by("id")
+        no_answers = Answerplayer.objects.filter(qrandom_id = question_id, is_correct = 0 ).order_by("-score")
 
+    no_answers_display = True
     if all_results == "0" :
-        anwsers = anwsers[:3]
-        no_anwsers = None
+        answers = answers[:3]
+        no_answers_display = False
+ 
 
-    context = { "anwsers" : anwsers , "no_anwsers" : no_anwsers , }
+    context = { "answers" : answers , "no_answers" : no_answers , "no_answers_display" : no_answers_display   }
+
+    print(context)
 
     data['html'] = render_to_string('tool/show_quizz_results.html', context)
 
@@ -581,89 +585,104 @@ def ajax_display_question_to_student(request):
     if gquizz_id :
         gquizz = Generate_quizz.objects.get(pk = gquizz_id)
         dq     = Display_question.objects.filter(gquizz=gquizz).last()
-        ts_tab = dq.timestamp.split(".")
-        delta  = int(round(time_zone.timestamp()))  -  int(ts_tab[0])
-        if dq.students : 
-            if not student in dq.students.all() :
-                if gquizz.quizz.is_random :
-                    generate_qr = Generate_qr.objects.get(pk = dq.question_id)
-                    question    =  { "qtype" : generate_qr.qrandom.qtype , "title" : generate_qr.qr_text , "id" : generate_qr.id, "duration" : generate_qr.qrandom.duration  }
-                    timer       = int(generate_qr.qrandom.duration)*1000 + 5000
-                else :
-                    question = Question.objects.get(pk = dq.question_id)
-                    timer    = int(question.duration)*1000 + 5000
 
-                context = { "question" : question , "form" : form ,  "gquizz_id" : gquizz_id ,  "timestamp" : timestamp   }  
+        if not student in dq.students.all() : #Si l'élève n'a pas chargé la question et que le temps est inférieur à 2 minutes
+            if gquizz.quizz.is_random :
+                generate_qr = Generate_qr.objects.get(pk = dq.question_id)
+                question    =  { "qtype" : generate_qr.qrandom.qtype , "title" : generate_qr.qr_text , "id" : generate_qr.id, "duration" : generate_qr.qrandom.duration  }
+                timer       = int(generate_qr.qrandom.duration)*1000 + 5000
+            else :
+                question = Question.objects.get(pk = dq.question_id)
+                timer    = int(question.duration)*1000 + 5000
 
-                data['html']     = render_to_string('tool/ajax_display_question_to_student.html', context)
-                data['is_valid'] = "True"
-                data['timer']    = timer
+            context = { "question" : question , "form" : form ,  "gquizz_id" : gquizz_id ,  "timestamp" : timestamp   }  
+
+            data['html']     = render_to_string('tool/ajax_display_question_to_student.html', context)
+            data['is_valid'] = "True"
+            data['timer']    = timer
 
         dq.students.add(student)
 
     return JsonResponse(data) 
  
 
-def answer_is_right(answer,question_id) :
-    """ réponse donnée est-lle juste ? """
+def answer_is_right(form , answer,question) :
+    """ réponse donnée est-elle juste ? """
     right = False
-    if question.qtype == 1 :
-        if question.is_correct == answer :
+    question_choices_answers = question.choices.values("answer").filter(is_correct = 1)
+    if question.qtype == 1 : ## V/F
+        form.answer = answer       
+        if int(question.is_correct) == int(answer) :
             right = True
-    elif question.qtype == 2 :
-        for choice in question.choices.all() :
-            if answer in choice :
+
+    elif question.qtype == 2 : ## Réponse
+        choice_answer = question_choices_answers.last()
+        answer_tab = answer.split("____")
+        for choice in question_choices_answers :
+            if choice["answer"] in answer_tab :
                 right = True
                 break
 
-    elif question.qtype == 3 :
-        for choice in question.choices.all() :
-            if answer in choice :
-                right = True
-                break
+    elif question.qtype == 3 : ## QCM
+        form.answer = answer  
+        nb_c = 0       
+        for choice in question_choices_answers :
+            if choice["answer"] in answer :
+                nb_c+=1 
+        if question_choices_answers.count() == nb_c :
+            right = True
 
-    elif question.qtype == 4 :
-        for choice in question.choices.all() :
-            if answer in choice :
+    elif question.qtype == 4 :## QCS
+        form.answer = answer
+        for choice in question_choices_answers :
+            if answer in choice.values()  :
                 right = True
-                break
-
+                break      
     return right
 
 
 def store_student_answer(request):
     """ Lancer le play quizz élève """
-    form = AnswerplayerForm(request.POST or None)
- 
-    time = request.POST.get("timestamp")
-    timestamp = time.split(",")[0]
-
-    time_zone = time_zone_user(request.user)
-    milliseconds = int(round(time_zone.timestamp())) 
-
-    timer = int(milliseconds) - int(timestamp) - 2 # 2 secindes délai d'affichage
-
+    form         = AnswerplayerForm(request.POST or None)
+    time         = request.POST.get("timestamp")
+    timestamp    = time.split(",")[0]
+    time_zone    = time_zone_user(request.user)
+    milliseconds = float(round(time_zone.timestamp())) 
+    timer        = float(milliseconds) - float(timestamp) - 2 # 2 secondes délai d'affichage
+    
     if request.method == "POST" :
         gquizz_id = request.POST.get("gquizz_id")
-        gquizz = Generate_quizz.objects.get(pk = gquizz_id)
+        gquizz    = Generate_quizz.objects.get(pk = gquizz_id)
         if form.is_valid() :
-            nf = form.save(commit = False)
-            nf.student =  request.user.student
             if gquizz.quizz.is_random :
-                nf.qrandom_id = request.POST.get("question_id")
+                qrandom_id = request.POST.get("question_id")
+                question_id = None
             else :
-                question_id   = request.POST.get("question_id")
-                answer        = request.POST.get("answer")
-                question      = Question.objects.get(pk = question_id)
-                nf.question   = question
-                nf.is_correct = answer_is_right(answer,question)
-                if answer_is_right(answer,question) :
+                qrandom_id = None
+                question_id       = request.POST.get("question_id")
+                question          = Question.objects.get(pk = question_id)
+                if question.qtype == 1 :
+                    answer = form.cleaned_data["answer"]
+                elif question.qtype == 2 :
+                    answer = form.cleaned_data["answer"]
+                elif question.qtype == 3 :
+                    answer_brut = request.POST.getlist("answer")
+                    choices = question.choices.values("answer")
+                    answer = []
+                    for ab in answer_brut : 
+                        answer.append(choices[int(ab)]['answer'])
+                else :
+                    choices = question.choices.values("answer")
+                    answer_brut = request.POST.get("answer")
+                    answer =  choices[int(answer_brut)]['answer'] 
+
+                answer_is_correct = answer_is_right(form, answer,question)
+                if answer_is_correct :
                     score = (question.point/question.duration)*(question.duration - timer)
                 else :
                     score = 0
-                nf.score   = score
-            nf.timer = timer
-            nf.save()
+            Answerplayer.objects.get_or_create(gquizz = gquizz , student = request.user.student , question = question , qrandom_id = qrandom_id , defaults = {"answer": answer , "score" :score , "timer" : timer , "is_correct" : answer_is_correct} )
+
         else :
             print(form.errors)
     else :

@@ -36,7 +36,7 @@
                 <thead>
                 <tr>
                     <th>Titre</th>
-                    <th>Groupes attribués</th>
+                    <th>Groupes attribués et type</th>
                     <th>  </th>
                 </tr>
                 </thead>
@@ -60,18 +60,19 @@
                                                 
                                                 <a href="{% if quizz.is_random %}{% url 'show_quizz_random_group'  quizz.id  g.id %}{% else %}{% url 'show_quizz_group'  quizz.id  g.id %}{% endif %}" style="color:{{g.color}}"
                                                    class="quizz_action {% if quizz.is_random %} confirm_create_historic{% endif %}">
-                                                   <i class="fa fa-play fa-xs"></i>  Quizz
+                                                   <i class="fa fa-play fa-xs"></i>  Papier
                                                 </a>
 
                                             </span>
+
+                                            {% if not quizz.is_random %}
                                             <span class="sanspuce historic_li"  style="border:1px solid {{g.color}}; border-radius:20px; width:70px">
                                                 <a href="{% url 'play_quizz_teacher'  quizz.id   g.id  %}" target="_blank"  class="quizz_action" 
-                                                    style="color:{{g.color}};"><i class="fa fa-gamepad"></i> 
-                                                    <em> 
-                                                        <span class="sacado" style="font-size:12px">SACADO Quizz Play</span>
-                                                    </em>
+                                                    style="color:{{g.color}};"><i class="fa fa-gamepad"></i> Numérique 
                                                 </a>  
                                             </span>
+                                            {% endif %}
+
                                             {% if not forloop.last %}, {% endif %} 
                                         </div>
                                         <div class="col-sm-6 col-md-6 quizz_historic_div">

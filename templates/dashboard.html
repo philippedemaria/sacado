@@ -380,26 +380,32 @@
             <a href="#" id="closeTools" class="pull-right"> <i class="fa fa-times"></i></a>
             <h1 class='sacado'>Mes outils péda.</h1>
         </div>
-    </div>
-    <hr class="divider"> 
-    <p class="thin">Diaporamas & Quizz </p>
-    
-  
-    <div class="row">
-        <div class="col-lg-12 col-xs-12">
-            <a href="{%  url 'list_diaporama' %}" >Mes diaporamas (<small class="text-danger">en test</small>)</a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12">
-            <a href="{%  url 'list_quizzes' %}"   >Mes quizz (<small class="text-danger">en test</small>)</a>
-        </div>
-    </div>
-
-
-
+    </div>    
     <hr class="divider"> 
     <p class="thin">Mes outils péda. <a href="{% url 'list_tools' %}" class="pull-right"  > Choisir  </a></p>
+    <hr class="divider"> 
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="#"   >Chat (<small class="text-danger">à venir</small>)</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{%  url 'list_quizzes' %}"   >Quizz </a>
+        </div>
+    </div>      
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="#" >Forum (<small class="text-danger">à venir</small>)</a>
+        </div>
+    </div>  
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{%  url 'list_diaporama' %}" >Diaporamas </a>
+        </div>
+    </div>
+
+
     <form method="post" action="#">
         <div id="list_of_tools">
         {% for tool in mytools %}

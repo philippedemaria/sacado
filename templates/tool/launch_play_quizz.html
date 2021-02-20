@@ -28,12 +28,13 @@
 
 
 {% block form %}
-<form method="POST"> 
+<form action="{% url 'launch_play_quizz' %}" method="POST">
 
     {% csrf_token %}
-    <input type="hidden" value="{{ question.id }}" id="question_id" /> 
-    <input type="hidden" value="{{ gquizz.id }}" id="gquizz_id" /> 
-
+    <input type="hidden" id="question_id" name="question_id" value="{{ question.id }}" /> 
+    <input type="hidden" id="gquizz_id"   name="gquizz_id"   value="{{ gquizz.id }}"   /> 
+    <input type="hidden" id="group_id"    name="group_id"    value="{{ group_id }}"    />
+    <input type="hidden" id="quizz_nav"   name="quizz_nav" value="{{ quizz_nav }}" />
     <div class="wrapper_slider">
         <div class="slider">
             <ul>
@@ -116,46 +117,46 @@
                             </div> 
                         </div>
                     {%  elif question.qtype > 2 %}   
+                        <div class="row">
                         {% for choice in question.choices.all %}
                             {% cycle 'bgcolorRed' 'bgcolorBlue' 'bgcolorOrange' 'bgcolorGreen' as rowcolor silent %} 
                             {% cycle 'A' 'B' 'C' 'D'  as choice_letter silent %}
-                            <div class="col-sm-12 col-md-6" style="padding-right: 20px;margin-bottom: 20px;font-size:1.2em; border : 1px solid #F0F0F0; border-radius : 10px">
-                                <div class="row" >
-                                    <div class="col-sm-2 col-md-1 {{ rowcolor }} get_image" style="padding-top: 20px;color:#FFF; padding-left:10px; border-radius : 10px 0px 0px 10px"> 
-                                        <b>{{ choice_letter }} </b>    
-                                    </div>
-                                    <div class="col-sm-10 col-md-11" style="font-size:{% if choice.answer|length > 30 %}1{% else  %}1.5{% endif %}em"> 
+                            <div class="col-sm-6 col-md-6 {{ rowcolor }} get_image" 
+                                style="margin-bottom: 20px; color:#FFF; border : 1px solid #F0F0F0; border-radius : 10px ; font-size:{% if choice.answer|length > 30 %}2{% else  %}3{% endif %}em">
+                                        {% if choice.imagefile %}
+                                            <img src="{{ choice.imagefile.url }}" height="250px" />
+                                        {% endif %}  
+
                                         {{ choice.answer }}
-                                    </div>
-                                </div>  
                             </div> 
                         {% endfor %}
                         {% resetcycle %}
                         {% resetcycle %}
+                        </div>
                     {% endif %}
                 </li>
                 <li class="my_slide my_slide_instruction">
+                    <div class="row">
+                       <div class="col-sm-12 col-md-12">
+                             <a href="#" class="command_results" data-all="1" data-question_id="{{ question.id }}" data-random="{% if gquizz.quizz.is_random %}1{% else %}0{% endif %}">
+                                Afficher tous ?
+                            </a>
+                            <a href="#" class="command_results" data-all="0" data-question_id="{{ question.id }}" data-random="{% if gquizz.quizz.is_random %}1{% else %}0{% endif %}">
+                                Afficher le podium ?
+                            </a>
+                        </div>
+                    </div>
                     <div class="row consigne_diapo"  align="center">
                         <div class="col-sm-12 col-md-12" id="last_slide" >
-                            <h1 style="font-size:6em" class="thin">Résultats</h1>
-                            <div style="font-size:1.5em;margin-top: 60px;margin-bottom: 60px" >
-                                <a href="#" class="command_results" data-all="1" data-question_id="{{ question.id }}" data-random="{% if gquizz.quizz.is_random %}1{% else %}0{% endif %}">
-                                    Afficher tous ?
-                                </a>
-                                <a href="#" class="command_results" data-all="0" data-question_id="{{ question.id }}" data-random="{% if gquizz.quizz.is_random %}1{% else %}0{% endif %}">
-                                    Afficher le podium ?
-                                </a>
-                            </div>
+                            <h1 style="font-size:6em;line-height: 400px" class="thin">Résultats</h1>
                         </div>
                         <div class="col-sm-12 col-md-12" id="display_results" >
  
                         </div>
                         <div class="col-sm-12 col-md-12"  >
-                            <input type="hidden" name="quizz_nav" value="{{ quizz_nav }}" />
                             <button type="submit" class="btn btn-default">Question suivante ?</button>
                         </div>
-                    </div> 
-                    
+                    </div>  
                 </li> 
             </ul>
         </div>

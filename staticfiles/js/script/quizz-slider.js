@@ -35,7 +35,8 @@ define(['jquery',  'bootstrap' ], function ($) {
             $("#navbarLeft").show(500);
             $("#stop_quizz").hide(500);
             $("#starter_quizz").show(500);
-
+            document.fullScreenElement && null !== document.fullScreenElement || !document.mozFullScreen && !document.webkitIsFullScreen ? document.documentElement.requestFullScreen ? document.documentElement.requestFullScreen() : document.documentElement.mozRequestFullScreen ? document.documentElement.mozRequestFullScreen() : document.documentElement.webkitRequestFullScreen && document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT) : document.cancelFullScreen ? document.cancelFullScreen() : document.mozCancelFullScreen ? document.mozCancelFullScreen() : document.webkitCancelFullScreen && document.webkitCancelFullScreen()
+       
         });
         // Vue en plein écran
         $('#starter_quizz').on('click', function(){ 
@@ -48,7 +49,7 @@ define(['jquery',  'bootstrap' ], function ($) {
        
        });
 //======================================================================================================
-//====================== Vue en plein écran
+//======================  
 //======================================================================================================
 
 

@@ -93,7 +93,7 @@ urlpatterns = [
     path('play_printing_teacher/<int:id>', play_printing_teacher, name='play_printing_teacher'), 
     path('play_quizz_teacher/<int:id>/<int:idg>', play_quizz_teacher, name='play_quizz_teacher'),
 
-    path('launch_play_quizz/<int:id>/<int:idg>', launch_play_quizz, name='launch_play_quizz'),
+    path('launch_play_quizz', launch_play_quizz, name='launch_play_quizz'),
     path('ajax_quizz_show_result', ajax_quizz_show_result, name='ajax_quizz_show_result'),
 
 

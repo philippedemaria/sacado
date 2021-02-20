@@ -245,17 +245,17 @@ class Generate_qr(models.Model):
 
 class Answerplayer(models.Model):
 
-    gquizz       = models.ForeignKey(Generate_quizz,  related_name="answerplayer",  on_delete=models.CASCADE ) 
+    gquizz   = models.ForeignKey(Generate_quizz,  related_name="answerplayer",  on_delete=models.CASCADE ) 
     student  = models.ForeignKey(Student,  null=True, blank=True,   related_name='questions_player', on_delete=models.CASCADE,  editable= False)
     question = models.ForeignKey(Question,  null=True, blank=True, related_name='questions_player', on_delete=models.CASCADE, editable= False)
     qrandom  = models.ForeignKey(Generate_qr,  null=True, blank=True, related_name='questions_player', on_delete=models.CASCADE, editable= False)
-    answer   = models.CharField( max_length=255, verbose_name="Réponse")  
+    answer   = models.CharField( max_length=255, null=True, blank=True,  verbose_name="Réponse")  
     score    = models.PositiveIntegerField(default=0, editable=False)
     timer    = models.CharField(max_length=255, editable=False)  
     is_correct  = models.BooleanField(default=0, editable=False) 
 
     def __str__(self):
-        return self.student 
+        return self.student.user.last_name
 
 
 class Slide(models.Model):
@@ -307,8 +307,8 @@ class Display_question(models.Model):
     """
     gquizz      = models.ForeignKey(Generate_quizz,  related_name="display_questions",  on_delete=models.CASCADE, editable=False) 
     question_id = models.PositiveIntegerField( default=0, ) 
-    timestamp   = models.CharField( max_length=255) 
-    students  = models.ForeignKey(Student,  null=True, blank=True,   related_name='display_questions', on_delete=models.CASCADE,  editable= False)
+    timestamp   = models.DateTimeField(auto_now=True)
+    students    = models.ManyToManyField(Student,    blank=True,   related_name='display_questions' ,  editable= False)
     def __str__(self):
         return self.gquizz.quizz.title 
 
