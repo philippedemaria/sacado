@@ -156,6 +156,12 @@ class Waiting(models.Model):
         return Exercise.objects.filter(knowledge__waiting = self).count()
 
 
+    def supportfile_counter(self):
+        Supportfile = apps.get_model('qcm', 'Supportfile')
+        return Supportfile.objects.filter(knowledge__waiting = self).count()
+
+
+
 
 class Knowledge(models.Model):
     level = models.ForeignKey(Level, related_name="knowledges", default="", on_delete=models.CASCADE, verbose_name="Niveau")

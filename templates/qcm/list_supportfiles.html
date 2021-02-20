@@ -51,8 +51,9 @@
                         {% for waiting in waiting_list  %}
                         
                             <tr style="background:#e6e2dd; cursor: pointer; color: black" class="opener out"  id="{{ waiting.grouper.id }}">
-                                <td style="width:85%"><i class="fa fa-caret-right"></i> {{waiting.grouper.name}}   <small><b>{{  waiting.grouper.exercises_counter }} exercice{{ waiting.grouper.exercises_counter|pluralize  }}</b>  </small> </td> 
+                                <td style="width:85%"><i class="fa fa-caret-right"></i> {{waiting.grouper.name}}   <small><b>{{  waiting.grouper.supportfile_counter }} exercice{{ waiting.grouper.supportfile_counter|pluralize  }}</b>  </small> </td> 
                             </tr>  
+ 
                             {% regroup waiting.list by knowledge as knowledge_list %} 
                             {% for knowledge in knowledge_list  %}
  
