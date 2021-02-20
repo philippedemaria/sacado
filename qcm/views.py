@@ -3074,7 +3074,7 @@ def admin_list_supportfiles(request,id):
 
         teacher = Teacher.objects.get(user=user)
         level = Level.objects.get(pk=id)
-        supportfiles = Supportfile.objects.filter(level = level , is_title=0).order_by("ranking")
+        supportfiles = Supportfile.objects.filter(level = level , is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
  
     return render(request, 'qcm/list_supportfiles.html', {'supportfiles': supportfiles, 'teacher':teacher , 'level':level , 'relationships' : [] , 'communications' : [] , 'parcours' :  None })
 
@@ -3136,7 +3136,7 @@ def create_supportfile_knowledge(request,id):
     teacher = request.user.teacher
     form = SupportfileKForm(request.POST or None,request.FILES or None, knowledge = knowledge )
     levels = Level.objects.all()
-    supportfiles = Supportfile.objects.filter(is_title=0).order_by("level")
+    supportfiles = Supportfile.objects.filter(is_title=0).order_by("level","theme","knowledge__waiting","knowledge","ranking")
     knowledges = Knowledge.objects.all().order_by("level")
 
     is_ggbfile = request.POST.get("is_ggbfile")
@@ -3172,7 +3172,7 @@ def update_supportfile(request, id, redirection=0):
         knowledge = supportfile.knowledge
         supportfile_form = UpdateSupportfileForm(request.POST or None, request.FILES or None, instance=supportfile, knowledge = knowledge)
         levels = Level.objects.all()
-        supportfiles = Supportfile.objects.filter(is_title=0).order_by("level")
+        supportfiles = Supportfile.objects.filter(is_title=0).order_by("level","theme","knowledge__waiting","knowledge","ranking")
         knowledges = Knowledge.objects.all().order_by("level")
         is_ggbfile = request.POST.get("is_ggbfile")
         if request.method == "POST":
@@ -6638,7 +6638,7 @@ def admin_testeur(request):
             reporting_c.append(r.id)
 
     parcourses = Parcours.objects.filter(teacher__user_id = 2480).exclude(pk__in=reporting_s).order_by("level")
-    supportfiles = Supportfile.objects.filter(is_title=0).exclude(pk__in=reporting_p).order_by("level")
+    supportfiles = Supportfile.objects.filter(is_title=0).exclude(pk__in=reporting_p).order_by("level","theme","knowledge__waiting","knowledge","ranking")
     courses = Course.objects.filter(teacher__user_id = 2480).exclude(pk__in=reporting_c).order_by("parcours")
     form_reporting = DocumentReportForm(request.POST or None )
 
