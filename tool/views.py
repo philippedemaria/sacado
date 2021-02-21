@@ -1086,6 +1086,9 @@ def send_slide(request):
         slide.save() 
         form.save_m2m()      
         diaporama.slides.add(slide)
+    else :
+        messages.error(request,"Votre création de diapositive contient une erreur "+form.errors)
+        slide = None
 
     context = {    }
     context_liste = {  'slide' : slide ,  'diaporama' : diaporama , 'from_ajax' : True , 'nbq' : nbq }
