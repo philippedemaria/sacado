@@ -1,6 +1,7 @@
 {% load static %}
 
 {% csrf_token %}  
+{% if slide %}
 <li class="sorted_list {% if slide %}{% if not slide.is_publish %} no_published{% endif %}{% endif %}">
 
     	<input type="hidden" value="{{ slide.id }}" class="sorted_slide_id"     />
@@ -28,3 +29,4 @@
         </div>
  
 </li>
+{% endif %}

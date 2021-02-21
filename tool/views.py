@@ -1083,11 +1083,10 @@ def send_slide(request):
     if form.is_valid():
         slide = form.save(commit=False)
         slide.ranking = ranking
-        slide.save() 
+        slide.save()  
         form.save_m2m()      
         diaporama.slides.add(slide)
     else :
-        messages.error(request,"Votre création de diapositive contient une erreur "+form.errors)
         slide = None
 
     context = {    }
