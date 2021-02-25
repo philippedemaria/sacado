@@ -190,9 +190,9 @@ def logout_view(request):
     context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 'cookie': False}
     return render(request, 'home.html', context)
 
-@login_required
-def send_message(request):
 
+def send_message(request):
+    ''' traitement du formulaire de contact de la page d'accueil '''
     name = request.POST.get("name")
     email = request.POST.get("email")
     subject = request.POST.get("subject")
