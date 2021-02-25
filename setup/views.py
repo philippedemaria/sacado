@@ -29,6 +29,7 @@ from general_fonctions import *
 import fileinput 
 import random
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.forms import BaseFormSet
 from django.forms import formset_factory
@@ -189,7 +190,7 @@ def logout_view(request):
     context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 'cookie': False}
     return render(request, 'home.html', context)
 
-
+@login_required
 def send_message(request):
 
     name = request.POST.get("name")
