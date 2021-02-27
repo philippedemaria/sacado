@@ -67,7 +67,7 @@
                                             {% if sacado_asso %}
                                                 {% if not quizz.is_random %}
                                                 <span class="sanspuce historic_li"  style="border:1px solid {{g.color}}; border-radius:20px; width:70px">
-                                                    <a href="{% url 'play_quizz_teacher'  quizz.id   g.id  %}" target="_blank"  class="quizz_action" 
+                                                    <a href="{% url 'play_quizz_teacher'  quizz.id   g.id  %}" target="_blank"  class="quizz_action" title="En version à tester"
                                                         style="color:{{g.color}};"><i class="fa fa-gamepad"></i> Numérique 
                                                     </a>  
                                                 </span>
