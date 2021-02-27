@@ -33,10 +33,14 @@
  
 
 {% block body %}
-<div class="content_main">  
+<div class="content_main"> 
+
+        <button id="stop_quizz" class="btn btn-default" ><i class="fa fa-compress"></i></button>
+        <button id="starter_quizz" class="btn btn-default" ><i class="fa fa-expand"></i></button>
+
     <div class="row">        
         <div class="col-sm-12 col-md-12">
-            {{ tool.remark|safe }}
+           {{ tool.remark|safe }}
         </div>
     </div>   
 </div>
