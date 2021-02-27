@@ -87,7 +87,7 @@
                         <div class="col-sm-12 col-md-12"> 
                             <div class="form-group">
                                 
-                                <input value="Sauvegarder" type="submit" class="btn btn-primary crop_image"  {% if  sacado_asso %}  disabled  title='La version établissement est requise.' {% endif %}/>
+                                <input value="Sauvegarder" type="submit" class="btn btn-primary crop_image"  {% if not sacado_asso %}  disabled  title='La version établissement est requise.' {% endif %}/>
                            
                             </div>
                         </div>
