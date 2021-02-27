@@ -48,7 +48,7 @@
                         {% get_percent_done s  parcours as data %}
                             <tr>
                                 <td>
-                                    {{ s.user.last_name }} {{ s.user.first_name }}
+                                    <a href="{% url 'detail_student_parcours' s.user.id parcours.id  %}">{{ s.user.last_name }} {{ s.user.first_name }}</a>
                                 </td>
                                 <td>
                                     <div class="progress">
