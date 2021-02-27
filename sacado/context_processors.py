@@ -27,7 +27,7 @@ def menu(request):
             levels = Level.objects.all()
             nb_demand = Demand.objects.filter(done=0).count()
 
-            mytools = Tool.objects.filter(is_publish=1, teachers = teacher)
+            mytools = Tool.objects.filter(is_publish=1, teachers = teacher).order_by("title")
 
             ### Exercice traités non vus par l'enseignant -> un point orange dans la barre de menu sur message
             is_pending_studentanswers = False
