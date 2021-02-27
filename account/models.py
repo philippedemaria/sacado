@@ -317,15 +317,21 @@ class Student(ModelWithCode):
 
 
     def percent_done(self, parcours):
-        """ POurcentage d'exercices faits dans un parcours par un élève donné """
-        nb_total_relationships = self.students_relationship.filter(parcours = parcours,is_publish=1).count()
-        nb_sta = self.answers.filter(parcours= parcours).values("exercise").distinct().count()
+        """ Pourcentage d'exercices faits dans un parcours par un élève donné """
+        nb_total_relationships = self.students_relationship.filter(parcours = parcours,is_publish=1,exercise__supportfile__is_title=0).count()
+
+        nb_sta    = self.answers.filter(parcours= parcours).values("exercise").distinct().count()
+        nb_exo_ce = self.student_custom_answer.filter(parcours = parcours, customexercise__is_publish = 1 ).count()
+
+        nb_exo  = nb_sta + nb_exo_ce
+     
+     
         try :
-            percent = int((nb_sta/nb_total_relationships) *100)
+            percent = int((nb_exo/nb_total_relationships) *100)
         except :
             percent = 0 
         data = {}
-        data["nb"] =  nb_sta
+        data["nb"] =  nb_exo
         data["percent"] =  percent
         return data
 
