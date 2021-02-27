@@ -5,24 +5,17 @@
  
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
-
-
-    <script>
-        require(['script/ajax-videocopy']);
-    </script> 
- 
-
 {% endblock %}
 
 
 
 {% block page_title %}
-        <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> Vidéo projection de copies</a> 
+        <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> Bibliothèque de copies</a> 
 {% endblock %}
 
 {% block page_menu_right %}
 
-     <a href="#" data-toggle='modal' data-target='#photo_proj'  class="btn btn-new pull-right">  Prendre une photo</a>  
+     <a href="{% url 'create_videocopy' %}"  class="btn btn-new pull-right">  Prendre une photo</a>  
 
 {% endblock %}
 
@@ -37,7 +30,7 @@
             <div class="videocopy">
 
                 <a href="#" data-toggle='modal' data-target='#video_projection' class="this_photo" data-img="{{ v.image.url }}" > 
-                    <img src="{{ v.image.url }}" width="294px" height="194px"  />
+                    <img src="{{ v.image.url }}" width="244px" height="244px"  />
                 </a>  
 
 
@@ -57,47 +50,7 @@
         </div>
     </div>
 </section>
-
-
-<div class="modal fade" id="photo_proj" tabindex="-1" role="dialog" aria-labelledby="photo_proj">
-    <div class="modal-dialog" role="document" style="width: 750px;">
-        <div class="modal-content" >
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> 
-                <h1 class='thin'  >Capture</h1>
-            </div>
-            <div class="modal-body">
-                <form action="{% url 'create_videocopy' %}" method="POST"  enctype='multipart/form-data'>
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12"> 
-                            <div class="form-group">
-                                {{ form.image  }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12"> 
-                            <img id="preview" width="500px" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12"> 
-                            <div class="form-group">
-                                
-                                <input value="Sauvegarder" type="submit" class="btn btn-primary crop_image"  {% if not sacado_asso %}  disabled  title='La version établissement est requise.' {% endif %}/>
-                           
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
+ 
 
 <div class="modal fade" id="video_projection" tabindex="-1" role="dialog" aria-labelledby="video_projection">
     <div class="modal-dialog" role="document" style="width: 100%;margin:0px">

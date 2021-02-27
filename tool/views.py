@@ -1425,7 +1425,7 @@ def create_videocopy(request):
 
     context = {'form': form, }
 
-    return render(request, 'tool/list_videocopy.html', context)
+    return render(request, 'tool/form_videocopy.html', context)
 
  
 
