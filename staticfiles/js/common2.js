@@ -69,6 +69,9 @@ requirejs.config({
         "bcPicker": {
             deps: ['jquery',]
         },
+        "uploader": {
+            deps: ['jquery',]
+        },
 
         mathjax: {
             exports: "MathJax",

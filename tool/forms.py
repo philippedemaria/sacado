@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from .models import Tool , Question  , Choice  , Quizz , Diaporama , Slide , Qrandom ,Variable , Answerplayer
+from .models import Tool , Question  , Choice  , Quizz , Diaporama , Slide , Qrandom ,Variable , Answerplayer, Videocopy
 from account.models import Student , Teacher
 from socle.models import Knowledge, Skill
 from group.models import Group
@@ -165,4 +165,12 @@ class AnswerplayerForm(forms.ModelForm):
 		model = Answerplayer
 		fields = '__all__'
 
-   
+
+
+
+class VideocopyForm(forms.ModelForm):
+
+ 
+	class Meta:
+		model = Videocopy
+		fields = '__all__'

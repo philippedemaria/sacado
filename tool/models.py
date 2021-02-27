@@ -30,6 +30,10 @@ def tool_directory_path(instance, filename):
 def variable_directory_path(instance, filename):
     return "tool/variable_qr/{}".format(filename)
 
+def videocopy_directory_path(instance, filename):
+    return "tool/videocopy/{}/{}".format(instance.teacher.user.id,filename)
+
+
 class Tool(models.Model):
     """
     Modèle représentant un associé.
@@ -298,8 +302,6 @@ class Diaporama(ModelWithCode):
         return self.title 
 
 
- 
-
 class Display_question(models.Model):
     """
     ENvoie un signale pour déclencher  l'interface élève et la vue de la question.
@@ -312,4 +314,13 @@ class Display_question(models.Model):
         return self.gquizz.quizz.title 
 
 
+class Videocopy(models.Model):
+    """
+    Prends la photo d'une copie.
+    """
+    teacher   = models.ForeignKey(Teacher, related_name="teacher_videocopy", blank=True, on_delete=models.CASCADE, editable=False ) 
+    timestamp = models.DateTimeField(auto_now=True)
+    image     = models.ImageField(upload_to=videocopy_directory_path, verbose_name="Photo", blank=True, null = True  )
 
+    def __str__(self):
+        return "videocopie" 

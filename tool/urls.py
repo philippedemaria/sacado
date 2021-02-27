@@ -101,4 +101,13 @@ urlpatterns = [
     path('ajax_display_question_to_student', ajax_display_question_to_student, name='ajax_display_question_to_student'),   
     path('ajax_display_question_for_student', ajax_display_question_for_student, name='ajax_display_question_for_student'),   
     path('store_student_answer', store_student_answer, name='store_student_answer'),
+
+
+
+
+    ############## Videocopy
+    path('list_videocopy', list_videocopy, name='list_videocopy'),
+    path('create_videocopy/new', create_videocopy, name='create_videocopy'),   
+    path('delete_videocopy/<int:id>', delete_videocopy, name='delete_videocopy'),
+
 ] 

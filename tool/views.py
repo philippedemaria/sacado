@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from tool.models import Tool , Question  , Choice  , Quizz , Diaporama  , Slide ,Qrandom ,Variable , VariableImage , Generate_quizz , Generate_qr , Answerplayer , Display_question 
-from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm,  DiaporamaForm , SlideForm,QrandomForm, VariableForm , AnswerplayerForm
+from tool.models import Tool , Question  , Choice  , Quizz , Diaporama  , Slide ,Qrandom ,Variable , VariableImage , Generate_quizz , Generate_qr , Answerplayer , Display_question ,  Videocopy
+from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm,  DiaporamaForm , SlideForm,QrandomForm, VariableForm , AnswerplayerForm,  VideocopyForm
 from group.models import Group 
 from socle.models import Level, Waiting
 from account.decorators import  user_is_testeur
@@ -1373,3 +1373,73 @@ def show_qrandom_admin(request,id):
     return render(request, 'tool/show_qr.html', {'qrandom': qrandom      })
 
 
+#####################################################################################################################################
+#####################################################################################################################################
+####    Videocopy
+#####################################################################################################################################
+#####################################################################################################################################
+
+ 
+ 
+def list_videocopy(request):
+    teacher = request.user.teacher
+
+    if request.user.school :
+        videocopies = Videocopy.objects.filter(teacher = teacher).order_by("-timestamp")
+    else :
+        messages.error(request,"Vous devez adhérer à l'association pour prétendre à cette fonctionnalité.")
+        return redirect("index")
+
+    form = VideocopyForm(request.POST or None, request.FILES or None   )
+ 
+ 
+    if request.method == "POST" :
+        if form.is_valid():
+            nf = form.save(commit=False)
+            nf.teacher = request.user.teacher
+            nf.save()
+
+            return redirect('list_videocopy')
+        else:
+            print(form.errors)
+
+
+    return render(request, 'tool/list_videocopy.html', {'form': form , 'videocopies' : videocopies })
+
+
+
+def create_videocopy(request):
+
+
+    form = VideocopyForm(request.POST or None, request.FILES or None,   )
+ 
+    if request.method == "POST" :
+        if form.is_valid():
+            nf = form.save(commit=False)
+            nf.teacher = request.user.teacher
+            nf.save()
+
+            return redirect('list_videocopy')
+        else:
+            print(form.errors)
+
+    context = {'form': form, }
+
+    return render(request, 'tool/list_videocopy.html', context)
+
+ 
+
+def delete_videocopy(request, id):
+
+    videocopy = Videocopy.objects.get(id=id)
+
+    if request.user == videocopy.teacher.user :
+        videocopy.delete()
+    else :
+        messages.error(request,"Vous ne pouvez pas supprimer cette image.")
+        return redirect("index")
+
+    return redirect('list_videocopy')
+    
+
+ 
