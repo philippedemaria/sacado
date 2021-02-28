@@ -45,21 +45,25 @@
                   {% endif %}
               {% endfor  %} 
    
-
+              {% if customexercise.is_publish_cor %}
+                  <a href="#" data-target="#copy_viewer"  data-toggle='modal' class="btn-success btn-xs">
+                      Corrigé  
+                  </a>
+              {% endif %}
 
 
           </div>
-          <div class="col-xs-12 col-md-5" >           
-          {% if customexercise.customexercise_remediation.all|length > 0 %} 
-              <div class="row">         
-               <label>Aides : </label>
-                {% for remediation in customexercise.customexercise_remediation.all %}
-                    <a href="#" data-target="#remediation_viewer" data-remediation_id="{{ remediation.id }}" data-is_custom="1" data-url="0" data-toggle='modal' class="white remediation_viewer btn btn-default">
-                        {% include 'qcm/remediation_choices.html' %}
-                    </a>
-                {% endfor  %} 
-             </div>
-          {% endif  %}
+          <div class="col-xs-12 col-md-4" >           
+              {% if customexercise.customexercise_remediation.all|length > 0 %} 
+                  <div class="row">         
+                   <label>Aides : </label>
+                    {% for remediation in customexercise.customexercise_remediation.all %}
+                        <a href="#" data-target="#remediation_viewer" data-remediation_id="{{ remediation.id }}" data-is_custom="1" data-url="0" data-toggle='modal' class="white remediation_viewer btn btn-default">
+                            {% include 'qcm/remediation_choices.html' %}
+                        </a>
+                    {% endfor  %} 
+                 </div>
+              {% endif  %}
 
               {% if is_lock %}
               <div class="row">  
@@ -67,12 +71,23 @@
               </div>
               {% endif %}
 
-              {% if c_e %}
-                  <a href="#" data-target="#copy_viewer"  data-toggle='modal' class="btn btn-primary">
-                      Ma copie envoyée
-                  </a>
-              {% endif %}
-          </div>          
+ 
+          </div>   
+
+ 
+          <div class="col-xs-12 col-md-1" >     
+          {% if c_e %}
+              <a href="#" data-target="#copy_viewer"  data-toggle='modal' class="btn btn-primary btn-xs">
+                  Mon code  
+              </a>
+          {% endif %}
+          </div>
+ 
+
+
+
+
+
       </div>
       <div id="left-div">
         <div id="editor"></div>
@@ -130,22 +145,42 @@
 </form>
 
 
-{% if c_e %}
+ 
+
 <div class="modal fade" id="copy_viewer" tabindex="-1" role="dialog" aria-labelledby="copy_viewer">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class='thin' style="width:100%" >Ma copie envoyée <a href="#" data-dismiss="modal" class="pull-right" ><i class="fa fa-times"></i> </a> </h2>
+                <h2 class='thin' style="width:100%" >Mon code <a href="#" data-dismiss="modal" class="pull-right" ><i class="fa fa-times"></i> </a> </h2>
             </div>
             <div class="modal-body">
-                <pre>{{ c_e.answer |safe }}</pre>
+                <div class="row">
+                  {% if customexercise.is_publish_cor %}
+                      <div class="col-xs-12 col-md-6" >  
+                        {% if c_e.answer %}
+                            <pre>{{ c_e.answer |safe }}</pre>
+                        {% endif %}
+                      </div>
+                      <div class="col-xs-12 col-md-6" > 
+                          {% if  customexercise.text_cor  %}
+                          <pre>{{ customexercise.text_cor |safe }}</pre>
+                          {% elif  customexercise.video_cor  %}
+                              <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ customexercise.video_cor }}?rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                              </iframe>
+                          {% elif  customexercise.file_cor   %}
+                              <a href="{{ customexercise.file_cor.url }}" class="btn btn-default">Télécharger le fichier</a>
+                          {% endif %}
+                      </div>
+                  {% else %}
+                      {% if c_e.answer %}
+                          <pre>{{ c_e.answer |safe }}</pre>
+                      {% endif %}
+                  {% endif %}
+                </div>  
             </div>
         </div>
     </div>
 </div>
-{% endif %}
-
-
 
 
  

@@ -60,7 +60,7 @@
     <div class="row">
         <div class="col-lg-{% if courses|length > 0 %}10{% else %}12{% endif %} col-xs-12">
         {% for rc in relationships_customexercises %}
- 
+                <!-- SECTION --> 
                 {% if rc.exercise.supportfile.is_title %}       
                     <h2 class="listing thin" style="width:100%; clear:both"> 
                         {% if rc.is_header_of_section  %}
@@ -74,21 +74,19 @@
  
                         {% endif %}
                     </h2>
-
+                <!-- SOUS SECTION --> 
                 {% elif rc.exercise.supportfile.is_subtitle %}
                     <h3 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> 
                         {% if rc.is_header_of_section %}
                             <a href="#" data-toggle='modal' data-target='#head_of_section'  data-relation_id='{{ rc.id }}' class="header_shower" title="Cours associé à cette sous-section"> 
  
                                     {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
- 
                                 <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
                         {% else %}
- 
-                                    {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
- 
+                            {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
                         {% endif %}
                     </h3>
+                <!-- EXERCICES --> 
                 {% elif rc.exercise %} 
                     {% get_constraint_to_this_relationship  rc  student as    under_score   %}
                     {%  get_last_score_and_time   rc.exercise   rc.parcours   student    as    data %}
@@ -273,11 +271,13 @@
 
 
                                 {% if noggb_data.is_corrected %}
-                                    <span class="pull-right selector_div_result" data-relation_id ="{{ rc.id }}"  data-custom=0 ><i class="fa fa-trophy"></i></span>
+                                    <span class="pull-right selector_div_result helper_tip" data-relation_id ="{{ rc.id }}"  data-custom=0 ><i class="fa fa-trophy" style="color:{{ parcours.color|contrast_color }}"></i>
+                                        <div class="helper_tip_text" >Résultat disponible. </div>
+                                    </span>
                                 {% else %}
                                     {% if submitter %}
                                         {% if not rc.exercise.supportfile.is_ggbfile %}  
-                                        <span class="pull-right selector_div_result" data-relation_id ="{{ rc.id }}"  data-custom=0 ><i class="fa fa-copy"></i></span>
+                                        <span class="pull-right selector_div_result" data-relation_id ="{{ rc.id }}"  data-custom=0 ><i class="fa fa-copy" style="color:{{ parcours.color|contrast_color }}"></i></span>
                                         {% endif %}
                                     {% endif %}
                                 {% endif %}
@@ -292,15 +292,21 @@
                                     <div class="helper_tip_text_card" >Cet exercice contient une aide extérieure ou une consigne orale.</div>
                                 </span>
                                 {% endif  %}
+                                {% if  rc.is_correction_visible %}
+                                    <span class="helper_tip"> <i class="pull-right  fa fa-copyright" style="color:{{ parcours.color|contrast_color }}"></i> 
+                                        <div class="helper_tip_text" >Correction disponible. Entrer dans l'exercice. </div>
+                                    </span> 
+                                {% endif  %}
+
                             </div>
                         </div>
                     </div> 
                 {% else %}          
  
  
-                {% get_score_student_for_this rc student as score %}
-                {% get_is_submit rc parcours student as submitter %}
-                {% get_all_results_custom rc student parcours as data %} 
+                    {% get_score_student_for_this rc student as score %}
+                    {% get_is_submit rc parcours student as submitter %}
+                    {% get_all_results_custom rc student parcours as data %} 
                     <div class="card_freeze"  {% if score %} style="opacity:0.8" {% endif %}  >
                         <!-- div de résultat -->
                         {% if submitter %}
@@ -448,6 +454,12 @@
                                 <a href="{% url 'mastering_custom_student_show' rc.id %}" target="_blank" style="color:{{ parcours.color|contrast_color }}">
                                     <i class="fa fa-fw fa-sitemap pull-right"></i>
                                 </a>
+                                {% endif  %}
+                                
+                                {% if  rc.is_publish_cor %}
+                                    <span class="helper_tip"> <i class="fa fa-copyright" style="color:{{ parcours.color|contrast_color }}"></i> 
+                                        <div class="helper_tip_text_right" >Correction disponible. Entrer dans l'exercice. </div>
+                                    </span> 
                                 {% endif  %}
 
                                 {% if data.is_corrected %}
