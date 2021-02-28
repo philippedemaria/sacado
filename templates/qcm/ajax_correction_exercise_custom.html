@@ -7,12 +7,12 @@
  
 {% if c_e %}
  
-{% block annotate %} 
-<!-- Caractéristique pour les AJAX pour la correction en ligne -->
-<input type="hidden" id="answer_id" value="{{ c_e.id}}" />
-<input type="hidden" id="custom" value="1" />
-<!-- Caractéristique pour les AJAX pour la correction en ligne -->
-{% endblock %}
+    {% block annotate %} 
+    <!-- Caractéristique pour les AJAX pour la correction en ligne -->
+    <input type="hidden" id="answer_id" value="{{ c_e.id}}" />
+    <input type="hidden" id="custom" value="1" />
+    <!-- Caractéristique pour les AJAX pour la correction en ligne -->
+    {% endblock %}
 
     <div id="corrector"> 
         {% if customexercise.is_file and c_e.file %}
@@ -44,7 +44,6 @@
 
 
 {% else %}
-
     <div class="alert alert-danger">  
         Document non rendu
     </div>

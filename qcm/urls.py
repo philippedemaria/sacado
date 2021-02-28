@@ -172,6 +172,15 @@ urlpatterns = [
     ############################################################################################################ 
     ############################################################################################################  
 
+
+    path('show_canvas', show_canvas, name='show_canvas'), 
+
+
+
+
+
+
+
     ####################################     Les demandes d'exercice  ##########################################
 
     path('parcours_demands', list_demands, name='demands'),
@@ -292,6 +301,9 @@ urlpatterns = [
 
     path('ajax_closer_exercise', ajax_closer_exercise, name='ajax_closer_exercise'),
     path('ajax_correction_viewer', ajax_correction_viewer, name='ajax_correction_viewer'),
+
+    path('ajax_save_canvas', ajax_save_canvas, name='ajax_save_canvas'),
+    
     #####################################################################################################################################
     #####################################################################################################################################
 

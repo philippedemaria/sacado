@@ -109,6 +109,18 @@ define(['jquery', 'bootstrap'], function ($) {
                     });
                 }
 
+
+
+        // Gère les notes.
+        if ($("#id_is_mark").is(":checked"))
+            {
+                $("#on_mark").show();
+            } 
+        else{
+                $("#on_mark").hide();
+            } 
+
+        ///////////////////////////////////////////
         $("#selector_student").click(function(){ 
             $('.selected_student').not(this).prop('checked', this.checked);
         });
@@ -211,10 +223,35 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+        // Gère le realtime.
+        if ($("#id_is_realtime").is(":checked")){
+
+                $(".no_realtime").hide();
+
+            } 
+        else{
+
+                $(".no_realtime").show();
+
+            } 
+ 
+        $("#id_is_realtime").on('change', function (){ 
+
+            if ($(this).is(":checked")){
+
+                $(".no_realtime").hide(500);
+                $('#id_is_realtime').prop('checked', true); 
+            } 
+            else{
+
+                $(".no_realtime").show(500);
+                $('#id_is_realtime').prop('checked', false); 
+            } 
+        })
+        ///////////////////////////////////////////
+ 
 
 
- 
- 
           
     $('.add_more').on('click', function (event) {
 
@@ -344,6 +381,7 @@ define(['jquery', 'bootstrap'], function ($) {
             )
          });
 
+      
 
 
 

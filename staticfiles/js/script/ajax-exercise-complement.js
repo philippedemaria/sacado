@@ -13,12 +13,16 @@ define(['jquery', 'bootstrap'], function ($) {
 
             $('#id_is_ggbfile').prop('checked', true); 
 
+
+            $('#on_mark').hide(); 
+
+
  
         $("#click_button").on('click', function (){ 
 
             if (!$('#id_is_ggbfile').is(":checked")){
 
-                if (!$('#id_is_python').is(":checked") && !$('#id_is_scratch').is(":checked") && !$('#id_is_file').is(":checked") && !$('#id_is_image').is(":checked") && !$('#id_is_text').is(":checked"))
+                if (!$('#id_is_realtime').is(":checked") && !$('#id_is_python').is(":checked") && !$('#id_is_scratch').is(":checked") && !$('#id_is_file').is(":checked") && !$('#id_is_image').is(":checked") && !$('#id_is_text').is(":checked"))
                 { alert("vous devez sélectionner une type de remise d'exercice") ; return false ; } 
             } 
             else
@@ -26,8 +30,30 @@ define(['jquery', 'bootstrap'], function ($) {
                 if ($("#id_ggbfile").val() == "") { alert("vous devez uploader un ficher GGB") ; return false ;}
             }
 
+        });
+
+
+
+
+
+ 
+        $("#id_is_realtime").on('click', function (){ 
+
+            if ($(this).is(":checked")){
+
+                $(".no_realtime").hide();
+
+            } 
+            else{
+
+                $(".no_realtime").show();
+
+            } 
+
+
 
         });
+
 
 
 

@@ -325,6 +325,37 @@ li label:hover{
   cursor: pointer;
 }
 
+.on_air{
+  background-color: #cb2131 ;
+  color: #FFF;
+  font-size : 20px;
+  border-radius: 5px;
+  padding: 5px;
+  -webkit-box-shadow:2px 2px 6px rgba(79, 73, 66, .255);
+  box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
+}
+
+.videocopy{
+    float : left;
+    width : 300px;
+    text-align: center;
+    color : #666;
+    -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
+    box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
+    position: relative;
+    border: 1px solid #e6e2dd;
+    margin: 10px;
+    border-radius : 5px;
+    padding: 3px;
+}
+
+.image-previewer {
+  height: 250px;
+  width: 250px;
+  display: flex;
+  border-radius: 10px;
+  border: 1px solid lightgrey;
+}
 
  /****************************************** Quizz **************************************/
 #body_question{
@@ -4848,7 +4879,6 @@ li .list_no_indent{
   transition: all 0.3s linear;
   position: absolute;
   z-index: 0;
-  top: -5px;
   right: 0px;
   font-size: 80px;
   color: rgba(0, 0, 0, 0.15);
@@ -5379,7 +5409,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   padding: 4px 12px;  
   border-radius: 3px; /*radius des boutons*/
 }
-.btn-publisher{
+.btn-publisher, .btn-tool{
   padding: 7px 12px;  
 }
 .btn.uppercase {

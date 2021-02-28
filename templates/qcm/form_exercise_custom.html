@@ -232,33 +232,66 @@ ul#id_skills li{
                         </div>
                         <div id="config_render">
                             <h4 class="thin"><i class="fa fa-paperclip"></i> Type de remise</h4><hr/>
+                            {% if teacher.user.is_superuser %}
                             <div class="row">
                                 <div class="col-sm-12 col-md-8">
                                     <div class="form-group">
-                                        Téléchargement de fichier <small>(pdf,doc,...)</small>
+                                        Suivi en temps réel <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <div class="helper_tip_text">Nécessite la version Etablissement. L'enseignant voit en direct les travaux des élèves, élève par élève.</div>
+                                    </span>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-4">
                                     <div class="form-group">
-                                        {{ form.is_file |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                        {% if  sacado_asso %}
+                                            {{ form.is_realtime |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                        {% else %}
+                                            {{ form.is_realtime |attr:"disabled" |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                        {% endif %}
+                                        {{ form.is_realtime.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            <div class="row no_realtime">
+                                <div class="col-sm-12 col-md-8">
+                                    <div class="form-group">
+                                        Fichier <small>(pdf,doc,...)</small> <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <div class="helper_tip_text">Nécessite la version Etablissement. Le rendu du travail est un fichier. Les élèves téléversent leurs rendus et l'enseignant le récupère dans sa console.</div>
+                                    </span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="form-group">
+                                        {% if  sacado_asso %}
+                                            {{ form.is_file |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                        {% else %}
+                                            {{ form.is_file |attr:"disabled" |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                        {% endif %}
                                         {{ form.is_file.errors }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row no_realtime">
                                 <div class="col-sm-12 col-md-8">
                                     <div class="form-group">
-                                        Téléchargement d'image <small>(jpg,png) <span style="font-size:12px;color:#c70000">max. 500ko</span></small>
+                                        Image <small>(jpg,png) <span style="font-size:12px;color:#c70000">max. 500ko</span></small> <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <div class="helper_tip_text">Nécessite la version Etablissement. Le rendu du travail est une image. Les élèves téléversent leurs rendus et l'enseignant le récupère dans sa console.</div>
+                                    </span>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-4">
                                     <div class="form-group">
-                                        {{ form.is_image |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                        {% if  sacado_asso %}
+                                            {{ form.is_image |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                        {% else %}
+                                            {{ form.is_image |attr:"disabled" |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                        {% endif %} 
                                         {{ form.is_image.errors }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row no_realtime">
                                 <div class="col-sm-12 col-md-8">
                                     <div class="form-group">
                                         Saisie de texte

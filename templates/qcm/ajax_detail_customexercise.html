@@ -9,7 +9,16 @@
             <table class="table table-hover" style="width:100%; font-size: 14px">
                 <tbody>
                     <tr> 
-                        <td style="width:150px">Nom Prénom</td>
+                        <td style="width:150px">Noms et prénoms</td>
+
+                        {% if customexercise.is_realtime %}
+                        <td> 
+                              
+                        </td> 
+                        {% endif %}
+
+
+
                         {% if customexercise.is_mark %}
                         <td> 
                             Note
@@ -34,6 +43,15 @@
                         {% get_all_results_custom customexercise student parcours as data %}                   
                         <tr> 
                             <td>{{ student }}</td>
+
+                            {% if customexercise.is_realtime %}
+                            <td>{% if data.canvas_img %} 
+                                    <img src="{{ data.canvas_img|decode_b }}" height="150px" />
+                                {% endif %}
+                            </td> 
+                            {% endif %}
+
+
                             {% if customexercise.is_mark %}
                             <td> 
                                 {% if data.point %}<b>{{ data.point }}</b>{% endif %}

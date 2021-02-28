@@ -4,7 +4,7 @@ from account.forms import StudentForm, TeacherForm, UserForm
 from django.contrib.auth.forms import  AuthenticationForm
 from django.forms.models import modelformset_factory
 from django.forms import inlineformset_factory
-from django.contrib.auth.decorators import  permission_required,user_passes_test
+from django.contrib.auth.decorators import  permission_required,user_passes_test, login_required
 from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group , Sharing_group
@@ -1832,9 +1832,10 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
             studentanswer_tab.append(studentanswer.exercise)
             student_tab.append(studentanswer)
 
-    nb_exo_w = s.student_written_answer.filter(relationship__exercise__in = studentanswer_tab, relationship__parcours = parcours, relationship__is_publish = 1 ).count()
+    #nb_exo_w = s.student_written_answer.filter(relationship__exercise__in = studentanswer_tab, relationship__parcours = parcours, relationship__is_publish = 1 ).count()
     nb_exo_ce = s.student_custom_answer.filter(parcours = parcours, customexercise__is_publish = 1 ).count()
-    nb_exo  = len(studentanswer_tab) + nb_exo_w + nb_exo_ce
+    #nb_exo  = len(studentanswer_tab) + nb_exo_w + nb_exo_ce
+    nb_exo  = len(studentanswer_tab) +  nb_exo_ce
     student["nb_exo"] = nb_exo
     duration, score, total_numexo, good_answer = 0, 0, 0, 0
     tab, tab_date = [], []
@@ -3886,6 +3887,8 @@ def correction_exercise(request,id,idp,ids=0):
         images_pdf = []
 
         if student :
+            nb = 0
+            images_pdf = []            
             if Customanswerbystudent.objects.filter(customexercise = customexercise ,  parcours = parcours , student_id = student).exists():
                 c_e = Customanswerbystudent.objects.get(customexercise = customexercise ,  parcours = parcours , student_id = student)
                 images_pdf = [] 
@@ -3896,6 +3899,8 @@ def correction_exercise(request,id,idp,ids=0):
 
                 elif customexercise.is_image :
                     images_pdf = Customanswerimage.objects.filter(customanswerbystudent = c_e)
+                elif customexercise.is_realtime :
+                    images_pdf = Customanswerimage.objects.filter(customanswerbystudent = c_e).last() 
 
         context = {'customexercise': customexercise,  'teacher': teacher, 'stage' : stage , 'images_pdf' : images_pdf   ,  'comments' : comments   , 'formComment' : formComment , 'nb':nb, 'c_e':c_e, 'customannotations':customannotations,  'custom': True,  'communications' : [], 'parcours' : parcours, 'group' : None , 'parcours_id': parcours.id, 'student' : student }
  
@@ -4087,11 +4092,11 @@ def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
     stage = get_stage(student.user) 
 
 
+
+
+
     tab_label = ["","text-danger","text-warning","text-success","text-primary"]
     tab_value = [-1, stage["low"]-1,stage["medium"]-1,stage["up"]-1,100]       
-
-
-
 
 
     if typ == 0 : 
@@ -4101,8 +4106,10 @@ def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
 
         relationship_id =  int(request.POST.get("relationship_id"))   
         relationship = Relationship.objects.get(pk = relationship_id)
-        if tab_value[value] > -1 :
 
+        Writtenanswerbystudent.objects.filter(relationship  = relationship  , student  = student).update(is_corrected = True)
+
+        if tab_value[value] > -1 :
             if knowledge_id :
                 studentanswer, creator = Studentanswer.objects.get_or_create(parcours = relationship.parcours, exercise = relationship.exercise, student = student , defaults={"point" : tab_value[value] , 'secondes' : 0} )
                 if not creator :
@@ -4146,10 +4153,6 @@ def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
                 if not creater :
                     Resultggbskill.objects.filter(student = student, skill = skill, relationship = relationship).update(point = tab_value[value]) 
 
-            data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"       
-        else :
-            data['eval'] = ""
-  
     else :
        
         customexercise_id =  int(request.POST.get("customexercise_id"))  
@@ -4158,8 +4161,7 @@ def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
         knowledge_id = request.POST.get("knowledge_id",None)       
         skill_id = request.POST.get("skill_id",None)
 
-        this_custom = Customanswerbystudent.objects.filter(parcours_id = parcours_id , customexercise_id = customexercise_id, student = student)
-        this_custom.update(is_corrected= 1)
+        Customanswerbystudent.objects.filter(parcours_id = parcours_id , customexercise_id = customexercise_id, student = student).update(is_corrected = True)
 
         if tab_value[value] > -1 :
   
@@ -4173,9 +4175,7 @@ def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
                 if not created :
                     Correctionknowledgecustomexercise.objects.filter(parcours_id = parcours_id , customexercise_id = customexercise_id, student  = student , knowledge_id = knowledge_id ).update(point= tab_value[value] )
 
-            data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"       
-        else :
-            data['eval'] = ""
+    data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"
 
     return JsonResponse(data)  
 
@@ -4611,6 +4611,10 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
     parcours = Parcours.objects.get(pk = idp)
     today = time_zone_user(student.user)
 
+    if customexercise.is_realtime :
+        on_air = True
+    else :
+        on_air = False   
  
 
     if Customanswerbystudent.objects.filter(student = student, customexercise = customexercise ).exists() : 
@@ -4655,7 +4659,7 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
 
             return redirect('show_parcours_student' , idp )
 
-    context = {'customexercise': customexercise, 'communications' : [] , 'c_e' : c_e , 'form' : cForm , 'images':images, 'form_ans' : form_ans , 'parcours' : parcours ,'student' : student, 'today' : today }
+    context = {'customexercise': customexercise, 'communications' : [] , 'c_e' : c_e , 'form' : cForm , 'images':images, 'form_ans' : form_ans , 'parcours' : parcours ,'student' : student, 'today' : today , 'on_air' : on_air}
 
     if customexercise.is_python :
         url = "basthon/index_custom.html" 
@@ -4663,6 +4667,65 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
         url = "qcm/form_writing_custom.html" 
 
     return render(request, url , context)
+
+
+
+
+#################################################################################################################
+#################################################################################################################
+################   Canvas
+#################################################################################################################
+#################################################################################################################
+@login_required
+def show_canvas(request):
+    user = request.user
+    context = { "user" :  user  }
+ 
+    return render(request, 'qcm/show_canvas.html', context)
+
+
+
+@login_required
+def ajax_save_canvas(request):
+
+ 
+    customexercise_id = request.POST.get("customexercise_id",0)
+    parcours_id       = request.POST.get("parcours_id",0)
+    student           = request.user.student  
+    customexercise    = Customexercise.objects.get(pk = customexercise_id)
+    parcours          = Parcours.objects.get(pk = parcours_id)
+    today             = time_zone_user(student.user)
+    data = {}
+ 
+    if Customanswerbystudent.objects.filter(student = student, customexercise = customexercise ).exists() : 
+        c_e = Customanswerbystudent.objects.get(student = student, customexercise = customexercise )
+        cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None, instance = c_e )
+        images = Customanswerimage.objects.filter(customanswerbystudent = c_e) 
+
+    else :
+        cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None )
+        c_e = False
+        images = False
+
+    if request.method == "POST":
+        if cForm.is_valid():
+            w_f = cForm.save(commit=False)
+            w_f.customexercise = customexercise
+            w_f.parcours = parcours
+            w_f.answer =  escape_chevron(cForm.cleaned_data['answer'])
+            w_f.student = student
+            w_f.is_corrected = 0
+            w_f.save()
+
+            if customexercise.is_realtime :
+                image = request.POST.get("image",0)
+                c_e_image , created = Customanswerimage.objects.get_or_create( customanswerbystudent = w_f , defaults = { 'imagecanvas' : image }  )
+                if not created :
+                    Customanswerimage.objects.filter(pk = c_e_image.id).update(imagecanvas = image)
+                data["image"] =  image
+
+    data["images"] =  None
+    return JsonResponse(data)
 
 
 

@@ -1,0 +1,84 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+ 
+     <script>
+        require(['script/ajax-canvas']);
+    </script> 
+ 
+{% endblock %}
+
+ 
+
+{% block page_title %}
+
+
+<div id="new_style">
+    <i class="fa fa-laptop"></i>  canvas<img src="{% static 'img/angle-right.png' %}"/>   
+ 
+    <small>         
+        classkick model
+    </small>  
+ 
+</div>
+{% endblock %}
+
+{% block page_menu_right %}
+ 
+{% endblock %}
+
+
+ 
+
+{% block body %}
+<div class="content_main">
+    <form action="" method="POST" enctype='multipart/form-data'> 
+    {% csrf_token %}
+        <div class="row">
+            <div class="col-xs-12 col-md-8" >
+                <div class="form-group">
+                    <div class="tool_draw_bar">
+                        <button id="saver" class="btn btn-primary btn-publisher"><i class="fa fa-save"></i></button>                        
+                        <input type="color" id="colorpicker" class="btn-default btn-publisher" />
+                        <div class="btn btn-default">
+                            <select name="thickness" id="thickness" >
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
+                        </div>
+                        <a href="#" id="pencil" class="btn btn-default btn-publisher"><i class="fa fa-edit"></i></a>
+                        <a href="#" id="text" class="btn btn-default btn-publisher"><i class="fa fa-font"></i></a>
+                        <a href="#" id="erasor" class="btn btn-default btn-publisher"><i class="fa fa-eraser"></i></a>
+                        <a href="#" id="clear" class="btn btn-default btn-publisher"><i class="fa fa-eraser text-danger"></i></a>
+<!--                         <input type="file" id="getImage" class="btn btn-default btn-publisher" value="fa fa-image" /> -->                 
+                    </div>
+                    <canvas id="myCanvas" style="border:1px solid #000"></canvas>
+                    <p><img id="preview"/></p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-12" >
+                <div class="form-group">
+                    <input value="Associer ce support à ces savoir faire" type="submit" class="btn btn-primary"/>
+                    <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>    
+{% endblock %}

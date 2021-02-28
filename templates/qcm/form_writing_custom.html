@@ -8,6 +8,7 @@
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
     <script>
         require(['script/ajax-exercise']);
+        require(['script/ajax-exercise-canvas']);
     </script> 
     
 {% endblock %}
@@ -20,7 +21,9 @@
 
 
 {% block page_menu_right %}
-
+    {% if on_air %}
+        <li class="on_air">Lecture en direct</li>
+    {% endif %}
 {% endblock %}
 
 
@@ -45,9 +48,24 @@
             </span>
             {% endif  %}
 
-            {% if customexercise.instruction %}
-            <a href="#" data-toggle='modal' data-target='#consigne' class="btn btn-danger">Lire la consigne</a><br/>
+            {% if customexercise.is_publish_cor %}
+            <a href="#" data-toggle='modal' data-target='#correction' class="pull-right btn btn-success">Voir le corrigé</a>
             {% endif  %}
+
+            {% if customexercise.instruction %}
+            <a href="#" data-toggle='modal' data-target='#consigne' class="btn btn-danger">Lire la consigne</a>
+                {% if customexercise.is_realtime  %} 
+                    <a href="#" id='text_zone' class="btn btn-default" >Zone de saisie manuelle</a>
+                    <a href="#" id='canvas_zone' class="btn btn-default" >Zone pour stylet</a>
+                {% endif  %}
+            <br/>
+            {% endif  %}
+
+
+
+
+
+
             {% for remediation in customexercise.customexercise_remediation.all %}
                 {% if remediation.consigne %}
                 <audio controls>
@@ -68,9 +86,6 @@
                  <li>
                     Copier le numéro de votre script <img src="{% static 'img/scratch_number.png' %}" height="20px" /> et le coller dans le champ prévu ci-dessous.
                 </li>
-            
- 
-
             {% endif %} 
             <hr>             
             <form action="" method="POST" enctype='multipart/form-data'>
@@ -144,38 +159,71 @@
                         {{ form.file.errors }} <br>
                     </div> 
                 {% endif %}
-                {% if customexercise.is_text   %} 
+                {% if customexercise.is_text or customexercise.is_realtime  %} 
 
-                    <div class="form-group">
+                    <div class="form-group" id="text_zone_div">
                         <label>Zone pour écrire</label><br>
                         {{ form.answer }}
                         {{ form.answer.errors }} <br>
                     </div>
                 {% endif %}
-
+                {% if customexercise.is_realtime  %} 
+ 
+                    <div class="form-group" id="canvas_zone_div">
+                        <div class="tool_draw_bar">                       
+                            <input type="color" id="colorpicker" class="btn-default btn-publisher" />
+                            <div class="btn btn-default">
+                                <select name="thickness" id="thickness" >
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </div>
+                            <a href="#" id="erasor" class="btn btn-default btn-publisher"><i class="fa fa-eraser"></i></a>
+                            <a href="#" id="clear" class="btn btn-default btn-publisher"><i class="fa fa-eraser text-danger"></i></a>
+                
+                        </div>
+                        <canvas id="myCanvas" style="border:1px solid #000"></canvas>
+                        <p><img id="preview"/></p>
+                    </div>
+ 
+                {% endif %}
 
 
                 <div class="row">
                     <div class="col-sm-12 col-lg-8">
                         <div class="form-group">
-                            {% get_all_results_custom customexercise student parcours.id as data %}                          
-                            {% if data.point  %}
-                                <h3>Note : {{ data.point }} <small>sur {{ customexercise.mark }}</small></h3>                             
-                            {% endif  %}
-                            {% if data.comment  %}
-                                <h3>Commentaire :</h3>
-                                 {{ data.comment }}                        
-                            {% endif  %}
-                            {% get_is_lock parcours today as is_lock %}                            
-                            {% get_is_lock customexercise today as is_block %}
-                            {% if not is_lock  %}
-                                {% if not data.is_corrected and not is_block  %}
-                                    <input value="Soumettre votre exercice" type="submit" class="btn btn-primary"/>
+                            {% if not customexercise.is_realtime  %} 
+
+                                {% get_all_results_custom customexercise student parcours.id as data %}                          
+                                {% if data.point  %}
+                                    <h3>Note : {{ data.point }} <small>sur {{ customexercise.mark }}</small></h3>                             
                                 {% endif  %}
-                            {% endif  %}
+                                {% if data.comment  %}
+                                    <h3>Commentaire :</h3>
+                                     {{ data.comment }}                        
+                                {% endif  %}
+                                {% get_is_lock parcours today as is_lock %}                            
+                                {% get_is_lock customexercise today as is_block %}
+                                {% if not is_lock  %}
+                                    {% if not data.is_corrected and not is_block  %}
+                                        <input value="Soumettre votre exercice" type="submit" class="btn btn-primary"/>
+                                    {% endif  %}
+                                {% endif  %}
                                 <hr/>
-                                <input type="button" value="Annuler" onclick="javascript:history.back()"
-                                                                       class="btn btn-default "/>                                       
+                            {% endif  %}
+
+                            
+                            <input type="hidden" value="{{ parcours.id }}"        name="parcours_id"       id="parcours_id" />  
+                            <input type="hidden" value="{{ customexercise.id }}"  name="customexercise_id" id="customexercise_id" />  
+                            <input type="button" value="Annuler" onclick="javascript:history.back()"  class="btn btn-default "/>                                       
                         </div>
                     </div>
                 </div>
@@ -238,6 +286,40 @@
         </div>
     </div>
 </div>
+ 
+
+
+<div class="modal fade" id="correction" tabindex="-1" role="dialog" aria-labelledby="correction">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class='thin' style="width:100%" >Corrigé :   <a href="#" data-dismiss="modal" class="pull-right" ><i class="fa fa-times"></i> </a> </h2>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                      <div class="col-xs-12 col-md-12" > 
+                          {% if  customexercise.text_cor  %}
+                          <pre>{{ customexercise.text_cor |safe }}</pre>
+                          {% elif  customexercise.video_cor  %}
+                              <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ customexercise.video_cor }}?rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                              </iframe>
+                          {% elif  customexercise.file_cor   %}
+                              <a href="{{ customexercise.file_cor.url }}" class="btn btn-default">Télécharger le fichier</a>
+                          {% endif %}
+                      </div>
+
+                </div>  
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 
 
 

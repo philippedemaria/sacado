@@ -996,11 +996,11 @@ class Customexercise(ModelWithCode):
     #### pour donner une date de remise - Tache     
     start = models.DateTimeField(null=True, blank=True, verbose_name="A partir de")
     date_limit = models.DateTimeField(null=True, blank=True, verbose_name="Date limite du rendu")
-    lock = models.DateTimeField(null=True, blank=True, verbose_name="Verrouillé à partir de")
+    lock = models.DateTimeField(null=True, blank=True, verbose_name="Verrouillé dès le")
 
     imagefile = models.ImageField(upload_to=vignette_directory_path, blank=True, verbose_name="Vignette d'accueil", default="")
 
-    duration = models.PositiveIntegerField(default=15, blank=True, verbose_name="Durée estimée (min.)")
+    duration = models.PositiveIntegerField(default=15, blank=True, verbose_name="Durée (min.)")
     
     skills = models.ManyToManyField(Skill, blank=True, related_name='skill_customexercises', verbose_name="Compétences évaluées")
     knowledges = models.ManyToManyField(Knowledge, blank=True, related_name='knowledge_customexercises', verbose_name="Savoir faire évalués")
@@ -1008,6 +1008,7 @@ class Customexercise(ModelWithCode):
     students = models.ManyToManyField(Student, blank=True, related_name='students_customexercises' )   
     
     is_share = models.BooleanField(default=0, verbose_name="Mutualisé ?")
+    is_realtime = models.BooleanField(default=0, verbose_name="Temps réel ?")
 
     is_python = models.BooleanField(default=0, verbose_name="Python ?")
     is_scratch = models.BooleanField(default=0, verbose_name="Scratch ?")
@@ -1183,6 +1184,13 @@ class Customexercise(ModelWithCode):
 
     def all_results_custom(self,student,parcours): # résultats vue élève
         data = {}
+        if Customanswerimage.objects.filter(customanswerbystudent__customexercise = self, customanswerbystudent__parcours = parcours, customanswerbystudent__student = student) :
+            c_image = Customanswerimage.objects.filter(customanswerbystudent__customexercise = self, customanswerbystudent__parcours = parcours, customanswerbystudent__student = student).last()
+            canvas_img = c_image.imagecanvas
+        else :
+            canvas_img = None
+        data["canvas_img"] = canvas_img   
+
         if Customanswerbystudent.objects.filter(customexercise = self, parcours = parcours, student = student,is_corrected=1).exists() :
             c = Customanswerbystudent.objects.get(customexercise = self, parcours = parcours, student = student,is_corrected=1)
             data["is_corrected"] = True            
@@ -1201,6 +1209,7 @@ class Customexercise(ModelWithCode):
             data["point"] = False
             data["audio"] = False
         return data
+
 
     def is_pending_correction(self):
         submit = False
@@ -1262,7 +1271,7 @@ class Customanswerimage(models.Model): # Commentaire et note pour les exercices 
     customanswerbystudent = models.ForeignKey(Customanswerbystudent,  on_delete=models.CASCADE,   related_name='customexercise_custom_answer_image', editable=False)
     date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to= file_directory_to_student, blank = True, null=True,   verbose_name="Scan ou image ou Photo", default="")
-    
+    imagecanvas = models.TextField( blank = True, null=True, editable=False)   
 
     def __str__(self):        
         return "{}".format(self.customanswerbystudent)
