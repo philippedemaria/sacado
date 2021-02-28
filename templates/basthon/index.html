@@ -77,10 +77,9 @@
       {% endif %}
       <div id="left-div">
         <div id="editor"> </div>
-        <div style="padding: 1vw 0px 0px 0px; display: flex; float: left;">
+        <div style="padding: 1vw 0px 0px 0px; display: flex; float: left; margin-bottom: 15px">
           <a id="run" class="btn" title="Exécuter le script">
-            <i class="fas fa-cogs fa-fw btn-logo btn-titled"></i>
-            Tester votre script
+            Tester votre script avant de l'envoyer
           </a>
           <a id="download" class="btn" title="Télécharger le script">
             <i class="fas fa-download fa-fw btn-logo"></i>
@@ -88,8 +87,22 @@
           <a id="hide-editor" class="btn" title="Afficher seulement la console" style="display: none;">
             <i class="fas fa-eye-slash fa-fw btn-logo"></i>
           </a>
-
         </div>
+
+      {% if   'write_exercise' in request.path %}
+       <div style="clear:both; margin-top: 20px"> 
+        {% get_is_lock parcours today as is_lock %}
+        {% if  is_lock or  relationship.is_lock  %}  
+        <button  class="btn btn-primary" disabled="" >Exercice verrouillé</button>   <br/> 
+        {% else  %} 
+        <button type="submit" name="submit_code"   id="submit_code" class="btn btn-primary" >Envoyer  le script </button>   
+        {% endif %}
+        <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                                   class="btn btn-default "/></a>
+        </div>
+      {% endif %}
+
+
       </div>
       <div id="right-div">
         <div id="graphics" style="display: none; justify-content: center;  align-items: center;"></div>
@@ -118,18 +131,7 @@
           </a>
         </div>
       </div>
-      {% if   'write_exercise' in request.path %}
-      <div id="left-div" style="margin-top: 20px">
-        {% get_is_lock parcours today as is_lock %}
-        {% if  is_lock or  relationship.is_lock  %}  
-        <button  class="btn btn-primary" disabled="" >Exercice verrouillé</button>   
-        {% else  %} 
-        <button type="submit" name="submit_code"   id="submit_code" class="btn btn-primary" >Envoyer ce script à mon enseignant</button>   
-        {% endif %}
-        <a href="javascript:history.back()"><input type="button" value="Annuler"
-                                                                   class="btn btn-default "/></a>
-      </div>
-      {% endif %}
+
     </div>
 </form>
 

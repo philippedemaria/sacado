@@ -19,14 +19,12 @@ textarea {
 
 #left-div {
     width:50%;
-    height:100%;
     margin: auto;
     float: left;
 }
 
 #right-div {
     width:48%;
-    height:100%;
     position:relative;
     margin: auto;
     float: right;

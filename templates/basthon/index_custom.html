@@ -91,9 +91,8 @@
       </div>
       <div id="left-div">
         <div id="editor"></div>
-        <div style="padding: 1vw 0px 0px 0px; display: flex; float: left;">
+        <div style="padding: 1vw 0px 0px 0px; display: flex; float: left; margin-bottom: 15px">
           <a id="run" class="btn" title="Exécuter le script">
-            <i class="fas fa-cogs fa-fw btn-logo btn-titled"></i>
             Tester votre script
           </a>
           <a id="download" class="btn" title="Télécharger le script">
@@ -104,6 +103,15 @@
           </a>
           <span class="helper_label"><b>Vous devez tester votre script avant de l'envoyer.</b></span>
         </div>
+      {% if   'write' in request.path or 'show_custom' in request.path %}
+       <div style="clear:both ; margin-top: 20px"> 
+
+        <button {% if is_lock %}disabled{% endif %} type="submit" name="submit_code" id="submit_code" class="btn btn-primary" >Envoyer le script</button>                      
+
+        <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                                   class="btn btn-default "/></a>
+      </div>
+      {% endif %}
       </div>
       <div id="right-div">
         <div id="graphics" style="display: none; justify-content: center;  align-items: center;"></div>
@@ -132,15 +140,7 @@
           </a>
         </div>
       </div>
-      {% if   'write' in request.path or 'show_custom' in request.path %}
-      <div id="left-div" style="margin-top: 20px"> 
 
-        <button {% if is_lock %}disabled{% endif %} type="submit" name="submit_code" id="submit_code" class="btn btn-primary" >Envoyer ce script à mon enseignant</button>                         
-
-        <a href="javascript:history.back()"><input type="button" value="Annuler"
-                                                                   class="btn btn-default "/></a>
-      </div>
-      {% endif %}
     </div>
 </form>
 
