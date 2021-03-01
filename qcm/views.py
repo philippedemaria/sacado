@@ -3627,18 +3627,8 @@ def ajax_search_exercise(request):
     code =  request.POST.get("search") 
     knowledges = Knowledge.objects.filter(name__contains= code)
 
-    if request.user.user_type == 2 :
-        teacher = request.user.teacher
-        parcours = parcours.teacher_parcours.all()
-
-    elif request.user.user_type == 0 :
-        student = Student.objects.get(user_id = request.user.id)
-        parcours = student.students_to_parcours.all()
-    else :
-        parcours = None 
-  
-
-    relationships = Relationship.objects.filter(Q(exercise__knowledge__in = knowledges)|Q(exercise__supportfile__annoncement__contains= code)|Q(exercise__supportfile__code__contains= code)).filter(exercise__supportfile__is_title=0, parcours__in = parcours)
+ 
+    relationships = Relationship.objects.filter(Q(exercise__knowledge__in = knowledges)|Q(exercise__supportfile__annoncement__contains= code)|Q(exercise__supportfile__code__contains= code))
     data = {}
     html = render_to_string('qcm/search_exercises.html',{ 'relationships' : relationships  })
  
@@ -5883,7 +5873,11 @@ def ajax_parcours_get_course(request):
         sacado_asso = True
 
     course_id =  int(request.POST.get("course_id"))
-    course = Course.objects.get(pk=course_id)
+    if course_id > 0 : 
+        course = Course.objects.get(pk=course_id)
+    else:
+        course = None
+
     parcourses =  teacher.teacher_parcours.all()    
 
     context = {  'course': course , 'parcourses': parcourses , 'teacher' : teacher , 'sacado_asso' : sacado_asso  }
@@ -5893,33 +5887,51 @@ def ajax_parcours_get_course(request):
     return JsonResponse(data)
  
 
- 
+
 def ajax_parcours_clone_course(request):
 
     teacher = request.user.teacher
-    course_id =  int(request.POST.get("course_id"))
-    course = Course.objects.get(pk=course_id)
+
     all_parcours = request.POST.get("all_parcours")
     checkbox_value = request.POST.get("checkbox_value")
+    course_id = int(request.POST.get("course_id"))
 
-    if checkbox_value != "" :
-        checkbox_ids = checkbox_value.split("-")
-        for checkbox_id in checkbox_ids :
-            try :
-                if all_parcours == "0" :
-                    course.pk = None
-                    course.teacher = teacher
-                    course.parcours_id = int(checkbox_id)
-                    course.save()
-                else :
-                    courses = course.parcours.course.all()
+    if course_id > 0 : 
+        course = Course.objects.get(pk=course_id)
+        if checkbox_value != "" :
+            checkbox_ids = checkbox_value.split("-")
+            for checkbox_id in checkbox_ids :
+                try :
+                    if all_parcours == "0" :
+                        course.pk = None
+                        course.teacher = teacher
+                        course.parcours_id = int(checkbox_id)
+                        course.save()
+                    else :
+                        courses = course.parcours.course.all()
+                        for course in courses :
+                            course.pk = None
+                            course.teacher = teacher
+                            course.parcours_id = int(checkbox_id)
+                            course.save()
+                except :
+                    pass
+
+    else :
+        parcours_id = int(request.POST.get("parcours_id"))
+        parcours = Parcorus.objetcs.get(pk = parcours_id)  
+        if checkbox_value != "" :
+            checkbox_ids = checkbox_value.split("-")
+            for checkbox_id in checkbox_ids :
+                try :
+                    courses = parcours.course.all()
                     for course in courses :
                         course.pk = None
                         course.teacher = teacher
                         course.parcours_id = int(checkbox_id)
                         course.save()
-            except :
-                pass
+                except :
+                    pass
 
     data = {} 
 
@@ -5945,11 +5957,14 @@ def ajax_course_custom_show_shared(request):
     teacher = Teacher.objects.get(user= request.user)
  
     data = {} 
-    level_id = request.POST.get('level_id',None)
 
-    courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user__is_superuser=1),is_share = 1).exclude(teacher = teacher)
+    level_id = request.POST.get('level_id',0)
 
-    if level_id :
+    courses = []
+    keywords = request.POST.get('keywords',None)
+
+    if int(level_id) > 0 :
+        
         level = Level.objects.get(pk=int(level_id))
         theme_ids = request.POST.getlist('theme_id')
 
@@ -5959,19 +5974,29 @@ def ajax_course_custom_show_shared(request):
         for theme_id in theme_ids :
             themes_tab.append(theme_id) 
 
- 
-
         if len(themes_tab) > 0 and themes_tab[0] != "" :
+
             exercises = Exercise.objects.filter(theme_id__in= themes_tab, level_id = level_id)
 
-            parcours_tab = []
+            parcours_set = set()
             for exercise in exercises :
-                parcourses = exercise.exercises_parcours.all()
-                for p in parcourses :
-                    if not p in parcours_tab:
-                        parcours_tab.append(p)
+                parcours_set.update(exercise.exercises_parcours.all())
 
-            courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user__is_superuser=1),is_share = 1, parcours__in = parcours_tab )
+            parcours_tab = list(parcours_set)
+            courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user__is_superuser=1),is_share = 1, parcours__in = parcours_tab ) )
+
+        else :
+            courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user__is_superuser=1), parcours__level = level,is_share = 1 ) )      
+    
+
+    if keywords :
+        for keyword in keywords.split(' '):
+            courses += list(Course.objects.filter(Q(title__icontains=keyword)| Q(annoncement__icontains=keyword),is_share = 1))
+
+    elif int(level_id) == 0 : 
+        courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user__is_superuser=1),is_share = 1).exclude(teacher = teacher)
+
+
 
     data['html'] = render_to_string('qcm/course/ajax_list_courses.html', {'courses' : courses, 'teacher' : teacher  })
  

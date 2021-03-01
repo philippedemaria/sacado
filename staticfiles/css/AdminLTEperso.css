@@ -2208,13 +2208,14 @@ table.table-bordered.dataTable {
   width:290px;
   height:235px;
   border : 1px solid #e6e2dd;
+  border-radius: 5px;
 }
 
 
 .course_title{
   font-weight: 100;
   font-size: 20px;
-  padding: 0px 10px 10px 10px;
+  padding: 0px 0px 5px 0px;
   border-bottom: 1px solid #CCC;
   max-height : 50px;
 }

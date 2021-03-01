@@ -29,12 +29,13 @@
 
 {% block body %}
 <section class="content_main">
-
-<!-- Module de recherche -->
-
 <form method="POST"> 
-    <div class="row" style="margin-left:0px; margin-right:0px; border:1px solid #CCC; background: #F0F0F0;padding-top: 15px">
-
+    <div class="row alert" style="margin-left:0px; margin-right:0px; border:1px solid #CCC; background: #F0F0F0">
+        <div class="col-sm-12 col-md-4 col-lg-1">
+            <div class="form-group">
+                <h4> Recherche</h4>
+            </div>
+        </div>
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="form-group">
                 <select id="id_subject" name="subject" class="form-control select2">
@@ -44,86 +45,63 @@
                 </select>
             </div>
         </div>
-        <div class="col-sm-12 col-md-3 col-lg-2">
+        <div class="col-sm-12 col-md-2 col-lg-2">
             <div class="form-group">
                 <select id="id_level" name="level" class="form-control select2" >
                     <option value=" ">Choisir un niveau</option>
-                    {% for l in teacher.levels.all %}
+                    {% for l in levels %}
                         <option value="{{l.id}}">{{ l.name }}</option>
                     {% endfor %}
                 </select>
             </div>
-
         </div>
-        <div class="col-sm-12 col-md-5 col-lg-3">
- 
+        <div class="col-sm-2 col-md-1 col-lg-1">
+            <div class="form-group" id="loading">
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4 col-lg-5">
             <div class="form-group">
                 <select id="id_theme" name="theme" class="form-control select2" multiple>
                     <option value=" ">Choisir un niveau puis un thème</option>
                 </select>
             </div>
         </div>
-        <div class="col-sm-12 col-md-12 col-lg-4">
-            <div class="form-group">
-                <input type="text" name="keywords" id="keywords" placeholder="Mots-clés" class="form-control" />
-            </div>
-        </div>
     </div>
     {% csrf_token %}
     <div id="loader"></div>
-
-
-
-
-
-
-    <div class="row" id="courses_details">
+    <div class="row">
         <div class="col-sm-12 col-md-12">
-            {% regroup courses by parcours as parcours_list  %}
-            {% for parcours in parcours_list  %}
-                <div class="card_course">
-                    <div class="course_title" >
-
-                         
-                            {% if parcours.grouper.title|length > 25 %} 
-                               <span title="{{ parcours.grouper.title }}" style="cursor: help"> {{ parcours.grouper.title|truncatechars:25 }}</span>
-                            {% else %} 
-                            {{ parcours.grouper.title }} 
-                            {% endif %} 
-                            {% if parcours.grouper.level %} 
-                            <span class="course_level" >{{ parcours.grouper.level  }}</span>
-                            {% endif %}                             
-                            <a href="#" data-toggle='modal' data-target='#clone_course' data-course_id =0 data-parcours_id = '{{ parcours.grouper.id  }}' class="pull-right  getter_course edit"><i class="fa fa-plus fa-xs"></i></a>
-                    </div>
-                    <div class="course_body" >
-                    {% for course in parcours.list  %}
-                        <li class="course_section">
-                            {% if course.title|length > 32 %} 
-                              <span title="{{ course.title }}" style="cursor: help">{{ course.title|truncatechars:32 }} </span>
-                            {% else %} 
-                            {{ course.title }} 
-                            {% endif %}
-
-                            <a href="#" data-toggle='modal' data-target='#clone_course' data-course_id = '{{ course.id }}' data-parcours_id =0  class="pull-right  getter_course edit"><i class="fa fa-plus fa-xs"></i></a>
-                            <a href="#" data-toggle='modal' data-target='#get_course' data-course_id = '{{ course.id }}'  data-parcours_id =0 class="pull-right shower_course edit"><i class="fa fa-eye fa-xs"></i></a>
-                        </li> 
-                    {% endfor %}
-                    </div>
-                </div>
-            {% endfor %} 
+            <table class="table  table-hover display100" id="table_course" style="width:100%">
+                <thead> 
+                    <tr>
+                        <th>Titre</th>
+                        <th>Parcours d'origine</th>
+                        <th>Auteur</th>
+                        <th></th>
+                    </tr>
+                </thead> 
+                <tbody id="courses_details">
+                    {% for course in courses  %} 
+                        
+                        <tr id="tr{{ course.id }}"> 
+                            <td>
+                               {{ course.title }} <a href="#" data-toggle='modal' data-target='#get_course' data-course_id = '{{ course.id }}' class="shower_course"><i class="fa fa-eye"></i></a> 
+                            </td>
+                            <td>
+                               {{ course.parcours.title }} 
+                            </td> 
+                            <td>
+                                {% if course.teacher.user.is_superuser %} SACADO {% else %}{{ course.teacher }}{% endif %}
+                            </td>
+                            <td>
+                                <a href="#" data-toggle='modal' data-target='#clone_course' data-course_id = '{{ course.id }}' class="btn btn-primary getter_course">Cloner <br>ce cours</a>
+                            </td>
+                        </tr>            
+                    {% endfor %} 
+                </tbody>
+            </table>
         </div>
     </div>
-
-
-
-
- 
-        
-               
-
-
-
-
 </form>     
 </section>
 
@@ -153,7 +131,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button> 
-                <h2 >Cloner dans un ou plusieurs de mes parcours ci-dessous </h2>
+                <h2  class='sacado'  >Cloner un cours</h2>
             </div>
             <form method="POST">
                 <div class="modal-body" id="get_course_result">
@@ -166,4 +144,3 @@
  
 {% endblock %}
 
-   

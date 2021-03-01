@@ -11,7 +11,11 @@
     <hr>     
     {% endif  %}
 
-    <label>Titre du cours : </label>{{ course.title }}
+    {% if course %}
+    <label>Titre du chapitre : {{ course.title }}</label>
+    {% else %} 
+    <label>Cours intégral</label>
+    {% endif %} 
     <hr> 
 
  
@@ -19,7 +23,10 @@
         <div class="col-sm-12 col-md-12">
             <div class="form-group">
                 {% for p in parcourses|dictsort:"title" %}
-                    <label style="margin-bottom:4px" class="btn btn-default"><input value="{{ p.id }}" name="get_parcourses" type="checkbox" /> {{ p }} {% if p.is_evaluation %}<i class="fa fa-trophy"></i> {% endif %}</label>
+                    <label style="margin-bottom:4px" class="btn btn-default"><input value="{{ p.id }}" name="get_parcourses" type="checkbox" /> {{ p }} 
+                        {% if p.level.shortname %}({{ p.level.shortname }}) {% endif %} 
+
+                        {% if p.is_evaluation %}<i class="fa fa-trophy"></i> {% endif %}</label>
                 {% endfor %}
             </div>
         </div>
@@ -28,13 +35,17 @@
         <div class="col-sm-12 col-md-12">
             <div class="form-group">
                 {% if teacher.sacado %}
-                <a href="#" class="btn btn-primary clone_to" data-course_id = '{{ course.id }}' data-all_parcours=0  data-dismiss="modal" aria-label="Close" >Cloner ce cours dans mes parcours</a>
-
-                <a href="#" class="btn btn-primary clone_to" data-course_id = '{{ course.id }}' data-all_parcours=1  data-dismiss="modal" aria-label="Close" >Cloner tous les cours de ce parcours dans mes parcours</a>
+                    {% if course %}
+                        <a href="#" class="btn btn-primary clone_to" data-course_id = '{{ course.id }}' data-all_parcours=0  data-dismiss="modal" aria-label="Close" >Cloner ce chapitre dans les parcours sélectionnés</a>
+                    {% else %}
+                        <a href="#" class="btn btn-primary clone_to" data-course_id = '{{ course.id }}' data-all_parcours=1  data-dismiss="modal" aria-label="Close" >Cloner le cours complet dans les parcours sélectionnés</a>
+                    {% endif %} 
                 {% else %}
-                <span class="btn btn-default">Cloner ce cours dans mes parcours</span>
-                
-                <span class="btn btn-default">Cloner tous les cours de ce parcours dans mes parcours</span>
+                    {% if course %}
+                        <span class="btn btn-default">Cloner ce chapitre dans les parcours sélectionnés</span>
+                    {% else %}
+                        <span class="btn btn-default">Cloner le cours intégral dans les parcours sélectionnés</span>
+                    {% endif %} 
                 {% endif  %}
             </div>
         </div>

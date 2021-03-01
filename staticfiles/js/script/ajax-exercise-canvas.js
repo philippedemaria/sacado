@@ -59,7 +59,7 @@ define(['jquery', 'bootstrap'], function ($) {
             paint('false') ;
         });
 
-
+        let actions = "" ;
         function paint(flag){
 
             $("#myCanvas").mousedown(function(event){ 
@@ -71,12 +71,12 @@ define(['jquery', 'bootstrap'], function ($) {
                         var init_x = event.clientX - 136;
                         var init_y = event.clientY - 171 ; 
 
-                        console.log(init_x,init_y);
-
                         ctx.lineTo(init_x,init_y);
-         
+                        actions = actions +"LT,"+init_x+","+init_y+","+ctx.strokeStyle+"/";
+ 
                         if (flag =="false"){
                             ctx.strokeStyle = "white" ;
+                            actions = actions +"LT,"+init_x+","+init_y+",#FFFFFF/";
                         }
                         ctx.stroke();
 
@@ -94,7 +94,7 @@ define(['jquery', 'bootstrap'], function ($) {
         }
 
 
-        var interval = setInterval( save_canvas, 5000)
+        //var interval = setInterval( save_canvas, 5000)
 
 
 
@@ -120,12 +120,7 @@ define(['jquery', 'bootstrap'], function ($) {
                 dataType: 'json',
                 success: function(data) {
 
-                    if (data.image){
-                    image = loadImage(data.image);
-                    ctx.drawImage(image, canvas.width , canvas.height , 0, 0)
-                    console.log("image loaded")                        
-                    }
-
+     
  
                     console.log('Image saved successfully !');
                 }
