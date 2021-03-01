@@ -205,7 +205,7 @@ body{
                         <form action="" method="POST" enctype='multipart/form-data'>     
                             {% csrf_token %}
                             <div class="btn-group"  style="padding:0px;margin:0px;">
-                                <a href="#" class="btn btn-default publisher"  data-from="1" id="parcours_publisher{{parcours.id}}" 
+                                <a href="#" class="btn btn-default btn-publisher publisher"  data-from="1" id="parcours_publisher{{parcours.id}}" 
                                     data-is_disabled="{% if parcours.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
                                     data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
                                     <i class="fa fa-circle-o-notch"></i>
@@ -311,7 +311,7 @@ body{
                                 <form action="" method="POST" enctype='multipart/form-data'>     
                                     {% csrf_token %}
                                     <div class="btn-group"  style="padding:0px;margin:0px;">
-                                        <a href="#" class="btn btn-default publisher"  data-from="1" id="parcours_publisher{{prcrs.id}}" 
+                                        <a href="#" class="btn btn-default btn-publisher publisher"  data-from="1" id="parcours_publisher{{prcrs.id}}" 
                                             data-is_disabled="{% if prcrs.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
                                             data-parcours_id="{{prcrs.id}}" data-statut="{{prcrs.is_publish }}">  
                                             <i class="fa fa-circle-o-notch"></i>
