@@ -97,7 +97,7 @@ body{
                                         </a>                                         
                                     </div>  
                                     </form> 
-                                    <span class="helper_tip"><small>{{ stat.last_connexion|date:"d N Y  H:i"  }} </small> <div class="helper_tip_text_right" >Dernière connexion</div>
+                                    <span class="helper_tip"><small>{{ stat.name.user.last_login|date:"d N Y  H:i"  }} </small> <div class="helper_tip_text_right" >Dernière connexion</div>
                                     </span>  
                                 </td>
                                 <td style="text-align: center;">{{ stat.nb_exo  }}/{{ stat.total_nb_exo  }}
