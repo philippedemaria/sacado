@@ -81,7 +81,6 @@ body{
                                         <a href="#" class="detail_student_exercise"  data-student_id="{{  stat.name.user.id }}"  data-parcours_id="{{ parcours.id }}"  >   
                                         {{ stat.name|truncatechars:"30"  }}
                                         </a> 
-
                                         <div class="pull-right"> 
                                         <a href="#" data-toggle='modal'
                                             data-target='#writer' 
@@ -97,11 +96,13 @@ body{
                                             {% endif %}
                                         </a>                                         
                                     </div>  
-                                    </form>    
+                                    </form> 
+                                    <span class="helper_tip"><small>{{ stat.last_connexion|date:"d N Y  H:i"  }} </small> <div class="helper_tip_text_right" >Dernière connexion</div>
+                                    </span>  
                                 </td>
                                 <td style="text-align: center;">{{ stat.nb_exo  }}/{{ stat.total_nb_exo  }}
                                     <span class="helper_tip"><i class="fa fa-question-circle"></i>
-                                        <div class="helper_tip_text" >Nombre d'exercices traités / nombre d'exercices publiés</div>
+                                        <div class="helper_tip_text_right" >Nombre d'exercices traités / nombre d'exercices publiés</div>
                                     </span>
                                 </td>
                                 <td style="text-align: left;font-size:12px; width:35%">
@@ -112,9 +113,46 @@ body{
                                 </td>
                                 <td style="text-align: center;">{{ stat.duration  }}</td>
                                 <td style="text-align: center;">
-                                    {% for s in stat.score_tab  %} {{ s }}{% if not forloop.last %} + {% endif %}{% endfor %}
-                                    {% for s in stat.tab_custom  %} {{ s }}{% if not forloop.last %} + {% endif %}{% endfor %}<br/> 
-                                    {% if stat.percent  %} Score moyen : {{ stat.average_score }} , score médian : {{ stat.median }} {% endif %}
+                                    {% for s in stat.score_tab  %} 
+                                        <span class="helper_tip white btn btn-{% if s.point < stage.low %}danger{% elif s.point < stage.medium %}warning{% else %}success{% endif %}" 
+                                                {% if s.point < stage.up and  stage.medium < s.point %}  style="background-color: #62d85a" {% endif %} >
+                                            {{ s.point }}
+                                            <div class="helper_tip_text_center" ><img src="{{ s.exercise.supportfile.imagefile.url }}" width="350px"/></div>
+                                        </span>
+                                    {% endfor %}
+                                    <br/> 
+                                    {% for s in stat.tab_custom  %} 
+                                        <span class="helper_tip btn btn-{% if s.point < stage.low %}danger{% elif s.point < stage.medium %}warning{% else %}success{% endif %}" 
+                                                {% if s.point < stage.up and  stage.medium < s.point %}  style="background-color: #62d85a" {% endif %} >
+                                            {{ s.point }}
+                                            <div class="helper_tip_text_center" ><img src="{{ s.imagefile.url }}" width="350px"/></div>
+                                        </span>
+                                    {% endfor %}
+                                    <br/> 
+                                    {% if stat.average_score %} 
+                                        {% if stat.average_score < stage.low %}
+                                            <span style="color:#FFF;padding:5px; border-radius:3px;margin-top:20px;margin-right: 5px;background-color:#dd4b39">Score moyen : {{ stat.average_score }}</span> 
+                                        {% elif stat.average_score < stage.medium %}
+                                            <span style="color:#FFF;padding:5px; border-radius:3px;margin-top:20px;margin-right: 5px;background-color:#f39c12;">Score moyen : {{ stat.average_score }}</span> 
+                                        {% elif stat.average_score < stage.up %}
+                                            <span style="color:#FFF;padding:5px; border-radius:3px;margin-top:20px;margin-right: 5px;background-color: #62d85a">Score moyen : {{ stat.average_score }}</span> 
+                                        {% else %}
+                                            <span style="color:#FFF;padding:5px; border-radius:3px;margin-top:20px;margin-right: 5px;background-color:#00a65a">Score moyen : {{ stat.average_score }}</span> 
+                                        {% endif %}
+ 
+ 
+                                        {% if stat.median < stage.low %}
+                                            <span style="color:#FFF;padding:5px; border-radius:3px;margin-top:20px;margin-right: 5px;background-color:#dd4b39">Score médian : {{ stat.median }}</span> 
+                                        {% elif stat.median < stage.medium %}
+                                            <span style="color:#FFF;padding:5px; border-radius:3px;margin-top:20px;margin-right: 5px;background-color:#f39c12">Score médian : {{ stat.median }}</span> 
+                                        {% elif stat.median < stage.up %}
+                                            <span style="color:#FFF;padding:5px; border-radius:3px;margin-top:20px;margin-right: 5px;background-color:#62d85a">Score médian : {{ stat.median }}</span> 
+                                        {% else %}
+                                            <span style="color:#FFF;padding:5px; border-radius:3px;margin-top:20px;margin-right: 5px;background-color:#00a65a">Score médian : {{ stat.median }}</span> 
+                                        {% endif %}
+
+
+                                    {% endif %}
                                 </td>
                                 <td style="text-align: right;">
                                     {% if stat.total_numexo  %} 

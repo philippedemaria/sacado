@@ -1848,7 +1848,7 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
         score += int(studentanswer.point)
         total_numexo += int(studentanswer.numexo)
         good_answer += int(studentanswer.numexo*studentanswer.point/100)
-        tab.append(studentanswer.point)
+        tab.append(studentanswer)
         tab_date.append(studentanswer.date)
         tab_date.sort()
     try :
@@ -1901,7 +1901,7 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
     except :
         pass
 
-    details_c , score_custom , tab_custom , score_total = "" , 0 , [] , 0
+    details_c , score_custom , cen , score_total = "" , 0 , [] , 0
     total_knowledge, total_skill, detail_skill, detail_knowledge = 0,0, "",""
     for ce in customexercises :
         score_total += float(ce.mark)
@@ -1910,12 +1910,11 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
                 cen = Customanswerbystudent.objects.get(customexercise = ce, student=s, parcours = parcours)
                 if cen.point :
                     score_custom +=  float(cen.point)
-                    tab_custom.append(float(cen.point))
             except :
                 pass
 
     student["score_custom"] = score_custom
-    student["tab_custom"] = tab_custom
+    student["tab_custom"] = cen
     student["score_total"] = int(score_total)
 
     for skill in  skills:
@@ -1941,11 +1940,12 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
 def stat_evaluation(request, id):
 
     teacher = request.user.teacher
+    stage = get_stage(teacher.user)
     parcours = Parcours.objects.get(id=id)
     skills = skills_in_parcours(request,parcours)
     knowledges = knowledges_in_parcours(parcours)
     #exercises = parcours.exercises.all()
-    relationships = Relationship.objects.filter(parcours=parcours,is_publish = 1,exercise__supportfile__is_title=0)
+    relationships = Relationship.objects.filter(parcours=parcours,is_publish = 1,exercise__supportfile__is_title=0).order_by("ranking")
     parcours_duration = parcours.duration #durée prévue pour le téléchargement
     exercises = []
     for r in relationships :
@@ -1969,7 +1969,7 @@ def stat_evaluation(request, id):
         stats.append(student)
 
 
-    context = { 'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'communications' : [] , 'role' : role  }
+    context = { 'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'stage' : stage , 'role' : role  }
 
     return render(request, 'qcm/stat_parcours.html', context )
 
@@ -5933,10 +5933,9 @@ def course_custom_show_shared(request):
     user = request.user
     if user.is_teacher:  # teacher
         teacher = Teacher.objects.get(user=user)
-        courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user__is_superuser=1),is_share = 1).exclude(teacher = teacher)
-        levels = teacher.levels.all() 
+        courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user__is_superuser=1),is_share = 1).exclude(teacher = teacher).order_by("parcours","parcours__level")
 
-        return render(request, 'qcm/course/list_courses.html', {  'teacher': teacher , 'courses':courses, 'levels':levels,  'parcours': None, 'relationships' : [] ,  'communications': [] , })
+        return render(request, 'qcm/course/list_courses.html', {  'teacher': teacher , 'courses':courses,   'parcours': None, 'relationships' : [] ,  'communications': [] , })
     else :
         return redirect('index')   
 
