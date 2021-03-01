@@ -173,7 +173,7 @@ body{
                                     {% endif %}                                     
                                     {% if stat.ajust  %}
                                          <span class="helper_tip"> <b> {{ stat.ajust  }}%</b> <i class="fa fa-question-circle"></i> 
-                                            <div class="helper_tip_text" > Score rapporté à tous les exercices proposés : nb exo / nb exo dus x score brut, soit {{ stat.nb_exo  }}/{{ stat.total_nb_exo }} x {{ stat.percent  }}%</div>
+                                            <div class="helper_tip_text" > Score rapporté à tous les exercices proposés : $\frac{nb\; exo}{nb\;  exo\;  total} \times  score \; brut $, soit $\frac{ {{ stat.nb_exo  }} }{ {{ stat.total_nb_exo }} } \times  {{ stat.percent  }} $%</div>
                                         </span>   
                                     {% endif %} 
  

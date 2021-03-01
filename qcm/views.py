@@ -1848,7 +1848,7 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
         score += int(studentanswer.point)
         total_numexo += int(studentanswer.numexo)
         good_answer += int(studentanswer.numexo*studentanswer.point/100)
-        tab.append(studentanswer)
+        tab.append(studentanswer.point)
         tab_date.append(studentanswer.date)
         tab_date.sort()
     try :
@@ -1863,7 +1863,7 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
             student["total_numexo"] = int(total_numexo)
             student["last_connexion"] = studentanswer.date
             student["score"] = int(score)
-            student["score_tab"] = tab
+            student["score_tab"] = student_tab
             if duration > parcours_duration : 
                 student["test_duration"] = True
             else :
