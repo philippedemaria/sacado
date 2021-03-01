@@ -55,7 +55,9 @@ body {
   border-radius:10px 
 }
 
-
+.padding10 {
+  padding: 10px;
+}
 
 hr.divider {
     margin-top: 10px;
@@ -1982,9 +1984,7 @@ a.menuright:hover{
   background-color: #000;
 } 
 
-a.white, a.white:active, a.white:visited, a.white:hover, .white{
-    color: #FFF;
-}
+
 
 .content {
     background-color: #F7F7F7;
@@ -2170,6 +2170,74 @@ table.table-bordered.dataTable {
 }
 .marginbottom100{
   margin-bottom: 100px;
+}
+
+/*--------------------------------------------------------------
+# Course
+--------------------------------------------------------------*/
+.card_course{
+  float: left;
+  margin: 20px ;
+  padding: 10px;
+  position:relative;
+  width:290px;
+  height:235px;
+  border : 1px solid #e6e2dd;
+}
+
+
+.course_title{
+  font-weight: 100;
+  font-size: 20px;
+  padding: 0px 10px 10px 10px;
+  border-bottom: 1px solid #CCC;
+  max-height : 50px;
+}
+.course_level{
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.course_section{
+  font-size: 14px;
+  list-style: none;
+}
+
+.course_section:hover{
+  font-size: 14px;
+  list-style: none;
+  background-color: #F0F0F0;
+}
+
+
+.course_body{
+  overflow: auto;
+  height : 170px;
+}
+
+/* width */
+.card_course ::-webkit-scrollbar {
+  width: 2px;
+}
+
+/* Track */
+.card_course ::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+.card_course ::-webkit-scrollbar-thumb {
+  background: #CCC; 
+}
+
+/* Handle on hover */
+.card_course ::-webkit-scrollbar-thumb:hover {
+  background: #f1f1f1; 
+}
+.shower_course{
+  padding-right: 5px;
+  padding-left: 5px;
+
 }
 
 /*--------------------------------------------------------------
@@ -5317,6 +5385,9 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   box-shadow: 0px 2px 50px rgba(0,0,0,0.3);
 }
 
+a.white, a.white:active, a.white:visited, a.white:hover, .white{
+    color: #FFF!important;
+}
  
 .shared_group{
   font-size:12px; 
