@@ -292,8 +292,8 @@ def skills_in_parcours(request,parcours):
 def knowledges_in_parcours(parcours):
 
     knowledges = []
-    for exercise in parcours.exercises.all():
-        relationships = exercise.exercise_relationship.filter(parcours=parcours)
+    for exercise in parcours.exercises.filter(supportfile__is_title=0):
+        relationships = exercise.exercise_relationship.filter(parcours=parcours,is_publish=1)
         for r in relationships :
             sr = r.exercise.knowledge
             if sr not in knowledges :
@@ -301,7 +301,7 @@ def knowledges_in_parcours(parcours):
     for ce in parcours.parcours_customexercises.all():
         for sk in ce.knowledges.all() :
             if sk not in knowledges :
-                knowledges.append(sk)   
+                knowledges.append(sk)
     return knowledges
 
 def total_by_skill_by_student(skill,relationships, parcours,student) : # résultat d'un élève par comptétnece sur un parcours donné
