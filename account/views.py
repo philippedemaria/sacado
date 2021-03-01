@@ -1420,7 +1420,7 @@ def ajax_courseinfo(request):
     groupe_code = request.POST.get("groupe_code")
     data = {}
     try:
-        nb_group = Group.objects.filter(code=groupe_code).count()
+        nb_group = Group.objects.filter(code=groupe_code,lock=0).count()
         if nb_group == 1:
             data['htmlg'] = "<br><i class='fa fa-check text-success'></i>"
         else:
