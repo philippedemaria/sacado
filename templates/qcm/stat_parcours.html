@@ -68,8 +68,8 @@ body{
                         <th style="text-align: center;">Savoir faire</th>
                         <th style="text-align: center;">Compétences</th>
                         <th style="text-align: center;">Durée</th> 
-                        <th style="text-align: center;">Score des exercices traitées </th>
-                        <th style="text-align: center;">Note </th>
+                        <th style="text-align: center;">Scores des exercices traités </th>
+                        <th style="text-align: center;">Scores </th>
                     </tr>
                     </thead>
                     <tbody>   
@@ -156,25 +156,33 @@ body{
                                 </td>
                                 <td style="text-align: right;">
                                     {% if stat.total_numexo  %} 
-                                        <span class="helper_tip"><small> {{ stat.good_answer  }}/{{ stat.total_numexo  }}</small> <i class="fa fa-question-circle"></i>
-                                            <div class="helper_tip_text" >Bonne réponse / nombre de situations.</div>
+                                    <div class="stat_mark_round">
+                                        <span class="helper_tip"><small> {{ stat.good_answer  }}/{{ stat.total_numexo  }} </small>
+                                            <div class="helper_tip_text" >Bonnes réponses / nombre de situations.</div>
                                         </span>
-                                        <br />
+                                    </div>
                                     {% endif %}
                                     {% if stat.score_custom  %} 
-                                        <span class="helper_tip">{{ stat.score_custom  }}/{{ stat.score_total}} <i class="fa fa-question-circle"></i> 
+                                    <div class="stat_mark_round">
+                                        <span class="helper_tip">{{ stat.score_custom  }}/{{ stat.score_total}} 
                                             <div class="helper_tip_text" >Score cumulé sur les exercices personnalisés/score total.</div>
                                         </span>
+                                    </div>
                                     {% endif %}
                                     {% if stat.percent  %}
-                                         <span class="helper_tip"> {{ stat.percent  }}% <i class="fa fa-question-circle"></i> 
+                                    <div class="stat_mark_round" style="background-color:{% if stat.percent < stage.low %}#dd4b39{% elif stat.percent < stage.medium %}#f39c12{% elif stat.percent < stage.medium %}#62d85a{% else %}#00a65a{% endif %}">
+
+                                         <span class="helper_tip white"> {{ stat.percent  }}% 
                                             <div class="helper_tip_text" > Score rapporté aux meilleurs scores</div>
                                         </span> 
+                                    </div>
                                     {% endif %}                                     
                                     {% if stat.ajust  %}
-                                         <span class="helper_tip"> <b> {{ stat.ajust  }}%</b> <i class="fa fa-question-circle"></i> 
+                                    <div class="stat_mark_round"  style="background-color:{% if stat.ajust < stage.low %}#dd4b39{% elif stat.ajust < stage.medium %}#f39c12{% elif stat.ajust < stage.medium %}#62d85a{% else %}#00a65a{% endif %}">
+                                         <span class="helper_tip white"> <b> {{ stat.ajust  }}%</b> 
                                             <div class="helper_tip_text" > Score rapporté à tous les exercices proposés : $\frac{nb\; exo}{nb\;  exo\;  total} \times  score \; brut $, soit $\frac{ {{ stat.nb_exo  }} }{ {{ stat.total_nb_exo }} } \times  {{ stat.percent  }} $%</div>
-                                        </span>   
+                                        </span> 
+                                    </div>  
                                     {% endif %} 
  
                                 </td>  
