@@ -1,0 +1,119 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+
+
+{% block require %}
+ 
+    {% if message %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% endif %}
+
+    <script>
+       require(['script/ajax-discussion']); 
+    </script>
+
+{% endblock %}
+
+ 
+
+{% block page_title %}
+     <i class="fa fa-envelope"></i> <a href="{% url 'emails' %}">Forum</a>  
+     <small>
+     	<img src="{% static 'img/angle-right.png' %}"/> {{ discussion.subject }}     	
+		<img src="{% static 'img/angle-right.png' %}"/> {{ discussion.category }} 
+     	<img src="{% static 'img/angle-right.png' %}"/> {{ discussion.topic }}  
+     </small>    
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+{% endblock %}
+
+
+{% block body %}
+<style>
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    padding: 0px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 0px solid #FFF;
+}
+.m_title   {
+    background-color: #5d4391; 
+    color:#F0F0F0;
+    padding: 3px;
+    font-size : 14px;
+}
+.m_answer   {
+    background-color: #EBEBEB; 
+    color:#5d4391;
+    padding : 1px;
+    font-size : 18px;
+}
+</style>
+
+
+<div class="content_main">
+
+		<div class="alert alert-danger">Vous êtes sur un forum pédagogique. Vos propos engagent votre responsabilité pénale. Merci de rester poli et courtois sous peine de radiation de Sacado. Merci.</div>
+
+ 
+ 
+	      <table class="table table-hover standard_tab_sort">
+	          <thead>
+	              <tr>
+	                <th></th>                        
+	              </tr>
+	          </thead>
+	          <tbody>
+	                {% for m in msgs %}
+	                <tr>
+	                    <td>
+    						<div class="col-xs-12 m_title" >
+                    			<small><i class="fa fa-file white" style="margin-right:5px;margin-left:5px;"></i>   {{ m.date_created|date:"d-m-Y, H:i" }}</small><span class="pull-right">#{{ forloop.counter}}</span>
+                    		</div>
+    						<div class="col-xs-2" style="background-color: #F0F0F0">
+		                         {{ m.user.username }} <br>
+		                        <small>{{ m.user.school.name }} <br> 
+		                         {{ m.user.school.country }} 
+		                         {% if  m.user.is_superuser %}<br> Equipe Sacado {% endif %}</small> 
+
+                    		</div>
+    						<div class="col-xs-10" style="padding:5px">
+    							{{ m.texte|safe }}
+                    		</div>
+	                    	{% if forloop.last %}                    		
+    						<div id="last_answer">
+	    						<div class="col-xs-12 m_answer" align="center" >
+	                    			<a href="#" id="answer_button">{% if last_user %}Modifier ma réponse {% else %}Répondre{% endif %}</a>
+	                    		</div>
+                    		</div>
+    						<div id="div_to_answer" class="col-xs-12 m_answer" align="center" >
+    							<form method="POST">
+    								<input type="hidden" name="user_id" value="{{ m.user.id }}" />
+    								{% csrf_token %}
+ 									{{ form.texte }}<br/>
+ 									<input value="Soumettre" type="submit" class="btn btn-primary btn-xs" id="answer_click_button" />
+                        			<input type="button" value="Annuler" class="btn btn-default  btn-xs"  id="answer_close_button"/>
+                        			<a href="{% url 'delete_message' discussion.id m.id %}" class="btn btn-danger  btn-xs" onclick="return TestDelete('ce message')" />Supprimer ce message</a>
+                        		</form>
+                    		</div>
+							{% endif %}
+	                    </td>  
+	                </tr>
+	                {% endfor %}
+	          </tbody>
+	      </table>
+
+
+ 
+ 
+</div>
+{% endblock %}

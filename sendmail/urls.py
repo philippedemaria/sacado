@@ -19,5 +19,9 @@ urlpatterns = [
 
 
     path('ajax/pending_notification/', pending_notification, name='pending_notification'),
-    
+
+    path('create_discussion', create_discussion, name='create_discussion'),
+    path('show_discussion/<int:idd>/show', show_discussion, name='show_discussion'),
+    path('delete_message/<int:idd>/<int:id>/', delete_message, name='delete_message'),
+  
 ]

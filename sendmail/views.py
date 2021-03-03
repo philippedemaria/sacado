@@ -3,8 +3,8 @@ from django.db.models import Q
 from account.models import User, Teacher, Student
 from qcm.models import Studentanswer, Relationship
 from group.models import Group
-from sendmail.models import Email, Communication
-from sendmail.forms import EmailForm, CommunicationForm
+from sendmail.models import Email, Communication, Discussion ,  Message
+from sendmail.forms import EmailForm, CommunicationForm , DiscussionForm  ,  MessageForm
 from django.http import JsonResponse
 from django.core import serializers
 from django.core.exceptions import PermissionDenied
@@ -42,10 +42,13 @@ def list_emails(request):
         emails = Email.objects.distinct().filter(receivers=user).order_by("-today")
         form = EmailForm(request.POST or None, request.FILES or None)
 
+        discussions = Discussion.objects.all().order_by("-date_created")
+        nb_discussions = discussions.count()
+
         return render(request,
                       'sendmail/list.html',
                       {'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups,  'today': today, 'communications': [], 
-                       'studentanswers': studentanswers, 'tasks': tasks})
+                       'discussions' : discussions, 'nb_discussions': nb_discussions ,  'studentanswers': studentanswers, 'tasks': tasks})
 
     elif user.is_student:
         student = Student.objects.get(user=user)
@@ -254,3 +257,86 @@ def reader_communication(request):
 		c.teachers.add(teacher)
 	
 	return JsonResponse(data)
+
+
+#######################################################################################################################################
+#######################################################################################################################################
+##### Forum
+#######################################################################################################################################
+#######################################################################################################################################
+
+
+def create_discussion(request):  
+	form   = DiscussionForm(request.POST or  None)
+	form_m = MessageForm(request.POST or  None)
+	if request.method == "POST":
+		if all((form.is_valid(),form_m.is_valid())):
+			new_f = form.save(commit=False)
+			new_f.user = request.user
+			new_f.save()
+
+			new_fm = form_m.save(commit=False)
+			new_fm.user = request.user
+			new_fm.discussion = new_f
+			new_fm.save()
+
+			return redirect('emails')
+
+		else :
+			print(form.errors)
+ 
+
+	return render(request,'sendmail/form_discussion.html', { 'form' : form , 'form_m': form_m, })
+
+ 
+
+
+def show_discussion(request,idd):
+	discussion = Discussion.objects.get(id = idd)
+	msgs = Message.objects.filter(discussion = discussion)
+	form = MessageForm(request.POST or  None)
+
+	if request.user.school :	
+		if discussion.user == request.user :
+			last_user = True
+			form = MessageForm(request.POST or  None, instance = msgs.last())
+		else :
+			last_user = False
+			form = MessageForm(request.POST or  None)
+
+		if form.is_valid():
+			new_f = form.save(commit=False)
+			new_f.user = request.user
+			new_f.discussion = discussion
+			new_f.save()
+		else :
+			print(form.errors)
+
+	else :
+		messages.error(request,"Vous devez posséder la version Etablissement pour participer.")
+
+	context = { 'form': form ,  'msgs': msgs ,  'discussion': discussion,  'last_user': last_user  }
+
+	return render(request, 'sendmail/show_discussion.html', context)
+
+
+ 
+
+def delete_message(request,idd, id):
+
+	if message.user == request.user :
+		if message.objects.filter(id=id).count() == 1 :
+			message = Message.objects.get(id=id)
+			message.delete()
+	else :
+		messages.error(request,"Vous ne pouvez pas supprimer un message dont vous n'êtes pas l'auteur.")
+
+	return redirect('show_discussion' , idd)
+
+
+ 
+ 
+
+
+
+

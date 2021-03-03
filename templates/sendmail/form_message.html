@@ -1,0 +1,86 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+    {% if message %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+ 
+
+{% endblock %}
+
+ 
+
+{% block page_title %}
+     <i class="fa fa-envelope"></i>      Forum  <img src="{% static 'img/angle-right.png' %}"/> 
+    <small>
+    {% if message  %}   
+        Modifier discussion
+    {% else %}        
+        Nouvelle discussion
+    {% endif %}
+    </small>      
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+{% endblock %}
+
+
+{% block body %}
+<div class="content_main">
+    <div class="col-xs-12 col-md-12">
+        <form action="" method="POST" enctype='multipart/form-data'>
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                        {{ form.category.label_tag }}
+                        {{ form.category |add_class:"form-control select2" }}
+                        {{ form.category.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                        {{ form.subject.label_tag }}
+                        {{ form.subject |add_class:"form-control select2" }}
+                        {{ form.subject.errors }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group">
+                        {{ form.topic.label_tag }}
+                        {{ form.topic |add_class:"form-control" }}
+                        {{ form.topic.errors }}
+                    </div>
+                </div>
+            </div> 
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group">
+                        {{ form_m.texte.label_tag }} 
+                        {{ form_m.texte  }}
+                        {{ form_m.texte.errors }}
+                    </div>
+                </div>
+            </div>    
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <input value="Enregistrer" type="submit" class="btn btn-primary" id="click_button" />
+                        <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

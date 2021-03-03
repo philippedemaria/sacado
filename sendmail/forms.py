@@ -1,5 +1,5 @@
 from django import forms
-from sendmail.models import Email, Communication
+from sendmail.models import Email, Communication , Discussion ,  Message
 from account.models import User
 from django.forms import models
 from django.forms.fields import MultipleChoiceField
@@ -31,3 +31,21 @@ class CommunicationForm(forms.ModelForm):
 	class Meta:
 		model = Communication
 		fields = '__all__'
+
+
+
+class DiscussionForm(forms.ModelForm):
+
+	class Meta:
+		model = Discussion
+		fields = '__all__'
+
+
+
+class MessageForm(forms.ModelForm):
+
+	class Meta:
+		model = Message
+		fields = '__all__'
+
+ 
