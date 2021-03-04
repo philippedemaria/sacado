@@ -3,7 +3,7 @@ from django.utils import timezone
 
 from account.models import Teacher, Student, User
 from qcm.models import Parcours, Studentanswer, Exercise, Demand
-from sendmail.models import Email
+from sendmail.models import Email, Message
 from socle.models import Level
 from school.models import School
 from group.models import Group

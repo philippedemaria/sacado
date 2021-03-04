@@ -44,7 +44,6 @@ def list_emails(request):
 
         discussions = Discussion.objects.all().order_by("-date_created")
         nb_discussions = discussions.count()
-
         return render(request,
                       'sendmail/list.html',
                       {'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups,  'today': today, 'communications': [], 
@@ -269,22 +268,25 @@ def reader_communication(request):
 def create_discussion(request):  
 	form   = DiscussionForm(request.POST or  None)
 	form_m = MessageForm(request.POST or  None)
-	if request.method == "POST":
-		if all((form.is_valid(),form_m.is_valid())):
-			new_f = form.save(commit=False)
-			new_f.user = request.user
-			new_f.save()
+	if request.user.school :
+		if request.method == "POST":
+			if all((form.is_valid(),form_m.is_valid())):
+				new_f = form.save(commit=False)
+				new_f.user = request.user
+				new_f.save()
 
-			new_fm = form_m.save(commit=False)
-			new_fm.user = request.user
-			new_fm.discussion = new_f
-			new_fm.save()
+				new_fm = form_m.save(commit=False)
+				new_fm.user = request.user
+				new_fm.discussion = new_f
+				new_fm.save()
 
-			return redirect('emails')
+				return redirect('emails')
 
-		else :
-			print(form.errors)
- 
+			else :
+				print(form.errors)
+
+	else :
+		messages.error(request,"Vous devez posséder la version Etablissement pour participer.")
 
 	return render(request,'sendmail/form_discussion.html', { 'form' : form , 'form_m': form_m, })
 
@@ -294,23 +296,25 @@ def create_discussion(request):
 def show_discussion(request,idd):
 	discussion = Discussion.objects.get(id = idd)
 	msgs = Message.objects.filter(discussion = discussion)
+	m = msgs.last()
+	print(m)
 	form = MessageForm(request.POST or  None)
 
 	if request.user.school :	
-		if discussion.user == request.user :
+		if m.user == request.user :
 			last_user = True
-			form = MessageForm(request.POST or  None, instance = msgs.last())
+			form = MessageForm(request.POST or  None, instance = m)
 		else :
 			last_user = False
 			form = MessageForm(request.POST or  None)
-
-		if form.is_valid():
-			new_f = form.save(commit=False)
-			new_f.user = request.user
-			new_f.discussion = discussion
-			new_f.save()
-		else :
-			print(form.errors)
+		if request.method == "POST":
+			if form.is_valid():
+				new_f = form.save(commit=False)
+				new_f.user = request.user
+				new_f.discussion = discussion
+				new_f.save()
+			else :
+				print(form.errors)
 
 	else :
 		messages.error(request,"Vous devez posséder la version Etablissement pour participer.")
@@ -323,15 +327,21 @@ def show_discussion(request,idd):
  
 
 def delete_message(request,idd, id):
+	message = Message.objects.get(pk=id)
 
 	if message.user == request.user :
-		if message.objects.filter(id=id).count() == 1 :
-			message = Message.objects.get(id=id)
+		d = Discussion.objects.get(pk=idd)
+		if d.discussion_message.count() == 1 :
+			d.delete()
 			message.delete()
+			return redirect('emails')
+		else :
+			message.delete()
+			return redirect('show_discussion' , idd)
+
 	else :
 		messages.error(request,"Vous ne pouvez pas supprimer un message dont vous n'êtes pas l'auteur.")
-
-	return redirect('show_discussion' , idd)
+		return redirect('show_discussion' , idd)
 
 
  

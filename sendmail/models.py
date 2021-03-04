@@ -88,6 +88,6 @@ class Message(models.Model):
  
 
     def __str__(self):
-        return "{}".format(self.topic)
+        return "{}".format(self.user)
  
  
