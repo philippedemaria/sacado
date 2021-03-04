@@ -4,18 +4,18 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
  
-            $('[type=checkbox]').prop('checked', false);            
+        $('[type=checkbox]').prop('checked', false);            
 
-            $('#selector_student').prop('checked', true);
-            $('.selected_student').prop('checked', true);
+        $('#selector_student').prop('checked', true);
+        $('.selected_student').prop('checked', true);
 
-            $('#id_is_publish').prop('checked', true);
+        $('#id_is_publish').prop('checked', true);
 
-            $('#id_is_ggbfile').prop('checked', true); 
+        $('#id_is_ggbfile').prop('checked', true); 
 
 
-            $('#on_mark').hide(); 
-
+        $('#on_mark').hide(); 
+        $(".no_realtime").show();
 
  
         $("#click_button").on('click', function (){ 
