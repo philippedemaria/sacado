@@ -174,3 +174,8 @@ class VideocopyForm(forms.ModelForm):
 	class Meta:
 		model = Videocopy
 		fields = '__all__'
+
+
+	def clean_content(self):
+		content = self.cleaned_data['image']
+		validation_file(content)  

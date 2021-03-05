@@ -5,31 +5,31 @@ define(['jquery',  'bootstrap',  'uploader' ,  ], function ($) {
     console.log(" ajax-video chargé ");
 
   
-        $('body').on('change', '#id_image' , function (event) {   
-            previewFile() ;
-         });      
+        // $('body').on('change', '#id_image' , function (event) {   
+        //     previewFile() ;
+        //  });      
 
 
  
-        function previewFile() {
+        // function previewFile() {
 
 
-            const file = $('#id_image')[0].files[0];
-            const reader = new FileReader();
+        //     const file = $('#id_image')[0].files[0];
+        //     const reader = new FileReader();
 
-            $("#preview").val("") ;  
+        //     $("#preview").val("") ;  
 
 
-            reader.addEventListener("load", function (e) {
-                                                var image = e.target.result ; 
-                                                $("#preview").attr("src", image );
-                                            }) ;
+        //     reader.addEventListener("load", function (e) {
+        //                                         var image = e.target.result ; 
+        //                                         $("#preview").attr("src", image );
+        //                                     }) ;
 
-            if (file) { console.log(file) ;
-              reader.readAsDataURL(file);
-            }            
+        //     if (file) { console.log(file) ;
+        //       reader.readAsDataURL(file);
+        //     }            
 
-          }
+        //   }
  
 
   
