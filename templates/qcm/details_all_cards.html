@@ -372,6 +372,7 @@
             <!-- Appel de la fenetre remédiation 
                   Appel ajax vers la modale qui est dans la page dashboard : id="remediation"
             -->
+            {% if parcours.zoom %}
             <a class="helper_tip" style="color:{{ parcours.color|contrast_color }}">
                 <i class="fa fa-search-plus"></i>
                 <span class="helper_tip_card_flex" style="font-size:40px;color:{{ parcours.color }}">
@@ -379,6 +380,7 @@
                   <img src="{{ rc.exercise.supportfile.imagefile.url }}" width="500px" />
                 </span>
             </a>
+            {% endif %}
 
             <span style="font-size:9px;color:{{ parcours.color|contrast_color }}" id="response{{rc.id}}" >{{  rc.relationship_remediation.all|length }}</span>
 
@@ -664,6 +666,8 @@
           </a> 
         <!--  Barre d'outil de la customcard  -->
         <div class="card-text" style="background-color:{{ parcours.color }}; text-align:center;color:{{ parcours.color|contrast_color }}">
+
+            {% if parcours.zoom %}
              <a class="helper_tip white">
                 <i class="fa fa-search-plus"></i>
                 <span class="helper_tip_card_flex" style="font-size:40px;color:{{ parcours.color }}">
@@ -671,6 +675,7 @@
                   <img {% if rc.imagefile %} src="{{ rc.imagefile.url }}" {% else %}  src="{% static 'img/custom_exercise.png' %}" {% endif %} width="500px" />
                 </span>
             </a>
+            {% endif %}
  
             <span style="font-size:9px">{{  rc.customexercise_remediation.all|length }}</span>
 

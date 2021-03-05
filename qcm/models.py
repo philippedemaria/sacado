@@ -361,6 +361,8 @@ class Parcours(ModelWithCode):
     start = models.DateTimeField(null=True, blank=True, verbose_name="Date de début de publication")
     stop = models.DateTimeField(null=True, blank=True, verbose_name="Verrouillé à partir de")
 
+    zoom = models.BooleanField(default=1, verbose_name="Zoom ?")
+
     maxexo = models.IntegerField(  default=-1,  blank=True, null=True,  verbose_name="Nombre max de réalisation par exercice")
 
     vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Vignette d'accueil", blank=True, default ="")
