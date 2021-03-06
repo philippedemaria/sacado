@@ -23,7 +23,7 @@
 
 
 {% block page_title %}
-    <span style="color:{{ group.color }}"><i class='fa fa-calendar'></i>  Gestion des taches <img src="{% static 'img/angle-right.png' %}"/> {{ group.name }} </span> 
+    <span style="color:{{ group.color }}"><i class='fa fa-calendar'></i>  Gestion des taches <img src="{% static 'img/angle-right.png' %}"/> <small>{{ group.name }}</small> </span> 
 {% endblock %}
 
 {% block page_menu_right %}

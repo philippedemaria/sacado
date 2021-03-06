@@ -3,10 +3,11 @@
 
 
 <li class="dropdown">
-        <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button "> 
-            Paramètres {% if  'parcours_group' in request.path %} du groupe {% endif %}
-            <b class="caret"></b>
-        </a>
+
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button "> 
+        Paramètres {% if  'parcours_group' in request.path %} du groupe {% endif %}
+        <b class="caret"></b>
+    </a>
 
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
         <li {% if 'parcours_group/' in request.path %} class="active" {% endif %}>
@@ -33,9 +34,9 @@
         </li>
 
 
-        <li {% if 'result_group_exercise/' in request.path %} class="active" {% endif %}>
+<!--         <li {% if 'result_group_exercise/' in request.path %} class="active" {% endif %}>
             <a  href="{% url 'result_group_exercise'  group.id %}"  ><i class="fa fa-mortar-board fa-fw"></i> Lire le suivi des acquisitions </a> 
-        </li>  
+        </li>   -->
 
 
         <li {% if 'schedule' in request.path %} class="active" {% endif %}>
@@ -59,12 +60,133 @@
         <li {% if 'group/stats/' in request.path %} class="active" {% endif %}>
              <a href="{% url 'stat_group' group.id   %}"   ><i class="fa fa-bar-chart fa-fw"></i> Lire les stats</a>
         </li> 
- 
-
-
-
     </ul>
 </li>    
    
  
+<li class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if  'result_group_skill' in request.path %} active {% endif %}"> Bilans et suivis <b class="caret"></b> </a>
+    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+
+
+
+        <li class="submenu_div{% if 'parcours_result/' in request.path %} active{% endif %}">
+            <a href="{% url 'result_group_waiting' group.id  %}" class="no_button {% if not sacado_asso %}no_sacado_asso{% endif %}" {% if not sacado_asso %}title="version établissement requise"{% endif %} >
+                Lire le bilan individualisé <i class="fa fa-caret-right fa-xs sub_caret"></i>
+            </a> 
+            <ul class="dropdown-submenu">
+
+                {% for std in group.students.all|dictsort:"user.last_name" %}
+                    <li class="{% if 'student' in request.path  %} {% if std.user.id == student.id %} active {% endif %}{% endif %}" >
+                        <a href="{% url 'detail_student_all_views' std.user.id %}"  > 
+                            {{ std }}   
+                        </a>
+                    </li>
+                {% endfor %}
+
+
+            </ul>
+        </li> 
+
+        <li class="divider"></li>
+        
+        <li {% if  'parcours_skill' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'result_group_skill' group.id %}" class="no_button {% if not sacado_asso %}no_sacado_asso{% endif %}" {% if not sacado_asso %}title="version établissement requise"{% endif %}>
+               Lire le bilan par compétences
+            </a>
+        </li> 
+
+        <li {% if 'parcours_result/' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'result_group_waiting' group.id  %}" class="no_button {% if not sacado_asso %}no_sacado_asso{% endif %}" {% if not sacado_asso %}title="version établissement requise"{% endif %} >
+                Lire le bilan par attendus 
+            </a> 
+        </li> 
+
+
+        <li class="submenu_div{% if 'parcours_result/' in request.path %} active{% endif %}">
+            <a href="{% url 'result_group_waiting' group.id  %}" class="no_button {% if not sacado_asso %}no_sacado_asso{% endif %}" {% if not sacado_asso %}title="version établissement requise"{% endif %} >
+                Lire le bilan par savoir faire  <i class="fa fa-caret-right fa-xs sub_caret"></i>
+            </a> 
+            <ul class="dropdown-submenu">
+
+                <li class="{% if 'result/' in request.path and not 'result_group_exercise' in request.path %} active {% endif %}">
+                    <a href="{% url 'result_group'  group.id %}"  >Tous les savoir faire proposés </a>
+                </li>
+                <hr class="subdivider"/>
+                {% for thm in group.level_themes %}
+                <li class="{% if  'group_theme/' in request.path %} {% if thm.id == theme.id  %} active {% endif %}{% endif %}">
+                        <a href="{% url 'result_group_theme'  group.id thm.id %}"  > {{ thm.name|truncatechars:35 }} </a>
+                </li>
+                {% endfor %}
+
+
+            </ul>
+
+
+
+        </li> 
+
+
+        <li class="submenu_div{% if 'parcours_result/' in request.path %} active{% endif %}">
+            <a href="{% url 'result_group_waiting' group.id  %}" 
+                class="no_button {% if not sacado_asso %}no_sacado_asso{% endif %}" 
+                {% if not sacado_asso %} title="version établissement requise"{% endif %} >
+                Lire le bilan par exercice  <i class="fa fa-caret-right fa-xs sub_caret"></i>
+            </a> 
+            <ul class="dropdown-submenu">
+
+                <li class="{% if 'result_group_exercise' in request.path %} active {% endif %}">
+                    <a href="{% url 'result_group_exercise'  group.id %}"  >Tous les exercices proposés </a>
+                </li>
+                <hr class="subdivider"/>
+                {% for thm in group.level_themes %}
+                <li class="{% if  'group_theme_exercise' in request.path  %} {% if thm.id == theme.id   %} active {% endif %}{% endif %}">
+                        <a href="{% url 'result_group_theme_exercise'  group.id   thm.id %}"  > {{ thm.name|truncatechars:35 }} </a>
+                </li>
+                {% endfor %}
+
+
+            </ul>
+
+        </li> 
+
+
+        <li class="divider"></li>
+
+        <li>
+            <a href="{% url 'print_statistiques' group.id 0 %}"  class="no_button {% if not sacado_asso %}no_sacado_asso{% endif %}" id="print_stats" >
+                <span id="loading_stats"></span> Imprimer les bilans <img src="{% static 'img/pdf.png' %}" width="15px"/>
+            </a>
+        </li> 
+   
  
+    </ul>
+</li>
+
+
+
+<!-- <li class="dropdown  dropdown-large">
+  <a href="#" class="dropdown-toggle no_button {% if 'student' in request.path %} active {% endif %}" data-toggle="dropdown"> Tâches  <b class="caret"></b></a> 
+    <ul class="dropdown-menu clearfix pull-right" role="menu">
+
+
+        <li class="dropdown dropdown-submenu {% if  'group_task' in request.path  %} active {% endif %}" >
+            {% if group.is_task_exists %}
+                <a href="{% url 'group_tasks' group.id %}"  > En cours de {{ group }}</a>
+            {% else %}
+                <span style="padding: 3px 20px;display: block ; clear:both; white-space: nowrap; color:#c90202;font-weight: 400">   Aucune tâche en cours </span>
+            {% endif %}
+        </li>
+         <li class="dropdown dropdown-submenu {% if  'tasks_all' in request.path  %} active {% endif %}" >
+                <a href="{% url 'group_tasks_all' group.id %}"  > Toutes de {{ group }} </a>
+        </li>
+        <li class="divider"></li>
+         <li class="dropdown dropdown-submenu {% if  'task_all' in request.path  %} active {% endif %}" >
+                <a href="{% url 'all_my_tasks'  %}"  > Toutes les taches en cours</a>
+        </li>
+         <li class="dropdown dropdown-submenu {% if  'task_all' in request.path  %} active {% endif %}" >
+                <a href="{% url 'these_all_my_tasks'    %}"  > Toutes les taches  </a>
+        </li>
+
+    </ul>
+</li>  -->

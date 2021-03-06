@@ -384,7 +384,102 @@ li label:hover{
   border: 1px solid lightgrey;
 }
 
- /****************************************** Quizz **************************************/
+ /******************************************** Submenu nav **************************************/
+
+.submenu_div {
+  position:relative;
+  background-color: #FFF;
+  color: #5d4391 ;
+}
+
+.submenu_div:hover {
+  position:relative;
+  color: #FFF ;
+}
+
+.submenu_div .dropdown-submenu {
+  display: none; 
+  margin-left:0px; 
+}
+
+.submenu_div:hover .dropdown-submenu {
+  display: block;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position:absolute;
+  left: 50px;
+  width:250px;
+  border-radius:4px;
+  -webkit-box-shadow:2px 2px 6px rgba(79, 73, 66, .4);
+  box-shadow: 2px 2px 6px rgba(79, 73, 66, .4);
+  z-index:900;
+  background-color: #FFF;
+  margin-left:0px;
+  padding: 5px; 
+}
+
+.submenu_div .dropdown-submenu a  {
+  list-style: none;
+  margin-left:0px;
+  padding: 5px;
+  color: #5d4391 ;   
+  font-weight: 400;
+}
+
+.submenu_div .dropdown-submenu li{
+  color: #FFF ; 
+  margin-left:0px;
+  padding: 5px; 
+}
+
+.submenu_div .dropdown-submenu li.subdivider{
+  color: #CCC ; 
+  height:1px;
+  padding: 5px; 
+}
+
+.submenu_div:hover .dropdown-submenu li:hover > a {
+  color: #FFF ; 
+  margin-left:0px;
+  padding: 5px;
+  text-decoration: none; 
+  font-weight: 400;
+}
+
+ 
+.submenu_div:hover  > .dropdown-submenu li:hover {
+  background-color: #5d4391 ;
+  color: #FFF ; 
+  margin-left:0px;
+  padding: 5px;
+}
+
+.dropdown-submenu::-webkit-scrollbar {
+  width: 5px;
+  max-height: 300px;
+}
+.dropdown-submenu::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+.dropdown-submenu::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+}
+
+.subdivider{
+  margin: 5px;
+
+}
+
+.sub_caret{
+  position: absolute;
+  right :0;
+  top:12px;
+}
+
+ /******************************************** Quizz  ********************************************/
 #body_question{
   margin-bottom: 20px;
 }

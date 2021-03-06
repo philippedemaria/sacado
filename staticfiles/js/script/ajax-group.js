@@ -4,6 +4,21 @@ define(['jquery','bootstrap_popover', 'bootstrap' ], function ($) {
 
 
 
+
+
+        $('.dropdown-submenu').on('mouseover', function () {
+            $(this).parent().find(".no_button").css('color','#EEE');
+        })
+
+
+        $('.dropdown-submenu').on('mouseout', function () {
+            $(this).parent().find(".no_button").css('color','#5d4391');
+        })
+
+        $('.dropdown-submenu').on('mouseover', function () {
+            $(this).css('color','#EEE');
+        })
+
         //$('[data-toggle="popover"]').popover();
 
         $('.selector_color').on('click', function () {

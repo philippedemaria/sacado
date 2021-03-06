@@ -2,77 +2,77 @@
 
  
 
-{% if sacado_asso %}
+
 <li class="dropdown">
-        <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if  'result_parcours_skill' in request.path %} active {% endif %}"> Bilans <b class="caret"></b> </a>
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if  'result_parcours_skill' in request.path %} active {% endif %}"> Bilans et suivis <b class="caret"></b> </a>
 
     <ul   class="dropdown-menu clearfix pull-right" role="menu">
 
-        <li {% if  'result_parcours_skill' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'result_parcours_skill' parcours.id %}"  class="no_button" >
+
+
+        
+        <li {% if 'parcours_stat/' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'stat_evaluation' parcours.id %}" > Lire les {% if parcours.is_evaluation %}résultats de l'évaluation{% else %}stats du parcours{% endif %}   </a>   
+        </li>
+        
+        
+        <li {% if 'parcours_progression/' in request.path %} class="active" {% endif %}>
+            {% if group_id %}
+            <a href="{% url 'parcours_progression' parcours.id group_id  %}" >
+            {% else %}
+            <a href="{% url 'parcours_progression' parcours.id 0  %}" >  
+            {% endif  %}
+                Lire les avancements
+            </a>
+        </li> 
+
+        <li class="divider"></li>
+
+
+
+        <li {% if  'skill' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'result_parcours_skill' parcours.id %}"  class="no_button {% if not sacado_asso %}no_sacado_asso{% endif %}" >
                 Lire le bilan par compétences
             </a>
         </li> 
+
+        <li {% if 'waiting' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'result_parcours_waiting' parcours.id  %}"  class="no_button {% if not sacado_asso %}no_sacado_asso{% endif %}" >
+                Lire le bilan par attendus 
+            </a> 
+        </li>  
+
+        <li class="divider"></li>
+
+        <li {% if 'knowledge' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'result_parcours_knowledge' parcours.id %}"  class="no_button" >
+                Lire le suivi par savoir faire 
+            </a>
+        </li> 
+
+ 
 
         <li {% if 'parcours_result/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'result_parcours_waiting' parcours.id  %}"  class="no_button" >
-                Lire le bilan par attendus 
+            <a href="{% url 'result_parcours' parcours.id  %}"  class="no_button" > 
+                Lire le suivi par exercice/élève 
             </a> 
         </li>    
-    </ul>
-</li>
- 
-{% else %}
-
-<li class="dropdown">
-        <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {no_sacado_asso"> Bilans <b class="caret"></b> </a>
-
-    <ul  class="dropdown-menu clearfix pull-right" role="menu">
-
-        <li>
-            <a href="#"  class="no_button no_sacado_asso" >
-                Lire le bilan par compétences
-            </a>
-        </li> 
-
-        <li>
-            <a href="#"  class="no_button no_sacado_asso" >
-                Lire le bilan par attendus 
-            </a> 
-        </li>    
-    </ul>
-</li>
-
-
-
-{% endif %}
-
-
-<li class="dropdown">
-        <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if 'parcours_result/' in request.path or  'parcours_result_knowledge/' in request.path  or 'result_parcours_exercise_students/' in request.path %} active {% endif %}"> Suivis d'acquisition <b class="caret"></b> </a>
-
-    <ul   class="dropdown-menu clearfix pull-right" role="menu">
-
-        <li {% if 'parcours_result_knowledge/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'result_parcours_knowledge' parcours.id %}"  class="no_button" >
-                <i class="fa fa-trophy fa-fw"></i> Lire le suivi par savoir faire 
-            </a>
-        </li> 
-
- 
-
-        <li {% if 'parcours_result/' in request.path %} class="active" {% endif %}><a href="{% url 'result_parcours' parcours.id  %}"  class="no_button" ><i class="fa fa-mortar-board fa-fw"></i> Lire le suivi par élève </a> </li>    
         {% if not parcours.is_folder %}
             {% if group_id %}
-                <li {% if 'result_parcours_exercise_students/' in request.path %} class="active" {% endif %}><a href="{% url 'result_parcours_exercise_students' parcours.id    %}"  class="no_button" ><i class="fa fa-tasks fa-fw"></i> Lire le suivi par exercice </a> </li>
+            <li {% if 'result_parcours_exercise_students/' in request.path %} class="active" {% endif %}>
+                    <a href="{% url 'result_parcours_exercise_students' parcours.id    %}"  class="no_button" >
+                    Lire le suivi par élève/exercice 
+                    </a> 
+            </li>
             {% endif %}
         {% endif %}
 
+
+
     </ul>
-</li> 
-
-
-
+</li>
+ 
+ 
 
 {% if role  %}
 {% if parcours.is_folder  %}
@@ -90,7 +90,7 @@
 
 {% else %}
 <li class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if 'parcours_show/' in request.path or 'parcours_update/' in request.path or 'parcours_peuplate/' in request.path or 'parcours_tasks_and_publishes/' in request.path  or 'parcours_individualise/' in request.path  or 'parcours_stat/' in request.path   %} active{% endif %}"> Paramètres {% if parcours.is_evaluation %}  de l'évaluation {% else %} du parcours {% endif %} <b class="caret"></b> </a>
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if 'parcours_show/' in request.path or 'parcours_update/' in request.path or 'parcours_peuplate/' in request.path or 'parcours_tasks_and_publishes/' in request.path  or 'parcours_individualise/' in request.path  or 'parcours_stat/' in request.path   %} active{% endif %}"> Paramètres <b class="caret"></b> </a>
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
         <li {% if 'parcours_show/' in request.path %} class="active" {% endif %}>
             <a href="{% url 'show_parcours' parcours.id   %}"><i class="fa fa-th fa-fw"></i> Voir {% if parcours.is_evaluation %}  l'évaluation {% else %} le parcours {% endif %}</a>
@@ -153,27 +153,6 @@
         </li> 
 
 
-
-        {% if parcours.is_evaluation %}
-        <li {% if 'parcours_stat/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'stat_evaluation' parcours.id %}" ><i class="fa fa-bar-chart fa-fw"></i> Lire les résultats de l'évaluation </a>   
-        </li>
-        {% else %} 
-        <li {% if 'parcours_stat_evaluation/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'stat_evaluation' parcours.id %}" ><i class="fa fa-bar-chart fa-fw"></i> Lire les stats du parcours</a>   
-        </li>
-        {% endif %} 
- 
-
-        {% if group_id %}
-            <li {% if 'parcours_progression/' in request.path %} class="active" {% endif %}>
-                <a href="{% url 'parcours_progression' parcours.id group_id  %}" ><i class="fa fa-navicon fa-fw"></i> Lire les avancements</a> 
-            </li> 
-        {% else %}
-            <li {% if 'parcours_progression/' in request.path %} class="active" {% endif %}>
-                <a href="{% url 'parcours_progression' parcours.id 0  %}" ><i class="fa fa-navicon fa-fw"></i> Lire les avancements</a> 
-            </li> 
-        {% endif  %}
     </ul>
 </li>
 {% endif %}

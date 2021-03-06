@@ -58,9 +58,6 @@
                 </select>
 
                 {% if snext_id %}<a href="{% url 'detail_student_all_views' snext_id  %}"  class="btn btn-default"> Elève suivant</a>{% endif  %}
-    
-
-
             {% else %}
                 {% if sprev_id %}<a href="{% url 'detail_student' sprev_id  %}"  class="btn btn-default"> Elève précédent </a>{% endif  %}
 
@@ -81,7 +78,6 @@
     {% elif request.user.user_type == 0 %}
         Mes bilans et suivis
  
-
     {% elif request.user.user_type == 1 %}
         Bilans et suivis de {{ student.user }}  
     {% endif %}
@@ -99,12 +95,18 @@
         <li><a href="{% url 'detail_student_all_views' student.user.id  %}"  class="no_button"  style="font-size:18px;{% if 'detail_student_all_views' in request.path %}color:#007EE2{% endif %}"> Bilan</a></li>
     {% else %}
         {% if group %}
-        <li><a href="{% url 'result_group_exercise' group.id  %}"  class="no_button"  style="font-size:18px;"> Tout le groupe</a></li>
-        {% endif %}
+        {% include 'group/submenu_group.html'  %}
+        {% else %}
         <li><a href="{% url 'detail_student_all_views' student.user.id  %}"  class="no_button"  style="font-size:18px;{% if 'detail_student_all_views' in request.path %}color:#007EE2{% endif %}"> Bilan élève</a></li>
+        {% endif %}
     {% endif %}
 
 
+
+
+
+
+    {% if request.user.user_type < 2 %}
         <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"  style="font-size:18px;{% if 'detail_student_theme' in request.path %}color:#007EE2{% endif %}"> Suivi par thème </a>
             <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
                 <li {% if 'detail_student/' in request.path %} class="active" {% endif %} ><a href="{% url 'detail_student'  student.user.id  %}" > Général</a></li>
@@ -127,7 +129,7 @@
                 {% endfor %}
             </ul>
         </li>
-
+    {% endif %}
 
 
 {% endblock %}

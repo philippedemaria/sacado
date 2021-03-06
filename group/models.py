@@ -67,6 +67,10 @@ class Group(ModelWithCode):
                 break
         return test
 
+    def level_themes(self) :
+        return self.level.themes.filter(subject=self.subject)
+
+
 
 
     def parcours_counter(self,teacher):
