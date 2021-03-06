@@ -94,7 +94,7 @@ def all_datas(level):
  
 def list_tools(request):
     teacher = request.user.teacher
-
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     if request.user.is_superuser :
         tools = Tool.objects.all()
     else :
@@ -106,7 +106,7 @@ def list_tools(request):
 
 def create_tool(request):
 
-
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     form = ToolForm(request.POST or None, request.FILES or None,   )
  
 
@@ -124,7 +124,7 @@ def create_tool(request):
 
 def update_tool(request, id):
 
- 
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     tool = Tool.objects.get(id=id)
  
     teacher = request.user.teacher   
@@ -144,7 +144,7 @@ def update_tool(request, id):
 
 
 def delete_tool(request, id):
-
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     tool = Tool.objects.get(id=id)
     tool.delete()
     return redirect('tool_index')
@@ -152,7 +152,7 @@ def delete_tool(request, id):
 
  
 def show_tool(request, id ):
-
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     tool = Tool.objects.get(id=id)
     if tool.url != "" :
         url = tool.url
@@ -167,7 +167,7 @@ def get_this_tool(request):
 
     data = {} 
     tool_id = int(request.POST.get("tool_id"))
-
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     tool = Tool.objects.get(pk=tool_id) 
     tool.teachers.add(request.user.teacher)
 
@@ -181,7 +181,7 @@ def delete_my_tool(request):
 
     data = {} 
     tool_id = int(request.POST.get("tool_id"))
-
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     tool = Tool.objects.get(pk=tool_id) 
     tool.teachers.remove(request.user.teacher)
  
@@ -198,7 +198,7 @@ def list_quizzes(request):
 
     teacher = request.user.teacher 
     quizzes = Quizz.objects.filter(teacher =teacher )
-
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher)
     return render(request, 'tool/list_quizzes.html', {'quizzes': quizzes , 'form': form,   })
 
@@ -208,7 +208,7 @@ def create_quizz(request):
     
     teacher = request.user.teacher 
     form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher  )
- 
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
 
     if form.is_valid():
         nf = form.save(commit = False)
@@ -233,7 +233,7 @@ def update_quizz(request,id):
     teacher = request.user.teacher 
     quizz = Quizz.objects.get(pk= id)
     form = QuizzForm(request.POST or None, request.FILES or None , instance = quizz , teacher = teacher  )
- 
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     if form.is_valid():
         nf = form.save(commit = False)
         nf.teacher = teacher
@@ -252,7 +252,8 @@ def update_quizz(request,id):
 
 
 def delete_quizz(request,id):
- 
+
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     quizz = Quizz.objects.get(pk= id)
     if quizz.teacher == request.user.teacher :
         quizz.delete() 
@@ -263,6 +264,8 @@ def delete_quizz(request,id):
  
 def show_quizz(request,id):
     """ permet à un prof de voir son quizz """
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     quizz = Quizz.objects.get(pk= id)
     questions = quizz.questions.filter(is_publish=1).order_by("ranking")
     context = {  "quizz" : quizz , "questions" : questions }
@@ -276,7 +279,8 @@ def show_quizz(request,id):
 
 
 def result_quizz(request,id):
- 
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     g_quizz = Generate_quizz.objects.get(pk= id, quizz__teacher = request.user.teacher)
     context = {  "g_quizz" : g_quizz }
 
@@ -287,7 +291,8 @@ def result_quizz(request,id):
 
 
 def delete_historic_quizz(request,id):
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     g_quizz = Generate_quizz.objects.get(pk= id)
 
     if g_quizz.quizz.teacher == request.user.teacher :
@@ -298,7 +303,8 @@ def delete_historic_quizz(request,id):
 
 
 def ajax_show_generated(request):
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     gq_id = request.POST.get("gq_id")
     data = {}  
     g_quizz = Generate_quizz.objects.get(pk= gq_id, quizz__teacher = request.user.teacher) 
@@ -314,6 +320,8 @@ def ajax_show_generated(request):
 
 def get_save_new_gquizz(quizz) :
     """ permet un enregistrement d'un nouveau quizz généré toutes les hours = 1 """
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     save = True
     remainig_time = datetime.now() - timedelta(hours = 0.15) # 0.25 pour 1/4 d'heure , 0.5 pour 1/2 heure
     if Generate_quizz.objects.filter(date_created__gt= remainig_time, quizz__teacher = quizz.teacher ).count() > 0 :
@@ -326,7 +334,8 @@ def get_save_new_gquizz(quizz) :
 def get_qr(quizz_id,group_id,mode) :
 
     """ fonction qui génére un historique de questions aléatoires à partir du modèle du quizz"""
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     quizz = Quizz.objects.get(pk= quizz_id)
     save = get_save_new_gquizz(quizz) 
 
@@ -377,7 +386,8 @@ def get_qr(quizz_id,group_id,mode) :
 def get_date_play(quizz_id,group_id,mode) : # pour les questionnaires non randomisés
 
     """ fonction qui génére un quizz à partir du modèle du quizz"""
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     quizz = Quizz.objects.get(pk= quizz_id)
     save = get_save_new_gquizz(quizz)
     if save :
@@ -393,7 +403,8 @@ def get_date_play(quizz_id,group_id,mode) : # pour les questionnaires non random
 def show_quizz_group(request,id,idg):
 
     """ show quizz d'un groupe classe """
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     quizz , gquizz , questions , save = get_date_play(id,idg,0)
     questions = quizz.questions.filter(is_publish=1).order_by("ranking")
     group = Group.objects.get(pk = idg)
@@ -411,6 +422,8 @@ def show_quizz_group(request,id,idg):
 
 def play_quizz_teacher(request,id,idg):
     """ Lancer d'un play quizz """
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     if request.session.get("gquizz_questions",None) :
         del request.session["gquizz_questions"] 
 
@@ -434,7 +447,8 @@ def play_quizz_teacher(request,id,idg):
 
 def launch_play_quizz(request):
     """ Lancer d'un play quizz """
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     gquizz_id = request.POST.get("gquizz_id",None)
     group_id  = request.POST.get("group_id",None)
     gquizz = Generate_quizz.objects.get(pk = gquizz_id) 
@@ -488,6 +502,8 @@ def launch_play_quizz(request):
 
 def this_student_can_play(student,gquizz):
     """ Vérifie qu'un joueur peut participer au quiz"""
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     can_play = False
     groups = gquizz.quizz.groups.all()
     group_set = set()
@@ -502,6 +518,8 @@ def this_student_can_play(student,gquizz):
 
 def play_quizz_student(request):
     """ Lancer le play quizz élève """
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     starter = True
     if request.method == 'POST' :
         code = request.POST.get("code",None)
@@ -526,6 +544,8 @@ def play_quizz_student(request):
 @csrf_exempt 
 def ajax_quizz_show_result(request):  
     """ affichage des résultats après la question du quizz"""
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     all_results = request.POST.get("all",None)
     question_id = request.POST.get("question_id",None)
     random = int(request.POST.get("random",0))
@@ -650,6 +670,7 @@ def store_student_answer(request):
     milliseconds = float(round(time_zone.timestamp())) 
     timer        = float(milliseconds) - float(timestamp) - 2 # 2 secondes délai d'affichage
     
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     if request.method == "POST" :
         gquizz_id = request.POST.get("gquizz_id")
         gquizz    = Generate_quizz.objects.get(pk = gquizz_id)
@@ -700,13 +721,16 @@ def store_student_answer(request):
 
 
 def list_questions(request):
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     questions = Question.objects.all()
     return render(request, 'tool/list_question.html', {'questions': questions  })
 
 
  
 def create_question(request,idq,qtype):
- 
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     quizz = Quizz.objects.get(pk = idq)
     questions = quizz.questions.order_by("ranking")
 
@@ -771,7 +795,8 @@ def create_question(request,idq,qtype):
 
  
 def update_question(request,id,idq,qtype):
- 
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     quizz = Quizz.objects.get(pk = idq)
     questions = quizz.questions.order_by("ranking")
 
@@ -830,7 +855,8 @@ def update_question(request,id,idq,qtype):
 
  
 def delete_question(request,id,idq):
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     question = Question.objects.get(pk= id)
     if question.quizz.count() == 0 :
         question.delete()
@@ -840,7 +866,8 @@ def delete_question(request,id,idq):
 
  
 def remove_question(request,id,idq):
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     quizz = Quizz.objects.get(pk = idq)
     if quizz.teacher == request.user.teacher :
         question = Question.objects.get(pk = id)
@@ -851,7 +878,8 @@ def remove_question(request,id,idq):
 
  
 def show_question(request,id):
- 
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche  
     question = Question.objects.get(pk= id)
     context = {'form': form, "question" : question }
 
@@ -877,7 +905,8 @@ def question_sorter(request):
 
  
 def play_printing_teacher(request, id):
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     quizz = Quizz.objects.get(id=id)
  
 
@@ -931,7 +960,8 @@ def play_printing_teacher(request, id):
 ############################################################################################################
 
 def list_diaporama(request):
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     teacher = request.user.teacher 
     diaporamas = Diaporama.objects.filter(teacher =teacher )
 
@@ -943,6 +973,7 @@ def list_diaporama(request):
  
 def create_diaporama(request):
     
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche     
     teacher = request.user.teacher 
     form = DiaporamaForm(request.POST or None, request.FILES or None , teacher = teacher  )
  
@@ -966,6 +997,7 @@ def create_diaporama(request):
  
 def update_diaporama(request,id):
     
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche     
     teacher = request.user.teacher
     diaporama = Diaporama.objects.get(pk= id)
     form = DiaporamaForm(request.POST or None, request.FILES or None , instance = diaporama , teacher = teacher  )
@@ -986,7 +1018,8 @@ def update_diaporama(request,id):
     return render(request, 'tool/form_diaporama.html', context)
 
 def show_diaporama(request,id):
- 
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche  
     diaporama = Diaporama.objects.get(pk= id)
     slides = diaporama.slides.order_by("ranking")
  
@@ -996,7 +1029,8 @@ def show_diaporama(request,id):
 
 
 def delete_diaporama(request,id):
- 
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche  
     diaporama = Diaporama.objects.get(pk= id)
     if diaporama.teacher == request.user.teacher :
         diaporama.delete() 
@@ -1011,7 +1045,8 @@ def delete_diaporama(request,id):
 
  
 def create_slide(request,id):
- 
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche  
     diaporama = Diaporama.objects.get(pk = id)
     teacher = request.user.teacher
     form = SlideForm(request.POST or None)
@@ -1023,7 +1058,8 @@ def create_slide(request,id):
 
  
 def delete_slide(request,id,idp):
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     slide = Slide.objects.get(pk= id)
     if slide.diapositive.count() == 0 :
         slide.delete()
@@ -1035,7 +1071,8 @@ def delete_slide(request,id,idp):
 
  
 def remove_slide(request,id,idq):
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     diaporama = Diaporama.objects.get(pk = idq)
     if diaporama.teacher == request.user.teacher :
         slide = Slide.objects.get(pk= id)
@@ -1045,7 +1082,8 @@ def remove_slide(request,id,idq):
 
  
 def update_slide(request,id,idp):
- 
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche  
     diaporama = Diaporama.objects.get(pk = idp)
 
     slide= Slide.objects.get(pk = id)
@@ -1065,7 +1103,8 @@ def update_slide(request,id,idp):
 
 @csrf_exempt
 def send_slide(request):
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     ### le quizz
     diaporama_id =  request.POST.get("diaporama_id",None)    
     diaporama =  Diaporama.objects.get(pk = diaporama_id)
@@ -1161,6 +1200,8 @@ def ajax_chargeknowledges(request):
 
 def show_quizz_random(request,id):
     """ Vue pour l'enseignant """
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     quizz , gquizz , qrandoms , save = get_qr(id, None,0)  
  
     context = {  "quizz" : quizz , "gquizz" : gquizz , "qrandoms" : qrandoms  , "save" : save }
@@ -1172,6 +1213,8 @@ def show_quizz_random(request,id):
 
 def show_quizz_random_group(request,id,idg):
     """ Vue pour le groupe en vidéo projection """
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     group = Group.objects.get(id = idg)
     quizz ,  gquizz , qrandoms , save = get_qr(id,idg,0)
 
@@ -1183,7 +1226,8 @@ def show_quizz_random_group(request,id,idg):
 
 
 def create_quizz_random(request,id):
- 
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     quizz = Quizz.objects.get(pk= id)
     noq = int(request.POST.get('noq',1)) 
     knowledge_ids = request.POST.getlist('knowledges')
@@ -1198,7 +1242,8 @@ def create_quizz_random(request,id):
 
 
 def list_qrandom(request):
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     if request.user.is_superuser :
         qrandoms = Qrandom.objects.all()
         context = {  "qrandoms" : qrandoms  }
@@ -1209,7 +1254,8 @@ def list_qrandom(request):
 
 
 def create_qrandom(request):
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     teacher = request.user.teacher
     if request.user.is_superuser :
         form = QrandomForm(request.POST or None )
@@ -1243,7 +1289,8 @@ def create_qrandom(request):
 
 
 def update_qrandom(request,id):
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     teacher = request.user.teacher
     if request.user.is_superuser :
         qr = Qrandom.objects.get(pk=id)
@@ -1272,7 +1319,8 @@ def update_qrandom(request,id):
 
 
 def delete_qrandom(request,id):
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     if request.user.is_superuser :
         qr = Qrandom.objects.get(pk= id)
         qr.delete()
@@ -1286,7 +1334,8 @@ def delete_qrandom(request,id):
 
  
 def admin_qrandom(request,id_level):
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     if request.user.is_superuser :
         level = Level.objects.get(pk = id_level)
         data = all_datas(level)
@@ -1298,7 +1347,8 @@ def admin_qrandom(request,id_level):
 
 
 def create_qrandom_admin(request,id_knowledge):
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     teacher = request.user.teacher
     if request.user.is_superuser :
         knowledge = Knowledge.objects.get(pk=id_knowledge)
@@ -1333,7 +1383,8 @@ def create_qrandom_admin(request,id_knowledge):
 
 
 def update_qrandom_admin(request,id_knowledge,id):
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     teacher = request.user.teacher
     if request.user.is_superuser :
         knowledge = Knowledge.objects.get(pk=id_knowledge)
@@ -1367,7 +1418,8 @@ def update_qrandom_admin(request,id_knowledge,id):
 
 
 def show_qrandom_admin(request,id):
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     qrandom = Qrandom.objects.get(pk = id)
  
     return render(request, 'tool/show_qr.html', {'qrandom': qrandom      })
@@ -1382,6 +1434,8 @@ def show_qrandom_admin(request,id):
  
  
 def list_videocopy(request):
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     teacher = request.user.teacher
 
     if request.user.school :
@@ -1409,8 +1463,8 @@ def list_videocopy(request):
 
 
 def create_videocopy(request):
-
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     form = VideocopyForm(request.POST or None, request.FILES or None,   )
  
     if request.method == "POST" :
@@ -1430,7 +1484,8 @@ def create_videocopy(request):
  
 
 def delete_videocopy(request, id):
-
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     videocopy = Videocopy.objects.get(id=id)
 
     if request.user == videocopy.teacher.user :

@@ -29,7 +29,7 @@
     </a>
 </li>
 
-<li class="dropdown {% if not '/account'  in request.path and not '/tool'  in request.path and not '/parcours'  in request.path and not '/school'  in request.path and not '/sendmail'  in request.path and not '/qcm'  in request.path  %}active{% endif %}">
+<li class="dropdown {% if  request.session.tdb  %}active{% endif %}">
     <a href="{% url 'index' %}" class="main" >
         <i class="fa fa-tachometer-alt fa-2x"></i> 
         <div class="captionmenu">Tableau de bord</div>
@@ -37,17 +37,13 @@
 </li>
 
 
- 
-
- 
-
-<li  class="dropdown {% if '/parcours' in request.path and not 'evaluation' in request.path %}active{% endif %}">
+<li  class="dropdown {% if not request.session.tdb and 'parcours' in request.path  and not 'evaluation' in request.path %}active{% endif %}">
     <a href="{% url 'parcours' %}" class="main" >
         <i class="fa fa-th fa-2x" aria-hidden="true"></i> 
         <div class="captionmenu">Parcours</div>
     </a>
 </li>
-<li  class="dropdown {% if 'evaluation' in request.path    %}active{% endif %}">
+<li  class="dropdown {% if not request.session.tdb and not request.session.tdb and 'evaluation' in request.path    %}active{% endif %}">
 
     {% if sacado_asso %}
     <a href="{% url 'evaluations' %}" class="main" >
@@ -62,7 +58,7 @@
     {% endif %}
 </li>
 
- <li  class="dropdown {% if '/exercise' in request.path %}active{% endif %}">
+ <li  class="dropdown {% if not request.session.tdb and '/exercise' in request.path  %}active{% endif %}">
     <a href="{% url 'exercises' %}" class="main" >
         <i class="fa fa-laptop fa-2x" aria-hidden="true"></i> 
         <div class="captionmenu">Exercices</div>
@@ -71,7 +67,7 @@
 
 
  
-<li class="dropdown {% if '/tool' in request.path and not 'admin' in    request.path %}active{% endif %}">
+<li class="dropdown {% if not request.session.tdb and '/tool' in request.path and not 'admin' in    request.path %}active{% endif %}">
     <a href="#" class="main"  id="tools">
         <i class="fa fa-cubes fa-2x"></i> 
         <div class="captionmenu">Outils péda.</div>
@@ -80,7 +76,7 @@
  
 
 
-<li  class="dropdown  {% if '/sendmail' in request.path %} active{% endif %}">
+<li  class="dropdown  {% if not request.session.tdb and '/sendmail' in request.path %} active{% endif %}">
 
     {% if sacado_asso %}
     <a href="{% url 'emails' %}" class="main" >
@@ -109,7 +105,7 @@
 
 {% if request.user.is_superuser %}
 
-<li  class="dropdown  {% if 'admin' in request.path  or 'school' in request.path  %} active{% endif %}">
+<li  class="dropdown  {% if not request.session.tdb and 'admin' in request.path  or 'school' in request.path  %} active{% endif %}">
     <a href="#"   id="admin" class="main">
         <i class="fa fa-cloud fa-2x"></i> 
         <div class="captionmenu">Admin</div>
@@ -118,7 +114,7 @@
 
 {% elif request.user.is_extra  %} <!-- Créateur de support -->
 
-<li  class="dropdown  {% if 'admin' in request.path or '/school' in request.path %} active{% endif %}">
+<li  class="dropdown  {% if not request.session.tdb and 'admin' in request.path or '/school' in request.path %} active{% endif %}">
     <a href="#"   id="admin" class="main">
         <i class="fa fa-cloud fa-2x"></i> 
         <div class="captionmenu">Admin</div>
@@ -126,7 +122,7 @@
 </li>
 
 {% elif request.user.is_manager   %} <!-- manager dans un établissement -->
-<li  class="dropdown  {% if 'admin' in request.path or '/school' in request.path %} active{% endif %}">
+<li  class="dropdown  {% if not request.session.tdb and 'admin' in request.path or '/school' in request.path %} active{% endif %}">
     <a href="{% url 'admin_tdb' %}" class="main" >
         <i class="fa fa-cloud fa-2x"></i> 
         <div class="captionmenu">Admin</div>
@@ -137,7 +133,7 @@
 
 
 {% elif request.user.is_testeur   %} <!-- testeur des documents -->
-<li  class="dropdown  {% if 'admin' in request.path or '/school' in request.path %} active{% endif %}">
+<li  class="dropdown  {% if not request.session.tdb and 'admin' in request.path or '/school' in request.path %} active{% endif %}">
     <a href="{% url 'admin_testeur' %}" class="main" >
         <i class="fa fa-cloud fa-2x"></i> 
         <div class="captionmenu">Admin</div>

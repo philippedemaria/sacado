@@ -782,6 +782,8 @@ def list_parcours(request):
     parcourses = teacher_has_parcourses_folder(teacher,0 ,0 ) #  is_evaluation ,is_archive 
     nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,0,1 )   ) 
 
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+ 
     try :
         del request.session["group_id"]
     except:
@@ -810,7 +812,10 @@ def list_evaluations(request):
     teacher = request.user.teacher
     today = time_zone_user(teacher.user)
     parcourses = teacher_has_parcourses(teacher,1 ,0 ) #  is_evaluation ,is_archive    
-    nb_archive = len( teacher_has_own_parcourses_and_folder(teacher,1,1 )  )  
+    nb_archive = len( teacher_has_own_parcourses_and_folder(teacher,1,1 )  )
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+
+    print(request.session.get("tdb"))
     try :
         del request.session["group_id"]
     except:
@@ -2835,6 +2840,7 @@ def list_exercises(request):
     if user.is_teacher:  # teacher
         teacher = Teacher.objects.get(user=user)
         datas = all_levels(user, 0)
+        request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
         customexercises = teacher.teacher_customexercises.all()
         return render(request, 'qcm/list_exercises.html', {'datas': datas, 'teacher': teacher , 'customexercises':customexercises, 'parcours': None, 'relationships' : [] ,  'communications': [] , })
     

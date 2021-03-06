@@ -112,13 +112,12 @@ def index(request):
             nb_teacher_level = teacher.levels.count()
 
             relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("date_limit").order_by("parcours")
-            
             parcourses = teacher.teacher_parcours.filter(is_evaluation=0, is_favorite =1,is_folder=0 ).order_by("-is_publish")
-
             communications = Communication.objects.values('id', 'subject', 'texte', 'today').filter(active=1).order_by("-id")
-
             parcours_tab = Parcours.objects.filter(students=None, teacher=teacher, is_favorite=1) ## Parcours favoris non affectés
 
+            request.session["tdb"] = True
+ 
             template = 'dashboard.html'
             context = {'this_user': this_user, 'teacher': teacher, 'groups': groups, 'parcourses': parcourses, 'parcours': None, 'today' : today , 'timer' : timer , 
                        'relationships': relationships, 'communications': communications, 'parcours_tab': parcours_tab,
