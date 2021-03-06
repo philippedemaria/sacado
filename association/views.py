@@ -66,7 +66,7 @@ def create_accounting(request):
 
     if form.is_valid():
         nf = form.save(commit = False)
-        nf.author = request.user
+        nf.user = request.user
         nf.save()
         messages.success(request, "Félicitations... Votre compte sacado est maintenant configuré et votre premier accountinge créé !")
 
