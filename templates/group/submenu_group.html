@@ -1,68 +1,6 @@
 {% load static %}
 {% load item_tags %}
 
-
-<li class="dropdown">
-
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button "> 
-        Paramètres {% if  'parcours_group' in request.path %} du groupe {% endif %}
-        <b class="caret"></b>
-    </a>
-
-    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-        <li {% if 'parcours_group/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'list_parcours_group' group.id  %}" ><i class="fa fa-th fa-fw"></i> Accéder à mes parcours
-            </a>
-        </li> 
-                <li class="divider"></li>
-
-
-        {%  get_access_to_this_group  group   teacher  as     has_access_to_this_group %}
-        {%  if  has_access_to_this_group.access   %}
-        <li {% if 'group/update/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'update_group' group.id %}"  > <i class="fa fa-cogs fa-fw"  ></i><span class="small_displayer"> Modifier le groupe/Ajouter des élèves</span></a>    
-        </li>  
-
-        <li {% if 'group/show/' in request.path %} class="active" {% endif %}>
-             <a href="{% url 'show_group' group.id  %}" ><i class="fa fa-arrow-circle-right fa-fw fa-fw"></i>  Lire les détails/Modifier les élèves </a>
-        </li>
-        {%  endif %} 
-
-
-        <li {% if 'group/print_ids/' in request.path %} class="active" {% endif %}>
-             <a href="{% url 'print_ids' group.id  %}" ><img src="{% static 'img/pdf.png' %}" width="15px" style="margin-right:11px"> Télécharger les identifiants </a>
-        </li>
-
-
-<!--         <li {% if 'result_group_exercise/' in request.path %} class="active" {% endif %}>
-            <a  href="{% url 'result_group_exercise'  group.id %}"  ><i class="fa fa-mortar-board fa-fw"></i> Lire le suivi des acquisitions </a> 
-        </li>   -->
-
-
-        <li {% if 'schedule' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'schedule_task_group' group.id  %}"  > <i class="fa fa-calendar-check-o fa-fw"></i> Lire le calendrier des tâches</a>
-        </li> 
-
-
-
-
-        <li {% if 'task_group/' in request.path and not  'schedule' in request.path  %} class="active" {% endif %}>
-            {% if group.is_task_exists %}
-                <a  href="{% url 'all_my_tasks'  %}"  >
-                    <i class="fa fa-calendar-check fa-fw"></i> 
-            {% else %}
-                <a  href="{% url 'task_group' group.id   %}"  >
-                    <i class="fa fa-calendar fa-fw"></i>  
-            {% endif %}
-                     Lire le suivi des tâches
-                </a> 
-        </li>    
-        <li {% if 'group/stats/' in request.path %} class="active" {% endif %}>
-             <a href="{% url 'stat_group' group.id   %}"   ><i class="fa fa-bar-chart fa-fw"></i> Lire les stats</a>
-        </li> 
-    </ul>
-</li>    
-   
  
 <li class="dropdown">
     <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if  'result_group_skill' in request.path %} active {% endif %}"> Bilans et suivis <b class="caret"></b> </a>
@@ -162,6 +100,71 @@
  
     </ul>
 </li>
+
+
+
+<li class="dropdown">
+
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button "> 
+        Paramètres {% if  'parcours_group' in request.path %} du groupe {% endif %}
+        <b class="caret"></b>
+    </a>
+
+    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+        <li {% if 'parcours_group/' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'list_parcours_group' group.id  %}" ><i class="fa fa-th fa-fw"></i> Accéder à mes parcours
+            </a>
+        </li> 
+                <li class="divider"></li>
+
+
+        {%  get_access_to_this_group  group   teacher  as     has_access_to_this_group %}
+        {%  if  has_access_to_this_group.access   %}
+        <li {% if 'group/update/' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'update_group' group.id %}"  > <i class="fa fa-cogs fa-fw"  ></i><span class="small_displayer"> Modifier le groupe/Ajouter des élèves</span></a>    
+        </li>  
+
+        <li {% if 'group/show/' in request.path %} class="active" {% endif %}>
+             <a href="{% url 'show_group' group.id  %}" ><i class="fa fa-arrow-circle-right fa-fw fa-fw"></i>  Lire les détails/Modifier les élèves </a>
+        </li>
+        {%  endif %} 
+
+
+        <li {% if 'group/print_ids/' in request.path %} class="active" {% endif %}>
+             <a href="{% url 'print_ids' group.id  %}" ><img src="{% static 'img/pdf.png' %}" width="15px" style="margin-right:11px"> Télécharger les identifiants </a>
+        </li>
+
+
+<!--         <li {% if 'result_group_exercise/' in request.path %} class="active" {% endif %}>
+            <a  href="{% url 'result_group_exercise'  group.id %}"  ><i class="fa fa-mortar-board fa-fw"></i> Lire le suivi des acquisitions </a> 
+        </li>   -->
+
+
+        <li {% if 'schedule' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'schedule_task_group' group.id  %}"  > <i class="fa fa-calendar-check-o fa-fw"></i> Lire le calendrier des tâches</a>
+        </li> 
+
+
+
+
+        <li {% if 'task_group/' in request.path and not  'schedule' in request.path  %} class="active" {% endif %}>
+            {% if group.is_task_exists %}
+                <a  href="{% url 'all_my_tasks'  %}"  >
+                    <i class="fa fa-calendar-check fa-fw"></i> 
+            {% else %}
+                <a  href="{% url 'task_group' group.id   %}"  >
+                    <i class="fa fa-calendar fa-fw"></i>  
+            {% endif %}
+                     Lire le suivi des tâches
+                </a> 
+        </li>    
+        <li {% if 'group/stats/' in request.path %} class="active" {% endif %}>
+             <a href="{% url 'stat_group' group.id   %}"   ><i class="fa fa-bar-chart fa-fw"></i> Lire les stats</a>
+        </li> 
+    </ul>
+</li>    
+   
+
 
 
 
