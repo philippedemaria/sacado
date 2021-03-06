@@ -13,6 +13,10 @@
 {% endblock %}
 
 {% block page_menu_right %}
+    {% if group %}
+        {% include 'group/submenu_group.html'  %}
+    {% endif %}
+
     <li> <a href="javascript:history.back()"   class="btn btn-default" style="margin-top:4px; margin-left:15px;padding:9px;font-size:18px;font-weight: 100" />Retour</a></li>
 {% endblock %}
 

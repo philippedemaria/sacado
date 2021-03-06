@@ -1030,7 +1030,7 @@ def task_group(request, id):
         for relationship in relationships:
             nb_ontime = Studentanswer.objects.filter(student=s, exercise=relationship.exercise).count()
 
-            utc_dt = dt_naive_to_timezone(relationship.date_limit, student.user.time_zone)
+            utc_dt = dt_naive_to_timezone(relationship.date_limit, s.user.time_zone)
 
             nb = Studentanswer.objects.filter(student=s, exercise=relationship.exercise, date__lte=utc_dt).count()
             if nb_ontime == 0:

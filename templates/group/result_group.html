@@ -36,6 +36,14 @@
 
 
 {% block page_menu_right %}
+
+
+    {% if group %}
+        {% include 'group/submenu_group.html'  %}
+    {% endif %}
+
+
+
  
     <li class="dropdown  dropdown-large">
       <a href="#" class="dropdown-toggle no_button {% if 'student' in request.path %} active {% endif %}" data-toggle="dropdown"> Elèves  <b class="caret"></b></a> 

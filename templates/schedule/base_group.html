@@ -14,6 +14,11 @@
 {% endblock %}
 
 {% block page_menu_right %}
+
+    {% if group %}
+        {% include 'group/submenu_group.html'  %}
+    {% endif %}
+
     <li><a href="{% url 'index' %}"  class="no_button" > Mes groupes</a></li> 
 {% endblock %}
 

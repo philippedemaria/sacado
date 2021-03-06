@@ -3,7 +3,10 @@
 
 
 <li class="dropdown">
-        <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if 'parcours_group/' in request.path or 'task_group/' in request.path  or 'result_group_exercise/' in request.path  or   'group/update/' in request.path or 'group/stats/' in request.path or 'group/show/' in request.path %} active {% endif %}"> Paramètres du groupe <b class="caret"></b> </a>
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button "> 
+            Paramètres {% if  'parcours_group' in request.path %} du groupe {% endif %}
+            <b class="caret"></b>
+        </a>
 
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
         <li {% if 'parcours_group/' in request.path %} class="active" {% endif %}>
@@ -33,16 +36,16 @@
         <li {% if 'result_group_exercise/' in request.path %} class="active" {% endif %}>
             <a  href="{% url 'result_group_exercise'  group.id %}"  ><i class="fa fa-mortar-board fa-fw"></i> Lire le suivi des acquisitions </a> 
         </li>  
-        <li {% if 'task_group/' in request.path %} class="active" {% endif %}>
 
-        <li {% if 'schedule_task_group/' in request.path %} class="active" {% endif %}>
+
+        <li {% if 'schedule' in request.path %} class="active" {% endif %}>
             <a href="{% url 'schedule_task_group' group.id  %}"  > <i class="fa fa-calendar-check-o fa-fw"></i> Lire le calendrier des tâches</a>
         </li> 
 
 
 
 
-        <li {% if 'task_group/' in request.path %} class="active" {% endif %}>
+        <li {% if 'task_group/' in request.path and not  'schedule' in request.path  %} class="active" {% endif %}>
             {% if group.is_task_exists %}
                 <a  href="{% url 'all_my_tasks'  %}"  >
                     <i class="fa fa-calendar-check fa-fw"></i> 
