@@ -10,7 +10,7 @@ urlpatterns = [
     path('new', create_accounting, name='create_accounting'),
     path('update/<int:id>/', update_accounting, name='update_accounting'),
     path('delete/<int:id>/', delete_accounting, name='delete_accounting'),
-    path('show/<int:id>/', show_accounting, name='show_create_accounting'), 
+    path('show/<int:id>/', show_accounting, name='show_accounting'), 
 
     path('new_voting/<int:id>/', create_voting, name='create_voting'),
  
