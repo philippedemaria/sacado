@@ -843,7 +843,7 @@ def response_from_mail(request,user_id):
         if user.email :
  
             sending_mail("ERREUR SUR UN EXERCICE SACADO",  msg , 'info@sacado.xyz' ,  [user.email] )
-            sending_mail("ERREUR SUR UN EXERCICE SACADO",  msg , 'info@sacado.xyz' , ["philippe.demaria-lgf@erlm.tn", "brunoserres33@gmail.com"])
+            sending_mail("ERREUR SUR UN EXERCICE SACADO",  msg , 'info@sacado.xyz' , ["philippe.demaria-lgf@erlm.tn", "brunoserres33@gmail.com", "nicolas.villemain@claudel.org"])
  
         else :
             if form.is_valid():
