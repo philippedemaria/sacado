@@ -20,6 +20,9 @@ class School(models.Model):
     code_acad = models.CharField(max_length=255, default='', verbose_name="Code académique")
 
 
+    address = models.CharField(max_length=255, blank=True, verbose_name="Adresse")
+    complement = models.CharField(max_length=255, blank=True, verbose_name="Complément d'adresse")
+
     def __str__(self):
         return "{} - {} - {}".format(self.name, self.town, self.country.name)
 

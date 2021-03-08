@@ -11,6 +11,7 @@ urlpatterns = [
     path('update/<int:id>/', update_accounting, name='update_accounting'),
     path('delete/<int:id>/', delete_accounting, name='delete_accounting'),
     path('show/<int:id>/', show_accounting, name='show_accounting'), 
+    path('print/<int:id>/', print_accounting, name='print_accounting'), 
 
     path('new_voting/<int:id>/', create_voting, name='create_voting'),
  
@@ -34,6 +35,7 @@ urlpatterns = [
  
     path('ajax_shower_document', ajax_shower_document, name='ajax_shower_document'),
 
-
+    path('print_bilan', print_bilan, name='print_bilan'),
+    path('export_bilan', export_bilan, name='export_bilan'),
 ]
  

@@ -89,6 +89,7 @@ class User(AbstractUser):
     closure = models.DateTimeField(blank=True, null=True, default = None ,  verbose_name="Date de fin d'adhésion")
     is_testeur = models.BooleanField(default=0)
     country = models.ForeignKey(Country, blank=True, null=True, related_name="countries", default=None, on_delete = models.PROTECT)
+    is_board = models.BooleanField(default=0)
 
     def __str__(self):
         return "{} {}".format(self.last_name, self.first_name)

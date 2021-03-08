@@ -533,15 +533,15 @@
         </div>
     </div>
  
-
+    {%  if request.user.is_board %}
     <hr class="divider">
     <p class="thin">L'asso SACADO </p>
-
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             <a href="{% url 'association_index' %}">Tableau de bord </a>
         </div>
     </div>
+    {% endif %}
 </div>
 {%  elif request.user.is_extra %}
 <div class="notification-container dismiss"  id="notification-admin">

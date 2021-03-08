@@ -1,5 +1,5 @@
 from django import forms
-from .models import Accounting , Voting , Associate, Document , Section
+from .models import Accounting , Voting , Associate, Document , Section , Detail
 
 
 
@@ -7,6 +7,14 @@ class AccountingForm(forms.ModelForm):
     class Meta:
         model = Accounting 
         fields = '__all__' 
+
+
+
+class DetailForm(forms.ModelForm):
+    class Meta:
+        model = Detail 
+        fields = '__all__' 
+
 
 
 

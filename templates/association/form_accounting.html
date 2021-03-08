@@ -11,7 +11,10 @@
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
     {% endif %}
  
- 
+    <script>
+        require(['script/ajax-accounting']);
+    </script> 
+    
 {% endblock %}
 
 
@@ -28,55 +31,163 @@
 {% endblock %}
 
  
- 
 
 {% block body %}     
 <div class="content_main">
     <form action="" method="POST">
-    <div class="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="alert alert-info">
             {% csrf_token %}
             <div class="row">
-                <div class="col-sm-12 col-md-4">
+                <div class="col-sm-12 col-md-12">
                     <div class="form-group">
-                        {{ form.amount.label_tag }} <font style="font-size:12px">en euros</font>
-                        {{ form.amount |add_class:"form-control" }}
-                        {{ form.amount.errors }}
+                        Choisir un bénéficiaire. Si établissement, il n'est pas utile de renseigner ses coordonnées.
                     </div>
-                </div>
-                <div class="col-sm-12 col-md-2">
-                    <div class="form-group">
-                        <label>Débit / Crédit </label>  <br/>
-                        {{ form.is_credit |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Crédit"|attr:"data-off:Débit"}} 
-                        {{ form.is_credit.errors }}
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-3">
-                        {{ form.acting.label_tag }} 
-                        {{ form.acting |add_class:"form-control datetimepicker" }}
-                        {{ form.acting.errors }}
                 </div>
             </div>
-            <div class="row"> 
+            <div class="row">
                 <div class="col-sm-12 col-md-6">
                     <div class="form-group">
-                        {{ form.objet.label_tag }} 
-                        {{ form.objet |add_class:"form-control"  }}
-                        {{ form.objet.errors }}
+                        {{ form.school |add_class:"form-control select2" }}
+                        {{ form.school.errors }}
                     </div>
-                </div>
-                <div class="col-sm-12 col-lg-6">
+                </div>                
+                <div class="col-sm-12 col-md-6">
                     <div class="form-group">
-                        {{ form.beneficiaire.label_tag }} 
-                        {{ form.beneficiaire |add_class:"form-control" }}
+                        {{ form.beneficiaire |add_class:"form-control"|attr:"placeholder: En faveur de"}} 
                         {{ form.beneficiaire.errors }}
                     </div>
                 </div>
             </div>
-
-            <div class="row"> 
+            <div class="row details_beneficiaire">
                 <div class="col-sm-12 col-md-12">
-                        {{ form.observation.label_tag }} 
+                    <div class="form-group">
+                        {{ form.address |add_class:"form-control"|attr:"placeholder: Adresse"}} 
+                        {{ form.address.errors }}
+                    </div>
+                </div>
+            </div>
+            <div class="row details_beneficiaire">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group">
+                        {{ form.complement |add_class:"form-control"|attr:"placeholder:Complément d'adresse"}} 
+                        {{ form.complement.errors }}
+                    </div>
+                </div>
+            </div>
+            <div class="row details_beneficiaire">
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        {{ form.contact |add_class:"form-control"|attr:"placeholder:Mail de l'administrateur"}}  
+                        {{ form.contact.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        {{ form.town |add_class:"form-control"|attr:"placeholder:Ville"}}  
+                        {{ form.town.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        {{ form.country |add_class:"form-control select2"|attr:"placeholder:Pays"}}  
+                        {{ form.country.errors }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+            <div class="row">
+                <div class="col-sm-3 col-md-1">
+                    <div class="form-group">
+                        {{ form.is_credit |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Crédit"|attr:"data-off:Débit"}} 
+                        {{ form.is_credit.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-7 col-md-8">
+                    <div class="form-group"> 
+                        {{ form.objet |add_class:"form-control"|attr:"placeholder:Objet"}}  
+                        {{ form.objet.errors }}
+                    </div>
+                </div>                
+                <div class="col-sm-2 col-md-2">
+                        {{ form.acting |add_class:"form-control datetimepicker"|attr:"placeholder:Date d'effet"}}  
+                        {{ form.acting.errors }}
+                </div>
+            </div>
+
+            {{ form_ds.management_form }} 
+            <script id="rowToClone" type="text/template">
+                <div id="duplicate">  
+                    <div class="row" >
+                        <div class="col-sm-8 col-md-9" > 
+                            <div class="form-group">
+                                {{ form_ds.empty_form.description|add_class:"form-control"|attr:"placeholder:Description" }} 
+                            </div> 
+                        </div>
+                        <div class="col-sm-2 col-md-2" > 
+                            <div class="form-group">
+                                {{ form_ds.empty_form.amount|add_class:"form-control"|attr:"placeholder:€" }}
+                            </div> 
+                        </div>
+                        <div class="col-sm-2 col-md-1">
+                            <div class="form-group" >
+                               <div class="delete_button"></div>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row" id="cloningZone">                            
+ 
+                    </div>
+                </div>
+            </script>    
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+
+
+                    <div id="formsetZone">
+                            <div class="row">
+                                <div class="col-sm-1 col-md-1" >
+                                    <div class="form-group"><br/>
+                                        <a href="#"  class="btn btn-info add_more" >Ajouter une description et son montant</a>
+                                    </div>
+                                </div>                        
+                            </div>
+
+
+                            {% for form in form_ds %}
+                            <div id="duplicate0">  
+                                <div class="row" >
+                                    <div class="col-sm-8 col-md-9" > 
+                                        <div class="form-group">
+                                            {{ form.description|add_class:"form-control"|attr:"placeholder:Description" }} 
+                                        </div> 
+                                    </div>
+                                    <div class="col-sm-2 col-md-2" > 
+                                        <div class="form-group">
+                                            {{ form.amount|add_class:"form-control" }}
+                                        </div> 
+                                    </div>
+                                    <div class="col-sm-2 col-md-1">
+                                        <div class="form-group" > <br/>
+                                           <div class="delete_button"></div>
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}   
+                    </div>
+
+
+
+
+
+
+
+                </div>
+                <div class="col-sm-12 col-md-6">
+                        {{ form.observation.label_tag }} <br/>
                         {{ form.observation }}
                         {{ form.observation.errors }}
                 </div>
@@ -84,7 +195,7 @@
             <div class="row">
                 <div class="col-sm-12 col-md-8">
                     <div class="form-group">
-                        <input value="Créer la transaction" type="submit" class="btn btn-primary"   />
+                        <input value="Enregistrer la transaction" type="submit" class="btn btn-primary"   />
                         <a href="javascript:history.back()"><input type="button" value="Annuler"
                                                                    class="btn btn-default "/></a>
                     </div>
@@ -92,8 +203,6 @@
             </div>
 
  
-        </div>
-    </div> 
     </form>
 </div>  
 {% endblock %}

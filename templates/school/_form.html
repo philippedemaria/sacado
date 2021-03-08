@@ -56,13 +56,22 @@
                     {{ form.town.errors }}
                 </div>
             </div>
-        </div>   
+        </div>
         <div class="row">
             <div class="col-sm-12 col-md-6">
                 <div class="form-group">                
-                    <label>{{ form.code_acad.label_tag }}</label>
-                    {{ form.code_acad |add_class:"form-control" }}
-                    {{ form.code_acad.errors }}
+                    <label>{{ form.address.label_tag }}</label>
+                    {{ form.address |add_class:"form-control" }}
+                    {{ form.address.errors }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">                
+                    <label>{{ form.complement.label_tag }}</label>
+                    {{ form.complement |add_class:"form-control" }}
+                    {{ form.complement.errors }}
                 </div>
             </div>
         </div>   

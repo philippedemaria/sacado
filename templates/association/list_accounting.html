@@ -2,16 +2,27 @@
 {% load static %}
 
 
+ 
+{% block require %}
+ 
 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+ 
+
+{% endblock %}
 
 
 
 {% block page_title %}
         <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Transactions
+
+        <a href="#" data-toggle='modal' data-target='#e_bilans' class="btn btn-default btn-xs"> <i class="fa fa-file-excel-o fa-xs text-success"></i> Exporter le bilan</a>
+        <a href="#" data-toggle='modal' data-target='#p_bilans' class="btn btn-default btn-xs"> <i class="fa fa-file-pdf-o fa-xs text-danger"></i> Imprimer le bilan</a>
 {% endblock %}
 
 {% block page_menu_right %}
-    <a href="{% url 'create_accounting' %}" class="btn btn-new pull-right"><img width="25px" src="{% static 'img/plus.png' %}"/> Nouvelle transaction</a>  
+    <a href="{% url 'create_accounting' %}" class="btn btn-new pull-right">  Nouvelle transaction</a>  
 {% endblock %}
 
  
@@ -23,37 +34,44 @@
                 <table id="standard_tab" class="table table-bordered table-hover">
                     <thead>
                     <tr>
-                        <td>Code</td>
-                        <td>Montant</td>
+                        <td style="width:100px">Date</td>                        
+                        <td style="width:80px">Référence</td>
+                        <td>Bénéficiaire</td>
                         <td>Object </td>
-                        <td>Beneficiaire</td>
-                        <td>Débit/crédit</td>
-                        <td>Dates/A valoir</td>
+                        <td style="width:80px">Montant</td>
+                        <td style="width:80px">Débit/crédit</td>
+                        <td style="width:150px">Date de valeur</td>
                     </tr>
                     </thead>
                     <tbody>
                         {% for accounting in accountings %}
                             <tr>
                                 <td>
+                                    <span >{{ accounting.date|date:"d N Y" }} </span> 
+                                </td>
+                                <td>
                                     <span >{{ accounting.code }}</span> 
                                 </td>
                                 <td>
+                                    <span class="helper_tip">{% if accounting.beneficiaire  %} {{ accounting.beneficiaire }} {% else %}{{ accounting.school.name }}, {{ accounting.school.country.name }} {% endif %}
+                                        <div class="helper_tip_text" > {{ accounting.observation|safe }}</div>
+                                    
+                                    </span>
+                                </td> 
+                                <td>
                                     <a href="{% url 'update_accounting'  accounting.id %}" >{{ accounting.objet }}</a>
-                                    <a href="{% url 'show_accounting'  accounting.id %}" class="pull-right"><i class="fa fa-eye"></i> </a>
+                                    <a href="{% url 'delete_accounting'  accounting.id %}" class="pull-right"  onclick="return TestDelete('cette facture')"><i class="fa fa-trash"></i> </a>
+                                    <a href="{% url 'print_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-print"></i> </a>
+                                    <a href="{% url 'show_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-eye"></i> </a>
                                 </td>
                                 <td>
-                                    <span class="helper_tip"> {{ accounting.beneficiaire }}
-                                        <div class="helper_tip_text" > {{ accounting.observation|safe }}</div>
-                                    </span>
-                                </td>                                
-                                <td style="width:150px">
-                                     {{ accounting.amount }}  <br>
+                                     {{ accounting.amount }} €  <br>
                                 </td>
                                 <td>
                                     {% if accounting.is_credit %}<span class="text-success">Crédit</span>{% else %}<span class="text-danger">Débit</span>{% endif %}
                                 </td>
                                 <td>
-                                     {{ accounting.date|date:"d N Y" }} / {{ accounting.acting|date:"d N Y" }}
+                                     {{ accounting.acting|date:"d N Y" }}
                                 </td>
                             </tr>
 
@@ -71,4 +89,86 @@
         </div>
     </section>
     </div>
+
+
+
+<div class="modal fade" id="e_bilans" tabindex="-1" role="dialog" aria-labelledby="e_bilans">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1  class='sacado'  >Exporter le bilan au format tableur</h1>
+            </div>
+            <div class="modal-body">
+                <form action="{%  url 'export_bilan' %}" method="POST"  >
+                        {% csrf_token %} 
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Date de début </label>   
+                                <input type="date" name="date_start" class="form-control"/>
+                            </div>
+                        </div> 
+                        <div class="col-lg-6 col-xs-12">
+                            <div class="form-group">   
+                                <label>Date de début </label>    
+                                <input type="date" name="date_end" class="form-control"/>
+                            </div>
+                        </div> 
+                    </div> 
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-12">  
+                            <div class="form-group">  
+                                <input type="submit" class="btn btn-success" value="Exporter" />
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                            </div>        
+                        </div>
+                    </div>
+                </form> 
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="p_bilans" tabindex="-1" role="dialog" aria-labelledby="p_bilans">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1  class='sacado'  >Imprimer le bilan en pdf</h1>
+            </div>
+            <div class="modal-body">
+                <form action="{%  url 'print_bilan' %}" method="POST"  >
+                        {% csrf_token %} 
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Date de début </label>   
+                                <input type="date" name="date_start" class="form-control"/>
+                            </div>
+                        </div> 
+                        <div class="col-lg-6 col-xs-12">
+                            <div class="form-group">   
+                                <label>Date de début </label>    
+                                <input type="date" name="date_end" class="form-control"/>
+                            </div>
+                        </div> 
+                    </div> 
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-12">  
+                            <div class="form-group">  
+                                <input type="submit" class="btn btn-primary" value="Télécharger" />
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                            </div>        
+                        </div>
+                    </div>
+                </form> 
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
 {% endblock %}

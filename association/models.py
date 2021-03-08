@@ -6,6 +6,7 @@ from account.models import ModelWithCode
 from django.apps import apps
 from django.utils import   timezone
 from django.db.models import Q
+from school.models import School , Country 
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
@@ -16,6 +17,25 @@ QUALITIES = (
         ("bienfaiteur", 'membre bienfaiteur'),    
         ("bénéficiaire", "membre bénéficiaire"),
     )
+
+
+
+YEARS = []
+
+
+class Rate(models.Model):
+    """
+    Modèle représentant les tarifs.
+    """
+    amount    = models.DecimalField(default=0, blank=True , max_digits=10, decimal_places=2, verbose_name="Tarif")
+    discount    = models.DecimalField(default=0, blank=True , max_digits=10, decimal_places=2, verbose_name="Réduction" )
+    quantity  = models.PositiveIntegerField(default=0,  verbose_name="Nombre d'élèves")
+    year      = models.CharField(max_length=255, default='',  verbose_name="Année")
+    is_active = models.BooleanField(default=0, editable=False)
+
+    def __str__(self):
+        return "{} {}, {}".format(amount, quantity, year)
+
 
 
 
@@ -90,20 +110,52 @@ class Voting(models.Model):
 class Accounting(ModelWithCode):
     """ Accounting   """
  
-    amount = models.DecimalField(default=0, blank=True , max_digits=10, decimal_places=2)
+    amount = models.DecimalField(default=0, blank=True , max_digits=10, decimal_places=2, editable=False)
     is_credit = models.BooleanField(default=0, )
     objet = models.CharField(max_length=255, verbose_name="Objet*")
-    beneficiaire = models.CharField(max_length=255, verbose_name="Bénéficiaire*")
+
+    beneficiaire = models.CharField(max_length=255, blank=True, verbose_name="En faveur de")
+    address = models.CharField(max_length=255, blank=True, verbose_name="Adresse")
+    complement = models.CharField(max_length=255, blank=True, verbose_name="Complément d'adresse")
+    town = models.CharField(max_length=255, blank=True, verbose_name="Complément d'adresse")
+    country = models.ForeignKey(Country, related_name="accontings", blank=True,  null=True,  on_delete=models.PROTECT, verbose_name="Pays")
+    contact = models.CharField(max_length=255, blank=True ,  verbose_name="Contact")
+
+    school = models.ForeignKey(School, related_name="accontings", blank=True, null=True,  on_delete=models.CASCADE, verbose_name="Etablissement")  
+
     observation = RichTextUploadingField( blank=True, default="", null=True, verbose_name="Observation")
+
     acting = models.DateTimeField(null=True, blank=True, verbose_name="Date d'effet")
     date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, related_name="accontings", on_delete=models.PROTECT, editable=False)
 
+
+
     def __str__(self):
-        return self.name
+        return self.beneficiaire
 
 
-     
+    def school_contact(self):
+        cs = self.school.users.filter(is_extra=1)
+        return  cs
+
+ 
+class Detail(models.Model):
+    """ detail d'un Accounting   """
+ 
+    accounting  = models.ForeignKey(Accounting, related_name="details", on_delete=models.CASCADE, verbose_name="Pays")
+    description = models.CharField(max_length=255, blank=True ,   verbose_name="Description")
+    amount      = models.DecimalField(default=0, blank=True , max_digits=10, decimal_places=2)
+ 
+    def __str__(self):
+        return self.accounting
+
+
+
+
+
+
+
 
 ########################################################################################################################################### 
 ########################################################################################################################################### 
