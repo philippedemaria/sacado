@@ -31,7 +31,7 @@ class Rate(models.Model):
     discount    = models.DecimalField(default=0, blank=True , max_digits=10, decimal_places=2, verbose_name="Réduction" )
     quantity  = models.PositiveIntegerField(default=0,  verbose_name="Nombre d'élèves")
     year      = models.CharField(max_length=255, default='',  verbose_name="Année")
-    is_active = models.BooleanField(default=0, editable=False)
+    is_active = models.BooleanField(default=0,  verbose_name="Année active")
 
     def __str__(self):
         return "{} {}, {}".format(amount, quantity, year)

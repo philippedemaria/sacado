@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from association.models import Accounting,Associate , Voting , Document, Section , Detail
-from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm, DetailForm
+from association.models import Accounting,Associate , Voting , Document, Section , Detail , Rate
+from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm, DetailForm , RateForm
 from account.models import User
 from django.forms import inlineformset_factory
 from django.http import JsonResponse
@@ -12,7 +12,7 @@ import uuid
 from django.contrib.auth.hashers import make_password
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import user_passes_test
-from account.decorators import user_is_superuser
+from account.decorators import user_is_board
 from templated_email import send_templated_mail
 from django.db.models import Q
 from django.contrib.auth.decorators import  permission_required,user_passes_test
@@ -48,18 +48,18 @@ import xlwt
 #####################################################################################################################################
 
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_board)
 def association_index(request):
     return render(request, 'association/dashboard.html', {  })
 
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_board)
 def list_accountings(request):
     accountings = Accounting.objects.all()
     return render(request, 'association/list_accounting.html', {'accountings': accountings  })
 
 
-@user_passes_test(user_is_superuser) 
+@user_passes_test(user_is_board) 
 def create_accounting(request):
  
     form     = AccountingForm(request.POST or None )
@@ -96,7 +96,7 @@ def create_accounting(request):
 
 
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_board)
 def update_accounting(request, id):
 
     accounting = Accounting.objects.get(id=id)
@@ -133,7 +133,7 @@ def update_accounting(request, id):
 
 
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_board)
 def delete_accounting(request, id):
 
     accounting = Accounting.objects.get(id=id)
@@ -141,7 +141,7 @@ def delete_accounting(request, id):
     return redirect('list_accountings')
     
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_board)
 def show_accounting(request, id ):
 
     accounting = Accounting.objects.get(id=id)
@@ -155,7 +155,7 @@ def show_accounting(request, id ):
  
 
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_board)
 def print_accounting(request, id ):
 
     accounting = Accounting.objects.get(id=id)
@@ -617,7 +617,7 @@ def export_bilan(request):
 #####################################################################################################################################
 
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_board)
 def list_associate(request):
     user = request.user
     associates = Associate.objects.filter(is_active = 1)
@@ -626,7 +626,7 @@ def list_associate(request):
     return render(request, 'association/list_associate.html', {'associates': associates , 'pending_associates': pending_associates , 'user' : user })
 
 
-@user_passes_test(user_is_superuser) 
+@user_passes_test(user_is_board) 
 def create_associate(request):
  
     form = AssociateForm(request.POST or None )
@@ -649,7 +649,7 @@ def create_associate(request):
 
 
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_board)
 def update_associate(request, id):
 
     associate = Associate.objects.get(id=id)
@@ -669,7 +669,7 @@ def update_associate(request, id):
 
 
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_board)
 def delete_associate(request, id):
 
     associate = Associate.objects.get(id=id)
@@ -678,7 +678,7 @@ def delete_associate(request, id):
     
 
  
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_board)
 def accept_associate(request, id):
     Associate.objects.filter(id=id).update(is_active = 1)
     return redirect('list_associate')
@@ -692,7 +692,7 @@ def accept_associate(request, id):
 
 
 
-@user_passes_test(user_is_superuser) 
+@user_passes_test(user_is_board) 
 def create_voting(request,id):
  
     form = VotingForm(request.POST or None )
@@ -721,7 +721,7 @@ def create_voting(request,id):
 
  
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_board)
 def show_voting(request, id):
 
     voting = Voting.objects.get(id=id)
@@ -739,7 +739,7 @@ def show_voting(request, id):
 #####################################################################################################################################
  
 
-@user_passes_test(user_is_superuser) 
+@user_passes_test(user_is_board) 
 def create_section(request):
 
     sections = Section.objects.all()
@@ -758,7 +758,7 @@ def create_section(request):
 
 
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_board)
 def update_section(request, id):
 
     sections = Section.objects.all()
@@ -778,7 +778,7 @@ def update_section(request, id):
 
 
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_board)
 def delete_section(request, id):
 
     section = Section.objects.get(id=id)
@@ -791,14 +791,14 @@ def delete_section(request, id):
 
 
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_board)
 def list_documents(request):
     documents = Document.objects.order_by("section", "date_modified")
     document =  documents.first()
     return render(request, 'association/show_document.html', { 'documents': documents , 'document': document  })
 
 
-@user_passes_test(user_is_superuser) 
+@user_passes_test(user_is_board) 
 def create_document(request):
  
     form = DocumentForm(request.POST or None )
@@ -818,7 +818,7 @@ def create_document(request):
 
 
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_board)
 def update_document(request, id):
 
  
@@ -840,7 +840,7 @@ def update_document(request, id):
 
 
 
-@user_passes_test(user_is_superuser)
+@user_passes_test(user_is_board)
 def delete_document(request, id):
 
     document = Document.objects.get(id=id)
@@ -859,3 +859,76 @@ def ajax_shower_document(request):
     data['html'] = render_to_string('association/ajax_shower_document.html', context)
 
     return JsonResponse(data)
+
+
+#####################################################################################################################################
+#####################################################################################################################################
+####    Rate
+#####################################################################################################################################
+#####################################################################################################################################
+@user_passes_test(user_is_board)
+def list_rates(request):
+
+    rates = Rate.objects.all()
+    return render(request, 'association/list_rate.html', {'rates': rates })
+
+
+
+@user_passes_test(user_is_board)
+def show_rate(request):
+
+    rates = Rate.objects.filter(is_active = 1).order_by("quantity")
+    return render(request, 'association/list_rate.html', {'rates': rates ,     })
+
+
+@user_passes_test(user_is_board) 
+def create_rate(request):
+ 
+    form = RateForm(request.POST or None )
+
+    if form.is_valid():
+        nf = form.save(commit = False)
+        nf.author = request.user
+        nf.save()
+
+
+        return redirect('list_rates')
+
+    else:
+        
+        print(form.errors)
+
+    context = {'form': form, }
+
+    return render(request, 'association/form_rate.html', context)
+
+
+
+@user_passes_test(user_is_board)
+def update_rate(request, id):
+
+    rate = Rate.objects.get(id=id)
+    
+    form = RateForm(request.POST or None, instance=rate )
+
+    if form.is_valid():
+        nf = form.save(commit = False)
+        nf.author = request.user
+        return redirect('list_rates')
+    else:
+        print(form.errors)
+
+    context = {'form': form,  'rate': rate,  }
+
+    return render(request, 'association/form_rate.html', context )
+
+
+
+@user_passes_test(user_is_board)
+def delete_rate(request, id):
+
+    rate = Rate.objects.get(id=id)
+    rate.delete()
+    return redirect('list_rates')
+    
+ 

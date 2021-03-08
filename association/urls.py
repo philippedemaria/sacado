@@ -37,5 +37,12 @@ urlpatterns = [
 
     path('print_bilan', print_bilan, name='print_bilan'),
     path('export_bilan', export_bilan, name='export_bilan'),
+
+    path('list_rates', list_rates, name='list_rates'),
+    path('create_rate', create_rate, name='create_rate'),
+    path('update_rate/<int:id>/', update_rate, name='update_rate'),
+    path('delete_rate/<int:id>/', delete_rate, name='delete_rate'),
+    path('show_rate', show_rate, name='show_rate'),
+
 ]
  

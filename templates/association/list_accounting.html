@@ -28,67 +28,67 @@
  
 
 {% block body %}
-    <section class="content_main"> 
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <table id="standard_tab" class="table table-bordered table-hover">
-                    <thead>
-                    <tr>
-                        <td style="width:100px">Date</td>                        
-                        <td style="width:80px">Référence</td>
-                        <td>Bénéficiaire</td>
-                        <td>Object </td>
-                        <td style="width:80px">Montant</td>
-                        <td style="width:80px">Débit/crédit</td>
-                        <td style="width:150px">Date de valeur</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        {% for accounting in accountings %}
-                            <tr>
-                                <td>
-                                    <span >{{ accounting.date|date:"d N Y" }} </span> 
-                                </td>
-                                <td>
-                                    <span >{{ accounting.code }}</span> 
-                                </td>
-                                <td>
-                                    <span class="helper_tip">{% if accounting.beneficiaire  %} {{ accounting.beneficiaire }} {% else %}{{ accounting.school.name }}, {{ accounting.school.country.name }} {% endif %}
-                                        <div class="helper_tip_text" > {{ accounting.observation|safe }}</div>
-                                    
-                                    </span>
-                                </td> 
-                                <td>
-                                    <a href="{% url 'update_accounting'  accounting.id %}" >{{ accounting.objet }}</a>
-                                    <a href="{% url 'delete_accounting'  accounting.id %}" class="pull-right"  onclick="return TestDelete('cette facture')"><i class="fa fa-trash"></i> </a>
-                                    <a href="{% url 'print_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-print"></i> </a>
-                                    <a href="{% url 'show_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-eye"></i> </a>
-                                </td>
-                                <td>
-                                     {{ accounting.amount }} €  <br>
-                                </td>
-                                <td>
-                                    {% if accounting.is_credit %}<span class="text-success">Crédit</span>{% else %}<span class="text-danger">Débit</span>{% endif %}
-                                </td>
-                                <td>
-                                     {{ accounting.acting|date:"d N Y" }}
-                                </td>
-                            </tr>
+<section class="content_main"> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table id="standard_tab" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <td style="width:100px">Date</td>                        
+                    <td style="width:80px">Référence</td>
+                    <td>Bénéficiaire</td>
+                    <td>Object </td>
+                    <td style="width:80px">Montant</td>
+                    <td style="width:80px">Débit/crédit</td>
+                    <td style="width:150px">Date de valeur</td>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for accounting in accountings %}
+                        <tr>
+                            <td>
+                                <span >{{ accounting.date|date:"d N Y" }} </span> 
+                            </td>
+                            <td>
+                                <span >{{ accounting.code }}</span> 
+                            </td>
+                            <td>
+                                <span class="helper_tip">{% if accounting.beneficiaire  %} {{ accounting.beneficiaire }} {% else %}{{ accounting.school.name }}, {{ accounting.school.country.name }} {% endif %}
+                                    <div class="helper_tip_text" > {{ accounting.observation|safe }}</div>
+                                
+                                </span>
+                            </td> 
+                            <td>
+                                <a href="{% url 'update_accounting'  accounting.id %}" >{{ accounting.objet }}</a>
+                                <a href="{% url 'delete_accounting'  accounting.id %}" class="pull-right"  onclick="return TestDelete('cette facture')"><i class="fa fa-trash"></i> </a>
+                                <a href="{% url 'print_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-print"></i> </a>
+                                <a href="{% url 'show_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-eye"></i> </a>
+                            </td>
+                            <td>
+                                 {{ accounting.amount }} €  <br>
+                            </td>
+                            <td>
+                                {% if accounting.is_credit %}<span class="text-success">Crédit</span>{% else %}<span class="text-danger">Débit</span>{% endif %}
+                            </td>
+                            <td>
+                                 {{ accounting.acting|date:"d N Y" }}
+                            </td>
+                        </tr>
 
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-
-
-        <div class="row">
-            <div class="col-sm-12 col-md-12">     
-                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
-            </div>
-        </div>
-    </section>
     </div>
+
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">     
+                <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+        </div>
+    </div>
+</section>
+ 
 
 
 

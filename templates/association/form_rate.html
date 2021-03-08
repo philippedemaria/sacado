@@ -1,0 +1,96 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+    {% if accounting %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+ 
+    <script>
+        require(['script/ajax-accounting']);
+    </script> 
+    
+{% endblock %}
+
+
+{% block page_title %}  
+    
+ 
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a>  Transaction 
+  
+{% endblock %}
+
+{% block page_menu_right %}
+    
+    
+{% endblock %}
+
+
+ 
+{% block body %}     
+<section class="content_main">
+    <form action="" method="POST">
+
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-sm-12 col-md-3">
+                <div class="form-group">
+                    {{ form.year.label_tag }}
+                    {{ form.year |add_class:"form-control" }}
+                    {{ form.year.errors }}
+                </div>
+            </div> 
+            <div class="col-sm-12 col-md-3">
+                <div class="form-group">
+                    {{ form.quantity.label_tag }}
+                    {{ form.quantity|add_class:"form-control"|attr:"step:500" }} 
+                    {{ form.quantity.errors }}
+                </div>
+            </div>                           
+            <div class="col-sm-12 col-md-3">
+                <div class="form-group">
+                    {{ form.amount.label_tag }}
+                    {{ form.amount |add_class:"form-control" }} 
+                    {{ form.amount.errors }}
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-3">
+                <div class="form-group">
+                    {{ form.discount.label_tag }}
+                    {{ form.discount |add_class:"form-control" }} 
+                    {{ form.discount.errors }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="form-group">
+                    {{ form.is_active.label_tag }}<br/>
+                    {{ form.is_active|attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}} 
+                    {{ form.is_active.errors }}
+                </div>
+            </div>
+        </div> 
+ 
+
+ 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="form-group">
+                    <input value="Enregistrer le tarif" type="submit" class="btn btn-primary"   />
+                    <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                               class="btn btn-default "/></a>
+                </div>
+            </div>    
+        </div>
+
+ 
+    </form>
+</section>  
+{% endblock %}

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Accounting , Voting , Associate, Document , Section , Detail
+from .models import Accounting , Voting , Associate, Document , Section , Detail , Rate
 
 
 
@@ -40,4 +40,12 @@ class DocumentForm(forms.ModelForm):
 class SectionForm(forms.ModelForm):
     class Meta:
         model = Section 
+        fields = '__all__' 
+
+
+
+
+class RateForm(forms.ModelForm):
+    class Meta:
+        model = Rate 
         fields = '__all__' 

@@ -1,0 +1,69 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+ 
+{% block require %}
+ 
+
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+ 
+
+{% endblock %}
+
+
+
+{% block page_title %}
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Tarifs
+{% endblock %}
+
+{% block page_menu_right %}
+    <a href="{% url 'create_rate' %}" class="btn btn-new pull-right">  Nouveau tarif</a> 
+    <a href="{% url 'show_rate' %}" class="btn btn-new pull-right"> Tarifs en cours</a>  
+{% endblock %}
+
+ 
+
+
+{% block body %}
+    <section class="content_main"> 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table id="standard_tab" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Année</th>                        
+                            <th>Nombre d'élèves</th>
+                            <th>Montant (€)</th>
+                            <th>Montant réduit (€)</th>
+                            <th>Année active</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rate in rates %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'update_accounting' rate.id %}">{{ rate.year }}</a>
+                                    <a href="{% url 'delete_accounting' rate.id %}" class="pull-right"  onclick="return TestDelete('ce tarif')"><i class="fa fa-trash"></i> </a>
+                                </td>
+                                <td>
+                                    {{ rate.quantity }}
+                                </td>
+                                <td>
+                                    {{ rate.amount }} €
+                                </td> 
+                                <td>
+                                    {{ rate.discount }} €
+                                </td>
+                                <td>
+                                    {% if rate.is_active %}<span class="text-success">actif</span>{% else %}<span class="text-danger">inactif</span>{% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+{% endblock %}

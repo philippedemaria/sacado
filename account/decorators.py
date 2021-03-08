@@ -6,11 +6,22 @@ from django.db.models import Q
 from school.models import School 
 
 def user_can_create(user):
-    return user.is_teacher
-
+    test = False
+    if user.is_teacher   :
+        test = True
+    return test
 
 def user_is_superuser(user):
-    return user.is_superuser == 1
+    test = False
+    if user.is_superuser   :
+        test = True
+    return test
+
+def user_is_board(user):
+    test = False
+    if user.is_board   :
+        test = True
+    return test
 
 
 def user_is_creator(user):
