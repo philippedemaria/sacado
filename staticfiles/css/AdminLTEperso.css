@@ -2304,7 +2304,7 @@ table.table-bordered.dataTable {
   height:235px;
   border : 1px solid #e6e2dd;
   border-radius: 5px;
-  background-color: #FAFAFA;
+  background-color: #F8F8F8;
 }
 .card_course:hover{
   float: left;
@@ -2326,7 +2326,6 @@ table.table-bordered.dataTable {
   padding: 0px 0px 5px 0px;
   border-bottom: 1px solid #CCC;
   max-height : 50px;
-  background-color: #F2F2F2;
 }
 .course_level{
   font-size: 14px;
