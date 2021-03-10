@@ -117,7 +117,7 @@
 
                 <!-- Fenetre accessible par le disc   -->
 
-                <div class="overlay  overlay_show{{parcours.id }}" style="height:100px"> 
+                <div class="overlay  overlay_show{{parcours.id }} no_visu_on_load" style="height:100px"> 
                     <div class="overlay_expand">
                         <a href="#" data-parcours_id="{{parcours.id }}" class="overlay_show pull-right">
                             <i class="fa fa-times"></i>
@@ -149,7 +149,7 @@
                 </div>
                 <!-- Fin de la fenetre  -->
                 <!--EXPORTATION  -->
-                <div class="group_show  overlay_export{{parcours.id }}"> 
+                <div class="group_show  overlay_export{{parcours.id }} no_visu_on_load"> 
                     <div class="overlay_expand">
                         <h4 style="color:{{parcours.color }}">Exportation CSV 
                         <a href="#" class="export_shower pull-right" data-parcours_id="{{parcours.id }}"><i class="fa fa-times"></i> </a>

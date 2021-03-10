@@ -35,6 +35,12 @@ body {
  /*height : 100vh ;*/
 }
 
+
+.no_visu_on_load{
+  display: none;
+}
+
+
 .search_div{
   margin-bottom: 0px;
 }

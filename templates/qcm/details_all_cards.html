@@ -31,10 +31,6 @@
 
     <!-- Partie sur laquelle est posée l'image  -->                  
     <div class="card-image">
-
-
-
- 
           {% if rc.is_lock  %}
                   <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
                       <i class="fa fa-lock"></i> <span class="hidden_lock"></span>
@@ -87,7 +83,7 @@
           =============================================================================================================
           =============================================================================================================-->
           <!-- Pop up de la date de la tache d'un exercice  -->
-          <div id="detail_dateur{{rc.id}}" class="card-dateur"  > 
+          <div id="detail_dateur{{rc.id}}" class="card-dateur no_visu_on_load"  > 
               <div class="row">
                     <div class="col-sm-12 col-md-12 title">     
                         <span href="#card{{rc.id}}" class="select_task_close pull-right" data-relationship_id="{{rc.id}}"><i class="fa fa-times"></i></span>  
@@ -100,7 +96,7 @@
           </div>
 
           <!-- Pop up de la date de publication d'un exercice  -->
-          <div id="detail_pub{{rc.id}}" class="card-dateur"  >
+          <div id="detail_pub{{rc.id}}" class="card-dateur no_visu_on_load"  >
               <div class="row">
                     <div class="col-sm-12 col-md-12 title">     
                         <span href="#card{{rc.id}}" class="select_publish_close pull-right" data-relationship_id="{{rc.id}}"><i class="fa fa-times"></i></span>  
@@ -117,7 +113,7 @@
                 Pop up de la constrainte 
           =============================================================================================================
           =============================================================================================================-->
-          <div id="detail_constraint{{rc.id}}" class="card-dateur"> 
+          <div id="detail_constraint{{rc.id}}" class="card-dateur no_visu_on_load"> 
               <div class="row">
                     <div class="col-sm-12 col-md-12 title">  
                       <span href="#card{{rc.id}}" class="select_constraint_close pull-right" data-relationship_id="{{rc.id}}"><i class="fa fa-times"></i></span>  
@@ -196,7 +192,7 @@
                 Pop up de la durée et du nombre de situation d'un exercice
           =============================================================================================================
           =============================================================================================================-->
-          <div id="details{{rc.id}}" class="card-dateur"  > 
+          <div id="details{{rc.id}}" class="card-dateur no_visu_on_load"  > 
               <div class="row">
                     <div class="col-sm-12 col-md-12 title">
                     <span href="#card{{rc.id}}" class="select_details_close pull-right" data-relationship_id="{{rc.id}}"><i class="fa fa-times"></i></span>               
@@ -246,7 +242,7 @@
               Pop up de partage d'un exercice
           =============================================================================================================
           =============================================================================================================-->
-          <div id="share{{ rc.id }}" class="card-dateur"  > 
+          <div id="share{{ rc.id }}" class="card-dateur no_visu_on_load"  > 
               <div class="row">
                     <div class="col-sm-12 col-md-12   title">  
                       <span href="#card{{rc.id}}" class="select_share_close" data-relationship_id="{{rc.id}}"><i class="fa fa-times pull-right"></i></span>           
@@ -279,7 +275,7 @@
               Pop up des compétences d'un exercice
           =============================================================================================================
           =============================================================================================================-->
-          <div id="skill{{ rc.id }}" class="card-skill"> 
+          <div id="skill{{ rc.id }}" class="card-skill no_visu_on_load"> 
 
         
               <div class="row">
@@ -287,10 +283,7 @@
                         Compétences visées  
                     </div>
                </div> 
-
             <hr style="padding:0px; margin:10px 0px"/><br>
-              
-                
                 {% for skill in rc.parcours.subject.skill.all %}
                       <label style="font-size:10px">
                       <input type="checkbox" name="skills" data-relationship_id="{{rc.id}}" value="{{skill.id}}" class="skill_selector" {% if skill in rc.skills.all %} checked {% endif %}  />
@@ -301,7 +294,6 @@
                       {% if group %}<a href="{% url 'update_parcours' rc.parcours.id group_id  %}">Cliquez ici</a>{% endif %}
                   </div>
                 {% endfor %}
-
           </div>
            <!--  
           =============================================================================================================
@@ -310,7 +302,7 @@
           =============================================================================================================
           =============================================================================================================-->
           {% if not rc.exercise.supportfile.is_ggbfile %}
-          <div id="select_note{{ rc.id }}"  class="card-dateur"  >  
+          <div id="select_note{{ rc.id }}"  class="card-dateur no_visu_on_load"  >  
               <div class="row">
                     <div class="col-sm-12 col-md-12 title">
                     <span href="#card{{rc.id}}" class="select_note_close pull-right" data-relationship_id="{{rc.id}}"><i class="fa fa-times"></i></span>               
@@ -555,7 +547,7 @@
           =============================================================================================================-->
 
           <!-- Pop up de la date de la tache d'un exercice  -->
-          <div id="custom_detail_dateur{{rc.id}}" class="card-dateur"  > 
+          <div id="custom_detail_dateur{{rc.id}}" class="card-dateur no_visu_on_load"  > 
               <div class="row">
                     <div class="col-sm-12 col-md-12 title">     
                         <span href="#customcard{{rc.id}}" class="custom_select_task_close pull-right" data-customexercise_id="{{rc.id}}"><i class="fa fa-times"></i></span>  
@@ -579,7 +571,7 @@
           </div>
 
           <!-- Pop up de la date de publication d'un exercice  -->
-          <div id="custom_detail_pub{{rc.id}}" class="card-dateur"  >
+          <div id="custom_detail_pub{{rc.id}}" class="card-dateur no_visu_on_load"  >
               <div class="row">
                     <div class="col-sm-12 col-md-12 title">     
                         <span href="#card{{rc.id}}" class="custom_select_publish_close pull-right" data-customexercise_id="{{rc.id}}"><i class="fa fa-times"></i></span>  
@@ -605,7 +597,7 @@
 
 
           <!-- Pop up de la durée et du nombre de situation d'un exercice  -->
-          <div id="custom_details{{rc.id}}" class="card-dateur"  > 
+          <div id="custom_details{{rc.id}}" class="card-dateur no_visu_on_load"  > 
               <div class="row">
                     <div class="col-sm-12 col-md-12 title">
                     <span href="#customcard{{rc.id}}" class="custom_select_details_close pull-right" data-customexercise_id="{{rc.id}}"><i class="fa fa-times"></i></span>               
@@ -629,7 +621,7 @@
           </div>
 
           <!-- Pop up de partage d'un exercice  -->
-          <div id="custom_share{{ rc.id }}" class="card-dateur"  > 
+          <div id="custom_share{{ rc.id }}" class="card-dateur no_visu_on_load"  > 
               <div class="row">
                     <div class="col-sm-12 col-md-12   title">  
                       <span href="#customcard{{rc.id}}" class="custom_select_share_close" data-customexercise_id="{{rc.id}}"><i class="fa fa-times pull-right"></i></span>           
@@ -645,7 +637,7 @@
           </div>
 
           <!-- Pop up des compétences d'un exercice  -->
-          <div id="custom_skill{{ rc.id }}" class="card-skill"> Compétences visées<br>
+          <div id="custom_skill{{ rc.id }}" class="card-skill no_visu_on_load"> Compétences visées<br>
               <span   class="select_skill_close pull-right" data-customexercise_id="{{rc.id}}"><i class="fa fa-times"></i></span>
                 {% for skill in skills %}
                       <label style="font-size:10px">
