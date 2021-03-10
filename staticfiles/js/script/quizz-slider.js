@@ -53,7 +53,7 @@ define(['jquery',  'bootstrap' ], function ($) {
 //======================================================================================================
 
 
-       $('.nav button').on('click', function(){ 
+       $('.nav').on('click', function(){ 
 
         $(".instruction").hide();
         $(".starter_in").hide();
