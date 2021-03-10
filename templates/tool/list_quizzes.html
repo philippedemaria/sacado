@@ -116,7 +116,7 @@
                                 {% endfor %}
                             </td>
                             <td > 
-                                <div class="quizz_action"><a href="{% url 'create_question'  quizz.id 0 %}" ><i class="fa fa-plus"></i> Ajouter des questions</a> 
+                                <div class="quizz_action"><a href="{% url 'create_question'  quizz.id 0 %}" ><i class="fa fa-plus"></i> Ajouter/modifier des questions</a> 
                                     <span style="font-size:10px">
                                         <b>{% if quizz.is_random %}
                                         {{ quizz.nb_slide }}
