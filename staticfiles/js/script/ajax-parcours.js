@@ -255,6 +255,15 @@ define(['jquery','bootstrap'], function ($) {
             $('#demosg'+value+' .selector').not(this).prop('checked', this.checked);
         });
 
+ 
+
+
+        $(".subparcours_show_close").click(function(){
+            value =  $(this).attr("data-parcours_id"); 
+            $('#subparcours_show'+value).toggle(500);
+        });
+
+
 
 
         $(".collapser").click(function(){

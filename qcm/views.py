@@ -787,7 +787,12 @@ def list_parcours(request):
     try :
         del request.session["group_id"]
     except:
-        pass  
+        pass 
+    try :
+        del request.session["parcours_folder_id"]
+    except:
+        pass 
+    print("ici") 
 
     return render(request, 'qcm/list_parcours.html', { 'parcourses' : parcourses , 'communications' : [] , 'relationships' : [],  'parcours' : None , 'group' : None , 'today' : today ,  'teacher' : teacher , 'nb_archive' : nb_archive })
 
@@ -880,13 +885,16 @@ def list_sub_parcours_group(request,idg,id):
     request.session["parcours_id"] = parcours.id
     request.session["group_id"] = group_id
 
+    request.session["parcours_folder_id"] = parcours.id
+
+
     if not authorizing_access(teacher,parcours, True ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
     parcours_tab = parcours.leaf_parcours.order_by("ranking")
 
-    return render(request, 'qcm/list_sub_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group , 'parcours_folder' : parcours,  'parcours' : parcours , 'communications' : [] , 'relationships' : [] , 'role' : True , 'today' : today })
+    return render(request, 'qcm/list_sub_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group , 'parcours_folder' : parcours,  'parcours' : None , 'communications' : [] , 'relationships' : [] , 'role' : True , 'today' : today })
 
 
 
@@ -1358,14 +1366,19 @@ def show_parcours(request, id):
 
     skills = Skill.objects.all()
 
+    parcours_folder_id = request.session.get("parcours_folder_id",None)
+    parcours_folder = None
+    if parcours_folder_id :
+        parcours_folder = Parcours.objects.get(pk = parcours_folder_id)
+
 
     form_reporting = DocumentReportForm(request.POST or None )
  
     context = { 'parcours': parcours, 'teacher': teacher,  'communications' : [] ,  'today' : today , 'skills': skills,  'form_reporting': form_reporting, 'user' : user ,
                'students_from_p_or_g': students_p_or_g,   'nb_exo_visible': nb_exo_visible , 'nb_students_p_or_g' : nb_students_p_or_g ,  'relationships_customexercises': relationships_customexercises,
-               'nb_exo_only': nb_exo_only,'group_id': group_id, 'group': group, 'role' : role, 'parcours_group' : parcours_group  }
+               'nb_exo_only': nb_exo_only,'group_id': group_id, 'group': group, 'role' : role, 'parcours_group' : parcours_group , 'parcours_folder' : parcours_folder   }
 
-    return render(request, 'qcm/show_parcours.html', context)
+    return render(request, 'qcm/show_parcours.html', context) 
 
 
 
