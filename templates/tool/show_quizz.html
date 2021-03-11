@@ -130,7 +130,7 @@
                         {% if question.imagefile %}
                         <div class="row">  
                             <div class="col-sm-12 col-md-12"align="center">
-                                 <img src="{{ question.imagefile.url }}" height="300px"  />
+                                 <img src="{{ question.imagefile.url }}" height="{% if question.qtype == 2 %}550{% else %}350{% endif %}px" />
                             </div>
                         </div>
                         {% endif %}
