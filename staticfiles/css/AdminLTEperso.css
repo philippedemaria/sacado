@@ -2938,8 +2938,8 @@ body.hold-transition .main-header .logo {
   margin-left: 35px;  
   margin-bottom: 15px;
   margin-right: 0px;
- /*  height:640px;*/
-  height:89vh;
+ /*  height:640px;
+  height:89vh;*/
   overflow-y: auto;
   overflow-x: hidden;
 }
