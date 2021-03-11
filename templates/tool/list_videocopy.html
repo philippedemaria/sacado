@@ -30,7 +30,7 @@
     <div class="row">
         <div class="col-sm-12 col-md-12">
         {% for v in videocopies %}
-            {% if v.image.url %}
+            {% if v.image %}
             <div class="videocopy">
                 <a href="#" data-toggle='modal' data-target='#video_projection' class="this_photo" data-img="{{ v.image.url }}" > 
                     <img src="{{ v.image.url }}" width="244px" height="244px"  />
