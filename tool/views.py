@@ -216,11 +216,10 @@ def create_quizz(request):
         nf.is_questions = 1
         nf.save()
         form.save_m2m()
-        print(nf.pk)
         return redirect('create_question' , nf.pk , 0 )
     else:
         print(form.errors)
-        print("ici")
+
 
     context = {'form': form,  }
 
@@ -245,7 +244,7 @@ def update_quizz(request,id):
     else:
         print(form.errors)
 
-    context = {'form': form,   }
+    context = {'form': form, 'quizz': quizz,  }
 
     return render(request, 'tool/form_quizz.html', context)
 
@@ -321,7 +320,6 @@ def ajax_show_generated(request):
 def get_save_new_gquizz(quizz) :
     """ permet un enregistrement d'un nouveau quizz généré toutes les hours = 1 """
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     save = True
     remainig_time = datetime.now() - timedelta(hours = 0.15) # 0.25 pour 1/4 d'heure , 0.5 pour 1/2 heure
     if Generate_quizz.objects.filter(date_created__gt= remainig_time, quizz__teacher = quizz.teacher ).count() > 0 :
@@ -387,7 +385,6 @@ def get_date_play(quizz_id,group_id,mode) : # pour les questionnaires non random
 
     """ fonction qui génére un quizz à partir du modèle du quizz"""
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     quizz = Quizz.objects.get(pk= quizz_id)
     save = get_save_new_gquizz(quizz)
     if save :
