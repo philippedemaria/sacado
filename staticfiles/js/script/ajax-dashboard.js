@@ -220,9 +220,28 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         });
 
 
+        $('#right_menu_open').mouseover(function(event) {    
+            $('#right_menu').show();
+          event.preventDefault();
+        });
 
 
- 
+        $('#right_menu_Close').click(function(event) {
+            $('#right_menu').hide();
+          event.preventDefault();
+        });
+
+         $('.menu_right_div').mouseover(function(event) {
+            $('#right_menu').show();
+        });
+
+         $('.menu_right_div').mouseout(function(event) {
+            $('#right_menu').hide();
+        });
+
+
+
+
         $('#tools').click(function(event) {
           if ($('#notification-tools').hasClass('dismiss')) {
             $('#notification-tools').removeClass('dismiss').addClass('selected').show();

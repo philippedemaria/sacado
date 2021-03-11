@@ -1,9 +1,12 @@
 {% load static %} 
 {% load item_tags %} 
 
-<div class="row" id ="principal_section"> 
-    <div class="col-xs-12 col-md-10 col-lg-10" style="margin-top:0px">
-        <h2 class="thin">Mes groupes </h2>
+
+
+<div class="row" id ="principal_section">
+    <a href="#" class="sub_menu_right pull-right whire" id="right_menu_open"><i class="fa fa-angle-double-left"></i></a> 
+    <div class="col-xs-12 col-md-12 col-lg-12" style="margin-top:0px">
+        <h2 class="thin">Mes groupes  </h2>
         <div class="row"></div><hr style="margin-top: 0px"/>   
         {% for group in groups %}
             {% get_group_parcours_counter group  teacher as data %}
@@ -279,9 +282,11 @@
      <!--    ****************************          Colonne de droite              ****************-->
      <!-- ****************************************************************************************-->
      <!-- ***************************** **********************************************************-->
+    {% comment "Menu right" %}
     <div class="col-xs-12 col-md-12 col-lg-2"> 
         {% include 'right_menu.html' %}
     </div>
+    {% endcomment %}
 </div>
 
 
@@ -349,3 +354,19 @@
         </div>
     </div>
 </div>
+
+
+
+
+<div class="menu_right_div" id="right_menu">
+ 
+    <div class="col-xs-12 col-md-12 col-lg-12"> 
+        {% include 'right_menu.html' %}
+    </div>
+
+</div>
+
+
+ 
+
+ 

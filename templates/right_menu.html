@@ -159,34 +159,8 @@ Aucun parcours
 </div>
 <hr>
  
-<div class="btn btn-default full_width" style="text-align: left; font-size:15px; margin-bottom: 5px">
-
-    <span data-toggle="collapse" data-parent="#accordion" href="#collapse">
-     {% with  nb_teacher_level as nbteacherlevel %}
-        {{ nbteacherlevel }} niveau{{ nbteacherlevel|pluralize:"x" }}  préféré{{  nbteacherlevel|pluralize }}  <i class="fa fa-caret-down pull-right"></i>
-     {% endwith %}
-    </span>
-    <div id="collapse" class="collapse">
-        <div class="panel-body" style="padding:0px">
-            <table class="table" style="margin-bottom: 0px;font-size:14px">
-                {% for l in teacher.levels.all %}
-                <tr>
-                    <td>
-                        {{ l.name }}
-                    </td>
-                </tr>
-                {% endfor %} 
-                <tr>
-                    <td>
-                        <a href="{% url 'profile' %}" style="font-size: 12px">Gérer mes préférences</a>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-</div>
-<hr>
-
+ 
+ 
 
 
 

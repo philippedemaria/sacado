@@ -390,6 +390,36 @@ li label:hover{
   border: 1px solid lightgrey;
 }
 
+ /******************************************** menu_right_div  **************************************/
+
+.menu_right_div{
+  position: absolute;
+  right: 0px;
+  width: 300px;
+  top: 0px;
+  height: 100vh;
+  background-color: #f1eef7;
+    -webkit-box-shadow: -2px -2px 6px rgba(79, 73, 66, .5);
+    box-shadow: -2px -2px 6px rgba(79, 73, 66, .5);
+  z-index: 999;
+  display: none;
+}
+
+
+.sub_menu_right{
+   background-color: #f1eef7;
+   padding: 10px;
+   position: absolute;
+   right: 0px;
+   height:100px;
+   z-index:800;
+   border-top-left-radius: 5px;
+   border-bottom-left-radius: 5px;
+}
+
+
+
+
  /******************************************** Submenu nav **************************************/
 
 .submenu_div {
