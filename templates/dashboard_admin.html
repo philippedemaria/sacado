@@ -112,7 +112,28 @@
                             </div>
                         </div>
 
-
+                        <div class="col-lg-3 col-md-4 col-xs-6">
+                            <div class="small-box bg-{% if  data.nbt > 0 %}purple{% else %}danger{% endif %}">
+                                <div class="inner">
+                                    <span style="font-size: 35px">Etablissement </span><br/><br/>
+ 
+                                    {% if school.adresse %}{{ school.adresse}}<br/>{% endif %}   
+ 
+                                    {% if school.adresse %}{{ school.complement}} <br/>{% endif %}       
+ 
+                                    {{ school.town}}, {{ school.country}}   
+                                </div>
+                                <div class="inner">
+                                    Token 
+                                    <span class="helper_tip" style="font-size: 12px"> <i class="fa fa-question-circle"></i>
+                                        <div class="helper_tip_text" >Ce token est à donner aux enseignant de votre établissement pour s'enregistrer.</div>
+                                    </span> :   {{ school.code_acad}}_{{ school.id }}  
+                                </div>
+ 
+ 
+ 
+                            </div>
+                        </div>
 
 
 
