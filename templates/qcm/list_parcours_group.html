@@ -160,7 +160,7 @@
                             <h4 style="color:{{parcours.color }}">Exportation CSV 
                             <a href="#" class="export_shower pull-right" data-parcours_id="{{parcours.id }}"><i class="fa fa-times"></i> </a>
                             <br><small>Pour exporter vers Pronote, les listes d'élèves Pronote et SACADO doivent être identiques.<span id="loading_export{{ parcours.id }}"></span></small></h4>
-                            {% if not request.user.school %}
+                            {% if sacado_asso %}
                             <form action="{% url 'export_note' group.id parcours.id  %}" method="POST" enctype='multipart/form-data'>     {% csrf_token %}
                                 <div class="col-md-6 col-lg-6 col-xs-6">
                                     <input type="text" class="form-control" placeholder ="Noté sur ?" name="on_mark" id="on_mark{{ parcours.id }}" />
@@ -171,7 +171,7 @@
                                 </div>
                             </form>
                             {% else %}
-                                <span style="color:red;font-size: 14px">Action non permise</span>
+                                <span style="color:red;font-size: 14px">Action non permise - Version établissement requise.</span>
                             {% endif %}
                         </div> 
                     </div>
