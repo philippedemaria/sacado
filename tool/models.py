@@ -152,6 +152,13 @@ class Question(models.Model):
         return self.title
 
 
+    def ans_for_this_question (self,q, student):
+        ans = Answerplayer.objects.get(gquizz = q , student= student , question = self)
+        return ans.answer
+
+
+
+
 class Choice(models.Model):
     """
     Modèle représentant un associé.
@@ -189,9 +196,17 @@ class Quizz(ModelWithCode):
     is_lock      = models.BooleanField(default=0, verbose_name="Verrouiller ?") 
     is_random    = models.BooleanField(default=0, verbose_name="Aléatoire ?") 
     nb_slide     = models.PositiveIntegerField(default=0, editable=False)  # Nombre de diapositive si le quizz est randomisé
+    is_video     = models.BooleanField(default=0, verbose_name="Type de passation")  # Vidéo projection
+
+    is_back      = models.BooleanField(default=0, verbose_name="Retour arrière ?")  
+    is_ranking   = models.BooleanField(default=0, verbose_name="Ordre aléatoire des questions ?")  
+    is_shuffle   = models.BooleanField(default=0, verbose_name="Ordre aléatoire des réponses ?") 
+    is_result    = models.BooleanField(default=0, verbose_name="Réponse en fin de quizz ?")  
 
     interslide   = models.PositiveIntegerField(default=10, blank=True, verbose_name="Temps entre les questions")
 
+    start = models.DateTimeField(null=True, blank=True, verbose_name="Début de publication")
+    stop  = models.DateTimeField(null=True, blank=True, verbose_name="Verrouillé dès le")
 
     groups       = models.ManyToManyField(Group, blank=True, related_name="quizz" , editable=False) 
     questions    = models.ManyToManyField(Question, blank=True, related_name="quizz" , editable=False)  
@@ -205,6 +220,20 @@ class Quizz(ModelWithCode):
         return self.generate_quizz.filter(group=group).order_by("-date_created")
 
 
+def time_zone_user(user):
+    try :
+        if user.time_zone :
+            time_zome = user.time_zone
+            timezone.activate(pytz.timezone(time_zome))
+            today = timezone.localtime(timezone.now())
+        else:
+            today = timezone.now()
+    except :
+        today = timezone.now()
+
+    return today
+
+
 class Generate_quizz(ModelWithCode):
     """
     Modèle qui récupère le quizz à partir du modèle de quizz choisi.
@@ -214,10 +243,39 @@ class Generate_quizz(ModelWithCode):
     date_created = models.DateTimeField(auto_now=True)
     is_game      = models.BooleanField(default=0, editable= False) 
     students     = models.ManyToManyField(Student, blank=True,  related_name="gquizz",   editable=False)
+    
     def __str__(self):
         return self.quizz.title 
 
  
+
+    def student_show(self):
+        ok = True
+        if self.quizz.stop :
+            today = time_zone_user(self.quizz.teacher.user)
+            if self.quizz.stop > today :
+                ok = False
+        return ok
+
+
+
+
+    def ans_for_this_question (self,q, student):
+        ans = Answerplayer.objects.get(gquizz = self , student= student , question = q)
+        t = []
+        if q.qtype == 2 :
+            t = ans.answer
+        else :
+            if ans.answer :
+                a_tab = ans.answer.split(',')
+                for a in a_tab :
+                    t.append(int(a))
+        return t
+
+
+
+
+
 class Generate_qr(models.Model):
     """
     Modèle qui récupère les questions du quizz généré.
@@ -259,6 +317,22 @@ class Answerplayer(models.Model):
 
     def __str__(self):
         return self.student.user.last_name
+
+
+    def get_choice_with_these(self):
+        tab_answer = self.answer.split(",")
+        rep , sep  = "" , ", "
+        i = 1
+        for t in tab_answer :
+            c = Choice.objects.get(pk=int(t))
+            if i==len(tab_answer):
+                sep = ""
+            rep += c.answer + sep
+            i +=1
+        return rep
+
+
+
 
 
 class Slide(models.Model):
@@ -324,3 +398,7 @@ class Videocopy(models.Model):
 
     def __str__(self):
         return "videocopie" 
+
+
+
+ 

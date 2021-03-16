@@ -1,0 +1,104 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+ 
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+    <script>
+        require(['script/ajax-quizz-complement']);
+    </script> 
+
+{% endblock %}
+
+
+
+{% block page_title %}
+        <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> Les quizz</a> 
+{% endblock %}
+
+{% block page_menu_right %}
+
+
+{% endblock %}
+
+
+
+
+{% block body %}
+<section class="content_main"> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table id="standard_tab" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Matière</th>
+                    <th>Code</th>
+                    <th>Titre</th>
+                    <th>Résultats</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for gquizz in gquizzes %}
+                        <tr style="font-size:20px">
+                            <td> 
+                               {{ gquizz.quizz.subject.shortname }}
+                            </td>
+                            <td> 
+                               {{ gquizz.code }}
+                            </td>
+                            <td>
+                               {% if  gquizz.quizz.is_video %}
+                               <a href="{% url 'play_quizz_student'  %}"><i class="fa fa-gamepad fa-fw"></i>  
+                               {% elif gquizz.quizz.is_numeric and not gquizz.quizz.is_video %}
+                                    <a href="{% url 'goto_quizz_student' gquizz.id  %}"><i class="fa fa-desktop fa-fw"></i> 
+                                {% else %}
+                                    <a href=" "><i class="fa fa-pencil-square fa-fw"></i>  
+                                {% endif %} {{ gquizz.quizz.title }} </a>
+
+                                <b><small>> 
+                                    {% if gquizz.quizz.is_random %}
+                                        {{ gquizz.quizz.nb_slide }}
+                                    {% else %}
+                                        {{ gquizz.quizz.questions.all|length }}
+                                    {% endif  %} question{% if gquizz.quizz.nb_slide > 1 or gquizz.quizz.questions.all|length > 1 %}s{% endif %}</small>
+                                </b>
+                            </td>
+                            <td>
+                                {% if gquizz.student_show %}
+                                    <small><a href="#" data-toggle='modal' class="show_my_quizz_result" data-target='#my_quizz_results' data-gquizz="{{ gquizz.id }}">mes résultats</a></small>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %} 
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">     
+                <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+        </div>
+    </div>
+</section>
+
+
+
+<div class="modal fade" id="my_quizz_results" tabindex="-1" role="dialog" aria-labelledby="my_quizz_results">
+    <div class="modal-dialog modal-maxsize" role="document" style="width:70%">
+        <div class="modal-content" >
+            <div class="modal-header">        
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2 class='thin' >Résultats</h2>    
+            </div>
+            <div class="modal-body" id="my_result">
+      
+            </div>
+        </div>
+    </div> 
+</div>
+{% endblock %}

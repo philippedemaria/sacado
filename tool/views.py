@@ -17,9 +17,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.forms import inlineformset_factory
 from templated_email import send_templated_mail
 from django.db.models import Q
-from random import  randint
+from random import  randint, shuffle
 import math
 import json
+import time
 ############### bibliothèques pour les impressions pdf  #########################
 import os
 from django.utils import formats, timezone
@@ -332,8 +333,7 @@ def get_save_new_gquizz(quizz) :
 def get_qr(quizz_id,group_id,mode) :
 
     """ fonction qui génére un historique de questions aléatoires à partir du modèle du quizz"""
-    
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+
     quizz = Quizz.objects.get(pk= quizz_id)
     save = get_save_new_gquizz(quizz) 
 
@@ -352,7 +352,7 @@ def get_qr(quizz_id,group_id,mode) :
         for i in range(nleft) :
             random = randint(0, len(qrandoms)-1)
             qrandoms.append(list_qr[random]) 
-        qrandoms.shuffle()
+        random.shuffle(qrandoms)
     
  
     if save :
@@ -405,9 +405,13 @@ def show_quizz_group(request,id,idg):
     quizz , gquizz , questions , save = get_date_play(id,idg,0)
     questions = quizz.questions.filter(is_publish=1).order_by("ranking")
     group = Group.objects.get(pk = idg)
-    context = {  "quizz" : quizz , "questions" : questions , "group" : group , "save" : save }
 
-    return render(request, 'tool/show_quizz.html', context)
+
+    if quizz.is_numeric and not quizz.is_video :
+        return redirect("list_quizzes")    
+    else :
+        context = {  "quizz" : quizz , "questions" : questions , "group" : group , "save" : save }     
+        return render(request, 'tool/show_quizz.html', context)
 
 
 
@@ -562,9 +566,7 @@ def ajax_quizz_show_result(request):
  
 
     context = { "answers" : answers , "no_answers" : no_answers , "no_answers_display" : no_answers_display   }
-
-    print(context)
-
+ 
     data['html'] = render_to_string('tool/show_quizz_results.html', context)
 
     return JsonResponse(data) 
@@ -709,6 +711,180 @@ def store_student_answer(request):
 
     context = { 'student' : request.user.student , 'gquizz' : gquizz , 'starter' : False }
     return render(request, 'tool/play_quizz_start.html', context)
+
+
+
+def list_quizz_student(request):
+    """ Lancer le play quizz élève """
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    student = request.user.student
+
+    gquizzes = set()
+    for g in student.students_to_group.all() : 
+        teacher_user = g.teacher.user
+        today = time_zone_user(teacher_user)
+        gquizzes.update(g.generate_quizz.filter(Q(quizz__is_publish = 1)| Q(quizz__start__lte= today,quizz__start__gte= today)))
+
+    context = { 'gquizzes' : gquizzes , }
+    return render(request, 'tool/list_quizz_student.html', context)
+
+
+
+
+
+
+
+def store_quizz_solution(gquizz_id,student,q_id, solutions,t):
+    """ Enregistrement des solutions postées """
+    answer,sep = "" , ","
+    i , score  = 1 , 0
+    is_correct = 0
+    for s in solutions : # est de la forme a-b où a est la réponse et b l'id de la question
+        ans      = s
+        print(q_id)
+        question = Question.objects.get(pk=q_id)
+        if question.qtype == 1 :
+            if int(ans) == question.is_correct :
+                is_correct = 1
+                score      = question.point
+        elif question.qtype == 2 :
+            choices = Choice.objects.filter(question = question)
+            for choice in choices :
+                if ans == choice.answer :
+                    is_correct = 1
+                    score      = question.point
+        else :
+            choices  = Choice.objects.values_list('id',flat=True).filter(question = question,is_correct=1)
+            corrects = 0
+            a = ""
+            if int(ans) in choices :
+                corrects += 1
+            if corrects == len(choices):
+                is_correct = 1
+                score      = question.point 
+
+        if i == len(solutions):
+            sep = ""
+        answer += str(escape_chevron(ans))+sep
+ 
+    timer = int(t)
+    answ, create_ans = Answerplayer.objects.get_or_create(gquizz_id = gquizz_id , student=student,question = question, qrandom_id = None, defaults={ "answer"  : answer , "score"  : score ,"timer"  : timer , "is_correct" : is_correct} )
+    if not create_ans :
+        Answerplayer.objects.filter(gquizz_id = gquizz_id , student=student,question = question, qrandom_id = None).update( answer = answer )
+        Answerplayer.objects.filter(gquizz_id = gquizz_id , student=student,question = question, qrandom_id = None).update( score = score )
+        Answerplayer.objects.filter(gquizz_id = gquizz_id , student=student,question = question, qrandom_id = None).update( timer = timer )
+        Answerplayer.objects.filter(gquizz_id = gquizz_id , student=student,question = question, qrandom_id = None).update( is_correct = is_correct )
+
+ 
+
+def goto_quizz_student(request,id):
+    """ participation à un quizz sur poste"""
+
+    student = request.user.student
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    gquizz = Generate_quizz.objects.get(pk= id)
+
+    #Génération des questions
+    question_ids = list(gquizz.quizz.questions.values_list("id",flat=True).order_by("ranking"))
+    gquizz_id    = request.session.get("gquizz_id",None) 
+    if not gquizz_id :
+        gquizz_id                    = gquizz.id
+        request.session["gquizz_id"] = gquizz_id
+
+        if quizz.is_ranking :
+            random.shuffle(question_ids)
+        
+        request.session["question_ids"] = question_ids
+
+
+    else :
+        gquizz_id    = request.session.get("gquizz_id")
+        question_ids = request.session.get("question_ids")
+    #Génération des réponses 
+    is_shuffle = False
+    if gquizz.quizz.is_shuffle :
+        is_shuffle = True
+
+    #Retour arrière
+    is_back = False
+    if gquizz.quizz.is_back :
+        is_back = True
+
+    #duration   
+    duration = False
+    if gquizz.quizz.stop and gquizz.quizz.start :
+        duration = gquizz.quizz.stop - gquizz.quizz.start 
+
+    #####################################################################################
+    ######## Navigation dans le quizz
+    #####################################################################################
+    #####################################################################################
+    quizz_nav      = int(request.POST.get("quizz_nav",-1))
+    quizz_nav_prev = int(request.POST.get("quizz_nav_prev",0))
+    end_of_quizz   = False
+
+    solutions  = request.POST.getlist("solution", None)
+
+    
+    stop_time  = time.time()
+    if solutions :
+        q_id    = request.POST.get("question_id")
+        start_time_tab = request.POST.get("start_time").split(",")
+        start_time =  int(start_time_tab[0])
+        timer =  stop_time - start_time
+        today = time_zone_user(gquizz.quizz.teacher.user)
+
+        if gquizz.quizz.stop and gquizz.quizz.start :
+            if gquizz.quizz.stop > today and gquizz.quizz.start < today :
+                store_quizz_solution(gquizz_id,student,q_id, solutions,timer)
+        elif gquizz.quizz.stop :
+            if gquizz.quizz.stop > today  :
+                store_quizz_solution(gquizz_id,student,q_id, solutions,timer)
+        else :
+            store_quizz_solution(gquizz_id,student,q_id, solutions,timer)
+
+
+    if quizz_nav == len(question_ids) :
+        end_of_quizz = True
+        question = None
+
+    elif quizz_nav > -1 : 
+        question_id = question_ids[quizz_nav]
+        question = Question.objects.get(pk = question_id)
+
+    else :
+        question = None
+
+
+    quizz_nav += 1
+    quizz_nav_prev = quizz_nav - 1
+
+
+
+    context = {  "gquizz" : gquizz , "question" : question , 'duration' : duration , "quizz_nav" : quizz_nav, "quizz_nav_prev" : quizz_nav_prev ,"end_of_quizz" : end_of_quizz ,"stop_time" : stop_time  }
+
+    return render(request, 'tool/pass_quizz_student.html', context)
+
+
+
+
+
+def ajax_show_my_result(request):
+
+    gquizz = request.POST.get("gquizz")
+    ans = Answerplayer.objects.filter(gquizz=gquizz,student = request.user.student)
+    score, total = 0 , 0
+    for a  in ans :
+        score += a.score
+        total += a.question.point
+
+    data = {}
+    data['html'] = render_to_string('tool/quizz_student_results.html', {'ans' : ans, 'gquizz' : gquizz , 'total' : total, 'score' : score,  })
+ 
+    return JsonResponse(data)
+
+
+
 
 ############################################################################################################
 ############################################################################################################

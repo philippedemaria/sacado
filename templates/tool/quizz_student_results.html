@@ -1,0 +1,58 @@
+ 
+
+
+
+<table class="table  table-hover standard_tab_1000" style="width:100%">
+    <thead> 
+        <tr>
+            <td>Question</td>
+            <td>Réponse proposé</td>
+            <td>Correction</td>
+            <td>Score</td>
+        </tr>
+    </thead> 
+    <tbody>
+        {% for a in  ans  %} 
+            <tr>
+                <td>{{a.question.title|safe}}</td>
+                <td> 
+                    {% if a.is_correct %}<i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif %}
+                    {% if a.question.qtype == 1 %}
+                        {% if  a.answer == "1" %}VRAI{% else %} FAUX {% endif %}
+                    {% elif a.question.qtype == 2 %}
+                        {{ a.answer }}
+                    {% else %}
+                        {{ a.get_choice_with_these }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if a.question.qtype == 1 %}
+                        {% if  a.question.is_correct %}VRAI{% else %} FAUX {% endif %}
+                    {% else %}
+                        {% for c in a.question.choices.all %}
+                            {% if c.is_correct %}
+                                {% if c.imagefile %}
+                                    <img src="{{ c.imagefile.url }}" width="200px">
+                                {% else %}
+                                    {{ c.answer }}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </td>
+                <td>{{a.score}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+  
+    <div class="row" align="center">
+        <div class="col-sm-12 col-md-12" >     
+            <h3 style="padding: 10px; background-color: #5d4391; color: #FFF;">Score : {{ score }} / {{ total }}</h3>
+        </div>
+    </div> 
+
+<script>
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>
+ 

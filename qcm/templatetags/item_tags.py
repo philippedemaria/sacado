@@ -107,6 +107,8 @@ def get_is_submitted(obj,student):
     """Vérifie si un exercice non auto corrigé est envoyé par un élève"""
     return obj.is_submit(student)
 
+
+
 @register.simple_tag
 def get_is_submit(obj,parcours,student): 
     """Vérifie si un exercice non auto corrigé est envoyé par un élève"""
@@ -126,6 +128,17 @@ def get_timer(obj,student):
     retourne  l'heure d'un exerice fait par élève.
     """
     return obj.timer(student) 
+
+
+
+@register.simple_tag
+def get_ans_for_this_question(obj,q, student): 
+    """
+    retourne  la réposne pour un quizz avec une question de type 1.
+    """
+    return obj.ans_for_this_question(q, student) 
+
+
 
 @register.simple_tag ##
 def get_score_and_time(obj,student):

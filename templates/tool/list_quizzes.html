@@ -35,7 +35,7 @@
                 <thead>
                 <tr>
                     <th>Titre</th>
-                    <th style="width:40%"">Groupes attribués et type</th>
+                    <th style="width:40%">Groupes attribués et type. Cliquer pour générer un quizz.</th>
                     <th>  </th>
                 </tr>
                 </thead>
@@ -49,6 +49,12 @@
                                     <div class="helper_tip_text" >Questions aléatoires </div>
                                 </span> 
                                {% endif %}
+                                <br/>
+                               {% if  quizz.is_publish %}
+                                    <div class="text-success">publié </div> 
+                               {% elif quizz.start  %}
+                                    <div class="text-success">{{ quizz.start|date:"d N Y H:i" }}</div>  {% if  quizz.stop %}  <div class="text-danger">{{ quizz.stop|date:"d N Y H:i" }}</div> {% endif %}
+                                {% endif %}
                             </td>
                             <td> 
                                 {% for g in quizz.groups.all %} 
@@ -64,10 +70,16 @@
 
                                             </span>
                                             {% if sacado_asso %}
-                                                {% if not quizz.is_random %}
+                                                {% if  quizz.is_video %}
                                                 <span class="sanspuce historic_li"  style="border:1px solid {{g.color}}; border-radius:20px; width:70px">
                                                     <a href="{% url 'play_quizz_teacher'  quizz.id   g.id  %}" target="_blank"  class="quizz_action" title="En version à tester"
                                                         style="color:{{g.color}};"><i class="fa fa-gamepad"></i> Numérique 
+                                                    </a>  
+                                                </span>
+                                                {% elif  quizz.is_numeric %}
+                                                <span class="sanspuce historic_li"  style="border:1px solid {{g.color}}; border-radius:20px; width:70px;color:{{g.color}};">
+                                                    <a href="{% url 'show_quizz_group'  quizz.id   g.id  %}" target="_blank"  class="quizz_action" title="Générer un quizz"
+                                                        style="color:{{g.color}};"><i class="fa fa-desktop"></i> Numérique
                                                     </a>  
                                                 </span>
                                                 {% endif %}
@@ -85,8 +97,10 @@
                                                         </a> 
                                                         <small style="margin-right:10px"  class="pull-right" >{{ gq.date_created|date:"d-m-Y" }}</small>
                                                         <small style="margin-right:20px"  class="pull-right" >
-                                                        {% if gq.is_game %}
+                                                        {% if gq.is_game and quizz.is_video %}
                                                            <i class="fa fa-gamepad"></i>
+                                                        {% elif not gq.is_game and quizz.is_numeric %}
+                                                           <i class="fa fa-desktop"></i>
                                                         {% else %}
                                                            <i class="fa fa-play fa-xs"></i> 
                                                         {% endif %}
@@ -121,7 +135,7 @@
                                         {{ quizz.nb_slide }}
                                         {% else %}
                                         {{ quizz.questions.all|length }}
-                                        {% endif  %} question{% if quizz.quizz.nb_slide > 1 or quizz.questions.all|length > 1 %}s{% endif %}</b>
+                                        {% endif  %} question{% if quizz.nb_slide > 1 or quizz.questions.all|length > 1 %}s{% endif %}</b>
                                     </span>
                                 </div>  
                                 {% if quizz.qrandoms.count > 0 or quizz.questions.count > 0 %}

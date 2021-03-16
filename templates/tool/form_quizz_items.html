@@ -34,6 +34,20 @@
                     </td>
                     <td> {{ form.is_publish|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
                 </tr>
+                <tr class="div_time">
+                    <td>{{ form.start.label_tag }}    
+                    </td>
+                    <td> {{ form.start |add_class:"form-control datetimepicker" }}  </td>
+                </tr>
+                <tr class="div_time">
+                    <td>{{ form.stop.label_tag }}  <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                    <div class="helper_tip_text" >Le quizz ne peut plus être traité mais reste visible. Dépublié pour fermer intégralement l'accès. </div>
+                                </span> 
+                    </td>
+                    <td> {{ form.stop|add_class:"form-control datetimepicker"  }}  </td>
+                </tr>
+
+
                 <tr>
                     <td>{{ form.is_share.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
                                     <div class="helper_tip_text" >Si Mutualisé, vos collègues peuvent le lire. Il est alors préférable de renseigner l'enseignement, le niveau et le thème pour le retrouver plus facilement.</div>
@@ -58,9 +72,36 @@
                     </td>
 
                 </tr>                                
-                <tr id="div_is_mark">
+                <tr class="div_is_mark">
                     <td class="no_border">{{ form.is_mark.label_tag }} </td>
                     <td>{{ form.is_mark|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+                </tr>
+                <tr class="div_is_mark">
+                    <td class="no_border">{{ form.is_video.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                    <div class="helper_tip_text" >Projection pour une utilisation en classe. individuelle, chaque élève travail sur son quizz.</div>
+                                </span> </td>
+                    <td>{{ form.is_video|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Projection"|attr:"data-off:Individuelle"|attr:"data-width:130" }}  </td>
+                </tr>
+
+                <tr class="div_is_mark div_is_ranking">
+                    <td class="no_border">{{ form.is_ranking.label_tag }} </td>
+                    <td>{{ form.is_ranking|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+                </tr>
+                <tr class="div_is_mark div_is_ranking">
+                    <td class="no_border">{{ form.is_shuffle.label_tag }}  </td>
+                    <td>{{ form.is_shuffle|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+                </tr>
+                <tr class="div_is_mark div_is_ranking">
+                    <td class="no_border">{{ form.is_back.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                    <div class="helper_tip_text" >Permet de revenir sur les questions en arrière dans le quizz.</div>
+                                </span> </td>
+                    <td>{{ form.is_back|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+                </tr>
+                <tr class="div_is_mark div_is_ranking">
+                    <td class="no_border">{{ form.is_result.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                    <div class="helper_tip_text" >Permet de revenir sur les questions en arrière dans le quizz.</div>
+                                </span> </td>
+                    <td>{{ form.is_result|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
                 </tr>
             </table>
         </div>

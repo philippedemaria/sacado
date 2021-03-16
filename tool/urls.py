@@ -102,6 +102,11 @@ urlpatterns = [
     path('ajax_display_question_for_student', ajax_display_question_for_student, name='ajax_display_question_for_student'),   
     path('store_student_answer', store_student_answer, name='store_student_answer'),
 
+    path('list_quizz_student', list_quizz_student, name='list_quizz_student'),
+    
+    path('goto_quizz_student/<int:id>', goto_quizz_student, name='goto_quizz_student'),
+
+    path('ajax_show_my_result', ajax_show_my_result, name='ajax_show_my_result'),
 
 
 

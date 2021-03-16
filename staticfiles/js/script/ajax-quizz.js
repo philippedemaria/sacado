@@ -121,20 +121,6 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
 
 
 
-        $("#div_is_mark").hide(); 
-
-            function makeItemAppear($toggle, $item) {
-                    $toggle.change(function () {
-                        if ($toggle.is(":checked")) {
-                            $item.show(500);
-                        } else {
-                            $item.hide(500);
-                        }
-                    });
-                }
- 
-        makeItemAppear($("#id_is_numeric"), $("#div_is_mark"));
-
 
 
 

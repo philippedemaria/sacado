@@ -358,8 +358,8 @@ class Parcours(ModelWithCode):
 
     is_evaluation = models.BooleanField(default=0, editable=False)
     duration = models.PositiveIntegerField(default=2, blank=True, verbose_name="Temps de chargement (min.)")
-    start = models.DateTimeField(null=True, blank=True, verbose_name="Date de début de publication")
-    stop = models.DateTimeField(null=True, blank=True, verbose_name="Verrouillé à partir de")
+    start = models.DateTimeField(null=True, blank=True, verbose_name="A partir de")
+    stop = models.DateTimeField(null=True, blank=True, verbose_name="Verrouillage")
 
     zoom = models.BooleanField(default=1, verbose_name="Zoom ?")
 

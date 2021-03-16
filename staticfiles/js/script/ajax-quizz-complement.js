@@ -18,14 +18,19 @@ define(['jquery',  'bootstrap' ], function ($) {
 
 
 
-        $('#div_is_mark').hide() ; 
-
-
+        $('.div_is_mark').hide() ; 
+        $(".div_is_ranking").hide(); 
+        $(".div_time").hide(); 
 
         $('#id_is_numeric').on('change', function (event) {
-            $('#div_is_mark').toggle(300) ; 
+            $('.div_is_mark').toggle(300) ; 
         });
-
+        $('#id_is_video').on('change', function (event) {
+            $('.div_is_ranking').toggle(300) ; 
+        });
+        $('#id_is_publish').on('change', function (event) {
+            $('.div_time').toggle(300) ; 
+        });
 
 
 
@@ -118,6 +123,32 @@ define(['jquery',  'bootstrap' ], function ($) {
 
 
 
+        $('.show_my_quizz_result').on('click', function (event) {
+
+            let gquizz = $(this).data("gquizz");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+ 
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional: true,
+                    data: {
+                        'gquizz': gquizz,                      
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url : "ajax_show_my_result",
+                    success: function (data) {
+
+                        $("#my_result").html(data.html); 
+                    }
+                }
+            )
+        });
+
+
+
+ 
 
  
     });
