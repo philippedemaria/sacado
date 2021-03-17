@@ -68,7 +68,9 @@ urlpatterns = [
     path('parcours_shower_course', ajax_parcours_shower_course, name='ajax_parcours_shower_course'),
     path('ajax/course_viewer', ajax_course_viewer, name='ajax_course_viewer'),
     path('parcours_get_course', ajax_parcours_get_course, name='ajax_parcours_get_course'),
+    path('ajax_individualise_this_exercise', ajax_individualise_this_exercise, name='ajax_individualise_this_exercise'),
 
+    
     #####################################  Modifie les relations par parcours et exercices  ##############################################################  
     path('<int:idp>/<int:ide>/', execute_exercise, name='execute_exercise'),#modif idp en id pour la sécurité 
     path('delete_evaluation/<int:id>/', delete_evaluation, name='delete_evaluation'), 

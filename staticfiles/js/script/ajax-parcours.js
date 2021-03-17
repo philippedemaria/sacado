@@ -386,7 +386,7 @@ define(['jquery','bootstrap'], function ($) {
 
 
         // Affiche dans la modal la liste des élèves du groupe sélectionné
-        $('.select_student').on('click' , function () {
+        $('body').on('click' , '.select_student', function () {
 
             let parcours_id = $(this).attr("data-parcours_id"); 
             let exercise_id = $(this).attr("data-exercise_id"); 
@@ -468,7 +468,11 @@ define(['jquery','bootstrap'], function ($) {
                                 $('.selected_student'+exercise_id).addClass(data.class);                      
                                 }
 
-     
+                            if (data.indiv_hide) 
+                                { $('#individialise_id_student'+exercise_id).removeClass("checkbox_no_display");}
+                            else{
+                                { $('#individialise_id_student'+exercise_id).addClass("checkbox_no_display");}
+                            }
 
                             $("#loading"+exercise_id).html("");  
                             $('#selecteur'+exercise_id).attr("data-statut",data.statut);    
@@ -476,7 +480,6 @@ define(['jquery','bootstrap'], function ($) {
                             }
 
                         if (data.alert){ alert("Certains exercices ont fait l'objet d'une réponse par certains élèves. Vous ne pouvez plus les dissocier.");}
-
 
                     }
                 }
@@ -894,7 +897,31 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
+        // Individualiser les exercices un par un
+        $('.individualiser').on('click', function (event) {
+            let nb = $(this).data("nb"); 
+            let custom = $(this).data("custom");
+            let relationship_id = $(this).data("relationship_id");            
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'custom': custom,
+                        'relationship_id' : relationship_id ,
+                        csrfmiddlewaretoken: csrf_token,
+                    },
+                    url: "../../ajax_individualise_this_exercise",
+                    success: function (data) {
+                        $('#indiv_this_exercise_nb').html(nb);
+                        $('#indiv_this_exercise').html(data.html);
+
+                    }
+                }
+            )
+        });
 
 
 

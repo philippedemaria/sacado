@@ -30,7 +30,7 @@ def insert_tags(html,cutter): #nettoie le code des balises HTML
 
 
 @register.filter
-def top_less(html,up): #nettoie le code des balises HTML
+def top_less(html,up): #Réduit le top
 
     htm_css_tab = html.split(";")#récupère chaque propriétés du css
 

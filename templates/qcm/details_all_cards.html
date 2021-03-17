@@ -49,14 +49,15 @@
 
           
           <!-- Exercice dissocié  -->  
-          {% if  rc.students.count != nb_students_p_or_g %}
-          <div  style="position: absolute; right : 0px; top:60px;" title="Cet exercice est indiviualisé à certains élèves" >   
+          
+          <div  style="position: absolute; right : 0px; top:60px;" title="Cet exercice est indiviualisé à certains élèves" id="individialise_id_student{{  rc.exercise.id }}" 
+                {% if  rc.students.count == nb_students_p_or_g %} class="checkbox_no_display" {% endif %}>   
             <a href="#card{{rc.id}}" class="detail_parcours btn btn-warning"  data-custom=0
                data-exercise_id="{{ rc.exercise.id }}"  data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}">
               <i class="fa fa-user"></i>
             </a>
           </div>
-          {% endif %}
+          
 
           <!-- Publication  -->
           <div href="#card{{rc.id}}" class="action_content {% if  rc.is_publish %}btn btn-success{% else %}btn btn-danger{% endif %}"  style="position: absolute; right : 0px; top:90px;" id="publisher{{rc.id}}"  data-relationship_id="{{rc.id}}" data-statut="{{rc.is_publish }}" data-custom="0" title="Publier l'exercice" >   
@@ -411,7 +412,7 @@
             {% if rc.exercise.supportfile.is_ggbfile %}
             <!-- Appel des situations et durée -->
             <span class="select_details horizontalmargin5"  data-relationship_id="{{ rc.id }}" id="clock{{rc.id}}"  title="Modifier le temps"><!-- l'id permet de modifier après ajax le temps -->
-                <i class="fa fa-clock-o"></i> <span style="font-size:10px">{{ rc.duration }} min.</span> 
+                <!-- <i class="fa fa-clock-o"></i> --><span style="font-size:10px">{{ rc.duration }} min.</span> 
             </span>
             <!-- Appel des situations -->
             <span class="select_details horizontalmargin5"  data-relationship_id="{{ rc.id }}" id="save{{rc.id}}" title="Modifier le nombre de situations"><!-- l'id permet de modifier après ajax le nombre de situation -->
@@ -448,11 +449,23 @@
             <span  class="sharered horizontalmargin5" data-relationship_id="{{ rc.id }}"  title="Accéder à cet exercice" style="cursor:pointer">
                <i class="fa fa-share-square"></i>
             </span>                                   
+
+ 
+            <a href = "#" data-toggle = 'modal' 
+                data-target = '#individualisation_exercice'  
+                class = "individualiser horizontalmargin5" 
+                data-nb = "{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" 
+                data-relationship_id = "{{ rc.id }}"  
+                data-custom = 0  title = "Individualiser cet exercice" 
+                style = "font-size:14px;color:{{ parcours.color|contrast_color }}">
+
+                <i class="fa fa-users"></i> 
+            </a>
+
             <!-- Suppression de l'exercice dans ce parcours  -->
             <a href="{% url 'delete_relationship' rc.id %}" class="white horizontalmargin5"   title="Supprimer cet exercice de ce parcours" style="font-size:14px;color:{{ parcours.color|contrast_color }}" onclick="return TestDelete('cet exercice de ce parcours')"  >
                 <i class="fa fa-trash"></i> 
             </a>
- 
 
             {% if not rc.is_publish and not rc.start %}<br>
             <span href="#card{{rc.id}}" title="Date de publication" class="select_publish white horizontalmargin5" id="select_publish{{rc.id}}" data-relationship_id="{{rc.id}}" data-statut="{{rc.is_publish }}" style="cursor:pointer">

@@ -641,6 +641,8 @@ def individualise_parcours(request,id):
 
     return render(request, 'qcm/form_individualise_parcours.html', context )
 
+
+
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_individualise(request):  
 
@@ -759,6 +761,7 @@ def ajax_individualise(request):
                     data["class"] = "btn btn-danger"
                     data["noclass"] = "btn btn-success"
                     data["alert"] = False
+
                 else :
                     data["statut"] = "True"
                     data["class"] = "btn btn-success"
@@ -772,7 +775,37 @@ def ajax_individualise(request):
                 data["noclass"] = "btn btn-danger"
                 data["alert"] = False
 
+        if relationship.students.count() != relationship.parcours.students.count() :
+            data["indiv_hide"] = True
+        else :
+            data["indiv_hide"] = False
+    print(data)
     return JsonResponse(data) 
+
+
+
+
+def ajax_individualise_this_exercise(request):
+
+    relationship_id = int(request.POST.get("relationship_id"))
+    custom = int(request.POST.get("custom"))
+    if custom :
+        rc = Customexercise.objects.get(pk=relationship_id)
+    else :
+        rc = Relationship.objects.get(pk=relationship_id)
+        parcours = rc.parcours
+    
+    students = rc.students.all
+    data = {}
+    data['html'] = render_to_string('qcm/ajax_individualise_this_exercise.html', {'rc' : rc, 'parcours' : parcours, 'students' : students, })
+
+    return JsonResponse(data)
+
+
+
+
+
+
 
 def list_parcours(request):
 

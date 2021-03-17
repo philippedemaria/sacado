@@ -63,6 +63,11 @@
 #response_div{
     display:none;
 }
+body{
+    overflow-x: hidden;
+}
+
+
 </style>
 
 {% include 'preloader.html' %}
@@ -75,7 +80,7 @@
 
 
 <form action="" methode="POST">      
-    <section class="content_list exercise_sortable" id="miseEnAttenteDashboard">
+    <section class="content_list content_list_add exercise_sortable" id="miseEnAttenteDashboard">
      
      
     {% if parcours.stop %}
