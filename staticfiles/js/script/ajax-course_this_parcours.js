@@ -1,11 +1,10 @@
 define(['jquery', 'bootstrap'], function ($) {
     $(document).ready(function () {
         console.log("chargement JS ajax-course.js OK");
-
-
+ 
 
         // Affiche dans la modal le modèle pour récupérer un exercice custom
-        $('.shower_course').on('click', function (event) {
+        $('body').on('click', '.shower_this_course' , function (event) {
 
             let course_id = $(this).attr("data-course_id");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
@@ -18,7 +17,7 @@ define(['jquery', 'bootstrap'], function ($) {
                         'course_id': course_id,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: "parcours_shower_course",
+                    url: "../parcours_shower_course",
                     success: function (data) {
 
                         $('#get_course_title').html(data.title);
@@ -29,15 +28,12 @@ define(['jquery', 'bootstrap'], function ($) {
          });
 
 
- 
-
-
 
 
 
 
         // Affiche dans la modal le modèle pour récupérer un exercice custom
-        $('.getter_course').on('click', function (event) {
+        $('body').on('click', '.getter_course', function (event) {
 
             let course_id = $(this).attr("data-course_id");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
@@ -54,7 +50,7 @@ define(['jquery', 'bootstrap'], function ($) {
                         'parcours_id': parcours_id,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: "parcours_get_course",
+                    url: "../parcours_get_course",
                     success: function (data) {
 
                         $('#get_course_result').html(data.html);
@@ -100,7 +96,7 @@ define(['jquery', 'bootstrap'], function ($) {
                             'checkbox_value' : checkbox_value,
                             'all_parcours' : all_parcours,
                         },
-                        url: "parcours_clone_course",
+                        url: "../parcours_clone_course",
                         success: function (data) {
 
                             $('#title_parcours'+parcours_id).html(data.success);
@@ -134,7 +130,7 @@ define(['jquery', 'bootstrap'], function ($) {
                             'id_subject': id_subject,                        
                             csrfmiddlewaretoken: csrf_token
                         },
-                        url : "ajax/chargethemes",
+                        url : "../ajax/chargethemes",
                         success: function (data) {
 
                             themes = data["themes"]
@@ -205,7 +201,7 @@ define(['jquery', 'bootstrap'], function ($) {
             if ( param1.val() > 0  ) {var theme_id = param1.val() ; console.log(theme_id) ; } else {var theme_id = [] ; console.log(theme_id) ; }  
  
 
-
+            let parcours_id = $("#parcours_id").val();
             let keywords = $("#keywords").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
  
@@ -220,11 +216,12 @@ define(['jquery', 'bootstrap'], function ($) {
                     traditional: true,
                     data: {
                         'level_id': level_id,
+                        'parcours_id': parcours_id,
                         'theme_id': theme_id,
                         'keywords': keywords,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url:"ajax_course_custom_show_shared",
+                    url:"../ajax_course_custom_show_shared",
                     success: function (data) {
  
                         $('#courses_details').html("").html(data.html);

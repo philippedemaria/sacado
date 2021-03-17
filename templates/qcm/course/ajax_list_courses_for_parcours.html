@@ -1,0 +1,55 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+ 
+
+        <div class="col-sm-12 col-md-12">
+            {% regroup courses by parcours as parcours_list  %}
+            {% for pcs in parcours_list  %}
+                <div class="card_course">
+                    <div class="course_title" >
+
+                         
+                            {% if pcs.grouper.title|length > 25 %} 
+                               <span title="{{ pcs.grouper.title }}" style="cursor: help"> {{ pcs.grouper.title|truncatechars:25 }}</span>
+                            {% else %} 
+                            {{ pcs.grouper.title }} 
+                            {% endif %} 
+                            {% if pcs.grouper.level %} 
+                            <span class="course_level" >{{ pcs.grouper.level  }}</span>
+                            {% endif %}                             
+                            <a href="{% url 'get_this_course_for_this_parcours' 0 parcours.id pcs.grouper.id %}" class="pull-right getter_course edit" onclick="return get_this_confirmation('tous les cours')">
+                                <i class="fa fa-plus"></i></a>
+                    </div>
+                    <div class="course_body" >
+                    {% for course in pcs.list  %}
+                        <li class="course_section">
+                            {% if course.title|length > 32 %} 
+                              <span title="{{ course.title }}" style="cursor: help">{{ course.title|truncatechars:32 }} </span>
+                            {% else %} 
+                            {{ course.title }} 
+                            {% endif %}
+                                <a href="{% url 'get_this_course_for_this_parcours' 1 parcours.id course.id %}" onclick="return get_this_confirmation('ce cours : {{ course.title }}')"  class="pull-right  getter_course edit"><i class="fa fa-plus fa-xs"></i></a>
+                                <a href="#" data-toggle='modal' data-target='#get_course' data-course_id = '{{ course.id }}'  data-parcours_id =0 class="pull-right shower_this_course edit"><i class="fa fa-eye fa-xs"></i></a>
+                        </li> 
+                    {% endfor %}
+                    </div>
+                </div>
+                {% empty %} 
+                    <div class="alert alert-danger"> Aucun résultat de votre recherche  </div> 
+
+                {% endfor %} 
+        </div>
+ 
+
+
+
+
+
+
+ 
+
+<script type="text/javascript">
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>

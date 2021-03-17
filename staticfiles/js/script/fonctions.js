@@ -57,4 +57,9 @@ function changeExerciceIntoParcours() {
     if (!confirm('Vous déplacez cet exercice dans un ou plusieurs parcours. Souhaitez vous continuer ?')) return false;
 }
 
+
+
+function get_this_confirmation(f1) {
+    if (!confirm('Vous souhaitez récupérer ' + f1 + ' ?')) return false;
+}
  

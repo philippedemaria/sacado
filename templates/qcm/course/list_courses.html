@@ -9,14 +9,31 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
 
+
+
+    {% if parcours %}
     <script>
-        require(['script/ajax-course']);
+        require(['script/ajax-course_this_parcours']);
     </script> 
+    {% else %}
+        <script>
+            require(['script/ajax-course']);
+        </script> 
+    {% endif  %}
+
 {% endblock %} 
 
   
 {% block page_title %}
-    <i class="fa fa-laptop"></i> Les cours mutualisés 
+    
+    {% if parcours %} 
+        <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-desktop"></i> </span>
+        {% include 'qcm/breadcrumb.html' %}
+        <small>  Clonage de parcours mutualisés  </small>
+    {% else  %} 
+        <i class="fa fa-laptop"></i> Les cours mutualisés 
+    {% endif  %} 
+
 
 {% endblock %}
 
@@ -73,39 +90,56 @@
     <div id="loader"></div>
 
 
-
+    {% if parcours %}
+         <input type="hidden" name="parcours_id" id="parcours_id" value="{{parcours.id }}"/>
+    {% endif %}
 
 
 
     <div class="row" id="courses_details">
         <div class="col-sm-12 col-md-12">
             {% regroup courses by parcours as parcours_list  %}
-            {% for parcours in parcours_list  %}
+            {% for pcs in parcours_list  %}
                 <div class="card_course">
                     <div class="course_title" >
+                        {% if pcs.grouper.title|length > 25 %} 
+                           <span title="{{ pcs.grouper.title }}" style="cursor: help"> {{ pcs.grouper.title|truncatechars:25 }}</span><span id="{{ pcs.grouper.id }}"></span>
+                        {% else %} 
+                        {{ pcs.grouper.title }} 
+                        {% endif %} 
+                        {% if pcs.grouper.level %} 
+                        <span class="course_level" >{{ pcs.grouper.level  }}</span>
+                        {% endif %} 
 
-                         
-                            {% if parcours.grouper.title|length > 25 %} 
-                               <span title="{{ parcours.grouper.title }}" style="cursor: help"> {{ parcours.grouper.title|truncatechars:25 }}</span>
-                            {% else %} 
-                            {{ parcours.grouper.title }} 
-                            {% endif %} 
-                            {% if parcours.grouper.level %} 
-                            <span class="course_level" >{{ parcours.grouper.level  }}</span>
-                            {% endif %}                             
-                            <a href="#" data-toggle='modal' data-target='#clone_course' data-course_id =0 data-parcours_id = '{{ parcours.grouper.id  }}' class="pull-right  getter_course edit"><i class="fa fa-plus fa-xs"></i></a>
+
+                        {% if parcours %}
+                            <a href="{% url 'get_this_course_for_this_parcours' 0 parcours.id pcs.grouper.id %}" class="pull-right getter_course edit" onclick="return get_this_confirmation('tous les cours')">
+                                <i class="fa fa-plus"></i></a>
+                        {% else %} 
+                            <a href="#" data-toggle='modal' data-target='#clone_course' data-course_id =0 data-parcours_id = '{{ pcs.grouper.id  }}' class="pull-right getter_course edit"><i class="fa fa-plus"></i></a>
+                        {% endif %}
+                        
+
                     </div>
                     <div class="course_body" >
-                    {% for course in parcours.list  %}
+                    {% for course in pcs.list  %}
                         <li class="course_section">
                             {% if course.title|length > 32 %} 
                               <span title="{{ course.title }}" style="cursor: help">{{ course.title|truncatechars:32 }} </span>
                             {% else %} 
-                            {{ course.title }} 
+                                {{ course.title }} 
                             {% endif %}
 
-                            <a href="#" data-toggle='modal' data-target='#clone_course' data-course_id = '{{ course.id }}' data-parcours_id =0  class="pull-right  getter_course edit"><i class="fa fa-plus fa-xs"></i></a>
-                            <a href="#" data-toggle='modal' data-target='#get_course' data-course_id = '{{ course.id }}'  data-parcours_id =0 class="pull-right shower_course edit"><i class="fa fa-eye fa-xs"></i></a>
+
+                            {% if parcours %} 
+                                <a href="{% url 'get_this_course_for_this_parcours' 1 parcours.id course.id %}" onclick="return get_this_confirmation('ce cours : {{ course.title }}')"  class="pull-right  getter_course edit"><i class="fa fa-plus fa-xs"></i></a>
+                                <a href="#" data-toggle='modal' data-target='#get_course' data-course_id = '{{ course.id }}'  data-parcours_id =0 class="pull-right shower_this_course edit"><i class="fa fa-eye fa-xs"></i></a>
+                            {% else %} 
+                                <a href="#" data-toggle='modal' data-target='#clone_course' data-course_id = '{{ course.id }}' data-parcours_id =0  class="pull-right  getter_course edit"><i class="fa fa-plus fa-xs"></i></a>
+                                <a href="#" data-toggle='modal' data-target='#get_course' data-course_id = '{{ course.id }}'  data-parcours_id =0 class="pull-right shower_course edit"><i class="fa fa-eye fa-xs"></i></a>
+                            {% endif %}
+                                
+
                         </li> 
                     {% endfor %}
                     </div>
@@ -153,7 +187,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button> 
-                <h2 >Cloner dans un ou plusieurs de mes parcours ci-dessous </h2>
+                <label >Cloner dans un ou plusieurs de mes parcours ci-dessous </label>
             </div>
             <form method="POST">
                 <div class="modal-body" id="get_course_result">

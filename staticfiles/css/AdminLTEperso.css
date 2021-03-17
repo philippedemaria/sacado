@@ -2384,8 +2384,15 @@ table.table-bordered.dataTable {
 .course_section:hover{
   font-size: 14px;
   list-style: none;
-  background-color: #F0F0F0;
+  background-color: #5d4391;
+  color: #FFF;
 }
+
+.getter_course, .shower_course, .shower_this_course{
+  padding-top: 3px;
+  padding-left: 5px;
+}
+
 
 
 .course_body{

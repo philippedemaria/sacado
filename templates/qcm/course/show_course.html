@@ -10,6 +10,7 @@
         require(['script/ajax-parcours']);
     </script> 
 
+
 {% endblock %}
 
  
@@ -63,6 +64,14 @@
                 {% endfor %}
             </ul>        
             </form>
+            <hr/>
+
+            {% if sacado_asso %}
+             <a href="{% url 'get_course_in_this_parcours'  parcours.id %}"  class="btn btn-default btn-fullwidth"><i class="fa fa-caret-right"></i> Cours mutualisés</a> 
+            {% else %}
+             <a href="#"  class="btn btn-default btn-fullwidth no_sacado_asso"  title="Version établissement requise"><i class="fa fa-caret-right"></i> Cours mutualisés</a> 
+            {% endif  %}
+
 
 
         </div>

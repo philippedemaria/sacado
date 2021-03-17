@@ -66,11 +66,13 @@ urlpatterns = [
 
     path('parcours_clone_course', ajax_parcours_clone_course, name='ajax_parcours_clone_course'),
     path('parcours_shower_course', ajax_parcours_shower_course, name='ajax_parcours_shower_course'),
+    path('ajax_course_custom_for_this_parcours', ajax_course_custom_for_this_parcours, name='ajax_course_custom_for_this_parcours'),
+
+    
     path('ajax/course_viewer', ajax_course_viewer, name='ajax_course_viewer'),
     path('parcours_get_course', ajax_parcours_get_course, name='ajax_parcours_get_course'),
     path('ajax_individualise_this_exercise', ajax_individualise_this_exercise, name='ajax_individualise_this_exercise'),
 
-    
     #####################################  Modifie les relations par parcours et exercices  ##############################################################  
     path('<int:idp>/<int:ide>/', execute_exercise, name='execute_exercise'),#modif idp en id pour la sécurité 
     path('delete_evaluation/<int:id>/', delete_evaluation, name='delete_evaluation'), 
@@ -142,6 +144,8 @@ urlpatterns = [
     path('parcours_show_course_student/<int:idc>/<int:id>', show_course_student, name='show_course_student'),
     path('course_custom_show_shared', course_custom_show_shared, name='course_custom_show_shared'),  
 
+    path('get_course_in_this_parcours/<int:id>', get_course_in_this_parcours, name='get_course_in_this_parcours'), 
+    path('get_this_course_for_this_parcours/<int:typ>/<int:id_target>/<int:idp>', get_this_course_for_this_parcours, name='get_this_course_for_this_parcours'), 
     ############################################################################################################  
     path('exercise_custom_show_shared', exercise_custom_show_shared, name='exercise_custom_show_shared'),  
 

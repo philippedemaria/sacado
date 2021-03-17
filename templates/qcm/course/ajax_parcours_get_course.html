@@ -1,6 +1,6 @@
     
 
-    {% if  not  teacher.sacado %}
+    {% if  not  sacado_asso %}
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <div class="alert alert-danger">
@@ -12,9 +12,9 @@
     {% endif  %}
 
     {% if course %}
-    <label>Titre du chapitre : {{ course.title }}</label>
+    <label>Titre du chapitre : <b>{{ course.title }}</b></label>
     {% else %} 
-    <label>Cours intégral</label>
+    <label>Cours intégral : <b>{{ parcours.title }}</b></label>
     {% endif %} 
     <hr> 
 
@@ -22,23 +22,29 @@
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <div class="form-group">
-                {% for p in parcourses|dictsort:"title" %}
-                    <label style="margin-bottom:4px" class="btn btn-default"><input value="{{ p.id }}" name="get_parcourses" type="checkbox" /> {{ p }} 
-                        {% if p.level.shortname %}({{ p.level.shortname }}) {% endif %} 
 
-                        {% if p.is_evaluation %}<i class="fa fa-trophy"></i> {% endif %}</label>
-                {% endfor %}
+                {% regroup parcourses by level as level_list %}
+                {% for level in level_list %}
+                    <h4 class="thin">{% if level.grouper.name %}{{ level.grouper.name }}{% else %}Aucun niveau renseigné{% endif %}</h4>
+
+                    {% for p in level.list|dictsort:"title" %}
+                        <label style="margin-bottom:4px" class="btn btn-{% if p.is_evaluation %}info{% else %}default{% endif %}"><input value="{{ p.id }}" name="get_parcourses" type="checkbox" /> {{ p }}
+                            {% if p.is_evaluation %}<small>- évaluation</small>{% endif %}
+
+                        </label>
+                    {% endfor %}
+                {% endfor %}  
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <div class="form-group">
-                {% if teacher.sacado %}
+                {% if  sacado_asso %}
                     {% if course %}
-                        <a href="#" class="btn btn-primary clone_to" data-course_id = '{{ course.id }}' data-all_parcours=0  data-dismiss="modal" aria-label="Close" >Cloner ce chapitre dans les parcours sélectionnés</a>
+                        <a href="#" class="btn btn-primary clone_to" data-course_id = '{{ course.id }}'  data-parcours_id = '{{ parcours.id }}' data-all_parcours=0  data-dismiss="modal" aria-label="Close" >Cloner ce chapitre dans les parcours sélectionnés</a>
                     {% else %}
-                        <a href="#" class="btn btn-primary clone_to" data-course_id = '{{ course.id }}' data-all_parcours=1  data-dismiss="modal" aria-label="Close" >Cloner le cours complet dans les parcours sélectionnés</a>
+                        <a href="#" class="btn btn-primary clone_to" data-course_id = '{{ course.id }}' data-parcours_id = '{{ parcours.id }}' data-all_parcours=1  data-dismiss="modal" aria-label="Close" >Cloner le cours complet dans les parcours sélectionnés</a>
                     {% endif %} 
                 {% else %}
                     {% if course %}
@@ -50,7 +56,7 @@
             </div>
         </div>
     </div>
-</form>
+
 <script type="text/javascript">
     MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 </script>
