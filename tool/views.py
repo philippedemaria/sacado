@@ -406,13 +406,17 @@ def show_quizz_group(request,id,idg):
     questions = quizz.questions.filter(is_publish=1).order_by("ranking")
     group = Group.objects.get(pk = idg)
 
+    context = {  "quizz" : quizz , "questions" : questions , "group" : group , "save" : save }     
+    return render(request, 'tool/show_quizz.html', context) 
 
-    if quizz.is_numeric and not quizz.is_video :
-        return redirect("list_quizzes")    
-    else :
-        context = {  "quizz" : quizz , "questions" : questions , "group" : group , "save" : save }     
-        return render(request, 'tool/show_quizz.html', context)
 
+ 
+def create_quizz_code(request,id,idg):
+    """ show quizz d'un groupe classe """
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    quizz , gquizz , questions , save = get_date_play(id,idg,0)
+    return redirect("list_quizzes") 
 
 
 ############################################################################################################

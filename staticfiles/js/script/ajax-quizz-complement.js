@@ -21,12 +21,14 @@ define(['jquery',  'bootstrap' ], function ($) {
         $('.div_is_mark').hide() ; 
         $(".div_is_ranking").hide(); 
         $(".div_time").hide(); 
+        $('.div_interslide').hide() ; 
 
         $('#id_is_numeric').on('change', function (event) {
             $('.div_is_mark').toggle(300) ; 
         });
         $('#id_is_video').on('change', function (event) {
-            $('.div_is_ranking').toggle(300) ; 
+            $('.div_is_ranking').toggle(300) ;
+            $('.div_interslide').toggle(300) ; 
         });
         $('#id_is_publish').on('change', function (event) {
             $('.div_time').toggle(300) ; 

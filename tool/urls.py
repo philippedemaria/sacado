@@ -38,7 +38,7 @@ urlpatterns = [
 
     path('show_quizz_group/<int:id>/<int:idg>', show_quizz_group, name='show_quizz_group'), 
     path('show_quizz_random_group/<int:id>/<int:idg>', show_quizz_random_group, name='show_quizz_random_group'), 
-
+    path('create_quizz_code/<int:id>/<int:idg>', create_quizz_code, name='create_quizz_code'),
 
     path('list_questions', list_questions, name='list_questions'),
 

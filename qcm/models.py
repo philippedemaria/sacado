@@ -376,7 +376,10 @@ class Parcours(ModelWithCode):
 
 
     def __str__(self):
-        return "{}".format(self.title)
+        if self.level :
+            return "{} ({})".format(self.title, self.level.name)
+        else :
+            return "{}".format(self.title)
 
 
     def is_done(self,student):

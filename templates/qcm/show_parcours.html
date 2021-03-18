@@ -91,14 +91,8 @@ body{
         </div>
     {% endif %}
 
- 
-
-
 
         <input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
-
-
-
         {% for rc in relationships_customexercises %}
             {%  if rc.exercise.supportfile.is_title %}     
                 <h2 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> 
@@ -128,8 +122,6 @@ body{
             {% else %}  
                 {% include 'qcm/details_all_cards.html' %}            
             {% endif %}  
-     
-
         {% endfor %}
 
      
@@ -183,8 +175,6 @@ body{
             {% endif %}
         {% endif %}
 
-
-
         {% if sacado_asso %}
         <div class="row">
             <div class="col-sm-12 col-md-12">
@@ -198,6 +188,79 @@ body{
             </div>
         </div>  
         {% endif %}  
+
+        <hr/>
+        <h1 class="thin">Les quizz associés</h1>
+
+
+        {% for q in parcours.quizz.all %}
+            <div class="card">
+
+                <div style="position: absolute; padding: 10px;">
+                    <a href="{% url 'update_quizz' q.id  %}" target="_blank" style="font-weight: normal;">
+                         {{ q }} 
+                    </a>
+                </div> 
+ 
+                {% if group %}
+                    <div class="sanspuce historic_li"  style="border:1px solid {{parcours.color}}; border-radius:20px; width:100px;position: absolute; padding:3px; top:60px;left:10px">
+                        <a href="{% if q.is_random %}{% url 'show_quizz_random_group'  q.id  group.id %}{% else %}{% url 'show_quizz_group'  q.id  group.id %}{% endif %}" 
+                           style="color:{{group.color}};" 
+                           class="quizz_action {% if q.is_random %} confirm_create_historic{% endif %}" target="_blank" >
+                           <i class="fa fa-play fa-xs"></i>  Papier
+                        </a>
+                    </div>
+                    {% if sacado_asso %}
+                        {% if  q.is_video %}
+                        <div class="sanspuce historic_li"  style="border:1px solid {{parcours.color}}; border-radius:20px; width:100px;position: absolute; padding:3px; top:90px;left:10px">
+                            <a href="{% url 'play_quizz_teacher'  q.id  group.id  %}" target="_blank"  class="quizz_action" title="En version à tester"
+                                style="color:{{group.color}};"><i class="fa fa-gamepad"></i> Numérique 
+                            </a>  
+                        </div>
+                        {% elif  q.is_numeric %}
+                        <div class="sanspuce historic_li"  style="border:1px solid {{parcours.color}}; border-radius:20px; width:100px;color:{{parcours.color}};position: absolute; padding:3px; top:90px;left:10px">
+                            <a href="{% url 'create_quizz_code'  q.id  group.id  %}#this_quizz{{ q.id }}" target="_blank" class="quizz_action" title="Générer un quizz"
+                                style="color:{{group.color}};"><i class="fa fa-desktop"></i> Numérique
+                            </a>  
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    <div class="sanspuce historic_li"  style="color:{{parcours.color}};  width:230px; position: absolute;  top:60px;left:10px">
+                        Pour obtenir les liens directs, il faut passer par le tableau de bord et le groupe
+                    </div>
+                {% endif %}
+                <img src="{% static 'img/quizz_slide.png' %}" width="250px"   />
+            </div>
+        {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     </section>
 </form>
@@ -236,11 +299,6 @@ body{
     </div>           
 </div>
 {% endif %}
-
-
-
-
-
 
  
 <div class="modal fade" id="head_of_section" tabindex="-1" role="dialog" aria-labelledby="head_of_section">

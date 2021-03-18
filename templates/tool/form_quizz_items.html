@@ -17,12 +17,11 @@
                 {{ form.vignette|add_class:"btn btn-default" }}
             </div>
             <div class="form-group">
-                {{ form.interslide.label_tag }} <label><small>(En secondes)</small></label>
-                <div class="row">           
-                    <div class="col-sm-12 col-md-6">  
-                    {{ form.interslide|add_class:"form-control" }}
-                    </div>
-                </div>    
+                {{ form.parcours.label_tag }} <label><span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                    <div class="helper_tip_text" >
+                                    Permet de regrouper le quizz dans un parcours.</div>
+                                </span>  </label>
+                    {{ form.parcours|add_class:"form-control select2" }}
             </div>
         </div>
         <div class="col-sm-12 col-md-6"> 
@@ -82,6 +81,15 @@
                                 </span> </td>
                     <td>{{ form.is_video|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Projection"|attr:"data-off:Individuelle"|attr:"data-width:130" }}  </td>
                 </tr>
+
+ 
+
+                <tr class="div_interslide">
+                    <td class="no_border">{{ form.interslide.label_tag }}
+                    </td>
+                    <td>{{ form.interslide|add_class:"form-control" }} </td>
+                </tr>
+
 
                 <tr class="div_is_mark div_is_ranking">
                     <td class="no_border">{{ form.is_ranking.label_tag }} </td>

@@ -4,6 +4,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from group.models import Group
 from socle.models import *
 from account.models import Student, Teacher, ModelWithCode , User
+from qcm.models import Parcours
 from django.apps import apps
 from django.utils import   timezone
 from django.db.models import Q
@@ -208,9 +209,10 @@ class Quizz(ModelWithCode):
     start = models.DateTimeField(null=True, blank=True, verbose_name="Début de publication")
     stop  = models.DateTimeField(null=True, blank=True, verbose_name="Verrouillé dès le")
 
-    groups       = models.ManyToManyField(Group, blank=True, related_name="quizz" , editable=False) 
+    groups       = models.ManyToManyField(Group, blank=True, related_name="quizz" ) 
     questions    = models.ManyToManyField(Question, blank=True, related_name="quizz" , editable=False)  
     qrandoms     = models.ManyToManyField(Qrandom, blank=True, related_name="quizz" , editable=False)  
+    parcours     = models.ManyToManyField(Parcours, blank=True, related_name="quizz"  ) 
     
     def __str__(self):
         return self.title 

@@ -80,10 +80,10 @@ class QuizzForm(forms.ModelForm):
 		teacher = kwargs.pop('teacher')
 		super(QuizzForm, self).__init__(*args, **kwargs)
  
-		self.fields['levels'] = forms.ModelMultipleChoiceField(queryset=teacher.levels.all(), required=False)
-		self.fields['subject'] = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)
-		self.fields['groups'] = forms.ModelMultipleChoiceField(queryset=teacher.groups.all(), required=False)
- 
+		self.fields['levels']   = forms.ModelMultipleChoiceField(queryset=teacher.levels.all(), required=False)
+		self.fields['subject']  = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)
+		self.fields['groups']   = forms.ModelMultipleChoiceField(queryset=teacher.groups.all(), required=False)
+		self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset=teacher.teacher_parcours.all(), required=False)
 
 	def clean_content(self):
 		content = self.cleaned_data['imagefile']
