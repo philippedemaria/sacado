@@ -1567,7 +1567,7 @@ def result_parcours(request, id):
         return redirect('index')
 
     if parcours.is_folder :
-        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all()).prefetch_related('exercise').order_by("ranking")
+        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all(),exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
 
         custom_set = set()
         for p in parcours.leaf_parcours.all():
@@ -1576,7 +1576,7 @@ def result_parcours(request, id):
         customexercises = list(custom_set)
 
     else :
-        relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise').order_by("ranking")
+        relationships = Relationship.objects.filter(parcours=parcours, exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
         customexercises = parcours.parcours_customexercises.all() 
 
 
@@ -1624,7 +1624,7 @@ def result_parcours_theme(request, id, idt):
 
 
     if parcours.is_folder :
-        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all(),exercise__in=exercises).order_by("ranking")
+        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all(),exercise__in=exercises, exercise__supportfile__is_title=0).order_by("ranking")
 
         custom_set = set()
         for p in parcours.leaf_parcours.all():
@@ -1633,7 +1633,7 @@ def result_parcours_theme(request, id, idt):
         customexercises = list(custom_set)
 
     else :
-        relationships = Relationship.objects.filter(parcours= parcours,exercise__in=exercises ).order_by("ranking")
+        relationships = Relationship.objects.filter(parcours= parcours,exercise__in=exercises, exercise__supportfile__is_title=0 ).order_by("ranking")
         customexercises = parcours.parcours_customexercises.all() 
 
 
@@ -1659,7 +1659,7 @@ def get_items_from_parcours(parcours) :
     Permet de déterminer les compétences dans l'ordre d'apparition du BO dans un parcours
     """
     if parcours.is_folder :
-        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all()).prefetch_related('exercise__supportfile').order_by("ranking")
+        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all(), exercise__supportfile__is_title=0).prefetch_related('exercise__supportfile').order_by("ranking")
 
         custom_set = set()
         for p in parcours.leaf_parcours.all():
@@ -1668,7 +1668,7 @@ def get_items_from_parcours(parcours) :
         customexercises = list(custom_set)
 
     else :
-        relationships = Relationship.objects.filter(parcours= parcours).prefetch_related('exercise__supportfile').order_by("ranking")
+        relationships = Relationship.objects.filter(parcours= parcours, exercise__supportfile__is_title=0).prefetch_related('exercise__supportfile').order_by("ranking")
         customexercises = parcours.parcours_customexercises.all() 
 
     skill_set = set()
@@ -1724,7 +1724,7 @@ def result_parcours_knowledge(request, id):
  
 
     if parcours.is_folder :
-        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all()).prefetch_related('exercise__supportfile').order_by("ranking")
+        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all(), exercise__supportfile__is_title=0).prefetch_related('exercise__supportfile').order_by("ranking")
 
         custom_set = set()
         for p in parcours.leaf_parcours.all():
@@ -1734,14 +1734,14 @@ def result_parcours_knowledge(request, id):
 
         knowledge_set = set()
         for p in parcours.leaf_parcours.all():
-            knw = p.exercises.values_list("knowledge",flat=True).order_by("knowledge").distinct()
+            knw = p.exercises.values_list("knowledge",flat=True).filter(supportfile__is_title=0).order_by("knowledge").distinct()
             knowledge_set.update(set(knw))
         knwldgs = list(knowledge_set)        
 
     else :
-        relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
+        relationships = Relationship.objects.filter(parcours=parcours, exercise__supportfile__is_title=0).prefetch_related('exercise__supportfile').order_by("ranking")
         customexercises = parcours.parcours_customexercises.all() 
-        knwldgs = parcours.exercises.values_list("knowledge_id",flat=True).order_by("knowledge").distinct()
+        knwldgs = parcours.exercises.values_list("knowledge_id",flat=True).filter(supportfile__is_title=0).order_by("knowledge").distinct()
 
 
 
@@ -1782,7 +1782,7 @@ def result_parcours_waiting(request, id):
  
 
     if parcours.is_folder :
-        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all()).prefetch_related('exercise__supportfile').order_by("ranking")
+        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all(), exercise__supportfile__is_title=0).prefetch_related('exercise__supportfile').order_by("ranking")
 
         custom_set = set()
         for p in parcours.leaf_parcours.all():
@@ -1792,14 +1792,14 @@ def result_parcours_waiting(request, id):
 
         knowledge_set = set()
         for p in parcours.leaf_parcours.all():
-            knw = p.exercises.values_list("knowledge",flat=True).order_by("knowledge").distinct()
+            knw = p.exercises.values_list("knowledge",flat=True).filter(supportfile__is_title=0).order_by("knowledge").distinct()
             knowledge_set.update(set(knw))
         knwldgs = list(knowledge_set)        
 
     else :
-        relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
+        relationships = Relationship.objects.filter(parcours=parcours, exercise__supportfile__is_title=0).prefetch_related('exercise__supportfile').order_by("ranking")
         customexercises = parcours.parcours_customexercises.all() 
-        knwldgs = parcours.exercises.values_list("knowledge_id",flat=True).order_by("knowledge").distinct()
+        knwldgs = parcours.exercises.values_list("knowledge_id",flat=True).filter(supportfile__is_title=0).order_by("knowledge").distinct()
 
 
     waitings,waiting_ids , wtngs = [], [] , []
