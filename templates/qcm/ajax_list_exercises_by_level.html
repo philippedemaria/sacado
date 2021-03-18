@@ -30,7 +30,7 @@
                                         {% if knowledge_list|length > 0 %}
                                                 <tr style="cursor: pointer" class="opener_k opened{{ waiting.grouper.id }} out"  id="{{ knowledge.grouper.id}}" >
                                                     <td class="listingtd"> 
-                                                       <i class="fa fa-caret-right"></i> {{ knowledge.grouper.name|capfirst }} <b><small> {{  knowledge.grouper.exercises.count }} exercice{{  knowledge.exercises.count|pluralize }}</small></b>
+                                                       <i class="fa fa-caret-right"></i> {{ knowledge.grouper.name|capfirst }} <b><small> {{  knowledge.grouper.exercises.count }} exercice{{  knowledge.grouper.exercises.count|pluralize }}</small></b>
                                                     </td>
                                                 </tr>
                                                 {% for exercise in knowledge.list  %}
