@@ -542,8 +542,10 @@ def update_group(request, id):
     group = Group.objects.get(id=id)
     stdnts = group.students.exclude(user__username = request.user.username).exclude(user__username__contains=  "_e-test").order_by("user__last_name")
 
-    all_students = Student.objects.filter(user__user_type=0, level=group.level, user__school=teacher.user.school)
-    
+
+    stu = group.students.values_list("user_id",flat=True)
+    all_students = Student.objects.filter(user__user_type=0, level=group.level, user__school=teacher.user.school).exclude(user_id__in = stu ).order_by("user__last_name")
+
     authorizing_access_group(request,teacher,group )
     
     form = GroupTeacherForm(request.POST or None, teacher = teacher , instance=group )
