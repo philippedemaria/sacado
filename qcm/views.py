@@ -894,9 +894,15 @@ def list_parcours_group(request,id):
 
     for student in students :
         if access :
-            pcs = Parcours.objects.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),subject= group.subject, students= student, is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation","ranking")
+            if group.subject :
+                pcs = Parcours.objects.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),subject= group.subject, students= student, is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation","ranking")
+            else :
+                pcs = Parcours.objects.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),students= student, is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation","ranking")
         else :
-            pcs = student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), is_favorite=1 ,subject= group.subject ).exclude(is_leaf=1).order_by("is_evaluation","ranking")
+            if group.subject :
+                pcs = student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), is_favorite=1 ,subject= group.subject ).exclude(is_leaf=1).order_by("is_evaluation","ranking")
+            else :
+                pcs = student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), is_favorite=1 ).exclude(is_leaf=1).order_by("is_evaluation","ranking")
         for parcours in pcs : 
             if parcours not in parcours_tab   :
                 parcours_tab.append(parcours)
