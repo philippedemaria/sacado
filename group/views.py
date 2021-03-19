@@ -473,7 +473,7 @@ def create_student_profile_inside(request, nf) :
     first_name = str(request.user.first_name).replace(" ", "")
     last_name  = str(request.user.last_name).replace(" ","") 
     name       = last_name + "_e-test"
-    username   =  get_username_teacher(request,name)
+    username   = get_username_teacher(request,name)
     password   = make_password("sacado2020")  
     email      =  request.user.email
 
