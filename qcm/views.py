@@ -3371,6 +3371,10 @@ def show_exercise(request, id):
 
     return render(request, url , context)
 
+
+
+
+
 def show_this_exercise(request, id):
 
     if request.user.is_authenticated:
@@ -3446,7 +3450,7 @@ def store_the_score_relation_ajax(request):
 
     relation = Relationship.objects.get(pk = relation_id)
     data = {}
-    print(request.user)
+ 
     student = Student.objects.get(user=request.user)
 
     if request.method == 'POST':

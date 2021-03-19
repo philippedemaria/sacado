@@ -368,6 +368,57 @@ def update_student(request, id,idg=0):
 
 
 
+
+
+def switch_teacher_student(request,idg): #idg = group_id  
+    """
+    Updete par un admin d'un établissement
+    """
+    user = request.user
+    request.session["user_id_switch_student_teacher"] = request.user.id
+    group = Group.objects.get(pk = idg)
+    student  = group.students.filter(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test"), user__email = user.email).last()
+    user = authenticate(username=student.user.username, password = "sacado2020")
+    login(request, user)
+    request.session["user_id"] = request.user.id
+
+    return redirect("index")
+
+
+
+
+
+def switch_student_teacher(request): #idg = group_id  
+    """
+    Updete par un admin d'un établissement
+    """
+    password = request.POST.get("password") 
+    student  = request.user.student
+    group    = student.students_to_group.last()
+    user     = group.teacher.user
+
+ 
+    user = authenticate(username= user.username, password = password)
+    login(request, user)
+    request.session["user_id"] = request.user.id
+
+    return redirect("index")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #@can_register
 #@is_manager_of_this_school
 def update_student_by_admin(request, id):  

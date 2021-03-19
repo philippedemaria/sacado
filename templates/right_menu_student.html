@@ -145,3 +145,44 @@
 
 
 <li class="sans_puce"><a href="#" id="select_parcours_div" class="btn btn-default full_width">Derniers exercices</a> </li>
+
+
+
+
+
+{% if teacher_to_student %}
+
+<hr/>
+
+<li class="sans_puce"><a href="#" id="teacher_to_student_view" class="btn btn-info full_width">Revenir au profil enseignant</a> </li>
+
+<div id="teacher_to_student_div" class="">
+    <form method="post" action="{% url 'switch_student_teacher' %}" enctype='multipart/form-data'>
+      {% csrf_token %}
+
+          <div class="row">
+              <div class="col-sm-12 col-md-12">
+                <div class="form-group">
+                    <label> </label>
+                    <input type="password" name="password" placeholder="mot de passe" class="form-control" />
+                </div>
+              </div> 
+          </div>
+ 
+
+         
+
+ 
+          <div class="row">
+              <div class="col-sm-12 col-md-12">
+ 
+                  <button type="submit" class="btn btn-sacado">Valider</button>   
+ 
+ 
+              </div>
+          </div>
+    </form>
+</div>
+
+
+{% endif  %}

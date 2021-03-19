@@ -161,6 +161,17 @@
         <li {% if 'group/stats/' in request.path %} class="active" {% endif %}>
              <a href="{% url 'stat_group' group.id   %}"   ><i class="fa fa-bar-chart fa-fw"></i> Lire les stats</a>
         </li> 
+
+        {% if group.studentprofile %}
+        <li class="divider"></li>
+        <li >
+            <a href="{% url 'switch_teacher_student' group.id %}" class="no_button {% if not sacado_asso %}no_sacado_asso{% endif %}" {% if not sacado_asso %}title="version établissement requise"{% endif %}>
+               <i class="fa fa-glasses fa-fw"></i> Accéder à la vue élève
+            </a>
+        </li> 
+        {% endif %}
+
+
     </ul>
 </li>    
    

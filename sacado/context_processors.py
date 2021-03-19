@@ -46,6 +46,10 @@ def menu(request):
             student = Student.objects.get(user=request.user)
             groups = student.students_to_group.all()
 
+            teacher_to_student = False
+            if "_e-test" in student.user.username :
+                teacher_to_student = True
+
             if student.user.school :
                 sacado_asso = True
 
@@ -61,6 +65,7 @@ def menu(request):
                 'sacado_asso' : sacado_asso , 
                 'group' : group ,
                 'groups' : groups,
+                'teacher_to_student' : teacher_to_student ,                
             }
 
         elif request.user.is_parent:
