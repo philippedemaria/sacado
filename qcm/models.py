@@ -500,8 +500,10 @@ class Parcours(ModelWithCode):
 
     def group_list(self):
         Group = apps.get_model("group.Group")
-        group_ids = set(self.students.values_list('students_to_group', flat=True))
+        group_ids = self.students.values_list('students_to_group', flat=True)
+        print(group_ids)
         groups = Group.objects.filter(teacher=self.teacher, pk__in=group_ids)
+        print(groups)
         return groups
 
     def shared_group_list(self):
