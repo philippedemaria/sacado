@@ -477,22 +477,26 @@ def create_student_profile_inside(request, nf) :
     password   = make_password("sacado2020")  
     email      =  request.user.email
 
-    user,created = User.objects.get_or_create(username=username , defaults= { 'last_name' : last_name, 'first_name' : first_name,  'password' : password , 'email' : email, 'user_type' : 0})
+    if User.objects.filter( username__contains=name).count() == 0 :
+        user,created = User.objects.get_or_create(username=username , defaults= { 'last_name' : last_name, 'first_name' : first_name,  'password' : password , 'email' : email, 'user_type' : 0})
 
-    if created :
-        mesg = "Vous avez demandé un profil élève. Identifiant : "+username+"\n\n Mot de passe : sacado2020 \n\n Ce mot de passe est générique. N'oubliez pas de le modifier. \n\n Merci." 
-        try :
-            send_mail("Identifiant Profil élève",  mesg , "info@sacado.xyz" , [email] )
-        except :
-            pass
-        code = str(uuid.uuid4())[:8]                 
-        student = Student.objects.create(user=user, level=nf.level, code=code)
+        if created :
+            mesg = "Vous avez demandé un profil élève. Identifiant : "+username+"\n\n Mot de passe : sacado2020 \n\n Ce mot de passe est générique. N'oubliez pas de le modifier. \n\n Merci." 
+            try :
+                send_mail("Identifiant Profil élève",  mesg , "info@sacado.xyz" , [email] )
+            except :
+                pass
+            code = str(uuid.uuid4())[:8]                 
+            student = Student.objects.create(user=user, level=nf.level, code=code)
+
+        else :
+            student = Student.objects.get(user=user)
+
+        st = True   
+        nf.students.add(student)
 
     else :
-        student = Student.objects.get(user=user)
-
-    st = True   
-    nf.students.add(student)
+        st = False
 
     return st
 
