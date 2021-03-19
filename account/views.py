@@ -1475,9 +1475,9 @@ def ajax_courseinfo(request):
         if nb_group == 1:
             data['htmlg'] = "<br><i class='fa fa-check text-success'></i>"
         else:
-            data['htmlg'] = "<br><i class='fa fa-times text-danger'></i> Groupe inconnu."
+            data['htmlg'] = "<br><i class='fa fa-times text-danger'></i> Groupe inconnu ou verrouillé."
     except:
-        data['htmlg'] = "<br><i class='fa fa-times text-danger'></i> Groupe inconnu."
+        data['htmlg'] = "<br><i class='fa fa-times text-danger'></i> Groupe inconnu ou verrouillé."
 
     return JsonResponse(data)
 
