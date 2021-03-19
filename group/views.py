@@ -519,7 +519,7 @@ def create_group(request):
         if eleveTest :
             st = create_student_profile_inside(request, nf)          
 
-        msg = "Félicitations... Votre compte sacado est maintenant configuré et votre premier groupe créé !" 
+        msg = "Félicitations... Votre compte sacado est maintenant configuré et votre groupe est créé !" 
         if st :
             msg = msg + " Vous avez demandé un profil élève. Un mail contenant vos identifiant vous est envoyé." 
         messages.success(request, msg )
@@ -542,6 +542,8 @@ def update_group(request, id):
     group = Group.objects.get(id=id)
     stdnts = group.students.exclude(user__username = request.user.username).exclude(user__username__contains=  "_e-test").order_by("user__last_name")
 
+    all_students = Student.objects.filter(user__user_type=0, level=group.level, user__school=teacher.user.school)
+    
     authorizing_access_group(request,teacher,group )
     
     form = GroupTeacherForm(request.POST or None, teacher = teacher , instance=group )
@@ -573,7 +575,7 @@ def update_group(request, id):
     else:
         print(form.errors)
 
-    context = {'form': form,   'group': group, 'teacher': teacher, 'students': stdnts, 'communications' : [] , }
+    context = {'form': form,   'group': group, 'teacher': teacher, 'students': stdnts, 'all_students' : all_students ,  }
 
     return render(request, 'group/form_group.html', context )
 
