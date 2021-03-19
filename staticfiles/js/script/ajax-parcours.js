@@ -141,7 +141,7 @@ define(['jquery','bootstrap'], function ($) {
             if (  $('select[name=level]').val() > 0 )
             {
                     let level_id = $('#level_id').val();
-                    if (id_level == " ") { alert("Sélectionner un niveau") ; return false ;}
+                    if (level_id == " ") { alert("Sélectionner un niveau") ; return false ;}
                     let theme_id = $(this).val();
                     let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
                     $("#loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");

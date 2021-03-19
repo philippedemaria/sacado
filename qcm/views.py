@@ -1015,14 +1015,20 @@ def ajax_all_parcourses(request):
         level = Level.objects.get(pk=int(level_id))
         theme_ids = request.POST.getlist('theme_id',[])
         
-        if len(theme_ids)>0 and theme_ids[0] !=0:
-            themes_tab = []
+        if len(theme_ids) > 0 :
 
-            for theme_id in theme_ids :
-                themes_tab.append(theme_id) 
-            parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1, exercises__knowledge__theme__in = themes_tab, exercises__level_id = level_id ).exclude(teacher=teacher).order_by('author').distinct()
+            if theme_ids[0] != '' :
+                themes_tab = []
+
+                for theme_id in theme_ids :
+                    themes_tab.append(theme_id) 
+                parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1, exercises__knowledge__theme__in = themes_tab, exercises__level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
+            else :
+                parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1, exercises__level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
         else :
-            parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1, exercises__level_id = level_id ).exclude(teacher=teacher).order_by('author').distinct()
+            parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1, exercises__level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct() 
+    else :
+        parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1 ).exclude(teacher=teacher).order_by('author').distinct()
 
     data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : parcourses, 'teacher' : teacher ,  })
  
