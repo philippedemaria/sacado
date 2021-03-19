@@ -528,7 +528,7 @@ def create_group(request):
             msg = msg + " Vous avez demandé un profil élève. Un mail contenant vos identifiant vous est envoyé." 
         messages.success(request, msg )
 
-        return redirect('index')
+        return redirect("show_group", nf.id)
     else:
         print(form.errors)
 
@@ -577,7 +577,7 @@ def update_group(request, id):
         messages.success(request, msg )
 
 
-        return redirect('index')
+        return redirect("show_group", group.id)
     else:
         print(form.errors)
 

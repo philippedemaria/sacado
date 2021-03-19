@@ -85,11 +85,15 @@ class Group(ModelWithCode):
         else :
             profilTest = False
 
-        parcourses = []
+        parcourses = set()
         for student in students:
-            for p in student.students_to_parcours.filter(Q(author=teacher)|Q(teacher=teacher)|Q(coteachers=teacher),level = self.level).exclude(is_leaf=1) :
-                if p not in parcourses  :
-                    parcourses.append(p)
+            if self.subject and self.level : 
+                parcourses.update(student.students_to_parcours.filter(Q(author=teacher)|Q(teacher=teacher)|Q(coteachers=teacher),level = self.level,subject = self.subject).exclude(is_leaf=1))
+            elif self.level : 
+                parcourses.update(student.students_to_parcours.filter(Q(author=teacher)|Q(teacher=teacher)|Q(coteachers=teacher),level = self.level ).exclude(is_leaf=1)) 
+            elif self.subject : 
+                parcourses.update(student.students_to_parcours.filter(Q(author=teacher)|Q(teacher=teacher)|Q(coteachers=teacher),subject = self.subject ).exclude(is_leaf=1)) 
+                
 
         data, nb, nbf, nbp, nbef , nbe = {}, 0, 0, 0, 0, 0
         for parcours in parcourses :
