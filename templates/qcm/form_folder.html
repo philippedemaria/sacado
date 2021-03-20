@@ -115,6 +115,59 @@
                     </div>
                     {% endif %}  
                     </div>
+
+
+                    <div class="form-group list_choice">         
+                    <label>Choisir les élèves parmi</label>   <br>  
+
+                            {% if group.students.count > 0 %}
+                            <a data-toggle="collapse" data-target="#demo{{ group.id }}" style="color:{{ group.color}};cursor:pointer">
+                                {{ group.name|truncatechars:15 }} <small><i class="fa fa-caret-down"></i></small> 
+                            </a> 
+                            <label class="pull-right"><input type="checkbox" value="{{ group.id }}" name="groups"
+                                                                                                {% if request.session.group_id %}
+                                                                                                    {% if  request.session.group_id == group.id %}checked {% endif %}
+                                                                                                {% else %}
+                                                                                                    {% if group.students.count == students_checked  %}checked {% endif %}
+                                                                                                {% endif %}
+                                                                                                class="select_all" /><small> tous  </small> 
+                                                               </label>
+                            {% else %}
+                                <span style="color:{{ group.color}}">
+                                   <small><i class="fa fa-caret-right"></i></small>  {{ group.name|truncatechars:15 }} 
+                                </span> 
+                                <small style="color:#cb2131">Groupe sans élève. Ce parcours ne lui sera pas affecté.</small>
+                            {% endif %}<br>
+
+                          <div id="demo{{ group.id }}" class="collapse" >
+                                <div class="form-group">
+                                    {% for s in group.students.all|dictsort:"user.last_name"  %}
+
+                                        <label>
+                                            <input type = "checkbox" 
+                                                    class="selector" 
+                                                    name="students" 
+                                                    value="{{ s.user.id}}"
+
+                                                    {% if parcours %}
+                                                     {% get_in_parcours  s parcours  as bool  %}
+
+                                                        {% if group_id %}
+                                                            {% if  group_id == group.id  %}checked {% endif %}
+                                                        {% else %}
+                                                            {% if bool  %}checked {% endif %}
+                                                        {% endif %}
+                                                    {% endif %} > 
+                                                    {{ s.user|title}}
+                                        </label><br>
+                                    {% endfor %}
+                                </div>
+                          </div>
+                          
+                    </div>
+
+
+
                 </div>
 
 
