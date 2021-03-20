@@ -477,7 +477,13 @@ def create_student_profile_inside(request, nf) :
     password   = make_password("sacado2020")  
     email      =  request.user.email
 
-    if User.objects.filter( username__contains=name).count() == 0 :
+
+
+    print(nf.students.filter( user__username__contains=name).count())
+
+
+
+    if nf.students.filter( user__username__contains=name).count() == 0 :
         user,created = User.objects.get_or_create(username=username , defaults= { 'last_name' : last_name, 'first_name' : first_name,  'password' : password , 'email' : email, 'user_type' : 0})
 
         if created :

@@ -118,12 +118,10 @@
 
 
                     <div class="form-group list_choice">         
-                    <label>Choisir les élèves parmi</label>   <br>  
+                    <label>Choisir les élèves parmi</label>  
 
                             {% if group.students.count > 0 %}
-                            <a data-toggle="collapse" data-target="#demo{{ group.id }}" style="color:{{ group.color}};cursor:pointer">
-                                {{ group.name|truncatechars:15 }} <small><i class="fa fa-caret-down"></i></small> 
-                            </a> 
+
                             <label class="pull-right"><input type="checkbox" value="{{ group.id }}" name="groups"
                                                                                                 {% if request.session.group_id %}
                                                                                                     {% if  request.session.group_id == group.id %}checked {% endif %}
@@ -139,7 +137,7 @@
                                 <small style="color:#cb2131">Groupe sans élève. Ce parcours ne lui sera pas affecté.</small>
                             {% endif %}<br>
 
-                          <div id="demo{{ group.id }}" class="collapse" >
+                          <div id="demo{{ group.id }}" >
                                 <div class="form-group">
                                     {% for s in group.students.all|dictsort:"user.last_name"  %}
 
