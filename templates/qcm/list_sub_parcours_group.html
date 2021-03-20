@@ -33,18 +33,18 @@
 
 
         <li class="dropdown">
-            <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Créer un parcours <b class="caret"></b> </a>
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Nouveau Parcours  <b class="caret"></b> </a>
 
             <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
          
                 {% if parcours %}
                     {% if parcours.is_folder %}
-                    <li> <a href="{% url 'create_parcours' parcours.id %}"  >  Nouveau Parcours</a> </li> 
+                    <li> <a href="{% url 'create_parcours' parcours.id %}"  >  Parcours personnalisé</a> </li> 
                     {% else %}
-                    <li> <a href="{% url 'create_parcours' 0 %}"  >   Nouveau Parcours</a> </li>
+                    <li> <a href="{% url 'create_parcours' 0 %}"  >  Parcours personnalisé</a> </li>
                     {% endif  %}
                 {% else %}
-                <li> <a href="{% url 'create_parcours' 0 %}"  >  Nouveau Parcours</a> </li>
+                <li> <a href="{% url 'create_parcours' 0 %}"  >  Parcours personnalisé</a> </li>
                 {% endif  %}
 
                 <li> {% if sacado_asso %} <a href="{% url 'all_parcourses' %}"   > Parcours mutualisés</a> {% else %}<a href="#"  class="no_sacado_asso" > Parcours mutualisés</a> {% endif %} </li> 
@@ -89,7 +89,7 @@
             <div class="handler widget-user-header">
                 
 
-<!-- 
+            <!-- 
                 <div class="group_show  group_show{{parcours.id }}"> 
                     <form action="#" method="POST">
                         {% csrf_token %}
@@ -107,7 +107,7 @@
                     </font>
                     <div style="clear:both"></div>
                 </div>
--->
+            -->
                 <a href="#" data-parcours_id="{{parcours.id }}" class="overlay_show white">
                 <div class="disc disc{{parcours.id }}" style="background-color:{% if parcours.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %};"> 
                      <i class="fa fa-circle-o-notch"></i>
@@ -195,13 +195,19 @@
                         {% if parcours.is_pending_correction %}
                         <i class="fa fa-copyright pull-right" style="font-size:12px;padding-right:5px;color:{{ parcours.color|contrast_color }};" title="Copies à corriger" ></i> 
                         {% endif %}
+
                         {{ parcours.title|truncatechars:"18" }}
+
                         {% get_is_lock parcours today as is_lock %} 
                         {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock" style="color:{{ parcours.color|contrast_color }};"></i><div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible aux élèves de soumettre des exercices.</div></span>{% endif %}
 
                         <span style="font-size:12px"> 
+
                             {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}, 
-                                {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }} {% endif %}min.
+                                {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}
+                            {% if parcours.title|length < 16 %}
+                                min.
+                            {% endif %}    
                         </span>
                     </a>
                     {% endif %}

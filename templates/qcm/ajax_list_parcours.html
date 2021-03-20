@@ -2,44 +2,21 @@
 {% load static %}
 {% load item_tags %}
 
-{% for parcours in parcourses  %} 
-    
-    <tr> 
-        <td>
-           <a href="{% url 'show_parcours_visual'  parcours.id %}" class="listing">{{ parcours.title }} 
-            <small>
-                [{{ parcours.exercises.count }} exercice{{ parcours.exercises.count|pluralize }}]
 
-                [{{ parcours.course.count }} cours]
-            </small> 
-           </a>
-        </td>
-        <td style="font-size:10px">
-            {% for data in parcours.get_themes   %} 
-            <span class="open_details btn btn-default" style="margin:2px">{{ data.theme }} 
-                <div class="details_exos">
-                        <span style="color:#444">{{ data.annoncement|cleanhtml|truncatechars:76  }}</span><br/>
-                    {% if not forloop.last %} <br/>{% endif %}
-                </div>
-            </span>
-            {% endfor %}
-        </td>
-        <td> 
-            {% for e in parcours.exercises_only|dictsort:"level.name" %}
-                {% ifchanged e.level.name %} 
-                    <small>{{ e.level.name }}</small> 
-                {% endifchanged %} 
-            {% endfor %}
-        </td>
-        <td>
-            {% if parcours.author.user.is_superuser %} SACADO {% else %}{{ parcours.author.user.get_full_name|truncatechars:20 }} {% endif %}
-        </td>
-    </tr>
+<div class="col-sm-12 col-md-12">
+    <h1 class="thin"> </h1>
+</div>
+
+
+<div class="col-sm-12 col-md-12">
+{% for parcours in parcourses  %} 
+
+    {% include 'qcm/parcours_shared.html' %}
 {% empty %} 
-    <tr class="alert alert-danger"><td colspan="4">Aucun résultat de votre recherche  </td>  </tr> 
+    <div class="alert alert-danger"> Aucun résultat de votre recherche  </div> 
 
 {% endfor %} 
- 
+</div>
 
 <script type="text/javascript"> 
     MathJax.Hub.Queue(["Typeset",MathJax.Hub]);

@@ -135,6 +135,17 @@ body{
                     </div>
                     <div class="col-sm-12 col-md-2" style="margin :40px 0px 0px 0px">
                         <i class="fa fa-folder-open fa-10x" style="color: {{ parcours.color }}"></i>
+
+
+                        <div >
+                            <a href="{% url 'create_parcours' 0 %}"  class="btn btn-default btn-xs" > Créer un parcours personnalisé</a>
+                        </div>
+                        {% if sacado_asso %}                                  
+                        <div>
+                            <a href="{% url 'all_parcourses' %}"  class="btn btn-default btn-xs" style="margin-top :10px" > Choisir un parcours mutualisés</a>
+                        </div>
+                        {% endif  %}
+
                     </div>
                     <div class="col-sm-12 col-md-9" style="margin :40px 0px 0px 0px">
 

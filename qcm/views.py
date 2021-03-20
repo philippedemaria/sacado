@@ -990,8 +990,16 @@ def parcours_progression_student(request,id):
 
 def all_parcourses(request):
     teacher = request.user.teacher
-    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1).exclude(exercises=None ).exclude(teacher=teacher).order_by("author").prefetch_related('exercises__knowledge__theme').select_related('author')
+    parcours_ids = Parcours.objects.values_list("id",flat=True).filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1,level__in = teacher.levels.all()).exclude(teacher=teacher).order_by('level').distinct()
 
+    parcourses , tab_id = [] , [] 
+    for p_id in parcours_ids :
+        if not p_id in tab_id :
+            p =  Parcours.objects.get(pk = p_id)
+            if p.exercises.count() > 0 :
+                parcourses.append(p)
+                tab_id.append(p_id)
+ 
     try :
         group_id = request.session.get("group_id",None)
         if group_id :
@@ -1016,8 +1024,8 @@ def all_parcourses(request):
     else :
         inside = False
 
-    return render(request, 'qcm/all_parcourses.html', { 'teacher' : teacher ,   'parcourses': parcourses , 'inside' : inside , 'communications' : [] , 'parcours' : parcours , 'group' : group })
-
+    #return render(request, 'qcm/all_parcourses.html', { 'teacher' : teacher ,   'parcourses': parcourses , 'inside' : inside , 'communications' : [] , 'parcours' : parcours , 'group' : group })
+    return render(request, 'qcm/list_parcours_shared.html', { 'teacher' : teacher ,   'parcourses': parcourses , 'inside' : inside ,   'parcours' : parcours , 'group' : group   })
 
 
 
@@ -1025,12 +1033,14 @@ def ajax_all_parcourses(request):
 
     teacher = request.user.teacher
     data = {} 
-    level_id = request.POST.get('level_id',None)
-
-    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1).exclude(exercises=None ).exclude(teacher=teacher).order_by("author").prefetch_related('exercises__knowledge__theme').select_related('author')
+    level_id = request.POST.get('level_id',0)
+    print(level_id)
+    subject_id = request.POST.get('subject_id',None)
+    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1).exclude(exercises=None ,teacher=teacher).order_by('level')
     
+    keywords = request.POST.get('keywords',None)
 
-    if level_id :
+    if int(level_id) > 0 :
         level = Level.objects.get(pk=int(level_id))
         theme_ids = request.POST.getlist('theme_id',[])
         
@@ -1041,13 +1051,52 @@ def ajax_all_parcourses(request):
 
                 for theme_id in theme_ids :
                     themes_tab.append(theme_id) 
-                parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1, exercises__knowledge__theme__in = themes_tab, exercises__level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
+
+                if keywords :
+                    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, 
+                                                        exercises__knowledge__theme__in = themes_tab, 
+                                                        exercises__supportfile__title__contains = keywords, 
+                                                        exercises__level_id = int(level_id)).exclude(teacher=teacher).order_by('author').distinct()
+                else :
+                    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, 
+                                                        exercises__knowledge__theme__in = themes_tab, 
+                                                        exercises__level_id = int(level_id)).exclude(teacher=teacher).order_by('author').distinct()  
+                    
             else :
-                parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1, exercises__level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
+                if keywords :
+                    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, 
+                                                            exercises__supportfile__title__contains = keywords,  
+                                                            exercises__level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
+
+                else :
+                    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, 
+                                                            exercises__level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
+
         else :
-            parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1, exercises__level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct() 
+            if keywords:
+                parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, 
+                                                        exercises__supportfile__title__contains = keywords  , 
+                                                        exercises__level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
+            else :
+                parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, 
+                                                        exercises__level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
+
     else :
-        parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1 ).exclude(teacher=teacher).order_by('author').distinct()
+        if keywords:
+            parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1 , exercises__supportfile__title__contains = keywords ).exclude(teacher=teacher).order_by('author').distinct()
+        else :
+            parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1 ).exclude(teacher=teacher).order_by('author').distinct()
+
+
+    parcourses , tab_id = [] , [] 
+    for p_id in parcours_ids :
+        if not p_id in tab_id :
+            p =  Parcours.objects.get(pk = p_id)
+            if p.exercises.count() > 0 :
+                parcourses.append(p)
+                tab_id.append(p_id)
+
+
 
     data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : parcourses, 'teacher' : teacher ,  })
  
@@ -1065,7 +1114,7 @@ def ajax_chargethemes_parcours(request):
 
     thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject).order_by("name")
     data['themes'] = list(thms)
-    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1, exercises__level_id = level_id ).exclude(teacher=teacher).order_by('author').distinct()
+    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, exercises__level_id = level_id ).exclude(teacher=teacher).order_by('author').distinct()
 
     data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : parcourses, })
 
@@ -1515,7 +1564,11 @@ def show_parcours_student(request, id):
 def show_parcours_visual(request, id):
 
     parcours = Parcours.objects.get(id=id)
- 
+    teacher = request.user.teacher 
+
+    role, group , group_id , access = get_complement(request, teacher, parcours)
+
+
     relationships = Relationship.objects.filter(parcours=parcours,  is_publish=1 ).order_by("ranking")
     nb_exo_only = [] 
     i=0
@@ -1526,7 +1579,7 @@ def show_parcours_visual(request, id):
             i+=1
         nb_exo_only.append(i)
     nb_exercises = parcours.exercises.filter(supportfile__is_title=0).count()
-    context = {'relationships': relationships,  'parcours': parcours,   'nb_exo_only': nb_exo_only, 'nb_exercises': nb_exercises,  'communications' : [] ,  }
+    context = {'relationships': relationships,  'parcours': parcours,   'nb_exo_only': nb_exo_only, 'nb_exercises': nb_exercises,  'group' : group ,  }
  
     return render(request, 'qcm/show_parcours_visual.html', context)
 
@@ -2142,7 +2195,6 @@ def clone_parcours(request, id, course_on ):
 
 
 
-
     former_relationship_ids = []
 
     if course_on == 1 : 
@@ -2176,7 +2228,7 @@ def clone_parcours(request, id, course_on ):
 
     messages.success(request, "Le parcours est cloné avec succès. Bonne utilisation.")
 
-    print(prcrs_id)
+
     if prcrs_id :
         return redirect('all_parcourses')
     elif parcours.is_evaluation :
@@ -6005,9 +6057,15 @@ def ajax_parcours_get_course(request):
     else :
         parcours = None
 
+
+    role, group , group_id , access = get_complement(request, teacher, parcours)
+    request.session["parcours_id"] = parcours.id
+    request.session["group_id"] = group_id
+
+
     parcourses =  teacher.teacher_parcours.order_by("level")    
 
-    context = {  'course': course , 'parcours': parcours ,  'parcourses': parcourses , 'teacher' : teacher , 'sacado_asso' : sacado_asso  }
+    context = {  'course': course , 'parcours': parcours ,  'parcourses': parcourses , 'teacher' : teacher , 'sacado_asso' : sacado_asso , 'group' : group }
     data = {}
     data['html'] = render_to_string('qcm/course/ajax_parcours_get_course.html', context)
  
@@ -6096,11 +6154,19 @@ def get_this_course_for_this_parcours(request,typ,id_target,idp):
 def get_course_in_this_parcours(request,id):
     parcours = Parcours.objects.get(pk = id) 
     user = request.user
-    if user.is_teacher:  # teacher
-        teacher = Teacher.objects.get(user=user)
-        courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user__is_superuser=1),is_share = 1).exclude(parcours__teacher = teacher).order_by("parcours","parcours__level")
 
-        return render(request, 'qcm/course/list_courses.html', {  'teacher': teacher , 'courses':courses,   'parcours': parcours, 'relationships' : [] ,  'communications': [] , })
+
+
+    if user.is_teacher:  # teacher
+    
+        teacher = request.user.teacher
+        role, group , group_id , access = get_complement(request, teacher, parcours)
+        request.session["parcours_id"] = parcours.id
+        request.session["group_id"] = group_id
+
+        courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=2480),is_share = 1).exclude(parcours__teacher = teacher).order_by("parcours","parcours__level")
+
+        return render(request, 'qcm/course/list_courses.html', {  'teacher': teacher , 'group': group , 'courses':courses,   'parcours': parcours, 'relationships' : [] ,  'communications': [] , })
     else :
         return redirect('index')  
 
@@ -6110,10 +6176,15 @@ def course_custom_show_shared(request):
     
     user = request.user
     if user.is_teacher:  # teacher
-        teacher = Teacher.objects.get(user=user)
-        courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user__is_superuser=1),is_share = 1).exclude(teacher = teacher).order_by("parcours","parcours__level")
+        teacher = request.user.teacher
+        role, group , group_id , access = get_complement(request, teacher, parcours)
+        request.session["parcours_id"] = parcours.id
+        request.session["group_id"] = group_id
 
-        return render(request, 'qcm/course/list_courses.html', {  'teacher': teacher , 'courses':courses,   'parcours': None, 'relationships' : [] ,  'communications': [] , })
+
+        courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=2480),is_share = 1).exclude(teacher = teacher).order_by("parcours","parcours__level")
+
+        return render(request, 'qcm/course/list_courses.html', {  'teacher': teacher , 'courses':courses, 'group': group ,  'parcours': None, 'relationships' : [] ,  'communications': [] , })
     else :
         return redirect('index')   
 
@@ -6134,9 +6205,16 @@ def ajax_course_custom_show_shared(request):
     parcours_id = request.POST.get('parcours_id',None)
     if parcours_id :
         parcours = Parcours.objects.get(pk = parcours_id)
+        teacher = request.user.teacher
+        role, group , group_id , access = get_complement(request, teacher, parcours)
+        request.session["parcours_id"] = parcours.id
+        request.session["group_id"] = group_id
+
+
         template = 'qcm/course/ajax_list_courses_for_parcours.html'
     else :
         parcours = None
+        group = None
         template = 'qcm/course/ajax_list_courses.html'
 
 
@@ -6160,10 +6238,10 @@ def ajax_course_custom_show_shared(request):
                 parcours_set.update(exercise.exercises_parcours.all())
 
             parcours_tab = list(parcours_set)
-            courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user__is_superuser=1),is_share = 1, parcours__in = parcours_tab ) )
+            courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=2480),is_share = 1, parcours__in = parcours_tab ) )
 
         else :
-            courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user__is_superuser=1), parcours__level = level,is_share = 1 ) )      
+            courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=2480), parcours__level = level,is_share = 1 ) )      
     
 
     if keywords :
@@ -6171,10 +6249,10 @@ def ajax_course_custom_show_shared(request):
             courses += list(Course.objects.filter(Q(title__icontains=keyword)| Q(annoncement__icontains=keyword),is_share = 1))
 
     elif int(level_id) == 0 : 
-        courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user__is_superuser=1),is_share = 1).exclude(teacher = teacher)
+        courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=2480),is_share = 1).exclude(teacher = teacher)
 
 
-    data['html'] = render_to_string(template , {'courses' : courses, 'teacher' : teacher, 'parcours' : parcours  })
+    data['html'] = render_to_string(template , {'courses' : courses, 'teacher' : teacher, 'parcours' : parcours  ,  'group': group })
  
     return JsonResponse(data)
 
@@ -6218,10 +6296,10 @@ def ajax_course_custom_for_this_parcours(request):
                 parcours_set.update(exercise.exercises_parcours.all())
 
             parcours_tab = list(parcours_set)
-            courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user__is_superuser=1),is_share = 1, parcours__in = parcours_tab ) )
+            courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=2480),is_share = 1, parcours__in = parcours_tab ) )
 
         else :
-            courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user__is_superuser=1), parcours__level = level,is_share = 1 ) )      
+            courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=2480), parcours__level = level,is_share = 1 ) )      
     
 
     if keywords :
@@ -6229,7 +6307,7 @@ def ajax_course_custom_for_this_parcours(request):
             courses += list(Course.objects.filter(Q(title__icontains=keyword)| Q(annoncement__icontains=keyword),is_share = 1))
 
     elif int(level_id) == 0 : 
-        courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user__is_superuser=1),is_share = 1).exclude(teacher = teacher)
+        courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=2480),is_share = 1).exclude(teacher = teacher)
 
 
     data['html'] = render_to_string('qcm/course/ajax_list_courses_for_parcours.html', {'courses' : courses, 'teacher' : teacher  , 'parcours' : parcours   })

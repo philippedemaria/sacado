@@ -292,9 +292,9 @@ def time_done(arg):
         if arg < 60:
             return f"{s}s"
         if arg < 3600:
-            return f"{m}min. {s}s"
+            return f"{m}min.{s}s"
         else:
-            return f"{h}h. {m}min. {s}s"
+            return f"{h}h.{m}min.{s}s"
 
 
 

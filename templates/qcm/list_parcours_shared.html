@@ -10,16 +10,9 @@
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
 
 
-
-    {% if parcours %}
     <script>
-        require(['script/ajax-course_this_parcours']);
+        require(['script/ajax-parcours_shared']);
     </script> 
-    {% else %}
-        <script>
-            require(['script/ajax-course']);
-        </script> 
-    {% endif  %}
 
 {% endblock %} 
 
@@ -29,9 +22,9 @@
     {% if parcours %} 
         <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-desktop"></i> </span>
         {% include 'qcm/breadcrumb.html' %}
-        <small> Les cours mutualisés  </small>
+        <small> Les parcours mutualisés  </small>
     {% else  %} 
-        <i class="fa fa-laptop"></i> Les cours mutualisés 
+        <i class="fa fa-laptop"></i> Les parcours mutualisés 
     {% endif  %} 
 
 
@@ -95,67 +88,28 @@
     {% endif %}
 
 
+    {% if inside %}   
+        <div class="row" id="courses_details">
+            <div class="col-sm-12 col-md-12">
+  
+                {% regroup parcourses by level as level_list  %}
 
-    <div class="row" id="courses_details">
-        <div class="col-sm-12 col-md-12">
-            {% regroup courses by parcours as parcours_list  %}
-            {% for pcs in parcours_list  %}
-                <div class="card_course">
-                    <div class="course_title" >
-
-                        {% if parcours %}
-                            <a href="{% url 'get_this_course_for_this_parcours' 0 parcours.id pcs.grouper.id %}" class="pull-right getter_course edit" 
-                                onclick="return get_this_confirmation('tous les cours')"  title="Récupérer ce cours"  >
-                                <i class="fa fa-plus"></i></a>
-                        {% else %} 
-                            <a href="#" data-toggle='modal' data-target='#clone_course' data-course_id =0 data-parcours_id = '{{ pcs.grouper.id  }}' class="pull-right getter_course edit" title="Récupérer ce cours" >
-                                <i class="fa fa-plus"></i>
-                            </a>
-                        {% endif %}
-
-                        {% if pcs.grouper.title|length > 25 %} 
-                           <span title="{{ pcs.grouper.title }}" style="cursor: help"> {{ pcs.grouper.title|truncatechars:25 }}</span><span id="{{ pcs.grouper.id }}"></span>
-                        {% else %} 
-                        {{ pcs.grouper.title }} 
-                        {% endif %} 
-                        {% if pcs.grouper.level %} 
-                        <span class="course_level" >{{ pcs.grouper.level  }}</span>
-                        {% endif %} 
-
-                        <br/><label style="font-size:10px">{{ pcs.grouper.teacher }}</label>
-
-                        
-
-                    </div>
-                    <div class="course_body" >
-                    {% for course in pcs.list  %}
-                        <li class="course_section">
-                            {% if course.title|length > 32 %} 
-                              <span title="{{ course.title }}" style="cursor: help">{{ course.title|truncatechars:32 }} </span>
-                            {% else %} 
-                                {{ course.title }} 
-                            {% endif %}
+                {% for level in level_list  %}
+                    <h1 class="thin">{{ level.grouper.name }}</h1>
 
 
-                            {% if parcours %} 
-                                <a href="{% url 'get_this_course_for_this_parcours' 1 parcours.id course.id %}" title="Récupérer ce cours"  
-                                    onclick="return get_this_confirmation('ce cours : {{ course.title }}')"  class="pull-right  getter_course edit"><i class="fa fa-plus fa-xs"></i></a>
-                                <a href="#" data-toggle='modal' data-target='#get_course' data-course_id = '{{ course.id }}'  data-parcours_id =0 class="pull-right shower_this_course edit"><i class="fa fa-eye fa-xs"></i></a>
-                            {% else %} 
-                                <a href="#" data-toggle='modal' data-target='#clone_course' data-course_id = '{{ course.id }}' data-parcours_id =0  class="pull-right  getter_course edit" title="Récupérer ce cours" >
-                                    <i class="fa fa-plus fa-xs"></i></a>
-                                <a href="#" data-toggle='modal' data-target='#get_course' data-course_id = '{{ course.id }}'  data-parcours_id =0 class="pull-right shower_course edit"><i class="fa fa-eye fa-xs"></i></a>
-                            {% endif %}
-                                
-
-                        </li> 
-                    {% endfor %}
-                    </div>
-                </div>
-            {% endfor %} 
+                        {% for parcours in level.list  %}
+                              {% include 'qcm/parcours_shared.html' %}
+                        {% endfor %}
+                        <div style="clear:both"></div>
+                {% endfor %} 
+            </div>
         </div>
-    </div>
-
+    {% else %} 
+        <div class="alert alert-danger">      
+            <i class="fa fa-warning"></i> Pour récupérer un parcours mutualisé, vous devez souscrire la version établisssement.
+        </div>
+    {% endif %}  
 
 
 

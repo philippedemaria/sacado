@@ -25,11 +25,10 @@
  
 
 {% block page_title %}
-<span  style="color:{{ parcours.color|contrast_color_title }}"> <i class="fa fa-th"></i>   {{ parcours }} 
- 
- 
-<img src="{% static 'img/angle-right.png' %}"/> 
-<small class="thin">{{ nb_exercises }} exercice{{ nb_exercises|pluralize }}</small> </span>
+<span  style="color:{{ parcours.color|contrast_color_title }}"> <i class="fa fa-th"></i> 
+
+{% include 'qcm/breadcrumb.html' %}  <small>{{ parcours }} </small></span>
+
 {% endblock %}
 
 {% block page_menu_right %}
@@ -91,8 +90,8 @@
             <h4 style="color:{{ parcours.color }}">Le cours du parcours</h4>
             <ul class="nav nav-pills nav-stacked admin-menu">
                 {% for course in parcours.course.all %}
-                    <li class="{% if forloop.first %}active{% endif %} menu_course"  style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">
-                        <a href="#" data-toggle='modal' data-target='#menu_course{{ forloop.counter }}'  data-relation_id='{{ relation.id }}' class="header_shower"> 
+                    <li class="{% if forloop.first %}active{% endif %} menu_course"  style="background-color:{{ parcours.color }}">
+                        <a href="#" data-toggle='modal' data-target='#menu_course{{ forloop.counter }}'  data-relation_id='{{ relation.id }}' class="header_shower" style="color:{{ parcours.color|contrast_color }}"> 
                         {{ course.title }}
                         </a> 
                     
@@ -123,8 +122,6 @@
         {% endif %}  
     </div>  
     <div class="row">
-        <div class="col-sm-1 col-md-1">
-        </div>
         <div class="col-sm-11 col-md-11">
             <div class="form-group">
                     <a href="{% url 'clone_parcours' parcours.id 0 %}" class="btn btn-primary">Cloner ce parcours </a>  
