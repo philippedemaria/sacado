@@ -894,15 +894,15 @@ def list_parcours_group(request,id):
 
     for student in students :
         if access :
-            if group.subject :
-                pcs = Parcours.objects.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),subject= group.subject, students= student, is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation","ranking")
-            else :
-                pcs = Parcours.objects.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),students= student, is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation","ranking")
+            #if group.subject :
+            #    pcs = Parcours.objects.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),subject= group.subject, students= student, is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation","ranking")
+            #else :
+            pcs = Parcours.objects.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),students= student, is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation","ranking")
         else :
-            if group.subject :
-                pcs = student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), is_favorite=1 ,subject= group.subject ).exclude(is_leaf=1).order_by("is_evaluation","ranking")
-            else :
-                pcs = student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), is_favorite=1 ).exclude(is_leaf=1).order_by("is_evaluation","ranking")
+            #if group.subject :
+            #    pcs = student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), is_favorite=1 ,subject= group.subject ).exclude(is_leaf=1).order_by("is_evaluation","ranking")
+            #else :
+            pcs = student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), is_favorite=1 ).exclude(is_leaf=1).order_by("is_evaluation","ranking")
         for parcours in pcs : 
             if parcours not in parcours_tab   :
                 parcours_tab.append(parcours)
@@ -2926,6 +2926,28 @@ def ajax_locker_exercise(request):
 
     return JsonResponse(data)
  
+
+
+
+def real_time(request,id):
+    """ module de real time"""
+    parcours = Parcours.objects.get(pk = id)
+    teacher = request.user.teacher
+    today = time_zone_user(request.user).now()
+    students = parcours.students.order_by("user__last_name")
+
+    role, group , group_id , access = get_complement(request, teacher, parcours)
+ 
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
+        return redirect('index')
+
+    rcs = parcours.parcours_relationship.filter(Q(is_publish=1)|Q(start__gt=today),exercise__supportfile__is_title=0).order_by("ranking")
+
+    return render(request, 'qcm/real_time.html', { 'teacher': teacher , 'parcours': parcours, 'rcs': rcs, 'students': students , 'group': group , 'role': role , 'access': access })
+
+
+ 
+
 
 #######################################################################################################################################################################
 #######################################################################################################################################################################
@@ -6960,6 +6982,7 @@ def create_folder(request,idg):
             nf.save() 
             nf.leaf_parcours.set(lp)        
             nf.students.set(group.students.all())
+            form.save_m2m()
             return redirect ("list_parcours_group", idg )     
         else:
             print(form.errors)
@@ -7000,6 +7023,7 @@ def update_folder(request,id,idg):
             nf.save()   
             nf.leaf_parcours.set(lp)         
             nf.students.set(group.students.all())
+            form.save_m2m()
             return redirect ("list_parcours_group", idg )     
         else:
             print(form.errors)
