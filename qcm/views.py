@@ -992,12 +992,31 @@ def all_parcourses(request):
     teacher = request.user.teacher
     parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user__is_superuser=1),is_share = 1).exclude(exercises=None ).exclude(teacher=teacher).order_by("author").prefetch_related('exercises__knowledge__theme').select_related('author')
 
+    try :
+        group_id = request.session.get("group_id",None)
+        if group_id :
+            group = Group.objects.get(pk = group_id)
+        else :
+            group = None   
+    except :
+        group = None
+
+    try :
+        parcours_id = request.session.get("parcours_id",None)
+        if parcours_id :
+            parcours = Parcours.objects.get(pk = parcours_id)
+        else :
+            parcours = None   
+    except :
+        parcours = None
+
+
     if request.user.school != None :
         inside = True
     else :
         inside = False
 
-    return render(request, 'qcm/all_parcourses.html', { 'teacher' : teacher ,   'parcourses': parcourses , 'inside' : inside , 'communications' : [] , 'parcours' : None , 'relationships' : []})
+    return render(request, 'qcm/all_parcourses.html', { 'teacher' : teacher ,   'parcourses': parcourses , 'inside' : inside , 'communications' : [] , 'parcours' : parcours , 'group' : group })
 
 
 
@@ -2079,9 +2098,9 @@ def add_exercice_in_a_parcours(request):
 @parcours_exists
 def clone_parcours(request, id, course_on ):
     """ cloner un parcours """
-    
+
     teacher = request.user.teacher
-    parcours = Parcours.objects.get(pk=id)
+    parcours = Parcours.objects.get(pk=id) # parcours à cloner
     relationships = Relationship.objects.filter(parcours = parcours) 
     courses = Course.objects.filter(parcours = parcours, is_share = 1)
     # clone le parcours
@@ -2093,6 +2112,36 @@ def clone_parcours(request, id, course_on ):
     parcours.is_favorite = 1
     parcours.code = str(uuid.uuid4())[:8]  
     parcours.save()
+    # ajoute le parcours cloné dans le dossier prcrs
+    try :
+        prcrs_id = request.session.get("parcours_id",None)
+        if prcrs_id :
+            prcrs = Parcours.objects.get(pk = prcrs_id)
+            parcours.is_leaf = 1
+            prcrs.leaf_parcours.add(parcours)
+        else :
+            prcrs = None   
+    except :
+        prcrs_id = None
+        prcrs = None
+
+
+    # ajoute le group au parcours si group    
+    try :
+        group_id = request.session.get("group_id",None)
+        if group_id :
+            group = Group.objects.get(pk = group_id)
+            parcours.groups.add(group)
+            if prcrs_id : 
+                Parcours.objects.filter(pk = prcrs_id).update(subject = group.subject)
+                Parcours.objects.filter(pk = prcrs_id).update(level = group.level)
+        else :
+            group = None   
+    except :
+        group = None
+
+
+
 
     former_relationship_ids = []
 
@@ -2127,7 +2176,10 @@ def clone_parcours(request, id, course_on ):
 
     messages.success(request, "Le parcours est cloné avec succès. Bonne utilisation.")
 
-    if parcours.is_evaluation :
+    print(prcrs_id)
+    if prcrs_id :
+        return redirect('all_parcourses')
+    elif parcours.is_evaluation :
         return redirect('evaluations')
     else :
         return redirect('parcours')
