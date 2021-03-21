@@ -501,9 +501,7 @@ class Parcours(ModelWithCode):
     def group_list(self):
         Group = apps.get_model("group.Group")
         group_ids = self.students.values_list('students_to_group', flat=True)
-        print(group_ids)
         groups = Group.objects.filter(teacher=self.teacher, pk__in=group_ids)
-        print(groups)
         return groups
 
     def shared_group_list(self):
@@ -705,6 +703,12 @@ class Parcours(ModelWithCode):
             if self in parcours.leaf_parcours.all() : 
                 test = True
         return test
+
+
+    def is_real_time(self):
+
+        test = False
+        return test 
 
 
 class Relationship(models.Model):
@@ -931,8 +935,6 @@ class Relationship(models.Model):
         if self.maxexo == -1   :
             is_ok = True
         return data
-
-
 
 class Studentanswer(models.Model):
 
@@ -1610,5 +1612,19 @@ class DocumentReport(models.Model):
     def __str__(self):
         return "{}".format(self.document)
 
+########################################################################################################################################### 
+########################################################################################################################################### 
+######################################################        Tracker             ######################################################### 
+########################################################################################################################################### 
+########################################################################################################################################### 
  
- 
+class Tracker(models.Model):
+    """Savoir où se trouve un utilisateur """
+    user = models.OneToOneField(User, blank=True, related_name="tracker", on_delete=models.CASCADE, primary_key=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    parcours = models.ForeignKey(Parcours,  on_delete=models.CASCADE, blank=True,  related_name='tracker', editable= False)
+    exercise_id = models.PositiveIntegerField(default=0, null=True,   editable= False)  
+    is_custom = models.BooleanField( blank=True, default=0, ) #0 Pour les exos sacado et 1 pour les exo personnels
+
+    def __str__(self):
+        return "Traceur de : {}".format(self.user)

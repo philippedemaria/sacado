@@ -1,0 +1,87 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3.js' %}"></script> 
+    <script>
+
+        require(['script/ajax-real-time-parcours']);
+    </script>
+{% endblock %}
+
+
+
+{% block page_title %}
+
+    {% if parcours %}
+    <span style="color:{{ parcours.color }}"><i class="fa fa-mortar-board"></i> </span> 
+    {% endif %}
+
+      {% include 'qcm/breadcrumb.html' %}
+
+       <small>  Suivi en temps réel</small>
+
+
+{% endblock %}
+
+
+
+
+{% block page_menu_right %}  
+    {% include 'qcm/submenu_parcours.html' %}
+{% endblock %}
+
+
+
+
+
+{% block body %}
+ 
+
+
+<section class="real_time_list" > 
+<form  action="" method="POST">
+{% csrf_token %} 
+<input type="hidden" name="parcours_id" id="parcours_id" value="{{ parcours.id }}" />
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table  class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th style="width:150px">Nom et prénom</th>
+
+                    {% for rc in rcs %}
+                    <th style="width:150px">
+                        {% if rc.exercise.supportfile.imagefile %}
+                        <img src="{{ rc.exercise.supportfile.imagefile.url }}" width="150px" class="imagefile" />
+                        {% elif rc.imagefile %}
+                        <img src="{{ rc.imagefile.url }}" width="150px" class="imagefile" />
+                        {% endif %}
+                    </th> 
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                    {% for student in  students %}
+
+                        <tr class="no_live" id="tr_student_{{ student.user.id }}">
+                            <td style="min-width:250px;" id="student_is_live_{{ student.user.id }}"  >
+                                {{ student |truncatechars:"30" }}     
+                            </td>
+                            {% for rc in rcs %}
+                            <td style="text-align:center" id="rc_{{ rc.parcours.id }}_{{ rc.exercise.id }}_tr_student_{{ student.user.id }}">
+                                <i class="fa fa-circle text-default fa-xs"></i>
+                            </td>
+                            {% endfor %}   
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+</section>
+{% endblock %}

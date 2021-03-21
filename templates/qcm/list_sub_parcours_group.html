@@ -276,12 +276,21 @@
                         </div>
                         <div class="col-lg-4 col-xs-4">
                             {% if not parcours.is_evaluation %}
-                            <a  href="{% url 'detail_task_parcours' parcours.id 0 0 %}"   class="edit" {% if parcours.is_task_exists %} style="color:{{ parcours.color }}" {% endif %}>
+                            <!-- <a  href="{% url 'detail_task_parcours' parcours.id 0 0 %}"   class="edit" {% if parcours.is_task_exists %} style="color:{{ parcours.color }}" {% endif %}>
                                 {% if not parcours.is_task_exists %}<i class="fa fa-fw fa-calendar"></i>{% else %}<i class="fa fa-fw fa-calendar-check"></i>{% endif %}
                                  <span class="label_icon tool_tip">Tâches
                                     <div class="tool_tip_text"><label><small>Gérer les tâches données aux élèves </small></label></div>
                                  </span>
-                            </a>  
+                            </a> --> 
+
+
+    
+                            <a href="{% url 'individualise_parcours' parcours.id  %}" class="edit" {% if parcours.is_individualized %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-user"></i> <span class="label_icon">Individual.</span>
+                            </a> 
+                
+
+
+
                             {% else %} 
                             <a href="#" class="edit export_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-upload"></i>  <span class="label_icon tool_tip">Export
                                     <div class="tool_tip_text"><label><small>Exporter les résultats </small></label></div>
@@ -297,12 +306,13 @@
                     <div class="row">  
                         {% if  not parcours.is_folder %}
                         <div class="col-lg-4 col-xs-4">
-                            <a href="{% url 'individualise_parcours' parcours.id  %}" class="edit" {% if parcours.is_individualized %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-user"></i> <span class="label_icon">Individual.</span>
+                            <a href="{% url 'real_time' parcours.id %}" class="edit {% if not sacado_asso %}no_sacado_asso{% endif %}" {% if parcours.is_real_time %} style="color:{{ parcours.color }}" {% endif %} >
+                                <i class="fa fa-fw fa-clock"></i><span class="label_icon">Temps réel.</span>
                             </a> 
                         </div>
                         <div class="col-lg-4 col-xs-4">
                         
-                            <a  href="{% url 'stat_evaluation' parcours.id %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon">{% if parcours.is_evaluation %}  Résultats{% else %}Stats{% endif %} </span></a>  
+                            <a href="{% url 'stat_evaluation' parcours.id %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon">{% if parcours.is_evaluation %}  Résultats{% else %}Stats{% endif %} </span></a>  
                         
                         </div>
                         {% endif %}                          

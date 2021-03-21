@@ -390,6 +390,49 @@ li label:hover{
   border: 1px solid lightgrey;
 }
 
+
+ /******************************************** real_time_live  **************************************/
+
+.no_live{
+  color:#CCC;
+  background-color: #F6F6F6;
+}
+
+.live{
+  color:#1bc074;
+  background-color: #FFF;
+}
+
+
+.real_time_list {
+  margin-left: 35px;  
+  margin-bottom: 15px;
+  margin-right: 0px;
+ /*  height:640px;
+  height:89vh;*/
+}
+
+
+
+.real_time_list::-webkit-scrollbar {
+  width: 0px;
+  height: 20px;
+}
+.real_time_list::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 10px;
+}
+.real_time_list::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+
+
+
+
+
+
  /******************************************** menu_right_div  **************************************/
 
 .menu_right_div{

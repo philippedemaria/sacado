@@ -130,7 +130,7 @@
                 </li> 
             {% else %}
                 <li>
-                    <a href="#" class="no_sacado_asso" ><i class="fa fa-plus fa-fw"></i> Ajouter un exercice personnalisé</a> 
+                    <a href="#" class="no_sacado_asso" title="Version établissement requise"><i class="fa fa-plus fa-fw"></i> Ajouter un exercice personnalisé</a> 
                 </li> 
             {% endif %}
 
@@ -142,6 +142,8 @@
         {% if not parcours.is_evaluation %}
             {% if sacado_asso %}
             <li {% if 'show_course/' in request.path %} class="active" {% endif %}><a href="{% url 'show_course' 0 parcours.id   %}"><i class="fa fa-desktop fa-fw"></i> Voir les cours</a>   </li>
+            {% else %} 
+            <li ><a href="#"  class="no_sacado_asso" title="Version établissement requise"><i class="fa fa-desktop fa-fw"></i> Voir les cours</a>   </li>
             {% endif %} 
 
         <li {% if 'parcours_tasks_and_publishes/' in request.path %} class="active" {% endif %}><a href="{% url 'parcours_tasks_and_publishes' parcours.id %}" ><i class="fa fa-indent fa-fw"></i> Gérer les sections</a></li>  
@@ -151,6 +153,20 @@
         <li {% if 'parcours_individualise/' in request.path %} class="active" {% endif %}>
             <a href="{% url 'individualise_parcours' parcours.id  %}" ><i class="fa fa-user fa-fw"></i> Individualiser les exercices</a> 
         </li> 
+
+        <li {% if 'real_time/' in request.path %} class="active" {% endif %}>
+            {% if sacado_asso %}
+            <a href="{% url 'real_time' parcours.id %}" class="{% if not sacado_asso %}no_sacado_asso{% endif %}"  >
+                <i class="fa fa-fw fa-clock"></i> Suivre en temps réel 
+            </a>
+            {% else %} 
+            <a href="" class="no_sacado_asso" title="Version établissement requise">
+                <i class="fa fa-fw fa-clock"></i> Suivre en temps réel 
+            </a>
+            {% endif %} 
+
+        </li> 
+
     </ul>
 </li>
 {% endif %}

@@ -42,7 +42,7 @@ import re
 import pytz
 from datetime import datetime , timedelta
 from general_fonctions import *
-
+from qcm.views import tracker_execute_exercise
 
 
 #################################################################################
@@ -523,7 +523,8 @@ def this_student_can_play(student,gquizz):
 
 def play_quizz_student(request):
     """ Lancer le play quizz élève """
-    
+
+    tracker_execute_exercise(False, request.user)
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     starter = True
     if request.method == 'POST' :
@@ -720,9 +721,11 @@ def store_student_answer(request):
 
 def list_quizz_student(request):
     """ Lancer le play quizz élève """
+    
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     student = request.user.student
-
+    tracker_execute_exercise(False, request.user)
+    
     gquizzes = set()
     for g in student.students_to_group.all() : 
         teacher_user = g.teacher.user

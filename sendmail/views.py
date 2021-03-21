@@ -18,7 +18,7 @@ import re
 import html
 import pytz
 from general_fonctions import *
- 
+from qcm.views import tracker_execute_exercise
 
 
 
@@ -53,6 +53,8 @@ def list_emails(request):
                        'discussions' : discussions, 'nb_discussions': nb_discussions ,  'studentanswers': studentanswers, 'tasks': tasks})
 
     elif user.is_student:
+
+        tracker_execute_exercise(False, user)
         student = Student.objects.get(user=user)
         groups = student.students_to_group.all()
         today = time_zone_user(request.user)

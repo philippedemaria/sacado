@@ -73,6 +73,10 @@ urlpatterns = [
     path('parcours_get_course', ajax_parcours_get_course, name='ajax_parcours_get_course'),
     path('ajax_individualise_this_exercise', ajax_individualise_this_exercise, name='ajax_individualise_this_exercise'),
 
+
+    path('real_time/<int:id>', real_time, name='real_time'),
+    path('ajax_real_time_live', ajax_real_time_live, name='ajax_real_time_live'),
+
     #####################################  Modifie les relations par parcours et exercices  ##############################################################  
     path('<int:idp>/<int:ide>/', execute_exercise, name='execute_exercise'),#modif idp en id pour la sécurité 
     path('delete_evaluation/<int:id>/', delete_evaluation, name='delete_evaluation'), 

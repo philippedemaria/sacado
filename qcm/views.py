@@ -9,7 +9,7 @@ from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group , Sharing_group
 from school.models import Stage
-from qcm.models import  Parcours , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage , DocumentReport
+from qcm.models import  Parcours , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage , DocumentReport , Tracker
 from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm
 from socle.models import  Theme, Knowledge , Level , Skill , Waiting
 from django.http import JsonResponse 
@@ -348,6 +348,36 @@ def total_by_knowledge_by_student(knowledge,relationships, parcours,student) : #
     else :
         tot_k  = -10
     return tot_k
+
+
+
+################################################################
+##  Trace les élève lors l'exécution d'exercice : Real time
+################################################################
+
+
+def tracker_execute_exercise(track_untrack ,  user , idp=0 , ide=None , custom=0) :
+    """ trace l'utilisateur. Utile pour le real time """
+ 
+
+    if track_untrack : # Si True alors on garde la trace
+        tracker, created = Tracker.objects.get_or_create(user =  user, defaults={  'parcours_id' : idp , 'exercise_id' : ide, 'is_custom' : custom})
+        if not created :
+            Tracker.objects.filter(user =  user).update(  parcours_id = idp )
+            Tracker.objects.filter(user =  user).update( exercise_id= ide)
+            Tracker.objects.filter(user =  user).update( is_custom= custom)
+    else :
+        try :
+            tracker = Tracker.objects.get(user =  user)
+            tracker.delete()
+        except :
+            pass
+
+
+
+
+
+
 
 #######################################################################################################################################################################
 #######################################################################################################################################################################
@@ -1533,10 +1563,11 @@ def show_parcours_student(request, id):
 
     parcours = Parcours.objects.get(id=id)
     user = request.user
-    student = Student.objects.get(user = user)
+    student = user.student
     today = time_zone_user(user)
     stage = get_stage(user)
 
+    tracker_execute_exercise(True ,  user , id , None , 0)
  
     if parcours.is_folder :
 
@@ -2942,9 +2973,77 @@ def real_time(request,id):
         return redirect('index')
 
     rcs = parcours.parcours_relationship.filter(Q(is_publish=1)|Q(start__gt=today),exercise__supportfile__is_title=0).order_by("ranking")
+    rcsc = parcours.parcours_customexercises.filter(Q(is_publish=1)|Q(start__gt=today))
+
+    rcs , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
+    
+ 
 
     return render(request, 'qcm/real_time.html', { 'teacher': teacher , 'parcours': parcours, 'rcs': rcs, 'students': students , 'group': group , 'role': role , 'access': access })
 
+
+
+def time_done(arg):
+    """
+    convertit 1 entier donné  (en secondes) en durée h:m:s
+    """
+    if arg == "":
+        return arg
+    else:
+        arg = int(arg)
+        s = arg % 60
+        m = arg // 60 % 60
+        h = arg // 3600
+        
+        if arg < 60:
+            return f"{s}s"
+        if arg < 3600:
+            return f"{m}min.{s}s"
+        else:
+            return f"{h}h.{m}min.{s}s"
+
+
+
+
+def ajax_real_time_live(request):
+    """ Envoie la liste des exercice pour un seul niveau """
+    data = {} # envoie vers JSON
+    parcours_id = request.POST.get("parcours_id")
+    parcours = Parcours.objects.get(pk=int(parcours_id))
+    today = time_zone_user(request.user).now()
+    trackers =  Tracker.objects.filter(parcours = parcours )
+
+    i , line, cell, result =  0 , "", "", ""
+    for tracker in trackers :
+        tui = tracker.user.id
+        tr = "tr_student_"+str(tui)
+        exo_id = "rc_"+parcours_id+"_"+str(tracker.exercise_id)+"_"+tr
+
+        if tracker.is_custom :
+            trck = "<i class='fa fa-check text-success'></i>"
+        else :
+
+            if tracker.parcours.answers.filter(student=tracker.user.student, exercise_id = tracker.exercise_id) :
+                ans = tracker.parcours.answers.filter(student=tracker.user.student, exercise_id = tracker.exercise_id).last()
+                trck = str(ans.numexo)+" > "+str(ans.point)+"% "+str(time_done(ans.secondes))
+            else :
+                trck = "en cours"
+            
+        if i == trackers.count()-1:
+            line +=  tr 
+            cell +=  exo_id 
+            result +=  trck
+        else :
+            line +=  tr + "====="
+            cell +=  exo_id  + "====="
+            result +=  trck  + "====="
+        i+=1
+      
+    data["line"] = line
+    data["cell"] = cell
+    data["result"] = result
+
+    return JsonResponse(data)
 
  
 
@@ -3566,6 +3665,9 @@ def execute_exercise(request, idp,ide):
     student = request.user.student
     today = time_zone_user(request.user)
     timer = today.time()
+
+    tracker_execute_exercise(True, request.user , idp , ide , 0)
+
 
     context = {'exercise': exercise,  'start_time' : start_time,  'student' : student,  'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today , 'communications' : [] , 'relationships' : [] }
     return render(request, 'qcm/show_relation.html', context)

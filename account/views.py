@@ -20,7 +20,7 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
-
+from django.contrib.auth import   logout
 from account.decorators import user_can_read_details, who_can_read_details, can_register, is_manager_of_this_school
 from account.models import User, Teacher, Student, Resultknowledge, Parent , Response
 from group.models import Group, Sharing_group
@@ -33,7 +33,16 @@ from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentFor
 from templated_email import send_templated_mail
 from general_fonctions import *
 from school.views import this_school_in_session
+from qcm.views import tracker_execute_exercise
 import uuid
+
+
+
+def logout_view(request):
+    tracker_execute_exercise(False,request.user)
+    logout(request)
+    return redirect('index')
+
 
 
 
@@ -587,7 +596,7 @@ def logged_user_has_permission_to_this_student(user_reader, student) :
 def detail_student(request, id):
 
     student = Student.objects.get(user_id=id)
-
+    tracker_execute_exercise(False,student.user)
 
     if not logged_user_has_permission_to_this_student(request.user, student) :
         messages.error(request, "Erreur...Vous n'avez pas accès à ces résultats.")
@@ -649,7 +658,7 @@ def detail_student(request, id):
 #@who_can_read_details
 def detail_student_theme(request, id,idt):
     student = Student.objects.get(user_id=id)
-
+    tracker_execute_exercise(False,student.user)
 
     if not logged_user_has_permission_to_this_student(request.user, student) :
         messages.error(request, "Erreur...Vous n'avez pas accès à ces résultats.")
@@ -723,8 +732,9 @@ def detail_student_theme(request, id,idt):
 
 #@who_can_read_details
 def detail_student_parcours(request, id,idp):
-    student = Student.objects.get(user_id=id)
 
+    student = Student.objects.get(user_id=id)
+    tracker_execute_exercise(False,student.user)
 
     if not logged_user_has_permission_to_this_student(request.user, student) :
         messages.error(request, "Erreur...Vous n'avez pas accès à ces résultats.")
@@ -766,8 +776,8 @@ def detail_student_parcours(request, id,idp):
 def detail_student_all_views(request, id):
 
     user = User.objects.get(pk=id)
-    student = Student.objects.get(user=user)
-
+    student = user.student
+    tracker_execute_exercise(False,user)
 
     if not logged_user_has_permission_to_this_student(request.user, student) :
         messages.error(request, "Erreur...Vous n'avez pas accès à ces résultats.")
