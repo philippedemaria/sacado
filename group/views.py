@@ -120,7 +120,11 @@ def student_dashboard(request,group_id):
     if int(group_id) > 0 :
         group = Group.objects.get(pk = group_id)
         request.session["group_id"] = group_id 
-        parcourses = student.students_to_parcours.filter(is_evaluation=0, is_publish=1,subject = group.subject,level = group.level).exclude(is_leaf=1).order_by("ranking")
+        #parcourses = student.students_to_parcours.filter(is_evaluation=0, is_publish=1,subject = group.subject,level = group.level).exclude(is_leaf=1).order_by("ranking")
+
+        
+        parcourses = student.students_to_parcours.filter(is_evaluation=0, is_publish=1).exclude(is_leaf=1).order_by("ranking")
+
         evaluations = student.students_to_parcours.filter(start__lte=today, is_evaluation=1,subject = group.subject)
         last_exercises_done = student.answers.filter(exercise__knowledge__theme__subject=group.subject).order_by("-date")[:5]
 
