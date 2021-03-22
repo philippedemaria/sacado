@@ -7070,7 +7070,6 @@ def create_folder(request,idg):
             nf.save() 
             nf.leaf_parcours.set(lp)        
             nf.students.set(group.students.all())
-            form.save_m2m()
             return redirect ("list_parcours_group", idg )     
         else:
             print(form.errors)
@@ -7111,7 +7110,6 @@ def update_folder(request,id,idg):
             nf.save()   
             nf.leaf_parcours.set(lp)         
             nf.students.set(group.students.all())
-            form.save_m2m()
             return redirect ("list_parcours_group", idg )     
         else:
             print(form.errors)
