@@ -96,6 +96,15 @@ def get_available(obj,student):
 
 
 
+
+@register.simple_tag
+def get_is_locker(obj,student): 
+    """Permet de déverrouiller un exercice dans une évaluation pour qeulques élèves """
+    return obj.is_locker(student)
+
+
+
+
 @register.simple_tag
 def get_is_lock_for_this_parcours(obj, parcours , today) :
     return obj.is_lock_this_parcours(parcours , today)

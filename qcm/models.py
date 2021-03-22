@@ -720,10 +720,6 @@ class Parcours(ModelWithCode):
         return test
 
 
-
-
-
-
 class Relationship(models.Model):
     exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.CASCADE,  editable= False)
     parcours = models.ForeignKey(Parcours, on_delete=models.CASCADE,  related_name='parcours_relationship',  editable= False)
@@ -948,6 +944,15 @@ class Relationship(models.Model):
         if self.maxexo == -1   :
             is_ok = True
         return data
+
+
+    def is_locker(self,student) :  
+        test = False 
+        if self.relationship_exerciselocker.filter(student= student).count()>0:
+            test = True
+        return test
+
+
 
 class Studentanswer(models.Model):
 
@@ -1269,6 +1274,14 @@ class Customexercise(ModelWithCode):
         data["nb_task_done"] = nb_task_done
         data["custom_tab"] = custom_tab
         return data
+
+    def is_locker(self,student) :  
+        test = False 
+        if self.customexercise_exerciselocker.filter(student = student).count()>0:
+            test = True
+        return test
+
+
 
 class Customanswerbystudent(models.Model): # Commentaire et note pour les exercices customisés coté enseignant
 
