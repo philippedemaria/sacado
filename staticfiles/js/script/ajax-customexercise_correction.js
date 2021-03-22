@@ -100,6 +100,21 @@ define(['jquery', 'bootstrap'], function ($) {
         });
 
 
+        var canvas    = document.getElementById("myCanvas");
+        var ctx       = canvas.getContext('2d');
+        canvas.width  = 700 ;
+        canvas.height = 700;
+
+        const value = JSON.parse(document.getElementById('this_answer').textContent); 
+
+        console.log(value);
+        
+        old_Stroke = ctx.strokeStyle ; 
+        ctx.lineTo(init_x,init_y);
+
+
+
+
 });
 
 });

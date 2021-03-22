@@ -5,7 +5,7 @@
 
 
 
-{% block liste_student %}  
+{% block liste_student %} 
     {% for stud in customexercise.students.all|dictsort:"user.last_name" %}
         <tr>
              <td {% if student %}{% if student == stud %} style="background-color: #F0F0F0;"{% endif %}{% endif %}>

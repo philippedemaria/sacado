@@ -184,6 +184,13 @@
                             <i class="fa fa-copyright pull-right" style="font-size:12px;color:{{ parcours.color|contrast_color }};" title="Copies à corriger" ></i> 
                             {% endif %}
                             {{ parcours.title|truncatechars:"18" }} <span style="font-size:12px"> {{ parcours.leaf_parcours.count}} parcours </span>
+ 
+                                {% if parcours.is_folder_real_time %}
+                                    <sup class="white" title="En composition" style="font-size:12px" >
+                                        <i class="fa fa-fw fa-clock"></i> 
+                                    </sup>
+                                {% endif %}
+
                         </a>
                         {% else %}
                         <a {% if parcours.is_evaluation%} href="{% url 'show_evaluation'  parcours.id  %}" {% else %} href="{% url 'show_parcours'  parcours.id  %}"{% endif %} style="color:{{ parcours.color|contrast_color }};">
@@ -213,8 +220,19 @@
 
                             {% endif %}
 
+ 
+                                {% if parcours.is_real_time %}
+                                    <sup class="white" title="En composition" style="font-size:12px" >
+                                        <i class="fa fa-fw fa-clock"></i> 
+                                    </sup>
+                                {% endif %}
+ 
                         </a>
                         {% endif %}
+
+                           
+
+
 
                         {% if parcours.groups.all|length > 1 and not parcours.is_folder %}
                         <span class="shared helper_tip" style="color:{{ parcours.color }};">Parcours partagé entre plusieurs groupes <i class="fa fa-question-circle"></i>
@@ -358,10 +376,6 @@
                     {% endif %}
                 </div>
                 {% endif %}
-
-
-
-
             </div>   
             {% endfor %}
         </div>

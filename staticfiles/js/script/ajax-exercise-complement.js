@@ -15,7 +15,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
         $('#on_mark').hide(); 
-        $(".no_realtime").show();
+
 
  
         $("#click_button").on('click', function (){ 
@@ -31,31 +31,6 @@ define(['jquery', 'bootstrap'], function ($) {
             }
 
         });
-
-
-
-
-
- 
-        $("#id_is_realtime").on('click', function (){ 
-
-            if ($(this).is(":checked")){
-
-                $(".no_realtime").hide();
-
-            } 
-            else{
-
-                $(".no_realtime").show();
-
-            } 
-
-
-
-        });
-
-
-
 
 
 

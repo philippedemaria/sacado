@@ -428,10 +428,37 @@ li label:hover{
 }
 
 
+.th_real_time_label{
 
+  position: absolute;
+  left:20px;
+  top:30px; 
+  font-size:10px;
+  width: 140px;
+  font-weight: 100
+  } 
 
+.th_real_time_label_hover{
 
+  position: absolute;
+  left:40px;
+  top:60px; 
+  font-size:18px;
+  } 
 
+a.visual_link{
+  display:block;
+}
+a.no_visual_link{
+  display:none;
+}
+
+.not_allowed_display{
+  display:none;
+}
+.allowed_display{
+  display:block;
+}
 
  /******************************************** menu_right_div  **************************************/
 

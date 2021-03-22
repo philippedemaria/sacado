@@ -4,11 +4,25 @@ define(['jquery',  'bootstrap', ], function ($) {
         console.log(" ajax-real-time-parcours chargé "); 
  
 
+        $(".imagefile").on('mouseover', function (event) {
+                 $(this).parent().find(".th_real_time_label").addClass("th_real_time_label_hover") ;
+                 })
+
+        $(".imagefile").on('mouseout', function (event) {
+                 $(this).parent().find(".th_real_time_label").removeClass("th_real_time_label_hover") ;
+                 })
+            
+
+        check_live();
 
         setInterval(  check_live  , 5000);
  
- 
         function check_live(){
+
+
+                $(".init").addClass("no_live").removeClass("live")  ; 
+                $(".is_tr_display").addClass("allowed_display").removeClass("not_allowed_display")  ;
+                $(".init_link").addClass("no_visual_link").removeClass("visual_link")  ;
 
 
                 let parcours_id = $("#parcours_id").val();
@@ -27,14 +41,10 @@ define(['jquery',  'bootstrap', ], function ($) {
 
                             line = data.line.split("=====") ;
                             cell = data.cell.split("=====") ;
-                            result = data.result.split("=====") ;
-
+                
                             line.forEach(line_split);
                             cell.forEach(cell_split);
 
-                            function line_split(item) {
-                                $("#"+item).addClass("live").removeClass("no_live") ;
-                            }
 
                             function line_split(item) {
                                 $("#"+item).addClass("live").removeClass("no_live") ;
@@ -42,9 +52,22 @@ define(['jquery',  'bootstrap', ], function ($) {
 
 
                             function cell_split(item,index) {
-                                $("#"+item).html( result[index])  ;
 
-                                console.log("#"+item,  result[index]);
+                                result = data.result.split("=====") ;                            
+
+                                if (result[index] == "en_compo")   
+                                {
+                                    console.log(item);
+                                    $("#"+item).addClass("live").removeClass("no_live")  ; 
+                                    $("#"+item).find("span").removeClass("allowed_display").addClass("not_allowed_display")  ;
+                                    $("#"+item).find(".init_link").removeClass("no_visual_link").addClass("visual_link")  ;
+ 
+                                }
+                                else
+                                {
+                                    $("#"+item).html( result[index])  ;                                    
+                                }
+
 
 
 

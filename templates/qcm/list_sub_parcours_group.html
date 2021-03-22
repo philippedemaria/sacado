@@ -231,15 +231,28 @@
                         {% endif  %}
                         </div> 
                         <div class="col-lg-4 col-xs-4">
-                            {% if not parcours.is_evaluation %}
-                                <a href="{% url 'show_course' 0 parcours.id   %}"  class="edit" {% if parcours.is_courses_exists %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-desktop"></i> <span class="label_icon tool_tip">Cours 
-                                <div class="tool_tip_text"><label><small>Ajouter un cours</small></label></div>
-                                </span> </a>
-                            {% else  %}                 
-                                <a href="{% url 'peuplate_parcours_evaluation' parcours.id   %}" class="edit"><i class="fa fa-fw fa-cloud"></i> <span class="label_icon tool_tip">Sélect.
-                                <div class="tool_tip_text"><label><small>Ajouter un cours</small></label></div>
-                                </span>
-                                </a>  
+                            {% if sacado_asso %}
+                                {% if not parcours.is_evaluation %}
+                                    <a href="{% url 'show_course' 0 parcours.id   %}"  class="edit" {% if parcours.is_courses_exists %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-desktop"></i> <span class="label_icon tool_tip">Cours 
+                                    <div class="tool_tip_text"><label><small>Ajouter un cours</small></label></div>
+                                    </span> </a>
+                                {% else  %}                 
+                                    <a href="{% url 'peuplate_parcours_evaluation' parcours.id   %}" class="edit"><i class="fa fa-fw fa-cloud"></i> <span class="label_icon tool_tip">Sélect.
+                                    <div class="tool_tip_text"><label><small>Ajouter un cours</small></label></div>
+                                    </span>
+                                    </a>  
+                                {% endif  %}
+                            {% else  %}
+                                {% if not parcours.is_evaluation %}
+                                    <a href="#"  class="edit no_sacado_asso"><i class="fa fa-fw fa-desktop"></i> <span class="label_icon tool_tip">Cours 
+                                    <div class="tool_tip_text"><label><small>Version établisement requise</small></label></div>
+                                    </span> </a>
+                                {% else  %}                 
+                                    <a href="{% url 'peuplate_parcours_evaluation' parcours.id   %}" class="edit"><i class="fa fa-fw fa-cloud"></i> <span class="label_icon tool_tip">Sélect.
+                                    <div class="tool_tip_text"><label><small>Version établisement requise</small></label></div>
+                                    </span>
+                                    </a>
+                                {% endif  %}    
                             {% endif  %}
                         </div> 
                         {% if parcours.subparcours.all|length == 0 %}
@@ -306,9 +319,15 @@
                     <div class="row">  
                         {% if  not parcours.is_folder %}
                         <div class="col-lg-4 col-xs-4">
-                            <a href="{% url 'real_time' parcours.id %}" class="edit {% if not sacado_asso %}no_sacado_asso{% endif %}" {% if parcours.is_real_time %} style="color:{{ parcours.color }}" {% endif %} >
+                            {% if sacado_asso %}
+                            <a href="{% url 'real_time' parcours.id %}" class="edit" {% if parcours.is_real_time %} style="color:#cb2131" {% endif %} >
                                 <i class="fa fa-fw fa-clock"></i><span class="label_icon">Temps réel.</span>
-                            </a> 
+                            </a>
+                            {% else %}
+                            <a href="#" class="edit no_sacado_asso" {% if parcours.is_real_time %} style="color:#cb2131" {% endif %}>
+                                <i class="fa fa-fw fa-clock"></i><span class="label_icon">Temps réel.</span>
+                            </a>
+                            {% endif %}
                         </div>
                         <div class="col-lg-4 col-xs-4">
                         

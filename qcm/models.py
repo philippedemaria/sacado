@@ -706,9 +706,22 @@ class Parcours(ModelWithCode):
 
 
     def is_real_time(self):
-
         test = False
-        return test 
+        if self.tracker.count() > 0 :
+            test = True
+        return test
+
+    def is_folder_real_time(self):
+        test = False
+        for p in self.leaf_parcours.filter(is_publish=1) :
+            if p.tracker.count() > 0 :
+                test = True
+                break
+        return test
+
+
+
+
 
 
 class Relationship(models.Model):
@@ -1085,9 +1098,12 @@ class Customexercise(ModelWithCode):
 
     def is_done(self,student):
         done = False
-        if Customanswerbystudent.objects.filter(student=student, customexercise = self).exists():
+        if student.student_custom_answer.filter( customexercise = self).exists():
+            done = True
+        elif student.user.tracker.filter(exercise_id = self.pk).exists():
             done = True
         return done
+
 
     def score_student_for_this(self,student):
 
@@ -1620,7 +1636,7 @@ class DocumentReport(models.Model):
  
 class Tracker(models.Model):
     """Savoir où se trouve un utilisateur """
-    user = models.OneToOneField(User, blank=True, related_name="tracker", on_delete=models.CASCADE, primary_key=True)
+    user = models.ForeignKey(User, blank=True, related_name="tracker", on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
     parcours = models.ForeignKey(Parcours,  on_delete=models.CASCADE, blank=True,  related_name='tracker', editable= False)
     exercise_id = models.PositiveIntegerField(default=0, null=True,   editable= False)  

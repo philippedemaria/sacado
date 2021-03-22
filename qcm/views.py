@@ -361,17 +361,17 @@ def tracker_execute_exercise(track_untrack ,  user , idp=0 , ide=None , custom=0
  
 
     if track_untrack : # Si True alors on garde la trace
-        tracker, created = Tracker.objects.get_or_create(user =  user, defaults={  'parcours_id' : idp , 'exercise_id' : ide, 'is_custom' : custom})
-        if not created :
-            Tracker.objects.filter(user =  user).update(  parcours_id = idp )
-            Tracker.objects.filter(user =  user).update( exercise_id= ide)
-            Tracker.objects.filter(user =  user).update( is_custom= custom)
+        Tracker.objects.create(user =  user, parcours_id = idp ,  exercise_id =  ide,  is_custom =  custom )
+        #tracker, created = Tracker.objects.get_or_create(user =  user, defaults={  'parcours_id' : idp , 'exercise_id' : ide, 'is_custom' : custom})
+        # if not created :
+        #     Tracker.objects.filter(user =  user).update(  parcours_id = idp )
+        #     Tracker.objects.filter(user =  user).update( exercise_id= ide)
+        #     Tracker.objects.filter(user =  user).update( is_custom= custom)
     else :
-        try :
-            tracker = Tracker.objects.get(user =  user)
+        trackers = Tracker.objects.filter(user =  user)
+        for tracker in trackers :    
             tracker.delete()
-        except :
-            pass
+
 
 
 
@@ -847,6 +847,7 @@ def list_parcours(request):
 
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
  
+
     try :
         del request.session["group_id"]
     except:
@@ -2972,10 +2973,9 @@ def real_time(request,id):
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
-    rcs = parcours.parcours_relationship.filter(Q(is_publish=1)|Q(start__gt=today),exercise__supportfile__is_title=0).order_by("ranking")
-    rcsc = parcours.parcours_customexercises.filter(Q(is_publish=1)|Q(start__gt=today))
-
     rcs , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
+
+    print(rcs)
     
  
 
@@ -3020,14 +3020,14 @@ def ajax_real_time_live(request):
         exo_id = "rc_"+parcours_id+"_"+str(tracker.exercise_id)+"_"+tr
 
         if tracker.is_custom :
-            trck = "<i class='fa fa-check text-success'></i>"
+            trck = "en_compo"
         else :
 
             if tracker.parcours.answers.filter(student=tracker.user.student, exercise_id = tracker.exercise_id) :
                 ans = tracker.parcours.answers.filter(student=tracker.user.student, exercise_id = tracker.exercise_id).last()
                 trck = str(ans.numexo)+" > "+str(ans.point)+"% "+str(time_done(ans.secondes))
             else :
-                trck = "en cours"
+                trck = "en composition"
             
         if i == trackers.count()-1:
             line +=  tr 
@@ -4847,7 +4847,7 @@ def write_exercise(request,id): # Coté élève
     student = Student.objects.get(user = request.user)  
     relationship = Relationship.objects.get(pk = id)
 
- 
+    tracker_execute_exercise(True ,  student.user , relationship.parcours.id  , relationship.exercise.id , 0)
 
     today = time_zone_user(student.user)
     if Writtenanswerbystudent.objects.filter(student = student, relationship = relationship ).exists() : 
@@ -4896,6 +4896,10 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
     customexercise = Customexercise.objects.get(pk = id)
     parcours = Parcours.objects.get(pk = idp)
     today = time_zone_user(student.user)
+
+
+    tracker_execute_exercise(True ,  student.user , idp  , id , 1)  
+
 
     if customexercise.is_realtime :
         on_air = True
@@ -4974,44 +4978,26 @@ def show_canvas(request):
 @login_required
 def ajax_save_canvas(request):
 
- 
+    actions           = request.POST.get("actions",None)
     customexercise_id = request.POST.get("customexercise_id",0)
     parcours_id       = request.POST.get("parcours_id",0)
     student           = request.user.student  
     customexercise    = Customexercise.objects.get(pk = customexercise_id)
     parcours          = Parcours.objects.get(pk = parcours_id)
-    today             = time_zone_user(student.user)
+    today             = time_zone_user(student.user).now()
     data = {}
  
-    if Customanswerbystudent.objects.filter(student = student, customexercise = customexercise ).exists() : 
-        c_e = Customanswerbystudent.objects.get(student = student, customexercise = customexercise )
-        cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None, instance = c_e )
-        images = Customanswerimage.objects.filter(customanswerbystudent = c_e) 
-
-    else :
-        cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None )
-        c_e = False
-        images = False
 
     if request.method == "POST":
-        if cForm.is_valid():
-            w_f = cForm.save(commit=False)
-            w_f.customexercise = customexercise
-            w_f.parcours = parcours
-            w_f.answer =  escape_chevron(cForm.cleaned_data['answer'])
-            w_f.student = student
-            w_f.is_corrected = 0
-            w_f.save()
-
-            if customexercise.is_realtime :
-                image = request.POST.get("image",0)
-                c_e_image , created = Customanswerimage.objects.get_or_create( customanswerbystudent = w_f , defaults = { 'imagecanvas' : image }  )
-                if not created :
-                    Customanswerimage.objects.filter(pk = c_e_image.id).update(imagecanvas = image)
-                data["image"] =  image
-
-    data["images"] =  None
+        c_ans , created = Customanswerbystudent.objects.get_or_create(customexercise_id = customexercise_id , parcours_id = parcours_id , student = student , defaults = { 'date' : today , 'answer' : actions} )
+        if not created :
+            Customanswerbystudent.objects.filter(customexercise_id = customexercise_id , parcours_id = parcours_id , student = student ).update(date = today)
+            Customanswerbystudent.objects.filter(customexercise_id = customexercise_id , parcours_id = parcours_id , student = student ).update(answer = actions)
+ 
     return JsonResponse(data)
+ 
+
+
 
 
 
@@ -7084,7 +7070,6 @@ def create_folder(request,idg):
             nf.save() 
             nf.leaf_parcours.set(lp)        
             nf.students.set(group.students.all())
-            form.save_m2m()
             return redirect ("list_parcours_group", idg )     
         else:
             print(form.errors)
@@ -7125,7 +7110,6 @@ def update_folder(request,id,idg):
             nf.save()   
             nf.leaf_parcours.set(lp)         
             nf.students.set(group.students.all())
-            form.save_m2m()
             return redirect ("list_parcours_group", idg )     
         else:
             print(form.errors)

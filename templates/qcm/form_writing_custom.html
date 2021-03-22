@@ -87,7 +87,10 @@
                     Copier le numéro de votre script <img src="{% static 'img/scratch_number.png' %}" height="20px" /> et le coller dans le champ prévu ci-dessous.
                 </li>
             {% endif %} 
-            <hr>             
+            <hr> 
+            <!-- ======================================================================= -->   
+            <!-- ================== Zone d'enregistrement ===============================--> 
+            <!-- ======================================================================= -->      
             <form action="" method="POST" enctype='multipart/form-data'>
                 {% csrf_token %}
                 {% if customexercise.is_image  %} 
@@ -161,7 +164,7 @@
                 {% endif %}
                 {% if customexercise.is_text or customexercise.is_realtime  %} 
 
-                    <div class="form-group" id="text_zone_div">
+                    <div class="form-group not_allowed_display" id="text_zone_div">
                         <label>Zone pour écrire</label><br>
                         {{ form.answer }}
                         {{ form.answer.errors }} <br>
@@ -169,7 +172,7 @@
                 {% endif %}
                 {% if customexercise.is_realtime  %} 
  
-                    <div class="form-group" id="canvas_zone_div">
+                    <div class="form-group not_allowed_display" id="canvas_zone_div">
                         <div class="tool_draw_bar">                       
                             <input type="color" id="colorpicker" class="btn-default btn-publisher" />
                             <div class="btn btn-default">
@@ -191,8 +194,10 @@
                 
                         </div>
                         <canvas id="myCanvas" style="border:1px solid #000"></canvas>
-                        <p><img id="preview"/></p>
                     </div>
+
+
+ 
  
                 {% endif %}
 
@@ -228,6 +233,11 @@
                     </div>
                 </div>
             </form> 
+            <!-- ======================================================================= -->   
+            <!-- ============================ Fin de Zone ===============================--> 
+            <!-- ======================================================================= -->    
+
+
         </div>  
         <div class="col-sm-12 col-lg-4">
 
@@ -314,14 +324,6 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-
-
-
 
 {% endblock %} 
  
