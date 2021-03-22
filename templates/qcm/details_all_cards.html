@@ -666,7 +666,7 @@
           <a href="#customcard{{rc.id}}" class="detail_parcours"  data-exercise_id="{{ rc.id }}"  
              data-num_exo="{{ nb_exo_only|index:forloop.counter0 }}" data-parcours_id="{{ parcours.id }}" data-custom=1>
              
-               <img {% if rc.imagefile %} src="{{ rc.imagefile.url }}" {% else %}  src="{% static 'img/custom_exercise.png' %}" {% endif %} class="image_parcours_order"  >
+               <img {% if rc.imagefile %} src="{{ rc.imagefile.url }}" {% else %}  src="{% static 'img/custom_exercise.jpg' %}" {% endif %} class="image_parcours_order"  >
             
           </a> 
         <!--  Barre d'outil de la customcard  -->
@@ -677,7 +677,7 @@
                 <i class="fa fa-search-plus"></i>
                 <span class="helper_tip_card_flex" style="font-size:40px;color:{{ parcours.color }}">
                   {% if not rc.is_publish %}<span style="color:#F5F5F5;">{{ nb_exo_only|index:forloop.counter0 }}.</span>{% else %}{{ nb_exo_visible|index:forloop.counter0 }}.{% endif %}<br>
-                  <img {% if rc.imagefile %} src="{{ rc.imagefile.url }}" {% else %}  src="{% static 'img/custom_exercise.png' %}" {% endif %} width="500px" />
+                  <img {% if rc.imagefile %} src="{{ rc.imagefile.url }}" {% else %}  src="{% static 'img/custom_exercise.jpg' %}" {% endif %} width="500px" />
                 </span>
             </a>
             {% endif %}

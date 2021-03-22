@@ -57,7 +57,7 @@
                         {% if rc.exercise.supportfile.imagefile %}
                         <img src="{{ rc.exercise.supportfile.imagefile.url }}" width="150px" class="imagefile" />
                         {% else %} <span class="th_real_time_label">{{ rc.instruction|safe|truncatewords:"20" }}</span>
-                        <img src="{% static 'img/custom_exercise.png' %}" width="150px" class="imagefile" />
+                        <img src="{% static 'img/custom_exercise.jpg' %}" width="150px" class="imagefile" />
                         {% endif %}
                     </th> 
                     {% endfor %}
