@@ -195,8 +195,11 @@
                         </div>
                         <canvas id="myCanvas" style="border:1px solid #000"></canvas>
                     </div>
-
-
+                {% if c_e %}
+                {{  c_e.answer|json_script:"this_answer" }} 
+                {% endif %}
+                <canvas id="myCanvas" style="border:1px solid #f8f8f8"></canvas>                
+ 
  
  
                 {% endif %}

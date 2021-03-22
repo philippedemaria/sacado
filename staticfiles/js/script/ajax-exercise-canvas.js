@@ -24,8 +24,8 @@ define(['jquery', 'bootstrap'], function ($) {
         ///////////////////////////////////////////////////////
         var canvas    = document.getElementById("myCanvas");
         var ctx       = canvas.getContext('2d');
-        canvas.width  = window.innerWidth - 200 ;
-        canvas.height = window.innerHeight - 200;
+        canvas.width  = 800 //window.innerWidth - 200 ;
+        canvas.height = 800 //window.innerHeight - 200;
         var color_code= 0;
 
         // Couleur
@@ -39,13 +39,20 @@ define(['jquery', 'bootstrap'], function ($) {
         });
 
 
-        var actions = "CanvasStyle" ;
+        var actions = JSON.parse(document.getElementById('this_answer').textContent) ;
+
+        if ( actions == "" ) 
+            {
+                var actions = "CanvasStyle=" ;
+            }
+
+        
 
         // Effacer tout le canvas
         $("#clear").on("click", function(){    
             ctx.fillStyle = "white";
             ctx.fillRect(0,0,canvas.width,canvas.height);
-            actions = "CanvasStyle" ;
+            actions = "CanvasStyle=" ;
             save_canvas(actions)
         });
 
@@ -85,7 +92,7 @@ define(['jquery', 'bootstrap'], function ($) {
                         }
                         else
                         {
-                            console.log(color_code)
+ 
                             if (color_code == 1) 
                             {
                                 color_code--; 
@@ -108,8 +115,8 @@ define(['jquery', 'bootstrap'], function ($) {
                         
                         $("#myCanvas").unbind("mousemove");
                         flag = "true" ;
+                        actions = actions +"=";
                         ctx.closePath();
-
                         save_canvas(actions)
                     })
 
@@ -118,17 +125,12 @@ define(['jquery', 'bootstrap'], function ($) {
         }
 
 
-        //var interval = setInterval( save_canvas, 5000)
-
         function save_canvas(actions){
 
             let customexercise_id = $("#customexercise_id").val();
             let parcours_id       = $("#parcours_id").val();
             let csrf_token        = $("input[name='csrfmiddlewaretoken']").val();
             
-            console.log(actions);
- 
- 
             $.ajax({
                 type: 'POST',
                 url: "../../ajax_save_canvas",
@@ -143,9 +145,61 @@ define(['jquery', 'bootstrap'], function ($) {
                 }
             });
  
- 
         }
       
+
+
+        new_color = "#000000" ;
+        if (actions !="") {
+
+
+            segments = actions.split("=");
+            segments.forEach( position );
+
+
+            function position(item) {
+
+
+                positions = item.split("!") ;
+                ctx.strokeStyle = "#000000" ;
+        
+                ctx.beginPath();
+                positions.forEach(create_draw);
+                ctx.stroke();
+                ctx.closePath(); 
+
+
+                    function create_draw(itemize,index) {
+            
+                            if (index > 0) // empeche la récupération de la balise d'entrée
+            
+                             { 
+                                coords = itemize.split(",");
+            
+                                if (coords[0] != "") 
+                                    { new_color = coords[0]; }
+            
+                                ctx.strokeStyle = new_color ;
+      
+                                 ctx.lineTo(coords[1],coords[2]);
+ 
+                            }
+                        
+                        }
+        
+                }
+
+
+
+            }
+
+
+
+
+
+
+
+
 
 
 

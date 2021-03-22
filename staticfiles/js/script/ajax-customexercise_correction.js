@@ -100,17 +100,61 @@ define(['jquery', 'bootstrap'], function ($) {
         });
 
 
+
+
         var canvas    = document.getElementById("myCanvas");
         var ctx       = canvas.getContext('2d');
-        canvas.width  = 700 ;
-        canvas.height = 700;
+        canvas.width  = 800 ;
+        canvas.height = 800;
+        new_color = "#000000" ;
 
-        const value = JSON.parse(document.getElementById('this_answer').textContent); 
+        const value = JSON.parse(document.getElementById('this_answer').textContent);
 
-        console.log(value);
+
+        new_color = "#000000" ;
+        if (value !="") {
+
+
+            segments = value.split("=");
+            segments.forEach( position );
+
+
+            function position(item) {
+
+
+                positions = item.split("!") ;
+                ctx.strokeStyle = "#000000" ;
         
-        old_Stroke = ctx.strokeStyle ; 
-        ctx.lineTo(init_x,init_y);
+                ctx.beginPath();
+                positions.forEach(create_draw);
+                ctx.stroke();
+                ctx.closePath(); 
+
+
+                    function create_draw(itemize,index) {
+            
+                            if (index > 0) // empeche la récupération de la balise d'entrée
+            
+                             { 
+                                coords = itemize.split(",");
+            
+                                if (coords[0] != "") 
+                                    { new_color = coords[0]; }
+            
+                                ctx.strokeStyle = new_color ;
+      
+                                 ctx.lineTo(coords[1],coords[2]);
+ 
+                            }
+                        
+                        }
+        
+                }
+
+
+
+            }
+
 
 
 

@@ -57,11 +57,9 @@ define(['jquery',  'bootstrap', ], function ($) {
 
                                 if (result[index] == "en_compo")   
                                 {
-                                    console.log(item);
                                     $("#"+item).addClass("live").removeClass("no_live")  ; 
                                     $("#"+item).find("span").removeClass("allowed_display").addClass("not_allowed_display")  ;
                                     $("#"+item).find(".init_link").removeClass("no_visual_link").addClass("visual_link")  ;
- 
                                 }
                                 else
                                 {
