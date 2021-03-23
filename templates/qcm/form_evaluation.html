@@ -63,7 +63,7 @@
             <td><label>Nombre de réalisation max</label>  <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                     <div class="helper_tip_text red" >Ce nombre détermine le nombre maximum de fois que chaque exercice peut être fait. Ce maximum peut être déterminé exercice par exercice après la création. <br/> Laisser -1  pour ne pas borner le nombre de réalisation.</div>
                                 </span></td>
-            <td>{{ form.maxexo|attr:"min:1"|attr:"max:10"|attr:"step:1"}}</td>
+            <td>{{ form.maxexo|attr:"min:-1"|attr:"max:10"|attr:"step:1"}}</td>
             <td></td>
         </tr>
 

@@ -95,7 +95,7 @@
                                     <div class="helper_tip_text" >Renseigner la matière  liée à ce parcours. Il vous sera cependant possible de choisir des exercices d'une autre matière. Par exemple, un enseignant de SPC doit renseigner ici SPC et pourra choisir des exercices de Maths plus tard dans ce parcours de SPC. </div>
                                 </span> :
                         </label>
-                        {{ form.subject |add_class:"form-control select2" }}
+                        {{ form.subject |add_class:"form-control select2"|attr:"required" }}
                         {{ form.subject.errors }}
                     </div>
                 </div>
