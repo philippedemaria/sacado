@@ -10,17 +10,19 @@
     {% else %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
     {% endif %}
+    <script>
+        require(['script/ajax-parcours']);
+    </script>
+    
+     {% block require_complement %}
+            {% if not parcours %}
+       
 
- 
-
-   
-
-            <script>
-                require(['script/ajax-evaluation']);
-            </script> 
-
-
-
+                <script>
+                    require(['script/ajax-evaluation']);
+                </script> 
+            {% endif %}
+        {% endblock %} 
 {% endblock %} 
 
 

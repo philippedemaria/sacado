@@ -947,7 +947,7 @@ def list_parcours_group(request,id):
                 break
 
     ###efface le realtime de plus de 2 h
-    clear_realtime(parcours_tab , today.now() ,  7200 )
+    clear_realtime(parcours_tab , today.now() ,  3600 )
 
     return render(request, 'qcm/list_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group': group,  'parcours' : None , 'communications' : [] , 'relationships' : [] , 'role' : role , 'today' : today })
 
@@ -974,7 +974,7 @@ def list_sub_parcours_group(request,idg,id):
     parcours_tab = parcours.leaf_parcours.order_by("is_evaluation", "ranking")
 
     ###efface le realtime de plus de 2 h
-    clear_realtime(parcours_tab , today.now() ,  7200 )
+    clear_realtime(parcours_tab , today.now() ,  3600 )
 
 
     return render(request, 'qcm/list_sub_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group , 'parcours_folder' : parcours,  'parcours' : None , 'communications' : [] , 'relationships' : [] , 'role' : True , 'today' : today })

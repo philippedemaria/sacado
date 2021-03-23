@@ -382,6 +382,15 @@ class Parcours(ModelWithCode):
             return "{}".format(self.title)
 
 
+    def isnot_shared(self) :
+        test = True
+        if self.groups.exclude(teacher_id=2480).count()>1:
+            test = False
+        return test
+
+
+
+
     def is_done(self,student):
         Studentanswer = apps.get_model('qcm', 'Studentanswer')
         studentanswers = Studentanswer.objects.filter(student=student, parcours=self).values_list("exercise",flat=True).order_by("exercise").distinct()

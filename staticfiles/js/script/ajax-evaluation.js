@@ -7,25 +7,6 @@ define(['jquery','bootstrap'], function ($) {
         $('[type=checkbox]').prop('checked', false);        
          $('#id_is_favorite').prop('checked', true); 
 
-
-
-        $(".select_all").click(function(){
-            value = $(this).val(); 
-            $('#demo'+value+' .selector').not(this).prop('checked', this.checked);
-        });
-
-
-        $(".select_all_sg").click(function(){
-            value = $(this).val(); 
-            $('#demosg'+value+' .selector').not(this).prop('checked', this.checked);
-        });
-
-
-
-
-
-
-
-
+ 
     });
 });

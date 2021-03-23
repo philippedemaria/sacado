@@ -11,13 +11,29 @@
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     {% endif %}
 
+    <script>
+        require(['script/ajax-parcours']);
+    </script> 
 
-
+    {% block require_complement %}
+        {% if not parcours %}
 
 
             <script>
-                require(['script/ajax-parcours-form']);
+                require(['script/ajax-parcours-complement']);
+ 
             </script> 
+        {% endif %}
+    {% endblock %} 
+
+
+
+
+
+
+
+
+
 
 
 {% endblock %} 
