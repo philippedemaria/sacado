@@ -2201,11 +2201,13 @@ def clone_parcours(request, id, course_on ):
 
     teacher = request.user.teacher
     parcours = Parcours.objects.get(pk=id) # parcours à cloner
-    relationships = Relationship.objects.filter(parcours = parcours) 
-    courses = Course.objects.filter(parcours = parcours, is_share = 1)
+    relationships = parcours.parcours_relationship.all() 
+    courses = parcours.course.filter(is_share = 1)
     # clone le parcours
     parcours.pk = None
+    parcours.title = parcours.title+"-2"
     parcours.teacher = teacher
+    parcours.is_publish = 0
     parcours.is_leaf = 0
     parcours.is_archive = 0
     parcours.is_share = 0
@@ -2273,16 +2275,21 @@ def clone_parcours(request, id, course_on ):
         except :
             pass
 
-    messages.success(request, "Le parcours est cloné avec succès. Bonne utilisation.")
+    messages.success(request, "Duplication réalisée avec succès. Bonne utilisation.")
 
 
-    if prcrs_id :
-        return redirect('all_parcourses')
-    elif parcours.is_evaluation :
+
+    if parcours.is_evaluation :
         return redirect('evaluations')
+    elif prcrs_id :
+        return redirect('all_parcourses')
     else :
         return redirect('parcours')
  
+
+ 
+
+
 
  
 def ajax_parcours_get_exercise_custom(request):

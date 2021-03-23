@@ -44,13 +44,13 @@ body{
         <table class="table table-hovered standard_tab_sort"  style="width:100%">
             <thead> 
                 <tr> 
-                    <th style="width:2px"></th>                  
-                    <th>Nom</th>
+                    <th></th>                  
+                    <th style="width:150px">Nom</th>
                     <th>Modif.</th>
                     <th>Niveau</th>
                     <th>Groupes affectés</th>
                     <th>Elèves</th>
-                    <th>Publication</th>                    
+                    <th style="width:130px">Publication</th>                    
                 </tr> 
             </thead>
             <tbody>
@@ -65,7 +65,19 @@ body{
                         <td>
                             <a href="{% url 'show_evaluation' parcours.id %}" > {{ parcours.title }}
                                 {% get_is_lock parcours today as is_lock %} 
-                                {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible de soumettre des exercices.</div></span>{% endif %}
+                                {% if is_lock %}
+                                <span class="helper_tip"><i class="fa fa-lock"></i>
+                                    <div class="helper_tip_text_right" >Le parcours est verrouillé. Il n'est plus possible de soumettre des exercices.<br/>
+                                        <span class="text-danger"> Verrouillée du
+                                                {{  parcours.start|date:"d N Y H:i"  }}   
+                                                {% if parcours.stop %}
+                                                   - {{  parcours.stop|date:"d N Y H:i"  }}     
+                                                {% endif %}                                
+
+                                        </span>
+                                    </div>
+                                </span>
+                                {% endif %}
 
                             </a>
 
@@ -130,25 +142,18 @@ body{
                             </form>
                         </td>
                         <td>
-                        <form action="" method="POST" enctype='multipart/form-data'>     
-                            {% csrf_token %}
-                            <div class="btn-group"  style="padding:0px;margin:0px;">
-                                <a href="#" class="btn btn-default publisher"  data-from="1" id="parcours_publisher{{parcours.id}}" 
-                                    data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
-                                    <i class="fa fa-circle-o-notch"></i>
-                                </a><span class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" id="parcours_statut{{parcours.id}}" style="cursor:auto" >  
-                                  {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
-                                </span>
-                            </div>
-                        </form>
-                        <span class="label_icon" style="color:{{ parcours.color   }};">
-                            {% if parcours.is_evaluation %}
-                                {{  parcours.start|date:"d N Y H:i"  }}   
-                                {% if parcours.stop %}
-                                   - {{  parcours.stop|date:"d N Y H:i"  }}     
-                                {% endif %}                                
-                            {% endif %}
-                        </span>
+                            <form action="" method="POST" enctype='multipart/form-data'>     
+                                {% csrf_token %}
+                                <div class="btn-group"  style="padding:0px;margin:0px;">
+                                    <a href="#" class="btn btn-default btn-publisher publisher"  data-from="1" id="parcours_publisher{{parcours.id}}" 
+                                        data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
+                                        <i class="fa fa-circle-o-notch"></i>
+                                    </a><span class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" id="parcours_statut{{parcours.id}}" style="cursor:auto" >  
+                                      {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
+                                    </span>
+                                </div>
+                            </form>
+
                         </td>
                     </tr>
             {% endfor  %} 

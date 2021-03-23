@@ -5664,7 +5664,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   color: #222;
   text-align: left;
   border-radius: 4px;
-  padding: 5px;
+  padding: 5px!important;
   position: absolute;
   display: table;  
   font-size: 14px;
