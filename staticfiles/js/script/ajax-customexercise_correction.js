@@ -108,52 +108,109 @@ define(['jquery', 'bootstrap'], function ($) {
         canvas.height = 800;
         new_color = "#000000" ;
 
-        const value = JSON.parse(document.getElementById('this_answer').textContent);
 
 
-        new_color = "#000000" ;
-        if (value !="") {
+
+        const value = JSON.parse(document.getElementById('this_answer').textContent); 
+
+        function draw_line(value) {
+
+            if (value !="") {
 
 
-            segments = value.split("=");
-            segments.forEach( position );
+                segments = value.split("=");
+                segments.forEach( position );
 
 
-            function position(item) {
+                function position(item) {
 
 
-                positions = item.split("!") ;
-                ctx.strokeStyle = "#000000" ;
-        
-                ctx.beginPath();
-                positions.forEach(create_draw);
-                ctx.stroke();
-                ctx.closePath(); 
-
-
-                    function create_draw(itemize,index) {
+                    positions = item.split("!") ;
+                    ctx.strokeStyle = "#000000" ;
             
-                            if (index > 0) // empeche la récupération de la balise d'entrée
-            
-                             { 
-                                coords = itemize.split(",");
-            
-                                if (coords[0] != "") 
-                                    { new_color = coords[0]; }
-            
-                                ctx.strokeStyle = new_color ;
-      
-                                 ctx.lineTo(coords[1],coords[2]);
- 
+                    ctx.beginPath();
+                    positions.forEach(create_draw);
+                    ctx.stroke();
+                    ctx.closePath(); 
+
+
+                        function create_draw(itemize,index) {
+                
+                                if (index > 0) // empeche la récupération de la balise d'entrée
+                
+                                 { 
+                                    coords = itemize.split(",");
+                
+                                    if (coords[0] != "") 
+                                        { new_color = coords[0]; }
+                
+                                    ctx.strokeStyle = new_color ;
+          
+                                     ctx.lineTo(coords[1],coords[2]);
+     
+                                }
+                            
                             }
-                        
-                        }
-        
+            
+                    }
+
+
+
                 }
 
 
+                // var socket = new WebSocket('ws://' + window.location.host + '/ws/qcm/')
 
-            }
+                // socket.onmessage = function(event){
+                //     var data = JSON.parse(event.data);
+
+                //     console.log(data);
+
+                //     document.querySelector('#app').innerText = data.listing ;
+
+                // }
+ 
+
+        }
+
+         setInterval(get_value, 4000)
+
+
+ 
+         function get_value() {
+ 
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let student_id = $("#student_id").val();
+            let customexercise_id = $("#customexercise_id").val();
+            let parcours_id = $("#parcours_id").val();
+ 
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+ 
+                        'student_id':student_id,
+                        'parcours_id':parcours_id,
+                        'customexercise_id': customexercise_id,
+ 
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../../get_values_canvas",
+                    success: function (data) {
+
+                        draw_line(data.values);
+                        
+                    }
+                }
+            )
+        } 
+
+
+
+
+
 
 
 

@@ -185,7 +185,7 @@ urlpatterns = [
 
     path('show_canvas', show_canvas, name='show_canvas'), 
 
-
+    path('get_values_canvas', get_values_canvas, name='get_values_canvas'), 
 
 
 

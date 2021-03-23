@@ -1511,14 +1511,6 @@ def rcs_for_realtime(parcours):
 
 
 
-
-
-
-
-
-
-
-
 @parcours_exists
 def show_parcours(request, id):
     """ show parcours coté prof """
@@ -3080,7 +3072,20 @@ def ajax_real_time_live(request):
     return JsonResponse(data)
 
  
+def get_values_canvas(request):
+    """ Récupère la réponse élève en temps réel """
+    data = {} # envoie vers JSON
+    parcours_id = request.POST.get("parcours_id")
+    customexercise_id = request.POST.get("customexercise_id")
+    student_id = request.POST.get("student_id")
+ 
+    ce = Customanswerbystudent.objects.get(customexercise_id = customexercise_id, parcours_id = parcours_id, student_id = student_id )
+    values = ce.answer
 
+    data["values"] = values
+ 
+
+    return JsonResponse(data)
 
 #######################################################################################################################################################################
 #######################################################################################################################################################################

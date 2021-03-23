@@ -103,50 +103,50 @@
                     </thead>
                     <tbody>
                     {% block liste_student %} 
-                    {% for stud in relationship.students.all|dictsort:"user.last_name" %}
-                        <tr>
-                            <td {% if student %}{% if student == stud %} style="background-color: #F0F0F0;"{% endif %}{% endif %}>
-                                {% get_done relationship stud as done %}
-                                {% get_score_student_for_this relationship stud as  studentanswer %}  
-                                                               
-                                {% if done %}
-                                    <a href="{% url 'correction_exercise' relationship.id  0  stud.user.id  %}" {% if not studentanswer.point %} style="color:#cb2131"{% endif %} >
-                                        <!--data-student_id="{{ student.user.id }}" data-relationship_id="{{ relationship.id }}" data-parcours_id="0" data-custom="0" class="choose_student"  --> 
-                                        {{ stud.user.last_name|title }} {{ stud.user.first_name|title }} 
-                                        {% if  studentanswer.point %}
-                                        <span id ="evaluate{{ stud.user.id }}">   
-                                            <i class="fa fa-square
-                                                    {% if studentanswer.point >= stage.up %}
-                                                     text-primary 
-                                                    {% elif studentanswer.point >= stage.medium %}
-                                                     text-success 
-                                                    {% elif studentanswer.point >=  stage.low  %}
-                                                     text-warning 
-                                                    {% else %}
-                                                        text-danger  
-                                                    {% endif %} pull-right"></i>
-                                        </span>
-                                        {% endif %}
-                                    </a>
-                                {% else %}                
-                                <span style="color:#DDD">
-                                    {{ stud.user.last_name }} {{ stud.user.first_name }}  
-                                    <a href="#" class="exercise_no_made" title="Marqué comme corrigé, avec compétences/savoir faire non évalués. Si note, note = 0." 
-                                            data-exercise_id ={{ relationship.id }} data-parcours_id ={{ parcours.id }}
-                                            data-custom =0
-                                            id="exercise_no_made{{ stud.user.id }}" 
-                                            data-student_id ={{ stud.user.id }} >
-                                            <i class="fa fa-toggle-off text-default pull-right"></i>
-                                    </a> 
-                                </span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% empty %}
-                        <tr>
-                            <td>Aucun élève.</td>
-                        </tr>
-                    {% endfor %}
+                        {% for stud in relationship.students.all|dictsort:"user.last_name" %}
+                            <tr>
+                                <td {% if student %}{% if student == stud %} style="background-color: #F0F0F0;"{% endif %}{% endif %}>
+                                    {% get_done relationship stud as done %}
+                                    {% get_score_student_for_this relationship stud as  studentanswer %}  
+                                                                   
+                                    {% if done %}
+                                        <a href="{% url 'correction_exercise' relationship.id  0  stud.user.id  %}" {% if not studentanswer.point %} style="color:#cb2131"{% endif %} >
+                                            <!--data-student_id="{{ student.user.id }}" data-relationship_id="{{ relationship.id }}" data-parcours_id="0" data-custom="0" class="choose_student"  --> 
+                                            {{ stud.user.last_name|title }} {{ stud.user.first_name|title }} 
+                                            {% if  studentanswer.point %}
+                                            <span id ="evaluate{{ stud.user.id }}">   
+                                                <i class="fa fa-square
+                                                        {% if studentanswer.point >= stage.up %}
+                                                         text-primary 
+                                                        {% elif studentanswer.point >= stage.medium %}
+                                                         text-success 
+                                                        {% elif studentanswer.point >=  stage.low  %}
+                                                         text-warning 
+                                                        {% else %}
+                                                            text-danger  
+                                                        {% endif %} pull-right"></i>
+                                            </span>
+                                            {% endif %}
+                                        </a>
+                                    {% else %}                
+                                    <span style="color:#DDD">
+                                        {{ stud.user.last_name }} {{ stud.user.first_name }}  
+                                        <a href="#" class="exercise_no_made" title="Marqué comme corrigé, avec compétences/savoir faire non évalués. Si note, note = 0." 
+                                                data-exercise_id ={{ relationship.id }} data-parcours_id ={{ parcours.id }}
+                                                data-custom =0
+                                                id="exercise_no_made{{ stud.user.id }}" 
+                                                data-student_id ={{ stud.user.id }} >
+                                                <i class="fa fa-toggle-off text-default pull-right"></i>
+                                        </a> 
+                                    </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td>Aucun élève.</td>
+                            </tr>
+                        {% endfor %}
                     {% endblock %}                    
                     </tbody>
                 </table>
