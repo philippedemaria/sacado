@@ -212,7 +212,7 @@
                     </a>
                     {% endif %}
 
-                    {% if parcours.group_list|length > 1 %}
+                    {% if parcours.isnot_shared  %}
                     <span class="shared" style="color:{{ parcours.color }};">Parcours partagé entre plusieurs groupes</span>
                     {% endif %} 
                 </div>

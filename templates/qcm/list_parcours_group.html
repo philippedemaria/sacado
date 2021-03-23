@@ -234,7 +234,7 @@
 
 
 
-                        {% if parcours.groups.all|length > 1 and not parcours.is_folder %}
+                        {% if parcours.isnot_shared and not parcours.is_folder %}
                         <span class="shared helper_tip" style="color:{{ parcours.color }};">Parcours partagé entre plusieurs groupes <i class="fa fa-question-circle"></i>
                             <div class="helper_tip_text" >
                                 {% for g in parcours.groups.all %}

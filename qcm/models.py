@@ -383,9 +383,9 @@ class Parcours(ModelWithCode):
 
 
     def isnot_shared(self) :
-        test = True
+        test = False
         if self.groups.exclude(teacher_id=2480).count()>1:
-            test = False
+            test = True
         return test
 
 
