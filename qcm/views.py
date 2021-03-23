@@ -904,6 +904,14 @@ def list_evaluations_archives(request):
     return render(request, 'qcm/list_evaluations_archives.html', { 'parcourses' : parcourses, 'parcours' : None , 'teacher' : teacher , 'communications' : [] ,  'today' : today , 'relationships' : []   })
 
 
+
+def clear_realtime(parcours_tab , today,  timer ):
+    """  efface le realtime de plus de timer secondes sur un ensemble de parcours parcours_tab """
+    today_delta = today.now() - timedelta(seconds = timer)
+    Tracker.objects.filter(parcours__in = parcours_tab, date_created__lte= today_delta).delete()
+
+
+
 ##@user_is_group_teacher
 def list_parcours_group(request,id):
 
@@ -940,6 +948,9 @@ def list_parcours_group(request,id):
             if len(parcours_tab) == teacher.teacher_parcours.count() :
                 break
 
+    ###efface le realtime de plus de 2 h
+    clear_realtime(parcours_tab , today.now() ,  7200 )
+
     return render(request, 'qcm/list_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group': group,  'parcours' : None , 'communications' : [] , 'relationships' : [] , 'role' : role , 'today' : today })
 
 
@@ -963,6 +974,10 @@ def list_sub_parcours_group(request,idg,id):
         return redirect('index')
 
     parcours_tab = parcours.leaf_parcours.order_by("ranking")
+
+    ###efface le realtime de plus de 2 h
+    clear_realtime(parcours_tab , today.now() ,  7200 )
+
 
     return render(request, 'qcm/list_sub_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group , 'parcours_folder' : parcours,  'parcours' : None , 'communications' : [] , 'relationships' : [] , 'role' : True , 'today' : today })
 
@@ -2966,18 +2981,15 @@ def real_time(request,id):
     parcours = Parcours.objects.get(pk = id)
     teacher = request.user.teacher
     today = time_zone_user(request.user).now()
-    students = parcours.students.order_by("user__last_name")
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
+
  
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
+    students = parcours.students.order_by("user__last_name")
     rcs , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
-
-    print(rcs)
-    
- 
 
     return render(request, 'qcm/real_time.html', { 'teacher': teacher , 'parcours': parcours, 'rcs': rcs, 'students': students , 'group': group , 'role': role , 'access': access })
 
@@ -3006,7 +3018,7 @@ def time_done(arg):
 
 
 def ajax_real_time_live(request):
-    """ Envoie la liste des exercice pour un seul niveau """
+    """ Envoie la liste des exercices d'un parcours """
     data = {} # envoie vers JSON
     parcours_id = request.POST.get("parcours_id")
     parcours = Parcours.objects.get(pk=int(parcours_id))
