@@ -1494,6 +1494,31 @@ def ordering_number(parcours):
 
     return listing_order , nb_exo_only, nb_exo_visible  
 
+
+
+
+def rcs_for_realtime(parcours):
+
+    listing_ordered = set() 
+    relationships = Relationship.objects.filter(parcours=parcours,exercise__supportfile__is_title=0).prefetch_related('exercise__supportfile').order_by("ranking")
+    customexercises = Customexercise.objects.filter(parcourses=parcours).order_by("ranking") 
+    listing_ordered.update(relationships)
+    listing_ordered.update(customexercises)
+
+    listing_order = sorted(listing_ordered, key=attrgetter('ranking')) #set trié par ranking
+
+    return listing_order
+
+
+
+
+
+
+
+
+
+
+
 @parcours_exists
 def show_parcours(request, id):
     """ show parcours coté prof """
@@ -2986,7 +3011,7 @@ def real_time(request,id):
         return redirect('index')
 
     students = parcours.students.order_by("user__last_name")
-    rcs , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
+    rcs      = rcs_for_realtime(parcours)
 
     return render(request, 'qcm/real_time.html', { 'teacher': teacher , 'parcours': parcours, 'rcs': rcs, 'students': students , 'group': group , 'role': role , 'access': access })
 
