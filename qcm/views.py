@@ -973,7 +973,7 @@ def list_sub_parcours_group(request,idg,id):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
-    parcours_tab = parcours.leaf_parcours.order_by("ranking")
+    parcours_tab = parcours.leaf_parcours.order_by("is_evaluation", "ranking")
 
     ###efface le realtime de plus de 2 h
     clear_realtime(parcours_tab , today.now() ,  7200 )
@@ -2286,11 +2286,6 @@ def clone_parcours(request, id, course_on ):
     else :
         return redirect('parcours')
  
-
- 
-
-
-
  
 def ajax_parcours_get_exercise_custom(request):
 
