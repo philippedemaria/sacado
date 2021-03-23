@@ -856,7 +856,6 @@ def list_parcours(request):
         del request.session["parcours_folder_id"]
     except:
         pass 
-    print("ici") 
 
     return render(request, 'qcm/list_parcours.html', { 'parcourses' : parcourses , 'communications' : [] , 'relationships' : [],  'parcours' : None , 'group' : None , 'today' : today ,  'teacher' : teacher , 'nb_archive' : nb_archive })
 
@@ -884,7 +883,6 @@ def list_evaluations(request):
     nb_archive = len( teacher_has_own_parcourses_and_folder(teacher,1,1 )  )
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
 
-    print(request.session.get("tdb"))
     try :
         del request.session["group_id"]
     except:
@@ -1080,7 +1078,6 @@ def ajax_all_parcourses(request):
     teacher = request.user.teacher
     data = {} 
     level_id = request.POST.get('level_id',0)
-    print(level_id)
     subject_id = request.POST.get('subject_id',None)
     parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1).exclude(exercises=None ,teacher=teacher).order_by('level')
     
@@ -1649,9 +1646,7 @@ def replace_exercise_into_parcours(request):
             for p_id in parcourses_id :
                 prcrs = Parcours.objects.get(pk = p_id)                
                 Relationship.objects.filter(pk = int(exercise_id)).update(parcours = prcrs)
-                print("modif", int(exercise_id) , prcrs.id )
                 try :
-                    print("ici")
                     Studentanswer.objects.filter(exercise = relationship.exercise, parcours = parcours).update(parcours = prcrs)
                 except :
                     pass
@@ -3550,7 +3545,6 @@ def ajax_sort_supportfile(request):
     exercise_ids = request.POST.get("valeurs")
     exercise_tab = exercise_ids.split("-") 
     for i in range(len(exercise_tab)-1):
-        print(exercise_tab[i])
         Supportfile.objects.filter( pk = exercise_tab[i]).update(ranking = i)
 
 
@@ -5957,7 +5951,6 @@ def export_skills_after_evaluation(request):
 
             if nbsk != 0 :
                 tot_s = total_skill//nbsk
-                print(student,tot_s)
                 level_skill = get_level_by_point(student,tot_s)
             else :
                 level_skill = "A"
