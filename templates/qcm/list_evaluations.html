@@ -126,7 +126,7 @@ body{
                                     </small>
 
                                 {% else %}
-                                    <a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-xs btn-danger">
+                                    <a href="{% url 'update_evaluation' parcours.id 0 %}" class="btn btn-xs btn-danger">
                                         <i class="fa fa-users"></i> Affecter des élèves à {% if parcours.is_evaluation %}cette évaluation{% else %}ce parcours{% endif %}
                                     </a>
                                 {% endif %}
