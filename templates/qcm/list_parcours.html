@@ -20,12 +20,6 @@
 
 {% block page_menu_right %}
 
-    {% if sacado_asso %}
-    <li><a href="{% url 'course_custom_show_shared' %}"  class="no_button"><i class="fa fa-desktop"></i> Cours mutualisés</a></li>
-    {% else %}
-    <li><a href="#"  class="no_button no_sacado_asso"  title="Version établissement requise"><i class="fa fa-desktop"></i> Cours mutualisés</a></li>
-    {% endif  %}
-
 
     <li><a href="{% url 'archives' %}"  class="no_button"><i class="fa fa-archive"></i> Parcours archivé{{ nb_archive|pluralize }} ({{ nb_archive }})</a></li>
 
