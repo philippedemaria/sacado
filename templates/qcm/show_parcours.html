@@ -181,9 +181,14 @@ body{
 
 
 
-        {% if parcours.teacher == teacher %}
+{% if parcours.teacher == teacher %}
 
-            {% if parcours.quizz.count > 0  %}
+    {% if parcours.quizz.count > 0  %}
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+
+
+            
                 <hr/>
                 <h1 class="thin">Les quizz associés</h1>
 
@@ -228,9 +233,10 @@ body{
                         <img src="{% static 'img/quizz_slide.png' %}" width="250px"   />
                     </div>
                 {% endfor %}
-
-            {% endif %} 
-        {% endif %} 
+            </div>
+        </div>  
+    {% endif %} 
+{% endif %} 
 
 
 
