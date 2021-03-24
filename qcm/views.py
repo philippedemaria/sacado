@@ -6311,7 +6311,7 @@ def get_course_in_this_parcours(request,id):
         request.session["parcours_id"] = parcours.id
         request.session["group_id"] = group_id
 
-        courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=2480),is_share = 1).exclude(parcours__teacher = teacher).order_by("parcours","parcours__level")
+        courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=2480),is_share = 1).exclude(parcours__teacher = teacher).order_by("parcours__level","parcours")
 
         return render(request, 'qcm/course/list_courses.html', {  'teacher': teacher , 'group': group , 'courses':courses,   'parcours': parcours, 'relationships' : [] ,  'communications': [] , })
     else :

@@ -18,8 +18,6 @@
         <div class="box_title_vignette"> 
             <a href="{% url 'show_parcours_visual'  parcours.id  %}" style="color:{{ parcours.color|contrast_color }};">
                 {{ parcours.title|truncatechars:"28" }}
-                {% get_is_lock parcours today as is_lock %} 
-                {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock" style="color:{{ parcours.color|contrast_color }};"></i><div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible aux élèves de soumettre des exercices.</div></span>{% endif %}
             </a>
         </div>
     </div>
@@ -29,7 +27,7 @@
                 <b>{{ parcours.subject.name }}</b>
 
                     {% if parcours.course.all|length > 0 %}
-                    <a href="{% url 'clone_parcours' parcours.id 1 %}" style="font-variant:small-caps; font-size: 12px;margin-left: 5px"  class="pull-right edit" title="Voir le parcours et ses cours associés" > <i class="fa fa-folder"></i> </a>
+                    <a href="{% url 'clone_parcours' parcours.id 1 %}" style="font-variant:small-caps; font-size: 12px;margin-left: 5px"  class="pull-right edit" title="Cloner le parcours et ses cours associés" > <i class="fa fa-folder"></i> </a>
                     {% endif %}
                     <a href="{% url 'clone_parcours' parcours.id 0 %}" style="font-variant:small-caps; font-size: 12px;margin-left: 5px"  class="pull-right edit" title="Cloner le parcours"  > <i class="fa fa-clone"></i> </a>                      
                     <a href="{% url 'show_parcours_visual'  parcours.id  %}" style="font-variant:small-caps; font-size: 12px" class="pull-right edit"  title="Voir le parcours"  ><i class="fa fa-eye"></i></a>

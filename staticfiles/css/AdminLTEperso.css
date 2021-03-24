@@ -2471,6 +2471,30 @@ table.table-bordered.dataTable {
   height : 170px;
 }
 
+
+
+.course_body_shared{
+  overflow: auto;
+  height : 100px;
+}
+
+
+
+ .course_body_shared::-webkit-scrollbar {
+  height: 10px;
+  width: 5px;
+}
+.course_body_shared::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 10px;
+}
+.course_body_shared::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+
+
 /* width */
 .card_course ::-webkit-scrollbar {
   width: 2px;
@@ -6566,6 +6590,40 @@ text-align: center;
   opacity:0.97;
   z-index:200;
 }
+
+
+
+.widget-user-header .disc_course{
+  position: absolute;
+  top:10px;
+  right: 20px;
+  font-size: 22px;
+  border-radius:50%;
+  width:40px;
+  height:40px;
+  padding: 6px 9px;
+  color:#FFF;
+  z-index: 1;
+  background-color: #DDD;
+}
+
+
+
+.widget-user-header .disc_course:hover{
+  position: absolute;
+  top:10px;
+  right: 20px;
+  font-size: 22px;
+  border-radius:50%;
+  width:40px;
+  height:40px;
+  padding: 6px 9px;
+  color:#FFF;
+  z-index: 1;
+  background-color: #777;
+}
+
+
 
 .widget-user-header .overlay .overlay_expand{
   padding-bottom: 5px;
