@@ -394,40 +394,56 @@ class Student(ModelWithCode):
 
     def this_exercise_is_locked(self,exercise, parcours , custom, today):
         
-        booleen , test , tst , tsst , tsste   = False , False , False  , False  , False 
+        tst = False 
 
         try :
             if parcours.stop < today :
                 tst = True
+            else :
+                if int(custom) == 1 :
+                    if self.student_exerciselocker.filter(customexercise = exercise, custom = 1, lock__lt= today ).exists() :
+                        tst = True 
+
+                    try :
+                        if exercise.lock < today :
+                            tst = True
+                    except :   
+                        pass 
+                else :
+
+                    if self.student_exerciselocker.filter(relationship = exercise, custom = 0, lock__lt= today ).exists() :
+                        tst = True
+
+                    try :
+                        if exercise.is_lock :
+                            tst = True       
+                    except :   
+                        pass
+
+
         except :
-            pass 
- 
-        if int(custom) == 1 :
-            if self.student_exerciselocker.filter(customexercise = exercise, custom = 1, lock__lt= today ).exists() :
-                test = True 
 
-            try :
-                if exercise.lock < today :
-                    tsst = True
-            except :   
-                pass 
+            if int(custom) == 1 :
+                if self.student_exerciselocker.filter(customexercise = exercise, custom = 1, lock__lt= today ).exists() :
+                    tst = True 
+                try :
+                    if exercise.lock < today :
+                        tst = True
+                except :   
+                    pass 
+            else :
 
+                if self.student_exerciselocker.filter(relationship = exercise, custom = 0, lock__lt= today ).exists() :
+                    tst = True
 
-        else :
-            if self.student_exerciselocker.filter(relationship = exercise, custom = 0, lock__lt= today ).exists() :
-                test = True
-
-            try :
-                if exercise.is_lock :
-                    tsste = True       
-            except :   
-                pass
+                try :
+                    if exercise.is_lock :
+                        tst = True       
+                except :   
+                    pass
 
 
-        if test and (tsst or tst or tsste) :
-            booleen = True
- 
-        return booleen
+        return tst
                 
 
     def is_lock_this_parcours(self,parcours,today):
