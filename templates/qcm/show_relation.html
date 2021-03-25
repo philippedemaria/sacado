@@ -24,7 +24,6 @@
 
 {% block body  %}  
 
-
 <section class="content_main content_main_exercise">
     {% get_available relation student  as available %} <!-- Si le nombre de tentative est dépassée ou pas -->
     <div class="col-sm-0 col-md-1 col-lg-1 full_screen_size">
@@ -67,7 +66,7 @@
         </div>
         <div class="situation">
             <img src="{% static 'img/situation.png' %}"  class="img_size_square_75" />
-            <p>{{ relation.situation }} situation{{ relation.situation|pluralize }}</p>
+            <p>{{ relation.situation }} question{{ relation.situation|pluralize }}</p>
         </div>
         <div class="situation" >
         {% if  relation.maxexo > -1 %}
@@ -75,7 +74,7 @@
             <div class="available">
                 <b> {{ available.nbleft }}</b>  
             </div>
-            <p>Réalisation{{ available.nbleft|pluralize  }} restante{{ available.nbleft|pluralize  }}</p>
+            <p>Tentative{{ available.nbleft|pluralize  }} restante{{ available.nbleft|pluralize  }}</p>
 
         {% endif  %} 
         </div>
@@ -86,6 +85,8 @@
         </div>
     </div>  
     <div class="col-sm-10 col-md-8 col-lg-8">
+
+
 
       {% for remediation in relation.relationship_remediation.all %}
 
@@ -114,6 +115,17 @@
                   <img src="{% static 'img/flechebleue.png' %}" style="position:absolute; right:30px;"/>            
               </div>
 
+              {% if parcours.is_evaluation %}
+                   
+ 
+                          <div class="alert alert-danger" style="width:750px; float:absolute!important;"  role="alert" id="message_alerte">
+                              Cet exercice est proposé dans une évaluation. Vous devez répondre à exactement <b>{{ relation.situation }} question{{ relation.situation|pluralize  }}</b>. Si vous dépassez ces <b>{{ relation.situation }} question{{ relation.situation|pluralize  }}, vous devrez recommencer l'exercice</b>.
+                          </div>
+ 
+              {% endif %}
+
+
+
               <div class = 'col-auto' id='ggb_applet_container' style="display:none" ></div>
           </div>
 
@@ -132,17 +144,28 @@
                               </div>
 
                             {% else %}
-                                <input  class="btn btn-primary"   type="submit" id="submit_button_relation"  value="Enregistrer le résultat"  />
+
+                                {% if parcours.is_evaluation %}
+                                    <input  class="btn btn-primary"   type="submit" id="submit_button_evaluation"  value="Enregistrer le résultat"  />
+                                {% else %}
+                                    <input  class="btn btn-primary"   type="submit" id="submit_button_relation"  value="Enregistrer le résultat"  />
+                                {% endif %}
                             {% endif %}
 
                         {% else %}  
 
 
                             {% if available.is_ok %}
-                                <input  class="btn btn-primary"   type="submit" id="submit_button_relation"  value="Enregistrer le résultat"  />
+
+                                {% if parcours.is_evaluation %}
+                                    <input  class="btn btn-primary"   type="submit" id="submit_button_evaluation"  value="Enregistrer le résultat"  />
+                                {% else %}
+                                    <input  class="btn btn-primary"   type="submit" id="submit_button_relation"  value="Enregistrer le résultat"  />
+                                {% endif %}
+
                             {% else %}
                               <div class="alert alert-danger" >
-                                <b>Vous avez atteint la limite des réalisations. Vous ne pouvez plus soumettre le résultat.</b>
+                                <b>Vous avez atteint la limite des tentatives. Vous ne pouvez plus soumettre le résultat.</b>
                               </div>
                             {% endif %}
 

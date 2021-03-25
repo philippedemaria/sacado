@@ -43,5 +43,52 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+        $('#submit_button_evaluation').on('click', function (event) {
+
+          var grade = ggb_applet_container.getValue("grade");
+          var numexo = ggb_applet_container.getValue("numexo");
+           let situation = $("#situation").val() ;
+
+                if ( situation  > numexo ) {
+                        alert("Vous devez atteindre "+situation+" situations pour enregistrer le résultat.");
+                        return false;
+                    }
+
+                else if ( situation  != numexo ) {
+                        alert("Vous ne pouvez pas dépasser les "+situation+" situations attendues.");
+                        return false;
+                    }
+
+
+
+            score = grade/(numexo-1) ;
+ 
+            $('#numexo').val(numexo); 
+            $('#score').val(score); 
+
+
+        }); 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     });
 });
