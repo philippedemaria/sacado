@@ -27,6 +27,10 @@ define(['jquery', 'bootstrap'], function ($) {
           var numexo = ggb_applet_container.getValue("numexo");
            let situation = $("#situation").val() ;
 
+
+           numexo = parseInt(numexo)  ;
+           this_situation = parseInt(situation) ;
+
                 if ( situation  > numexo ) {
                         alert("Vous devez atteindre "+situation+" situations pour enregistrer le résultat.");
                         return false;
@@ -49,13 +53,15 @@ define(['jquery', 'bootstrap'], function ($) {
           var numexo = ggb_applet_container.getValue("numexo");
            let situation = $("#situation").val() ;
 
-                if ( situation  > numexo ) {
-                        alert("Vous devez atteindre "+situation+" situations pour enregistrer le résultat.");
-                        return false;
-                    }
+           grade = parseInt(grade) ;
+           numexo = parseInt(numexo)  ;
 
-                else if ( situation  != numexo ) {
-                        alert("Vous ne pouvez pas dépasser les "+situation+" situations attendues.");
+           var this_situation = parseInt(situation)  + 1 ;
+
+           console.log(situation  , numexo , this_situation ) ; 
+
+                 if ( this_situation != numexo ) {
+                        alert("Vous devez effectuer le nombre de "+situation+" situations attendues.");
                         return false;
                     }
 

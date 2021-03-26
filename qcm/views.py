@@ -4136,7 +4136,9 @@ def delete_evaluation(request,id):
 def show_evaluation(request, id):
 
     parcours = Parcours.objects.get(id=id)
-    teacher =  parcours.teacher 
+    teacher =  parcours.teacher
+
+    today = time_zone_user(parcours.teacher.user)
 
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
@@ -4154,7 +4156,7 @@ def show_evaluation(request, id):
 
     context = {'relationships_customexercises': relationships_customexercises, 'parcours': parcours, 'teacher': teacher, 'skills': skills, 'communications' : [] ,  
                'students_from_p_or_g': students_p_or_g, 'nb_exercises': nb_exercises, 'nb_exo_visible': nb_exo_visible, 'nb_students_p_or_g' : nb_students_p_or_g , 
-               'nb_exo_only': nb_exo_only, 'group_id': group_id, 'group': group, 'role' : role }
+               'nb_exo_only': nb_exo_only, 'group_id': group_id, 'group': group, 'role' : role , 'today' : today }
 
     return render(request, 'qcm/show_parcours.html', context)
 

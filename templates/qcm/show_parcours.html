@@ -77,11 +77,14 @@ body{
      
      
     {% if parcours.stop %}
+
+        {% if parcours.stop < today %}
         <div class="row" >
             <div class="col-sm-12 col-md-12">
                 <div class="alert alert-danger" >{% if parcours.is_evaluation %}Cette évaluation est verrouillée {% else %}Ce parcours est verrouillé {% endif %} à partir du <b>{{ parcours.stop|date:"d F Y à H:i" }}</b></div>
             </div>
         </div>
+        {% endif %}
     {% endif %}
 
 
