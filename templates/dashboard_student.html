@@ -1,9 +1,9 @@
  {% load item_tags %}
  {% load static %}
 
-<section>  
+    <a href="#" class="sub_menu_right pull-right whire" id="right_menu_open"><i class="fa fa-angle-double-left"></i> </a> 
     <div class="row">
-        <div class="col-md-10 col-lg-10 col-xs-12">
+        <div class="col-md-12 col-lg-12 col-xs-12">
             <h2 class="thin">Mes matières</h2>
             <!-- ******************************************************************************************** -->
             <!-- *************************************** Parcours ******************************************* -->
@@ -88,11 +88,14 @@
             {% endif %}
             <!-- ******************************************************************************************** -->
         </div>
-        <div class="col-md-2 col-lg-2 col-xs-12">
-            {% include 'right_menu_student.html' %}
-        </div>  
-    </div>
-</section> 
-
-
  
+    </div>
+ 
+
+ <div class="menu_right_div" id="right_menu">
+ 
+    <div class="col-xs-12 col-md-12 col-lg-12"> 
+        {% include 'right_menu_student.html' %}
+    </div>
+
+</div>
