@@ -109,7 +109,7 @@ def index(request):
             groups = chain(grps, sgps)
 
             this_user = request.user
-
+            nb_teacher_level = teacher.levels.count()
             relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("date_limit").order_by("parcours")
             parcourses = teacher.teacher_parcours.filter(is_evaluation=0, is_favorite =1,is_folder=0 ).order_by("-is_publish")
             communications = Communication.objects.values('id', 'subject', 'texte', 'today').filter(active=1).order_by("-id")
@@ -118,7 +118,7 @@ def index(request):
             request.session["tdb"] = True
  
             template = 'dashboard.html'
-            context = {'this_user': this_user, 'teacher': teacher, 'groups': groups,  'parcours': None, 'today' : today , 'timer' : timer , 
+            context = {'this_user': this_user, 'teacher': teacher, 'groups': groups,  'parcours': None, 'today' : today , 'timer' : timer , 'nb_teacher_level' : nb_teacher_level , 
                        'relationships': relationships, 'parcourses': parcourses, 
                        'communications': communications, 'parcours_tab': parcours_tab,
                        }
