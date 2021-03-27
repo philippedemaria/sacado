@@ -109,6 +109,10 @@ urlpatterns = [
     path('ajax_show_my_result', ajax_show_my_result, name='ajax_show_my_result'),
 
 
+    path('ajax_find_question', ajax_find_question, name='ajax_find_question'),
+    path('get_this_question/<int:id>/<int:idquizz>', get_this_question, name='get_this_question'),
+
+
 
     ############## Videocopy
     path('list_videocopy', list_videocopy, name='list_videocopy'),

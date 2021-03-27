@@ -718,6 +718,10 @@ class Parcours(ModelWithCode):
         test = False
         if self.tracker.count() > 0 :
             test = True
+        for p in self.leaf_parcours.all():
+            if p.tracker.count() > 0 :
+                test = True
+                break
         return test
 
     def is_folder_real_time(self):

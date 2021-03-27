@@ -106,6 +106,7 @@ def student_dashboard(request,group_id):
     # si une seule matière alors  sur dashboard
     groups = student.students_to_group.all()
 
+
     if groups.count() > 1  :
         if int(group_id)  > 0  :
             template =  "group/dashboard_group.html" 
@@ -174,10 +175,8 @@ def student_dashboard(request,group_id):
 
     ratiowidth = int(0.9*ratio)
 
-    groups = student.students_to_group.all()
 
     responses = request.user.user_response.exclude(is_read=1)
-
 
     studentanswers =  student.answers.all()
     exercises = Exercise.objects.filter(pk__in=studentanswers.values_list('exercise', flat=True))

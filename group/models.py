@@ -77,13 +77,18 @@ class Group(ModelWithCode):
         """
         Donne le nombre total de parcours/évaluations, le nombre de visibles et de publiés du groupe
         """
-        students = self.students.exclude(user__username__contains= "_e-test").order_by("user__last_name")
-        snt = students.count()
+        
+        students = self.students.all()
+        studnts = students.exclude(user__username__contains= "_e-test") 
+        snt = studnts.count()
 
-        if self.students.filter(user__username__contains="_e-test").count() == 1 : 
+
+
+        if studnts.count() == 1 : 
             profilTest = True
         else :
             profilTest = False
+
 
         parcourses = set()
         for student in students:
@@ -93,7 +98,7 @@ class Group(ModelWithCode):
                 parcourses.update(student.students_to_parcours.filter(Q(author=teacher)|Q(teacher=teacher)|Q(coteachers=teacher),level = self.level ).exclude(is_leaf=1)) 
             elif self.subject : 
                 parcourses.update(student.students_to_parcours.filter(Q(author=teacher)|Q(teacher=teacher)|Q(coteachers=teacher),subject = self.subject ).exclude(is_leaf=1)) 
-                
+
 
         data, nb, nbf, nbp, nbef , nbe = {}, 0, 0, 0, 0, 0
         for parcours in parcourses :

@@ -368,7 +368,6 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
 
  
 
-
  
     });
 });

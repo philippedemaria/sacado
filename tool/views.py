@@ -915,7 +915,7 @@ def create_question(request,idq,qtype):
     questions = quizz.questions.order_by("ranking")
 
     form = QuestionForm(request.POST or None, request.FILES or None, quizz = quizz)
-
+    all_questions = Question.objects.filter(is_publish=1)
     
     if qtype > 2 :
         formSet = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct') , extra=4)
@@ -938,7 +938,7 @@ def create_question(request,idq,qtype):
 
  
     bgcolors = ["bgcolorRed", "bgcolorBlue","bgcolorOrange", "bgcolorGreen"] 
-    context = { 'quizz': quizz, 'questions': questions,  'form' : form, 'qtype' : qtype  }
+    context = { 'quizz': quizz, 'questions': questions,  'form' : form, 'qtype' : qtype , 'all_questions' : all_questions , "quizz_id" : quizz.id  }
 
 
     if quizz.is_random :
@@ -1064,6 +1064,51 @@ def show_question(request,id):
     context = {'form': form, "question" : question }
 
     return render(request, 'tool/form_question.html', context)
+
+
+
+ 
+@csrf_exempt 
+def ajax_find_question(request): 
+
+    data = {}
+    keywords = request.POST.get('keywords',None)
+    quizz_id = request.POST.get('quizz_id',None)
+
+    if keywords == "no_finder" :
+        questions =  Question.objects.filter(is_publish=1)
+    else :
+        key_tab = keywords.split(" ")
+        questions = set()
+        for k in key_tab:
+            questions.update( set(Question.objects.filter(  title__contains = k , is_publish=1  ) ) )
+
+    data['html'] = render_to_string('tool/ajax_finder_question.html', {'all_questions' : questions , "quizz_id" : quizz_id })
+    return JsonResponse(data)
+
+
+
+def get_this_question(request,id,idquizz):
+    
+
+    question = Question.objects.get(pk = id)
+    choices  = Choice.objects.filter(question = question)    
+    question.pk = None
+    question.save()
+
+    print(question)
+
+    for c in choices :
+        c.pk = None
+        c.save()
+        print(c)
+
+    quizz    = Quizz.objects.get(pk = idquizz)
+    quizz.questions.add(question)
+    print(quizz)
+
+    return redirect('create_question' , quizz.id , 0) 
+
 
 #######################################################################################################################
 ############################ Ajax  ####################################################################################
