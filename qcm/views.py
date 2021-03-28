@@ -2290,13 +2290,13 @@ def clone_parcours(request, id, course_on ):
     messages.success(request, "Duplication réalisée avec succès. Bonne utilisation.")
 
 
-
-    if parcours.is_evaluation :
-        return redirect('evaluations')
-    elif prcrs_id :
-        return redirect('all_parcourses')
+    if group_id :
+        if parcours.is_evaluation :
+            return redirect('update_evaluation',  parcours.id, group_id)
+        else :
+            return redirect('update_parcours',  parcours.id, group_id)
     else :
-        return redirect('parcours')
+        return redirect('all_parcourses')
  
  
 def ajax_parcours_get_exercise_custom(request):
