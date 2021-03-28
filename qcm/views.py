@@ -1257,11 +1257,9 @@ def create_parcours(request,idp=0):
 
         if request.POST.get("save_and_choose") :
             return redirect('peuplate_parcours', nf.id)
-        elif idp == 0 :
-            return redirect('parcours')
         elif request.session.has_key("group_id") :
             group_id = request.session.get("group_id")
-            return redirect('list_parcours_group' , group_id)
+            return redirect('list_parcours_group' , group_id)            
         else:
             return redirect('parcours')
     else:
@@ -1360,10 +1358,11 @@ def update_parcours(request, id, idg=0 ):
                 return redirect('peuplate_parcours', nf.id)
             elif idg == 99999999999:
                 return redirect('index')
-            elif idg == 0:
-                return redirect('parcours')
+            elif idg > 0:
+                return redirect('list_parcours_group', idg)                
             else:
-                return redirect('list_parcours_group', idg)
+                return redirect('parcours')
+
         else :
             print(form.errors)
  
