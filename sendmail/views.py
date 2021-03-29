@@ -302,7 +302,7 @@ def show_discussion(request,idd):
 	discussion = Discussion.objects.get(id = idd)
 	msgs = Message.objects.filter(discussion = discussion)
 	m = msgs.last()
-	print(m)
+ 
 	form = MessageForm(request.POST or  None)
 
 	if request.user.school :	
@@ -318,6 +318,14 @@ def show_discussion(request,idd):
 				new_f.user = request.user
 				new_f.discussion = discussion
 				new_f.save()
+				try :				
+					dest = []
+					for e in discussion.discussion_message.values_list("user__email",flat=True).distinct():
+						dest.append(e)
+ 
+					send_mail("sacado Forum : " +new_f.discussion  , cleanhtml(unescape_html(new_f.texte)) +"\n Pour répondre connectez-vous à Sacado : https://sacado.xyz", "info@sacado.xyz", dest )
+				except :
+					pass
 			else :
 				print(form.errors)
 
