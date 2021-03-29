@@ -99,8 +99,6 @@ class Group(ModelWithCode):
             elif self.subject : 
                 parcourses.update(student.students_to_parcours.filter(Q(author=teacher)|Q(teacher=teacher)|Q(coteachers=teacher),subject = self.subject ).exclude(is_leaf=1)) 
 
-        print(parcourses)
-
         data, nb, nbf, nbp, nbef , nbe = {}, 0, 0, 0, 0, 0
         for parcours in parcourses :
             if parcours.is_favorite and not parcours.is_evaluation :
