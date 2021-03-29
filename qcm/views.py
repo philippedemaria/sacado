@@ -7145,6 +7145,8 @@ def update_folder(request,id,idg):
             nf.teacher = teacher
             nf.is_evaluation = 0
             nf.is_folder = 1
+            nf.level = group.level
+            nf.subject = group.subject
             nf.save()   
             nf.leaf_parcours.set(lp)         
             nf.students.set(group.students.all())
