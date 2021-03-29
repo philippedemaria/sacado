@@ -1276,7 +1276,21 @@ def create_slide(request,id):
     teacher = request.user.teacher
     form = SlideForm(request.POST or None)
 
+    print(request)
+
+
+    if request.method == "POST"  :  
+        if form.is_valid():
+            nf = form.save() 
+            print("laaaaaa")    
+            diaporama.slides.add(nf)
+        else :
+            print(form.errors)
+ 
+
+    
     slides = diaporama.slides.order_by("ranking")
+
     context = { 'diaporama': diaporama, 'slides': slides, 'form': form, }
 
     return render(request, 'tool/form_slide.html', context)
@@ -1286,10 +1300,10 @@ def delete_slide(request,id,idp):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     slide = Slide.objects.get(pk= id)
-    if slide.diapositive.count() == 0 :
+    diaporama = Diaporama.objects.get(pk = idp)
+    if request.user.teacher ==  diaporama.teacher : 
         slide.delete()
-    else :
-        messages.error(request, "  !!!  Cette question est utiolisée dans un quizz  !!! Suppression interdite.")
+
  
     return redirect ('create_slide', idp)
 
@@ -1314,9 +1328,10 @@ def update_slide(request,id,idp):
     slide= Slide.objects.get(pk = id)
     teacher = request.user.teacher
     form = SlideForm(request.POST or None , instance = slide  )
-    if form.is_valid():
-        form.save()     
-        return redirect ('create_slide', idp)
+    if request.method == "POST" :
+        if form.is_valid():
+            form.save()     
+            return redirect ('create_slide', idp)
 
     slides = diaporama.slides.order_by("ranking")
     context = { 'diaporama': diaporama, 'slides': slides, 'form': form, 'slide': slide, }
@@ -1324,43 +1339,7 @@ def update_slide(request,id,idp):
     return render(request, 'tool/form_slide.html', context)
 
 
-
-
-@csrf_exempt
-def send_slide(request):
-    
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
-    ### le quizz
-    diaporama_id =  request.POST.get("diaporama_id",None)    
-    diaporama =  Diaporama.objects.get(pk = diaporama_id)
-
-    list_slides = diaporama.slides.order_by("ranking")
-    if len(list_slides) > 0 :
-        last_slide = list_slides.last()
-        ranking = int(last_slide.ranking) + 1
-    else :
-        ranking =   1
-    ## Nombre de questions dans le quizz    ####################################
-    nbq = list_slides.count()  + 1
-
-    form = SlideForm(request.POST or None   )
-    if form.is_valid():
-        slide = form.save(commit=False)
-        slide.ranking = ranking
-        slide.save()  
-        form.save_m2m()      
-        diaporama.slides.add(slide)
-    else :
-        slide = None
-
-    context = {    }
-    context_liste = {  'slide' : slide ,  'diaporama' : diaporama , 'from_ajax' : True , 'nbq' : nbq }
-
-    data = {'new' : True}
-    data['html'] = render_to_string('tool/type_of_slide.html', context)
-    data['slide'] = render_to_string('tool/list_of_slide.html', context_liste)
  
-    return JsonResponse(data)
 
 
 

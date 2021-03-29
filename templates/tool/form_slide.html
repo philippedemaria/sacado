@@ -25,7 +25,7 @@
 
 
 {% block page_menu_right %}
-    <a href="{% url 'list_diaporama'  %}" target="_blank" class="btn btn-new">Mes présentation</a>
+    <a href="{% url 'list_diaporama'  %}" target="_blank" class="btn btn-new">Mes présentations</a>
     <a href="{% url 'show_diaporama' diaporama.id %}" target="_blank" class="btn btn-new">Voir la présentation</a>
 {% endblock %}
 
@@ -49,9 +49,51 @@
  
             </div>
 
-            <div class="col-sm-12 col-md-10" id="body_slide">  
+            <div class="col-sm-12 col-md-10" >  
  
-                {% include 'tool/type_of_slide.html' %}
+                <form action="{% url 'create_slide' diaporama.id %}"  method = "POST"  enctype='multipart/form-data' >
+                    {% csrf_token %}  
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                {{ form.title.label_tag }}  
+                                {{ form.title |add_class:"form-control" }}
+                                {{ form.title.errors }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-sm-6 col-md-3">
+                            <div class="form-group">
+                                {{ form.is_publish.label_tag }}<br/>
+                                {{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                {{ form.is_publish.errors }}
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="row">                
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                {{ form.content.label_tag }}<br/>
+                                {{ form.content }}
+                                {{ form.content.errors }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12"> 
+                            <div class="form-group">
+                                <input value="{{ diaporama.id }}" id="diaporama_id" name="diaporama_id" type="hidden"  />
+
+                                <input value="Enregistrer"  type="submit"  class="btn btn-primary btn-lg"/>
+
+                            </div>
+                        </div>    
+                    </div>
+                </form>
+
 
             </div>
         </div>

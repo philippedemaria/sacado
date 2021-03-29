@@ -342,7 +342,7 @@ class Slide(models.Model):
     Modèle représentant un associé.
     """
     title      = models.CharField( max_length=255, default="",  verbose_name="Titre") 
-    content    = RichTextUploadingField(  default="", verbose_name="Texte ")
+    content    = RichTextUploadingField(  default="", verbose_name="Texte")
     ranking    = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
     duration   = models.PositiveIntegerField(default=0, blank=True, verbose_name="Durée d'affichage")
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")

@@ -53,7 +53,7 @@
                 <input value="{{ slide.id }}" id="slide_id" name="slide_id" type="hidden"  />
                 <input value="Enregistrer"  type="submit"  class="btn btn-primary btn-lg"/>
                 {% else %}
-                <input value="Enregistrer"  id="submit_slide"  class="btn btn-primary btn-lg"/>
+                <input value="Enregistrer" type="submit"   class="btn btn-primary btn-lg"/>
                 {% endif %}
             </div>
         </div>    
@@ -61,15 +61,4 @@
 </form>
 
 
-{% if slide %}
-
-<script>
-  
-    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-    $("[data-toggle='toggle']").bootstrapToggle();
-
-</script>
-
-
-
-{% endif %}
+ 
