@@ -31,13 +31,19 @@
     </div>
     <div class="row" >
         <div class="col-xs-12 col-md-12" >
-            {% if user %}
-            <form method="post" action="{% url 'close_my_account' %}">{% csrf_token %}
-                <button class="btn btn-danger" onclick="return TestDelete('ce compte')" >Clôturer mon compte</button>
-                <a href="javascript:history.back()" class="btn btn-default" >Annuler</a>
-            </form>
-            {% endif %}
 
+            {% if not sacado_asso %}
+                {% if user %}
+                <form method="post" action="{% url 'close_my_account' %}">{% csrf_token %}
+                    <button class="btn btn-danger" onclick="return TestDelete('ce compte')" >Clôturer mon compte</button>
+                    <a href="javascript:history.back()" class="btn btn-default" >Annuler</a>
+                </form>
+                {% endif %}
+            {% else %}
+
+                Pour cloturer votre compte, vous devez contacter le gestionnaire SACADO de votre établissement. 
+
+            {% endif %}
         </div>  
     </div>    
 </section>
