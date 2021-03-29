@@ -330,7 +330,7 @@ Intro Section -
       <div class="container">
         <div class="row">
 
-          <div class="col-lg-6 col-md-6">
+          <div class="col-lg-5 col-md-5">
           <h3>Progressivité et Programmes </h3>
 
       <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/2/02-Maths-CP-attendus-eduscol_1114732.pdf" target="_blank"> CP - Repère de progressivité</a></li>
@@ -365,12 +365,12 @@ Intro Section -
 
           </div>
 
-            <div class="col-lg-6 col-md-6">
+            <div class="col-lg-7 col-md-7">
                 <header class="section-header">
-                    <h3>A propos</h3>
+                    <h3>A propos de l'asso <span class="sacado">SACADO</span></h3>
                 </header>
                 <div class="about-content">
-
+<!-- 
                     <h3>Les attendus et savoir faire des exercices sont issus des programmes officiels de l'éducation
                         nationale.</h3>
                     <p>En aucun cas, ces exercices se substituent aux attentes des enseignants mais sont un complément
@@ -387,9 +387,54 @@ Intro Section -
                     <h3>La veille <span class="sacado">SACADO</span></h3>
                     <p>
                         Hélène, Julie, David, Nicolas ...<br> et nos élèves...
-                    </p>
+                    </p> -->
+
+                    <div class="index_label_icone" >
+                      <a href="#"  data-toggle='modal' data-target='#actu'  >
+                        <img src="{% static 'img/index_actu.png' %}" class="index_icone"/>L'actu  
+                      </a>
+                    </div>
 
 
+
+                    <div class="index_label_icone" >
+                      <a href="#"  data-toggle='modal' data-target='#historique'  ><img src="{% static 'img/index_historique.png' %}" class="index_icone"/>L'historique  
+                      </a>
+                    </div>
+                    
+                    <div class="index_label_icone" >
+                      <a href="#"  data-toggle='modal' data-target='#statut'  >
+                        <img src="{% static 'img/index_status.png' %}" class="index_icone"/>Les statuts   
+                      </a>
+                    </div>
+
+
+                    <div class="index_label_icone" >
+                      <a href="#"  data-toggle='modal' data-target='#comptes'  ><img src="{% static 'img/index_compte.png' %}" class="index_icone"/>Les comptes  
+                      </a>
+                    </div>
+                    <div class="index_label_icone" >
+                      <a href="#"  data-toggle='modal' data-target='#membres'  >
+                        <img src="{% static 'img/index_membres.png' %}" class="index_icone"/>Les membres  
+                      </a>
+                    </div>
+
+                    <div class="index_label_icone" >
+                      <a href="#"  data-toggle='modal' data-target='#whos'  ><img src="{% static 'img/index_whos.png' %}" class="index_icone"/>On en parle 
+                      </a>
+                    </div>
+
+                     <div class="index_label_icone" >
+                      <a href="#"  data-toggle='modal' data-target='#connecteurs'  ><img src="{% static 'img/index_gar.png' %}" class="index_icone"/> Connecteur 
+                      </a>
+                    </div>
+
+ 
+                     <div class="index_label_icone" >
+                      <a href="#"  data-toggle='modal' data-target='#helpus'  ><img src="{% static 'img/index_helpus.png' %}" class="index_icone"/> Aider  
+                      </a>
+                    </div>
+ 
                 </div>
             </div>
         </div>
@@ -420,7 +465,7 @@ Intro Section -
 
                     <h4> <a href="#"  data-toggle='modal' data-target='#cgu'  style="color:#535074" >CGU & RGPD</a></h4>
 
-                    <h4><a href="#"  data-toggle='modal' data-target='#sacado_association'  style="color:#535074" >L'Asso SACADO</a></h4>
+ 
                     
                     <h4>Contact</h4>
                     <p>
@@ -450,10 +495,11 @@ Intro Section -
                     <div class="footer-links">
                       <h4>Exercices</h4>
                       <p>
-                        Audrey Ledoux - Italie <br> 
                         Bruno Serres - Nicaragua <br>
                         Philippe Demaria - Tunisie <br>
                         Mehdi Boulifa - Tunisie <br>
+                        Nicolas Villemain - Canada <br> 
+                        Olivier Evain - Gabon
                       </p>
                       <h4>Codeurs</h4>
                       <p>
@@ -525,4 +571,139 @@ Intro Section -
         </div>
     </div> 
 </div>
+
+<div class="modal fade" id="actu" tabindex="-1" role="dialog" aria-labelledby="actu">
+    <div class="modal-dialog modal-maxsize" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h2  class='sacado'  >L'actu <span class="sacado">SACADO</span></h2>              
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+
+            </div>
+            <div class="modal-body">
+                {% include 'sacado_actu.html' %}
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+<div class="modal fade" id="statut" tabindex="-1" role="dialog" aria-labelledby="statut">
+    <div class="modal-dialog modal-maxsize" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h2  class='sacado'  >Les statuts <span class="sacado">SACADO</span></h2>              
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+
+            </div>
+            <div class="modal-body">
+                {% include 'sacado_status.html' %}
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+<div class="modal fade" id="membres" tabindex="-1" role="dialog" aria-labelledby="membres">
+    <div class="modal-dialog modal-maxsize" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h2  class='sacado'  >Les membres <span class="sacado">SACADO</span></h2>              
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+
+            </div>
+            <div class="modal-body">
+                {% include 'sacado_membres.html' %}
+            </div>
+        </div>
+    </div> 
+</div>
+<div class="modal fade" id="whos" tabindex="-1" role="dialog" aria-labelledby="whos">
+    <div class="modal-dialog modal-maxsize" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h2  class='sacado'  >On parle de <span class="sacado">SACADO</span></h2>                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+
+            </div>
+            <div class="modal-body">
+                 {% include 'sacado_whos.html' %}
+            </div>
+        </div>
+    </div> 
+</div>
+<div class="modal fade" id="historique" tabindex="-1" role="dialog" aria-labelledby="historique">
+    <div class="modal-dialog modal-maxsize" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h2  class='sacado'  >L'historique de <span class="sacado">SACADO</span></h2>              
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+
+            </div>
+            <div class="modal-body">
+                 {% include 'sacado_historique.html' %}
+            </div>
+        </div>
+    </div> 
+</div>
+<div class="modal fade" id="comptes" tabindex="-1" role="dialog" aria-labelledby="comptes">
+    <div class="modal-dialog modal-maxsize" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h2  class='sacado'  >Les comptes de <span class="sacado">SACADO</span></h2>              
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+
+            </div>
+            <div class="modal-body">
+                 {% include 'sacado_comptes.html' %}
+            </div>
+        </div>
+    </div> 
+</div>
+<div class="modal fade" id="connecteurs" tabindex="-1" role="dialog" aria-labelledby="connecteurs">
+    <div class="modal-dialog modal-maxsize" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h2  class='sacado'  >Le connecteur ENT/GAR</h2>              
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+
+            </div>
+            <div class="modal-body">
+                 {% include 'sacado_gar.html' %}
+            </div>
+        </div>
+    </div> 
+</div>
+<div class="modal fade" id="helpus" tabindex="-1" role="dialog" aria-labelledby="helpus">
+    <div class="modal-dialog modal-maxsize" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h2  class='sacado'  >Aider <span class="sacado">SACADO</span></h2>              
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+
+            </div>
+            <div class="modal-body">
+                  {% include 'sacado_help_us.html' %}
+            </div>
+        </div>
+    </div> 
+</div>
+ 
+
 {% endblock %}

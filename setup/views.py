@@ -150,7 +150,7 @@ def index(request):
         nb_teacher = Teacher.objects.all().count()
         nb_student = Student.objects.all().count()
 
-        schools = School.objects.all()
+        schools = School.objects.order_by("country__name")
 
         today_start = datetime.date(datetime.now())
 

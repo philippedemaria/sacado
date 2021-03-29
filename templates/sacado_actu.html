@@ -1,0 +1,13 @@
+{% load widget_tweaks %}
+{% load static %}
+
+{%  if communications|length > 0  %}
+    {% for c in communications %}
+        <h5> {{ c.subject }} <span class="pull-right">{{ c.today|date:"d N Y" }}</span></h5>
+        {{ c.texte|safe }}
+        <hr>
+    {% endfor %}
+    <div class="text-center">
+        <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
+    </div>
+{%  endif  %} 

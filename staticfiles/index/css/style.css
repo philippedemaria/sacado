@@ -69,7 +69,8 @@ color : #0056b3;
   color:#5d4391 ;
 }
 
- 
+
+
 
 .content_bgwhite{
     background-color: #FFF;
@@ -211,6 +212,59 @@ table.table-bordered.dataTable {
 .marginbottom100{
   margin-bottom: 100px;
 }
+
+
+
+.index_icone{
+  width:90px;
+  height:90px;
+  border-radius: 50%;
+  background-color: #0056b3;
+  margin-right: 10px;
+}
+
+.index_icone:hover{
+  width:90px;
+  height:90px;
+  border-radius: 50%;
+  background-color: #FFB400;
+  margin-right: 10px; 
+  font-size : 20px; 
+}
+
+.index_label_icone{
+ font-size : 20px; 
+  margin : 10px;
+  float:left;
+  width: 280px;
+}
+
+.index_label_icone:hover > .index_icone {
+  width:90px;
+  height:90px;
+  border-radius: 50%;
+  background-color: #F4F4F4;
+  margin-right: 10px; 
+  font-size : 20px; 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 .btn-index{
