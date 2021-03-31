@@ -1498,8 +1498,8 @@ def ordering_number(parcours):
 def rcs_for_realtime(parcours):
 
     listing_ordered = set() 
-    relationships = Relationship.objects.filter(parcours=parcours,exercise__supportfile__is_title=0).prefetch_related('exercise__supportfile').order_by("ranking")
-    customexercises = Customexercise.objects.filter(parcourses=parcours).order_by("ranking") 
+    relationships = Relationship.objects.filter(is_publish=1,parcours=parcours,exercise__supportfile__is_title=0).prefetch_related('exercise__supportfile').order_by("ranking")
+    customexercises = Customexercise.objects.filter(is_publish=1,parcourses=parcours).order_by("ranking") 
     listing_ordered.update(relationships)
     listing_ordered.update(customexercises)
 
