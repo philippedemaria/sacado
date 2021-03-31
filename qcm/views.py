@@ -906,8 +906,7 @@ def list_evaluations_archives(request):
 def clear_realtime(parcours_tab , today,  timer ):
     """  efface le realtime de plus de timer secondes sur un ensemble de parcours parcours_tab """
     today_delta = today.now() - timedelta(seconds = timer)
-    Tracker.objects.filter(parcours__in = parcours_tab, date_created__lte= today_delta).delete()
-
+    Tracker.objects.filter(Q(parcours__in = parcours_tab)|Q(parcours__leaf_parcours__in = parcours_tab), date_created__lte= today_delta).delete()
 
 
 ##@user_is_group_teacher
