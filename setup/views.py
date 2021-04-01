@@ -18,7 +18,6 @@ from django.core.mail import send_mail
 from django.db.models import Count, Q
 from datetime import date, datetime , timedelta
 from django.utils import formats, timezone
-from django.contrib import messages
 import random
 import pytz
 import uuid
@@ -197,24 +196,17 @@ def send_message(request):
     email = request.POST.get("email")
     subject = request.POST.get("subject")
     message = request.POST.get("message")
-    token = request.POST.get("token", None)
+    token = request.POST.get("token")
 
-    if token :
-        if int(token) == 7 :
-            if message:
-                send_mail(subject,
-                          "Bonjour, vous venez d'envoyer le message suivant :\n\n" + message+" \n\n" + email +" \n\n Ceci est un mail automatique. Ne pas répondre.",
-                          'info@sacado.xyz',
-                          [email])
-                send_mail(subject,
-                            message+" \n\n" + email ,
-                          'info@sacado.xyz',
-                          [email, "philippe.demaria83@gmail.com", "brunoserres33@gmail.com", "association@sacado.xyz"])
-        else :
-            messages.error(request,"Erreur d'opération....")
-    else :
-        messages.error(request,"Oubli de token.")
-
+    if message:
+        send_mail(subject,
+                  "Bonjour, vous venez d'envoyer le message suivant :\n\n" + message+" \n\n" + email +" \n\n Ceci est un mail automatique. Ne pas répondre.",
+                  'info@sacado.xyz',
+                  [email])
+        send_mail(subject,
+                    message+" \n\n" + email ,
+                  'info@sacado.xyz',
+                  [email, "philippe.demaria83@gmail.com", "brunoserres33@gmail.com", "association@sacado.xyz"])
     return redirect("index")
 
 
