@@ -686,9 +686,20 @@ def admin_tdb(request):
     for s in schools :
         schools_tab.append(s)
 
-    nb_teachers = User.objects.filter(school=school, user_type=2).count()
+
+    teachers = Teacher.objects.filter(user__school=school, user__user_type=2)
+
+
+    nb_teachers = teachers.count()
     nb_students = User.objects.filter(school=school, user_type=0).count()
     nb_groups = Group.objects.filter(Q(teacher__user__school=school)|Q(teacher__user__schools=school)).count()
+    
+    is_lycee = False
+    if not school.get_seconde_to_comp :
+        for t in teachers :
+            if t.groups.filter(level__gte=10).count() > 0 :
+                is_lycee = True
+                break
  
     try:
         stage = Stage.objects.get(school=school)
@@ -711,7 +722,7 @@ def admin_tdb(request):
             school_id = 0
 
     return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers, 'nb_students': nb_students, 'school_id' : school_id , "school" : school , 
-                                                    'nb_groups': nb_groups, 'schools_tab': schools_tab, 'stage': stage,
+                                                    'nb_groups': nb_groups, 'schools_tab': schools_tab, 'stage': stage, 'is_lycee' : is_lycee , 
                                                     'eca': eca, 'ac': ac, 'dep': dep , 'communications' : [],
                                                     })
 

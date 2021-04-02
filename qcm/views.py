@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import  permission_required,user_passes_test
 from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group , Sharing_group
-from school.models import Stage
+from school.models import Stage, School
 from qcm.models import  Parcours , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage , DocumentReport , Tracker
 from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm
 from socle.models import  Theme, Knowledge , Level , Skill , Waiting
@@ -54,6 +54,79 @@ import html
 from general_fonctions import *
 
 
+#################################################################
+#Récupération du marocurs Seconde to Maths complémentaires
+#################################################################
+def get_seconde_to_math_comp(request):
+
+    teacher = request.user.teacher
+ 
+    group = Group.objects.get(id=1921)#groupe fixe sur le serveur 
+    parcourses = group.group_parcours.all() 
+    student = group.students.last()   
+    group.pk = None
+    group.teacher = teacher
+    group.code = str(uuid.uuid4())[:8]  
+    group.lock = 0
+    group.save()
+    group.students.add(student)
+    for parcours in parcourses :
+ 
+        relationships = parcours.parcours_relationship.all() 
+        courses = parcours.course.all()
+        #################################################
+        # clone le parcours
+        #################################################
+        parcours.pk = None
+        parcours.teacher = teacher
+        parcours.is_publish = 1
+        parcours.is_leaf = 0
+        parcours.is_archive = 0
+        parcours.is_share = 0
+        parcours.is_favorite = 1
+        parcours.code = str(uuid.uuid4())[:8]  
+        parcours.save()
+        parcours.students.add(student)
+        parcours.groups.add(group)
+        #################################################
+        # clone les exercices attachés à un cours 
+        #################################################
+        former_relationship_ids = []
+        for course in courses :
+
+            old_relationships = course.relationships.all()
+            # clone le cours associé au parcours
+            course.pk = None
+            course.parcours = parcours
+            course.save()
+            for relationship in old_relationships :
+                # clone l'exercice rattaché au cours du parcours 
+                if not relationship.id in former_relationship_ids :
+                    relationship.pk = None
+                    relationship.parcours = parcours
+                    relationship.save() 
+                course.relationships.add(relationship)
+                former_relationship_ids.append(relationship.id)
+
+        #################################################
+        # clone tous les exercices rattachés au parcours 
+        #################################################
+        for relationship in relationships :
+            try :
+                relationship.pk = None
+                relationship.parcours = parcours
+                relationship.save()                 
+                relationship.students.add(student)
+            except :
+                pass
+
+    School.objects.filter(pk = request.user.school.id).update(get_seconde_to_comp=1)
+
+    return redirect('admin_tdb' )
+
+##################################################################################################################################
+##################################################################################################################################
+##################################################################################################################################
 
 def new_content_type(s):
     names = ['Pages', 'Questionnaires', 'Activités', 'Tâches',  'Fichiers', 'Urls externes', 'Discussions' , 'Notes',  'Acquis', 'Participants', 'Suivis' ]                

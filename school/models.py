@@ -22,6 +22,8 @@ class School(models.Model):
 
     address = models.CharField(max_length=255, blank=True, verbose_name="Adresse")
     complement = models.CharField(max_length=255, blank=True, verbose_name="Complément d'adresse")
+    get_seconde_to_comp = models.BooleanField(default=0,   editable=False)# L'établissement a récupéré le groupe prépa math comp
+
 
     def __str__(self):
         return "{} - {} - {}".format(self.name, self.town, self.country.name)
