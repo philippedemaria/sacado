@@ -61,22 +61,37 @@ def get_seconde_to_math_comp(request):
 
     teacher = request.user.teacher
  
-    group = Group.objects.get(id=10)#groupe fixe sur le serveur 1921
+    group = Group.objects.get(id=1921)#groupe fixe sur le serveur 1921
+
+    print(group)
     parcourses = group.group_parcours.all()
+    print(parcourses)
+    
     cod = "_e-test_"+ str(uuid.uuid4())[:4]  
     user = User.objects.create(last_name=teacher.user.last_name, first_name =teacher.user.first_name+cod , email="", user_type=0,
                                                       school=request.user.school, time_zone=request.user.time_zone,
                                                       is_manager=0, username = teacher.user.username+ cod  ,  password ="sacado2020",
                                                       is_extra = 0 )
-    student = Student.objects.create(user=user, level=group.level, task_post=1) 
+    student = Student.objects.create(user=user, level=group.level, task_post=1)
+
+    print(user , student)
+
     group.pk = None
     group.teacher = teacher
     group.code = str(uuid.uuid4())[:8]  
     group.lock = 0
     group.save()
+
+    print(group)
+
     group.students.add(student)
+
+    print(parcourses)
+
     for parcours in parcourses :
- 
+
+        print(parcours)
+
         relationships = parcours.parcours_relationship.all() 
         courses = parcours.course.all()
         #################################################
@@ -97,19 +112,28 @@ def get_seconde_to_math_comp(request):
         # clone les exercices attachés à un cours 
         #################################################
         former_relationship_ids = []
+
         for course in courses :
+
+            print(course)
 
             old_relationships = course.relationships.all()
             # clone le cours associé au parcours
             course.pk = None
             course.parcours = parcours
             course.save()
+
+            print(course.id)
+
             for relationship in old_relationships :
                 # clone l'exercice rattaché au cours du parcours 
                 if not relationship.id in former_relationship_ids :
                     relationship.pk = None
                     relationship.parcours = parcours
-                    relationship.save() 
+                    relationship.save()
+
+                    print(course, relationship.id)
+
                 course.relationships.add(relationship)
                 former_relationship_ids.append(relationship.id)
 
@@ -120,7 +144,8 @@ def get_seconde_to_math_comp(request):
             try :
                 relationship.pk = None
                 relationship.parcours = parcours
-                relationship.save()                 
+                relationship.save()    
+                print( relationship.id)       
                 relationship.students.add(student)
             except :
                 pass
