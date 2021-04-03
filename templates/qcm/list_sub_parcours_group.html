@@ -188,7 +188,12 @@
                         {% if parcours.is_pending_correction %}
                         <i class="fa fa-copyright pull-right" style="font-size:12px;padding-right:5px;color:{{ parcours.color|contrast_color }};" title="Copies à corriger" ></i> 
                         {% endif %}
-                        {{ parcours.title|truncatechars:"18" }}
+
+                        {% if parcours.title|length > 18 %}
+                        <span class="helper_tip" style="color:{{ parcours.color|contrast_color }}">{{ parcours.title|truncatechars:"18" }}<div class="helper_tip_text_right">{{ parcours.title }}</div></span>
+                        {% else %}
+                        {{ parcours.title}}
+                        {% endif %}
                     </a>
                     {% else %}
                     <a {% if parcours.is_evaluation%} href="{% url 'show_evaluation'  parcours.id  %}" {% else %} href="{% url 'show_parcours'  parcours.id  %}"{% endif %} style="color:{{ parcours.color|contrast_color }};">
@@ -196,7 +201,12 @@
                         <i class="fa fa-copyright pull-right" style="font-size:12px;padding-right:5px;color:{{ parcours.color|contrast_color }};" title="Copies à corriger" ></i> 
                         {% endif %}
 
-                        {{ parcours.title|truncatechars:"18" }}
+                        {% if parcours.title|length > 18 %}
+                        <span class="helper_tip" style="color:{{ parcours.color|contrast_color }}">{{ parcours.title|truncatechars:"18" }}<div class="helper_tip_text_right">{{ parcours.title }}</div></span>
+                        {% else %}
+                        {{ parcours.title}}
+                        {% endif %}
+                        
 
                         {% get_is_lock parcours today as is_lock %} 
                         {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock" style="color:{{ parcours.color|contrast_color }};"></i><div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible aux élèves de soumettre des exercices.</div></span>{% endif %}
