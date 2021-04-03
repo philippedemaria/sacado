@@ -190,7 +190,7 @@
                         {% endif %}
 
                         {% if parcours.title|length > 18 %}
-                        <span class="helper_tip" style="color:{{ parcours.color|contrast_color }}">{{ parcours.title|truncatechars:"18" }}<div class="helper_tip_text_right">{{ parcours.title }}</div></span>
+                        <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px">{{ parcours.title|truncatechars:"18" }}<div class="helper_tip_text_right">{{ parcours.title }}</div></span>
                         {% else %}
                         {{ parcours.title}}
                         {% endif %}
@@ -202,7 +202,9 @@
                         {% endif %}
 
                         {% if parcours.title|length > 18 %}
-                        <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px;">{{ parcours.title|truncatechars:"18" }}<div class="helper_tip_text_right">{{ parcours.title }}</div></span>
+                        <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px;">
+                            {{ parcours.title|truncatechars:"18" }}<div class="helper_tip_text_right">{{ parcours.title }}</div>
+                        </span>
                         {% else %}
                         {{ parcours.title}}
                         {% endif %}
