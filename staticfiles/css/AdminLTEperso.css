@@ -2703,8 +2703,16 @@ table.table-bordered.dataTable {
   padding: 10px;
   margin: auto;
 }
-
-
+.available_infinite{
+  width:60px;
+  height:60px;
+  border-radius: 50%;
+  border : 2px solid #F0F0F0 ;
+  font-size : 30px ;
+  padding: 10px;
+  padding-top: 17px;
+  margin: auto;
+}
 
 .label_progress_bar{
   position: absolute;
