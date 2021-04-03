@@ -177,7 +177,20 @@
 
     {% endif %} 
 
-
+    {% if is_lycee %}
+    <hr/>
+    <div class="row">
+        <div class="col-lg-2 col-md-2 col-xs-12">
+            <img src="{% static 'img/seconde_math_comp.png' %}" />
+        </div>
+        <div class="col-lg-9 col-md-9 col-xs-12">
+            <span style="font-size:16px">Dans les lycées, certains élèves arrêtent les maths en Seconde malgré leur nécessité pour leur orientation. La reprise des mathématiques par la Terminale Complémentaire peut alors s'avérer compliquée. Sacado met à disposition un groupe qui recense les notions et besoins nécessaires via des cours et de exercices pour réussir cette reprise en douceur. </span> 
+        </div>
+        <div class="col-lg-1 col-md-1 col-xs-12">
+            <a href="{% url 'get_seconde_to_math_comp' %}" class="btn btn-warning"  > Récupérer  </a>
+        </div>
+    </div>
+    {% endif %} 
 
 
 
