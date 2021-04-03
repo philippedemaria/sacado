@@ -61,11 +61,12 @@ def get_seconde_to_math_comp(request):
 
     teacher = request.user.teacher
  
-    group = Group.objects.get(id=1921)#groupe fixe sur le serveur 
-    parcourses = group.group_parcours.all() 
-    user = User.objects.create(last_name=teacher.user.last_name, first_name =teacher.user.first_name+"_e-test", email="", user_type=0,
+    group = Group.objects.get(id=10)#groupe fixe sur le serveur 1921
+    parcourses = group.group_parcours.all()
+    cod = "_e-test_"+ str(uuid.uuid4())[:4]  
+    user = User.objects.create(last_name=teacher.user.last_name, first_name =teacher.user.first_name+cod , email="", user_type=0,
                                                       school=request.user.school, time_zone=request.user.time_zone,
-                                                      is_manager=0, username = teacher.user.username+"_e-test_comp",  password ="sacado2020",
+                                                      is_manager=0, username = teacher.user.username+ cod  ,  password ="sacado2020",
                                                       is_extra = 0 )
     student = Student.objects.create(user=user, level=group.level, task_post=1) 
     group.pk = None
