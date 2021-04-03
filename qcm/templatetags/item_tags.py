@@ -94,7 +94,10 @@ def get_available(obj,student):
     """ Détermine si un exercice est enregistrable pour un élève lors d'une évaluation au vue du nombre de tentatives"""
     return obj.is_available(student)
 
-
+@register.simple_tag
+def get_parcours_available(obj,student,exercise): 
+    """ Détermine si un exercice est enregistrable pour un élève lors d'une évaluation au vue du nombre de tentatives"""
+    return obj.is_available(student,exercise)
 
 
 @register.simple_tag

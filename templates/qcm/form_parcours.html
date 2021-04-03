@@ -309,6 +309,14 @@
                             {% endfor %}</td>
                     </tr>
                     {% endblock %}
+
+                    <tr>
+                        <td>{{ form.zoom.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text" >Si coché, une loupe propose d'agrandir la vignette.</div></td>
+                        <td>{{ form.zoom |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                        <td>{{ form.zoom.errors }}</td>
+                    </tr>
+                    {% block evaluation_choices %}     
                     {% if parcours %}
                     <tr>
                         <td>{{ form.is_leaf.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
@@ -317,13 +325,6 @@
                         <td>{{ form.is_leaf.errors }}</td>
                     </tr>
                     {% endif  %}
-                    <tr>
-                        <td>{{ form.zoom.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text" >Si coché, une loupe propose d'agrandir la vignette.</div></td>
-                        <td>{{ form.zoom |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
-                        <td>{{ form.zoom.errors }}</td>
-                    </tr>
-                    {% block evaluation_choices %}     
                     <tr>
                         <td>{{ form.is_favorite.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                 <div class="helper_tip_text" >Si coché, le parcours est accessible depuis le.s groupe.s au.x.quel.s il est rattaché. Sinon il n'est accessible que depuis la liste de vos parcours.</div>

@@ -59,14 +59,27 @@
 
 
 {% block evaluation %}
+        {% if parcours %}
         <tr>
-            <td><label>Nombre de réalisation max</label>  <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                    <div class="helper_tip_text red" >Ce nombre détermine le nombre maximum de fois que chaque exercice peut être fait. Ce maximum peut être déterminé exercice par exercice après la création. <br/> Laisser -1  pour ne pas borner le nombre de réalisation.</div>
+            <td>Inclusion dans un dossier<span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                    <div class="helper_tip_text" >Si coché, l'évaluation est incluse dans un dossier.</div></td>
+            <td>{{ form.is_leaf |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+            <td>{{ form.is_leaf.errors }}</td>
+        </tr>
+        {% endif  %}
+        <tr>
+            <td><label>Tentatives max</label>  <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text red" >Ce nombre détermine le nombre maximum de fois que chaque exercice peut être fait. Ce maximum peut être déterminé exercice par exercice. Dans ce cas, laissez -1.</div>
                                 </span></td>
             <td>{{ form.maxexo|attr:"min:-1"|attr:"max:10"|attr:"step:1"}}</td>
             <td></td>
         </tr>
-
+        <tr>
+            <td>{{ form.is_next.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                    <div class="helper_tip_text" >Si coché, l'élève ne peut plus faire l'exercice qu'il vient de terminer et doit passer au suivant.</div></td>
+            <td>{{ form.is_next |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+            <td>{{ form.is_next.errors }}</td>
+        </tr>
         <tr>
             <td>{{ form.duration.label_tag }}
                     <span class="helper_tip"> <i class="fa fa-question-circle"></i>

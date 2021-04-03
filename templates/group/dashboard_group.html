@@ -197,7 +197,9 @@
                             <small><i class="fa fa-graduation-cap"></i></small>
                         </div>
                         <div class="small-box-footer-max">
-                            <h2 class="white thin">{{ evaluation.title }}  </h2>
+                            <h2 class="white thin">{{ evaluation.title }} 
+                                {% if  evaluation.stop %}{% if  evaluation.stop < today %}<sup><i class="fa fa-lock fa-xs" style="font-size:12px;"></i></sup>{% endif %}{% endif %}  
+                            </h2>
                            
                             <div style="text-align: center; margin-top: 20px; margin-bottom: 20px">
                              <a href="{% url 'show_parcours_student' evaluation.id  %}" class="btn btn-default btn-accueil"><i class="fa fa-arrow-circle-right"></i> Démarrer</a>

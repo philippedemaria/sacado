@@ -357,13 +357,15 @@ class Parcours(ModelWithCode):
     is_favorite = models.BooleanField(default=1, verbose_name="Favori ?")
 
     is_evaluation = models.BooleanField(default=0, editable=False)
+    is_next = models.BooleanField(default=0, verbose_name="Suivant ?")
+
     duration = models.PositiveIntegerField(default=2, blank=True, verbose_name="Temps de chargement (min.)")
     start = models.DateTimeField(null=True, blank=True, verbose_name="A partir de")
     stop = models.DateTimeField(null=True, blank=True, verbose_name="Verrouillage")
 
     zoom = models.BooleanField(default=1, verbose_name="Zoom ?")
 
-    maxexo = models.IntegerField(  default=-1,  blank=True, null=True,  verbose_name="Nombre max de réalisation par exercice")
+    maxexo = models.IntegerField(  default=-1,  blank=True, null=True,  verbose_name="Tentatives")
 
     vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Vignette d'accueil", blank=True, default ="")
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
@@ -388,7 +390,18 @@ class Parcours(ModelWithCode):
             test = True
         return test
 
-
+    def is_available(self,student,exercise) :
+        data = {}
+        is_ok = True
+        nbs = Studentanswer.objects.filter(parcours=self , exercise= exercise,student = student ).count()
+        nbleft = self.maxexo - nbs
+        if nbleft == 0  :
+            is_ok = False
+        data["is_ok"] = is_ok
+        data["nbleft"] = nbleft
+        if self.maxexo == -1   :
+            is_ok = True
+        return data
 
 
     def is_done(self,student):
