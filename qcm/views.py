@@ -63,10 +63,8 @@ def get_seconde_to_math_comp(request):
  
     group = Group.objects.get(id=1921)#groupe fixe sur le serveur 1921
 
-    print(group)
     parcourses = group.group_parcours.all()
-    print(parcourses)
-    
+
     cod = "_e-test_"+ str(uuid.uuid4())[:4]  
     user = User.objects.create(last_name=teacher.user.last_name, first_name =teacher.user.first_name+cod , email="", user_type=0,
                                                       school=request.user.school, time_zone=request.user.time_zone,
@@ -74,23 +72,17 @@ def get_seconde_to_math_comp(request):
                                                       is_extra = 0 )
     student = Student.objects.create(user=user, level=group.level, task_post=1)
 
-    print(user , student)
-
     group.pk = None
     group.teacher = teacher
     group.code = str(uuid.uuid4())[:8]  
     group.lock = 0
     group.save()
 
-    print(group)
-
     group.students.add(student)
 
-    print(parcourses)
+    all_new_parcours_folders , all_new_parcours_leaves  = [],[]
 
     for parcours in parcourses :
-
-        print(parcours)
 
         relationships = parcours.parcours_relationship.all() 
         courses = parcours.course.all()
@@ -100,14 +92,17 @@ def get_seconde_to_math_comp(request):
         parcours.pk = None
         parcours.teacher = teacher
         parcours.is_publish = 1
-        parcours.is_leaf = 0
         parcours.is_archive = 0
         parcours.is_share = 0
         parcours.is_favorite = 1
         parcours.code = str(uuid.uuid4())[:8]  
         parcours.save()
-        parcours.students.add(student)
+        if parcours.is_folder :
+            all_new_parcours_folders.append(parcours)
+        else :
+            all_new_parcours_leaves.append(parcours)
         parcours.groups.add(group)
+        parcours.students.add(student)
         #################################################
         # clone les exercices attachés à un cours 
         #################################################
@@ -115,15 +110,13 @@ def get_seconde_to_math_comp(request):
 
         for course in courses :
 
-            print(course)
-
             old_relationships = course.relationships.all()
             # clone le cours associé au parcours
             course.pk = None
             course.parcours = parcours
             course.save()
 
-            print(course.id)
+
 
             for relationship in old_relationships :
                 # clone l'exercice rattaché au cours du parcours 
@@ -132,7 +125,6 @@ def get_seconde_to_math_comp(request):
                     relationship.parcours = parcours
                     relationship.save()
 
-                    print(course, relationship.id)
 
                 course.relationships.add(relationship)
                 former_relationship_ids.append(relationship.id)
@@ -144,13 +136,17 @@ def get_seconde_to_math_comp(request):
             try :
                 relationship.pk = None
                 relationship.parcours = parcours
-                relationship.save()    
-                print( relationship.id)       
+                relationship.save()       
                 relationship.students.add(student)
             except :
                 pass
 
+        for prcr in all_new_parcours_folders :
+            prcr.leaf_parcours.set(all_new_parcours_leaves)
+
     School.objects.filter(pk = request.user.school.id).update(get_seconde_to_comp=1)
+
+    messages.success(request,"Tous les parcours du groupe PREPA Maths Complémentaires ont été placés dans tous les dossiers. Vous devez manuellement les sélectionner pour personnaliser vos dossiers.")
 
     return redirect('admin_tdb' )
 
