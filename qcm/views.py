@@ -63,7 +63,11 @@ def get_seconde_to_math_comp(request):
  
     group = Group.objects.get(id=1921)#groupe fixe sur le serveur 
     parcourses = group.group_parcours.all() 
-    student = group.students.last()   
+    user = User.objects.create(last_name=teacher.user.last_name+"_e-test", first_name =teacher.user.first_name+"_e-test", email="", user_type=0,
+                                                      school=request.user.school, time_zone=request.user.time_zone,
+                                                      is_manager=0, username = teacher.user.username+"_e-test",  password ="sacado2020",
+                                                      is_extra = 0 )
+    student = Student.objects.create(user=user, level=group.level, task_post=1) 
     group.pk = None
     group.teacher = teacher
     group.code = str(uuid.uuid4())[:8]  
@@ -1430,6 +1434,8 @@ def update_parcours(request, id, idg=0 ):
                 return redirect('peuplate_parcours', nf.id)
             elif idg == 99999999999:
                 return redirect('index')
+            elif idg > 0 and parcours.is_leaf :
+                return redirect('list_sub_parcours_group', idg, parcours.id)
             elif idg > 0:
                 return redirect('list_parcours_group', idg)                
             else:
