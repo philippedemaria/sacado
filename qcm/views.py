@@ -1445,13 +1445,11 @@ def update_parcours(request, id, idg=0 ):
                 pass
  
             lock_all_exercises_for_student(nf.stop,parcours)
-
+            print("--------------------->")
             if request.POST.get("save_and_choose") :
                 return redirect('peuplate_parcours', nf.id)
             elif idg == 99999999999:
                 return redirect('index')
-            elif idg > 0 and parcours.is_leaf :
-                return redirect('list_sub_parcours_group', idg, parcours.id)
             elif idg > 0:
                 return redirect('list_parcours_group', idg)                
             else:
