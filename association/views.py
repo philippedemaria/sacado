@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from association.models import Accounting,Associate , Voting , Document, Section , Detail , Rate
 from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm, DetailForm , RateForm
-from account.models import User
+from account.models import User, Student, Teacher
+from qcm.models import Exercise, Studentanswer , Customanswerbystudent , Writtenanswerbystudent
+from school.models import School
 from django.forms import inlineformset_factory
 from django.http import JsonResponse
 from django.core import serializers
@@ -50,7 +52,17 @@ import xlwt
 
 @user_passes_test(user_is_board)
 def association_index(request):
-    return render(request, 'association/dashboard.html', {  })
+
+    today_start  = datetime.date(datetime.now())
+    nb_teachers  = Teacher.objects.all().count()
+    nb_students  = Student.objects.all().count()
+    nb_exercises = Exercise.objects.filter(supportfile__is_title=0).count()
+    nb_schools   = School.objects.all().count()
+    nb_answers   = Studentanswer.objects.filter(date__gte= today_start).count() + Customanswerbystudent.objects.filter(date__gte= today_start).count() + Writtenanswerbystudent.objects.filter(date__gte= today_start).count()
+    
+    context = { 'nb_teachers': nb_teachers , 'nb_students': nb_students , 'nb_exercises': nb_exercises, 'nb_schools': nb_schools, 'nb_answers': nb_answers }
+
+    return render(request, 'association/dashboard.html', context )
 
 
 @user_passes_test(user_is_board)

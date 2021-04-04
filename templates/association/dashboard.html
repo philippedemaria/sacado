@@ -47,6 +47,10 @@
                      <span style="font-size: 35px">Membres </span>
                 </div>
 
+                <p style="text-align: center"><br/><br/>
+                <span class="counter">{{ nb_schools }}</span><br/>
+                Etablissements  </p>
+
                 <a href="{% url 'list_associate' %}" class="small-box-footer"><i
                         class="fa fa-arrow-circle-right"></i> En détails </a>
             </div>
@@ -81,6 +85,34 @@
     </div>
 
  
+
+
+    <hr/>
+
+    <div class="row">
+        <div class="col-lg-3 col-3 text-center">
+            <span class="counter">{{ nb_teachers }}</span>
+            <p>Enseignants</p>
+        </div>
+        <div class="col-lg-3 col-3 text-center">
+            <span class="counter">{{ nb_students }}</span>
+            <p>Elèves</p>
+        </div>
+        <div class="col-lg-3 col-3 text-center">
+            <span class="counter">{{ nb_exercises }}</span>
+            <p>Supports </p>
+        </div>
+        <div class="col-lg-3 col-3 text-center">
+            <span class="counter">{{ nb_answers }}</span>
+            <p>Exercices traités  </p>
+        </div>
+
+
+
+    </div>
+
+
+
 
     {% endif %} 
 

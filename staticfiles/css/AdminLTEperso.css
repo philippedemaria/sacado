@@ -36,7 +36,11 @@ body {
  /*height : 100vh ;*/
 }
 
+.counter{
+  font-size:60px;
+}  
  /* cache les pop-up on load */
+
 .no_visu_on_load{
   display: none;
 }
