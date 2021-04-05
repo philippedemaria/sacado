@@ -69,7 +69,7 @@
 
                                 {% if knowledge.supportfile_counter > 0 %}
 
-                                    {% for supportfile in knowledge.supportfiles.all  %} 
+                                    {% for supportfile in knowledge.supportfiles.all|dictsort:"ranking"  %} 
                                         <tr  class="opener_e openedk{{ knowledge.id }} this_supportfile" style="background:#fff; cursor: move;" >
                                             <td> 
                                                 <input type="hidden" value="{{ supportfile.id }}" name="this_supportfile_id" ><!--  sert à classer les thèmes  -->   
