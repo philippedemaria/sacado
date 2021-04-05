@@ -37,7 +37,8 @@
             <table  class="table table-bordered table-hover standard_tab_sort300" style="width:100%">
                   <thead>
                       <tr>
-                        <th  style="width:35%">Nom</th>                      
+                        <th>Enseignement</th>
+                        <th style="width:35%">Nom</th>                      
                         <th>Thème</th>
                         <th>Niveau</th>
                         <th  style="width:35%">Attendu</th>
@@ -46,6 +47,9 @@
                   <tbody>
                         {% for knowledge in knowledges %}
                         <tr> 
+                          <td >
+                              {{ knowledge.theme.subject.shortname }} 
+                          </td> 
                           <td>
                               <a href="{% url 'update_knowledge' knowledge.id %}">{{ knowledge.name }}  {% if knowledge.used %}<i class="fa fa-check text-success"></i> [{{ knowledge.nb_exercise }}]   {% endif %}</a> 
                               <small>

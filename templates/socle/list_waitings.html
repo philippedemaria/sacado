@@ -36,6 +36,7 @@
             <table  class="table table-bordered table-hover standard_tab_sort300" style="width:100%">
                   <thead>
                       <tr>
+                        <th>Enseignement</th>
                         <th>Nom</th>                      
                         <th>Thème</th>
                         <th>Niveau</th>
@@ -44,6 +45,9 @@
                   <tbody>
                         {% for waiting in waitings %}
                         <tr> 
+                          <td >
+                              {{ waiting.theme.subject.shortname }} 
+                          </td> 
                           <td>
                               <a href="{% url 'update_waiting' waiting.id %}">{{ waiting.name }}   </a> 
                               <small>

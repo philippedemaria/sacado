@@ -34,22 +34,23 @@
             <table  class="table table-bordered table-hover standard_tab_sort300" style="width:100%">
                   <thead>
                       <tr>
+                        <th>Enseignement</th>                        
                         <th>Nom</th>                      
-                        <th>Enseignement</th>
                       </tr>
                   </thead>
                   <tbody>
                         {% for skill in skills %}
                         <tr> 
+                          <td >
+                              {{ skill.subject.name }}
+                          </td>                          
                           <td>
                               <a href="{% url 'update_skill' skill.id %}">{{ skill.name }}  {% if skill.used %}<i class="fa fa-check text-success"></i> [{{ skill.nb_exercise }}]   {% endif %}</a> 
                               <small>
                               <a href="{% url 'delete_skill' skill.id %}"  onclick="return TestDelete('ce savoir faire')"><i class='fa fa-trash pull-right'></i></a>
                               </small>
                           </td>
-                          <td >
-                              {{ skill.subject.name }}
-                          </td>
+
                         </tr>
                         {% endfor %}
                   </tbody>
