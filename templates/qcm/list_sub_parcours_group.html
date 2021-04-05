@@ -36,7 +36,7 @@
             <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Nouveau Parcours  <b class="caret"></b> </a>
 
             <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-         
+ 
                 {% if parcours %}
                     {% if parcours.is_folder %}
                     <li> <a href="{% url 'create_parcours' parcours.id %}"  >  Parcours personnalisé</a> </li> 

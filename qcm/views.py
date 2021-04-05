@@ -1075,7 +1075,8 @@ def list_sub_parcours_group(request,idg,id):
     clear_realtime(parcours_tab , today.now() ,  3600 )
 
 
-    return render(request, 'qcm/list_sub_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group , 'parcours_folder' : parcours,  'parcours' : None , 'communications' : [] , 'relationships' : [] , 'role' : True , 'today' : today })
+
+    return render(request, 'qcm/list_sub_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group , 'parcours' : parcours,  'parcours_folder' : parcours,   'communications' : [] , 'relationships' : [] , 'role' : True , 'today' : today })
 
 
 
@@ -1324,8 +1325,16 @@ def create_parcours(request,idp=0):
         nf.save()
         form.save_m2m()
 
-        nf.groups.set(request.POST.getlist('groups'))
- 
+
+        group_ckeched_ids = request.POST.getlist('groups')
+        nf.groups.set(group_ckeched_ids)
+
+        for group_ckeched_id in group_ckeched_ids :
+            group_ckeched = Group.objects.get(pk = group_ckeched_id)
+            for s in group_ckeched.students.all() :
+                nf.students.add(s)
+
+
         if idp > 0 :
             parcours_folder = Parcours.objects.get(pk = idp)
             parcours_folder.leaf_parcours.add(nf)
@@ -4136,9 +4145,6 @@ def create_evaluation(request):
         group = None
         request.session["group_id"]  = None
 
-
-
-    print("-------------->",group)   
 
     context = {'form': form, 'teacher': teacher, 'parcours': None, 'groups': groups, 'idg': 0,  'group_id': group_id , 'group': group , 'relationships': [], 'communications' : [], 'share_groups' : share_groups , 
                'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'role':True}
