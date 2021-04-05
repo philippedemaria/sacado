@@ -86,6 +86,8 @@ def create_knowledge(request):
 
     return render(request, 'socle/form_knowledge.html', context)
 
+
+
 @user_is_superuser 
 def create_multi_knowledge(request):
 
