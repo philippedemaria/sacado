@@ -1285,8 +1285,14 @@ def lock_all_exercises_for_student(dateur,parcours):
 def create_parcours(request,idp=0):
 
     teacher = request.user.teacher
-    levels =  teacher.levels.all()    
-    form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher)
+    levels =  teacher.levels.all() 
+
+    try :
+        group_id = request.session.get("group_id")
+        group = Group.objects.get(pk=group_id)
+        form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level })
+    except :
+        form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher )
  
     themes_tab = []
     for level in levels :
@@ -1366,8 +1372,7 @@ def create_parcours(request,idp=0):
     else :
         group_id = None
         group = None
-        request.session["group_id"]  = None            
-
+        request.session["group_id"]  = None
 
     context = {'form': form,   'teacher': teacher,  'groups': groups,  'levels': levels, 'idg': 0,  'parcours_folder': parcours_folder ,  'themes' : themes_tab, 'group_id': group_id , 'parcours': None,  'relationships': [], 'share_groups' : share_groups , 
                'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'communications' : [],  'group': group , 'role' : True }
@@ -4070,7 +4075,12 @@ def create_evaluation(request):
 
     teacher = request.user.teacher
     levels =  teacher.levels.all()    
-    form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher)
+    try :
+        group_id = request.session.get("group_id")
+        group = Group.objects.get(pk=group_id)
+        form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level })
+    except :
+        form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher )
 
     themes_tab = []
     for level in levels :
@@ -4110,14 +4120,16 @@ def create_evaluation(request):
 
 
     try :
-        if 'group_id' in request.session :
-            if request.session.get["group_id"] :
-                group_id = request.session["group_id"]
-                group = Group.objects.get(pk = group_id) 
+        if request.session.has_key("group_id") :
+            group_id = request.session.get("group_id",None)        
+            if group_id :
+                group = Group.objects.get(pk = group_id)
+            else :
+                group = None
         else :
             group_id = None
             group = None
-            request.session["group_id"]  = None            
+            request.session["group_id"]  = None        
 
     except :
         group_id = None
@@ -4125,7 +4137,10 @@ def create_evaluation(request):
         request.session["group_id"]  = None
 
 
-    context = {'form': form, 'teacher': teacher, 'parcours': None, 'groups': groups, 'idg': 0,  'group_id': group_id ,  'relationships': [], 'communications' : [], 'share_groups' : share_groups , 
+
+    print("-------------->",group)   
+
+    context = {'form': form, 'teacher': teacher, 'parcours': None, 'groups': groups, 'idg': 0,  'group_id': group_id , 'group': group , 'relationships': [], 'communications' : [], 'share_groups' : share_groups , 
                'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'role':True}
 
     return render(request, 'qcm/form_evaluation.html', context)
@@ -7173,8 +7188,9 @@ def mastering_custom_done(request):
 def create_folder(request,idg):
 
     teacher = request.user.teacher 
-    form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher)
     group = Group.objects.get(pk = idg)
+    form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level })
+
 
     parcourses = set()
     for student in group.students.all() :

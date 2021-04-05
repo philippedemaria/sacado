@@ -17,24 +17,12 @@
 
     {% block require_complement %}
         {% if not parcours %}
-
-
             <script>
                 require(['script/ajax-parcours-complement']);
  
             </script> 
         {% endif %}
     {% endblock %} 
-
-
-
-
-
-
-
-
-
-
 
 {% endblock %} 
 
@@ -119,17 +107,18 @@
                     <label>Choisir les élèves parmi</label>   <br>  
                         {% for group in groups %}
                             {% if group.students.count > 0 %}
-                            <a data-toggle="collapse" data-target="#demo{{ group.id }}" style="color:{{ group.color}};cursor:pointer">
-                                {{ group.name|truncatechars:15 }} <small><i class="fa fa-caret-down"></i></small> 
-                            </a> 
-                            <label class="pull-right"><input type="checkbox" value="{{ group.id }}" name="groups"
-                                                                                                {% if request.session.group_id %}
-                                                                                                    {% if  request.session.group_id == group.id %}checked {% endif %}
-                                                                                                {% else %}
-                                                                                                    {% if group.students.count == students_checked  %}checked {% endif %}
-                                                                                                {% endif %}
-                                                                                                class="select_all" /><small> tous  </small> 
-                                                               </label>
+                                <a data-toggle="collapse" data-target="#demo{{ group.id }}" style="color:{{ group.color}};cursor:pointer">
+                                    {{ group.name|truncatechars:15 }} <small><i class="fa fa-caret-down"></i></small> 
+                                </a> 
+                                <label class="pull-right">
+                                    <input type="checkbox" value="{{ group.id }}" name="groups"
+                                        {% if request.session.group_id %}
+                                            {% if  request.session.group_id == group.id %}checked {% endif %}
+                                        {% else %}
+                                            {% if group.students.count == students_checked  %}checked {% endif %}
+                                        {% endif %}
+                                        class="select_all" /><small> tous  </small> 
+                                </label>
                             {% else %}
                                 <span style="color:{{ group.color}}">
                                    <small><i class="fa fa-caret-right"></i></small>  {{ group.name|truncatechars:15 }} 

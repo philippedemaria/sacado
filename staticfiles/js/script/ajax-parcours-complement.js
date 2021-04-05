@@ -7,10 +7,13 @@ define(['jquery','bootstrap'], function ($) {
             $('.publication_div').toggle(500);
         });
 
-
-        $('[type=checkbox]').prop('checked', false);        
+       
         $('#id_is_favorite').prop('checked', true); 
 
+        $('#id_zoom').prop('checked', false); 
+        $('#id_is_share').prop('checked', false); 
+        $('#id_is_publish').prop('checked', false); 
+        $('#id_is_achievement').prop('checked', false); 
 
         // Pour le form_parcours
  

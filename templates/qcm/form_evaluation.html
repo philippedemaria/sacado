@@ -36,11 +36,18 @@
 
 
 {% block page_title %}
-    {% if parcours %}
-        <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-trophy"></i> {{ parcours }}    </span>   <small><img src="{% static 'img/angle-right.png' %}"/> Modification</small>   
-    {% else %}
-       <i class="fa fa-trophy"></i> Nouvelle évaluation
-    {% endif %}
+
+    <span style="color:{{ group.color }}"><i class="fa fa-trophy"></i>
+
+    {% include 'qcm/breadcrumb.html' %}
+
+    <small>  
+        {% if parcours %}
+            Configuration 
+        {% else %}
+             Nouvelle évaluation 
+        {% endif %}
+    </small> 
 
 {% endblock %}
 
