@@ -3493,9 +3493,10 @@ def admin_list_supportfiles(request,id):
 
         teacher = Teacher.objects.get(user=user)
         level = Level.objects.get(pk=id)
-        supportfiles = Supportfile.objects.filter(level = level , is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
+
+        waitings = level.waitings.filter(theme__subject__in= teacher.subjects.all()).order_by("theme__subject" , "theme")
  
-    return render(request, 'qcm/list_supportfiles.html', {'supportfiles': supportfiles, 'teacher':teacher , 'level':level , 'relationships' : [] , 'communications' : [] , 'parcours' :  None })
+    return render(request, 'qcm/list_supportfiles.html', { 'waitings': waitings, 'teacher':teacher , 'level':level , 'relationships' : [] , 'communications' : [] , 'parcours' :  None })
 
 
 @parcours_exists

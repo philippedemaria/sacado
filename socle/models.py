@@ -305,6 +305,11 @@ class Knowledge(models.Model):
         return tab_set
 
 
+    def supportfile_counter(self):
+        return self.supportfiles.count()
+
+
+
 class Skill(models.Model): 
     name = models.CharField(max_length=10000, verbose_name="Nom")
     subject  = models.ForeignKey(Subject, related_name="skill", default="", on_delete=models.PROTECT, null = True ,  verbose_name="Enseignement")
