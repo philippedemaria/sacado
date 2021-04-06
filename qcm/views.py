@@ -1057,13 +1057,12 @@ def list_sub_parcours_group(request,idg,id):
     today = time_zone_user(teacher.user)
     parcours = Parcours.objects.get(pk = id) 
     group = Group.objects.get(pk = idg) 
-
+ 
     role, group , group_id , access = get_complement(request, teacher, parcours)
     request.session["parcours_id"] = parcours.id
     request.session["group_id"] = group_id
 
     request.session["parcours_folder_id"] = parcours.id
-
 
     if not authorizing_access(teacher,parcours, True ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
@@ -1074,9 +1073,9 @@ def list_sub_parcours_group(request,idg,id):
     ###efface le realtime de plus de 2 h
     clear_realtime(parcours_tab , today.now() ,  3600 )
 
+    context = {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group , 'parcours' : parcours,  'parcours_folder' : parcours,   'communications' : [] , 'relationships' : [] , 'role' : True , 'today' : today }
 
-
-    return render(request, 'qcm/list_sub_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group , 'parcours' : parcours,  'parcours_folder' : parcours,   'communications' : [] , 'relationships' : [] , 'role' : True , 'today' : today })
+    return render(request, 'qcm/list_sub_parcours_group.html', context )
 
 
 
@@ -1459,14 +1458,13 @@ def update_parcours(request, id, idg=0 ):
                         relationship.students.set(sg_students)
             except:
                 pass
- 
+            
             lock_all_exercises_for_student(nf.stop,parcours)
+
             if request.POST.get("save_and_choose") :
                 return redirect('peuplate_parcours', nf.id)
             elif idg == 99999999999:
                 return redirect('index')
-            elif idg >0 and idp > 0 :
-                return redirect('list_sub_parcours_group' , idg, idp)     
             elif idg > 0:
                 return redirect('list_parcours_group', idg)     
             else:

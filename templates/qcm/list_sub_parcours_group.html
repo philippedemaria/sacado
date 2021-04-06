@@ -184,7 +184,7 @@
                 {% endif  %}
                 <div class="box_title_vignette"> 
                     {% if parcours.is_folder %}
-                    <a href="{% url 'list_sub_parcours_group'  parcours.id  %}" style="color:{{ parcours.color|contrast_color }};">
+                    <a href="{% url 'list_sub_parcours_group' group.id parcours.id  %}" style="color:{{ parcours.color|contrast_color }};">
                         {% if parcours.is_pending_correction %}
                         <i class="fa fa-copyright pull-right" style="font-size:12px;padding-right:5px;color:{{ parcours.color|contrast_color }};" title="Copies à corriger" ></i> 
                         {% endif %}
