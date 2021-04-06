@@ -15,6 +15,14 @@ define(['jquery','bootstrap'], function ($) {
         $('#id_is_publish').prop('checked', false); 
         $('#id_is_achievement').prop('checked', false); 
 
+
+        $('#id_is_task').prop('checked', false); 
+        $('#id_is_paired').prop('checked', false); 
+        $('#id_notification').prop('checked', false); 
+ 
+
+
+
         // Pour le form_parcours
  
          $('#folder_div').hide(); 
