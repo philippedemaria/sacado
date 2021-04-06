@@ -1465,6 +1465,9 @@ def update_parcours(request, id, idg=0 ):
                 return redirect('peuplate_parcours', nf.id)
             elif idg == 99999999999:
                 return redirect('index')
+            elif request.session.get("parcours_folder_id",None) :
+                parcours_folder_id = request.session.get("parcours_folder_id",None)
+                return redirect('list_sub_parcours_group' , idg , parcours_folder_id )  
             elif idg > 0:
                 return redirect('list_parcours_group', idg)     
             else:
