@@ -12,7 +12,7 @@ define(['jquery','bootstrap'], function ($) {
         $('#id_is_publish').prop('checked', false); 
         $('#id_is_achievement').prop('checked', false); 
         $('#id_is_next').prop('checked', false); 
-        $('#id_is_exit').prop('checked', true); 
+        $('#id_is_exit').prop('checked', false); 
 
 
 
