@@ -14,6 +14,15 @@ define(['jquery','bootstrap'], function ($) {
         $('#id_is_next').prop('checked', false); 
         $('#id_is_exit').prop('checked', false); 
 
+        $('#id_is_exit_div').hide(); 
+ 
+        $("#id_is_next").change(function () {
+                        if ($("#id_is_next").is(":checked")) {
+                           $("#id_is_exit_div").show(500);
+                        } else {
+                          $("#id_is_exit_div").hide(500);
+                        }
+                    })
 
 
 

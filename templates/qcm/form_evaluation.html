@@ -126,7 +126,7 @@
 {% block evaluation_choices %}   
 
  
-        <tr>
+        <tr id="id_is_exit_div">
             <td>{{ form.is_exit.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
                     <div class="helper_tip_text" >Si coché, l'élève peut revenir à la vue de tous les exercices de son évaluation à partir d'un exercice.</div></td>
             <td>{{ form.is_exit |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
