@@ -357,7 +357,10 @@ class Parcours(ModelWithCode):
     is_favorite = models.BooleanField(default=1, verbose_name="Favori ?")
 
     is_evaluation = models.BooleanField(default=0, editable=False)
+
     is_next = models.BooleanField(default=0, verbose_name="Suivant ?")
+    is_exit = models.BooleanField(default=0, verbose_name="Retour aux exercices ?")
+ 
 
     duration = models.PositiveIntegerField(default=2, blank=True, verbose_name="Temps de chargement (min.)")
     start = models.DateTimeField(null=True, blank=True, verbose_name="A partir de")

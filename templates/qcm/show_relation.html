@@ -159,11 +159,9 @@
 
                             {% else %}
 
-                                {% if parcours.is_evaluation %}
-                                    <input  class="btn btn-primary"   type="submit" id="submit_button_evaluation"  value="Enregistrer le résultat"  />
-                                {% else %}
-                                    <input  class="btn btn-primary"   type="submit" id="submit_button_relation"  value="Enregistrer le résultat"  />
-                                {% endif %}
+                                {% include 'qcm/is_evaluation.html' %}
+
+
                             {% endif %}
 
                         {% else %}  
@@ -171,11 +169,8 @@
 
                             {% if available.is_ok %}
 
-                                {% if parcours.is_evaluation %}
-                                    <input  class="btn btn-primary"   type="submit" id="submit_button_evaluation"  value="Enregistrer le résultat"  />
-                                {% else %}
-                                    <input  class="btn btn-primary"   type="submit" id="submit_button_relation"  value="Enregistrer le résultat"  />
-                                {% endif %}
+ 
+                                {% include 'qcm/is_evaluation.html' %}
 
                             {% else %}
                               <div class="alert alert-danger" >
@@ -184,10 +179,16 @@
                             {% endif %}
 
 
-                        {% endif %}               
-                    {% endif %}   
-                      <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
-                      
+                        {% endif %}
+
+                    {% endif %}  
+
+
+                    {% if parcours.is_exit %}
+                        <a href="{% url 'show_parcours_student' parcours.id %}"  class="btn btn-default" >  Revenir aux exercices   </a>
+                    {% else %}
+                      <a href="javascript:history.back()"><input type="button" value="Revenir aux exercices" class="btn btn-default "/></a>
+                    {% endif %}
 
                       <!-- ligne d'enregistrement -->
                       <input id="relation" name="relation_id"  type="hidden" value="{{ relation.id }}"/>

@@ -3916,7 +3916,27 @@ def store_the_score_relation_ajax(request):
         except:
             pass
 
-    return redirect('show_parcours_student' , relation.parcours.id )
+    if relation.parcours.is_evaluation and relation.parcours.is_next :
+        parcours      = relation.parcours
+        new_rank      = relation.ranking + 1 
+        i             = 0
+        relationships = Relationship.objects.filter(parcours=parcours)
+
+        print(relationships.count() , new_rank)
+
+        for r in relationships :
+            Relationship.objects.filter(pk=r.id).update(ranking = i)
+            i += 1
+
+        if new_rank < relationships.count():
+            new_relation = Relationship.objects.get(parcours=parcours, ranking = new_rank)
+            return redirect('execute_exercise' , parcours.id , new_relation.exercise.id )
+        else :
+            return redirect('show_parcours_student' ,  parcours.id )
+
+    else :
+        return redirect('show_parcours_student' , relation.parcours.id )
+
 
 
 def ajax_theme_exercice(request):

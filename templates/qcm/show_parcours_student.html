@@ -105,9 +105,8 @@
                     <!---------------------------------------------------------->
                     <!-------------------- sacado exercise  -------------------->
                     <!---------------------------------------------------------->
-
-                    <!-- div de résultat SACADO corrigé par le prof -->                    
-                    <div class="card_freeze" {% if data.score %} style="opacity:0.8" {% endif %}>
+ 
+                    <div class="card_freeze">
                         <div id="div_results{{ rc.id }}" class="div_results" >
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12"> <a href="#" class="div_results_close pull-right" data-relation_id="{{rc.id}}"><i class="fa fa-times"></i></a>     
@@ -195,7 +194,7 @@
                             </div>
                         {% endif %} 
 
-                        <div class="card-body student">
+                        <div class="card-body student" >
                             <span style="font-size: 40px; padding-left:3px;float:left; padding-top: 10px; {% if not data.score %} color: {{ rc.parcours.color}} ;  {% endif %} ">
                                 {{ nb_exo_only|index:forloop.counter0 }}.</span> 
                             <div class="card-score-student">
@@ -234,7 +233,7 @@
                               <img src="{% static 'img/no_calculator.png' %}" class="pull-right"   width="35px" />
                             {% endif  %} 
                         </div>                    
-                        <div class="card-image">
+                        <div class="card-image"   {% if data.score > -1 %} style="opacity:0.8" {% endif %}>
                             {% if student %}
 
                                 {% get_this_exercise_is_locked  student rc rc.parcours 0 today as is_blck %}
@@ -255,7 +254,7 @@
 
                                             {% if parcours.is_next and not available.is_ok %} 
                                                 <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
-                                                      <i class="fa fa-lock"></i>  Vous devez passer à l'exerice suivant
+                                                      <i class="fa fa-lock"></i>  Vous devez passer à un autre exercice  
                                                 </div>
                                      
                                                     <img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not rc.is_publish %} style="opacity:0.8" {% endif %}  >
@@ -269,7 +268,7 @@
                                         {% else %}                                            
 
                                             <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
-                                                  <i class="fa fa-lock"></i>  Vous devez passer à l'exerice suivant
+                                                  <i class="fa fa-lock"></i>   Vous devez passer à un autre exercice  
                                             </div>
                                  
                                                 <img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not rc.is_publish %} style="opacity:0.8" {% endif %}  >
@@ -312,7 +311,7 @@
                             {% else %}
                                 <a href="#" class="detail_parcours"      data-exercise_id="{{ rc.exercise.id }}"  
                                     data-num_exo="{{ forloop.counter}}"  data-parcours_id="{{ parcours.id }}">
-                                    <img src="{{ rc.exercise.supportfile.imagefile.url }}" class="image_parcours" {% if not rc.is_publish %} style="opacity:0.6" {% endif %}  >
+                                    <img src="{{ rc.exercise.supportfile.imagefile.url }}" class="image_parcours" {% if not rc.is_publish %} style="opacity:0.8" {% endif %}  >
                                 </a> 
                             {% endif  %}
                             
@@ -365,7 +364,8 @@
                                 {% endif  %}
                             </div>
                         </div>
-                    </div>     
+                    </div>
+ 
                 {% else %}  
                 <!---------------------------------------------------------->
                 <!-------------------- custom exercise  -------------------->
@@ -373,7 +373,7 @@
                     {% get_score_student_for_this rc student as score %}
                     {% get_is_submit rc parcours student as submitter %}
                     {% get_all_results_custom rc student parcours as data %} 
-                    <div class="card_freeze"  {% if score %} style="opacity:0.8" {% endif %}  >
+                    <div class="card_freeze"  {% if score %} style="opacity:0.5" {% endif %}  >
                         <!-- div de résultat -->
                         {% if submitter %}
                             <div id="div_results_custom{{ rc.id }}" class="div_results" >
