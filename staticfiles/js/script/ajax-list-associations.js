@@ -86,10 +86,8 @@ define(['jquery', 'bootstrap'], function ($) {
             let action = $(this).attr("data-action");
             if (!confirm("Vous souhaitez supprimer l'association avec ce support ?")) return false;  
      
-
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
-            console.log(exercise_id+"----"+action);
 
             $.ajax(
                 {
@@ -109,9 +107,29 @@ define(['jquery', 'bootstrap'], function ($) {
             )
         });
 
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('.load_modal').on('click', function (event) {
+
+            let exercise_id = $(this).data("exercise_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
 
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'exercise_id': exercise_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../ajax_load_modal",
+                    success: function (data) {
 
+                        $("#change_knowledge").html("").html(data.listing_w) ;
+                    }
+                }
+            )
+        });
 
 
 

@@ -10,7 +10,7 @@ from group.forms import GroupForm
 from group.models import Group , Sharing_group
 from school.models import Stage, School
 from qcm.models import  Parcours , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage , DocumentReport , Tracker
-from qcm.forms import ParcoursForm , ExerciseForm, RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm
+from qcm.forms import ParcoursForm ,  RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm
 from socle.models import  Theme, Knowledge , Level , Skill , Waiting
 from django.http import JsonResponse 
 from django.core import serializers
@@ -3733,6 +3733,48 @@ def create_exercise(request, supportfile_id):
     context = {  'knowledges': knowledges, 'supportfile': supportfile , 'parcours': None, 'communications' : [] , 'communications' : [] , 'relationships' : []  }
 
     return render(request, 'qcm/form_exercise.html', context)
+
+
+
+
+
+@user_passes_test(user_is_creator)
+def ajax_load_modal(request):
+    """ crée la modale pour changer les savoir faire"""
+
+    exercise_id  = request.POST.get('exercise_id', None)
+    exercise = Exercise.objects.get(pk = exercise_id)
+    waitings = exercise.level.waitings.filter(level_id=exercise.level.id)
+    k_id = exercise.knowledge.id
+
+    data = {}
+ 
+    data['listing_w'] = render_to_string('qcm/ajax_load_modal.html', { 'waitings': waitings , 'k_id' : k_id , 'exercise' : exercise   })
+ 
+    return JsonResponse(data)
+
+
+@csrf_exempt
+@user_passes_test(user_is_creator)
+def change_knowledge(request):
+
+    exercise_id  = request.POST.get('exercise_id', None)
+    knowledge_id = request.POST.get('knowledge_id', None)
+    exercise = Exercise.objects.get(pk=exercise_id)
+
+    print(exercise_id , knowledge_id , exercise)
+
+    if knowledge_id :
+        Exercise.objects.filter(pk=exercise_id).update(knowledge_id = knowledge_id)
+ 
+
+    return redirect( 'admin_associations', exercise.level.id)
+
+
+
+
+
+
 
 def show_exercise(request, id):
     exercise = Exercise.objects.get(id=id)

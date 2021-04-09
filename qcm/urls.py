@@ -109,6 +109,11 @@ urlpatterns = [
 
     path('create_exercise/<int:supportfile_id>/', create_exercise, name='create_exercise'), 
 
+    path('ajax_load_modal', ajax_load_modal, name='ajax_load_modal'), 
+
+    path('change_knowledge', change_knowledge, name='change_knowledge'), 
+
+    
     path('show_this_exercise/<int:id>/', show_this_exercise, name='show_this_exercise'),  #from dashboard 
 
     path('parcours_show_write_exercise/<int:id>/', show_write_exercise, name='show_write_exercise'), 

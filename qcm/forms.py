@@ -118,28 +118,6 @@ class UpdateParcoursForm(forms.ModelForm):
 			pass
 
 
-
-class ExerciseForm(forms.ModelForm):
-	class Meta:
-		model = Exercise
-		fields = '__all__'
-
-	def __init__(self, *args, **kwargs):
-		super(ExerciseForm, self).__init__(*args, **kwargs)
-		knowledges = Knowledge.objects.filter(id  = 0)
-		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
-
-class ExerciseKForm(forms.ModelForm):
-	class Meta:
-		model = Exercise
-		fields = '__all__'
-		exclude = ('knowledge',)
-
-class UpdateExerciseForm(forms.ModelForm):
-	class Meta:
-		model = Exercise
-		fields = '__all__'
-
 class RelationshipForm(forms.ModelForm):
 	class Meta:
 		model = Relationship

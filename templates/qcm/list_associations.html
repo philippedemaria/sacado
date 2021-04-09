@@ -29,75 +29,101 @@
 <section class="content_container">  
  
  
-                <div class="row">
-                    <div class="col-sm-12 col-md-12">
-                        <form action="" method="POST" enctype='multipart/form-data'> 
-                        {% csrf_token %}
-                            <table class="table  table-hover standard_tab_1000" style="width:100%">
-                                <thead> 
-                                    <tr>
-                                        <td></td><td>  </td>
-                                    </tr>
-                                </thead> 
-                                <tbody>
-                                    {% for theme in data.themes  %} 
-                                        <tr style="background:#e6e2dd">
-                                            <td style="width:85%">{{theme.name}}</td> 
-                                            <td style="width:15%"> </td>
-                                        </tr>   
-                                        {% for knowledge in theme.knowledges  %} 
-                                            <tr  style="background:#F0F0F0" id="row{{ knowledge.name.id }}"> 
-                                                <td>
-                                                    Le savoir faire "<span style="color:#007EE2">{{ knowledge.name.name|capfirst }}</span>" est associé 
-                                                     {% if knowledge.exercises|length > 1%}aux {%  else %}au {% endif %}support{{ knowledge.exercises|length|pluralize }} GGB ci-dessous :
-                                                </td>
-                                                <td style="position: relative;" >
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <form action="" method="POST" enctype='multipart/form-data'> 
+            {% csrf_token %}
+                <table class="table  table-hover standard_tab_1000" style="width:100%">
+                    <thead> 
+                        <tr>
+                            <td></td><td>  </td>
+                        </tr>
+                    </thead> 
+                    <tbody>
+                        {% for theme in data.themes  %} 
+                            <tr style="background:#e6e2dd">
+                                <td style="width:85%">{{theme.name}}</td> 
+                                <td style="width:15%"> </td>
+                            </tr>   
+                            {% for knowledge in theme.knowledges  %} 
+                                <tr  style="background:#F0F0F0" id="row{{ knowledge.name.id }}"> 
+                                    <td>
+                                        Le savoir faire "<span style="color:#007EE2">{{ knowledge.name.name|capfirst }}</span>" est associé 
+                                         {% if knowledge.exercises|length > 1%}aux {%  else %}au {% endif %}support{{ knowledge.exercises|length|pluralize }} GGB ci-dessous :
+                                    </td>
+                                    <td style="position: relative;" >
 
-                                                     <input type="text" id="create_code{{ knowledge.name.id }}" class="form-control" placeholder="code du support" />                               
+                                         <input type="text" id="create_code{{ knowledge.name.id }}" class="form-control" placeholder="code du support" />                               
 
-                                                     <a href="#row{{ knowledge.name.id }}" data-exercise_id="{{ knowledge.name.id }}" 
-                                                        data-action="create" 
-                                                        class="btn btn-success create_association" style="position: absolute;right:11px;top:10px"   ><i class="fa fa-plus"></i></a> 
+                                         <a href="#row{{ knowledge.name.id }}" data-exercise_id="{{ knowledge.name.id }}" 
+                                            data-action="create" 
+                                            class="btn btn-success btn-publisher create_association" style="position: absolute;right:11px;top:10px"   ><i class="fa fa-plus"></i></a> 
 
-                                                </td>
-                                            </tr>
-                                            {% for exercise in knowledge.exercises  %} 
-                                            
-                                            <tr id="new_exercice{{ exercise.id }}">
-                                                <td>
-                                                    <div id="association{{ exercise.id }}" > 
-                                                        {% include 'qcm/ajax_association.html' %}
-                                                    </div>
-                                                </td>
-                                                <td  style="position: relative;" > <small>A remplacer par</small> 
-                                                     <input type="text" id="update_code{{ exercise.id }}" class="form-control" placeholder="code du support" />                               
+                                    </td>
+                                </tr>
+                                {% for exercise in knowledge.exercises  %} 
+                                
+                                <tr id="new_exercice{{ exercise.id }}">
+                                    <td>
+                                        <div id="association{{ exercise.id }}" > 
+                                            {% include 'qcm/ajax_association.html' %}
+                                        </div>
+                                    </td>
+                                    <td  style="position: relative;" > <small>A remplacer par</small> 
+                                            <input type="text" id="update_code{{ exercise.id }}" class="form-control" placeholder="code du support" />                               
 
-                                                     <a type="submit" href="#row{{ exercise.knowledge.id }}" data-exercise_id="{{ exercise.id }}" data-action="update" class="btn btn-primary update_association" style="position: absolute;right:11px;top:38px"   ><i class="fa fa-pencil-square-o"></i></a> 
+                                            <a type="submit" href="#row{{ exercise.knowledge.id }}" data-exercise_id="{{ exercise.id }}" data-action="update" class="btn btn-primary btn-publisher update_association" style="position: absolute;right:11px;top:30px"   ><i class="fa fa-pencil-square-o"></i></a> 
 
-                                                     <a href="#row{{ exercise.knowledge.id }}" 
-                                                        data-exercise_id="{{ exercise.id }}" style="position: absolute;right:11px;top:78px"
-                                                        data-action="delete" 
-                                                        class="btn btn-danger {% if not exercise.is_used %}delete_association{% endif %}"
-                                                         {% if exercise.is_used %} disabled title="Déjà utilisé"{% endif %}  ><i class="fa fa-trash"></i>  
-                                                    </a> 
-                                                    <div id="error_str{{ exercise.id }}" style="color:red"></div>                                        
-                                                </td> 
-                                            </tr>
-                                              
-                                            {% endfor %}    
-                                        {% endfor %}
-                                        
-                                    {% endfor %}
+                                            <a href="#row{{ exercise.knowledge.id }}" 
+                                                data-exercise_id="{{ exercise.id }}" style="position: absolute;right:11px;top:70px"
+                                                data-action="delete" 
+                                                class="btn btn-danger btn-publisher {% if not exercise.is_used %}delete_association{% endif %}"
+                                                 {% if exercise.is_used %} disabled title="Déjà utilisé"{% endif %}  ><i class="fa fa-trash"></i>  
+                                            </a> 
 
-                                </tbody>
-                            </table>
-                        </form>
-                    </div>
-                </div>
+
+
+                                            <a href="#" data-toggle='modal' data-target='#knowledge_modal' data-exercise_id ="{{ exercise.id }}" 
+                                                        class="btn btn-default load_modal" style="position: absolute;right:60px;top:70px" >
+                                                Modifier le savoir faire
+                                            </a> 
+
+
+                                        <div id="error_str{{ exercise.id }}" style="color:red"></div>                                        
+                                    </td> 
+                                </tr>
+                                  
+                                {% endfor %}    
+                            {% endfor %}
+                            
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
  
- 
- 
-
 </section>
+
+
+<div class="modal fade" id="knowledge_modal" tabindex="-1" role="dialog" aria-labelledby="knowledge_modal">
+    <div class="modal-dialog" role="document" style="width:70%">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                 
+                <h2  class='sacado'  >Modifier le savoir faire</h2>              
+            </div>
+            <div class="modal-body" id="change_knowledge">
+
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+
 
 {% endblock %}

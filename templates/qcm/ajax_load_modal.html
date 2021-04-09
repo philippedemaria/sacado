@@ -1,0 +1,67 @@
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+<form  action="{% url 'change_knowledge' %}" method="POST">
+    {% csrf_token %}
+
+
+        <div class="col-sm-12 col-md-12">
+            <input type="hidden" name="exercise_id" value="{{ exercise.id }}"   />
+        </div>
+
+
+    <div class="row form-group">  
+        <div class="col-sm-12 col-md-12">
+ 
+           <img src="{{ exercise.supportfile.imagefile.url }}" class="imagefile">
+     
+
+     
+            <small>   
+                <i class="fa fa-fw fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                <i class="fa fa-fw fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
+                <i class="fa fa-fw fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum
+            </small>
+      
+
+        </div>
+    </div>
+
+
+
+     <hr/> 
+ 
+
+
+
+
+    <div class="row  form-group">  
+        <div class="col-sm-12 col-md-12">
+            <select name="knowledge_id" class="select2" id="knowledge_id">
+                <option value="">Choisir un savoir faire</option>
+                {% for w in waitings %}
+                <optgroup  label="{{w.name}}"> 
+                {% for k in w.knowledges.all %}
+                <option value="{{k.id}}" {% if k.id == k_id %} selected {% endif %}>{{k.name}}</option>
+                {% endfor %}
+                </optgroup>
+                {% endfor %}
+            </select> 
+        </div>
+    </div>
+    <div class="row form-group">  
+        <div class="col-sm-12 col-md-12">
+            <input type="submit" value="Modifier le savoir faire" class="btn btn-primary" />
+        </div>
+    </div>
+</form>
+
+
+<script>
+
+$("#knowledge_id").select2({
+  width: '100%'
+})
+</script>
