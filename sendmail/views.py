@@ -35,12 +35,12 @@ def list_emails(request):
             
         request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
 
+        group_students = set()
         for group in groups:
-            for student in group.students.order_by("user__last_name"):
-                if student.user.email :
-                    users.append(student.user)
+            group_students.update(group.students.all())
+ 
 
-        studentanswers = Studentanswer.objects.filter(student__user__in =  users).order_by("-date")[:100]
+        studentanswers = Studentanswer.objects.filter(student__user__in =  group_students).order_by("-date")[:100]
         tasks = Relationship.objects.filter(parcours__teacher = teacher,  exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")[:50] 
         sent_emails = Email.objects.distinct().filter(author=user).order_by("-today")
         emails = Email.objects.distinct().filter(receivers=user).order_by("-today")
