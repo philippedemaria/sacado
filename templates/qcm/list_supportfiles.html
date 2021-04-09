@@ -42,7 +42,7 @@
                 <tbody  id="supportfile_ranking">  
                     {% regroup waitings by theme as theme_list %}
                     {% for theme in theme_list  %} 
-                        <tr style="background:#d4cdc4; color:white">
+                        <tr style="background:#5d4391; color:white">
                             <td style="width:85%">{{theme.grouper.subject.name}} : {{theme.grouper.name}}</td> 
                         </tr> 
 
@@ -50,14 +50,14 @@
 
                         {% for waiting in theme.list  %}
                         
-                            <tr style="background:#e6e2dd; cursor: pointer; color: black" class="opener out"  id="{{ waiting.id }}">
+                            <tr style="background:#aa98cd; cursor: pointer; color: white" class="opener out"  id="{{ waiting.id }}">
                                 <td style="width:85%"><i class="fa fa-caret-right"></i> {{waiting.name}}   <small><b>{{  waiting.supportfile_counter }} exercice{{ waiting.supportfile_counter|pluralize  }}</b>  </small> </td> 
                             </tr>  
                  
  
                             {% for knowledge in waiting.knowledges.all  %}
  
-                                    <tr style="background:#f4f2f0; cursor: pointer; color: black" class="listingtd opener_k opened{{ waiting.id }} out"  id="{{ knowledge.id}}"> 
+                                    <tr  style="background:#d4cbe6; cursor: pointer; color: black" class="listingtd opener_k opened{{ waiting.id }} out"  id="{{ knowledge.id}}"> 
                                         <td>
                                             <i class="fa fa-caret-right"></i>  
                                             {{ knowledge.name|capfirst }}  <small><b>{{  knowledge.supportfile_counter  }} exercice{{  knowledge.supportfile_counter|pluralize  }}</b></small> 

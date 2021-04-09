@@ -624,7 +624,7 @@ def peuplate_parcours(request,id):
     form = UpdateParcoursForm(request.POST or None , instance=parcours, teacher = parcours.teacher  )
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
     """ affiche le parcours existant avant la modif en ajax""" 
-    exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme")
+    exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
     """ fin """
     themes_tab = []
     for level in levels :
@@ -635,7 +635,7 @@ def peuplate_parcours(request,id):
     if request.method == 'POST' :
         level = request.POST.get("level") 
         # modifie les exercices sélectionnés
-        exercises_all = parcours.exercises.filter(supportfile__is_title=0,level=level).order_by("theme")
+        exercises_all = parcours.exercises.filter(supportfile__is_title=0,level=level).order_by("theme","knowledge__waiting","knowledge","ranking")
         exercises_posted_ids = request.POST.getlist('exercises')
 
         new_list = []
@@ -692,7 +692,7 @@ def peuplate_parcours_evaluation(request,id):
     form = UpdateParcoursForm(request.POST or None , instance=parcours, teacher = teacher  )
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
     """ affiche le parcours existant avant la modif en ajax""" 
-    exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme")
+    exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
     """ fin """
     themes_tab = []
     for level in levels :
@@ -1405,7 +1405,7 @@ def update_parcours(request, id, idg=0 ):
     form = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher)
 
     """ affiche le parcours existant avant la modif en ajax"""
-    exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme")
+    exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
     """ fin """
     themes_tab = []
     for level in levels:
@@ -3202,32 +3202,34 @@ def get_values_canvas(request):
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 
-def all_datas(user, status,level):
-    teacher = Teacher.objects.get(user=user)
-    datas = []
-    levels_tab,knowledges_tab, exercises_tab    =   [],  [],  []
-    levels_dict = {}
-    levels_dict["name"]=level 
-    themes = level.themes.all().order_by("id")
-    themes_tab =   []
-    for theme in themes :
-        themes_dict =  {}                
-        themes_dict["name"]=theme.name 
-        knowlegdes = Knowledge.objects.filter(theme=theme,level=level).order_by("theme")
-        knowledges_tab  =  []
-        for knowledge in knowlegdes :
-            knowledges_dict  =   {}  
-            knowledges_dict["name"]=knowledge 
-            exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).select_related('supportfile').order_by("theme")
-            exercises_tab    =   []
-            for exercise in exercises :
-                exercises_tab.append(exercise)
-            knowledges_dict["exercises"]=exercises_tab
-            knowledges_tab.append(knowledges_dict)
-        themes_dict["knowledges"]=knowledges_tab
-        themes_tab.append(themes_dict)
-    levels_dict["themes"]=themes_tab
-    return levels_dict
+# def all_datas(user, status,level):
+#     teacher = Teacher.objects.get(user=user)
+#     datas = []
+#     levels_tab,knowledges_tab, exercises_tab    =   [],  [],  []
+#     levels_dict = {}
+#     levels_dict["name"]=level 
+#     themes = level.themes.all().order_by("id")
+#     themes_tab =   []
+#     for theme in themes :
+#         themes_dict =  {}                
+#         themes_dict["name"]=theme.name 
+#         knowlegdes = Knowledge.objects.filter(theme=theme,level=level).order_by("theme")
+#         knowledges_tab  =  []
+#         for knowledge in knowlegdes :
+#             knowledges_dict  =   {}  
+#             knowledges_dict["name"]=knowledge 
+#             exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).select_related('supportfile').order_by("theme","ranking")
+#             exercises_tab    =   []
+#             for exercise in exercises :
+#                 exercises_tab.append(exercise)
+#             knowledges_dict["exercises"]=exercises_tab
+#             knowledges_tab.append(knowledges_dict)
+#         themes_dict["knowledges"]=knowledges_tab
+#         themes_tab.append(themes_dict)
+#     levels_dict["themes"]=themes_tab
+#     return levels_dict
+
+
 
 def all_levels(user, status):
     teacher = Teacher.objects.get(user=user)
@@ -3243,25 +3245,6 @@ def all_levels(user, status):
         levels_dict = {}
         levels_dict["name"]=level 
 
-        # themes = level.themes.all().order_by("id")
-        # themes_tab =   []
-        # for theme in themes :
-        #     themes_dict =  {}                
-        #     themes_dict["name"]=theme.name 
-        #     knowlegdes = Knowledge.objects.filter(theme=theme,level=level).order_by("theme")
-        #     knowledges_tab  =  []
-        #     for knowledge in knowlegdes :
-        #         knowledges_dict  =   {}  
-        #         knowledges_dict["name"]=knowledge 
-        #         exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).order_by("theme")
-        #         exercises_tab    =   []
-        #         for exercise in exercises :
-        #             exercises_tab.append(exercise)
-        #         knowledges_dict["exercises"]=exercises_tab
-        #         knowledges_tab.append(knowledges_dict)
-        #     themes_dict["knowledges"]=knowledges_tab
-        #     themes_tab.append(themes_dict)
-        # levels_dict["themes"]=themes_tab
         datas.append(levels_dict)
     return datas
 
@@ -3447,11 +3430,13 @@ def admin_list_associations(request,id):
     level = Level.objects.get(pk = id)
     user = request.user
 
-    teacher = Teacher.objects.get(user=user)
-    data = all_datas(user, 1,level)
+    teacher  = Teacher.objects.get(user=user)
+    subjects = teacher.subjects.all()
+    exercises = level.exercises.filter(theme__subject__in=subjects,supportfile__is_title=0).order_by("theme","knowledge","ranking")
 
-    return render(request, 'qcm/list_associations.html', {'data': data, 'teacher': teacher , 'parcours': None, 'relationships' : [] , 'communications' : []   })
+    return render(request, 'qcm/list_associations.html', {'exercises': exercises, 'teacher': teacher , 'parcours': None, 'relationships' : [] , 'communications' : []   })
  
+
 @user_passes_test(user_is_superuser)
 def gestion_supportfiles(request):
   
@@ -3762,7 +3747,6 @@ def change_knowledge(request):
     knowledge_id = request.POST.get('knowledge_id', None)
     exercise = Exercise.objects.get(pk=exercise_id)
 
-    print(exercise_id , knowledge_id , exercise)
 
     if knowledge_id :
         Exercise.objects.filter(pk=exercise_id).update(knowledge_id = knowledge_id)
@@ -3770,6 +3754,26 @@ def change_knowledge(request):
 
     return redirect( 'admin_associations', exercise.level.id)
 
+
+
+
+@csrf_exempt
+def ajax_sort_exercise_from_admin(request):
+    """ tri des exercices""" 
+
+
+
+    exercise_ids = request.POST.get("valeurs")
+    exercise_tab = exercise_ids.split("-") 
+
+    try :
+        for i in range(len(exercise_tab)-1):
+            Exercise.objects.filter(pk = exercise_tab[i]).update(ranking = i)
+    except :
+        pass
+
+    data = {}
+    return JsonResponse(data)
 
 
 
@@ -3999,8 +4003,8 @@ def ajax_level_exercise(request):
 
     teacher = Teacher.objects.get(user= request.user)
     data = {} 
-    level_id = request.POST.get('level_id')
-    theme_ids = request.POST.getlist('theme_id')
+    level_id = request.POST.get('level_id', None)
+    theme_ids = request.POST.getlist('theme_id', None)
     parcours_id = request.POST.get('parcours_id', None)
 
     if  parcours_id :
@@ -4012,12 +4016,11 @@ def ajax_level_exercise(request):
         ajax = False
         parcours_id = None
 
- 
- 
-    exercises = Exercise.objects.filter(level_id = level_id , theme_id__in= theme_ids ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
+    if level_id and theme_ids[0] != "" : 
+        exercises = Exercise.objects.filter(level_id = level_id , theme_id__in= theme_ids ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
  
      
-    data['html'] = render_to_string('qcm/ajax_list_exercises.html', { 'exercises': exercises , "parcours" : parcours, "ajax" : ajax, "teacher" : teacher , 'parcours_id' : parcours_id })
+        data['html'] = render_to_string('qcm/ajax_list_exercises.html', { 'exercises': exercises , "parcours" : parcours, "ajax" : ajax, "teacher" : teacher , 'parcours_id' : parcours_id })
  
     return JsonResponse(data)
 
@@ -4232,7 +4235,7 @@ def update_evaluation(request, id, idg=0 ):
     form = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher)
 
     """ affiche le parcours existant avant la modif en ajax"""
-    exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme")
+    exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
     """ fin """
     themes_tab = []
     for level in levels:

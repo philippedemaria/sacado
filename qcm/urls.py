@@ -113,7 +113,7 @@ urlpatterns = [
 
     path('change_knowledge', change_knowledge, name='change_knowledge'), 
 
-    
+
     path('show_this_exercise/<int:id>/', show_this_exercise, name='show_this_exercise'),  #from dashboard 
 
     path('parcours_show_write_exercise/<int:id>/', show_write_exercise, name='show_write_exercise'), 
@@ -233,7 +233,9 @@ urlpatterns = [
     path('asking_parcours_sacado/<int:pk>', asking_parcours_sacado, name='asking_parcours_sacado'), # pk est la clé du group 
 
 
-    path('ajax/sort_supportfile', ajax_sort_supportfile, name='ajax_sort_supportfile'), 
+    path('ajax/sort_supportfile', ajax_sort_supportfile, name='ajax_sort_supportfile'),
+    path('ajax_sort_exercise_from_admin', ajax_sort_exercise_from_admin, name='ajax_sort_exercise_from_admin'),
+
     path('ajax_search_exercise', ajax_search_exercise, name='ajax_search_exercise'),
     path('ajax_knowledge_exercise', ajax_knowledge_exercise, name='ajax_knowledge_exercise'),
     path('ajax_theme_exercice', ajax_theme_exercice, name='ajax_theme_exercice'),
