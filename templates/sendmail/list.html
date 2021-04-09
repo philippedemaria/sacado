@@ -13,7 +13,7 @@
 
 
 {% block page_title %}
-    <a href="#" id='buttonToggle'><i class="fa fa-bars"></i></a> Messages, notifications, forum
+    <a href="#" id='buttonToggle'><i class="fa fa-bars"></i></a> Notifications, forum
 {% endblock %}
  
 {% block page_menu_right %}
@@ -60,6 +60,7 @@
 .table{
   font-size: 12px
 }
+ 
 </style>
 
 
@@ -67,16 +68,20 @@
             <div class="col-md-2" id="sub_menu_left">
                 <form  action="" method="POST">
                 <ul class="nav nav-pills nav-stacked admin-menu">
+                 {% comment %}
                     <li>Messages </li> 
-                    <li  class="active"><a href="#" class="nav-link active" data-target-id="home">Réception <span class="pull-right">({{ emails|length }})</span></a> </li>
+                    <li class="active"><a href="#" class="nav-link" data-target-id="home">Réception <span class="pull-right">({{ emails|length }})</span></a> </li>
                     <li ><a href="#" class="nav-link" data-target-id="profile">Envoi <span class="pull-right"> ({{ sent_emails|length }})</span></a> </li>
+                    <hr>
+                {% endcomment %}
+
                     {% if request.user.user_type == 2 %}
-                      <hr>
+                     
                       <li>Notifications </li> 
-                      <li>
+                      <li  class="active">
                           
                               <a href="#" class="nav-link" data-target-id="notification" data-teacher_id="{{ request.user.id }}" id="notifs">
-                                Exercices faits
+                                100 derniers exercices
                                 <span id="is_pending"> 
                                     {% if is_pending_studentanswers %}
                                         <i class="fa fa-info-circle text-warning" aria-hidden="true"></i> 
@@ -85,6 +90,19 @@
                               </a>
                           
                       </li>
+                      <li>
+                          <a href="#" class="nav-link" data-target-id="group" >
+                            <small><i class="fa fa-caret-right"></i> par groupe </small>
+                          </a>
+                      </li>
+                      <li>
+                          <a href="#" class="nav-link" data-target-id="student">
+                            <small><i class="fa fa-caret-right"></i> par élève </small>
+                          </a>
+                      </li>
+
+
+
                       <li ><a href="#" class="nav-link" data-target-id="task">Tâches  </a> </li>
                       <hr>
                       <li>Forum </li> 
@@ -102,10 +120,14 @@
                 </form> 
             </div>
             <div class="col-md-10" id="flex"> 
+
+                {% comment %}
+
+
                 <div class="admin-content" id="home" >
                     <div class="row"> 
                         <div class="col-sm-12 col-md-12">
-                        <a href="#"  data-toggle='modal' data-target='#newEmail'   class="btn btn-xs btn-danger"><i class="fa fa-plus"></i> Nouveau message</a> 
+                        <a href="#"  data-toggle='modal' data-target='#newEmail' class="btn btn-xs btn-danger"><i class="fa fa-plus"></i> Nouveau message</a> 
                       
                         {% if emails %}
                           <form  action="" method="POST">
@@ -187,6 +209,10 @@
                       </div>
                     </div>
                 </div>
+
+                {% endcomment %}
+
+                
                 <div class="admin-content" id="notification" > 
                     <div class="row"> 
                       <div class="col-sm-12 col-md-12">
@@ -233,6 +259,53 @@
                       </div>
                     </div>
                 </div>
+
+                <div class="admin-content" id="group" > 
+                    <div class="row"> 
+                        <form  action="" method="POST">
+                        {% csrf_token %}  
+                        <div class="col-sm-12 col-md-12">
+                            {% for g in groups %}
+                                <a href="#" data-group_id = "{{ g.id }}" class="btn btn-default selector_group" style="background-color: {{ g.color }}; color: {{ g.color|contrast_color }}">   {{g.name}}
+                                </a>
+                            {% endfor %}
+                        </div>
+                        </form>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-sm-12 col-md-12" id="result_group">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-content" id="student" > 
+                    <div class="row">
+                        <form  action="" method="POST">
+                        {% csrf_token %}  
+                        <div class="col-sm-12 col-md-12">
+                            <select name="student_choose" class="select2" id="student_choose">
+                                <option value="">Choisir un élève</option>
+                                {% for g in groups %}
+                                    <optgroup style="background-color: {{ g.color }}; color: {{ g.color|contrast_color }}"  label="{{g.name}}"> 
+                                    {% for s in g.just_students %}
+                                        <option value="{{g.id}}__{{s.user.id}}">{{s}}</option>
+                                    {% endfor %}
+                                    </optgroup>
+                                {% endfor %}
+                            </select>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-sm-12 col-md-12" id="result_student">
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
                 <div class="admin-content" id="task" > 
                     <div class="row"> 
                       <div class="col-sm-12 col-md-12">
@@ -310,8 +383,6 @@
                         </div>  
                     </div>
                 </div>
-
-
 
             </div>
         </div>
