@@ -36,7 +36,7 @@
                 <table class="table  table-hover standard_tab_1000" style="width:100%">
                     <thead> 
                         <tr>
-                            <td></td><td>  </td>
+                            <td></td><td>  </td><td></td>
                         </tr>
                     </thead> 
                     <tbody id="exercise_ranking">
@@ -65,7 +65,7 @@
                                         <td></td> 
                                         <td>
                                             Le savoir faire "<span style="color:#007EE2">{{ knowledge.grouper.name|capfirst }}</span>" est associé 
-                                             {% if knowledge.exercises|length > 1%}aux {%  else %}au {% endif %}support{{ knowledge.grouper.exercises|length|pluralize }} GGB ci-dessous :
+                                             {% if knowledge_list|length > 1%}aux {%  else %}au {% endif %}support{{ knowledge.grouper.exercises|length|pluralize }} GGB ci-dessous :
                                         </td>
                                         <td style="position: relative;" >
 
