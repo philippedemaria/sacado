@@ -529,8 +529,9 @@ class Teacher(models.Model):
         Envoie un email aux administrateurs informant de l'inscription d'un nouvel enseignant
         """
         try :
-            admins = User.objects.filter(is_superuser=1)
-            admins_emails = list(admins.values_list('email', flat=True))
+            #admins = User.objects.filter(is_superuser=1)
+            #admins_emails = list(admins.values_list('email', flat=True))
+            admins_emails =["sacado.asso@gmail.com"]
             send_templated_mail(
                 template_name="teacher_registration_notify_admins",
                 from_email="info@sacado.xyz",
