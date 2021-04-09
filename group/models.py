@@ -71,6 +71,12 @@ class Group(ModelWithCode):
         return self.level.themes.filter(subject=self.subject)
 
 
+    def just_students(self):
+ 
+        return self.students.exclude(user__username__contains="_e-test").order_by("user__last_name")
+
+
+
 
 
     def parcours_counter(self,teacher):

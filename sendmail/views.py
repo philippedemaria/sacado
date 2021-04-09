@@ -13,6 +13,7 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from sendmail.decorators import user_is_email_teacher, user_is_active
 from django.views.decorators.csrf import csrf_exempt
+
 from django.utils import timezone
 import re
 import html
@@ -222,11 +223,6 @@ def update_communication(request,id): # update
 	return render(request,'sendmail/form_update_communication.html', {'form':form,'communication':communication,   })
 
 
-
-
-
-
-
 def delete_communication(request, id):
 
 
@@ -261,6 +257,39 @@ def reader_communication(request):
 		c.teachers.add(teacher)
 	
 	return JsonResponse(data)
+
+
+def ajax_notification_group(request):
+    
+    data = {}
+    group_id =  request.POST.get("group_id")
+    group = Group.objects.get(pk=group_id)
+   
+    studentanswers = Studentanswer.objects.filter(student__in =  group.students.all(), parcours__subject = group.subject, parcours__level = group.level).order_by("-date")[:100]
+
+    context = {  'studentanswers': studentanswers,   }
+    data['html'] = render_to_string('sendmail/ajax_list.html', context)
+ 
+    return JsonResponse(data)
+
+
+def ajax_notification_student(request):
+
+
+    data = {}
+
+    datas =  request.POST.get("datas").split("__")
+
+    student_id =  datas[1]
+    group_id =   datas[0]
+    group = Group.objects.get(pk=group_id)
+
+    studentanswers = Studentanswer.objects.filter(student_id = student_id, parcours__subject = group.subject, parcours__level = group.level ).order_by("-date")[:100]
+
+    context = {  'studentanswers': studentanswers,   }
+    data['html'] = render_to_string('sendmail/ajax_list.html', context)
+ 
+    return JsonResponse(data)
 
 
 #######################################################################################################################################

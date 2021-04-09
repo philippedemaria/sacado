@@ -24,4 +24,12 @@ urlpatterns = [
     path('show_discussion/<int:idd>/show', show_discussion, name='show_discussion'),
     path('delete_message/<int:idd>/<int:id>/', delete_message, name='delete_message'),
   
+
+
+
+    path('ajax_notification_group', ajax_notification_group, name='ajax_notification_group'),
+    path('ajax_notification_student', ajax_notification_student, name='ajax_notification_student'),
+
+
+  
 ]

@@ -105,7 +105,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
         // Affiche dans la modal la liste des élèves du groupe sélectionné
-        $('.update_Com').on('click', function (event) {
+        $('.show_com').on('click', function (event) {
             let communication_id = $(this).attr("data-communication_id");
 
 
@@ -123,9 +123,6 @@ define(['jquery', 'bootstrap'], function ($) {
                 }
             )
         });
-
-
-
 
 
         // Affiche dans la modal la liste des élèves du groupe sélectionné
@@ -153,6 +150,61 @@ define(['jquery', 'bootstrap'], function ($) {
             )
         });
 
+
+
+
+
+        // Affiche dans les 100 derniers résultat du groupe sélectionné
+        $('.selector_group').on('click', function (event) {
+
+            let group_id = $(this).attr("data-group_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            if (group_id == "") { alert("Vous devez sélectionner un groupe"); return false ;}
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'group_id': group_id,
+ 
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "ajax_notification_group",
+                    success: function (data) {
+                    $("#result_group").html("").append(data.html); 
+                    }
+                }
+            )
+        });
+
+
+
+        // Affiche dans les 100 derniers résultat du groupe sélectionné
+        $('#student_choose').on('change', function (event) {
+
+            let datas = $(this).val();
+
+            if (datas == "") { alert("Vous devez sélectionner un élève"); return false ;}
+
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'datas': datas,
+ 
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "ajax_notification_student",
+                    success: function (data) {
+                    $("#result_student").html("").append(data.html); 
+                    }
+                }
+            )
+        });
 
 
     });
