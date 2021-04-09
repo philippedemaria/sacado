@@ -162,7 +162,9 @@ class Exercise(models.Model):
                                   verbose_name="Savoir faire associé - Titre")
     supportfile = models.ForeignKey(Supportfile, blank=True, default=1, related_name="exercises",
                                     on_delete=models.PROTECT, verbose_name="Fichier Géogebra")
-  
+    #ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
+
+
 
     def __str__(self):
         return "{}".format(self.knowledge.name)
