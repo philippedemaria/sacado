@@ -3432,7 +3432,7 @@ def admin_list_associations(request,id):
 
     teacher  = Teacher.objects.get(user=user)
     subjects = teacher.subjects.all()
-    exercises = level.exercises.filter(theme__subject__in=subjects,supportfile__is_title=0).order_by("theme","knowledge","ranking")
+    exercises = level.exercises.filter(theme__subject__in=subjects,supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
 
     return render(request, 'qcm/list_associations.html', {'exercises': exercises, 'teacher': teacher , 'parcours': None, 'relationships' : [] , 'communications' : []   })
  
