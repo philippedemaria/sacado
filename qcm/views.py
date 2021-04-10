@@ -6258,6 +6258,7 @@ def create_course(request, idc , id ):
             nf =  form.save(commit = False)
             nf.parcours = parcours
             nf.teacher = teacher
+            nf.author = teacher
             nf.save()
             try :
                 return redirect('show_course' , 0 , id)
