@@ -356,7 +356,7 @@
               $('#renew_form_school').toggle(500); 
         });
 
-        $('#id_nbstudents').on('keyup', function () {
+        $('#id_nbstudents').on('change', function () {
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
                 let nbr_students = $("#id_nbstudents").val() ;
                 $.ajax({

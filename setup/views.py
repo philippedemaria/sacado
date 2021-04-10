@@ -234,22 +234,32 @@ def school_adhesion(request):
     rates = Rate.objects.all() #tarifs en vigueur 
     school_year = rates.first().year #tarifs pour l'année scolaire
     form = SchoolForm(request.POST or None)
+    token = request.POST.get("token", None)
+
+    
 
     if request.method == "POST" :
         if form.is_valid():
-            if request.POST.get("token") == 7 :
-                form.save()
-                send_mail("Demande d'adhésion à la version établissement",
-                          "Bonjour, vous venez d'envoyer le message suivant :\n\n" + message+" \n\n" + email +" \n\n Ceci est un mail automatique. Ne pas répondre.",
-                          'info@sacado.xyz',
-                          ['sacado.asso@gmail.com'])
+            if token :
+                if int(token) == 7  :
+                    print("ici")
+                    sc = form.save()
+                    somme = request.POST.get("somme")
 
-                request.session["name_admin"] = request.POST.get("name_admin")
-                request.session["mail_admin"] = request.POST.get("mail_admin")
-                request.session["somme"] = request.POST.get("somme")
-                request.session["inscription_school_id"] = form.pk
+                    school_datas =  sc.name +"\n"+sc.code_acad +  " - " + str(sc.nbstudents) +  " élèves \n" + sc.address +  "\n"+sc.town+", "+sc.country.name
+                    send_mail("Demande d'adhésion à la version établissement",
+                              "Bonjour l'équipe SACADO, \nl'établissement suivant demande la version établissement :\n"+ school_datas +"\n\nCotisation : "+somme+" €.\n\nEnregistrement de l'étalissement dans la base de données https://sacado.xyz. Ne pas répondre.",
+                              'info@sacado.xyz',
+                              ['sacado.asso@gmail.com'])
 
-                return redirect('payment_school_adhesion')
+                    request.session["name_admin"] = request.POST.get("name_admin")
+                    request.session["mail_admin"] = request.POST.get("mail_admin")
+                    request.session["somme"] = somme
+                    request.session["inscription_school_id"] = sc.pk
+
+                    return redirect('payment_school_adhesion')
+        else :
+            print(form.errors)
 
 
     context = { 'form' : form , 'rates': rates, 'school_year': school_year, }
