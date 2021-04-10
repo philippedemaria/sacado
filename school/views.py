@@ -114,6 +114,8 @@ def create_school(request):
 	
 	if form.is_valid():
 		school = form.save()
+		school.is_active = 1
+		school.save()
 
 		Stage.objects.create(school = school ,low = 30,  medium = 65, up = 85)
 		return redirect('schools')
@@ -127,7 +129,11 @@ def update_school(request,id):
 	form = SchoolForm(request.POST or None, instance=school)
 
 	if form.is_valid():
-		form.save()
+		school = form.save()
+		school.is_active = 1
+		school.save()
+
+
 		return redirect('schools')
 
 	return render(request,'school/_form.html', {'form':form,  'communications' : [],'school':school})

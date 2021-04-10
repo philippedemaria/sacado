@@ -242,11 +242,15 @@ def school_adhesion(request):
         if form.is_valid():
             if token :
                 if int(token) == 7  :
-                    print("ici")
-                    sc = form.save()
-                    somme = request.POST.get("somme")
+                    school_commit = form.save(commit=False)
+                    school_exists, created = School.objects.get_or_create(name = school_commit.name, town = school_commit.town , country = school_commit.country , code_acad = school_commit.code_acad , defaults={ 'nbstudents' : school_commit.nbstudents , 'address' : school_commit.address ,'complement' : school_commit.complement , }  )
+                    if not created :
+                        messages.error(request,"Etablissement existant.")
+                        return redirect('index')
 
-                    school_datas =  sc.name +"\n"+sc.code_acad +  " - " + str(sc.nbstudents) +  " élèves \n" + sc.address +  "\n"+sc.town+", "+sc.country.name
+                    somme = request.POST.get("somme") 
+
+                    school_datas =  school_exists.name +"\n"+school_exists.code_acad +  " - " + str(school_exists.nbstudents) +  " élèves \n" + school_exists.address +  "\n"+school_exists.town+", "+school_exists.country.name
                     send_mail("Demande d'adhésion à la version établissement",
                               "Bonjour l'équipe SACADO, \nl'établissement suivant demande la version établissement :\n"+ school_datas +"\n\nCotisation : "+somme+" €.\n\nEnregistrement de l'étalissement dans la base de données https://sacado.xyz. Ne pas répondre.",
                               'info@sacado.xyz',
@@ -255,7 +259,7 @@ def school_adhesion(request):
                     request.session["name_admin"] = request.POST.get("name_admin")
                     request.session["mail_admin"] = request.POST.get("mail_admin")
                     request.session["somme"] = somme
-                    request.session["inscription_school_id"] = sc.pk
+                    request.session["inscription_school_id"] = school_exists.pk
 
                     return redirect('payment_school_adhesion')
         else :

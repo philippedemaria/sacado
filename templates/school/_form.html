@@ -84,6 +84,23 @@
                 </div>
             </div>
         </div>   
+
+        {% if  request.user.is_superuser %}
+    
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">                
+                    {{ form.nbstudents.label_tag }}
+                    {{ form.nbstudents |add_class:"form-control" }}
+                    {{ form.nbstudents.errors }}
+                </div>
+            </div>
+        </div>   
+
+        {% endif %} 
+
+
+
         <div class="row">
             <div class="col-sm-9 col-md-9">
                 <div class="form-group">
