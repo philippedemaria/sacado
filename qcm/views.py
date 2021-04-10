@@ -6243,7 +6243,7 @@ def create_course(request, idc , id ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     parcours = Parcours.objects.get(pk =  id)
-    teacher = Teacher.objects.get(user= request.user)
+    teacher =  request.user.teacher
 
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
@@ -6281,7 +6281,7 @@ def update_course(request, idc, id  ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     parcours = Parcours.objects.get(pk =  id)
-    teacher = Teacher.objects.get(user= request.user)
+    teacher =  request.user.teacher
     course = Course.objects.get(id=idc)
     course_form = CourseForm(request.POST or None, instance=course , parcours = parcours )
     relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("ranking")
@@ -6702,7 +6702,7 @@ def ajax_course_viewer(request):
             is_teacher = True
         else : 
             is_teacher = False 
-        context = { 'courses' : courses , 'parcours' : relationship.parcours , 'is_teacher' : is_teacher }
+        context = { 'courses' : courses , 'parcours' : relationship.parcours , 'is_teacher' : is_teacher , 'teacher' : request.user.teacher  }
         html = render_to_string('qcm/course/course_viewer.html',context)
         data['html'] = html       
 

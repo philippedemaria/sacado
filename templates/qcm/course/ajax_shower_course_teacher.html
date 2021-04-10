@@ -3,8 +3,13 @@
 
 
  
-<h1 class="thin">  <span id="this_course_title">{{ course.title }}</span>   
+<h1 class="thin">  <span id="this_course_title">{{ course.title }}</span>  
+
+    {% if  teacher == course.author %}
     <a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 12px; margin-right:10px;" class="pull-right">Modifier ce cours</a> 
+    {% endif  %}
+
+
     <a href="#"  data-toggle='modal' data-target='#view_course'  data-course_id="{{ course.id }}"  style="font-size: 12px; margin-right:10px;" class="pull-right course_viewer">Vidéoprojeter ce cours</a>
     <a href="#" data-toggle='modal' data-target='#built_diaporama'  data-course_id="{{ course.id }}"  style="font-size: 12px; margin-right:10px;" class="pull-right built_diaporama"> Diaporama 
         <span class="helper_tip"> <i class="fa fa-question-circle"></i>

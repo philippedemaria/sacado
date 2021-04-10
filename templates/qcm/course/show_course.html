@@ -77,8 +77,13 @@
         </div>
         {% if   course  %}
             <div class="col-md-8 col-xs-12 col-lg-9" id="this_course_viewer">
-                <h1 class="thin">  <span id="this_course_title">{{ course.title }}</span>   
+                <h1 class="thin">  <span id="this_course_title">{{ course.title }}</span>
+
+                    {% if  teacher == course.author %}                   
                     <a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 14px; margin-right:10px;" class="pull-right">Modifier ce cours</a> 
+                    {% endif  %}
+
+
                     <a href="#"  data-toggle='modal' data-target='#view_course'  data-course_id="{{ course.id }}" data-parcours_id="{{ parcours.id }}"   style="font-size: 14px; margin-right:10px;" class="pull-right course_viewer">Vidéoprojeter ce cours</a>
                     <a href="#" data-toggle='modal' data-target='#built_diaporama'  data-course_id="{{ course.id }}"  class="pull-right built_diaporama helper_tip" style="font-size: 14px; margin-right:10px;color: #007EE2;">Diaporama 
                          <i class="fa fa-question-circle fa-xs" ></i>

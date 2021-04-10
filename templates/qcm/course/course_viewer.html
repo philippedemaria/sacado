@@ -28,8 +28,12 @@
         <div class="col-md-8 col-xs-12 col-lg-9">
         {% for course in courses %}
             <div class="admin-content"  id="course{{forloop.counter0}}">
-                <h1 class="thin">  {{ course.title }}               
-                    {% if is_teacher %}<a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 12px" class="pull-right">Modifier ce cours</a>{% endif %}
+                <h1 class="thin">  {{ course.title }}  
+                    {% if is_teacher %}
+                        {% if course.author == teacher %}
+                            <a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 12px" class="pull-right">Modifier ce cours</a>
+                        {% endif %}
+                    {% endif %}
                 </h1>
                 <hr>
                 {{ course.annoncement|decode|safe }} 
