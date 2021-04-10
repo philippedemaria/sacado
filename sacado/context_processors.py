@@ -37,12 +37,13 @@ def menu(request):
  
             ### Permet de vérifier qu'un enseignant est dans un établissement sacado
             if teacher.user.school :
-                sacado_asso = True
+                if teacher.user.school.is_active :
+                    sacado_asso = True
 
             return {'today': today, 'nbe': nbe, 'levels': levels,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso , "is_pending_studentanswers" : is_pending_studentanswers  }
 
         elif request.user.is_student:
-
+            
             student = Student.objects.get(user=request.user)
             groups = student.students_to_group.all()
 
@@ -51,7 +52,8 @@ def menu(request):
                 teacher_to_student = True
 
             if student.user.school :
-                sacado_asso = True
+                if student.user.school.is_active :
+                    sacado_asso = True
 
             group_id = request.session.get("group_id",None)
 
