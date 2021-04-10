@@ -4,7 +4,7 @@ from django.contrib.auth.forms import  UserCreationForm,  AuthenticationForm
 from account.forms import  UserForm, TeacherForm, StudentForm , BaseUserFormSet
 from django.contrib.auth import   logout
 from account.models import  User, Teacher, Student  ,Parent , Adhesion
-from qcm.models import Parcours, Exercise, Relationship,Studentanswer, Supportfile, Customexercise, Customanswerbystudent,Writtenanswerbystudent , Course
+from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise, Customanswerbystudent,Writtenanswerbystudent
 from tool.models import Quizz, Question, Choice
 from group.models import Group, Sharing_group
 from association.models import Accounting , Detail
@@ -99,15 +99,6 @@ def index(request):
             request.user.save()
 
         if request.user.is_teacher:
-
-
-            courses = Course.objects.all()
-            for c in courses :
-                c.author = c.teacher
-                c.save()
-
-
-
 
             teacher = Teacher.objects.get(user=request.user)
 
