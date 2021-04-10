@@ -16,6 +16,10 @@ function TestRemove(f1) {
 }
 
 
+function TestRenew() {
+    if (!confirm("Vous souhaitez renouveler  la cotisation ? Attention si vous cliquez, la transaction est enregistrée." )) return false;
+}
+
 
 
 function TestDuplicate(f1) {

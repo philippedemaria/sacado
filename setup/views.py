@@ -7,6 +7,7 @@ from account.models import  User, Teacher, Student  ,Parent , Adhesion
 from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise, Customanswerbystudent,Writtenanswerbystudent
 from tool.models import Quizz, Question, Choice
 from group.models import Group, Sharing_group
+from association.models import Accounting , Detail
 from group.views import student_dashboard
 from setup.models import Formule 
 from association.models import Rate
@@ -229,13 +230,25 @@ def send_message(request):
     return redirect("index")
 
 
+def accounting_adhesion(school_exists, today , somme , acting, user, is_active  ):
+
+    accounting, create = Accounting.objects.get_or_create( school = school_exists   ,  date = today ,  defaults={ 'amount' : somme, 'objet' : "Cotisation", 'beneficiaire' :  "SACADO ASSO" ,
+                                                                                                                    'is_credit' : 1, 'address' : school_exists.address , 'complement' : school_exists.complement ,
+                                                                                                                    'town' : school_exists.town , 'country' : school_exists.country , 'contact' : school_exists.address ,
+                                                                                                                     'observation' : "Cotisation" ,'acting' : acting , 'user' : user ,'is_active' : is_active })
+    if create :
+        Detail.objects.create( accounting = accounting  ,  description = "Cotisation" , amount = somme)
+
+
+
+
 def school_adhesion(request):
 
     rates = Rate.objects.all() #tarifs en vigueur 
     school_year = rates.first().year #tarifs pour l'année scolaire
     form = SchoolForm(request.POST or None)
     token = request.POST.get("token", None)
-
+    today = datetime.now()
     
 
     if request.method == "POST" :
@@ -248,7 +261,11 @@ def school_adhesion(request):
                         messages.error(request,"Etablissement existant.")
                         return redirect('index')
 
-                    somme = request.POST.get("somme") 
+                    somme = request.POST.get("somme")
+
+                    acting, user, is_active  = None , None , False 
+
+                    accounting_adhesion(school_exists, today , somme , acting, user, is_active)
 
                     school_datas =  school_exists.name +"\n"+school_exists.code_acad +  " - " + str(school_exists.nbstudents) +  " élèves \n" + school_exists.address +  "\n"+school_exists.town+", "+school_exists.country.name
                     send_mail("Demande d'adhésion à la version établissement",
@@ -298,6 +315,25 @@ def delete_school_adhesion(request):
     school.delete()
     messages.error(request,"Demande d'adhésion ssannulée")
     return redirect('index')
+
+
+
+def renew_school_adhesion(request,school_id):
+ 
+    school = School.objects.get(pk = school_id)
+
+    today = datetime.now()
+    if today < datetime(2021,7,1) :
+        somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().discount
+    else :
+        somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().amount
+    user = request.user
+    accounting_adhesion(school, today , somme , None , user, False  )
+
+    return redirect('admin_tdb') 
+
+
+
 
 
 

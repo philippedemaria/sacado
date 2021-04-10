@@ -118,7 +118,7 @@ class Accounting(ModelWithCode):
     address = models.CharField(max_length=255, blank=True, verbose_name="Adresse")
     complement = models.CharField(max_length=255, blank=True, verbose_name="Complément d'adresse")
     town = models.CharField(max_length=255, blank=True, verbose_name="Complément d'adresse")
-    country = models.ForeignKey(Country, related_name="accontings", blank=True,  null=True,  on_delete=models.PROTECT, verbose_name="Pays")
+    country = models.ForeignKey(Country, related_name="accontings", blank=True,  null=True,  on_delete=models.SET_NULL, verbose_name="Pays")
     contact = models.CharField(max_length=255, blank=True ,  verbose_name="Contact")
 
     school = models.ForeignKey(School, related_name="accontings", blank=True, null=True,  on_delete=models.CASCADE, verbose_name="Etablissement")  
@@ -127,8 +127,8 @@ class Accounting(ModelWithCode):
 
     acting = models.DateTimeField(null=True, blank=True, verbose_name="Date d'effet")
     date = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, related_name="accontings", on_delete=models.PROTECT, editable=False)
-
+    user = models.ForeignKey(User, related_name="accontings", null=True, blank=True,  on_delete=models.CASCADE, editable=False)
+    is_active = models.BooleanField(default=0, verbose_name="Actif")
 
 
     def __str__(self):
