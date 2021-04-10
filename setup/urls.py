@@ -15,7 +15,14 @@ urlpatterns = [
 
     path('gestion_files', gestion_files, name='gestion_files'),
 
+    path('school_adhesion', school_adhesion, name='school_adhesion'),
+    path('ajax_get_price', ajax_get_price , name='ajax_get_price'), 
+    path('payment_school_adhesion', payment_school_adhesion , name='payment_school_adhesion'), 
+    path('delete_school_adhesion', delete_school_adhesion , name='delete_school_adhesion'), 
+    path('print_proformat_school', print_proformat_school, name='print_proformat_school'),  
 
+
+    
     path('student_to_association__123526', student_to_association, name='student_to_association'),     
     path('choice_menu__123526/<slug:name>', choice_menu, name='choice_menu'), 
     path('details_of_adhesion__123526', details_of_adhesion, name='details_of_adhesion'), 
@@ -23,7 +30,7 @@ urlpatterns = [
     path('save_adhesion__123526', save_adhesion, name='save_adhesion'), 
     path('adhesions__123526', adhesions, name='adhesions'), 
 
-    
+
     path('delete_adhesion__123526', delete_adhesion, name='delete_adhesion'), 
 
     path('ajax_remboursement__123526', ajax_remboursement, name='ajax_remboursement'), 

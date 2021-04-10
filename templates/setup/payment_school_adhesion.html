@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+
+
+
+
+{% block body %}
+
+<section class="container" style="margin-top:100px">
+    <h3 class="thin">Paiement de la cotisation </h3>
+ 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+ 
+               {{  name_admin  }}, <em>{{  mail_admin  }}</em> , vous  venez de demander une adhésion de l'établissement sous-cité à l'association SACADO.
+ 
+        </div>
+    </div> 
+    <div class="row">                    
+        <div class="col-sm-12 col-md-5">
+
+
+              <div class="card_association" >
+                  <h3> {{ school.name  }} </h3>   
+                  <div><b> {{ school.code_acad }}  -  {{ school.nbstudents   }} élèves</b></div>  
+                  <div>{{ school.address  }} {% if school.complement  %} <br/>{{ school.complement   }}  {% endif %}</div>  
+                  <div>{{ school.town  }}, {{ school.country   }} </div>  
+                  <div><b>Cotisation {{ school_year  }} : {{ somme }} €</b> </div> 
+                  <img src="{% static 'img/sacadoA1.png' %}" style="position: absolute;right: 5px; bottom:5px" />
+              </div>
+
+
+            <div class="row">                    
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <a href="{% url 'delete_school_adhesion' %}" class="btn btn-danger" onclick="return TestDelete('cette adhésion')" >Annuler cette demande</a>
+                    </div> 
+                </div>  
+            </div> 
+
+
+        </div>
+        <div class="col-sm-12 col-md-7">
+            <div class="card_association" >
+                <h3 class="thin">Mode de paiement </h3>
+                <div class="row">
+                      <div class="col-sm-3 col-md-3">
+                          <a href="#" id="on_line">En ligne</a>
+                      </div>
+                      <div class="col-sm-5 col-md-5">
+                          <a href="#" id="virement_bancaire">Virement bancaire</a>
+                      </div>
+                      <div class="col-sm-4 col-md-4">
+                          <a href="#" id="envoi_postal">Envoi postal</a>
+                      </div>  
+                </div>
+            </div>
+
+
+            <div class="card_association this_card show_div_for_payment" id="show_on_line">
+                <h3 class="thin">Paiement en ligne</h3>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+
+                        <div class="alert alert-danger">
+                              A venir
+                        </div>
+
+                    </div>  
+                </div>
+            </div>
+
+
+
+            <div class="card_association this_card show_div_for_payment" id="show_virement_bancaire">
+                  <h3 class="thin">Virement bancaire</h3>
+                  <p>
+                      Pour effectuer un virement bancaire par IBAN à l'association SACADO, le DAF de votre établissement doit nous contacter depuis son courriel professionnel.
+                  </p>
+                  <form action="{% url 'send_message' %}" method="post" >
+                      {% csrf_token %}
+                    <div class="form-group">
+                      <input type="text" name="name" class="form-control" id="name" placeholder="Nom du DAF"   required />
+                    </div>
+                    <div class="form-group">
+                      <input type="email" class="form-control" name="email" id="email" placeholder="Courriel professionnel"  required />
+                    </div>
+                    <div class="form-group">
+                      <textarea class="form-control" name="message" rows="3">Bonjour, je souhaite par ce courrier obtenir l'IBAN de l'association SACADO pour procéder à un virement bancaire en contre partie de l'obtention de la version Etablissement. Cordialement.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                      <img src="{% static 'img/som_token.png' %}" />
+                      <input type="text" name="token" class="form-control" id="token" placeholder="Ecrire le résultat de la somme"  />
+                    </div>
+
+                    <div class="text-center"><button type="submit" class="btn btn-sacado">Envoyer</button></div>
+                  </form>
+            </div>
+
+
+
+
+
+            <div class="card_association this_card show_div_for_payment" id="show_envoi_postal">
+                <h3 class="thin">Envoi postal </h3>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <p> Vous devez éditer le devis suivant et nous le retourner signé et accompagné d'un chèque bancaire du montant correspondant à la cotisation et à l'ordre de ASSOCIATION SACADO.XYZ . <small>L'envoi postal occasionne des frais de dossier de 2€.</small></p>
+                        <p><a href="{% url 'print_proformat_school' %}"><i class="fa fa-print"></i> Editer le devis</a></p> 
+                    </div>
+
+                </div>
+            </div>
+
+        </div>  
+    </div> 
+
+</section> 
+
+ 
+{% endblock %}

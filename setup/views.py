@@ -8,10 +8,11 @@ from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfil
 from tool.models import Quizz, Question, Choice
 from group.models import Group, Sharing_group
 from group.views import student_dashboard
-from setup.models import Formule
-from school.models import Stage
+from setup.models import Formule 
+from association.models import Rate
+from school.models import Stage , School
 from sendmail.models import Communication
-from school.models import School
+from school.forms import  SchoolForm
 from socle.models import Level
 from django.http import JsonResponse
 from django.core.mail import send_mail
@@ -148,6 +149,9 @@ def index(request):
         except:
             pass
 
+        rates = Rate.objects.all() #tarifs en vigueur 
+        school_year = rates.first().year #tarifs pour l'année scolaire
+
         nb_teacher = Teacher.objects.all().count()
         nb_student = Student.objects.all().count()
 
@@ -167,7 +171,7 @@ def index(request):
         exercise = exercises[i]
 
         context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 'schools' : schools,'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
-                   'cookie': cookie, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, }
+                   'cookie': cookie, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, 'rates': rates, 'school_year': school_year, }
 
 
 
@@ -192,24 +196,31 @@ def logout_view(request):
 
 
 def send_message(request):
-    ''' traitement du formulaire de contact de la page d'accueil '''
+    ''' traitement du formulaire de contact de la page d'accueil et du paiement de l'adhésion par virement bancaire '''
     name = request.POST.get("name")
     email = request.POST.get("email")
-    subject = request.POST.get("subject")
+    subject = request.POST.get("subject",None)
     message = request.POST.get("message")
     token = request.POST.get("token", None)
 
     if token :
         if int(token) == 7 :
             if message:
+                school_datas = ""
+                if not subject :
+                    subject = "Adhésion SACADO - demande d'IBAN"
+                    school_id = request.session.get("inscription_school_id",None)
+                    if school_id :
+                        school = School.objects.get(pk = school_id)
+                        school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
                 send_mail(subject,
-                          "Bonjour, vous venez d'envoyer le message suivant :\n\n" + message+" \n\n" + email +" \n\n Ceci est un mail automatique. Ne pas répondre.",
+                          "Bonjour, vous venez d'envoyer le message suivant :\n\n" + message+" \n\n" + email +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
                           'info@sacado.xyz',
                           [email])
                 send_mail(subject,
-                            message+" \n\n" + email ,
+                            message+" \n\n" + email +  school_datas,
                           'info@sacado.xyz',
-                          [email, "philippe.demaria83@gmail.com", "brunoserres33@gmail.com", "association@sacado.xyz"])
+                          [email, "sacado.asso@gmail.com"])
         else :
             messages.error(request,"Erreur d'opération....")
     else :
@@ -218,8 +229,162 @@ def send_message(request):
     return redirect("index")
 
 
+def school_adhesion(request):
+
+    rates = Rate.objects.all() #tarifs en vigueur 
+    school_year = rates.first().year #tarifs pour l'année scolaire
+    form = SchoolForm(request.POST or None)
+
+    if request.method == "POST" :
+        if form.is_valid():
+            if request.POST.get("token") == 7 :
+                form.save()
+                send_mail("Demande d'adhésion à la version établissement",
+                          "Bonjour, vous venez d'envoyer le message suivant :\n\n" + message+" \n\n" + email +" \n\n Ceci est un mail automatique. Ne pas répondre.",
+                          'info@sacado.xyz',
+                          ['sacado.asso@gmail.com'])
+
+                request.session["name_admin"] = request.POST.get("name_admin")
+                request.session["mail_admin"] = request.POST.get("mail_admin")
+                request.session["somme"] = request.POST.get("somme")
+                request.session["inscription_school_id"] = form.pk
+
+                return redirect('payment_school_adhesion')
 
 
+    context = { 'form' : form , 'rates': rates, 'school_year': school_year, }
+    return render(request, 'setup/school_adhesion.html', context)
+
+
+
+def payment_school_adhesion(request):
+ 
+    somme = request.session.get("somme",None)
+    if somme : 
+        name_admin = request.session.get("name_admin")
+        mail_admin = request.session.get("mail_admin")
+        school_id = request.session.get("inscription_school_id")
+        school = School.objects.get(pk = school_id)
+
+        rate = Rate.objects.filter(quantity__gte=school.nbstudents).first()
+        school_year = rate.year #tarifs pour l'année scolaire
+
+        context = { 'school' : school , 'name_admin' : name_admin , 'mail_admin' : mail_admin , 'somme' : somme , 'rate' : rate ,  'school_year' : school_year ,  }
+
+        return render(request, 'setup/payment_school_adhesion.html', context)
+
+    else :
+        return redirect('school_adhesion')     
+
+
+def delete_school_adhesion(request):
+
+    school_id = request.session.get("inscription_school_id")
+    school = School.objects.get(pk = school_id)
+    school.delete()
+    messages.error(request,"Demande d'adhésion ssannulée")
+    return redirect('index')
+
+
+
+def print_proformat_school(request):
+
+    school_year = Rate.objects.get(pk=1).year
+    somme = request.session.get("somme",None) + 2
+    name_admin = request.session.get("name_admin")
+    mail_admin = request.session.get("mail_admin")
+    school_id = request.session.get("inscription_school_id")
+    school = School.objects.get(pk = school_id)
+
+    now = datetime.now().date()
+
+    response = HttpResponse(content_type='application/pdf')
+
+    response['Content-Disposition'] = 'attachment; filename="'+str(school.id)+"-"+str(datetime.now().strftime('%Y%m%d'))+".pdf"
+    doc = SimpleDocTemplate(response,   pagesize=A4, 
+                                        topMargin=0.3*inch,
+                                        leftMargin=0.3*inch,
+                                        rightMargin=0.3*inch,
+                                        bottomMargin=0.3*inch     )
+
+    sample_style_sheet = getSampleStyleSheet()
+
+    sacado = ParagraphStyle('sacado', 
+                            fontSize=20, 
+                            leading=26,
+                            borderPadding = 0,
+                            alignment= TA_CENTER,
+                            )
+
+    elements = []                 
+    title_black = ParagraphStyle('title', fontSize=20, )
+    subtitle = ParagraphStyle('title', fontSize=16,  textColor=colors.HexColor("#00819f"),)
+    normal = ParagraphStyle(name='Normal',fontSize=10,)
+    normalr = ParagraphStyle(name='Normal',fontSize=12,alignment= TA_RIGHT)
+ 
+    logo = Image('https://sacado.xyz/static/img/sacadoA1.png')  
+    logo_tab = [[logo, "ASSOCIATION SACADO.XYZ \n2B avenue de la pinède \n83400 La Capte Hyères \nFrance" ]]
+    logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
+
+    elements.append(logo_tab_tab)
+    elements.append(Spacer(0, 0.2*inch))
+
+    paragraph0 = Paragraph( "Adhésion Annuelle " + school_year  , sacado )
+    elements.append(paragraph0)
+    elements.append(Spacer(0, 0.5*inch))
+
+
+
+    school_datas =  school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
+ 
+    demandeur =  school_datas+   "\n\nMontant de la cotisation : "+str(somme)+"€ (frais de port inclus)" +"\n\nNom du demandeur : " + name_admin +  "\nCourriel : " + mail_admin  
+
+
+
+
+    demandeur_tab = [[demandeur, "ASSOCIATION SACADO.XYZ \n2B avenue de la pinède \n83400 La Capte Hyères \nFrance\n\n\n\n\n" ]]
+    demandeur_tab_tab = Table(demandeur_tab, hAlign='LEFT', colWidths=[5*inch,2*inch])
+
+    elements.append(demandeur_tab_tab)
+    elements.append(Spacer(0, 0.2*inch))
+
+
+
+    my_texte_ = "Sous réserve du bon fonctionnement de son hébergeur LWS, l'association SACADO met l'ensemble des fonctionnalités du site https://sacado.xyz à disposition des enseignants de l'établissement "+school.name+"."
+    paragraph = Paragraph( my_texte_  , normal )
+    elements.append(paragraph)
+    elements.append(Spacer(0, 0.2*inch))
+
+
+
+    sy = school_year.split("-")
+    my_texte = "Le présent contrat est valide pour la période scolaire du 1 Septembre " + sy[0]+" jusqu'au 30 juin "+sy[1]+" pour les établissements de rythme Nord. \nPour les établissements de rythme Sud, la validité de l'adhésion est valable sur l'année "+sy[1]+"."
+
+
+    paragraph = Paragraph( my_texte  , normal )
+    elements.append(paragraph)
+    elements.append(Spacer(0, 0.2*inch))
+
+
+
+    signature_tab = [[ 'Signature précédée de la mention "Lu et approuvé" \n\n...........................................................\n\n\n ...........................................................',"" ]]
+    signature_tab_tab = Table(signature_tab, hAlign='LEFT', colWidths=[4*inch,3*inch])
+
+    elements.append(signature_tab_tab)
+    elements.append(Spacer(0, 0.4*inch))
+
+ 
+    doc.build(elements)
+
+    return response
+
+
+
+###############################################################################################################################################################################
+###############################################################################################################################################################################
+########  Inscription élève isolé
+###############################################################################################################################################################################
+###############################################################################################################################################################################
 
 def inscription(request):
     context = {}
@@ -627,7 +792,35 @@ def delete_adhesion(request):
 
 
 
- 
+##################################################################################################################
+##################################################################################################################
+##############################################  AJAX  ############################################################
+##################################################################################################################
+################################################################################################################## 
+
+def ajax_get_price(request):
+
+    nbr_students = request.POST.get("nbr_students",None)
+    data = {}
+    price = ""
+    if nbr_students :
+        if int(nbr_students) < 1500 : 
+            adhesion = Rate.objects.filter(quantity__gte=int(nbr_students)).first()
+            
+            today = datetime.now()
+
+            seuil = datetime(2021, 7, 1)
+
+            if today < seuil :
+                price = adhesion.discount
+            else :
+                price = adhesion.amount
+
+    data["price"] = price
+
+    return JsonResponse(data)
+
+
 
 def ajax_remboursement(request):
     data_id = int(request.POST.get("data_id"))
@@ -638,14 +831,6 @@ def ajax_remboursement(request):
 
 
  
-
-##################################################################################################################
-##################################################################################################################
-##############################################  AJAX  ############################################################
-##################################################################################################################
-##################################################################################################################
-
-
 def ajax_changecoloraccount(request):
     """
     Appel Ajax pour afficher la liste des élèves du groupe sélectionné

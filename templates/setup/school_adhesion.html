@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+
+
+
+
+{% block body %}
+
+<section class="container" style="margin-top:100px">
+    <h3 class="thin">Demande d'adhésion à la version Etablissement  <a href="#" id="show_fonctions" style="font-size : 14px">Fonctionnalités proposées</a></h3>    
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="alert alert-danger">
+                Si votre établissement souhaite une adhésion via le GAR, attendre sa mise en place prévue avant le 1 juillet 2021.
+            </div>
+        </div>
+    </div> 
+    <div class="row">
+       <div class="col-sm-12 col-md-12">
+        {% include 'table_price.html' %}
+       </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="alert alert-danger">
+            Si votre établissement est déjà inscrit, l'administrateur doit procéder à un renouvellement via son <a href="{% url 'index' %}">espace Admin</a>. Sinon <a href="#" id="renew_adh_school">cliquez ici</a>.
+            </div>
+        </div>
+    </div> 
+
+    <div class="row" id="fonctions">
+        <div class="col-sm-12 col-md-12">
+            {% include 'table_fonctions.html' %}
+
+            <a href="#" id="close_tab" class="btn btn-default">Fermer</a>
+        </div>
+    </div> 
+
+
+
+    <form action="" method="POST" id="renew_form_school">
+        <div class="row">                    
+            <div class="col-sm-12 col-md-6">
+
+                  {% csrf_token %}
+
+                  <div class="form-group">
+                      <label>Nom de l'établissement  : </label>   
+                      {{ form.name |add_class:"form-control" }}
+                      {{ form.name.errors }}
+                  </div>
+
+                  <div class="form-group">                
+                      {{ form.code_acad.label_tag }} <small>Pour les établissements sans RNE, renseigner un code de 5 caractères</small>
+                      {{ form.code_acad |add_class:"form-control" }}
+                      {{ form.code_acad.errors }}
+                  </div>
+                  <div class="form-group">
+                      {{ form.country.label_tag }}
+                      {{ form.country |add_class:"form-control select2" }}
+                      {{ form.country.errors }}
+                  </div>
+
+                  <div class="form-group">                
+                      {{ form.town.label_tag }}
+                      {{ form.town |add_class:"form-control" }}
+                      {{ form.town.errors }}
+                  </div>
+
+                  <div class="form-group">                
+                      {{ form.address.label_tag }}
+                      {{ form.address |add_class:"form-control" }}
+                      {{ form.address.errors }}
+                  </div>
+
+                  <div class="form-group">                
+                      {{ form.complement.label_tag }}
+                      {{ form.complement |add_class:"form-control" }}
+                      {{ form.complement.errors }}
+                  </div>
+
+                  <div class="row">     
+                      <div class="col-sm-12 col-md-6">
+                          <div class="form-group">
+                              {{ form.nbstudents.label_tag }}
+                              {{ form.nbstudents |add_class:"form-control" }}
+                              {{ form.nbstudents.errors }}
+                          </div>
+                      </div>
+
+                      <div class="col-sm-12 col-md-6">
+                          <div class="form-group">
+                              <label>Cotisation en euros : </label> 
+                              <input name="somme" id="somme" value=60 type="number"class="form-control" required readonly />
+                          </div>
+                      </div>
+                  </div>
+
+
+
+            </div>
+            <div class="col-sm-12 col-md-6">
+                  <div class="form-group">
+                      <label>Nom et prénom du demandeur  : </label>                
+                      <input name="name_admin" type="text"  class="form-control" required />
+                  </div>
+
+                  <div class="form-group">
+                      <label>Courriel  : </label>                
+                      <input name="mail_admin" type="text"  class="form-control" required />
+                  </div>
+
+ 
+
+                  <div class="form-group">
+                      <img src="{% static 'img/som_token.png' %}" />
+                      <input type="text" name="token" class="form-control" id="token" placeholder="Ecrire le résultat de la somme"  />
+                  </div>
+                  <div class="form-group">
+                      <input value="Envoyer la demande et payer" type="submit" class="btn btn-primary"/>            
+                      <a href="#" id="close_form" class="btn btn-default">Annuler</a>
+                  </div>
+
+                  <div class="row">
+                      <div class="col-sm-12 col-md-12">
+                          <div class="alert alert-danger">
+                              A partir du 1 juillet 2021, la version établissement ne sera activée qu'à partir de l'encaissement de la cotisation.
+                          </div>
+                      </div>
+                  </div> 
+
+
+
+            </div>  
+        </div> 
+    </form>
+ 
+
+</section> 
+
+ 
+{% endblock %}

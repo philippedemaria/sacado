@@ -83,12 +83,12 @@ class User(AbstractUser):
     time_zone = models.CharField(max_length=100, null=True, blank=True, choices=TZ_SET, verbose_name="Fuseau horaire")
     is_extra = models.BooleanField(default=0)
     is_manager = models.BooleanField(default=0)
-    school = models.ForeignKey(School, blank=True, null=True, related_name="users", default=None, on_delete = models.PROTECT)
+    school = models.ForeignKey(School, blank=True, null=True, related_name="users", default=None, on_delete = models.SET_NULL)
     schools = models.ManyToManyField(School, related_name="schools_to_users", blank=True,  verbose_name="Autres établissement à administrer")
     cgu = models.BooleanField(default=1)
     closure = models.DateTimeField(blank=True, null=True, default = None ,  verbose_name="Date de fin d'adhésion")
     is_testeur = models.BooleanField(default=0)
-    country = models.ForeignKey(Country, blank=True, null=True, related_name="countries", default=None, on_delete = models.PROTECT)
+    country = models.ForeignKey(Country, blank=True, null=True, related_name="countries", default=None, on_delete = models.SET_NULL)
     is_board = models.BooleanField(default=0)
 
     def __str__(self):

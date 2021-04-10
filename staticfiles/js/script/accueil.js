@@ -1,8 +1,6 @@
- 
     $(document).ready(function () {
  
-
-		 
+ 
         console.log("---- NEW test ajax-accueil.js ---") ;      
 
 
@@ -334,6 +332,82 @@
 
         if ($('#id_form-0-cgu')) { $('#id_form-0-cgu').prop('checked', false); } 
         if ($('#id_cgu')) { $('#id_cgu').prop('checked', false); }
+
+
+
+
+        $("#renew_form_school").hide();
+        $('#renew_adh_school').on('click', function (event) { 
+            $('#renew_form_school').toggle(500);           
+        });
+
+ 
+        $("#fonctions").hide();
+        $('#show_fonctions').on('click', function (event) { 
+              $('#fonctions').toggle(500); 
+        });
+
+        $('#close_tab').on('click', function (event) { 
+              $('#fonctions').toggle(500); 
+        });
+
+
+        $('#close_form').on('click', function (event) { 
+              $('#renew_form_school').toggle(500); 
+        });
+
+        $('#id_nbstudents').on('keyup', function () {
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                let nbr_students = $("#id_nbstudents").val() ;
+                $.ajax({
+                    url: 'ajax_get_price',
+                    data: {
+                        'nbr_students': nbr_students,
+                        csrfmiddlewaretoken: csrf_token,                        
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function (data) {
+ 
+                        $("#somme").val(data["price"]);
+ 
+                    }
+                });
+            });
+
+
+ 
+
+
+ 
+        $('#on_line').on('click', function (event) { 
+              $('.this_card').addClass("show_div_for_payment"); 
+              $('#show_on_line').removeClass("show_div_for_payment"); 
+        });
+
+ 
+        $('#virement_bancaire').on('click', function (event) { 
+              $('.this_card').addClass("show_div_for_payment"); 
+              $('#show_virement_bancaire').removeClass("show_div_for_payment"); 
+
+        });
+
+ 
+        $('#envoi_postal').on('click', function (event) { 
+              $('.this_card').addClass("show_div_for_payment"); 
+              $('#show_envoi_postal').removeClass("show_div_for_payment"); 
+        });
+
+
+
+
+
+
+
+
+
+
+
 
 
     });
