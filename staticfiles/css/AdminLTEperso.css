@@ -6634,6 +6634,7 @@ text-align: center;
   padding: 9px 9px;
   color:#FFF;
   z-index: 1;
+  opacity: 0.85;
 }
 
 .widget-user-header .disce{
