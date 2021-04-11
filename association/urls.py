@@ -15,6 +15,7 @@ urlpatterns = [
 
     path('new_voting/<int:id>/', create_voting, name='create_voting'),
  
+ 
     path('list_associate', list_associate, name='list_associate'),
     path('new_associate', create_associate, name='create_associate'),
     path('update_associate/<int:id>/', update_associate, name='update_associate'),
