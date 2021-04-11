@@ -189,9 +189,15 @@
                                             class="delete_from_folder pull-right" 
                                             style="padding-right:10px; font-size:16px;color:{{ p.color|contrast_color }}"><i class="fa fa-trash"></i>
                                         </a>
+                                        {% if group.id %}
                                         <a href="{% url 'update_parcours' p.id group.id %}"  class="pull-right" 
                                             style="padding-right:10px; font-size:16px;color:{{ p.color|contrast_color }}"><i class="fa fa-pencil-square"></i>
                                         </a>
+                                        {% else %}
+                                        <a href="{% url 'update_parcours' p.id 0 %}"  class="pull-right" 
+                                            style="padding-right:10px; font-size:16px;color:{{ p.color|contrast_color }}"><i class="fa fa-pencil-square"></i>
+                                        </a>
+                                        {% endif %}
                                     </h4>
                             </div>
                             </label>
