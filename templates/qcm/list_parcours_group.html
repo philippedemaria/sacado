@@ -186,7 +186,7 @@
     
 
                                 {% if parcours.title|length > 25 %}
-                                    <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px">{{ parcours.title|truncatechars:"25" }}<div class="helper_tip_text_right">{{ parcours.title }}</div></span>
+                                    <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px">{{ parcours.title|truncatechars:"28" }}<div class="helper_tip_text_right">{{ parcours.title }}</div></span>
                                 
                                     <span style="font-size:12px"> {{ parcours.leaf_parcours.count}} <i class="fa fa-th"></i> </span>
                                 {% else %}
@@ -228,9 +228,13 @@
                                         {{ parcours.nb_exercises }} ex, 
                                             {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}<small>min</small>
                                     </span>
+                                {% elif parcours.title|length > 14 %}
+                                    {{ parcours.title }}
 
-                  
-
+                                    <span style="font-size:12px"> 
+                                        {{ parcours.nb_exercises }} ex, 
+                                            {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}<small>min</small>
+                                    </span>
                                 {% else %}
                                 {{ parcours.title}}
 
