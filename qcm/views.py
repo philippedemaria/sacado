@@ -7395,6 +7395,20 @@ def delete_folder(request,id,idg):
     return redirect ("list_parcours_group", idg )  
 
 
+
+def parcours_delete_from_folder(request):
+
+    parcours_id =  request.POST.get("parcours_id",None) 
+    if parcours_id :
+        parcours = Parcours.objects.get( pk = int(parcours_id))
+        if parcours.teacher == request.user.teacher :
+            parcours.delete()
+    data = {}
+         
+    return JsonResponse(data)
+
+
+
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 #################   Testeurs

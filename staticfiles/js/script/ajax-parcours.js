@@ -976,7 +976,30 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
+        // Individualiser les exercices un par un
+        $('.delete_from_folder').on('click', function (event) {
 
+            let parcours_id = $(this).data("parcours_id"); 
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+ 
+                        'parcours_id' : parcours_id ,
+                        csrfmiddlewaretoken: csrf_token,
+                    },
+                    url: "../../../parcours_delete_from_folder",
+                    success: function (data) {
+                        
+                        $('#delete_from_folder'+parcours_id).remove();
+
+                    }
+                }
+            )
+        });
 
 
 

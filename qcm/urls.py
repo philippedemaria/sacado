@@ -24,6 +24,7 @@ urlpatterns = [
     path('parcours_folder/<int:idg>/', create_folder, name='create_folder'),
     path('parcours_update_folder/<int:id>/<int:idg>/', update_folder, name='update_folder'),
     path('parcours_delete_folder/<int:id>/<int:idg>/', delete_folder, name='delete_folder'),  
+    path('parcours_delete_from_folder', parcours_delete_from_folder, name='parcours_delete_from_folder'), 
 
     path('parcours_tasks_and_publishes/<int:id>/', parcours_tasks_and_publishes, name='parcours_tasks_and_publishes'), # gestion des taches
     path('show_parcours_visual/<int:id>/', show_parcours_visual, name='show_parcours_visual'), 

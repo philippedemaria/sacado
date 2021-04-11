@@ -173,8 +173,8 @@
                     <label><b>Sous parcours possibles</b></label>
                     {% for p in parcourses %}
                         {% get_is_leaf p parcours as is_leaf %}
-                        <li class="sanspuce">
-                            <label><input type="checkbox" name="subparcours" value="{{ p.id }}" {% if is_leaf %} checked {% endif %}  /> {{ p.title }}</label>
+                        <li class="sanspuce folder_line" id="delete_from_folder{{ p.id }}">
+                            <label><input type="checkbox" name="subparcours" value="{{ p.id }}" {% if is_leaf %} checked {% endif %}  /> {{ p.title }}
                             <div class="background_parcours" {% if not p.vignette %} style="background-color: {{ p.color }}" {% endif %}>
                                 {% if p.vignette %}
                                     <img src="{{ p.vignette.url }}" />
@@ -184,8 +184,15 @@
                                         {% if p.is_evaluation %}
                                              - Evaluation 
                                         {% endif %}
+
+                                        <a href="#" data-parcours_id="{{ p.id }}"  onclick="return TestDelete('{% if p.is_evaluation %}cette évaluation{% else %}ce parcours{% endif %}')"
+                                            class="delete_from_folder pull-right" 
+                                            style="padding-right:10px; font-size:16px;color:{{ p.color|contrast_color }}"><i class="fa fa-trash"></i>
+                                        </a>
+
                                     </h4>
                             </div>
+                            </label>
                         </li>
                     {% endfor %}
                 </div>

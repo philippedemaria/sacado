@@ -313,7 +313,7 @@ li label{
 
 li label:hover{
     cursor:pointer;
-    font-weight: 700;
+    /*font-weight: 700;*/
 }
 
 
@@ -403,11 +403,11 @@ li label:hover{
 
 .sanspuce:hover .background_parcours{
   position: absolute;
-  right: 0px;
+  right: 15px;
   width:300px;
   height:170px;
   overflow: hidden;
-  border:3px solid #222;
+  border:3px solid #5d4391;
   -webkit-box-shadow: -2px -2px 6px rgba(79, 73, 66, .5);
   box-shadow: -2px -2px 6px rgba(79, 73, 66, .5);
   display: block ;
@@ -416,7 +416,11 @@ li label:hover{
 
 
 
-
+.folder_line:hover{
+  background-color: #5d4391;
+  color:white;
+  border-radius: 0px 20px 0px 0px;
+}
 
 
  /******************************************** real_time_live  **************************************/
