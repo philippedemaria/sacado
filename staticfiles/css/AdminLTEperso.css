@@ -396,6 +396,29 @@ li label:hover{
 }
 
 
+
+.background_parcours{
+  display: none ;
+}
+
+.sanspuce:hover .background_parcours{
+  position: absolute;
+  right: 0px;
+  width:300px;
+  height:170px;
+  overflow: hidden;
+  border:3px solid #222;
+  -webkit-box-shadow: -2px -2px 6px rgba(79, 73, 66, .5);
+  box-shadow: -2px -2px 6px rgba(79, 73, 66, .5);
+  display: block ;
+  opacity: 0.9;
+  }
+
+
+
+
+
+
  /******************************************** real_time_live  **************************************/
 
 .no_live{

@@ -169,11 +169,24 @@
                 </div>
 
 
-                <div class="col-sm-6 col-md-6  col-lg-6">
+                <div class="col-sm-6 col-md-6  col-lg-6" style="position: relative">
                     <h4>Sous parcours possibles</h4>
                     {% for p in parcourses %}
                         {% get_is_leaf p parcours as is_leaf %}
-                        <li class="sanspuce"><label><input type="checkbox" name="subparcours" value="{{ p.id }}" {% if is_leaf %} checked {% endif %}  /> {{ p }}</label></li>
+                        <li class="sanspuce">
+                            <label><input type="checkbox" name="subparcours" value="{{ p.id }}" {% if is_leaf %} checked {% endif %}  /> {{ p.title }}</label>
+                            <div class="background_parcours" {% if not p.vignette %} style="background-color: {{ p.color }}" {% endif %}>
+                                {% if p.vignette %}
+                                    <img src="{{ p.vignette.url }}" />
+                                {% endif %}
+                                <div style="position: absolute; left:0px; padding-left:10px; opacity: 0.9; width:300px; bottom:0px;color:{{ p.color|contrast_color }};{% if p.vignette %}background-color: {{ p.color }}{% endif %}">
+                                    <h4 class="thin">{{ p.level }}
+                                        {% if p.is_evaluation %}
+                                             - Evaluation 
+                                        {% endif %}
+                                    </h4>
+                            </div>
+                        </li>
                     {% endfor %}
                 </div>
             </div>
