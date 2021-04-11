@@ -189,7 +189,9 @@
                                             class="delete_from_folder pull-right" 
                                             style="padding-right:10px; font-size:16px;color:{{ p.color|contrast_color }}"><i class="fa fa-trash"></i>
                                         </a>
-
+                                        <a href="{% url 'update_parcours' p.id group.id %}"  class="pull-right" 
+                                            style="padding-right:10px; font-size:16px;color:{{ p.color|contrast_color }}"><i class="fa fa-pencil-square"></i>
+                                        </a>
                                     </h4>
                             </div>
                             </label>
