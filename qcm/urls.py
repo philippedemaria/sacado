@@ -61,6 +61,10 @@ urlpatterns = [
 
     path('parcours_stat_evaluation/<int:id>/', stat_evaluation, name='stat_evaluation'), 
 
+    path('redo_evaluation', redo_evaluation, name='redo_evaluation'), 
+
+
+
     path('parcours_get_exercise_custom', ajax_parcours_get_exercise_custom, name='ajax_parcours_get_exercise_custom'),
     path('parcours_clone_exercise_custom', parcours_clone_exercise_custom, name='parcours_clone_exercise_custom'),
 

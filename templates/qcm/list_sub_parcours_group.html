@@ -109,7 +109,7 @@
                 </div>
             -->
                 <a href="#" data-parcours_id="{{parcours.id }}" class="overlay_show white">
-                <div class="disc disc{{parcours.id }}" style="background-color:{% if parcours.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %};"> 
+                <div class="disc disc{{parcours.id }} {% if  parcours.is_evaluation %}disce{% endif %}" style="background-color:{% if parcours.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %};"> 
                      <i class="fa fa-circle-o-notch"></i>
                 </div>
                 </a> 

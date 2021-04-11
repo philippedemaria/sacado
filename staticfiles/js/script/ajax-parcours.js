@@ -765,6 +765,57 @@ define(['jquery','bootstrap'], function ($) {
 
         // ====================================================================================================================
         // ====================================================================================================================
+        // ========================================   Reproposer une évaluation       =========================================
+        // ====================================================================================================================
+        // ====================================================================================================================
+
+ 
+        $('.redo_eval').on('click', function (event) {
+
+            let student_id  = $(this).data("student_id");
+            let parcours_id = $(this).data("parcours_id");
+            let student     = $(this).data("student_name");
+            let parcours    = $(this).data("parcours_title");
+
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            if (!confirm("Vous souhaitez effacer les résultats de l'élève "+student+" lors de l'évaluation "+parcours+" ? Attention cette action est irréversible. Confirmer. ")) return false;
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'student_id': student_id,
+                        'parcours_id': parcours_id,
+                        csrfmiddlewaretoken: csrf_token,
+                    },
+                    url: "../../redo_evaluation",
+                    success: function (data) {
+
+                        $('#redoNbr'+student_id).html("0");
+                        $('#redoKnowledge'+student_id).html(data.knowledges);
+                        $('#redoSkill'+student_id).html(data.skills);
+                        $('#redoDuration'+student_id).html("");
+                        $('#redoScore'+student_id).html("");  
+                        $('.stat_mark_round'+student_id).remove();                                   
+ 
+                    }
+                }
+            )
+        });
+
+
+
+
+
+
+
+
+
+
+        // ====================================================================================================================
+        // ====================================================================================================================
         // ============================================       Mes accordions       ============================================ 
         // ====================================================================================================================
         // ====================================================================================================================

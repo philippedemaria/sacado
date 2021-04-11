@@ -54,7 +54,7 @@ body{
 }
 </style>
  
-    <div class="content_list"> 
+    <div class="eval_list"> 
         <div class="row">
             <div class="col-sm-12 col-md-12">
  
@@ -100,19 +100,19 @@ body{
                                     <span class="helper_tip"><small>{{ stat.name.user.last_login|date:"d N Y  H:i"  }} </small> <div class="helper_tip_text_right" >Dernière connexion</div>
                                     </span>  
                                 </td>
-                                <td style="text-align: center;">{{ stat.nb_exo  }}/{{ stat.total_nb_exo  }}
+                                <td style="text-align: center;"><span id="redoNbr{{ stat.name.user.id }}">{{ stat.nb_exo  }}</span>/{{ stat.total_nb_exo  }}
                                     <span class="helper_tip"><i class="fa fa-question-circle"></i>
                                         <div class="helper_tip_text_right" >Nombre d'exercices traités / nombre d'exercices publiés</div>
                                     </span>
                                 </td>
-                                <td style="text-align: left;font-size:12px; width:35%">
+                                <td style="text-align: left;font-size:12px; width:35%" id="redoKnowledge{{ stat.name.user.id }}">
                                     {{  stat.detail_knowledge|safe  }}
                                 </td>
-                                <td style="text-align: left;font-size:12px">
+                                <td style="text-align: left;font-size:12px" id="redoSkill{{ stat.name.user.id }}">
                                     {{  stat.detail_skill|safe }}
                                 </td>
-                                <td style="text-align: center;">{{ stat.duration  }}</td>
-                                <td style="text-align: center;">
+                                <td style="text-align: center;" id="redoDuration{{ stat.name.user.id }}">{{ stat.duration  }}</td>
+                                <td style="text-align: center;" id="redoScore{{ stat.name.user.id }}">
                                     {% for s in stat.score_tab  %} 
                                         <span class="helper_tip white btn btn-{% if s.point < stage.low %}danger{% elif s.point < stage.medium %}warning{% else %}success{% endif %}" 
                                                 {% if s.point < stage.up and  stage.medium < s.point %}  style="background-color: #62d85a" {% endif %} >
@@ -156,21 +156,21 @@ body{
                                 </td>
                                 <td style="text-align: right;">
                                     {% if stat.total_numexo  %} 
-                                    <div class="stat_mark_round_max_width">
+                                    <div class="stat_mark_round_max_width stat_mark_round{{  stat.name.user.id }}">
                                         <span class="helper_tip"><small> {{ stat.good_answer  }}/{{ stat.total_numexo  }} </small>
                                             <div class="helper_tip_text" >Bonnes réponses / nombre de situations.</div>
                                         </span>
                                     </div>
                                     {% endif %}
                                     {% if stat.score_custom  %} 
-                                    <div class="stat_mark_round">
+                                    <div class="stat_mark_round stat_mark_round{{  stat.name.user.id }}">
                                         <span class="helper_tip">{{ stat.score_custom  }}/{{ stat.score_total}} 
                                             <div class="helper_tip_text" >Score cumulé sur les exercices personnalisés/score total.</div>
                                         </span>
                                     </div>
                                     {% endif %}
                                     {% if stat.percent  %}
-                                    <div class="stat_mark_round" style="background-color:{% if stat.percent < stage.low %}#dd4b39{% elif stat.percent < stage.medium %}#f39c12{% elif stat.percent < stage.medium %}#62d85a{% else %}#00a65a{% endif %}">
+                                    <div class="stat_mark_round stat_mark_round{{  stat.name.user.id }}" style="background-color:{% if stat.percent < stage.low %}#dd4b39{% elif stat.percent < stage.medium %}#f39c12{% elif stat.percent < stage.medium %}#62d85a{% else %}#00a65a{% endif %}">
 
                                          <span class="helper_tip white"> {{ stat.percent  }}% 
                                             <div class="helper_tip_text" > Score rapporté aux meilleurs scores</div>
@@ -178,13 +178,30 @@ body{
                                     </div>
                                     {% endif %}                                     
                                     {% if stat.ajust  %}
-                                    <div class="stat_mark_round"  style="background-color:{% if stat.ajust < stage.low %}#dd4b39{% elif stat.ajust < stage.medium %}#f39c12{% elif stat.ajust < stage.medium %}#62d85a{% else %}#00a65a{% endif %}">
+                                    <div class="stat_mark_round stat_mark_round{{  stat.name.user.id }}"  style="background-color:{% if stat.ajust < stage.low %}#dd4b39{% elif stat.ajust < stage.medium %}#f39c12{% elif stat.ajust < stage.medium %}#62d85a{% else %}#00a65a{% endif %}">
                                          <span class="helper_tip white"> <b> {{ stat.ajust  }}%</b> 
                                             <div class="helper_tip_text" > Score rapporté à tous les exercices proposés : $\frac{nb\; exo}{nb\;  exo\;  total} \times  score \; brut $, soit $\frac{ {{ stat.nb_exo  }} }{ {{ stat.total_nb_exo }} } \times  {{ stat.percent  }} $%</div>
                                         </span> 
                                     </div>  
                                     {% endif %} 
- 
+
+                                    {% if parcours.is_evaluation  %}
+                                    <div class="stat_mark_round helper_tip" style="padding-top:13px">
+                                        {% if sacado_asso %} 
+                                            <form  action="" method="POST">{% csrf_token %} 
+                                                <span class="redo_eval" data-student_id="{{  stat.name.user.id }}" 
+                                                    style="cursor:pointer"  data-student_name="{{  stat.name.user  }}"  
+                                                                            data-parcours_id="{{ parcours.id }}" 
+                                                                            data-parcours_title="{{ parcours.title }}" > <i class="fa fa-redo"></i> </span>
+                                            </form>
+                                        {% else %} 
+                                        <i class="fa fa-redo"></i>
+                                        {% endif %} 
+                                            <div class="helper_tip_text" > Effacer les résultats de cet élève et lui reproposer l'évaluation
+                                            </div>
+                                    </div>
+                                    {% endif %} 
+
                                 </td>  
                             </tr>
                         {% endfor %}

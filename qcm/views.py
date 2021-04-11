@@ -2279,6 +2279,40 @@ def stat_evaluation(request, id):
 
 
 
+ 
+def redo_evaluation(request):
+
+    data = {}     
+    parcours_id = request.POST.get("parcours_id", None)
+    student_id  = request.POST.get("student_id", None)
+    student     = Student.objects.get(pk=int(student_id) )
+    parcours    = Parcours.objects.get(pk=int(parcours_id) )
+
+    student.answers.filter(parcours=parcours).delete() # toutes les répones de cet élève à ce parcours/évaluation
+    student.student_correctionskill.filter(parcours= parcours).delete()
+    student.student_resultggbskills.filter(relationship__parcours = parcours).delete()  
+    student.student_exerciselocker.filter( relationship__parcours = parcours, custom = 0).delete()     
+    student.student_correctionknowledge.filter(parcours = parcours).delete()
+
+    skills = skills_in_parcours(request,parcours)
+    knowledges = knowledges_in_parcours(parcours)
+
+    detail_knowledge = ""
+    detail_skill     = ""
+
+    for knowledge in  knowledges :
+        detail_knowledge += knowledge.name + "<i class='fa fa-square text-default pull-right'></i> <br>" 
+
+    for skill in  skills :
+        detail_skill += knowledge.name + "<i class='fa fa-square text-default pull-right'></i> <br>" 
+
+    data["skills"]    = detail_skill 
+    data["knowledges"] = detail_knowledge  
+
+    return JsonResponse(data)
+
+
+
 
 def add_exercice_in_a_parcours(request):
 
