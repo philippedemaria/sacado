@@ -714,11 +714,14 @@ def create_voting(request,id):
         nf.user = request.user
         nf.associate_id = id
         nf.save()
-        rcv = ["sacado.asso@gmail.com"]
-        msg = "Une proposition de membre est postée par "+str(request.user)+". Rendez-vous sur https://sacado.xyz"
-        send_mail("Proposition de membre", msg , 'info@sacado.xyz', rcv)
+        try : 
+            rcv = ["sacado.asso@gmail.com"]
+            msg = "Une proposition de membre est postée par "+str(request.user)+". Rendez-vous sur https://sacado.xyz"
+            send_mail("Proposition de membre", msg , 'info@sacado.xyz', rcv)
+        except :
+            pass
         return redirect('list_associate')
-        
+
     else:
         print(form.errors)
 
