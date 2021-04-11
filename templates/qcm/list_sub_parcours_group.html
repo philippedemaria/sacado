@@ -185,43 +185,67 @@
                 <div class="box_title_vignette"> 
                     {% if parcours.is_folder %}
                     <a href="{% url 'list_sub_parcours_group' group.id parcours.id  %}" style="color:{{ parcours.color|contrast_color }};">
+
                         {% if parcours.is_pending_correction %}
-                        <i class="fa fa-copyright pull-right" style="font-size:12px;padding-right:5px;color:{{ parcours.color|contrast_color }};" title="Copies à corriger" ></i> 
+                            <i class="fa fa-copyright pull-right" style="font-size:12px;padding-right:5px;color:{{ parcours.color|contrast_color }};" title="Copies à corriger" ></i> 
                         {% endif %}
 
-                        {% if parcours.title|length > 18 %}
-                        <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px">{{ parcours.title|truncatechars:"18" }}<div class="helper_tip_text_right">{{ parcours.title }}</div></span>
+                        {% if parcours.title|length > 26 %}
+                            <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px">{{ parcours.title|truncatechars:"25" }}
+                                <div class="helper_tip_text_right"  style="color:{{ parcours.color}};font-size:14px">
+                                    {{ parcours.title }}
+                                </div>
+                            </span>
                         {% else %}
-                        {{ parcours.title}}
+                            {{ parcours.title}}
                         {% endif %}
                     </a>
                     {% else %}
-                    <a {% if parcours.is_evaluation%} href="{% url 'show_evaluation'  parcours.id  %}" {% else %} href="{% url 'show_parcours'  parcours.id  %}"{% endif %} style="color:{{ parcours.color|contrast_color }};">
-                        {% if parcours.is_pending_correction %}
-                        <i class="fa fa-copyright pull-right" style="font-size:12px;padding-right:5px;color:{{ parcours.color|contrast_color }};" title="Copies à corriger" ></i> 
-                        {% endif %}
+                        <a {% if parcours.is_evaluation%} href="{% url 'show_evaluation'  parcours.id  %}" {% else %} href="{% url 'show_parcours'  parcours.id  %}"{% endif %} style="color:{{ parcours.color|contrast_color }};">
+                            {% if parcours.is_pending_correction %}
+                            <i class="fa fa-copyright pull-right" style="font-size:12px;padding-right:5px;color:{{ parcours.color|contrast_color }};" title="Copies à corriger" ></i> 
+                            {% endif %}
 
-                        {% if parcours.title|length > 18 %}
-                        <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px;">
-                            {{ parcours.title|truncatechars:"18" }}<div class="helper_tip_text_right">{{ parcours.title }}</div>
-                        </span>
-                        {% else %}
-                        {{ parcours.title}}
-                        {% endif %}
+                            {% if parcours.title|length > 24 %}
+                                <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px;">
+                                    {{ parcours.title|truncatechars:"25" }}
+                                    <div class="helper_tip_text_right" style="color:{{ parcours.color }};">
+                                        <label style="font-size:14px">{{ parcours.title }} 
+                                            {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}, 
+                                                {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}min.
+                                        </label>
+                                    </div>
+                                </span>
+                            {% elif parcours.title|length > 18 %}
+                                <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px;">
+                                    {{ parcours.title|truncatechars:"19" }}  
+                                    <span style="font-size:12px">
+                                        {{ parcours.nb_exercises }} ex, 
+                                        {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %} 
+                                    </span> 
+                                    <div class="helper_tip_text_right" style="color:{{ parcours.color }};">
+                                        <label style="font-size:14px">{{ parcours.title }} </label>
+                                    </div>
+                                </span>
+                            {% else %}
+                                {{ parcours.title}}
+                                <span style="font-size:12px"> 
+
+                                    {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}, 
+                                        {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}
+                                    {% if parcours.title|length < 16 %}
+                                        min.
+                                    {% endif %}    
+                                </span>
+                            {% endif %}
 
 
-                        {% get_is_lock parcours today as is_lock %} 
-                        {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock" style="color:{{ parcours.color|contrast_color }};"></i><div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible aux élèves de soumettre des exercices.</div></span>{% endif %}
+                            {% get_is_lock parcours today as is_lock %} 
+                                {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock" style="color:{{ parcours.color|contrast_color }};"></i><div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible aux élèves de soumettre des exercices.</div></span>
+                            {% endif %}
 
-                        <span style="font-size:12px"> 
 
-                            {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}, 
-                                {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}
-                            {% if parcours.title|length < 16 %}
-                                min.
-                            {% endif %}    
-                        </span>
-                    </a>
+                        </a>
                     {% endif %}
 
                     {% if parcours.isnot_shared  %}
