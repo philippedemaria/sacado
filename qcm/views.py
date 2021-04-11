@@ -3942,7 +3942,7 @@ def store_the_score_relation_ajax(request):
             scored = 0
             studentanswers = Studentanswer.objects.filter(student = student,exercise__knowledge = knowledge) 
             for studentanswer in studentanswers:
-                scored +=  studentanswer.point 
+                scored += studentanswer.point 
             try :
                 scored = scored/len(studentanswers)
             except :
@@ -4006,8 +4006,6 @@ def store_the_score_relation_ajax(request):
         new_rank      = relation.ranking + 1 
         i             = 0
         relationships = Relationship.objects.filter(parcours=parcours)
-
-        print(relationships.count() , new_rank)
 
         for r in relationships :
             Relationship.objects.filter(pk=r.id).update(ranking = i)
@@ -4191,6 +4189,17 @@ def create_evaluation(request):
     if not request.user.is_authenticated :
         redirect('index')
 
+
+
+    if request.session.has_key("group_id") :
+        group_id = request.session.get("group_id",None)        
+        if group_id :
+            group = Group.objects.get(pk = group_id)
+    else :
+        group_id = None
+        group = None
+        request.session["group_id"]  = None  
+
     teacher = request.user.teacher
     levels =  teacher.levels.all()    
     try :
@@ -4231,29 +4240,12 @@ def create_evaluation(request):
 
         if request.POST.get("save_and_choose") :
             return redirect('peuplate_parcours', nf.id)
+        elif group_id :
+            return redirect('list_parcours_group', group_id ) 
         else :
             return redirect('evaluations')   
     else:
         print(form.errors)
-
-
-    try :
-        if request.session.has_key("group_id") :
-            group_id = request.session.get("group_id",None)        
-            if group_id :
-                group = Group.objects.get(pk = group_id)
-            else :
-                group = None
-        else :
-            group_id = None
-            group = None
-            request.session["group_id"]  = None        
-
-    except :
-        group_id = None
-        group = None
-        request.session["group_id"]  = None
-
 
     context = {'form': form, 'teacher': teacher, 'parcours': None, 'groups': groups, 'idg': 0,  'group_id': group_id , 'group': group , 'relationships': [], 'communications' : [], 'share_groups' : share_groups , 
                'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'role':True}
@@ -6756,7 +6748,7 @@ def ajax_this_course_viewer(request):
     course = Course.objects.get(pk=course_id)
     data = {}
  
-
+    teacher = request.user.teacher
     parcours_id =  int(request.POST.get("parcours_id"))
     parcours = Parcours.objects.get(pk=parcours_id)
 
@@ -6771,7 +6763,7 @@ def ajax_this_course_viewer(request):
 
 
 
-    context = {  'course': course , 'parcours': parcours   }
+    context = {  'course': course , 'parcours': parcours , 'teacher' : teacher   }
  
  
     html = render_to_string(url, context )

@@ -242,7 +242,7 @@ def school_groups(request):
 
 
 
-	users = school.users.all()
+	users = school.users.filter(user_type=2)
 	groups = Group.objects.filter(teacher__user__in=users).order_by("level")
 
 	return render(request, 'school/list_groups.html', { 'communications' : [],'groups': groups, "school" : school })

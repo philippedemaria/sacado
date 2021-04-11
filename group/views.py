@@ -588,9 +588,11 @@ def update_group(request, id):
 
 
 def delete_group(request, id):
-    group = Group.objects.get(id=id, teacher_id=request.user.id)
+
+
+    group = Group.objects.get(id=id)
     # Si le prof n'appartient pas à un établissement
-    teacher = group.teacher
+    teacher = request.user.teacher
     authorizing_access_group(request,teacher,group )
     if not teacher.user.school :
         # Si les élèves n'appartiennent pas à un établissement
@@ -608,12 +610,18 @@ def delete_group(request, id):
         group.delete()
         request.session.pop('group', None)
         request.session.pop('group_id', None)
+        messages.success(request,"Groupe supprimé.")
         return redirect('index')
     else :
-        group.delete()
-        request.session.pop('group', None)
-        request.session.pop('group_id', None)
-        return redirect('school_groups')        
+        if teacher.user.is_manager and group.teacher.user.school == request.user.school :
+            group.delete()
+            request.session.pop('group', None)
+            request.session.pop('group_id', None)
+            messages.success(request,"Groupe supprimé.")
+            return redirect('school_groups')
+        else :
+            messages.error(request,"Vous ne pouvez pas supprimer le groupe. Contacter l'administrateur de votre étalissement.")
+            return redirect('school_groups')    
 
  
 def show_group(request, id ):

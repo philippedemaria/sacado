@@ -362,7 +362,7 @@ class Parcours(ModelWithCode):
 
     is_next = models.BooleanField(default=0, verbose_name="Suivant ?")
     is_exit = models.BooleanField(default=0, verbose_name="Retour aux exercices ?")
-    is_stop = models.BooleanField(default=0, verbose_name="Dépassement ?")
+    is_stop = models.BooleanField(default=0, verbose_name="Limité ?")
 
     duration = models.PositiveIntegerField(default=2, blank=True, verbose_name="Temps de chargement (min.)")
     start = models.DateTimeField(null=True, blank=True, verbose_name="A partir de")
