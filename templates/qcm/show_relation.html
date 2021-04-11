@@ -184,7 +184,7 @@
                     {% endif %}  
 
 
-                    {% if parcours.is_exit %}
+                    {% if parcours.is_evaluation and parcours.is_exit %}
                         <a href="{% url 'show_parcours_student' parcours.id %}"  class="btn btn-default" >  Revenir aux exercices   </a>
                     {% else %}
                       <a href="javascript:history.back()"><input type="button" value="Revenir aux exercices" class="btn btn-default "/></a>
