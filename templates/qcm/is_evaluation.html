@@ -1,5 +1,12 @@
-{% if parcours.is_evaluation and parcours_available.nbleft > 0 %}
+{% if parcours.is_evaluation and parcours_available.nbleft > 0 or available.nbleft > 0%}
+
+
+ 	{% if parcours_available.nbleft > 0 or available.nbleft > 0 %}
+
     <input  class="btn btn-primary"   type="submit" id="submit_button_evaluation"  value="Enregistrer le résultat"  />
+
+ 	{% endif %}
+
 {% else %}
     <input  class="btn btn-primary"   type="submit" id="submit_button_relation"  value="Enregistrer le résultat"  />
 {% endif %}
