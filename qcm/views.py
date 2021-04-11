@@ -2405,8 +2405,13 @@ def clone_parcours(request, id, course_on ):
         else :
             return redirect('update_parcours',  parcours.id, group_id)
     else :
-        return redirect('all_parcourses')
- 
+        if parcours.is_evaluation :
+            return redirect('update_evaluation' , parcours.id, 0)
+        else :
+            return redirect('all_parcourses')
+
+
+
  
 def ajax_parcours_get_exercise_custom(request):
 
