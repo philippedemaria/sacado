@@ -82,7 +82,7 @@
         {% for parcours in parcours_sort.list %}  
   
         <div  class="box box-widget widget-user-2 div_sorter"  {% if not parcours_sort.grouper %} data-parcours_id ="{{parcours.id}}" {% endif %} 
-              style="cursor: move;{% if parcours.vignette %}background-image: url('{{ parcours.vignette.url }}'); background-size: cover; {% else %} background-color:{{parcours.color }}{% endif %};">
+              style="cursor: move;{% if parcours.vignette %}background-image: url('{{ parcours.vignette.url }}'); background-size: cover;{% endif %} background-color:{{parcours.color }};">
  
 
             <!-- Add the bg color to the header using any of the bg-* classes -->
