@@ -356,27 +356,12 @@
               "langage":"en",
               "filename":"{{ exercise.supportfile.ggbfile.url }}",
                "appletOnLoad" :  function(applet) { 
+
                         applet.setValue("situation",{{ relation.situation }});
 
-                    {% if parcours.is_evaluation and parcours.is_stop %}
-                       applet.registerUpdateListener("updateListener");  
-                    {% endif %}
 
                   }
               };
-
-
-              function updateListener(objName) {
-                  var applet = document.ggbApplet;
-                    if ( objName == "fini") { 
-                        if ( applet.getValue(objName)  ==  1 ) { 
-
-                          alert("Vous êtes en évaluation. L'exercice est fini. Vous devez enregistrer votre résultat.") ;
-                          applet.setValue("fini", 0) ; 
-
-                        }
-                    }
-                }
 
 
         var applet = new GGBApplet('5.0', parameters,true);
