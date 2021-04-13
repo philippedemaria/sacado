@@ -6622,8 +6622,11 @@ text-align: center;
   font-size: 0.6em;
 }
 
+.disc{
+  display: none;
+}
 
-.widget-user-header .disc{
+.widget-user-header:hover .disc{
   position: absolute;
   top:10px;
   right: 20px;
@@ -6635,6 +6638,7 @@ text-align: center;
   color:#FFF;
   z-index: 1;
   opacity: 0.85;
+  display: block;
 }
 
 .widget-user-header .disce{
