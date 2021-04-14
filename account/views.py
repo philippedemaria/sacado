@@ -1030,12 +1030,13 @@ def update_teacher(request, pk):
 #@can_register
 #@is_manager_of_this_school
 def delete_teacher(request, id):
-    if request.POST:
-        teacher = get_object_or_404(Teacher, user_id=id)
+
+    teacher = get_object_or_404(Teacher, user_id=id)
+    if request.user.teacher == teacher or request.user.is_superuser :
         teacher.user.delete()
 
-    test = request.POST.get("listing",None)
-    if test :
+        messages.success(request,"Le profil a été supprimé avec succès.")
+    if request.user.is_superuser :
         return redirect('list_teacher')
     elif request.user.is_manager :
         return redirect('school_teachers')
