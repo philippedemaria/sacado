@@ -423,6 +423,32 @@ li label:hover{
 }
 
 
+
+ /******************************************** rabat dossier  **************************************/
+
+.rabat_dossier{
+  position: absolute;
+  top : 0px;
+  right:0px;  
+  opacity: 0;
+  -webkit-transition: .6s ease-in-out;
+  transition: .6s ease-in-out;
+
+}
+
+
+.widget-user-header:hover .rabat_dossier{
+  position: absolute;
+  top : 0px;
+  right:0px;
+  opacity: 1;
+}
+
+
+
+
+
+
  /******************************************** real_time_live  **************************************/
 
 .no_live{

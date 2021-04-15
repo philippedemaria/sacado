@@ -71,12 +71,20 @@
       
             <div  class="box box-widget widget-user-2 div_sorter"  {% if not parcours_sort.grouper %} data-parcours_id ="{{parcours.id}}" {% endif %} 
                   style="cursor: move;{% if parcours.vignette %}background-image: url('{{ parcours.vignette.url }}'); background-size: cover; {% endif %}background-color:{{parcours.color }};">
+ 
+
      
 
                 <div class="handler widget-user-header">
                     <!-- Add signet to folder -->
                     {% if parcours.is_folder and not parcours.vignette  %}
                         <img src="{% static 'img/signet.png' %}" class="pull-right" />
+                    {% elif parcours.is_folder and parcours.vignette  %}
+                        <img src="{% static 'img/rabat_dossier.png' %}" class="rabat_dossier" />
+                    {% elif not parcours.is_folder and parcours.vignette  %}
+                        <img src="{% static 'img/rabat_parcours.png' %}" class="rabat_dossier" />
+                    {% else  %}
+                        <img src="{% static 'img/rabat_parcours.png' %}" class="rabat_dossier" />
                     {% endif  %}
 
                     <div class="group_show  group_show{{parcours.id }} no_visu_on_load"> 
@@ -167,12 +175,6 @@
                             {% endif %}
                         </div> 
                     </div>
-                    <!-- Fin de la fenetre  -->
-                    {% if parcours.is_evaluation %}   
-                        <div class="icon_evaluation">
-                            <i class="fa fa-bullseye"></i> 
-                        </div>
-                    {% endif %}
                     {% if parcours.vignette %}                
                         <div class="box_title_underlay_vignette" style="background-color:{{ parcours.color }};">
                         </div> 
