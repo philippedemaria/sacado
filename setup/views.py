@@ -400,7 +400,7 @@ def print_proformat_school(request):
     elements.append(Spacer(0, 0.5*inch))
 
     school_datas =  school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
-    demandeur =  school_datas+   "\n\nMontant de la cotisation : "+str(school.fee())+"€ (frais de port inclus)" +"\n\nNom du demandeur : " + user.first_name + " "  + user.last_name + "\nCourriel : " + user.email  
+    demandeur =  school_datas+   "\n\nMontant de la cotisation : "+str(school.fee()+2)+"€ (frais de port inclus)" +"\n\nNom du demandeur : " + user.first_name + " "  + user.last_name + "\nCourriel : " + user.email  
 
 
     demandeur_tab = [[demandeur, "ASSOCIATION SACADO.XYZ \n2B avenue de la pinède \n83400 La Capte Hyères \nFrance\n\n\n\n\n" ]]
