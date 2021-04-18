@@ -20,11 +20,7 @@ urlpatterns = [
     path('payment_school_adhesion', payment_school_adhesion , name='payment_school_adhesion'), 
     path('delete_school_adhesion', delete_school_adhesion , name='delete_school_adhesion'), 
     path('print_proformat_school', print_proformat_school, name='print_proformat_school'),  
-
-
-    path('renew_school_adhesion/<int:school_id>', renew_school_adhesion , name='renew_school_adhesion'),
-
-
+    path('iban_asking', iban_asking, name='iban_asking'),  
     
     path('student_to_association__123526', student_to_association, name='student_to_association'),     
     path('choice_menu__123526/<slug:name>', choice_menu, name='choice_menu'), 

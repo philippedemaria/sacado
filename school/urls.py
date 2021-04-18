@@ -24,6 +24,10 @@ urlpatterns = [
 
     path('get_school', get_school, name='get_school'),
 
+    path('school_accounting', school_accounting, name='school_accounting'),
+
+
+
 
     path('new_student/<slug:slug>', new_student , name='new_student'),
     path('new_student_list/<slug:slug>', new_student_list , name='new_student_list'),
@@ -48,6 +52,9 @@ urlpatterns = [
     path('get_school_students', get_school_students , name='get_school_students'),
     path('manage_stage', manage_stage, name='manage_stage'),
 
+
+    path('renew_school_adhesion', renew_school_adhesion , name='renew_school_adhesion'), 
+    path('delete_renewal_school_adhesion', delete_renewal_school_adhesion, name='delete_renewal_school_adhesion'), 
 
     path('ajax_subject_teacher', ajax_subject_teacher, name='ajax_subject_teacher'),
     path('ajax_get_this_school_in_session', ajax_get_this_school_in_session, name='ajax_get_this_school_in_session'),

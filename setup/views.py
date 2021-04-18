@@ -7,10 +7,9 @@ from account.models import  User, Teacher, Student  ,Parent , Adhesion
 from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise, Customanswerbystudent,Writtenanswerbystudent
 from tool.models import Quizz, Question, Choice
 from group.models import Group, Sharing_group
-from association.models import Accounting , Detail
+from association.models import Accounting , Detail , Rate
 from group.views import student_dashboard
 from setup.models import Formule 
-from association.models import Rate
 from school.models import Stage , School
 from sendmail.models import Communication
 from school.forms import  SchoolForm
@@ -21,6 +20,7 @@ from django.db.models import Count, Q
 from datetime import date, datetime , timedelta
 from django.utils import formats, timezone
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
 import random
 import pytz
 import uuid
@@ -29,6 +29,7 @@ import os
 from itertools import chain
 from account.decorators import is_manager_of_this_school
 from general_fonctions import *
+from payment_fonctions import *
 import fileinput 
 import random
 from django.contrib.auth.hashers import make_password
@@ -230,17 +231,6 @@ def send_message(request):
     return redirect("index")
 
 
-def accounting_adhesion(school_exists, today , somme , acting, user, is_active  ):
-
-    accounting, create = Accounting.objects.get_or_create( school = school_exists   ,  date = today ,  defaults={ 'amount' : somme, 'objet' : "Cotisation", 'beneficiaire' :  "SACADO ASSO" ,
-                                                                                                                    'is_credit' : 1, 'address' : school_exists.address , 'complement' : school_exists.complement ,
-                                                                                                                    'town' : school_exists.town , 'country' : school_exists.country , 'contact' : school_exists.address ,
-                                                                                                                     'observation' : "Cotisation" ,'acting' : acting , 'user' : user ,'is_active' : is_active })
-    if create :
-        Detail.objects.create( accounting = accounting  ,  description = "Cotisation" , amount = somme)
-
-
-
 
 def school_adhesion(request):
 
@@ -249,58 +239,85 @@ def school_adhesion(request):
     form = SchoolForm(request.POST or None)
     token = request.POST.get("token", None)
     today = datetime.now()
-    
+    u_form = UserForm(request.POST or None)
+
 
     if request.method == "POST" :
-        if form.is_valid():
+        if  all((u_form.is_valid(), form.is_valid())):   
+
             if token :
-                if int(token) == 7  :
+                if int(token) == 7 :
                     school_commit = form.save(commit=False)
                     school_exists, created = School.objects.get_or_create(name = school_commit.name, town = school_commit.town , country = school_commit.country , code_acad = school_commit.code_acad , defaults={ 'nbstudents' : school_commit.nbstudents , 'address' : school_commit.address ,'complement' : school_commit.complement , }  )
                     if not created :
-                        messages.error(request,"Etablissement existant.")
-                        return redirect('index')
+                        # si l'établisseent est déjà créé, on la modifie et on récupère son utilisateur.
+                        School.objects.filter(pk = school_exists.id).update(town = school_commit.town , country = school_commit.country , code_acad = school_commit.code_acad , nbstudents = school_commit.nbstudents , address = school_commit.address , complement = school_commit.complement )
+                        new_user_id = request.session.get("new_user_id", None)
+                        if new_user_id :
+                            user = User.objects.get(pk = new_user_id )
 
-                    somme = request.POST.get("somme")
+                    else :
+                        # si l'établissement vient d'être créé on crée aussi la personne qui l'enregistre.
+                        user = u_form.save(commit=False)
+                        user.user_type = User.TEACHER
+                        user.school = school_exists # on attribue l'établissement à la personne qui devient référence
+                        user.is_manager = 1 # on attribue l'établissement à la personne qui devient administratrice de sacado.
+                        user.set_password(u_form.cleaned_data["password1"])
+                        user.save()
+                        username = u_form.cleaned_data['username']
+                        password = u_form.cleaned_data['password1']
+                        teacher = Teacher.objects.create(user=user)
+                        request.session["new_user_id"] = user.id 
+                        ##########
+                    acting, is_active  = None , False # date d'effet, user, le paiement est payé non ici... doit passer par la vérification
+                    observation =   "Paiement en ligne "             
 
-                    acting, user, is_active  = None , None , False 
-
-                    accounting_adhesion(school_exists, today , somme , acting, user, is_active)
+                    accounting_id = accounting_adhesion(school_exists, today , acting, user, is_active , observation) # créattion de la facturation
 
                     school_datas =  school_exists.name +"\n"+school_exists.code_acad +  " - " + str(school_exists.nbstudents) +  " élèves \n" + school_exists.address +  "\n"+school_exists.town+", "+school_exists.country.name
                     send_mail("Demande d'adhésion à la version établissement",
-                              "Bonjour l'équipe SACADO, \nl'établissement suivant demande la version établissement :\n"+ school_datas +"\n\nCotisation : "+somme+" €.\n\nEnregistrement de l'étalissement dans la base de données https://sacado.xyz. Ne pas répondre.",
+                              "Bonjour l'équipe SACADO, \nl'établissement suivant demande la version établissement :\n"+ school_datas +"\n\nCotisation : "+str(school_exists.fee())+" €.\n\nEnregistrement de l'étalissement dans la base de données.\nEn attente de paiement. \nhttps://sacado.xyz. Ne pas répondre.",
                               'info@sacado.xyz',
                               ['sacado.asso@gmail.com'])
 
-                    request.session["name_admin"] = request.POST.get("name_admin")
-                    request.session["mail_admin"] = request.POST.get("mail_admin")
-                    request.session["somme"] = somme
-                    request.session["inscription_school_id"] = school_exists.pk
+                    send_mail("Demande d'adhésion à la version établissement",
+                              "Bonjour "+user.first_name+" "+user.last_name +", \nVous avez demandé la version établissement pour :\n"+ school_datas +"\n\nCotisation : "+str(school_exists.fee())+" €. \nEn attente de paiement. \nL'équipe SACADO vous remercie de votre confiance. \nCeci est un mail automatique. Ne pas répondre. ",
+                               'info@sacado.xyz',
+                               [user.email])
+
+
+                    # Mise en session de l'ide de l'établissement et de l'id de la facture.
+                    request.session["accounting_id"] = accounting_id
+                    request.session["inscription_school_id"] = school_exists.pk  # inscription_school_id != school_id... On pourrait imaginer qu'un établissement en inscrive un autre sinon.
+                    request.session["contact"] = user.first_name+" "+user.last_name 
 
                     return redirect('payment_school_adhesion')
         else :
             print(form.errors)
+            print(u_form.errors)
 
-
-    context = { 'form' : form , 'rates': rates, 'school_year': school_year, }
+    context = { 'form' : form , 'rates': rates, 'school_year': school_year, 'u_form' : u_form }
     return render(request, 'setup/school_adhesion.html', context)
+
 
 
 
 def payment_school_adhesion(request):
  
-    somme = request.session.get("somme",None)
-    if somme : 
-        name_admin = request.session.get("name_admin")
-        mail_admin = request.session.get("mail_admin")
-        school_id = request.session.get("inscription_school_id")
-        school = School.objects.get(pk = school_id)
 
-        rate = Rate.objects.filter(quantity__gte=school.nbstudents).first()
-        school_year = rate.year #tarifs pour l'année scolaire
+    school_id     = request.session.get("inscription_school_id", None)
+    accounting_id = request.session.get("accounting_id", None)
+    contact       = request.session.get("contact", None)
+    new_user_id   = request.session.get("new_user_id", None)
 
-        context = { 'school' : school , 'name_admin' : name_admin , 'mail_admin' : mail_admin , 'somme' : somme , 'rate' : rate ,  'school_year' : school_year ,  }
+    if new_user_id :
+        user = User.objects.get(pk = new_user_id )
+
+    if school_id :  
+        school     = School.objects.get(pk = school_id)
+        accounting = Accounting.objects.get(pk=accounting_id) 
+
+        context = { 'school' : school , 'contact' : contact ,   'accounting' : accounting ,   'user' : user , }
 
         return render(request, 'setup/payment_school_adhesion.html', context)
 
@@ -308,35 +325,33 @@ def payment_school_adhesion(request):
         return redirect('school_adhesion')     
 
 
+
+def iban_asking(request):
+
+    school_id = request.session.get("inscription_school_id")
+    new_user_id = request.session.get("new_user_id")
+    school = School.objects.get(pk = school_id)
+    user = User.objects.get(pk = new_user_id)
+    send_mail("Demande d'IBAN",
+                "Bonjour l'équipe SACADO, \nJe souhaiterais recevoir un IBAN de votre compte pour procéder à un virement bancaire en faveur de mon établissement :\n\n"+ school.name +"\n"+ school.town +","+ school.country.name +"\n\nNe pas répondre.",
+                    'info@sacado.xyz',
+                    [user.email,'sacado.asso@gmail.com'])
+
+    messages.success(request,"Demande d'IBAN envoyée")
+    return redirect('index')
+
+
+
 def delete_school_adhesion(request):
 
     school_id = request.session.get("inscription_school_id")
     school = School.objects.get(pk = school_id)
     school.delete()
-    messages.error(request,"Demande d'adhésion ssannulée")
+    messages.success(request,"Demande d'adhésion annulée")
     return redirect('index')
 
 
-
-def renew_school_adhesion(request,school_id):
  
-    school = School.objects.get(pk = school_id)
-
-    today = datetime.now()
-    if today < datetime(2021,7,1) :
-        somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().discount
-    else :
-        somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().amount
-    user = request.user
-    accounting_adhesion(school, today , somme , None , user, False  )
-
-    return redirect('admin_tdb') 
-
-
-
-
-
-
 def print_proformat_school(request):
 
     school_year = Rate.objects.get(pk=1).year
@@ -956,8 +971,26 @@ def admin_tdb(request):
         else :
             school_id = 0
 
-    return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers, 'nb_students': nb_students, 'school_id' : school_id , "school" : school , 
-                                                    'nb_groups': nb_groups, 'schools_tab': schools_tab, 'stage': stage, 'is_lycee' : is_lycee , 
+    rates = Rate.objects.all() #tarifs en vigueur 
+    school_year = rates.first().year #tarifs pour l'année scolaire
+
+    school_year_tab = school_year.split("-")
+    renew_date = datetime(int(school_year_tab[0]),4,15)
+    next_renew_date = datetime(int(school_year_tab[1]),4,15)
+
+
+    today   = datetime.now()
+    renewal = True
+    if Accounting.objects.filter(school = school, is_active = 1, date__gte=renew_date, date__lte=next_renew_date ).count() == 1:
+        renewal = False   
+
+
+    renew_propose = False
+    if today > datetime(int(today.year),4,15) and renewal :
+        renew_propose = True
+    print(renew_propose)
+    return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers, 'nb_students': nb_students, 'school_id' : school_id , "school" : school , 'renew_propose' : renew_propose ,  
+                                                    'nb_groups': nb_groups, 'schools_tab': schools_tab, 'stage': stage, 'is_lycee' : is_lycee , 'school_year' : school_year ,  'rates' : rates , 
                                                     'eca': eca, 'ac': ac, 'dep': dep , 'communications' : [],
                                                     })
 

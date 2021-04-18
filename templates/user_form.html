@@ -2,14 +2,14 @@
 <div class="row">
     <div class="col-sm-12 col-md-6">
         <div class="form-group">
-            <label>{{ u_form.last_name.label_tag }}</label>
+            {{ u_form.last_name.label_tag }}
             {{ u_form.last_name |add_class:"form-control id_last_name" }}
             {{ u_form.last_name.errors }}
         </div>
     </div>
     <div class="col-sm-12 col-md-6">
         <div class="form-group">
-            <label>{{ u_form.first_name.label_tag }}</label>
+            {{ u_form.first_name.label_tag }}
             {{ u_form.first_name |add_class:"form-control id_first_name" }}
             {{ u_form.first_name.errors }}
         </div>
@@ -18,7 +18,7 @@
 <div class="row">
     <div class="col-sm-12 col-md-8">
         <div class="form-group">
-            <label>{{ u_form.email.label_tag }}</label>
+            {{ u_form.email.label_tag }}
             {{ u_form.email |add_class:"form-control email" }}
             {{ u_form.email.errors }}
         </div>
@@ -32,7 +32,7 @@
 <div class="row">
     <div class="col-sm-11 col-md-8">
         <div class="form-group">
-            <label>{{ u_form.username.label_tag }}</label>
+            {{ u_form.username.label_tag }}
             {{ u_form.username |add_class:"form-control username" }}
             {{ u_form.username.errors }}
         </div>
@@ -46,14 +46,14 @@
 <div class="row">
     <div class="col-sm-12 col-md-6">
         <div class="form-group">
-            <label>{{ u_form.password1.label_tag }} <small><em>Au moins 8 caractères</em></small></label>
+            {{ u_form.password1.label_tag }} <small><em>Au moins 8 caractères</em></small>
             {{ u_form.password1 |add_class:"form-control" }}
             {{ u_form.password1.errors }}
         </div>
     </div>
     <div class="col-sm-12 col-md-6">
         <div class="form-group">
-            <label>{{ u_form.password2.label_tag }}</label>
+            {{ u_form.password2.label_tag }}
             {{ u_form.password2 |add_class:"form-control" }}
             {{ u_form.password2.errors }}
         </div>
@@ -63,7 +63,7 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
         <div class="form-group">
-            <label>{{ u_form.cgu }}  <small>Je reconnais avoir lu et compris les <a href="#" data-target="#cgu" data-toggle='modal'>conditions générales d'utilisation</a> et je les accepte</small>.</label>
+            {{ u_form.cgu }}  <small>Je reconnais avoir lu et compris les <a href="#" data-target="#cgu" data-toggle='modal'>conditions générales d'utilisation</a> et je les accepte</small>.
         </div>
     </div>
 </div>

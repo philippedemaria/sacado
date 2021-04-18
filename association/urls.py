@@ -45,5 +45,9 @@ urlpatterns = [
     path('delete_rate/<int:id>/', delete_rate, name='delete_rate'),
     path('show_rate', show_rate, name='show_rate'),
 
+
+    path('payment_complete', payment_complete, name='payment_complete'),  
+
+
 ]
  

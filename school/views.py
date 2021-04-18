@@ -2,23 +2,24 @@ from django.shortcuts import render, redirect
 from django.forms import formset_factory
 from django.contrib.auth.decorators import permission_required,user_passes_test
 from django.contrib import messages
-from .models import School, Country  , Stage
-from school.forms import SchoolForm, CountryForm, GroupForm, StageForm
-from group.views import include_students
-from group.models import Group, Sharing_group
-from account.decorators import is_manager_of_this_school
-from socle.decorators import user_is_superuser
-from socle.models import Subject
-from account.models import User, Teacher, Student
-from account.forms import UserForm , StudentForm ,NewUserSForm
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from django.http import JsonResponse
+from .models import School, Country  , Stage
+from account.decorators import is_manager_of_this_school
+from account.models import User, Teacher, Student
+from account.forms import UserForm , StudentForm ,NewUserSForm
+from association.models import Accounting, Rate, Detail
+from school.forms import SchoolForm, CountryForm, GroupForm, StageForm
+from group.views import include_students
+from group.models import Group, Sharing_group
+from socle.decorators import user_is_superuser
+from socle.models import Subject
 from general_fonctions import *
+from payment_fonctions import *
 ############### bibliothèques pour les impressions pdf  #########################
-import os
 from django.utils import formats
 from io import BytesIO, StringIO
 from django.http import  HttpResponse
@@ -285,6 +286,35 @@ def school_students(request):
 	users = User.objects.filter(school = school, user_type=0).order_by("last_name")  
 
 	return render(request,'school/list_students.html', { 'communications' : [], 'users':users , 'school' : school , })
+
+
+ 
+
+
+def school_accounting(request):
+
+	
+	school = this_school_in_session(request)
+	teacher = Teacher.objects.get(user=request.user)
+
+	if not authorizing_access_school(teacher, school):
+		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. ")
+		return redirect('index')
+
+
+	accountings = Accounting.objects.filter(school = school).order_by("-date")  
+
+	return render(request,'school/list_accountings.html', { 'accountings' : accountings , 'school' : school , })
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -565,6 +595,49 @@ def new_group_many(request):
 	return render(request,'school/many_group_form.html', {'formset' : group_formset , 'school': school , 'communications' : [] , 'group' : None  })
 
  
+
+
+
+###############################################################################################
+######  Renouvellement de l'adhésion
+###############################################################################################
+ 
+
+
+
+def renew_school_adhesion(request):
+    """ renouvellement de la cotisation annuelle"""
+    school = request.user.school
+
+    today = datetime.now()
+    if today < datetime(today.year,7,1) :
+        somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().discount
+    else :
+        somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().amount
+    
+    user = request.user
+
+    accounting_id =  accounting_adhesion(school, today , None , user, False , "Renouvellement" )
+    accounting = Accounting.objects.get(pk = accounting_id) 
+
+    request.session["accounting_id"] = accounting_id
+
+    context =  {  'school' : school  , 'user' : user , 'accounting_id' : accounting_id, 'accounting' : accounting  }
+
+    return render(request, 'school/renew_school_adhesion.html', context)
+
+
+ 
+
+
+def delete_renewal_school_adhesion(request):
+
+    school = request.user.school
+    accounting = Accounting.objects.filter(school=school,is_active = 0).last() 
+    accounting.delete()
+    messages.error(request,"Demande de renouvellement d'adhésion annulée")
+    return redirect('admin_tdb')
+
 
 ###############################################################################################
 ###############################################################################################

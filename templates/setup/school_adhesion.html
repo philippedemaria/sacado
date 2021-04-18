@@ -25,7 +25,7 @@
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <div class="alert alert-danger">
-            Si votre établissement est déjà inscrit, l'administrateur doit procéder à un renouvellement via son <a href="{% url 'index' %}">espace Admin</a>. Sinon <a href="#" id="renew_adh_school">cliquez ici</a>.
+            Si votre établissement est déjà inscrit, l'administrateur ou le DAF doit procéder à un renouvellement via son <a href="{% url 'index' %}">espace Admin</a>. Sinon <a href="#" id="renew_adh_school">cliquez ici</a>.
             </div>
         </div>
     </div> 
@@ -33,7 +33,6 @@
     <div class="row" id="fonctions">
         <div class="col-sm-12 col-md-12">
             {% include 'table_fonctions.html' %}
-
             <a href="#" id="close_tab" class="btn btn-default">Fermer</a>
         </div>
     </div> 
@@ -53,7 +52,7 @@
                   </div>
 
                   <div class="form-group">                
-                      {{ form.code_acad.label_tag }} <small>Pour les établissements sans RNE, renseigner un code de 5 caractères</small>
+                      {{ form.code_acad.label_tag }} <small>Pour les établissements sans RNE, renseigner 999efe</small>
                       {{ form.code_acad |add_class:"form-control" }}
                       {{ form.code_acad.errors }}
                   </div>
@@ -102,15 +101,9 @@
 
             </div>
             <div class="col-sm-12 col-md-6">
-                  <div class="form-group">
-                      <label>Nom et prénom du demandeur  : </label>                
-                      <input name="name_admin" type="text"  class="form-control" required />
-                  </div>
-
-                  <div class="form-group">
-                      <label>Courriel  : </label>                
-                      <input name="mail_admin" type="text"  class="form-control" required />
-                  </div>
+                                      
+                  <label>Coordonnées du Directeur Administratif et Financier </label>
+                  {% include 'user_form.html' %}
 
  
 

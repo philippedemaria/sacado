@@ -82,7 +82,7 @@
                                 <div class="icon">
                                     {{ data.nbs }}  
                                 </div>
-                                <a href="{% url 'csv_full_group'  %}" class="btn btn-default btn-accueil" style="margin-left:10px;width:280px; position: absolute; top:150px;"> Initialisation des groupes d'élèves </a> 
+                                <a href="{% url 'csv_full_group'  %}" class="btn btn-default btn-accueil" style="margin-left:10px;width:280px; position: absolute; top:150px;"> Initialiser les groupes d'élèves </a> 
                                 {% if  data.nbg > 0 %}
                                     <a href="{% url 'school_students' %}" class="small-box-footer"><i
                                         class="fa fa-arrow-circle-right"></i> En détails </a>
@@ -112,27 +112,30 @@
                             </div>
                         </div>
 
+ 
+
+
+
+
                         <div class="col-lg-3 col-md-4 col-xs-6">
-                            <div class="small-box bg-{% if  data.nbt > 0 %}purple{% else %}danger{% endif %}">
+                            <div class="small-box bg-{% if  data.nbg > 0 %}purple{% else %}danger{% endif %}">
                                 <div class="inner">
-                                    <span style="font-size: 35px">Etablissement </span><br/><br/>
- 
-                                    {% if school.adresse %}{{ school.adresse}}<br/>{% endif %}   
- 
-                                    {% if school.adresse %}{{ school.complement}} <br/>{% endif %}       
- 
-                                    {{ school.town}}, {{ school.country}}   
+                                     <span style="font-size: 35px">Etablissement </span>
+                 
                                 </div>
                                 <div class="inner">
                                     Token 
-                                    <span class="helper_tip" style="font-size: 12px"> <i class="fa fa-question-circle"></i>
+                                    <span class="helper_tip" style="font-size: 12px; color:#FFF"> <i class="fa fa-question-circle"></i>
                                         <div class="helper_tip_text" >Ce token est à donner aux enseignants de votre établissement pour s'enregistrer.</div>
                                     </span> :   {{ school.code_acad}}_{{ school.id }}  
                                 </div>
- 
- 
-                                    <a href="{% url 'renew_school_adhesion' school.id %}" class="small-box-footer"  onclick="return TestRenew()" ><i
-                                        class="fa fa-arrow-circle-right"></i> Renouveler l'adhésion </a>
+
+                                {% if renew_propose %}
+                                <a href="{% url 'renew_school_adhesion' %}" class="btn btn-default btn-accueil" style="margin-left:10px;width:280px; position: absolute; top:150px;" onclick="return TestRenew('cette adhésion')"> Renouveler l'abonnement </a> 
+                                {% endif %}
+
+                                    <a href="{% url 'school_accounting'  %}" class="small-box-footer" ><i
+                                        class="fa fa-arrow-circle-right"></i> En détails </a>
  
                             </div>
                         </div>
@@ -176,7 +179,6 @@
             {% endfor %}
  
     </form>
-
     {% endif %} 
 
 
@@ -196,11 +198,6 @@
         </div>
     </div>
     {% endif %} 
-
-
-
-
-
  
 
     {% if request.user.is_testeur %}

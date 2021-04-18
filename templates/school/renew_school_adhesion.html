@@ -1,0 +1,224 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script>   
+        require(['script/ajax-dashboard']);
+    </script>
+{% endblock %} 
+
+
+{% block page_title %}
+    Renouvellement de la cotisation
+{% endblock %} 
+
+{% block page_menu_right %}
+  {{ request.user.school.name }}
+{% endblock %}
+
+
+{% block body %}
+<section class="content_list" >
+
+ 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+ 
+               {{  user.get_full_name  }}, vous souhaitez un renouvellement de l'adhésion de votre établissement sous-cité à l'association SACADO.
+ 
+        </div>
+    </div> 
+    <div class="row">                    
+        <div class="col-sm-12 col-md-5">
+
+
+              <div class="card_association" >
+                  <h2> {{ school.name  }} </h2>   
+                  <p> Code établissement :  {{ school.code_acad }}  </p>   
+                  <p> {{ school.nbstudents   }} élèves  </p>  
+                  <p>{{ school.address  }} {% if school.complement  %} <br/>{{ school.complement   }}  {% endif %}</p>  
+                  <p>{{ school.town  }}, {{ school.country   }} </p>
+                  <p>  <a href="{% url 'update_school' school.id %}"><small>Modifier les données</small></a></p>  
+
+                  <div style="margin-top: 15px;"></div> 
+                  <div><b>{{ accounting.objet  }} : {{ school.fee }} €</b> </div> 
+                  <img src="{% static 'img/sacadoA1.png' %}" style="position: absolute;right: 5px; bottom:5px" />
+              </div> 
+
+
+            <div class="row">                    
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <a href="{% url 'delete_renewal_school_adhesion' %}" class="btn btn-danger" onclick="return TestDelete('cette adhésion')" >Annuler cette demande</a>
+                    </div> 
+                </div>  
+            </div> 
+
+
+        </div>
+        <div class="col-sm-12 col-md-7">
+            <div class="card_association" >
+                <h3 class="thin">Mode de paiement </h3>
+                <div class="row">
+                      <div class="col-sm-3 col-md-3">
+                          <a href="#" id="on_line">En ligne</a>
+                      </div>
+                      <div class="col-sm-5 col-md-5">
+                          <a href="#" id="virement_bancaire">Virement bancaire</a>
+                      </div>
+                      <div class="col-sm-4 col-md-4">
+                          <a href="#" id="envoi_postal">Envoi postal</a>
+                      </div>  
+                </div>
+            </div>
+
+
+            <div class="card_association this_card show_div_for_payment" id="show_on_line">
+                <h3 class="thin">Paiement en ligne</h3>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+ 
+
+
+                      <div id="smart-button-container">
+                            <div style="text-align: center;">
+                              <div id="paypal-button-container"></div>
+                            </div>
+                          </div>
+                        <script src="https://www.paypal.com/sdk/js?client-id=AbJcY8NVnL9ejW_BRR3RiV_8oK9PF7leWCi0pPwoGGboUZ5y1hl2Z-09NUaSRJe-JVTIuzX7VTcznaoa&currency=EUR" data-sdk-integration-source="button-factory"></script>
+                        <script>
+
+
+                          function getCookie(name) {
+                              let cookieValue = null;
+                              if (document.cookie && document.cookie !== '') {
+                                  const cookies = document.cookie.split(';');
+                                  for (let i = 0; i < cookies.length; i++) {
+                                      const cookie = cookies[i].trim();
+                                      // Does this cookie string begin with the name we want?
+                                      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                          break;
+                                      }
+                                  }
+                              }
+                              return cookieValue;
+                          }
+                          const csrftoken = getCookie('csrftoken');
+
+
+                          var amount = "{{ school.fee }}" ; 
+                          var school_id = "{{ school.id  }}" ;
+                          var accounting_id = "{{ accounting_id }}" ;
+
+                          function completeOrder(){
+                            var url = "{% url 'payment_complete' %}" ;
+
+                            fetch(url, {
+                              method :'POST',
+                              headers : {
+                                'Content-type' : 'application/json',
+                                'X-CSRFToken'  : csrftoken,
+                              },
+                              body : JSON.stringify({ 'school_id' : school_id , 'accounting_id' : accounting_id })
+                            })
+                          }
+
+                          function initPayPalButton() {
+                            paypal.Buttons({
+                              style: {
+                                shape: 'rect',
+                                color: 'blue',
+                                layout: 'vertical',
+                                label: 'paypal',
+                                
+                              },
+
+                              createOrder: function(data, actions) {
+                                return actions.order.create({
+                                  purchase_units: [{"amount":
+                                                      {
+                                                        "currency_code":"EUR","value": amount ,
+                                                      }
+                                                    }] ,
+                                });
+                              },
+
+                              onApprove: function(data, actions) {
+                                return actions.order.capture().then(function(details) {
+
+                                  completeOrder() ;
+                                  alert('Transaction completed by ' + details.payer.name.given_name + '!');
+                                  window.location.replace("https://sacado.xyz/after_school_payment/");
+
+
+                                });
+                              },
+
+                              onError: function(err) {
+                                console.log(err);
+                              }
+                            }).render('#paypal-button-container');
+                          }
+                          initPayPalButton();
+                        </script>
+
+                    </div>  
+                </div>
+            </div>
+
+
+<!-- AZbWzc5bw6DUgDEDaYf3mGKRefyYaS2eYyhR24vxzoP7WLtfo7qq3p05a6Qfsa3utAopR07r3bOgiqJf -->
+
+            <div class="card_association this_card show_div_for_payment" id="show_virement_bancaire">
+                  <h3 class="thin">Virement bancaire</h3>
+                  <p>
+                      Pour effectuer un virement bancaire par IBAN à l'association SACADO, le DAF de votre établissement doit nous contacter depuis son courriel professionnel.
+                  </p>
+                  <form action="{% url 'send_message' %}" method="post" >
+                      {% csrf_token %}
+                    <div class="form-group">
+                      <input type="text" name="name" class="form-control" id="name" placeholder="Nom du DAF"   required />
+                    </div>
+                    <div class="form-group">
+                      <input type="email" class="form-control" name="email" id="email" placeholder="Courriel professionnel"  required />
+                    </div>
+                    <div class="form-group">
+                      <textarea class="form-control" name="message" rows="3">Bonjour, je souhaite par ce courrier obtenir l'IBAN de l'association SACADO pour procéder à un virement bancaire en contre partie de l'obtention de la version Etablissement. Cordialement.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                      <img src="{% static 'img/som_token.png' %}" />
+                      <input type="text" name="token" class="form-control" id="token" placeholder="Ecrire le résultat de la somme"  />
+                    </div>
+
+                    <div class="text-center"><button type="submit" class="btn btn-primary">Envoyer</button></div>
+                  </form>
+            </div>
+
+
+
+
+
+            <div class="card_association this_card show_div_for_payment" id="show_envoi_postal">
+                <h3 class="thin">Envoi postal </h3>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <p> Vous devez éditer le devis suivant et nous le retourner signé et accompagné d'un chèque bancaire du montant correspondant à la cotisation et à l'ordre de ASSOCIATION SACADO.XYZ . <small>L'envoi postal occasionne des frais de dossier de 2€.</small></p>
+                        <p><a href="{% url 'print_proformat_school' %}"><i class="fa fa-print"></i> Editer le devis</a></p> 
+                    </div>
+
+                </div>
+            </div>
+
+        </div>  
+    </div> 
+
+</section> 
+
+ 
+{% endblock %}

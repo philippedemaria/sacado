@@ -1,0 +1,71 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+ 
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-accueil.js' %}"></script> 
+    <script>
+        require(['script/ajax-dashboard']);
+        require(['script/ajax-group']);
+    </script>
+{% endblock %}
+
+
+
+{% block page_title %}
+    <a href="{% url 'index' %}"><i class="fa fa-cloud"></i></a> Liste des factures</a>
+{% endblock %} 
+
+{% block page_menu_right %}
+  {{ request.user.school.name }} 
+{% endblock %}
+
+
+
+
+{% block body %}
+    <section class="content_list"> 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table class="table table-bordered table-hover standard_tab_sort">
+                    <thead>
+                        <tr>
+                            <td>Date </td>
+                            <td>Code</td>
+                            <td>Objet</td>                            
+                            <td>Montant </td>
+
+                            <td>Date de paiement</td>
+                            <td> </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for accounting in  accountings %}
+                            <tr>
+                                <td>{{ accounting.date|date:"d N Y" }}</td>
+                                <td>{{ accounting.code }}</td>
+                                <td>{{ accounting.objet }}</td>                                
+                                <td>{{ accounting.amount }} €</td>
+                                <td>{% if accounting.acting %}{{ accounting.acting }}{% else %} En attente de paiement {% endif %}</td>
+                                <td>
+                                    {% if accounting.acting %}<a href="#" > Imprimer </a>{% else %} <a href="{% url 'renew_school_adhesion' %}" class="btn btn-xs btn-danger"> Payer </a>{% endif %}
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">     
+                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+            </div>
+        </div>
+    </section>
+{% endblock %}

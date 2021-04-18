@@ -1,0 +1,90 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script>   
+        require(['script/ajax-dashboard']);
+    </script>
+{% endblock %} 
+
+
+{% block page_title %}
+    Merci de votre confiance
+{% endblock %} 
+
+{% block page_menu_right %}
+  {{ request.user.school.name }}
+{% endblock %}
+
+
+{% block body %}
+<section class="container" >
+
+    <div class="card_association">
+
+
+      {% if done %}
+
+        <div class="row" align="center">              
+            <div class="col-sm-12 col-md-12">
+                <h1>MERCI</h1>
+            </div>  
+        </div>  
+
+        <div class="row">
+              <div class="col-sm-12 col-md-12">
+                  <p>  Votre facture est imprimable depuis votre espace <a href="{% url 'index' %}">admin</a>. </p>
+
+                  <h3> {{ school.name  }} </h3>   
+                  <div><b> {{ school.code_acad }}  -  {{ school.nbstudents   }} élèves</b></div>  
+                  <div>{{ school.address  }} {% if school.complement  %} <br/>{{ school.complement   }}  {% endif %}</div>  
+                  <div>{{ school.town  }}, {{ school.country   }} </div>  
+                  <div><b>{{ accounting.objet  }} : {{ school.fee }} €</b> </div> 
+                  <img src="{% static 'img/sacadoA1.png' %}" style="position: absolute;right: 5px; bottom:5px" />
+ 
+              </div>  
+        </div>
+      {% else %}
+
+        <div class="row" align="center">              
+            <div class="col-sm-12 col-md-12">
+              <div class="alert alert-danger">
+                  <h1>PAIEMENT REFUSE</h1>
+              </div>
+            </div>  
+        </div>  
+
+        <div class="row">
+              <div class="col-sm-12 col-md-12">
+                  <p>La transaction n'a pu être effectuée. </p>
+                  <p>Paypal n'a pas reçu votre paiement.</p>
+                  <p>Contacter votre établissement bancaire.</p>
+ 
+              </div>  
+        </div>
+
+
+      {% endif %}
+
+     </div>
+
+
+        <div class="row">              
+            <div class="col-sm-12 col-md-12">
+                <a href="{% url 'admin_tdb' %}">Vers le tableau de bord administrateur</a>
+            </div>  
+        </div> 
+
+
+
+ 
+ 
+
+</section> 
+
+ 
+{% endblock %}

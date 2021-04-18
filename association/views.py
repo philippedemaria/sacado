@@ -11,6 +11,7 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from django.core.mail import send_mail
 import uuid
+import json
 from django.contrib.auth.hashers import make_password
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import user_passes_test
@@ -43,6 +44,19 @@ import xlwt
  
  
 
+
+#####################################################################################################################################
+#####################################################################################################################################
+####    payment_accepted from Paypal
+#####################################################################################################################################
+#####################################################################################################################################
+
+def payment_complete(request):
+    body = json.loads(request.body)
+    print(body)
+    Accounting.objects.filter(pk = body['accounting_id']).update(is_active = 1)
+    return JsonResponse('Payement completed !', safe = False)
+
 #####################################################################################################################################
 #####################################################################################################################################
 ####    accounting
@@ -69,6 +83,7 @@ def association_index(request):
 def list_accountings(request):
     accountings = Accounting.objects.all()
     return render(request, 'association/list_accounting.html', {'accountings': accountings  })
+
 
 
 @user_passes_test(user_is_board) 
