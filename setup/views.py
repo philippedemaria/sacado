@@ -356,13 +356,14 @@ def print_proformat_school(request):
 
     school_year = Rate.objects.get(pk=1).year
     somme = request.session.get("somme",None) + 2
-    name_admin = request.session.get("name_admin")
-    mail_admin = request.session.get("mail_admin")
+
+    new_user_id   = request.session.get("new_user_id", None)
+    user = User.objects.get(pk = new_user_id )
+ 
     school_id = request.session.get("inscription_school_id")
     school = School.objects.get(pk = school_id)
 
     now = datetime.now().date()
-
     response = HttpResponse(content_type='application/pdf')
 
     response['Content-Disposition'] = 'attachment; filename="'+str(school.id)+"-"+str(datetime.now().strftime('%Y%m%d'))+".pdf"
@@ -398,13 +399,8 @@ def print_proformat_school(request):
     elements.append(paragraph0)
     elements.append(Spacer(0, 0.5*inch))
 
-
-
     school_datas =  school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
- 
-    demandeur =  school_datas+   "\n\nMontant de la cotisation : "+str(somme)+"€ (frais de port inclus)" +"\n\nNom du demandeur : " + name_admin +  "\nCourriel : " + mail_admin  
-
-
+    demandeur =  school_datas+   "\n\nMontant de la cotisation : "+str(somme)+"€ (frais de port inclus)" +"\n\nNom du demandeur : " + user.first_name + " "  + user.last_name + "\nCourriel : " + user.email  
 
 
     demandeur_tab = [[demandeur, "ASSOCIATION SACADO.XYZ \n2B avenue de la pinède \n83400 La Capte Hyères \nFrance\n\n\n\n\n" ]]
@@ -420,17 +416,12 @@ def print_proformat_school(request):
     elements.append(paragraph)
     elements.append(Spacer(0, 0.2*inch))
 
-
-
     sy = school_year.split("-")
     my_texte = "Le présent contrat est valide pour la période scolaire du 1 Septembre " + sy[0]+" jusqu'au 30 juin "+sy[1]+" pour les établissements de rythme Nord. \nPour les établissements de rythme Sud, la validité de l'adhésion est valable sur l'année "+sy[1]+"."
-
 
     paragraph = Paragraph( my_texte  , normal )
     elements.append(paragraph)
     elements.append(Spacer(0, 0.2*inch))
-
-
 
     signature_tab = [[ 'Signature précédée de la mention "Lu et approuvé" \n\n...........................................................\n\n\n ...........................................................',"" ]]
     signature_tab_tab = Table(signature_tab, hAlign='LEFT', colWidths=[4*inch,3*inch])
@@ -438,7 +429,6 @@ def print_proformat_school(request):
     elements.append(signature_tab_tab)
     elements.append(Spacer(0, 0.4*inch))
 
- 
     doc.build(elements)
 
     return response

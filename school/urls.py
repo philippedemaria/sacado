@@ -27,7 +27,7 @@ urlpatterns = [
     path('school_accounting', school_accounting, name='school_accounting'),
 
 
-
+    path('print_bill_school/<int:a_id>', print_bill_school, name='print_bill_school'),  
 
     path('new_student/<slug:slug>', new_student , name='new_student'),
     path('new_student_list/<slug:slug>', new_student_list , name='new_student_list'),

@@ -20,6 +20,8 @@ from socle.models import Subject
 from general_fonctions import *
 from payment_fonctions import *
 ############### bibliothèques pour les impressions pdf  #########################
+import os
+from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
 from django.utils import formats
 from io import BytesIO, StringIO
 from django.http import  HttpResponse
@@ -32,7 +34,17 @@ from reportlab.lib.colors import yellow, red, black, white, blue
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.utils import ImageReader
 from html import escape
-cm = 2.54
+from reportlab.lib.enums import TA_JUSTIFY,TA_LEFT,TA_CENTER,TA_RIGHT 
+cm = 2.54 
+############## FIN bibliothèques pour les impressions pdf  #########################
+
+
+
+
+
+
+
+
 #################################################################################
 
 
@@ -637,6 +649,104 @@ def delete_renewal_school_adhesion(request):
     accounting.delete()
     messages.error(request,"Demande de renouvellement d'adhésion annulée")
     return redirect('admin_tdb')
+
+
+
+ 
+def print_bill_school(request,a_id):
+
+    school =  request.user.school 
+    now = datetime.now().date()
+    response = HttpResponse(content_type='application/pdf')
+
+    response['Content-Disposition'] = 'attachment; filename="Facture'+str(school.id)+"-"+str(datetime.now().strftime('%Y%m%d'))+".pdf"
+    doc = SimpleDocTemplate(response,   pagesize=A4, 
+                                        topMargin=0.3*inch,
+                                        leftMargin=0.3*inch,
+                                        rightMargin=0.3*inch,
+                                        bottomMargin=0.3*inch     )
+
+    sample_style_sheet = getSampleStyleSheet()
+
+    sacado = ParagraphStyle('sacado', 
+                            fontSize=20, 
+                            leading=26,
+                            borderPadding = 0,
+                            alignment= TA_CENTER,
+                            )
+
+    elements = []                 
+    title_black = ParagraphStyle('title', fontSize=20, )
+    subtitle = ParagraphStyle('title', fontSize=16,  textColor=colors.HexColor("#00819f"),)
+    normal = ParagraphStyle(name='Normal',fontSize=10,)
+    normalr = ParagraphStyle(name='Normal',fontSize=12,alignment= TA_RIGHT)
+ 
+    logo = Image('https://sacado.xyz/static/img/sacadoA1.png')  
+    logo_tab = [[logo, "ASSOCIATION SACADO.XYZ \n2B avenue de la pinède \n83400 La Capte Hyères \nFrance" ]]
+    logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
+
+    elements.append(logo_tab_tab)
+    elements.append(Spacer(0, 0.2*inch))
+
+    try :
+        accounting = Accounting.objects.get(id=a_id, school = school,is_active =1)
+    except :
+        messages.error(request,"Violation de droit. Accès interdit.")
+        return redirect("index")
+
+    paragraph0 = Paragraph( accounting.objet  , sacado )
+    elements.append(paragraph0)
+    elements.append(Spacer(0, 0.5*inch))
+
+    school_datas =  "REF : "+accounting.code +"\n\n"+school.name +"\n"+school.code_acad +  "\n" + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
+    demandeur =  school_datas+   "\n\nMontant de la cotisation : "+str(school.fee())+"€" 
+
+
+    demandeur_tab = [[demandeur, "ASSOCIATION SACADO.XYZ \n2B avenue de la pinède \n83400 La Capte \nHyères \nFrance \n\n\n\n" ]]
+    demandeur_tab_tab = Table(demandeur_tab, hAlign='LEFT', colWidths=[5*inch,2*inch])
+
+    elements.append(demandeur_tab_tab)
+    elements.append(Spacer(0, 0.2*inch))
+
+
+
+    my_texte_ = "Sous réserve du bon fonctionnement de son hébergeur LWS, l'association SACADO met l'ensemble des fonctionnalités du site https://sacado.xyz à disposition des enseignants de l'établissement sus-mentionné et dénommé par "+school.name+"."
+    paragraph = Paragraph( my_texte_  , normal )
+    elements.append(paragraph)
+    elements.append(Spacer(0, 0.2*inch))
+
+ 
+    my_texte = "La cotisation est acquittée le "+str(accounting.date.strftime('%d-%m-%Y'))+"."
+
+    paragraph = Paragraph( my_texte  , normal )
+    elements.append(paragraph)
+    elements.append(Spacer(0, 1*inch))
+
+ 
+    my__texte =  "Le trésorier Bruno Serres "
+
+    paragraf = Paragraph( my__texte  , normal )
+    elements.append(paragraf)
+ 
+
+
+
+    doc.build(elements)
+
+    return response
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ###############################################################################################

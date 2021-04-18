@@ -1,8 +1,7 @@
 from django.db import models
 from datetime import date
 from ckeditor_uploader.fields import RichTextUploadingField
-from account.models import User 
-from account.models import ModelWithCode
+from account.models import User , ModelWithCode
 from django.apps import apps
 from django.utils import   timezone
 from django.db.models import Q

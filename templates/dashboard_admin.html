@@ -19,7 +19,7 @@
 {% endblock %} 
 
 {% block page_menu_right %}
- {% if schools_tab|length == 1 %} {{ request.user.school.name }}{% endif %}
+ {% if schools_tab|length == 1 %}     <a href="{% url 'update_school'  request.user.school.id    %}">{{ request.user.school.name }} </a> {% endif %}
 {% endblock %}
 
 
@@ -129,11 +129,11 @@
                                         <div class="helper_tip_text" >Ce token est à donner aux enseignants de votre établissement pour s'enregistrer.</div>
                                     </span> :   {{ school.code_acad}}_{{ school.id }}  
                                 </div>
-
+                                {% if request.user.is_superuser %}
                                 {% if renew_propose %}
                                 <a href="{% url 'renew_school_adhesion' %}" class="btn btn-default btn-accueil" style="margin-left:10px;width:280px; position: absolute; top:150px;" onclick="return TestRenew('cette adhésion')"> Renouveler l'abonnement </a> 
                                 {% endif %}
-
+                                {% endif %}
                                     <a href="{% url 'school_accounting'  %}" class="small-box-footer" ><i
                                         class="fa fa-arrow-circle-right"></i> En détails </a>
  

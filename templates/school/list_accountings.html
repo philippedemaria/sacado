@@ -20,7 +20,7 @@
 {% endblock %} 
 
 {% block page_menu_right %}
-  {{ request.user.school.name }} 
+    <a href="{% url 'update_school'  request.user.school.id    %}">{{ request.user.school.name }} </a>
 {% endblock %}
 
 
@@ -51,7 +51,7 @@
                                 <td>{{ accounting.amount }} €</td>
                                 <td>{% if accounting.acting %}{{ accounting.acting }}{% else %} En attente de paiement {% endif %}</td>
                                 <td>
-                                    {% if accounting.acting %}<a href="#" > Imprimer </a>{% else %} <a href="{% url 'renew_school_adhesion' %}" class="btn btn-xs btn-danger"> Payer </a>{% endif %}
+                                    {% if accounting.acting %}<a href="{% url 'print_bill_school' accounting.id %}"> Imprimer </a>{% else %} <a href="{% url 'renew_school_adhesion' %}" class="btn btn-xs btn-danger"> Payer </a>{% endif %}
                                 </td>
                             </tr>
 
