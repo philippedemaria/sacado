@@ -10,7 +10,7 @@ from datetime import datetime
 
 def traite_notif(request):
 
-	template = "school/renew_school_adhesion.html"
+    template = "school/renew_school_adhesion.html"
     context = {   }
 
     return render(request, template , context)
@@ -18,7 +18,7 @@ def traite_notif(request):
 
 
 
-def traite_notif____(request):
+def traite_notif_test(request):
 
     param_str = request.body
     params = urllib.parse.parse_qsl(param_str)
