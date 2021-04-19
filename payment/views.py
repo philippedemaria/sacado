@@ -11,7 +11,7 @@ from datetime import datetime
 def traite_notif(request):
 
 	template = "school/renew_school_adhesion.html"
-    context = { 'request' : request   }
+    context = { 'test' : request   }
 
     return render(request, template , context)
 
