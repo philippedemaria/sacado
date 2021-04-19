@@ -1,3 +1,5 @@
+from django.shortcuts import render
+
 import sys
 import urllib.parse
 import requests
@@ -15,7 +17,7 @@ def TraiteNotif(request):
     params.append(('cmd', '_notify-validate'))
     # Post back to PayPal for validation                                                                                                                                  
     headers = {'content-type': 'application/x-www-form-urlencoded',
-                          'user-agent': 'Python-IPN-Verification-Script'}
+                'user-agent': 'Python-IPN-Verification-Script'}
 
     r = requests.post(VERIFY_URL, params=params, headers=headers, verify=True)
     r.raise_for_status()
@@ -24,7 +26,7 @@ def TraiteNotif(request):
                                                                                                                       
     if r.text == 'VERIFIED':
         # Paiement validé
-        done                   = True
+        done                  = True
         inscription_school_id = request.session.get("inscription_school_id", None)
         accounting_id         = request.session.get("accounting_id", None)
         school                = request.user.school  
@@ -53,13 +55,13 @@ def TraiteNotif(request):
             elif student_family_id  :  # Ré inscription Famille
 
                 topic = "Nouvelle adhésion"
-                message_details = "Famillle"
+                message_details = "Famille"
                 template        = 'setup/thanks_for_payment.html'
 
             else  : # Nouvelle inscription Famille
 
                 topic           = "Renouvellement d'adhésion"
-                message_details = "Famillle"
+                message_details = "Famille"
                 template        = 'setup/thanks_for_payment.html'
 
 
@@ -67,10 +69,11 @@ def TraiteNotif(request):
         send_mail(topic,  message  ,  'info@sacado.xyz',  ['sacado.asso@gmail.com'])
 
     else:
-        done = False  
+        done       = False  
         accounting = None
-        school = None
-        family = None 
+        school     = None
+        family     = None
+        template  = 'home.html'
 
     context = { 'accounting' : accounting ,  "done" : done,  "school" : school,  "family" : family  }
 
