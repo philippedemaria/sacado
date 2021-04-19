@@ -18,15 +18,13 @@
           },
           createOrder: function(data, actions) {
             return actions.order.create({
-              purchase_units: [{"amount":
+              purchase_units: [{"reference_id": accounting_id ,
+                                "amount":
                                   {
                                     "currency_code":"EUR",
                                     "value": amount ,
-                                  },
-                                "shipping" :   {
-                                    "method":accounting_id,
-                                  },
-                              }] ,
+                                  }
+                              }] 
             });
           },
 
