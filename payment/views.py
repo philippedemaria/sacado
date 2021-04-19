@@ -7,7 +7,19 @@ from association.models import Accounting
 from school.models import School 
 from datetime import datetime  
 
-def TraiteNotif(request):
+
+def traite_notif(request):
+
+	template = "school/renew_school_adhesion.html"
+    context = { 'request' : request   }
+
+    return render(request, template , context)
+
+
+
+
+def traite_notif____(request):
+
     param_str = request.body
     params = urllib.parse.parse_qsl(param_str)
     VERIFY_URL = 'https://ipnpb.sandbox.paypal.com/cgi-bin/webscr'

@@ -3,7 +3,7 @@ from .views import *
 
 urlpatterns = [
 
-    path('TraiteNotif', TraiteNotif, name='TraiteNotif'),
+    path('traite_notif', traite_notif, name='traite_notif'),
 
 ]
  
