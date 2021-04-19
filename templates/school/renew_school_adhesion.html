@@ -42,7 +42,7 @@
                   <p> {{ school.nbstudents   }} élèves  </p>  
                   <p>{{ school.address  }} {% if school.complement  %} <br/>{{ school.complement   }}  {% endif %}</p>  
                   <p>{{ school.town  }}, {{ school.country   }} </p>
-                  <p>  <a href="{% url 'update_school' school.id %}"><small>Modifier les données</small></a></p>  
+                  <p>  <a href="{% url 'update_school' school.id %}"><small>Modifier les coordonnées</small></a></p>  
 
                   <div style="margin-top: 15px;"></div> 
                   <div><b>{{ accounting.objet  }} : {{ school.fee }} €</b> </div> 
@@ -103,7 +103,7 @@
             </div>
 
 
-<!-- AZbWzc5bw6DUgDEDaYf3mGKRefyYaS2eYyhR24vxzoP7WLtfo7qq3p05a6Qfsa3utAopR07r3bOgiqJf -->
+
 
             <div class="card_association this_card show_div_for_payment" id="show_virement_bancaire">
                   <h3 class="thin">Virement bancaire</h3>
@@ -148,6 +148,8 @@
 
         </div>  
     </div> 
+
+{% if test %} {{ test }} {% endif %}
 
 </section> 
 
