@@ -5,8 +5,9 @@
 
 <script>
 
-    var amount = "{{ school.fee|decimal2number }}";
+    var amount        = "{{ school.fee|decimal2number }}";
     var accounting_id = "{{ accounting.id }}";
+    var description   = "Paiement établissement";
 
         paypal.Buttons({
           style: {
@@ -19,6 +20,7 @@
           createOrder: function(data, actions) {
             return actions.order.create({
               purchase_units: [{"reference_id": accounting_id ,
+                                "description": description ,
                                 "amount":
                                   {
                                     "currency_code":"EUR",
