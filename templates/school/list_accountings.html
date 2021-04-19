@@ -38,7 +38,7 @@
                             <td>Objet</td>                            
                             <td>Montant </td>
 
-                            <td>Date de paiement</td>
+                            <td>Statut</td>
                             <td> </td>
                         </tr>
                     </thead>
@@ -49,7 +49,7 @@
                                 <td>{{ accounting.code }}</td>
                                 <td>{{ accounting.objet }}</td>                                
                                 <td>{{ accounting.amount }} €</td>
-                                <td>{% if accounting.acting %}{{ accounting.acting }}{% else %} En attente de paiement {% endif %}</td>
+                                <td>{% if accounting.acting %}Payé le {{ accounting.acting }}{% else %} En attente de paiement {% endif %}</td>
                                 <td>
                                     {% if accounting.acting %}<a href="{% url 'print_bill_school' accounting.id %}"> Imprimer </a>{% else %} <a href="{% url 'renew_school_adhesion' %}" class="btn btn-xs btn-danger"> Payer </a>{% endif %}
                                 </td>
