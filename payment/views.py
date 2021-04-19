@@ -10,7 +10,7 @@ from datetime import datetime
 
 def traite_notif(request):
 
-    template = "school/renew_school_adhesion.html"
+    template = "payment/payment_test.html"
     context = {   }
 
     return render(request, template , context)
