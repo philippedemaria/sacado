@@ -23,12 +23,8 @@ def cleanhtml(raw_html): #nettoie le code des balises HTML
 
 @register.filter
 def decimal2number(decimal): #enlève la virgule et met un point
-    d_tab = str(decimal).split(",") 
-    try :
-        nb = str(d_tab[0])+"."+str(d_tab[1])
-    except :
-        nb = str(d_tab[0]) 
-    return nb
+    d_tab = str(decimal).replace(",",".") 
+    return d_tab
 
 
 
