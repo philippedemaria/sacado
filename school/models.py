@@ -76,14 +76,18 @@ class School(models.Model):
 
     def fee(self):
         """ cotisation pour un établissement suivant le nombre de ses élèves"""
-        Rate = apps.get_model('association', 'Rate')
-        rate = Rate.objects.filter(is_active  =  1, quantity__lte=self.nbstudents).order_by("quantity").last()
- 
-        today = datetime.now()
-        limit = datetime(today.year,6,30)
-        f = rate.amount
-        if today < limit :
-            f = rate.discount
+        try :
+            Rate = apps.get_model('association', 'Rate')            
+            rate = Rate.objects.filter(is_active  =  1, quantity__gte=self.nbstudents).order_by("quantity").first()
+            today = datetime.now()
+            limit = datetime(today.year,6,30)
+            f = rate.amount
+            if today < limit :
+                f = rate.discount
+
+        except :
+            f = "Nous contacter"
+
         return f
 
 

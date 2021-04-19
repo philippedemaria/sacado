@@ -33,7 +33,7 @@ class Rate(models.Model):
     is_active = models.BooleanField(default=0,  verbose_name="Année active")
 
     def __str__(self):
-        return "{} {}, {}".format(amount, quantity, year)
+        return "{} {}, {}".format(self.amount, self.quantity, self.year)
 
 
 
