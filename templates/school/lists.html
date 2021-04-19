@@ -2,6 +2,16 @@
 {% load static %}
 
 
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-accueil.js' %}"></script> 
+    <script>
+    
+        require(['script/ajax-dashboard']);
+    </script>
+{% endblock %}
+
+
  
 {% block page_title %}
    <a href="{% url 'admin_tdb' %}"> <i class="fa fa-cloud"></i></a> Etablissements  
@@ -11,8 +21,6 @@
 
 {% block page_menu_right %}
     <li><a href="{% url 'create_school' %}"  class="btn btn-new">+ Nouvel établissement</a> </li>
-
- 
 {% endblock %}
 
 
