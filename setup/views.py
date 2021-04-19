@@ -964,22 +964,12 @@ def admin_tdb(request):
     rates = Rate.objects.all() #tarifs en vigueur 
     school_year = rates.first().year #tarifs pour l'année scolaire
 
-    school_year_tab = school_year.split("-")
-    renew_date = datetime(int(school_year_tab[0]),4,15)
-    next_renew_date = datetime(int(school_year_tab[1]),4,15)
 
 
-    today   = datetime.now()
-    renewal = True
-    if Accounting.objects.filter(school = school, is_active = 1, date__gte=renew_date, date__lte=next_renew_date ).count() == 1:
-        renewal = False   
 
 
-    renew_propose = False
-    if today > datetime(int(today.year),4,15) and renewal :
-        renew_propose = True
-    print(renew_propose)
-    return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers, 'nb_students': nb_students, 'school_id' : school_id , "school" : school , 'renew_propose' : renew_propose ,  
+ 
+    return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers, 'nb_students': nb_students, 'school_id' : school_id , "school" : school ,  
                                                     'nb_groups': nb_groups, 'schools_tab': schools_tab, 'stage': stage, 'is_lycee' : is_lycee , 'school_year' : school_year ,  'rates' : rates , 
                                                     'eca': eca, 'ac': ac, 'dep': dep , 'communications' : [],
                                                     })

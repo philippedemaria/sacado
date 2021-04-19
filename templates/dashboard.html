@@ -289,11 +289,24 @@
         </div>
     </div>
     <hr>
+{% if not user.country   %} 
+   
     <div class="row">
         <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
-            <a href="{% url 'profile' %}" class="{% if not user.country and user.user_type == 2 %} text-danger{% endif %}">Profil & Notifications {% if not user.country and user.user_type == 2  %} <br/> > Renseigner le pays{% endif %}</a> 
+            <a href="{% url 'profile' %}" class="btn btn-warning">Renseignez votre profil </a> 
         </div>
     </div>
+
+  {% else %}
+
+    <div class="row">
+        <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
+            <a href="{% url 'profile' %}">Profil & Notifications </a> 
+        </div>
+    </div>
+
+{% endif %}
+
     <div class="row">
         <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
             <a href="{% url 'updatepassword' %}">Changer mon mot de passe</a>
