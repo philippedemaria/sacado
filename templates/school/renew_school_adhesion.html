@@ -22,7 +22,7 @@
 
 
 {% block body %}
-<section class="content_list" >
+<section class="content_list" style="margin-top:100px">
 
  
     <div class="row">
@@ -82,21 +82,8 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
  
-
-
-                      <div id="smart-button-container">
-                            <div style="text-align: center;">
-                              <div id="paypal-button-container"></div>
-                            </div>
-                          </div>
-
                           <!-- page de paiement en ligne -->
-                          <div id="smart-button-container">
-                              <div style="text-align: center;">
-                                <div id="paypal-button-container"></div>
-                              </div>
-                          </div>
-                          {% include 'association/payment_module.html' %}
+                          {% include 'payment/payment_module.html' %}
                           <!-- page de paiement en ligne -->
                     </div>  
                 </div>
@@ -113,7 +100,7 @@
                   <form action="{% url 'send_message' %}" method="post" >
                       {% csrf_token %}
                     <div class="form-group">
-                      <input type="text" name="name" class="form-control" id="name" placeholder="Nom du DAF"   required />
+                      <input type="text" name="name" class="form-control" id="name" placeholder="Nom du DAF, chargé.e de commandes, ..."   required />
                     </div>
                     <div class="form-group">
                       <input type="email" class="form-control" name="email" id="email" placeholder="Courriel professionnel"  required />

@@ -356,7 +356,8 @@
               "langage":"en",
               "filename":"{{ exercise.supportfile.ggbfile.url }}",
                "appletOnLoad" :  function(applet) { 
-                        applet.setValue("situation",{{ relation.situation }});
+                        var situation = "{{ relation.situation }}" ;
+                        applet.setValue("situation", situation );
 
                     {% if parcours.is_evaluation and parcours.is_stop %}
                        applet.registerUpdateListener("updateListener");  

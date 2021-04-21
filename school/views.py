@@ -594,7 +594,7 @@ def new_group_many(request):
 
 	GroupFormSet = formset_factory(GroupForm , extra=2) 
 	group_formset  = GroupFormSet(request.POST or None, form_kwargs={'school': school, })
-	print(group_formset)
+
 	if request.method == "POST" :	
 		if group_formset.is_valid():
 			for f in group_formset :
@@ -620,6 +620,8 @@ def new_group_many(request):
 def renew_school_adhesion(request):
     """ renouvellement de la cotisation annuelle"""
     school = request.user.school
+
+    request.session["inscription_school_id"] = None
 
     today = datetime.now()
     if today < datetime(today.year,7,1) :

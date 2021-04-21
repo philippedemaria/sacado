@@ -1,33 +1,10 @@
-{% extends 'dashboard.html' %}
-
-{% load widget_tweaks %}
-{% load static %}
-
-
-{% block require %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
-    <script>   
-        require(['script/ajax-dashboard']);
-    </script>
-{% endblock %} 
-
-
-{% block page_title %}
-    Merci de votre confiance
-{% endblock %} 
-
-{% block page_menu_right %}
-  {{ request.user.school.name }}
-{% endblock %}
-
-
-{% block body %}
-<section class="container" >
+ 
+ 
 
     <div class="card_association">
 
 
-      {% if done %}
+ 
 
         <div class="row" align="center">              
             <div class="col-sm-12 col-md-12">
@@ -48,27 +25,7 @@
  
               </div>  
         </div>
-      {% else %}
-
-        <div class="row" align="center">              
-            <div class="col-sm-12 col-md-12">
-              <div class="alert alert-danger">
-                  <h1>PAIEMENT REFUSE</h1>
-              </div>
-            </div>  
-        </div>  
-
-        <div class="row">
-              <div class="col-sm-12 col-md-12">
-                  <p>La transaction n'a pu être effectuée. </p>
-                  <p>Paypal n'a pas reçu votre paiement.</p>
-                  <p>Contacter votre établissement bancaire.</p>
  
-              </div>  
-        </div>
-
-
-      {% endif %}
 
      </div>
 
@@ -80,11 +37,4 @@
         </div> 
 
 
-
  
- 
-
-</section> 
-
- 
-{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'dashboard.html' %}
+ 
+
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+
+
+{% endblock %} 
+
+  
+{% block page_title %}
+  Cotisation acquitée
+{% endblock %}
+
+
+{% block page_menu_right %}
+  {{ request.user.school.name }}
+{% endblock %}
+
+
+{% block body %}
+<section class="content_container">
+
+
+ 
+
+
+ 
+
+
+        <div class="row" align="center">              
+            <div class="col-sm-12 col-md-12">
+                <h1 class="sacado" style="font-size:90px">MERCI</h1>
+            </div>  
+        </div>  
+
+        <div class="row" style="margin-top:50px">
+  
+            <div class="col-sm-6 col-md-6">
+                <div class="card_association">
+                  <h3> {{ school.name  }} </h3>   
+                  <div><b> {{ school.code_acad }}  -  {{ school.nbstudents   }} élèves</b></div>  
+                  <div>{{ school.address  }} {% if school.complement  %} <br/>{{ school.complement   }}  {% endif %}</div>  
+                  <div>{{ school.town  }}, {{ school.country   }} </div>  
+                  <div><b>{{ accounting.objet  }} : {{ school.fee }} €</b> </div> 
+
+                  <div class="row" style="margin-top:50px">              
+                      <div class="col-sm-12 col-md-12">
+                         Votre facture est en téléchargement depuis la <a href="{% url 'school_accounting' %}">liste de vos cotisations</a>. 
+                      </div>  
+                  </div> 
+                </div>  
+            </div> 
+            <div class="col-sm-6 col-md-6">
+                <div class="card_association">
+                    <p><b> Administrateur SACADO </b> </p>   
+   
+                    <p><b> {{ user.first_name  }} {{ user.last_name  }} </b> <br/> {{ user.email }}  </p>  
+   
+   
+                    <div class="row" style="margin-top:50px">              
+
+                   
+                        <div class="col-sm-12 col-md-12">
+                            <a href="{% url 'admin_tdb' %}">Vers le tableau de bord administrateur</a>
+                        </div>  
+                    </div> 
+                </div> 
+
+            </div>                 
+
+        </div>
+    
+
+
+
+  <img src="{% static 'img/sacadoA1.png' %}" style="position: absolute;right: 5px; bottom:5px" />
+ 
+ 
+
+
+
+</section>
+{% endblock %}                        
+ 

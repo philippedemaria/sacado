@@ -11,10 +11,10 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12 col-md-12" align="center">
-                <h4 class="title_page">Choisissez le menu qui vous convient</h4>
+                <h4 class="title_page">{% comment %}Choisissez le menu qui vous convient{% endcomment %}</h4>
             </div>
         </div> 
-        <div class="row">
+        <div class="row" align="center">
 
 
             <div class="col-sm-6 col-md-6" align="center">
@@ -37,18 +37,17 @@
                             <p class="card-text"><i class="fa fa-database"></i> Accès au contenu de tous les niveaux.</p>
                             <p class="card-text"><i class="fa fa-tasks"></i> Suivis de progression</p>
                         </div>
-                        <a href="{% url 'choice_menu' frml.name  %}" class="btn-asso">Choisir ce menu</a>
+                        <a href="{% url 'choice_menu' frml.name  %}" class="btn-asso">{% comment %}Choisir ce menu{% endcomment %}Continuer</a>
                     </div>
                 </div>
 
             </div>
 
 
-
+            {% comment %} 
             <div class="col-sm-6 col-md-6" align="center">
-
-                <div class="card" >
-                    <div class="card-header">
+                <div class="card" >             
+                    <div class="card-header">              
                         <div class="row">
                             <div class="col-sm-4 col-md-3">
                                 <img src="{% static 'img/menu_accompagnement.png' %}"  width="60px">
@@ -69,9 +68,10 @@
                         </div>
                         <a href="{% url 'choice_menu' 'accompagnement' %}" class="btn-asso">Choisir ce menu</a>
                     </div>
-                </div>
 
+                </div>
             </div>
+            {% endcomment %}
         </div>
     </div>
 </section> 

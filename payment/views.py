@@ -3,90 +3,132 @@ from django.shortcuts import render
 import sys
 import urllib.parse
 import requests
+from account.models import User  
 from association.models import Accounting  
 from school.models import School 
 from datetime import datetime  
+import json
+from django.core.mail import send_mail
+from templated_email import send_templated_mail
+from django.http import JsonResponse 
 
 
-def traite_notif(request):
+def verify_payment(buyer, accounting, school,new):
 
-    template = "payment/payment_test.html"
-    context = {   }
+	accounting.is_active = False
+ 
+	today = datetime.now()
+	if school :
 
-    return render(request, template , context)
+		if buyer.school.fee() == accounting.amount : # Vérification que le montant à payer est le bon.
 
+			is_school = True
+			accounting.is_active = True
+			accounting.acting = today
+			message_details =  school.name 
 
+			if new :  # Nouvelle inscription établissement
+				
+				topic  = "Nouvelle adhésion à la version établissement"
 
+			elif school :  # Ré inscription établissement
+ 
+				topic = "Renouvellement d'adhésion à la version établissement"
 
-def traite_notif_test(request):
-
-    param_str = request.body
-    params = urllib.parse.parse_qsl(param_str)
-    VERIFY_URL = 'https://ipnpb.sandbox.paypal.com/cgi-bin/webscr'
-    ###### for live : https://ipnpb.paypal.com/cgi-bin/webscr
-
-    # Add '_notify-validate' parameter                                                                                                                                    
-    params.append(('cmd', '_notify-validate'))
-    # Post back to PayPal for validation                                                                                                                                  
-    headers = {'content-type': 'application/x-www-form-urlencoded',
-                'user-agent': 'Python-IPN-Verification-Script'}
-
-    r = requests.post(VERIFY_URL, params=params, headers=headers, verify=True)
-    r.raise_for_status()
-    # Check return message and take action as needed
-
-                                                                                                                      
-    if r.text == 'VERIFIED':
-        # Paiement validé
-        done                  = True
-        inscription_school_id = request.session.get("inscription_school_id", None)
-        accounting_id         = request.session.get("accounting_id", None)
-        school                = request.user.school  
-        student_family_id     = request.session.get("student_family_id", None)
-        today                 = datetime.now()
-
-        if accounting_id : # récupération de la facture
-            Accounting.ojects.filter(pk=accounting_id).update(is_valide=1, acting = today)
-            accounting = Accounting.ojects.get(pk=accounting_id)
-
-            if inscription_school_id :  # Nouvelle inscription établissement
-                school          = School.ojects.get(pk=inscription_school_id) 
-                topic           = "Nouvelle adhésion à la version établissement"
-                message_details =  school.name 
-                template        = 'school/thanks_for_payment.html'
-
-            elif school :  # Ré inscription établissement
-
-                topic           = "Renouvellement d'adhésion à la version établissement"
-                message_details =  school.name 
-                template        = 'school/thanks_for_payment.html'
-
-            ########################################################
-            ######## Adhésion famille  ---> TODO
-            ########################################################
-            elif student_family_id  :  # Ré inscription Famille
-
-                topic = "Nouvelle adhésion"
-                message_details = "Famille"
-                template        = 'setup/thanks_for_payment.html'
-
-            else  : # Nouvelle inscription Famille
-
-                topic           = "Renouvellement d'adhésion"
-                message_details = "Famille"
-                template        = 'setup/thanks_for_payment.html'
+ 
+			message = topic + " : " + message_details
+			send_mail(topic,  message  ,  'info@sacado.xyz',  ['sacado.asso@gmail.com'])
+			# send_templated_mail(
+			# 	template_name="teacher_registration",
+			# 	from_email="info@sacado.xyz",
+			# 	recipient_list=[self.user.email, ],
+			# 	context={"teacher": self.user, }, )
+			accounting.save()
 
 
-        message +=  message_details
-        send_mail(topic,  message  ,  'info@sacado.xyz',  ['sacado.asso@gmail.com'])
+	else :
+		is_school = False
+		message_details = "Famille"
+		student_family_id = new
+		########################################################
+		######## Adhésion famille  ---> TODO
+		########################################################
+		if new  :  # Ré inscription Famille
+			
+			topic = "Nouvelle adhésion"
+ 
 
-    else:
-        done       = False  
-        accounting = None
-        school     = None
-        family     = None
-        template  = 'home.html'
+		else  : # Nouvelle inscription Famille
+ 
+			topic = "Renouvellement d'adhésion"
 
-    context = { 'accounting' : accounting ,  "done" : done,  "school" : school,  "family" : family  }
+	return accounting.is_active
 
-    return render(request, template , context)
+
+
+
+def create_payment(request):
+
+	today = datetime.now()
+	body = json.loads(request.body)
+
+	accounting_id = body["accounting_id"]
+	accounting    = Accounting.objects.get(pk=accounting_id) 
+	request.session["accounting_id"] = accounting_id
+
+	school_id = body["school_id"]
+	if school_id : 
+		school    = School.objects.get(pk=school_id) 
+		request.session["school_id"] = school.id
+
+	user_id = body["user_id"]
+	user  = User.objects.get(pk=user_id) 
+	request.session["user_id"] = user_id
+
+	if request.session.get("inscription_school_id", None) :
+		new = request.session.get("inscription_school_id")
+	
+
+	elif request.session.get("student_family_id", None) :
+		new = request.session.get("student_family_id")
+		school = None
+	else :
+		new = False
+
+	verify_payment(user, accounting, school, new)
+	
+	return JsonResponse('Payment en cours', safe = False)
+
+
+
+def thanks_for_payment(request) :
+
+	if request.session.get("school_id", None) :
+
+		school_id = request.session.get("school_id")
+		school    = School.objects.get(pk = school_id)
+
+		accounting_id = request.session.get("accounting_id")
+		accounting    = Accounting.objects.get(pk=accounting_id) 
+
+		if request.session.get("inscription_school_id", None) :
+			new      = True
+			template = 'payment/new_school_payment.html'
+			user_id = request.session["user_id"]
+			user  = User.objects.get(pk=user_id)
+
+		else :
+			new      = False
+			user_id = request.session["user_id"]
+			user  = User.objects.get(pk=user_id)
+			template = 'payment/school_payment.html'
+
+		context = { 'school' : school , 'accounting' : accounting, 'user' : user }
+		
+
+	else :
+		template   = 'payment/family_payment.html'
+ 
+
+
+	return render(request, template , context)

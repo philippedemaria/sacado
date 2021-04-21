@@ -63,21 +63,23 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
  
-                          {% comment %}
+
                           <!-- page de paiement en ligne -->
                           <div id="smart-button-container">
                               <div style="text-align: center;">
                                 <div id="paypal-button-container"></div>
                               </div>
                           </div>
-                          {% include 'association/payment_module.html' %}
+                          {% include 'payment/payment_module.html' %}
                           <!-- page de paiement en ligne -->
 
-                          {% endcomment %}
+                          {% comment %}
 
                           <div class="alert alert-danger">
                               A venir
                           </div>  
+                          {% endcomment %}
+
                     </div>  
                 </div>
             </div>

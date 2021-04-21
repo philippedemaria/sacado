@@ -376,7 +376,23 @@
             });
 
 
+        $("#id_form-0-username").on('change', function () {
+            let username = $(this).val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
  
+            $.ajax({
+                url: '/account/ajax/userinfo/',
+                type: "POST",
+                data: {
+                    'username': username,
+                    csrfmiddlewaretoken: csrf_token,    
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $("#id_form-0-username .ajaxresult").html(data["html"]);
+                } 
+            });
+        }); 
 
 
  

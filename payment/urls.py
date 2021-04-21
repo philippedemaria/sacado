@@ -3,7 +3,11 @@ from .views import *
 
 urlpatterns = [
 
-    path('traite_notif', traite_notif, name='traite_notif'),
+
+    path('create_payment', create_payment, name='create_payment'), 
+
+    path('thanks_for_payment', thanks_for_payment, name='thanks_for_payment'), 
+ 
 
 ]
  

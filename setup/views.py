@@ -263,6 +263,7 @@ def school_adhesion(request):
                         user.school = school_exists # on attribue l'établissement à la personne qui devient référence
                         user.is_manager = 1 # on attribue l'établissement à la personne qui devient administratrice de sacado.
                         user.set_password(u_form.cleaned_data["password1"])
+                        user.country = school_exists.country
                         user.save()
                         username = u_form.cleaned_data['username']
                         password = u_form.cleaned_data['password1']
