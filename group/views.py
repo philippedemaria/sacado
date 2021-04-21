@@ -186,7 +186,7 @@ def student_dashboard(request,group_id):
 
     context = {'student_id': student.user.id, 'student': student, 'relationships': relationships, 'timer' : timer ,  'last_exercises_done' : last_exercises_done, 'responses' : responses ,
                'evaluations': evaluations, 'ratio': ratio, 'today' : today ,  'parcourses': parcourses,   'customexercises': customexercises, 'group' : group , 'groups' : groups ,
-               'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late, 
+               'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late, 'index_tdb' : True, 
                'relationships_in_tasks': relationships_in_tasks , }
 
 
