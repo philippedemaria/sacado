@@ -17,7 +17,6 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import  path, include, re_path
 from django.conf.urls.static import static
-import cas.views
 
 urlpatterns = [
                   path('', include('setup.urls')),
@@ -32,18 +31,8 @@ urlpatterns = [
                   path('oauth/', include('social_django.urls')),
                   path('basthon/', include('basthon.urls')),    
                   path('association/', include('association.urls')),
-
-
-
-                  path('tool/', include('tool.urls')),  
-
+                  path('tool/', include('tool.urls')),
                   path('payment/', include('payment.urls')),
-
-                  path('login/gar_sso', cas.views.login, name='login_sso'),
-                  path('logout/gar_sso', cas.views.logout, name='logout_sso'),
-
-
-
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
