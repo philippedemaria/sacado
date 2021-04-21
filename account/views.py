@@ -1080,7 +1080,7 @@ def register_teacher_from_admin(request):
     """"
     Enregistre un enseignant depuis la console admin d'un établissement
     """ 
-    user_form = ManagerForm(request.POST or None,initial = {'time_zone': request.user.time_zone })
+    user_form = ManagerForm(request.POST or None,initial = {'time_zone': request.user.time_zone , 'country': request.user.country })
     teacher_form = TeacherForm(request.POST or None)
     school = this_school_in_session(request)
     new = False

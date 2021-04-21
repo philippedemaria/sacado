@@ -69,6 +69,7 @@ def end_of_contract() :
 def index(request):
 
     if request.user.is_authenticated :
+        index_tdb = True  # Permet l'affichage des tutos Youtube dans le dashboard
   
         today = time_zone_user(request.user)
 
@@ -123,7 +124,7 @@ def index(request):
  
             template = 'dashboard.html'
             context = {'this_user': this_user, 'teacher': teacher, 'groups': groups,  'parcours': None, 'today' : today , 'timer' : timer , 'nb_teacher_level' : nb_teacher_level , 
-                       'relationships': relationships, 'parcourses': parcourses, 
+                       'relationships': relationships, 'parcourses': parcourses, 'index_tdb' : index_tdb,
                        'communications': communications, 'parcours_tab': parcours_tab,
                        }
         
@@ -134,7 +135,7 @@ def index(request):
         elif request.user.is_parent:  ## parent
             parent = Parent.objects.get(user=request.user)
             students = parent.students.order_by("user__first_name")
-            context = {'parent': parent, 'students': students, 'today' : today ,  }
+            context = {'parent': parent, 'students': students, 'today' : today , 'index_tdb' : index_tdb, }
             template = 'dashboard.html'
 
         return render(request, template , context)
