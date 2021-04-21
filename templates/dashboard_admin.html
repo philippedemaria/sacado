@@ -69,7 +69,7 @@
                                     {{ data.nbt }} 
                                 </div>
                                 <a href="{% url 'school_teachers' %}" class="small-box-footer"><i
-                                        class="fa fa-arrow-circle-right"></i> En détails </a>
+                                        class="fa fa-arrow-circle-right"></i> Liste/créer des enseignants </a>
                             </div>
                         </div>
 
@@ -85,10 +85,10 @@
                                 <a href="{% url 'csv_full_group'  %}" class="btn btn-default btn-accueil" style="margin-left:10px;width:280px; position: absolute; top:150px;"> Initialiser les groupes d'élèves </a> 
                                 {% if  data.nbg > 0 %}
                                     <a href="{% url 'school_students' %}" class="small-box-footer"><i
-                                        class="fa fa-arrow-circle-right"></i> En détails </a>
+                                        class="fa fa-arrow-circle-right"></i> Liste/créer des élèves </a>
                                 {% else %}
                                     <a href="{% url 'school_groups' %}" class="small-box-footer"><i
-                                        class="fa fa-arrow-circle-right"></i> Renseigner les groupes </a>
+                                        class="fa fa-arrow-circle-right"></i> Liste/créer des groupes </a>
                                 {% endif %}
                             </div>
                         </div>
@@ -104,7 +104,7 @@
                                 </div>
                                 {% if  data.nbt > 0 %}
                                     <a href="{% url 'school_groups' %}" class="small-box-footer"><i
-                                        class="fa fa-arrow-circle-right"></i> En détails </a>
+                                        class="fa fa-arrow-circle-right"></i> Liste/créer des groupes </a>
                                 {% else %}
                                     <a href="{% url 'school_teachers' %}" class="small-box-footer"><i
                                         class="fa fa-arrow-circle-right"></i> Renseigner les enseignants </a>
@@ -135,7 +135,7 @@
                                 {% endif %}
                                 {% endif %}
                                     <a href="{% url 'school_accounting'  %}" class="small-box-footer" ><i
-                                        class="fa fa-arrow-circle-right"></i> En détails </a>
+                                        class="fa fa-arrow-circle-right"></i> Liste des cotisations </a>
  
                             </div>
                         </div>
