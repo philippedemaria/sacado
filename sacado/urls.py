@@ -37,7 +37,7 @@ urlpatterns = [
                   path('payment/', include('payment.urls')),
 
 
-                  path('SSO_GAR/login', cas.views.login, name='login_sso'    ) , 
+                  path('SSO_GAR', cas.views.login, name='login_sso'    ) , 
                   path('SSO_GAR/logout', cas.views.logout, name='logout_sso')
 
 
