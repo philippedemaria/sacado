@@ -1032,10 +1032,23 @@ def update_teacher(request, pk):
 def delete_teacher(request, id):
 
     teacher = get_object_or_404(Teacher, user_id=id)
-    if request.user.teacher == teacher or request.user.is_superuser :
-        teacher.user.delete()
 
+    supprime , sup  = False , False
+
+    if request.user.is_manager and teacher.user.school == request.user.school : #Si l'enseignant est manager et administre le même étabissement que le prof à supprimer alors on supprime.
+        supprime = True
+        if teacher.groups.count() > 0 : # si le prof a déjà des groupes, seul lui peut se supprimer
+            supprime = False
+
+    if request.user.teacher == teacher or request.user.is_superuser   :
+        sup = True
+        
+    if sup or supprime :
+        teacher.user.delete()
         messages.success(request,"Le profil a été supprimé avec succès.")
+    else :
+        messages.error(request,"Permission refusée. Le profil n'a pas été supprimé. Des groupes sont attribués à cet enseignant. Il faut le dissocer de ses groupes.")
+
     if request.user.is_superuser :
         return redirect('list_teacher')
     elif request.user.is_manager :

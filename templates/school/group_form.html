@@ -86,8 +86,8 @@
                                 {{ form.suiviparent  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                         </div>
                          <div class="col-sm-12 col-md-4">
-                                <label>{{ form.lock.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                    <div class="helper_tip_text" > Interdire l'admission dans un groupe </div>
+                                <label>Verrouiller<span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                    <div class="helper_tip_text" > Interdire l'admission dans un groupe via le lien d'inscription. </div>
                                 </span></label> <br/> 
                                 {{ form.lock |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                                 {{ form.lock.errors }}
@@ -111,7 +111,7 @@
                                     <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
                                         <div class="btn btn-default full_width" style="text-align: left; font-size:15px; margin-bottom: 5px">
                                             <span data-toggle="collapse" data-parent="#accordion" href="#collapsed" class="parcours_displayer" style="color : {{  parcours.color }}" >
-                                                 <label>Co-enseignement ?  <small>Partager un groupe avec vos collègues</small> </label>
+                                                 <label>Co-enseignement ?  <small>Mutualiser un groupe avec vos collègues</small> </label>
                                             </span>
                                             <div id="collapsed" class="collapse">
                                                 <div class="panel-body"  style="padding:0px">
@@ -148,7 +148,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <span class="helper_label">Tous les parcours du groupe sont attribués en coanimation par défaut. Il est possible à l'enseignant propriétaire de dissocier le partage.</small>
+                                    <em><span style="font-size:10px;">A leur création, les parcours du groupe seront attribués en coanimation par défaut. Il est possible à l'enseignant propriétaire de dissocier la mutualisation.</span></em>
                                 </div>
                             </div>
                         </div> 

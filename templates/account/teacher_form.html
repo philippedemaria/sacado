@@ -147,7 +147,7 @@
                         <div class="{% if teacher.subjects.all.count == 0 %} alert alert-danger{% else %}form-group{% endif %}">
                             <label>{{ teacher_form.subjects.label_tag }} {% if teacher.subjects.count == 0 %} <i class="fa fa-warning"></i> Renseigner{% endif %} 
                                 <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                    <div class="helper_tip_text" >Choisir votre ou vos enseignement pour sélectionner les exercices correspondants.</div>
+                                    <div class="helper_tip_text" >Choisir votre (ou vos) enseignement(s) pour sélectionner les exercices correspondants.</div>
                                 </span> 
                             </label>
                             {{ teacher_form.subjects  |add_class:"form-control select2" }}
@@ -158,7 +158,7 @@
                         <div class="{% if teacher.levels.all.count == 0 %} alert alert-danger{% else %}form-group{% endif %}">
                             <label>{{ teacher_form.levels.label_tag }} {% if teacher.levels.count == 0 %} <i class="fa fa-warning"></i> Renseigner{% endif %}  
                                 <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                    <div class="helper_tip_text" >Choisir votre ou vos niveaux préférés qui apparaitront dans votre espace personnalisé. Sans choix, vous ne pouvez pas sélectionner d'exercices.</div>
+                                    <div class="helper_tip_text" >Choisir votre (ou vos) niveau(x) préféré(s) qui apparait(ront) dans votre espace personnalisé. Sans choix, vous ne pouvez pas sélectionner d'exercices.</div>
                                 </span> 
                             </label>
                             {{ teacher_form.levels  |add_class:"form-control select2" }}
@@ -216,7 +216,7 @@
                     </div>
                 </div>
 
-                {% if request.user.is_superuser %}
+                {% if request.user.is_superuser or request.user.is_manager %}
                 <div class="col-sm-12 col-md-6">                 
                     <div class="alert alert-danger"> 
                         <h4 cLass="thin">Attribution des droits</h4>
@@ -224,7 +224,8 @@
                             <label>Administrateur établissement ?</label>
                             {{ user_form.is_manager |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"  }}
                             {{ user_form.is_manager.errors }}
-                        </div>
+                        </div>  
+                        {% if request.user.is_superuser %}
                         <div class="form-group">
                             <label>Créateur d'exercices ?</label>
                             {{ user_form.is_extra |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"  }}
@@ -245,13 +246,13 @@
                             {{ user_form.schools|add_class:"form-control select2"   }}
                             {{ user_form.schools.errors }}
                         </div>
-
+                        {% endif  %} 
                     </div>
                 </div>
-                {% endif  %} 
+                {% endif  %}
             </div>
             <div class="row" style="margin-top:20px">
-                <div class="col-sm-12 col-md-8">
+                <div class="col-sm-12 col-md-6">
                     <div class="form-group">
                         <input value="Enregistrer" type="submit" class="btn btn-primary"/>
                             {% if request.user.is_superuser %}
@@ -267,7 +268,13 @@
                 {% if teacher %}
                 <div class="col-sm-12 col-md-4">
                     <div class="form-group">
-                        <a href="{% url 'dissociate_teacher' teacher.user.id %}" class="btn btn-danger" onclick="return TestRemove('cet enseignant')" > Dissocier cet enseignant de mon établissement</a>
+                        <a href="{% url 'dissociate_teacher' teacher.user.id %}" class="btn btn-warning" onclick="return TestRemove('cet enseignant')" > Dissocier cet enseignant de mon établissement</a>
+                    </div>   
+                </div>
+
+                <div class="col-sm-12 col-md-2">
+                    <div class="form-group">
+                        <a href="{% url 'delete_teacher' teacher.user.id %}" class="btn btn-danger" onclick="return TestDelete('cet enseignant')" > Supprimer cet enseignant</a>
                     </div>   
                 </div>
                 {% endif  %} 
