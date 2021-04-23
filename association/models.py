@@ -186,3 +186,28 @@ class Document(models.Model): # pour l'asso'
  
     def __str__(self):
         return self.title 
+
+
+
+
+
+
+########################################################################################################################################### 
+########################################################################################################################################### 
+############################################################  Abonnement    ############################################################### 
+########################################################################################################################################### 
+########################################################################################################################################### 
+
+
+
+class Abonnement(models.Model):
+
+    school     = models.ForeignKey(School, on_delete=models.CASCADE, related_name='abonnement', editable=False)
+    date_start = models.DateTimeField(verbose_name="Date de début", editable=False)
+    date_stop  = models.DateTimeField(verbose_name="Date de fin", editable=False)
+    accounting = models.ForeignKey(Accounting, on_delete=models.CASCADE, related_name='abonnement', editable=False)
+    user       = models.ForeignKey(User, on_delete=models.CASCADE, related_name='abonnement', editable=False)
+ 
+
+    def __str__(self):
+        return "{}".format(self.school.name)

@@ -53,7 +53,7 @@ import xlwt
 
 def payment_complete(request):
     body = json.loads(request.body)
-    print(body)
+ 
     Accounting.objects.filter(pk = body['accounting_id']).update(is_active = 1)
     return JsonResponse('Payement completed !', safe = False)
 

@@ -13,6 +13,7 @@ from account.models import User, Teacher, Student
 from account.forms import UserForm , StudentForm ,NewUserSForm
 from association.models import Accounting, Rate, Detail
 from school.forms import SchoolForm, CountryForm, GroupForm, StageForm
+from school.gar import *
 from group.views import include_students
 from group.models import Group, Sharing_group
 from socle.decorators import user_is_superuser
@@ -129,6 +130,8 @@ def create_school(request):
 		school = form.save()
 		school.is_active = 1
 		school.save()
+		# Create Web abonnement
+		#create_web_abonnement(school)
 
 		Stage.objects.create(school = school ,low = 30,  medium = 65, up = 85)
 		return redirect('schools')

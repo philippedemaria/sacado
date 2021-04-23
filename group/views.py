@@ -522,7 +522,7 @@ def create_group(request):
         if eleveTest :
             st = create_student_profile_inside(request, nf)          
 
-        msg = "Félicitations... Votre compte sacado est maintenant configuré et votre groupe est créé !" 
+        msg = "Félicitations... Votre groupe est créé !" 
         if st :
             msg = msg + " Vous avez demandé un profil élève. Un mail contenant vos identifiant vous est envoyé." 
         messages.success(request, msg )

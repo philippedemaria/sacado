@@ -7,7 +7,7 @@ from account.models import  User, Teacher, Student  ,Parent , Adhesion
 from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise, Customanswerbystudent,Writtenanswerbystudent
 from tool.models import Quizz, Question, Choice
 from group.models import Group, Sharing_group
-from association.models import Accounting , Detail , Rate
+from association.models import Accounting , Detail , Rate , Abonnement
 from group.views import student_dashboard
 from setup.models import Formule 
 from school.models import Stage , School
@@ -30,6 +30,7 @@ from itertools import chain
 from account.decorators import is_manager_of_this_school
 from general_fonctions import *
 from payment_fonctions import *
+from school.gar import *
 import fileinput 
 import random
 from django.contrib.auth.hashers import make_password
@@ -250,13 +251,13 @@ def school_adhesion(request):
                 if int(token) == 7 :
                     school_commit = form.save(commit=False)
                     school_exists, created = School.objects.get_or_create(name = school_commit.name, town = school_commit.town , country = school_commit.country , code_acad = school_commit.code_acad , defaults={ 'nbstudents' : school_commit.nbstudents , 'address' : school_commit.address ,'complement' : school_commit.complement , }  )
+                   
                     if not created :
                         # si l'établisseent est déjà créé, on la modifie et on récupère son utilisateur.
                         School.objects.filter(pk = school_exists.id).update(town = school_commit.town , country = school_commit.country , code_acad = school_commit.code_acad , nbstudents = school_commit.nbstudents , address = school_commit.address , complement = school_commit.complement )
                         new_user_id = request.session.get("new_user_id", None)
                         if new_user_id :
                             user = User.objects.get(pk = new_user_id )
-
                     else :
                         # si l'établissement vient d'être créé on crée aussi la personne qui l'enregistre.
                         user = u_form.save(commit=False)
@@ -271,10 +272,23 @@ def school_adhesion(request):
                         teacher = Teacher.objects.create(user=user)
                         request.session["new_user_id"] = user.id 
                         ##########
+                        ##########
+                        # Si on vient de créer un établissement, on lui crée un abonnement.
+                        ##########
+
+
                     acting, is_active  = None , False # date d'effet, user, le paiement est payé non ici... doit passer par la vérification
                     observation =   "Paiement en ligne "             
-
+ 
                     accounting_id = accounting_adhesion(school_exists, today , acting, user, is_active , observation) # créattion de la facturation
+                    ########################################################################################################################
+                    #############  GAR
+                    ########################################################################################################################
+                    create_abonnement(today,school_exists,accounting_id,user)
+
+                    ########################################################################################################################
+                    #############  FIN  GAR
+                    ########################################################################################################################
 
                     school_datas =  school_exists.name +"\n"+school_exists.code_acad +  " - " + str(school_exists.nbstudents) +  " élèves \n" + school_exists.address +  "\n"+school_exists.town+", "+school_exists.country.name
                     send_mail("Demande d'adhésion à la version établissement",
