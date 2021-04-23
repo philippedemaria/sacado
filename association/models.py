@@ -207,7 +207,7 @@ class Abonnement(models.Model):
     date_stop  = models.DateTimeField(verbose_name="Date de fin", editable=False)
     accounting = models.ForeignKey(Accounting, on_delete=models.CASCADE, related_name='abonnement', editable=False)
     user       = models.ForeignKey(User, on_delete=models.CASCADE, related_name='abonnement', editable=False)
- 
+    gar_active = models.BooleanField(default=0, verbose_name="Actif au GAR")
 
     def __str__(self):
         return "{}".format(self.school.name)
