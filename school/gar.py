@@ -1,17 +1,28 @@
 from association.models import Abonnement
-
+import requests
 
 
 def create_abonnement(today,school,accounting_id,user):
     """Création d'un abonnement dans la base de données"""
-
+	host   = "https://abonnement.partenaire.test-gar.education.fr/" 
     # Date d'abonnement du 1 septembre au 14 juillet
     if today < datetime.date(today.year(),5,30):
+        date_start = today.isoformat() # Année en cours
+        date_stop  = datetime.date(today.year(),7,14).isoformat() # Année en cours
+    else :
         date_start = datetime.date(today.year(),9,1).isoformat() # Année en cours
         date_stop  = datetime.date(today.year()+1,7,14).isoformat() # Année suivante
 
     # Create Web abonnement d'un établissement
     abonnement, abo_created = Abonnement.objects.get_or_create(school = school, date_start = date_start, date_stop = date_stop,  accounting_id = accounting_id , defaults={ 'user' : user}  )
+ 
+    host += str(abonnement.id)
+	r = requests.put(host, params)
+	r.status_code
+	r.headers['content-type']
+	r.encoding
+	r.text
+	r.json()
 
 
 
@@ -42,7 +53,8 @@ def create_web_abonnement_xml(abonnement):
 
 
 
-def create_liste_etablissement_xml(abonnement):
+def create_liste_etablissement_xml():
+	pass
 
 
 	# school   = dict()
@@ -87,16 +99,3 @@ def create_liste_etablissement_xml(abonnement):
 
 # </listEtablissement>
 
-
-
-def liste_etablissement_xml():
-
-
-	chaine = "<listEtablissement xmlns='http://www.gar.education.fr/listEtablissement/v1.0/'><etablissement>"
-	
-	for abonnement in abonnements : 
-		create_liste_etablissement_xml(abonnement)
- 
- 
-
-	chaine += "</etablissement></listEtablissement>"
