@@ -48,15 +48,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-12 col-md-6">
-                <div class="form-group">                
-                    {{ form.town.label_tag }}
-                    {{ form.town |add_class:"form-control" }}
-                    {{ form.town.errors }}
-                </div>
-            </div>
-        </div>
+
         <div class="row">
             <div class="col-sm-12 col-md-6">
                 <div class="form-group">                
@@ -74,7 +66,25 @@
                     {{ form.complement.errors }}
                 </div>
             </div>
-        </div>   
+        </div>  
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">                
+                    {{ form.zip_code.label_tag }}
+                    {{ form.zip_code |add_class:"form-control" }}
+                    {{ form.zip_code.errors }}
+                </div>
+            </div>
+        </div> 
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">                
+                    {{ form.town.label_tag }}
+                    {{ form.town |add_class:"form-control" }}
+                    {{ form.town.errors }}
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-12 col-md-6">
                 <div class="form-group">                
@@ -84,8 +94,8 @@
                 </div>
             </div>
         </div>   
-
-        {% if  request.user.is_superuser %}
+ 
+ 
     
         <div class="row">
             <div class="col-sm-12 col-md-6">
@@ -96,8 +106,7 @@
                 </div>
             </div>
         </div>   
-
-        {% endif %} 
+  
 
 
 

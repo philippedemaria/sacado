@@ -258,6 +258,18 @@ def school_adhesion(request):
                         new_user_id = request.session.get("new_user_id", None)
                         if new_user_id :
                             user = User.objects.get(pk = new_user_id )
+                        else :
+                            user = u_form.save(commit=False)
+                            user.user_type = User.TEACHER
+                            user.school = school_exists # on attribue l'établissement à la personne qui devient référence
+                            user.is_manager = 1 # on attribue l'établissement à la personne qui devient administratrice de sacado.
+                            user.set_password(u_form.cleaned_data["password1"])
+                            user.country = school_exists.country
+                            user.save()
+                            username = u_form.cleaned_data['username']
+                            password = u_form.cleaned_data['password1']
+                            teacher = Teacher.objects.create(user=user)
+                            request.session["new_user_id"] = user.id    
                     else :
                         # si l'établissement vient d'être créé on crée aussi la personne qui l'enregistre.
                         user = u_form.save(commit=False)
@@ -280,14 +292,16 @@ def school_adhesion(request):
                     acting, is_active  = None , False # date d'effet, user, le paiement est payé non ici... doit passer par la vérification
                     observation =   "Paiement en ligne "             
  
-                    accounting_id = accounting_adhesion(school_exists, today , acting, user, is_active , observation) # créattion de la facturation
+                    accounting_id = accounting_adhesion(school_exists, today , acting, user, is_active , observation) # création de la facturation
                     ########################################################################################################################
-                    #############  GAR
+                    #############  Abonnement
                     ########################################################################################################################
-                    create_abonnement(today,school_exists,accounting_id,user)
+                    date_start, date_stop = date_abonnement(today)
+
+                    abonnement, abo_created = Abonnement.objects.get_or_create(school = school_exists, date_start = date_start, date_stop = date_stop,  accounting_id = accounting_id , is_gar = 0 , defaults={ 'user' : user, 'is_active' : 0}  )
 
                     ########################################################################################################################
-                    #############  FIN  GAR
+                    #############  FIN  Abonnement
                     ########################################################################################################################
 
                     school_datas =  school_exists.name +"\n"+school_exists.code_acad +  " - " + str(school_exists.nbstudents) +  " élèves \n" + school_exists.address +  "\n"+school_exists.town+", "+school_exists.country.name

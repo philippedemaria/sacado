@@ -10,24 +10,26 @@
 
 <section class="container" style="margin-top:100px">
     <h3 class="thin">Demande d'adhésion à la version Etablissement  <a href="#" id="show_fonctions" style="font-size : 14px">Fonctionnalités proposées</a></h3>    
-    <div class="row">
-        <div class="col-sm-12 col-md-12">
-            <div class="alert alert-danger">
-                Si votre établissement souhaite une adhésion via le GAR, attendre sa mise en place prévue avant le 1 juillet 2021.
-            </div>
-        </div>
-    </div> 
+
     <div class="row">
        <div class="col-sm-12 col-md-12">
         {% include 'table_price.html' %}
        </div>
     </div>
  
+
     <div class="row">
         <div class="col-sm-12 col-md-12">
-            <div class="alert alert-danger">
-            Si votre établissement est déjà inscrit, l'administrateur ou le DAF doit procéder à un renouvellement via son <a href="{% url 'index' %}">espace Admin</a>. Sinon <a href="#" id="renew_adh_school">cliquez ici</a>.
-            </div>
+            Nous vous proposons deux types d'inscription.  
+        </div>
+    </div> 
+
+    <div class="row">
+        <div class="col-sm-6 col-md-6">
+            <a href="#" id="div_gar_show" class="btn btn-default"><img src="{% static 'img/gar.png' %}" height="57px"/></a> 
+        </div>
+        <div class="col-sm-6 col-md-6">
+            <a href="#" id="renew_adh_school" class="btn btn-default"><img src="{% static 'img/sacadoLogo.png' %}"/> Inscription directe</a> 
         </div>
     </div> 
  
@@ -38,9 +40,28 @@
         </div>
     </div> 
 
+    <div class="row"  id="div_gar">
+
+ 
+            <div class="col-sm-12 col-md-12">
+                <div class="alert alert-danger">
+                    Nous sommes en cours de création de l'accrochage GAR. Attendre sa mise en place prévue avant le 1 juillet 2021. Merci pour votre compréhension.
+                </div>
+            </div>
+ 
+
+    </div> 
+
 
 
     <form action="" method="POST" id="renew_form_school">
+        <div class="row">   
+            <div class="col-sm-12 col-md-12">
+                <div class="alert alert-danger">
+                Si votre établissement est déjà inscrit, l'administrateur ou le DAF doit procéder à un renouvellement via son <a href="{% url 'index' %}">espace Admin</a>. 
+                </div>
+            </div>
+        </div>
         <div class="row">                    
             <div class="col-sm-12 col-md-6">
 
@@ -57,18 +78,6 @@
                       {{ form.code_acad |add_class:"form-control" }}
                       {{ form.code_acad.errors }}
                   </div>
-                  <div class="form-group">
-                      {{ form.country.label_tag }}
-                      {{ form.country |add_class:"form-control select2" }}
-                      {{ form.country.errors }}
-                  </div>
-
-                  <div class="form-group">                
-                      {{ form.town.label_tag }}
-                      {{ form.town |add_class:"form-control" }}
-                      {{ form.town.errors }}
-                  </div>
-
                   <div class="form-group">                
                       {{ form.address.label_tag }}
                       {{ form.address |add_class:"form-control" }}
@@ -81,6 +90,30 @@
                       {{ form.complement.errors }}
                   </div>
 
+
+                  <div class="row">     
+                      <div class="col-sm-12 col-md-6">
+                          <div class="form-group">
+                              {{ form.town.label_tag }}
+                              {{ form.town |add_class:"form-control" }}
+                              {{ form.town.errors }}
+                          </div>
+                      </div>
+
+                      <div class="col-sm-12 col-md-6">
+                          <div class="form-group">
+                              {{ form.zip_code.label_tag }}
+                              {{ form.zip_code |add_class:"form-control" }}
+                              {{ form.zip_code.errors }}
+                          </div>
+                      </div>
+                  </div>
+ 
+                  <div class="form-group">
+                      {{ form.country.label_tag }}
+                      {{ form.country |add_class:"form-control select2" }}
+                      {{ form.country.errors }}
+                  </div>
                   <div class="row">     
                       <div class="col-sm-12 col-md-6">
                           <div class="form-group">

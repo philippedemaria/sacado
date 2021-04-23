@@ -4,7 +4,7 @@ import sys
 import urllib.parse
 import requests
 from account.models import User  
-from association.models import Accounting  
+from association.models import Accounting , Abonnement 
 from school.models import School 
 from datetime import datetime  
 import json
@@ -14,6 +14,7 @@ from django.http import JsonResponse
 
 
 def verify_payment(buyer, accounting, school,new):
+	""" vérifie que le paiement a été reçu par Payal et active l'abonnement"""
 
 	accounting.is_active = False
  
@@ -44,6 +45,8 @@ def verify_payment(buyer, accounting, school,new):
 			# 	recipient_list=[self.user.email, ],
 			# 	context={"teacher": self.user, }, )
 			accounting.save()
+			accounting.abonnement.is_active=True
+			accounting.abonnement.save()
 
 
 	else :
