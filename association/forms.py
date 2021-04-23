@@ -1,6 +1,6 @@
 from django import forms
 from .models import Accounting , Voting , Associate, Document , Section , Detail , Rate
-
+from account.models import User
 
 
 class AccountingForm(forms.ModelForm):
@@ -23,6 +23,10 @@ class AssociateForm(forms.ModelForm):
         model = Associate
         fields = '__all__' 
 
+    def __init__(self, *args, **kwargs):
+        super(AssociateForm, self).__init__(*args, **kwargs)
+        users = User.objects.filter(user_type = 2)
+        self.fields['user'] = forms.ModelChoiceField(queryset=users,    required=False )
 
  
 class VotingForm(forms.ModelForm):
