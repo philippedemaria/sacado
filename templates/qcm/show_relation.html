@@ -23,7 +23,6 @@
 {% endblock %} 
 
 {% block body  %}  
-
 <section class="content_main content_main_exercise">
     {% get_available relation student  as available %} <!-- Si le nombre de tentative est dépassée ou pas -->
     {% get_parcours_available parcours student relation.exercise as parcours_available %} <!-- Si le nombre de tentative est dépassée ou pas -->
@@ -124,22 +123,24 @@
 
           <div class='justify-content-center'  style="position:relative">
 
-              <div style="position:absolute;bottom:80px;font-size: 12px;width:50px;color:#0d72ac;left:780px;">
-                  Mode plein <br> écran <br>
-                  <img src="{% static 'img/flechebleue.png' %}" style="position:absolute; right:30px;"/>            
-              </div>
+
 
               {% if parcours.is_evaluation %}
                    
  
-                          <div class="alert alert-danger" style="width:750px; float:absolute!important;"  role="alert" id="message_alerte">
-                              Cet exercice est proposé dans une évaluation. Vous devez répondre à exactement <b>{{ relation.situation }} question{{ relation.situation|pluralize  }}</b>.
-                          </div>
+                  <div class="alert alert-danger" style="width:750px; position:absolute;z-index: 999;"  role="alert" id="message_alerte">
+                      Cet exercice est proposé dans une <b>évaluation</b>. Vous devez répondre à exactement <b>{{ relation.situation }} question{{ relation.situation|pluralize  }}</b>. <small><em>Cliquez sur la croix pour faire disparaitre ce bandeau  </em></small><i class="fas fa-long-arrow-alt-right"></i> 
+                      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  </div> 
  
               {% endif %}
 
 
 
+              <div style="position:absolute;bottom:80px;font-size: 12px;width:50px;color:#0d72ac;left:780px;">
+                  Mode plein <br> écran <br>
+                  <img src="{% static 'img/flechebleue.png' %}" style="position:absolute; right:30px;"/>            
+              </div>
               <div class = 'col-auto' id='ggb_applet_container' style="display:none" ></div>
           </div>
 
