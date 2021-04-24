@@ -82,8 +82,12 @@
                                                    <br><a href="{% url 'create_exercise' supportfile.id %}" class="btn btn-primary"  >Associer/Dissocier un savoir faire à ce support</a>
                                                 </div>
 
-                                                    <a href="{% url 'show_this_supportfile' supportfile.id   %}" target="_blank">  
+                                                    <a href="{% url 'show_this_supportfile' supportfile.id   %}" target="_blank"> 
+                                                    {% if supportfile.imagefile %} 
                                                         <img src="{{ supportfile.imagefile.url }}" class="imagefile">
+                                                    {% else %} 
+                                                        <img src="{% static 'img/missing_img.png' %}" class="imagefile">
+                                                    {% endif  %} 
                                                     </a>
 
 
