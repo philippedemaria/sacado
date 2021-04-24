@@ -19,18 +19,24 @@
   
 {% block page_title %}
     
+
+
     {% if parcours %} 
         <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-desktop"></i> </span>
         {% include 'qcm/breadcrumb.html' %}
-        <small> Les parcours mutualisés  </small>
+        <small> Les {% if is_eval %}évaluations mutualisées{% else %}parcours mutualisés{% endif  %}   </small>
     {% else  %} 
-        <i class="fa fa-laptop"></i> Les parcours mutualisés 
+        <i class="fa fa-laptop"></i> Les {% if is_eval %}évaluations mutualisées{% else %}parcours mutualisés{% endif  %} 
     {% endif  %} 
 
 
 {% endblock %}
 
 {% block page_menu_right %}
+
+
+
+
 
     {% if is_eval %}
     <li> <a href="{% url 'evaluations' %}"   class="btn btn-new-evaluation"> Mes évaluations</a> </li>
