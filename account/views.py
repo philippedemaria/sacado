@@ -271,7 +271,7 @@ def register_student_from_admin(request):
             u_form.username = get_username(request, u_form.last_name, u_form.first_name)
             u_form.save()
 
-            # On récupère les parcours d'un élève de ce groupe et on les attribue au nouvel élève.
+            # On récupère les parcours, exercives et cours d'un élève de ce groupe et on les attribue au nouvel élève.
             try :
                 this_student = group.students.first()
                 parcourses = this_student.students_to_parcours.all()
