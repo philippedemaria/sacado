@@ -111,7 +111,7 @@
     </div> 
 
     
-    <div class="col-sm-12 col-md-3 col-lg-3">
+    <div class="col-sm-12 col-md-12 col-lg-3">
         {% if user.user_type == 2 %}
             <form action="{% url 'add_exercice_in_a_parcours' %}" method="POST" enctype='multipart/form-data'>   {% csrf_token %}
                 <input type="hidden" id="id_exercise"  name="exercise" required="" value="{{ exercise.id }}">
@@ -171,36 +171,32 @@
     <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script>
 
     <script type="text/javascript">
-          // parameters of the geogebra app
+        // parameters of the geogebra app
         var parameters = {
-                "appname":"classic",
-                "id":"ggb_applet_container",
-              "prerelease":false,
-              "width":{{ exercise.supportfile.width }},
-              "height":{{ exercise.supportfile.height }},
-              "showToolBar":{{ exercise.supportfile.toolBar|lower }},
-              "showfullscreenbutton":true,
-              "borderColor":"#f5f8fd",
-              "showMenuBar":{{ exercise.supportfile.menuBar|lower }},
-              "showAlgebraInput":{{ exercise.supportfile.algebraInput|lower }},
-              "showResetIcon":{{ exercise.supportfile.resetIcon|lower }},
-              "enableLabelDrags":false,
-              "enableShiftDragZoom":{{ exercise.supportfile.dragZoom|lower }},
-              "enableRightClick":false,
-              "capturingThreshold":null,
-              "showToolBarHelp":false,
-              "errorDialogsActive":false,
-              "useBrowserForJS":false,
+                  "appname":"classic",
+                  "id":"ggb_applet_container",
+                  "prerelease":false,
+                  "width":{{ exercise.supportfile.width }},
+                  "height":{{ exercise.supportfile.height }},
+                  "showToolBar":{{ exercise.supportfile.toolBar|lower }},
+                  "showfullscreenbutton":true,
+                  "borderColor":"#f5f8fd",
+                  "showMenuBar":{{ exercise.supportfile.menuBar|lower }},
+                  "showAlgebraInput":{{ exercise.supportfile.algebraInput|lower }},
+                  "showResetIcon":{{ exercise.supportfile.resetIcon|lower }},
+                  "enableLabelDrags":false,
+                  "enableShiftDragZoom":{{ exercise.supportfile.dragZoom|lower }},
+                  "enableRightClick":false,
+                  "capturingThreshold":null,
+                  "showToolBarHelp":false,
+                  "errorDialogsActive":false,
+                  "useBrowserForJS":false,
                   "langage":"en",
-          "filename":"{{ exercise.supportfile.ggbfile.url }}"
-        };
-
+                  "filename":"{{ exercise.supportfile.ggbfile.url }}"
+            };
         var applet = new GGBApplet('5.0', parameters,true);
         // Geogebra applet creation
-          applet.inject('ggb_applet_container', 'preferHTML5');  
- 
-
-   
+        applet.inject('ggb_applet_container', 'preferHTML5');  
     </script>
     
     <div style="height:20px"></div>

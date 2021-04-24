@@ -19,10 +19,22 @@
             <div class="form-group">
                 {{ form.parcours.label_tag }} <label><span class="helper_tip"> <i class="fa fa-question-circle"></i>  
                                     <div class="helper_tip_text" >
-                                    Permet de regrouper le quizz dans un parcours.</div>
+                                    Permet d'accéder à ce quizz depuis le.s parcours sélectionné.s.</div>
                                 </span>  </label>
                     {{ form.parcours|add_class:"form-control select2" }}
             </div>
+
+
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <label>Attribuer à mes groupes </label> <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                    <div class="helper_tip_text" >
+                                    Les élèves du groupe peuvent accéder à ce quizz.</div>
+                                </span>  </label>
+                    {{ form.groups|add_class:"form-control select2" }}
+                </div>
+            </div>
+
         </div>
         <div class="col-sm-12 col-md-6"> 
             <table class="table">
@@ -115,12 +127,6 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-sm-12 col-md-12">
-            <label>Attribuer à mes groupes</label>
-            {{ form.groups|add_class:"form-control select2" }}
-        </div>
-    </div>
 
 
     <hr class="divider">

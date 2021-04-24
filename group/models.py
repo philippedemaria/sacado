@@ -4,7 +4,7 @@ from account.models import Student, Teacher, ModelWithCode, generate_code
 from socle.models import Level, Subject , Waiting
 from account.models import ModelWithCode
 from django.apps import apps
-from django.utils import   timezone
+from django.utils import timezone
 from django.db.models import Q
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User
@@ -14,24 +14,30 @@ from django.db.models import Q
  
 class Group(ModelWithCode):
     """ Group est une classe d'élèves coté enseignant -- Ce qui permet de faire un groupe avec une ou plusieurs divisions """
-    name = models.CharField(max_length=255, verbose_name="Nom*")
-    color = models.CharField(max_length=255, default='#46119c', blank=True, null=True, verbose_name="Couleur*")
-    students = models.ManyToManyField(Student, related_name="students_to_group", blank=True, verbose_name="Élèves*")
-    teacher = models.ForeignKey(Teacher, blank=True, null=True, on_delete=models.CASCADE, related_name="groups", verbose_name="Enseignant*")
-    level = models.ForeignKey(Level, on_delete=models.PROTECT, related_name="groups", verbose_name="Niveau*")
-    assign = models.BooleanField(default=1)
-    suiviparent = models.BooleanField(default=0)
+    name           = models.CharField(max_length=255, verbose_name="Nom*")
+    color          = models.CharField(max_length=255, default='#46119c', blank=True, null=True, verbose_name="Couleur*")
+    students       = models.ManyToManyField(Student, related_name="students_to_group", blank=True, verbose_name="Élèves*")
+    teacher        = models.ForeignKey(Teacher, blank=True, null=True, on_delete=models.CASCADE, related_name="groups", verbose_name="Enseignant*")
+    level          = models.ForeignKey(Level, on_delete=models.PROTECT, related_name="groups", verbose_name="Niveau*")
+    assign         = models.BooleanField(default=1)
+    suiviparent    = models.BooleanField(default=0)
     studentprofile = models.BooleanField(default=0)
-    lock = models.BooleanField(default=0)
-    teachers = models.ManyToManyField(Teacher, blank=True,   editable=False, through="Sharing_group", related_name="teacher_group")
-    subject = models.ForeignKey(Subject, default = "" ,  null=True, on_delete=models.PROTECT, related_name="subject_group", verbose_name="Matière*")
+    lock           = models.BooleanField(default=0)
+    teachers       = models.ManyToManyField(Teacher, blank=True,   editable=False, through="Sharing_group", related_name="teacher_group")
+    subject        = models.ForeignKey(Subject, default = "" ,  null=True, on_delete=models.PROTECT, related_name="subject_group", verbose_name="Matière*")
  
 
     class Meta:
         ordering = ['name']
 
     def __str__(self):
-        return self.name
+        if self.level :
+            if self.teachers.count() > 0 :
+                return "[CoA] : {} ({})".format(self.name, self.level.shortname)
+            else :
+                return "{} ({})".format(self.name, self.level.shortname)
+        else :
+            return "{}".format(self.name)
 
     def contrastColorText(self):
         """ donne le noir ou blanc selon la couleur initiale  """

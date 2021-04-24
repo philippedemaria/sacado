@@ -1,6 +1,8 @@
 {% extends 'dashboard.html' %}
 {% load widget_tweaks %}
 {% load static %}
+{% load item_tags %}
+
 
     {% block require %}
 
@@ -167,12 +169,26 @@
                     </div>
                 </div>
                 {% if  teacher  %}
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-3">
                     <div class="form-group">
                         <label>Groupes en charge</label>
-                        <ul>
+                        <ul style="padding-left:0px;">
                         {% for g in teacher.groups.all %}
-                            <li class="sanspuce"><small>{{ g.name }} - {{ g.level.name }} - {{ g.subject.name }}</small></li>
+                            <li class="sanspuce">
+                                <a href="{% url 'show_group' g.id %}" style="color:{{g.color}}">{{ g.name }} </a><small>- {{ g.level.shortname|abreviation|safe }}  - {{ g.subject.shortname }}</small>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3">
+                    <div class="form-group">
+                        <label>Groupes en co-animation</label>
+                        <ul style="padding-left:0px;">
+                        {% for g in teacher.teacher_group.all %}
+                            <li class="sanspuce">
+                                <a href="{% url 'show_group' g.id %}" style="color:{{g.color}}">{{ g.name }} </a><small>- {{ g.level.shortname|abreviation|safe }}  - {{ g.subject.shortname }}</small>
+                            </li>
                         {% endfor %}
                         </ul>
                     </div>
