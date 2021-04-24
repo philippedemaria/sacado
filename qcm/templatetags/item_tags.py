@@ -50,6 +50,18 @@ def counting(obj): #compte le nombre d'exercice sans titre
     return obj.filter(supportfile__is_title=0).count()
 
 
+
+
+@register.filter
+def not_title(obj): #renvoie les supportfile qui ne sont pas des titles
+    return obj.filter(is_title=0) 
+
+
+
+
+
+
+
 @register.filter
 def insert_tags(html,cutter): #nettoie le code des balises HTML
     i = 1
