@@ -153,12 +153,12 @@ class Waiting(models.Model):
 
     def exercises_counter(self):
         Exercise = apps.get_model('qcm', 'Exercise')
-        return Exercise.objects.filter(knowledge__waiting = self).count()
+        return Exercise.objects.filter(knowledge__waiting = self, supportfile__is_title=0).count()
 
 
     def supportfile_counter(self):
         Supportfile = apps.get_model('qcm', 'Supportfile')
-        return Supportfile.objects.filter(knowledge__waiting = self).count()
+        return Supportfile.objects.filter(knowledge__waiting = self, is_title=0).count()
 
 
 

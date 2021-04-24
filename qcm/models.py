@@ -336,6 +336,9 @@ class Exercise(models.Model):
         parcours = self.exercises_parcours.filter(teacher=teacher)
         return parcours
 
+
+
+
 class Parcours(ModelWithCode):
 
     title = models.CharField(max_length=255, verbose_name="Titre")

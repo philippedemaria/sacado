@@ -31,7 +31,7 @@
 
   <li> <a href="{% url 'index' %}"  class="btn btn-new" style="margin-right:5px" > Parcours par défaut</a></li>
   {% if sacado_asso %}
-  <li> <a href="{% url 'all_parcourses' %}" class="btn btn-new white" style="margin-right:5px;background-color: #007bff; color:#FFF!important; "> Parcours mutualisés</a></li>
+  <li> <a href="{% url 'all_parcourses' 0 %}" class="btn btn-new white" style="margin-right:5px;background-color: #007bff; color:#FFF!important; "> Parcours mutualisés</a></li>
   {% else %}
  <li> <a href="#" class="btn btn-new white no_sacado_asso" style="margin-right:5px;background-color: #007bff; color:#FFF!important; "> Parcours mutualisés</a></li>
   {% endif %}

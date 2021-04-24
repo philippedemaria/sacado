@@ -31,7 +31,7 @@ define(['jquery', 'bootstrap'], function ($) {
                             'id_subject': id_subject,                        
                             csrfmiddlewaretoken: csrf_token
                         },
-                        url : "../ajax/chargethemes",
+                        url : "../../ajax/chargethemes",
                         success: function (data) {
 
                             themes = data["themes"]
@@ -103,7 +103,7 @@ define(['jquery', 'bootstrap'], function ($) {
             if ( param0.val() > 0 ) {var level_id = param0.val() ; console.log(level_id) ;  } else {var level_id = 0 ; console.log(level_id) ; }  
             if ( param1.val() > 0  ) {var theme_id = param1.val() ; console.log(theme_id) ; } else {var theme_id = [] ; console.log(theme_id) ; }  
  
-
+            let is_eval = $("#is_eval").val();
             let subject_id = $("#id_subject").val();
             let keywords = $("#keywords").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
@@ -118,13 +118,14 @@ define(['jquery', 'bootstrap'], function ($) {
                     dataType: "json",
                     traditional: true,
                     data: {
-                        'subject_id': subject_id,
-                        'level_id': level_id,
-                        'theme_id': theme_id,
-                        'keywords': keywords,
+                        'is_eval'      : is_eval,
+                        'subject_id'   : subject_id,
+                        'level_id'     : level_id,
+                        'theme_id'     : theme_id,
+                        'keywords'     : keywords,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url:"../ajax_all_parcourses",
+                    url:"../../ajax_all_parcourses",
                     success: function (data) {
  
                         $('#courses_details').html("").html(data.html);

@@ -7,7 +7,7 @@
 
    
 {% block require %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
 
 
     <script>
@@ -32,7 +32,11 @@
 
 {% block page_menu_right %}
 
+    {% if is_eval %}
+    <li> <a href="{% url 'evaluations' %}"   class="btn btn-new-evaluation"> Mes évaluations</a> </li>
+    {% else %}
     <li> <a href="{% url 'parcours' %}"   class="btn btn-new"> Mes parcours</a> </li>
+    {% endif %}
 
 {% endblock %}
 
@@ -76,6 +80,7 @@
         <div class="col-sm-12 col-md-12 col-lg-4">
             <div class="form-group">
                 <input type="text" name="keywords" id="keywords" placeholder="Mots-clés" class="form-control" />
+                <input type="hidden" name="is_eval" id="is_eval"  value="{{ is_eval }}" />
             </div>
         </div>
     </div>

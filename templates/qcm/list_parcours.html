@@ -32,7 +32,7 @@
      
             <li> <a href="{% url 'create_parcours' 0 %}"  >  + Nouveau Parcours</a> </li>  
         {% if sacado_asso %}
-            <li> <a href="{% url 'all_parcourses' %}"   > Parcours mutualisés</a></li>
+            <li> <a href="{% url 'all_parcourses' 0 %}"   > Parcours mutualisés</a></li>
         {% else %}
             <li><a href="#"  class="no_sacado_asso" title="Version établissement requise">  Parcours mutualisés </a></li>
         {% endif  %}
@@ -136,14 +136,14 @@
 
                             {% for g in  parcours.groups.all  %}
                                 {% get_parcours_group_students_count parcours g as nb_st %}
-                                    <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
+                                    <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g.name }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
                             {% empty %}
                                 {% if parcours.groups.count == 0 %}
                                     {% if parcours.is_folder %}
                                         <small> 
                                         {% for g in  parcours.group_list  %}
                                         {% get_parcours_group_students_count parcours g as nb_st %}
-                                            {{ g }}({{ nb_st.nb}}){% if not forloop.last %}, {% endif %}
+                                            {{ g.name }}({{ nb_st.nb}}){% if not forloop.last %}, {% endif %}
                                         {% endfor %}
                                         </small>
                                     {% else %}
@@ -255,7 +255,7 @@
                             <td>
                                 {% for g in  prcrs.group_list  %}
                                     {% get_parcours_group_students_count prcrs g as nb_st %}
-                                        <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
+                                        <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g.name }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
                                 {% empty %}
                                     {% if prcrs.students.count %}
 
@@ -347,9 +347,9 @@
                         <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés <p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier une fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur
 
                             {% if sacado_asso %}
-                                <a href="{% url 'all_parcourses' %}"   ><i class="fa fa-caret-right"></i> Parcours mutualisés</a>
+                                <a href="{% url 'all_parcourses' 0 %}"   ><i class="fa fa-caret-right"></i> Parcours mutualisés</a>
                             {% else %}    
-                                <a href="{% url 'all_parcourses' %}" class="no_sacado_asso"  ><i class="fa fa-caret-right"></i> Parcours mutualisés</a>
+                                <a href="#" class="no_sacado_asso"  ><i class="fa fa-caret-right"></i> Parcours mutualisés</a>
                             {% endif %}
 
 

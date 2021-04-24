@@ -42,7 +42,10 @@ urlpatterns = [
 
     path('parcours_detail_task/<int:id>/<int:s>/<int:c>/', detail_task_parcours, name='detail_task_parcours'), #modif idp en id pour la sécurité
     path('parcours_exercises/<int:id>/', parcours_exercises, name='parcours_exercises'),  # student_list_exercises
-    path('parcourses_all/', all_parcourses, name='all_parcourses'),
+
+    path('parcourses_all/<int:is_eval>/', all_parcourses, name='all_parcourses'),
+ 
+
     path('parcours_clone/<int:id>/<int:course_on>', clone_parcours, name='clone_parcours'),
     path('parcours_group/<int:id>/', list_parcours_group, name='list_parcours_group'), # parcours d'un groupe
     path('parcours_sub_parcours/<int:idg>/<int:id>/', list_sub_parcours_group, name='list_sub_parcours_group'), # parcours d'un parcours

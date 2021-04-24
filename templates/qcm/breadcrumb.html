@@ -6,7 +6,7 @@
 
 
 
-{% if group %} <a href="{% url 'list_parcours_group' group.id %}" style="color:{{ group.color }}" >{{ group }}</a> <img src="{% static 'img/angle-right.png' %}"/>  {% endif %} 
+{% if group %} <a href="{% url 'list_parcours_group' group.id %}" style="color:{{ group.color }}" >{{ group.name }}</a> <img src="{% static 'img/angle-right.png' %}"/>  {% endif %} 
 
 
 {% if parcours_folder and group %}

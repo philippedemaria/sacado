@@ -1124,9 +1124,9 @@ def parcours_progression_student(request,id):
 
 
 
-def all_parcourses(request):
+def all_parcourses(request,is_eval):
     teacher = request.user.teacher
-    parcours_ids = Parcours.objects.values_list("id",flat=True).filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1,level__in = teacher.levels.all()).exclude(teacher=teacher).order_by('level').distinct()
+    parcours_ids = Parcours.objects.values_list("id",flat=True).filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_evaluation = is_eval, is_share = 1,level__in = teacher.levels.all()).exclude(teacher=teacher).order_by('level').distinct()
 
     parcourses , tab_id = [] , [] 
     for p_id in parcours_ids :
@@ -1161,17 +1161,18 @@ def all_parcourses(request):
         inside = False
 
     #return render(request, 'qcm/all_parcourses.html', { 'teacher' : teacher ,   'parcourses': parcourses , 'inside' : inside , 'communications' : [] , 'parcours' : parcours , 'group' : group })
-    return render(request, 'qcm/list_parcours_shared.html', { 'teacher' : teacher ,   'parcourses': parcourses , 'inside' : inside ,   'parcours' : parcours , 'group' : group   })
+    return render(request, 'qcm/list_parcours_shared.html', { 'is_eval' : is_eval ,  'teacher' : teacher ,   'parcourses': parcourses , 'inside' : inside ,   'parcours' : parcours , 'group' : group   })
 
 
 
 def ajax_all_parcourses(request):
 
     teacher = request.user.teacher
-    data = {} 
+    data = {}
+    is_eval = int(request.POST.get('is_eval',0))
     level_id = request.POST.get('level_id',0)
     subject_id = request.POST.get('subject_id',None)
-    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1).exclude(exercises=None ,teacher=teacher).order_by('level')
+    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1,is_evaluation = is_eval).exclude(exercises=None ,teacher=teacher).order_by('level')
     
     keywords = request.POST.get('keywords',None)
 
@@ -1188,39 +1189,39 @@ def ajax_all_parcourses(request):
                     themes_tab.append(theme_id) 
 
                 if keywords :
-                    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, 
+                    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
                                                         exercises__knowledge__theme__in = themes_tab, 
                                                         exercises__supportfile__title__contains = keywords, 
                                                         exercises__level_id = int(level_id)).exclude(teacher=teacher).order_by('author').distinct()
                 else :
-                    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, 
+                    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
                                                         exercises__knowledge__theme__in = themes_tab, 
                                                         exercises__level_id = int(level_id)).exclude(teacher=teacher).order_by('author').distinct()  
                     
             else :
                 if keywords :
-                    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, 
+                    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
                                                             exercises__supportfile__title__contains = keywords,  
                                                             exercises__level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
 
                 else :
-                    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, 
+                    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
                                                             exercises__level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
 
         else :
             if keywords:
-                parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, 
+                parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1,is_evaluation = is_eval, 
                                                         exercises__supportfile__title__contains = keywords  , 
                                                         exercises__level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
             else :
-                parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, 
+                parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
                                                         exercises__level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
 
     else :
         if keywords:
-            parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1 , exercises__supportfile__title__contains = keywords ).exclude(teacher=teacher).order_by('author').distinct()
+            parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1 , is_evaluation = is_eval, exercises__supportfile__title__contains = keywords ).exclude(teacher=teacher).order_by('author').distinct()
         else :
-            parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1 ).exclude(teacher=teacher).order_by('author').distinct()
+            parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,).exclude(teacher=teacher).order_by('author').distinct()
 
 
     parcourses , tab_id = [] , [] 
@@ -2442,7 +2443,7 @@ def clone_parcours(request, id, course_on ):
         if parcours.is_evaluation :
             return redirect('update_evaluation' , parcours.id, 0)
         else :
-            return redirect('all_parcourses')
+            return redirect('all_parcourses', 0 )
 
 
 
@@ -3241,33 +3242,6 @@ def get_values_canvas(request):
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 
-# def all_datas(user, status,level):
-#     teacher = Teacher.objects.get(user=user)
-#     datas = []
-#     levels_tab,knowledges_tab, exercises_tab    =   [],  [],  []
-#     levels_dict = {}
-#     levels_dict["name"]=level 
-#     themes = level.themes.all().order_by("id")
-#     themes_tab =   []
-#     for theme in themes :
-#         themes_dict =  {}                
-#         themes_dict["name"]=theme.name 
-#         knowlegdes = Knowledge.objects.filter(theme=theme,level=level).order_by("theme")
-#         knowledges_tab  =  []
-#         for knowledge in knowlegdes :
-#             knowledges_dict  =   {}  
-#             knowledges_dict["name"]=knowledge 
-#             exercises = Exercise.objects.filter(knowledge=knowledge,supportfile__is_title=0).select_related('supportfile').order_by("theme","ranking")
-#             exercises_tab    =   []
-#             for exercise in exercises :
-#                 exercises_tab.append(exercise)
-#             knowledges_dict["exercises"]=exercises_tab
-#             knowledges_tab.append(knowledges_dict)
-#         themes_dict["knowledges"]=knowledges_tab
-#         themes_tab.append(themes_dict)
-#     levels_dict["themes"]=themes_tab
-#     return levels_dict
-
 
 
 def all_levels(user, status):
@@ -3286,6 +3260,8 @@ def all_levels(user, status):
 
         datas.append(levels_dict)
     return datas
+
+
 
 def list_exercises(request):
     
@@ -3323,51 +3299,6 @@ def list_exercises(request):
                       {'relationships': relationships, 'nb_exercises': nb_exercises ,     })
 
 
-# def ajax_list_exercises_by_level(request):
-#     """ Envoie la liste des exercice pour un seul niveau """
-#     teacher = request.user.teacher
-#     data = {} # envoie vers JSON
-#     datas = [] #dictionnaire pour le recueil des données
-#     level_id =  int(request.POST.get("level_id"))  
-#     levels_tab,knowledges_tab, exercises_tab    =   [],  [],  []
-
-#     level = Level.objects.get(pk=level_id)
-
-#     levels_dict = {}
-#     levels_dict["name"]=level 
-
-#     themes = level.themes.all().order_by("id")
-
-#     themes_tab =   []
-#     for theme in themes :
-#         themes_dict =  {}                
-#         themes_dict["name"]=theme
-#         waitings = theme.waitings.filter(level=level)
-#         waitings_tab  =  []
-#         for waiting in waitings :
-#             exercises_counter = 0
-#             waiting_dict  =   {} 
-#             waiting_dict["name"]=waiting 
-#             knowlegdes = waiting.knowledges.prefetch_related('exercises').order_by("name")
-#             knowledges_tab  =  []
-#             for knowledge in knowlegdes :
-#                 knowledges_dict  =   {}  
-#                 knowledges_dict["name"]=knowledge 
-#                 exercises = knowledge.exercises.filter(supportfile__is_title=0).order_by("supportfile__ranking")
-#                 exercises_counter +=  exercises.count()
-#                 knowledges_dict["exercises"]=exercises
-#                 knowledges_tab.append(knowledges_dict)
-#             waiting_dict["knowledges"]=knowledges_tab
-#             waiting_dict["exercises_counter"]=exercises_counter
-#             waitings_tab.append(waiting_dict)
-#         themes_dict["waitings"]=waitings_tab
-#         themes_tab.append(themes_dict)
-#     levels_dict["themes"]=themes_tab
-#     datas.append(levels_dict)
-
-#     data['html'] = render_to_string('qcm/ajax_list_exercises_by_level.html', { 'datas': datas , "teacher" : teacher })
- 
-#     return JsonResponse(data)
 
 
 def ajax_list_exercises_by_level(request):
@@ -3375,10 +3306,7 @@ def ajax_list_exercises_by_level(request):
     teacher = request.user.teacher
     level_id =  int(request.POST.get("level_id"))  
  
-
     level = Level.objects.get(pk=level_id)
- 
- 
     exercises = Exercise.objects.filter(level_id = level_id , supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
  
     data = {}
@@ -3394,12 +3322,12 @@ def ajax_list_exercises_by_level_and_theme(request):
     """ Envoie la liste des exercice pour un seul niveau """
     teacher = request.user.teacher
     level_id =  int(request.POST.get("level_id",0))  
-    theme_id =  int(request.POST.get("theme_id", 0) )
+    theme_ids =  request.POST.getlist("theme_id", 0)
 
     level = Level.objects.get(pk=level_id)
  
  
-    exercises = Exercise.objects.filter(level_id = level_id , theme_id = theme_id ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
+    exercises = Exercise.objects.filter(level_id = level_id , theme_id__in= theme_ids ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
  
     data= {}
     data['html'] = render_to_string('qcm/ajax_list_exercises_by_level.html', { 'exercises': exercises  , "teacher" : teacher , "level_id" : level_id })
@@ -3407,60 +3335,6 @@ def ajax_list_exercises_by_level_and_theme(request):
     return JsonResponse(data)
 
 
-
-
-
-# def ajax_list_exercises_by_level_and_theme(request):
-#     """ Envoie la liste des exercices pour un seul niveau """
-#     teacher = request.user.teacher
-#     data = {} # envoie vers JSON
-#     datas = [] #dictionnaire pour le recueil des données
-#     level_id =  int(request.POST.get("level_id"))  
-#     levels_tab,knowledges_tab, exercises_tab    =   [],  [],  []
-
-#     level = Level.objects.get(pk=level_id)
-
-#     levels_dict = {}
-#     levels_dict["name"]=level
-
-#     theme_id =  request.POST.get("theme_id", None) 
-
-#     if theme_id :
-#         theme = Theme.objects.get(pk=int(theme_id))
-#         themes = [theme]
-#     else :
-#         themes = level.themes.all().order_by("id")
-
-#     themes_tab =   []
-#     for theme in themes :
-#         themes_dict =  {}                
-#         themes_dict["name"]=theme
-#         waitings = theme.waitings.filter(level=level)
-#         waitings_tab  =  []
-#         for waiting in waitings :
-#             exercises_counter = 0
-#             waiting_dict  =   {} 
-#             waiting_dict["name"]=waiting 
-#             knowlegdes = waiting.knowledges.prefetch_related('exercises').order_by("name")
-#             knowledges_tab  =  []
-#             for knowledge in knowlegdes :
-#                 knowledges_dict  =   {}  
-#                 knowledges_dict["name"]=knowledge 
-#                 exercises = knowledge.exercises.filter(supportfile__is_title=0).order_by("supportfile__annoncement")
-#                 exercises_counter +=  exercises.count()
-#                 knowledges_dict["exercises"]=exercises
-#                 knowledges_tab.append(knowledges_dict)
-#             waiting_dict["knowledges"]=knowledges_tab
-#             waiting_dict["exercises_counter"]=exercises_counter
-#             waitings_tab.append(waiting_dict)
-#         themes_dict["waitings"]=waitings_tab
-#         themes_tab.append(themes_dict)
-#     levels_dict["themes"]=themes_tab
-#     datas.append(levels_dict)
-
-#     data['html'] = render_to_string('qcm/ajax_list_exercises_by_level.html', { 'datas': datas , "teacher" : teacher })
- 
-#     return JsonResponse(data)
 
 
 

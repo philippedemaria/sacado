@@ -47,7 +47,7 @@
                 <li> <a href="{% url 'create_parcours' 0 %}"  >  Parcours personnalisé</a> </li>
                 {% endif  %}
 
-                <li> {% if sacado_asso %} <a href="{% url 'all_parcourses' %}"   > Parcours mutualisés</a> {% else %}<a href="#"  class="no_sacado_asso" > Parcours mutualisés</a> {% endif %} </li> 
+                <li> {% if sacado_asso %} <a href="{% url 'all_parcourses' 0 %}"   > Parcours mutualisés</a> {% else %}<a href="#"  class="no_sacado_asso" > Parcours mutualisés</a> {% endif %} </li> 
 
 
 
@@ -417,7 +417,7 @@
                         <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés <p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier une fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur
 
                             {% if sacado_asso %}
-                                <a href="{% url 'all_parcourses' %}"   ><i class="fa fa-caret-right"></i>  Parcours mutualisés</a>
+                                <a href="{% url 'all_parcourses' 0 %}"  ><i class="fa fa-caret-right"></i>  Parcours mutualisés</a>
                             {% else %}
                                 <a href="#"  class="no_sacado_asso" > <i class="fa fa-caret-right"></i> Parcours mutualisés</a>
                             {% endif %}

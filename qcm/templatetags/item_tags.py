@@ -44,6 +44,12 @@ def abreviation(raw_html): #nettoie le code des balises HTML
 
 
 
+
+@register.filter
+def counting(obj): #compte le nombre d'exercice sans titre
+    return obj.filter(supportfile__is_title=0).count()
+
+
 @register.filter
 def insert_tags(html,cutter): #nettoie le code des balises HTML
     i = 1

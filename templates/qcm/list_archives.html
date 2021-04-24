@@ -31,7 +31,7 @@
 
             <li>  
                 {% if sacado_asso %}
-                    <a href="{% url 'all_parcourses' %}"   > Parcours mutualisés</a>
+                    <a href="{% url 'all_parcourses' 0 %}"   > Parcours mutualisés</a>
                 {% else %}
                     <a href="#"  class="no_sacado_asso" > Parcours mutualisés</a>
                 {% endif %}

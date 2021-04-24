@@ -57,7 +57,7 @@
                 
                 <tr>
                     <td>{% if sacado_asso %}
-                        <a href="{% url 'all_parcourses' %}" title="Parcours déjà existants dans la base de données, créés par des collègues de votre établissement."><i class="fa fa-caret-right"></i> Parcours mutualisés</a>
+                        <a href="{% url 'all_parcourses' 0 %}" title="Parcours déjà existants dans la base de données, créés par des collègues de votre établissement."><i class="fa fa-caret-right"></i> Parcours mutualisés</a>
                         {% else  %}
                         <a href="#" class="no_sacado_asso" title="Version établissement requise."><i class="fa fa-caret-right"></i> Parcours mutualisés</a>
                         {% endif  %}

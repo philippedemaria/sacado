@@ -38,13 +38,13 @@
 </li>
 
 
-<li  class="dropdown {% if not request.session.tdb and 'parcours' in request.path  and not 'evaluation' in request.path %}active{% endif %}">
+<li  class="dropdown {% if not request.session.tdb and 'parcours' in request.path  and not 'evaluation' in request.path and not 'parcourses_all/1/' in request.path %}active{% endif %}">
     <a href="{% url 'parcours' %}" class="main" >
         <i class="fa fa-th fa-2x" aria-hidden="true"></i> 
         <div class="captionmenu">Parcours</div>
     </a>
 </li>
-<li  class="dropdown {% if not request.session.tdb and not request.session.tdb and 'evaluation' in request.path    %}active{% endif %}">
+<li  class="dropdown {% if not request.session.tdb and not request.session.tdb and 'evaluation' in request.path or 'parcourses_all/1/' in request.path    %}active{% endif %}">
 
     {% if sacado_asso %}
     <a href="{% url 'evaluations' %}" class="main" >
