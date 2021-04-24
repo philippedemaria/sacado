@@ -275,25 +275,21 @@ def include_students(request , liste, group):
                     context={"last_name": lname, "first_name": fname, "username": username}, )
 
             user, created = User.objects.get_or_create(username=username,
-                                                       defaults={"last_name": lname, "first_name": fname,
-                                                                 "password": password, "email": email,
+                                                       defaults={"last_name": lname, "first_name": fname,  "time_zone": request.user.time_zone,
+                                                                 "password": password, "email": email, "school": request.user.school, "country": request.user.country,
                                                                  "user_type": User.STUDENT})
 
             if created:
                 student = Student.objects.create(user=user, level=group.level)
                 group.students.add(student)
-                parcours_tab = []
+                parcourses = set()
                 for student in group.students.all():
-                    parcourses = student.students_to_parcours.all()
-                    for parcours in parcourses:
-                        if not parcours in parcours_tab:
-                            parcours_tab.append(parcours)
+                    parcourses.update(student.students_to_parcours.all())
 
-                for p in parcours_tab:
-                    p.students.add(student)
-                    relationships = Relationship.objects.filter(parcours=p)
-                    for relationship in relationships:
-                        relationship.students.add(student)
+                attribute_all_documents_to_student(parcourses, student)
+ 
+
+ 
             else:
                 messages.error(request, "Erreur lors de l'enregistrement. L'identifiant {} est déjà utilisé. Modifier le prénom ou le nom.".format(username))
                 break
