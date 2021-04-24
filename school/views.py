@@ -319,14 +319,6 @@ def school_accounting(request):
 
 
 
-
-
-
-
-
-
-
- 
 def new_student(request,slug):
 
     school = this_school_in_session(request)

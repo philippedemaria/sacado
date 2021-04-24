@@ -34,10 +34,10 @@ def time_zone_user(user):
 
 
  
-def attribute_all_documents_to_student(parcours,student):
+def attribute_all_documents_to_student(parcourses,student):
     """  assigner les documents et renvoie Vrai ou Faux suivant l'attribution """
     try :
-        for p in parcours:
+        for p in parcourses:
             p.students.add(student)
 
             relationships = p.parcours_relationship.all()

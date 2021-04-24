@@ -271,8 +271,15 @@ def register_student_from_admin(request):
             u_form.username = get_username(request, u_form.last_name, u_form.first_name)
             u_form.save()
 
-            student = Student.objects.create(user=u_form, level=group.level, task_post=1)
-            group.students.add(student)
+            # On récupère les parcours d'un élève de ce groupe et on les attribue au nouvel élève.
+            try :
+                this_student = group.students.first()
+                parcourses = this_student.students_to_parcours.all()
+                student = Student.objects.create(user=u_form, level=group.level, task_post=1)
+                group.students.add(student)
+                attribute_all_documents_to_student(parcourses, student)
+            except :
+                pass
 
             send_templated_mail(
                 template_name="student_registration",
@@ -421,20 +428,6 @@ def switch_student_teacher(request): #idg = group_id
     return redirect("index")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #@can_register
 #@is_manager_of_this_school
 def update_student_by_admin(request, id):  
@@ -448,6 +441,8 @@ def update_student_by_admin(request, id):
     user_form = UserUpdateForm(request.POST or None, request.FILES or None, instance=user)
     student_form = StudentForm(request.POST or None, request.FILES or None, instance=student)
     groups = Group.objects.filter(teacher__user__school = school).order_by("name")
+
+
     if request.method == "POST":
         if all((user_form.is_valid(), student_form.is_valid())):
             user_form.save()
