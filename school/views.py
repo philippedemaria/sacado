@@ -148,8 +148,8 @@ def update_school(request,id):
 			school.is_active = 1
 			school.save()
 
-
-		return redirect('schools')
+		if request.user.is_superuser :
+			return redirect('schools')
 
 	return render(request,'school/_form.html', {'form':form,  'communications' : [],'school':school})
 
