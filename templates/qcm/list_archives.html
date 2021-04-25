@@ -111,7 +111,10 @@ body{
                             {% if parcours.teacher != teacher %}
                                 <i class="fa fa-edit text-default" aria-hidden="true" ></i></a>
                             {% else %}
-                                {% if parcours.is_evaluation %}
+
+                                {% if parcours.is_folder %}
+                                <a href="{% url 'folder_unarchive' parcours.id  %}"> 
+                                {% elif parcours.is_evaluation %}
                                 <a href="{% url 'update_evaluation' parcours.id 0 %}"> 
                                 {% else %}
                                 <a href="{% url 'update_parcours' parcours.id 0 %}">

@@ -7256,6 +7256,20 @@ def update_folder(request,id,idg):
 
 
 @parcours_exists
+def folder_unarchive(request,id):
+
+    parcours = Parcours.objects.get(id=id)
+    parcours.is_archive = 0
+    parcours.save()
+    if parcours.is_evaluation :
+        return redirect('evaluations')
+    else :
+        return redirect('parcours')
+ 
+
+
+
+@parcours_exists
 def delete_folder(request,id,idg):
 
     teacher = request.user.teacher 

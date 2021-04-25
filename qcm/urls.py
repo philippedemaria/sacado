@@ -22,6 +22,7 @@ urlpatterns = [
     path('parcours_show/<int:id>/', show_parcours, name='show_parcours'), 
 
     path('parcours_folder/<int:idg>/', create_folder, name='create_folder'),
+    path('folder_unarchive/<int:id>/', folder_unarchive, name='folder_unarchive'),
     path('parcours_update_folder/<int:id>/<int:idg>/', update_folder, name='update_folder'),
     path('parcours_delete_folder/<int:id>/<int:idg>/', delete_folder, name='delete_folder'),  
     path('parcours_delete_from_folder', parcours_delete_from_folder, name='parcours_delete_from_folder'), 

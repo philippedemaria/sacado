@@ -275,11 +275,11 @@
                         <i class="fa fa-th"> </i>   Désarchiver
                     </a>
                 {% else %}
-                    <a href="{% url 'archive_parcours' parcours.id  group.id  %}" class="btn btn-warning"  onclick="return TestArchive('ce parcours')"> 
+                    <a href="{% url 'archive_parcours' parcours.id  group.id  %}" class="btn btn-warning"  onclick="return TestArchive('ce dossier')"> 
                         <i class="fa fa-archive"> </i>   Archiver
                     </a>
                 {% endif %}
-                <a href="{% url 'delete_parcours' parcours.id   group.id   %}" class="btn btn-danger"  onclick="return TestDelete('ce parcours')"> 
+                <a href="{% url 'delete_parcours' parcours.id   group.id   %}" class="btn btn-danger"  onclick="return TestDelete('ce dossier')"> 
                     <i class="fa fa-trash"> </i>   Supprimer
                 </a>
         {% endif %}  
