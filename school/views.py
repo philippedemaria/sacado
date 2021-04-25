@@ -139,7 +139,7 @@ def update_school(request,id):
 	form = SchoolForm(request.POST or None, instance=school)
 
 	ok = False
-	if request.user.is_manager or request.user.school = school :
+	if request.user.is_manager or request.user.school == school :
 		ok = True
 
 	if request.user.is_superuser or ok :
