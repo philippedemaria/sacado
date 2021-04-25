@@ -59,6 +59,10 @@ def not_title(obj): #renvoie les supportfile qui ne sont pas des titles
 
 
 
+@register.filter
+def exclude_teacher(obj): #exclusion des enseignants de la liste renvoyées
+    return obj.exclude(user__username__contains="_e-test").order_by("user__last_name")
+
 
 
 

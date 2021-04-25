@@ -1,6 +1,6 @@
 {% extends 'dashboard.html' %}
 {% load static %}
-
+{% load item_tags %}
 
  
 
@@ -76,7 +76,7 @@
                                 </td>
                                 <td>
                                     <span class="label label-default"> {{ group.students.count }}<i class="fa fa-users"></i></span>
-                                        {% for s in group.students.all|dictsort:"user.last_name" %} 
+                                        {% for s in group.students|exclude_teacher  %} 
                                            <font style="font-size:14px">    <a  href="{% url 'update_student'  s.user.id group.id  %}"> {{s}} </a>{% if not forloop.last %}, {% endif %} </font>
                                         {% empty %}
                                         {% if group %}<br>
