@@ -150,6 +150,8 @@ def update_school(request,id):
 
 		if request.user.is_superuser :
 			return redirect('schools')
+		else :
+			return redirect('admin_tdb')
 
 	return render(request,'school/_form.html', {'form':form,  'communications' : [],'school':school})
 
