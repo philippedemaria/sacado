@@ -3721,11 +3721,16 @@ def show_exercise(request, id):
 
 def show_this_exercise(request, id):
 
+    exercise  = Exercise.objects.get(pk = id)
+    ranking   = exercise.level.ranking 
+    level_inf = ranking - 1
+    level_sup = ranking + 1
+
     if request.user.is_authenticated:
         today = time_zone_user(request.user)
         if request.user.is_teacher:
             teacher = Teacher.objects.get(user=request.user)
-            parcours = Parcours.objects.filter(teacher=teacher)
+            parcours = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher), level__lte = level_sup, level__gte = level_inf    )
         elif request.user.is_student :
             student = Student.objects.get(user=request.user)
             parcours = None
@@ -3739,7 +3744,7 @@ def show_this_exercise(request, id):
 
     start_time = time.time()
 
-    exercise = Exercise.objects.get(pk = id)
+
 
     if exercise.supportfile.is_ggbfile :
         wForm = None

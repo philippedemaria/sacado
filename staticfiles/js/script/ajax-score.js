@@ -6,7 +6,7 @@ define(['jquery', 'bootstrap'], function ($) {
    $('#ggb_applet_container').css("display","block") ; 
     $('#preloader').css("display","block") ; 
 
- 
+    $('#show_ggb').css("display","none") ; 
 
   $(window).on('load', function () {
     if ($('#preloader').length) {
@@ -18,6 +18,15 @@ define(['jquery', 'bootstrap'], function ($) {
   });
 
  
+  $(window).on('load', function () {
+    if ($('#preload_div').length) {
+      $('#preload_div').fadeOut('slow', function () {
+        $(this).remove();
+        $('#show_ggb').css("display","block") ; 
+      });
+    }
+    
+  });
  
 
 
@@ -79,9 +88,15 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+      $('#div_parcours').css("display","none") ; 
 
 
+      $('#show_parcours').on('click', function (event) {
 
+            $('#div_parcours').toggle(500) ; 
+
+
+        }); 
 
 
 

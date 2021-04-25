@@ -2367,6 +2367,36 @@ a.menuright:hover{
   animation: animate-preloader 2s linear infinite;
 }
 
+
+#preload_div {
+  width:750px;
+  height: 350px;
+  padding: 100px 350px;
+}
+
+
+
+ 
+
+#preload_div #preload  {
+  border: 16px solid #f2f2f2;
+  border-top: 16px solid #5d4391 ;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: animate-preloader 1s linear infinite;
+  animation: animate-preloader 2s linear infinite;
+}
+
+
+
+
+
+
+
+
+
+
 @-webkit-keyframes animate-preloader {
   0% {
     -webkit-transform: rotate(0deg);

@@ -227,6 +227,12 @@ def get_is_selected(obj,parcours):
     return obj.is_selected(parcours) 
 
 
+@register.simple_tag  
+def get_ranking(obj,parcours): 
+    """
+    retourne le rang d'un exercice est choisi dans un parcours.
+    """
+    return obj.is_ranking(parcours) 
 
 @register.simple_tag 
 def get_percent(obj,student): 

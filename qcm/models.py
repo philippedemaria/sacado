@@ -263,6 +263,16 @@ class Exercise(models.Model):
         relationship = Relationship.objects.filter(parcours=parcours, exercise=self)
         return relationship.count() == 1
 
+
+    def is_ranking(self, parcours):
+        try :
+            relationship = Relationship.objects.get(parcours=parcours, exercise=self)
+            rk = relationship.ranking
+        except :
+            rk = ""
+        return rk
+
+
     def is_relationship(self ,parcours):
         try:
             relationship = Relationship.objects.get(parcours=parcours, exercise=self)

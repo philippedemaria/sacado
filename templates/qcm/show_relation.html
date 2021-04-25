@@ -115,11 +115,7 @@
 
       <form action="{% url 'store_the_score_relation_ajax'  %}" method="POST" enctype='multipart/form-data'>   
         {% csrf_token %}  
-          <div id="preloader">
-            <div class="alert alert-danger" role="alert" id="message_alert">
-                <i class="fa fa-warning"></i> Si vous voyez ce message après 15 secondes, l'exercice ne s'est pas chargé correctement. Rechargez votre page.<br> Sous Windows, appuyez simultanement sur CTRL et la touche F5
-            </div>
-          </div>
+
 
           <div class='justify-content-center'  style="position:relative">
 
@@ -137,11 +133,28 @@
 
 
 
-              <div style="position:absolute;bottom:80px;font-size: 12px;width:50px;color:#0d72ac;left:780px;">
-                  Mode plein <br> écran <br>
-                  <img src="{% static 'img/flechebleue.png' %}" style="position:absolute; right:30px;"/>            
+
+
+              <div id="preload_div">
+                  <div id="preload"></div>
+                  Chargement...
               </div>
-              <div class = 'col-auto' id='ggb_applet_container' style="display:none" ></div>
+
+
+
+              <div class='justify-content-center' id="show_ggb"  >
+                  <div style="position:absolute;bottom:80px;font-size: 12px;width:50px;color:#0d72ac;left:780px;">
+                      Mode plein <br> écran <br>
+                      <img src="{% static 'img/flechebleue.png' %}" style="position:absolute; right:30px;"/>            
+                  </div>
+
+
+                
+                  <div class = 'col-auto' id='ggb_applet_container' ></div>
+              </div>
+
+
+ 
           </div>
 
        
@@ -220,32 +233,6 @@
       {% endif  %}
     </div>
     <div class="col-sm-12 col-md-2 col-lg-2">
-        {% if user.user_type == 2 %}
-            <form action="{% url 'add_exercice_in_a_parcours' %}" method="POST" enctype='multipart/form-data'>   {% csrf_token %}
-                <input type="hidden" id="id_exercise"  name="exercise" required="" value="{{ exercise.id }}">
-                 Attribuer cet exercice à un parcours 
-                <input type="hidden" id="exercises_parcours"  name="exercises_parcours" required="" value="{% for p in parcours %}{%  get_is_selected   exercise  p   as is_sel  %}{% if is_sel %}{{ p.id }}{% endif %}{% if not forloop.last %}-{% endif %}{% endfor %}">
-                 <table class = "table">
-                {% for p in parcours %}
-                    <tr>{% if p %} {%  get_is_selected   exercise  p   as is_sel  %} {% endif %} 
-                        <td><label><input type="checkbox" id="id_parcours"  name="parcours"  value="{{ p.id }}"  {% if is_sel %} checked{% endif %}> {{ p.title }}</label></td>
-                        <td>Ordre. <input type="number" id="id_orders" class="form-control" name="orders" min="0" step ="1" > </td>
-                    </tr>
-                {% empty %}
-                    <tr><td><small>Pour attribuer cet exercice à un parcours, il faut <a href="{% url 'create_parcours' 0 %}" class="btn-primary">créer un parcours</a>.</small></td></tr>
-                {% endfor %}
-                </table>
-
-
-                {% if parcours|length > 0 %}
-                <div class="form-group">
-                  <input value="Associer/Dissocier" type="submit" class="btn btn-primary"/>
-                </div>
-                {% endif %}
-
-            </form>
-        {% endif  %}  
-
         {% if not relation.parcours.is_evaluation %}
         {% if relation.relationships_courses.all|length > 0 %}      
           <h4 style="color:{{ relation.parcours.color }}">Le cours </h4>
@@ -332,30 +319,38 @@
     <script type="text/javascript">
           // parameters of the geogebra app
 
-        console.log("ouverture de JS");
+        var width               = "{{ exercise.supportfile.width }}" ;
+        var height              = "{{ exercise.supportfile.height }}" ; 
+        var showToolBar         = "{{ exercise.supportfile.toolBar|lower }}" ;
+        var showMenuBar         = "{{ exercise.supportfile.menuBar|lower }}" ;
+        var showAlgebraInput    = "{{ exercise.supportfile.algebraInput|lower }}" ;
+        var showResetIcon       = "{{ exercise.supportfile.resetIcon|lower }}" ; 
+        var enableShiftDragZoom = "{{ exercise.supportfile.dragZoom|lower }}" ;
+        var filename            = "{{ exercise.supportfile.ggbfile.url }}" ;
+
 
 
         var parameters = {
-                "appname":"classic",
-                "id":"ggb_applet_container",
+              "appname":"classic",
+              "id":"ggb_applet_container",
               "prerelease":false,
-              "width":{{ exercise.supportfile.width }},
-              "height":{{ exercise.supportfile.height }},
-              "showToolBar":{{ exercise.supportfile.toolBar|lower }},
+              "width": parseInt(width, 10),
+              "height": parseInt(height, 10),
+              "showToolBar": showToolBar,
               "showfullscreenbutton":true,
               "borderColor":"#f5f8fd",
-              "showMenuBar":{{ exercise.supportfile.menuBar|lower }},
-              "showAlgebraInput":{{ exercise.supportfile.algebraInput|lower }},
-              "showResetIcon":{{ exercise.supportfile.resetIcon|lower }},
+              "showMenuBar": showMenuBar,
+              "showAlgebraInput": showAlgebraInput ,
+              "showResetIcon": showResetIcon ,
               "enableLabelDrags":false,
-              "enableShiftDragZoom":{{ exercise.supportfile.dragZoom|lower }},
+              "enableShiftDragZoom": enableShiftDragZoom,
               "enableRightClick":false,
               "capturingThreshold":null,
               "showToolBarHelp":false,
               "errorDialogsActive":false,
               "useBrowserForJS":false,
               "langage":"en",
-              "filename":"{{ exercise.supportfile.ggbfile.url }}",
+              "filename": filename,
                "appletOnLoad" :  function(applet) { 
                         var situation = "{{ relation.situation }}" ;
                         applet.setValue("situation", situation );
@@ -385,9 +380,8 @@
         var applet = new GGBApplet('5.0', parameters,true);
         // Geogebra applet creation
         applet.inject('ggb_applet_container', 'preferHTML5');  
- 
+
     </script>
-    
     <div style="height:20px"></div>
 
 </section>

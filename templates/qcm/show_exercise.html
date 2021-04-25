@@ -42,12 +42,7 @@
 
 <section class="content_main">
  
-<div class="alert alert-danger" role="alert" id="message_alert">
-  <i class="fa fa-warning"></i> Si vous voyez ce message après 10 secondes, l'exercice ne s'est pas chargé. Rechargez votre page.
-</div>
-
-
-    <div class="col-sm-0 col-md-1 col-lg-1">
+     <div class="col-sm-0 col-md-1 col-lg-1">
         {% if exercise.supportfile.calculator %}
           <img src="{% static 'img/calculator.png' %}"  with="80px"  height="80px" />
         {% else %}
@@ -92,19 +87,25 @@
         <i class="fa fa-barcode fa-4x"></i><p>{{ exercise.supportfile.code }}</p>
 
     </div>  
-    <div class="col-sm-12 col-md-8 col-lg-8">
+    <div class="col-sm-12 col-md-12 col-lg-8">
  
-      <div id="preloader">
-          <div class="alert alert-danger" role="alert" id="message_alert">
-              <i class="fa fa-warning"></i> Si vous voyez ce message après 15 secondes, l'exercice ne s'est pas chargé correctement. Rechargez votre page.<br> Sous Windows, appuyez simultanement sur CTRL et la touche F5
-          </div>
-      </div>
 
-        <div class='justify-content-center'>
-            <div class = 'col-auto' id='ggb_applet_container'  ></div>
+            <div id="preload_div">
+                <div id="preload"></div>
+                Chargement...
+            </div>
+
+
+
+        <div class='justify-content-center' id="show_ggb"  >
+
+
+
+            <div class = 'col-auto' id='ggb_applet_container' ></div>
+        <a href="javascript:window.close()"><input type="button" value="Fermer" class="btn btn-default "/></a>
         </div>
 
- 
+
 
 
 
@@ -112,31 +113,7 @@
 
     
     <div class="col-sm-12 col-md-12 col-lg-3">
-        {% if user.user_type == 2 %}
-            <form action="{% url 'add_exercice_in_a_parcours' %}" method="POST" enctype='multipart/form-data'>   {% csrf_token %}
-                <input type="hidden" id="id_exercise"  name="exercise" required="" value="{{ exercise.id }}">
-                 Attribuer cet exercice à un parcours 
-                <input type="hidden" id="exercises_parcours"  name="exercises_parcours" required="" value="{% for p in parcours %}{%  get_is_selected   exercise  p   as is_sel  %}{% if is_sel %}{{ p.id }}{% endif %}{% if not forloop.last %}-{% endif %}{% endfor %}">
-                 <table class = "table">
-                {% for p in parcours %}
-                    <tr>{% if p %} {%  get_is_selected   exercise  p   as is_sel  %} {% endif %} 
-                        <td><label><input type="checkbox" id="id_parcours"  name="parcours"  value="{{ p.id }}"  {% if is_sel %} checked{% endif %}> {{ p.title }}</label></td>
-                        <td>Ordre. <input type="number" id="id_orders" class="form-control" name="orders" min="0" step ="1" > </td>
-                    </tr>
-                {% empty %}
-                    <tr><td><small>Pour attribuer cet exercice à un parcours, il faut <a href="{% url 'create_parcours' 0 %}" class="btn-primary">créer un parcours</a>.</small></td></tr>
-                {% endfor %}
-                </table>
-
-
-                {% if parcours|length > 0 %}
-                <div class="form-group">
-                  <input value="Associer/Dissocier" type="submit" class="btn btn-primary"/>
-                </div>
-                {% endif %}
-
-            </form>
-        {% endif  %}  
+        <div style="height:30px"></div>
               <div class="row">
                   <div class="col-lg-12 col-xs-12"> 
                     <div class="form-group"> 
@@ -166,33 +143,78 @@
                     </div>
                  </div>                     
             </div> 
+
+            <hr/>
+
+        {% if user.user_type == 2 %}
+            <form action="{% url 'add_exercice_in_a_parcours' %}" method="POST" enctype='multipart/form-data'>   {% csrf_token %}
+                <input type="hidden" id="id_exercise"  name="exercise" required="" value="{{ exercise.id }}">
+                  <span id="show_parcours">Attribuer cet exercice à mes parcours {{ parcours.count }}<i class="fa fa-caret-down"></i></span>
+                <input type="hidden" id="exercises_parcours"  name="exercises_parcours" required="" 
+                       value="{% for p in parcours %}{%  get_is_selected   exercise  p   as is_sel  %}{% if is_sel %}{{ p.id }}{% endif %}{% if not forloop.last %}-{% endif %}{% endfor %}">
+                <div id="div_parcours">
+                    <table class = "table">
+                    {% for p in parcours %}
+                        <tr> 
+                                {%  get_is_selected   exercise  p   as is_sel  %}
+                                {%  get_ranking   exercise  p   as ranking  %} 
+                              
+                            <td><label style="color : {{ p.color }}"><input type="checkbox" id="id_parcours"  name="parcours"  value="{{ p.id }}"  {% if is_sel %} checked{% endif %}> {{ p.title }}</label></td>
+                            <td>Ordre</td>
+                            <td><input type="number" id="id_orders" class="form-control" name="orders" min="0" step ="1" value="{{ ranking }}" > </td>
+                        </tr>
+                    {% empty %}
+                        <tr><td><small>Pour attribuer cet exercice à mes parcours, il faut <a href="{% url 'create_parcours' 0 %}" class="btn-primary">créer un parcours</a>.</small></td></tr>
+                    {% endfor %}
+                    </table>
+
+
+                    {% if parcours|length > 0 %}
+                    <div class="form-group">
+                      <input value="Associer/Dissocier" type="submit" class="btn btn-primary"/>
+                    </div>
+                    {% endif %}
+                </div>
+            </form>
+        {% endif  %}  
+
     </div>   
 
     <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script>
 
     <script type="text/javascript">
         // parameters of the geogebra app
+
+        var width               = "{{ exercise.supportfile.width }}" ;
+        var height              = "{{ exercise.supportfile.height }}" ; 
+        var showToolBar         = "{{ exercise.supportfile.toolBar|lower }}" ;
+        var showMenuBar         = "{{ exercise.supportfile.menuBar|lower }}" ;
+        var showAlgebraInput    = "{{ exercise.supportfile.algebraInput|lower }}" ;
+        var showResetIcon       = "{{ exercise.supportfile.resetIcon|lower }}" ; 
+        var enableShiftDragZoom = "{{ exercise.supportfile.dragZoom|lower }}" ;
+        var filename            = "{{ exercise.supportfile.ggbfile.url }}" ;
+
         var parameters = {
                   "appname":"classic",
                   "id":"ggb_applet_container",
                   "prerelease":false,
-                  "width":{{ exercise.supportfile.width }},
-                  "height":{{ exercise.supportfile.height }},
-                  "showToolBar":{{ exercise.supportfile.toolBar|lower }},
+                  "width": parseInt(width, 10),
+                  "height": parseInt(height, 10),
+                  "showToolBar": showToolBar,
                   "showfullscreenbutton":true,
                   "borderColor":"#f5f8fd",
-                  "showMenuBar":{{ exercise.supportfile.menuBar|lower }},
-                  "showAlgebraInput":{{ exercise.supportfile.algebraInput|lower }},
-                  "showResetIcon":{{ exercise.supportfile.resetIcon|lower }},
+                  "showMenuBar": showMenuBar,
+                  "showAlgebraInput": showAlgebraInput ,
+                  "showResetIcon": showResetIcon ,
                   "enableLabelDrags":false,
-                  "enableShiftDragZoom":{{ exercise.supportfile.dragZoom|lower }},
+                  "enableShiftDragZoom": enableShiftDragZoom,
                   "enableRightClick":false,
                   "capturingThreshold":null,
                   "showToolBarHelp":false,
                   "errorDialogsActive":false,
                   "useBrowserForJS":false,
                   "langage":"en",
-                  "filename":"{{ exercise.supportfile.ggbfile.url }}"
+                  "filename": filename
             };
         var applet = new GGBApplet('5.0', parameters,true);
         // Geogebra applet creation
