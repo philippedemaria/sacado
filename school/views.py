@@ -132,15 +132,21 @@ def create_school(request):
 	return render(request,'school/_form.html', { 'communications' : [], 'form':form})
 
 
-@user_is_superuser
+ 
 def update_school(request,id):
+
 	school = School.objects.get(id=id)
 	form = SchoolForm(request.POST or None, instance=school)
 
-	if form.is_valid():
-		school = form.save()
-		school.is_active = 1
-		school.save()
+	ok = False
+	if request.user.is_manager and request.user.school = school :
+		ok = True
+
+	if request.user.is_superuser or is_ok :
+		if form.is_valid():
+			school = form.save()
+			school.is_active = 1
+			school.save()
 
 
 		return redirect('schools')
