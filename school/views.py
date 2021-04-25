@@ -139,10 +139,10 @@ def update_school(request,id):
 	form = SchoolForm(request.POST or None, instance=school)
 
 	ok = False
-	if request.user.is_manager and request.user.school = school :
+	if request.user.is_manager or request.user.school = school :
 		ok = True
 
-	if request.user.is_superuser or is_ok :
+	if request.user.is_superuser or ok :
 		if form.is_valid():
 			school = form.save()
 			school.is_active = 1
