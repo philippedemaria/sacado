@@ -14,7 +14,7 @@
  
 
 {% block page_title %}
-    <i class="fa fa-th"></i> Mes parcours archivés          
+    <i class="fa fa-th"></i> Mes dossiers et parcours archivés          
 {% endblock %}
 
 {% block page_menu_right %}
@@ -110,7 +110,11 @@ body{
                                 {% else %}
                                 <a href="{% url 'update_parcours' parcours.id 0 %}">
                                 {% endif %}
+                                {% if parcours.is_folder %}
+                                <i class="fa fa-cogs" aria-hidden="true"></i></a>
+                                {% else %}
                                 <i class="fa fa-edit" aria-hidden="true"></i></a>
+                                {% endif %}
                             {% endif %}
                         </td> 
                         <td>
