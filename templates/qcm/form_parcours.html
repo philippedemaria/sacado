@@ -204,20 +204,6 @@
                 <div class="col-sm-6 col-md-6  col-lg-6">
                     
                     <div class="form-group">
-                        {{ form.vignette.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i> <span style="font-size:12px">(facultatif)</span>
-                                    <div class="helper_tip_text" >format recommandé: l:450px h:300px <br>La vignette se superpose à la couleur du parcours qui ne sera pas visible selon la taille de l'image. </div>
-                                </span> 
-                    {% if sacado_asso %}
-                        {{ form.vignette|add_class:"btn btn-default full_width" }} 
-                        {{ form.vignette.errors }}
-                    {% else %}  
-                    <div class="alert alert-danger">
-                        <small>L'utilisation d'image est réservée à la version établissement.</small>
-                    </div>
-                    {% endif %}  
-                    </div>
- 
-                    <div class="form-group">
                         <label>Niveau d'enseignement :</label>  
                         {{ form.level|add_class:"form-control select2"|attr:"required"}}
                         {{ form.level.errors }}
@@ -249,7 +235,19 @@
                     </div>
 
 
-
+                    <div class="form-group">
+                        {{ form.vignette.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i> <span style="font-size:12px">(facultatif)</span>
+                                    <div class="helper_tip_text" >format recommandé: l:450px h:300px <br>La vignette se superpose à la couleur du parcours qui ne sera pas visible selon la taille de l'image. </div>
+                                </span> 
+                    {% if sacado_asso %}
+                        {{ form.vignette|add_class:"btn btn-default full_width" }} 
+                        {{ form.vignette.errors }}
+                    {% else %}  
+                    <div class="alert alert-danger">
+                        <small>L'utilisation d'image est réservée à la version établissement.</small>
+                    </div>
+                    {% endif %}  
+                    </div>
 
 
 
@@ -318,17 +316,30 @@
                     </tr>
                     {% endblock %}
 
-
-                    {% block evaluation_choices %}     
-                    {% if parcours %}
+                    <!-- affiche la possibilité de mettre le parcours dans un dossier si le parcours est créé hors du dossier -->
+                    {% if idp == 0 or parcours %}
                     <tr>
                         <td>{{ form.is_leaf.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                 <div class="helper_tip_text" >Si coché, le parcours est inclus dans un dossier.</div></td>
                         <td>{{ form.is_leaf |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
                         <td>{{ form.is_leaf.errors }}</td>
                     </tr>
-                    {% endif  %}
  
+                     <tr id="folder_parcours">
+                        <td><label>Dossier cible</label><span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text" >Dossier dans lequel le parcours doit être inclus.</div></td>
+                        <td>{{ form.folder_parcours|add_class:"form-control select2" }}</td>
+                        <td>{{ form.folder_parcours.errors }}</td>
+                    </tr>
+                    {% endif %}
+
+
+
+
+
+                    {% block evaluation_choices %}     
+ 
+
                     <tr>
                         <td>{{ form.is_achievement.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                 <div class="helper_tip_text" >Permet aux élèves de regarder l'avancement (en %) de leurs camarades sur le parcours.</div></td>

@@ -20,7 +20,14 @@ define(['jquery','bootstrap'], function ($) {
         $('#id_is_paired').prop('checked', false); 
         $('#id_notification').prop('checked', false); 
  
+        $('#id_is_leaf').prop('checked', false); 
 
+
+        $('#folder_parcours').hide(); 
+
+        $("#id_is_leaf").on('change', function (event) {
+            $('#folder_parcours').toggle(500);
+        });
 
 
         // Pour le form_parcours

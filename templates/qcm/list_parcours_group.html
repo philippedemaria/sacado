@@ -428,20 +428,39 @@
         <div class="row"> 
             <div class="col-sm-12 col-md-12">
                 <div class="alert alert-danger">Aucun parcours n'est affecté à ce groupe. Tant qu'un groupe ne contient pas d'élève, <strong>vous ne pouvez pas lui attribuer de parcours</strong>. Lorsque vos parcours sont créés, les élèves les rejoignent directement dès leur inscrition via le lien <span style="color:#271942">https://sacado.xyz/group/{{ group.code }}</span><br>
-                <i class="fa fa-bullhorn"></i> <strong>Préparer</strong> maintenant vos parcours, <strong>publier</strong>.  
+                <i class="fa fa-bullhorn"></i> Préparer maintenant vos parcours et  les publier  immédiatement ou plus tard.  
                 </div>
             </div>
         </div>
-        
+
         <div class="row"> 
             <div class="col-sm-12 col-md-12">
-                <h2 class='thin'><i class="fa fa-recycle"></i> 3 façons de disposer de parcours avec <span class="sacado">sacado</span></h2>  
+                <h2 class='thin'> 3 façons de disposer de parcours avec <span class="sacado">sacado</span></h2>  
                     
+                        <ol><i class="fa fa-hand-o-right"></i> <label style="font-size:18px"> Les parcours personnalisés</label> <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br>  Créer votre parcours personnalisé dans un premier temps puis sélectionner les exercices de votre choix. <a href="{% url 'create_parcours' 0 %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a></p></ol>
 
-                        <ol><i class="fa fa-hand-o-right"></i> Les parcours par défaut (Recommandé pour une première utilisation) <p> Ces parcours contiennent tous les exercices  de  {{ group.level}} proposés par <span class="sacado">sacado</span>, classés par le thème. Vous pouvez les utiliser directement, leur ajouter, leur supprimer des exercices.<br>Choisir le parcours souhaité <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   ><i class="fa fa-caret-right"></i>  Parcours par défaut</a><p></ol>
-                        <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés <p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier une fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur <a href="{% url 'all_parcourses' 0 %}"   ><i class="fa fa-caret-right"></i> Parcours mutualisés</a></p></ol>
-                        <ol><i class="fa fa-hand-o-right"></i>  Les parcours personnalisés <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br>  Créer votre parcours personnalisé dans un premier temps puis sélectionner les exercices de votre choix. <a href="{% url 'create_parcours' 0 %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a></p></ol>
+                        <ol><i class="fa fa-hand-o-right"></i> <label style="font-size:18px"> Les parcours mutualisés</label> (<em>Recommandé pour une première utilisation</em>)<p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier une fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur 
+                            
+                            {% if sacado_asso %}
+                            <a href="{% url 'all_parcourses' 0 %}"   ><i class="fa fa-caret-right"></i> Parcours mutualisés</a></p>
+                            {% else %}
+                            <a href="#"   ><i class="fa fa-caret-right"></i>  <em>Version établissement requise</em></a></p>
+                            {% endif %}
 
+
+
+
+
+                        </ol>
+
+                        <ol><i class="fa fa-hand-o-right"></i> <label style="font-size:18px"> Les parcours par défaut </label> <p> Ces parcours contiennent tous les exercices  de  {{ group.level}} proposés par <span class="sacado">sacado</span>, classés par thème. Vous pouvez les utiliser directement, leur ajouter, leur supprimer des exercices.<br>Choisir le parcours souhaité <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   ><i class="fa fa-caret-right"></i>  Parcours par défaut</a><p></ol>
+        <hr/>
+ 
+                <h3 class='thin'>Conseils : Classer vos parcours par dossier <a href="{% url 'create_folder' group.id %}" style="font-size:14px"  ><i class="fa fa-caret-right"></i>  Créer un dossier</a></h3> 
+                        <ol><label style="font-size:18px"> 1. Créer vos parcours personnalisés en tant que sous-dossier (bouton à cocher à la création)</label>. Attention, ils n'apparaitront pas sur votre tableau de bord (Les sous dossiers n'apparaissent pas).</ol>
+                        <ol><label style="font-size:18px"> 2. Créer un dossier</label>. Vous pourrez alors sélectionner les parcours personnalisés à inclure à l'intérieur de ce dossier</ol>
+
+                        <ol><label style="font-size:18px"> Autre méthode</label>. <em>Vous pouvez d'abord créer votre dossier, puis vos parcours personnalisés en cochant l'option <label>inclus dans un dosier</label> et reconfigurer à votre dossier pour inclure les parcours créés à l'intérieur du dossier</em>.</ol>
 
 
             </div>

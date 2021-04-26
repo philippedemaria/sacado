@@ -44,8 +44,8 @@ class ParcoursForm(forms.ModelForm):
 					students_tab.append(student.user)
 			students = Student.objects.filter(user__in=students_tab).order_by("level", "user__last_name")					
 			coteachers = Teacher.objects.filter(user__school=teacher.user.school).order_by("user__last_name") 
-			leaf_parcourses = teacher.teacher_parcours.filter(is_evaluation=0,is_archive=0,is_leaf = 1)		
-			folder_parcourses = teacher.teacher_parcours.filter(is_evaluation=0,is_archive=0,is_folder = 1)
+			leaf_parcourses = teacher.teacher_parcours.filter(is_evaluation=0,is_archive=0,is_leaf = 1).order_by("level")	
+			folder_parcourses = teacher.teacher_parcours.filter(is_evaluation=0,is_archive=0,is_folder = 1).order_by("level") 
 
 			self.fields['students']	 = forms.ModelMultipleChoiceField(queryset=students, widget=forms.CheckboxSelectMultiple, required=False)
 			self.fields['coteachers']	 = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
@@ -92,8 +92,8 @@ class UpdateParcoursForm(forms.ModelForm):
 
 			students = Student.objects.filter(user__in = students_tab).order_by("user__last_name") 					
 			coteachers = Teacher.objects.filter(user__school=teacher.user.school).order_by("user__last_name") 
-			leaf_parcourses = teacher.teacher_parcours.filter(is_evaluation=0,is_archive=0,is_leaf = 1)		
-			folder_parcourses = teacher.teacher_parcours.filter(is_evaluation=0,is_archive=0,is_folder = 1)
+			leaf_parcourses = teacher.teacher_parcours.filter(is_evaluation=0,is_archive=0,is_leaf = 1).order_by("level") 	
+			folder_parcourses = teacher.teacher_parcours.filter(is_evaluation=0,is_archive=0,is_folder = 1).order_by("level")|teacher.coteacher_parcours.filter(is_evaluation=0,is_archive=0,is_folder = 1).order_by("level") 
 
 			self.fields['students']	 = forms.ModelMultipleChoiceField(queryset= students, widget=forms.CheckboxSelectMultiple, required=False)
 			self.fields['coteachers']	 = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)

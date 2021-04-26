@@ -104,7 +104,7 @@ body{
                                 {% get_parcours_group_students_count parcours g as nb_st %}
                                 {% for g in  parcours.group_list  %}
                                     {% get_parcours_group_students_count parcours g as nb_st %}
-                                    <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
+                                    <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g.name }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
                                 {% endfor %}
                             {% empty %}
                                 {% if parcours.students.count %}

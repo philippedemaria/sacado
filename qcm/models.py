@@ -385,11 +385,11 @@ class Parcours(ModelWithCode):
     vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Vignette d'accueil", blank=True, default ="")
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
     
-    is_leaf = models.BooleanField(default=0, verbose_name="Sous-parcours ?")
+    is_leaf = models.BooleanField(default=0, verbose_name="Inclus dans un dossier ?")
     folder_parcours = models.ManyToManyField('self',  blank=True,  related_name="subparcours_parcours",  verbose_name="Nom de parcours")    
     
     is_folder = models.BooleanField(default=0, verbose_name="Dossier")
-    leaf_parcours = models.ManyToManyField('self',  blank=True,  related_name="subparcours_parcours",  verbose_name="Nom de parcours")
+    leaf_parcours = models.ManyToManyField('self',  blank=True,  related_name="subparcours_parcours",  verbose_name="Nom du dossier")# from_parcours_id est le dossier et from_parcours_id est le parcours  
 
 
     def __str__(self):
@@ -566,10 +566,12 @@ class Parcours(ModelWithCode):
                 break
         return shared
 
+
+
     def parcours_group_students_count(self,group):
 
         data = {}
-        group_students = group.students.all()
+        group_students = group.students.exclude(user__username__contains="_e-test")
         parcours_students = self.students.all()
         intersection = list(set(group_students) & set(parcours_students))
 
@@ -577,6 +579,9 @@ class Parcours(ModelWithCode):
         data["students"] = intersection
         return data 
  
+
+
+
     def is_task_exists(self):
         today = timezone.now()
         test = False

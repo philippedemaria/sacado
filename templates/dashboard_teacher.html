@@ -214,9 +214,12 @@
                                         <i class="fa fa-trash"></i>
                                 </a>
                                    
-
+                            {% if parcours.is_evaluation %} 
+                                <a href="{% url 'update_evaluation' parcours.id 0 %}" class="btn btn-info btn-xs" >   Affecter à un groupe</a><br>
+                            {% else %}
                                 <a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-info btn-xs" >   Affecter à un groupe</a><br>
-                           
+                            {% endif %}
+
 
 
                                 <div class="icon" style="opacity:0.9;top:80px">
@@ -251,7 +254,12 @@
                         <div class="box-footer">
                             <div class="row extend">                              
                                 <div class="col-lg-3 col-xs-3">
-                                    <a href="{% url 'update_parcours' parcours.id 0 %}" class="edit" > <i class="fa fa-edit"></i><span class="label_icon tool_tip">Conf.
+                                    {% if parcours.is_evaluation %} 
+                                        <a href="{% url 'update_evaluation' parcours.id 0 %}" class="edit" >  
+                                    {% else %}
+                                        <a href="{% url 'update_parcours' parcours.id 0 %}" class="edit" >   
+                                    {% endif %}
+                                        <i class="fa fa-edit"></i><span class="label_icon tool_tip">Conf.
                                             <div class="tool_tip_text" >
                                                 <small>Configurer les paramètres.</small>
                                             </div>

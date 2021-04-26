@@ -20,6 +20,7 @@
 
                 <script>
                     require(['script/ajax-evaluation']);
+                    require(['script/ajax-parcours-complement']);
                 </script> 
             {% endif %}
         {% endblock %} 
@@ -66,14 +67,7 @@
 
 
 {% block evaluation %}
-        {% if parcours %}
-        <tr>
-            <td>Inclusion dans un dossier<span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                    <div class="helper_tip_text" >Si coché, l'évaluation est incluse dans un dossier.</div></td>
-            <td>{{ form.is_leaf |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
-            <td>{{ form.is_leaf.errors }}</td>
-        </tr>
-        {% endif  %}
+ 
         <tr>
             <td>{{ form.duration.label_tag }}
                     <span class="helper_tip"> <i class="fa fa-question-circle"></i>

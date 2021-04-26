@@ -19,9 +19,11 @@
 
 {% block page_menu_right %}
 
-
-    <li> <a href="{% url 'exercise_custom_show_shared' %}"   class="btn btn-new"> Exercices personnels mutualisés</a> </li>
-
+    {% if sacado_asso %}
+    <li> <a href="{% url 'exercise_custom_show_shared' %}" class="btn btn-new"> Exercices personnels mutualisés</a> </li>
+    {% else %}
+    <li> <a href="#" class="btn btn-new no_sacado_asso" title="Version établissement requise"> Exercices personnels mutualisés</a> </li>
+    {% endif %}
 
     {% if request.user.is_superuser and  '/admin' in request.path %}
     <li ><a href="{% url 'create_supportfile' %}"   class="btn btn-new"><img width="25px" src="{% static 'img/plus.png' %}"/> Nouveau support GGB </a> </li> 

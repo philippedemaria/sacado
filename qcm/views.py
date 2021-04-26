@@ -1285,15 +1285,18 @@ def lock_all_exercises_for_student(dateur,parcours):
 
 def create_parcours(request,idp=0):
 
-    teacher = request.user.teacher
-    levels =  teacher.levels.all() 
+    teacher         = request.user.teacher
+    levels          = teacher.levels.all()
 
     try :
         group_id = request.session.get("group_id")
         group = Group.objects.get(pk=group_id)
-        form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level })
+        if idp > 0 : 
+            form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level,'level': group.level})
+        else :
+            form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level})
     except :
-        form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher )
+        form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher)
  
     themes_tab = []
     for level in levels :
@@ -1325,7 +1328,6 @@ def create_parcours(request,idp=0):
         nf.save()
         form.save_m2m()
 
-
         group_ckeched_ids = request.POST.getlist('groups')
         nf.groups.set(group_ckeched_ids)
 
@@ -1334,10 +1336,16 @@ def create_parcours(request,idp=0):
             for s in group_ckeched.students.all() :
                 nf.students.add(s)
 
-
         if idp > 0 :
             parcours_folder = Parcours.objects.get(pk = idp)
             parcours_folder.leaf_parcours.add(nf)
+        else :
+            for pid in request.POST.getlist("folder_parcours") :
+                parcours_folder = Parcours.objects.get(pk = pid)
+                parcours_folder.leaf_parcours.add(nf)            
+     
+
+
 
         sg_students =  request.POST.getlist('students_sg')
         for s_id in sg_students :
@@ -1364,11 +1372,15 @@ def create_parcours(request,idp=0):
 
         if request.POST.get("save_and_choose") :
             return redirect('peuplate_parcours', nf.id)
-        elif group_id > 0 and idp > 0 :
-            return redirect('list_sub_parcours_group' , group_id, idp)              
+        elif group_id and idp > 0 :
+            if group_id > 0 and idp > 0 :
+                return redirect('list_sub_parcours_group' , group_id, idp)              
         elif request.session.has_key("group_id") :
             group_id = request.session.get("group_id")
-            return redirect('list_parcours_group' , group_id)
+            if group_id :
+                return redirect('list_parcours_group' , group_id)
+            else :
+                return redirect('parcours')
         else:
             return redirect('parcours')
     else:
@@ -1386,7 +1398,7 @@ def create_parcours(request,idp=0):
         request.session["group_id"]  = None
 
     context = {'form': form,   'teacher': teacher,  'groups': groups,  'levels': levels, 'idg': 0,  'parcours_folder': parcours_folder ,  'themes' : themes_tab, 'group_id': group_id , 'parcours': None,  'relationships': [], 'share_groups' : share_groups , 
-               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'communications' : [],  'group': group , 'role' : True }
+               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'communications' : [],  'group': group , 'role' : True , 'idp' : idp }
 
     return render(request, 'qcm/form_parcours.html', context)
  
@@ -1399,11 +1411,9 @@ def update_parcours(request, id, idg=0 ):
     levels = teacher.levels.all()
  
     parcours = Parcours.objects.get(id=id)
-
-    p_set = set(parcours.leaf_parcours.all())
-
-
-    form = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher)
+    folder_parcourses = teacher.teacher_parcours.filter(leaf_parcours= parcours).order_by("level") 
+ 
+    form = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher, initial={ 'folder_parcours' : folder_parcourses })
 
     """ affiche le parcours existant avant la modif en ajax"""
     exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
@@ -1441,9 +1451,10 @@ def update_parcours(request, id, idg=0 ):
             nf.groups.set(request.POST.getlist('groups'))
             
 
-            for p in p_set :
-                p.leaf_parcours.add(nf)
- 
+            for pid in request.POST.getlist("folder_parcours") :
+                parcours_folder = Parcours.objects.get(pk = pid)
+                parcours_folder.leaf_parcours.add(nf)  
+
  
             sg_students =  request.POST.getlist('students_sg')
             for s_id in sg_students :
@@ -4068,8 +4079,6 @@ def create_evaluation(request):
     if not request.user.is_authenticated :
         redirect('index')
 
-
-
     if request.session.has_key("group_id") :
         group_id = request.session.get("group_id",None)        
         if group_id :
@@ -4080,11 +4089,15 @@ def create_evaluation(request):
         request.session["group_id"]  = None  
 
     teacher = request.user.teacher
-    levels =  teacher.levels.all()    
+    levels =  teacher.levels.all()  
+
+
+
     try :
         group_id = request.session.get("group_id")
+        folder_parcourses = teacher.teacher_parcours.filter(leaf_parcours= parcours).order_by("level") 
         group = Group.objects.get(pk=group_id)
-        form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level })
+        form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level, 'folder_parcours' : folder_parcourses  })
     except :
         form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher )
 
@@ -4103,6 +4116,8 @@ def create_evaluation(request):
         nf.teacher = teacher
         nf.is_evaluation = 1    
         nf.save()
+        form.save_m2m()
+
         nf.students.set(form.cleaned_data.get('students'))
         i = 0
         for exercise in form.cleaned_data.get('exercises'):
@@ -4116,6 +4131,10 @@ def create_evaluation(request):
 
             lock_all_exercises_for_student(nf.lock,nf)
 
+        for pid in request.POST.getlist("folder_parcours") :
+            parcours_folder = Parcours.objects.get(pk = pid)
+            parcours_folder.leaf_parcours.add(nf)   
+
 
         if request.POST.get("save_and_choose") :
             return redirect('peuplate_parcours', nf.id)
@@ -4127,7 +4146,7 @@ def create_evaluation(request):
         print(form.errors)
 
     context = {'form': form, 'teacher': teacher, 'parcours': None, 'groups': groups, 'idg': 0,  'group_id': group_id , 'group': group , 'relationships': [], 'communications' : [], 'share_groups' : share_groups , 
-               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'role':True}
+               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'role':True , 'idp' : 0 }
 
     return render(request, 'qcm/form_evaluation.html', context)
 
@@ -4142,7 +4161,10 @@ def update_evaluation(request, id, idg=0 ):
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
-    form = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher)
+
+    folder_parcourses = teacher.teacher_parcours.filter(leaf_parcours= parcours).order_by("level") 
+    form = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher, initial={ 'folder_parcours' : folder_parcourses })
+
 
     """ affiche le parcours existant avant la modif en ajax"""
     exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
@@ -4173,7 +4195,11 @@ def update_evaluation(request, id, idg=0 ):
  
             lock_all_exercises_for_student(nf.stop,parcours)
 
+            for pid in request.POST.getlist("folder_parcours") :
+                parcours_folder = Parcours.objects.get(pk = pid)
+                parcours_folder.leaf_parcours.add(nf)   
 
+            
             if request.POST.get("save_and_choose") :
                 return redirect('peuplate_parcours', nf.id)
             elif idg == 99999999999:
