@@ -287,6 +287,32 @@ table.table-bordered.dataTable {
   border-radius: 50%;
 }
 
+
+
+
+.btn-ss_index{
+  border-radius: 4px;
+  border : solid 1px #FFB400;
+  color:#2a4c5e;
+  background: #FFB400;
+  border-radius: 50%;
+  width : 80px;
+  height: 80px;
+  padding-top: 15px;
+  cursor: pointer;
+}
+
+.btn-ss_index:hover{ 
+  color:#FFF;
+  background: #2a4c5e;
+  border-radius: 4px;
+  border : solid 1px #2a4c5e;   
+  border-radius: 50%;
+}
+
+
+
+
 @media (max-width:990px){
 
   .btn-index{
