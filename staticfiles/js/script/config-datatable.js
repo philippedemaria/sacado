@@ -69,4 +69,12 @@ $('table.display1000').DataTable({
 		"paging": false,
         "info":     false				
     } );
+
+ $('table.display_no_details50').DataTable({
+        "pageLength": 50,
+        "paging": false,
+        "info":     false               
+    } );
+
+
 });
