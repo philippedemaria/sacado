@@ -7,7 +7,89 @@
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
 
 
-    {% if not sacado_asso %}
+    {% if sacado_asso %}
+
+           <li class="submenu_div{% if 'parcours_result/' in request.path %} active{% endif %}">
+            <a href="{% url 'result_group_waiting' group.id  %}" class="no_button"  >
+                Lire le bilan individualisé <i class="fa fa-caret-right fa-xs sub_caret"></i>
+            </a> 
+            <ul class="dropdown-submenu">
+
+                {% for std in group.students|exclude_teacher %}
+                    <li class="{% if 'student' in request.path  %} {% if std.user.id == student.id %} active {% endif %}{% endif %}" >
+                        <a href="{% url 'detail_student_all_views' std.user.id %}"  > 
+                            {{ std }}   
+                        </a>
+                    </li>
+                {% endfor %}
+
+
+            </ul>
+        </li> 
+
+        <li class="divider"></li>
+
+        <li {% if  'parcours_skill' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'result_group_skill' group.id %}" class="no_button">
+               Lire le bilan par compétences
+            </a>
+        </li> 
+
+        <li {% if 'parcours_result/' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'result_group_waiting' group.id  %}" class="no_button" >
+                Lire le bilan par attendus 
+            </a> 
+        </li> 
+
+        <li class="submenu_div{% if 'parcours_result/' in request.path %} active{% endif %}">
+            <a href="{% url 'result_group_waiting' group.id  %}" class="no_button"  >
+                Lire le bilan par savoir faire  <i class="fa fa-caret-right fa-xs sub_caret"></i>
+            </a> 
+            <ul class="dropdown-submenu">
+
+                <li class="{% if 'result/' in request.path and not 'result_group_exercise' in request.path %} active {% endif %}">
+                    <a href="{% url 'result_group'  group.id %}"  >Tous les savoir faire proposés </a>
+                </li>
+                <hr class="subdivider"/>
+                {% for thm in group.level_themes %}
+                <li class="{% if  'group_theme/' in request.path %} {% if thm.id == theme.id  %} active {% endif %}{% endif %}">
+                        <a href="{% url 'result_group_theme'  group.id thm.id %}"  > {{ thm.name|truncatechars:35 }} </a>
+                </li>
+                {% endfor %}
+
+
+            </ul>
+        </li> 
+
+        <li class="submenu_div{% if 'parcours_result/' in request.path %} active{% endif %}">
+            <a href="{% url 'result_group_waiting' group.id  %}" 
+                class="no_button" >
+                Lire le bilan par exercice  <i class="fa fa-caret-right fa-xs sub_caret"></i>
+            </a> 
+            <ul class="dropdown-submenu">
+
+                <li class="{% if 'result_group_exercise' in request.path %} active {% endif %}">
+                    <a href="{% url 'result_group_exercise'  group.id %}"  >Tous les exercices proposés </a>
+                </li>
+                <hr class="subdivider"/>
+                {% for thm in group.level_themes %}
+                <li class="{% if  'group_theme_exercise' in request.path  %} {% if thm.id == theme.id   %} active {% endif %}{% endif %}">
+                        <a href="{% url 'result_group_theme_exercise'  group.id   thm.id %}"  > {{ thm.name|truncatechars:35 }} </a>
+                </li>
+                {% endfor %}
+
+
+            </ul>
+        </li> 
+        <li class="divider"></li>
+        <li>
+            <a href="{% url 'print_statistiques' group.id 0 %}"  
+                class="no_button" id="print_stats">
+                <span id="loading_stats"></span> Imprimer les bilans <img src="{% static 'img/pdf.png' %}" width="15px"/>
+            </a>
+        </li> 
+    {% else %}
+
         <li class="submenu_div{% if 'parcours_result/' in request.path %} active{% endif %}">
             <a href="#" class="no_button no_sacado_asso" title="version établissement requise" >
                 Lire le bilan individualisé <i class="fa fa-caret-right fa-xs sub_caret"></i>
@@ -84,88 +166,6 @@
         <li class="divider"></li>
         <li>
             <a href="#" class="no_button no_sacado_asso" id="print_stats" title="version établissement requise">
-                <span id="loading_stats"></span> Imprimer les bilans <img src="{% static 'img/pdf.png' %}" width="15px"/>
-            </a>
-        </li> 
-   
-    {% else %}
-
-        <li class="submenu_div{% if 'parcours_result/' in request.path %} active{% endif %}">
-            <a href="{% url 'result_group_waiting' group.id  %}" class="no_button"  >
-                Lire le bilan individualisé <i class="fa fa-caret-right fa-xs sub_caret"></i>
-            </a> 
-            <ul class="dropdown-submenu">
-
-                {% for std in group.students|exclude_teacher %}
-                    <li class="{% if 'student' in request.path  %} {% if std.user.id == student.id %} active {% endif %}{% endif %}" >
-                        <a href="{% url 'detail_student_all_views' std.user.id %}"  > 
-                            {{ std }}   
-                        </a>
-                    </li>
-                {% endfor %}
-
-
-            </ul>
-        </li> 
-
-        <li class="divider"></li>
-
-        <li {% if  'parcours_skill' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'result_group_skill' group.id %}" class="no_button">
-               Lire le bilan par compétences
-            </a>
-        </li> 
-
-        <li {% if 'parcours_result/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'result_group_waiting' group.id  %}" class="no_button" >
-                Lire le bilan par attendus 
-            </a> 
-        </li> 
-
-        <li class="submenu_div{% if 'parcours_result/' in request.path %} active{% endif %}">
-            <a href="{% url 'result_group_waiting' group.id  %}" class="no_button"  >
-                Lire le bilan par savoir faire  <i class="fa fa-caret-right fa-xs sub_caret"></i>
-            </a> 
-            <ul class="dropdown-submenu">
-
-                <li class="{% if 'result/' in request.path and not 'result_group_exercise' in request.path %} active {% endif %}">
-                    <a href="{% url 'result_group'  group.id %}"  >Tous les savoir faire proposés </a>
-                </li>
-                <hr class="subdivider"/>
-                {% for thm in group.level_themes %}
-                <li class="{% if  'group_theme/' in request.path %} {% if thm.id == theme.id  %} active {% endif %}{% endif %}">
-                        <a href="{% url 'result_group_theme'  group.id thm.id %}"  > {{ thm.name|truncatechars:35 }} </a>
-                </li>
-                {% endfor %}
-
-
-            </ul>
-        </li> 
-
-        <li class="submenu_div{% if 'parcours_result/' in request.path %} active{% endif %}">
-            <a href="{% url 'result_group_waiting' group.id  %}" 
-                class="no_button" >
-                Lire le bilan par exercice  <i class="fa fa-caret-right fa-xs sub_caret"></i>
-            </a> 
-            <ul class="dropdown-submenu">
-
-                <li class="{% if 'result_group_exercise' in request.path %} active {% endif %}">
-                    <a href="{% url 'result_group_exercise'  group.id %}"  >Tous les exercices proposés </a>
-                </li>
-                <hr class="subdivider"/>
-                {% for thm in group.level_themes %}
-                <li class="{% if  'group_theme_exercise' in request.path  %} {% if thm.id == theme.id   %} active {% endif %}{% endif %}">
-                        <a href="{% url 'result_group_theme_exercise'  group.id   thm.id %}"  > {{ thm.name|truncatechars:35 }} </a>
-                </li>
-                {% endfor %}
-
-
-            </ul>
-        </li> 
-        <li class="divider"></li>
-        <li>
-            <a href="{% url 'print_statistiques' group.id 0 %}"  
-                class="no_button" id="print_stats">
                 <span id="loading_stats"></span> Imprimer les bilans <img src="{% static 'img/pdf.png' %}" width="15px"/>
             </a>
         </li> 

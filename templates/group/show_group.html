@@ -1,6 +1,6 @@
 {% extends 'dashboard.html' %}
 {% load static %}
-
+{% load item_tags %}
  
 {% block require %}
  
@@ -41,115 +41,81 @@
 
 {% block body %}
 <div class="content_main"> 
-
-        <div class="row">        
-            <div class="col-sm-12 col-md-3">
-                <p style="color:{{ group.color }}"><strong>Niveau : {{ group.level.name }}</strong></p>
-            </div>
- 
-            <div class="col-sm-12 col-md-7"> 
-                <form action="" method="POST"> 
-                    {% csrf_token %}
-                    <p style="color:{{ group.color }}"> 
-                        {% for sp in  studentprofiles   %}
-                        <span class="profile_student_incognito" id="profile_incognito{{ sp.user.id }}" >Id élève : {{ sp.user.username }} 
-                            <a href="#" class="delete_student_profile edit" data-student_id="{{ sp.user.id }}" onclick="return TestDelete('votre profil élève')">
-                                <i class="fa fa-trash"></i>
-                            </a>
-                        </span>
-                        {% endfor %}
-                    </p>
-                </form>
-            </div>
+    <div class="row">        
+        <div class="col-sm-12 col-md-3">
+            <p style="color:{{ group.color }}"><strong>Niveau : {{ group.level.name }}</strong></p>
         </div>
- 
- 
-        <div class="row">        
-            <div class="col-sm-11 col-md-12">
-                <table class="table table-hover display_no_details50">
-                    <thead>
-                    <tr>
-                        <td>Nom* </td>
-                        <td>Prénom*</td>
-                        <td>Courriel*</td>
-                        <td>Identifiant* </td>
-                        <td>Dernière connexion</td>
-                        <td><span style="font-size:13px; color:#cb2131">Mot de passe par défaut : <strong>sacado2020</strong> 
-                            <span class="helper_tip" style="color:#cb2131"> <i class="fa fa-question-circle"></i>
-                                    <div class="helper_tip_text" >Lors de la création d'un élève ou d'une ré-initialisation de mot de passe, <b>sacado2020</b> est le mot de passe attribué.</div>
-                                </span></span>
-                        </td> 
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <form action="" method="POST">   
-                        {% for student in  students   %}
-                            {% if not sacado_asso %}         
-                                {% csrf_token %}        
-                                    <tr>
-                                        <td><input  type="text" 
-                                                    id="studentLastName{{ student.user.id }}" 
-                                                    data-student_id="{{ student.user.id }}" 
-                                                    class="updateStudent" 
-                                                    data-is_name="1" 
-                                                    value="{{ student.user.last_name|lower|title }}" 
-                                                    style="background: #f2f0f0; border: none;width:140px" />
-         
-                                        </td>
-                                        <td><input  type="text" 
-                                                    id="studentFirstName{{ student.user.id }}" 
-                                                    data-student_id="{{ student.user.id }}" 
-                                                    data-is_name="0" 
-                                                    class="updateStudent"  
-                                                    value="{{ student.user.first_name|lower|title }}" 
-                                                    style="background: #f2f0f0; border: none;width:120px" /> 
-                                        </td>
-                                        <td><input  type="text" 
-                                                    id="studentEmail{{ student.user.id }}" 
-                                                    data-student_id="{{ student.user.id }}" 
-                                                    data-is_name="2" 
-                                                    class="updateStudent"  
-                                                    value="{{ student.user.email }}" 
-                                                    style="background: #f2f0f0; border: none;width:310px" /> </td>
-                                        <td><input  type="text" 
-                                                    id="studentUsername{{ student.user.id }}" 
-                                                    data-student_id="{{ student.user.id }}" 
-                                                    data-is_name="3" 
-                                                    class="updateStudent"  
-                                                    value="{{ student.user.username }}" 
-                                                    style="background: #f2f0f0; border: none;width:180px" />
-                                        
-                                        </td>
-                                        <td>
-                                            {% if student.user.last_login %}{{ student.user.last_login|date:"Y m d, H:i"  }}{% else %}Jamais{% endif %}
-                                        </td>
-                                        <td>
-                                            <a href="{% url 'detail_student_all_views'  student.user.id   %}"  style="font-size: 11px"> 
-                                               voir les résultats  
-                                            </a> 
-                                            <small>|</small> 
-                                            <a  href="{% url 'newpassword_student' student.user.id  group.id   %}" data-student_id="{{ student.user.id }}" title="mot de passe par défaut : sacado2020" 
-                                                onclick="return Newpassword()" style="font-size:11px; margin-right:5px"  >
-                                                Init. mot de passe
-                                            </a><small>|</small>       
-                                            <a  href="{% url 'delete_student' student.user.id  group.id %}"
-                                                onclick="return TestDelete('cet élève')" style="font-size:11px"  >
-                                                Supprimer
-                                            </a> 
-                                        </td>
-                                    </tr>
-                            {% else %} 
+
+        <div class="col-sm-12 col-md-7"> 
+            <form action="" method="POST"> 
+                {% csrf_token %}
+                <p style="color:{{ group.color }}"> 
+                    {% for sp in  studentprofiles   %}
+                    <span class="profile_student_incognito" id="profile_incognito{{ sp.user.id }}" >Id élève : {{ sp.user.username }} 
+                        <a href="#" class="delete_student_profile edit" data-student_id="{{ sp.user.id }}" onclick="return TestDelete('votre profil élève')">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </span>
+                    {% endfor %}
+                </p>
+            </form>
+        </div>
+    </div>
+    <div class="row">        
+        <div class="col-sm-11 col-md-12">
+            <table class="table table-hover display_no_details50">
+                <thead>
+                <tr>
+                    <td>Nom* </td>
+                    <td>Prénom*</td>
+                    <td>Courriel*</td>
+                    <td>Identifiant* </td>
+                    <td>Dernière connexion</td>
+                    <td><span style="font-size:13px; color:#cb2131">Mot de passe par défaut : <strong>sacado2020</strong> 
+                        <span class="helper_tip" style="color:#cb2131"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text" >Lors de la création d'un élève ou d'une ré-initialisation de mot de passe, <b>sacado2020</b> est le mot de passe attribué.</div>
+                            </span></span>
+                    </td> 
+                </tr>
+                </thead>
+                <tbody>
+                    <form action="" method="POST">   
+                    {% for student in  students   %}
+                        {% if not sacado_asso %}         
+                            {% csrf_token %}        
                                 <tr>
-                                    <td>
-                                        {{ student.user.last_name|lower|title }}
+                                    <td><input  type="text" 
+                                                id="studentLastName{{ student.user.id }}" 
+                                                data-student_id="{{ student.user.id }}" 
+                                                class="updateStudent" 
+                                                data-is_name="1" 
+                                                value="{{ student.user.last_name|lower|title }}" 
+                                                style="background: #f2f0f0; border: none;width:140px" />
+     
                                     </td>
-                                    <td>
-                                        {{ student.user.first_name|lower|title }}
-                                    <td>
-                                        {{ student.user.email }}
+                                    <td><input  type="text" 
+                                                id="studentFirstName{{ student.user.id }}" 
+                                                data-student_id="{{ student.user.id }}" 
+                                                data-is_name="0" 
+                                                class="updateStudent"  
+                                                value="{{ student.user.first_name|lower|title }}" 
+                                                style="background: #f2f0f0; border: none;width:120px" /> 
                                     </td>
-                                    <td>
-                                        {{ student.user.username }}
+                                    <td><input  type="text" 
+                                                id="studentEmail{{ student.user.id }}" 
+                                                data-student_id="{{ student.user.id }}" 
+                                                data-is_name="2" 
+                                                class="updateStudent"  
+                                                value="{{ student.user.email }}" 
+                                                style="background: #f2f0f0; border: none;width:310px" /> </td>
+                                    <td><input  type="text" 
+                                                id="studentUsername{{ student.user.id }}" 
+                                                data-student_id="{{ student.user.id }}" 
+                                                data-is_name="3" 
+                                                class="updateStudent"  
+                                                value="{{ student.user.username }}" 
+                                                style="background: #f2f0f0; border: none;width:180px" />
+                                    
                                     </td>
                                     <td>
                                         {% if student.user.last_login %}{{ student.user.last_login|date:"Y m d, H:i"  }}{% else %}Jamais{% endif %}
@@ -164,47 +130,93 @@
                                             Init. mot de passe
                                         </a><small>|</small>       
                                         <a  href="{% url 'delete_student' student.user.id  group.id %}"
-                                            onclick="alert('Vous avez la version établissement. Contacter le gestion SACADO de votre établissement.'); return false;" style="font-size:11px"  >
+                                            onclick="return TestDelete('cet élève')" style="font-size:11px"  >
                                             Supprimer
                                         </a> 
                                     </td>
                                 </tr>
-                            {% endif %}
-                        {% endfor %}
-                        </form>
-                    </tbody>
-                </table>
+                        {% else %} 
+                            <tr>
+                                <td>
+                                    {{ student.user.last_name|lower|title }}
+                                </td>
+                                <td>
+                                    {{ student.user.first_name|lower|title }}
+                                <td>
+                                    {{ student.user.email }}
+                                </td>
+                                <td>
+                                    {{ student.user.username }}
+                                </td>
+                                <td>
+                                    {% if student.user.last_login %}{{ student.user.last_login|date:"Y m d, H:i"  }}{% else %}Jamais{% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'detail_student_all_views'  student.user.id   %}"  style="font-size: 11px"> 
+                                       voir les résultats  
+                                    </a> 
+                                    <small>|</small> 
+                                    <a  href="{% url 'newpassword_student' student.user.id  group.id   %}" data-student_id="{{ student.user.id }}" title="mot de passe par défaut : sacado2020" 
+                                        onclick="return Newpassword()" style="font-size:11px; margin-right:5px"  >
+                                        Init. mot de passe
+                                    </a><small>|</small>       
+                                    <a  href="{% url 'delete_student' student.user.id  group.id %}"
+                                        onclick="alert('Vous avez la version établissement. Contacter le gestion SACADO de votre établissement.'); return false;" style="font-size:11px"  >
+                                        Supprimer
+                                    </a> 
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </form>
+                </tbody>
+            </table>
+        </div>   
+    </div> 
 
 
 
+	{% if group %}
 
-            </div>   
-        </div> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12 alert alert-info">
+            <div style="font-size: 16px"><i class="fa fa-info-circle"></i>
+                <b>Lien d'inscription :</b> Les élèves peuvent rejoindre ce groupe via cette URL à leur donner : <strong>https://sacado.xyz/group/{{ group.code }}</strong> <a href="https://sacado.xyz/group/{{ group.code }}" target="_blank"><img src="{% static 'img/external-link.png' %}"/></a>
+            </div>
+        </div>
+    </div>
 
-
-
-		{% if group %}
- 
+    {% if group.group_parcours.count == 0 %}
         <div class="row">
-            <div class="col-sm-12 col-md-12 alert alert-info">
-                <div style="font-size: 16px"><i class="fa fa-info-circle"></i>
-                    <b>Lien d'inscription :</b> Les élèves peuvent rejoindre ce groupe via cette URL à leur donner : <strong>https://sacado.xyz/group/{{ group.code }}</strong> <a href="https://sacado.xyz/group/{{ group.code }}" target="_blank"><img src="{% static 'img/external-link.png' %}"/></a>
+            <div class="col-lg-12 col-xs-12">
+                <p></p>
+                <div class="round" style="background-color: {{ group.color }};">
+                    <a href="{% url 'list_parcours_group' group.id %}" style="color: {{ group.color|contrast_color }};" > 
+                        <h1 class="sacado"> <br> 
+                            Créer <br> mon premier <br>  parcours
+                        </h1>
+                    </a>
+
                 </div>
             </div>
         </div>
-        {% endif %}
+    {% endif %}
 
+    
+    {% endif %}
 
-
-
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <div class="form-group">
-                    <a href="javascript:history.back()"><input type="button" value="Retour"
-                                                               class="btn btn-default "/></a>
-                </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="form-group">
+                <a href="javascript:history.back()"><input type="button" value="Retour"
+                                                           class="btn btn-default "/></a>
             </div>
-        </div> 
+        </div>
+    </div> 
+
+
+
+
 </div> 
 
 
