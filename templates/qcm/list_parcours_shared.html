@@ -102,18 +102,24 @@
     {% if inside %}   
         <div class="row" id="courses_details">
             <div class="col-sm-12 col-md-12">
-  
-                {% regroup parcourses by level as level_list  %}
+                {% comment  %}
+                    {% regroup parcourses by level as level_list  %}
 
-                {% for level in level_list  %}
-                    <h1 class="thin">{{ level.grouper.name }}</h1>
+                    {% for level in level_list  %}
+                        <h1 class="thin">{{ level.grouper.name }}</h1>
+                            {% for parcours in level.list  %}
+                                  {% include 'qcm/parcours_shared.html' %}
+                            {% endfor %}
+                            <div style="clear:both"></div>
+                    {% endfor %}
+                {% endcomment %}
+                <div style="height:50px"></div>
+                Pour trouver des parcours mutualisés, vous devez :                <div style="height:20px"></div>
+                <ol>Sélectionner une matière</ol>
+                <ol>Sélectionner un niveau</ol>
+                <ol>Sélectionner un thème</ol>
+                <ol>ou choisir un mot clé</ol>
 
-
-                        {% for parcours in level.list  %}
-                              {% include 'qcm/parcours_shared.html' %}
-                        {% endfor %}
-                        <div style="clear:both"></div>
-                {% endfor %} 
             </div>
         </div>
     {% else %} 

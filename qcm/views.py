@@ -1126,7 +1126,8 @@ def parcours_progression_student(request,id):
 
 def all_parcourses(request,is_eval):
     teacher = request.user.teacher
-    parcours_ids = Parcours.objects.values_list("id",flat=True).filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_evaluation = is_eval, is_share = 1,level__in = teacher.levels.all()).exclude(teacher=teacher).order_by('level').distinct()
+    #parcours_ids = Parcours.objects.values_list("id",flat=True).filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_evaluation = is_eval, is_share = 1,level__in = teacher.levels.all()).exclude(teacher=teacher).order_by('level').distinct()
+    parcours_ids = []  
 
     parcourses , tab_id = [] , [] 
     for p_id in parcours_ids :
@@ -1173,13 +1174,15 @@ def ajax_all_parcourses(request):
     level_id = request.POST.get('level_id',0)
     subject_id = request.POST.get('subject_id',None)
     parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1,is_evaluation = is_eval).exclude(exercises=None ,teacher=teacher).order_by('level')
-    
+
     keywords = request.POST.get('keywords',None)
 
     if int(level_id) > 0 :
         level = Level.objects.get(pk=int(level_id))
         theme_ids = request.POST.getlist('theme_id',[])
         
+        print(level_id)
+
         if len(theme_ids) > 0 :
 
             if theme_ids[0] != '' :
@@ -1189,49 +1192,36 @@ def ajax_all_parcourses(request):
                     themes_tab.append(theme_id) 
 
                 if keywords :
-                    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
+                    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
                                                         exercises__knowledge__theme__in = themes_tab, 
-                                                        exercises__supportfile__title__contains = keywords, 
-                                                        exercises__level_id = int(level_id)).exclude(teacher=teacher).order_by('author').distinct()
+                                                        exercises__supportfile__title__contains = keywords, level_id = int(level_id)).exclude(teacher=teacher).order_by('author').distinct()
                 else :
-                    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
-                                                        exercises__knowledge__theme__in = themes_tab, 
-                                                        exercises__level_id = int(level_id)).exclude(teacher=teacher).order_by('author').distinct()  
+                    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
+                                                        exercises__knowledge__theme__in = themes_tab, level_id = int(level_id)).exclude(teacher=teacher).order_by('author').distinct()  
                     
             else :
                 if keywords :
-                    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
-                                                            exercises__supportfile__title__contains = keywords,  
-                                                            exercises__level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
+                    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
+                                                            exercises__supportfile__title__contains = keywords, level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
 
                 else :
-                    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
-                                                            exercises__level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
+                    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
+                                                            level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
 
         else :
             if keywords:
-                parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1,is_evaluation = is_eval, 
-                                                        exercises__supportfile__title__contains = keywords  , 
-                                                        exercises__level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
+                parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1,is_evaluation = is_eval, 
+                                                        exercises__supportfile__title__contains = keywords  , level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
             else :
-                parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
-                                                        exercises__level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
+                parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
+                                                        level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
+                print(parcourses)
 
     else :
         if keywords:
-            parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1 , is_evaluation = is_eval, exercises__supportfile__title__contains = keywords ).exclude(teacher=teacher).order_by('author').distinct()
+            parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1 , is_evaluation = is_eval, exercises__supportfile__title__contains = keywords ).exclude(teacher=teacher).order_by('author').distinct()
         else :
-            parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,).exclude(teacher=teacher).order_by('author').distinct()
-
-
-    parcourses , tab_id = [] , [] 
-    for p_id in parcours_ids :
-        if not p_id in tab_id :
-            p =  Parcours.objects.get(pk = p_id)
-            if p.exercises.count() > 0 :
-                parcourses.append(p)
-                tab_id.append(p_id)
-
+            parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,).exclude(teacher=teacher).order_by('author').distinct()
 
 
     data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : parcourses, 'teacher' : teacher ,  })
@@ -5748,13 +5738,6 @@ def ajax_delete_constraint(request):
     return JsonResponse(data)
 
  
-
-
-
-
-
-
-
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 #################   exports PRONOTE ou autre
