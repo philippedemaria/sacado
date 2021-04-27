@@ -1215,8 +1215,6 @@ def ajax_all_parcourses(request):
             else :
                 parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
                                                         level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
-                print(parcourses)
-
     else :
         if keywords:
             parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1 , is_evaluation = is_eval, exercises__supportfile__title__contains = keywords ).exclude(teacher=teacher).order_by('author').distinct()
