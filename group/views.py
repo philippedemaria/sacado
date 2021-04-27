@@ -22,7 +22,7 @@ from group.decorators import user_is_group_teacher
 from account.decorators import user_can_create
 from templated_email import send_templated_mail
 from django.db.models import Q
-
+from django.db.models import Avg, Count, Min, Sum
 ############### bibliothèques pour les impressions pdf  #########################
 import os
 from django.utils import formats, timezone
@@ -196,11 +196,11 @@ def student_dashboard(request,group_id):
 
 
 def student_parcours_studied(student):  
-    parcourses = student.students_to_parcours.all()
-    if Parcours.objects.filter(pk__in=parcourses,linked=1,is_publish=1).count() > 0 :
-        parcourses = student.students_to_parcours.all()
+    parces = student.students_to_parcours.all()
+    if parces.filter(linked=1,is_publish=1).count() > 0 :
+        parcourses = parces
     else :
-        parcourses = student.students_to_parcours.filter(linked=0)
+        parcourses = parces.filter(linked=0)
     return parcourses
 
 
@@ -630,7 +630,6 @@ def show_group(request, id ):
     access = data['access']
     authorizing_access_group(request,teacher,group )
     studentprofiles = group.students.filter(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test")).order_by("user__last_name")
-    print(studentprofiles)
     students = group.students.exclude( user__username__contains= "_e-test").order_by("user__last_name")
 
     context = {  'group': group,  'communications' : [] , 'teacher' : group.teacher , 'students' : students , 'studentprofiles' : studentprofiles }
@@ -1166,6 +1165,7 @@ def code_couleur(score,teacher):
 
 def print_statistiques(request, group_id, student_id):
 
+
     themes, subjects = [], []
     group = Group.objects.get(pk = group_id)
 
@@ -1184,7 +1184,6 @@ def print_statistiques(request, group_id, student_id):
             if not know.theme in themes :
                 themes.append(know.theme)
 
-
     else :
         student = Student.objects.get(pk = student_id)
         students = [student]
@@ -1194,8 +1193,7 @@ def print_statistiques(request, group_id, student_id):
         for know in knows :
             if not know.theme in themes :
                 themes.append(know.theme)
-    
- 
+
     subject = group.subject
 
     elements = []        
@@ -1228,7 +1226,6 @@ def print_statistiques(request, group_id, student_id):
                             textColor=colors.HexColor("#00819f"),
                             )
  
-
     normal = ParagraphStyle(name='Normal',fontSize=12,)    
     style_cell = TableStyle(
             [
@@ -1252,57 +1249,48 @@ def print_statistiques(request, group_id, student_id):
         else :
             scolar_year = str(timezone.now().year)+"-"+str(timezone.now().year+1)
 
-        sort_of_exercise , nb_exo = [] , 0 
-        studentanswer_ids = Studentanswer.objects.values_list("id",flat=True).filter(student=student)
-        for studentanswer_id in studentanswer_ids :
-            if not studentanswer_id in sort_of_exercise :
-                nb_exo += 1
 
+        studentanswers = student.answers.all()
+        studentanswer_ids = studentanswers.values_list("id",flat=True).distinct() 
+        nb_exo = studentanswer_ids.count() # Nombre d'exercices traités
+        info = studentanswers.aggregate( duration =  Sum("secondes"), score =  Sum("point"), avg =  Avg("point"))
+        scores = studentanswers.values_list("point",flat=True).order_by("point")
+ 
+        score , duration , average_score = 0  , 0 , 0
+        if info["score"]:
+            score = info["score"]
+        if info["duration"]:
+            duration = info["duration"]
+        if info["avg"]:
+            average_score = int(info["avg"])
 
-        studentanswers = Studentanswer.objects.filter(student=student)
-        duration, score = 0, 0
-        tab, tab_date = [], []
-        for studentanswer in  studentanswers : 
-            duration += int(studentanswer.secondes)
-            score += int(studentanswer.point)
-            tab.append(studentanswer.point)
-            tab_date.append(studentanswer.date)
-        tab_date.sort()
         try :
             if len(studentanswers)>1 :
-                average_score = int(score/len(studentanswers))
-                tab.sort()
-                if len(tab)%2 == 0 :
-                    med = (tab[(len(tab)-1)//2]+tab[(len(tab)-1)//2+1])/2 ### len(tab)-1 , ce -1 est causÃ© par le rang 0 du tableau
+                if len(scores)%2 == 0 :
+                    med = (scores[(len(scores)-1)//2]+scores[(len(scores)-1)//2+1])/2 ### len(scores)-1 , ce -1 est causé par le rang 0 du tableau
                 else:
-                    med = tab[(len(tab)-1)//2+1]
+                    med = scores[(len(scores)-1)//2+1]
                 median = int(med)
             else :
-                average_score = int(score)
                 median = int(score)
         except :
-            average_score = 0
             median = 0
-
-
 
         # Vérifie que le parcours par défaut est donné
         nb_k_p , nb_p = 0 , 0 
         parcourses = student_parcours_studied(student)
 
-        knowledges = []
+        knowledges , knowledge_ids  = [] ,  []
 
-        for parcours in parcourses :
-            exercises = parcours.exercises.filter(theme__in= themes , level = student.level)
-            nb_p += exercises.count()
-            for exercise in exercises :
-                if not exercise.knowledge in knowledges:
-                    knowledges.append(exercise.knowledge)
+        knowledge_ids = Relationship.objects.values_list("exercise__knowledge_id", flat=True).filter(parcours__in = parcourses,exercise__theme__in= themes , exercise__level = student.level).distinct()
+        nb_k_p += knowledge_ids.count()
+        
+        exercise_ids  = Relationship.objects.values_list("exercise_id", flat=True).filter(parcours__in = parcourses,exercise__theme__in= themes , exercise__level = student.level).distinct()
+        nb_p += exercise_ids.count()
 
+        knows_ids = student.answers.values_list("id",flat=True).filter(exercise__knowledge_id__in = knowledge_ids, exercise_id__in= exercise_ids)
+        nb_k = knows_ids.count()
 
-            nb_k_p = len(knowledges)
-            knows_ids = Studentanswer.objects.values_list("id",flat=True).filter(exercise__knowledge__in = knows, exercise__in= exercises , student=student)
-            nb_k = count_unique(knows_ids)
         # Les taux
         try :
             p_k = int(nb_k/nb_k_p * 100 )
@@ -1317,14 +1305,13 @@ def print_statistiques(request, group_id, student_id):
         except :
             p_e = 0
 
-
         relationships = Relationship.objects.filter(parcours__in = parcourses).exclude(date_limit=None)
         done, late, no_done = 0 , 0 , 0 
         for relationship in relationships :
-            nb_ontime = Studentanswer.objects.filter(student=student, exercise = relationship.exercise ).count()
 
-
-            nb = Studentanswer.objects.filter(student=student, exercise = relationship.exercise, date__lte= relationship.date_limit ).count()
+            ontime = student.answers.filter(exercise = relationship.exercise )
+            nb_ontime = ontime.count()
+            nb = ontime.filter(date__lte= relationship.date_limit ).count()
             if nb_ontime == 0 :
                 no_done += 1
             elif nb > 0 :
@@ -1351,12 +1338,6 @@ def print_statistiques(request, group_id, student_id):
         ##########################################################################
         #### Gestion des labels à afficher
         ##########################################################################
-        #labels = [str(student.user.last_name)+" "+str(student.user.first_name), "Classe de "+str(student.level)+", année scolaire "+scolar_year,"Temps de connexion : "+convert_seconds_in_time(duration), "Score moyen : "+str(average_score)+"%" , "Score médian : "+str(median)+"%" , \
-        #        "Les savoir faire  ", "Nombre de savoir faire étudiés : "+str(nb_k)+complement, "Nombre de savoir faire proposés : "+str(nb_k_p), "Taux d'étude : "+str(p_k)+"%",\
-        #         "Les exercices ", "Nombre d'exercices différents étudiés : "+str(nb_exo)+complt, "Nombre d'exercices proposés : "+str(nb_p), "Taux d'étude : "+str(p_e)+"%",\
-        #         "Les tâches ", "Tâches proposées : "+str(t_r),  "Tâches remises en temps : "+str(done), "Tâches remises en retard : "+str(late), "Tâches non remises : "+str(no_done),\
-        #         "Bilan des compétences ",]
-
         labels = [str(student.user.last_name)+" "+str(student.user.first_name), "Classe de "+str(student.level)+", année scolaire "+scolar_year,"Temps de connexion : "+convert_seconds_in_time(duration), "Score moyen : "+str(average_score)+"%, score médian : "+str(median)+"%" , \
                  "Exercices SACADO proposés : " +str(nb_p) , "dont "+str(nb_exo)+" étudiés "+complt+", soit un taux d'étude de "+str(p_e)+"%",  \
                  "Tâches demandées : "+str(t_r),  "Remises en temps : "+str(done)+",  remises en retard : "+str(late)+", non remises : "+str(no_done),\
@@ -1384,6 +1365,7 @@ def print_statistiques(request, group_id, student_id):
             i+=1   
 
 
+
         ##########################################################################
         #### Gestion des compétences
         ##########################################################################
@@ -1391,11 +1373,12 @@ def print_statistiques(request, group_id, student_id):
         skills = Skill.objects.filter(subject= subject)
         for skill  in skills :
             try :
-                resultlastskill  = Resultlastskill.objects.get(student = student, skill= skill )
+                resultlastskill  = skill.student_resultskill.objects.get(student = student)
                 sk_tab.append([skill.name, code_couleur(resultlastskill.point,teacher) ])
             except :
                 sk_tab.append([skill.name,  "N.E"  ])
-            
+
+
         try : # Test pour les élèves qui n'auront rien fait, il n'auront pas de th_tab donc il ne faut l'afficher 
             skill_tab = Table(sk_tab, hAlign='LEFT', colWidths=[5.2*inch,1*inch])
             skill_tab.setStyle(TableStyle([
@@ -1415,14 +1398,12 @@ def print_statistiques(request, group_id, student_id):
         elements.append(Spacer(0, 0.15*inch))
 
         th_tab, bgc_tab = [] , [('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),('BOX', (0,0), (-1,-1), 0.25, colors.black),]
+
         bgc = 0        
         for theme  in themes :
 
             waiting_set = set(theme.waitings.filter(theme__subject = group.subject, level = group.level)) # on profite de cette boucle pour créer la liste des attendus
- 
- 
             th_tab.append([theme.name,  " " ])
-
             bgc_tab.append(  ('BACKGROUND', (0,bgc), (-1,bgc), colors.Color(0,0.5,0.62)) )
 
             for waiting in waiting_set :
@@ -1441,8 +1422,6 @@ def print_statistiques(request, group_id, student_id):
                 
             bgc += 1
 
-
-            
         try : # Test pour les élèves qui n'auront rien fait, il n'auront pas de th_tab donc il ne faut l'afficher 
             theme_tab = Table(th_tab, hAlign='LEFT', colWidths=[6*inch,1*inch])
             theme_tab.setStyle(TableStyle(bgc_tab))
@@ -1451,24 +1430,13 @@ def print_statistiques(request, group_id, student_id):
 
         elements.append(theme_tab)
 
-
-
-
         loop  = 0
         for theme  in themes :
 
             ##########################################################################
             #### Gestion des knowledges par thème
             ##########################################################################
-            knowledges = []
-            for parcours in parcourses :
-                exercises = parcours.exercises.filter(theme= theme , level = student.level)
-                for exercise in exercises :
-                    if not exercise.knowledge in knowledges:
-                        knowledges.append(exercise.knowledge)
-
-
-            if len(knowledges) > 0 :
+            if len(knowledge_ids) > 0 :
 
                 if loop%2 == 0 :
                     elements.append(PageBreak()) # Ouvre une nouvelle page - 2 thèmes
@@ -1481,17 +1449,18 @@ def print_statistiques(request, group_id, student_id):
                 #######
 
 
-                for knowledge in knowledges :
+                for knowledge_id in knowledge_ids :
                     # Savoir faire
-                    name = split_paragraph(knowledge.name,80)
+                    name_k = Knowledge.objects.get(pk = knowledge_id).name
+                    name   = split_paragraph(name_k,80)
 
                     ##########################################################################
                     #### Affichage des résultats par knowledge
                     ##########################################################################                    
                     try :      
-                        knowledgeResult = Resultknowledge.objects.get(knowledge  = knowledge, student = student)
-                        knowledgeResult_nb = Studentanswer.objects.values_list("id",flat=True).filter(exercise__knowledge = knowledge, student=student).count()          
-                        knowledge_tab.append(      ( name ,  code_couleur(knowledgeResult.point,teacher) , knowledgeResult_nb )          )
+                        knowledgeResult = student.results_k.values("point",flat= True).get(knowledge_id  = knowledge_id)
+                        knowledgeResult_nb = student.answers.values_list("id",flat=True).filter(exercise__knowledge_id = knowledge_id ).count()          
+                        knowledge_tab.append(      ( name ,  code_couleur(knowledgeResult['point'],teacher) , knowledgeResult_nb )          )
                     except : 
                         knowledge_tab.append(      ( name ,   "N.E"  , 0  )        )
                 
@@ -1514,6 +1483,7 @@ def print_statistiques(request, group_id, student_id):
     doc.build(elements)
 
     return response
+
 
 
 def print_ids(request, id):

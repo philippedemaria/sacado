@@ -81,6 +81,8 @@
 
             </ul>
         </li> 
+
+        {% comment %}
         <li class="divider"></li>
         <li>
             <a href="{% url 'print_statistiques' group.id 0 %}"  
@@ -88,6 +90,8 @@
                 <span id="loading_stats"></span> Imprimer les bilans <img src="{% static 'img/pdf.png' %}" width="15px"/>
             </a>
         </li> 
+        {% endcomment %}
+
     {% else %}
 
         <li class="submenu_div{% if 'parcours_result/' in request.path %} active{% endif %}">
@@ -163,13 +167,14 @@
 
             </ul>
         </li> 
+        {% comment %}
         <li class="divider"></li>
         <li>
             <a href="#" class="no_button no_sacado_asso" id="print_stats" title="version établissement requise">
                 <span id="loading_stats"></span> Imprimer les bilans <img src="{% static 'img/pdf.png' %}" width="15px"/>
             </a>
         </li> 
-
+        {% endcomment %}
     {% endif %}
 
 
