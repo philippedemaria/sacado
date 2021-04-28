@@ -2201,6 +2201,9 @@ a.bilan_title:hover .fa-angle-down,a.bilan_title:focus .fa-angle-down {
 
 
 /* badges */
+.c1{
+  background-color: #a5a59d;
+}
 .c2{
   background-color: #ef635c;
 }

@@ -42,7 +42,7 @@ class ParcoursForm(forms.ModelForm):
 			for group in groups:
 				for student in group.students.order_by("user__last_name"):
 					students_tab.append(student.user)
-			students = Student.objects.filter(user__in=students_tab).order_by("level", "user__last_name")					
+			students = Student.objects.filter(user__in=students_tab).order_by("level__ranking", "user__last_name")					
 			coteachers = Teacher.objects.filter(user__school=teacher.user.school).order_by("user__last_name") 
 			leaf_parcourses = teacher.teacher_parcours.filter(is_evaluation=0,is_archive=0,is_leaf = 1).order_by("level")	
 			folder_parcourses = teacher.teacher_parcours.filter(is_evaluation=0,is_archive=0,is_folder = 1).order_by("level") 
@@ -53,7 +53,7 @@ class ParcoursForm(forms.ModelForm):
 			self.fields['leaf_parcours']	 = forms.ModelMultipleChoiceField(queryset=leaf_parcourses,  required=False)
 			self.fields['folder_parcours']	 = forms.ModelMultipleChoiceField(queryset=folder_parcourses,  required=False)
 			self.fields['subject']	 = forms.ModelChoiceField(queryset=teacher.subjects.all(),  required=False)
-			self.fields['level']	 = forms.ModelChoiceField(queryset=teacher.levels.all(),  required=False)
+			self.fields['level']	 = forms.ModelChoiceField(queryset=teacher.levels.order_by("ranking"),  required=False)
 			
 	def clean(self):
 		"""
@@ -100,7 +100,7 @@ class UpdateParcoursForm(forms.ModelForm):
 			self.fields['leaf_parcours']	 = forms.ModelMultipleChoiceField(queryset=leaf_parcourses,  required=False)
 			self.fields['folder_parcours']	 = forms.ModelMultipleChoiceField(queryset=folder_parcourses,  required=False)
 			self.fields['subject']	 = forms.ModelChoiceField(queryset=teacher.subjects.all(),  required=False)			
-			self.fields['level']	 = forms.ModelChoiceField(queryset=teacher.levels.all(),  required=False)
+			self.fields['level']	 = forms.ModelChoiceField(queryset=teacher.levels.order_by("ranking"),  required=False)
 
 			
 	def clean(self):
@@ -296,7 +296,7 @@ class CustomexerciseForm (forms.ModelForm):
 
 		super(CustomexerciseForm, self).__init__(*args, **kwargs)
 		skills = Skill.objects.filter(subject__in = teacher.subjects.all())
-		knowledges = Knowledge.objects.filter(theme__subject__in = teacher.subjects.all(), level__in = teacher.levels.all())
+		knowledges = Knowledge.objects.filter(theme__subject__in = teacher.subjects.all(), level__in = teacher.levels.order_by("ranking"))
 		parcourses = teacher.author_parcours.exclude(pk=parcours.id)
 		students = parcours.students.order_by("user__last_name")
 
@@ -318,7 +318,7 @@ class CustomexerciseNPForm (forms.ModelForm):
 		custom = kwargs.pop('custom')
 		super(CustomexerciseNPForm, self).__init__(*args, **kwargs)
 		skills = Skill.objects.filter(subject__in = teacher.subjects.all())
-		knowledges = Knowledge.objects.filter(theme__subject__in = teacher.subjects.all(), level__in = teacher.levels.all())
+		knowledges = Knowledge.objects.filter(theme__subject__in = teacher.subjects.all(), level__in = teacher.levels.order_by("ranking"))
 		students = custom.students.all() 
 		self.fields['skills'] = forms.ModelMultipleChoiceField(queryset=skills,    required=False )
 		self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=False ) 

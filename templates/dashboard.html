@@ -490,7 +490,7 @@
     {% endif %}
     <p class="thin">Création </p>
  
-    {% for level in levels %}
+    {% for level in levels|dictsort:"ranking" %}
         <div class="row" style="font-size: 12px">
             <div class="col-lg-3 col-xs-3">
                 <small>{{ level.shortname }} </small> 

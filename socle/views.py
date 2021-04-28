@@ -161,7 +161,7 @@ def association_knowledge(request):
 @user_is_superuser
 def list_levels(request):
  
-    levels = Level.objects.all()
+    levels = Level.objects.order_by("ranking")
 
     return render(request, 'socle/list_levels.html', {'communications' : [] ,'levels': levels})
 
