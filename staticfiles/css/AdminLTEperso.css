@@ -445,10 +445,6 @@ li label:hover{
 }
 
 
-
-
-
-
  /******************************************** real_time_live  **************************************/
 
 .no_live{
@@ -516,6 +512,20 @@ a.no_visual_link{
 }
 .allowed_display{
   display:block;
+}
+
+
+.selector_image_from_ajax{
+  cursor:pointer;
+}
+
+.opacity_selector_img{
+  opacity: 0.3;
+  filter: alpha(opacity=0.3);
+}
+.opacity_selector_img:hover{
+  opacity: 1;
+  filter: alpha(opacity=1);
 }
 
  /******************************************** menu_right_div  **************************************/

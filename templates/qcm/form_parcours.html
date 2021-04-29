@@ -55,6 +55,7 @@
 {% block body %}  
 <section class="content_main">
     <form action="" method="POST" enctype='multipart/form-data'> 
+    <input type="hidden" name="is_update" id="is_update" value="{% if parcours %}1{% else %}0{% endif %}">
     <div class="row">
         <div class="col-sm-12 col-md-8">
             {% csrf_token %}
@@ -209,7 +210,6 @@
                         {{ form.level.errors }}
                     </div>
 
-
                     <div class="form-group">
                         {% if sacado_asso %}
                             {% if group %}
@@ -234,6 +234,7 @@
                         {% endif %}
                     </div>
 
+                    <input name="this_image_selected" type="hidden" id="this_image_selected" />
 
                     <div class="form-group">
                         {{ form.vignette.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i> <span style="font-size:12px">(facultatif)</span>
@@ -248,6 +249,29 @@
                     </div>
                     {% endif %}  
                     </div>
+
+
+                    {% if sacado_asso %}
+                        {% if group_id %}
+                        <div id="label_vignette"> 
+                                <label>Ou choisir une image proposée</label>
+                                {% if not group_id %}
+                                <span style="font-size:12px;color:#cb2131">Pour voir les vignettes disponibles, modifier le niveau d'enseignement puis revenir au niveau souhaité.</span>
+                                {% endif %}
+                        </div>        
+                        <div id="prop_vignette"> 
+                            {% for image in images %}
+                                <img src='https://ressources.sacado.xyz/{{ image }}'  width='200px'  data-url_image='{{ image }}' class='selector_image_from_ajax' />
+                            {% endfor %}
+                        </div>
+                        {% else %} 
+                            <div id="label_vignette"> 
+                            </div>        
+                            <div id="prop_vignette"> 
+                            </div>
+                        {% endif %} 
+                    {% endif %} 
+
 
 
 

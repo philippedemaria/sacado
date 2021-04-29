@@ -17,6 +17,7 @@ from django.core import serializers
 from django.template.loader import render_to_string
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
+from tool.consumers import *
 import uuid
 import time
 import math
@@ -461,6 +462,9 @@ def tracker_execute_exercise(track_untrack ,  user , idp=0 , ide=None , custom=0
 
     if track_untrack : # Si True alors on garde la trace
         Tracker.objects.create(user =  user, parcours_id = idp ,  exercise_id =  ide,  is_custom =  custom )
+        parcours = Parcours.objects.get(pk=idp)
+
+        send_exercise_student_to_teacher(parcours.teacher.id, ide, user.id)
         #tracker, created = Tracker.objects.get_or_create(user =  user, defaults={  'parcours_id' : idp , 'exercise_id' : ide, 'is_custom' : custom})
         # if not created :
         #     Tracker.objects.filter(user =  user).update(  parcours_id = idp )
@@ -553,7 +557,13 @@ def ajax_chargethemes(request):
 
     thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject).order_by("name")
     data['themes'] = list(thms)
- 
+
+    # gère les propositions d'image d'accueil
+    data['imagefiles'] = None
+    imagefiles = level.level_parcours.values_list("vignette", flat = True).filter(subject_id=id_subject).exclude(vignette=" ").distinct()
+    if imagefiles.count() > 0 :
+        data['imagefiles'] = list(imagefiles)
+
     return JsonResponse(data)
 
 
@@ -1311,6 +1321,10 @@ def create_parcours(request,idp=0):
         nf.author = teacher
         nf.teacher = teacher
         nf.is_evaluation = 0
+
+        if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
+            nf.vignette = request.POST.get("this_image_selected",None)
+
         if idp > 0 :
             nf.is_leaf = 1
         nf.save()
@@ -1373,20 +1387,23 @@ def create_parcours(request,idp=0):
             return redirect('parcours')
     else:
         print(form.errors)
- 
+    images = [] 
     if request.session.has_key("group_id") :
         group_id = request.session.get("group_id",None)        
         if group_id :
             group = Group.objects.get(pk = group_id)
+            images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id=group.subject).exclude(vignette=" ").distinct()
         else :
             group = None
+        
     else :
         group_id = None
         group = None
         request.session["group_id"]  = None
+ 
 
     context = {'form': form,   'teacher': teacher,  'groups': groups,  'levels': levels, 'idg': 0,  'parcours_folder': parcours_folder ,  'themes' : themes_tab, 'group_id': group_id , 'parcours': None,  'relationships': [], 'share_groups' : share_groups , 
-               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'communications' : [],  'group': group , 'role' : True , 'idp' : idp }
+               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'communications' : [],  'group': group , 'role' : True , 'idp' : idp , 'images' : images }
 
     return render(request, 'qcm/form_parcours.html', context)
  
@@ -1432,6 +1449,10 @@ def update_parcours(request, id, idg=0 ):
             nf.author = teacher
             nf.teacher = teacher
             nf.is_evaluation = 0
+
+            if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
+                nf.vignette = request.POST.get("this_image_selected",None)
+
             nf.save()
             form.save_m2m()
 
@@ -4082,12 +4103,14 @@ def create_evaluation(request):
 
 
     try :
-        group_id = request.session.get("group_id")
+        group_id = request.session.get("group_id",None)
         folder_parcourses = teacher.teacher_parcours.filter(leaf_parcours= parcours).order_by("level") 
         group = Group.objects.get(pk=group_id)
         form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level, 'folder_parcours' : folder_parcourses  })
     except :
         form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher )
+        group_id = None
+        group = None
 
     themes_tab = []
     for level in levels :
@@ -4102,7 +4125,11 @@ def create_evaluation(request):
         nf = form.save(commit=False)
         nf.author = teacher
         nf.teacher = teacher
-        nf.is_evaluation = 1    
+        nf.is_evaluation = 1
+
+        if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
+            nf.vignette = request.POST.get("this_image_selected",None)
+
         nf.save()
         form.save_m2m()
 
@@ -4172,6 +4199,10 @@ def update_evaluation(request, id, idg=0 ):
             nf.author = teacher
             nf.teacher = teacher
             nf.is_evaluation = 1 
+
+            if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
+                nf.vignette = request.POST.get("this_image_selected",None)
+
             nf.save()
             nf.students.set(form.cleaned_data.get('students'))
             try:
@@ -4874,7 +4905,6 @@ def ajax_remove_my_appreciation(request):
 ######   Fin des outils de correction
 #####################################################################################################################################
 #####################################################################################################################################
-
 
  
 def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice non autocorrigé dans un parcours
