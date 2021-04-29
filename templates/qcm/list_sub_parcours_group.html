@@ -351,14 +351,11 @@
                         <div class="col-lg-4 col-xs-4">
                             {% if sacado_asso %}
 
-                            {% comment %}
+ 
                             <a href="{% url 'real_time' parcours.id %}" class="edit" {% if parcours.is_real_time %} style="color:{{ parcours.color }}" {% endif %} >
                                 <i class="fa fa-fw fa-clock"></i><span class="label_icon">Temps réel.</span>
                             </a>
-                            {% endcomment %}
-                            <a href="#" class="edit no_sacado_asso" title="En pause." {% if parcours.is_real_time %} style="color:{{ parcours.color }}" {% endif %}>
-                                <i class="fa fa-fw fa-clock"></i><span class="label_icon">Temps réel.</span>
-                            </a>
+ 
                             {% else %}
                             <a href="#" class="edit no_sacado_asso" {% if parcours.is_real_time %} style="color:{{ parcours.color }}" {% endif %}>
                                 <i class="fa fa-fw fa-clock"></i><span class="label_icon">Temps réel.</span>
