@@ -9,10 +9,6 @@ from tool.models import Generate_quizz
 
  
 
-
-
-
-
 class RealConsumer(WebsocketConsumer):
 
     def connect(self,message):

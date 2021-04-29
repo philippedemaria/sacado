@@ -1,8 +1,8 @@
 from django.urls import path
-from tool.consumers import RealConsumer
+from qcm.consumers import RealConsumer
 
 
 ws_urlpatterns = [
-	path('ws/tool/', RealConsumer.as_asgi())
+	path('ws/qcm/', RealConsumer.as_asgi())
 ]
 
