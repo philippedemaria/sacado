@@ -464,7 +464,7 @@ def tracker_execute_exercise(track_untrack ,  user , idp=0 , ide=None , custom=0
         Tracker.objects.create(user =  user, parcours_id = idp ,  exercise_id =  ide,  is_custom =  custom )
         parcours = Parcours.objects.get(pk=idp)
 
-        send_exercise_student_to_teacher(parcours.teacher.id, ide, user.id)
+        #send_exercise_student_to_teacher(parcours.teacher.id, ide, user.id)
         #tracker, created = Tracker.objects.get_or_create(user =  user, defaults={  'parcours_id' : idp , 'exercise_id' : ide, 'is_custom' : custom})
         # if not created :
         #     Tracker.objects.filter(user =  user).update(  parcours_id = idp )
