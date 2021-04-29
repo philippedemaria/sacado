@@ -382,11 +382,13 @@
                         {% endif %} 
                         <div class="row">  
                             <div class="col-lg-4 col-xs-4">
-                                <!--<a href="{% url 'individualise_parcours' parcours.id  %}" class="edit" {% if parcours.is_individualized %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-user"></i> <span class="label_icon">Individual.</span>
-                                </a> -->
+                                <a href="{% url 'individualise_parcours' parcours.id  %}" class="edit" {% if parcours.is_individualized %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-user"></i> <span class="label_icon">Individual.</span>
+                                </a> 
+                                {% comment %}
                                 <a href="{% url 'real_time' parcours.id %}" class="edit {% if not sacado_asso %}no_sacado_asso{% endif %}" {% if parcours.is_real_time %} style="color:{{ parcours.color }}" {% endif %} >
                                     <i class="fa fa-fw fa-clock"></i><span class="label_icon">Temps réel.</span>
                                 </a>
+                                {% endcomment %}
                             </div>
                             <div class="col-lg-4 col-xs-4">
                              
