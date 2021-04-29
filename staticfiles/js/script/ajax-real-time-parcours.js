@@ -13,9 +13,9 @@ define(['jquery',  'bootstrap', ], function ($) {
                  })
             
 
-        check_live();
+        //check_live();
 
-        setInterval(  check_live  , 5000);
+        //setInterval(  check_live  , 5000);
  
         function check_live(){
 
@@ -83,11 +83,17 @@ define(['jquery',  'bootstrap', ], function ($) {
                         }
                     }
                 )
-            }         
+        }         
 
 
- 
+     
+        var socket = new WebSocket('ws://127.0.0.1:8000/ws/qcm/');
 
+        socket.onmessage = function(event){
+            var data = JSON.parse(event.data);
+            console.log(data);
+            $('#app').text( data.message ) ;
+        }
  
 
 
