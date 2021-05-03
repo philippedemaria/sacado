@@ -33,7 +33,7 @@
                         {% if course.author == teacher %}
                             <a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 12px" class="pull-right">Modifier ce cours</a>
                         {% else  %}
-                            <a href="{% url 'delete_course' course.id  parcours.id %}" class="pull-right"  onclick="return TestDelete('ce cours')">Supprimer ce cours</a>
+                            <a href="{% url 'delete_course' course.id  parcours.id %}" style="font-size: 12px" class="pull-right"  onclick="return TestDelete('ce cours')">Supprimer ce cours</a>
                         {% endif  %}
                     {% endif %}
                 </h1>
