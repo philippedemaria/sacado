@@ -15,8 +15,9 @@ define(['jquery', 'bootstrap'], function ($) {
             let id_level = $(this).val();
             let id_subject = $("#id_subject").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-            $("#loading").html("<i class='fa fa-spinner fa-pulse fa-fw'></i>");
-            $("#loading").show(); 
+
+            $("#loader").html("<i class='fa fa-spinner fa-pulse fa-fw fa-10x'></i><br/>Chargement...");
+            $("#loader").show(); 
 
 
             if (id_level > 0)
@@ -60,7 +61,7 @@ define(['jquery', 'bootstrap'], function ($) {
                                 $('select[name=theme]').append(option);
                             }
 
-                            $("#loading").html("").hide(500); 
+                            $("#loader").html("").hide(500); 
                         }
                     }
                 )                
@@ -108,7 +109,7 @@ define(['jquery', 'bootstrap'], function ($) {
             let keywords = $("#keywords").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
  
-            $("#loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");
+            $("#loader").html("<i class='fa fa-spinner fa-pulse fa-10x fa-fw'></i>");
             
  
 

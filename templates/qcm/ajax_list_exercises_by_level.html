@@ -118,14 +118,13 @@
             </div>
  
             <script>
-             $('table.display100').DataTable({
-                "pageLength": 100,
+            $('table.display1000').DataTable({
+                "pageLength": 1000,
                 "ordering": false,
                 "retrieve": true,
-                "paging": false
+                "paging": false,
+                "info":  false
                 });
-
-
 
 
         $('.input-sm').on('keyup', function (event) {  

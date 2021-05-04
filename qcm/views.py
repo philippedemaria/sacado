@@ -1255,6 +1255,26 @@ def ajax_chargethemes_parcours(request):
     return JsonResponse(data)
 
 
+@csrf_exempt
+def ajax_chargethemes_exercise(request):
+    level_id =  request.POST.get("id_level")
+    id_subject =  request.POST.get("id_subject")
+    teacher = request.user.teacher
+
+    data = {}
+    level =  Level.objects.get(pk = level_id)
+
+    thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject).order_by("name")
+    data['themes'] = list(thms)
+    exercises = Exercise.objects.filter(level_id = level_id , supportfile__is_title=0 ).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
+
+    data['html'] = render_to_string('qcm/ajax_list_exercises_by_level.html', { 'exercises': exercises  , "teacher" : teacher , "level_id" : level_id })
+
+    return JsonResponse(data)
+ 
+ 
+
+
 def lock_all_exercises_for_student(dateur,parcours):
 
     for student in parcours.students.all() :
@@ -3342,12 +3362,14 @@ def ajax_list_exercises_by_level_and_theme(request):
     """ Envoie la liste des exercice pour un seul niveau """
     teacher = request.user.teacher
     level_id =  int(request.POST.get("level_id",0))  
-    theme_ids =  request.POST.getlist("theme_id", 0)
+    theme_ids =  request.POST.getlist("theme_id")
 
     level = Level.objects.get(pk=level_id)
- 
- 
-    exercises = Exercise.objects.filter(level_id = level_id , theme_id__in= theme_ids ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
+
+    if theme_ids[0] != "" :
+        exercises = Exercise.objects.filter(level_id = level_id , theme_id__in= theme_ids ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
+    else :
+        exercises = Exercise.objects.filter(level_id = level_id ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
  
     data= {}
     data['html'] = render_to_string('qcm/ajax_list_exercises_by_level.html', { 'exercises': exercises  , "teacher" : teacher , "level_id" : level_id })
@@ -4051,19 +4073,7 @@ def relation_is_done(request, id ): #id  = id_content
 def content_is_done(request, id ): #id  = id_content
     return redirect('exercises' )
 
-
-
-# def ajax_search_exercise(request):
-
-#     code =  request.POST.get("search") 
-#     knowledges = Knowledge.objects.filter(name__contains= code)
-#     exercises = Exercise.objects.filter(Q(knowledge__in = knowledges)|Q(supportfile__annoncement__contains= code)|Q(supportfile__code__contains= code)).filter(supportfile__is_title=0)
-#     data = {}
-#     html = render_to_string('qcm/search_exercises.html',{ 'exercises' : exercises  })
  
-#     data['html'] = html       
-
-#     return JsonResponse(data)
 
 
 
@@ -4072,10 +4082,14 @@ def ajax_search_exercise(request):
     code =  request.POST.get("search") 
     knowledges = Knowledge.objects.filter(name__contains= code)
 
- 
-    relationships = Relationship.objects.filter(Q(exercise__knowledge__in = knowledges)|Q(exercise__supportfile__annoncement__contains= code)|Q(exercise__supportfile__code__contains= code))
+    if request.user.user_type == 0 :
+        student = True
+    else :
+        student = False
+
+    relationship = Relationship.objects.filter(Q(exercise__knowledge__in = knowledges)|Q(exercise__supportfile__annoncement__contains= code)|Q(exercise__supportfile__code__contains= code)).last()
     data = {}
-    html = render_to_string('qcm/search_exercises.html',{ 'relationships' : relationships  })
+    html = render_to_string('qcm/search_exercises.html',{ 'relationship' : relationship ,  'student' : student })
  
     data['html'] = html       
 

@@ -91,8 +91,10 @@
         </div>
     </div>
     {% csrf_token %}
-    <div id="loader"></div>
-
+            <div class="row" align="center">
+                <div id="loader">
+                </div>
+            </div>  
 
     {% if parcours %}
          <input type="hidden" name="parcours_id" id="parcours_id" value="{{parcours.id }}"/>
@@ -113,11 +115,11 @@
                             <div style="clear:both"></div>
                     {% endfor %}
                 {% endcomment %}
-                <div style="height:50px"></div>
-                Pour trouver des parcours mutualisés, vous devez :                <div style="height:20px"></div>
+                <div style="height:50px"></div> 
+                Pour trouver des {% if is_eval %}évaluations mutualisées {% else %}parcours mutualisés {% endif  %} , vous devez :                <div style="height:20px"></div>
                 <ol>Sélectionner une matière</ol>
                 <ol>Sélectionner un niveau</ol>
-                <ol>Sélectionner un thème</ol>
+                <ol>Sélectionner un thème</ol> 
                 <ol>ou choisir un mot clé</ol>
 
             </div>

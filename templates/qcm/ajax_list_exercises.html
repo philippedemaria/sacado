@@ -8,7 +8,7 @@
  
             <div class="row">
                 <div class="col-sm-12 col-md-12">
-                    <table class="table  table-hover display100" style="width:100%">
+                    <table class="table  table-hover display1000" style="width:100%">
                         <thead>
                             <tr><td></td><td></td><td></td></tr>
                         </thead>
@@ -122,13 +122,14 @@
             </div>
  
             <script>
-             $('table.display100').DataTable({
-                "pageLength": 100,
+                
+$('table.display1000').DataTable({
+                "pageLength": 1000,
                 "ordering": false,
                 "retrieve": true,
-                "paging": false
+                "paging": false,
+                "info":  false
                 });
-
 
 
         $('.input-sm').on('keyup', function (event) {  

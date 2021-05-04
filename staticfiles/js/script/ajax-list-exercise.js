@@ -40,8 +40,10 @@ define(['jquery',  'bootstrap' ], function ($) {
             if (id_level == " ") { alert("Sélectionner un niveau") ; return false ;}
             let id_subject = $("#id_subject").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-            $("#loading").html("<i class='fa fa-spinner fa-pulse fa-fw'></i>");
-            $("#loading").show(); 
+            $("#loader").html("<i class='fa fa-spinner fa-10x fa-pulse fa-fw'></i><br/>Chargement...");
+            $("#loader").show(); 
+
+
             $.ajax(
                 {
                     type: "POST",
@@ -52,7 +54,7 @@ define(['jquery',  'bootstrap' ], function ($) {
                         'id_subject': id_subject,                        
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url : "ajax/chargethemes_parcours",
+                    url : "ajax/chargethemes_exercise",
                     success: function (data) {
 
                         themes = data["themes"];
@@ -81,11 +83,9 @@ define(['jquery',  'bootstrap' ], function ($) {
                             $('select[name=theme]').append(option);
                         }
 
-
-                        $('#parcours_details').html("").html(data.html);
-
-                        $("#loading").hide(500); 
-                    }
+                        $('#content_exercises').html("").html(data.html);
+                        $("#loader").hide(500); 
+                   }
                 }
             )
         });

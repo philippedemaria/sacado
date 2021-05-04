@@ -14,32 +14,56 @@
         </tr>
     </thead>
     <tbody>
-        {% for relationship in relationships  %} 
+        {% if relationship  %} 
         <tr>
             <td>
+                {% if student  %}
                 <a href="{% url  'execute_exercise'  relationship.parcours.id  relationship.exercise.id   %}">
+                {% else %}
+                <a href="{% url  'show_this_exercise'   relationship.exercise.id   %}" target="_blank">
+                {% endif %}
                     <img src="{{ relationship.exercise.supportfile.imagefile.url }}" class="imagefile">
                 </a> 
-                <a href="{% url  'execute_exercise'  relationship.parcours.id relationship.exercise.id   %}" class="listing" style="font-size: 18px">                                     
-                                                {% if  relationship.exercise.supportfile.title %}  
-                                                    {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
-                                                {% else %}
-                                                    {{ relation.exercise.supportfile.annoncement|cleanhtml }}
-                                                {% endif %}   </a> 
+ 
+                {% if student %}
+                <a href="{% url  'execute_exercise'  relationship.parcours.id  relationship.exercise.id   %}"  class="listing" style="font-size: 18px">
+                {% else %}
+                <a href="{% url  'show_this_exercise'   relationship.exercise.id   %}"  class="sublisting" target="_blank">
+                {% endif %}
+
+
+
+                {% if  relationship.exercise.supportfile.title %}  
+                    {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
+                {% else %}
+                    {{ relation.exercise.supportfile.annoncement|cleanhtml }}
+                {% endif %}   
+                </a> 
                 {% if relationship.exercise.supportfile.calculator %}
                   <img src="{% static 'img/calculator.png' %}" width="30px" />
                 {% else %}
                   <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
                 {% endif  %}   
                 <br>
-                 <a href="{% url  'execute_exercise'  relationship.parcours.id  relationship.exercise.id   %}" class="sublisting"> <small>   
+
+ 
+                {% if student %}
+                <a href="{% url  'execute_exercise'  relationship.parcours.id  relationship.exercise.id   %}"  class="sublisting">
+                {% else %}
+                <a href="{% url  'show_this_exercise'   relationship.exercise.id   %}"  class="sublisting" target="_blank">
+                {% endif %}
+
+
+
+
+                    <small>   
                     <i class="fa fa-fw fa-barcode"></i> {{ relationship.exercise.supportfile.code }}  {% if relationship.exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
                     <i class="fa fa-fw fa-clock-o"></i> {{ relationship.exercise.supportfile.duration }} minutes {% if relationship.exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
                     <i class="fa fa-fw fa-save"></i> {{ relationship.exercise.supportfile.situation}} situation{{ relationship.exercise.supportfile.situation|pluralize}} minimum</small>
                 </a> 
             </td>
         </tr>
-        {% empty %} 
+        {% else %} 
         <tr>
             <td>
                 <div class="alert alert-danger">
@@ -47,7 +71,7 @@
                 </div>    
             </td>
         </tr>
-        {% endfor %} 
+        {% endif %} 
     </tbody>
 
 </table>
