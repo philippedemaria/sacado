@@ -198,7 +198,7 @@
             <div class="row"></div><hr style="margin-top: 0px"/>             
                 {% for parcours in parcours_sort.list %}  
                     <div  class="box box-widget widget-user-2"  
-                          style="opacity:0.7;{% if parcours.vignette %}background-image: url('{{ parcours.vignette.url }}'); background-size: cover; {% else %} background-color:{{parcours.color }}{% endif %};">
+                          style="opacity:0.7;{% if parcours.vignette %}background-image: url('{{ parcours.vignette.url }}'); background-size: cover; {% endif %} background-color:{{parcours.color }};">
                           <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="handler widget-user-header">
  
