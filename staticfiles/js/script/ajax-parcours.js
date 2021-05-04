@@ -647,6 +647,9 @@ define(['jquery','bootstrap'], function ($) {
 
         // Affiche  un cours connaissant le parcours et le cours
         $('.course_viewer').on('click', function (event) {
+
+            console.log("ici");
+            
             let course_id = $(this).attr("data-course_id");
             let parcours_id = $(this).attr("data-parcours_id");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();

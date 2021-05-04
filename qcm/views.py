@@ -6664,7 +6664,7 @@ def ajax_this_course_viewer(request):
     course = Course.objects.get(pk=course_id)
     data = {}
  
-    teacher = request.user.teacher
+    
     parcours_id =  int(request.POST.get("parcours_id"))
     parcours = Parcours.objects.get(pk=parcours_id)
 
@@ -6673,8 +6673,10 @@ def ajax_this_course_viewer(request):
 
  
     if request.user.user_type == 2 :
+        teacher = request.user.teacher
         url = 'qcm/course/ajax_shower_course_teacher.html'
     else :
+        teacher = None
         url = 'qcm/course/ajax_shower_course.html'        
 
 
