@@ -178,7 +178,8 @@ def show_accounting(request, id ):
 
     return render(request, 'association/show_accounting.html', context )
 
- 
+
+
 
 
 @user_passes_test(user_is_board)
@@ -355,6 +356,24 @@ def print_accounting(request, id ):
                ]))
     elements.append(details_tot)
 
+
+    #########################################################################################
+    ### Observation
+    #########################################################################################
+    if accounting.observation  :
+        elements.append(Spacer(0,0.4*inch)) 
+
+        print(cleantext(accounting.observation))
+        offs = 0
+        for text in cleantext(accounting.observation) :
+            observation = Paragraph( text , normal )
+            elements.append(observation)
+            elements.append(Spacer(0,0.1*inch))
+            offs +=0.15 
+
+        offset = offs + OFFSET_INIT
+
+
     #########################################################################################
     ### Signature Bruno
     #########################################################################################
@@ -367,14 +386,6 @@ def print_accounting(request, id ):
     elements.append(signature2)
     signature2 = Paragraph( "Trésorier de l'association SacAdo"  , signature_style_mini )
     elements.append(signature2)
-
-    #########################################################################################
-    ### Observation
-    #########################################################################################
-    if accounting.observation  :
-        observation = Paragraph( cleanhtml(accounting.observation) , normal )
-        elements.append(observation)
-        offset = int(len(accounting.observation)/100) + OFFSET_INIT
 
     #########################################################################################
     ### Bas de page
@@ -393,6 +404,9 @@ def print_accounting(request, id ):
     doc.build(elements)
 
     return response
+
+
+
 
 
 

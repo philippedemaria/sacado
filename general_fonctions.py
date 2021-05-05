@@ -78,6 +78,21 @@ def escape_chevron(string):
 
 
 
+def cleantext(raw_html):
+    """Renvoie à la ligne pour es paragraphe et les listes"""
+    raw_less_p = raw_html.split('<p>')
+
+    for rp in raw_less_p :
+        r_less_li = rp.split('<li>')
+
+        for rli in r_less_li :
+            r_less_li = re.sub('<.*?>', '', rli)
+
+        rp = re.sub('<.*?>', '', rp)
+
+    return raw_less_p
+
+
 def dt_naive_to_timezone(naive_date,timezone_user):
 
     try :
