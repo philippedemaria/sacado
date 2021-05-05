@@ -129,7 +129,7 @@ def update_accounting(request, id):
     accounting = Accounting.objects.get(id=id)
 
     form = AccountingForm(request.POST or None, instance=accounting )
-    formSet = inlineformset_factory( Accounting , Detail , fields=('accounting','description','amount',) , extra=0)
+    formSet = inlineformset_factory( Accounting , Detail , fields=('accounting','description','amount') , extra=0)
     form_ds = formSet(request.POST or None, instance = accounting)
 
     if request.method == "POST":
@@ -138,7 +138,6 @@ def update_accounting(request, id):
             nf.user = request.user
             nf.save()
 
-            
             for form_d in form_ds :
                 if form_d.is_valid():
                     form_d.save()
