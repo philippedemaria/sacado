@@ -148,10 +148,10 @@ def update_school(request,id):
 			school.is_active = 1
 			school.save()
 
-		if request.user.is_superuser :
-			return redirect('schools')
-		else :
-			return redirect('admin_tdb')
+			if request.user.is_superuser :
+				return redirect('schools')
+			else :
+				return redirect('admin_tdb')
 
 	return render(request,'school/_form.html', {'form':form,  'communications' : [],'school':school})
 
