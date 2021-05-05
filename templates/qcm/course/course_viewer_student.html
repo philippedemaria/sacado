@@ -30,6 +30,11 @@
 
 
 <script type="text/javascript">
+  
+  $("#this_course_viewer").find(".projection").attr("style","");
+  $("#this_course_viewer").find(".projection").removeClass("projection");
+
+
 
 $(".tab-content").css("display","none"); 
 $(".tab-content:first-child").css("display","block"); 
@@ -43,5 +48,6 @@ $('#myRow a').on('click', function (e) {
 
 })
 
-    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+
+  MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 </script>
