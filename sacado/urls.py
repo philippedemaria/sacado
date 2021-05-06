@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import  path, include, re_path
 from django.conf.urls.static import static
 import cas.views
-from setup.views import index
+import setup.views
 
 urlpatterns = [
                   path('', include('setup.urls')),
