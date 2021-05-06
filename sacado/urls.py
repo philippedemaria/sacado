@@ -40,7 +40,7 @@ urlpatterns = [
 
                   path('SSO_GAR', cas.views.login, name='login_sso'    ) , 
                   path('SSO_GAR/logout', cas.views.logout, name='logout_sso'),
-                  path('None', index , name='none'    ) , 
+   
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
