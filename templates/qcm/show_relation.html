@@ -271,39 +271,7 @@
 
 
 
-              <div class="row">
-                  <div class="col-lg-12 col-xs-12"> 
-                    <div class="form-group"> 
-                        <a href="#" id='error_set' class="pull-right btn btn-warning" >Signaler <span class="label_plus"> un problème sur cet exercice</span> ? </a>
-                    </div>
-                 </div>                     
-              </div> 
-              <div class="row">
-                  <div class="col-lg-12 col-xs-12"> 
-                    <div class="form-group" id='form_error_set'> 
-                        <form action="" method="POST">    {% csrf_token %}
-                            <div class="form-group">
-                                <textarea name="message" id="message"   class="form-control" placeholder="Vous devez décrire le problème brièvement. Merci."></textarea>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12 col-xs-12">   
-                                    <div class="form-group">
-                                        <a id="error_sender" data-from ="0" data-exercise_id="{{ exercise.id }}" class="pull-right btn btn-primary">Envoyer</a>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12 col-xs-12">   
-                                    <div id="loader">
-                                    </div>
-                                </div>
-                                <div class="col-lg-12 col-xs-12">   
-                                    <div class="verif_sender">
-                                    </div>
-                                </div>  
-                            </div> 
-                        </form>
-                    </div>
-                 </div>                     
-            </div> 
+        {% include 'qcm/signal_exercise.html' %}
     </div>  
 
 
