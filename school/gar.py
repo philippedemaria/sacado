@@ -13,7 +13,7 @@ def web_abonnement_xml(abonnement,new):
 	dico["idAbonnement"]          = "ABO" + str(abonnement.school.id)
 	dico["commentaireAbonnement"] = "Abonnement à SacAdo"
 	dico["idDistributeurCom"]     = "46173_832020065"
-	dico["idRessource"]	          = "ark:/46173/00001.p"  
+	dico["idRessource"]	          = "ark:/46173/00001.p" # En production, il faut enlever le p 
 	dico["typeIdRessource"]       = "ark" 	   
 	dico["libelleRessource"]      = "SACADO"
 	dico["debutValidite"]	      = abonnement.date_start.isoformat()
