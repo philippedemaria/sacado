@@ -963,6 +963,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
                 if (from == "0") { url_to ="../../ajax/exercise_error"} else  { url_to ="../ajax/exercise_error" ; } 
      
+                $("#loader").html("<i class='fa fa-spinner fa-2x fa-pulse'></i>")  ;
+
                 $.ajax({
                     url: url_to,
                     data: {
@@ -974,8 +976,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     dataType: "json",
                     success: function (data) {
 
+                        $(".verif_sender").addClass("verif_sender_sent");
                         $(".verif_sender").html(data.htmlg);
-     
+                        $("#loader").hide()  ;
                     }
                 });
             });
