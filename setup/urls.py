@@ -22,8 +22,6 @@ urlpatterns = [
     path('print_proformat_school', print_proformat_school, name='print_proformat_school'),  
 
 
-
-
     path('iban_asking', iban_asking, name='iban_asking'),  
     
     path('student_to_association__123526', student_to_association, name='student_to_association'),     
