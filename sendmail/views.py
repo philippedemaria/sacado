@@ -1,3 +1,4 @@
+from django.conf import settings # récupération de variables globales du settings.py
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from account.models import User, Teacher, Student
@@ -110,8 +111,8 @@ def create_email(request):
 					rcv.append(str(s.user.email)) 
 
 
-		send_mail(subject, cleanhtml(unescape_html(texte)) , "info@sacado.xyz", rcv )
-		send_mail(subject, cleanhtml(unescape_html(texte)) , "info@sacado.xyz", [str(request.user.email)] )
+		send_mail(subject, cleanhtml(unescape_html(texte)) , settings.DEFAULT_FROM_EMAIL, rcv )
+		send_mail(subject, cleanhtml(unescape_html(texte)) , settings.DEFAULT_FROM_EMAIL, [str(request.user.email)] )
 
 	else:
 		messages.error(request, "Le corps de message est obligatoire !")
@@ -182,7 +183,7 @@ def create_communication(request):
 				for u in users :
 					if u.email :
 						rcv.append(u.email)
-				send_mail(new_f.subject, cleanhtml(unescape_html(new_f.texte)), "info@sacado.xyz", rcv )
+				send_mail(new_f.subject, cleanhtml(unescape_html(new_f.texte)), settings.DEFAULT_FROM_EMAIL, rcv )
 			except :
 				pass
 
@@ -210,7 +211,7 @@ def update_communication(request,id): # update
 				for u in users :
 					if u.email :
 						rcv.append(u.email)
-				send_mail(new_f.subject, cleanhtml(unescape_html(new_f.texte)), "info@sacado.xyz", rcv )
+				send_mail(new_f.subject, cleanhtml(unescape_html(new_f.texte)), settings.DEFAULT_FROM_EMAIL, rcv )
 			except :
 				pass
 
@@ -352,7 +353,7 @@ def show_discussion(request,idd):
 					for e in discussion.discussion_message.values_list("user__email",flat=True).distinct():
 						dest.append(e)
  
-					send_mail("sacado Forum : " +new_f.discussion  , cleanhtml(unescape_html(new_f.texte)) +"\n Pour répondre connectez-vous à Sacado : https://sacado.xyz", "info@sacado.xyz", dest )
+					send_mail("sacado Forum : " +new_f.discussion  , cleanhtml(unescape_html(new_f.texte)) +"\n Pour répondre connectez-vous à Sacado : https://sacado.xyz", settings.DEFAULT_FROM_EMAIL, dest )
 				except :
 					pass
 			else :

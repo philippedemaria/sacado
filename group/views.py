@@ -1,3 +1,4 @@
+from django.conf import settings # récupération de variables globales du settings.py
 from django.shortcuts import render, redirect, get_object_or_404
 from account.models import Student, Teacher, User, Resultknowledge, Resultlastskill, Resultskill
 from account.forms import UserForm
@@ -270,7 +271,7 @@ def include_students(request , liste, group):
             if email != "":
                 send_templated_mail(
                     template_name="student_registration_by_teacher",
-                    from_email="info@sacado.xyz",
+                    from_email=settings.DEFAULT_FROM_EMAIL,
                     recipient_list=[email],
                     context={"last_name": lname, "first_name": fname, "username": username}, )
 
@@ -336,7 +337,7 @@ def include_students_in_a_model(request, liste,model):
  
             try :
                 if email != "" :
-                    send_mail("Inscription SacAdo", "Bonjour "+fname+", \n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : "+username+"\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , "saca_do_not_reply@sacado.xyz" , [email])
+                    send_mail("Inscription SacAdo", "Bonjour "+fname+", \n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : "+username+"\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , settings.DEFAULT_FROM_EMAIL , [email])
             except :
                 pass
 
@@ -478,7 +479,7 @@ def create_student_profile_inside(request, nf) :
         if created :
             mesg = "Vous avez demandé un profil élève. Identifiant : "+username+"\n\n Mot de passe : sacado2020 \n\n Ce mot de passe est générique. N'oubliez pas de le modifier. \n\n Merci." 
             try :
-                send_mail("Identifiant Profil élève",  mesg , "info@sacado.xyz" , [email] )
+                send_mail("Identifiant Profil élève",  mesg , settings.DEFAULT_FROM_EMAIL , [email] )
             except :
                 pass
             code = str(uuid.uuid4())[:8]                 
@@ -794,7 +795,7 @@ def sender_mail(request,form):
             for r in nf.receivers.all():
                 rcv.append(r.email)
             try :
-                send_mail( cleanhtml(subject), cleanhtml(texte) , "info@sacado.xyz" , rcv)
+                send_mail( cleanhtml(subject), cleanhtml(texte) , settings.DEFAULT_FROM_EMAIL , rcv)
             except :
                 pass
 
@@ -1136,7 +1137,7 @@ def enroll(request, slug):
                 if user_form.cleaned_data['email']:
                     send_mail('Création de compte sur Sacado',
                               'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.',
-                              'info@sacado.xyz',
+                              settings.DEFAULT_FROM_EMAIL,
                               [request.POST.get("email")])
             except :
                 pass

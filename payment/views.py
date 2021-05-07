@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django.conf import settings # récupération de variables globales du settings.py
 import sys
 import urllib.parse
 import requests
@@ -38,10 +38,10 @@ def verify_payment(buyer, accounting, school,new):
 
  
 			message = topic + " : " + message_details
-			send_mail(topic,  message  ,  'info@sacado.xyz',  ['sacado.asso@gmail.com'])
+			send_mail(topic,  message  ,  settings.DEFAULT_FROM_EMAIL ,  ['sacado.asso@gmail.com'])
 			# send_templated_mail(
 			# 	template_name="teacher_registration",
-			# 	from_email="info@sacado.xyz",
+			# 	from_email=settings.DEFAULT_FROM_EMAIL,
 			# 	recipient_list=[self.user.email, ],
 			# 	context={"teacher": self.user, }, )
 			accounting.save()

@@ -1,3 +1,4 @@
+from django.conf import settings # récupération de variables globales du settings.py
 from django.shortcuts import render, redirect
 from account.models import  Student, Teacher, User,Resultknowledge, Resultskill, Resultlastskill
 from account.forms import StudentForm, TeacherForm, UserForm
@@ -58,6 +59,26 @@ from general_fonctions import *
 #################################################################
 #Récupération du marocurs Seconde to Maths complémentaires
 #################################################################
+
+
+def get_teacher_id_by_subject_id(subject_id):
+
+    if subject_id == 1 or subject_id == "1" :
+        teacher_id = 2480
+
+    elif  subject_id == 2 or subject_id == "2" :
+        teacher_id = 35487
+
+    elif subject_id == 3 or subject_id == "3"  :
+        teacher_id = 2480
+
+    else :
+        teacher_id = 2480
+
+    return teacher_id
+
+
+
 def get_seconde_to_math_comp(request):
 
     teacher = request.user.teacher
@@ -206,7 +227,7 @@ def send_to_teachers(level) : # envoie d'une notification au enseignant du nivea
 
     msg = "Un nouvel exercice vient d'être publié sur SacAdo sur le niveau "+str(level)
 
-    sending_mail("Nouvel exercice SacAdo",  msg , "info@sacado.xyz" , rcv)
+    sending_mail("Nouvel exercice SacAdo",  msg , settings.DEFAULT_FROM_EMAIL , rcv)
  
 
 def students_from_p_or_g(request,parcours) :
@@ -1183,15 +1204,16 @@ def ajax_all_parcourses(request):
     is_eval = int(request.POST.get('is_eval',0))
     level_id = request.POST.get('level_id',0)
     subject_id = request.POST.get('subject_id',None)
-    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1,is_evaluation = is_eval).exclude(exercises=None ,teacher=teacher).order_by('level')
+
+    teacher_id = get_teacher_id_by_subject_id(subject_id)
+
+    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1,is_evaluation = is_eval).exclude(exercises=None ,teacher=teacher).order_by('level')
 
     keywords = request.POST.get('keywords',None)
 
     if int(level_id) > 0 :
         level = Level.objects.get(pk=int(level_id))
         theme_ids = request.POST.getlist('theme_id',[])
-        
-        print(level_id)
 
         if len(theme_ids) > 0 :
 
@@ -1202,34 +1224,34 @@ def ajax_all_parcourses(request):
                     themes_tab.append(theme_id) 
 
                 if keywords :
-                    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
+                    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, is_evaluation = is_eval,
                                                         exercises__knowledge__theme__in = themes_tab, 
                                                         exercises__supportfile__title__contains = keywords, level_id = int(level_id)).exclude(teacher=teacher).order_by('author').distinct()
                 else :
-                    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
+                    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, is_evaluation = is_eval,
                                                         exercises__knowledge__theme__in = themes_tab, level_id = int(level_id)).exclude(teacher=teacher).order_by('author').distinct()  
                     
             else :
                 if keywords :
-                    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
+                    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, is_evaluation = is_eval,
                                                             exercises__supportfile__title__contains = keywords, level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
 
                 else :
-                    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
+                    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, is_evaluation = is_eval,
                                                             level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
 
         else :
             if keywords:
-                parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1,is_evaluation = is_eval, 
+                parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1,is_evaluation = is_eval, 
                                                         exercises__supportfile__title__contains = keywords  , level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
             else :
-                parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,
+                parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, is_evaluation = is_eval,
                                                         level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
     else :
         if keywords:
-            parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1 , is_evaluation = is_eval, exercises__supportfile__title__contains = keywords ).exclude(teacher=teacher).order_by('author').distinct()
+            parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1 , is_evaluation = is_eval, exercises__supportfile__title__contains = keywords ).exclude(teacher=teacher).order_by('author').distinct()
         else :
-            parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, is_evaluation = is_eval,).exclude(teacher=teacher).order_by('author').distinct()
+            parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, is_evaluation = is_eval,).exclude(teacher=teacher).order_by('author').distinct()
 
 
     data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : parcourses, 'teacher' : teacher ,  })
@@ -1243,12 +1265,14 @@ def ajax_chargethemes_parcours(request):
     id_subject =  request.POST.get("id_subject")
     teacher = request.user.teacher
 
+    teacher_id = get_teacher_id_by_subject_id(id_subject)
+
     data = {}
     level =  Level.objects.get(pk = level_id)
 
     thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject).order_by("name")
     data['themes'] = list(thms)
-    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_share = 1, exercises__level_id = level_id ).exclude(teacher=teacher).order_by('author').distinct()
+    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, exercises__level_id = level_id ).exclude(teacher=teacher).order_by('author').distinct()
 
     data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : parcourses, })
 
@@ -2545,18 +2569,18 @@ def ajax_exercise_error(request):
         usr = request.user
         msg = "Message envoyé par l'utilisateur #"+str(usr.id)+", "+usr.last_name+" :\n\nL'exercice dont l'id est -- "+str(exercise_id)+" --  décrit ci-dessous : \n Savoir faire visé : "+exercise.knowledge.name+ " \n Niveau : "+exercise.level.name+  "  \n Thème : "+exercise.theme.name +" comporte un problème. \n  S'il est identifié par l'utilisateur, voici la description :  \n" + message   
         response = "\n\n Cliquer ici pour répondre https://sacado.xyz/account/response_from_mail/"+str(usr.id)+"\n\n Cliquer ici pour voir l'exercice en question https://sacado.xyz/qcm/show_this_exercise/"+str(exercise_id)+"/"
-        sending_mail("Avertissement SacAdo Exercice "+str(exercise_id),  msg + response , "info@sacado.xyz" , ["sacado.asso@gmail.com", str(exercise.supportfile.author.user.email)])
+        sending_mail("Avertissement SacAdo Exercice "+str(exercise_id),  msg + response , settings.DEFAULT_FROM_EMAIL , ["sacado.asso@gmail.com", str(exercise.supportfile.author.user.email)])
 
     else :
         usr = "non connecté"
         msg = "Message envoyé par l'utilisateur #Non connecté :\n\nL'exercice dont l'id est -- "+str(exercise_id)+" --  décrit ci-dessous : \n Savoir faire visé : "+exercise.knowledge.name+ " \n Niveau : "+exercise.level.name+  "  \n Thème : "+exercise.theme.name +" comporte un problème. \n  S'il est identifié par l'utilisateur, voici la description :  \n" + message   
         response = "\n\n Cliquer ici pour voir l'exercice en question https://sacado.xyz/qcm/show_this_exercise/"+str(exercise_id)+"/"
 
-        sending_mail("Avertissement SacAdo Exercice "+str(exercise_id),  msg + response , "info@sacado.xyz" , ["sacado.asso@gmail.com"])
+        sending_mail("Avertissement SacAdo Exercice "+str(exercise_id),  msg + response , settings.DEFAULT_FROM_EMAIL , ["sacado.asso@gmail.com"])
 
 
     data = {}
-    data["htmlg"]= "Envoi réussi, merci."
+    data["htmlg"]= "Envoi réussi, merci.<br/>Nous traitons votre demande."
     return JsonResponse(data) 
 
 
@@ -2809,8 +2833,8 @@ def ajax_dates(request):  # On conserve relationship_id par commodité mais c'es
                         if  s.user.email :                  
                             rec.append(s.user.email)
 
-                sending_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "info@sacado.xyz" , rec ) 
-                sending_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "info@sacado.xyz" , [r.parcours.teacher.user.email] )   
+                sending_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , settings.DEFAULT_FROM_EMAIL , rec ) 
+                sending_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , settings.DEFAULT_FROM_EMAIL , [r.parcours.teacher.user.email] )   
 
             else :
                 if custom == "0" : 
@@ -2837,8 +2861,8 @@ def ajax_dates(request):  # On conserve relationship_id par commodité mais c'es
                     if s.task_post : 
                         if  s.user.email :                  
                             rec.append(s.user.email)
-                sending_mail("SacAdo. Annulation de tâche à effectuer",  msg , "info@sacado.xyz" , rec ) 
-                sending_mail("SacAdo. Annulation de tâche à effectuer",  msg , "info@sacado.xyz" , [r.parcours.teacher.user.email] ) 
+                sending_mail("SacAdo. Annulation de tâche à effectuer",  msg , settings.DEFAULT_FROM_EMAIL , rec ) 
+                sending_mail("SacAdo. Annulation de tâche à effectuer",  msg , settings.DEFAULT_FROM_EMAIL , [r.parcours.teacher.user.email] ) 
 
         else :
             if custom == "0" :
@@ -2862,8 +2886,8 @@ def ajax_dates(request):  # On conserve relationship_id par commodité mais c'es
                     if  s.user.email :                  
                         rec.append(s.user.email)
 
-            sending_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "info@sacado.xyz" , rec ) 
-            sending_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , "info@sacado.xyz" , [r.parcours.teacher.user.email] ) 
+            sending_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , settings.DEFAULT_FROM_EMAIL , rec ) 
+            sending_mail("SacAdo Tâche à effectuer avant le "+str(date),  msg , settings.DEFAULT_FROM_EMAIL , [r.parcours.teacher.user.email] ) 
 
             data["dateur"] = date  
 
@@ -3906,7 +3930,7 @@ def store_the_score_relation_ajax(request):
                         rec.append(g.teacher.user.email)
  
                 if g.teacher.notification :
-                    sending_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , rec )
+                    sending_mail("SacAdo Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , rec )
                     pass
 
             except:
@@ -4702,7 +4726,7 @@ def ajax_mark_evaluate(request): # Evaluer un exercice custom par note
 
     if student.user.email :
         msg = "Vous venez de recevoir la note : "+ str(mark)+" pour l'exercice "+str(exercise) 
-        sending_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , [student.user.email] )
+        sending_mail("SacAdo Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , [student.user.email] )
 
 
     data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"             
@@ -4743,7 +4767,7 @@ def ajax_comment_all_exercise(request): # Ajouter un commentaire à un exercice 
 
     if student.user.email :
         msg = "Vous venez de recevoir une appréciation pour l'exercice "+str(exercise)+"\n\n  "+str(comment) 
-        sending_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , [student.user.email] )
+        sending_mail("SacAdo Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , [student.user.email] )
 
     data = {}
     data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"          
@@ -4804,7 +4828,7 @@ def ajax_audio_comment_all_exercise(request): # Ajouter un commentaire à un exe
 
     if student.user.email :
         msg = "Vous venez de recevoir une appréciation orale pour l'exercice "+str(exercise)+"\n\n  "+str(comment) 
-        sending_mail("SacAdo Exercice posté",  msg , "info@sacado.xyz" , [student.user.email] )
+        sending_mail("SacAdo Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , [student.user.email] )
 
     data = {}
     data['eval'] = "<i class = 'fa fa-check text-success pull-right'></i>"          
@@ -5061,7 +5085,7 @@ def write_exercise(request,id): # Coté élève
             ### Envoi de mail à l'enseignant
             msg = "Exercice : "+str(unescape_html(cleanhtml(relationship.exercise.supportfile.annoncement)))+"\n Parcours : "+str(relationship.parcours.title)+", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(wForm.cleaned_data['answer'])
             if relationship.parcours.teacher.notification :
-                sending_mail("SACADO Exercice posté",  msg , "info@sacado.xyz" , [relationship.parcours.teacher.user.email] )
+                sending_mail("SACADO Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , [relationship.parcours.teacher.user.email] )
                 pass
 
             return redirect('show_parcours_student' , relationship.parcours.id )
@@ -5134,7 +5158,7 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
             msg = "Exercice : "+str(unescape_html(cleanhtml(customexercise.instruction)))+"\n Parcours : "+str(parcours.title)+", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(cForm.cleaned_data['answer'])
 
             if customexercise.teacher.notification :
-                sending_mail("SACADO Exercice posté",  msg , "info@sacado.xyz" , [customexercise.teacher.user.email] )
+                sending_mail("SACADO Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , [customexercise.teacher.user.email] )
                 pass
 
             return redirect('show_parcours_student' , idp )
@@ -5204,10 +5228,13 @@ def ajax_delete_custom_answer_image(request):
 
 def asking_parcours_sacado(request,pk):
     """demande de parcours par un élève"""
-
-    teacher = Teacher.objects.get(pk=2480)
-    student = request.user.student
     group = Group.objects.get(pk = pk)
+
+    teacher_id = get_teacher_id_by_subject_id(group.subject.id)
+
+    teacher = Teacher.objects.get(pk=teacher_id)
+    student = request.user.student
+
     subject = group.subject
     level = group.level
 
@@ -5223,7 +5250,7 @@ def asking_parcours_sacado(request,pk):
 
     msg = "Je souhaite utiliser les parcours Sacado de mon niveau de "+str(level)+", mon enseignant ne les utilise pas. "+test_string+" Merci.\n\n"+str(student)
 
-    sending_mail("Demande de parcours SACADO",  msg , "info@sacado.xyz" , ["brunoserres33@gmail.com", "sacado.asso@gmail.com"] )
+    sending_mail("Demande de parcours SACADO",  msg , settings.DEFAULT_FROM_EMAIL , ["brunoserres33@gmail.com", "sacado.asso@gmail.com"] )
 
     return redirect("dashboard_group",pk)
 
@@ -6448,7 +6475,7 @@ def get_course_in_this_parcours(request,id):
     parcours = Parcours.objects.get(pk = id) 
     user = request.user
 
-
+    teacher_id = get_teacher_id_by_subject_id(parcours.subject.id) 
 
     if user.is_teacher:  # teacher
     
@@ -6457,7 +6484,7 @@ def get_course_in_this_parcours(request,id):
         request.session["parcours_id"] = parcours.id
         request.session["group_id"] = group_id
 
-        courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=2480),is_share = 1).exclude(parcours__teacher = teacher).order_by("parcours__level","parcours")
+        courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=teacher_id),is_share = 1).exclude(parcours__teacher = teacher).order_by("parcours__level","parcours")
 
         return render(request, 'qcm/course/list_courses.html', {  'teacher': teacher , 'group': group , 'courses':courses,   'parcours': parcours, 'relationships' : [] ,  'communications': [] , })
     else :
@@ -6732,10 +6759,10 @@ def create_demand(request):
             nf.save()
             messages.success(request, 'La demande a été envoyée avec succès !')
             rec = ['brunoserres33@gmal.com', 'philippe.demaria83@gmal.com', ]
-            sending_mail("SacAdo Demande d'exercice",  "Demande d'exercice.... voir dans Demande d'exercices sur https://sacado.xyz" , "info@sacado.xyz" , rec )
+            sending_mail("SacAdo Demande d'exercice",  "Demande d'exercice.... voir dans Demande d'exercices sur https://sacado.xyz" , settings.DEFAULT_FROM_EMAIL , rec )
 
             sender = [teacher.user.email,]
-            sending_mail("SacAdo Demande d'exercice",  "Votre demande d'exercice est en cours de traitement." , "info@sacado.xyz" , sender )
+            sending_mail("SacAdo Demande d'exercice",  "Votre demande d'exercice est en cours de traitement." , settings.DEFAULT_FROM_EMAIL , sender )
 
 
             return redirect('index')
@@ -6823,7 +6850,7 @@ def ajax_demand_done(request) :
 
     rec = [demand.teacher.user.email]
 
-    sending_mail("SacAdo Demande d'exercice",  "Bonjour " + str(demand.teacher.user.get_full_name())+ ", \n\n Votre exercice est créé. \n\n Pour tester votre exercice, https://sacado.xyz/qcm/show_exercise/"+str(code)  +"\n\n Bonne utilisation de sacado." , "info@sacado.xyz" , rec )
+    sending_mail("SacAdo Demande d'exercice",  "Bonjour " + str(demand.teacher.user.get_full_name())+ ", \n\n Votre exercice est créé. \n\n Pour tester votre exercice, https://sacado.xyz/qcm/show_exercise/"+str(code)  +"\n\n Bonne utilisation de sacado." , settings.DEFAULT_FROM_EMAIL , rec )
     data={}
     return JsonResponse(data)
 
@@ -7399,10 +7426,10 @@ def reporting(request ):
 
         rec = ["nicolas.villemain@claudel.org" , "brunoserres33@gmail.com " , "sacado.asso@gmail.com"]
         if nf.report != "<p>RAS</p>" :
-            sending_mail("SACADO "+nf.document+" à modifier", str(nf.document)+" #"+str(nf.document_id)+" doit recevoir les modifications suivantes : \n\n "+str(cleanhtml(nf.report))+"\n\n"+str(request.user) , "info@sacado.xyz" , rec )
+            sending_mail("SACADO "+nf.document+" à modifier", str(nf.document)+" #"+str(nf.document_id)+" doit recevoir les modifications suivantes : \n\n "+str(cleanhtml(nf.report))+"\n\n"+str(request.user) , settings.DEFAULT_FROM_EMAIL , rec )
         else :
             DocumentReport.objects.filter(pk=int(nf.document_id)).update(is_done=1)
-            sending_mail("SACADO "+nf.document+" #"+str(nf.document_id)+" vérifié", str(nf.document)+" dont l'id: "+str(nf.document_id)+" est validé sans erreur par "+str(request.user) , "info@sacado.xyz" , rec )
+            sending_mail("SACADO "+nf.document+" #"+str(nf.document_id)+" vérifié", str(nf.document)+" dont l'id: "+str(nf.document_id)+" est validé sans erreur par "+str(request.user) , settings.DEFAULT_FROM_EMAIL , rec )
 
     return redirect('admin_testeur')
 

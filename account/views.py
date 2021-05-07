@@ -1,6 +1,7 @@
 import html
 import random
 import re
+from django.conf import settings # récupération de variables globales du settings.py
 from statistics import median, StatisticsError
 import csv
 import pytz
@@ -242,7 +243,7 @@ def message_to_teachers_sent(request):
         if u.email:
             rcv.append(u.email)
 
-    sending_mail(subject, cleanhtml(unescape_html(message)), 'info@sacado.xyz', rcv)
+    sending_mail(subject, cleanhtml(unescape_html(message)),  settings.DEFAULT_FROM_EMAIL , rcv)
  
     messages.success(request, 'message envoyé')
 
@@ -283,7 +284,7 @@ def register_student_from_admin(request):
 
             send_templated_mail(
                 template_name="student_registration",
-                from_email="info@sacado.xyz",
+                from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[u_form.email, ],
                 context={"student": u_form, }, )
 
@@ -339,7 +340,7 @@ def register_student(request):
                 if user_form.cleaned_data['email']:
                     send_templated_mail(
                         template_name="student_registration",
-                        from_email="info@sacado.xyz",
+                        from_email=settings.DEFAULT_FROM_EMAIL,
                         recipient_list=[user_form.cleaned_data['email'], ],
                         context={"student": user, }, )
             else:
@@ -514,7 +515,7 @@ def newpassword_student(request, id,idg):
     user.set_password("sacado2020")
     user.save()
 
-    sending_mail('Réinitialisation de mot de passe Sacado', "Bonjour, votre mot de passe est réinitialisé. Il est générique. Votre identifiant est : "+user.username+"\n\n Votre mot de passe est : sacado2020.\n\n  Pour plus de sécurité, vous devez le modifier dès votre connexion.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz et cliquez sur le bouton bleu Se connecter.\n Ceci est un mail automatique. Ne pas répondre.", 'info@sacado.xyz', [user.email])
+    sending_mail('Réinitialisation de mot de passe Sacado', "Bonjour, votre mot de passe est réinitialisé. Il est générique. Votre identifiant est : "+user.username+"\n\n Votre mot de passe est : sacado2020.\n\n  Pour plus de sécurité, vous devez le modifier dès votre connexion.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz et cliquez sur le bouton bleu Se connecter.\n Ceci est un mail automatique. Ne pas répondre.", settings.DEFAULT_FROM_EMAIL, [user.email])
  
     if idg > 0 :
         return redirect('show_group', idg )
@@ -556,7 +557,7 @@ def sender_mail(request,form):
             nf.receivers.add(student_user)
             for r in nf.receivers.all():
                 rcv.append(r.email)
-            sending_mail( cleanhtml(subject), cleanhtml(texte) , "info@sacado.xyz" , rcv)
+            sending_mail( cleanhtml(subject), cleanhtml(texte) , settings.DEFAULT_FROM_EMAIL , rcv)
  
 
         else :
@@ -905,8 +906,8 @@ def response_from_mail(request,user_id):
         msg = "Bonjour, \n vous venez d'envoyer le message suivant :\n\n" + message + " \n\n Voici notre réponse.\n\n " + response  + "\n\n Merci pour votre aide."
         if user.email :
  
-            sending_mail("ERREUR SUR UN EXERCICE SACADO",  msg , 'info@sacado.xyz' ,  [user.email] )
-            sending_mail("ERREUR SUR UN EXERCICE SACADO",  msg , 'info@sacado.xyz' , ["philippe.demaria-lgf@erlm.tn", "brunoserres33@gmail.com", "nicolas.villemain@claudel.org"])
+            sending_mail("ERREUR SUR UN EXERCICE SACADO",  msg , settings.DEFAULT_FROM_EMAIL ,  [user.email] )
+            sending_mail("ERREUR SUR UN EXERCICE SACADO",  msg , settings.DEFAULT_FROM_EMAIL , ["philippe.demaria-lgf@erlm.tn", "brunoserres33@gmail.com", "nicolas.villemain@claudel.org"])
  
         else :
             if form.is_valid():
@@ -975,8 +976,8 @@ def register_teacher(request):
                 # msg = "Bonjour "+ user.first_name +" " + user.last_name+",\n\n Votre compte Sacado est maintenant disponible.\n\nVotre identifiant est : "+user.username+".\n\nPour vous connecter, redirigez-vous vers  https://sacado.xyz .\n\nCeci est un mail automatique. Merci de ne pas répondre."
                 # msg_ = "Bonjour,\n\n Un enseignant vient de rejoindre SacAdo : " + user.last_name + "  "+user.first_name 
                 # if user.email :
-                #     send_mail('Nouvel enseignant', msg ,'info@sacado.xyz',[user.email, ])
-                #     send_mail('Nouvel enseignant', msg_ ,'info@sacado.xyz',["brunoserres33@gmail.com","philippe.demaria83@gmail.com" ])
+                #     send_mail('Nouvel enseignant', msg ,settings.DEFAULT_FROM_EMAIL,[user.email, ])
+                #     send_mail('Nouvel enseignant', msg_ ,settings.DEFAULT_FROM_EMAIL,["brunoserres33@gmail.com","philippe.demaria83@gmail.com" ])
             except :
                 pass
 
@@ -1067,7 +1068,7 @@ def dissociate_teacher(request, id):
 
     if user.email :
         sending_mail('Disociation de compte à un établissement', msg ,
-                      'info@sacado.xyz',
+                      settings.DEFAULT_FROM_EMAIL,
                       [user.email, ])
 
 
@@ -1109,7 +1110,7 @@ def register_teacher_from_admin(request):
 
             sending_mail('Création de compte sur Sacado',
                           f'Bonjour {teacher.user}, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {u_form.username} \r\n\r\nVotre mot de passe est : sacado2020 \r\n\r\nVous pourrez le modifier une fois connecté à votre espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
-                          'info@sacado.xyz',
+                          settings.DEFAULT_FROM_EMAIL,
                           [u_form.email, ])
  
             return redirect('school_teachers')
@@ -1205,7 +1206,7 @@ def register_by_csv(request, key, idg=0):
 
         sending_mail('Création de compte sur Sacado',
               f'Bonjour {user}, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {user.username} \r\n\r\nVotre mot de passe est : sacado2020 \r\n\r\nVous pourrez le modifier une fois connecté à votre espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
-              'info@sacado.xyz',
+              settings.DEFAULT_FROM_EMAIL,
               destinataires)
 
 
@@ -1310,7 +1311,7 @@ def updatepassword(request):
             update_session_auth_hash(request, userport) # Important!
             messages.success(request, 'Votre mot de passe a été modifié avec succès !')
 
-            sending_mail('Changement de mot de passe sur sacAdo', 'Bonjour, votre nouveau mot de passe sacado est '+str(request.POST.get("new_password1"))+'. Pour vous connecter, redirigez-vous vers https://sacado.xyz .', 'info@sacado.xyz', [request.user.email])
+            sending_mail('Changement de mot de passe sur sacAdo', 'Bonjour, votre nouveau mot de passe sacado est '+str(request.POST.get("new_password1"))+'. Pour vous connecter, redirigez-vous vers https://sacado.xyz .', settings.DEFAULT_FROM_EMAIL, [request.user.email])
 
             return redirect('logout')
         else :
@@ -1350,7 +1351,7 @@ def register_parent(request):
                 login(request, user)
                 messages.success(request, "Inscription réalisée avec succès !")            
                 if user_form.cleaned_data['email'] :
-                    sending_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n\n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.', 'info@sacado.xyz', [request.POST.get("email")])
+                    sending_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n\n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.', settings.DEFAULT_FROM_EMAIL, [request.POST.get("email")])
        
         else:
             messages.error(request, "Erreur lors de l'enregistrement. Reprendre l'inscription...")

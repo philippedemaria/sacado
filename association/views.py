@@ -363,7 +363,6 @@ def print_accounting(request, id ):
     if accounting.observation  :
         elements.append(Spacer(0,0.4*inch)) 
 
-        print(cleantext(accounting.observation))
         offs = 0
         for text in cleantext(accounting.observation) :
             observation = Paragraph( text , normal )

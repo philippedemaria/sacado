@@ -1,3 +1,4 @@
+from django.conf import settings # récupération de variables globales du settings.py
 from django.shortcuts import render,redirect
 from django.forms import formset_factory
 from django.contrib.auth.forms import  UserCreationForm,  AuthenticationForm
@@ -219,11 +220,11 @@ def send_message(request):
                         school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
                 send_mail(subject,
                           "Bonjour, vous venez d'envoyer le message suivant :\n\n" + message+" \n\n" + email +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
-                          'info@sacado.xyz',
+                          settings.DEFAULT_FROM_EMAIL ,
                           [email])
                 send_mail(subject,
                             message+" \n\n" + email +  school_datas,
-                          'info@sacado.xyz',
+                          settings.DEFAULT_FROM_EMAIL,
                           [email, "sacado.asso@gmail.com"])
         else :
             messages.error(request,"Erreur d'opération....")
@@ -307,12 +308,12 @@ def school_adhesion(request):
                     school_datas =  school_exists.name +"\n"+school_exists.code_acad +  " - " + str(school_exists.nbstudents) +  " élèves \n" + school_exists.address +  "\n"+school_exists.town+", "+school_exists.country.name
                     send_mail("Demande d'adhésion à la version établissement",
                               "Bonjour l'équipe SACADO, \nl'établissement suivant demande la version établissement :\n"+ school_datas +"\n\nCotisation : "+str(school_exists.fee())+" €.\n\nEnregistrement de l'étalissement dans la base de données.\nEn attente de paiement. \nhttps://sacado.xyz. Ne pas répondre.",
-                              'info@sacado.xyz',
+                              settings.DEFAULT_FROM_EMAIL,
                               ['sacado.asso@gmail.com'])
 
                     send_mail("Demande d'adhésion à la version établissement",
                               "Bonjour "+user.first_name+" "+user.last_name +", \nVous avez demandé la version établissement pour :\n"+ school_datas +"\n\nCotisation : "+str(school_exists.fee())+" €. \nEn attente de paiement. \nL'équipe SACADO vous remercie de votre confiance. \nCeci est un mail automatique. Ne pas répondre. ",
-                               'info@sacado.xyz',
+                               settings.DEFAULT_FROM_EMAIL,
                                [user.email])
 
 
@@ -364,7 +365,7 @@ def iban_asking(request):
     user = User.objects.get(pk = new_user_id)
     send_mail("Demande d'IBAN",
                 "Bonjour l'équipe SACADO, \nJe souhaiterais recevoir un IBAN de votre compte pour procéder à un virement bancaire en faveur de mon établissement :\n\n"+ school.name +"\n"+ school.town +","+ school.country.name +"\n\nNe pas répondre.",
-                    'info@sacado.xyz',
+                    settings.DEFAULT_FROM_EMAIL,
                     [user.email,'sacado.asso@gmail.com'])
 
     messages.success(request,"Demande d'IBAN envoyée")
@@ -781,7 +782,7 @@ def save_adhesion(request) :
 
         msg += "L'équipe SACADO vous remercie de votre confiance.\n\n"
 
-        send_mail("Inscription SACADO", msg, "info@sacado.xyz", [p["email"]])
+        send_mail("Inscription SACADO", msg, settings.DEFAULT_FROM_EMAIL, [p["email"]])
 
 
     for s in students_of_adhesion :
@@ -794,7 +795,7 @@ def save_adhesion(request) :
             smsg += "Il est possible de retrouver ces détails à partir de votre tableau de bord après votre connexion à https://sacado.xyz"
             smsg += "L'équipe SACADO vous remercie de votre confiance.\n\n"
 
-            send_mail("Inscription SACADO", smsg, "info@sacado.xyz", srcv)
+            send_mail("Inscription SACADO", smsg, settings.DEFAULT_FROM_EMAIL, srcv)
 
     # Envoi à SACADO
     sacado_rcv = ["philippe.demaria83@gmail.com","brunoserres33@gmail.com","sacado.asso@gmail.com"]
@@ -812,7 +813,7 @@ def save_adhesion(request) :
         sacado_msg += "Enfant "+str(j)+" : "+s["first_name"]+" "+s["last_name"]+" Niveau :" +s["level"]+adr+"\n\n"         
         j+=1
 
-    send_mail("Inscription SACADO", sacado_msg, "info@sacado.xyz", sacado_rcv)
+    send_mail("Inscription SACADO", sacado_msg, settings.DEFAULT_FROM_EMAIL, sacado_rcv)
 
     #########################################################
 
@@ -871,7 +872,7 @@ def delete_adhesion(request):
     msg += "La référence d'adhésion est "+adhesion.code+" et son id est "+adhesion.id+".\n\n"
     msg += "Le montant du remboursement est de "+remb+"€ au pro-rata des jours adhérés." 
 
-    send_mail("Demande d'annulation d'adhésion SACADO", msg, "info@sacado.xyz", ["sacado.asso@gmail.com"])
+    send_mail("Demande d'annulation d'adhésion SACADO", msg, settings.DEFAULT_FROM_EMAIL, ["sacado.asso@gmail.com"])
 
     return redirect("adhesions")
 

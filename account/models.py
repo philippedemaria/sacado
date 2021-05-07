@@ -13,6 +13,8 @@ from school.models import School, Country
 from templated_email import send_templated_mail
 from general_fonctions import *
 
+from django.conf import settings # récupération de variables globales du settings.py
+
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
@@ -517,7 +519,7 @@ class Teacher(models.Model):
             if self.user.email != '':
                 send_templated_mail(
                     template_name="teacher_registration",
-                    from_email="info@sacado.xyz",
+                    from_email= settings.DEFAULT_FROM_EMAIL ,
                     recipient_list=[self.user.email, ],
                     context={"teacher": self.user, }, )
         except :
@@ -534,7 +536,7 @@ class Teacher(models.Model):
             admins_emails =["sacado.asso@gmail.com"]
             send_templated_mail(
                 template_name="teacher_registration_notify_admins",
-                from_email="info@sacado.xyz",
+                from_email= settings.DEFAULT_FROM_EMAIL ,
                 recipient_list=admins_emails,
                 context={"teacher": self.user,}, )
         except :
