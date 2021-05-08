@@ -8,7 +8,7 @@
     <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3.js' %}"></script> 
     <script>
 
-        //require(['script/ajax-real-time-parcours']);
+        require(['script/ajax-real-time-parcours']);
     </script>
 {% endblock %}
 
@@ -43,13 +43,6 @@
 
 <section class="real_time_list" > 
  
-    <div class="row">
-        <div class="col-sm-12 col-md-12">
-            <div class="alert alert-danger">
-                Cette fonctionnalité est désactivée. Elle prend trop de ressource serveur. Nous travaillons pour changer de technologie et vous la proposer en version étabissement le plus rapidement possible.
-            </div>
-        </div>
-    </div>
 
 <form  action="" method="POST">
 {% csrf_token %} 
