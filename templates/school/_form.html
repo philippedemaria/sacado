@@ -95,7 +95,15 @@
             </div>
         </div>   
  
- 
+         <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">                
+                    {{ form.gar.label_tag }}
+                    {{ form.gar |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                    {{ form.gar.errors }}
+                </div>
+            </div>
+        </div> 
     
         <div class="row">
             <div class="col-sm-12 col-md-6">

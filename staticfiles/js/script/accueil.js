@@ -1,4 +1,4 @@
-    $(document).ready(function () {
+$(document).ready(function () {
  
  
         console.log("---- NEW test ajax-accueil.js ---") ;      
@@ -334,23 +334,7 @@
         if ($('#id_cgu')) { $('#id_cgu').prop('checked', false); }
 
 
-
-        $("#div_gar").hide();
-        $('#div_gar_show').on('click', function (event) { 
-            $('#div_gar_show').addClass("btn-primary").removeClass("btn-default");
-            $('#renew_adh_school').addClass("btn-default").removeClass("btn-primary");
-            $('#div_gar').show(500); 
-            $('#renew_form_school').hide(500);  
-        });
-
-
-        $("#renew_form_school").hide();
-        $('#renew_adh_school').on('click', function (event) { 
-            $('#renew_adh_school').addClass("btn-primary").removeClass("btn-default");
-            $('#div_gar_show').addClass("btn-default").removeClass("btn-primary");
-            $('#div_gar').hide(500);  
-            $('#renew_form_school').show(500);      
-        });
+ 
 
  
         $("#fonctions").hide();
@@ -425,21 +409,10 @@
               $('#show_envoi_postal').removeClass("show_div_for_payment"); 
         });
 
+        $("#id_gar").prop("checked",false);
 
 
 
-
-
-
-
-
-
-
-
-
-    });
-
- 
-
+});
 
  

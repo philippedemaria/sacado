@@ -17,21 +17,7 @@
        </div>
     </div>
  
-
-    <div class="row">
-        <div class="col-sm-12 col-md-12">
-            Nous vous proposons deux types d'inscription.  
-        </div>
-    </div> 
-
-    <div class="row">
-        <div class="col-sm-6 col-md-6">
-            <a href="#" id="div_gar_show" class="btn btn-default"><img src="{% static 'img/gar.png' %}" height="57px"/></a> 
-        </div>
-        <div class="col-sm-6 col-md-6">
-            <a href="#" id="renew_adh_school" class="btn btn-default"><img src="{% static 'img/sacadoLogo.png' %}"/> Inscription directe</a> 
-        </div>
-    </div> 
+ 
  
     <div class="row" id="fonctions">
         <div class="col-sm-12 col-md-12">
@@ -40,21 +26,11 @@
         </div>
     </div> 
 
-    <div class="row"  id="div_gar">
-
- 
-            <div class="col-sm-12 col-md-12">
-                <div class="alert alert-danger">
-                    Nous sommes en cours de création de l'accrochage GAR. Attendre sa mise en place prévue avant le 1 juillet 2021. Merci pour votre compréhension.
-                </div>
-            </div>
  
 
-    </div> 
 
 
-
-    <form action="" method="POST" id="renew_form_school">
+    <form action="" method="POST"  >
         <div class="row">   
             <div class="col-sm-12 col-md-12">
                 <div class="alert alert-danger">
@@ -74,7 +50,7 @@
                   </div>
 
                   <div class="form-group">                
-                      {{ form.code_acad.label_tag }} <small>Pour les établissements sans RNE, renseigner 999efe</small>
+                      {{ form.code_acad.label_tag }} <small>Pour les établissements sans UAI, renseigner 999efe</small>
                       {{ form.code_acad |add_class:"form-control" }}
                       {{ form.code_acad.errors }}
                   </div>
@@ -110,10 +86,34 @@
                   </div>
  
                   <div class="form-group">
-                      {{ form.country.label_tag }}
+                      <label>Pays :</label>
                       {{ form.country |add_class:"form-control select2" }}
                       {{ form.country.errors }}
                   </div>
+  
+
+                  <div class="row">     
+
+                      <div class="col-sm-12 col-md-4">
+                          <div class="form-group">
+                              <img src="{% static 'img/gar.png' %}" width="150px"  />
+                          </div>
+                      </div>
+                      <div class="col-sm-12 col-md-5">
+                          <div class="form-group">
+                              Connexion souhaitée via le GAR depuis votre ENT 
+                          </div>
+                      </div>
+                      <div class="col-sm-12 col-md-3">
+                          <div class="form-group">
+                              {{ form.gar |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                              {{ form.gar.errors }}
+                          </div>
+                      </div>
+                  </div>
+
+
+
                   <div class="row">     
                       <div class="col-sm-12 col-md-6">
                           <div class="form-group">

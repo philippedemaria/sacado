@@ -23,6 +23,7 @@ class School(models.Model):
     get_seconde_to_comp = models.BooleanField(default=0,   editable=False)# L'établissement a récupéré le groupe prépa math comp
     nbstudents          = models.PositiveIntegerField(default=500, verbose_name="Nombre d'élèves")
     is_active           = models.BooleanField(default=0,   editable=False)
+    gar                 = models.BooleanField(default=0, verbose_name="Connexion via le GAR souhaitée")
 
     def __str__(self):
         return "{} - {} - {}".format(self.name, self.town, self.country.name)
