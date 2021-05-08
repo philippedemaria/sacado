@@ -13,9 +13,9 @@ define(['jquery',  'bootstrap', ], function ($) {
                  })
             
 
-        check_live();
+        //check_live();
 
-        setInterval(  check_live  , 5000);
+        //setInterval(  check_live  , 5000);
  
         function check_live(){
 
