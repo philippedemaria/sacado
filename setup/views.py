@@ -169,10 +169,10 @@ def index(request):
 
         nb_student_answers = Studentanswer.objects.filter(date__gte= today_start).count() + Customanswerbystudent.objects.filter(date__gte= today_start).count() + Writtenanswerbystudent.objects.filter(date__gte= today_start).count()
         
-        exercise_nb = Exercise.objects.filter(supportfile__is_title=0).count()
         exercises = Exercise.objects.filter(supportfile__is_title=0, supportfile__is_ggbfile = 1 )
+        exercise_nb = len(exercises)-1
 
-        i = random.randrange(0, len(exercises))
+        i = random.randrange(0, exercise_nb)
         exercise = exercises[i]
 
         context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 'schools' : schools,'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,

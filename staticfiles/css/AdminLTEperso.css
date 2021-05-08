@@ -1230,7 +1230,8 @@ li.my_slide{
     text-align: center;
     width:70px;
     height:70px;  
-    box-shadow: 0px 0px 10px rgba(70, 17, 156, 0.2)
+    box-shadow: 0px 0px 10px rgba(70, 17, 156, 0.3);
+    opacity:0.9;
 }
 
 .mastering_badge{
@@ -1240,7 +1241,7 @@ li.my_slide{
     text-align: center;
     width:80px;
     height:80px;  
-    box-shadow: 0px 0px 10px rgba(70, 17, 156, 0.2);
+    box-shadow: 0px 0px 10px rgba(70, 17, 156, 0.3);
     margin-right: auto; 
     margin-left: auto ; 
     font-size: 30px;

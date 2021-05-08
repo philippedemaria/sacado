@@ -80,92 +80,55 @@
 
 
     {% for parcours in parcourses %}
-            {% get_percent parcours student as data %}  
-            {% get_min_score_parcours parcours student as data_min %} 
-            {% if parcours.vignette %}
-            <!-- small box -->
-            <div class="small-box-student" style="background-image: url('{{parcours.vignette.url }}'); background-size: 100% 100%;background-color:{{parcours.color }};">
-                {% if  student.user.school %}
-                    {% if  data_min.boolean %}
-                    <div class="background_badge" >
-                    <i class="fa fa-trophy" style="color:{{ data_min.colored }};font-size: 40px "></i>
-                    </div>
-                    {% endif  %}
+        {% get_percent parcours student as data %}  
+        {% get_min_score_parcours parcours student 0 as data_min %} 
+
+        <!-- small box -->
+        <div class="small-box-student" style="{% if parcours.vignette %}background-image: url('{{parcours.vignette.url }}');{% endif  %} background-size: 100% 100%;background-color:{{parcours.color }};">
+            {% if  student.user.school %}
+                {% if  data_min.boolean %}
+                <div class="background_badge" >
+                <i class="fa fa-trophy" style="color:{{ data_min.colored }};font-size: {{ data_min.size }} "></i><br/><font style="font-size:14px;color:{{parcours.color }};">{{ data_min.label }}</font>
+                </div>
                 {% endif  %}
+            {% endif  %}
 
 
-                <div class="icon-student">
-                     {{ data.pc }}% 
-                </div>
-                <div class="small-box-footer-max" style="background-color:{{parcours.color }};color:{{parcours.color|contrast_color }};"  >
-                    <h2 class="white thin"> {{ parcours.title|truncatechars:"14" }} <span class="pull-right" style="color:{{parcours.color|contrast_color }}; font-size:14px; margin-top:15px">{{ parcours.teacher.user.civilite }} {{ parcours.teacher.user.last_name }}</span></h2>
-                    <br> 
-                    <div style="text-align: center">
-                    <a href="{% url 'show_parcours_student' parcours.id %}" class="btn btn-default btn-accueil"> {% get_tasks student parcours  as is_task_exists %} 
-                            {%  if is_task_exists %}
-                                <i class="fa fa-calendar-check" style="color:red"></i>
-                            {% endif %} Accéder aux {% if parcours.is_folder %}parcours{% else  %}exercices{% endif %}</a>
-                    </div>
-                    <div  class="student_vignette_subtitle">    
-                        {{ data.nb }}/{{ data.nb_total }} exercice{{ data.nb_total|pluralize }} étudié{{ data.nb_total|pluralize }} 
-
-                        {% if parcours.course.all|length > 0 %}  
-                        <a href="{% url 'show_course_student' 0 parcours.id %}" class="pull-right white" title="Rappels de cours"  target="_blank"  >
-                            <i class="fa fa-desktop"></i>  
-                        </a>
-                        {% endif  %}
-
-                    </div>
-                </div>
+            <div class="icon-student">
+                 {% if parcours.is_folder %}<i class="fa fa-folder" style="position:absolute; right:200px ; top:7px;"></i>{% endif %}  {{  data.pc }}% 
             </div>
-            {% else %}
-            <div class="small-box-student" style="background-color:{{parcours.color }}">
-                {% if  student.user.school %}
-                    {% if data_min.boolean %}
-                    <div class="background_badge" >
-                    <i class="fa fa-trophy" style="color:{{ data_min.colored }};font-size: 40px"></i>
-                    </div>
+            <div class="small-box-footer-max" style="background-color:{{parcours.color }};color:{{parcours.color|contrast_color }};"  >
+                <h2 class="white thin"> {{ parcours.title|truncatechars:"14" }} <span class="pull-right" style="color:{{parcours.color|contrast_color }}; font-size:14px; margin-top:15px">{{ parcours.teacher.user.civilite }} {{ parcours.teacher.user.last_name }}</span></h2>
+                <br> 
+                <div style="text-align: center">
+                <a href="{% url 'show_parcours_student' parcours.id %}" class="btn btn-default btn-accueil"> {% get_tasks student parcours  as is_task_exists %} 
+                        {%  if is_task_exists %}
+                            <i class="fa fa-calendar-check" style="color:red"></i>
+                        {% endif %} Accéder aux {% if parcours.is_folder %}parcours{% else  %}exercices{% endif %}</a>
+                </div>
+                <div  class="student_vignette_subtitle">    
+                    {{ data.nb }}/{{ data.nb_total }} exercice{{ data.nb_total|pluralize }} étudié{{ data.nb_total|pluralize }} 
+
+                    {% if parcours.course.all|length > 0 %}  
+                    <a href="{% url 'show_course_student' 0 parcours.id %}" class="pull-right white" title="Rappels de cours"  target="_blank"  >
+                        <i class="fa fa-desktop"></i>  
+                    </a>
                     {% endif  %}
-                {% endif  %}
 
-                <div class="icon-student">
-                    {% if parcours.is_folder %}<i class="fa fa-folder" style="position:absolute; right:200px ; top:7px;"></i>{% endif %}  {{  data.pc }}% 
-                </div>
-                <div class="small-box-footer-max">
-                    <h2 class="white thin"> {{ parcours.title|truncatechars:"14" }} <span class="pull-right" style="color:{{parcours.color|contrast_color }}; font-size:14px; margin-top:15px">{{ parcours.teacher.user.civilite }} {{ parcours.teacher.user.last_name }}</span></h2>
-                    <br> 
-                    <div style="text-align: center">
-                    <a href="{% url 'show_parcours_student' parcours.id %}" class="btn btn-default btn-accueil"> {% get_tasks student parcours  as is_task_exists %} 
-                            {%  if is_task_exists %}
-                                <i class="fa fa-calendar-check" style="color:red"></i>
-                            {% endif %} Accéder aux {% if parcours.is_folder %}parcours {% else  %}exercices{% endif %}</a>
-                    </div>
-                    <div  class="student_vignette_subtitle">    
-                            {{  data.nb  }}/{{ data.nb_total }} {% if parcours.is_folder %}parcours{% else  %}exercice{{ data.nb_total|pluralize }}{% endif %} étudié{{ data.nb_total|pluralize }}
-
-                        {% if parcours.course.all|length > 0 %}  
-                        <a href="{% url 'show_course_student' 0 parcours.id %}" class="pull-right white" title="Rappels de cours" target="_blank"  >
-                            <i class="fa fa-desktop"></i>  
-                        </a>
-                        {% endif  %}
-                    </div>
                 </div>
             </div>
-            {% endif %}
-        
-     
-
-        {% empty  %}  
-        <div class="row">  
-            <div class="col-md-12 col-lg-12 col-sm-12" style="text-align: center">
-                <div class="alert alert-info">
-                    <h1 class="thin"> Votre enseignant n'a pas encore publié de parcours.</h1>
-                    <div style="border-radius: 50%;width:250px;height:250px; margin-right: auto; margin-left: auto; background-color: #FFF;text-align: center">
-                        <img src="{% static 'img/sacado_color.png' %}"   />  
-                    </div>
+        </div>
+    {% empty  %}  
+    <div class="row">  
+        <div class="col-md-12 col-lg-12 col-sm-12" style="text-align: center">
+            <div class="alert alert-info">
+                <h1 class="thin"> Votre enseignant n'a pas encore publié de parcours.</h1>
+                <div style="border-radius: 50%;width:250px;height:250px; margin-right: auto; margin-left: auto; background-color: #FFF;text-align: center">
+                    <img src="{% static 'img/sacado_color.png' %}"   />  
                 </div>
             </div>
-        </div> 
+        </div>
+    </div> 
     {% endfor  %}  
     
 </section>

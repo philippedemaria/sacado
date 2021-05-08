@@ -656,23 +656,51 @@ class Parcours(ModelWithCode):
 
         return som 
 
-    def min_score_parcours(self,student):
+
+
+    def min_score_parcours(self,student,flag):
         """
         min score d'un parcours par élève
         """
-        Stage = apps.get_model('school', 'Stage')
         data = {}
         max_tab = []
         nb_done = 0
-        for exercise in self.exercises.all() :
-            maxi = Studentanswer.objects.filter(student=student, parcours= self, exercise = exercise )
-            if maxi.count()>0 :
-                maximum = maxi.aggregate(Max('point'))
-                max_tab.append(maximum["point__max"])
-                nb_done +=1
+        exercises = set()
+        if flag == 0 :  # si c'est un parcours
+            exercises.update(self.exercises.filter(supportfile__is_title=0, supportfile__is_ggbfile=1 ))
+            nb_exo_in_parcours =  self.parcours_relationship.filter(is_publish=1,students=student ).count()
+            for exercise in exercises :
+                maxi = self.answers.filter(student=student, exercise = exercise )
+                if maxi.count()>0 :
+                    maximum = maxi.aggregate(Max('point'))
+                    max_tab.append(maximum["point__max"])
+                    nb_done +=1
+
+
+        else : # si c'est un dossier
+            exs = set()
+            nb_exo_in_parcours = 0
+ 
+            for p in self.leaf_parcours.filter(is_publish=1):
+                exos = p.exercises.filter(supportfile__is_title=0, supportfile__is_ggbfile=1 )
+                
+                if exos.count() > 0 : 
+                    exercises.update(exos)
+ 
+                nb_exo_in_parcours +=  p.parcours_relationship.filter(is_publish=1,students=student ).count()
+        
+                for exercise in exercises :
+                    maxi = p.answers.filter(student=student, exercise = exercise )
+                    if maxi.count()>0 :
+                        maximum = maxi.aggregate(Max('point'))
+                        max_tab.append(maximum["point__max"])
+                        nb_done +=1
+
+
+
 
         try :
-            stage = Stage.objects.get(school = student.user.school)
+            stage =  student.user.school.aptitude.first()
             up = stage.up
             med = stage.medium
             low = stage.low
@@ -681,16 +709,26 @@ class Parcours(ModelWithCode):
             med = 65
             low = 35
 
-        if nb_done == Relationship.objects.filter(is_publish=1,students=student, parcours= self ).count() :
-            max_tab.sort()
+        ### Si l'elève a fait tous les exercices du parcours
+        suff = ""
+        if student.user.civilite =="Mme":
+            suff = "e"
 
-            if len(max_tab)>0 :
+        data["colored"] = "red"
+        data["label"] = ""
+
+        if nb_done == nb_exo_in_parcours :
+            data["size"] = "40px"
+          
+            max_tab.sort()
+            try :
                 score = max_tab[0]
-            else :
+            except :
                 score = None
 
+            data["boolean"] = True
+
             if score :
-                data["boolean"] = True
                 if score > up :
                     data["colored"] = "darkgreen"
                 elif score >  med :
@@ -700,12 +738,47 @@ class Parcours(ModelWithCode):
                 else :
                     data["colored"] = "red"
             else :
-                data["boolean"] = False
-                data["colored"] = "red"     
+                data["colored"] = "red"
+
+
+
+        ### Si l'elève a fait plus de la moitié des exercices du parcours
+        elif nb_done > nb_exo_in_parcours // 2 :
+            data["size"] = "20px"
+
+            max_tab.sort()
+
+            if len(max_tab)>0 :
+                score = max_tab[0]
+            else :
+                score = None
+
+            data["boolean"] = True
+            if score :
+                if score > up :
+                    data["colored"] = "darkgreen"
+                    data["label"] = "Expert"+suff
+                elif score >  med :
+                    data["colored"] = "green"
+                    data["label"] = "Confirmé"+suff
+                elif score > low :
+                    data["colored"] = "orange"
+                    data["label"] = "Amateur"
+                    if student.user.civilite =="Mme": 
+                        data["label"] = "Amatrice"
+                else :
+                    data["colored"] = "red"
+                    data["label"] = "Débutant"+suff
+            else :
+                data["boolean"] = True
+                data["colored"] = "red"
+                data["label"] = "Débutant"+suff
         else :
             data["boolean"] = False
-            data["colored"] = "red"       
+  
         return data
+
+ 
 
     def is_pending_correction(self):
         """
