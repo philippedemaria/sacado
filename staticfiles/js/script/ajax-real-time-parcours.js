@@ -15,9 +15,9 @@ define(['jquery',  'bootstrap', ], function ($) {
 
         check_live();
 
-        //setInterval(  check_live  , 5000);
+        setInterval(  check_live  , 10);
  
-        //function check_live(){
+        function check_live(){
 
 
                 $(".init").addClass("no_live").removeClass("live")  ; 
