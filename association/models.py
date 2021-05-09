@@ -106,12 +106,13 @@ class Voting(models.Model):
         unique_together = ('associate', 'user')
 
  
-class Accounting(ModelWithCode):
+class Accounting(models.Model):
     """ Accounting   """
  
     amount = models.DecimalField(default=0, blank=True , max_digits=10, decimal_places=2, editable=False)
     is_credit = models.BooleanField(default=0, )
     objet = models.CharField(max_length=255, verbose_name="Objet*")
+    chrono = models.CharField(max_length=50, blank=True,  editable=False)
 
     beneficiaire = models.CharField(max_length=255, blank=True, verbose_name="En faveur de")
     address = models.CharField(max_length=255, blank=True, verbose_name="Adresse")

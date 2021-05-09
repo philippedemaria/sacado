@@ -86,6 +86,7 @@ def list_accountings(request):
 
 
 
+
 @user_passes_test(user_is_board) 
 def create_accounting(request):
  
@@ -97,6 +98,7 @@ def create_accounting(request):
         if form.is_valid():
             nf = form.save(commit = False)
             nf.user = request.user
+            nf.chrono = get_chrono(Accounting)
             nf.save()
 
             form_ds = formSet(request.POST or None, instance = nf)
@@ -191,7 +193,7 @@ def print_accounting(request, id ):
     #########################################################################################
     elements = []        
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="'+str(accounting.code)+'.pdf"'
+    response['Content-Disposition'] = 'attachment; filename="'+str(accounting.chrono)+'.pdf"'
     doc = SimpleDocTemplate(response,   pagesize=A4, 
                                         topMargin=0.5*inch,
                                         leftMargin=0.5*inch,
@@ -267,7 +269,7 @@ def print_accounting(request, id ):
     #########################################################################################
     ### Logo Sacado
     #########################################################################################
-    dateur = accounting.date.strftime("%d %b %Y")
+    dateur = accounting.date.strftime("%d-%m-%Y")
     logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
     logo_tab = [[logo, "Association SacAdo \nContact : association@sacado.xyz", dateur]]
     logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5.52*inch,inch])
@@ -320,7 +322,10 @@ def print_accounting(request, id ):
     #########################################################################################
     ### Code de facture
     #########################################################################################
-    code = Paragraph(  "Référence : "+accounting.code , normal )
+    code = Paragraph(  "Objet : "+accounting.objet , normal )
+    elements.append(code)
+    elements.append(Spacer(0,0.1*inch))
+    code = Paragraph(  "Facture : "+accounting.chrono , normal )
     elements.append(code)
     elements.append(Spacer(0,0.1*inch))
     objet = Paragraph(  "Objet : "+accounting.objet , normal )

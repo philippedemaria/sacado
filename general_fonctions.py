@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.http import HttpResponseRedirect
 from django.shortcuts import  redirect
 from school.models import Stage
+
 from operator import attrgetter
 from django.core.mail import send_mail 
 
@@ -186,6 +187,25 @@ def split_paragraph(paragraph,coupe) :
 
     return name 
 
-    school_group_set_sorted = Group.objects.filter(Q(teacher__user__school=self)|Q(teacher__user__schools=self)).order_by('level_id')
-
  
+
+
+
+def get_chrono(obj):
+
+    today = datetime.now().strftime("%Y-%m")
+    last_accountings = obj.objects.filter(chrono__contains = today).order_by("date")
+    if last_accountings.count() == 0 :
+        new = "01"
+    else :
+        last_accounting = last_accountings.last()
+        chrono = last_accounting.chrono.split("-")
+
+        new = int(chrono[2])+1
+        if new < 10 :
+            new = "0" + str(new)
+        else :
+            new = str(new)
+
+
+    return str(today) + "-" + new
