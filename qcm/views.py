@@ -3493,7 +3493,7 @@ def parcours_exercises(request,id):
     return render(request, 'qcm/student_list_exercises.html', {'parcours': parcours  , 'relationships': relationships, })
 
 def exercises_level(request, id):
-    exercises = Exercise.objects.filter(level_id=id,supportfile__is_title=0).order_by("theme")
+    exercises = Exercise.objects.filter(level_id=id,supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
     level = Level.objects.get(pk=id)
     themes =  level.themes.all()
     form = AuthenticationForm() 

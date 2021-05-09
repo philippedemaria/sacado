@@ -148,7 +148,7 @@ def index(request):
         u_form = UserForm()
         t_form = TeacherForm()
         s_form = StudentForm()
-        levels = Level.objects.all()
+        levels = Level.objects.order_by("ranking")
         try:
             cookie = request.session.get("cookie")
         except:

@@ -1060,7 +1060,10 @@ table.table-bordered.dataTable {
   }
 
 }
-
+.c1 {
+    background-color: #a5a59d;
+    position: absolute;
+}
 .c2{
   background-color: #670064;
   position: absolute ;
