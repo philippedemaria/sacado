@@ -50,7 +50,7 @@
                                 <span >{{ accounting.date|date:"d N Y" }} </span> 
                             </td>
                             <td>
-                                <span >{{ accounting.code }}</span> 
+                                <span >{{ accounting.chrono }}</span> 
                             </td>
                             <td>
                                 <span class="helper_tip">{% if accounting.beneficiaire  %} {{ accounting.beneficiaire }} {% else %}{{ accounting.school.name }}, {{ accounting.school.country.name }} {% endif %}
