@@ -2568,13 +2568,13 @@ def ajax_exercise_error(request):
     if request.user :
         usr = request.user
         msg = "Message envoyé par l'utilisateur #"+str(usr.id)+", "+usr.last_name+" :\n\nL'exercice dont l'id est -- "+str(exercise_id)+" --  décrit ci-dessous : \n Savoir faire visé : "+exercise.knowledge.name+ " \n Niveau : "+exercise.level.name+  "  \n Thème : "+exercise.theme.name +" comporte un problème. \n  S'il est identifié par l'utilisateur, voici la description :  \n" + message   
-        response = "\n\n Cliquer ici pour répondre https://sacado.xyz/account/response_from_mail/"+str(usr.id)+"\n\n Cliquer ici pour voir l'exercice en question https://sacado.xyz/qcm/show_this_exercise/"+str(exercise_id)+"/"
+        response = "\n\n Cliquer ici pour répondre  sacado.xyz-account-response_from_mail-"+str(usr.id)+"\n\n Cliquer ici pour voir l'exercice en question  sacado.xyz-qcm-show_this_exercise-"+str(exercise_id)+"-"
         sending_mail("Avertissement SacAdo Exercice "+str(exercise_id),  msg + response , settings.DEFAULT_FROM_EMAIL , ["sacado.asso@gmail.com", str(exercise.supportfile.author.user.email)])
 
     else :
         usr = "non connecté"
         msg = "Message envoyé par l'utilisateur #Non connecté :\n\nL'exercice dont l'id est -- "+str(exercise_id)+" --  décrit ci-dessous : \n Savoir faire visé : "+exercise.knowledge.name+ " \n Niveau : "+exercise.level.name+  "  \n Thème : "+exercise.theme.name +" comporte un problème. \n  S'il est identifié par l'utilisateur, voici la description :  \n" + message   
-        response = "\n\n Cliquer ici pour voir l'exercice en question https://sacado.xyz/qcm/show_this_exercise/"+str(exercise_id)+"/"
+        response = "\n\n Cliquer ici pour voir l'exercice en question  sacado.xyz-qcm-show_this_exercise-"+str(exercise_id)+"-"
 
         sending_mail("Avertissement SacAdo Exercice "+str(exercise_id),  msg + response , settings.DEFAULT_FROM_EMAIL , ["sacado.asso@gmail.com"])
 
@@ -2813,7 +2813,7 @@ def ajax_dates(request):  # On conserve relationship_id par commodité mais c'es
                     r = Relationship.objects.get(pk = int(relationship_id))
                     data["class"] = "btn-success"
                     data["noclass"] = "btn-default"
-                    msg = "Pour le "+str(date)+": \n Faire l'exercice : https://sacado.xyz/qcm/show_this_exercise/"+str(r.exercise.id)+" : " +str(r.exercise)+" \n. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
+                    msg = "Pour le "+str(date)+": \n Un exercice vous est assigné. Rejoindre sacado.xyz. \n. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
                     data["dateur"] = date 
                     students = r.students.all()
                     rec = []
@@ -2822,7 +2822,7 @@ def ajax_dates(request):  # On conserve relationship_id par commodité mais c'es
                     ce = Customexercise.objects.get(pk = int(relationship_id))
                     data["class"] = "btn-success"
                     data["noclass"] = "btn-default"
-                    msg = "Pour le "+str(date)+": \n Faire l'exercice : https://sacado.xyz/qcm/show_this_exercise/"+str(ce.id)+"\n. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
+                    msg = "Pour le "+str(date)+": \n Un exercice vous est assigné. Rejoindre sacado.xyz. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
                     data["dateur"] = date 
                     students = ce.students.all()
                     rec = []
@@ -6759,7 +6759,7 @@ def create_demand(request):
             nf.save()
             messages.success(request, 'La demande a été envoyée avec succès !')
             rec = ['brunoserres33@gmal.com', 'philippe.demaria83@gmal.com', ]
-            sending_mail("SacAdo Demande d'exercice",  "Demande d'exercice.... voir dans Demande d'exercices sur https://sacado.xyz" , settings.DEFAULT_FROM_EMAIL , rec )
+            sending_mail("SacAdo Demande d'exercice",  "Demande d'exercice.... voir dans Demande d'exercices sur sacado.xyz\n Nous essaierons de réaliser l'exercice au plus proche de vos idées." , settings.DEFAULT_FROM_EMAIL , rec )
 
             sender = [teacher.user.email,]
             sending_mail("SacAdo Demande d'exercice",  "Votre demande d'exercice est en cours de traitement." , settings.DEFAULT_FROM_EMAIL , sender )
