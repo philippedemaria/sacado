@@ -269,7 +269,7 @@ def print_accounting(request, id ):
     #########################################################################################
     dateur = accounting.date.strftime("%d %b %Y")
     logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
-    logo_tab = [[logo, "Association SacAdo \nContact : assocation@sacado.xyz", dateur]]
+    logo_tab = [[logo, "Association SacAdo \nContact : association@sacado.xyz", dateur]]
     logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5.52*inch,inch])
     logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))
     elements.append(logo_tab_tab)
