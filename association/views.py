@@ -356,6 +356,14 @@ def print_accounting(request, id ):
                ]))
     elements.append(details_tot)
 
+    #########################################################################################
+    ### TVA non applicable
+    #########################################################################################
+
+    elements.append(Spacer(0,0.1*inch)) 
+    tva = Paragraph(  "« TVA non applicable, suivant article 293-b du CGI. »"  , signature_style_mini )
+    elements.append(tva)
+
 
     #########################################################################################
     ### Observation

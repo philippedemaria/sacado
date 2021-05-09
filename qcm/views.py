@@ -2868,13 +2868,13 @@ def ajax_dates(request):  # On conserve relationship_id par commodité mais c'es
             if custom == "0" :
                 Relationship.objects.filter(pk = int(relationship_id)).update(start = date)
                 r = Relationship.objects.get(pk = int(relationship_id))
-                msg = "Pour le "+str(date)+": \n Faire l'exercice : https://sacado.xyz/qcm/show_this_exercise/"+str(r.exercise.id)+" : " +str(r.exercise)+" \n. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
+                msg = "Pour le "+str(date)+": \n Faire l'exercice : https://sacado.xyz/qcm/show_this_exercise/"+str(r.exercise.id)+" : " +str(r.exercise)+" \n. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte. Ceci est un mail automatique. Ne pas répondre."
                 students = r.students.all()
             else :
                 Customexercise.objects.filter(pk = int(relationship_id)).update(start = date)
                 Customexercise.objects.filter(pk = int(relationship_id)).update(date_limit = None)
                 ce = Customexercise.objects.get(pk = int(relationship_id))
-                msg = "Pour le "+str(date)+": \n Faire l'exercice : https://sacado.xyz/qcm/show_this_exercise/"+str(ce.id)+"\n Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."
+                msg = "Pour le "+str(date)+": \n Faire l'exercice : https://sacado.xyz/qcm/show_this_exercise/"+str(ce.id)+"\n Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte. Ceci est un mail automatique. Ne pas répondre."
                 students = ce.students.all()
 
             data["class"] = "btn-success"
