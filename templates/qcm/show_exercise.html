@@ -122,7 +122,7 @@
         {% if user.user_type == 2 %}
             <form action="{% url 'add_exercice_in_a_parcours' %}" method="POST" enctype='multipart/form-data'>   {% csrf_token %}
                 <input type="hidden" id="id_exercise"  name="exercise" required="" value="{{ exercise.id }}">
-                  <span id="show_parcours">Attribuer cet exercice <br/>à mes parcours {{ parcours.count }}<i class="fa fa-caret-down"></i></span>
+                  <span id="show_parcours">Attribuer cet exercice à mes parcours {{ parcours.count }}<i class="fa fa-caret-down"></i></span>
                 <input type="hidden" id="exercises_parcours"  name="exercises_parcours" required="" 
                        value="{% for p in parcours %}{%  get_is_selected   exercise  p   as is_sel  %}{% if is_sel %}{{ p.id }}{% endif %}{% if not forloop.last %}-{% endif %}{% endfor %}">
                 <div id="div_parcours">
