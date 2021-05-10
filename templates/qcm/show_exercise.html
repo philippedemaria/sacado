@@ -126,7 +126,7 @@
                                 {%  get_ranking   exercise  p   as ranking  %} 
                                 <td><label style="color : {{ p.color }}"><input type="checkbox" id="id_parcours"  name="parcours"  value="{{ p.id }}"  {% if is_sel %} checked{% endif %}> {{ p.title }}</label></td>
                                 <td>Ordre</td>
-                                <td><input type="number" id="id_orders" class="form-control" name="orders" min="0" step ="1" value="{{ ranking }}" > </td>
+                                <td style="width:70px"><input type="number" id="id_orders" class="form-control" name="orders" min="0" step ="1" value="{{ ranking }}" > </td>
                             </tr>
                         {% empty %}
                             <tr><td><small>Pour attribuer cet exercice à mes parcours, il faut <a href="{% url 'create_parcours' 0 %}" class="btn-primary">créer un parcours</a>.</small></td></tr>
