@@ -42,7 +42,7 @@
 
 <section class="content_main">
  
-     <div class="col-sm-0 col-md-1 col-xl-1">
+     <div class="col-sm-0 col-md-1 col-lg-1">
         {% if exercise.supportfile.calculator %}
           <img src="{% static 'img/calculator.png' %}"  with="80px"  height="80px" />
         {% else %}
@@ -87,7 +87,7 @@
         <i class="fa fa-barcode fa-4x"></i><p>{{ exercise.supportfile.code }}</p>
 
     </div>  
-    <div class="col-sm-12 col-md-11 col-xl-8">
+    <div class="col-sm-12 col-md-11 col-lg-8">
  
 
             <div id="preload_div">
@@ -112,10 +112,16 @@
     </div> 
 
     
-    <div class="col-sm-12 col-md-12 col-xl-3">
+    <div class="col-sm-12 col-md-12 col-lg-3">
         <div style="height:30px"></div>
         
             {% include 'qcm/signal_exercise.html' %}
+
+
+    </div>  
+
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <div style="height:30px"></div>
 
             <hr/>
 
@@ -150,7 +156,9 @@
             </form>
         {% endif  %}  
 
-    </div>   
+    </div> 
+
+
 
     <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script>
 
