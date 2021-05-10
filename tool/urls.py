@@ -18,6 +18,14 @@ urlpatterns = [
     path('delete_quizz/<int:id>', delete_quizz, name='delete_quizz'),
     path('show_quizz/<int:id>', show_quizz, name='show_quizz'), 
 
+    path('all_quizzes/search', all_quizzes, name='all_quizzes'), 
+    path('ajax_shared_quizzes', ajax_shared_quizzes, name='ajax_shared_quizzes'), 
+    path('clone_quizz/<int:id_quizz>', clone_quizz, name='clone_quizz'),
+    path('ajax_chargethemes_quizz', ajax_chargethemes_quizz, name='ajax_chargethemes_quizz'),
+
+    path('show_quizz_shared/<int:id>', show_quizz_shared, name='show_quizz_shared'), 
+
+
     path('create_question/<int:idq>/<int:qtype>', create_question, name='create_question'),
     path('update_question/<int:id>/<int:idq>', update_question, name='update_question'),   
     path('delete_question/<int:id>/<int:idq>', delete_question  , name='delete_question'),

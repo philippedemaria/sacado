@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from tool.models import Tool , Question  , Choice  , Quizz , Diaporama  , Slide ,Qrandom ,Variable , VariableImage , Generate_quizz , Generate_qr , Answerplayer , Display_question ,  Videocopy
 from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm,  DiaporamaForm , SlideForm,QrandomForm, VariableForm , AnswerplayerForm,  VideocopyForm
 from group.models import Group 
-from socle.models import Level, Waiting
+from socle.models import Level, Waiting , Theme
 from account.decorators import  user_is_testeur
 from sacado.settings import MEDIA_ROOT
 from socle.models import Knowledge, Waiting
@@ -195,6 +195,94 @@ def delete_my_tool(request):
 ############################################################################################################
 ############################################################################################################
 
+
+def all_quizzes(request):
+
+    teacher = request.user.teacher 
+    quizzes = Quizz.objects.filter(is_share =1 ).exclude(teacher =teacher )
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher)
+    return render(request, 'tool/all_quizzes.html', {'quizzes': quizzes , 'form': form, 'teacher':teacher   })
+
+
+
+def ajax_shared_quizzes(request):
+
+    teacher = request.user.teacher 
+    quizzes = Quizz.objects.filter(is_share =1 ).exclude(teacher =teacher )
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher)
+    return render(request, 'tool/all_quizzes.html', {'quizzes': quizzes , 'form': form, 'teacher':teacher   })
+
+
+
+
+def clone_quizz(request, id_quizz):
+    """ cloner un parcours """
+
+    teacher = request.user.teacher
+    quizz = Quizz.objects.get(pk=id_quizz) # parcours à cloner.pk = None
+    questions = quizz.questions.all()
+    levels = quizz.levels.all()
+    qrandoms = quizz.qrandoms.all()
+    themes = quizz.themes.all()
+
+    
+    quizz.pk = None
+    quizz.teacher = teacher
+    quizz.code = str(uuid.uuid4())[:8]  
+    quizz.save()
+
+    for q in questions :
+        q.pk = None
+        q.save()
+        quizz.questions.add(q)
+        for c in q.choices.all():
+            c.pk = None
+            c.question = q
+            c.save()
+
+
+    for l in levels :
+        l.pk = None
+        l.save()
+        quizz.levels.add(l)
+    for qr in qrandoms :
+        qr.pk = None
+        qr.save()
+        quizz.qrandoms.add(qr)
+    for t in themes :
+        t.pk = None
+        t.save()
+        quizz.themes.add(t)
+
+    return redirect('list_quizzes')
+ 
+
+
+@csrf_exempt
+def ajax_chargethemes_quizz(request):
+    id_level =  request.POST.get("id_level")
+    id_subject =  request.POST.get("id_subject")
+    teacher = request.user.teacher
+    data = {}
+    level =  Level.objects.get(pk = id_level)
+    thms_id = request.POST.getlist("theme_id")
+    quizz = set()
+    if len(thms_id) > 0 :
+        for thm_id in thms_id :
+            th = Theme.objects.get(pk=thm_id)
+            quizz.update(Quizz.objects.filter(subject_id = id_subject, themes=th, levels = level , is_share = 1).exclude(teacher=teacher)) 
+    else :
+        thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject).order_by("name")
+        data['themes'] = list(thms)
+        quizz.update(Quizz.objects.filter(subject_id = id_subject, levels = level , is_share = 1).exclude(teacher=teacher))         
+
+    data['html'] = render_to_string('tool/ajax_list_quizz_shared.html', {'quizz' : quizz, })
+
+    return JsonResponse(data)
+
+
 def list_quizzes(request):
 
     teacher = request.user.teacher 
@@ -273,6 +361,16 @@ def show_quizz(request,id):
     return render(request, 'tool/show_quizz.html', context)
 
 
+
+def show_quizz_shared(request,id):
+    """ permet à un prof de voir le quizz mutualisé """
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    quizz = Quizz.objects.get(pk= id)
+    questions = quizz.questions.filter(is_publish=1).order_by("ranking")
+    context = {  "quizz" : quizz , "questions" : questions }
+
+    return render(request, 'tool/show_quizz_shared.html', context)
 
 
  

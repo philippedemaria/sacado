@@ -1,10 +1,13 @@
 {% if parcours.is_evaluation %}
 
-
  	{% if parcours_available.nbleft > 0  %}
-    <input  class="btn btn-primary"   type="submit" id="submit_button_evaluation"  value="Enregistrer le résultat"  />
- 	{% elif available.nbleft > 0 %}
-    <input  class="btn btn-primary"   type="submit" id="submit_button_evaluation"  value="Enregistrer le résultat"  />
+    	<input  class="btn btn-primary"   type="submit" id="submit_button_evaluation"  value="Enregistrer le résultat"  />
+ 	{% elif available.nbleft > 0  %}
+    	<input  class="btn btn-primary"   type="submit" id="submit_button_evaluation"  value="Enregistrer le résultat"  />
+ 	{% else   %}
+      <div class="alert alert-danger" >
+        <b>Vous avez atteint la limite des tentatives. Vous ne pouvez plus soumettre le résultat.</b>
+      </div>
  	{% endif %}
 
 {% else %}

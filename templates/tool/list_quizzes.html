@@ -20,7 +20,24 @@
 
 {% block page_menu_right %}
 
-     <a href="#" data-toggle='modal' data-target='#quizz_choice'  class="btn btn-new pull-right">  Créer un quizz</a>  
+ 
+
+
+
+        <li class="dropdown">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Créer un quizz <b class="caret"></b> </a>
+
+            <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+                <li> <a href="#" data-toggle='modal' data-target='#quizz_choice' >  Nouveau</a> </li> 
+                <li> {% if sacado_asso %} <a href="{% url 'all_quizzes' %}" > Quizz mutualisés</a> {% else %}<a href="#"  class="no_sacado_asso" > Quizz mutualisés</a> {% endif %} </li>         
+ 
+            </ul>
+        </li>  
+
+
+
+
+
 
 {% endblock %}
 
@@ -131,6 +148,8 @@
                                         </div>
                                     </div>
                                     <hr  style="margin:5px; border-color:#CCC">                                            
+                                {% empty %}
+                                    <div class="alert alert-danger"><a href="{% url 'update_quizz' quizz.id  %}">Assigner au moins un de vos groupes</a></div>
                                 {% endfor %}
                             </td>
                             <td> 

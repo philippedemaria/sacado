@@ -40,7 +40,7 @@
 <div class="content_main">  
         <div class="row">
             <div class="col-sm-12 col-md-12">
-                <div class="{% if accounting.is_credit %}credit_asso{% else %}debit_asso{% endif %}"> 
+                <div class="{% if accounting.acting %}credit_asso{% else %}debit_asso{% endif %}"> 
                     <div class="col-sm-3 col-md-3">
                          <label>Montant : </label> <b>{{ accounting.amount }} €</b>
                     </div>                       
@@ -51,7 +51,13 @@
                          <label>Date d'enregistrement : </label> {{ accounting.date }}
                     </div>
                     <div class="col-sm-3 col-md-3">
-                         <label>Date d'effet : </label> {{ accounting.acting }}
+                         <label>Date d'effet : </label> 
+                        {% if accounting.acting %}
+                            {{ accounting.acting }} : {{ accounting.mode }}
+                        {% else %}
+                            En attente
+                        {% endif %}
+
                     </div>
                 </div>
             </div>
