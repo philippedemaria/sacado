@@ -43,7 +43,6 @@ define(['jquery',  'bootstrap' ], function ($) {
             $("#loader").html("<i class='fa fa-spinner fa-10x fa-pulse fa-fw'></i><br/>Chargement...");
             $("#loader").show(); 
 
-
             $.ajax(
                 {
                     type: "POST",
@@ -85,6 +84,8 @@ define(['jquery',  'bootstrap' ], function ($) {
 
                         $('#content_exercises').html("").html(data.html);
                         $("#loader").hide(500); 
+
+
                    }
                 }
             )
@@ -112,7 +113,7 @@ define(['jquery',  'bootstrap' ], function ($) {
             let is_parcours = $("#is_parcours").val();
             let level_id = param0.val();
             let theme_id = param1.val();
-
+            $("#loading").html("<i class='fa fa-spinner  fa-pulse fa-fw'></i>");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
             url = "ajax_list_exercises_by_level_and_theme";
@@ -120,7 +121,7 @@ define(['jquery',  'bootstrap' ], function ($) {
 
             var parcours_id = $("#id_parcours").val();
 
-            if($("#loader")) {$("#loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");      }
+            if($("#loader")) {$("#loader").html("<i class='fa fa-spinner fa-pulse fa-10x fa-fw'></i>");      }
 
             $.ajax(
                 {
@@ -138,7 +139,7 @@ define(['jquery',  'bootstrap' ], function ($) {
  
                         $('#content_exercises').html("").html(data.html);
                         $("#loader").html(""); 
-                        
+                        $("#loading").hide(500); 
                         }
                 }
             )
