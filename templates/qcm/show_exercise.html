@@ -94,71 +94,58 @@
                 <div id="preload"></div>
                 Chargement...
             </div>
-
-
-
         <div class='justify-content-center' id="show_ggb"  >
-
-
-
             <div class = 'col-auto' id='ggb_applet_container' ></div>
         <a href="javascript:window.close()"><input type="button" value="Fermer" class="btn btn-default "/></a>
         </div>
-
-
-
-
-
     </div> 
 
-    
     <div class="col-sm-12 col-md-12 col-lg-3">
         <div style="height:30px"></div>
-        
-            {% include 'qcm/signal_exercise.html' %}
-
-
+          {% include 'qcm/signal_exercise.html' %}
     </div>  
 
-    <div class="col-sm-12 col-md-12 col-lg-12">
-        <div style="height:30px"></div>
+{% if user.user_type == 2 %}    
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <div style="height:30px"></div>
 
-            <hr/>
+                <hr/>
 
-        {% if user.user_type == 2 %}
-            <form action="{% url 'add_exercice_in_a_parcours' %}" method="POST" enctype='multipart/form-data'>   {% csrf_token %}
-                <input type="hidden" id="id_exercise"  name="exercise" required="" value="{{ exercise.id }}">
-                  <span id="show_parcours">Attribuer cet exercice à mes parcours {{ parcours.count }}<i class="fa fa-caret-down"></i></span>
-                <input type="hidden" id="exercises_parcours"  name="exercises_parcours" required="" 
-                       value="{% for p in parcours %}{%  get_is_selected   exercise  p   as is_sel  %}{% if is_sel %}{{ p.id }}{% endif %}{% if not forloop.last %}-{% endif %}{% endfor %}">
-                <div id="div_parcours">
-                    <table class = "table">
-                    {% for p in parcours %}
-                        <tr> 
-                            {%  get_is_selected   exercise  p   as is_sel  %}
-                            {%  get_ranking   exercise  p   as ranking  %} 
-                            <td><label style="color : {{ p.color }}"><input type="checkbox" id="id_parcours"  name="parcours"  value="{{ p.id }}"  {% if is_sel %} checked{% endif %}> {{ p.title }}</label></td>
-                            <td>Ordre</td>
-                            <td><input type="number" id="id_orders" class="form-control" name="orders" min="0" step ="1" value="{{ ranking }}" > </td>
-                        </tr>
-                    {% empty %}
-                        <tr><td><small>Pour attribuer cet exercice à mes parcours, il faut <a href="{% url 'create_parcours' 0 %}" class="btn-primary">créer un parcours</a>.</small></td></tr>
-                    {% endfor %}
-                    </table>
+      
+                <form action="{% url 'add_exercice_in_a_parcours' %}" method="POST" enctype='multipart/form-data'>   {% csrf_token %}
+                    <input type="hidden" id="id_exercise"  name="exercise" required="" value="{{ exercise.id }}">
+                      <span id="show_parcours">Attribuer cet exercice à mes parcours {{ parcours.count }}<i class="fa fa-caret-down"></i></span>
+                    <input type="hidden" id="exercises_parcours"  name="exercises_parcours" required="" 
+                           value="{% for p in parcours %}{%  get_is_selected   exercise  p   as is_sel  %}{% if is_sel %}{{ p.id }}{% endif %}{% if not forloop.last %}-{% endif %}{% endfor %}">
+                    <div id="div_parcours">
+                        <table class = "table">
+                        {% for p in parcours %}
+                            <tr> 
+                                {%  get_is_selected   exercise  p   as is_sel  %}
+                                {%  get_ranking   exercise  p   as ranking  %} 
+                                <td><label style="color : {{ p.color }}"><input type="checkbox" id="id_parcours"  name="parcours"  value="{{ p.id }}"  {% if is_sel %} checked{% endif %}> {{ p.title }}</label></td>
+                                <td>Ordre</td>
+                                <td><input type="number" id="id_orders" class="form-control" name="orders" min="0" step ="1" value="{{ ranking }}" > </td>
+                            </tr>
+                        {% empty %}
+                            <tr><td><small>Pour attribuer cet exercice à mes parcours, il faut <a href="{% url 'create_parcours' 0 %}" class="btn-primary">créer un parcours</a>.</small></td></tr>
+                        {% endfor %}
+                        </table>
 
 
-                    {% if parcours|length > 0 %}
-                    <div class="form-group">
-                      <input value="Associer/Dissocier" type="submit" class="btn btn-primary"/>
+                        {% if parcours|length > 0 %}
+                        <div class="form-group">
+                          <input value="Associer/Dissocier" type="submit" class="btn btn-primary"/>
+                        </div>
+                        {% endif %}
                     </div>
-                    {% endif %}
-                </div>
-            </form>
-        {% endif  %}  
+                </form>
+            
 
-    </div> 
-
-
+        </div> 
+</div> 
+ {% endif  %} 
 
     <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script>
 
