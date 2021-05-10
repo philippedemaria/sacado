@@ -125,7 +125,7 @@
                                 {%  get_is_selected   exercise  p   as is_sel  %}
                                 {%  get_ranking   exercise  p   as ranking  %} 
                                 <td><label style="color : {{ p.color }}"><input type="checkbox" id="id_parcours"  name="parcours"  value="{{ p.id }}"  {% if is_sel %} checked{% endif %}> {{ p.title }}</label></td>
-                                <td>Ordre</td>
+                                <td>Position d'apparition dans le parcours</td>
                                 <td style="width:70px"><input type="number" id="id_orders" class="form-control" name="orders" min="0" step ="1" value="{{ ranking }}" > </td>
                             </tr>
                         {% empty %}
