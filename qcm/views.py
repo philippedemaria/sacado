@@ -1333,10 +1333,7 @@ def create_parcours(request,idp=0):
     try :
         group_id = request.session.get("group_id")
         group = Group.objects.get(pk=group_id)
-        if idp > 0 : 
-            form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level,'level': group.level})
-        else :
-            form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level})
+        form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level,   })
     except :
         form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher)
  
@@ -1372,6 +1369,13 @@ def create_parcours(request,idp=0):
         if idp > 0 :
             nf.is_leaf = 1
         nf.save()
+        ################################################
+        ### Si le parcours est créé à partir d'un groupe
+        try :
+            nf.groups.add(group)
+        except :
+            pass
+        ################################################
         form.save_m2m()
 
         group_ckeched_ids = request.POST.getlist('groups')
@@ -1431,6 +1435,7 @@ def create_parcours(request,idp=0):
             return redirect('parcours')
     else:
         print(form.errors)
+    # gestion des images vignettes    
     images = [] 
     if request.session.has_key("group_id") :
         group_id = request.session.get("group_id",None)        
@@ -7259,7 +7264,7 @@ def create_folder(request,idg):
 
     teacher = request.user.teacher 
     group = Group.objects.get(pk = idg)
-    form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level })
+    form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level  })
 
 
     parcourses = set()
@@ -7284,8 +7289,11 @@ def create_folder(request,idg):
             nf.level = group.level
             nf.subject = group.subject
             nf.save() 
+            nf.groups.add(group) 
             nf.leaf_parcours.set(lp)        
-            nf.students.set(group.students.all())
+            for s in request.POST.getlist("these_students"):
+                print(s)
+                nf.students.add(s)
             return redirect ("list_parcours_group", idg )     
         else:
             print(form.errors)
@@ -7300,13 +7308,20 @@ def create_folder(request,idg):
 def update_folder(request,id,idg):
 
     teacher = request.user.teacher 
-    group = Group.objects.get(pk = idg) 
+
     parcours = Parcours.objects.get(id=id)
     form = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher)
 
-    parcourses = set()
-    for student in group.students.all() :
-        parcourses.update(student.students_to_parcours.filter(teacher = teacher).exclude(is_folder=1))
+    try :
+        group = Group.objects.get(pk = idg)     
+        parcourses = set()
+        for student in group.students.exclude(user__username__contains="_e-test") :
+            parcourses.update(student.students_to_parcours.filter(teacher = teacher).exclude(is_folder=1))
+        group_exists = True
+    except :
+        group = None
+        group_exists = False
+        parcourses = teacher.teacher_parcours.all()
 
     if request.method == "POST" :
         lp = []            
@@ -7325,10 +7340,20 @@ def update_folder(request,id,idg):
             nf.is_folder = 1
             nf.level = group.level
             nf.subject = group.subject
-            nf.save()   
-            nf.leaf_parcours.set(lp)         
-            nf.students.set(group.students.all())
-            return redirect ("list_parcours_group", idg )     
+            nf.save()  
+            nf.leaf_parcours.set(lp)
+            ##################################################
+            ## Suppression des élèves 
+            for stu in group.students.exclude(user__username__contains="_e-test") :
+                nf.students.remove(stu)
+            ## Insertion des nouveaux élèves
+            for s in request.POST.getlist("these_students"):
+                nf.students.add(s)
+            ##################################################
+            if group_exists :
+                return redirect ("list_parcours_group", idg ) 
+            else :
+                return redirect ("list_parcours" ) 
         else:
             print(form.errors)
 

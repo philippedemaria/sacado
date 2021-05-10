@@ -395,7 +395,7 @@
                 <a href="{% url 'clone_parcours' parcours.id  1 %}" class="btn btn-info"  onclick="return TestDuplicate('ce parcours')"> 
                     <i class="fa fa-clone"> </i>   Dupliquer
                 </a>
-                
+ 
                 {% if parcours.is_archive %}
                     <a href="{% url 'unarchive_parcours' parcours.id  idg  %}" class="btn btn-warning"> 
                         <i class="fa fa-th"> </i>   Désarchiver
@@ -408,6 +408,7 @@
                 <a href="{% url 'delete_parcours' parcours.id  idg  %}" class="btn btn-danger"  onclick="return TestDelete('ce parcours')"> 
                     <i class="fa fa-trash"> </i>   Supprimer
                 </a>
+    
         {% endif %}  
         </div>
     </div>  

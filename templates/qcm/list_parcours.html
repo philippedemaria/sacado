@@ -108,6 +108,8 @@
                             {% if  parcours.is_folder %}
                                 {% for g in  parcours.group_list  %}
                                     {% if forloop.first %}<a href="{% url 'update_folder' parcours.id g.id %}" style="color:{{ g.color }}"> <i class="fa fa-cogs  fa-xs"></i></a>{% endif %}
+                                {% empty %}
+                                    <a href="{% url 'update_folder' parcours.id 0 %}"> <i class="fa fa-cogs  fa-xs"></i></a>
                                 {% endfor %}
                             {% else %}
                                 {% if parcours.teacher != teacher %}

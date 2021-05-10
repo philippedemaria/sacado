@@ -1045,6 +1045,32 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
+ 
+            $('#checkBtn').click(function() {
+                
+                var len = $('.check_if_check:checked').length ;
+ 
+                if (len == 0) {
+                        alert("Vous devez sélectionner au moins un élève.");
+                        return false ;
+                        }
+
+            });
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     });
 });

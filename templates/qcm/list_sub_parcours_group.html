@@ -425,7 +425,14 @@
                                 <a href="#"  class="no_sacado_asso" > <i class="fa fa-caret-right"></i> Parcours mutualisés</a>
                             {% endif %}
                         </p></ol>
-                        <ol><i class="fa fa-hand-o-right"></i>  Les parcours personnalisés <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br>  Créer votre parcours personnalisé dans un premier temps puis sélectionner les exercices de votre choix. <a href="{% url 'create_parcours' 0 %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a></p></ol>
+                        <ol><i class="fa fa-hand-o-right"></i>  Les parcours personnalisés <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br>  Créer votre parcours personnalisé dans un premier temps puis sélectionner les exercices de votre choix. 
+
+                            {% if parcours %}
+                            <a href="{% url 'create_parcours' parcours.id %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a>
+                            {% else %}
+                            <a href="{% url 'create_parcours' 0 %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a>
+                            {% endif %}
+                        </p></ol>
 
 
 
