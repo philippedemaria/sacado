@@ -99,6 +99,10 @@ def create_accounting(request):
             nf = form.save(commit = False)
             nf.user = request.user
             nf.chrono = get_chrono(Accounting)
+            if request.POST.get("forme") == "AVOIR" :
+                nf.chrono = "A-" + get_chrono(Accounting)
+            elif request.POST.get("forme") == "DEVIS" :
+                nf.chrono = "D-" + get_chrono(Accounting)
             nf.save()
 
             form_ds = formSet(request.POST or None, instance = nf)
@@ -269,18 +273,17 @@ def print_accounting(request, id ):
     #########################################################################################
     ### Logo Sacado
     #########################################################################################
-    dateur = accounting.date.strftime("%d-%m-%Y")
+    dateur = "Date : " + accounting.date.strftime("%d-%m-%Y")
     logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
-    logo_tab = [[logo, "Association SacAdo \nContact : association@sacado.xyz", dateur]]
-    logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5.52*inch,inch])
-    logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))
+    logo_tab = [[logo, "Association SacAdo\nhttps://sacado.xyz \nassociation@sacado.xyz", dateur]]
+    logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5.2*inch,inch])
     elements.append(logo_tab_tab)
     #########################################################################################
     ### Facture
     #########################################################################################
     elements.append(Spacer(0,0.3*inch))
-    facture = Paragraph( "Facture" , sacado )
-    elements.append(facture) 
+    f = Paragraph( accounting.forme , sacado )
+    elements.append(f) 
     #########################################################################################
     ### Bénéficiaire ou Etablissement
     #########################################################################################
@@ -322,10 +325,9 @@ def print_accounting(request, id ):
     #########################################################################################
     ### Code de facture
     #########################################################################################
-    code = Paragraph(  "Objet : "+accounting.objet , normal )
-    elements.append(code)
-    elements.append(Spacer(0,0.1*inch))
-    code = Paragraph(  "Facture : "+accounting.chrono , normal )
+ 
+    elements.append(Spacer(0,0.5*inch))
+    code = Paragraph(  "Facture "+accounting.chrono , normal )
     elements.append(code)
     elements.append(Spacer(0,0.1*inch))
     objet = Paragraph(  "Objet : "+accounting.objet , normal )
@@ -334,26 +336,27 @@ def print_accounting(request, id ):
     #########################################################################################
     ### Description de facturation
     #########################################################################################
-    details_tab = [("Description",  "Prix €" )]
+    details_tab = [("Description", "Qté", "Px unitaire HT" ,  "Px Total HT" )]
 
     details = Detail.objects.filter(accounting = accounting)
 
     for d in details :
-        details_tab.append((d.description,  d.amount ))
+        details_tab.append((d.description, "1" , d.amount ,  d.amount ))
         offset += OFFSET_INIT
                 
-    details_table = Table(details_tab, hAlign='LEFT', colWidths=[6.3*inch,1*inch])
+    details_table = Table(details_tab, hAlign='LEFT', colWidths=[4.1*inch,1*inch,1*inch,1*inch])
     details_table.setStyle(TableStyle([
                ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray),
                ('BOX', (0,0), (-1,-1), 0.25, colors.gray),
                 ('BACKGROUND', (0,0), (-1,0), colors.Color(1,1,1))
                ]))
     elements.append(details_table)
+
     #########################################################################################
     ### Total de facturation
     #########################################################################################
     elements.append(Spacer(0,0.1*inch))
-    details_tot = Table([("Total TTC en euros", accounting.amount  )], hAlign='LEFT', colWidths=[6.3*inch,1*inch])
+    details_tot = Table([("Total HT", str( accounting.amount) +"€" ), ("Net à payer en euros", str( accounting.amount) +"€" )], hAlign='RIGHT', colWidths=[2.8*inch,1*inch])
     details_tot.setStyle(TableStyle([
                ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray),
                ('BOX', (0,0), (-1,-1), 0.25, colors.gray),
@@ -373,42 +376,47 @@ def print_accounting(request, id ):
     #########################################################################################
     ### Observation
     #########################################################################################
+    offs = 0
     if accounting.observation  :
         elements.append(Spacer(0,0.4*inch)) 
 
-        offs = 0
+        
         for text in cleantext(accounting.observation) :
             observation = Paragraph( text , normal )
             elements.append(observation)
             elements.append(Spacer(0,0.1*inch))
             offs +=0.15 
 
-        offset = offs + OFFSET_INIT
 
 
+
+ 
     #########################################################################################
-    ### Signature Bruno
+    ### Reglement facture
     #########################################################################################
+    elements.append(Spacer(0,1*inch)) 
+    if accounting.acting  :
+        label_facture = "Facture réglée le " + str(accounting.acting.strftime("%d-%m-%Y")) +" "+accounting.mode
+    else :
+        label_facture = "En attente d'acquittement"
 
-    elements.append(Spacer(0,inch)) 
-    signature = Paragraph(  "_______________________________"  , signature_style_blue )
-    elements.append(signature)
-    elements.append(Spacer(0,0.1*inch)) 
-    signature2 = Paragraph( "Bruno Serres                     "  , signature_style )
-    elements.append(signature2)
-    signature2 = Paragraph( "Trésorier de l'association SacAdo"  , signature_style_mini )
-    elements.append(signature2)
+    facture = Paragraph(  label_facture  , normal )
+    elements.append(facture)
+    offs +=1
+
+    offset = offs + OFFSET_INIT
+
 
     #########################################################################################
     ### Bas de page
     #########################################################################################
-    nb_inches = 4.3 - offset
+    nb_inches = 5.3 - offset
     elements.append(Spacer(0,nb_inches*inch)) 
     asso = Paragraph(  "___________________________________________________________________"  , bas_de_page_blue )
     elements.append(asso)
     asso2 = Paragraph( "Association SacAdo"  , bas_de_page )
     elements.append(asso2)
-    asso3 = Paragraph( "siren : W832020065"  , bas_de_page )
+    asso3 = Paragraph( "siren : W832020065 - Préfecture du Var"  , bas_de_page )
     elements.append(asso3)
     asso4 = Paragraph( "2B Avenue de la pinède, La Capte, 83400 Hyères"  , bas_de_page )
     elements.append(asso4)

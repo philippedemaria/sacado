@@ -3,6 +3,8 @@ from qcm.consumers import RealConsumer
 
 
 ws_urlpatterns = [
-	path('ws/qcm/', RealConsumer.as_asgi())
+
+	path('/qcm/<int:parcours_id>/', RealConsumer.as_asgi())
+	
 ]
 

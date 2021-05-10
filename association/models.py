@@ -108,11 +108,28 @@ class Voting(models.Model):
  
 class Accounting(models.Model):
     """ Accounting   """
- 
+
+    TYPES = (
+        ("par carte de crédit", "Carte de crédit"),
+        ("par virement bancaire", "Virement bancaire"),
+        ("en espèces", "Espèces"),
+    )
+
+    FORMES = (
+        ("FACTURE", "FACTURE"),        
+        ("AVOIR", "AVOIR"),
+        ("DEVIS", "DEVIS"),
+    )
+
+
     amount = models.DecimalField(default=0, blank=True , max_digits=10, decimal_places=2, editable=False)
     is_credit = models.BooleanField(default=0, )
     objet = models.CharField(max_length=255, verbose_name="Objet*")
     chrono = models.CharField(max_length=50, blank=True,  editable=False)
+
+
+    mode = models.CharField(max_length=255, default='',  blank=True,  choices=TYPES, verbose_name="Mode de paiement")
+    forme = models.CharField(max_length=255, default='FACTURE',  blank=True,  choices=FORMES, verbose_name="Format")
 
     beneficiaire = models.CharField(max_length=255, blank=True, verbose_name="En faveur de")
     address = models.CharField(max_length=255, blank=True, verbose_name="Adresse")

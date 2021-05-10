@@ -99,21 +99,29 @@
 
 
             <div class="row">
-                <div class="col-sm-3 col-md-1">
+                <div class="col-sm-2 col-md-2 col-lg-1">
                     <div class="form-group">
                         {{ form.is_credit |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Crédit"|attr:"data-off:Débit"}} 
                         {{ form.is_credit.errors }}
                     </div>
                 </div>
-                <div class="col-sm-7 col-md-8">
+                <div class="col-sm-3 col-md-3 col-lg-2">
+                        {{ form.forme |add_class:"form-control select2"|attr:"placeholder:Forme"}}  
+                        {{ form.forme.errors }}
+                </div>
+                <div class="col-sm-6 col-md-7  col-lg-5">
                     <div class="form-group"> 
                         {{ form.objet |add_class:"form-control"|attr:"placeholder:Objet"}}  
                         {{ form.objet.errors }}
                     </div>
                 </div>                
-                <div class="col-sm-2 col-md-2">
+                <div class="col-sm-3 col-md-6 col-lg-2">
                         {{ form.acting |add_class:"form-control datetimepicker"|attr:"placeholder:Date d'effet"}}  
                         {{ form.acting.errors }}
+                </div>
+                <div class="col-sm-3 col-md-6 col-lg-2">
+                        {{ form.mode |add_class:"form-control select2"}}  
+                        {{ form.mode.errors }}
                 </div>
             </div>
 
@@ -121,17 +129,17 @@
             <script id="rowToClone" type="text/template">
                 <div id="duplicate">  
                     <div class="row" >
-                        <div class="col-sm-8 col-md-9" > 
+                        <div class="col-sm-8 col-md-8 col-lg-9" > 
                             <div class="form-group">
                                 {{ form_ds.empty_form.description|add_class:"form-control"|attr:"placeholder:Description" }} 
                             </div> 
                         </div>
-                        <div class="col-sm-2 col-md-2" > 
+                        <div class="col-sm-2 col-md-2 col-lg-2" > 
                             <div class="form-group">
                                 {{ form_ds.empty_form.amount|add_class:"form-control"|attr:"placeholder:€" }}
                             </div> 
                         </div>
-                        <div class="col-sm-2 col-md-1">
+                        <div class="col-sm-2 col-md-2 col-lg-1">
                             <div class="form-group" >
                                <div class="delete_button"></div>
                             </div> 
