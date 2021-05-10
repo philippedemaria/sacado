@@ -42,7 +42,7 @@
 
 <section class="content_main">
  
-     <div class="col-sm-0 col-md-1 col-lg-1">
+     <div class="col-sm-0 col-md-1 col-xl-1">
         {% if exercise.supportfile.calculator %}
           <img src="{% static 'img/calculator.png' %}"  with="80px"  height="80px" />
         {% else %}
@@ -87,7 +87,7 @@
         <i class="fa fa-barcode fa-4x"></i><p>{{ exercise.supportfile.code }}</p>
 
     </div>  
-    <div class="col-sm-12 col-md-12 col-lg-8">
+    <div class="col-sm-12 col-md-11 col-xl-8">
  
 
             <div id="preload_div">
@@ -112,7 +112,7 @@
     </div> 
 
     
-    <div class="col-sm-12 col-md-12 col-lg-3">
+    <div class="col-sm-12 col-md-12 col-xl-3">
         <div style="height:30px"></div>
         
             {% include 'qcm/signal_exercise.html' %}
@@ -122,16 +122,15 @@
         {% if user.user_type == 2 %}
             <form action="{% url 'add_exercice_in_a_parcours' %}" method="POST" enctype='multipart/form-data'>   {% csrf_token %}
                 <input type="hidden" id="id_exercise"  name="exercise" required="" value="{{ exercise.id }}">
-                  <span id="show_parcours">Attribuer cet exercice à mes parcours {{ parcours.count }}<i class="fa fa-caret-down"></i></span>
+                  <span id="show_parcours">Attribuer cet exercice <br/>à mes parcours {{ parcours.count }}<i class="fa fa-caret-down"></i></span>
                 <input type="hidden" id="exercises_parcours"  name="exercises_parcours" required="" 
                        value="{% for p in parcours %}{%  get_is_selected   exercise  p   as is_sel  %}{% if is_sel %}{{ p.id }}{% endif %}{% if not forloop.last %}-{% endif %}{% endfor %}">
                 <div id="div_parcours">
                     <table class = "table">
                     {% for p in parcours %}
                         <tr> 
-                                {%  get_is_selected   exercise  p   as is_sel  %}
-                                {%  get_ranking   exercise  p   as ranking  %} 
-                              
+                            {%  get_is_selected   exercise  p   as is_sel  %}
+                            {%  get_ranking   exercise  p   as ranking  %} 
                             <td><label style="color : {{ p.color }}"><input type="checkbox" id="id_parcours"  name="parcours"  value="{{ p.id }}"  {% if is_sel %} checked{% endif %}> {{ p.title }}</label></td>
                             <td>Ordre</td>
                             <td><input type="number" id="id_orders" class="form-control" name="orders" min="0" step ="1" value="{{ ranking }}" > </td>
