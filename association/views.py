@@ -395,9 +395,9 @@ def print_accounting(request, id ):
     ### Reglement facture
     #########################################################################################
     elements.append(Spacer(0,1*inch)) 
+    label_facture = ""
     if accounting.acting  :
         label_facture = "Facture réglée le " + str(accounting.acting.strftime("%d-%m-%Y")) +" "+accounting.mode
-
 
     facture = Paragraph(  label_facture  , normal )
     elements.append(facture)
