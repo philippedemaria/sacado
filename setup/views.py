@@ -377,8 +377,38 @@ def delete_school_adhesion(request):
 
     school_id = request.session.get("inscription_school_id")
     school = School.objects.get(pk = school_id)
-    school.delete()
-    messages.success(request,"Demande d'adhésion annulée")
+
+    if school.users.count() == 0 :
+        school.delete()
+        messages.success(request,"Demande d'adhésion annulée")  
+
+        try :
+            send_mail("Suppression d'adhésion",
+                    "Bonjour l'équipe SACADO, \nJe souhaite annuler la demande d'adhésion :\n\n"+ school.name +"\n"+ school.town +","+ school.country.name +"\n\nNe pas répondre.",
+                        settings.DEFAULT_FROM_EMAIL,
+                        ['sacado.asso@gmail.com'])
+        except :
+            pass
+
+    elif school.users.count() == 1 :
+        for u in school.users.all():
+            u.teacher.delete()
+            u.delete()
+
+        school.delete()
+        messages.success(request,"Demande d'adhésion annulée")  
+
+        try :
+            send_mail("Suppression d'adhésion",
+                    "Bonjour l'équipe SACADO, \nJe souhaite annuler la demande d'adhésion :\n\n"+ school.name +"\n"+ school.town +","+ school.country.name +"\n\nNe pas répondre.",
+                        settings.DEFAULT_FROM_EMAIL,
+                        ['sacado.asso@gmail.com'])
+        except :
+            pass            
+
+    else :  
+        messages.error(request,"La demande d'annulation ne peut être validée. Des utilisateurs de votre établissement restent inscrits.")  
+
     return redirect('index')
 
 

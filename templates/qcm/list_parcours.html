@@ -84,7 +84,7 @@
                             {% get_is_lock parcours today as is_lock %}
 
                             {% if parcours.is_folder %}   
-                                <a href="#" class="accordion" data-target="{{ forloop.counter }}"  style="color : {{ parcours.color }}" >{{ parcours.title }} <i class="fa fa-chevron-down" id="pop{{ forloop.counter }}" ></i></a>
+                                <span   class="accordion" data-target="{{ forloop.counter }}"  style="color : {{ parcours.color }}" >{{ parcours.title }} <i class="fa fa-chevron-down" id="pop{{ forloop.counter }}" ></i></span>
                                 {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible de soumettre des exercices.</div></span>{% endif %}
                            
                             {% else %}
@@ -94,8 +94,16 @@
                             </a>
 
                             <div style="font-size:14px;margin-top:-5px;">
-                                <span class="helper_tip" ><i class="fa fa-barcode"></i><div class="helper_tip_text_right"><br/><b>Code du parcours : {{ parcours.code }}</b><br/></div></span>
-                                {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }} 
+                                <span class="helper_tip" >
+                                    <i class="fa fa-barcode"></i>
+                                    <div class="helper_tip_text_right">
+                                        <br/><b>Code du parcours : {{ parcours.code }}</b><br/>
+                                    </div>
+                                </span>
+                                {% with nbp=parcours.nb_exercises %}
+                                    {{ nbp }} exercice{{ nbp|pluralize }}
+                                {% endwith %}
+
                                 <small> {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}min. </small>
                                 {% if parcours.course.all|length > 0 %}
                                     <i class="fa fa-desktop" title="cours associé"></i> <small>{{  parcours.duration_reader_course|int_minutes }}min. </small>
@@ -109,7 +117,7 @@
                                 {% for g in  parcours.group_list  %}
                                     {% if forloop.first %}<a href="{% url 'update_folder' parcours.id g.id %}" style="color:{{ g.color }}"> <i class="fa fa-cogs  fa-xs"></i></a>{% endif %}
                                 {% empty %}
-                                    <a href="{% url 'update_folder' parcours.id 0 %}"> <i class="fa fa-cogs  fa-xs"></i></a>
+                                    <a href="{% url 'delete_folder' parcours.id 0 %}"> <i class="fa fa-trash  fa-xs"></i></a>
                                 {% endfor %}
                             {% else %}
                                 {% if parcours.teacher != teacher %}
@@ -150,7 +158,7 @@
                                         </small>
                                     {% else %}
                                     <a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-xs btn-danger">
-                                        <i class="fa fa-edit"></i> Renseigner les groupes associés
+                                        <i class="fa fa-users"></i> Renseigner les groupes associés
                                     </a>
                                     {% endif %}
 
@@ -162,7 +170,7 @@
                                             <a href="#groupe_name_anchor" class="vue menuactionparcours" data-toggle='modal' 
                                                 data-is_disabled="{% if parcours.shared_group_list|length > 0  %}1{% else %}0{% endif %}" 
                                                  data-parcours_id='{{ parcours.id }}' data-target='#listing'> 
-                                                 > Retirer des élèves de ce parcours
+                                                <i class="fa fa-edit"></i> Retirer des élèves de ce parcours
                                             </a>
                                         </form>
                                     {% else %}
@@ -172,17 +180,17 @@
 
                                 {% else %}
                                     <a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-xs btn-danger">
-                                        <i class="fa fa-users"></i> Affecter des élèves à {% if parcours.is_evaluation %}cette évaluation{% else %}ce parcours{% endif %}
+                                        <i class="fa fa-mortar-board"></i> Affecter des élèves à {% if parcours.is_evaluation %}cette évaluation{% else %}ce parcours{% endif %}
                                     </a>
                                 {% endif %}
                             {% endfor %} 
-
                         </td>
-                        <td>
-
-                            {% for sg in  parcours.shared_group_list  %}
-                                <a href="{% url 'list_parcours_group' sg.group.id %}" title="Groupe partagé"><small>{{ sg.group.name }} <small>({{ sg.group.students.count}})</small>{% if not forloop.last %}, {% endif %}</small></a>
-                            {% endfor %}
+                        <td style="padding-left: 40px ">
+                            {% if  parcours.shared_group_list   %}
+                                <i class="fa fa-check text-success"></i> 
+                            {% else %}
+                                <i class="fa fa-times text-danger"></i>
+                            {% endif %}
                         </td>
                         <td>
                             <form action="#" method="POST">

@@ -1385,7 +1385,8 @@ def create_parcours(request,idp=0):
             group_ckeched = Group.objects.get(pk = group_ckeched_id)
             for s in group_ckeched.students.all() :
                 nf.students.add(s)
-
+        ################################################
+        ### Si idp > 0 alors idp est le parcours dossier
         if idp > 0 :
             parcours_folder = Parcours.objects.get(pk = idp)
             parcours_folder.leaf_parcours.add(nf)
@@ -1393,9 +1394,7 @@ def create_parcours(request,idp=0):
             for pid in request.POST.getlist("folder_parcours") :
                 parcours_folder = Parcours.objects.get(pk = pid)
                 parcours_folder.leaf_parcours.add(nf)            
-     
-
-
+        ################################################
 
         sg_students =  request.POST.getlist('students_sg')
         for s_id in sg_students :

@@ -491,10 +491,16 @@ class Parcours(ModelWithCode):
             data["pc"] = 0
         return data
 
+
+
     def nb_exercises(self):
-        nb = self.exercises.filter(supportfile__is_title=0).count()
+        nb = self.parcours_relationship.filter(exercise__supportfile__is_title=0).count()
         nba = self.parcours_customexercises.all().count()     
         return nb + nba
+
+
+
+
 
     def exercises_only(self):
         exercises = self.exercises.filter(supportfile__is_title=0).prefetch_related('level')
