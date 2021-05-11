@@ -410,7 +410,7 @@ def print_accounting(request, id ):
     #########################################################################################
     ### Bas de page
     #########################################################################################
-    nb_inches = 5.3 - offset
+    nb_inches = 4.3 - offset
     elements.append(Spacer(0,nb_inches*inch)) 
     asso = Paragraph(  "___________________________________________________________________"  , bas_de_page_blue )
     elements.append(asso)
