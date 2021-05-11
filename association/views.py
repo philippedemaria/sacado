@@ -145,12 +145,13 @@ def create_accounting(request):
 def update_accounting(request, id):
 
     accounting = Accounting.objects.get(id=id)
-    if accounting.abonnement :
+    try :
         abonnement = accounting.abonnement 
         form_abo = AbonnementForm(request.POST or None, instance=accounting.abonnement  )
-    else :
+    except :
         abonnement = False
         form_abo = AbonnementForm(request.POST or None )
+
     form = AccountingForm(request.POST or None, instance=accounting )
     formSet = inlineformset_factory( Accounting , Detail , fields=('accounting','description','amount') , extra=0)
     form_ds = formSet(request.POST or None, instance = accounting)
