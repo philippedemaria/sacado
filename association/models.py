@@ -113,6 +113,9 @@ class Accounting(models.Model):
         ("par carte de crédit", "Carte de crédit"),
         ("par virement bancaire", "Virement bancaire"),
         ("en espèces", "Espèces"),
+        ("par mandatement administratif", "Mandatement administratif"),
+
+
     )
 
     FORMES = (
