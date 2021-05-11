@@ -11,7 +11,16 @@
                 <table class="table table-bordered table-hover standard_tab_sort300">
                     <thead>
                         <tr class="no_padding" style="background-color: {{ parcours.color }};color:#eee">
-                            <td> <a href="{% url 'show_parcours' parcours.id %}" target="_blank" style="color:#FFF" >{{ parcours|truncatechars:"18" }}</a><img src="{% static 'img/angle-right-white.png' %}" width="25px" /> Sections et exercices </th>
+                            <td> 
+                                {% if teacher %}
+                                <a href="{% url 'show_parcours' parcours.id %}" target="_blank" style="color:#FFF" >{{ parcours|truncatechars:"18" }}</a>
+                                {% else %}
+                                <span style="color: {{ parcours.color|contrast_color }}">{{ parcours|truncatechars:"18" }}</span>
+                                {% endif %}
+                                <img src="{% static 'img/angle-right-white.png' %}" width="25px" /> Sections et exercices 
+
+
+                            </th>
                             <td style="width:400px">Score</th>
                         </tr>
                     </thead>
