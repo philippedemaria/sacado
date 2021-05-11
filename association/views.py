@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from association.models import Accounting,Associate , Voting , Document, Section , Detail , Rate
-from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm, DetailForm , RateForm
+from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm, DetailForm , RateForm , AbonnementForm
 from account.models import User, Student, Teacher
 from qcm.models import Exercise, Studentanswer , Customanswerbystudent , Writtenanswerbystudent
 from school.models import School
@@ -91,6 +91,7 @@ def list_accountings(request):
 def create_accounting(request):
  
     form     = AccountingForm(request.POST or None )
+    form_abo = AbonnementForm(request.POST or None )
     formSet = inlineformset_factory( Accounting , Detail , fields=('accounting','description','amount',) , extra=0)
     form_ds = formSet(request.POST or None)
     
@@ -100,9 +101,11 @@ def create_accounting(request):
             nf.user = request.user
             nf.chrono = get_chrono(Accounting)
             if request.POST.get("forme") == "AVOIR" :
-                nf.chrono = "A-" + get_chrono(Accounting)
+                nf.chrono = "A" + get_chrono(Accounting)
             elif request.POST.get("forme") == "DEVIS" :
-                nf.chrono = "D-" + get_chrono(Accounting)
+                nf.chrono = "D" + get_chrono(Accounting)
+ 
+
             nf.save()
 
             form_ds = formSet(request.POST or None, instance = nf)
@@ -117,13 +120,22 @@ def create_accounting(request):
 
             Accounting.objects.filter(pk = nf.id).update(amount=som)
 
+            if nf.is_abonnement :
+                if form_abo.is_valid():
+                    fa = form_abo.save(commit = False)
+                    fa.user = request.user
+                    fa.accounting = nf
+                    fa.school = nf.school
+                    if nf.acting:
+                        fa.active = 1
+                    fa.save()
         else :
             print(form.errors)
         
         return redirect('list_accountings')
  
 
-    context = {'form': form, 'form_ds': form_ds,   }
+    context = {'form': form, 'form_ds': form_ds, 'form_abo' : form_abo  }
 
     return render(request, 'association/form_accounting.html', context)
 
@@ -133,7 +145,12 @@ def create_accounting(request):
 def update_accounting(request, id):
 
     accounting = Accounting.objects.get(id=id)
-
+    if accounting.abonnement :
+        abonnement = accounting.abonnement 
+        form_abo = AbonnementForm(request.POST or None, instance=accounting.abonnement  )
+    else :
+        abonnement = False
+        form_abo = AbonnementForm(request.POST or None )
     form = AccountingForm(request.POST or None, instance=accounting )
     formSet = inlineformset_factory( Accounting , Detail , fields=('accounting','description','amount') , extra=0)
     form_ds = formSet(request.POST or None, instance = accounting)
@@ -154,12 +171,24 @@ def update_accounting(request, id):
                 som += d.amount
             Accounting.objects.filter(pk = accounting.id).update(amount=som)
 
+            if nf.is_abonnement :
+                if form_abo.is_valid():
+                    fa = form_abo.save(commit = False)
+                    fa.user = request.user
+                    fa.accounting = accounting
+                    fa.school = nf.school
+                    if nf.acting:
+                        fa.active = 1
+                    fa.save()
+                else :
+                    accounting.abonnement.delete()
+
         else :
             print(form.errors)
         
         return redirect('list_accountings')
 
-    context = {'form': form, 'form_ds': form_ds ,  'accounting': accounting,   }
+    context = {'form': form, 'form_ds': form_ds ,  'accounting': accounting,  'form_abo': form_abo, 'abonnement' : abonnement  }
 
     return render(request, 'association/form_accounting.html', context )
 

@@ -42,16 +42,22 @@ define(['jquery', 'bootstrap' ], function ($) {
 
 
 
-        $(document).on('click', '.remove_more', function () {
-            var total_form = $('#id_details-TOTAL_FORMS') ;
-            var totalForms = parseInt(total_form.val())-1  ;
+            $(document).on('click', '.remove_more', function () {
+                var total_form = $('#id_details-TOTAL_FORMS') ;
+                var totalForms = parseInt(total_form.val())-1  ;
 
-            $('#duplicate'+totalForms).remove();
-            total_form.val(totalForms)
-        });
+                $('#duplicate'+totalForms).remove();
+                total_form.val(totalForms)
+            });
 
 
+
+            $(".abonnement_div").hide();
  
+            $("body").on('change', '#id_is_abonnement', function (event) { 
+            $(".abonnement_div").toggle();
+            }); 
+
 
     });
 

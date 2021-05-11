@@ -1,5 +1,5 @@
 from django import forms
-from .models import Accounting , Voting , Associate, Document , Section , Detail , Rate
+from .models import Accounting , Voting , Associate, Document , Section , Detail , Rate , Abonnement
 from account.models import User
 
 
@@ -15,7 +15,10 @@ class DetailForm(forms.ModelForm):
         model = Detail 
         fields = '__all__' 
 
-
+class AbonnementForm(forms.ModelForm):
+    class Meta:
+        model = Abonnement 
+        fields = '__all__' 
 
 
 class AssociateForm(forms.ModelForm):
