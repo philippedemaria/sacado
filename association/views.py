@@ -327,7 +327,7 @@ def print_accounting(request, id ):
     #########################################################################################
  
     elements.append(Spacer(0,0.5*inch))
-    code = Paragraph(  "Facture "+accounting.chrono , normal )
+    code = Paragraph( accounting.forme+" "+accounting.chrono , normal )
     elements.append(code)
     elements.append(Spacer(0,0.1*inch))
     objet = Paragraph(  "Objet : "+accounting.objet , normal )
@@ -410,7 +410,7 @@ def print_accounting(request, id ):
     #########################################################################################
     ### Bas de page
     #########################################################################################
-    nb_inches = 4.3 - offset
+    nb_inches = 4.6 - offset
     elements.append(Spacer(0,nb_inches*inch)) 
     asso = Paragraph(  "___________________________________________________________________"  , bas_de_page_blue )
     elements.append(asso)
