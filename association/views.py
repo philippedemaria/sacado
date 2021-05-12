@@ -160,6 +160,11 @@ def update_accounting(request, id):
         if form.is_valid():
             nf = form.save(commit = False)
             nf.user = request.user
+            nf.chrono = get_chrono(Accounting)
+            if request.POST.get("forme") == "AVOIR" :
+                nf.chrono = "A" + get_chrono(Accounting)
+            elif request.POST.get("forme") == "DEVIS" :
+                nf.chrono = "D" + get_chrono(Accounting)
             nf.save()
 
             for form_d in form_ds :
