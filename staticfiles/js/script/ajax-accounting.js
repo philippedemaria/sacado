@@ -54,9 +54,28 @@ define(['jquery', 'bootstrap' ], function ($) {
 
             $(".abonnement_div").hide();
  
-            $("body").on('change', '#id_is_abonnement', function (event) { 
-            $(".abonnement_div").toggle();
-            }); 
+            $("body").on('change', '#id_is_abonnement', function (event) {
+
+                var value = $("#id_school").val() ;
+
+                        if (  value == ""  )
+                        {
+                            alert("Vous ne pouvez pas créer d'abonnement sans renseigner un établissement déjà créé.");
+                            $("#id_school").focus();                    
+                            $('#id_is_abonnement').prop('checked', false);
+                        }
+                        else 
+                        {
+                            $(".abonnement_div").toggle();  
+                        }
+
+
+
+                }); 
+
+
+
+
 
 
     });
