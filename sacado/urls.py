@@ -17,7 +17,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import  path, include, re_path
 from django.conf.urls.static import static
-import cas.views
+#import cas.views
 from setup.views import index
 
 urlpatterns = [
@@ -38,8 +38,8 @@ urlpatterns = [
                   path('payment/', include('payment.urls')),
 
 
-                  path('SSO_GAR', cas.views.login, name='login_sso'    ) , 
-                  path('SSO_GAR/logout', cas.views.logout, name='logout_sso'), 
+                  #path('SSO_GAR', cas.views.login, name='login_sso'    ) , 
+                  #path('SSO_GAR/logout', cas.views.logout, name='logout_sso'), 
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
