@@ -278,19 +278,21 @@
 
                 <h3 class='thin'>ARTICLE 2 : ACCÈS AU SITE</h3>
 
-                <p>Le site https://sacado.xyz permet à l'Utilisateur un accès gratuit aux services cités ci-après dans la limite du débit Internet proposé. Pour un débit plus important, contacter via le forlulaire sur la page d'accueil l'équipe SACADO. </p>
+                <p>Le site https://sacado.xyz permet à l'Utilisateur un accès gratuit aux services cités ci-après dans la limite du débit Internet proposé. Pour un débit plus important, contacter via le formulaire sur la page d'accueil l'équipe SACADO. </p>
 
 
                 <p>Le site internet propose les services suivants :</p>
                 <ul>
-                <li>Des exercices en ligne en accès libre, sans identification</li>
                 <li>Un suivi pédagogique des savoir faire (enseignant - élève - parent)</li>
                 <li>Un suivi pédagogique des compétences (enseignant - élève - parent)</li>
-                <li>Un espace de création de cours en ligne (enseignant)</li>
-                <li>Un espace de création de parcours d'exercices (enseignant)</li>
+                <li>Un espace de création de parcours d'exercices (enseignant)</li>                
+                <li>Un espace de création de cours en ligne (Version Etablissement)</li>
+                <li>Un espace de création de quizz en ligne (Version Etablissement)</li>
                 </ul>
-                <p>Le site est accessible gratuitement en tout lieu à tout Utilisateur ayant un accès à Internet. Tous les frais supportés par
+                <p>La version Enseignant est accessible gratuitement en tout lieu à tout Utilisateur ayant un accès à Internet. Tous les frais supportés par
                 l'Utilisateur pour accéder au service (matériel informatique, logiciels, connexion Internet, etc.) sont à sa charge.</p>
+
+                <p>La version Etablissement est accessible via une cotisation à l'association SACADO. <a href="{% url 'school_adhesion' %}">Adhérer</a>.</p>
 
                 <p>L’Utilisateur non membre n'a pas accès aux services réservés. Pour cela, il doit s’inscrire en remplissant le formulaire. En
                 acceptant de s’inscrire aux services réservés, l’Utilisateur membre s’engage à fournir des informations sincères et exactes, éventuellement notamment son adresse email.<br>
@@ -298,7 +300,7 @@
                 communiqués après son inscription.
                 <br>
                 Tout Utilisateur membre régulièrement inscrit pourra également solliciter sa désinscription en se rendant à la page dédiée sur son
-                espace personnel. Celle-ci sera effective IMMEDIATEDEMENT et IRREVERISBLE. TOUTES LES DONNEES SERONT ALORS SUPPRIMEES.</p>
+                espace personnel. Celle-ci sera effective IMMEDIATEMENT et IRREVERSIBLE. TOUTES LES DONNEES SERONT ALORS SUPPRIMEES.</p>
 
                 <p>Tout événement dû à un cas de force majeure ayant pour conséquence un dysfonctionnement du site ou serveur et sous réserve
                 de toute interruption ou modification en cas de maintenance, n'engage pas la responsabilité de https://sacado.xyz. Dans ces cas,
@@ -313,18 +315,23 @@
 
                 <h4>Enseignant</h4>
                 <p>Le site collecte  le nom, le prénom et l'adresse mail de chaque enseignant. Lorsque l'enseignant crée ses groupes de travail, il prend la responsabilité de l'enregistrement de ses élèves. Seuls le nom, prénom et éventuellement email sont demandés.</p> 
-                <p>Lors de la création de cours, de vidéos, ou tout autre suprt pédagogique, l'enseignant est ale responsable du contenu de la diffusion. https://sacado.xyz enregistre l'auteur de chaque contenu pédagogique.</p>
+                <p>Lors de la création de cours, de vidéos, ou tout autre support pédagogique, l'enseignant est le responsable du contenu de la diffusion. https://sacado.xyz enregistre l'auteur de chaque contenu pédagogique.</p>
                 <h4>Elèves</h4>
                 <p>
                 Le site collecte <em>a minima</em> le nom et le prénom de chaque élève pour le rattacher au groupe classe de l'enseignant. L'adresse mail n'est pas obligatoire. Elle permet éventuellement une correspondance entre l'enseignant et l'élève. En  outre, via cette adresse mail, l'élève reçoit les notifications des travaux proposés.
                 </p>
-                <p>En outre, lorsque l'élève propose et enregistre ses solutions à un exercice donnée, sa production est consultable via son espace personnel. Son enseignant a accès à ses résultats et données, ainsi que son ou ses parent.s direct.s.</p>
+                <p>Lorsque l'élève propose et enregistre ses solutions à un exercice donné, sa production est consultable via son espace personnel. Son enseignant a accès à ses résultats et données, ainsi que ses parents directs.</p>
                 <h4>Parent</h4>
                 <p>
-                Le site collecte  le nom et le prénom de chaque parent pour le rattacher à son enfant uniquement, sous réseve d'acceptation de l'enseignant. L'adresse mail n'est pas obligatoire.  
+                Le site collecte  le nom et le prénom de chaque parent pour le rattacher à son enfant uniquement, sous réserve d'acceptation de l'enseignant. L'adresse mail n'est pas obligatoire.  
                 <p>
                 <p><strong>sacado.xyz ne diffuse aucune information.</strong></p>
-                <p>Lors d'une connexion via un ENT, Facebook ou Google, https://sacado.xyz ne dévoile pas les informations qu'elle possède à ces applications tierces. </p> 
+                Lors d'une connexion via un ENT, Facebook ou Google, https://sacado.xyz ne dévoile pas les informations qu'elle possède à ces applications tierces. </p> 
+
+                <p>Le site assure à l'Utilisateur une collecte et un traitement d'informations personnelles dans le respect de la vie privée conformément à la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés.</p>
+
+                <p>En vertu de la loi Informatique et Libertés, en date du 6 janvier 1978, l'Utilisateur dispose d'un droit d'accès, de rectification, de suppression et d'opposition de ses données personnelles.</p>
+
 
                 <h3 class='thin'>ARTICLE 4 : PROPRIÉTÉ INTELLECTUELLE</h3>
 
@@ -345,7 +352,7 @@
                 exempt de défauts, d’erreurs ou d’omissions.</p>
                 <p>Les informations communiquées sont présentées à titre indicatif et général sans valeur contractuelle. Malgré des mises à jour
                 régulières, le site https://sacado.xyz ne peut être tenu responsable de la modification des dispositions administratives et
-                juridiques survenant après la publication. De même, le site ne peut être tenue responsable de l’utilisation et de l’interprétation de
+                juridiques survenant après la publication. De même, le site ne peut être tenu responsable de l’utilisation et de l’interprétation de
                 l’information contenue dans ce site.</p>
                 <p>L'Utilisateur s'assure de garder son mot de passe secret. Toute divulgation du mot de passe, quelle que soit sa forme, est
                 interdite. Il assume les risques liés à l'utilisation de son identifiant et mot de passe. Le site décline toute responsabilité.
@@ -369,7 +376,7 @@
                 peuvent pas être utilisés pour identifier quelqu’un. Un cookie contient un identifiant unique, généré aléatoirement et donc
                 anonyme. Certains cookies expirent à la fin de la visite de l’Utilisateur, d’autres restent.
                 <p>L’information contenue dans les cookies est utilisée pour améliorer le site https://sacado.xyz.
-                En naviguant sur le site, L’Utilisateur les accepte.
+                En naviguant sur le site. L’Utilisateur les accepte.
                 <p>L’Utilisateur doit toutefois donner son consentement quant à l’utilisation de certains cookies.
                 A défaut d’acceptation, l’Utilisateur est informé que certaines fonctionnalités ou pages risquent de lui être refusées.
                 L’Utilisateur pourra désactiver ces cookies par l’intermédiaire des paramètres figurant au sein de son logiciel de navigation.</p>
