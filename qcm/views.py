@@ -3838,6 +3838,10 @@ def show_this_exercise(request, id):
 
 def execute_exercise(request, idp,ide):
 
+
+    if not request.user.is_authenticated :
+        return redirect("index")
+        
     parcours = Parcours.objects.get(id= idp)
     exercise = Exercise.objects.get(id= ide)
     if Relationship.objects.filter(parcours=parcours, exercise=exercise).count() == 0 :
