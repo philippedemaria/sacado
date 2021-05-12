@@ -224,8 +224,8 @@ class Document(models.Model): # pour l'asso'
 class Abonnement(models.Model):
 
     school     = models.ForeignKey(School, on_delete=models.CASCADE, related_name='abonnement', editable=False)
-    date_start = models.DateTimeField(verbose_name="Date de début")
-    date_stop  = models.DateTimeField(verbose_name="Date de fin")
+    date_start = models.DateTimeField( blank=True, verbose_name="Date de début")
+    date_stop  = models.DateTimeField( blank=True, verbose_name="Date de fin")
     accounting = models.OneToOneField(Accounting, on_delete=models.CASCADE,  related_name="abonnement", editable=False)
     user       = models.ForeignKey(User, on_delete=models.CASCADE, related_name='abonnement', editable=False)
     is_gar     = models.BooleanField(default=0, verbose_name="Usage du GAR")

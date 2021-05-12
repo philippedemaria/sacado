@@ -156,6 +156,7 @@
                         {{ form_abo.is_gar.errors }}
                     </div>
                 </div>
+                
             </div>
             {{ form_ds.management_form }} 
             <script id="rowToClone" type="text/template">
@@ -223,18 +224,11 @@
 
                             {% endfor %}   
                     </div>
-
-
-
-
-
-
-
                 </div>
                 <div class="col-sm-12 col-md-6">
-                        {{ form.observation.label_tag }} <br/>
-                        {{ form.observation }}
-                        {{ form.observation.errors }}
+                    {{ form.observation.label_tag }} <br/>
+                    {{ form.observation }}
+                    {{ form.observation.errors }}
                 </div>
             </div>
             <div class="row">
