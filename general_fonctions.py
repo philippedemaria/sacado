@@ -187,25 +187,54 @@ def split_paragraph(paragraph,coupe) :
 
     return name 
 
+
+
+def increment_chrono( obj , pattern , forme , flag  ):
+    """ On incrémente le chrono selon le chrono qui arrive """
+    if forme :
+        last_accountings = obj.objects.filter(chrono__contains = pattern).order_by("date")
+        if last_accountings.count() == 0 :
+            new = "01"
+        else :
+            last_accounting = last_accountings.last()
+            chrono = last_accounting.chrono.split("-")
+
+            new = int(chrono[2])+1
+            if new < 10 :
+                new = "0" + str(new)
+            else :
+                new = str(new)
+
+        ch = "F" +  str(pattern) + "-" + new
+        if flag :
+            ch = str(pattern) + "-" + new
+        else : 
+            if forme == "AVOIR" :
+                ch = "A" + str(pattern) + "-" + new
+            elif forme == "DEVIS" :
+                ch = "D" +  str(pattern) + "-" + new
+    else :
+        ch = ""
  
+    return ch
 
 
 
-def get_chrono(obj):
+def create_chrono(obj,forme):
 
     today = datetime.now().strftime("%Y-%m")
-    last_accountings = obj.objects.filter(chrono__contains = today).order_by("date")
-    if last_accountings.count() == 0 :
-        new = "01"
-    else :
-        last_accounting = last_accountings.last()
-        chrono = last_accounting.chrono.split("-")
+    this_chrono = increment_chrono( obj , today , forme , False )     
+    return this_chrono
 
-        new = int(chrono[2])+1
-        if new < 10 :
-            new = "0" + str(new)
-        else :
-            new = str(new)
+ 
 
+def update_chrono(obj, accounting,forme):
 
-    return str(today) + "-" + new
+    this_chrono = accounting.chrono
+    if forme :
+        if this_chrono[0] != forme[0] :
+            today = datetime.now().strftime("%Y-%m")
+            new_pattern = str(forme[0]) + str(today)
+            this_chrono = increment_chrono( obj ,   new_pattern ,  forme , True )  
+
+    return this_chrono

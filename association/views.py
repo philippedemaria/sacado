@@ -99,13 +99,8 @@ def create_accounting(request):
         if form.is_valid():
             nf = form.save(commit = False)
             nf.user = request.user
-            nf.chrono = get_chrono(Accounting)
-            if request.POST.get("forme") == "AVOIR" :
-                nf.chrono = "A" + get_chrono(Accounting)
-            elif request.POST.get("forme") == "DEVIS" :
-                nf.chrono = "D" + get_chrono(Accounting)
- 
-
+            forme = request.POST.get("forme",None)
+            nf.chrono = create_chrono(Accounting, forme)
             nf.save()
 
             form_ds = formSet(request.POST or None, instance = nf)
@@ -160,11 +155,8 @@ def update_accounting(request, id):
         if form.is_valid():
             nf = form.save(commit = False)
             nf.user = request.user
-            nf.chrono = get_chrono(Accounting)
-            if request.POST.get("forme") == "AVOIR" :
-                nf.chrono = "A" + get_chrono(Accounting)
-            elif request.POST.get("forme") == "DEVIS" :
-                nf.chrono = "D" + get_chrono(Accounting)
+            forme = request.POST.get("forme",None)
+            nf.chrono = update_chrono(Accounting, accounting, forme)
             nf.save()
 
             for form_d in form_ds :
