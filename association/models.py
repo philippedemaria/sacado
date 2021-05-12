@@ -128,7 +128,7 @@ class Accounting(models.Model):
     amount = models.DecimalField(default=0, blank=True , max_digits=10, decimal_places=2, editable=False)
     is_credit = models.BooleanField(default=0, )
     objet = models.CharField(max_length=255, verbose_name="Objet*")
-    chrono = models.CharField(max_length=50, blank=True,  editable=False)
+    chrono = models.CharField(max_length=50, blank=True, unique =True,  editable=False)
 
 
     mode = models.CharField(max_length=255, default='',  blank=True,  choices=TYPES, verbose_name="Mode de paiement")
