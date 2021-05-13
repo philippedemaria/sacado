@@ -63,7 +63,7 @@ def menu(request):
                         renew_propose = True
 
 
-            return {'today': today, 'nbe': nbe, 'levels': levels, 'renew_propose' : renew_propose ,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso , "is_pending_studentanswers" : is_pending_studentanswers  }
+            return {'today': today, 'index_tdb' : False , 'nbe': nbe, 'levels': levels, 'renew_propose' : renew_propose ,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso , "is_pending_studentanswers" : is_pending_studentanswers  }
 
         elif request.user.is_student:
             
@@ -90,7 +90,8 @@ def menu(request):
                 'sacado_asso' : sacado_asso , 
                 'group' : group ,
                 'groups' : groups,
-                'teacher_to_student' : teacher_to_student ,                
+                'teacher_to_student' : teacher_to_student ,   
+                'index_tdb' : False ,              
             }
 
         elif request.user.is_parent:
@@ -102,6 +103,7 @@ def menu(request):
                 'this_user': this_user,
                 'last_exercises_done': last_exercises_done,
                  'sacado_asso' : sacado_asso , 
+                 'index_tdb' : False , 
             }
 
 
