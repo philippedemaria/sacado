@@ -108,8 +108,6 @@ def user_is_customexercice_teacher(function):
 def parcours_exists(function):
 	def wrap(request, *args, **kwargs):
 
-		print(kwargs['id'])
-
 		if Parcours.objects.filter(pk=kwargs['id']).count() == 0 :
 			messages.error(request, "Le parcours demandé n'existe pas")
 			return redirect("index")

@@ -939,7 +939,7 @@ def ajax_individualise(request):
             data["indiv_hide"] = True
         else :
             data["indiv_hide"] = False
-    print(data)
+ 
     return JsonResponse(data) 
 
 
@@ -7295,7 +7295,6 @@ def create_folder(request,idg):
             nf.groups.add(group) 
             nf.leaf_parcours.set(lp)        
             for s in request.POST.getlist("these_students"):
-                print(s)
                 nf.students.add(s)
             return redirect ("list_parcours_group", idg )     
         else:

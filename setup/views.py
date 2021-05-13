@@ -1103,8 +1103,6 @@ def play_quizz_start(request):
     quizz.students.add(student)
    
     questions = list(quizz.questions.order_by("ranking"))
-    print(n)
-    print(questions)
     question = questions[n]    
     n +=1
     context = {  "quizz" : quizz , "question" : question , "n" : n}

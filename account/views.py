@@ -897,7 +897,6 @@ def response_from_mail(request,user_id):
     form = ResponseForm(request.POST or None)
 
     context = { 'user' : user , }
-    print("ici")
 
     if request.method == "POST" :
  
