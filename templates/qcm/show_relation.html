@@ -304,9 +304,9 @@
         {% include 'qcm/signal_exercise.html' %}
     </div>  
 
-    <!--     <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script> -->
+   <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script>
                   <!-- Additional Javascript for Geogebra exercises -->
-    <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script>
+    <!--      <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script> -->
     <script type="text/javascript">
           // parameters of the geogebra app
 
@@ -355,15 +355,20 @@
                   }
               };
 
+
+        var applet = new GGBApplet('5.0', parameters,true);
+        // Geogebra applet creation
+        applet.inject('ggb_applet_container', 'preferHTML5');  
  
 
-              function updateListener(objName) {  
 
+              function updateListener(objName) {  
 
                   var applet     = document.ggbApplet; 
 
                   var grade      = applet.getValue("grade");
                   var numexo     = applet.getValue("numexo");
+
                   var situation  = "{{ relation.situation }}" ; 
 
                   var start_time = "{{ start_time}}" ;
@@ -373,33 +378,35 @@
                   var p_available= "{{ parcours_available.nbleft}}" ;
                   var available  = "{{ available.nbleft}}" ;
 
-                  if (Number.isInteger(p_available)) 
+                  if (p_available != "") 
                     {  
-                      alert("is_number");
-                      var nb_attempt = parseInt(p_available, 10) ; 
+                      var nb_attempt = parseInt(p_available) ; 
                     }
-                  else if (Number.isInteger(available)) 
-                    {  alert("is_number available");
-                      var nb_attempt = parseInt(available, 10) ; 
+                  else if ( available != "") 
+                    { 
+                      var nb_attempt = parseInt(available) ; 
                     }
                   else 
-                    {  alert("is_number nb_attempt");
+                    {   
                       var nb_attempt = 0 ; 
                     }
 
-                  numexo = parseInt(numexo, 10) ;
-                  score = grade/parseInt(situation, 10) ;
+                  numexo = parseInt(numexo) ;
+                  score = grade/parseInt(situation) ;
 
 
                   if (  applet.getValue("demarrer")  &&  objName == "demarrer"  &&  applet.getValue("init")   ) 
                       {
 
+                          console.log( "===========  init de la bdd  ==============" );
+                          // Modification du nombre de tentatives
                           nb_left = nb_attempt-1;
                           if ( nb_left < 0)
                               {
                                 nb_left = 0;
                               }
                           $("#attempt").html(nb_left); 
+                          // ========= AJAX ================
                           use_ajax( 1 , start_time, score, relation_id, "ok" , true )
                       }
 
@@ -451,9 +458,7 @@
               }
 
 
-        var applet = new GGBApplet('5.0', parameters,true);
-        // Geogebra applet creation
-        applet.inject('ggb_applet_container', 'preferHTML5');  
+
 
     </script>
     <div style="height:20px"></div>
