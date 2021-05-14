@@ -134,15 +134,19 @@
                           <h2>Cet exercice est proposé dans une <b>évaluation</b></h2> 
                           <br/>Vous devez répondre à <b>{{ relation.situation }} question{{ relation.situation|pluralize  }}</b>.<br/>
                             {% if parcours.is_stop %}
-
                             <h2>Directives</h2>
                               <p><b>D1.</b> En cliquant sur le bouton Commencer, vous initialisez votre score à 0. 
                                 <b>Si vous sortez de l'exerice avant de l'avoir terminé, vous ne pourrez plus le refaire si le nombre de tentatives est égal à 0. Vous devez donc le terminer avec la plus grande attention.</b></p>
                               <p><b>D2.</b> Les résultats s'enregistrement directement après validation de vos résultats en cliquant sur le bouton Suivant.</p>
                               <p><b>D3.</b> Pour la validation finale, utiliser le bouton Enregistrer le résultat.</p>
+                              <p></p>
+                              <a href="#" class="btn btn-danger" data-dismiss="alert" aria-label="close">J'ai compris les directives.</a>  
+                            {% else %}
+                              <br/>
+                              <small><em>Cliquez sur la croix pour faire disparaitre ce bandeau  </em></small><i class="fas fa-long-arrow-alt-right"></i> 
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                             {% endif %}
-                            <p></p>
-                          <a href="#" class="btn btn-danger" data-dismiss="alert" aria-label="close">J'ai compris les directives.</a>
+
 
 
                       </div> 
