@@ -170,7 +170,7 @@
 
 
 
-              <div id="preload_div">
+              <div id="preload_div" style="position:absolute;top:280px;">
                   <div id="preload"></div>
                   Chargement...
               </div>
@@ -182,8 +182,6 @@
                       Mode plein <br> écran <br>
                       <img src="{% static 'img/flechebleue.png' %}" style="position:absolute; right:30px;"/>            
                   </div>
-
-
                 
                   <div class = 'col-auto' id='ggb_applet_container' ></div>
               </div>
@@ -306,9 +304,9 @@
         {% include 'qcm/signal_exercise.html' %}
     </div>  
 
-    <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script>
+    <!--     <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script> -->
                   <!-- Additional Javascript for Geogebra exercises -->
-    <!-- <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script> -->
+    <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script>
     <script type="text/javascript">
           // parameters of the geogebra app
 
@@ -359,7 +357,7 @@
 
  
 
-              function updateListener(objName) {
+              function updateListener(objName) {  
 
 
                   var applet     = document.ggbApplet; 
@@ -377,33 +375,31 @@
 
                   if (Number.isInteger(p_available)) 
                     {  
-                      var nb_attempt = parseInt(p_available) ; 
+                      alert("is_number");
+                      var nb_attempt = parseInt(p_available, 10) ; 
                     }
                   else if (Number.isInteger(available)) 
-                    {  
-                      var nb_attempt = parseInt(available) ; 
+                    {  alert("is_number available");
+                      var nb_attempt = parseInt(available, 10) ; 
                     }
                   else 
-                    {  
+                    {  alert("is_number nb_attempt");
                       var nb_attempt = 0 ; 
                     }
 
-                  numexo = parseInt(numexo) ;
-                  score = grade/parseInt(situation) ;
+                  numexo = parseInt(numexo, 10) ;
+                  score = grade/parseInt(situation, 10) ;
 
 
                   if (  applet.getValue("demarrer")  &&  objName == "demarrer"  &&  applet.getValue("init")   ) 
                       {
 
-                          console.log( "===========  init de la bdd  ==============" );
-                          // Modification du nombre de tentatives
                           nb_left = nb_attempt-1;
-                          if ( nb_attempt-1 < 0)
+                          if ( nb_left < 0)
                               {
                                 nb_left = 0;
                               }
                           $("#attempt").html(nb_left); 
-                          // ========= AJAX ================
                           use_ajax( 1 , start_time, score, relation_id, "ok" , true )
                       }
 
