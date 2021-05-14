@@ -3861,7 +3861,7 @@ def execute_exercise(request, idp,ide):
     context = {'exercise': exercise,  'start_time' : start_time,  'student' : student,  'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today , 'communications' : [] , 'relationships' : [] }
     return render(request, 'qcm/show_relation.html', context)
 
-
+@csrf_exempt    
 def store_the_score_relation_ajax(request):
 
     time_begin = request.POST.get("start_time",None)
@@ -3886,66 +3886,72 @@ def store_the_score_relation_ajax(request):
         score = round(float(request.POST.get("score")),2)*100
         if score > 100 :
             score = 100
- 
-        if int(relation.situation) <= int(numexo+1):
-            Studentanswer.objects.create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student , numexo= numexo,  point= score, secondes = timer)
-            result, createded = Resultexercise.objects.get_or_create(exercise  = relation.exercise , student  = student , defaults = { "point" : score , })
-            if not createded :
-                Resultexercise.objects.filter(exercise  = relation.exercise , student  = student).update(point= score)
- 
-            # Moyenne des scores obtenus par savoir faire enregistré dans Resultknowledge
-            knowledge = relation.exercise.knowledge
+
+        ##########################################################
+        ########################### Storage student answer
+        ##########################################################
+        this_studentanswer, new_studentanswer =  Studentanswer.objects.get_or_create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student, defaults = { "numexo" : numexo,  "point" : score, "secondes" : timer }   )
+        if not new_studentanswer : 
+            Studentanswer.objects.filter(pk = this_studentanswer.id).update( numexo   = numexo, point    = score , secondes = timer )
+        ##########################################################
+
+        result, createded = Resultexercise.objects.get_or_create(exercise  = relation.exercise , student  = student , defaults = { "point" : score , })
+        if not createded :
+            Resultexercise.objects.filter(exercise  = relation.exercise , student  = student).update(point= score)
+
+        # Moyenne des scores obtenus par savoir faire enregistré dans Resultknowledge
+        knowledge = relation.exercise.knowledge
+        scored = 0
+        studentanswers = Studentanswer.objects.filter(student = student,exercise__knowledge = knowledge) 
+        for studentanswer in studentanswers:
+            scored += studentanswer.point 
+        try :
+            scored = scored/len(studentanswers)
+        except :
             scored = 0
-            studentanswers = Studentanswer.objects.filter(student = student,exercise__knowledge = knowledge) 
-            for studentanswer in studentanswers:
-                scored += studentanswer.point 
-            try :
-                scored = scored/len(studentanswers)
-            except :
-                scored = 0
-            result, created = Resultknowledge.objects.get_or_create(knowledge  = relation.exercise.knowledge , student  = student , defaults = { "point" : scored , })
-            if not created :
-                Resultknowledge.objects.filter(knowledge  = relation.exercise.knowledge , student  = student).update(point= scored)
+        result, created = Resultknowledge.objects.get_or_create(knowledge  = relation.exercise.knowledge , student  = student , defaults = { "point" : scored , })
+        if not created :
+            Resultknowledge.objects.filter(knowledge  = relation.exercise.knowledge , student  = student).update(point= scored)
+        
+
+        # Moyenne des scores obtenus par compétences enregistrées dans Resultskill
+        skills = relation.skills.all()
+        for skill in skills :
+            Resultskill.objects.create(student = student, skill = skill, point = score) 
+            resultskills = Resultskill.objects.filter(student = student, skill = skill).order_by("-id")[0:10]
+            sco = 0
+            for resultskill in resultskills :
+                sco += resultskill.point
+                try :
+                    sco_avg = sco/len(resultskills)
+                except :
+                    sco_avg = 0
+            result, creat = Resultlastskill.objects.get_or_create(student = student, skill = skill, defaults = { "point" : sco_avg , })
+            if not creat :
+                Resultlastskill.objects.filter(student = student, skill = skill).update(point = sco_avg) 
             
-
-            # Moyenne des scores obtenus par compétences enregistrées dans Resultskill
-            skills = relation.skills.all()
-            for skill in skills :
-                Resultskill.objects.create(student = student, skill = skill, point = score) 
-                resultskills = Resultskill.objects.filter(student = student, skill = skill).order_by("-id")[0:10]
-                sco = 0
-                for resultskill in resultskills :
-                    sco += resultskill.point
-                    try :
-                        sco_avg = sco/len(resultskills)
-                    except :
-                        sco_avg = 0
-                result, creat = Resultlastskill.objects.get_or_create(student = student, skill = skill, defaults = { "point" : sco_avg , })
-                if not creat :
-                    Resultlastskill.objects.filter(student = student, skill = skill).update(point = sco_avg) 
-                
-                result, creater = Resultggbskill.objects.get_or_create(student = student, skill = skill, relationship = relation, defaults = { "point" : score , })
-                if not creater :
-                    Resultggbskill.objects.filter(student = student, skill = skill, relationship = relation).update(point = sco_avg) 
+            result, creater = Resultggbskill.objects.get_or_create(student = student, skill = skill, relationship = relation, defaults = { "point" : score , })
+            if not creater :
+                Resultggbskill.objects.filter(student = student, skill = skill, relationship = relation).update(point = sco_avg) 
 
 
-            try :
-                if relation.exercise.supportfile.annoncement != "" :
-                    name_title = relation.exercise.supportfile.annoncement
-                else :
-                    name_title = relation.exercise.knowledge.name
-                msg = "Exercice : "+str(unescape_html(cleanhtml(name_title)))+"\n Parcours : "+str(relation.parcours.title)+"\n Fait par : "+str(student.user)+"\n Nombre de situations : "+str(numexo)+"\n Score : "+str(score)+"%"+"\n Temps : "+str(convert_seconds_in_time(timer))
-                rec = []
-                for g in student.students_to_group.filter(teacher = relation.parcours.teacher):
-                    if not g.teacher.user.email in rec : 
-                        rec.append(g.teacher.user.email)
- 
-                if g.teacher.notification :
-                    sending_mail("SacAdo Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , rec )
-                    pass
+        try :
+            if relation.exercise.supportfile.annoncement != "" :
+                name_title = relation.exercise.supportfile.annoncement
+            else :
+                name_title = relation.exercise.knowledge.name
+            msg = "Exercice : "+str(unescape_html(cleanhtml(name_title)))+"\n Parcours : "+str(relation.parcours.title)+"\n Fait par : "+str(student.user)+"\n Nombre de situations : "+str(numexo)+"\n Score : "+str(score)+"%"+"\n Temps : "+str(convert_seconds_in_time(timer))
+            rec = []
+            for g in student.students_to_group.filter(teacher = relation.parcours.teacher):
+                if not g.teacher.user.email in rec : 
+                    rec.append(g.teacher.user.email)
 
-            except:
+            if g.teacher.notification :
+                sending_mail("SacAdo Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , rec )
                 pass
+
+        except:
+            pass
         try :
             nb_done = 0
             for exercise in relation.parcours.exercises.all() :
@@ -3956,6 +3962,22 @@ def store_the_score_relation_ajax(request):
                 redirect('index')
         except:
             pass
+
+        #####################################################################
+        # Enregistrement à la volée pour les évaluations 
+        #####################################################################
+        is_ajax =  request.POST.get("is_ajax", None)
+        init =  request.POST.get("init", None)
+        if is_ajax :
+            data = {}
+            if init :
+                data["html"] = "<span class= 'verif_init_and_answer' >Exercice initialisé</span>"
+                data["nb_situation"] = -100
+            else :
+                data["html"] = "<span class= 'verif_init_and_answer' >Score enregistré</span>"
+                data["nb_situation"] = Studentanswer.objects.get(pk = this_studentanswer.id).numexo
+            return JsonResponse(data)
+        #####################################################################
 
     if relation.parcours.is_evaluation and relation.parcours.is_next :
         parcours      = relation.parcours

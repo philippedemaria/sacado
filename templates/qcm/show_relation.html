@@ -70,20 +70,26 @@
         </div>
         <div class="situation" > 
         {% if  parcours.maxexo > -1 %}
-                <div class="available">
-                    <b> {{ parcours_available.nbleft }}</b>  
+
+            {% with nb_attempt=parcours_available.nbleft  %}
+
+                <div class="available" id="attempt" style="font-weight:800" >
+                      {{ nb_attempt }} 
                 </div>
-                <p>Tentative{{ parcours_available.nbleft|pluralize  }} restante{{ parcours_available.nbleft|pluralize  }}</p>
+                <p>Tentative{{ nb_attempt|pluralize  }} restante{{ nb_attempt|pluralize  }}</p>
+            {% endwith %}
+
         {% else %}
             {% if  relation.maxexo > -1 %}
-
-                <div class="available">
-                    <b> {{ available.nbleft }}</b>  
-                </div>
-                <p>Tentative{{ available.nbleft|pluralize  }} restante{{ available.nbleft|pluralize  }}</p>
+                {% with nb_attempt=available.nbleft  %}
+                  <div class="available" id="attempt" style="font-weight:800" >
+                     {{ nb_attempt }}   
+                  </div>
+                  <p>Tentative{{ nb_attempt|pluralize  }} restante{{ nb_attempt|pluralize  }}</p>
+                {% endwith %}
             {% else  %} 
-                <div class="available_infinite" > 
-                    <b> $ \infty $</b>  
+                <div class="available_infinite" id="attempt" style="font-weight:800" > 
+                   $ \infty $ 
                 </div>
                 <p>Tentatives restantes</p>
             {% endif  %} 
@@ -123,11 +129,40 @@
 
               {% if parcours.is_evaluation %}
                    
- 
-                  <div class="alert alert-danger" style="width:750px; position:absolute;z-index: 999;"  role="alert" id="message_alerte">
-                      Cet exercice est proposé dans une <b>évaluation</b>. Vous devez répondre à exactement <b>{{ relation.situation }} question{{ relation.situation|pluralize  }}</b>. <small><em>Cliquez sur la croix pour faire disparaitre ce bandeau  </em></small><i class="fas fa-long-arrow-alt-right"></i> 
-                      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                  </div> 
+                  {% if parcours_available.nbleft > 0 or available.nbleft > 0 %}
+                      <div class="alert alert-danger" style="width:750px; position:absolute;z-index: 500;"  role="alert" id="message_alerte">
+                          <h2>Cet exercice est proposé dans une <b>évaluation</b></h2> 
+                          <br/>Vous devez répondre à <b>{{ relation.situation }} question{{ relation.situation|pluralize  }}</b>.<br/>
+                            {% if parcours.is_stop %}
+
+                            <h2>Directives</h2>
+                              <p><b>D1.</b> En cliquant sur le bouton Commencer, vous initialisez votre score à 0. 
+                                <b>Si vous sortez de l'exerice avant de l'avoir terminé, vous ne pourrez plus le refaire si le nombre de tentatives est égal à 0. Vous devez donc le terminer avec la plus grande attention.</b></p>
+                              <p><b>D2.</b> Les résultats s'enregistrement directement après validation de vos résultats en cliquant sur le bouton Suivant.</p>
+                              <p><b>D3.</b> Pour la validation finale, utiliser le bouton Enregistrer le résultat.</p>
+                            {% endif %}
+                            <p></p>
+                          <a href="#" class="btn btn-danger" data-dismiss="alert" aria-label="close">J'ai compris les directives.</a>
+
+
+                      </div> 
+
+
+
+                  {% else   %}
+                      <div style="width:750px; height : 550px; position:absolute; z-index:1000; opacity: 0.9; background-color: #FFF" >
+                      </div>
+
+                          <div class="alert alert-danger" style="position:absolute; z-index:1001; top: 150px; text-align:center" >
+                              <b><i class="fa fa-lock fa-10x"></i><br/><br/> Vous avez atteint la limite des tentatives. Vous ne pouvez plus soumettre le résultat.</b>
+                          </div>
+                  {% endif   %}
+
+
+
+
+
+
  
               {% endif %}
 
@@ -183,7 +218,6 @@
 
                             {% if available.is_ok %}
 
- 
                                 {% include 'qcm/is_evaluation.html' %}
 
                             {% else %}
@@ -196,15 +230,15 @@
                         {% endif %}
                     {% endif %}  
 
-
+                      <!-- Retour aux exercices du parcours -->
                     {% if parcours.is_evaluation %}
-
                         {% if  parcours.is_exit %}
                           <a href="{% url 'show_parcours_student' parcours.id %}"  class="btn btn-default" >  Revenir aux exercices   </a>
                         {% endif %}
                     {% else %}
                       <a href="javascript:history.back()"><input type="button" value="Revenir aux exercices" class="btn btn-default "/></a>
                     {% endif %}
+
 
                       <!-- ligne d'enregistrement -->
                       <input id="relation" name="relation_id"  type="hidden" value="{{ relation.id }}"/>
@@ -272,17 +306,6 @@
         {% include 'qcm/signal_exercise.html' %}
     </div>  
 
-
-
-
-
-
-
-
-
-
-
-
     <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script>
                   <!-- Additional Javascript for Geogebra exercises -->
     <!-- <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script> -->
@@ -326,25 +349,110 @@
                         applet.setValue("situation", situation );
 
                     {% if parcours.is_evaluation and parcours.is_stop %}
-                       applet.registerUpdateListener("updateListener");  
+
+                        applet.registerUpdateListener("updateListener");  
+
                     {% endif %}
 
                   }
               };
 
-
+ 
 
               function updateListener(objName) {
-                  var applet = document.ggbApplet;
-                    if ( objName == "fini") { 
-                        if ( applet.getValue(objName)  ==  1 ) { 
 
-                          alert("Vous êtes en évaluation. L'exercice est fini. Vous devez enregistrer votre résultat.") ;
-                          applet.setValue("fini", 0) ; 
 
-                        }
+                  var applet     = document.ggbApplet; 
+
+                  var grade      = applet.getValue("grade");
+                  var numexo     = applet.getValue("numexo");
+                  var situation  = "{{ relation.situation }}" ; 
+
+                  var start_time = "{{ start_time}}" ;
+                  var relation_id= "{{ relation.id}}" ;
+
+
+                  var p_available= "{{ parcours_available.nbleft}}" ;
+                  var available  = "{{ available.nbleft}}" ;
+
+                  if (Number.isInteger(p_available)) 
+                    {  
+                      var nb_attempt = parseInt(p_available) ; 
                     }
-                }
+                  else if (Number.isInteger(available)) 
+                    {  
+                      var nb_attempt = parseInt(available) ; 
+                    }
+                  else 
+                    {  
+                      var nb_attempt = 0 ; 
+                    }
+
+                  numexo = parseInt(numexo) ;
+                  score = grade/parseInt(situation) ;
+
+
+                  if (  applet.getValue("demarrer")  &&  objName == "demarrer"  &&  applet.getValue("init")   ) 
+                      {
+
+                          console.log( "===========  init de la bdd  ==============" );
+                          // Modification du nombre de tentatives
+                          nb_left = nb_attempt-1;
+                          if ( nb_attempt-1 < 0)
+                              {
+                                nb_left = 0;
+                              }
+                          $("#attempt").html(nb_left); 
+                          // ========= AJAX ================
+                          use_ajax( 1 , start_time, score, relation_id, "ok" , true )
+                      }
+
+
+                  if (  applet.getValue("demarrer") && numexo > 1 && objName == "numexo"   ) 
+                        {
+                            use_ajax( numexo, start_time, score, relation_id, "ok" , false )
+                        }
+
+ 
+
+                  if ( applet.getValue("fini")  ==  1 ) 
+                      {
+                          alert("Vous êtes en évaluation. L'exercice est fini. Passer à l'exercice suivant.") ;
+                          applet.setValue("fini", 0) ; 
+                      }
+
+
+
+                  function use_ajax( numexo, start_time, score, relation_id, is_ajax , init ){
+
+                        if (init) 
+                            { 
+                              dataset = {'numexo'     : numexo, 'start_time' : start_time , 'score': score,  'relation_id': relation_id,  'is_ajax'    : is_ajax, 'init'       : init } 
+                            }
+                        else 
+                            { 
+                              dataset = {'numexo'     : numexo, 'start_time' : start_time , 'score': score,  'relation_id': relation_id, 'is_ajax'    : is_ajax } 
+                            }
+
+                        $.ajax({
+                                  url: '../../store_the_score_relation_ajax/',
+                                  data: dataset ,
+                                  type: "POST",
+                                  dataType: "json",
+                                  success: function (data) {
+                                          $('#is_storage').show();
+                                          $('#is_storage').html(data.html);
+                                          setTimeout(function(){ $('#is_storage').hide() }, 4000);
+
+                                          if (situation == data.nb_situation)
+                                            { $('#submit_button_evaluation').show(); }
+
+                                          }
+                              });
+
+                      }
+
+              }
 
 
         var applet = new GGBApplet('5.0', parameters,true);
@@ -358,5 +466,7 @@
 
 
 {% endblock  %}   
+
+ 
 
  

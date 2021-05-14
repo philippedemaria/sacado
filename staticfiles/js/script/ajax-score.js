@@ -67,14 +67,11 @@ define(['jquery', 'bootstrap'], function ($) {
 
            var this_situation = parseInt(situation)  + 1 ;
 
-           console.log(situation  , numexo , this_situation ) ; 
 
                  if ( this_situation != numexo ) {
                         alert("Vous devez effectuer le nombre de "+situation+" situations attendues.");
                         return false;
                     }
-
-
 
             score = grade/(numexo-1) ;
  
