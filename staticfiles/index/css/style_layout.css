@@ -447,14 +447,6 @@ table.table-bordered.dataTable {
   text-align: center;
 }
 
-.logolevel{
-  position:absolute;
-  left:0px;
-  top:70px;
-
-}
-
-
 
 /*--------------------------------------------------------------
 # Intro Section
@@ -714,11 +706,21 @@ table.table-bordered.dataTable {
 /*--------------------------------------------------------------
 # Surcouche bootstrap for nav mobile
 --------------------------------------------------------------*/
- @media (max-width:1100px){
+
+
+.logolevel{
+  position:absolute;
+  left:0px;
+  top:70px;
+
+}
+ @media (max-width:1400px){
 .logolevel{display:none!important}
 }
- .d-none{display:none!important}
- @media (min-width:992px){
+
+
+.d-none{display:none!important}
+@media (min-width:992px){
   .d-lg-none{display:none!important}
   .d-lg-inline{display:inline!important}
   .d-lg-inline-block{display:inline-block!important}
