@@ -211,13 +211,19 @@ def send_message(request):
     if token :
         if int(token) == 7 :
             if message:
+                #### Si c'est un établissement qui fait une demande 
                 school_datas = ""
                 if not subject :
                     subject = "Adhésion SACADO - demande d'IBAN"
                     school_id = request.session.get("inscription_school_id",None)
+                    if not school_id:
+                        school_id = request.POST.get("inscription_school_id",None)
+                    print(school_id)
                     if school_id :
                         school = School.objects.get(pk = school_id)
                         school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
+                ############################################################  
+
                 send_mail(subject,
                           "Bonjour, vous venez d'envoyer le message suivant :\n\n" + message+" \n\n" + email +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
                           settings.DEFAULT_FROM_EMAIL ,
@@ -341,10 +347,9 @@ def payment_school_adhesion(request):
     contact       = request.session.get("contact", None)
     new_user_id   = request.session.get("new_user_id", None)
 
-    if new_user_id :
+ 
+    if school_id and new_user_id :
         user = User.objects.get(pk = new_user_id )
-
-    if school_id :  
         school     = School.objects.get(pk = school_id)
         accounting = Accounting.objects.get(pk=accounting_id) 
 
@@ -357,14 +362,12 @@ def payment_school_adhesion(request):
 
 
 
-def iban_asking(request):
+def iban_asking(request,school_id,user_id):
 
-    school_id = request.session.get("inscription_school_id")
-    new_user_id = request.session.get("new_user_id")
     school = School.objects.get(pk = school_id)
-    user = User.objects.get(pk = new_user_id)
+    user = User.objects.get(pk = user_id)
     send_mail("Demande d'IBAN",
-                "Bonjour l'équipe SACADO, \nJe souhaiterais recevoir un IBAN de votre compte pour procéder à un virement bancaire en faveur de mon établissement :\n\n"+ school.name +"\n"+ school.town +","+ school.country.name +"\n\nNe pas répondre.",
+                "Bonjour l'équipe SACADO, \nJe souhaiterais recevoir un IBAN de votre compte pour procéder à un virement bancaire en faveur de mon établissement :\nIdentifiant : "+ str(school.id) +"\nUAI : "+ school.code_acad +"\n"+ school.name +"\n"+ school.town +","+ school.country.name +"\n\nNe pas répondre.",
                     settings.DEFAULT_FROM_EMAIL,
                     [user.email,'sacado.asso@gmail.com'])
 

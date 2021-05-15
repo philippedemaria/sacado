@@ -1,5 +1,7 @@
 from association.models import  Accounting, Detail
 from datetime import  datetime
+from datetime import  datetime
+from general_fonctions import *
 
 def accounting_adhesion(school, today , acting, user, is_active , observation ): #acting = date d'effet
 
@@ -9,7 +11,7 @@ def accounting_adhesion(school, today , acting, user, is_active , observation ):
     next_year = int(this_year) + 1
     objet     = "Cotisation "+ str(this_year) +" - " +str(next_year)
 
-    accounting, create = Accounting.objects.get_or_create( school = school   , is_active = 0 ,  defaults={ 'date' : today , 'amount' : fee , 'objet' : objet , 'beneficiaire' :  school.name ,
+    accounting, create = Accounting.objects.get_or_create( school = school   , is_active = 0 ,  defaults={ 'date' : today , 'amount' : fee , 'objet' : objet , 'beneficiaire' :  school.name , 'chrono' : create_chrono(Accounting,"DEVIS") ,
                                                                                                                     'is_credit' : 1, 'address' :  school.address , 'complement' : school.complement ,
                                                                                                                     'town' : school.town , 'country' : school.country , 'contact' : school.address ,
                                                                                                                      'observation' : observation ,'acting' : acting , 'user' : user  })

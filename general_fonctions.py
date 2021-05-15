@@ -191,8 +191,15 @@ def split_paragraph(paragraph,coupe) :
 
 def increment_chrono( obj , pattern , forme , flag  ):
     """ On incrémente le chrono selon le chrono qui arrive """
+
     if forme :
-        last_accountings = obj.objects.filter(chrono__contains = pattern).order_by("date")
+        chro = "F" +  str(pattern) 
+        if forme == "AVOIR" :
+            chro = "A" + str(pattern)  
+        elif forme == "DEVIS" :
+            chro = "D" +  str(pattern) 
+
+        last_accountings = obj.objects.filter(chrono__contains = chro).order_by("chrono")
         if last_accountings.count() == 0 :
             new = "01"
         else :
@@ -205,14 +212,8 @@ def increment_chrono( obj , pattern , forme , flag  ):
             else :
                 new = str(new)
 
-        ch = "F" +  str(pattern) + "-" + new
-        if flag :
-            ch = str(pattern) + "-" + new
-        else : 
-            if forme == "AVOIR" :
-                ch = "A" + str(pattern) + "-" + new
-            elif forme == "DEVIS" :
-                ch = "D" +  str(pattern) + "-" + new
+        ch = chro + "-" + new
+
     else :
         ch = ""
  
