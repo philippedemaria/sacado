@@ -123,9 +123,6 @@ def create_school(request):
 		school = form.save()
 		school.is_active = 1
 		school.save()
-		# Create Web abonnement
-		#create_web_abonnement(school)
-
 		Stage.objects.create(school = school ,low = 30,  medium = 65, up = 85)
 		return redirect('schools')
 
@@ -629,6 +626,10 @@ def renew_school_adhesion(request):
 
     accounting_id =  accounting_adhesion(school, today , None , user, False , "Renouvellement" )
     accounting = Accounting.objects.get(pk = accounting_id) 
+    date_start, date_stop = date_abonnement(today)
+    abonnement, abo_created = Abonnement.objects.get_or_create(school = school, date_start = date_start, date_stop = date_stop,  accounting_id = accounting_id , is_gar = school.gar , defaults={ 'user' : user, 'is_active' : 0}  )
+
+
 
     request.session["accounting_id"] = accounting_id
 
