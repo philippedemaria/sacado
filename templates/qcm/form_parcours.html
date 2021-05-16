@@ -243,6 +243,28 @@
                     {% if sacado_asso %}
                         {{ form.vignette|add_class:"btn btn-default full_width" }} 
                         {{ form.vignette.errors }}
+
+                        {% if group_id %}
+                        <div id="label_vignette"> 
+                                <label>Ou choisir une image proposée</label>
+                                {% if not group_id %}
+                                <span style="font-size:12px;color:#cb2131">Pour voir les vignettes disponibles, modifier le niveau d'enseignement puis revenir au niveau souhaité.</span>
+                                {% endif %}
+                        </div>                         
+                        <div style="width:450px;height:300px;overflow-y:auto; background-color: #F7F7F7">        
+                            <div id="prop_vignette"> 
+                                {% for image in images %}
+                                    <img src='https://ressources.sacado.xyz/{{ image }}'  width='200px'  data-url_image='{{ image }}' class='selector_image_from_ajax' />
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% else %} 
+                            <div id="label_vignette"> 
+                            </div>        
+                            <div id="prop_vignette" style="width:450px;height:300px;overflow-y:auto; background-color: #F7F7F7"> 
+                            </div>
+                        {% endif %} 
+
                     {% else %}  
                     <div class="alert alert-danger">
                         <small>L'utilisation d'image est réservée à la version établissement.</small>
@@ -251,26 +273,9 @@
                     </div>
 
 
-                    {% if sacado_asso %}
-                        {% if group_id %}
-                        <div id="label_vignette"> 
-                                <label>Ou choisir une image proposée</label>
-                                {% if not group_id %}
-                                <span style="font-size:12px;color:#cb2131">Pour voir les vignettes disponibles, modifier le niveau d'enseignement puis revenir au niveau souhaité.</span>
-                                {% endif %}
-                        </div>        
-                        <div id="prop_vignette"> 
-                            {% for image in images %}
-                                <img src='https://ressources.sacado.xyz/{{ image }}'  width='200px'  data-url_image='{{ image }}' class='selector_image_from_ajax' />
-                            {% endfor %}
-                        </div>
-                        {% else %} 
-                            <div id="label_vignette"> 
-                            </div>        
-                            <div id="prop_vignette"> 
-                            </div>
-                        {% endif %} 
-                    {% endif %} 
+ 
+
+ 
 
 
 

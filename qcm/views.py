@@ -1544,11 +1544,12 @@ def update_parcours(request, id, idg=0 ):
 
         else :
             print(form.errors)
- 
+    images = []
     if idg > 0 and idg < 99999999999 :
         group_id = idg
         request.session["group_id"] = idg
-        group = Group.objects.get(pk = group_id) 
+        group = Group.objects.get(pk = group_id)
+        images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id=group.subject).exclude(vignette=" ").distinct()
         if Sharing_group.objects.filter(group_id=group_id, teacher = teacher).exists() :
             sh_group = Sharing_group.objects.get(group_id=group_id, teacher = teacher)
             role = sh_group.role 
@@ -1566,7 +1567,7 @@ def update_parcours(request, id, idg=0 ):
     students_checked = parcours.students.count()  # nombre d'étudiant dans le parcours
 
     context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'group': group ,  'relationsips': relationships, 'share_groups': share_groups, 'relationships' :  [] ,
-               'exercises': exercises, 'levels': levels, 'themes': themes_tab, 'students_checked': students_checked, 'communications' : [], 'role' : role }
+               'exercises': exercises, 'levels': levels, 'themes': themes_tab, 'students_checked': students_checked, 'communications' : [], 'role' : role , 'images' : images }
 
     return render(request, 'qcm/form_parcours.html', context)
 
@@ -7290,7 +7291,7 @@ def create_folder(request,idg):
     teacher = request.user.teacher 
     group = Group.objects.get(pk = idg)
     form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level  })
-
+    images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id = group.subject).exclude(vignette=" ").distinct()
 
     parcourses = set()
     for student in group.students.all() :
@@ -7313,6 +7314,8 @@ def create_folder(request,idg):
             nf.is_folder = 1
             nf.level = group.level
             nf.subject = group.subject
+            if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
+                nf.vignette = request.POST.get("this_image_selected",None)
             nf.save() 
             nf.groups.add(group) 
             nf.leaf_parcours.set(lp)        
@@ -7322,7 +7325,7 @@ def create_folder(request,idg):
         else:
             print(form.errors)
 
-    context = {'form': form,   'teacher': teacher,  'group': group,  'parcours': None, 'parcourses' : parcourses ,  'relationships': [], 'role' : True }
+    context = {'form': form,   'teacher': teacher, 'group': group,  'group_id': group.id,  'images' : images ,    'parcours': None, 'parcourses' : parcourses ,  'relationships': [], 'role' : True }
 
     return render(request, 'qcm/form_folder.html', context)
  
@@ -7342,10 +7345,13 @@ def update_folder(request,id,idg):
         for student in group.students.exclude(user__username__contains="_e-test") :
             parcourses.update(student.students_to_parcours.filter(teacher = teacher).exclude(is_folder=1))
         group_exists = True
+        images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id = group.subject).exclude(vignette=" ").distinct()
+
     except :
         group = None
         group_exists = False
         parcourses = teacher.teacher_parcours.all()
+        images = [] 
 
     if request.method == "POST" :
         lp = []            
@@ -7364,6 +7370,8 @@ def update_folder(request,id,idg):
             nf.is_folder = 1
             nf.level = group.level
             nf.subject = group.subject
+            if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
+                nf.vignette = request.POST.get("this_image_selected",None)
             nf.save()  
             nf.leaf_parcours.set(lp)
             ##################################################
@@ -7381,7 +7389,7 @@ def update_folder(request,id,idg):
         else:
             print(form.errors)
 
-    context = {'form': form,   'teacher': teacher,  'group': group,  'parcours': parcours, 'parcourses' : parcourses ,   'relationships': [], 'role' : True }
+    context = {'form': form,   'teacher': teacher,  'group': group, 'group_id': group.id,  'parcours': parcours, 'parcourses' : parcourses , 'images' : images ,   'relationships': [], 'role' : True }
 
     return render(request, 'qcm/form_folder.html', context)
  
