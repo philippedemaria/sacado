@@ -4180,11 +4180,13 @@ def create_evaluation(request):
         group_id = request.session.get("group_id",None)
         folder_parcourses = teacher.teacher_parcours.filter(leaf_parcours= parcours).order_by("level") 
         group = Group.objects.get(pk=group_id)
+        images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id=group.subject).exclude(vignette=" ").distinct()
         form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level, 'folder_parcours' : folder_parcourses  })
     except :
         form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher )
         group_id = None
         group = None
+        images = []
 
     themes_tab = []
     for level in levels :
@@ -4234,7 +4236,7 @@ def create_evaluation(request):
     else:
         print(form.errors)
 
-    context = {'form': form, 'parcours_is_folder' : False, 'teacher': teacher, 'parcours': None, 'groups': groups, 'idg': 0,  'group_id': group_id , 'group': group , 'relationships': [], 'communications' : [], 'share_groups' : share_groups , 
+    context = {'form': form, 'parcours_is_folder' : False, 'images' : images  , 'teacher': teacher, 'parcours': None, 'groups': groups, 'idg': 0,  'group_id': group_id , 'group': group , 'relationships': [], 'communications' : [], 'share_groups' : share_groups , 
                'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'role':True , 'idp' : 0 }
 
     return render(request, 'qcm/form_evaluation.html', context)
@@ -4308,18 +4310,19 @@ def update_evaluation(request, id, idg=0 ):
         group_id = idg
         request.session["group_id"] = idg
         group = Group.objects.get(pk = group_id) 
- 
+        images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id=group.subject).exclude(vignette=" ").distinct()
     else :
         group_id = None
         group = None
         request.session["group_id"] = None
+        images = []
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
 
 
     students_checked = parcours.students.count()  # nombre d'étudiant dans le parcours
 
-    context = {'form': form, 'parcours_is_folder' : False, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'relationships': relationships, 'communications' : [], 'role': role,  'share_groups' : share_groups , 
+    context = {'form': form, 'parcours_is_folder' : False, 'images' : images  , 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'relationships': relationships, 'communications' : [], 'role': role,  'share_groups' : share_groups , 
                'exercises': exercises, 'levels': levels, 'themes': themes_tab, 'students_checked': students_checked}
 
     return render(request, 'qcm/form_evaluation.html', context)
