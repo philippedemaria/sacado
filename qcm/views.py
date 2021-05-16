@@ -6268,12 +6268,12 @@ def create_course(request, idc , id ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     ######################################################    
-
-    courses = Course.objects.filter(annoncement__contains="iframe",author_id=2480)
-    for course in courses :
-        annoncement = course.annoncement
-        course.annoncement = annoncement.replace("/888888/","/FFFFFF/")
-        course.save()
+    #  Pour modifier un annoncement de cours
+    #courses = Course.objects.filter(annoncement__contains="iframe",author_id=2480)
+    #for course in courses :
+    #    annoncement = course.annoncement
+    #    course.annoncement = annoncement.replace("/888888/","/FFFFFF/")
+    #    course.save()
 
     ######################################################
 
