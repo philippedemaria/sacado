@@ -1326,7 +1326,7 @@ def lock_all_exercises_for_student(dateur,parcours):
 
 
 def create_parcours(request,idp=0):
-
+    """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
     teacher         = request.user.teacher
     levels          = teacher.levels.all()
 
@@ -1450,7 +1450,7 @@ def create_parcours(request,idp=0):
         request.session["group_id"]  = None
  
 
-    context = {'form': form,   'teacher': teacher,  'groups': groups,  'levels': levels, 'idg': 0,  'parcours_folder': parcours_folder ,  'themes' : themes_tab, 'group_id': group_id , 'parcours': None,  'relationships': [], 'share_groups' : share_groups , 
+    context = {'form': form,  'parcours_is_folder' : False,   'teacher': teacher,  'groups': groups,  'levels': levels, 'idg': 0,  'parcours_folder': parcours_folder ,  'themes' : themes_tab, 'group_id': group_id , 'parcours': None,  'relationships': [], 'share_groups' : share_groups , 
                'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'communications' : [],  'group': group , 'role' : True , 'idp' : idp , 'images' : images }
 
     return render(request, 'qcm/form_parcours.html', context)
@@ -1460,6 +1460,8 @@ def create_parcours(request,idp=0):
 
 @parcours_exists
 def update_parcours(request, id, idg=0 ):
+    """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
+
     teacher = Teacher.objects.get(user_id=request.user.id)
     levels = teacher.levels.all()
  
@@ -1567,7 +1569,7 @@ def update_parcours(request, id, idg=0 ):
     students_checked = parcours.students.count()  # nombre d'étudiant dans le parcours
 
     context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'group': group ,  'relationsips': relationships, 'share_groups': share_groups, 'relationships' :  [] ,
-               'exercises': exercises, 'levels': levels, 'themes': themes_tab, 'students_checked': students_checked, 'communications' : [], 'role' : role , 'images' : images }
+               'exercises': exercises, 'parcours_is_folder' : False, 'levels': levels, 'themes': themes_tab, 'students_checked': students_checked, 'communications' : [], 'role' : role , 'images' : images }
 
     return render(request, 'qcm/form_parcours.html', context)
 
@@ -4156,7 +4158,7 @@ def ajax_search_exercise(request):
 
 
 def create_evaluation(request):
-
+    """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
     if not request.user.is_authenticated :
         redirect('index')
 
@@ -4232,7 +4234,7 @@ def create_evaluation(request):
     else:
         print(form.errors)
 
-    context = {'form': form, 'teacher': teacher, 'parcours': None, 'groups': groups, 'idg': 0,  'group_id': group_id , 'group': group , 'relationships': [], 'communications' : [], 'share_groups' : share_groups , 
+    context = {'form': form, 'parcours_is_folder' : False, 'teacher': teacher, 'parcours': None, 'groups': groups, 'idg': 0,  'group_id': group_id , 'group': group , 'relationships': [], 'communications' : [], 'share_groups' : share_groups , 
                'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'role':True , 'idp' : 0 }
 
     return render(request, 'qcm/form_evaluation.html', context)
@@ -4240,6 +4242,7 @@ def create_evaluation(request):
 
 #@user_is_parcours_teacher 
 def update_evaluation(request, id, idg=0 ):
+    """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
     teacher = Teacher.objects.get(user_id=request.user.id)
     levels = teacher.levels.all()
 
@@ -4316,7 +4319,7 @@ def update_evaluation(request, id, idg=0 ):
 
     students_checked = parcours.students.count()  # nombre d'étudiant dans le parcours
 
-    context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'relationships': relationships, 'communications' : [], 'role': role,  'share_groups' : share_groups , 
+    context = {'form': form, 'parcours_is_folder' : False, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'relationships': relationships, 'communications' : [], 'role': role,  'share_groups' : share_groups , 
                'exercises': exercises, 'levels': levels, 'themes': themes_tab, 'students_checked': students_checked}
 
     return render(request, 'qcm/form_evaluation.html', context)
@@ -7287,7 +7290,7 @@ def mastering_custom_done(request):
 ##################################################################################################################################################
 
 def create_folder(request,idg):
-
+    """ 'parcours_is_folder' : True pour les vignettes et différencier si folder ou pas """
     teacher = request.user.teacher 
     group = Group.objects.get(pk = idg)
     form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level  })
@@ -7325,7 +7328,7 @@ def create_folder(request,idg):
         else:
             print(form.errors)
 
-    context = {'form': form,   'teacher': teacher, 'group': group,  'group_id': group.id,  'images' : images ,    'parcours': None, 'parcourses' : parcourses ,  'relationships': [], 'role' : True }
+    context = {'form': form,  'parcours_is_folder' : True,  'teacher': teacher, 'group': group,  'group_id': group.id,  'images' : images ,    'parcours': None, 'parcourses' : parcourses ,  'relationships': [], 'role' : True }
 
     return render(request, 'qcm/form_folder.html', context)
  
@@ -7333,7 +7336,7 @@ def create_folder(request,idg):
 
 
 def update_folder(request,id,idg):
-
+    """ 'parcours_is_folder' : True pour les vignettes et différencier si folder ou pas """
     teacher = request.user.teacher 
 
     parcours = Parcours.objects.get(id=id)
@@ -7389,7 +7392,7 @@ def update_folder(request,id,idg):
         else:
             print(form.errors)
 
-    context = {'form': form,   'teacher': teacher,  'group': group, 'group_id': group.id,  'parcours': parcours, 'parcourses' : parcourses , 'images' : images ,   'relationships': [], 'role' : True }
+    context = {'form': form, 'parcours_is_folder' : True,   'teacher': teacher,  'group': group, 'group_id': group.id,  'parcours': parcours, 'parcourses' : parcourses , 'images' : images ,   'relationships': [], 'role' : True }
 
     return render(request, 'qcm/form_folder.html', context)
  
