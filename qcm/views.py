@@ -4210,6 +4210,7 @@ def create_evaluation(request):
         form.save_m2m()
 
         nf.students.set(form.cleaned_data.get('students'))
+
         
         sg_students =  request.POST.getlist('students_sg')
         for s_id in sg_students :
