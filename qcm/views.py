@@ -4210,6 +4210,13 @@ def create_evaluation(request):
         form.save_m2m()
 
         nf.students.set(form.cleaned_data.get('students'))
+        
+        sg_students =  request.POST.getlist('students_sg')
+        for s_id in sg_students :
+            student = Student.objects.get(user_id = s_id)
+            nf.students.add(student)
+
+
         i = 0
         for exercise in form.cleaned_data.get('exercises'):
             exercise = Exercise.objects.get(pk=exercise.id)
@@ -4282,6 +4289,13 @@ def update_evaluation(request, id, idg=0 ):
 
             nf.save()
             nf.students.set(form.cleaned_data.get('students'))
+
+ 
+            sg_students =  request.POST.getlist('students_sg')
+            for s_id in sg_students :
+                student = Student.objects.get(user_id = s_id)
+                nf.students.add(student)
+
             try:
                 for exercise in parcours.exercises.all():
                     relationship = Relationship.objects.get(parcours=nf, exercise=exercise)
