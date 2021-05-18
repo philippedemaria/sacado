@@ -422,10 +422,16 @@ def print_proformat_school(request):
  
 
     new_user_id   = request.session.get("new_user_id", None)
-    user = User.objects.get(pk = new_user_id )
+    if new_user_id :
+        user = User.objects.get(pk = new_user_id )
+    else :
+        user = request.user
  
-    school_id = request.session.get("inscription_school_id")
-    school = School.objects.get(pk = school_id)
+    school_id = request.session.get("inscription_school_id", None)
+    if school_id :
+        school = School.objects.get(pk = school_id)
+    else :
+        school = request.user.school
 
     now = datetime.now().date()
     response = HttpResponse(content_type='application/pdf')
