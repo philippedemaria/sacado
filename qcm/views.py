@@ -4162,31 +4162,32 @@ def create_evaluation(request):
     if not request.user.is_authenticated :
         redirect('index')
 
+    teacher = request.user.teacher
+    levels =  teacher.levels.all()  
+    images = []
+
+
     if request.session.has_key("group_id") :
-        group_id = request.session.get("group_id",None)        
+        group_id = request.session.get("group_id",None) 
         if group_id :
             group = Group.objects.get(pk = group_id)
+
+            try : 
+                folder_parcourses = teacher.teacher_parcours.filter(leaf_parcours= parcours).order_by("level") 
+                images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id=group.subject).exclude(vignette=" ").distinct()
+                form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level, 'folder_parcours' : folder_parcourses  })
+            except :
+                form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level,   }  )
+        else :
+            form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher)
+            
     else :
         group_id = None
         group = None
-        request.session["group_id"]  = None  
-
-    teacher = request.user.teacher
-    levels =  teacher.levels.all()  
-
-
-
-    try :
-        group_id = request.session.get("group_id",None)
-        folder_parcourses = teacher.teacher_parcours.filter(leaf_parcours= parcours).order_by("level") 
-        group = Group.objects.get(pk=group_id)
-        images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id=group.subject).exclude(vignette=" ").distinct()
-        form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level, 'folder_parcours' : folder_parcourses  })
-    except :
+        request.session["group_id"]  = None 
         form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher )
-        group_id = None
-        group = None
-        images = []
+
+
 
     themes_tab = []
     for level in levels :
@@ -4211,7 +4212,16 @@ def create_evaluation(request):
 
         nf.students.set(form.cleaned_data.get('students'))
 
-        
+        group_ckeched_ids = request.POST.getlist('groups')
+        nf.groups.set(group_ckeched_ids)
+
+        for group_ckeched_id in group_ckeched_ids :
+            group_ckeched = Group.objects.get(pk = group_ckeched_id)
+            for s in group_ckeched.students.all() :
+                nf.students.add(s)
+
+
+
         sg_students =  request.POST.getlist('students_sg')
         for s_id in sg_students :
             student = Student.objects.get(user_id = s_id)
@@ -4234,7 +4244,7 @@ def create_evaluation(request):
             parcours_folder = Parcours.objects.get(pk = pid)
             parcours_folder.leaf_parcours.add(nf)   
 
-
+        print(group_id)    
         if request.POST.get("save_and_choose") :
             return redirect('peuplate_parcours', nf.id)
         elif group_id :
@@ -4290,7 +4300,13 @@ def update_evaluation(request, id, idg=0 ):
 
             nf.save()
             nf.students.set(form.cleaned_data.get('students'))
+            group_ckeched_ids = request.POST.getlist('groups')
+            nf.groups.set(group_ckeched_ids)
 
+            for group_ckeched_id in group_ckeched_ids :
+                group_ckeched = Group.objects.get(pk = group_ckeched_id)
+                for s in group_ckeched.students.all() :
+                    nf.students.add(s)
  
             sg_students =  request.POST.getlist('students_sg')
             for s_id in sg_students :
