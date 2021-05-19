@@ -159,7 +159,6 @@ class Question(models.Model):
 
 
 
-
 class Choice(models.Model):
     """
     Modèle représentant un associé.
@@ -276,8 +275,6 @@ class Generate_quizz(ModelWithCode):
 
 
 
-
-
 class Generate_qr(models.Model):
     """
     Modèle qui récupère les questions du quizz généré.
@@ -332,8 +329,6 @@ class Answerplayer(models.Model):
             rep += c.answer + sep
             i +=1
         return rep
-
-
 
 
 

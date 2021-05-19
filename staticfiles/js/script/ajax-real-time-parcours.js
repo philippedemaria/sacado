@@ -13,7 +13,7 @@ define(['jquery',  'bootstrap', ], function ($) {
                  })
             
 
-        //check_live();
+        check_live();
 
         //setInterval(  check_live  , 10); 10 millisecondes pour faire sauter le serveur.
  
