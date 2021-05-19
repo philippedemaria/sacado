@@ -42,10 +42,9 @@
 {% block body %}
 <div class="content_main"> 
     <div class="row">        
-        <div class="col-sm-12 col-md-3">
-            <p style="color:{{ group.color }}"><strong>Niveau : {{ group.level.name }}</strong></p>
+        <div class="col-sm-12 col-md-4">
+            <p style="color:{{ group.color }}">Niveau : <strong>{{ group.level.name }}</strong> - Code : <strong>{{ group.code }}</strong></p>
         </div>
-
         <div class="col-sm-12 col-md-7"> 
             <form action="" method="POST"> 
                 {% csrf_token %}
@@ -71,7 +70,7 @@
                     <td>Courriel*</td>
                     <td>Identifiant* </td>
                     <td>Dernière connexion</td>
-                    <td><span style="font-size:13px; color:#cb2131">Mot de passe par défaut : <strong>sacado2020</strong> 
+                    <td><span style=" color:#cb2131">Mot de passe par défaut : <strong>sacado2020</strong> 
                         <span class="helper_tip" style="color:#cb2131"> <i class="fa fa-question-circle"></i>
                                 <div class="helper_tip_text" >Lors de la création d'un élève ou d'une ré-initialisation de mot de passe, <b>sacado2020</b> est le mot de passe attribué.</div>
                             </span></span>
