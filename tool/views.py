@@ -244,16 +244,10 @@ def clone_quizz(request, id_quizz):
 
 
     for l in levels :
-        l.pk = None
-        l.save()
         quizz.levels.add(l)
     for qr in qrandoms :
-        qr.pk = None
-        qr.save()
         quizz.qrandoms.add(qr)
     for t in themes :
-        t.pk = None
-        t.save()
         quizz.themes.add(t)
 
     return redirect('list_quizzes')
