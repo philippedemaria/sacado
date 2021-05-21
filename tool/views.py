@@ -231,12 +231,12 @@ def clone_quizz(request, id_quizz):
     quizz.pk = None
     quizz.teacher = teacher
     quizz.code = str(uuid.uuid4())[:8]  
-    new_quizz=quizz.save()
+    quizz.save()
 
     for q in questions :
         q.pk = None
         q.save()
-        new_quizz.questions.add(q)
+        quizz.questions.add(q)
         for c in q.choices.all():
             c.pk = None
             c.question = q
@@ -244,11 +244,11 @@ def clone_quizz(request, id_quizz):
 
 
     for l in levels :
-        new_quizz.levels.add(l)
+        quizz.levels.add(l)
     for qr in qrandoms :
-        new_quizz.qrandoms.add(qr)
+        quizz.qrandoms.add(qr)
     for t in themes :
-        new_quizz.themes.add(t)
+        quizz.themes.add(t)
 
     return redirect('list_quizzes')
  
