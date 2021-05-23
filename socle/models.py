@@ -110,6 +110,17 @@ class Level(models.Model):
         return nb
 
 
+    def is_level_theme(self,theme):
+        this_theme = False
+        if self.themes.filter(pk=theme.id).count() > 0:
+            this_theme = True
+        return this_theme
+
+
+
+
+
+
 class Waiting(models.Model):
     name = models.CharField(max_length=500, verbose_name="Nom")
     theme  = models.ForeignKey(Theme, related_name="waitings",  on_delete=models.CASCADE, verbose_name="Thème")

@@ -1,7 +1,7 @@
 {% extends 'dashboard.html' %}
 {% load static %}
 {% load widget_tweaks %}
-
+{% load item_tags %}
 
 
 {% block require %}
@@ -58,14 +58,41 @@
                       </div>
                   </div>
               </div>
+
+
+
+
+
+              <div class="row">
+                  <div class="col-sm-12 col-md-8">
+                      <div class="form-group">
+                          <label>Niveaux cibles :</label>  <br/>
+                         
+                          {% for l in levels|dictsort:"ranking" %}
+                              <label>
+                                  {% if theme %}
+                                      {% get_level_theme l theme as this_theme %}
+                                      <input name="levels" type="checkbox" value="{{l.id}}" {% if this_theme %}checked{% endif %} /> {{ l.name }}
+                                  {% else %}
+                                      <input name="levels" type="checkbox" value="{{l.id}}"  /> {{ l.name }}
+                                  {% endif %}
+                              </label><br/>
+
+                          {% endfor %}
+                      </div>
+                  </div>
+              </div>
+
+
+
  
 
               <div class="row">
                   <div class="col-sm-12 col-md-12">
                       {% if theme %}
-                      <button type="submit" class="btn btn-sacado">Enregistrer les modifications</button>   
+                      <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>   
                       {% else %}
-                      <button type="submit" class="btn btn-sacado">Créer le thème</button> 
+                      <button type="submit" class="btn btn-primary">Créer le thème</button> 
                       {% endif %}
                       <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
                   </div>

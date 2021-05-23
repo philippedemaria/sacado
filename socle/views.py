@@ -21,13 +21,18 @@ def list_themes(request):
 
     return render(request, 'socle/list_themes.html', {'themes': themes, 'communications' : [] , })
 
+
+
 @user_is_superuser 
 def create_theme(request):
 
     form = ThemeForm(request.POST or None  )
 
     if form.is_valid():
-        form.save()
+        nf = form.save()
+        for l_id in request.POST.getlist("levels") :
+            level = Level.objects.get(pk=l_id)
+            level.themes.add(nf)
         messages.success(request, 'Le thème a été créé avec succès !')
         return redirect('themes')
     else:
@@ -37,6 +42,8 @@ def create_theme(request):
 
     return render(request, 'socle/form_theme.html', context)
 
+
+
 @user_is_superuser 
 def update_theme(request, id):
 
@@ -45,6 +52,9 @@ def update_theme(request, id):
     if request.method == "POST" :
         if theme_form.is_valid():
             theme_form.save()
+            for l_id in request.POST.getlist("levels") :
+                level = Level.objects.get(pk=l_id)
+                level.themes.add(theme)
             messages.success(request, 'Le thème a été modifié avec succès !')
             return redirect('themes')
         else:
@@ -58,7 +68,11 @@ def update_theme(request, id):
 @user_is_superuser 
 def delete_theme(request, id):
     theme = Theme.objects.get(id=id)
+    levels = Level.objects.filter(themes=theme)
+    for l in levels :
+        l.themes.remove(theme)
     theme.delete()
+
     return redirect('themes')
 
 

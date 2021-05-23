@@ -281,6 +281,20 @@ def get_resultknowledge_by_theme(obj,theme):
     return obj.resultknowledge_by_theme(theme) 
 
 
+
+@register.simple_tag   
+def get_level_theme(obj,theme): 
+    """
+    Renvoie les exercices selon thème d'un élève
+    """
+    return obj.is_level_theme(theme) 
+
+
+
+
+
+
+
 @register.filter
 def contrast_color(color):
     """
