@@ -113,11 +113,10 @@ define(['jquery',  'bootstrap' ], function ($) {
             let is_parcours = $("#is_parcours").val();
             let level_id = param0.val();
             let theme_id = param1.val();
+            let subject_id = $("#id_subject").val(); 
+
             $("#loading").html("<i class='fa fa-spinner  fa-pulse fa-fw'></i>");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-
-            url = "ajax_list_exercises_by_level_and_theme";
-
 
             var parcours_id = $("#id_parcours").val();
 
@@ -132,9 +131,11 @@ define(['jquery',  'bootstrap' ], function ($) {
                         'parcours_id': parcours_id ,
                         'level_id': level_id,
                         'theme_id': theme_id,
+                        'subject_id': subject_id,
+
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: url,
+                    url: "ajax_list_exercises_by_level_and_theme",
                     success: function (data) {
  
                         $('#content_exercises').html("").html(data.html);

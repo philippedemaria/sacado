@@ -3402,13 +3402,17 @@ def ajax_list_exercises_by_level_and_theme(request):
     level_id =  int(request.POST.get("level_id",0))  
     theme_ids =  request.POST.getlist("theme_id")
 
+    subject_id =  request.POST.get("subject_id",None)
     level = Level.objects.get(pk=level_id)
 
     try : 
         test  = theme_ids[0]
         exercises = Exercise.objects.filter(level_id = level_id , theme_id__in= theme_ids ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
     except :
-        exercises = Exercise.objects.filter(level_id = level_id ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
+        if subject_id :
+            exercises = Exercise.objects.filter(level_id = level_id , theme__subject_id = subject_id,  supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
+        else :
+            exercises = Exercise.objects.filter(level_id = level_id , supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
  
     data= {}
     data['html'] = render_to_string('qcm/ajax_list_exercises_by_level.html', { 'exercises': exercises  , "teacher" : teacher , "level_id" : level_id })
