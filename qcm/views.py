@@ -1290,9 +1290,13 @@ def ajax_chargethemes_exercise(request):
 
     thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject).order_by("name")
     data['themes'] = list(thms)
-    exercises = Exercise.objects.filter(level_id = level_id , supportfile__is_title=0 ).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
+    exercises = Exercise.objects.filter(level_id = level_id , theme__subject_id = id_subject ,  supportfile__is_title=0 ).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
 
-    data['html'] = render_to_string('qcm/ajax_list_exercises_by_level.html', { 'exercises': exercises  , "teacher" : teacher , "level_id" : level_id })
+    #data['html'] = render_to_string('qcm/ajax_list_exercises_by_level.html', { 'exercises': exercises  , "teacher" : teacher , "level_id" : level_id })
+    data['html'] = "<div class='alert alert-info'>Choisir un thème</div>"
+
+
+
 
     return JsonResponse(data)
  
@@ -3400,9 +3404,10 @@ def ajax_list_exercises_by_level_and_theme(request):
 
     level = Level.objects.get(pk=level_id)
 
-    if theme_ids[0] != "" :
+    try : 
+        test  = theme_ids[0]
         exercises = Exercise.objects.filter(level_id = level_id , theme_id__in= theme_ids ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
-    else :
+    except :
         exercises = Exercise.objects.filter(level_id = level_id ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
  
     data= {}
