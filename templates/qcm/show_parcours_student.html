@@ -27,7 +27,7 @@
      
      
     <img src="{% static 'img/angle-right.png' %}"/> 
-    <small class="thin">{{ nb_exercises }} exercice{{ nb_exercises|pluralize }}
+    <small class="thin">{{ nb_exercises }} exercice{{ nb_exercises|pluralize }} 
 
     {% if parcours.is_achievement %}
         <img src="{% static 'img/angle-right.png' %}"/>
@@ -50,15 +50,27 @@
       
 <section class="content_list"> 
 
-    {% if parcours.stop < today %}
-    <div class="row">
-        <div class="col-lg-12 col-xs-12">
-            <div class="alert alert-danger">
-                {% if parcours.is_evaluation %}Evaluation verrouillée{% else %}Parcours verrouillé {% endif %} depuis le <b>{{ parcours.stop|date:"d N Y à H:i"}}</b>.
+
+
+    {% if parcours.stop   %}
+        {% if parcours.stop < today %}
+        <div class="row">
+            <div class="col-lg-12 col-xs-12">
+                <div class="alert alert-danger">
+                    {% if parcours.is_evaluation %}Evaluation verrouillée{% else %}Parcours verrouillé {% endif %} depuis le <b>{{ parcours.stop|date:"d N Y à H:i"}}</b>.
+                </div>
             </div>
         </div>
-    </div>
-    {% endif %}
+        {% else %}
+        <div class="row">
+            <div class="col-lg-12 col-xs-12">
+                <div class="alert alert-danger">
+                    <i class="fa fa-warning"></i> Attention {% if parcours.is_evaluation %}cette évaluation sera verrouillée{% else %}ce parcours sera verrouillé {% endif %} le <b>{{ parcours.stop|date:"d N Y à H:i"}}</b>.
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    {% endif %}    
 
     <div class="row">
         <div class="col-lg-{% if courses|length > 0 %}10{% else %}12{% endif %} col-xs-12">
