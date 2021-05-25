@@ -19,6 +19,8 @@ define(['jquery','bootstrap_popover', 'bootstrap' ], function ($) {
             $(this).css('color','#EEE');
         })
 
+
+
         //$('[data-toggle="popover"]').popover();
 
         $('.selector_color').on('click', function () {
@@ -276,6 +278,21 @@ define(['jquery','bootstrap_popover', 'bootstrap' ], function ($) {
             $("#teacher_record").hide();
             $("#auto_record").show();             
         });
+
+
+
+
+            $('.div_username').on('click', function (){  
+ 
+                    let username_div = $(this).data("username_div");
+
+                    $("#response_username").html(username_div) ;
+                });
+
+
+
+
+
 
 
 
