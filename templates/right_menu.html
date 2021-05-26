@@ -1,6 +1,17 @@
 {% load item_tags %} 
 {% load static %} 
 {% if teacher.levels.all.count > 0 %} 
+
+
+<div  class="events_title">
+    <h3 class="thin">
+        {% if sacado_asso %}
+            Version complète
+        {% else %}
+            Version restreinte
+        {% endif  %}
+    </h3>
+</div> 
 <div class="events_title">
      A venir <small><span class="pull-right parcours_displayer pull-right_top"><i class="fa fa-calendar"></i> <a href="{% url 'calendar_initialize' %}" class="a_venir" >Afficher le calendrier</a> <a href="{% url 'calendar_initialize' %}" style="font-size:10px" target="_blank" title="Lien externe"><img src="{% static 'img/external-link_blue.png' %}" width="9px" ></a></span> </small>
 </div>
