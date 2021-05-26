@@ -23,9 +23,8 @@ urlpatterns = [
     
 
     path('get_school', get_school, name='get_school'),
-
     path('school_accounting', school_accounting, name='school_accounting'),
-
+    path('get_first_adhesion', get_first_adhesion, name='get_first_adhesion'),
 
     path('print_bill_school/<int:a_id>', print_bill_school, name='print_bill_school'),  
 

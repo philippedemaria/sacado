@@ -20,6 +20,7 @@ from socle.decorators import user_is_superuser
 from socle.models import Subject
 from general_fonctions import *
 from payment_fonctions import *
+from django.conf import settings # récupération de variables globales du settings.py
 ############### bibliothèques pour les impressions pdf  #########################
 import os
 from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
@@ -322,8 +323,6 @@ def school_accounting(request):
 
 
 
-
-
 def new_student(request,slug):
 
     school = this_school_in_session(request)
@@ -606,41 +605,103 @@ def new_group_many(request):
 ###############################################################################################
 ######  Renouvellement de l'adhésion
 ###############################################################################################
+def get_first_adhesion(request):
+	""" renouvellement de la cotisation annuelle"""
+
+	user = request.user
+
+	form = SchoolForm(request.POST or None)
+	token = request.POST.get("token", None)
+	today = datetime.now()
+
+
+	if request.method == "POST" :
+		if form.is_valid():
+			name = request.POST.get("name")
+			town = request.POST.get("town")
+			code_acad = request.POST.get("code_acad")
+			if School.objects.filter(name= name , town = town, code_acad = code_acad).count() == 0 :
+				school = form.save()
+
+
+				today = datetime.now()
+				if today < datetime(today.year,7,1) :
+				    somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().discount
+				else :
+				    somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().amount
+
+
+				accounting_id =  accounting_adhesion(school, today , None , user, False , "Première adhésion" )
+				accounting = Accounting.objects.get(pk = accounting_id) 
+				date_start, date_stop = date_abonnement(today)
+				abonnement, abo_created = Abonnement.objects.get_or_create(school = school, date_start = date_start, date_stop = date_stop,  accounting_id = accounting_id , is_gar = school.gar , defaults={ 'user' : user, 'is_active' : 0}  )
+
+
+				subject = "Adhésion SACADO - demande d'IBAN"
+				school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
+
+
+				send_mail(subject,
+				          "Bonjour,  :\n\n Vous avez formulé une demande d'adhésion \n\n" + user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
+				          settings.DEFAULT_FROM_EMAIL ,
+				          [user.email, "sacado.asso@gmail.com"])
  
+
+				request.session["accounting_id"] = accounting_id
+				messages.success(request,"Demandé envoyée. Nous allons vous répondre rapidement. Merci.")
+				return redirect( 'index')
+
+			else :
+				messages.error(request,"Etablissement déjà enregistré")
+
+
+
+	context =  {  'user' : user , 'form' : form ,  }
+
+	return render(request, 'school/get_first_adhesion.html', context)
+
 
 
 
 def renew_school_adhesion(request):
-    """ renouvellement de la cotisation annuelle"""
-    school = request.user.school
+	""" renouvellement de la cotisation annuelle"""
+	school = request.user.school
 
-    request.session["inscription_school_id"] = None
+	request.session["inscription_school_id"] = None
 
-    today = datetime.now()
-    if today < datetime(today.year,7,1) :
-        somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().discount
-    else :
-        somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().amount
-    
-    user = request.user
+	today = datetime.now()
+	if today < datetime(today.year,7,1) :
+		somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().discount
+	else :
+		somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().amount
 
-    if Accounting.objects.filter(school = school , is_abonnement =  1 ,is_active = 0 ):
-    	accounting = Accounting.objects.filter(school = school , is_abonnement =  1, is_active = 0 ).last()
-    	accounting_id = accounting.id
-    	abonnement = accounting.abonnement
-    else :
-	    accounting_id =  accounting_adhesion(school, today , None , user, False , "Renouvellement" )
-	    accounting = Accounting.objects.get(pk = accounting_id) 
-	    date_start, date_stop = date_abonnement(today)
-	    abonnement, abo_created = Abonnement.objects.get_or_create(school = school, date_start = date_start, date_stop = date_stop,  accounting_id = accounting_id , is_gar = school.gar , defaults={ 'user' : user, 'is_active' : 0}  )
+	user = request.user
+
+	if Accounting.objects.filter(school = school , is_abonnement =  1 ,is_active = 0 ):
+		accounting = Accounting.objects.filter(school = school , is_abonnement =  1, is_active = 0 ).last()
+		accounting_id = accounting.id
+		abonnement = accounting.abonnement
+	else :
+		accounting_id =  accounting_adhesion(school, today , None , user, False , "Renouvellement" )
+		accounting = Accounting.objects.get(pk = accounting_id) 
+		date_start, date_stop = date_abonnement(today)
+		abonnement, abo_created = Abonnement.objects.get_or_create(school = school, date_start = date_start, date_stop = date_stop,  accounting_id = accounting_id , is_gar = school.gar , defaults={ 'user' : user, 'is_active' : 0}  )
 
 
+	subject = "Adhésion SACADO - demande d'IBAN"
+	school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
 
-    request.session["accounting_id"] = accounting_id
+	send_mail(subject,
+	          "Bonjour,  :\n\n Vous avez formulé une demande de renouvellement d'adhésion \n\n" + user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
+	          settings.DEFAULT_FROM_EMAIL ,
+	          [user.email, "sacado.asso@gmail.com"])
 
-    context =  {  'school' : school  , 'user' : user , 'accounting_id' : accounting_id, 'accounting' : accounting  }
 
-    return render(request, 'school/renew_school_adhesion.html', context)
+	request.session["accounting_id"] = accounting_id
+
+	context =  {  'school' : school  , 'user' : user , 'accounting_id' : accounting_id, 'accounting' : accounting  }
+
+	return render(request, 'school/renew_school_adhesion.html', context)
 
 
  
