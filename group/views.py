@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from django.core import serializers
 from django.template.loader import render_to_string
 from django.contrib import messages
+from django.contrib.auth.hashers import check_password
 from django.core.mail import send_mail
 import uuid
 from django.contrib.auth.hashers import make_password
@@ -647,8 +648,6 @@ def aggregate_group(request):
     if Group.objects.exclude(students = student).filter(code = code_groupe,lock=0).exists()  :    
         group = Group.objects.get(code = code_groupe)
         group.students.add(student)
-    else :
-        print(code_groupe)    
 
     return redirect("index") 
 
@@ -1110,41 +1109,62 @@ def enroll(request, slug):
     user_form = UserForm(request.POST or None)
 
     if request.method == 'POST':
-        user_form = UserForm(request.POST)
-        if user_form.is_valid() :
-            user = user_form.save(commit=False)
-            user.user_type = User.STUDENT
-            password = request.POST.get("password1")
-            username = request.POST.get("username")
-            user.set_password(password)
-            user.save()
+        submit_button = request.POST.get("submit_button", None)
+        if submit_button == "Enregistrer" :
+            user_form = UserForm(request.POST)
+            if user_form.is_valid() :
+                user = user_form.save(commit=False)
+                user.user_type = User.STUDENT
+                password = request.POST.get("password1")
+                username = request.POST.get("username")
+                user.set_password(password)
+                user.save()
+                # Liste des parcours des élèves du groupe
+                # parcourses = []
+                # for student in group.students.all():
+                #     for p in student.students_to_parcours.filter(teacher=group.teacher) :
+                #         if p not in parcourses :
+                #             parcourses.append(p)
 
-            # Liste des parcours des élèves du groupe
-            parcourses = []
-            for student in group.students.all():
-                for p in student.students_to_parcours.filter(teacher=group.teacher) :
-                    if p not in parcourses :
-                        parcourses.append(p)
+                # Liste des parcours des élèves du groupe
+                parcourses = set()
+                for std in group.students.all():
+                    parcourses.update(std.students_to_parcours.filter(teacher=group.teacher))
 
-            # Création de Student et affections des parcours
-            student = Student.objects.create(user=user, level=group.level)
-            attribute_all_documents_to_student(parcourses, student)
 
-            group.students.add(student)
+                # Création de Student et affections des parcours
+                student = Student.objects.create(user=user, level=group.level)
+                attribute_all_documents_to_student(parcourses, student)
+                group.students.add(student)
+                messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation. Connectez-vous avec vos identifiants en cliquant sur le bouton bleu Se connecter.")
+                try :    
+                    if user_form.cleaned_data['email']:
+                        send_mail('Création de compte sur Sacado',
+                                  'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.',
+                                  settings.DEFAULT_FROM_EMAIL,
+                                  [request.POST.get("email")])
+                except :
+                    pass 
+        else :
 
-            messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation. Connectez-vous avec vos identifiants en cliquant sur le bouton bleu Se connecter.")
-            try :    
-                if user_form.cleaned_data['email']:
-                    send_mail('Création de compte sur Sacado',
-                              'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.',
-                              settings.DEFAULT_FROM_EMAIL,
-                              [request.POST.get("email")])
-            except :
-                pass
+            username = request.POST.get("this_username")
+            group_id = request.POST.get("group_id")
+            group = get_object_or_404(Group, pk=group_id)
+            password = request.POST.get("this_password")
 
-            return redirect('index')    
-        else:
-            user_form = UserForm(request.POST or None)
+            user = authenticate(username=username, password=password)
+            if user :
+                # Liste des parcours des élèves du groupe
+                parcourses = set()
+                for std in group.students.all():
+                    parcourses.update(std.students_to_parcours.filter(teacher=group.teacher))
+                attribute_all_documents_to_student(parcourses,  user.student)
+                group.students.add(  user.student)
+                messages.success(request, "Vous avez rejoint le groupe avec succès ! Connectez-vous avec vos identifiants en cliquant sur le bouton bleu Se connecter.")
+            else :
+                messages.error(request,"Utilisateur inconnu")
+
+        return redirect('index') 
 
     return render(request, 'group/enroll.html', {"u_form": user_form, "slug": slug, "group": group, })
 

@@ -135,6 +135,37 @@
         $("#join_alone").hide();
         $("#parcours_div").hide();
         $('#level_selected').toggle(500); 
+
+
+
+
+        $("#already").hide();
+        $("#new_inscription").hide();
+
+ 
+        $('#show_already').on('click', function (event) { 
+            $("#new_inscription").hide();
+            $('#already').show(); 
+            $('#already').removeClass("no_display"); 
+            $('.remove_after').remove();
+            $('.init_box').removeClass("init_box"); 
+            $('#show_already').addClass("btn btn-default"); 
+            $('#show_new_inscription').addClass("btn btn-default"); 
+        });
+
+ 
+        $('#show_new_inscription').on('click', function (event) { 
+            $("#new_inscription").show();
+            $('#already').hide(); 
+            $('#new_inscription').removeClass("no_display"); 
+            $('.remove_after').remove(); 
+            $('.init_box').removeClass("init_box");
+            $('#show_new_inscription').addClass("btn btn-default"); 
+            $('#show_already').addClass("btn btn-default"); 
+        });
+
+
+
 });
 
  

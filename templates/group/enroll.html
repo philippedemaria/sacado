@@ -65,6 +65,27 @@ body{
 .thin{
   font-weight: 100;
 }
+
+.init_box{
+  border: 1px solid #f1eef7;
+  padding : 70px 10px;
+  width: 100%;
+  height:200px;
+}
+
+.init_box:hover{
+  background-color: #f1eef7;
+}
+
+.no_display{
+  display : none;
+}
+
+.toppadding{
+  padding-top: 20px;
+}
+
+
 </style>
 
 
@@ -74,7 +95,6 @@ body{
 <body>
 
     <div id="inscription">
-        <form action="" method="POST" id="student_form">
             <div id="head_inscription">
                 
                     <div class="row">
@@ -84,108 +104,160 @@ body{
                     </div>   
             </div>
             <div id="body_inscription">
-
-
                 {% if group.lock %}
                     <div class="alert alert-danger">
-                        <i class="fa fa-lock fa-2x"></i> Le groupe <b>{{ group }}</b> est verrouillé. <br/>Vous ne pouvez plus vous y inscrire. Contacter l'enseignant {{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}.
+                        <i class="fa fa-lock fa-2x"></i> Le groupe <b>{{ group.name }}</b> est verrouillé. <br/>Vous ne pouvez plus vous y inscrire. Contacter l'enseignant {{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}.
                     </div>
                 {% else %}
-                {% csrf_token %}
-                    <h2 class="thin">S'inscrire à {{ group }}<span class="pull-right"><small>{{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}</small></span></h2>
-                    <input name="group_id" value="{{ group.id }}" type="hidden" /> 
-                    <div class="row">
+                <form action="" method="POST" id="student_form">
+
+                    <div class="row" align="center">
                         <div class="col-sm-12 col-md-6">
-                            <div class="form-group">
-                                {{ u_form.first_name.label_tag }}
-                                {{ u_form.first_name |add_class:"form-control id_first_name" }}
-                                {{ u_form.first_name.errors }}
+                            <div class="init_box">
+                                <a href="#" id="show_new_inscription">
+                                    Je n'ai pas de compte SACADO 
+                                </a>
+                                <div class="remove_after">
+                                    <br/><br/>
+                                    <img src="{% static 'img/sacadoA1_grey.png' %}" />
+                                </div>
                             </div>
-                        </div>                
+                        </div>
                         <div class="col-sm-12 col-md-6">
-                            <div class="form-group">
-                                {{ u_form.last_name.label_tag }}
-                                {{ u_form.last_name |add_class:"form-control id_last_name" }}
-                                {{ u_form.last_name.errors }}
+                            <div class="init_box">
+                                <a href="#"  id="show_already">
+                                    J'ai déjà un compte SACADO 
+                                </a>                                
+                                <div class="remove_after">
+                                    <br/><br/>
+                                    <img src="{% static 'img/sacadoA1.png' %}" />
+                                </div>
                             </div>
-                        </div>    
+                        </div>
+                    </div>   
+                    {% csrf_token %}
+                    <div id="new_inscription" class="no_display toppadding" >
+
+                        <h2 class="thin">S'inscrire à {{ group.name }}<span class="pull-right"><small>{{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}</small></span></h2>
+                        <input name="group_id" value="{{ group.id }}" type="hidden" /> 
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    {{ u_form.first_name.label_tag }}
+                                    {{ u_form.first_name |add_class:"form-control id_first_name" }}
+                                    {{ u_form.first_name.errors }}
+                                </div>
+                            </div>                
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    {{ u_form.last_name.label_tag }}
+                                    {{ u_form.last_name |add_class:"form-control id_last_name" }}
+                                    {{ u_form.last_name.errors }}
+                                </div>
+                            </div>    
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-11 col-md-12">
+                                <div class="form-group">
+                                    {{ u_form.email.label_tag }} <small>(optionnel)</small>
+                                    {{ u_form.email |add_class:"form-control email" }}
+                                    {{ u_form.email.errors }}
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-sm-11 col-md-9">
+                                <div class="form-group">
+                                    {{ u_form.username.label_tag }}
+                                    {{ u_form.username |add_class:"form-control username" }}
+
+                                </div>
+                                {% for error in u_form.username.errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-sm-1 col-md-3">
+                                <div class="form-group">
+                                    <span class="ajaxresult pull-right"></span>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    {{ u_form.password1.label_tag }} <small><em>Au moins 8 caractères</em></small>
+                                    {{ u_form.password1 |add_class:"form-control" }}
+                                    {{ u_form.password1.errors }}
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    {{ u_form.password2.label_tag }}
+                                    {{ u_form.password2 |add_class:"form-control" }}
+                                    {{ u_form.password2.errors }}
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="alert alert-danger">
+
+                                    Votre mot de passe ne doit pas contenir votre prénom ou votre prénom. Il doit contenir <b>au moins 8 caractères</b>.
+
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                     <a href="#"  data-toggle='modal' data-target='#rgpd'>Voir le règlement général sur la protection des données.</a>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <input value="Enregistrer" name="submit_button" type="submit" class="btn btn-primary pull-right"/>
+                                </div>
+                            </div>
+                        </div> 
                     </div>
-                    <div class="row">
-                        <div class="col-sm-11 col-md-12">
-                            <div class="form-group">
-                                {{ u_form.email.label_tag }} <small>(optionnel)</small>
-                                {{ u_form.email |add_class:"form-control email" }}
-                                {{ u_form.email.errors }}
-                            </div>
+                </form>
+                <form action="" method="POST" id="student_form">
+                    {% csrf_token %}
+                        <input name="group_id" value="{{ group.id }}" type="hidden" /> 
+                    <div id="already" class="no_display toppadding" >
+                        <h2 class="thin">Rejoindre le groupe {{ group.name }} <span class="pull-right"><small>{{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}</small></span></h2>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    <label>Identifiant Sacado :</label>
+                                    <input type="text"  name="this_username" class="form-control" />
+                                </div>
+                            </div>                
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    <label>Mot de passe :</label>
+                                    <input type="password" name="this_password" class="form-control" />
+                                </div>
+                            </div>    
                         </div>
-                    </div> 
-                    <div class="row">
-                        <div class="col-sm-11 col-md-9">
-                            <div class="form-group">
-                                {{ u_form.username.label_tag }}
-                                {{ u_form.username |add_class:"form-control username" }}
-
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <input value="Rejoindre le groupe" name="other_submit_button" type="submit" class="btn btn-primary pull-right"/>
+                                </div>
                             </div>
-                            {% for error in u_form.username.errors %}
-                            <div class="alert alert-danger">
-                                <strong>{{ error|escape }}</strong>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        <div class="col-sm-1 col-md-3">
-                            <div class="form-group">
-                                <span class="ajaxresult pull-right"></span>
-                            </div>
-                        </div>
-                    </div> 
-                    <div class="row">
-                        <div class="col-sm-12 col-md-6">
-                            <div class="form-group">
-                                {{ u_form.password1.label_tag }} <small><em>Au moins 8 caractères</em></small>
-                                {{ u_form.password1 |add_class:"form-control" }}
-                                {{ u_form.password1.errors }}
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-6">
-                            <div class="form-group">
-                                {{ u_form.password2.label_tag }}
-                                {{ u_form.password2 |add_class:"form-control" }}
-                                {{ u_form.password2.errors }}
-                            </div>
-                        </div>
-                    </div> 
-
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">
-                            <div class="alert alert-danger">
-
-                                Votre mot de passe ne doit pas contenir votre prénom ou votre prénom. Il doit contenir <b>au moins 8 caractères</b>.
-
-                            </div>
-                        </div>
-                    </div> 
-
-
-
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">
-                                 <a href="#"  data-toggle='modal' data-target='#rgpd'>Voir le règlement général sur la protection des données.</a>
-                            </div>
-                        </div>
-                    </div> 
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <input value="Enregistrer" type="submit" class="btn btn-primary pull-right"/>
-                            </div>
-                        </div>
-                    </div> 
+                        </div> 
+                    </div>
+                </form>
                 {% endif %}
 
 
            </div>
-        </form>
+
     </div>
 
 
