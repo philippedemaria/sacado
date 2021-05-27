@@ -218,7 +218,6 @@ def send_message(request):
                     school_id = request.session.get("inscription_school_id",None)
                     if not school_id:
                         school_id = request.POST.get("inscription_school_id",None)
-                    print(school_id)
                     if school_id :
                         school = School.objects.get(pk = school_id)
                         school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name

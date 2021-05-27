@@ -34,8 +34,8 @@
             <table id="standard_tab" class="table table-bordered table-hover">
                 <thead>
                 <tr>
+                    <td style="width:80px">Référence</td>                    
                     <td style="width:100px">Date</td>                        
-                    <td style="width:80px">Référence</td>
                     <td>Client</td>
                     <td>Object </td>
                     <td style="width:80px">Montant</td>
@@ -47,10 +47,10 @@
                     {% for accounting in accountings %}
                         <tr>
                             <td>
-                                <span >{{ accounting.date|date:"d N Y" }} </span> 
-                            </td>
-                            <td>
                                 <span >{{ accounting.chrono }}</span> 
+                            </td>                            
+                            <td>
+                                <span >{{ accounting.date|date:"d N Y" }} </span> 
                             </td>
                             <td>
                                 <span class="helper_tip">{% if accounting.beneficiaire  %} {{ accounting.beneficiaire }} {% else %}{{ accounting.school.name }}, {{ accounting.school.country.name }} {% endif %}

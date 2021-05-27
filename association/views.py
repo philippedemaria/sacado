@@ -81,7 +81,7 @@ def association_index(request):
 
 @user_passes_test(user_is_board)
 def list_accountings(request):
-    accountings = Accounting.objects.all()
+    accountings = Accounting.objects.order_by("-date")
     return render(request, 'association/list_accounting.html', {'accountings': accountings  })
 
 
