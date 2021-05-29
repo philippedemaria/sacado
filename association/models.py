@@ -10,6 +10,10 @@ from school.models import School , Country
 # from account.models import User
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
 
+ 
+def accounting_directory_path(instance, filename):
+    return "association/{}/{}".format(instance.id, filename)
+
 QUALITIES = (
         ("actif", 'membre actif'),    
         ("honneur", "membre d'honneur"),
@@ -34,10 +38,6 @@ class Rate(models.Model):
 
     def __str__(self):
         return "{} {}, {}".format(self.amount, self.quantity, self.year)
-
-
-
-
 
 
 class Associate(models.Model):
@@ -82,8 +82,6 @@ class Associate(models.Model):
         if s == 4 :
             data["fin"] = " fin du scrutin"
         return data
-
-
 
 
 class Voting(models.Model):
@@ -150,6 +148,8 @@ class Accounting(models.Model):
     user = models.ForeignKey(User, related_name="accontings", null=True, blank=True,  on_delete=models.CASCADE, editable=False)
     is_active = models.BooleanField(default=0, verbose_name="Actif")
     is_abonnement = models.BooleanField(default=0, verbose_name="Abonnement")
+    ticket = models.FileField(upload_to=accounting_directory_path, blank=True, verbose_name="Justificatif",  default="" )
+
 
     def __str__(self):
         return self.beneficiaire

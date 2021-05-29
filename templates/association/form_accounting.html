@@ -186,7 +186,6 @@
             <div class="row">
                 <div class="col-sm-12 col-md-6">
 
-
                     <div id="formsetZone">
                             <div class="row">
                                 <div class="col-sm-1 col-md-1" >
@@ -224,8 +223,17 @@
 
                             {% endfor %}   
                     </div>
+
+
+                    <div class="form-group">
+                    {{ form.ticket.label_tag }} <br/>
+                    {{ form.ticket|add_class:"btn btn-default" }}
+                    {{ form.ticket.errors }}
+                    </div>
+
+
                 </div>
-                <div class="col-sm-12 col-md-6">
+                <div class="form-group">
                     {{ form.observation.label_tag }} <br/>
                     {{ form.observation }}
                     {{ form.observation.errors }}
