@@ -48,6 +48,9 @@ urlpatterns = [
 
     path('payment_complete', payment_complete, name='payment_complete'),  
 
+    path('ajax_total_month', ajax_total_month, name='ajax_total_month'),  
+    path('ajax_total_period', ajax_total_period, name='ajax_total_period'),      
+
 
 ]
  

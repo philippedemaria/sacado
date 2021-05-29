@@ -8,7 +8,9 @@
 
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
 
- 
+     <script>
+        require(['script/ajax-list_accounting']);
+    </script> 
 
 {% endblock %}
 
@@ -31,6 +33,42 @@
 <section class="content_main"> 
     <div class="row">
         <div class="col-sm-12 col-md-12">
+        <div class="col-sm-12 col-md-12 encours">
+            <div class="col-sm-4 col-md-3">
+                <label>Encours.  Mois
+                    <select name="month" id="month" class="control-form">
+                        <option value="1" {% if this_month == 1 %}selected{% endif %}>Janv.</option>
+                        <option value="2" {% if this_month == 2 %}selected{% endif %}>Févr.</option>
+                        <option value="3" {% if this_month == 3 %}selected{% endif %}>Mars</option>
+                        <option value="4" {% if this_month == 4 %}selected{% endif %}>Avril</option>
+                        <option value="5" {% if this_month == 5 %}selected{% endif %}>Mai</option>
+                        <option value="6" {% if this_month == 6 %}selected{% endif %}>Juin</option>
+                        <option value="7" {% if this_month == 7 %}selected{% endif %}>Juil.</option>
+                        <option value="8" {% if this_month == 8 %}selected{% endif %}>Aout</option>
+                        <option value="9" {% if this_month == 9 %}selected{% endif %}>Sept.</option>
+                        <option value="10" {% if this_month == 10 %}selected{% endif %}>Oct.</option>
+                        <option value="11" {% if this_month == 11 %}selected{% endif %}>Nov.</option>
+                        <option value="12" {% if this_month == 12 %}selected{% endif %}>Déc.</option>
+                    </select>  
+                :</label> <span id="this_month"><b>{{ total_month }} €</b></span>
+            </div>
+            <div class="col-sm-4 col-md-2">
+                <label>Année civile : <b>{{ total_year }} € </b></label><br/>
+            </div>
+            <div class="col-sm-4 col-md-2">
+                <label>Année scolaire : <b>{{ total_shoolyear}} € </b></label><br/>
+            </div>
+            <div class="col-sm-4 col-md-5">
+                <label>du <input name="from_date" type="date"  id="from_date" class="control-form period">  au : <input name="to_date" id="to_date" type="date" class="control-form period"> <b> <span id="this_period"></span> </b></label>
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
             <table id="standard_tab" class="table table-bordered table-hover">
                 <thead>
                 <tr>
@@ -45,7 +83,7 @@
                 </thead>
                 <tbody>
                     {% for accounting in accountings %}
-                        <tr>
+                        <tr id="this_tr_{{ accounting.id }}" class="this_tr_all">
                             <td>
                                 <span >{{ accounting.chrono }}</span> 
                             </td>                            

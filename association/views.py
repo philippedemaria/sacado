@@ -10,6 +10,7 @@ from django.core import serializers
 from django.template.loader import render_to_string
 from django.contrib import messages
 from django.core.mail import send_mail
+ 
 import uuid
 import json
 from django.contrib.auth.hashers import make_password
@@ -17,7 +18,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import user_passes_test
 from account.decorators import user_is_board
 from templated_email import send_templated_mail
-from django.db.models import Q
+from django.db.models import Q , Sum
 from django.contrib.auth.decorators import  permission_required,user_passes_test
 ############### bibliothèques pour les impressions pdf  #########################
 import os
@@ -79,10 +80,98 @@ def association_index(request):
     return render(request, 'association/dashboard.html', context )
 
 
+def total(first_date, last_date) :
+
+    accountings = Accounting.objects.filter(date__lte=last_date, date__gte=first_date, is_active = 1)
+    total_amount = 0
+    total_amount_active = 0
+    for a in accountings :
+        if a.is_credit :
+            total_amount += a.amount
+        else :
+            total_amount -= a.amount
+    return total_amount
+
+
+
 @user_passes_test(user_is_board)
 def list_accountings(request):
     accountings = Accounting.objects.order_by("-date")
-    return render(request, 'association/list_accounting.html', {'accountings': accountings  })
+
+
+    today = datetime.now()
+    this_month = today.month
+    this_year = today.year
+
+    first_date_month =  datetime(this_year, this_month, 1)
+    first_date_year = datetime(this_year, 1, 1)
+
+    if this_month > 0 and this_month < 8 :
+        this_year = this_year - 1
+    first_date_schoolyear = datetime(this_year, 9, 1)
+
+    total_month = total(first_date_month, today)
+    total_year = total(first_date_year, today)
+    total_shoolyear =  total(first_date_schoolyear, today)
+
+    return render(request, 'association/list_accounting.html', {'accountings': accountings , 'total_month': total_month, 'total_year': total_year, 'total_shoolyear': total_shoolyear ,'this_month' :this_month })
+
+
+
+
+
+@user_passes_test(user_is_board)
+def ajax_total_month(request):
+    data = {}
+    month = int(request.POST.get("month"))
+
+    today = datetime.now()
+    this_year = datetime.now().year
+    first = datetime(this_year, month, 1)
+    nb_days=[0,31,28,31,30,31,30,31,31,30,31,30,31]
+    first = datetime(this_year, month, 1)
+    last = datetime(this_year, month, nb_days[month])
+
+
+    data['html'] = "<label><b>"+str(total(first, last)).replace(".",",")+" € </b></label>"
+    rows = Accounting.objects.values_list("id", flat = True).filter(date__lte=last, date__gte=first)
+    data['rows'] = list(rows)
+    data['len']  = len(list(rows))
+
+    print(len(list(rows)) , list(rows) )
+
+
+    return JsonResponse(data)
+
+
+def str_to_date(date_str):
+    dtab = date_str.split("-")
+    m = str(dtab[1]).replace("0","")
+    return datetime( int(dtab[0]) , int(dtab[1]) , int(dtab[2]) )
+
+
+
+@user_passes_test(user_is_board)
+def ajax_total_period(request):
+    data = {}
+    from_date = request.POST.get("from_date",None)
+    to_date = request.POST.get("to_date",None)
+
+    if from_date and to_date :
+        from_date = str_to_date(from_date)
+        to_date = str_to_date(to_date)
+
+        rows = Accounting.objects.values_list("id", flat = True).filter(date__lte=to_date, date__gte=from_date)
+        data['rows'] = list(rows)
+        data['html'] = str(total(from_date, to_date)) +" €"
+        data['len']  = len(list(rows))
+    else :
+        data['html'] = "Sélectionner deux dates"
+        data['rows'] = False
+        data['len']  = 0
+    return JsonResponse(data)
+
+
 
 
 

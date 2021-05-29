@@ -441,8 +441,19 @@ li label:hover{
 }
 
 
+.encours{
+  border: 1px solid #F0F0F0;
+  background-color: #F7F7F7;
+  padding :10px;
+}
+
+.selected_account{
+   background-color: #f1eef7;
+}
+
 
  /******************************************** rabat dossier  **************************************/
+
 
 .rabat_dossier{
   position: absolute;
