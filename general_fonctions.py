@@ -193,12 +193,7 @@ def increment_chrono( obj , pattern , forme , flag  ):
     """ On incrémente le chrono selon le chrono qui arrive """
 
     if forme :
-        chro = "F" +  str(pattern) 
-        if forme == "AVOIR" :
-            chro = "A" + str(pattern)  
-        elif forme == "DEVIS" :
-            chro = "D" +  str(pattern) 
-
+        chro = forme[0] +  str(pattern) 
         last_accountings = obj.objects.filter(chrono__contains = chro).order_by("chrono")
         if last_accountings.count() == 0 :
             new = "01"

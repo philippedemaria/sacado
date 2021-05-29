@@ -100,7 +100,7 @@ def create_accounting(request):
             nf = form.save(commit = False)
             nf.user = request.user
             forme = request.POST.get("forme",None)
-            nf.chrono = create_chrono(Accounting, forme)
+            nf.chrono = create_chrono(Accounting, forme) # Create_chrono dans general_functions.py
             nf.save()
 
             form_ds = formSet(request.POST or None, instance = nf)

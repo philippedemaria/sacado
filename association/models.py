@@ -120,6 +120,7 @@ class Accounting(models.Model):
         ("FACTURE", "FACTURE"),        
         ("AVOIR", "AVOIR"),
         ("DEVIS", "DEVIS"),
+        ("REMBOURSEMENT", "REMBOURSEMENT"),
     )
 
 
