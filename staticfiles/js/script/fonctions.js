@@ -17,7 +17,7 @@ function TestRemove(f1) {
 
 
 function TestRenew() {
-    if (!confirm("Vous souhaitez renouveler la cotisation ? Attention si vous cliquez, vous engagez la procédure." )) return false;
+    if (!confirm("Vous souhaitez renouveler la cotisation ? En cliquant, vous créez un devis et pourrez choisir le mode de réglement qui vous convient." )) return false;
 }
 
 
