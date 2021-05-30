@@ -995,9 +995,7 @@ def admin_tdb(request):
     for s in schools :
         schools_tab.append(s)
 
-
     teachers = Teacher.objects.filter(user__school=school, user__user_type=2)
-
 
     nb_teachers = teachers.count()
     nb_students = User.objects.filter(school=school, user_type=0).count()
@@ -1032,11 +1030,6 @@ def admin_tdb(request):
 
     rates = Rate.objects.all() #tarifs en vigueur 
     school_year = rates.first().year #tarifs pour l'année scolaire
-
-
-
-
-
  
     return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers, 'nb_students': nb_students, 'school_id' : school_id , "school" : school ,  
                                                     'nb_groups': nb_groups, 'schools_tab': schools_tab, 'stage': stage, 'is_lycee' : is_lycee , 'school_year' : school_year ,  'rates' : rates , 

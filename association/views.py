@@ -265,7 +265,8 @@ def update_accounting(request, id):
                     fa.accounting = accounting
                     fa.school = nf.school
                     if nf.acting:
-                        fa.active = 1
+                        fa.is_active = 1
+                        Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
                     fa.save()
                 else :
                     accounting.abonnement.delete()

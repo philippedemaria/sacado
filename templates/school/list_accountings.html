@@ -46,7 +46,7 @@
                         {% for accounting in  accountings %}
                             <tr>
                                 <td>{{ accounting.date|date:"d N Y" }}</td>
-                                <td>{{ accounting.code }}</td>
+                                <td>{{ accounting.chrono }}</td>
                                 <td>{{ accounting.objet }}</td>                                
                                 <td>{{ accounting.amount }} €</td>
                                 <td>{% if accounting.acting %}Payé le {{ accounting.acting }}{% else %} En attente de paiement {% endif %}</td>

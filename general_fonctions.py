@@ -209,7 +209,6 @@ def increment_chrono( obj , pattern , forme , flag  ):
 
         ch = chro + "-" + new
 
-
     else :
         ch = ""
  
@@ -231,7 +230,6 @@ def update_chrono(obj, accounting,forme):
     if forme :
         if this_chrono[0] != forme[0] :
             today = datetime.now().strftime("%Y-%m")
-            new_pattern = str(forme[0]) + str(today)
-            this_chrono = increment_chrono( obj ,   new_pattern ,  forme , True )  
+            this_chrono = increment_chrono( obj ,   today ,  forme , True )  
 
     return this_chrono
