@@ -82,7 +82,7 @@ def association_index(request):
 
 def total(first_date, last_date) :
 
-    accountings = Accounting.objects.filter(date__lte=last_date, date__gte=first_date, is_active = 1)
+    accountings = Accounting.objects.filter(date__lte=last_date, date__gte=first_date).exclude(acting=None)
     total_amount = 0
     total_amount_active = 0
     for a in accountings :
@@ -134,7 +134,7 @@ def ajax_total_month(request):
 
 
     data['html'] = "<label><b>"+str(total(first, last)).replace(".",",")+" € </b></label>"
-    rows = Accounting.objects.values_list("id", flat = True).filter(date__lte=last, date__gte=first)
+    rows = Accounting.objects.values_list("id", flat = True).filter(date__lte=last, date__gte=first).exclude(acting=None)
     data['rows'] = list(rows)
     data['len']  = len(list(rows))
 
@@ -161,7 +161,7 @@ def ajax_total_period(request):
         from_date = str_to_date(from_date)
         to_date = str_to_date(to_date)
 
-        rows = Accounting.objects.values_list("id", flat = True).filter(date__lte=to_date, date__gte=from_date)
+        rows = Accounting.objects.values_list("id", flat = True).filter(date__lte=to_date, date__gte=from_date).exclude(acting=None)
         data['rows'] = list(rows)
         data['html'] = str(total(from_date, to_date)) +" €"
         data['len']  = len(list(rows))
