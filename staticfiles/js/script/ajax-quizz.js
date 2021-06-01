@@ -81,8 +81,6 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
             $("#loading").html("<i class='fa fa-spinner fa-pulse fa-fw'></i>");
             $("#loading").show(); 
 
-            console.log(waitings) ;
-
             $.ajax(
                 {
                     type: "POST",
@@ -160,27 +158,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
             checked_vf() ;
         }); 
 
-        // Fonction de sélection du de la calculatrice ou de la publication
-        $('body').on('click', '#check_calculator' , function (event) {  
-            check_assets("#id_calculator"); 
-        }); 
-        $('body').on('click', '#check_publish' , function (event) {  
-            check_assets("#id_is_publish"); 
-        }); 
-
-
-
-        function check_assets(cible){
-
-            if ($(cible).is(":checked"))
-            {
-             $(cible).prop("checked", false); 
-            }
-            else
-            {
-             $(cible).prop("checked", true); 
-            }  
-        }
+ 
 
 
         $("#id_calculator").prop("checked", false);   
