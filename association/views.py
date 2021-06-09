@@ -138,8 +138,6 @@ def ajax_total_month(request):
     data['rows'] = list(rows)
     data['len']  = len(list(rows))
 
-    print(len(list(rows)) , list(rows) )
-
 
     return JsonResponse(data)
 
@@ -305,10 +303,14 @@ def show_accounting(request, id ):
 
 
 
-@user_passes_test(user_is_board)
 def print_accounting(request, id ):
 
     accounting = Accounting.objects.get(id=id)
+
+    if not request.user.is_superuser :
+        if request.user.school != accounting.school :
+            return redirect ("index")
+
     #########################################################################################
     ### Instanciation
     #########################################################################################
