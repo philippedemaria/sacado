@@ -194,6 +194,7 @@ def increment_chrono( obj , pattern , forme , flag  ):
 
     if forme :
         chro = forme[0] +"-"+  str(pattern) 
+
         last_accountings = obj.objects.filter(chrono__contains = chro).order_by("chrono")
         if last_accountings.count() == 0 :
             new = "01"
@@ -201,7 +202,8 @@ def increment_chrono( obj , pattern , forme , flag  ):
             last_accounting = last_accountings.last()
             chrono = last_accounting.chrono.split("-")
 
-            new = int(chrono[2])+1
+            new = int(chrono[3])+1
+
             if new < 10 :
                 new = "0" + str(new)
             else :
