@@ -486,7 +486,7 @@ def print_proformat_school(request):
     elements.append(Spacer(0, 0.2*inch))
 
     sy = school_year.split("-")
-    my_texte = "Le présent contrat est valide pour la période scolaire du 1 Septembre " + sy[0]+" jusqu'au 30 juin "+sy[1]+" pour les établissements de rythme Nord. \nPour les établissements de rythme Sud, la validité de l'adhésion est valable sur l'année "+sy[1]+"."
+    my_texte = "Le présent contrat est valide pour la période scolaire du 1 Septembre " + sy[0]+" jusqu'au 7 juillet "+sy[1]+" pour les établissements de rythme Nord. \nPour les établissements de rythme Sud, la validité de l'adhésion est valable sur l'année "+sy[1]+"."
 
     paragraph = Paragraph( my_texte  , normal )
     elements.append(paragraph)

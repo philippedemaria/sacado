@@ -99,7 +99,25 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+      $('#open_draft').on('click', function (event) {
 
+            if ($('#draft').hasClass("checkbox_no_display")) 
+              { $('#draft').removeClass("checkbox_no_display") ; } 
+            else 
+              { $('#draft').addClass("checkbox_no_display") ; } 
+
+        }); 
+
+
+
+      $('#close_draft').on('click', function (event) {
+
+            if ($('#draft').hasClass("checkbox_no_display")) 
+              { $('#draft').removeClass("checkbox_no_display") ; } 
+            else 
+              { $('#draft').addClass("checkbox_no_display") ; } 
+
+        }); 
 
 
 

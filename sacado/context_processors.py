@@ -53,7 +53,7 @@ def menu(request):
                     renew_date = datetime(int(school_year_tab[0]),5,15)
                     next_renew_date = datetime(int(school_year_tab[1]),5,15)
                     renewal = True
-                    if Accounting.objects.filter(school = teacher.user.school,   date__gte=renew_date, date__lte=next_renew_date ).count() == 1:
+                    if Accounting.objects.filter(school = teacher.user.school,   date__gte=renew_date, date__lte=next_renew_date,is_active = 1 ).count() == 1:
                         renewal = False
                         request.session["renewal"] = True
 

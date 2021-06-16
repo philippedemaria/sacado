@@ -325,7 +325,7 @@ def print_accounting(request, id ):
 
     sample_style_sheet = getSampleStyleSheet()
     OFFSET_INIT = 0.2
-#########################################################################################
+    #########################################################################################
     ### Style
     #########################################################################################
     sacado = ParagraphStyle('sacado', 
@@ -451,7 +451,12 @@ def print_accounting(request, id ):
     elements.append(Spacer(0,0.1*inch))
     objet = Paragraph(  "Objet : "+accounting.objet , normal )
     elements.append(objet) 
+    elements.append(Spacer(0,0.1*inch))
+    licence = Paragraph(  "Licence : "+str(accounting.school.nbstudents)+" élèves" , normal )
+    elements.append(licence) 
     elements.append(Spacer(0,0.2*inch))
+
+
     #########################################################################################
     ### Description de facturation
     #########################################################################################

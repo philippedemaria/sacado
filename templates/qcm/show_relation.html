@@ -27,13 +27,21 @@
     {% get_available relation student  as available %}                                    <!-- Si le nombre de tentative est dépassée ou pas : même code que get_parcours_available mais pour une relationship -->
     {% get_parcours_available parcours student relation.exercise as parcours_available %} <!-- Si le nombre de tentative est dépassée ou pas : même code que get_available pour une parcours -->
     <div class="col-sm-0 col-md-1 col-lg-1 full_screen_size">
-        <div class="calculator double_bottom_padding">
+        <div class="calculator_img double_bottom_padding">
         {% if relation.exercise.supportfile.calculator %}
-          <img src="{% static 'img/calculator.png' %}"  class="img_size_square_75" />
+            <a href="#" data-toggle='modal' data-target='#calculator'>
+                <img src="{% static 'img/calculator.png' %}"  class="img_size_square_75" />
+            </a>
         {% else %}
-          <img src="{% static 'img/no_calculator.png' %}"    class="img_size_square_75" />
+            <img src="{% static 'img/no_calculator.png' %}"    class="img_size_square_75" />
         {% endif  %} 
         </div>
+
+        <div class="barcode">
+            <a href="#" id="open_draft"><img src="{% static 'img/draft.png' %}"  class="img_size_square_75"  /></a> </br>
+        </div>
+
+
         <div class="horloge">
             {% if relation.duration == 5 %}
               <img src="{% static 'img/horloge5.png' %}"   class="img_size_square_75" />
@@ -102,6 +110,7 @@
             <i class="fa fa-barcode fa-4x"></i>
             <p>{{ relation.exercise.supportfile.code }}</p>
         </div>
+
     </div>  
     <div class="col-sm-10 col-md-8 col-lg-8">
 
@@ -221,6 +230,9 @@
                       <input id="score" name="score" type="hidden"  />
                       <input id="situation" name="situation"  type="hidden" value="{{ relation.situation }}"/> 
                       <!-- fin ligne d'enregistrement -->
+                      <!-- Pour e ws -->
+                      <input id="parcours_id" name="parcours_id"  type="hidden" value="{{ relation.parcours.id }}"/>
+
                   </div>
           </div>
             
@@ -438,7 +450,58 @@
 
 
     </script>
-    <div style="height:20px"></div>
+    <div style="height:40px;clear: both"></div>
+
+
+ 
+     <div class="checkbox_no_display" id="draft" >
+          <div class="col-sm-0 col-md-1 col-lg-1"></div>
+          <div class="col-sm-12 col-md-11 col-lg-11">
+
+                <div style="left:800px;  position:absolute; z-index:1000;"><a href="#" id="close_draft"><i class="fa fa-times"></i></a></div>            
+                {% if sacado_asso  %}
+                      <iframe scrolling="no" title="Brouillon" src="https://www.geogebra.org/material/iframe/id/dwdmv846/width/750/height/550/border/888888/sfsb/false/smb/false/stb/true/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false" width="750px" height="550px" style="border:0px;"> </iframe>
+                {% else  %}
+                   <div class="alert alert-danger">Pour utiliser la fonctionnalité Brouillon, votre établissement doit posséder la version Etablissement</div> 
+                {% endif  %}
+
+
+          </div>
+
+      </div>
+
+
+<div class="modal fade" id="calculator" tabindex="-1" role="dialog" aria-labelledby="calculator">
+    <div class="modal-dialog modal-maxsize" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h2  class='sacado'  >Calculatrice</span></h2>              
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+            </div>
+            <div class="modal-body">
+              {% if sacado_asso  %}
+                  {% if exercise.level < 7  %}
+                    {% include 'qcm/simulator_c3.html' %} 
+                  {% elif exercise.level == 14  %}
+                    {% include 'qcm/simulator_c3.html' %} 
+                  {% else  %}
+                    {% include 'qcm/simulator.html' %}   
+                  {% endif  %}
+              {% else  %}
+                 <div class="alert alert-danger">Pour utiliser la calculatrice, votre établissement doit posséder la version Etablissement</div> 
+              {% endif  %}
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+
+                  
+
+
 
 </section>
 
