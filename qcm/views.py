@@ -1782,7 +1782,7 @@ def show_parcours_student(request, id):
     today = time_zone_user(user)
     stage = get_stage(user)
 
-    tracker_execute_exercise(True ,  user , id , None , 0)
+    #tracker_execute_exercise(True ,  user , id , None , 0)
  
     if parcours.is_folder :
 
@@ -3653,7 +3653,9 @@ def show_this_supportfile(request, id):
     elif supportfile.is_python :
         url = "basthon/index_supportfile.html"
     else :
-        url = "qcm/show_teacher_writing.html" 
+        wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None )
+        context = {'exercise': exercise, 'start_time': start_time, 'parcours': parcours , 'communications' : [] , 'relationships' : [] , 'today' : today , 'wForm' : wForm }
+        url = "qcm/show_teacher_writing.html"  
 
     return render(request, url , context)
 
@@ -3796,7 +3798,9 @@ def show_exercise(request, id):
         url = "basthon/index_shower.html"
         wForm = None
     else :
-        url = "qcm/show_teacher_writing.html" 
+        wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None )
+        context = {'exercise': exercise,   'form': form , 'u_form' : u_form , 's_form' : s_form , 's_form' : s_form , 't_form' : t_form ,  'wForm' : wForm , 'levels' : [],   'communications' : [] , 'relationships' : []  }
+        url = "qcm/show_teacher_writing.html"  
 
     return render(request, url , context)
 
