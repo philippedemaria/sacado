@@ -69,11 +69,14 @@ def exclude_teacher(obj): #exclusion des enseignants de la liste renvoyées
 @register.filter
 def insert_tags(html,cutter): #nettoie le code des balises HTML
     i = 1
-    htm = html[:cutter]
-    while i*cutter < len(html) : 
-            htm += html[i*cutter:(i+1)*cutter].replace(" ","<br>",1)
-            i += 1
-    return "<p>"+htm+"</p>"
+    if "iframe" in html :
+        return html
+    else:
+        htm = html[:cutter]
+        while i*cutter < len(html) : 
+                htm += html[i*cutter:(i+1)*cutter].replace(" ","<br>",1)
+                i += 1
+        return "<p>"+htm+"</p>"
 
 
 @register.filter
