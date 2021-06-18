@@ -751,7 +751,7 @@ def detail_student_parcours(request, id,idp):
     if request.user.is_teacher:
         students = []
         teacher = Teacher.objects.get(user=request.user)
-        groups =  student.students_to_group.filter(teacher=teacher)        
+        groups =  student.students_to_group.filter(Q(teacher=teacher)|Q(teachers=teacher))        
         group =  groups.last()
         for g in groups :
             sts = g.students.all().order_by("user__last_name")
