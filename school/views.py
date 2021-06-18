@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.forms import formset_factory
-from django.contrib.auth.decorators import permission_required,user_passes_test
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password

@@ -29,9 +29,13 @@
     <div class="col-sm-0 col-md-1 col-lg-1 full_screen_size">
         <div class="calculator_img double_bottom_padding">
         {% if relation.exercise.supportfile.calculator %}
+            {% comment %}
             <a href="#" data-toggle='modal' data-target='#calculator'>
                 <img src="{% static 'img/calculator.png' %}"  class="img_size_square_75" />
             </a>
+            {% endcomment %}
+                <img src="{% static 'img/calculator.png' %}"  class="img_size_square_75" />
+            
         {% else %}
             <img src="{% static 'img/no_calculator.png' %}"    class="img_size_square_75" />
         {% endif  %} 
@@ -470,7 +474,7 @@
 
       </div>
 
-
+{% comment  %}
 <div class="modal fade" id="calculator" tabindex="-1" role="dialog" aria-labelledby="calculator">
     <div class="modal-dialog modal-maxsize" role="document">
         <div class="modal-content" >
@@ -496,7 +500,7 @@
         </div>
     </div> 
 </div>
-
+{% endcomment  %}
 
 
                   
