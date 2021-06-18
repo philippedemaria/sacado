@@ -761,7 +761,7 @@ def detail_student_parcours(request, id,idp):
  
         if group :
             nav = navigation(group, id)
-            context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'sprev_id': nav[0], 'students' : students , 'group' : group , 'communications' : [], 
+            context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'teacher' : teacher , 'sprev_id': nav[0], 'students' : students , 'group' : group , 'communications' : [], 
                    'snext_id': nav[1], 'parcourses': parcourses, 'student': student}
         else :
             messages.error(request, "Erreur...L'élève "+str(student.user.first_name)+" "+str(student.user.last_name)+" n'est pas associé à un groupe.")

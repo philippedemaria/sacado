@@ -199,7 +199,7 @@
         </li> 
                 <li class="divider"></li>
 
-
+ 
         {%  get_access_to_this_group  group   teacher  as     has_access_to_this_group %}
         {%  if  has_access_to_this_group.access   %}
         <li {% if 'group/update/' in request.path %} class="active" {% endif %}>
