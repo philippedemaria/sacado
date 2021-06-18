@@ -32,8 +32,8 @@ def list_emails(request):
     if user.is_teacher:
         today = time_zone_user(request.user)
         teacher = user.teacher
-        groups =  teacher.groups.all() 
-        shared_groups = teacher.teacher_group.all() 
+        groups =  teacher.groups.order_by("level") 
+        shared_groups = teacher.teacher_group.order_by("level") 
         groups = groups | shared_groups
             
         request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
