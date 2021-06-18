@@ -46,7 +46,7 @@
                 <div class="row" style="margin-bottom:8px; padding-bottom: 8px; ">
                     <div class="col-sm-12 col-md-5">        
                         <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" >  
-                        <img src="{{ relationship.exercise.supportfile.imagefile.url }}" {% if parcours.zoom %} class="imagefile"  {% endif %} ></a>
+                        <img src="{{ relationship.exercise.supportfile.imagefile.url }}" {% if parcours.zoom %} class="imagefile" {% else %} width="300px" {% endif %} ></a>
                                                             
                                     {% if  relationship.exercise.supportfile.title %}  
                                                     {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
