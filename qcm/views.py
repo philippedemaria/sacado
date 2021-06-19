@@ -7573,3 +7573,9 @@ def repaired_reporting(request, pk,code ):
 
     DocumentReport.objects.filter(pk=pk).update(is_done=1)
     return redirect( 'admin_testeur', code)
+
+
+def simulator(request):
+    context = {}
+    return render(request, 'qcm/simulator.html', context )
+
