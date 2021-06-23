@@ -15,6 +15,16 @@ from time import strftime
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
+POLICES = (
+        (16, '16'),
+        (24, '24'), 
+        (32, '32'), 
+        (40, '40'),
+        (48, '48'),
+        (56, '56'),
+    )
+
+
 
 def choice_directory_path(instance, filename):
     return "choices/{}".format(filename) 
@@ -55,6 +65,7 @@ class Tool(models.Model):
 
 
 class Qrandom(models.Model):
+
     title      = models.CharField(max_length=50,  blank=True, verbose_name="Titre")
     texte      = RichTextUploadingField(  blank=True, verbose_name="Enoncé")
     knowledge  = models.ForeignKey(Knowledge, related_name="qrandom", blank=True, null = True,  on_delete=models.CASCADE) 
@@ -65,7 +76,6 @@ class Qrandom(models.Model):
     calculator = models.BooleanField(default=0, verbose_name="Calculatrice ?")
     tool       = models.BooleanField(default=0, verbose_name="Barre d'outils ?")
     duration   = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
-
 
     def __str__(self):
         return self.title
@@ -137,6 +147,9 @@ class Question(models.Model):
     knowledge  = models.ForeignKey(Knowledge, related_name="question", blank=True, null = True,  on_delete=models.CASCADE) 
 
     imagefile  = models.ImageField(upload_to=question_directory_path, blank=True, verbose_name="Image", default="")
+    audio       = models.FileField(upload_to=question_directory_path, blank=True, verbose_name="Audio", default="")
+    video      = models.TextField( default='',  blank=True, verbose_name="Vidéo intégrée")
+
     is_publish = models.BooleanField(default=1, verbose_name="Publié ?")
     is_radio   = models.BooleanField(default=0, verbose_name="Type de réponse ?")
 
@@ -148,6 +161,12 @@ class Question(models.Model):
     is_correct = models.BooleanField(default=1, verbose_name="Réponse correcte ?")
     ranking    = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
     students   = models.ManyToManyField(Student, blank=True, through="Answerplayer", related_name="questions",   editable=False)
+
+    size       = models.PositiveIntegerField(default=32, choices=POLICES,  verbose_name="Taille de police")
+    theme      = models.BooleanField(default=0, verbose_name="Thème ?")
+
+
+
 
     def __str__(self):
         return self.title

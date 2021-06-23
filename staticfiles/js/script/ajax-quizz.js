@@ -346,6 +346,52 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
 
  
 
+        $("#support_image").on('click', function (event) {
+
+            get_the_target("#support_image","#drop_zone_image","#video_div","#audio_div")
+
+        })
+
+
+
+        $("#support_video").on('click', function (event) { 
+
+            get_the_target("#support_video","#video_div","#drop_zone_image","#audio_div")
+
+        })
+
+
+
+        $("#support_audio").on('click', function (event) { 
+
+            get_the_target("#support_audio","#audio_div","#drop_zone_image","#video_div")
+
+        })
+
+
+
+
+
+ 
+        function get_the_target(target,cible,f1,f2){
+
+            $(f1).removeClass("allowed_display");
+            $(f2).removeClass("allowed_display");
+            $(f1).addClass("not_allowed_display");
+            $(f2).addClass("not_allowed_display");
+
+            if ($(cible).hasClass("not_allowed_display")) 
+            {
+                $(cible).removeClass("not_allowed_display");
+                $(cible).addClass("allowed_display");
+            } else {
+                $(cible).removeClass("allowed_display");                
+                $(cible).addClass("not_allowed_display");
+            }
+        }
+
+
+
  
     });
 });

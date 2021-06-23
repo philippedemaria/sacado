@@ -63,10 +63,13 @@ class QuestionForm(forms.ModelForm):
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges, required=False)
 
 
-
 	def clean_content(self):
 		content = self.cleaned_data['imagefile']
 		validation_file(content)  
+		audio_ = self.cleaned_data['audio']
+		validation_file(audio_) 
+		video_ = self.cleaned_data['video']
+		validation_file(video_) 
 
 
 

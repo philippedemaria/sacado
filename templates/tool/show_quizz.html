@@ -123,17 +123,33 @@
                             </div>
                         </div> 
                         <div class="row">  
-                            <div class="col-sm-12 col-md-12"align="center">
-                                <h1 style="font-size:3.5em" class="thin"> {{ question.title }} </h1>
+                            <div class="col-sm-12 col-md-12" align="center">
+                                <h1 style="font-size:{{ question.size }}" class="thin"> {{ question.title }} </h1>
                             </div>
                         </div>
-                        {% if question.imagefile %}
-                        <div class="row">  
-                            <div class="col-sm-12 col-md-12"align="center">
-                                 <img src="{{ question.imagefile.url }}" height="{% if question.qtype == 2 %}550{% else %}350{% endif %}px" />
+ 
+                            {% if question.imagefile %}
+                            <div class="row">  
+                                <div class="col-sm-12 col-md-12" align="center">
+                                     <img src="{{ question.imagefile.url }}" height="{% if question.qtype == 2 %}550{% else %}350{% endif %}px" />
+                                </div>
                             </div>
-                        </div>
-                        {% endif %}
+                            {% elif question.audio %}
+                            <div class="row">  
+                                <div class="col-sm-12 col-md-12" align="center">
+                                    <audio controls autoplay>
+                                        <source src="{{ question.audio.url }}" type="audio/mpeg">
+                                        <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                                    </audio>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="row">  
+                                <div class="col-sm-12 col-md-12" align="center">
+                                     {{ question.video|safe }}
+                                </div>
+                            </div>
+                            {% endif %}
                         <hr/> 
 
 
@@ -149,32 +165,33 @@
 
                         {% if question.qtype == 1 %}   
                    
-                                <div class="col-sm-12 col-md-6 bgcolorBlue white"  align="center" style="border-radius : 10px ">
+                                <div class="col-sm-12 col-md-6 {% if not question.theme %}bgcolorBlue white{% endif %}"  align="center" style="border-radius : 10px ">
                                     <h1 style="font-size:3.5em" class="thin">VRAI </h1>  
                                 </div> 
 
-                                <div class="col-sm-12 col-md-6 bgcolorRed white"  align="center" style="border-radius : 10px ">
+                                <div class="col-sm-12 col-md-6 {% if not question.theme %}bgcolorRed white{% endif %}"  align="center" style="border-radius : 10px ">
                                     <h1 style="font-size:3.5em" class="thin">FAUX </h1>  
                                 </div> 
                            
-                        {%  elif question.qtype > 2 %}   
-                             
-                            {% for choice in question.choices.all %}
-                                {% cycle 'bgcolorRed' 'bgcolorBlue' 'bgcolorOrange' 'bgcolorGreen' as rowcolor silent %} 
-                                {% cycle 'A' 'B' 'C' 'D'  as choice_letter silent %}
-                                <div class="col-sm-12 col-md-6" style="padding-right: 20px;margin-bottom: 20px;font-size:1.2em;   border-radius : 10px">
-                                    <div class="row" >
-                                        <div class="col-sm-2 col-md-1 {{ rowcolor }} get_image" style="padding-top: 2px;color:#FFF; padding-left:10px; border-radius : 10px 0px 0px 10px"> 
-                                            <h1 style="font-size:2.5em">{{ choice_letter }} </h1>    
-                                        </div>
-                                        <div class="col-sm-10 col-md-11 {{ rowcolor }}" align="center" style="color:#FFF; font-size:{% if choice.answer|length > 20 %}1.5{% elif choice.answer|length > 10  %}2.5{% else  %}3{% endif %}em; border-radius : 0px 10px  10px 0px"> 
-                                            {{ choice.answer }}
-                                        </div>
-                                    </div>  
-                                </div> 
-                            {% endfor %}
-                            {% resetcycle %}
-                            {% resetcycle %}
+                        {%  elif question.qtype > 2 %} 
+
+                                {% for choice in question.choices.all %}
+                                    {% cycle 'bgcolorRed' 'bgcolorBlue' 'bgcolorOrange' 'bgcolorGreen' as rowcolor silent %} 
+                                    {% cycle 'A' 'B' 'C' 'D'  as choice_letter silent %}
+                                    <div class="col-sm-12 col-md-6" style="padding-right: 20px;margin-bottom: 20px;font-size:1.2em;   border-radius : 10px">
+                                        <div class="row" >
+                                            <div class="col-sm-2 col-md-1 {{ rowcolor }} get_image" style="padding-top: 2px;color:#FFF; padding-left:10px; border-radius : 10px 0px 0px 10px"> 
+                                                <h1 style="font-size:2.5em">{{ choice_letter }} </h1>    
+                                            </div>
+                                            <div class="col-sm-10 col-md-11 {% if not question.theme %}{{ rowcolor }}{% endif %}" align="center" style="{% if not question.theme %}color:#FFF;{% endif %} font-size:{% if choice.answer|length > 20 %}1.5{% elif choice.answer|length > 10  %}2.5{% else  %}3{% endif %}em; border-radius : 0px 10px  10px 0px"> 
+                                                {{ choice.answer }}
+                                            </div>
+                                        </div>  
+                                    </div> 
+                                {% endfor %}
+                                {% resetcycle %}
+                                {% resetcycle %}
+
                         {% endif %}
                     </li>
                     {% endfor %}

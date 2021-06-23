@@ -1033,7 +1033,7 @@ def create_question(request,idq,qtype):
 
  
     bgcolors = ["bgcolorRed", "bgcolorBlue","bgcolorOrange", "bgcolorGreen"] 
-    context = { 'quizz': quizz, 'questions': questions,  'form' : form, 'qtype' : qtype , 'all_questions' : all_questions , "quizz_id" : quizz.id  }
+    context = { 'quizz': quizz, 'questions': questions,  'form' : form, 'qtype' : qtype , 'all_questions' : all_questions , "quizz_id" : quizz.id , "question" : None   }
 
 
     if quizz.is_random :
@@ -1059,7 +1059,7 @@ def create_question(request,idq,qtype):
     #QCM ou QCS
     elif qtype == 3 or qtype == 4  :
  
-        context.update( {  'bgcolors' : bgcolors  ,  'title_type_of_question' : "QCM" , 'form_ans' : form_ans   , 'question' : None  })
+        context.update( {  'bgcolors' : bgcolors  ,  'title_type_of_question' : "QCM" , 'form_ans' : form_ans   })
         template = 'tool/question_qcm.html'
 
 
@@ -1099,7 +1099,7 @@ def update_question(request,id,idq,qtype):
 
  
     bgcolors = ["bgcolorRed","bgcolorBlue","bgcolorOrange","bgcolorGreen"] 
-    context = { 'quizz': quizz, 'questions': questions,  'form' : form, 'qtype' : qtype  }
+    context = { 'quizz': quizz, 'questions': questions,  'form' : form, 'qtype' : qtype , "question" : question  }
 
     #Choix des questions
     if qtype == 0 :
@@ -1119,7 +1119,7 @@ def update_question(request,id,idq,qtype):
     #QCM ou QCS
     elif qtype == 3 or qtype == 4  :
  
-        context.update( {  'bgcolors' : bgcolors  ,  'title_type_of_question' : "QCM" , 'form_ans' : form_ans , 'question' : question    })
+        context.update( {  'bgcolors' : bgcolors  ,  'title_type_of_question' : "QCM" , 'form_ans' : form_ans   })
         template = 'tool/question_qcm.html' 
 
 

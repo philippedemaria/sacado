@@ -102,8 +102,12 @@
                     {% block type_of_question %} 
 
                             <div class="row" >
-                                <div class="col-sm-12 col-md-12" >  
+                                <div class="col-sm-10 col-md-11" >  
                                     {{ form.title|add_class:"quizz_box quizz_font40" |attr:"placeholder:Ecrire votre question ici" |attr:"rows:1"|attr:"required"  }}
+                                </div>
+                                <div class="col-sm-2 col-md-1" > 
+                                        <label>Taille de police</label><br/>
+                                    {{ form.size|add_class:"form-control select2"  }}
                                 </div>
                             </div>
                             <div class="row margin40" >
@@ -127,20 +131,53 @@
                                         {{ form.is_publish  }} 
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-8" align="center" > 
-                                    <div id="drop_zone" class="drop-zone">
-                                        {% if question.imagefile  %}
-                                            <p  style="font-size:18px">Remplacer votre image ici. MAX : 700px par 600px</p>
-                                            <img src="{{ question.imagefile.url }}" width="300px" />
-                                        {% else %} 
-                                            <p class="title">Déposer votre image ici <div style="font-size:20px">MAX : 700px par 600px</div></p>
-                                        {% endif %}  
-                                        <div class="preview-container"></div>
+
+
+                                {% if sacado_asso %}
+                                <div class="col-sm-12 col-md-1" align="center" >
+                                    <div class="quizz_assets" style="height:100px">
+                                       <label>Support</label><br>
+                                       <label><a href="#" id="support_audio" >Audio</a></label><br/>
+                                       <label><a href="#" id="support_video" >Vidéo</a></label><br/>
+                                       <label><a href="#" id="support_image" >Image</a></label>
                                     </div>
-                                        {{ form.imagefile|attr:"multiple" }} 
-                                </div>  
+                                </div>
+                                <div class="col-sm-12 col-md-7" align="center" > 
+                                    <div id="drop_zone_image" class="{% if question.imagefile %}allowed_display{% else %}not_allowed_display{% endif %}">
+                                        <div id="drop_zone" class="drop-zone">
+                                            {% if question.imagefile  %}
+                                                <p  style="font-size:18px">Remplacer votre image ici. MAX : 700px par 600px</p>
+                                                <img src="{{ question.imagefile.url }}" width="300px" />
+                                            {% else %} 
+                                                <p class="title">Déposer votre image ici <div style="font-size:20px">MAX : 700px par 600px</div></p>
+                                            {% endif %}  
+                                            <div class="preview-container"></div>
+                                        </div>
+                                        {{ form.imagefile|attr:"multiple" }}
+                                    </div> 
+                                    <div id="video_div" class="{% if question.video %}allowed_display{% else %}not_allowed_display{% endif %}"></br></br>
+                                        {{ form.video|attr:"placeholder:Coller le code iframe de votre vidéo ici"|attr:"rows:5"  }}</br></br>
+                                    </div>
+                                    <div id="audio_div" class="{% if question.audio %}allowed_display{% else %}not_allowed_display{% endif %}">
+                                        <label style="font-size:20px">Choix d'un fichier audio</label></br></br>
+                                        {{ form.audio|add_class:"btn btn-default" }}
+                                    </div>
+                                </div> 
+
+                                {% else %}
+                                        <div class="col-sm-12 col-md-8" align="center">
+                                            <div class="alert alert-danger">
+                                                Pour inclure des images, des vidéos ou de l'audio, vous devez avoir la version établissement.
+                                            </div>  
+                                        </div>
+                                {% endif %}
+
+
                             </div>
                     {% endblock %}
+
+
+
                     {% if qtype > 0 %}
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
@@ -149,7 +186,18 @@
                             </div>                            
                         </div>
                     </div>
-                    {% endif %}                     
+
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">                       
+                                <label>Thème de réponse : <em>Couleur de fond des choix possibles</em></label> {{ form.theme |attr:"data-toggle:toggle" |attr:"data-onstyle:default"|attr:"data-offstyle:primary"|attr:"data-on:Blanc"|attr:"data-off:Coloré"}}
+                                <label><em>Lors de la création des choix de réponse, le fond reste coloré.</em></label>
+                            </div>                            
+                        </div>
+                    </div>
+                    {% endif %} 
+
                     {% block type_of_choices %}
                         {% if qtype > 0 %}
                             <div class="row" > 
@@ -162,7 +210,7 @@
                         {% endif %}  
                     {% endblock %}
 
-                
+
 
                 {% if qtype > 0 %}
 
