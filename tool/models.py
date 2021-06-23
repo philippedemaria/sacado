@@ -164,7 +164,7 @@ class Question(models.Model):
 
     size       = models.PositiveIntegerField(default=32, choices=POLICES,  verbose_name="Taille de police")
     theme      = models.BooleanField(default=0, verbose_name="Thème ?")
-    themeeee      = models.BooleanField(default=0, verbose_name="Thème ?")
+ 
 
 
 
