@@ -140,7 +140,7 @@
                             {% if request.user.is_authenticated %}
                                 {% if user.is_teacher %} 
                                     <li>
-                                        <a href="#" data-toggle='modal' data-target='#tutos_sacado' class="btn btn-outline-danger" >
+                                        <a href="{% url 'tutos_video_sacado' %}" class="btn btn-outline-danger" >
                                             Les tutos en vidéo
                                         </a>
                                     </li>
@@ -211,21 +211,6 @@
             </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="tutos_sacado" tabindex="-1" role="dialog" aria-labelledby="tutos_sacado">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content" >
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> 
-                <h2  class='sacado'  >Les tutos Sacado en vidéo</h2>
-            </div>
-            <div class="modal-body">
-                {% include 'tutos_sacado.html' %}
-            </div>
-        </div>
-    </div> 
 </div>
 {%  endif  %}
 
