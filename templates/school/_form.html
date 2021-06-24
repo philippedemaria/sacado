@@ -105,20 +105,21 @@
             </form>
         </div>
         <div class="col-sm-12 col-md-6">
+
             {% if school and  request.user.is_superuser %}
                 <h1 class="thin"> Initialisation et récupération</h1>   
 
-                 <div class="text-danger"><b>Selon le nombre d'élèves, ces actions peuvent être longues.</b></div>
+                 <div class="text-danger"><b>Selon le nombre d'élèves, cette action peut être longue.</b></div>
 
 
-
+                {% comment %}
                 <h3 class="thin"> Récupération des résultats</h3>
 
                     <a href="{% url 'export_csv_all_students_school' %}" class="btn btn-default">Récupérer les résultats de tous les élèves   <img src="{% static 'img/excel.png' %}" width="15px" /></a>
                         
                     <a href="{% url 'export_pdf_all_students_school' %}" class="btn btn-default">Récupérer les résultats de tous les élèves   <img src="{% static 'img/pdf.png' %}" width="20px" /></a> 
 
-
+                {% endcomment %} 
                 <h3 class="thin"> Ré-initialisation</h3>
 
                     <div class="alert alert-danger">Le  bouton ci-dessous ré-initialise la base de données en supprimant toutes les données existantes. L'action est irréversible. Du fait du caractère irréversible de l'action, vous allez recevoir un mail avec un lien. En cliquant ce lein, vous supprimerez toutes les données. ACTION IRREVERSBLE : Vous ne pourrez alors plus récupérer les données. <hr/> Cette action est cependant nécessaire en fin d'année  pour recréer une nouvelle structure d'établissement.</div>
@@ -129,8 +130,9 @@
  
 
 
-            {% endif %} 
 
+            {% endif %} 
+ 
         </div> 
     </div>
 </section>
