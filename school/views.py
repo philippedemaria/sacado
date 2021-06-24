@@ -133,7 +133,8 @@ def update_school(request,id):
 	school = School.objects.get(id=id)
 	form = SchoolForm(request.POST or None, instance=school)
 
-	nb_total = school.users.filter(user_type=1).count()
+	nb_total = school.users.filter(user_type=0).count()
+	print(nb_total)
 	nb = 300
 	if nb > nb_total:
 		nb = nb_total
