@@ -1183,7 +1183,9 @@ def reset_all_students_school(request) :
 
 	Parent.objects.all().delete()
 	Response.objects.all().delete()
-    for user in school.users.filter(user_type=0).exclude(username__contains= "_e-test"):
-    	user.delete()
+	for user in school.users.filter(user_type=0).exclude(username__contains= "_e-test"):
+		user.delete()
+
+	return redirect('index_tdb')
 
  
