@@ -13,6 +13,56 @@ from operator import attrgetter
 from django.core.mail import send_mail 
 
 
+
+def convert_seconds_in_time(secondes):
+    if secondes < 60:
+        return "{}s".format(secondes)
+    elif secondes < 3600:
+        minutes = secondes // 60
+        sec = secondes % 60
+        if sec < 10:
+            sec = f'0{sec}'
+        return "{}:{}".format(minutes, sec)
+    else:
+        hours = secondes // 3600
+        minutes = (secondes % 3600) // 60
+        sec = (secondes % 3600) % 60
+        if sec < 10:
+            sec = f'0{sec}'
+        if minutes < 10:
+            minutes = f'0{minutes}'
+        return "{}:{}:{}".format(hours, minutes, sec)
+
+
+def student_parcours_studied(student):  
+    parces = student.students_to_parcours.all()
+    if parces.filter(linked=1,is_publish=1).count() > 0 :
+        parcourses = parces
+    else :
+        parcourses = parces.filter(linked=0)
+    return parcourses
+
+
+
+def code_couleur(score,teacher):
+
+    stage = Stage.objects.get(school = teacher.user.school) 
+    if score < stage.low :
+        return Image('D:/uwamp/www/sacado/static/img/code_red.png')
+        #return Image('https://sacado.xyz/static/img/code_red.png')
+    elif score < stage.medium :
+        return Image('D:/uwamp/www/sacado/static/img/code_orange.png')
+        #return Image('https://sacado.xyz/static/img/code_orange.png')
+    elif score < stage.up :
+        return Image('D:/uwamp/www/sacado/static/img/code_green.png')
+        #return Image('https://sacado.xyz/static/img/code_green.png')
+    else :
+        return Image('D:/uwamp/www/sacado/static/img/code_darkgreen.png')
+        #return Image('https://sacado.xyz/static/img/code_darkgreen.png')
+
+
+
+
 def sending_mail(ob , m , a ,r) :
     try : 
         send_mail(ob, m, a, r)
@@ -224,7 +274,6 @@ def create_chrono(obj,forme):
     this_chrono = increment_chrono( obj , today , forme , False )     
     return this_chrono
 
- 
 
 def update_chrono(obj, accounting,forme):
 
@@ -235,3 +284,13 @@ def update_chrono(obj, accounting,forme):
             this_chrono = increment_chrono( obj ,   today ,  forme , True )  
 
     return this_chrono
+
+
+def this_year_from_today(today) :
+
+    compare_date = datetime(today.year, 7, 31)
+    if today > compare_date :
+        year = str(today.year) +"-"+str(today.year+1)
+    else :
+        year = str(today.year-1) +"-"+str(today.year)
+    return year

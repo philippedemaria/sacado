@@ -27,117 +27,111 @@
 {% block body  %}    
  
 <section class="content_main">
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <form  action="" method="POST">
+                {% csrf_token %}
 
-    <form  action="" method="POST">
-        {% csrf_token %}
-        <div class="row">
-            <div class="col-sm-12 col-md-6">
-                <div class="form-group">
-                    {{ form.name.label_tag }}
-                    {{ form.name |add_class:"form-control" }}
-                    {{ form.name.errors }}
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12 col-md-6">
-                <div class="form-group">
-                    <label>Pays :</label>
-                    {{ form.country |add_class:"form-control select2" }}
-                    {{ form.country.errors }}
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-12 col-md-6">
-                <div class="form-group">                
-                    {{ form.address.label_tag }}
-                    {{ form.address |add_class:"form-control" }}
-                    {{ form.address.errors }}
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12 col-md-6">
-                <div class="form-group">                
-                    {{ form.complement.label_tag }}
-                    {{ form.complement |add_class:"form-control" }}
-                    {{ form.complement.errors }}
-                </div>
-            </div>
-        </div>  
-        <div class="row">
-            <div class="col-sm-12 col-md-6">
-                <div class="form-group">                
-                    {{ form.zip_code.label_tag }}
-                    {{ form.zip_code |add_class:"form-control" }}
-                    {{ form.zip_code.errors }}
-                </div>
-            </div>
-        </div> 
-        <div class="row">
-            <div class="col-sm-12 col-md-6">
-                <div class="form-group">                
-                    {{ form.town.label_tag }}
-                    {{ form.town |add_class:"form-control" }}
-                    {{ form.town.errors }}
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12 col-md-6">
-                <div class="form-group">                
-                    {{ form.code_acad.label_tag }}
-                    {{ form.code_acad |add_class:"form-control" }}
-                    {{ form.code_acad.errors }}
-                </div>
-            </div>
-        </div>   
+                        <div class="form-group">
+                            {{ form.name.label_tag }}
+                            {{ form.name |add_class:"form-control" }}
+                            {{ form.name.errors }}
+                        </div>
  
-         <div class="row">
-            <div class="col-sm-12 col-md-6">
-                <div class="form-group">                
-                    {{ form.gar.label_tag }}
-                    {{ form.gar |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
-                    {{ form.gar.errors }}
-                </div>
-            </div>
-        </div> 
-    
-        <div class="row">
-            <div class="col-sm-12 col-md-6">
-                <div class="form-group">                
-                    {{ form.nbstudents.label_tag }}
-                    {{ form.nbstudents |add_class:"form-control" }}
-                    {{ form.nbstudents.errors }}
-                </div>
-            </div>
-        </div>   
-  
-
-
-
-        <div class="row">
-            <div class="col-sm-9 col-md-9">
-                <div class="form-group">
-                    <input value="Enregistrer" type="submit" class="btn btn-primary"/>            
-                    <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
-                </div>
-            </div>
+                        <div class="form-group">
+                            <label>Pays :</label>
+                            {{ form.country |add_class:"form-control select2" }}
+                            {{ form.country.errors }}
+                        </div>
  
-   
-            {% if school and  request.user.is_superuser %}
+                        <div class="form-group">                
+                            {{ form.address.label_tag }}
+                            {{ form.address |add_class:"form-control" }}
+                            {{ form.address.errors }}
+                        </div>
+ 
+                        <div class="form-group">                
+                            {{ form.complement.label_tag }}
+                            {{ form.complement |add_class:"form-control" }}
+                            {{ form.complement.errors }}
+                        </div>
+ 
+                        <div class="form-group">                
+                            {{ form.zip_code.label_tag }}
+                            {{ form.zip_code |add_class:"form-control" }}
+                            {{ form.zip_code.errors }}
+                        </div>
+ 
+                        <div class="form-group">                
+                            {{ form.town.label_tag }}
+                            {{ form.town |add_class:"form-control" }}
+                            {{ form.town.errors }}
+                        </div>
+ 
+                        <div class="form-group">                
+                            {{ form.code_acad.label_tag }}
+                            {{ form.code_acad |add_class:"form-control" }}
+                            {{ form.code_acad.errors }}
+                        </div>
+ 
+                        <div class="form-group">                
+                            {{ form.gar.label_tag }}
+                            {{ form.gar |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                            {{ form.gar.errors }}
+                        </div>
+ 
+                        <div class="form-group">                
+                            {{ form.nbstudents.label_tag }}
+                            {{ form.nbstudents |add_class:"form-control" }}
+                            {{ form.nbstudents.errors }}
+                        </div>
+ 
+                        <div class="form-group">
+                            <input value="Enregistrer" type="submit" class="btn btn-primary"/>            
+                            <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                        </div>
+ 
+         
+           
+                    {% if school and  request.user.is_superuser %}
+                
+ 
+                            <div class="form-group">
+                                <a href="{% url 'delete_school'  school.id %}"  class="btn btn-danger pull-right"  onclick="return TestDelete(' cet établissement ')">Supprimer</a>
+                            </div>           
         
-                <div class="col-sm-3 col-md-3">
-                    <div class="form-group">
-                        <a href="{% url 'delete_school'  school.id %}"  class="btn btn-danger"  onclick="return TestDelete(' cet établissement ')">Supprimer</a>
-                    </div>           
-                </div>
-            
-            {% endif %} 
+                    
+                    {% endif %} 
+            </form>
         </div>
-    </form>
-   
+        <div class="col-sm-12 col-md-6">
+            {% if school and  request.user.is_superuser %}
+                <h1 class="thin"> Initialisation et récupération</h1>   
+
+                 <div class="text-danger"><b>Selon le nombre d'élèves, ces actions peuvent être longues.</b></div>
+
+
+
+                <h3 class="thin"> Récupération des résultats</h3>
+
+                    <a href="{% url 'export_csv_all_students_school' %}" class="btn btn-default">Récupérer les résultats de tous les élèves   <img src="{% static 'img/excel.png' %}" width="15px" /></a>
+                        
+                    <a href="{% url 'export_pdf_all_students_school' %}" class="btn btn-default">Récupérer les résultats de tous les élèves   <img src="{% static 'img/pdf.png' %}" width="20px" /></a> 
+
+
+                <h3 class="thin"> Ré-initialisation</h3>
+
+                    <div class="alert alert-danger">Le  bouton ci-dessous ré-initialise la base de données en supprimant toutes les données existantes. L'action est irréversible. Du fait du caractère irréversible de l'action, vous allez recevoir un mail avec un lien. En cliquant ce lein, vous supprimerez toutes les données. ACTION IRREVERSBLE : Vous ne pourrez alors plus récupérer les données. <hr/> Cette action est cependant nécessaire en fin d'année  pour recréer une nouvelle structure d'établissement.</div>
+
+
+                    <a href="{% url 'reset_all_students_school' %}" class="btn btn-danger" onclick="TestDelete('ces données.... Action irréversible....ATTENTION')">Effacer tous les élèves et leurs résultats de l'année <i class="fa fa-users"></i></a>
+
+ 
+
+
+            {% endif %} 
+
+        </div> 
+    </div>
 </section>
 {% endblock  %}

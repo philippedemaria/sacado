@@ -197,7 +197,7 @@ def student_dashboard(request,group_id):
 
 
 
-def student_parcours_studied(student):  
+#def student_parcours_studied(student):  
     parces = student.students_to_parcours.all()
     if parces.filter(linked=1,is_publish=1).count() > 0 :
         parcourses = parces
@@ -358,7 +358,7 @@ def include_students_in_a_model(request, liste,model):
 
 
 
-def convert_seconds_in_time(secondes):
+#def convert_seconds_in_time(secondes):
     if secondes < 60:
         return "{}s".format(secondes)
     elif secondes < 3600:
@@ -1169,20 +1169,7 @@ def enroll(request, slug):
     return render(request, 'group/enroll.html', {"u_form": user_form, "slug": slug, "group": group, })
 
 
-
-def code_couleur(score,teacher):
-
-    stage = Stage.objects.get(school = teacher.user.school) 
-    if score < stage.low :
-        return Image('https://sacado.xyz/static/img/code_red.png')
-    elif score < stage.medium :
-        return Image('https://sacado.xyz/static/img/code_orange.png')
-    elif score < stage.up :
-        return Image('https://sacado.xyz/static/img/code_green.png')
-    else :
-        return Image('https://sacado.xyz/static/img/code_darkgreen.png')
-
-
+ 
 
 def print_statistiques(request, group_id, student_id):
 
@@ -1394,7 +1381,7 @@ def print_statistiques(request, group_id, student_id):
         skills = Skill.objects.filter(subject= subject)
         for skill  in skills :
             try :
-                resultlastskill  = skill.student_resultskill.objects.get(student = student)
+                resultlastskill  = skill.student_resultskill.get(student = student)
                 sk_tab.append([skill.name, code_couleur(resultlastskill.point,teacher) ])
             except :
                 sk_tab.append([skill.name,  "N.E"  ])

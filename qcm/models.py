@@ -1645,7 +1645,7 @@ class Mastering(models.Model):
 class Mastering_done(models.Model):
 
     mastering = models.ForeignKey(Mastering, related_name="mastering_done", editable=False, on_delete=models.PROTECT, verbose_name="Exercice")
-    student = models.ForeignKey(Student, on_delete=models.PROTECT, editable=False, related_name='students_mastering_done')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, editable=False, related_name='students_mastering_done')
     writing = RichTextUploadingField( blank=True, verbose_name="Texte*") 
     
     def __str__(self):
@@ -1685,7 +1685,7 @@ class Masteringcustom(models.Model):
 class Masteringcustom_done(models.Model):
 
     mastering = models.ForeignKey(Masteringcustom, related_name="mastering_custom_done", editable=False, on_delete=models.PROTECT, verbose_name="Exercice")
-    student = models.ForeignKey(Student, on_delete=models.PROTECT, editable=False, related_name='students_mastering_custom_done')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, editable=False, related_name='students_mastering_custom_done')
     writing = RichTextUploadingField( blank=True, verbose_name="Texte*") 
     
     def __str__(self):

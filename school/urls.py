@@ -58,4 +58,10 @@ urlpatterns = [
     path('ajax_subject_teacher', ajax_subject_teacher, name='ajax_subject_teacher'),
     path('ajax_get_this_school_in_session', ajax_get_this_school_in_session, name='ajax_get_this_school_in_session'),
 
+    ##### export from a school
+    path('export_csv_all_students_school', export_csv_all_students_school, name='export_csv_all_students_school'),
+    path('export_pdf_all_students_school', export_pdf_all_students_school, name='export_pdf_all_students_school'),
+    path('reset_all_students_school', reset_all_students_school, name='reset_all_students_school'),
+
+
 ]

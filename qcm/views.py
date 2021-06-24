@@ -6124,9 +6124,6 @@ def export_results_after_evaluation(request):
 
     return response
 
-
-
-
 def export_notes_after_evaluation(request):
 
     parcours_id = request.POST.get("parcours_id")  
@@ -6171,8 +6168,6 @@ def export_notes_after_evaluation(request):
 
         writer.writerow( (str(student.user.last_name).lower() , str(student.user.first_name).lower() , data_student["total_nb_exo"] , data_student["nb_exo"],  data_student["percent"] , data_student["ajust"] , final_mark ) )
     return response
-
-
 
 def export_skills_after_evaluation(request):
 
@@ -6245,7 +6240,6 @@ def export_skills_after_evaluation(request):
  
         writer.writerow( skill_level_tab )
     return response
-
 
 def export_note_custom(request,id,idp):
 

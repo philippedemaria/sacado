@@ -9,6 +9,8 @@ from django.http import JsonResponse
 from .models import School, Country  , Stage
 from account.decorators import is_manager_of_this_school
 from account.models import User, Teacher, Student
+from qcm.models import Relationship
+from socle.models import Skill, Theme, Waiting, Knowledge
 from account.forms import UserForm , StudentForm ,NewUserSForm
 from association.models import Accounting, Rate, Detail
 from school.forms import SchoolForm, CountryForm, GroupForm, StageForm
@@ -20,6 +22,7 @@ from socle.models import Subject
 from general_fonctions import *
 from payment_fonctions import *
 from django.conf import settings # récupération de variables globales du settings.py
+from django.db.models import Avg, Count, Min, Sum
 ############### bibliothèques pour les impressions pdf  #########################
 import os
 from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
@@ -38,7 +41,7 @@ from html import escape
 from reportlab.lib.enums import TA_JUSTIFY,TA_LEFT,TA_CENTER,TA_RIGHT 
 cm = 2.54 
 ############## FIN bibliothèques pour les impressions pdf  #########################
-
+import csv
 #################################################################################
 
 
@@ -65,7 +68,6 @@ def get_username(ln, fn):
     return un
 
 
-
 def this_school_in_session(request):
 
 	school_id = request.session.get("school_id",None)
@@ -75,8 +77,6 @@ def this_school_in_session(request):
 	else :
 		school = request.user.school
 	return school 
-
-
 
 
 def group_has_overall_parcourses(group):
@@ -114,7 +114,6 @@ def list_schools(request):
 	return render(request, 'school/lists.html', { 'communications' : [], 'schools': schools})
 
 
-
 @user_is_superuser
 def create_school(request):
 	form = SchoolForm(request.POST or None)
@@ -127,7 +126,6 @@ def create_school(request):
 		return redirect('schools')
 
 	return render(request,'school/_form.html', { 'communications' : [], 'form':form})
-
 
  
 def update_school(request,id):
@@ -153,15 +151,11 @@ def update_school(request,id):
 	return render(request,'school/_form.html', {'form':form,  'communications' : [],'school':school})
 
 
-
 @user_is_superuser
 def delete_school(request,id):
 	school = School.objects.get(id=id)
 	school.delete()
 	return redirect('schools')
-
-
-
 
 
 @user_is_superuser
@@ -220,8 +214,6 @@ def clear_detail_student(student):
 		pass
 
 
-
-
 #@is_manager_of_this_school
 def school_teachers(request):
 
@@ -240,7 +232,6 @@ def school_teachers(request):
  
 
 	return render(request,'school/list_teachers.html', { 'communications' : [],'teachers':teachers, "school" : school })
-
 
 
 #@is_manager_of_this_school
@@ -262,7 +253,6 @@ def school_groups(request):
 	return render(request, 'school/list_groups.html', { 'communications' : [],'groups': groups, "school" : school })
 
 
-
 #@is_manager_of_this_school
 def school_level_groups(request):
 
@@ -279,10 +269,6 @@ def school_level_groups(request):
 	groups = Group.objects.filter(teacher__user__in = users).order_by("level") 
 
 	return render(request,'school/list_level_groups.html', { 'communications' : [],'groups':groups, "school" : school })
-
-
-
-
 
 #@is_manager_of_this_school
 def school_students(request):
@@ -956,7 +942,6 @@ def get_school(request):
 ###############################################################################################
 ###############################################################################################
 
-import csv
 
 #@is_manager_of_this_school
 def csv_full_group(request):
@@ -1027,10 +1012,6 @@ def csv_full_group(request):
 
  
 
-
-
-
-
 def group_to_teacher(request):
 
     school = this_school_in_session(request)
@@ -1064,3 +1045,142 @@ def ajax_get_this_school_in_session(request):
 	request.session["school_id"] = school_id
 	data = {}
 	return JsonResponse(data)
+
+
+
+###############################################################################################
+###############################################################################################
+######  Exports des résultats 
+###############################################################################################
+###############################################################################################
+ 
+
+def export_csv_all_students_school(request) :
+	pass
+	
+
+
+def export_pdf_all_students_school(request) :
+
+    school = request.user.school
+    today = datetime.now()
+    scolar_year = this_year_from_today(today)
+    subjects = []
+    teacher = request.user.teacher
+
+    elements = []        
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="export_pdf_all_students_school_'+scolar_year+'.pdf"'
+
+    doc = SimpleDocTemplate(response,   pagesize=A4, 
+                                        topMargin=0.3*inch,
+                                        leftMargin=0.3*inch,
+                                        rightMargin=0.3*inch,
+                                        bottomMargin=0.3*inch     )
+
+    sample_style_sheet = getSampleStyleSheet()
+
+    sacado = ParagraphStyle('sacado', 
+                            fontSize=20, 
+                            leading=26,
+                            borderPadding = 0,
+                            alignment= TA_CENTER,
+                            )
+
+    title = ParagraphStyle('title', 
+                            fontSize=20, 
+                            textColor=colors.HexColor("#00819f"),
+                            )
+
+    subtitle = ParagraphStyle('title', 
+                            fontSize=16, 
+                            textColor=colors.HexColor("#00819f"),
+                            )
+ 
+    normal = ParagraphStyle(name='Normal',fontSize=12,)    
+    style_cell = TableStyle(
+            [
+                ('SPAN', (0, 1), (1, 1)),
+                ('TEXTCOLOR', (0, 1), (-1, -1),  colors.Color(0,0.7,0.7))
+            ]
+        )
+
+    subjects = Subject.objects.all()
+
+ 
+
+    for user in school.users.filter(user_type=0).order_by("student__level","last_name"):
+ 
+        logo = Image('D:/uwamp/www/sacado/static/img/sacadoA1.png')
+ 
+        logo_tab = [[logo, "SACADO \nBilan de compétences - Année scolaire "+scolar_year ]]
+        logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
+        logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))
+        elements.append(logo_tab_tab)
+        elements.append(Spacer(0, 0.1*inch))
+
+
+        paragraph = Paragraph( user.last_name+" "+user.first_name+" - "+user.student.level.name , title )
+        elements.append(paragraph)
+        elements.append(Spacer(0, 1*inch))
+ 
+
+        for subject in subjects :
+            elements.append(Spacer(0, 0.5*inch))
+            groups = subject.subject_group.filter(students= user.student)
+            g_name = "-"
+            for g in groups :
+            	g_name += g.teacher.user.last_name+ " - "
+
+            paragraph = Paragraph(subject.name + " - " + g_name, title )
+            elements.append(paragraph)
+
+
+            elements.append(Spacer(0, 0.5*inch))
+            ##########################################################################
+            #### Gestion des compétences
+            ##########################################################################
+            sk_tab = []
+            skills = Skill.objects.filter(subject= subject)
+
+            for skill  in skills :
+
+                resultlastskills  = skill.student_resultskill.filter(student = user.student)
+                point = 0
+                i=1
+                for rs in resultlastskills :
+                    point += rs.point
+                    i+=1
+                if point == 0 :
+                    sc = "N.E"
+                elif i>1  :
+                    sc = str(round(point/(i-1),0))+"%"
+                else :
+                    sc = str(point)+"%" 
+                sk_tab.append([skill.name,  sc  ])
+
+
+
+            skill_tab = Table(sk_tab, hAlign='LEFT', colWidths=[5.2*inch,1*inch])
+            skill_tab.setStyle(TableStyle([
+                   ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
+                   ('BOX', (0,0), (-1,-1), 0.25, colors.black),
+                   ]))
+
+
+            elements.append(skill_tab)
+
+        elements.append(PageBreak())
+
+    doc.build(elements)
+    return response
+
+
+
+
+def reset_all_students_school(request) :
+    for user in school.users.filter(user_type=0).exclude(username__contains= "_e-test"):
+    	user.delete()
+
+ 
