@@ -122,10 +122,12 @@
                 {% endcomment %} 
                 <h3 class="thin"> Ré-initialisation</h3>
 
-                    <div class="alert alert-danger">Le  bouton ci-dessous ré-initialise la base de données en supprimant toutes les données existantes. L'action est irréversible. Du fait du caractère irréversible de l'action, vous allez recevoir un mail avec un lien. En cliquant ce lein, vous supprimerez toutes les données. ACTION IRREVERSBLE : Vous ne pourrez alors plus récupérer les données. <hr/> Cette action est cependant nécessaire en fin d'année  pour recréer une nouvelle structure d'établissement.</div>
+                    <div class="alert alert-danger">Le  bouton ci-dessous ré-initialise la base de données en supprimant toutes les données existantes. L'action est irréversible. <hr/> Cette action est cependant nécessaire en fin d'année  pour recréer une nouvelle structure d'établissement. La suppression s'opère par lot de 300 élèves.</div>
 
 
-                    <a href="{% url 'reset_all_students_school' %}" class="btn btn-danger" onclick="TestDelete('ces données.... Action irréversible....ATTENTION')">Effacer tous les élèves et leurs résultats de l'année <i class="fa fa-users"></i></a>
+
+
+                    <a href="{% url 'reset_all_students_school' %}" class="btn btn-danger" onclick="TestDelete('ces données.... Action irréversible....ATTENTION')">Effacer {{ nb }}/{{ nb_total }} élèves <i class="fa fa-users"></i></a>
 
  
 

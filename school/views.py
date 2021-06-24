@@ -133,6 +133,11 @@ def update_school(request,id):
 	school = School.objects.get(id=id)
 	form = SchoolForm(request.POST or None, instance=school)
 
+	nb_total = school.users.filter(user_type=1).count()
+	nb = 300
+	if nb > nb_total:
+		nb = nb_total
+
 	ok = False
 	if request.user.is_superuser or request.user.is_manager or request.user.school == school :
 		ok = True
@@ -148,7 +153,7 @@ def update_school(request,id):
 			else :
 				return redirect('admin_tdb')
 
-	return render(request,'school/_form.html', {'form':form,  'communications' : [],'school':school})
+	return render(request,'school/_form.html', {'form':form,  'communications' : [],'school':school ,'nb':nb ,'nb_total':nb_total })
 
 
 @user_is_superuser
@@ -1184,7 +1189,7 @@ def reset_all_students_school(request) :
 	Parent.objects.all().delete()
 	Response.objects.all().delete()
 	school = request.user.school
-	for user in school.users.filter(user_type=0).exclude(username__contains= "_e-test"):
+	for user in school.users.filter(user_type=0).exclude(username__contains= "_e-test")[:300] :
 		user.delete()
 
 	return redirect('index_tdb')
