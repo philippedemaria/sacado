@@ -134,7 +134,6 @@ def update_school(request,id):
 	form = SchoolForm(request.POST or None, instance=school)
 
 	nb_total = school.users.filter(user_type=0).count()
-	print(nb_total)
 	nb = 300
 	if nb > nb_total:
 		nb = nb_total
@@ -1193,6 +1192,6 @@ def reset_all_students_school(request) :
 	for user in school.users.filter(user_type=0).exclude(username__contains= "_e-test")[:300] :
 		user.delete()
 
-	return redirect('index_tdb')
+	return redirect('update_school', school.id)
 
  
