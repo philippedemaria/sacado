@@ -1183,6 +1183,7 @@ def reset_all_students_school(request) :
 
 	Parent.objects.all().delete()
 	Response.objects.all().delete()
+	school = request.user.school
 	for user in school.users.filter(user_type=0).exclude(username__contains= "_e-test"):
 		user.delete()
 
