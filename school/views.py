@@ -8,8 +8,8 @@ from django.db.models import Q
 from django.http import JsonResponse
 from .models import School, Country  , Stage
 from account.decorators import is_manager_of_this_school
-from account.models import User, Teacher, Student
-from qcm.models import Relationship
+from account.models import User, Teacher, Student , Parent ,Response
+from qcm.models import Relationship  
 from socle.models import Skill, Theme, Waiting, Knowledge
 from account.forms import UserForm , StudentForm ,NewUserSForm
 from association.models import Accounting, Rate, Detail
