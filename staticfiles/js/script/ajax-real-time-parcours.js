@@ -13,9 +13,7 @@ define(['jquery',  'bootstrap', ], function ($) {
                  })
 
         check_live();
-        setInterval(  check_live  , 10);  // 10 millisecondes pour faire sauter le serveur.
-
-
+        setInterval(  check_live  , 10); //10 millisecondes pour faire sauter le serveur.
         function check_live(){
 
 
@@ -81,29 +79,29 @@ define(['jquery',  'bootstrap', ], function ($) {
         //------------------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------------------
 
-        // var parcours_id = $("#parcours_id").val();
-        // var connectionString = 'ws://' + window.location.host + '/ws_qcm/'+parcours_id+'/';
-        // var socket = new WebSocket(connectionString);
+        var parcours_id = $("#parcours_id").val();
+        var connectionString = 'ws://' + window.location.host + '/ws_qcm/'+parcours_id+'/';
+        var socket = new WebSocket(connectionString);
 
 
-        // socket.onopen = function(evt) {
-        //   write('Connected');
-        //   // il n'y a pas de verbes GET/POST, etc en websocket
-        //   // on envoie les messages et c'est tout.
-        //   for (var i=0; i < 10; i++) {
-        //     write('Envoie des données');
-        //     socket.send(i + " - " + new Date());
-        //   }
+        socket.onopen = function(evt) {
+          write('Connected');
+          // il n'y a pas de verbes GET/POST, etc en websocket
+          // on envoie les messages et c'est tout.
+          for (var i=0; i < 10; i++) {
+            write('Envoie des données');
+            socket.send(i + " - " + new Date());
+          }
 
-        // };
+        };
 
 
 
-        // socket.onmessage = function(event){
-        //     var data = JSON.parse(event.data);
-        //     console.log(data);
-        //     $('#app').text( data.message ) ;
-        // }
+        socket.onmessage = function(event){
+            var data = JSON.parse(event.data);
+            console.log(data);
+            $('#app').text( data.message ) ;
+        }
  
 
 
