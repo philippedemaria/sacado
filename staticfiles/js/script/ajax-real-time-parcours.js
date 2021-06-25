@@ -11,12 +11,11 @@ define(['jquery',  'bootstrap', ], function ($) {
         $(".imagefile").on('mouseout', function (event) {
                  $(this).parent().find(".th_real_time_label").removeClass("th_real_time_label_hover") ;
                  })
-            
 
         check_live();
+        setInterval(  check_live  , 10);  // 10 millisecondes pour faire sauter le serveur.
 
-        //setInterval(  check_live  , 10); 10 millisecondes pour faire sauter le serveur.
- 
+
         function check_live(){
 
 
@@ -66,38 +65,12 @@ define(['jquery',  'bootstrap', ], function ($) {
                                     $("#"+item).html( result[index])  ;                                    
                                 }
 
-
-
-
                             }
-
-
-
-
- 
-
-
-
-
-
                         }
                     }
                 )
-        }         
-
-
-     
-        // var socket = new WebSocket('ws://127.0.0.1:8000/ws/qcm/');
-
-        // socket.onmessage = function(event){
-        //     var data = JSON.parse(event.data);
-        //     console.log(data);
-        //     $('#app').text( data.message ) ;
-        // }
+            }
  
-
-
-
 
         //------------------------------------------------------------------------------------------------    
         //------------------------------------------------------------------------------------------------
@@ -108,34 +81,30 @@ define(['jquery',  'bootstrap', ], function ($) {
         //------------------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------------------
 
-        var parcours_id = $("#parcours_id").val();
-        var connectionString = 'ws://' + window.location.host + '/qcm/' + parseInt(parcours_id) + '/';
+        // var parcours_id = $("#parcours_id").val();
+        // var connectionString = 'ws://' + window.location.host + '/ws_qcm/'+parcours_id+'/';
+        // var socket = new WebSocket(connectionString);
 
-        var socket = new WebSocket(connectionString);
 
-        socket.onmessage = function(event){
-            var data = JSON.parse(event.data);
-            console.log(data);
-            $('#app').text( data.message ) ;
-        }
+        // socket.onopen = function(evt) {
+        //   write('Connected');
+        //   // il n'y a pas de verbes GET/POST, etc en websocket
+        //   // on envoie les messages et c'est tout.
+        //   for (var i=0; i < 10; i++) {
+        //     write('Envoie des données');
+        //     socket.send(i + " - " + new Date());
+        //   }
+
+        // };
+
+
+
+        // socket.onmessage = function(event){
+        //     var data = JSON.parse(event.data);
+        //     console.log(data);
+        //     $('#app').text( data.message ) ;
+        // }
  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

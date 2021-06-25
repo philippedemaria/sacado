@@ -98,7 +98,7 @@ def menu(request):
                 teacher_to_student = True
 
 
-            sacado_asso, sacado_is_active = is_sacado_asso(teacher.user,today)
+            sacado_asso, sacado_is_active = is_sacado_asso(student.user,today)
 
             group_id = request.session.get("group_id",None)
 
