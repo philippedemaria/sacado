@@ -104,11 +104,21 @@
                 </table>
             </div>
         </div>
+
         <div class="row">
-            <div class="col-sm-12 col-md-12">     
-                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+            <div class="col-sm-12 col-md-12">
+                <h2 class="thin">Ré-initialisation du serveur</h2>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">     
+                <a href="{% url 'reset_all_students_sacado' %}" class="btn btn-danger" onclick="return TestDelete('les données élèves... action irréversible')">Effacer les données de {{ nb }}/{{ nb_total }} élèves par lot de 150 élèves</a>
+            </div>
+        </div>
+
+
+
     </section>
 
 

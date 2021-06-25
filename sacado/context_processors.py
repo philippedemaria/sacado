@@ -11,6 +11,32 @@ from group.models import Group
 from tool.models import Tool
 from datetime import datetime 
 
+##############################################################################################################################################
+##############################################################################################################################################
+###              L'établissement est-t-il membre sacado 
+##############################################################################################################################################
+##############################################################################################################################################
+
+
+def is_sacado_asso(this_user, today):
+    is_sacado = False
+    is_active = False
+
+    try :
+        abonnement = this_user.school.abonnement.last()
+        if today < abonnement.date_stop and abonnement.is_active :
+            is_sacado = True
+    except :
+        pass
+ 
+    return is_sacado, abonnement.is_active
+
+##############################################################################################################################################
+##############################################################################################################################################
+##############################################################################################################################################
+##############################################################################################################################################
+
+
 def menu(request):
 
     if request.user.is_authenticated:
@@ -39,29 +65,26 @@ def menu(request):
                 is_pending_studentanswers = True
  
             ### Permet de vérifier qu'un enseignant est dans un établissement sacado
+
+            sacado_asso, sacado_is_active = is_sacado_asso(teacher.user,today)
             renew_propose = False
-            if teacher.user.school :
-                if teacher.user.school.is_active :
-                    sacado_asso = True
-                    
-                ### Rapelle le renouvellement de la cotisation
-                renew = request.session.get("renewal", None)
-                if not renew :
-                    rates = Rate.objects.all() #tarifs en vigueur 
-                    school_year = rates.first().year #tarifs pour l'année scolaire
-                    school_year_tab = school_year.split("-")
-                    renew_date = datetime(int(school_year_tab[0]),5,15)
-                    next_renew_date = datetime(int(school_year_tab[1]),5,15)
-                    renewal = True
-                    if Accounting.objects.filter(school = teacher.user.school,   date__gte=renew_date, date__lte=next_renew_date,is_active = 1 ).count() == 1:
-                        renewal = False
-                        request.session["renewal"] = True
+            ### Rapelle le renouvellement de la cotisation
+            renew = request.session.get("renewal", None)
+            if not renew :
+                rates = Rate.objects.all() #tarifs en vigueur 
+                school_year = rates.first().year #tarifs pour l'année scolaire
+                school_year_tab = school_year.split("-")
+                renew_date = datetime(int(school_year_tab[0]),5,15)
+                next_renew_date = datetime(int(school_year_tab[1]),5,15)
+                renewal = True
+                if Accounting.objects.filter(school = teacher.user.school,   date__gte=renew_date, date__lte=next_renew_date,is_active = 1 ).count() == 1:
+                    renewal = False
+                    request.session["renewal"] = True
 
-                    renew_propose = False
-                    now =  datetime.now()
-                    if now > datetime(int(today.year),5,15) and renewal :
-                        renew_propose = True
-
+                renew_propose = False
+                now =  datetime.now()
+                if now > datetime(int(today.year),5,15) and renewal :
+                    renew_propose = True
 
             return {'today': today, 'index_tdb' : False , 'nbe': nbe, 'levels': levels, 'renew_propose' : renew_propose ,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso , "is_pending_studentanswers" : is_pending_studentanswers  }
 
@@ -74,9 +97,8 @@ def menu(request):
             if "_e-test" in student.user.username :
                 teacher_to_student = True
 
-            if student.user.school :
-                if student.user.school.is_active :
-                    sacado_asso = True
+
+            sacado_asso, sacado_is_active = is_sacado_asso(teacher.user,today)
 
             group_id = request.session.get("group_id",None)
 
@@ -102,7 +124,8 @@ def menu(request):
             return {
                 'this_user': this_user,
                 'last_exercises_done': last_exercises_done,
-                 'sacado_asso' : sacado_asso , 
+                'sacado_asso' : sacado_asso , 
+                 'sacado_asso' : False , 
                  'index_tdb' : False , 
             }
 

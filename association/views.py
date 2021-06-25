@@ -806,7 +806,12 @@ def list_associate(request):
     associates = Associate.objects.filter(is_active = 1)
     pending_associates = Associate.objects.filter(is_active = 0)
 
-    return render(request, 'association/list_associate.html', {'associates': associates , 'pending_associates': pending_associates , 'user' : user })
+    nb_total = User.objects.filter(user_type=0).count()
+    nb = 150
+    if nb > nb_total:
+        nb = nb_total
+
+    return render(request, 'association/list_associate.html', {'associates': associates , 'pending_associates': pending_associates , 'user' : user  ,'nb':nb ,'nb_total':nb_total  })
 
 
 @user_passes_test(user_is_board) 
@@ -1127,7 +1132,7 @@ def reset_all_students_sacado(request):
     Response.objects.all().delete() 
     User.objects.filter(user_type=0).exclude(username__contains= "_e-test").delete() 
 
-    return redirect('association_index')
+    return redirect('list_associate')
 
 
 

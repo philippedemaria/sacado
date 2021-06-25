@@ -39,11 +39,6 @@ def verify_payment(buyer, accounting, school,new):
  
 			message = topic + " : " + message_details
 			send_mail(topic,  message  ,  settings.DEFAULT_FROM_EMAIL ,  ['sacado.asso@gmail.com'])
-			# send_templated_mail(
-			# 	template_name="teacher_registration",
-			# 	from_email=settings.DEFAULT_FROM_EMAIL,
-			# 	recipient_list=[self.user.email, ],
-			# 	context={"teacher": self.user, }, )
 			accounting.save()
 			accounting.abonnement.is_active=True
 			accounting.abonnement.save()
