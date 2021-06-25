@@ -3420,6 +3420,9 @@ a:focus {
  * asso
  * ----------------------
  */
+a.link_not_allowed{
+    cursor: not-allowed;
+}
 
 
 .observation_asso{

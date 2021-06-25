@@ -3,7 +3,7 @@
 {% load widget_tweaks %}
 
 {% block page_title %} 
-   <a href="{% url 'admin_tdb' %}"> <i class="fa fa-cloud"></i></a> {% if request.user.is_superuser %}Nouvel établissement {% else %}Modifier l'établissement{% endif %}
+   <a href="{% url 'admin_tdb' %}"> <i class="fa fa-cloud"></i></a> {% if request.user.is_superuser %}Gestion d'un établissement {% else %}Modifier l'établissement{% endif %}
 {% endblock  %}
 
 
@@ -124,12 +124,28 @@
 
                     <div class="alert alert-danger">Le  bouton ci-dessous ré-initialise la base de données en supprimant toutes les données existantes. L'action est irréversible. <hr/> Cette action est cependant nécessaire en fin d'année  pour recréer une nouvelle structure d'établissement. La suppression s'opère par lot de 150 élèves.</div>
 
+ 
+                    <div>
+                        {% if nb > 0 %}
+                            <a href="{% url 'reset_all_students_school' %}" class="btn btn-danger" onclick="return TestDelete('ces données ... action irréversible')">Effacer les données de {{ nb }}/{{ nb_total }} élèves</a> 
 
-
-
-                    <a href="{% url 'reset_all_students_school' %}" class="btn btn-danger">Effacer {{ nb }}/{{ nb_total }} élèves <i class="fa fa-users"></i></a>
+                        {% else %}
+                            <a href="#" class="btn btn-default link_not_allowed">Aucun élève </a>
+                        {% endif %}                             
+                    </div>
 
  
+
+ 
+                    <div style="margin-top: 30px">
+                        {% if nb_total > 0%}
+                            <a href="#" class="btn btn-default link_not_allowed">Pour effacer tous les groupes, supprimer tous les élèves</a>
+ 
+                        {% else %}
+                            <a href="{% url 'reset_all_groups_school' %}" class="btn btn-danger" onclick="return TestDelete('ces données ... action irréversible')">Effacer tous les groupes</a>
+                        {% endif %}                             
+                    </div>
+
 
 
 

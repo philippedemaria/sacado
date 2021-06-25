@@ -19,7 +19,7 @@
 {% endblock %} 
 
 {% block page_menu_right %}
- {% if schools_tab|length == 1 %}     <a href="{% url 'update_school'  request.user.school.id    %}">{{ request.user.school.name }} </a> {% endif %}
+ {% if schools_tab|length == 1 %}     <a href="{% url 'update_school'  request.user.school.id    %}" style="font-size : 24px">{{ request.user.school.name }} <i class="fa fa-edit fa-xs"></i></a> {% endif %}
 {% endblock %}
 
 

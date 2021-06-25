@@ -153,7 +153,7 @@ def update_school(request,id):
 			else :
 				return redirect('admin_tdb')
 
-	return render(request,'school/_form.html', {'form':form,  'communications' : [],'school':school ,'nb':nb ,'nb_total':nb_total })
+	return render(request,'school/_form.html', {'form':form,  'communications' : [],'school':school ,'nb':nb ,'nb_total':nb_total  })
 
 
 @user_is_superuser
@@ -1189,9 +1189,33 @@ def reset_all_students_school(request) :
 	Parent.objects.all().delete()
 	Response.objects.all().delete()
 	school = request.user.school
-	for user in school.users.filter(user_type=0).exclude(username__contains= "_e-test")[:150] :
-		user.delete()
+	for u in school.users.filter(user_type=0).exclude(username__contains= "_e-test")[:150] : 
+		u.delete()
 
-	return redirect('update_school', school.id)
+	form = SchoolForm(request.POST or None, instance=school)
+	nb_total = school.users.filter(user_type=0).exclude(username__contains= "_e-test").count()
+	nb = 150
+	if nb > nb_total:
+		nb = nb_total
 
+	context = {'form':form,  'communications' : [], 'school':school ,'nb':nb ,'nb_total':nb_total }
+	return render(request,'school/_form.html', context)
+
+
+def reset_all_groups_school(request) :
+
+	school = request.user.school
+
+	form = SchoolForm(request.POST or None, instance=school)
+	nb_total = school.users.filter(user_type=0).count()
+	nb = 150
+	if nb > nb_total:
+		nb = nb_total
+
+	users = school.users.all()
+
+	for u in  users :
+		Group.objects.filter(teacher=u.teacher).delete()
  
+	context = {'form':form,  'communications' : [], 'school':school ,'nb':nb ,'nb_total':nb_total }
+	return render(request,'school/_form.html', context)

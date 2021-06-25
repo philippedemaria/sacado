@@ -51,6 +51,6 @@ urlpatterns = [
     path('ajax_total_month', ajax_total_month, name='ajax_total_month'),  
     path('ajax_total_period', ajax_total_period, name='ajax_total_period'),      
 
-
+    path('reset_all_students_sacado', reset_all_students_sacado, name='reset_all_students_sacado'),
 ]
  

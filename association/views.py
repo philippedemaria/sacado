@@ -1117,3 +1117,21 @@ def delete_rate(request, id):
     return redirect('list_rates')
     
  
+
+
+
+@user_passes_test(user_is_board)
+def reset_all_students_sacado(request):
+
+    Parent.objects.all().delete()
+    Response.objects.all().delete() 
+    User.objects.filter(user_type=0).exclude(username__contains= "_e-test")[:150].delete() 
+
+    return redirect('association_index')
+
+
+
+
+
+
+

@@ -97,6 +97,9 @@
         <div class="col-lg-3 col-3 text-center">
             <span class="counter">{{ nb_students }}</span>
             <p>Elèves</p>
+            <div>
+                <a href="{% url 'reset_all_students_sacado' %}" class="btn btn-danger" onclick="return TestDelete('les données élèves... action irréversible')">Effacer les données élèves par lot de 150</a>
+            </div>
         </div>
         <div class="col-lg-3 col-3 text-center">
             <span class="counter">{{ nb_exercises }}</span>

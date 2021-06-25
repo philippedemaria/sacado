@@ -62,6 +62,6 @@ urlpatterns = [
     path('export_csv_all_students_school', export_csv_all_students_school, name='export_csv_all_students_school'),
     path('export_pdf_all_students_school', export_pdf_all_students_school, name='export_pdf_all_students_school'),
     path('reset_all_students_school', reset_all_students_school, name='reset_all_students_school'),
-
+    path('reset_all_groups_school', reset_all_groups_school, name='reset_all_groups_school'),
 
 ]
