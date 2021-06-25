@@ -1125,7 +1125,7 @@ def reset_all_students_sacado(request):
 
     Parent.objects.all().delete()
     Response.objects.all().delete() 
-    User.objects.filter(user_type=0).exclude(username__contains= "_e-test")[:150].delete() 
+    User.objects.filter(user_type=0).exclude(username__contains= "_e-test").delete() 
 
     return redirect('association_index')
 
