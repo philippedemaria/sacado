@@ -7389,22 +7389,27 @@ def create_folder(request,idg):
 
 def update_folder(request,id,idg):
     """ 'parcours_is_folder' : True pour les vignettes et différencier si folder ou pas """
-    teacher = request.user.teacher 
-
-    parcours = Parcours.objects.get(id=id)
-    form = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher)
+    teacher      = request.user.teacher
+    groups       = teacher.groups.all() 
+    share_groups = teacher.teacher_group.all() 
+    parcours     = Parcours.objects.get(id=id)
+    form         = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher)
 
     try :
         group = Group.objects.get(pk = idg)     
+        group_id = group.id
         parcourses = set()
-        for student in group.students.exclude(user__username__contains="_e-test") :
+        for student in group.students.all() :
             parcourses.update(student.students_to_parcours.filter(teacher = teacher).exclude(is_folder=1))
         group_exists = True
         images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id = group.subject).exclude(vignette=" ").distinct()
 
     except :
         group = None
+        group_id = None
         group_exists = False
+        parcourses = teacher.teacher_parcours.all()
+        images = [] 
         parcourses = teacher.teacher_parcours.all()
         images = [] 
 
@@ -7444,7 +7449,7 @@ def update_folder(request,id,idg):
         else:
             print(form.errors)
 
-    context = {'form': form, 'parcours_is_folder' : True,   'teacher': teacher,  'group': group, 'group_id': group.id,  'parcours': parcours, 'parcourses' : parcourses , 'images' : images ,   'relationships': [], 'role' : True }
+    context = {'form': form, 'parcours_is_folder' : True,   'teacher': teacher,  'group': group, 'groups': groups, 'share_groups': share_groups, 'group_id': group_id,  'parcours': parcours, 'parcourses' : parcourses , 'images' : images ,   'relationships': [], 'role' : True }
 
     return render(request, 'qcm/form_folder.html', context)
  
