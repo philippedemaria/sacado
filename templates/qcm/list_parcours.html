@@ -113,11 +113,11 @@
                             {% endif %}
                         </td>  
                         <td>
-                            {% if  parcours.is_folder %}
+                            {% if  parcours.is_folder %} 
                                 {% for g in  parcours.group_list  %}
                                     {% if forloop.first %}<a href="{% url 'update_folder' parcours.id g.id %}" style="color:{{ g.color }}"> <i class="fa fa-cogs  fa-xs"></i></a>{% endif %}
                                 {% empty %}
-                                    <a href="{% url 'delete_folder' parcours.id 0 %}"> <i class="fa fa-trash  fa-xs"></i></a>
+                                    <a href="{% url 'update_folder' parcours.id 0 %}" style="color:{{ g.color }}"> <i class="fa fa-cogs  fa-xs"></i></a>
                                 {% endfor %}
                             {% else %}
                                 {% if parcours.teacher != teacher %}
@@ -225,7 +225,7 @@
                         </td>
                     </tr> 
                     {% for prcrs in parcours.leaf_parcours.all %}
-                        <tr {% if not prcrs.is_publish %} style="background-color:#F4F4F4;" {% endif  %} class="collapsed subparcours{{ forloop.parentloop.counter }}" >
+                        <tr {% if not prcrs.is_publish %} style="background-color:#F4F4F4;" {% endif  %} {% if prcrs.students.count %}class="collapsed subparcours{{ forloop.parentloop.counter }}"{% endif %} >
                             <td style="text-align:center">
                                 <svg width="1em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-bar-right" fill="{{ parcours.color }}" >
                                   <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
