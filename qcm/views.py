@@ -7428,16 +7428,20 @@ def update_folder(request,id,idg):
             nf.teacher = teacher
             nf.is_evaluation = 0
             nf.is_folder = 1
-            nf.level = group.level
-            nf.subject = group.subject
+            if group_exists : 
+                nf.level = group.level
+                nf.subject = group.subject
+ 
+
             if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
                 nf.vignette = request.POST.get("this_image_selected",None)
             nf.save()  
             nf.leaf_parcours.set(lp)
             ##################################################
             ## Suppression des élèves 
-            for stu in group.students.exclude(user__username__contains="_e-test") :
-                nf.students.remove(stu)
+            if group_exists :
+                for stu in group.students.exclude(user__username__contains="_e-test") :
+                    nf.students.remove(stu)
             ## Insertion des nouveaux élèves
             for s in request.POST.getlist("these_students"):
                 nf.students.add(s)
@@ -7445,7 +7449,7 @@ def update_folder(request,id,idg):
             if group_exists :
                 return redirect ("list_parcours_group", idg ) 
             else :
-                return redirect ("list_parcours" ) 
+                return redirect ("index" ) 
         else:
             print(form.errors)
 

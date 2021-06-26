@@ -132,7 +132,7 @@
 
                                         <label>
                                             <input type = "checkbox" 
-                                                    class="selector" 
+                                                    class="selector check_if_check" 
                                                     name="students" 
                                                     value="{{ s.user.id}}"
 
@@ -169,7 +169,7 @@
                                     {% for s in sg.group.students.all|dictsort:"user.last_name"  %}
                                         <label>
                                             <input type = "checkbox" 
-                                                    class="selector" 
+                                                    class="selector check_if_check" 
                                                     name="students_sg" 
                                                     value="{{ s.user.id}}"
 
@@ -358,7 +358,7 @@
     <div class="row" style="margin-top:40px">
         <div class="col-sm-12 col-md-7">
             <div class="form-group">
-                <input value="Enregistrer ce parcours" type="submit" class="btn btn-primary"/>
+                <input value="Enregistrer ce parcours" type="submit" class="btn btn-primary"  id="checkBtn" />
 
                 <input value="Enregistrer ce parcours et choisir les exercices" type="submit" name="save_and_choose" class="btn btn-primary"/>
                 <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
