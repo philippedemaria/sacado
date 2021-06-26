@@ -105,7 +105,7 @@
 
 
                     <div class="form-group list_choice">         
-                    <label>Choisir les élèves parmi</label></br>
+                    <label>Choisir les élèves parmi</label>{% if not group %}</br>{% endif %}
 
                         {% if group %}
                             {% if group.students.count > 0 %}
