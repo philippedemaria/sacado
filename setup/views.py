@@ -120,7 +120,7 @@ def index(request):
             relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("date_limit").order_by("parcours")
             parcourses = teacher.teacher_parcours.filter(is_evaluation=0, is_favorite =1,is_folder=0 ).order_by("-is_publish")
             communications = Communication.objects.values('id', 'subject', 'texte', 'today').filter(active=1).order_by("-id")
-            parcours_tab = Parcours.objects.filter(students=None, teacher=teacher, is_favorite=1) ## Parcours favoris non affectés
+            parcours_tab = Parcours.objects.filter(students=None, teacher=teacher, is_favorite=1).order_by("is_evaluation") ## Parcours favoris non affectés
 
             request.session["tdb"] = True
  

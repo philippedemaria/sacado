@@ -312,6 +312,13 @@
 
                     <!-- affiche la possibilité de mettre le parcours dans un dossier si le parcours est créé hors du dossier -->
                     {% if idp == 0 or parcours %}
+                     <tr id="folder_parcours">
+                        <td><label>Transformer ce parcours en dossier ?</label></td>
+                        <td>{{ form.is_folder|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                        <td>{{ form.is_folder.errors }}</td>
+                    </tr>
+
+
                     <tr>
                         <td>{{ form.is_leaf.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                 <div class="helper_tip_text" >Si Oui, le parcours est inclus dans un dossier.</div></td>
@@ -325,6 +332,7 @@
                         <td>{{ form.folder_parcours|add_class:"form-control select2" }}</td>
                         <td>{{ form.folder_parcours.errors }}</td>
                     </tr>
+
                     {% endif %}
 
 

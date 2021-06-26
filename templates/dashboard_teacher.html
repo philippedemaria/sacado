@@ -202,24 +202,25 @@
                           <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="handler widget-user-header">
  
-                      
-
                             {% if parcours.is_evaluation %}   
                                 <div class="icon_evaluation">
                                     <i class="fa fa-bullseye"></i> 
                                 </div>
-                            {% endif %}
+                            {% endif %}  
 
-                                <a href="{% url 'delete_parcours' parcours.id 0 %}" class="pull-right btn btn-danger btn-xs"  onclick="return TestDelete('ce parcours')">
-                                        <i class="fa fa-trash"></i>
-                                </a>
-                                   
-                            {% if parcours.is_evaluation %} 
-                                <a href="{% url 'update_evaluation' parcours.id 0 %}" class="btn btn-info btn-xs" >   Affecter à un groupe</a><br>
-                            {% else %}
-                                <a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-info btn-xs" >   Affecter à un groupe</a><br>
+                            <a href="{% url 'delete_parcours' parcours.id 0 %}" class="pull-right btn btn-danger btn-xs"  onclick="return TestDelete('ce parcours')">
+                                <i class="fa fa-trash"></i>
+                            </a>  
+                                                                                  
+                            {% if parcours.is_folder %} 
+                                <a href="{% url 'update_folder' parcours.id 0 %}" class="btn btn-default btn-xs" >   Affecter à un groupe</a><br>
+                            {% else %}   
+                                {% if parcours.is_evaluation %} 
+                                    <a href="{% url 'update_evaluation' parcours.id 0 %}" class="btn btn-default btn-xs" >   Affecter à un groupe</a><br>
+                                {% else %}
+                                    <a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-default btn-xs" >   Affecter à un groupe</a><br>
+                                {% endif %}
                             {% endif %}
-
 
 
                                 <div class="icon" style="opacity:0.9;top:80px">
@@ -254,10 +255,14 @@
                         <div class="box-footer">
                             <div class="row extend">                              
                                 <div class="col-lg-3 col-xs-3">
-                                    {% if parcours.is_evaluation %} 
-                                        <a href="{% url 'update_evaluation' parcours.id 0 %}" class="edit" >  
+                                    {% if parcours.is_folder %} 
+                                            <a href="{% url 'update_folder' parcours.id 0 %}" class="edit" >   
                                     {% else %}
-                                        <a href="{% url 'update_parcours' parcours.id 0 %}" class="edit" >   
+                                        {% if parcours.is_evaluation %} 
+                                            <a href="{% url 'update_evaluation' parcours.id 0 %}" class="edit" >  
+                                        {% else %}
+                                            <a href="{% url 'update_parcours' parcours.id 0 %}" class="edit" >   
+                                        {% endif %}
                                     {% endif %}
                                         <i class="fa fa-edit"></i><span class="label_icon tool_tip">Conf.
                                             <div class="tool_tip_text" >

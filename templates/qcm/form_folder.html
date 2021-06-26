@@ -105,8 +105,9 @@
 
 
                     <div class="form-group list_choice">         
-                    <label>Choisir les élèves parmi</label>  
+                    <label>Choisir les élèves parmi</label></br>
 
+                        {% if group %}
                             {% if group.students.count > 0 %}
 
                             <label class="pull-right"><input type="checkbox" value="{{ group.id }}" name="groups" class="select_all" /><small> tous  </small> 
@@ -118,31 +119,120 @@
                                 <small style="color:#cb2131">Groupe sans élève. Ce parcours ne lui sera pas affecté.</small>
                             {% endif %}<br>
 
-                          <div id="demo{{ group.id }}" >
-                                <div class="form-group">
-                                    {% for s in group.students.all|dictsort:"user.last_name"  %}
+                            <div id="demo{{ group.id }}" >
+                                    <div class="form-group">
+                                        {% for s in group.students.all|dictsort:"user.last_name"  %}
 
-                                        <label>
-                                            <input type = "checkbox" 
-                                                    class="selector check_if_check" 
-                                                    name="these_students" 
-                                                    value="{{ s.user.id }}"
-                                                    id="these_students" 
+                                            <label>
+                                                <input type = "checkbox" 
+                                                        class="selector check_if_check" 
+                                                        name="these_students" 
+                                                        value="{{ s.user.id }}"
+                                                        id="these_students" 
 
-                                                    {% if parcours %}
-                                                     {% get_in_parcours  s parcours  as bool  %}
+                                                        {% if parcours %}
+                                                         {% get_in_parcours  s parcours  as bool  %}
 
-                                                        {% if group_id %}
-                                                            {% if  group_id == group.id  %}checked {% endif %}
-                                                        {% else %}
-                                                            {% if bool  %}checked {% endif %}
-                                                        {% endif %}
-                                                    {% endif %} > 
-                                                    {{ s.user|title}}
-                                        </label><br>
-                                    {% endfor %}
-                                </div>
-                          </div>  
+                                                            {% if group_id %}
+                                                                {% if  group_id == group.id  %}checked {% endif %}
+                                                            {% else %}
+                                                                {% if bool  %}checked {% endif %}
+                                                            {% endif %}
+                                                        {% endif %} > 
+                                                        {{ s.user|title}}
+                                            </label><br>
+                                        {% endfor %}
+                                    </div>
+                            </div> 
+                        {% else %}
+
+                            {% for group in groups %}
+                                {% if group.students.count > 0 %}
+                                    <a data-toggle="collapse" data-target="#demo{{ group.id }}" style="color:{{ group.color}};cursor:pointer">
+                                        {{ group.name|truncatechars:15 }} <small><i class="fa fa-caret-down"></i></small> 
+                                    </a> 
+                                    <label class="pull-right">
+                                        <input type="checkbox" value="{{ group.id }}" name="groups"
+                                            {% if request.session.group_id %}
+                                                {% if  request.session.group_id == group.id %}checked {% endif %}
+                                            {% else %}
+                                                {% if group.students.count == students_checked  %}checked {% endif %}
+                                            {% endif %}
+                                            class="select_all" /><small> tous  </small> 
+                                    </label>
+                                {% else %}
+                                    <span style="color:{{ group.color}}">
+                                       <small><i class="fa fa-caret-right"></i></small>  {{ group.name|truncatechars:15 }} 
+                                    </span> 
+                                    <small style="color:#cb2131">Groupe sans élève. Ce parcours ne lui sera pas affecté.</small>
+                                {% endif %}<br>
+
+                              <div id="demo{{ group.id }}" class="collapse" >
+                                    <div class="form-group">
+                                        {% for s in group.students.all|dictsort:"user.last_name"  %}
+
+                                            <label>
+                                                <input type = "checkbox" 
+                                                        class="selector" 
+                                                        name="students" 
+                                                        value="{{ s.user.id}}"
+
+                                                        {% if parcours %}
+                                                         {% get_in_parcours  s parcours  as bool  %}
+
+                                                            {% if group_id %}
+                                                                {% if  group_id == group.id  %}checked {% endif %}
+                                                            {% else %}
+                                                                {% if bool  %}checked {% endif %}
+                                                            {% endif %}
+                                                        {% endif %} > 
+                                                        {{ s.user|title}}
+                                            </label><br>
+                                        {% endfor %}
+                                    </div>
+                              </div>
+                              <div style="height:5px"></div>
+                            {% endfor %}
+                            {% if share_groups|length > 0 %}<hr><label>Groupes co-animés</label><br>{% endif %}
+                            {% for sg in share_groups %}
+                            <a data-toggle="collapse" data-target="#demosg{{ sg.group.id }}" style="color:{{ sg.group.color}};cursor:pointer">
+                                {{ sg.group.name }} <small><i class="fa fa-caret-down"></i></small> </a> 
+                                {% if sg.group.students.count > 0 %}<label class="pull-right"><input type="checkbox" value="{{ sg.group.id }}" name="groups"
+                                                                                                    {% if request.session.group_id %}
+                                                                                                        {% if  request.session.group_id == sg.group.id %}checked {% endif %}
+                                                                                                    {% else %}
+                                                                                                        {% if sg.group.students.count == students_checked  %}checked {% endif %}
+                                                                                                    {% endif %}
+                                                                                                    class="select_all_sg" /><small> tous  </small> </label>{% endif %}<br>
+
+                              <div id="demosg{{ sg.group.id }}" class="collapse" >
+                                    <div class="form-group">
+                                        {% for s in sg.group.students.all|dictsort:"user.last_name"  %}
+                                            <label>
+                                                <input type = "checkbox" 
+                                                        class="selector" 
+                                                        name="students_sg" 
+                                                        value="{{ s.user.id}}"
+
+                                                        {% if parcours %}
+                                                         {% get_in_parcours  s parcours  as bool  %}
+
+                                                            {% if group_id %}
+                                                                {% if  group_id == sg.group.id  %}checked {% endif %}
+                                                            {% else %}
+                                                                {% if bool  %}checked {% endif %}
+                                                            {% endif %}
+                                                        {% endif %} > 
+                                                        {{ s.user|title}}
+                                            </label><br>
+                                        {% endfor %}
+                                    </div>
+                              </div>
+                              <div style="height:5px"></div>
+                            {% endfor %}
+
+
+                        {% endif %} 
                     </div>
                 </div>
 
@@ -255,7 +345,7 @@
         </div> 
 
         <div class="col-sm-12 col-md-5">
-        {% if parcours  %}
+        {% if parcours and group %}
                 {% if parcours.is_archive %}
                     <a href="{% url 'unarchive_parcours' parcours.id   group.id   %}" class="btn btn-warning"> 
                         <i class="fa fa-th"> </i>   Désarchiver
