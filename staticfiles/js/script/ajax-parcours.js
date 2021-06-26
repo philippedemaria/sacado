@@ -1052,7 +1052,7 @@ define(['jquery','bootstrap'], function ($) {
  
                 if (len == 0) {
                         if (!confirm("Vous devriez sélectionner au moins un élève. Si vous n'avez pas encore d'élèves, créez-vous un profil élève dans chacun de vos groupes. Confirmez l'enregistrement sans élève ?"));
-                        return false ;
+                            { return false ; }
                         }
 
             });
