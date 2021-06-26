@@ -44,6 +44,7 @@ Intro Section -
 
         <div class="row justify-content-center align-self-center intro-info order-md-first order-last" style="padding-bottom:20px">
             <div class="col-xs-12 col-md-12 col-lg-6">
+              {% comment %}
                 <div class="title marginbottom50" style="margin-bottom: 40px;">
                     <span class="exo">{{ nb_exercise }}</span> 
                       exercice{{  nb_exercise|pluralize }}<span class="helper_tip"> <sup style="top:-1.5em"> <i class="fa fa-question-circle text-danger"></i> </sup> 
@@ -56,6 +57,23 @@ Intro Section -
                               <div class="helper_tip_text" >Maternelle en cours.</div>
                           </span> à la Terminale.
                 </div>
+                {% endcomment %}
+                <div class="marginbottom50" style="margin-bottom: 40px;">
+                    sacado.xyz va changer de serveur à partir du 7 juillet</br> 
+                    et sera donc indisponible du 7 juillet au 25 aout. </br>
+                    Bien sûr, tous vos parcours sont sauvegardés. </br>
+                    Par contre, les <a href="#" data-toggle='modal' data-target='#sacadopopup'>versions établissement</a> sont maintenant</br> soumises à adhésion. Sans cette adhésion, vous perdrez 
+                  </br>vos droits gracieusement octroyés cette année.</br> Notre adresse reste inchangée : sacado.xyz
+                  </br>Nous procéderons durant l'été à des améliorations et espérons associer le suivi des exercices en temps réel. 
+                </div>
+
+
+
+
+
+
+
+
                 <div class="row" style="margin-top:0px">
  
                     <img src="{% static 'img/real_time.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/>  Suivis en<br/>   temps réel 
