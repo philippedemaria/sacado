@@ -91,17 +91,17 @@
  
 
                 <div class="col-sm-6 col-md-6  col-lg-6">
-
+                    {% if sacado_asso %}  
                     <div class="form-group">
                         <label>Dossier partagé avec <small>(facultatif)</small></label><br>
-                        {% if teacher.user.school %}
+ 
                             {{ form.coteachers|add_class:"form-control select2"}}
                             {{ form.coteachers.errors }}
-                        {% else %}
-                            <div class="alert alert-danger"><small>Co-animation uniquement avec la version établissement.</small></div>
-                        {% endif %}
+ 
                     </div>
-
+                    {% else %}
+                        <div class="alert alert-danger"><small>Co-animation uniquement avec la version établissement.</small></div>
+                    {% endif %}
 
 
                     <div class="form-group list_choice">         
