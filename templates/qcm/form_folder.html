@@ -128,7 +128,6 @@
                                                         class="selector check_if_check" 
                                                         name="these_students" 
                                                         value="{{ s.user.id }}"
-                                                        id="these_students" 
 
                                                         {% if parcours %}
                                                          {% get_in_parcours  s parcours  as bool  %}
@@ -174,7 +173,7 @@
                                             <label>
                                                 <input type = "checkbox" 
                                                         class="selector check_if_check" 
-                                                        name="students" 
+                                                        name="these_students" 
                                                         value="{{ s.user.id}}"
 
                                                         {% if parcours %}
@@ -246,7 +245,7 @@
                         </div>
                     {% endif %}
 
-                    
+
                     {% include 'qcm/insert_vignettes.html' %}
 
 
@@ -347,8 +346,8 @@
     <div class="row" style="margin-top:40px">
         <div class="col-sm-12 col-md-7">
             <div class="form-group">
-                <input value="Enregistrer ce dossier" type="submit" class="btn btn-primary" id="checkBtn" />
-                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                <input value="Enregistrer ce dossier" type="submit" class="btn btn-primary" onclick="return check_if_checked()" />
+                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default"/></a>
             </div>
         </div> 
 

@@ -67,3 +67,17 @@ function get_this_confirmation(f1) {
     if (!confirm('Vous souhaitez récupérer ' + f1 + ' ?')) return false;
 }
  
+
+function check_if_checked() {
+
+    var checkeds = document.getElementsByClassName("check_if_check") ;
+    var len = 0 ;
+    for(let i = 0; i < checkeds.length ; i++) {
+        if(checkeds[i].checked) {
+          len++;
+        }
+    }
+    if (len == 0) {
+            if (!confirm("Vous devriez sélectionner au moins un élève. Si vous n'avez pas encore d'élèves, créez-vous un profil élève dans chacun de vos groupes. Confirmez l'enregistrement sans élève ?")) return false ;             
+            } 
+}
