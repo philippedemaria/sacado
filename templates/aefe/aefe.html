@@ -88,8 +88,8 @@
                             <label>Vous n'avez pas de groupe sur ce niveau</label>
                         </div>
                         {% endfor %}
-                        <div class="col-lg-12 col-xs-12">
                         {% if groupes_sixieme %}
+                        <div class="col-lg-12 col-xs-12">
                             {% get_historic_aefe teacher parcours as aefe %}
                             {% if aefe %}
                                 <label class="text-success" >Parcours attribué. </label>
@@ -97,9 +97,8 @@
                                 <label><a href="{% url 'get_this_parcours_aefe' parcours.id %}" onclick="return test_aefe()"> Attribuer à mes groupes </a></label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                 <div class="helper_tip_text" >Une fois le parcours attribué à votre/vos groupe.s, vous pourrez individualiser chaque exercice. </div>
                             {% endif %}
+                        </div>                            
                         {% endif %}
-                        </div>
-
                     </div>
                 </div>
 
@@ -170,9 +169,9 @@
                             {% else %}
                                 <label><a href="{% url 'get_this_parcours_aefe' parcours.id %}"  onclick="return test_aefe()"> Attribuer à mes groupes </a></label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                 <div class="helper_tip_text" >Une fois le parcours attribué à votre/vos groupe.s, vous pourrez individualiser chaque exercice. </div>
-                            {% endif %} 
-                        {% endif %} 
-                        </div>                
+                            {% endif %}
+                            </div> 
+                        {% endif %}                
                     </div>
                 </div>
             </div>   
