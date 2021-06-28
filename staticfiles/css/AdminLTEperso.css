@@ -5469,7 +5469,7 @@ li .list_no_indent{
 }
 .box:hover {
   text-decoration: none;
-  color: #f9f9f9;
+  /*color: #f9f9f9;*/
 }
 .box:hover .icon {
   font-size: 95px;

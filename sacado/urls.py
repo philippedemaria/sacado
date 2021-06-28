@@ -36,6 +36,7 @@ urlpatterns = [
 
                   path('tool/', include('tool.urls')),  
                   path('payment/', include('payment.urls')),
+                  path('aefe/', include('aefe.urls')),
 
                   path('SSO_GAR', django_cas_ng.views.LoginView.as_view(), name='cas_ng_login'),
                   path('SSO_GAR/logout', django_cas_ng.views.LogoutView.as_view(), name='cas_ng_logout'),

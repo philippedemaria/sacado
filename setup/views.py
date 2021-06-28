@@ -1110,3 +1110,4 @@ def play_quizz_start(request):
     n +=1
     context = {  "quizz" : quizz , "question" : question , "n" : n}
     return render(request, 'tool/play_quizz_start.html', context)
+

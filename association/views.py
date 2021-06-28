@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from association.models import Accounting,Associate , Voting , Document, Section , Detail , Rate
 from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm, DetailForm , RateForm , AbonnementForm
-from account.models import User, Student, Teacher
+from account.models import User, Student, Teacher, Parent ,  Response
 from qcm.models import Exercise, Studentanswer , Customanswerbystudent , Writtenanswerbystudent
 from school.models import School
 from django.forms import inlineformset_factory
@@ -1128,8 +1128,8 @@ def delete_rate(request, id):
 @user_passes_test(user_is_board)
 def reset_all_students_sacado(request):
 
-    Parent.objects.all().delete()
-    Response.objects.all().delete() 
+    Parent.objects.delete()
+    Response.objects.delete() 
     User.objects.filter(user_type=0).exclude(username__contains= "_e-test").delete() 
 
     return redirect('list_associate')

@@ -104,6 +104,18 @@
   
 
 
+<li class="dropdown {% if not request.session.tdb and '/aefe' in request.path %}active{% endif %}">
+    <a href="{% url 'aefe' %}" class="main">
+        <i class="fa fa-database fa-2x"></i> 
+        <div class="captionmenu">aefe</div>
+    </a>
+</li>
+
+
+
+
+
+
 {% if request.user.is_superuser %}
 
 <li  class="dropdown  {% if not request.session.tdb and 'admin' in request.path  or 'school' in request.path  %} active{% endif %}">

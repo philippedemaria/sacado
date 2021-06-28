@@ -507,13 +507,10 @@ class Parcours(ModelWithCode):
         return exercises 
 
     def level_list(self):
-        
-        exercises = self.exercises.filter(supportfile__is_title=0).prefetch_related("level").order_by("level")
-        exercises_level_tab = []
-        for e  in exercises :
-            if e.level not in exercises_level_tab:
-                exercises_level_tab.append(e.level)
+        exercises_level_tab = self.exercises.values_list("level__name",flat=True).filter(supportfile__is_title=0).prefetch_related("level").order_by("level").distinct()
         return exercises_level_tab
+
+        
 
     def duration_overall(self):
         som = self.duration
@@ -577,7 +574,7 @@ class Parcours(ModelWithCode):
     def parcours_group_students_count(self,group):
 
         data = {}
-        group_students = group.students.exclude(user__username__contains="_e-test")
+        group_students = group.students.all() #.exclude(user__username__contains="_e-test")
         parcours_students = self.students.all()
         intersection = list(set(group_students) & set(parcours_students))
 

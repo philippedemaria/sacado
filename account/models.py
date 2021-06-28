@@ -564,8 +564,14 @@ class Teacher(models.Model):
             creator = True
         return creator
 
-
- 
+    ################################################################################################
+    # aefe
+    ################################################################################################
+    def historic_aefe(self,parcours):
+        get = False
+        if self.teacher_to_test.filter(origin = parcours).count()>0  :
+            get = True
+        return get
 
 
 class Resultknowledge(models.Model):

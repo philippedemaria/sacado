@@ -81,3 +81,8 @@ function check_if_checked() {
             if (!confirm("Vous devriez sélectionner au moins un élève. Si vous n'avez pas encore d'élèves, créez-vous un profil élève dans chacun de vos groupes. Confirmez l'enregistrement sans élève ?")) return false ;             
             } 
 }
+
+
+function test_aefe() {
+    if (!confirm("Vous devez avoir vos groupes entièrement constitués avant de procéder à l'attribution. Sinon vous devrez réattribuer les élèves manquants. Confirmer l'attribution ?")) return false;
+}

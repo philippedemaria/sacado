@@ -814,3 +814,14 @@ def get_score_quizz_random(obj, g_quizz):
     obj = student ,  renvoie par élève le score total au quizz et le niveau de knowledge
     """
     return obj.score_quizz_random(g_quizz)  
+
+
+
+
+@register.simple_tag 
+def get_historic_aefe(obj, parcours):
+    """
+    obj = teacher ,  renvoie si l'enseignant a récupéré les parcours aefe
+    """
+    print( obj)
+    return obj.historic_aefe(parcours)  

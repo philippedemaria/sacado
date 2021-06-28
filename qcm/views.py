@@ -1058,6 +1058,7 @@ def list_parcours_group(request,id):
     parcours_tab = []
     students = group.students.all()
 
+
     for student in students :
         if access :
             #if group.subject :
