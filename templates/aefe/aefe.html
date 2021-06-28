@@ -59,8 +59,7 @@
                                 {% elif parcours.title|length > 22 %}
                                     {{ parcours.title|truncatechars:"22"}}
                                     <span style="font-size:12px"> 
-                                        {{ parcours.nb_exercises }} ex, 
-                                            {{  parcours.duration_overall|int_minutes }}<small>min</small>
+                                        {{ parcours.nb_exercises }} ex
                                     </span>
                                 {% elif parcours.title|length > 14 %}
                                     {{ parcours.title }}
