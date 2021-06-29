@@ -1130,7 +1130,9 @@ def reset_all_students_sacado(request):
 
     Parent.objects.all().delete()
     Response.objects.all().delete() 
-    User.objects.filter(user_type=0).exclude(username__contains= "_e-test").delete() 
+    #User.objects.filter(user_type=0).exclude(username__contains= "_e-test").delete()
+    messages.success(request,"Ré initialisation effectuée avec succès.")
+
 
     return redirect('list_associate')
 
