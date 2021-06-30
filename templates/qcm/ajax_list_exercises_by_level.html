@@ -91,8 +91,19 @@
                                                                         <i class="fa fa-fw fa-barcode"></i> {{ exercise.supportfile.code }}  {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
                                                                         <i class="fa fa-fw fa-clock-o"></i> {{ exercise.supportfile.duration }} minutes {% if exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
                                                                         {% if exercise.supportfile.is_ggbfile %}
-                                                                        <i class="fa fa-fw fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum
+                                                                        <i class="fa fa-fw fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum<br>
                                                                         {% endif %}
+
+                                                                        <i class="fa fa-fw fa-copyright"></i>
+                                                                        {% if exercise.supportfile.skills.count > 0 %}
+                                                                            {% for skill in exercise.supportfile.skills.all %}
+                                                                            {{ skill.name}}{% if not forloop.last %}, {% endif %}
+                                                                            {% endfor %}
+                                                                        {% else %}
+                                                                            <small>compétence non renseignée</small>
+                                                                        {% endif  %}
+
+                                                                        
                                                                     </small>
                                                             {% endif %}
 

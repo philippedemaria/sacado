@@ -83,7 +83,17 @@
                                                                     <small>   
                                                                         <i class="fa fa-fw fa-barcode"></i> {{ e.supportfile.code }}  {% if e.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
                                                                         <i class="fa fa-fw fa-clock-o"></i> {{ e.supportfile.duration }} minutes {% if e.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
-                                                                        <i class="fa fa-fw fa-save"></i> {{ e.supportfile.situation}} situation{{ e.supportfile.situation|pluralize}} minimum</small>
+                                                                        <i class="fa fa-fw fa-save"></i> {{ e.supportfile.situation}} situation{{ e.supportfile.situation|pluralize}} minimum<br></small>
+                                                                        
+                                                                        <i class="fa fa-fw fa-copyright"></i>
+                                                                        {% if e.supportfile.skills.count > 0 %}
+                                                                            {% for skill in e.supportfile.skills.all %}
+                                                                            {{ skill.name}}{% if not forloop.last %}, {% endif %}
+                                                                            {% endfor %}
+                                                                        {% else %}
+                                                                            <small>compétence non renseignée</small>
+                                                                        {% endif  %}
+
                                                             </label>
                                                         </td>
                                                         <td style="width:150px">
@@ -96,7 +106,8 @@
                                                                 <a href="{% url 'create_remediation'  e.id   %}" class="pull-right edit" style="margin-left:5px; font-size: 10px"> 
                                                                     <i class="fa fa-plus thin"></i>   
                                                                 </a> 
-                                                            {% endif %}                                                
+                                                            {% endif %}  
+
                                                         </td>
                                                     </tr>
                                                 {% endfor %} 

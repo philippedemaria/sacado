@@ -111,7 +111,15 @@
                                                     <small>   
                                                         <i class="fa fa-fw fa-barcode"></i> {{ supportfile.code }}  {% if supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
                                                         <i class="fa fa-fw fa-clock-o"></i> {{ supportfile.duration }} minutes {% if supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
-                                                        {% if supportfile.is_ggbfile %}<i class="fa fa-fw fa-save"></i> {{ supportfile.situation}} situation{{ supportfile.situation|pluralize}} minimum{% endif %}
+                                                        {% if supportfile.is_ggbfile %}<i class="fa fa-fw fa-save"></i> {{ supportfile.situation}} situation{{ supportfile.situation|pluralize}} minimum{% endif %}<br>
+                                                        <i class="fa fa-fw fa-copyright"></i>
+                                                        {% if supportfile.skills.count > 0 %}
+	                                                        {% for skill in supportfile.skills.all %}
+	                                                        {{ skill.name}}{% if not forloop.last %}, {% endif %}
+	                                                        {% endfor %}
+                                                    	{% else %}
+                                                      		<small>compétence non renseignée</small>
+                                                    	{% endif  %}
                                                     </small>   
                                            </td>
                                         </tr>
