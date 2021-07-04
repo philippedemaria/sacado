@@ -181,7 +181,11 @@
                   "errorDialogsActive":false,
                   "useBrowserForJS":false,
                   "langage":"en",
-                  "filename": filename
+                  "filename": filename,
+                   "appletOnLoad" :  function(api) { 
+                            var situation = "{{ relation.situation }}" ;
+                            api.setValue("situation", situation );
+                      }
             };
         var applet = new GGBApplet('5.0', parameters,true);
         // Geogebra applet creation
