@@ -468,7 +468,11 @@ $(document).ready(function () {
 
             let subject_id = $(this).attr("data-subject_id");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
- 
+
+            $(".subject_div").removeClass("active_subject_div");
+            $(this).addClass("active_subject_div"); 
+
+
             $.ajax({
                 
                 url: '/ajax_get_subject/',
@@ -480,6 +484,7 @@ $(document).ready(function () {
                 dataType: 'json',
                 success: function (data) {
                     $("#sacado_subject").html(data["html"]);
+
                 } 
 
             });

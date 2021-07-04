@@ -191,7 +191,7 @@ Intro Section -
             {% csrf_token %}
             {% for subject in subjects %}
                 <div class="col-lg-3 col-md-4 col-xs-6">
-                    <div class="subject_div" data-subject_id="{{ subject.id }}" >
+                    <div class="subject_div {% if forloop.first %}active_subject_div{% endif %}" data-subject_id="{{ subject.id }}" >
                         <div class="title_subject">{{ subject.name}}</div>
                         <div class="level_subject">{{ subject.level_min_max}}</div>
 
@@ -204,7 +204,6 @@ Intro Section -
 
         <div style="height: 30px"></div>
         <div class="row" id="sacado_subject">
-          {% comment %}
             {% for level in levels %}
                 {% with level.exotot as nb_exo %}
                 <div class="col-md-6 col-lg-3 wow bounceInUp" data-wow-duration="1.4s">
@@ -218,7 +217,6 @@ Intro Section -
                 </div>
                 {% endwith %}
             {% endfor %}
-          {% endcomment %}
         </div>
         <div style="height: 100px"></div>
 
