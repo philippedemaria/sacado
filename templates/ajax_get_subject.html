@@ -1,0 +1,17 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+{% for level in levels %}
+    {% get_nb_level_subject level subject_id as nb_exo %}
+    <div class="col-xs-6 col-md-6 col-lg-3 wow bounceInUp" data-wow-duration="1.4s">
+      	<a href="{% url 'exercises_level' level.id  %}" style="color:#FFF;">
+	            <div class="imagebox">
+	                <div class="icon {{ level.cycle }}" > {{ level.name }}<br>{{ nb_exo}} exercice{{ nb_exo|pluralize }}</div>
+                    <img src="../../static/img/levels/level{{ level.id }}.png" width="250" />
+	                <p class="description"></p>
+	            </div>
+          </a>
+    </div>
+{% endfor %}

@@ -335,6 +335,65 @@ table.table-bordered.dataTable {
 
 
 
+.subject_div{
+  position: relative;
+  color : #0056b3;
+  border-radius: 10px;
+  border : solid 1px #0056b3;  
+  height: 200px; 
+  width: 200px;
+  padding:30px 10px; 
+  text-align: center;
+  cursor : pointer;  
+}
+
+
+
+.subject_div:hover{
+  color : #FFF;
+  border-radius: 10px;
+
+  background-color:#0056b3;
+  font-size : 20px;
+    -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    -moz-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+
+}
+
+
+.title_subject{
+  position: absolute;
+  width:180px;
+  text-align: center;
+  top:30px;
+  font-size: 20px;
+}
+
+.level_subject{
+  position: absolute;
+  width:180px;
+  text-align: center;
+  bottom:50px;
+  font-size: 18px;
+}
+
+.nb_exo_div{
+  position: absolute;
+  width:180px;
+  text-align: center;  
+  bottom: 25px;
+  font-size: 15px;
+}
+
+
+
+
+
+
+
+
+
+
 @media (max-width:990px){
 
   .btn-index{

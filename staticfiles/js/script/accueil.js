@@ -458,6 +458,51 @@ $(document).ready(function () {
  
         });
 
+
+
+
+
+
+
+        $(".subject_div").on('click', function () {
+
+            let subject_id = $(this).attr("data-subject_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+ 
+            $.ajax({
+                
+                url: '/ajax_get_subject/',
+                type: "POST",
+                data: {
+                    'subject_id': subject_id,
+                     csrfmiddlewaretoken: csrf_token,    
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $("#sacado_subject").html(data["html"]);
+                } 
+
+            });
+        }); 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 
 

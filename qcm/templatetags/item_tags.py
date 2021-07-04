@@ -823,5 +823,13 @@ def get_historic_aefe(obj, parcours):
     """
     obj = teacher ,  renvoie si l'enseignant a récupéré les parcours aefe
     """
-    print( obj)
     return obj.historic_aefe(parcours)  
+
+
+
+@register.simple_tag 
+def get_nb_level_subject(obj, subject_id):
+    """
+    Donne le nombre d'exercices sur un niveau dans une matière donnée
+    """
+    return obj.nb_level_subject(subject_id)  

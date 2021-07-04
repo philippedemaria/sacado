@@ -2,7 +2,7 @@
 
 {% load widget_tweaks %}
 {% load static %}
-
+{% load item_tags %}
 
 
 
@@ -46,22 +46,53 @@ Intro Section -
             <div class="col-xs-12 col-md-12 col-lg-6">
  
                 <div class="title marginbottom50" style="margin-bottom: 40px;">
+
+                  {% comment %}
                     <span class="exo">{{ nb_exercise }}</span> 
                       exercice{{  nb_exercise|pluralize }}<span class="helper_tip"> <sup style="top:-1.5em"> <i class="fa fa-question-circle text-danger"></i> </sup> 
                               <div class="helper_tip_text" >Enoncés à variables didactiques aléatoires, chargées à la volée. Le nombre réel d'exercices est donc au moins décuplé.</div>
                           </span> 
-                      de Mathématiques<span class="helper_tip"> <sup style="top:-1.5em"> <i class="fa fa-question-circle text-danger"></i> </sup>
+                      de Mathématiques<span class="helper_tip"><sup style="top:-1.5em"> <i class="fa fa-question-circle text-danger"></i> </sup>
                               <div class="helper_tip_text" >Nous commençons à inclure les Sciences Physiques et Chimiques. Quelques exercices sont également proposés en NSI.</div>
                           </span>
                       <br> interactif{{ nb_exercise|pluralize }} et corrigé{{  nb_exercise|pluralize }}<br> du CP<span class="helper_tip"> <sup style="top:-1.5em"> <i class="fa fa-question-circle text-danger"></i> </sup>
                               <div class="helper_tip_text" >Maternelle en cours.</div>
                           </span> à la Terminale.
+                  {% endcomment %}
+
+                    <span class="exo">{{ nb_exercise }}</span> 
+                      exercice{{  nb_exercise|pluralize }}<span class="helper_tip"><sup style="top:-1.5em"><i class="fa fa-question-circle text-danger"></i></sup> 
+                              <div class="helper_tip_text" >Enoncés à variables didactiques aléatoires, chargées à la volée. Le nombre réel d'exercices est donc au moins décuplé.</div>
+                          </span> 
+                      de</br> {% for s in subjects %}{{ s.shortname}}{% if not forloop.last %}, {% endif %}{% endfor %}
+
+                      <span class="helper_tip"> <sup style="top:-1.5em"> <i class="fa fa-question-circle text-danger"></i> </sup>
+                              <div class="helper_tip_text" >Les exercices de Sciences Physiques et Chimiques, Numériques et Sciences de l'Informatique, Sciences et Vie de la Terre arrivent peu à peu.</div>
+                          </span>
+
+
+                      <br> interactif{{ nb_exercise|pluralize }} et corrigé{{  nb_exercise|pluralize }}<br> du CP<span class="helper_tip"> <sup style="top:-1.5em"> <i class="fa fa-question-circle text-danger"></i> </sup>
+                              <div class="helper_tip_text" >Maternelle en cours.</div>
+                          </span> à la Terminale.
+
                 </div>
        
 
 
 
-
+                <div class="row" style="margin-top: 50px; margin-bottom: 50px">
+                    <div class="col-xs-12 col-md-12 col-lg-6">
+                        <a href="#" data-toggle='modal' data-target='#connexion' class="btn btn-primary">
+                            Se connecter
+                        </a>
+                    </div>
+                    <div class="col-xs-12 col-md-12 col-lg-6">
+                        <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-danger index_size">
+                            Se connecter avec <img src="{% static 'img/Googlelogo.png' %}" height="15"
+                                                   style="margin-left: 5px; vertical-align: baseline"/>
+                        </a>
+                    </div>
+                </div>
 
 
 
@@ -80,19 +111,7 @@ Intro Section -
 
                 </div>
 
-                <div class="row" style="margin-top: 50px">
-                    <div class="col-xs-12 col-md-12 col-lg-6">
-                        <a href="#" data-toggle='modal' data-target='#connexion' class="btn btn-primary">
-                            Se connecter
-                        </a>
-                    </div>
-                    <div class="col-xs-12 col-md-12 col-lg-6">
-                        <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-danger index_size">
-                            Se connecter avec <img src="{% static 'img/Googlelogo.png' %}" height="15"
-                                                   style="margin-left: 5px; vertical-align: baseline"/>
-                        </a>
-                    </div>
-                </div>
+
                 <br>
 
 
@@ -161,32 +180,47 @@ Intro Section -
     ============================-->
     <section id="exercises">
       <div class="container">
-
         <header class="section-header">
           <h3>Exercices</h3>
           <p style="padding-bottom:30px">Classés par niveaux, par thèmes, par savoir-faire. </p>
         </header>
+ 
+        <form method="POST" enctype='multipart/form-data'>
+        <div class="row" align="center">
 
-        <div class="row">
+            {% csrf_token %}
+            {% for subject in subjects %}
+                <div class="col-lg-3 col-md-4 col-xs-6">
+                    <div class="subject_div" data-subject_id="{{ subject.id }}" >
+                        <div class="title_subject">{{ subject.name}}</div>
+                        <div class="level_subject">{{ subject.level_min_max}}</div>
 
-        {% for level in levels %}
-          {% with level.exotot as nb_exo %}
-          <div class="col-md-6 col-lg-3 wow bounceInUp" data-wow-duration="1.4s">
-          	<a href="{% url 'exercises_level'  level.id  %}" style="color:#FFF;">
-	            <div class="imagebox">
-	              <div class="icon {{ level.cycle }}" > {{ level.name }}<br>{{ nb_exo}} exercice{{ nb_exo|pluralize }}</div>
-                <img src="../../static/img/levels/level{{ level.id }}.png" width="250" />
-	              <p class="description"></p>
-	            </div>
-	          </a>
-          </div>
-          {% endwith %}
-        {% endfor %}
+                        <div class="nb_exo_div">{{ subject.nb_exercises}} exercices</div>
+                    </div>
+                </div> 
+            {% endfor %}
+        </div>
+        </form>
+
+        <div style="height: 30px"></div>
+        <div class="row" id="sacado_subject">
+          {% comment %}
+            {% for level in levels %}
+                {% with level.exotot as nb_exo %}
+                <div class="col-md-6 col-lg-3 wow bounceInUp" data-wow-duration="1.4s">
+                  	<a href="{% url 'exercises_level'  level.id  %}" style="color:#FFF;">
+          	            <div class="imagebox">
+            	              <div class="icon {{ level.cycle }}" > {{ level.name }}<br>{{ nb_exo}} exercice{{ nb_exo|pluralize }}</div>
+                            <img src="../../static/img/levels/level{{ level.id }}.png" width="250" />
+            	              <p class="description"></p>
+          	            </div>
+        	          </a>
+                </div>
+                {% endwith %}
+            {% endfor %}
+          {% endcomment %}
         </div>
         <div style="height: 100px"></div>
-
-
-
 
       </div>
     </section><!-- #services -->

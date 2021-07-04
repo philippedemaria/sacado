@@ -766,9 +766,6 @@ def peuplate_parcours_evaluation(request,id):
             except :
                 pass
  
-
- 
-
         # fin ---- modifie les exercices sélectionnés
     context = {'form': form, 'parcours': parcours, 'communications':[], 'group' : group , 'role' : role , 'teacher': teacher, 'exercises': exercises , 'levels': levels , 'themes' : themes_tab , 'user': request.user , 'group_id' : group_id , 'relationships' :relationships  }
 

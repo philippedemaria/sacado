@@ -44,8 +44,7 @@ urlpatterns = [
     path('play_quizz_login', play_quizz_login, name='play_quizz_login'), 
     path('play_quizz_start', play_quizz_start, name='play_quizz_start'), 
 
-
-
+    path('ajax_get_subject/', ajax_get_subject, name='ajax_get_subject'),#gère les div des subjects sur la page d'accuril des exercices.
 ]
 
 

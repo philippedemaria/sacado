@@ -10,11 +10,11 @@ from tool.models import Quizz, Question, Choice
 from group.models import Group, Sharing_group
 from association.models import Accounting , Detail , Rate , Abonnement
 from group.views import student_dashboard
-from setup.models import Formule 
+from setup.models import Formule  
 from school.models import Stage , School
 from sendmail.models import Communication
 from school.forms import  SchoolForm
-from socle.models import Level
+from socle.models import Level, Subject
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.db.models import Count, Q
@@ -22,6 +22,7 @@ from datetime import date, datetime , timedelta
 from django.utils import formats, timezone
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
+from django.template.loader import render_to_string
 import random
 import pytz
 import uuid
@@ -159,7 +160,8 @@ def index(request):
 
         nb_teacher = Teacher.objects.all().count()
         nb_student = Student.objects.all().count()
-
+        
+        subjects = Subject.objects.all() 
         schools = School.objects.order_by("country__name")
 
         today_start = datetime.date(datetime.now())
@@ -176,7 +178,7 @@ def index(request):
         exercise = exercises[i]
 
         context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 'schools' : schools,'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
-                   'cookie': cookie, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, 'rates': rates, 'school_year': school_year, }
+                   'cookie': cookie, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, 'rates': rates, 'school_year': school_year, 'subjects': subjects, }
 
 
 
@@ -506,6 +508,20 @@ def print_proformat_school(request):
 def tutos_video_sacado(request):
     context = {}
     return render(request, 'setup/tutos_video_sacado.html', context)
+
+
+
+def ajax_get_subject(request):
+    subject_id =  request.POST.get("subject_id")
+    data = {}
+    level_ids = Exercise.objects.values_list("level__id", flat= True).filter(theme__subject_id = subject_id).distinct()
+    levels =  Level.objects.filter(pk__in=level_ids).order_by("ranking")
+    data['html'] = render_to_string('ajax_get_subject.html', { 'levels' : levels , 'subject_id' :  subject_id })
+
+    return JsonResponse(data)
+
+
+
 ###############################################################################################################################################################################
 ###############################################################################################################################################################################
 ########  Inscription élève isolé
@@ -1110,4 +1126,6 @@ def play_quizz_start(request):
     n +=1
     context = {  "quizz" : quizz , "question" : question , "n" : n}
     return render(request, 'tool/play_quizz_start.html', context)
+
+
 

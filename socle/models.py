@@ -8,7 +8,24 @@ from django.core.exceptions import ObjectDoesNotExist
 from general_fonctions import *
 
  
-
+def level_name(level):
+    if level == "T" :
+        my_level = level+"erm"
+    elif level == '6' :
+        my_level = str(level)+"ème"
+    elif level == '5' :
+        my_level = str(level)+"ème"
+    elif level == '4' :
+        my_level = str(level)+"ème"
+    elif level == '3' :
+        my_level = str(level)+"ème"
+    elif level == '2' :
+        my_level = str(level)+"nde"
+    elif level == '1' :
+        my_level = str(level)+"ère"
+    else :
+        my_level = level 
+    return my_level
 
 
 class Subject(models.Model):
@@ -18,6 +35,25 @@ class Subject(models.Model):
  
     def __str__(self):
         return "{}".format(self.shortname)
+
+    def nb_exercises(self):
+        Exercise = apps.get_model('qcm', 'Exercise')
+        return Exercise.objects.filter(theme__subject=self,supportfile__is_title=0).count()
+
+
+
+
+
+    def level_min_max(self):
+        Exercise = apps.get_model('qcm', 'Exercise')
+        level_names = Exercise.objects.values_list("level__shortname",flat=True).order_by("level__ranking").filter(theme__subject=self,supportfile__is_title=0).distinct()
+        print(level_names)
+        if len(level_names) == 1 :
+            return level_name(level_names[0])
+        elif len(level_names) > 1 :
+            return level_name(level_names[0])+" à la "+level_name( level_names[len(level_names)-1] )
+        else :
+            return "-"
 
 
 
@@ -95,17 +131,18 @@ class Level(models.Model):
         return self.knowledges.filter(level=self).count()
 
     def exotot(self):
-        return self.exercises.filter(supportfile__is_title=0).count()
+        return self.exercises.filter(supportfile__is_title=0, theme__subject_id=1).count()
 
     def notexo(self):
         nb, m  = 0 , 0
-        Exercise = apps.get_model('qcm', 'Exercise')
-        Knowledge = apps.get_model('socle', 'Knowledge')
-        n = Knowledge.objects.filter(level=self).count()
-        for k in Knowledge.objects.filter(level=self) : 
-            if Exercise.objects.filter(level=self, knowledge =k).exists():
+        kws = self.knowledges
+        n = kws.count()
+        for k in kws.all() : 
+            if self.exercises.filter(knowledge =k).exists():
                 m+=1
-
+        print(m)
+        z = self.exercises.filter(knowledge__in = kws).count()
+        print(z)
         nb = n - m
         return nb
 
@@ -115,6 +152,11 @@ class Level(models.Model):
         if self.themes.filter(pk=theme.id).count() > 0:
             this_theme = True
         return this_theme
+
+    def nb_level_subject(self, subject_id):
+        nb = self.exercises.filter(supportfile__is_title=0, theme__subject_id =  subject_id).count()
+        return nb
+
 
 
 
