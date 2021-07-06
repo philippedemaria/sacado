@@ -23,6 +23,9 @@ def level_name(level):
         my_level = str(level)+"nde"
     elif level == '1' :
         my_level = str(level)+"ère"
+    elif level == 'Mater' :
+        my_level = str(level)+"nelle"
+
     else :
         my_level = level 
     return my_level

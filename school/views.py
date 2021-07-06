@@ -537,12 +537,13 @@ def delete_school_students(request):
 		return redirect('index')
 
 
-	students = Student.objects.filter(user__school = school, user_type = 0)
+	students = Student.objects.filter(user__school = school, user__user_type = 0).exclude(user__username__contains="_e-test_")
 	for s in students :
 		clear_detail_student(s)
 		s.delete()
-	return redirect('admin_tdb')
 
+	return redirect('admin_tdb')
+ 
 
 
 
@@ -550,13 +551,27 @@ def delete_school_students(request):
 def delete_selected_students(request):
 	
 	school = this_school_in_session(request)
+	teacher = Teacher.objects.get(user=request.user)
+
+	if not authorizing_access_school(teacher, school):
+		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. ")
+		return redirect('index')
+
+
 	user_ids = request.POST.getlist("user_ids")
 	for user_id in user_ids :
-		user = User.objects.get(pk=user_id)
-		student = Student.objects.get(user=user)
-		user.delete()
-		clear_detail_student(student)
-		student.delete()
+			user = User.objects.get(pk=user_id)
+			student = Student.objects.get(user=user)
+			user.delete()
+			clear_detail_student(student)
+			student.delete()
+
+
+
+
+
+
+
 	return redirect('school_students')
 
 
