@@ -507,7 +507,7 @@ class Parcours(ModelWithCode):
         return exercises 
 
     def level_list(self):
-        exercises_level_tab = self.exercises.prefetch_related("level").values_list("level__name",flat=True).filter(supportfile__is_title=0).order_by("level").distinct()
+        exercises_level_tab = self.exercises.values_list("level__name",flat=True).filter(supportfile__is_title=0).prefetch_related("level").order_by("level").distinct()
         return exercises_level_tab
 
         
@@ -522,7 +522,7 @@ class Parcours(ModelWithCode):
 
     def duration_reader_course(self):
         som = 0
-        for c in self.course.select_related('duration').values_list('duration',flat=True).filter(is_publish=1):
+        for c in self.course.values_list('duration',flat=True).select_related('duration').filter(is_publish=1):
             som += c
         return som 
 

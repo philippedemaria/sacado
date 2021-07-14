@@ -194,7 +194,7 @@
 
             {% for parcours_sort in list_parcours %}  
             <div class="row"></div>
-            <h2 class="thin">{% if parcours_sort.grouper %}Mes évaluations non affectées{% else %} Mes parcours non affectés{% endif %}</h2>
+            <h2 class="thin">{% if parcours_sort.grouper %}Mes évaluations non affectées{% else %} Mes dossiers et parcours non affectés{% endif %}</h2>
             <div class="row"></div><hr style="margin-top: 0px"/>             
                 {% for parcours in parcours_sort.list %}  
                     <div  class="box box-widget widget-user-2"  
@@ -213,7 +213,7 @@
                             </a>  
                                                                                   
                             {% if parcours.is_folder %} 
-                                <a href="{% url 'update_folder' parcours.id 0 %}" class="btn btn-default btn-xs" >   Affecter à un groupe</a><br>
+                                <a href="{% url 'update_folder' parcours.id 0 %}" class="btn btn-info btn-xs" >   Affecter ce dossier à un groupe</a><br>
                             {% else %}   
                                 {% if parcours.is_evaluation %} 
                                     <a href="{% url 'update_evaluation' parcours.id 0 %}" class="btn btn-default btn-xs" >   Affecter à un groupe</a><br>

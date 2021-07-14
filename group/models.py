@@ -10,7 +10,6 @@ from django.db.models import Q
 # from account.models import User
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
 
-
  
 class Group(ModelWithCode):
     """ Group est une classe d'élèves coté enseignant -- Ce qui permet de faire un groupe avec une ou plusieurs divisions """
@@ -68,7 +67,7 @@ class Group(ModelWithCode):
         test = False
         students = self.students.prefetch_related("students_relationship")
         for student in students:
-            if Relationship.objects.filter(students=student, date_limit__gte=today).count() > 0:
+            if student.students_relationship.filter(date_limit__gte=today).count() > 0:
                 test = True
                 break
         return test
@@ -78,18 +77,13 @@ class Group(ModelWithCode):
 
 
     def just_students(self):
- 
         return self.students.exclude(user__username__contains="_e-test").order_by("user__last_name")
-
-
-
 
 
     def parcours_counter(self,teacher):
         """
         Donne le nombre total de parcours/évaluations, le nombre de visibles et de publiés du groupe
         """
-        
         students = self.students.all()
         studnts = students.exclude(user__username__contains= "_e-test") 
         snt = studnts.count()
