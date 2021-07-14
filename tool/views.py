@@ -3,6 +3,7 @@ from tool.models import Tool , Question  , Choice  , Quizz , Diaporama  , Slide 
 from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm,  DiaporamaForm , SlideForm,QrandomForm, VariableForm , AnswerplayerForm,  VideocopyForm
 from group.models import Group 
 from socle.models import Level, Waiting , Theme
+from qcm.models import  Parcours
 from account.decorators import  user_is_testeur
 from sacado.settings import MEDIA_ROOT
 from socle.models import Knowledge, Waiting
@@ -286,7 +287,7 @@ def list_quizzes(request):
     quizzes = Quizz.objects.filter(teacher =teacher )
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher)
-    return render(request, 'tool/list_quizzes.html', {'quizzes': quizzes , 'form': form,   })
+    return render(request, 'tool/list_quizzes.html', {'quizzes': quizzes , 'form': form,  'teacher': teacher,  })
 
 
  
@@ -307,7 +308,7 @@ def create_quizz(request):
         print(form.errors)
 
 
-    context = {'form': form,  }
+    context = {'form': form, 'teacher': teacher, }
 
     return render(request, 'tool/form_quizz.html', context)
 
@@ -330,7 +331,7 @@ def update_quizz(request,id):
     else:
         print(form.errors)
 
-    context = {'form': form, 'quizz': quizz,  }
+    context = {'form': form, 'quizz': quizz, 'teacher': teacher, }
 
     return render(request, 'tool/form_quizz.html', context)
 
@@ -503,6 +504,28 @@ def show_quizz_group(request,id,idg):
 
     context = {  "quizz" : quizz , "questions" : questions , "group" : group , "save" : save }     
     return render(request, 'tool/show_quizz.html', context) 
+
+
+ 
+def show_quizz_parcours_student(request,id,idp):
+
+    """ show quizz d'un groupe classe """
+    try :
+        parcours  = Parcours.objects.get(pk=idp)
+        groups    = parcours.groups.all()
+        group     = Group.objects.get(pk__in = groups, students = request.user.student)
+    except :
+        return redirect("show_parcours_student", id)
+
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    quizz , gquizz , questions , save = get_date_play(id,group.id,0)
+    questions = quizz.questions.filter(is_publish=1).order_by("ranking")
+ 
+    context = {  "quizz" : quizz , "questions" : questions , "group" : group , "save" : save }     
+    return render(request, 'tool/show_quizz.html', context) 
+
+
+ 
 
 
  
