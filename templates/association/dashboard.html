@@ -93,10 +93,25 @@
         <div class="col-lg-3 col-3 text-center">
             <span class="counter">{{ nb_teachers }}</span>
             <p>Enseignants</p>
+            <a href="{% url 'list_teacher' %}" class="btn btn-info">
+                Voir la liste
+            </a>
         </div>
         <div class="col-lg-3 col-3 text-center">
-            <span class="counter">{{ nb_students }}</span>
-            <p>Elèves</p>
+            {% if nb_students > 0   %}
+                <span class="counter">{{ nb_students }}</span>
+                <p>Elèves</p>
+
+                <a href="{% url 'reset_all_students_sacado' %}" class="btn btn-danger" onclick="return TestDelete('les données élèves... action irréversible')">
+                    Ré-initialisation serveur.<br/> Effacer les données élèves
+                </a>
+
+            {% else %}
+                <div class="alert alert-success">
+                    <span class="counter">{{ nb_students }}</span>
+                    <p>Elèves</p>
+                </div>
+            {% endif %}
         </div>
         <div class="col-lg-3 col-3 text-center">
             <span class="counter">{{ nb_exercises }}</span>
@@ -104,11 +119,8 @@
         </div>
         <div class="col-lg-3 col-3 text-center">
             <span class="counter">{{ nb_answers }}</span>
-            <p>Exercices traités  </p>
+            <p>Exercices traités ce jour  </p>
         </div>
-
-
-
     </div>
 
 

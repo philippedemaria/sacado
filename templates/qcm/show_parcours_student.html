@@ -561,7 +561,7 @@
 
         {% if courses|length > 0 %}      
         <div class="col-lg-2 col-xs-12">
-            <h4 style="color:{{ parcours.color }}">Le cours du parcours</h4>
+            <h4 class='thin' style="color:{{ parcours.color }}">Le cours du parcours</h4>
             <ul class="nav nav-pills nav-stacked admin-menu">
                 {% for course in courses %}
                     <li class="{% if forloop.first %}active{% endif %} menu_course">
@@ -594,6 +594,31 @@
                 {% endfor %}
 
             </ul>
+
+            <hr/>
+            <h4 class='thin' style="color:{{ parcours.color }}">Les quizz</h4>
+
+                {% for quizz in quizzes %}
+                    <li class="menu_course" style="padding:5px">
+ 
+
+                            {% if sacado_asso %}
+                                {% if  quizz.is_video %}
+                                    <div class="alert alert-danger"><i class="fa fa-ban"></i> Version projetable en classe</div>
+
+                                {% else %}
+
+                                    <a  href="{% url 'show_quizz_parcours_student'  quizz.id  parcours.id %}" 
+                                        style="color:{{g.color}}"
+                                        class="quizz_action" target="_blank" >
+                                       {{ quizz.title }} <small>{{ quizz.code }}</small>
+                                    </a>
+
+                                {% endif %}
+                            {% endif %}
+
+                    </li>
+                {% endfor %}
         </div>
         {% endif %}          
     </div>

@@ -94,13 +94,10 @@ class Group(ModelWithCode):
         studnts = students.exclude(user__username__contains= "_e-test") 
         snt = studnts.count()
 
-
-
-        if studnts.count() == 1 : 
+        if snt == 1 : 
             profilTest = True
         else :
             profilTest = False
-
 
         parcourses = set()
         for student in students:

@@ -49,8 +49,7 @@ class Subject(models.Model):
 
     def level_min_max(self):
         Exercise = apps.get_model('qcm', 'Exercise')
-        level_names = Exercise.objects.values_list("level__shortname",flat=True).order_by("level__ranking").filter(theme__subject=self,supportfile__is_title=0).distinct()
-        print(level_names)
+        level_names = Exercise.objects.filter(theme__subject=self,supportfile__is_title=0).prefetch_related("level").values_list("level__shortname",flat=True).order_by("level__ranking").distinct()
         if len(level_names) == 1 :
             return level_name(level_names[0])
         elif len(level_names) > 1 :
@@ -131,10 +130,11 @@ class Level(models.Model):
             return "#FFFFFF"
 
     def nbknowlegde(self):
-        return self.knowledges.filter(level=self).count()
+        return self.knowledges.count()
 
     def exotot(self):
-        return self.exercises.filter(supportfile__is_title=0, theme__subject_id=1).count()
+        return self.exercises.select_related("supportfile","theme").filter(supportfile__is_title=0, theme__subject_id=1).count()
+
 
     def notexo(self):
         nb, m  = 0 , 0
@@ -143,9 +143,7 @@ class Level(models.Model):
         for k in kws.all() : 
             if self.exercises.filter(knowledge =k).exists():
                 m+=1
-        print(m)
         z = self.exercises.filter(knowledge__in = kws).count()
-        print(z)
         nb = n - m
         return nb
 
@@ -157,7 +155,7 @@ class Level(models.Model):
         return this_theme
 
     def nb_level_subject(self, subject_id):
-        nb = self.exercises.filter(supportfile__is_title=0, theme__subject_id =  subject_id).count()
+        nb = self.exercises.select_related("theme").filter(supportfile__is_title=0, theme__subject_id =  subject_id).count()
         return nb
 
 

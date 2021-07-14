@@ -48,6 +48,10 @@ urlpatterns = [
     path('show_quizz_random_group/<int:id>/<int:idg>', show_quizz_random_group, name='show_quizz_random_group'), 
     path('create_quizz_code/<int:id>/<int:idg>', create_quizz_code, name='create_quizz_code'),
 
+    path('show_quizz_parcours_student/<int:id>/<int:idp>', show_quizz_parcours_student, name='show_quizz_parcours_student'), 
+
+
+
     path('list_questions', list_questions, name='list_questions'),
 
     path('create_question/<int:id>/<int:qtype>', create_question, name='create_question'),

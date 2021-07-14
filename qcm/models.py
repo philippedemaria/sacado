@@ -507,22 +507,22 @@ class Parcours(ModelWithCode):
         return exercises 
 
     def level_list(self):
-        exercises_level_tab = self.exercises.values_list("level__name",flat=True).filter(supportfile__is_title=0).prefetch_related("level").order_by("level").distinct()
+        exercises_level_tab = self.exercises.prefetch_related("level").values_list("level__name",flat=True).filter(supportfile__is_title=0).order_by("level").distinct()
         return exercises_level_tab
 
         
 
     def duration_overall(self):
         som = self.duration
-        for d in self.parcours_relationship.values_list('duration',flat=True).filter(is_publish=1):
+        for d in self.parcours_relationship.select_related('duration').values_list('duration',flat=True).filter(is_publish=1):
             som += d
-        for e in self.parcours_customexercises.values_list('duration',flat=True).filter(is_publish=1):
+        for e in self.parcours_customexercises.select_related('duration').values_list('duration',flat=True).filter(is_publish=1):
             som += e
         return som 
 
     def duration_reader_course(self):
         som = 0
-        for c in self.course.values_list('duration',flat=True).filter(is_publish=1):
+        for c in self.course.select_related('duration').values_list('duration',flat=True).filter(is_publish=1):
             som += c
         return som 
 

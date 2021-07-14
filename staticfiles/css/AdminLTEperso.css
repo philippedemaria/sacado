@@ -1692,7 +1692,7 @@ text-align: right;
     }
 
     .text-success {
-        color: #249a56;
+        color: #249a56!important;
     }
 
     a.listing{

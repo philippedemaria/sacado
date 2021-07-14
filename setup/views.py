@@ -68,7 +68,9 @@ def end_of_contract() :
     else :
         end = int(date.year) + 1
     return end
- 
+
+
+
 def index(request):
 
     if request.user.is_authenticated :
@@ -105,30 +107,37 @@ def index(request):
 
         if request.user.is_teacher:
 
-            teacher = Teacher.objects.get(user=request.user)
+            teacher = request.user.teacher
 
-            grps = Group.objects.filter(teacher=teacher)
+            grps = teacher.groups.all() 
             shared_grps_id = Sharing_group.objects.filter(teacher=teacher).values_list("group_id", flat=True)
-            sgps = []
-            for sg_id in shared_grps_id :
-                grp = Group.objects.get(pk=sg_id)
-                sgps.append(grp)
+            # sgps = []
+            # for sg_id in shared_grps_id :
+            #     grp = Group.objects.get(pk=sg_id)
+            #     sgps.append(grp)
 
+            sgps = Group.objects.filter(pk__in=shared_grps_id)
             groups = chain(grps, sgps)
+ 
 
             this_user = request.user
             nb_teacher_level = teacher.levels.count()
             relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("date_limit").order_by("parcours")
-            parcourses = teacher.teacher_parcours.filter(is_evaluation=0, is_favorite =1,is_folder=0 ).order_by("-is_publish")
+
+            teacher_parcours = teacher.teacher_parcours
+            parcours_tab = teacher_parcours.filter(students=None, is_favorite=1).order_by("is_evaluation") ## Parcours favoris non affectés
+            parcourses = teacher_parcours.filter(is_evaluation=0, is_favorite =1,is_folder=0 ).order_by("-is_publish")
+
             communications = Communication.objects.values('id', 'subject', 'texte', 'today').filter(active=1).order_by("-id")
-            parcours_tab = Parcours.objects.filter(students=None, teacher=teacher, is_favorite=1).order_by("is_evaluation") ## Parcours favoris non affectés
 
             request.session["tdb"] = True
+
+
  
             template = 'dashboard.html'
             context = {'this_user': this_user, 'teacher': teacher, 'groups': groups,  'parcours': None, 'today' : today , 'timer' : timer , 'nb_teacher_level' : nb_teacher_level , 
                        'relationships': relationships, 'parcourses': parcourses, 'index_tdb' : index_tdb,
-                       'communications': communications, 'parcours_tab': parcours_tab,
+                       'communications': communications, 'parcours_tab': parcours_tab, 
                        }
         
         elif request.user.is_student:  ## student
@@ -162,7 +171,7 @@ def index(request):
         nb_student = Student.objects.all().count()
         
         subjects = Subject.objects.all() 
-        schools = School.objects.order_by("country__name")
+        schools = School.objects.prefetch_related("country").order_by("country__name")
 
         today_start = datetime.date(datetime.now())
 
@@ -171,16 +180,14 @@ def index(request):
 
         nb_student_answers = Studentanswer.objects.filter(date__gte= today_start).count() + Customanswerbystudent.objects.filter(date__gte= today_start).count() + Writtenanswerbystudent.objects.filter(date__gte= today_start).count()
         
-        exercises = Exercise.objects.filter(supportfile__is_title=0, supportfile__is_ggbfile = 1 )
-        exercise_nb = len(exercises)-1
+        exercises = Exercise.objects.select_related("supportfile").filter(supportfile__is_title=0, supportfile__is_ggbfile = 1 )
+        exercise_nb = exercises.count() - 1
 
         i = random.randrange(0, exercise_nb)
         exercise = exercises[i]
 
         context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 'schools' : schools,'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
                    'cookie': cookie, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, 'rates': rates, 'school_year': school_year, 'subjects': subjects, }
-
-
 
         return render(request, 'home.html', context)
 

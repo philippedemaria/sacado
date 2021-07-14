@@ -493,9 +493,9 @@ def delete_all_students_group(request,id):
 
 	group = Group.objects.get(id=id)
 	form = GroupForm(request.POST or None, school = school, instance = group)
-	for student in group.students.all() :
-		clear_detail_student(student)
-	group.students.clear()
+	#for student in group.students.all() :
+	#	clear_detail_student(student)
+	group.students.delete()
 	return redirect('update_group_school', group.id)
 
  
@@ -518,14 +518,6 @@ def ajax_subject_teacher(request):
 
 
 
-
-
-
-
-
-
-
-
 #@is_manager_of_this_school
 def delete_school_students(request):
 	
@@ -536,11 +528,12 @@ def delete_school_students(request):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. ")
 		return redirect('index')
 
+	Student.objects.filter(user__school = school, user__user_type = 0).exclude(user__username__contains="_e-test_").delete()
 
-	students = Student.objects.filter(user__school = school, user__user_type = 0).exclude(user__username__contains="_e-test_")
-	for s in students :
-		clear_detail_student(s)
-		s.delete()
+	# students = Student.objects.filter(user__school = school, user__user_type = 0).exclude(user__username__contains="_e-test_")
+	# for s in students :
+	# 	clear_detail_student(s)
+	# 	s.delete()
 
 	return redirect('admin_tdb')
  
@@ -566,12 +559,6 @@ def delete_selected_students(request):
 			clear_detail_student(student)
 			student.delete()
 
-
-
-
-
-
-
 	return redirect('school_students')
 
 
@@ -579,7 +566,6 @@ def delete_selected_students(request):
 
 #@is_manager_of_this_school
 def new_group_many(request):
-
 	
 	school = this_school_in_session(request)
 

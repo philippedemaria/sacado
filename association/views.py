@@ -70,7 +70,7 @@ def association_index(request):
 
     today_start  = datetime.date(datetime.now())
     nb_teachers  = Teacher.objects.all().count()
-    nb_students  = Student.objects.all().count()
+    nb_students  = Student.objects.all().count()#.exclude(user__username__contains="_e-test_")
     nb_exercises = Exercise.objects.filter(supportfile__is_title=0).count()
     nb_schools   = School.objects.all().count()
     nb_answers   = Studentanswer.objects.filter(date__gte= today_start).count() + Customanswerbystudent.objects.filter(date__gte= today_start).count() + Writtenanswerbystudent.objects.filter(date__gte= today_start).count()
@@ -806,12 +806,9 @@ def list_associate(request):
     associates = Associate.objects.filter(is_active = 1)
     pending_associates = Associate.objects.filter(is_active = 0)
 
-    nb_total = User.objects.filter(user_type=0).count()
-    nb = 150
-    if nb > nb_total:
-        nb = nb_total
+    nb_total = User.objects.filter(user_type=0).exclude(username__contains="_e-test_").count()
 
-    return render(request, 'association/list_associate.html', {'associates': associates , 'pending_associates': pending_associates , 'user' : user  ,'nb':nb ,'nb_total':nb_total  })
+    return render(request, 'association/list_associate.html', {'associates': associates , 'pending_associates': pending_associates , 'user' : user  , 'nb_total':nb_total  })
 
 
 @user_passes_test(user_is_board) 

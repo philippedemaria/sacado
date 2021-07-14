@@ -53,7 +53,7 @@
                 <tr>
                     <th>Titre</th>
                     <th>Parcours rattachés</th>
-                    <th style="width:40%">Groupes attribués et type. Cliquer pour générer un quizz.</th>
+                    <th style="width:40%">Groupes attribués et type</th>
                     <th>  </th>
                 </tr>
                 </thead>
@@ -69,10 +69,26 @@
                                {% endif %}
                                 <br/>
                                {% if  quizz.is_publish %}
-                                    <div class="text-success">publié </div> 
+                                    <div class="text-success">publié <span class="helper_tip text-success"> <sup><i class="fa fa-question-circle"></i></sup>
+                                    <div class="helper_tip_text" >
+                                    Les élèves du.des groupe.s désigné.s peuvent le lire depuis leur parcours.</div>
+                                </span></div> 
                                {% elif quizz.start  %}
                                     <div class="text-success">{{ quizz.start|date:"d N Y H:i" }}</div>  {% if  quizz.stop %}  <div class="text-danger">{{ quizz.stop|date:"d N Y H:i" }}</div> {% endif %}
-                                {% endif %}
+                               {% else %} 
+                                    <div class="text-danger">
+                                        <small>privé</small> 
+                                    </div>
+                               {% endif %}
+                               {% if quizz.is_share %}
+                                    <div class="text-success">
+                                        mutualisé 
+                                   </div>
+                               {% else %} 
+                                    <div class="text-danger">
+                                        <small>privé</small> 
+                                    </div>
+                               {% endif %}
                             </td>
                             <td>{% for p in quizz.parcours.all %}
                                     {{ p }}{% if not forloop.last %}, {% endif %} 
@@ -83,26 +99,32 @@
                                     <div class="row">
                                         <div class="col-sm-6 col-md-6">
                                             <label style="color:{{g.color}}"> {{ g }} </label><br/>
-                                            <span  class="sanspuce historic_li"  style="color:{{g.color}};border:1px solid {{g.color}}; border-radius:20px; width:70px;margin-right: 10px;">
-                                                
-                                                <a href="{% if quizz.is_random %}{% url 'show_quizz_random_group'  quizz.id  g.id %}{% else %}{% url 'show_quizz_group'  quizz.id  g.id %}{% endif %}" style="color:{{g.color}}"
-                                                   class="quizz_action {% if quizz.is_random %} confirm_create_historic{% endif %}" target="_blank" >
-                                                   <i class="fa fa-play fa-xs"></i>  Papier
-                                                </a>
-
-                                            </span>
                                             {% if sacado_asso %}
                                                 {% if  quizz.is_video %}
-                                                <span class="sanspuce historic_li"  style="border:1px solid {{g.color}}; border-radius:20px; width:70px">
+                                                <span class="sanspuce historic_li"  style="border:1px solid {{g.color}}; border-radius:20px; width:70px;color:{{g.color}};">
+                                                    <i class="fa fa-gamepad"></i> Numérique
                                                     <a href="{% url 'play_quizz_teacher'  quizz.id   g.id  %}" target="_blank"  class="quizz_action" title="En version à tester"
-                                                        style="color:{{g.color}};"><i class="fa fa-gamepad"></i> Numérique 
+                                                        style="color:{{g.color}};"> <i class="fa fa-play fa-x"></i> Lancer
                                                     </a>  
                                                 </span>
                                                 {% elif  quizz.is_numeric %}
                                                 <span class="sanspuce historic_li"  style="border:1px solid {{g.color}}; border-radius:20px; width:70px;color:{{g.color}};">
+                                                    <i class="fa fa-desktop"></i> Numérique
                                                     <a href="{% url 'create_quizz_code'  quizz.id   g.id  %}" class="quizz_action" title="Générer un quizz"
-                                                        style="color:{{g.color}};"><i class="fa fa-desktop"></i> Numérique
-                                                    </a>  
+                                                        style="color:{{g.color}};"><i class="fa fa-play fa-xs"></i> Générer
+                                                    </a>  |
+                                                    <a href="{% url 'show_quizz_group'  quizz.id   g.id  %}" class="quizz_action" title="voir ce quizz"  target="_blank"
+                                                        style="color:{{g.color}};"> <small>Voir</small>
+                                                    </a> 
+                                                </span>
+                                                {% else %}
+                                                <span  class="sanspuce historic_li"  style="color:{{g.color}};border:1px solid {{g.color}}; border-radius:20px; width:70px;margin-right: 10px;">
+                                                    <i class="fa fa-edit fa-xs"></i> Papier
+                                                    <a href="{% if quizz.is_random %}{% url 'show_quizz_random_group'  quizz.id  g.id %}{% else %}{% url 'show_quizz_group'  quizz.id  g.id %}{% endif %}" style="color:{{g.color}}"
+                                                       class="quizz_action {% if quizz.is_random %} confirm_create_historic{% endif %}" target="_blank" >
+                                                       <i class="fa fa-play fa-xs"></i>  Projeter
+                                                    </a>
+
                                                 </span>
                                                 {% endif %}
                                             {% endif %}
@@ -140,14 +162,14 @@
                                                             {% else %}
                                                                 href="{% url 'result_quizz'  gq.id %}"
                                                             {% endif %}>
-                                                            {{ gq.code }}
+                                                            {{ gq.code }} <small>Résultats</small> 
                                                         </a>       
                                                     </li>
                                                 {% endfor %}
                                             </form>
                                         </div>
                                     </div>
-                                    <hr  style="margin:5px; border-color:#CCC">                                            
+                                    {% if not forloop.last %}<hr  style="margin:5px; border-color:#CCC">{% endif %}                                           
                                 {% empty %}
                                     <div class="alert alert-danger"><a href="{% url 'update_quizz' quizz.id  %}">Assigner au moins un de vos groupes</a></div>
                                 {% endfor %}
@@ -162,10 +184,15 @@
                                         {% endif  %} question{% if quizz.nb_slide > 1 or quizz.questions.all|length > 1 %}s{% endif %}</b>
                                     </span>
                                 </div>  
-                                {% if quizz.qrandoms.count > 0 or quizz.questions.count > 0 %}
-                                <div class="quizz_action"><a href="{% url 'play_printing_teacher'  quizz.id   %}"  class="quizz_action"><i class="fa fa-print"></i> Créer les fiches réponses imprimables</a> </div>    
+
+                                {% if not quizz.is_numeric and not quizz.is_video %}
+                                    {% if quizz.qrandoms.count > 0 or quizz.questions.count > 0 %}
+                                    <div class="quizz_action"><a href="{% url 'play_printing_teacher'  quizz.id   %}"  class="quizz_action"><i class="fa fa-print"></i> Créer les fiches réponses imprimables</a> </div>    
+                                    {% else  %}
+                                    <div class="alert alert-danger"><i class="fa fa-ban"></i> Aucune question actuellement</div> 
+                                    {% endif  %}
                                 {% else  %}
-                                <div class="alert alert-danger"><br/>Aucune question actuellement<br/> <br/></div> 
+                                    <div class="alert alert-danger"><i class="fa fa-ban"></i> Version numérique sans fiche</div> 
                                 {% endif  %}
                                 <a href="{% url 'delete_quizz'  quizz.id %}"  class="quizz_action"  onclick="return TestDelete('ce quizz')"><i class="fa fa-trash"></i>  Supprimer</a> 
                             </td>

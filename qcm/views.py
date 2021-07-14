@@ -1796,10 +1796,11 @@ def show_parcours_student(request, id):
         nb_exercises = len(relationships_customexercises)
 
         courses = parcours.course.filter(Q(is_publish=1)|Q(publish_start__lte=today,publish_end__gte=today)).order_by("ranking")
+        quizzes = parcours.quizz.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)).order_by("-date_modified")
 
         context = { 'stage' : stage , 'relationships_customexercises': relationships_customexercises,
                     'courses':courses , 'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only, 
-                    'today': today ,   }
+                    'today': today , 'quizzes': quizzes ,   }
 
         return render(request, 'qcm/show_parcours_student.html', context)
 
