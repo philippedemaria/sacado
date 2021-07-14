@@ -38,10 +38,6 @@ urlpatterns = [
                   path('payment/', include('payment.urls')),
                   path('aefe/', include('aefe.urls')),
 
-                  #path('SSO_GAR', django_cas_ng.views.LoginView.as_view(), name='cas_ng_login'),
-                  #path('SSO_GAR/logout', django_cas_ng.views.LogoutView.as_view(), name='cas_ng_logout'),
-                  #path('SSO_GAR/callback', django_cas_ng.views.callback, name='cas_ng_proxy_callback'),
-
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
