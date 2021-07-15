@@ -46,7 +46,7 @@ import csv
 
 
 def authorizing_access_school(teacher, school) :
-	if (school in teacher.user.schools.all() and teacher.user.is_manager) or (school == teacher.user.school and teacher.user.is_manager) or teacher.user.is_superuser :
+	if (school in teacher.user.schools.all() and teacher.user.is_manager) or teacher.user.is_superuser :
 		return True
 	else :
 		return False
@@ -287,7 +287,7 @@ def school_students(request):
 		return redirect('index')
 
 
-	users = User.objects.filter(school = school, user_type=0).order_by("last_name")  
+	users = User.objects.prefetch_related("student").filter(school = school, user_type=0).order_by("last_name")    
 
 	return render(request,'school/list_students.html', { 'communications' : [], 'users':users , 'school' : school , })
 

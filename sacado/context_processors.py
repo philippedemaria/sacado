@@ -51,7 +51,7 @@ def menu(request):
         if request.user.is_teacher:
             teacher = request.user.teacher
             #nbs = Studentanswer.objects.filter(parcours__teacher=teacher, date=today).count()
-            nbe = Email.objects.distinct().filter(receivers=request.user, today=today).count()
+            nbe = Email.objects.values_list("id").distinct().filter(receivers=request.user, today=today).count()
             #nb_not = nbs + nbe
             levels = Level.objects.all()
             nb_demand = Demand.objects.filter(done=0).count()
