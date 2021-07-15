@@ -33,6 +33,11 @@ urlpatterns = [
 
     path('replace_exercise_into_parcours', replace_exercise_into_parcours, name='replace_exercise_into_parcours'), #Déplacer un execice de parcours
 
+
+    path('actioner', actioner, name='actioner'), #archiver ou supprimer une sélection
+ 
+
+
     # Résultats d'un parcours
     path('parcours_result/<int:id>/', result_parcours, name='result_parcours'), 
     path('parcours_result_theme/<int:id>/<int:idt>/', result_parcours_theme, name='result_parcours_theme'),  # Je ne sais pas si cette route est utilisée ?????

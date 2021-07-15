@@ -7504,10 +7504,10 @@ def delete_folder(request,id,idg):
         if parcours.leaf_parcours.count() == 0 :
             parcours.delete()
         else :
-            messages.error(request, "Le dossier n'est pas vide. La suppression n'est pas possible.")
+            messages.error(request, "Le dossier "+ parcours.title +" n'est pas vide. La suppression n'est pas possible.")
     
     else :
-        messages.error(request, "Vous ne pouvez pas supprimer ce dossier. Contacter le propriétaire.")
+        messages.error(request, "Vous ne pouvez pas supprimer le dossier "+ parcours.title +". Contacter le propriétaire.")
     
     if idg == 0 :
         return redirect ("parcours" )  
@@ -7526,6 +7526,47 @@ def parcours_delete_from_folder(request):
     data = {}
          
     return JsonResponse(data)
+
+
+
+
+def actioner(request):
+
+    teacher = request.user.teacher 
+    idps = request.POST.getlist("selected_parcours") 
+    print(request.POST.get("action") , idps)
+    if  request.POST.get("action") == "deleter" :  
+        for idp in idps :
+            parcours = Parcours.objects.get(id=idp) 
+            if parcours.teacher == teacher or request.user.is_superuser :
+                if parcours.is_folder :
+                    if parcours.leaf_parcours.count() == 0 :
+                        parcours.delete()
+                    else :
+                        messages.error(request, "Le dossier "+ parcours.title +" n'est pas vide. La suppression n'est pas possible.")
+                else :
+                    parcours.delete()
+            
+            else :
+                messages.error(request, "Vous ne pouvez pas supprimer le dossier "+ parcours.title +". Contacter le propriétaire.")
+
+    else: 
+
+        for idp in idps :
+            parcours = Parcours.objects.get(id=idp) 
+            parcours.is_archive = 1
+            parcours.save()
+            subparcours = parcours.leaf_parcours.all()
+            for p in subparcours :
+                p.is_archive = 1
+                p.save()
+
+    return redirect('parcours')
+
+
+
+
+
 
 
 

@@ -54,230 +54,128 @@
 
 
 {% if parcourses %}
-<div class="row">    
-   <div class="col-sm-12 col-md-12">
-        <form action="" method="POST" enctype='multipart/form-data'>
-            {% csrf_token %}
-            <table class="table table-hovered display1000"  style="width:100%" >
-                <thead> 
-                    <tr> 
-                        <th style="width:2px"></th>                  
-                        <th style="width:300px">Nom</th>
-                        <th>Modif.</th>
-                        <th>Niveau</th>
-                        <th style="width:350px">Affecté à </th>
-                        <th>Coanimation</th>
-                        <th>Elèves</th>
-                        <th style="width:120px">Publication</th>                    
-                    </tr> 
-                </thead>
-                <tbody>
-                {% for parcours in parcourses|dictsortreversed:"is_favorite" %}
-                    <tr {% if not parcours.is_publish %} style="background-color:#F4F4F4;" {% endif  %}>
-                        <td style="text-align:center; padding-bottom: 0px;"> 
-                            <span class="fa-stack selector_favorite" id="selector_favorite{{ parcours.id }}" data-fav="{% if parcours.is_favorite %}1{% else  %}0{% endif  %}" data-parcours_id="{{ parcours.id }}" style="cursor:pointer">
-                                <i class="fa fa-{% if parcours.is_evaluation %}bullseye{% elif parcours.is_folder %}folder{% else %}square{% endif  %} fa-2x" style="color: {{ parcours.color }} ;"></i>
-                                <span id="is_favorite_id{{ parcours.id }}">{% if parcours.is_favorite %}<i class="fa fa-star fa-stack-1x" style="font-size: 12px; color:#FFF" ></i>{% endif  %}</span>
-                            </span>
-                        </td>  
-                        <td {% if parcours.is_folder %} style="padding-top:15px" {% endif %} >
-                            {% get_is_lock parcours today as is_lock %}
+<form action="{% url 'actioner' %}" method="POST" enctype='multipart/form-data'>
+    <div class="row">    
+       <div class="col-sm-12 col-md-12">
+            
+                {% csrf_token %}
+                <table class="table table-hovered display1000"  style="width:100%" >
+                    <thead> 
+                        <tr> 
+                            <th style="width:2px"></th>                  
+                            <th style="width:300px">Nom</th>
+                            <th>Modif.</th>
+                            <th>Niveau</th>
+                            <th style="width:350px">Affecté à </th>
+                            <th>Coanimation</th>
+                            <th>Elèves</th>
+                            <th style="width:120px">Publication</th>                    
+                        </tr> 
+                    </thead>
+                    <tbody>
+                    {% for parcours in parcourses|dictsortreversed:"is_favorite" %}
+                        <tr {% if not parcours.is_publish %} style="background-color:#F4F4F4;" {% endif  %}>
+                            <td style="text-align:center; padding-bottom: 0px;"> 
 
-                            {% if parcours.is_folder %}   
-                                <span   class="accordion" data-target="{{ forloop.counter }}"  style="color : {{ parcours.color }}" >{{ parcours.title }} <i class="fa fa-chevron-down" id="pop{{ forloop.counter }}" ></i></span>
-                                {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible de soumettre des exercices.</div></span>{% endif %}
-                           
-                            {% else %}
+                                <input type="checkbox" name="selected_parcours" value="{{ parcours.id}}"/>
 
-                            <a href="{% url 'show_parcours' parcours.id %}" > {{ parcours.title }} 
-                                {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible de soumettre des exercices.</div></span>{% endif %}
-                            </a>
 
-                            <div style="font-size:14px;margin-top:-5px;">
-                                <span class="helper_tip" >
-                                    <i class="fa fa-barcode"></i>
-                                    <div class="helper_tip_text_right">
-                                        <br/><b>Code du parcours : {{ parcours.code }}</b><br/>
-                                    </div>
+                                <span class="fa-stack selector_favorite" id="selector_favorite{{ parcours.id }}" data-fav="{% if parcours.is_favorite %}1{% else  %}0{% endif  %}" data-parcours_id="{{ parcours.id }}" style="cursor:pointer">
+                                    <i class="fa fa-{% if parcours.is_evaluation %}bullseye{% elif parcours.is_folder %}folder{% else %}square{% endif  %} fa-2x" style="color: {{ parcours.color }} ;"></i>
+                                    <span id="is_favorite_id{{ parcours.id }}">{% if parcours.is_favorite %}<i class="fa fa-star fa-stack-1x" style="font-size: 12px; color:#FFF" ></i>{% endif  %}</span>
                                 </span>
-                                {% with nbp=parcours.nb_exercises %}
-                                    {{ nbp }} exercice{{ nbp|pluralize }}
-                                {% endwith %}
-
-                                <small> {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}min. </small>
-                                {% if parcours.course.all|length > 0 %}
-                                    <i class="fa fa-desktop" title="cours associé"></i> <small>{{  parcours.duration_reader_course|int_minutes }}min. </small>
-                                {% endif %}  
-                      
-                            </div> 
-                            {% endif %}
-                        </td>  
-                        <td>
-                            {% if  parcours.is_folder %} 
-                                {% for g in  parcours.group_list  %}
-                                    {% if forloop.first %}<a href="{% url 'update_folder' parcours.id g.id %}" style="color:{{ g.color }}"> <i class="fa fa-cogs  fa-xs"></i></a>{% endif %}
-                                {% empty %}
-                                    <a href="{% url 'update_folder' parcours.id 0 %}" style="color:{{ g.color }}"> <i class="fa fa-cogs  fa-xs"></i></a>
-                                {% endfor %}
-                            {% else %}
-                                {% if parcours.teacher != teacher %}
-                                    <i class="fa fa-edit text-default fa-xs" aria-hidden="true" ></i></a>
-                                {% else %}
-                                    {% if parcours.is_evaluation %}
-                                    <a href="{% url 'update_evaluation' parcours.id 0 %}"> <i class="fa fa-edit fa-xs" aria-hidden="true"></i></a> 
-                                    {% else %}
-                                    <a href="{% url 'update_parcours' parcours.id 0 %}"> <i class="fa fa-edit fa-xs" aria-hidden="true"></i></a> 
-                                    {% endif %}
-                                {% endif %}
-                            {% endif %}
-                        </td> 
-                        <td>
-                            <small>
-                                {% if parcours.level %}
-                                    {{ parcours.level }}
-                                {% else %}
-                                    {% for l in  parcours.level_list  %}
-                                        {{ l }}{% if not forloop.last %}, {% endif %}
-                                    {% endfor %}
-                                {% endif %}
-                            </small>
-                        </td> 
-                        <td>
-
-                            {% for g in  parcours.groups.all  %}
-                                {% get_parcours_group_students_count parcours g as nb_st %}
-                                    <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g.name }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
-                            {% empty %}
-                                {% if parcours.groups.count == 0 %}
-                                    {% if parcours.is_folder %}
-                                        <small> 
-                                        {% for g in  parcours.group_list  %}
-                                        {% get_parcours_group_students_count parcours g as nb_st %}
-                                            {{ g.name }}({{ nb_st.nb}}){% if not forloop.last %}, {% endif %}
-                                        {% endfor %}
-                                        </small>
-                                    {% else %}
-                                    <a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-xs btn-danger">
-                                        <i class="fa fa-users"></i> Renseigner les groupes associés
-                                    </a>
-                                    {% endif %}
-
-                                {% elif parcours.students.count %}
-                                    <small>
-                                    {% if parcours.shared_group_list|length == 0  %}
-                                        <form action="#" method="POST">
-                                            Ce parcours contient des élèves qui n'appartiennent pas à vos groupes.
-                                            <a href="#groupe_name_anchor" class="vue menuactionparcours" data-toggle='modal' 
-                                                data-is_disabled="{% if parcours.shared_group_list|length > 0  %}1{% else %}0{% endif %}" 
-                                                 data-parcours_id='{{ parcours.id }}' data-target='#listing'> 
-                                                <i class="fa fa-edit"></i> Retirer des élèves de ce parcours
-                                            </a>
-                                        </form>
-                                    {% else %}
-                                         Groupe co-animé
-                                    {% endif %}
-                                    </small>
-
-                                {% else %}
-                                    <a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-xs btn-danger">
-                                        <i class="fa fa-mortar-board"></i> Affecter des élèves à {% if parcours.is_evaluation %}cette évaluation{% else %}ce parcours{% endif %}
-                                    </a>
-                                {% endif %}
-                            {% endfor %} 
-                        </td>
-                        <td style="padding-left: 40px ">
-                            {% if  parcours.shared_group_list   %}
-                                <i class="fa fa-check text-success"></i> 
-                            {% else %}
-                                <i class="fa fa-times text-danger"></i>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <form action="#" method="POST">
-                                {% csrf_token %}
-                                <a href="#groupe_name_anchor" class="vue menuactionparcours" data-toggle='modal' style="float:left; margin-right:10px"  
-                                     data-parcours_id='{{ parcours.id }}' data-target='#listing'  data-is_disabled="{% if parcours.shared_group_list|length > 0  %}1{% else %}0{% endif %}"  > 
-                                    <span class="label label-{% if parcours.shared_group_list|length > 0  %}warning{% else %}default{% endif %}"> {{ parcours.students.count }}<i class="fa fa-users"></i></span>
-                                </a>
-                            </form>
-                        </td>
-                        <td>
-                        <form action="" method="POST" enctype='multipart/form-data'>     
-                            {% csrf_token %}
-                            <div class="btn-group"  style="padding:0px;margin:0px;">
-                                <a href="#" class="btn btn-default btn-publisher publisher"  data-from="1" id="parcours_publisher{{parcours.id}}" 
-                                    data-is_disabled="{% if parcours.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
-                                    data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
-                                    <i class="fa fa-circle-o-notch"></i>
-                                </a><span class="legend-btn  legend-btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %} size13" id="parcours_statut{{parcours.id}}"  >  
-                                  {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
-                                </span>
-                            </div>
-                        </form>
-                        <span class="label_icon" style="color:{{ parcours.color   }};">
-                            {% if parcours.is_evaluation %}
-                                {{  parcours.start|date:"d N Y H:i"  }}   
-                                {% if parcours.stop %}
-                                   - {{  parcours.stop|date:"d N Y H:i"  }}     
-                                {% endif %}                                
-                            {% endif %}
-                        </span>
-                        </td>
-                    </tr> 
-                    {% for prcrs in parcours.leaf_parcours.all %}
-                        <tr {% if not prcrs.is_publish %} style="background-color:#F4F4F4;" {% endif  %} {% if prcrs.students.count %}class="collapsed subparcours{{ forloop.parentloop.counter }}"{% endif %} >
-                            <td style="text-align:center">
-                                <svg width="1em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-bar-right" fill="{{ parcours.color }}" >
-                                  <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
-                                </svg> 
                             </td>  
-                            <td>
-                                <a href="{% url 'show_parcours' prcrs.id %}" > {{ prcrs.title }}
-                                    {% get_is_lock prcrs today as is_lock %} 
-                                    {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i>
-                                                    <div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible de soumettre des exercices.</div>
-                                                   </span>
-                                    {% endif %}     
+                            <td {% if parcours.is_folder %} style="padding-top:15px" {% endif %} >
+                                {% get_is_lock parcours today as is_lock %}
+
+                                {% if parcours.is_folder %}   
+                                    <span   class="accordion" data-target="{{ forloop.counter }}"  style="color : {{ parcours.color }}" >{{ parcours.title }} <i class="fa fa-chevron-down" id="pop{{ forloop.counter }}" ></i></span>
+                                    {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible de soumettre des exercices.</div></span>{% endif %}
+                               
+                                {% else %}
+
+                                <a href="{% url 'show_parcours' parcours.id %}" > {{ parcours.title }} 
+                                    {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible de soumettre des exercices.</div></span>{% endif %}
                                 </a>
-                                 <div style="font-size:14px;margin-top:-5px;">
-                                    <span class="helper_tip" ><i class="fa fa-barcode"></i><div class="helper_tip_text_right padding20"><br/><b>Code du parcours : {{ prcrs.code }}</b><br/></div></span>
-                                     {{ prcrs.nb_exercises }} exercice{{ prcrs.nb_exercises|pluralize }}<small> {% if prcrs.is_evaluation %}{{  prcrs.evaluation_duration|int_minutes  }}{% else %}{{  prcrs.duration_overall|int_minutes }}{% endif %}min. </small>
-                                    {% if prcrs.course.all|length > 0 %}<i class="fa fa-desktop" title="cours associé"></i>  <small>{{  prcrs.duration_reader_course|int_minutes }}min. </small>{% endif %}  
+
+                                <div style="font-size:14px;margin-top:-5px;">
+                                    <span class="helper_tip" >
+                                        <i class="fa fa-barcode"></i>
+                                        <div class="helper_tip_text_right">
+                                            <br/><b>Code du parcours : {{ parcours.code }}</b><br/>
+                                        </div>
+                                    </span>
+                                    {% with nbp=parcours.nb_exercises %}
+                                        {{ nbp }} exercice{{ nbp|pluralize }}
+                                    {% endwith %}
+
+                                    <small> {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}min. </small>
+                                    {% if parcours.course.all|length > 0 %}
+                                        <i class="fa fa-desktop" title="cours associé"></i> <small>{{  parcours.duration_reader_course|int_minutes }}min. </small>
+                                    {% endif %}  
+                          
                                 </div> 
+                                {% endif %}
                             </td>  
                             <td>
-                                {% if prcrs.teacher != teacher %}
-                                    <i class="fa fa-edit fa-xs text-default" aria-hidden="true" ></i></a>
+                                {% if  parcours.is_folder %} 
+                                    {% for g in  parcours.group_list  %}
+                                        {% if forloop.first %}<a href="{% url 'update_folder' parcours.id g.id %}" style="color:{{ g.color }}"> <i class="fa fa-cogs  fa-xs"></i></a>{% endif %}
+                                    {% empty %}
+                                        <a href="{% url 'update_folder' parcours.id 0 %}" style="color:{{ g.color }}"> <i class="fa fa-cogs  fa-xs"></i></a>
+                                    {% endfor %}
                                 {% else %}
-                                    {% if prcrs.is_evaluation %}
-                                    <a href="{% url 'update_evaluation' prcrs.id 0 %}"> 
+                                    {% if parcours.teacher != teacher %}
+                                        <i class="fa fa-edit text-default fa-xs" aria-hidden="true" ></i></a>
                                     {% else %}
-                                    <a href="{% url 'update_parcours' prcrs.id 0 %}">
+                                        {% if parcours.is_evaluation %}
+                                        <a href="{% url 'update_evaluation' parcours.id 0 %}"> <i class="fa fa-edit fa-xs" aria-hidden="true"></i></a> 
+                                        {% else %}
+                                        <a href="{% url 'update_parcours' parcours.id 0 %}"> <i class="fa fa-edit fa-xs" aria-hidden="true"></i></a> 
+                                        {% endif %}
                                     {% endif %}
-                                    <i class="fa fa-edit fa-xs" aria-hidden="true"></i></a>
                                 {% endif %}
                             </td> 
                             <td>
-                                {% for l in  prcrs.level_list  %}
-                                    <small>{{ l }}{% if not forloop.last %}, {% endif %}</small>
-                                {% endfor %}
+                                <small>
+                                    {% if parcours.level %}
+                                        {{ parcours.level }}
+                                    {% else %}
+                                        {% for l in  parcours.level_list  %}
+                                            {{ l }}{% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </small>
                             </td> 
                             <td>
-                                {% for g in  prcrs.group_list  %}
-                                    {% get_parcours_group_students_count prcrs g as nb_st %}
+
+                                {% for g in  parcours.groups.all  %}
+                                    {% get_parcours_group_students_count parcours g as nb_st %}
                                         <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g.name }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
                                 {% empty %}
-                                    {% if prcrs.students.count %}
+                                    {% if parcours.groups.count == 0 %}
+                                        {% if parcours.is_folder %}
+                                            <small> 
+                                            {% for g in  parcours.group_list  %}
+                                            {% get_parcours_group_students_count parcours g as nb_st %}
+                                                {{ g.name }}({{ nb_st.nb}}){% if not forloop.last %}, {% endif %}
+                                            {% endfor %}
+                                            </small>
+                                        {% else %}
+                                        <a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-xs btn-danger">
+                                            <i class="fa fa-users"></i> Renseigner les groupes associés
+                                        </a>
+                                        {% endif %}
 
-
+                                    {% elif parcours.students.count %}
                                         <small>
-                                        {% if prcrs.shared_group_list|length == 0  %}
+                                        {% if parcours.shared_group_list|length == 0  %}
                                             <form action="#" method="POST">
                                                 Ce parcours contient des élèves qui n'appartiennent pas à vos groupes.
                                                 <a href="#groupe_name_anchor" class="vue menuactionparcours" data-toggle='modal' 
-                                                    data-is_disabled="{% if prcrs.shared_group_list|length > 0  %}1{% else %}0{% endif %}" 
-                                                     data-parcours_id='{{ prcrs.id }}' data-target='#listing'> 
-                                                     > Retirer des élèves de ce parcours
+                                                    data-is_disabled="{% if parcours.shared_group_list|length > 0  %}1{% else %}0{% endif %}" 
+                                                     data-parcours_id='{{ parcours.id }}' data-target='#listing'> 
+                                                    <i class="fa fa-edit"></i> Retirer des élèves de ce parcours
                                                 </a>
                                             </form>
                                         {% else %}
@@ -286,57 +184,176 @@
                                         </small>
 
                                     {% else %}
-                                        <a href="{% url 'update_parcours' prcrs.id 0 %}" class="btn btn-xs btn-danger">
-                                            <i class="fa fa-users"></i> Affecter des élèves à {% if prcrs.is_evaluation %}cette évaluation{% else %}ce parcours{% endif %}
+                                        <a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-xs btn-danger">
+                                            <i class="fa fa-mortar-board"></i> Affecter des élèves à {% if parcours.is_evaluation %}cette évaluation{% else %}ce parcours{% endif %}
                                         </a>
                                     {% endif %}
                                 {% endfor %} 
                             </td>
-                            <td>
-
-                                {% for sg in  prcrs.shared_group_list  %}
-                                    <a href="{% url 'list_parcours_group' sg.group.id %}" title="Groupe partagé"><small>{{ sg.group.name }} <small>({{ sg.group.students.count}})</small>{% if not forloop.last %}, {% endif %}</small></a>
-                                {% endfor %}
+                            <td style="padding-left: 40px ">
+                                {% if  parcours.shared_group_list   %}
+                                    <i class="fa fa-check text-success"></i> 
+                                {% else %}
+                                    <i class="fa fa-times text-danger"></i>
+                                {% endif %}
                             </td>
                             <td>
                                 <form action="#" method="POST">
                                     {% csrf_token %}
                                     <a href="#groupe_name_anchor" class="vue menuactionparcours" data-toggle='modal' style="float:left; margin-right:10px"  
-                                         data-parcours_id='{{ prcrs.id }}' data-target='#listing'  data-is_disabled="{% if prcrs.shared_group_list|length > 0  %}1{% else %}0{% endif %}"  > 
-                                        <span class="label label-{% if prcrs.shared_group_list|length > 0  %}warning{% else %}default{% endif %}"> {{ prcrs.students.count }}<i class="fa fa-users"></i></span>
+                                         data-parcours_id='{{ parcours.id }}' data-target='#listing'  data-is_disabled="{% if parcours.shared_group_list|length > 0  %}1{% else %}0{% endif %}"  > 
+                                        <span class="label label-{% if parcours.shared_group_list|length > 0  %}warning{% else %}default{% endif %}"> {{ parcours.students.count }}<i class="fa fa-users"></i></span>
                                     </a>
                                 </form>
                             </td>
                             <td>
-                                <form action="" method="POST" enctype='multipart/form-data'>     
-                                    {% csrf_token %}
-                                    <div class="btn-group"  style="padding:0px;margin:0px;">
-                                        <a href="#" class="btn btn-default btn-publisher publisher"  data-from="1" id="parcours_publisher{{prcrs.id}}" 
-                                            data-is_disabled="{% if prcrs.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
-                                            data-parcours_id="{{prcrs.id}}" data-statut="{{prcrs.is_publish }}">  
-                                            <i class="fa fa-circle-o-notch"></i>
-                                        </a><span class="legend-btn  legend-btn-{% if not prcrs.is_publish %}danger{% else  %}success{% endif  %} size13" id="parcours_statut{{prcrs.id}}"  >  
-                                          {% if prcrs.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
-                                        </span>
-                                    </div>
-                                </form>
-                                <span class="label_icon text-danger">
-                                    {% if prcrs.is_evaluation %}
-                                        {{  prcrs.start|date:"d N Y H:i"  }}   
-                                        {% if prcrs.stop %}
-                                           - {{  prcrs.stop|date:"d N Y H:i"  }}     
-                                        {% endif %}                                
-                                    {% endif %}
-                                </span>
+                            <form action="" method="POST" enctype='multipart/form-data'>     
+                                {% csrf_token %}
+                                <div class="btn-group"  style="padding:0px;margin:0px;">
+                                    <a href="#" class="btn btn-default btn-publisher publisher"  data-from="1" id="parcours_publisher{{parcours.id}}" 
+                                        data-is_disabled="{% if parcours.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
+                                        data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
+                                        <i class="fa fa-circle-o-notch"></i>
+                                    </a><span class="legend-btn  legend-btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %} size13" id="parcours_statut{{parcours.id}}"  >  
+                                      {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
+                                    </span>
+                                </div>
+                            </form>
+                            <span class="label_icon" style="color:{{ parcours.color   }};">
+                                {% if parcours.is_evaluation %}
+                                    {{  parcours.start|date:"d N Y H:i"  }}   
+                                    {% if parcours.stop %}
+                                       - {{  parcours.stop|date:"d N Y H:i"  }}     
+                                    {% endif %}                                
+                                {% endif %}
+                            </span>
                             </td>
-                        </tr>
+                        </tr> 
+                        {% for prcrs in parcours.leaf_parcours.all %}
+                            <tr {% if not prcrs.is_publish %} style="background-color:#F4F4F4;" {% endif  %} {% if prcrs.students.count %}class="collapsed subparcours{{ forloop.parentloop.counter }}"{% endif %} >
+                                <td style="text-align:center">
+                                    <svg width="1em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-bar-right" fill="{{ parcours.color }}" >
+                                      <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
+                                    </svg> 
+                                </td>  
+                                <td>
+                                    <a href="{% url 'show_parcours' prcrs.id %}" > {{ prcrs.title }}
+                                        {% get_is_lock prcrs today as is_lock %} 
+                                        {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i>
+                                                        <div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible de soumettre des exercices.</div>
+                                                       </span>
+                                        {% endif %}     
+                                    </a>
+                                     <div style="font-size:14px;margin-top:-5px;">
+                                        <span class="helper_tip" ><i class="fa fa-barcode"></i><div class="helper_tip_text_right padding20"><br/><b>Code du parcours : {{ prcrs.code }}</b><br/></div></span>
+                                         {{ prcrs.nb_exercises }} exercice{{ prcrs.nb_exercises|pluralize }}<small> {% if prcrs.is_evaluation %}{{  prcrs.evaluation_duration|int_minutes  }}{% else %}{{  prcrs.duration_overall|int_minutes }}{% endif %}min. </small>
+                                        {% if prcrs.course.all|length > 0 %}<i class="fa fa-desktop" title="cours associé"></i>  <small>{{  prcrs.duration_reader_course|int_minutes }}min. </small>{% endif %}  
+                                    </div> 
+                                </td>  
+                                <td>
+                                    {% if prcrs.teacher != teacher %}
+                                        <i class="fa fa-edit fa-xs text-default" aria-hidden="true" ></i></a>
+                                    {% else %}
+                                        {% if prcrs.is_evaluation %}
+                                        <a href="{% url 'update_evaluation' prcrs.id 0 %}"> 
+                                        {% else %}
+                                        <a href="{% url 'update_parcours' prcrs.id 0 %}">
+                                        {% endif %}
+                                        <i class="fa fa-edit fa-xs" aria-hidden="true"></i></a>
+                                    {% endif %}
+                                </td> 
+                                <td>
+                                    {% for l in  prcrs.level_list  %}
+                                        <small>{{ l }}{% if not forloop.last %}, {% endif %}</small>
+                                    {% endfor %}
+                                </td> 
+                                <td>
+                                    {% for g in  prcrs.group_list  %}
+                                        {% get_parcours_group_students_count prcrs g as nb_st %}
+                                            <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g.name }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
+                                    {% empty %}
+                                        {% if prcrs.students.count %}
+
+
+                                            <small>
+                                            {% if prcrs.shared_group_list|length == 0  %}
+                                                <form action="#" method="POST">
+                                                    Ce parcours contient des élèves qui n'appartiennent pas à vos groupes.
+                                                    <a href="#groupe_name_anchor" class="vue menuactionparcours" data-toggle='modal' 
+                                                        data-is_disabled="{% if prcrs.shared_group_list|length > 0  %}1{% else %}0{% endif %}" 
+                                                         data-parcours_id='{{ prcrs.id }}' data-target='#listing'> 
+                                                         > Retirer des élèves de ce parcours
+                                                    </a>
+                                                </form>
+                                            {% else %}
+                                                 Groupe co-animé
+                                            {% endif %}
+                                            </small>
+
+                                        {% else %}
+                                            <a href="{% url 'update_parcours' prcrs.id 0 %}" class="btn btn-xs btn-danger">
+                                                <i class="fa fa-users"></i> Affecter des élèves à {% if prcrs.is_evaluation %}cette évaluation{% else %}ce parcours{% endif %}
+                                            </a>
+                                        {% endif %}
+                                    {% endfor %} 
+                                </td>
+                                <td>
+
+                                    {% for sg in  prcrs.shared_group_list  %}
+                                        <a href="{% url 'list_parcours_group' sg.group.id %}" title="Groupe partagé"><small>{{ sg.group.name }} <small>({{ sg.group.students.count}})</small>{% if not forloop.last %}, {% endif %}</small></a>
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    <form action="#" method="POST">
+                                        {% csrf_token %}
+                                        <a href="#groupe_name_anchor" class="vue menuactionparcours" data-toggle='modal' style="float:left; margin-right:10px"  
+                                             data-parcours_id='{{ prcrs.id }}' data-target='#listing'  data-is_disabled="{% if prcrs.shared_group_list|length > 0  %}1{% else %}0{% endif %}"  > 
+                                            <span class="label label-{% if prcrs.shared_group_list|length > 0  %}warning{% else %}default{% endif %}"> {{ prcrs.students.count }}<i class="fa fa-users"></i></span>
+                                        </a>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="" method="POST" enctype='multipart/form-data'>     
+                                        {% csrf_token %}
+                                        <div class="btn-group"  style="padding:0px;margin:0px;">
+                                            <a href="#" class="btn btn-default btn-publisher publisher"  data-from="1" id="parcours_publisher{{prcrs.id}}" 
+                                                data-is_disabled="{% if prcrs.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
+                                                data-parcours_id="{{prcrs.id}}" data-statut="{{prcrs.is_publish }}">  
+                                                <i class="fa fa-circle-o-notch"></i>
+                                            </a><span class="legend-btn  legend-btn-{% if not prcrs.is_publish %}danger{% else  %}success{% endif  %} size13" id="parcours_statut{{prcrs.id}}"  >  
+                                              {% if prcrs.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
+                                            </span>
+                                        </div>
+                                    </form>
+                                    <span class="label_icon text-danger">
+                                        {% if prcrs.is_evaluation %}
+                                            {{  prcrs.start|date:"d N Y H:i"  }}   
+                                            {% if prcrs.stop %}
+                                               - {{  prcrs.stop|date:"d N Y H:i"  }}     
+                                            {% endif %}                                
+                                        {% endif %}
+                                    </span>
+                                </td>
+                            </tr>
+                        {% endfor  %} 
                     {% endfor  %} 
-                {% endfor  %} 
-                </tbody>
-            </table>
-        </form>
+                    </tbody>
+                </table>
+            
+        </div>
     </div>
-</div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <button class="btn btn-warning" name="action" value="archiver" onclick="return TestArchive('ces dossiers/fichiers')"> 
+                <i class="fa fa-archive"> </i>   Archiver la sélection
+            </button>
+            <button class="btn btn-danger" name="action" value="deleter" onclick="return TestDelete('ces dossiers/fichiers')"> 
+                <i class="fa fa-trash"> </i>   Supprimer la sélection
+            </button>
+        </div>
+    </div>
+</form>
 {% else %}
 
 
@@ -374,13 +391,9 @@
 
             </div>
         </div>
-
-
-
-
 {% endif  %}
 
-
+ 
 
 </section>
 
