@@ -2,14 +2,12 @@ from channels.generic.websocket import WebsocketConsumer
 import json
 from time import sleep
 from django.db.models.signals import m2m_changed
-#from asgiref.sync import async_to_sync
-#from channels.layers import get_channel_layer
 from django.dispatch import receiver
 from tool.models import Generate_quizz
-
+from channels.db import database_sync_to_async
  
 
-class RealConsumer(WebsocketConsumer):
+class ToolConsumer(WebsocketConsumer):
 
     def connect(self,message):
         self.accept()

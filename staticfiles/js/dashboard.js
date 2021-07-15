@@ -1,5 +1,5 @@
 requirejs.config({
-    baseUrl: "static/js", 
+    baseUrl: "../../../static/js", 
     waitSeconds: 90,
     paths: {
         jquery: ['lib/jquery-2.2.4.min'],
