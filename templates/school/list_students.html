@@ -85,7 +85,8 @@
                                     <a href="{% url 'update_student_by_admin' user.id  %}">{{ user.last_name }} </a>   
                                 </td>
                                 <td>
-                                    <a href="{% url 'update_student_by_admin' user.id  %}"> {{ user.first_name }}</a>   
+                                    <a href="{% url 'update_student_by_admin' user.id  %}"> {{ user.first_name }}</a>
+                                    {% if not user.student %} <i class="fa fa-warning pull-right"></i>{% endif %}  
                                 </td>
                                 <td>
                                     {{ user.email }}   

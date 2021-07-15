@@ -438,44 +438,29 @@ def update_student_by_admin(request, id):
     school = this_school_in_session(request)
     user = get_object_or_404(User, pk=id)
     today = time_zone_user(user)
+    student = Student.objects.get(user=user)
     user_form = UserUpdateForm(request.POST or None, request.FILES or None, instance=user)
-
-    try :   
-        student = Student.objects.get(user=user)
-        student_form = StudentForm(request.POST or None, request.FILES or None, instance=student)
-        student_exists = True
-    except :
-        student_exists = False
-
+    student_form = StudentForm(request.POST or None, request.FILES or None, instance=student)
     groups = Group.objects.filter(teacher__user__school = school).order_by("name")
 
 
     if request.method == "POST":
-        if student_exists :
-            if all((user_form.is_valid(), student_form.is_valid())):
-                user_form.save()
-                student_f = student_form.save(commit=False)
-                student_f.user = user
-                student_f.save()
-                messages.success(request, 'Le profil a été changé avec succès !')
-                
-                group_ids = request.POST.getlist("group_ids")
-                these_groups = student.students_to_group.all()
-                for g in these_groups:
-                    g.students.remove(student_f)
-                for group_id in group_ids:
-                    group = Group.objects.get(pk = group_id)
-                    group.students.add(student_f)
-        else :
-            if user_form.is_valid():
-                user_form.save()
-                student_f = student_form.save(commit=False)
-                student_f.user = user
-                student_f.save()
-                messages.success(request, 'Le profil a été changé avec succès !')
-                
+        if all((user_form.is_valid(), student_form.is_valid())):
+            user_form.save()
+            student_f = student_form.save(commit=False)
+            student_f.user = user
+            student_f.save()
+            messages.success(request, 'Le profil a été changé avec succès !')
+            
+            group_ids = request.POST.getlist("group_ids")
+            these_groups = student.students_to_group.all()
+            for g in these_groups:
+                g.students.remove(student_f)
+            for group_id in group_ids:
+                group = Group.objects.get(pk = group_id)
+                group.students.add(student_f)
 
-        return redirect('school_students')
+            return redirect('school_students')
 
     return render(request, 'account/student_form_by_admin.html',
                   {'user_form': user_form, 'form': student_form, 'student': student, 'communications' : [],  'groups': groups  , 'today' : today })
