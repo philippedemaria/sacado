@@ -352,20 +352,26 @@
         </div> 
 
         <div class="col-sm-12 col-md-5">
-        {% if parcours and group %}
+        {% if parcours  %}
                 {% if parcours.is_archive %}
-                    <a href="{% url 'unarchive_parcours' parcours.id   group.id   %}" class="btn btn-warning"> 
+                    <a href="{% url 'folder_unarchive' parcours.id   %}" class="btn btn-warning"> 
                         <i class="fa fa-th"> </i>   Désarchiver
                     </a>
                 {% else %}
-                    <a href="{% url 'archive_parcours' parcours.id  group.id  %}" class="btn btn-warning"  onclick="return TestArchive('ce dossier')"> 
+                    <a href="{% url 'folder_archive' parcours.id  %}" class="btn btn-warning"  onclick="return TestArchive('ce dossier')"> 
                         <i class="fa fa-archive"> </i>   Archiver
                     </a>
                 {% endif %}
-                <a href="{% url 'delete_parcours' parcours.id   group.id   %}" class="btn btn-danger"  onclick="return TestDelete('ce dossier')"> 
+
+                {% if group %}
+                <a href="{% url 'delete_folder' parcours.id  group.id %}" class="btn btn-danger"  onclick="return TestDelete('ce dossier')"> 
                     <i class="fa fa-trash"> </i>   Supprimer
                 </a>
+                {% endif %}  
+
+
         {% endif %}  
+
         </div>
     </div>  
  

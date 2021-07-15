@@ -7457,6 +7457,22 @@ def update_folder(request,id,idg):
     return render(request, 'qcm/form_folder.html', context)
  
 
+@parcours_exists
+def folder_archive(request,id):
+
+    parcours = Parcours.objects.get(id=id)
+    parcours.is_archive = 1
+    parcours.save()
+    subparcours = parcours.leaf_parcours.all()
+ 
+    for p in subparcours :
+        p.is_archive = 1
+        p.save()
+
+    return redirect('parcours')
+
+
+
 
 @parcours_exists
 def folder_unarchive(request,id):
@@ -7464,6 +7480,12 @@ def folder_unarchive(request,id):
     parcours = Parcours.objects.get(id=id)
     parcours.is_archive = 0
     parcours.save()
+    subparcours = parcours.leaf_parcours.all()
+ 
+    for p in subparcours :
+        p.is_archive = 0
+        p.save()
+
     if parcours.is_evaluation :
         return redirect('evaluations')
     else :
