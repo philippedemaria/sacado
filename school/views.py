@@ -553,14 +553,14 @@ def delete_selected_students(request):
 
 	user_ids = request.POST.getlist("user_ids")
 	for user_id in user_ids :
-		try :
-			user = User.objects.get(pk=user_id)
-			student = Student.objects.get(user_id=user_id)
-			user.delete()
-			clear_detail_student(student)
-			student.delete()
-		except :
-			pass
+		print(user_id)
+
+		user = User.objects.get(pk=user_id)
+		student = Student.objects.get(user_id=user_id)
+		user.delete()
+		clear_detail_student(student)
+		student.delete()
+
 
 	return redirect('school_students')
 
