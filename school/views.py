@@ -528,12 +528,7 @@ def delete_school_students(request):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. ")
 		return redirect('index')
 
-	Student.objects.filter(user__school = school, user__user_type = 0).exclude(user__username__contains="_e-test_").delete()
-
-	# students = Student.objects.filter(user__school = school, user__user_type = 0).exclude(user__username__contains="_e-test_")
-	# for s in students :
-	# 	clear_detail_student(s)
-	# 	s.delete()
+	User.objects.filter(school = school, user_type = 0).exclude(username__contains="_e-test_").delete()
 
 	return redirect('admin_tdb')
  
