@@ -367,6 +367,10 @@
                 <a href="{% url 'delete_folder' parcours.id  group.id %}" class="btn btn-danger"  onclick="return TestDelete('ce dossier')"> 
                     <i class="fa fa-trash"> </i>   Supprimer
                 </a>
+                {% else %}
+                    <a href="{% url 'delete_folder' parcours.id  0 %}" class="btn btn-danger"  onclick="return TestDelete('ce dossier')"> 
+                        <i class="fa fa-trash"> </i>   Supprimer
+                    </a>
                 {% endif %}  
 
 

@@ -7498,7 +7498,6 @@ def folder_unarchive(request,id):
 def delete_folder(request,id,idg):
 
     teacher = request.user.teacher 
-    group = Group.objects.get(pk = idg) 
     parcours = Parcours.objects.get(id=id) 
 
     if parcours.teacher == teacher or request.user.is_superuser :
@@ -7509,8 +7508,11 @@ def delete_folder(request,id,idg):
     
     else :
         messages.error(request, "Vous ne pouvez pas supprimer ce dossier. Contacter le propriétaire.")
- 
-    return redirect ("list_parcours_group", idg )  
+    
+    if idg == 0 :
+        return redirect ("parcours" )  
+    else :
+        return redirect ("list_parcours_group", idg )  
 
 
 
