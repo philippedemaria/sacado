@@ -3681,7 +3681,7 @@ def ajax_sort_supportfile(request):
 @user_passes_test(user_is_creator)
 def create_exercise(request, supportfile_id):
  
-    knowledges = Knowledge.objects.all().order_by("level").select_related('level')
+    knowledges = Knowledge.objects.all().select_related('level').order_by("level")
     supportfile = Supportfile.objects.get(id=supportfile_id)
 
     if request.user.is_superuser or user_is_creator : 

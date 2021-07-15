@@ -1131,7 +1131,7 @@ def reset_all_students_sacado(request):
     messages.success(request,"Ré-initialisation effectuée avec succès.")
 
 
-    return redirect('list_associate')
+    return redirect('association_index')
 
 
 

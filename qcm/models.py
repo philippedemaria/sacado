@@ -522,7 +522,7 @@ class Parcours(ModelWithCode):
 
     def duration_reader_course(self):
         som = 0
-        for c in self.course.values_list('duration',flat=True).select_related('duration').filter(is_publish=1):
+        for c in self.course.select_related('duration').values_list('duration',flat=True).filter(is_publish=1):
             som += c
         return som 
 
