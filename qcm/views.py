@@ -7502,7 +7502,7 @@ def delete_folder(request,id,idg):
 
     if parcours.teacher == teacher or request.user.is_superuser :
         if parcours.leaf_parcours.count() == 0 :
-            parcours.remove()
+            parcours.delete()
         else :
             messages.error(request, "Le dossier n'est pas vide. La suppression n'est pas possible.")
     
