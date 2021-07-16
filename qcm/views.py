@@ -7479,11 +7479,13 @@ def folder_unarchive(request,id):
 
     parcours = Parcours.objects.get(id=id)
     parcours.is_archive = 0
+    parcours.is_favorite = 0
     parcours.save()
     subparcours = parcours.leaf_parcours.all()
  
     for p in subparcours :
         p.is_archive = 0
+        p.is_favorite = 0
         p.save()
 
     if parcours.is_evaluation :
@@ -7555,10 +7557,12 @@ def actioner(request):
         for idp in idps :
             parcours = Parcours.objects.get(id=idp) 
             parcours.is_archive = 1
+            parcours.is_favorite = 0
             parcours.save()
             subparcours = parcours.leaf_parcours.all()
             for p in subparcours :
                 p.is_archive = 1
+                p.is_favorite = 0
                 p.save()
 
     return redirect('parcours')
