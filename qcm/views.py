@@ -1370,6 +1370,8 @@ def create_parcours(request,idp=0):
 
         if idp > 0 :
             nf.is_leaf = 1
+        else :
+            nf.is_leaf = 0
         nf.save()
         ################################################
         ### Si le parcours est créé à partir d'un groupe
