@@ -1023,7 +1023,7 @@ def admin_tdb(request):
     teachers = Teacher.objects.filter(user__school=school, user__user_type=2)
 
     nb_teachers = teachers.count()
-    nb_students = User.objects.filter(school=school, user_type=0).count()
+    nb_students = User.objects.filter(school=school, user_type=0).exclude(username__contains="_e-test_").count()
     nb_groups = Group.objects.filter(Q(teacher__user__school=school)|Q(teacher__user__schools=school)).count()
     
     is_lycee = False
