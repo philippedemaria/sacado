@@ -217,7 +217,9 @@ class Quizz(ModelWithCode):
     is_back      = models.BooleanField(default=0, verbose_name="Retour arrière ?")  
     is_ranking   = models.BooleanField(default=0, verbose_name="Ordre aléatoire des questions ?")  
     is_shuffle   = models.BooleanField(default=0, verbose_name="Ordre aléatoire des réponses ?") 
-    is_result    = models.BooleanField(default=0, verbose_name="Réponse en fin de quizz ?")  
+    is_result    = models.BooleanField(default=0, verbose_name="Réponse en fin de quizz ?")
+
+    is_archive   = models.BooleanField(default=0, verbose_name="Archivé ?")
 
     interslide   = models.PositiveIntegerField(default=10, blank=True, verbose_name="Temps entre les questions")
 

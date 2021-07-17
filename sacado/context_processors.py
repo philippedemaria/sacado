@@ -26,9 +26,9 @@ def is_sacado_asso(this_user, today):
         abonnement = this_user.school.abonnement.last()
         if today < abonnement.date_stop and abonnement.is_active :
             is_sacado = True
+            is_active = True
     except :
         pass
- 
     return is_sacado, is_active
 
 ##############################################################################################################################################

@@ -15,12 +15,24 @@
 
 
 {% block page_title %}
-        <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> Mes quizz</a> 
+        <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> Mes quizz {% if is_archive %}archivés{% endif %}</a> 
 {% endblock %}
 
 {% block page_menu_right %}
 
- 
+        <li>
+            {% if sacado_asso %} 
+                {% if not is_archive %}
+                    <a href="{% url 'all_quizzes_archived' %}"  class="no_button"><i class="fa fa-archive"></i> Mes quizz archivés ({{ nba }})</a> 
+                {% else %}
+                    <a href="{% url 'list_quizzes' %}"  class="no_button" >Mes quizz  </a> 
+                {% endif %}
+
+            {% else %}
+                <a href="#"  class="no_sacado_asso" >{% if not is_archive %}<i class="fa fa-archive"></i>{% endif %} Mes quizz {% if not is_archive %}archivés{% endif %}</a> 
+            {% endif %} 
+        </li>
+
 
 
 
@@ -30,15 +42,8 @@
             <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
                 <li> <a href="#" data-toggle='modal' data-target='#quizz_choice' >  Nouveau</a> </li> 
                 <li> {% if sacado_asso %} <a href="{% url 'all_quizzes' %}" > Quizz mutualisés</a> {% else %}<a href="#"  class="no_sacado_asso" > Quizz mutualisés</a> {% endif %} </li>         
- 
             </ul>
         </li>  
-
-
-
-
-
-
 {% endblock %}
 
 
@@ -46,6 +51,8 @@
 
 {% block body %}
 <section class="content_main"> 
+    <form action="{% url 'quizz_actioner' %}" method="POST" enctype='multipart/form-data'>    
+        {% csrf_token %}
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <table id="standard_tab" class="table table-bordered table-hover">
@@ -61,6 +68,11 @@
                     {% for quizz in quizzes %}
                         <tr id="this_quizz{{quizz.id}}">
                             <td>
+                                {% if not is_archive %}
+                                <input type="checkbox" name="selected_quizz" value="{{ quizz.id}}"/> 
+                                {% endif  %}
+
+
                                <a href="{% url 'update_quizz' quizz.id  %}"> {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="200px" />{% endif %}{{ quizz.title }}</a>
                                {% if quizz.is_random %}
                                 <span class="helper_tip"  style="line-height: 30px"> <i class="fa fa-random" style="font-size:12px"></i> 
@@ -131,7 +143,7 @@
                                             {% if not forloop.last %}, {% endif %} 
                                         </div>
                                         <div class="col-sm-6 col-md-6 quizz_historic_div">
-                                            <form method="POST">
+ 
                                                 {% get_quizz_generated quizz g as generated_historic %} 
                                                     {% for gq in generated_historic %} 
                                                     <li class="sanspuce historic_li btn-new">
@@ -166,7 +178,7 @@
                                                         </a>       
                                                     </li>
                                                 {% endfor %}
-                                            </form>
+ 
                                         </div>
                                     </div>
                                     {% if not forloop.last %}<hr  style="margin:5px; border-color:#CCC">{% endif %}                                           
@@ -202,12 +214,19 @@
             </table>
         </div>
     </div>
-
     <div class="row">
-        <div class="col-sm-12 col-md-12">     
-                <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+        <div class="col-sm-12 col-md-12">
+            <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces dossiers/fichiers')"> 
+                <i class="fa fa-archive"> </i>   Archiver la sélection
+            </button>
+            <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces dossiers/fichiers')"> 
+                <i class="fa fa-trash"> </i>   Supprimer la sélection
+            </button>
+     
+            <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
         </div>
-    </div>
+    </div>    
+    </form>
 </section>
 
 

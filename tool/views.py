@@ -284,10 +284,28 @@ def ajax_chargethemes_quizz(request):
 def list_quizzes(request):
 
     teacher = request.user.teacher 
-    quizzes = Quizz.objects.filter(teacher =teacher )
+    quizzes = teacher.teacher_quizz.filter(is_archive=0)
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher)
-    return render(request, 'tool/list_quizzes.html', {'quizzes': quizzes , 'form': form,  'teacher': teacher,  })
+    is_archive = False
+    nba = teacher.teacher_quizz.filter(  is_archive=1).count()
+    return render(request, 'tool/list_quizzes.html', {'quizzes': quizzes , 'form': form,  'teacher': teacher, 'is_archive' : is_archive, 'nba' : nba  })
+
+
+
+
+def all_quizzes_archived(request):
+
+    teacher = request.user.teacher 
+    quizzes = Quizz.objects.filter(teacher =teacher,is_archive=1)
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher)
+    is_archive = True
+    return render(request, 'tool/list_quizzes.html', {'quizzes': quizzes , 'form': form,  'teacher': teacher, 'is_archive' : is_archive })
+
+
+
+
 
 
  
@@ -1008,6 +1026,56 @@ def ajax_show_my_result(request):
  
     return JsonResponse(data)
 
+
+
+ 
+
+
+
+def quizz_actioner(request):
+    teacher = request.user.teacher 
+    idps = request.POST.getlist("selected_quizz") 
+ 
+    if  request.POST.get("action") == "deleter" :  
+        for idp in idps :
+            quizz = Quizz.objects.get(id=idp) 
+            if quizz.teacher == teacher or request.user.is_superuser :
+                    quizz.delete()
+                    messages.success(request, "Quizz Supprimé.")
+            else :
+                messages.error(request, "Vous ne pouvez pas supprimer ce quizz. Contacter le propriétaire.")
+    else: 
+
+        for idp in idps :
+            quizz = Quizz.objects.get(id=idp) 
+            quizz.is_archive = 1
+            quizz.save()
+ 
+    return redirect('list_quizzes')
+
+
+
+
+def quizz_unarchive(request):
+    teacher = request.user.teacher 
+    idps = request.POST.getlist("selected_quizz") 
+ 
+    if  request.POST.get("action") == "deleter" :  
+        for idp in idps :
+            quizz = Quizz.objects.get(id=idp) 
+            if quizz.teacher == teacher or request.user.is_superuser :
+                    quizz.delete()
+                    messages.success(request, "Quizz Supprimé.")
+            else :
+                messages.error(request, "Vous ne pouvez pas supprimer ce quizz. Contacter le propriétaire.")
+    else: 
+
+        for idp in idps :
+            quizz = Quizz.objects.get(id=idp) 
+            quizz.is_archive = 0
+            quizz.save()
+ 
+    return redirect('list_quizzes')
 
 
 

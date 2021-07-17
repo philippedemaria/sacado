@@ -30,8 +30,8 @@ urlpatterns = [
     path('update_question/<int:id>/<int:idq>', update_question, name='update_question'),   
     path('delete_question/<int:id>/<int:idq>', delete_question  , name='delete_question'),
 
-
-
+    path('quizz_actioner', quizz_actioner  , name='quizz_actioner'),
+    path('quizz_archived', all_quizzes_archived  , name='all_quizzes_archived'),
 
     path('list_diaporama', list_diaporama, name='list_diaporama'),
     path('create_diaporama/new', create_diaporama, name='create_diaporama'),
