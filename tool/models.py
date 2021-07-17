@@ -147,7 +147,7 @@ class Question(models.Model):
     knowledge  = models.ForeignKey(Knowledge, related_name="question", blank=True, null = True,  on_delete=models.CASCADE) 
 
     imagefile  = models.ImageField(upload_to=question_directory_path, blank=True, verbose_name="Image", default="")
-    audio       = models.FileField(upload_to=question_directory_path, blank=True, verbose_name="Audio", default="")
+    #audio      = models.FileField(upload_to=question_directory_path, blank=True, verbose_name="Audio", default="")
     video      = models.TextField( default='',  blank=True, verbose_name="Vidéo intégrée")
 
     is_publish = models.BooleanField(default=1, verbose_name="Publié ?")
