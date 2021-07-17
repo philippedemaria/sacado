@@ -288,7 +288,7 @@ body{
 
 
 
-{% if user.is_testeur %} 
+{% if user.is_testeur or user.is_superuser %} 
 <div class="modal fade" id="reporting" tabindex="-1" role="dialog" aria-labelledby="reporting"> 
     <div class="modal-dialog" role="document" >
         <div class="modal-content" style="padding-top :0px;">
