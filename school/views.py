@@ -287,7 +287,7 @@ def school_students(request):
 		return redirect('index')
 
 
-	users = User.objects.prefetch_related("student").filter(school = school, user_type=0).order_by("last_name")    
+	users = User.objects.prefetch_related("student").filter(school = school, user_type=0).exclude(username__contains="_e-test_").order_by("last_name")    
 
 	return render(request,'school/list_students.html', { 'communications' : [], 'users':users , 'school' : school , })
 
