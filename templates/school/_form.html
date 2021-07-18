@@ -73,7 +73,11 @@
                             {{ form.code_acad |add_class:"form-control" }}
                             {{ form.code_acad.errors }}
                         </div>
- 
+                         <div class="form-group">                
+                            {{ form.rythme.label_tag }}
+                            {{ form.rythme |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Nord"|attr:"data-off:Sud"}}
+                            {{ form.rythme.errors }}
+                        </div>
                         <div class="form-group">                
                             {{ form.gar.label_tag }}
                             {{ form.gar |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
