@@ -575,7 +575,7 @@ class Parcours(ModelWithCode):
 
         data = {}
         group_students = group.students.all() #.exclude(user__username__contains="_e-test")
-        parcours_students = self.students.all()
+        parcours_students = self.students.exclude(user__username__contains="_e-test")
         intersection = list(set(group_students) & set(parcours_students))
 
         data["nb"]= len(intersection)

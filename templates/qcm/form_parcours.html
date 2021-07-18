@@ -271,14 +271,20 @@
                         <td>{{ form.is_favorite.errors }}</td>
                     </tr>
                     <tr>
-                        <td>{{ form.is_share.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text" >Si Oui, l'évaluation est proposée à l'ensemble des collègues de SACADO. Si vous n'avez pas la version établissement, l'évaluation n'est pas mutualisée par défaut.</div></td>
+                        <td>{{ form.is_share.label_tag }}
+                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text" >Si Oui, l'évaluation est proposée à l'ensemble des collègues de SACADO. Si vous n'avez pas la version établissement, l'évaluation n'est pas mutualisée par défaut.</div>
+                            </span>
+                        </td>
                         <td>{{ form.is_share |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
                         <td>{{ form.is_share.errors }}</td>
                     </tr>
                     <tr>
-                        <td>{{ form.zoom.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text" >Si Oui, une loupe propose d'agrandir la vignette.</div></td>
+                        <td>{{ form.zoom.label_tag }}
+                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text" >Si Oui, une loupe propose d'agrandir la vignette.</div>
+                            </span>
+                        </td>
                         <td>{{ form.zoom |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
                         <td>{{ form.zoom.errors }}</td>
                     </tr>
