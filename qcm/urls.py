@@ -139,6 +139,9 @@ urlpatterns = [
     path('content_is_done/<int:id>/', content_is_done , name='content_is_done'), 
     path('relation_is_done/<int:id>/', relation_is_done , name='relation_is_done'), 
 
+    path('exercises_level_subject/<int:id>/<int:subject_id>', exercises_level_subject , name='exercises_level_subject'), 
+
+
     path('delete_relationship/<int:idr>/', delete_relationship, name='delete_relationship'),
     path('delete_relationship_by_individualise/<int:idr>/<int:id>/', delete_relationship_by_individualise, name='delete_relationship_by_individualise'),#modif idp en id pour la sécurité
 
