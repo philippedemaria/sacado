@@ -7402,7 +7402,7 @@ def update_folder(request,id,idg):
         group_id = group.id
         parcourses = set()
         for student in group.students.all() :
-            parcourses.update(student.students_to_parcours.filter(teacher = teacher).exclude(is_folder=1))
+            parcourses.update(student.students_to_parcours.filter(teacher = teacher,is_archive=0).exclude(is_folder=1))
         group_exists = True
         images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id = group.subject).exclude(vignette=" ").distinct()
 
