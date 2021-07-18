@@ -22,7 +22,7 @@ class School(models.Model):
     zip_code            = models.CharField(max_length=255, default='99999', blank=True, verbose_name="Code postal")
     get_seconde_to_comp = models.BooleanField(default=0,   editable=False)# L'établissement a récupéré le groupe prépa math comp
     nbstudents          = models.PositiveIntegerField(default=500, verbose_name="Nombre d'élèves")
-    rythme              = models.BooleanField(default=0, verbose_name="Rythme")# Nord ou Sud
+    rythme              = models.BooleanField(default=1, verbose_name="Rythme")# Nord ou Sud
     is_active           = models.BooleanField(default=0,   editable=False)
     gar                 = models.BooleanField(default=0, verbose_name="Connexion via le GAR souhaitée")
 
