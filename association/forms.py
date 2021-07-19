@@ -1,6 +1,12 @@
 from django import forms
-from .models import Accounting , Voting , Associate, Document , Section , Detail , Rate , Abonnement
+from .models import Accounting , Voting , Associate, Document , Section , Detail , Rate , Abonnement , Holidaybook
 from account.models import User
+
+class HolidaybookForm(forms.ModelForm):
+    class Meta:
+        model = Holidaybook 
+        fields = '__all__' 
+
 
 
 class AccountingForm(forms.ModelForm):

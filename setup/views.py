@@ -8,7 +8,7 @@ from account.models import  User, Teacher, Student  ,Parent , Adhesion
 from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise, Customanswerbystudent,Writtenanswerbystudent
 from tool.models import Quizz, Question, Choice
 from group.models import Group, Sharing_group
-from association.models import Accounting , Detail , Rate , Abonnement
+from association.models import Accounting , Detail , Rate , Abonnement , Holidaybook
 from group.views import student_dashboard
 from setup.models import Formule  
 from school.models import Stage , School
@@ -163,6 +163,11 @@ def index(request):
             cookie = request.session.get("cookie")
         except:
             pass
+        try :
+            holidaybook = Holidaybook.objects.get(pk=1)
+            sacado_voyage = holidaybook.is_display
+        except :
+            sacado_voyage = False
 
         rates = Rate.objects.all() #tarifs en vigueur 
         school_year = rates.first().year #tarifs pour l'année scolaire
@@ -187,7 +192,7 @@ def index(request):
         exercise = exercises[i]
 
         context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 'schools' : schools,'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
-                   'cookie': cookie, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, 'rates': rates, 'school_year': school_year, 'subjects': subjects, }
+                   'cookie': cookie, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, 'rates': rates, 'school_year': school_year, 'subjects': subjects,  'sacado_voyage' : sacado_voyage}
 
         return render(request, 'home.html', context)
 

@@ -26,19 +26,22 @@ urlpatterns = [
 
 
     path('iban_asking/<int:school_id>/<int:user_id>', iban_asking, name='iban_asking'),  
-    
-    path('student_to_association__123526', student_to_association, name='student_to_association'),     
-    path('choice_menu__123526/<slug:name>', choice_menu, name='choice_menu'), 
-    path('details_of_adhesion__123526', details_of_adhesion, name='details_of_adhesion'), 
-    path('commit_adhesion__123526', commit_adhesion, name='commit_adhesion'), 
-    path('save_adhesion__123526', save_adhesion, name='save_adhesion'), 
-    path('adhesions__123526', adhesions, name='adhesions'), 
 
 
-    path('delete_adhesion__123526', delete_adhesion, name='delete_adhesion'), 
-
-    path('ajax_remboursement__123526', ajax_remboursement, name='ajax_remboursement'), 
-
+    ############################################################################################
+    #######  SACADO Cahier de vacances payant
+    ############################################################################################
+    path('student_to_association', student_to_association, name='student_to_association'),     
+    path('choice_menu/<slug:name>', choice_menu, name='choice_menu'), 
+    path('details_of_adhesion', details_of_adhesion, name='details_of_adhesion'), 
+    path('commit_adhesion', commit_adhesion, name='commit_adhesion'), 
+    path('save_adhesion', save_adhesion, name='save_adhesion'), 
+    path('adhesions', adhesions, name='adhesions'), 
+    path('delete_adhesion', delete_adhesion, name='delete_adhesion'), 
+    path('ajax_remboursement', ajax_remboursement, name='ajax_remboursement'), 
+    ############################################################################################
+    #######  SACADO Cahier de vacances 
+    ############################################################################################
 
     path('play_quizz', play_quizz, name='play_quizz'), 
     path('play_quizz_login', play_quizz_login, name='play_quizz_login'), 

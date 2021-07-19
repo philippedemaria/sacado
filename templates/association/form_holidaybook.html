@@ -1,0 +1,66 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+{% endblock %}
+
+{% block page_title %}  
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Cahiers de vacances
+{% endblock %}
+
+{% block page_menu_right %}
+    
+
+ 
+
+    
+{% endblock %}
+
+ 
+ 
+     
+{% block body %}     
+<div class="content_main">
+    <form action="" method="POST">
+ 
+ 
+                {% csrf_token %}
+ 
+                <div class="row" >
+                    <div class="col-sm-6 col-md-2">
+                        <div class="form-group">
+                            {{ form.is_display.label_tag }}  
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="form-group">
+                            {{ form.is_display |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Ouvert"|attr:"data-off:Fermé"}} 
+                            {{ form.is_display.errors }}
+                        </div>
+                    </div>
+ 
+                </div>
+
+ 
+     
+     
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <div class="form-group">
+ 
+                            <input value="Enregistrer" type="submit" class="btn btn-primary"   />
+ 
+                   
+                            <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                                       class="btn btn-default "/></a>
+                        </div>
+                    </div>    
+                </div>
+
+  
+    </form>       
+{% endblock %}

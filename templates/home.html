@@ -44,34 +44,30 @@ Intro Section -
 
         <div class="row justify-content-center align-self-center intro-info order-md-first order-last" style="padding-bottom:20px">
             <div class="col-xs-12 col-md-12 col-lg-6">
- 
-                <div class="title marginbottom50" style="margin-bottom: 40px;">
 
-                  {% comment %}
-                    <span class="exo">{{ nb_exercise }}</span> 
-                      exercice{{  nb_exercise|pluralize }}<span class="helper_tip"> <sup style="top:-1.5em"> <i class="fa fa-question-circle text-danger"></i> </sup> 
-                              <div class="helper_tip_text" >Enoncés à variables didactiques aléatoires, chargées à la volée. Le nombre réel d'exercices est donc au moins décuplé.</div>
-                          </span> 
-                      de Mathématiques<span class="helper_tip"><sup style="top:-1.5em"> <i class="fa fa-question-circle text-danger"></i> </sup>
-                              <div class="helper_tip_text" >Nous commençons à inclure les Sciences Physiques et Chimiques. Quelques exercices sont également proposés en NSI.</div>
-                          </span>
-                      <br> interactif{{ nb_exercise|pluralize }} et corrigé{{  nb_exercise|pluralize }}<br> du CP<span class="helper_tip"> <sup style="top:-1.5em"> <i class="fa fa-question-circle text-danger"></i> </sup>
-                              <div class="helper_tip_text" >Maternelle en cours.</div>
-                          </span> à la Terminale.
-                  {% endcomment %}
+                {% if sacado_voyage %}
+                <h1><a href="{% url 'student_to_association' %}"><img src="{% static 'img/sacado_cahiers.jpg' %}" style="float:left"><span class="sacado">SACADO </span><br/> en voyage </a></h1>
+                {% endif %}
+                <div class="title marginbottom50" style="clear: both; margin-bottom: 40px;">
+ 
 
                     <span class="exo">{{ nb_exercise }}</span> 
                       exercice{{  nb_exercise|pluralize }}<span class="helper_tip"><sup style="top:-1.5em"><i class="fa fa-question-circle text-danger"></i></sup> 
                               <div class="helper_tip_text" >Enoncés à variables didactiques aléatoires, chargées à la volée. Le nombre réel d'exercices est donc au moins décuplé.</div>
                           </span> 
-                      de</br> {% for s in subjects %}{{ s.shortname}}{% if not forloop.last %}, {% endif %}{% endfor %}
+                {% if not sacado_voyage %}
+                <br/>
+                {% endif %}
+                      de  {% for s in subjects %}{{ s.shortname}}{% if not forloop.last %}, {% endif %}{% endfor %}
 
                       <span class="helper_tip"> <sup style="top:-1.5em"> <i class="fa fa-question-circle text-danger"></i> </sup>
                               <div class="helper_tip_text" >Les exercices de Sciences Physiques et Chimiques, Numériques et Sciences de l'Informatique, Sciences et Vie de la Terre arrivent peu à peu.</div>
                           </span>
+                {% if not sacado_voyage %}
+                <br/>
+                {% endif %}
 
-
-                      <br> interactif{{ nb_exercise|pluralize }} et corrigé{{  nb_exercise|pluralize }}<br> du CP<span class="helper_tip"> <sup style="top:-1.5em"> <i class="fa fa-question-circle text-danger"></i> </sup>
+                       interactif{{ nb_exercise|pluralize }} et corrigé{{  nb_exercise|pluralize }}<br> du CP<span class="helper_tip"> <sup style="top:-1.5em"> <i class="fa fa-question-circle text-danger"></i> </sup>
                               <div class="helper_tip_text" >Maternelle en cours.</div>
                           </span> à la Terminale.
 

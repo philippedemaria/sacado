@@ -1,16 +1,17 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from association.models import Accounting,Associate , Voting , Document, Section , Detail , Rate
-from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm, DetailForm , RateForm , AbonnementForm
+from association.models import Accounting,Associate , Voting , Document, Section , Detail , Rate  , Holidaybook
+from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm, DetailForm , RateForm , AbonnementForm , HolidaybookForm
 from account.models import User, Student, Teacher, Parent ,  Response
 from qcm.models import Exercise, Studentanswer , Customanswerbystudent , Writtenanswerbystudent
 from school.models import School
+from setup.models import Formule
+from setup.forms import FormuleForm
 from django.forms import inlineformset_factory
 from django.http import JsonResponse
 from django.core import serializers
 from django.template.loader import render_to_string
 from django.contrib import messages
 from django.core.mail import send_mail
- 
 import uuid
 import json
 from django.contrib.auth.hashers import make_password
@@ -58,6 +59,67 @@ def payment_complete(request):
     Accounting.objects.filter(pk = body['accounting_id']).update(is_active = 1)
     return JsonResponse('Payement completed !', safe = False)
 
+
+#####################################################################################################################################
+#####################################################################################################################################
+####    Holidaybook
+#####################################################################################################################################
+#####################################################################################################################################
+@user_passes_test(user_is_board)
+def display_holidaybook(request):
+
+    try :
+        holidaybook = Holidaybook.objects.get(pk = 1)
+        form = HolidaybookForm(request.POST or None, instance = holidaybook )
+
+    except :
+        form = HolidaybookForm(request.POST or None )
+ 
+    if request.method == "POST":
+        is_display = request.POST.get("is_display")
+        if is_display == 'on' :
+            is_display = 1
+        else :
+            is_display = 0 
+        holidaybook, created = Holidaybook.objects.get_or_create(pk =  1, defaults={  'is_display' : is_display } )
+        if not created :
+            holidaybook.is_display = is_display
+            holidaybook.save()
+        
+        return redirect('association_index')
+ 
+
+    context = {'form': form  }
+
+    return render(request, 'association/form_holidaybook.html', context)
+
+@user_passes_test(user_is_board)
+def update_formule(request, id):
+
+    formule = Formule.objects.get(id=id)
+    form = FormuleForm(request.POST or None, instance=formule )
+
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+        else :
+            print(form.errors)
+        
+        return redirect('list_rates')
+
+    context = {'form': form, 'formule' : formule }
+
+    return render(request, 'association/form_formule.html', context )
+
+
+@user_passes_test(user_is_board)
+def delete_formule(request, id):
+
+    formule = Formule.objects.get(id=id)
+    formule.delete()
+    return redirect('list_rates')
+
+
 #####################################################################################################################################
 #####################################################################################################################################
 ####    accounting
@@ -74,8 +136,13 @@ def association_index(request):
     nb_exercises = Exercise.objects.filter(supportfile__is_title=0).count()
     nb_schools   = School.objects.all().count()
     nb_answers   = Studentanswer.objects.filter(date__gte= today_start).count() + Customanswerbystudent.objects.filter(date__gte= today_start).count() + Writtenanswerbystudent.objects.filter(date__gte= today_start).count()
-    
-    context = { 'nb_teachers': nb_teachers , 'nb_students': nb_students , 'nb_exercises': nb_exercises, 'nb_schools': nb_schools, 'nb_answers': nb_answers }
+    if Holidaybook.objects.all() :
+        holidaybook  = Holidaybook.objects.values("is_display").get(pk=1)
+    else :
+        holidaybook = False
+
+
+    context = { 'nb_teachers': nb_teachers , 'nb_students': nb_students , 'nb_exercises': nb_exercises, 'nb_schools': nb_schools, 'nb_answers': nb_answers, 'holidaybook': holidaybook }
 
     return render(request, 'association/dashboard.html', context )
 
@@ -1055,10 +1122,9 @@ def ajax_shower_document(request):
 #####################################################################################################################################
 @user_passes_test(user_is_board)
 def list_rates(request):
-
+    formules = Formule.objects.all()
     rates = Rate.objects.all()
-    return render(request, 'association/list_rate.html', {'rates': rates })
-
+    return render(request, 'association/list_rate.html', {'rates': rates , 'formules': formules   })
 
 
 @user_passes_test(user_is_board)

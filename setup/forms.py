@@ -1,6 +1,6 @@
 from django import forms
 from socle.models import Skill, Waiting, Knowledge  
- 
+from .models import Formule  
 
 class SkillForm(forms.ModelForm):
 
@@ -29,4 +29,9 @@ class KnowledgeForm(forms.ModelForm):
         fields = '__all__'
 
 
- 
+
+class FormuleForm(forms.ModelForm):
+
+    class Meta:
+        model = Formule 
+        fields = ('price',)

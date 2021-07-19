@@ -1,0 +1,71 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+{% endblock %}
+
+
+{% block page_title %} 
+    <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a>  Formule
+{% endblock %}
+
+{% block page_menu_right %}
+    
+    
+{% endblock %}
+
+ 
+
+{% block body %}     
+<section class="content_main">
+    <form action="" method="POST">
+
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-sm-12 col-md-3">
+                <div class="form-group">
+                   <label>Nom  de la formule :</label> {{ formule.name }}
+                </div>
+ 
+                <div class="form-group">
+                   <label>Type d'adhésion :</label> {{ formule.adhesion }}
+                </div>
+ 
+                <div class="form-group">
+                    {{ form.price.label_tag }}
+                    {{ form.price |add_class:"form-control" }} 
+                    {{ form.price.errors }}
+                </div>
+ 
+                <div class="form-group">
+                   <label> Durée :</label> {{ formule.nb_month  }} mois
+                </div>
+            </div>
+ 
+            <div class="col-sm-12 col-md-12">
+                <div class="form-group">
+                    <label>Pack famille :</label> {%  if  formule.is_family    %} <span class="text-success">OUI</span> {% else %} <span class="text-danger">NON</span> {% endif %}
+                </div>
+            </div>
+        </div> 
+ 
+
+ 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="form-group">
+                    <input value="Enregistrer le tarif" type="submit" class="btn btn-primary"   />
+                    <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                               class="btn btn-default "/></a>
+                </div>
+            </div>    
+        </div>
+
+ 
+    </form>
+</section>  
+{% endblock %}

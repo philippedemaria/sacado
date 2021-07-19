@@ -10,6 +10,15 @@ from school.models import School , Country
 # from account.models import User
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
 
+
+class Holidaybook(models.Model):
+
+    is_display = models.BooleanField(default=0, verbose_name="Afficher ?") 
+ 
+    def __str__(self):
+        return "{}".format(self.is_display)
+
+
  
 def accounting_directory_path(instance, filename):
     return "association/{}/{}".format(instance.id, filename)

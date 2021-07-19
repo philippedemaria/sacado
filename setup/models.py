@@ -19,8 +19,19 @@ class MyCronJob(CronJobBase):
 
 class Formule(models.Model):
 
-	name = models.CharField(max_length=255, verbose_name="Nom")
-	adhesion = models.CharField(max_length=255, default ="" ,verbose_name="Adhesion")
+	ADHESIONS = (
+	    ('Mensuelle', 'Mensuelle'),
+	    ('Trimestrielle', 'Trimestrielle'),
+	    ('Annuelle', 'Annuelle'),
+	)
+
+	NAMES = (
+	    ('Autonomie', 'Autonomie'),
+	    ('Accompagnement', 'Accompagnement'),
+	)
+
+	name = models.CharField(max_length=255, verbose_name="Nom", choices=NAMES)
+	adhesion = models.CharField(max_length=255, default ="" ,verbose_name="Adhésion", choices=ADHESIONS)
 	price = models.CharField(max_length=255, default ="" , verbose_name="Montant")
 
 	is_family = models.BooleanField(default=0, verbose_name="Forfait famille ?") 
@@ -63,9 +74,6 @@ class Formule(models.Model):
 
 				end = date 	+ timedelta(days = 31*left_month)  
  
-
-
-
 		adh =  float(price) 
 		adh2 =  adh * coeff_two 
 		adh3 =  adh * coeff_three

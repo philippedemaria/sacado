@@ -52,5 +52,11 @@ urlpatterns = [
     path('ajax_total_period', ajax_total_period, name='ajax_total_period'),      
 
     path('reset_all_students_sacado', reset_all_students_sacado, name='reset_all_students_sacado'),
+
+
+    path('display_holidaybook', display_holidaybook, name='display_holidaybook'),  
+    path('update_formule/<int:id>/', update_formule, name='update_formule'),
+    path('delete_formule/<int:id>/', delete_formule, name='delete_formule'),
+
 ]
  
