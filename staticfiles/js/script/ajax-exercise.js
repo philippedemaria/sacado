@@ -93,8 +93,8 @@ define(['jquery', 'bootstrap'], function ($) {
                 }
 
 
- 
- 
+            $("#collaborative_div").hide();
+            makeDivAppear($("#id_is_text"), $("#collaborative_div"));
             makeDivAppear($("#id_is_mark"), $("#on_mark"));
             function makeDivAppear($toggle, $item) {
                     $toggle.change(function () {

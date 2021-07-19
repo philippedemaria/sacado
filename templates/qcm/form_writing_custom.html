@@ -155,24 +155,34 @@
                         {% endif %}
                     </div>
                 {% endif %}
-                {% if   customexercise.is_file  %}  
+                {% if customexercise.is_file  %}  
                     <div class="form-group">
                         {{ form.file.label_tag }}  <br>
                         {{ form.file|add_class:"btn btn-default"   }}
                         {{ form.file.errors }} <br>
                     </div> 
                 {% endif %}
-                {% if customexercise.is_text or customexercise.is_realtime  %} 
+                {% if customexercise.is_text and customexercise.is_realtime  %} 
+                    <div class="form-group">
+                        <a href="#" id="text_zone" class="btn btn-default btn-xs">Zone de texte</a>
+                        <a href="#" id="canvas_zone" class="btn btn-default btn-xs">Pad</a>
 
-                    <div class="form-group not_allowed_display" id="text_zone_div">
-                        <label>Zone pour écrire</label><br>
-                        {{ form.answer }}
-                        {{ form.answer.errors }} <br>
                     </div>
                 {% endif %}
+
+                {% if customexercise.is_text %}
+                    {% if customexercise.is_collaborative %}
+                        <a href="#" class="btn btn-primary">Clique ici pour rejoindre ton pad collaboratif {{ pad_student}}</a>
+                    {% else %}
+                        <div class="form-group {% if customexercise.is_text and customexercise.is_realtime  %}not_allowed_display{% endif %}" id="text_zone_div">
+                            <label>Zone pour écrire</label><br>
+                            {{ form.answer }}
+                            {{ form.answer.errors }} <br>
+                        </div>
+                    {% endif %}
+                {% endif %}
                 {% if customexercise.is_realtime  %} 
- 
-                    <div class="form-group not_allowed_display" id="canvas_zone_div">
+                    <div class="form-group {% if customexercise.is_text and customexercise.is_realtime  %}not_allowed_display{% endif %}" id="canvas_zone_div">
                         <div class="tool_draw_bar">                       
                             <input type="color" id="colorpicker" class="btn-default btn-publisher" />
                             <div class="btn btn-default">
@@ -195,13 +205,10 @@
                         </div>
                         <canvas id="myCanvas" style="border:1px solid #000"></canvas>
                     </div>
-                {% if c_e %}
-                {{  c_e.answer|json_script:"this_answer" }} 
-                {% endif %}
-                <canvas id="myCanvas" style="border:1px solid #f8f8f8"></canvas>                
- 
- 
- 
+                    {% if c_e %}
+                    {{  c_e.answer|json_script:"this_answer" }} 
+                    {% endif %}
+                    <canvas id="myCanvas" style="border:1px solid #f8f8f8"></canvas>                
                 {% endif %}
 
 
@@ -220,7 +227,7 @@
                                 {% endif  %}
                                 {% get_is_lock parcours today as is_lock %}                            
                                 {% get_is_lock customexercise today as is_block %}
-                                {% if not is_lock  %}
+                                {% if not is_lock and not customexercise.is_collaborative %} 
                                     {% if not data.is_corrected and not is_block  %}
                                         <input value="Soumettre votre exercice" type="submit" class="btn btn-primary"/>
                                     {% endif  %}

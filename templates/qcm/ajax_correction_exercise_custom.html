@@ -20,7 +20,9 @@
     {% endblock %}
 
     <div id="corrector"> 
-        {% if customexercise.is_file and c_e.file %}
+        {% if customexercise.is_collaborative %}
+            <iframe src=" " height="700" width="100%"></iframe>
+        {% elif customexercise.is_file and c_e.file %}
             <iframe src="{{  c_e.file.url }}" height="700" width="100%"></iframe>
         {%  elif customexercise.is_python   %}
             <pre>{{ c_e.answer|safe }}</pre>
@@ -82,11 +84,10 @@
     </div>    
     <hr>   
     {% endif %}
-
-
-
-    {% include 'qcm/correction_tools.html' %}
-
+ 
+    {% if not customexercise.is_collaborative %}
+        {% include 'qcm/correction_tools.html' %}
+    {% endif %}
 
     {% if customexercise.knowledges.all|length > 0 %}
     <table class="table table-bordered table-hover fontsize_14">
@@ -167,7 +168,7 @@
                     <div class="form-group">
                         <a href="#" class="btn btn-primary save_comment margin_space5" data-saver=0 data-parcours_id="{{ parcours_id}}"   data-student_id="{{student.user.id}}"  data-customexercise_id="{{customexercise.id}}" >Enregistrer </a>
                         
-<!--                         <a href="#" class="btn btn-primary save_comment margin_space5" data-saver=1 data-parcours_id="{{ parcours_id}}"   data-student_id="{{student.user.id}}"  data-customexercise_id="{{customexercise.id}}" >Enregistrer et conserver</a> -->
+ 
 
                         {% if c_e and  sacado_asso %}  
                         <a href="#" data-toggle='modal' data-target='#audio_comment' class="btn btn-primary margin_space5" ><i class="fa fa-microphone"></i> Commentaire Audio </a>

@@ -5203,13 +5203,14 @@ def write_exercise(request,id): # Coté élève
 
 def write_custom_exercise(request,id,idp): # Coté élève - exercice non autocorrigé
  
-    student = Student.objects.get(user = request.user)  
+    user = request.user
+    student = user.student
     customexercise = Customexercise.objects.get(pk = id)
     parcours = Parcours.objects.get(pk = idp)
-    today = time_zone_user(student.user)
+    today = time_zone_user(user)
 
 
-    tracker_execute_exercise(True ,  student.user , idp  , id , 1)  
+    tracker_execute_exercise(True , user , idp  , id , 1)  
 
 
     if customexercise.is_realtime :
@@ -5265,6 +5266,8 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
     if customexercise.is_python :
         url = "basthon/index_custom.html" 
     else :
+        pad_student = str(student.user.id)+"_"+str(idp)+"_"+str(customexercise.id)
+        context.update(pad_student=pad_student)
         url = "qcm/form_writing_custom.html" 
 
     return render(request, url , context)

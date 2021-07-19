@@ -1162,6 +1162,7 @@ class Customexercise(ModelWithCode):
     is_image = models.BooleanField(default=0, verbose_name="Image/Scan ?")
     is_text = models.BooleanField(default=0, verbose_name="Texte ?")
     is_mark = models.BooleanField(default=0, verbose_name="Notation ?")
+    is_collaborative = models.BooleanField(default=0, verbose_name="Collaboratif ?")
     mark = models.PositiveIntegerField(default=0, verbose_name="Sur ?")
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)

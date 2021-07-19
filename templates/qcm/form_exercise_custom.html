@@ -247,12 +247,31 @@ ul#id_skills li{
                                     </div>
                                 </div>
                             </div>
+                            <div class="row" {% if not customexercise %} id="collaborative_div" {% endif %}>
+                                <div class="col-sm-12 col-md-8">
+                                    <div class="form-group">
+                                        Saisie collaborative <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <div class="helper_tip_text">Ecriture au clavier sur un espace partagé. L'enseignant voit en direct les travaux des élèves</div>
+                                    </span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="form-group">
+                                        {% if  sacado_asso %}
+                                        {{ form.is_collaborative |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                        {{ form.is_collaborative.errors }}
+                                        {% else %}
+                                            <span class="text-danger">Nécessite la version Etablissement.</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
                             {% if teacher.user.is_superuser %}
                             <div class="row">
                                 <div class="col-sm-12 col-md-8">
                                     <div class="form-group">
                                         Saisie manuscrite <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                        <div class="helper_tip_text">Nécessite la version Etablissement. L'enseignant voit en direct les travaux des élèves, élève par élève.</div>
+                                        <div class="helper_tip_text">fonctionnnalité qui permet aux élèves d'utiliser un stylet.</div>
                                     </span>
                                     </div>
                                 </div>

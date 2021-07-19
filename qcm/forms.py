@@ -293,10 +293,11 @@ class CustomexerciseForm (forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		parcours = kwargs.pop('parcours')
 		teacher = kwargs.pop('teacher')
+		parcours_subject = parcours.subject 
 
 		super(CustomexerciseForm, self).__init__(*args, **kwargs)
-		skills = Skill.objects.filter(subject__in = teacher.subjects.all())
-		knowledges = Knowledge.objects.filter(theme__subject__in = teacher.subjects.all(), level__in = teacher.levels.order_by("ranking"))
+		skills = Skill.objects.filter(subject = parcours_subject)
+		knowledges = Knowledge.objects.filter(theme__subject = parcours_subject, level  = parcours.level)
 		parcourses = teacher.author_parcours.exclude(pk=parcours.id)
 		students = parcours.students.order_by("user__last_name")
 
