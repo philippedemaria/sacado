@@ -495,7 +495,7 @@ def delete_all_students_group(request,id):
 	form = GroupForm(request.POST or None, school = school, instance = group)
 	#for student in group.students.all() :
 	#	clear_detail_student(student)
-	group.students.delete()
+	group.students.all().delete()
 	return redirect('update_group_school', group.id)
 
  
