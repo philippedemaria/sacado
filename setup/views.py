@@ -612,7 +612,7 @@ def commit_adhesion(request) :
     formset = userFormset(data_post)
 
     formule = Formule.objects.get(pk = menu_id )
-
+ 
     parents  , students = [] , []
     if formset.is_valid():
         i = 0
