@@ -125,8 +125,8 @@ def index(request):
             relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("date_limit").order_by("parcours")
 
             teacher_parcours = teacher.teacher_parcours
-            parcours_tab = teacher_parcours.filter(Q(is_folder=1)|Q(is_leaf=0), students=None, is_favorite=1).order_by("is_evaluation") ## Parcours favoris non affectés
-            parcourses = teacher_parcours.filter(is_evaluation=0, is_favorite =1,is_folder=0 ).order_by("-is_publish")
+            parcours_tab = teacher_parcours.filter(Q(is_folder=1)|Q(is_leaf=0), students=None, is_favorite=1, is_archive=0).order_by("is_evaluation") ## Parcours favoris non affectés
+            parcourses = teacher_parcours.filter(is_evaluation=0, is_favorite =1,is_folder=0 , is_archive=0).order_by("-is_publish")
 
             communications = Communication.objects.values('id', 'subject', 'texte', 'today').filter(active=1).order_by("-id")
 
