@@ -87,8 +87,9 @@ class Group(ModelWithCode):
         students = self.students.all()
         studnts = students.exclude(user__username__contains= "_e-test") 
         snt = studnts.count()
+        profil = students.filter(user__username__contains= "_e-test").count()
 
-        if snt == 1 : 
+        if profil > 0 : 
             profilTest = True
         else :
             profilTest = False

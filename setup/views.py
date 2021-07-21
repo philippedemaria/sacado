@@ -239,8 +239,8 @@ def send_message(request):
 
                 send_mail(subject,
                           "Bonjour, vous venez d'envoyer le message suivant :\n\n" + message+" \n\n" + email +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
-                          settings.DEFAULT_FROM_EMAIL ,
-                          [email])
+                          settings.DEFAULT_FROM_EMAIL , 
+                          [email,])
                 send_mail(subject,
                             message+" \n\n" + email +  school_datas,
                           settings.DEFAULT_FROM_EMAIL,
