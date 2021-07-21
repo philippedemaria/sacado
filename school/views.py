@@ -46,7 +46,7 @@ import csv
 
 
 def authorizing_access_school(teacher, school) :
-	if (school in teacher.user.schools.all() and teacher.user.is_manager) or teacher.user.is_superuser :
+	if (school == teacher.user.school and teacher.user.is_manager) or (school in teacher.user.schools.all() and teacher.user.is_manager) or teacher.user.is_superuser :
 		return True
 	else :
 		return False

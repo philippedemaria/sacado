@@ -577,6 +577,7 @@ def logged_user_has_permission_to_this_student(user_reader, student) :
                 break
 
         sgroups = Sharing_group.objects.filter(teacher__user = user_reader) # tous le groupes partagés du prof
+ 
         for sgroup in sgroups :
             if student in sgroup.group.students.all() :
                 test = True
@@ -590,7 +591,6 @@ def logged_user_has_permission_to_this_student(user_reader, student) :
     else : 
         if user_reader == student.user :
             test = True
-
     return test
 
  
@@ -782,6 +782,7 @@ def detail_student_all_views(request, id):
     student = user.student
     tracker_execute_exercise(False,user)
 
+
     if not logged_user_has_permission_to_this_student(request.user, student) :
         messages.error(request, "Erreur...Vous n'avez pas accès à ces résultats.")
         return redirect('index')
@@ -855,8 +856,8 @@ def detail_student_all_views(request, id):
     if request.user.is_teacher:
         students = []
         teacher = Teacher.objects.get(user=request.user)
-        group = student.students_to_group.filter( teacher=teacher).last()
-        groups =  student.students_to_group.filter(teacher=teacher)
+        group = student.students_to_group.filter( Q(teacher=teacher)| Q(teachers=teacher)).last()
+        groups =  student.students_to_group.filter(Q(teacher=teacher)| Q(teachers=teacher))
         for g in groups :
             sts = g.students.all().order_by("user__last_name")
             for s in sts :
