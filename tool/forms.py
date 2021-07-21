@@ -94,7 +94,7 @@ class QuizzForm(forms.ModelForm):
 		self.fields['levels']   = forms.ModelMultipleChoiceField(queryset=teacher.levels.all(), required=False)
 		self.fields['subject']  = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)
 		self.fields['groups']   = forms.ModelMultipleChoiceField(queryset = all_groups.order_by("level")  , required=False)
-		self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset = all_parcours, required=False)
+		self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset = all_parcours.order_by("level"), required=False)
 
 	def clean_content(self):
 		content = self.cleaned_data['imagefile']
