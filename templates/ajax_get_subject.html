@@ -9,7 +9,7 @@
       	<a href="{% url 'exercises_level_subject' level.id subject_id %}" style="color:#FFF;">
 	            <div class="imagebox">
 	                <div class="icon {{ level.cycle }}" > {{ level.name }}<br>{{ nb_exo}} exercice{{ nb_exo|pluralize }}</div>
-                    <img src="../../static/img/levels/level{{ level.id }}.png" width="250" />
+                    <img src="../../static/img/levels/level{{ level.id }}_{{ subject_id }}.png" width="250" />
 	                <p class="description"></p>
 	            </div>
           </a>
