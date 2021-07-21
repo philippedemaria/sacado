@@ -82,8 +82,8 @@ class QuizzForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
 		super(QuizzForm, self).__init__(*args, **kwargs)
-		parcours =  teacher.teacher_parcours.all() 
-		coteacher_parcours = teacher.coteacher_parcours.all() 
+		parcours =  teacher.teacher_parcours.exclude(is_archive=1) 
+		coteacher_parcours = teacher.coteacher_parcours.exclude(is_archive=1) 
 		all_parcours = parcours|coteacher_parcours
 
 		groups =  teacher.groups.all() 
