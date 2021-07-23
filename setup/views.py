@@ -245,6 +245,8 @@ def send_message(request):
                             message+" \n\n" + email +  school_datas,
                           settings.DEFAULT_FROM_EMAIL,
                           [email, "sacado.asso@gmail.com"])
+                messages.success(request,"Message envoyé..... Merci. L'équipe Sacado.")
+
         else :
             messages.error(request,"Erreur d'opération....")
     else :
