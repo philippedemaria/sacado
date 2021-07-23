@@ -74,6 +74,25 @@
                         </div>
 
                         <div class="col-lg-3 col-md-4 col-xs-6">
+                            <div class="small-box bg-{% if  data.nbt > 0 %}purple{% else %}danger{% endif %}">
+                                <div class="inner">
+                                     <span style="font-size: 35px">Groupes </span>
+                                </div>
+                                <div class="icon">
+                                    {{ data.nbg }}
+                                </div>
+                                {% if  data.nbt > 0 %}
+                                    <a href="{% url 'school_groups' %}" class="small-box-footer"><i
+                                        class="fa fa-arrow-circle-right"></i> Liste/créer des groupes </a>
+                                {% else %}
+                                    <a href="{% url 'school_teachers' %}" class="small-box-footer"><i
+                                        class="fa fa-arrow-circle-right"></i> Renseigner les enseignants </a>
+                                {% endif %}
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-3 col-md-4 col-xs-6">
                             <div class="small-box bg-{% if  data.nbg > 0 %}purple{% else %}danger{% endif %}">
                                 <div class="inner">
                                      <span style="font-size: 35px">Élèves </span>
@@ -94,29 +113,6 @@
                         </div>
 
                          
-                        <div class="col-lg-3 col-md-4 col-xs-6">
-                            <div class="small-box bg-{% if  data.nbt > 0 %}purple{% else %}danger{% endif %}">
-                                <div class="inner">
-                                     <span style="font-size: 35px">Groupes </span>
-                                </div>
-                                <div class="icon">
-                                    {{ data.nbg }}
-                                </div>
-                                {% if  data.nbt > 0 %}
-                                    <a href="{% url 'school_groups' %}" class="small-box-footer"><i
-                                        class="fa fa-arrow-circle-right"></i> Liste/créer des groupes </a>
-                                {% else %}
-                                    <a href="{% url 'school_teachers' %}" class="small-box-footer"><i
-                                        class="fa fa-arrow-circle-right"></i> Renseigner les enseignants </a>
-                                {% endif %}
-                            </div>
-                        </div>
-
- 
-
-
-
-
                         <div class="col-lg-3 col-md-4 col-xs-6">
                             <div class="small-box bg-{% if  data.nbg > 0 %}purple{% else %}danger{% endif %}">
                                 <div class="inner">
