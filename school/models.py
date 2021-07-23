@@ -64,7 +64,7 @@ class School(models.Model):
 
 
         nbt, nbs = 0, 0
-        for u in self.users.all():
+        for u in self.users.exclude(username__contains="_e-test"):
             if u.is_teacher:
                 nbt += 1
             elif u.is_student:
