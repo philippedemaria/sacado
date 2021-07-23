@@ -403,7 +403,6 @@ def new_group(request):
 	form = GroupForm(request.POST or None, school = school)
 
 	if request.method == "POST" :
-		print(request.POST)	
 		if form.is_valid():
 			group = form.save()
 			stdts = request.POST.get("students")
