@@ -69,7 +69,7 @@
                                     {{ data.nbt }} 
                                 </div>
                                 <a href="{% url 'school_teachers' %}" class="small-box-footer"><i
-                                        class="fa fa-arrow-circle-right"></i> Liste/créer des enseignants </a>
+                                        class="fa fa-arrow-circle-right"></i> Gestion des enseignants </a>
                             </div>
                         </div>
 
@@ -83,7 +83,7 @@
                                 </div>
                                 {% if  data.nbt > 0 %}
                                     <a href="{% url 'school_groups' %}" class="small-box-footer"><i
-                                        class="fa fa-arrow-circle-right"></i> Liste/créer des groupes </a>
+                                        class="fa fa-arrow-circle-right"></i> Gestion des groupes </a>
                                 {% else %}
                                     <a href="{% url 'school_teachers' %}" class="small-box-footer"><i
                                         class="fa fa-arrow-circle-right"></i> Renseigner les enseignants </a>
@@ -104,10 +104,10 @@
                                 <a href="{% url 'csv_full_group'  %}" class="btn btn-default btn-accueil" style="margin-left:10px;width:280px; position: absolute; top:150px;"> Initialiser les groupes d'élèves </a> 
                                 {% if  data.nbg > 0 %}
                                     <a href="{% url 'school_students' %}" class="small-box-footer"><i
-                                        class="fa fa-arrow-circle-right"></i> Liste/créer des élèves </a>
+                                        class="fa fa-arrow-circle-right"></i> Gestion des élèves </a>
                                 {% else %}
                                     <a href="{% url 'school_groups' %}" class="small-box-footer"><i
-                                        class="fa fa-arrow-circle-right"></i> Liste/créer des groupes </a>
+                                        class="fa fa-arrow-circle-right"></i> Gestion des groupes </a>
                                 {% endif %}
                             </div>
                         </div>
