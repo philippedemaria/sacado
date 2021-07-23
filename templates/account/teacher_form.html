@@ -204,10 +204,10 @@
                     <div class="form-group">
                         <div class="alert alert-info">
                         Notifications
- 
 
-                            <table class="table">
-     
+                            {% if sacado_asso %}
+                             <table class="table">
+                                    
                                 <tr>
                                     <td><label><small> Recevoir chaque fois qu'un élève effectue une tache ?</small></label></td>
                                     <td>{{ teacher_form.notification |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}    
@@ -227,6 +227,29 @@
                                     </td>                            
                                 </tr>
                             </table>
+                            {% else %}
+                            <div class="alert alert-danger">Fonctionnalité réservée à la version établissement</div>
+                            <table class="table">
+                                <tr>
+                                    <td><label><small> Recevoir chaque fois qu'un élève effectue une tache ?</small></label></td>
+                                    <td>{{ teacher_form.notification |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"|attr:"disabled"}}    
+                                        {{ teacher_form.notification.errors }}
+                                    </td>                            
+                                </tr>
+                                <tr>
+                                    <td><label><small>Recevoir lorsqu'un exercice d'un de mes niveaux préférés est mis en ligne ?</small></label></td>
+                                    <td>{{ teacher_form.exercise_post |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"|attr:"disabled"}}    
+                                        {{ teacher_form.exercise_post.errors }}
+                                    </td>                            
+                                </tr>
+                                <tr>
+                                    <td><label><small>Recevoir des messages de ses élèves via sacado ? <small>le nom de l'émetteur apparait dans le message.</small></small></label></td>
+                                    <td>{{ teacher_form.is_mailing |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"|attr:"disabled"}}    
+                                        {{ teacher_form.is_mailing.errors }}
+                                    </td>                            
+                                </tr>
+                            </table>
+                            {% endif  %}
                         </div>                        
                     </div>
                 </div>
