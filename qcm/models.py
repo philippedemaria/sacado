@@ -386,7 +386,7 @@ class Parcours(ModelWithCode):
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
     
     is_leaf = models.BooleanField(default=0, verbose_name="Inclus dans un dossier ?")
-    folder_parcours = models.ManyToManyField('self',  blank=True,  related_name="subparcours_parcours",  verbose_name="Nom de parcours")    
+    folder_parcours = models.ManyToManyField('self',  blank=True,  related_name="subparcours_parcours",  verbose_name="Nom de parcours")  
     
     is_folder = models.BooleanField(default=0, verbose_name="Dossier")
     leaf_parcours = models.ManyToManyField('self',  blank=True,  related_name="subparcours_parcours",  verbose_name="Nom du dossier")# from_parcours_id est le dossier et from_parcours_id est le parcours  

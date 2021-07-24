@@ -128,8 +128,6 @@ class Accounting(models.Model):
     FORMES = (
         ("FACTURE", "FACTURE"),        
         ("AVOIR", "AVOIR"),
-        ("DEVIS", "DEVIS"),
-        ("REMBOURSEMENT", "REMBOURSEMENT"),
     )
 
 

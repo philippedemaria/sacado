@@ -1043,7 +1043,7 @@ def list_parcours_group(request,id):
     today = time_zone_user(request.user)
     group = Group.objects.get(pk = id) 
 
-    request.session["group_id"] = group.id
+    request.session["group_id"] = id
 
     role, group , group_id , access = get_complement(request, teacher, group)
 
@@ -1729,6 +1729,20 @@ def show_parcours(request, id):
     parcours_folder = None
     if parcours_folder_id :
         parcours_folder = Parcours.objects.get(pk = parcours_folder_id)
+    else:
+        try :
+            if parcours_folder_id in parcours.folder_parcours.all() :
+                parcours_folder = Parcours.objects.get(pk = parcours_folder_id)
+            elif parcours_folder_id in parcours.leaf_parcours.all() :
+                parcours_folder = Parcours.objects.get(pk = parcours_folder_id)
+            else :
+                parcours_folder = None
+        except :
+            parcours_folder = None
+
+
+
+
 
 
     form_reporting = DocumentReportForm(request.POST or None )
