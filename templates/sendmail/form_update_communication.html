@@ -47,9 +47,16 @@
                     </div>
                     <div class="form-group">
                         <div class="col-lg-4 col-xs-12">
-                            <button type="submit" class="btn btn-sacado"> Envoyer</button>
+                            <button type="submit" class="btn btn-primary" name="sender"> Diffusion par mail</button>
                         </div>
-                        <a href="javascript:history.back()"  class="btn btn-default" >Annuler</a>
+                        {% if communication %}
+                        <div class="col-lg-4 col-xs-12">
+                            <button type="submit" class="btn btn-primary"  name="no_sender"> Modifier sans diffusion par mail</button>
+                        </div>
+                        {% endif  %}
+                        <div class="col-lg-4 col-xs-12">
+                            <a href="javascript:history.back()"  class="btn btn-default" >Annuler</a>
+                        </div>
                     </div>
               </form> 
         </div>

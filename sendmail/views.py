@@ -205,15 +205,14 @@ def update_communication(request,id): # update
 			new_f = form.save(commit=False)
 			new_f.teacher = request.user
 			new_f.save()
-
-
 			try :
-				users = User.objects.filter(user_type=2)
-				rcv = []
-				for u in users :
-					if u.email :
-						rcv.append(u.email)
-				send_mail(new_f.subject, cleanhtml(unescape_html(new_f.texte)), settings.DEFAULT_FROM_EMAIL, rcv )
+				if request.POST.get("sender") :
+					users = User.objects.filter(user_type=2)
+					rcv = []
+					for u in users :
+						if u.email :
+							rcv.append(u.email)
+					send_mail(new_f.subject, cleanhtml(unescape_html(new_f.texte)), settings.DEFAULT_FROM_EMAIL, rcv )
 			except :
 				pass
 
@@ -225,6 +224,7 @@ def update_communication(request,id): # update
 
 	return render(request,'sendmail/form_update_communication.html', {'form':form,'communication':communication,   })
 
+ 
 
 def delete_communication(request, id):
 
