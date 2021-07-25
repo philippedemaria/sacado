@@ -27,15 +27,13 @@
 {% block page_title %}  
     
  
-        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a>  Transaction 
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a>  Opération 
   
 {% endblock %}
 
 {% block page_menu_right %}
-    
-    
+{% include 'association/menubar.html' %}
 {% endblock %}
-
  
 
 {% block body %}     
@@ -102,152 +100,181 @@
             </div>
         </div>
 
+        <div class="row">
 
-
-            <div class="row">
-                <div class="col-sm-2 col-md-2 col-lg-1">
-                    <div class="form-group">
-                        {{ form.is_credit |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Crédit"|attr:"data-off:Débit"}} 
-                        {{ form.is_credit.errors }}
-                    </div>
-                </div>
-                <div class="col-sm-3 col-md-3 col-lg-2">
-                        {{ form.forme |add_class:"form-control select2"|attr:"placeholder:Forme"}}  
-                        {{ form.forme.errors }}
-                </div>
-                <div class="col-sm-6 col-md-7  col-lg-5">
-                    <div class="form-group"> 
-                        {{ form.objet |add_class:"form-control"|attr:"placeholder:Objet"}}  
-                        {{ form.objet.errors }}
-                    </div>
-                </div>                
-                <div class="col-sm-3 col-md-6 col-lg-2">
-                        {{ form.acting |add_class:"form-control datetimepicker"|attr:"placeholder:Date d'effet"}}  
-                        {{ form.acting.errors }}
-                </div>
-                <div class="col-sm-3 col-md-6 col-lg-2">
-                        {{ form.mode |add_class:"form-control select2"}}  
-                        {{ form.mode.errors }}
+            <div class="col-sm-4 col-md-2 col-lg-1">
+                <div class="form-group">
+                    <label>Paypal ?</label>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-2 col-md-2 col-lg-2">
-                    <div class="form-group">Abonnement ? 
-                        {{ form.is_abonnement |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}} 
-                        {{ form.is_abonnement.errors }}
+            <div class="col-sm-8 col-md-4 col-lg-3">
+                <div class="form-group">
+                    {{ form.is_paypal |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}} 
+                    {{ form.is_paypal.errors }}
+                </div>
+            </div>
+
+
+
+
+            <div class="col-sm-4 col-md-2 col-lg-1">
+                <div class="form-group">
+                    <label>Plan comptable</label>
+                </div>
+            </div>
+            <div class="col-sm-8 col-md-4 col-lg-6">
+                <div class="form-group">
+                    {{ form.plan |add_class:"form-control select2"|attr:"placeholder:Forme"}}  
+                    {{ form.plan.errors }}
+                </div>
+            </div>
+ 
+        </div>
+
+        <div class="row">
+            <div class="col-sm-2 col-md-2 col-lg-1">
+                <div class="form-group">
+                    {{ form.is_credit |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Crédit"|attr:"data-off:Débit"}} 
+                    {{ form.is_credit.errors }}
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-2">
+                    {{ form.forme |add_class:"form-control select2"|attr:"placeholder:Forme"}}  
+                    {{ form.forme.errors }}
+            </div>
+            <div class="col-sm-6 col-md-7  col-lg-5">
+                <div class="form-group"> 
+                    {{ form.objet |add_class:"form-control"|attr:"placeholder:Libellé"}}  
+                    {{ form.objet.errors }}
+                </div>
+            </div>                
+            <div class="col-sm-3 col-md-6 col-lg-2">
+                    {{ form.acting |add_class:"form-control datetimepicker"|attr:"placeholder:Date d'effet"}}  
+                    {{ form.acting.errors }}
+            </div>
+            <div class="col-sm-3 col-md-6 col-lg-2">
+                    {{ form.mode |add_class:"form-control select2"}}  
+                    {{ form.mode.errors }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2 col-md-2 col-lg-2">
+                <div class="form-group">Abonnement ? 
+                    {{ form.is_abonnement |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}} 
+                    {{ form.is_abonnement.errors }}
+                </div>
+            </div>
+
+            <div class="col-sm-4 col-md-4 col-lg-3 {% if not abonnement %}abonnement_div{% endif  %}">
+                <div class="form-group">  Début
+                    {{ form_abo.date_start|add_class:" datetimepicker"}} 
+                    {{ form_abo.date_start.errors }}
+                </div>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-3 {% if not abonnement %}abonnement_div{% endif  %}">
+                <div class="form-group"> Fin
+                    {{ form_abo.date_stop |add_class:"  datetimepicker"}} 
+                    {{ form_abo.date_stop.errors }}
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-3 {% if not abonnement %}abonnement_div{% endif  %}">
+                <div class="form-group">GAR ?
+                    {{ form_abo.is_gar |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}} 
+                    {{ form_abo.is_gar.errors }}
+                </div>
+            </div>
+            
+        </div>
+        {{ form_ds.management_form }} 
+        <script id="rowToClone" type="text/template">
+            <div id="duplicate">  
+                <div class="row" >
+                    <div class="col-sm-8 col-md-8 col-lg-9" > 
+                        <div class="form-group">
+                            {{ form_ds.empty_form.description|add_class:"form-control"|attr:"placeholder:Description" }} 
+                        </div> 
                     </div>
+                    <div class="col-sm-2 col-md-2 col-lg-2" > 
+                        <div class="form-group">
+                            {{ form_ds.empty_form.amount|add_class:"form-control"|attr:"placeholder:€" }}
+                        </div> 
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-lg-1">
+                        <div class="form-group" >
+                           <div class="delete_button"></div>
+                        </div> 
+                    </div>
+                </div>
+                <div class="row" id="cloningZone">                            
+
+                </div>
+            </div>
+        </script>    
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+
+
+                <div id="formsetZone">
+                        <div class="row">
+                            <div class="col-sm-1 col-md-1" >
+                                <div class="form-group"><br/>
+                                    <a href="#"  class="btn btn-info add_more" >Ajouter une description et son montant</a>
+                                </div>
+                            </div>                        
+                        </div>
+
+
+                        {% for form in form_ds %}
+                        <div id="duplicate0">  
+                            <div class="row" >
+                                <div class="col-sm-8 col-md-9" > 
+                                    <div class="form-group">
+                                        {{ form.description|add_class:"form-control"|attr:"placeholder:Description" }} 
+                                    </div> 
+                                </div>
+                                <div class="col-sm-2 col-md-2" > 
+                                    <div class="form-group">
+                                        {{ form.amount|add_class:"form-control" }}
+                                    </div> 
+                                </div>
+                                <div class="col-sm-2 col-md-1">
+                                    <div class="form-group" > <br/>
+                                       <div class="delete_button"></div>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+
+                        {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+
+                        {% endfor %}   
                 </div>
 
-                <div class="col-sm-4 col-md-4 col-lg-3 {% if not abonnement %}abonnement_div{% endif  %}">
-                    <div class="form-group">  Début
-                        {{ form_abo.date_start|add_class:" datetimepicker"}} 
-                        {{ form_abo.date_start.errors }}
-                    </div>
-                </div>
-                <div class="col-sm-4 col-md-4 col-lg-3 {% if not abonnement %}abonnement_div{% endif  %}">
-                    <div class="form-group"> Fin
-                        {{ form_abo.date_stop |add_class:"  datetimepicker"}} 
-                        {{ form_abo.date_stop.errors }}
-                    </div>
-                </div>
-                <div class="col-sm-2 col-md-2 col-lg-3 {% if not abonnement %}abonnement_div{% endif  %}">
-                    <div class="form-group">GAR ?
-                        {{ form_abo.is_gar |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}} 
-                        {{ form_abo.is_gar.errors }}
-                    </div>
+
+                <div class="form-group">
+                {{ form.ticket.label_tag }} <br/>
+                {{ form.ticket|add_class:"btn btn-default" }}
+                {{ form.ticket.errors }}
                 </div>
                 
             </div>
-            {{ form_ds.management_form }} 
-            <script id="rowToClone" type="text/template">
-                <div id="duplicate">  
-                    <div class="row" >
-                        <div class="col-sm-8 col-md-8 col-lg-9" > 
-                            <div class="form-group">
-                                {{ form_ds.empty_form.description|add_class:"form-control"|attr:"placeholder:Description" }} 
-                            </div> 
-                        </div>
-                        <div class="col-sm-2 col-md-2 col-lg-2" > 
-                            <div class="form-group">
-                                {{ form_ds.empty_form.amount|add_class:"form-control"|attr:"placeholder:€" }}
-                            </div> 
-                        </div>
-                        <div class="col-sm-2 col-md-2 col-lg-1">
-                            <div class="form-group" >
-                               <div class="delete_button"></div>
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="row" id="cloningZone">                            
- 
-                    </div>
-                </div>
-            </script>    
-            <div class="row">
-                <div class="col-sm-12 col-md-6">
-
-
-                    <div id="formsetZone">
-                            <div class="row">
-                                <div class="col-sm-1 col-md-1" >
-                                    <div class="form-group"><br/>
-                                        <a href="#"  class="btn btn-info add_more" >Ajouter une description et son montant</a>
-                                    </div>
-                                </div>                        
-                            </div>
-
-
-                            {% for form in form_ds %}
-                            <div id="duplicate0">  
-                                <div class="row" >
-                                    <div class="col-sm-8 col-md-9" > 
-                                        <div class="form-group">
-                                            {{ form.description|add_class:"form-control"|attr:"placeholder:Description" }} 
-                                        </div> 
-                                    </div>
-                                    <div class="col-sm-2 col-md-2" > 
-                                        <div class="form-group">
-                                            {{ form.amount|add_class:"form-control" }}
-                                        </div> 
-                                    </div>
-                                    <div class="col-sm-2 col-md-1">
-                                        <div class="form-group" > <br/>
-                                           <div class="delete_button"></div>
-                                        </div> 
-                                    </div>
-                                </div>
-                            </div>
-
-                            {% for hidden in form.hidden_fields %}
-                                {{ hidden }}
-                            {% endfor %}
-
-                            {% endfor %}   
-                    </div>
-
-
-                    <div class="form-group">
-                    {{ form.ticket.label_tag }} <br/>
-                    {{ form.ticket|add_class:"btn btn-default" }}
-                    {{ form.ticket.errors }}
-                    </div>
-                    
-                </div>
-                <div class="col-sm-12 col-md-6">
-                    {{ form.observation.label_tag }} <br/>
-                    {{ form.observation }}
-                    {{ form.observation.errors }}
-                </div>
+            <div class="col-sm-12 col-md-6">
+                {{ form.observation.label_tag }} <br/>
+                {{ form.observation }}
+                {{ form.observation.errors }}
             </div>
-            <div class="row">
-                <div class="col-sm-12 col-md-8">
-                    <div class="form-group">
-                        <input value="Enregistrer la transaction" type="submit" class="btn btn-primary"   />
-                        <a href="javascript:history.back()"><input type="button" value="Annuler"
-                                                                   class="btn btn-default "/></a>
-                    </div>
-                </div>    
-            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-8">
+                <div class="form-group">
+                    <input value="Enregistrer la transaction" type="submit" class="btn btn-primary"   />
+                    <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                               class="btn btn-default "/></a>
+                </div>
+            </div>    
+        </div>
 
  
     </form>

@@ -6,6 +6,13 @@ urlpatterns = [
 
     path('association_index', association_index, name='association_index'),
 
+    path('accountings', accountings, name='accountings'),
+    path('list_paypal', list_paypal, name='list_paypal'),
+    path('bank_activities', bank_activities, name='bank_activities'),
+    path('bank_bilan', bank_bilan, name='bank_bilan'),
+    path('adhesions', adhesions, name='adhesions'),
+
+
     path('list_accountings', list_accountings, name='list_accountings'),
     path('new', create_accounting, name='create_accounting'),
     path('update/<int:id>/', update_accounting, name='update_accounting'),

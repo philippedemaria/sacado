@@ -11,6 +11,18 @@ from school.models import School , Country
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
 
 
+class Plancomptable(models.Model):
+
+    code = models.PositiveIntegerField(verbose_name="code")
+    name = models.CharField(max_length=255,   verbose_name="Nom") 
+    def __str__(self):
+        return "{} : {}".format(self.code,self.name)
+
+
+
+
+
+
 class Holidaybook(models.Model):
 
     is_display = models.BooleanField(default=0, verbose_name="Afficher ?") 
@@ -128,9 +140,9 @@ class Accounting(models.Model):
         ("AVOIR", "AVOIR"),
     )
 
-
     amount = models.DecimalField(default=0, blank=True , max_digits=10, decimal_places=2, editable=False)
     is_credit = models.BooleanField(default=0, )
+    is_paypal = models.BooleanField(default=0, )
     objet = models.CharField(max_length=255, verbose_name="Objet*")
     chrono = models.CharField(max_length=50, blank=True, unique =True,  editable=False)
 
@@ -155,7 +167,7 @@ class Accounting(models.Model):
     is_active = models.BooleanField(default=0, verbose_name="Actif")
     is_abonnement = models.BooleanField(default=0, verbose_name="Abonnement")
     ticket = models.FileField(upload_to=accounting_directory_path, blank=True, verbose_name="Justificatif",  default="" )
-
+    plan = models.ForeignKey(Plancomptable, related_name="plan_accontings", blank=True,  null=True,  on_delete=models.SET_NULL, verbose_name="Plan comptable")
 
     def __str__(self):
         return self.beneficiaire

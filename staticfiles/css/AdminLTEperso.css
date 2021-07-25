@@ -148,6 +148,10 @@ border : 0px!important;
     background-color: #f6f6f6;
 }
 
+.bg_white{
+  background-color: white;
+}
+
 /* Style après un envoi de mail via le bouton signaler un exerice dans show_relation */
 .verif_sender_sent{
     color: #3c763d;

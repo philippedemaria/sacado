@@ -1,0 +1,28 @@
+<li>
+ <a href="{% url 'accountings' %}" class="no_button">Comptabilité</a>
+</li>
+<li class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"> Opérations <b class="caret"></b> </a>
+    <ul   class="dropdown-menu clearfix pull-right" role="menu">
+        <li>
+            <a href="{% url 'create_accounting' %}" > Nouvelle   </a>   
+        </li>
+        <li>
+            <a href="{% url 'list_accountings' %}"  class="no_button" > 
+                Liste
+            </a> 
+        </li>    
+    </ul>
+</li>
+<li>
+ <a href="{% url 'adhesions' %}" class="no_button">Abonnements</a>
+</li>
+<li>
+ <a href="{% url 'list_paypal' %}" class="no_button">Paypal</a>
+</li>
+<li>
+ <a href="{% url 'bank_bilan' %}" class="no_button">Bilan</a>
+</li>
+ 
+
+

@@ -17,7 +17,7 @@
 
 
 {% block page_title %}
-        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Journal des opérations
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Abonnements Etablissements
 
         <a href="#" data-toggle='modal' data-target='#e_bilans' class="btn btn-default btn-xs"> <i class="fa fa-file-excel-o fa-xs text-success"></i> Exporter le bilan</a>
         <a href="#" data-toggle='modal' data-target='#p_bilans' class="btn btn-default btn-xs"> <i class="fa fa-file-pdf-o fa-xs text-danger"></i> Imprimer le bilan</a>
@@ -71,63 +71,69 @@
         <div class="col-sm-12 col-md-12">
             <table   class="standard_tab_sort300 table table-bordered table-hover">
                 <thead>
-                <tr>                   
-                    <td style="width:80px">Date</td>                        
-                    <td>Client</td>
-                    <td>Libellé </td>
-                    <td style="width:80px">Banque Débit</td>
-                    <td style="width:80px">Banque Crédit</td>
-                    <td style="width:80px">Paypal Débit</td>
-                    <td style="width:80px">Paypal Crédit</td>
-                    <td>Comptes</td>
-                    <td>Paiement</td>
+                <tr>
+                    <td style="width:80px">Référence</td>                    
+                    <td style="width:100px">Date</td>                         
+                    <td>Etablissement</td>
+                    <td>Object </td>
+                    <td>Mode </td>
+                    <td style="width:80px">Montant</td>
+                    <td style="width:80px">Débit/crédit</td>
+                    <td style="width:150px">Date de valeur</td>
+                    <td>Ville</td>
+                    <td>Pays</td>
+                    <td>Contacts</td>
                 </tr>
                 </thead>
                 <tbody>
                     {% for accounting in accountings %}
-                        <tr id="this_tr_{{ accounting.id }}" class="this_tr_all">                         
+                        <tr id="this_tr_{{ accounting.id }}" class="this_tr_all">
+                            <td>
+                                <span >{{ accounting.chrono }}</span> 
+                            </td>                            
                             <td>
                                 <span >{{ accounting.date|date:"Y-m-d" }} </span> 
                             </td>
-                            <td><span class="helper_tip"><a href="{% url 'update_accounting'  accounting.id %}" >
-                                {% if accounting.beneficiaire  %} {{ accounting.beneficiaire }} {% else %}{{ accounting.school.name }}, {{ accounting.school.country.name }} {% endif %}
+                            <td>
+                                <span class="helper_tip">{% if accounting.beneficiaire  %} {{ accounting.beneficiaire }} {% else %}{{ accounting.school.name }}, {{ accounting.school.country.name }} {% endif %}
                                     <div class="helper_tip_text" > {{ accounting.observation|safe }}</div>
                                 
-                                </a></span>
-
-                                <a href="{% url 'delete_accounting'  accounting.id %}" class="pull-right"  onclick="return TestDelete('cette facture')"><i class="fa fa-trash"></i> </a>
-                                <a href="{% url 'print_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-print"></i> </a>
-                                <a href="{% url 'show_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-eye"></i> </a>
+                                </span>
 
                             </td> 
                             <td>
-                                {{ accounting.mode }}, {{ accounting.objet }}
+                                <a href="{% url 'update_accounting'  accounting.id %}" >{{ accounting.objet }}</a>
 
+                                <a href="{% url 'print_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-print"></i> </a>
+                                <a href="{% url 'show_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-eye"></i> </a>
 
-
-
-                            </td>
-
-
-
-                            <td style="width:80px">
-                                {% if accounting.is_credit and not is_paypal%}<span class="text-success">{{ accounting.amount }} €</span>{% endif %}
-                            </td>
-                            <td style="width:80px">
-                                {% if not accounting.is_credit and not is_paypal%}<span class="text-danger">{{ accounting.amount }} €</span>{% endif %}
-                            </td>
-                            <td style="width:80px">
-                                {% if accounting.is_credit and  is_paypal%}<span class="text-success">{{ accounting.amount }} €</span>{% endif %}
-                            </td>
-                            <td style="width:80px">
-                                {% if not accounting.is_credit and  is_paypal%}<span class="text-danger">{{ accounting.amount }} €</span>{% endif %}
-                            </td>
-                            <td style="width:80px">
-                                {{ accounting.plan }}
                             </td>
                             <td>
-                                 {{ accounting.acting|date:"d N Y" }}
+                                 {{ accounting.mode }}    <br>
                             </td>
+                            <td>
+                                 {{ accounting.amount }} €  <br>
+                            </td>
+                            <td>
+                                {% if accounting.is_credit %}<span class="text-success">Crédit</span>{% else %}<span class="text-danger">Débit</span>{% endif %}
+                            </td>
+                            <td>
+                                 {{ accounting.acting|date:"Y-m-d" }}
+                            </td>
+
+                            <td>
+                                 {{ accounting.school.town }} 
+                            </td>
+                            <td>
+                                 {{ accounting.school.country.name }} 
+                            </td>
+                            <td style="font-size: 10px">
+                                 {% for u in accounting.school.admin %} <li>{{u.get_full_name}}, {{u.email}}</li> {% endfor %}
+                            </td>
+
+
+
+
                         </tr>
 
                     {% endfor %}

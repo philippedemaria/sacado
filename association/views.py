@@ -163,7 +163,7 @@ def total(first_date, last_date) :
 
 @user_passes_test(user_is_board)
 def list_accountings(request):
-    accountings = Accounting.objects.order_by("-date")
+    accountings = Accounting.objects.exclude(is_paypal=1).order_by("-date")
 
 
     today = datetime.now()
@@ -1203,5 +1203,85 @@ def reset_all_students_sacado(request):
 
 
 
+@user_passes_test(user_is_board)
+def accountings(request):
+    context = { }
+
+    return render(request, 'association/accountings.html', context )
 
 
+
+
+
+@user_passes_test(user_is_board)
+def adhesions(request):
+    accountings = Accounting.objects.exclude(user_id=None).order_by("-date")
+    today = datetime.now()
+    this_month = today.month
+    this_year = today.year
+
+    first_date_month =  datetime(this_year, this_month, 1)
+    first_date_year = datetime(this_year, 1, 1)
+
+    if this_month > 0 and this_month < 8 :
+        this_year = this_year - 1
+    first_date_schoolyear = datetime(this_year, 9, 1)
+
+    total_month = total(first_date_month, today)
+    total_year = total(first_date_year, today)
+    total_shoolyear =  total(first_date_schoolyear, today)
+
+
+    context =  {'accountings': accountings , 'total_month': total_month, 'total_year': total_year, 'total_shoolyear': total_shoolyear ,'this_month' :this_month }
+ 
+    return render(request, 'association/adhesions.html', context )
+
+
+
+
+
+
+
+@user_passes_test(user_is_board)
+def list_paypal(request):
+    accountings = Accounting.objects.filter(is_paypal=1).order_by("-date")
+
+
+    today = datetime.now()
+    this_month = today.month
+    this_year = today.year
+
+    first_date_month =  datetime(this_year, this_month, 1)
+    first_date_year = datetime(this_year, 1, 1)
+
+    if this_month > 0 and this_month < 8 :
+        this_year = this_year - 1
+    first_date_schoolyear = datetime(this_year, 9, 1)
+
+    total_month = total(first_date_month, today)
+    total_year = total(first_date_year, today)
+    total_shoolyear =  total(first_date_schoolyear, today)
+
+
+    context =  {'accountings': accountings , 'total_month': total_month, 'total_year': total_year, 'total_shoolyear': total_shoolyear ,'this_month' :this_month }
+ 
+    return render(request, 'association/list_accounting.html', context )
+
+
+
+@user_passes_test(user_is_board)
+def bank_activities(request):
+    context = { }
+
+    return render(request, 'association/bank_activities.html', context )
+
+
+
+@user_passes_test(user_is_board)
+def bank_bilan(request):
+    context = {  }
+
+    return render(request, 'association/bank_bilan.html', context )   
+
+ 
+ 
