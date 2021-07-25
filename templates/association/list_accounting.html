@@ -125,7 +125,10 @@
                                 {% if not accounting.is_credit and  is_paypal%}<span class="text-danger">{{ accounting.amount }} €</span>{% endif %}
                             </td>
                             <td style="width:80px">
-                                {{ accounting.plan }}
+                                {{ accounting.plan.code }}
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" >{{ accounting.plan }}</div>
+                                </span>
                             </td>
                             <td>
                                  {{ accounting.acting|date:"d N Y" }}
