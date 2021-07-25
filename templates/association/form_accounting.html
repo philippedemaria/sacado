@@ -117,12 +117,14 @@
         </div>
         {% endif %}
         <div class="row">
+            {% if tp == 2 %}
             <div class="col-sm-2 col-md-2 col-lg-1">
                 <div class="form-group">
                     {{ form.is_credit |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Crédit"|attr:"data-off:Débit"}} 
                     {{ form.is_credit.errors }}
                 </div>
             </div>
+            {% endif %}
             <div class="col-sm-3 col-md-3 col-lg-2">
                     {{ form.forme |add_class:"form-control select2"|attr:"placeholder:Forme"}}  
                     {{ form.forme.errors }}
@@ -153,7 +155,7 @@
         </div>
         {% endif %}
 
-        {% if tp == 0 %}
+ 
         <div class="row">
             <div class="col-sm-2 col-md-2 col-lg-2">
                 <div class="form-group">Abonnement ? 
@@ -182,7 +184,7 @@
             </div>
             
         </div>
-        {% endif %}
+ 
 
         {{ form_ds.management_form }} 
         <script id="rowToClone" type="text/template">

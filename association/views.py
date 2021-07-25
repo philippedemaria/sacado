@@ -167,8 +167,8 @@ def list_accountings(request,tp):
         accountings = Accounting.objects.filter(tp=tp,acting=None).exclude(is_paypal=1).order_by("-date")
     elif tp == 1 :
         accountings = Accounting.objects.filter(tp=tp,acting=None).order_by("-date")
-    if tp == 2 :
-        accountings = Accounting.objects.filter(tp=tp).exclude(acting=None).order_by("-date")
+    else :
+        accountings = Accounting.objects.exclude(acting=None).order_by("-date")
 
     today = datetime.now()
     this_month = today.month
