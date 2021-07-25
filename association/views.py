@@ -163,8 +163,12 @@ def total(first_date, last_date) :
 
 @user_passes_test(user_is_board)
 def list_accountings(request,tp):
-    accountings = Accounting.objects.exclude(is_paypal=1,tp=tp).order_by("-date")
-
+    if tp == 0 :
+        accountings = Accounting.objects.filter(tp=tp,acting=None).exclude(is_paypal=1).order_by("-date")
+    elif tp == 1 :
+        accountings = Accounting.objects.filter(tp=tp,acting=None).order_by("-date")
+    if tp == 2 :
+        accountings = Accounting.objects.filter(tp=tp).exclude(acting=None).order_by("-date")
 
     today = datetime.now()
     this_month = today.month
@@ -256,6 +260,17 @@ def create_accounting(request,tp):
             forme = request.POST.get("forme",None)
             nf.chrono = create_chrono(Accounting, forme) # Create_chrono dans general_functions.py
             nf.tp = tp
+            if tp == 0 :
+                nf.tp = 18
+                if forme == "FACTURE" :
+                    nf.is_credit = 1
+                else :
+                    nf.is_credit = 0
+            elif tp == 1 :
+                if forme == "AVOIR" :
+                    nf.is_credit = 1
+                else :
+                    nf.is_credit = 0
             nf.save()
 
             form_ds = formSet(request.POST or None, instance = nf)
@@ -310,7 +325,7 @@ def update_accounting(request, id):
         if form.is_valid():
             nf = form.save(commit = False)
             nf.user = request.user
-            forme = request.POST.get("forme",None)
+            forme = request.POST.get("forme", None)
             nf.chrono = update_chrono(Accounting, accounting, forme)
             nf.save()
 
@@ -333,6 +348,7 @@ def update_accounting(request, id):
                     if nf.acting:
                         fa.is_active = 1
                         Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
+                        Accounting.objects.filter(pk = accounting.id).update(tp = 3)
                     fa.save()
                 else :
                     accounting.abonnement.delete()
