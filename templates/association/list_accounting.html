@@ -73,7 +73,8 @@
         <div class="col-sm-12 col-md-12">
             <table   class="standard_tab_sort300 table table-bordered table-hover">
                 <thead>
-                <tr>                   
+                <tr>                     
+                    <td style="width:80px">Chrono</td>                     
                     <td style="width:80px">Date</td>                        
                     <td>Client</td>
                     <td>Libellé </td>
@@ -87,7 +88,10 @@
                 </thead>
                 <tbody>
                     {% for accounting in accountings %}
-                        <tr id="this_tr_{{ accounting.id }}" class="this_tr_all">                         
+                        <tr id="this_tr_{{ accounting.id }}" class="this_tr_all">
+                            <td>
+                                <span >{{ accounting.chrono }}</span> 
+                            </td>                  
                             <td>
                                 <span >{{ accounting.date|date:"Y-m-d" }} </span> 
                             </td>
