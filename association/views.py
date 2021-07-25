@@ -282,7 +282,7 @@ def create_accounting(request,tp):
         else :
             print(form.errors)
         
-        return redirect('list_accountings')
+        return redirect('list_accountings',tp)
  
 
     context = {'form': form, 'form_ds': form_ds, 'form_abo' : form_abo , 'tp' : tp  }
@@ -340,7 +340,7 @@ def update_accounting(request, id):
         else :
             print(form.errors)
         
-        return redirect('list_accountings')
+        return redirect('list_accountings', accounting.tp)
 
     context = {'form': form, 'form_ds': form_ds ,  'accounting': accounting,  'form_abo': form_abo, 'abonnement' : abonnement  }
 
@@ -353,7 +353,7 @@ def delete_accounting(request, id):
 
     accounting = Accounting.objects.get(id=id)
     accounting.delete()
-    return redirect('list_accountings')
+    return redirect('list_accountings', accounting.tp)
     
 
 @user_passes_test(user_is_board)
