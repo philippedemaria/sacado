@@ -168,7 +168,8 @@ class Accounting(models.Model):
     is_abonnement = models.BooleanField(default=0, verbose_name="Abonnement")
     ticket = models.FileField(upload_to=accounting_directory_path, blank=True, verbose_name="Justificatif",  default="" )
     plan = models.ForeignKey(Plancomptable, related_name="plan_accontings", blank=True,  null=True,  on_delete=models.SET_NULL, verbose_name="Plan comptable")
-
+    tp  = models.PositiveIntegerField(default=0, editable=False)
+    
     def __str__(self):
         return self.beneficiaire
 

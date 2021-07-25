@@ -6,7 +6,7 @@
 {% block require %}
  
 
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
 
      <script>
         require(['script/ajax-list_accounting']);
@@ -17,7 +17,9 @@
 
 
 {% block page_title %}
-        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Journal des opérations
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Journal des opérations 
+
+        {% if tp == 0 %}Client{% elif tp == 1 %}Fournisseur{% else %}Banque{% endif %}
 
         <a href="#" data-toggle='modal' data-target='#e_bilans' class="btn btn-default btn-xs"> <i class="fa fa-file-excel-o fa-xs text-success"></i> Exporter le bilan</a>
         <a href="#" data-toggle='modal' data-target='#p_bilans' class="btn btn-default btn-xs"> <i class="fa fa-file-pdf-o fa-xs text-danger"></i> Imprimer le bilan</a>

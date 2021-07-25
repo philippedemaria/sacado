@@ -13,8 +13,8 @@ urlpatterns = [
     path('adhesions', adhesions, name='adhesions'),
 
 
-    path('list_accountings', list_accountings, name='list_accountings'),
-    path('new', create_accounting, name='create_accounting'),
+    path('list_accountings/<int:tp>/', list_accountings, name='list_accountings'),
+    path('new/<int:tp>/', create_accounting, name='create_accounting'),
     path('update/<int:id>/', update_accounting, name='update_accounting'),
     path('delete/<int:id>/', delete_accounting, name='delete_accounting'),
     path('show/<int:id>/', show_accounting, name='show_accounting'), 

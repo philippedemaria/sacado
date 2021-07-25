@@ -162,8 +162,8 @@ def total(first_date, last_date) :
 
 
 @user_passes_test(user_is_board)
-def list_accountings(request):
-    accountings = Accounting.objects.exclude(is_paypal=1).order_by("-date")
+def list_accountings(request,tp):
+    accountings = Accounting.objects.exclude(is_paypal=1,tp=tp).order_by("-date")
 
 
     today = datetime.now()
@@ -181,7 +181,7 @@ def list_accountings(request):
     total_year = total(first_date_year, today)
     total_shoolyear =  total(first_date_schoolyear, today)
 
-    return render(request, 'association/list_accounting.html', {'accountings': accountings , 'total_month': total_month, 'total_year': total_year, 'total_shoolyear': total_shoolyear ,'this_month' :this_month })
+    return render(request, 'association/list_accounting.html', {'accountings': accountings , 'tp' : tp , 'total_month': total_month, 'total_year': total_year, 'total_shoolyear': total_shoolyear ,'this_month' :this_month })
 
 
 
@@ -242,7 +242,7 @@ def ajax_total_period(request):
 
 
 @user_passes_test(user_is_board) 
-def create_accounting(request):
+def create_accounting(request,tp):
  
     form     = AccountingForm(request.POST or None )
     form_abo = AbonnementForm(request.POST or None )
@@ -255,6 +255,7 @@ def create_accounting(request):
             nf.user = request.user
             forme = request.POST.get("forme",None)
             nf.chrono = create_chrono(Accounting, forme) # Create_chrono dans general_functions.py
+            nf.tp = tp
             nf.save()
 
             form_ds = formSet(request.POST or None, instance = nf)
@@ -284,7 +285,7 @@ def create_accounting(request):
         return redirect('list_accountings')
  
 
-    context = {'form': form, 'form_ds': form_ds, 'form_abo' : form_abo  }
+    context = {'form': form, 'form_ds': form_ds, 'form_abo' : form_abo , 'tp' : tp  }
 
     return render(request, 'association/form_accounting.html', context)
 

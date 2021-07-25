@@ -6,9 +6,9 @@
 {% block require %}
  
     {% if accounting %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
     {% else %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     <script>
         require(['script/ajax-accounting_complement']);
     </script> 
@@ -26,8 +26,7 @@
 
 {% block page_title %}  
     
- 
-        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a>  Opération 
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a>  Opération {% if tp == 0 %}Client{% elif tp == 1 %}Fournisseur{% else %}Banque{% endif %}
   
 {% endblock %}
 
@@ -102,14 +101,10 @@
 
         <div class="row">
 
-            <div class="col-sm-4 col-md-2 col-lg-1">
-                <div class="form-group">
-                    <label>Paypal ?</label>
-                </div>
-            </div>
+ 
             <div class="col-sm-8 col-md-4 col-lg-3">
                 <div class="form-group">
-                    {{ form.is_paypal |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}} 
+                    {{ form.is_paypal |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Paypal"|attr:"data-off:Banque"}} 
                     {{ form.is_paypal.errors }}
                 </div>
             </div>

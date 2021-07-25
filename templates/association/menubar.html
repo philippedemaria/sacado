@@ -5,13 +5,31 @@
     <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"> Opérations <b class="caret"></b> </a>
     <ul   class="dropdown-menu clearfix pull-right" role="menu">
         <li>
-            <a href="{% url 'create_accounting' %}" > Nouvelle   </a>   
+            <a href="{% url 'create_accounting' 0 %}" > Nouvelle opération Client   </a>   
         </li>
         <li>
-            <a href="{% url 'list_accountings' %}"  class="no_button" > 
-                Liste
+            <a href="{% url 'list_accountings' 0 %}"  class="no_button" > 
+                Journal opérations Client
             </a> 
-        </li>    
+        </li> 
+        <li class="divider"></li>
+        <li>
+            <a href="{% url 'create_accounting' 1 %}" > Nouvelle opération Fournisseur    </a>   
+        </li>
+        <li>
+            <a href="{% url 'list_accountings' 1 %}"  class="no_button" > 
+                Journal opérations Fournisseur 
+            </a> 
+        </li> 
+        <li class="divider"></li>
+        <li>
+            <a href="{% url 'create_accounting' 2 %}" > Nouvelle opération Bancaire    </a>  
+        </li>
+        <li>
+            <a href="{% url 'list_accountings' 2 %}"  class="no_button" > 
+                Journal opérations Bancaire  
+            </a> 
+        </li> 
     </ul>
 </li>
 <li>
