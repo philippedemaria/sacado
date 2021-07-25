@@ -76,7 +76,7 @@
                 <tr>                     
                     <td style="width:80px">Chrono</td>                     
                     <td style="width:80px">Date</td>                        
-                    <td>Client</td>
+                    <td style="width:200px">Client</td>
                     <td>Libellé </td>
                     <td style="width:80px">Banque Débit</td>
                     <td style="width:80px">Banque Crédit</td>
@@ -107,11 +107,24 @@
 
                             </td> 
                             <td>
-                                {{ accounting.mode }}, {{ accounting.objet }}
-
-
-
-
+                                {%  if accounting.mode == "par virement bancaire" %}
+                                    <span class="helper_tip"> <i class="fa fa-send"></i>
+                                        <div class="helper_tip_text" >par virement bancaire</div>
+                                    </span>
+                                {% elif accounting.mode == "en espèces" %}
+                                    <span class="helper_tip"> <i class="fa fa-euro"></i>
+                                        <div class="helper_tip_text" >Espèces</div>
+                                    </span>
+                                {% elif accounting.mode == "par mandatement administratif" %}
+                                    <span class="helper_tip"> <i class="fa fa-envelop"></i>
+                                        <div class="helper_tip_text" >Mandat administratif</div>
+                                    </span>
+                                {% else %}
+                                    <span class="helper_tip"> <i class="fa fa-credit-card"></i>
+                                        <div class="helper_tip_text" >par carte de crédit</div>
+                                    </span>
+                                {% endif %},
+                                 {{ accounting.objet }}
                             </td>
 
 
