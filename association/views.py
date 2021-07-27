@@ -1265,7 +1265,7 @@ def accountings(request):
 
 @user_passes_test(user_is_board)
 def adhesions(request):
-    accountings = Accounting.objects.exclude(user_id=None).order_by("-date")
+    accountings = Accounting.objects.exclude(school=None).order_by("-date")
     today = datetime.now()
     this_month = today.month
     this_year = today.year
