@@ -329,7 +329,6 @@ def update_accounting(request, id):
             nf.user = request.user
             forme = request.POST.get("forme", None)
             nf.chrono = update_chrono(Accounting, accounting, forme)
-            nf.is_credit = accounting.is_credit
             nf.save()
 
             for form_d in form_ds :
@@ -340,7 +339,8 @@ def update_accounting(request, id):
             details = nf.details.all()
             for d in details :
                 som += d.amount
-            Accounting.objects.filter(pk = accounting.id).update(amount=som)
+
+            Accounting.objects.filter(pk = accounting.id).update(amount=som,is_credit=accounting.is_credit)
 
             if nf.is_abonnement :
                 if form_abo.is_valid():
