@@ -1230,10 +1230,14 @@ def accountings(request):
     this_day     = datetime.now() 
     this_year    = this_day.year
 
-    nb_schools        = Abonnement.objects.filter(date_start__lte = this_day  , date_stop__gte = this_day).count()
-    nb_schools_fr     = Abonnement.objects.filter(date_start__lte = this_day  , date_stop__gte = this_day, is_active = 1, school__country_id = 5).count()
-    nb_schools_no_fr  = Abonnement.objects.filter(date_start__lte = this_day  , date_stop__gte = this_day, is_active = 1).exclude(school__country_id =5).count() 
-    nb_schools_no_pay = Abonnement.objects.filter(date_start__lte = this_day  , date_stop__gte = this_day, is_active = 0).count()
+    abonnements = Abonnement.objects.filter(date_start__lte = this_day  , date_stop__gte = this_day).order_by("school__country__name")
+
+    nb_schools        = abonnements.count()
+    nb_schools_fr     = abonnements.filter(is_active = 1, school__country_id = 5).count()
+    nb_schools_no_fr  = abonnements.filter(is_active = 1).exclude(school__country_id =5).count() 
+    nb_schools_no_pay = abonnements.filter(is_active = 0).count()
+
+ 
   
     start_date   = datetime(this_year, 1, 1)
     end_date     = datetime(this_year, 12, 31)
@@ -1252,7 +1256,7 @@ def accountings(request):
     result       = actif - charge
     total        = actif + product
         
-    context = { 'charge': charge, 'product': product , 'result': result , 'actif': actif , 'total': total ,  'nb_schools': nb_schools ,  
+    context = { 'charge': charge, 'product': product , 'result': result , 'actif': actif , 'total': total ,  'nb_schools': nb_schools , 'abonnements': abonnements ,   
                 'nb_schools': nb_schools , 'nb_schools_fr': nb_schools_fr , 'nb_schools_no_fr': nb_schools_no_fr ,  'nb_schools_no_pay': nb_schools_no_pay }  
 
 
