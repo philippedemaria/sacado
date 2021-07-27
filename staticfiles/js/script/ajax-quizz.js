@@ -369,6 +369,11 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
         })
 
 
+        $("#support_audio_image").on('click', function (event) { 
+
+            get_the_target_2("#support_audio_image","#drop_zone_image","#audio_div","#video_div")
+
+        })
 
 
 
@@ -390,7 +395,26 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
             }
         }
 
+        function get_the_target_2(target,cible,f1,f2){
 
+            $(f1).removeClass("allowed_display");
+            $(f2).removeClass("allowed_display");
+            $(f1).addClass("not_allowed_display");
+            $(f2).addClass("not_allowed_display");
+
+            if ($(cible).hasClass("not_allowed_display")) 
+            {
+                $(cible).removeClass("not_allowed_display");
+                $(cible).addClass("allowed_display");
+                $(f1).removeClass("not_allowed_display");
+                $(f1).addClass("allowed_display");
+            } else {
+                $(cible).removeClass("allowed_display");                
+                $(cible).addClass("not_allowed_display");
+                $(f1).removeClass("not_allowed_display");
+                $(f1).addClass("allowed_display");
+            }
+        }
 
  
     });
