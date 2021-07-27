@@ -73,34 +73,37 @@
                                 {% endif  %}
 
 
-                               <a href="{% url 'update_quizz' quizz.id  %}"> {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="200px" />{% endif %}{{ quizz.title }}</a>
-                               {% if quizz.is_random %}
-                                <span class="helper_tip"  style="line-height: 30px"> <i class="fa fa-random" style="font-size:12px"></i> 
-                                    <div class="helper_tip_text" >Questions aléatoires </div>
-                                </span> 
-                               {% endif %}
+                                <a href="{% url 'update_quizz' quizz.id  %}"> {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="200px" />{% endif %}{{ quizz.title }}</a>
+                                {% if quizz.is_random %}
+                                    <span class="helper_tip"  style="line-height: 30px"> <i class="fa fa-random" style="font-size:12px"></i> 
+                                        <div class="helper_tip_text" >Questions aléatoires </div>
+                                    </span> 
+                                {% endif %}
                                 <br/>
-                               {% if  quizz.is_publish %}
-                                    <div class="text-success">publié <span class="helper_tip text-success"> <sup><i class="fa fa-question-circle"></i></sup>
-                                    <div class="helper_tip_text" >
-                                    Les élèves du.des groupe.s désigné.s peuvent le lire depuis leur parcours.</div>
-                                </span></div> 
-                               {% elif quizz.start  %}
+                                {% if  quizz.is_publish %}
+                                    <div class="text-success">publié 
+                                        <span class="helper_tip text-success"> <sup><i class="fa fa-question-circle"></i></sup>
+                                        <div class="helper_tip_text" >
+                                            Les élèves du.des groupe.s désigné.s peuvent le lire depuis leur parcours.
+                                        </div>
+                                        </span>
+                                    </div> 
+                                {% elif quizz.start  %}
                                     <div class="text-success">{{ quizz.start|date:"d N Y H:i" }}</div>  {% if  quizz.stop %}  <div class="text-danger">{{ quizz.stop|date:"d N Y H:i" }}</div> {% endif %}
-                               {% else %} 
+                                {% else %} 
                                     <div class="text-danger">
                                         <small>privé</small> 
                                     </div>
-                               {% endif %}
-                               {% if quizz.is_share %}
+                                {% endif %}
+                                {% if quizz.is_share %}
                                     <div class="text-success">
                                         mutualisé 
                                    </div>
-                               {% else %} 
+                                {% else %} 
                                     <div class="text-danger">
                                         <small>privé</small> 
                                     </div>
-                               {% endif %}
+                                {% endif %}
                             </td>
                             <td>{% for p in quizz.parcours.all %}
                                     {{ p }}{% if not forloop.last %}, {% endif %} 
@@ -216,10 +219,10 @@
     </div>
     <div class="row">
         <div class="col-sm-12 col-md-12">
-            <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces dossiers/fichiers')"> 
+            <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces quizz')"> 
                 <i class="fa fa-archive"> </i>   Archiver la sélection
             </button>
-            <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces dossiers/fichiers')"> 
+            <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces quizz')"> 
                 <i class="fa fa-trash"> </i>   Supprimer la sélection
             </button>
      

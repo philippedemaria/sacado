@@ -1374,11 +1374,48 @@ def list_diaporama(request):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     teacher = request.user.teacher 
-    diaporamas = Diaporama.objects.filter(teacher =teacher )
-
+    diaporamas = Diaporama.objects.filter(teacher =teacher,is_archive=0 )
+    nbd = Diaporama.objects.filter(teacher =teacher,is_archive=1 ).count()
 
     form = DiaporamaForm(request.POST or None, request.FILES or None ,teacher = teacher)
-    return render(request, 'tool/list_diaporama.html', {'diaporamas': diaporamas , 'form': form,   })
+    return render(request, 'tool/list_diaporama.html', {'diaporamas': diaporamas , 'form': form, 'is_archive' : False , 'nbd' : nbd  })
+
+
+
+def all_diaporama_archived(request):
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    teacher = request.user.teacher 
+    diaporamas = Diaporama.objects.filter(teacher =teacher ,is_archive=1 )
+    nbd = Diaporama.objects.filter(teacher =teacher,is_archive=0 ).count()
+    form = DiaporamaForm(request.POST or None, request.FILES or None ,teacher = teacher)
+    return render(request, 'tool/list_diaporama.html', {'diaporamas': diaporamas , 'form': form, 'is_archive' : True , 'nbd' : nbd  })
+
+
+
+def diaporama_actioner(request):
+
+    teacher = request.user.teacher 
+    idps = request.POST.getlist("selected_diaporama") 
+
+    if  request.POST.get("action") == "deleter" :  
+        for idp in idps :
+            diaporama = Diaporama.objects.get(id=idp) 
+            if diaporama.teacher == teacher or request.user.is_superuser :
+                diaporama.delete()
+                messages.success(request, "La présentation "+ diaporama.title +" est supprimée.")
+            else :
+                messages.error(request, "Vous ne pouvez pas supprimer la présentation "+ diaporama.title +". Contacter le propriétaire.")
+
+    else: 
+
+        for idp in idps :
+            diaporama = Diaporama.objects.get(id=idp) 
+            diaporama.is_archive = 1
+            diaporama.save()
+
+    return redirect('list_diaporama')
+
 
 
  

@@ -34,11 +34,14 @@ urlpatterns = [
     path('quizz_archived', all_quizzes_archived  , name='all_quizzes_archived'),
 
     path('list_diaporama', list_diaporama, name='list_diaporama'),
+    path('all_diaporama_archived', all_diaporama_archived, name='all_diaporama_archived'),
+
+
     path('create_diaporama/new', create_diaporama, name='create_diaporama'),
     path('update_diaporama/<int:id>', update_diaporama, name='update_diaporama'),
     path('show_diaporama/<int:id>', show_diaporama, name='show_diaporama'),     
     path('delete_diaporama/<int:id>', delete_diaporama, name='delete_diaporama'),
-
+    path('diaporama_actioner', diaporama_actioner, name='diaporama_actioner'),
 
     path('create_slide/<int:id>', create_slide, name='create_slide'),
     path('update_slide/<int:id>/<int:idp>', update_slide, name='update_slide'),

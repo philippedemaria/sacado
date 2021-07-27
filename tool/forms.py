@@ -126,6 +126,7 @@ class DiaporamaForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
 		super(DiaporamaForm, self).__init__(*args, **kwargs)
+		groups = teacher.groups.order_by("level") | teacher.teacher_group.order_by("group__level")
  
 		self.fields['levels'] = forms.ModelMultipleChoiceField(queryset=teacher.levels.all(), required=False)
 		self.fields['subject'] = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)

@@ -5,22 +5,30 @@
  
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
-
-
- 
-
 {% endblock %}
 
 
 
 {% block page_title %}
-        <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> </a> Les présentations
+    <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> </a> Les présentations    
+    {% if   is_archive %} 
+        archivées
+    {% endif %}
 {% endblock %}
 
+
+
 {% block page_menu_right %}
-
-     <a href="#" data-toggle='modal' data-target='#quizz_choice'  class="btn btn-new pull-right">  Créer une présentation</a>  
-
+<li>
+    {% if not is_archive %}
+        <a href="{% url 'all_diaporama_archived' %}"  class="no_button"><i class="fa fa-archive"></i> Mes présentations archivées ({{ nbd }}) </a> 
+    {% else %}
+        <a href="{% url 'list_diaporama' %}"  class="no_button" >Mes présentations  ({{ nbd }})  </a> 
+    {% endif %}
+</li>
+<li>
+     <a href="#" data-toggle='modal' data-target='#quizz_choice'  class="btn btn-new pull-right">  Créer une présentation</a> 
+</li>   
 {% endblock %}
 
 
@@ -28,6 +36,8 @@
 
 {% block body %}
 <section class="content_main"> 
+    <form action="{% url 'diaporama_actioner' %}" method="POST" enctype='multipart/form-data'>          
+    {% csrf_token %} 
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <table id="standard_tab" class="table table-bordered table-hover">
@@ -42,6 +52,10 @@
                     {% for diaporama in diaporamas %}
                         <tr>
                             <td>
+                                {% if not is_archive %}
+                                <input type="checkbox" name="selected_diaporama" value="{{ diaporama.id}}"/> 
+                                {% endif  %}
+
                                <a href="{% url 'update_diaporama' diaporama.id  %}"> {% if diaporama.vignette %}<img src="{{ diaporama.vignette.url }}" width="200px" />{% endif %}{{ diaporama.title }}</a> 
                             </td>
                             <td> 
@@ -49,10 +63,7 @@
                             </td>
                             <td > 
                                 <div class="quizz_action"><a href="{% url 'create_slide'  diaporama.id %}" ><i class="fa fa-plus"></i> Ajouter des diapositives</a> [{{ diaporama.slides.count}}]</div>  
-
- 
-
-                                <div class="quizz_action"><a href="{% url 'show_diaporama'  diaporama.id %}"  class="quizz_action"><i class="fa fa-eye"></i>  Lire le diaporama</a>  </div>  
+                                <div class="quizz_action"><a href="{% url 'show_diaporama'  diaporama.id %}"  class="quizz_action"><i class="fa fa-eye"></i>  Lire la présentation</a>  </div>  
                                 <div class="quizz_action"><a href="{% url 'delete_diaporama'  diaporama.id %}"  class="quizz_action"  onclick="return TestDelete('ce diaporama')"><i class="fa fa-trash"></i>  Supprimer</a> </div>  
                             </td>
                         </tr>
@@ -63,10 +74,18 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-12 col-md-12">     
+        <div class="col-sm-12 col-md-12">  
+                <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces présentations')"> 
+                    <i class="fa fa-archive"> </i>   Archiver la sélection
+                </button>
+                <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces présentations')"> 
+                    <i class="fa fa-trash"> </i>   Supprimer la sélection
+                </button>
+
                 <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
         </div>
     </div>
+    </form>
 </section>
 
 

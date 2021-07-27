@@ -374,7 +374,6 @@ class Diaporama(ModelWithCode):
     students      = models.ManyToManyField(Student, related_name="user_presentation", blank=True , editable=False ) 
     date_modified = models.DateTimeField(auto_now=True)
 
-    #### pour donner une date de remise - Tache 
     levels    = models.ManyToManyField(Level, related_name="presentation", blank=True)
     themes    = models.ManyToManyField(Theme, related_name="presentation", blank=True)
     subject   = models.ForeignKey(Subject, related_name="presentation", blank=True, null = True, on_delete=models.CASCADE)
@@ -383,8 +382,9 @@ class Diaporama(ModelWithCode):
 
     is_share   = models.BooleanField(default=0, verbose_name="Mutualisé ?")
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
- 
-    groups     = models.ManyToManyField(Group, blank=True, related_name="presentation" , editable=False) 
+    is_archive   = models.BooleanField(default=0, verbose_name="Archivé ?")
+
+    groups     = models.ManyToManyField(Group, blank=True, related_name="presentation") 
     slides     = models.ManyToManyField(Slide, blank=True, related_name="diapositive" , editable=False) 
  
     def __str__(self):

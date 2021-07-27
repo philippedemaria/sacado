@@ -15,14 +15,14 @@
  
 
 {% block page_title %}
-    Nouvel outil
+    <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> </a>  Présentation
 {% endblock %}
 
 
 {% block page_menu_right %}
  
 
-            <a href="{% url 'list_diaporama' %}" class="btn btn-new pull-right">Liste de mes diaporamas</a>  
+            <a href="{% url 'list_diaporama' %}" class="btn btn-new pull-right">Liste de mes présentations</a>  
  
 {% endblock %}
 

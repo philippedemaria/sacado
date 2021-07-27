@@ -10,19 +10,29 @@
             <div class="form-group"> 
             <label>Titre : </label>
             {{ form.title|add_class:"form-control" }}
-
             </div>
+            {% if staticado_asso %}
             <div class="form-group"> 
                 {{ form.vignette.label_tag }} <label><small>(Facultatif)</small></label>
                 {{ form.vignette|add_class:"btn btn-default" }}
             </div>
+            {% else %}
+            <div class="form-group"> 
+                <div class="aler alert-danger"> 
+                    {{ form.vignette.label_tag }} <label><small>(Facultatif)</small></label>
+                    Version etablissement requise
+                </div>
+            </div>
+            {% endif %}
         </div>
         <div class="col-sm-12 col-md-6"> 
             <table class="table">
                 <tr>
-                    <td>            <label>Publiée : </label>  <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-                                    <div class="helper_tip_text" >Si publié, vos élèves peuvent le lire en autonomie. </div>
-                                </span> 
+                    <td>            
+                        <label>Publiée : </label>  
+                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                            <div class="helper_tip_text" >Si publié, vos élèves peuvent le lire en autonomie. </div>
+                        </span> 
                     </td>
                     <td> {{ form.is_publish|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
                 </tr>
@@ -33,7 +43,11 @@
                     </td>
                     <td> {{ form.is_share|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
                 </tr>
- 
+                 <tr>
+                    <td>  <label>Archivée : </label> 
+                    </td>
+                    <td> {{ form.is_archive|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+                </tr>            
             </table>
         </div>
     </div>
@@ -48,8 +62,9 @@
         </div>
     </div>
 
-
     <hr class="divider">
+ 
+
 
 
 

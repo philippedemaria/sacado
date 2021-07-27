@@ -20,7 +20,7 @@
 
 
 {% block page_title %}
-         {{ diaporama.title }} <img src="{% static 'img/angle-right.png' %}"/>   <span id="slide_id"></span>
+         {{ diaporama.title }} <img src="{% static 'img/angle-right.png' %}"/> <a href="{% url 'list_diaporama' %}" class="no_button" style="font-size: 16px">Vers mes présentations</a>    <span id="slide_id"></span>
 {% endblock %}
 
 
@@ -30,10 +30,10 @@
             <!-- <button  class='btn btn-primary'><i class='fa fa-play'></i> Lecture automatique</button> -->
             <button data-nav="prev" class="btn btn-default"><i class="fa fa-caret-left"></i> Précedent</button>  
             <button data-nav="next" class="btn btn-default"><i class="fa fa-caret-right"></i> Suivant</button>  
-            <button id="stop_quizz" class="btn btn-default btn-publisher"><i class="fa fa-compress"></i></button>
-            <button id="starter_quizz" class="btn btn-default btn-publisher"><i class="fa fa-expand"></i></button>
+            <button id="stop_quizz" class="btn btn-default btn-publisher"><i class="fa fa-compress"></i> </button>
+            <button id="starter_quizz" class="btn btn-default btn-publisher"><i class="fa fa-expand"></i> </button>
         </span>
- 
+
 {% endblock %}
  
 
@@ -81,4 +81,6 @@
         </div>
     </div>
   
+
+
 {% endblock %}

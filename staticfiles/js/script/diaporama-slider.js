@@ -8,7 +8,7 @@ define(['jquery',  'bootstrap' ], function ($) {
 
 
    var slideBox = $('.slider ul'),
-            slideWidth = 800 ,
+            slideWidth = 1000 ,
             slideQuantity = $('.slider ul').children('li').length,
             currentSlide = 1 ,
             currentQuestion = 1 ;
