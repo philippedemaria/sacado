@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from association.models import Accounting,Associate , Voting , Document, Section , Detail , Rate  , Holidaybook
+from association.models import Accounting,Associate , Voting , Document, Section , Detail , Rate  , Holidaybook, Abonnement
 from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm, DetailForm , RateForm , AbonnementForm , HolidaybookForm
 from account.models import User, Student, Teacher, Parent ,  Response
 from qcm.models import Exercise, Studentanswer , Customanswerbystudent , Writtenanswerbystudent
@@ -135,14 +135,16 @@ def association_index(request):
     nb_students  = Student.objects.all().count()#.exclude(user__username__contains="_e-test_")
     nb_exercises = Exercise.objects.filter(supportfile__is_title=0).count()
     nb_schools   = School.objects.all().count()
+
     nb_answers   = Studentanswer.objects.filter(date__gte= today_start).count() + Customanswerbystudent.objects.filter(date__gte= today_start).count() + Writtenanswerbystudent.objects.filter(date__gte= today_start).count()
     if Holidaybook.objects.all() :
         holidaybook  = Holidaybook.objects.values("is_display").get(pk=1)
     else :
         holidaybook = False
 
-
-    context = { 'nb_teachers': nb_teachers , 'nb_students': nb_students , 'nb_exercises': nb_exercises, 'nb_schools': nb_schools, 'nb_answers': nb_answers, 'holidaybook': holidaybook }
+    context = { 'nb_teachers': nb_teachers , 'nb_students': nb_students , 'nb_exercises': nb_exercises, 
+                'nb_schools': nb_schools, 'nb_answers': nb_answers, 'holidaybook': holidaybook ,
+                }
 
     return render(request, 'association/dashboard.html', context )
 
@@ -1222,7 +1224,42 @@ def reset_all_students_sacado(request):
 
 @user_passes_test(user_is_board)
 def accountings(request):
-    context = { }
+
+
+    this_day     = datetime.now() 
+    this_year    = this_day.year
+
+    print(this_day)
+
+    nb_schools        = Abonnement.objects.filter(date_start__lte = this_day  , date_stop__gte = this_day).count()
+    nb_schools_fr     = Abonnement.objects.filter(date_start__lte = this_day  , date_stop__gte = this_day, is_active = 1, school__country_id = 5).count()
+    nb_schools_no_fr  = Abonnement.objects.filter(date_start__lte = this_day  , date_stop__gte = this_day, is_active = 1).exclude(school__country_id =5).count() 
+    nb_schools_no_pay = Abonnement.objects.filter(date_start__lte = this_day  , date_stop__gte = this_day, is_active = 0).count()
+
+
+    print(nb_schools , nb_schools_fr , nb_schools_no_fr , nb_schools_no_pay )  
+ 
+    start_date   = datetime(this_year, 1, 1)
+    end_date     = datetime(this_year, 12, 31)
+
+    product , charge , actif = 0 , 0 , 0
+    accountings   = Accounting.objects.values_list("amount","is_credit","acting").filter(date__gte = start_date  , date__lte = end_date)
+
+    for a in accountings :
+        if a[1] and a[2] != None:
+            actif += a[0]
+        elif a[1] and a[2] == None:
+            product += a[0] 
+        else :
+            charge += a[0]
+
+    result       = actif - charge
+    total        = actif + product
+        
+    context = { 'charge': charge, 'product': product , 'result': result , 'actif': actif , 'total': total ,  'nb_schools': nb_schools ,  
+                'nb_schools': nb_schools , 'nb_schools_fr': nb_schools_fr , 'nb_schools_no_fr': nb_schools_no_fr ,  'nb_schools_no_pay': nb_schools_no_pay }  
+
+
 
     return render(request, 'association/accountings.html', context )
 
