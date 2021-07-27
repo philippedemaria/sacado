@@ -312,6 +312,7 @@ def create_accounting(request,tp):
 def update_accounting(request, id):
 
     accounting = Accounting.objects.get(id=id)
+    is_credit =  accounting.is_credit
     try :
         abonnement = accounting.abonnement 
         form_abo = AbonnementForm(request.POST or None, instance=accounting.abonnement  )
@@ -340,7 +341,8 @@ def update_accounting(request, id):
             for d in details :
                 som += d.amount
 
-            Accounting.objects.filter(pk = accounting.id).update(amount=som,is_credit=accounting.is_credit)
+            Accounting.objects.filter(pk = accounting.id).update(amount=som,is_credit=is_credit)
+ 
 
             if nf.is_abonnement :
                 if form_abo.is_valid():
