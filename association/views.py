@@ -210,8 +210,6 @@ def ajax_total_month(request):
     rows = Accounting.objects.values_list("id", flat = True).filter(acting__lte=last, acting__gte=first).exclude(acting=None)
     data['rows'] = list(rows)
     data['len']  = len(list(rows))
-
-
     return JsonResponse(data)
 
 
@@ -341,7 +339,7 @@ def update_accounting(request, id):
             for d in details :
                 som += d.amount
 
-            Accounting.objects.filter(pk = accounting.id).update(amount=som,is_credit=is_credit)
+            Accounting.objects.filter(pk = accounting.id).update( amount = som , is_credit = is_credit )
  
 
             if nf.is_abonnement :

@@ -18,7 +18,7 @@ define(['jquery', 'bootstrap' ], function ($) {
                         'month': month,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: "../../ajax_total_month",
+                    url: "ajax_total_month",
                     success: function (data) {
                        $(".this_tr_all").removeClass("selected_account");
                        $("#this_month").html(data.html) ;
@@ -59,7 +59,7 @@ define(['jquery', 'bootstrap' ], function ($) {
                         'to_date'  : to_date,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: "../../ajax_total_period",
+                    url: "ajax_total_period",
                     success: function (data) {
 
                        $("#this_period").html(data.html) ;
