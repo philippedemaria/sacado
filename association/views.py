@@ -329,6 +329,7 @@ def update_accounting(request, id):
             nf.user = request.user
             forme = request.POST.get("forme", None)
             nf.chrono = update_chrono(Accounting, accounting, forme)
+            nf.is_credit = accounting.is_credit
             nf.save()
 
             for form_d in form_ds :
@@ -1229,16 +1230,11 @@ def accountings(request):
     this_day     = datetime.now() 
     this_year    = this_day.year
 
-    print(this_day)
-
     nb_schools        = Abonnement.objects.filter(date_start__lte = this_day  , date_stop__gte = this_day).count()
     nb_schools_fr     = Abonnement.objects.filter(date_start__lte = this_day  , date_stop__gte = this_day, is_active = 1, school__country_id = 5).count()
     nb_schools_no_fr  = Abonnement.objects.filter(date_start__lte = this_day  , date_stop__gte = this_day, is_active = 1).exclude(school__country_id =5).count() 
     nb_schools_no_pay = Abonnement.objects.filter(date_start__lte = this_day  , date_stop__gte = this_day, is_active = 0).count()
-
-
-    print(nb_schools , nb_schools_fr , nb_schools_no_fr , nb_schools_no_pay )  
- 
+  
     start_date   = datetime(this_year, 1, 1)
     end_date     = datetime(this_year, 12, 31)
 
