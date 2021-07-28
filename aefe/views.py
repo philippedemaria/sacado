@@ -12,8 +12,8 @@ def aefe(request):
 
     teacher = request.user.teacher
 
-    p_sixieme = [1786,1788,1790,1791] #### A modifier en dur
-    p_seconde = [1801,1801,1803,1794] #### A modifier en dur
+    p_sixieme = [7367,7368,7369] #### A modifier en dur
+    p_seconde = [7371,7372,7373,7374,7375] #### A modifier en dur
 
     parcours_sixieme = Parcours.objects.filter(id__in=p_sixieme) 
     parcours_seconde = Parcours.objects.filter(id__in=p_seconde)
