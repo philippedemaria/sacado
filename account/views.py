@@ -399,7 +399,7 @@ def switch_teacher_student(request,idg): #idg = group_id
         user = authenticate(username=student.user.username, password = "sacado2020")
         login(request, user)
         request.session["user_id"] = request.user.id
-        messages.success(request,"Vous êtes maintenant sur l'interface Elève votre groupe.")
+        messages.success(request,"Vous êtes maintenant sur l'interface Elève de votre groupe.")
     except :
         messages.error(request,"Erreur sur la vue élève. Vue élève indisponible. Contacter l'équipe SACADO.")
 
