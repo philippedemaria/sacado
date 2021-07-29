@@ -625,7 +625,7 @@ class Parcours(ModelWithCode):
     def is_folder_courses_exists(self):
 
         test = False
-        for p in self.leaf_parcours.filter(is_publish=1) :
+        for p in self.leaf_parcours.all() :
             if p.course.count() > 0 :
                 test = True
                 break
