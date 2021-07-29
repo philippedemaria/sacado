@@ -459,9 +459,18 @@ li label:hover{
  /******************************************** this_course_viewer  **************************************/
 
 #this_course_viewer p {
-  line-height: 2;
+  line-height: 1.8;
   font-size: 20px;
 }
+#this_course_viewer div {
+  font-size: 20px;
+}
+
+#this_course_viewer div p {
+  line-height: 1.8;
+  font-size: 20px;
+}
+
 
  /******************************************** rabat dossier  **************************************/
 
