@@ -90,7 +90,7 @@ requirejs.config({
     }
 });
 
-require(['jquery', 'bootstrap',  'uploader', 'uploader', 'bootstrap_popover', 'bcPicker',  'ckeditor', 'ckeditor_init', 'ckeditor_jquery',  'mathjax',  'datatables', 'datatables_bootstrap', 'config_select2', 'config_datepicker', 'config_toggle',  'config_colorpicker', 'fonctions_jquery', 'fonctions',   'config_datatable', 'multiselect', 'ui',]);
+require(['jquery', 'bootstrap',  'uploader', 'uploader', 'bootstrap_popover', 'bcPicker', 'ckeditor_jquery', 'ckeditor', 'ckeditor_init',   'mathjax',  'datatables', 'datatables_bootstrap', 'config_select2', 'config_datepicker', 'config_toggle',  'config_colorpicker', 'fonctions_jquery', 'fonctions',   'config_datatable', 'multiselect', 'ui',]);
 
 // suppression de admin dans le chargement  : 'admin', 
 //  ,'slimscroll', 'chart'
