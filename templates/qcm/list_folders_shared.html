@@ -18,13 +18,11 @@
 
   
 {% block page_title %}
-    {% if parcours %} 
-        <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-folder"></i> </span>
+
+        <i class="fa fa-folder" style="color:{{ group.color }}"></i>  
         {% include 'qcm/breadcrumb.html' %}
         <small> Les dossiers mutualisés  </small>
-    {% else  %} 
-        <i class="fa fa-folder"></i> <small>Les dossiers mutualisés</small>
-    {% endif  %} 
+
 {% endblock %}
 
 

@@ -1280,23 +1280,13 @@ def all_folders(request):
     except :
         group = None
 
-    try :
-        parcours_id = request.session.get("parcours_id",None)
-        if parcours_id :
-            parcours = Parcours.objects.get(pk = parcours_id)
-        else :
-            parcours = None   
-    except :
-        parcours = None
-
 
     if request.user.school != None :
         inside = True
     else :
         inside = False
 
-    #return render(request, 'qcm/all_parcourses.html', { 'teacher' : teacher ,   'parcourses': parcourses , 'inside' : inside , 'communications' : [] , 'parcours' : parcours , 'group' : group })
-    return render(request, 'qcm/list_folders_shared.html', {  'teacher' : teacher ,   'parcourses': parcourses , 'inside' : inside ,   'parcours' : parcours , 'group' : group   })
+    return render(request, 'qcm/list_folders_shared.html', {  'teacher' : teacher ,   'parcourses': parcourses , 'inside' : inside ,  'group' : group   })
 
 
 
