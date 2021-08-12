@@ -23,25 +23,8 @@
 
     <li><a href="{% url 'archives' %}"  class="no_button"><i class="fa fa-archive"></i> Parcours archivé{{ nb_archive|pluralize }} ({{ nb_archive }})</a></li>
 
-
-    <li class="dropdown">
-        <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Créer un parcours <b class="caret"></b> </a>
-
-        <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-     
-     
-            <li> <a href="{% url 'create_parcours' 0 %}"  >  Parcours personnalisé</a> </li>  
-        {% if sacado_asso %}
-            <li> <a href="{% url 'all_parcourses' 0 %}"   > Parcours mutualisés</a></li>
-        {% else %}
-            <li><a href="#"  class="no_sacado_asso" title="Version établissement requise">  Parcours mutualisés </a></li>
-        {% endif  %}
-
-            <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   > Parcours par défaut</a></li>
-
-
-        </ul>
-    </li> 
+    {% include 'qcm/submenu_creation_new_parcours.html' %}
+    
 {% endblock %}
 
 

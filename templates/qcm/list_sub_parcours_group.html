@@ -33,27 +33,12 @@
 
 
         <li class="dropdown">
-            <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Nouveau Parcours  <b class="caret"></b> </a>
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Nouveau parcours <b class="caret"></b> </a>
 
             <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
- 
-                {% if parcours %}
-                    {% if parcours.is_folder %}
-                    <li> <a href="{% url 'create_parcours' parcours.id %}"  >  Parcours personnalisé</a> </li> 
-                    {% else %}
-                    <li> <a href="{% url 'create_parcours' 0 %}"  >  Parcours personnalisé</a> </li>
-                    {% endif  %}
-                {% else %}
-                <li> <a href="{% url 'create_parcours' 0 %}"  >  Parcours personnalisé</a> </li>
-                {% endif  %}
-
-                <li> {% if sacado_asso %} <a href="{% url 'all_parcourses' 0 %}"   > Parcours mutualisés</a> {% else %}<a href="#"  class="no_sacado_asso" > Parcours mutualisés</a> {% endif %} </li> 
-
-
-
-                <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   > Parcours par défaut</a></li>
-
-
+                <li> <a href="{% url 'create_parcours' 0 %}"  > Créer un parcours</a> </li> 
+                <li> {% if sacado_asso %} <a href="{% url 'all_parcourses' 0 %}" > Récupérer un parcours mutualisé</a> {% else %}<a href="#"  class="no_sacado_asso" > Récupérer un parcours mutualisé</a> {% endif %} </li>         
+                <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"> Récupérer un parcours par défaut</a></li>
             </ul>
         </li>  
     {% endif %}

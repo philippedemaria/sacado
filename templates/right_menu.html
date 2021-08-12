@@ -54,7 +54,7 @@
 <div class="btn btn-primary full_width">
 
         <span id="show_collapser" >
-         Créer un parcours 
+            Parcours 
         </span>
 
     <div id="collapser" class="collapse">
@@ -62,22 +62,22 @@
             <table class="table" style="margin-bottom: 0px;font-size:14px;text-align: left">
                 <tr>
                     <td>
-                         <a href="{% url 'create_parcours' 0 %}" title="Parcours vide à remplir par des exercices de votre choix"><i class="fa fa-caret-right"></i> Nouveau parcours <span style="font-size: 10px">(Recommandé)</span></a>
+                         <a href="{% url 'create_parcours' 0 %}" title="Parcours vide à remplir par des exercices de votre choix"><i class="fa fa-caret-right"></i> Créer un parcours <span style="font-size: 10px">(Recommandé)</span></a>
                     </td>
                 </tr>
                 
                 <tr>
                     <td>{% if sacado_asso %}
-                        <a href="{% url 'all_parcourses' 0 %}" title="Parcours déjà existants dans la base de données, créés par des collègues de votre établissement."><i class="fa fa-caret-right"></i> Parcours mutualisés</a>
+                        <a href="{% url 'all_parcourses' 0 %}" title="Parcours déjà existants dans la base de données, créés par des collègues de votre établissement."><i class="fa fa-caret-right"></i> Récupérer un parcours mutualisé</a>
                         {% else  %}
-                        <a href="#" class="no_sacado_asso" title="Version établissement requise."><i class="fa fa-caret-right"></i> Parcours mutualisés</a>
+                        <a href="#" class="no_sacado_asso" title="Version établissement requise."><i class="fa fa-caret-right"></i> Récupérer un parcours mutualisés</a>
                         {% endif  %}
                     </td>
                 </tr>
                 
                 <tr>
                     <td>
-                        <a href="#" data-toggle="modal" data-target="#parcours_default_modal" title="Parcours contenant tous les exercices de sacado sur le thème choisi."  > <i class="fa fa-caret-right"></i> Parcours par défaut</a>
+                        <a href="#" data-toggle="modal" data-target="#parcours_default_modal" title="Parcours contenant tous les exercices de sacado sur le thème choisi."  > <i class="fa fa-caret-right"></i> Récupérer un parcours défaut</a>
                     </td>
                 </tr>
             </table>
