@@ -1,0 +1,23 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+<div class="col-sm-12 col-md-12">
+    <h1 class="thin"> </h1>
+</div>
+
+
+<div class="col-sm-12 col-md-12">
+{% for parcours in parcourses  %} 
+
+    {% include 'qcm/folder_shared.html' %}
+{% empty %} 
+    <div class="alert alert-danger"> Aucun résultat de votre recherche  </div> 
+
+{% endfor %} 
+</div>
+
+<script type="text/javascript"> 
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>

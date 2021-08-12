@@ -11,8 +11,8 @@
         </li>
         <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"> Récupérer un parcours par défaut</a></li>
         <li class="divider"> </li> 
-        <li>{% if sacado_asso %}
-        		<a href="{% url 'all_folders' 0 %}" > Récupérer un dossier mutualisé</a> 
+        <li>{% if sacado_asso and group %}
+        		<a href="{% url 'all_folders' %}" > Récupérer un dossier mutualisé</a> 
         	{% else %}
         		<a href="#"  class="no_sacado_asso" > Récupérer un dossier mutualisé</a> 
         	{% endif %} 

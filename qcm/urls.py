@@ -51,9 +51,10 @@ urlpatterns = [
     path('parcours_exercises/<int:id>/', parcours_exercises, name='parcours_exercises'),  # student_list_exercises
 
     path('parcourses_all/<int:is_eval>/', all_parcourses, name='all_parcourses'),
- 
+    path('folders_all/0/', all_folders, name='all_folders'), 
 
     path('parcours_clone/<int:id>/<int:course_on>', clone_parcours, name='clone_parcours'),
+    path('parcours_clone_folder/<int:id>', clone_folder, name='clone_folder'),
     path('parcours_group/<int:id>/', list_parcours_group, name='list_parcours_group'), # parcours d'un groupe
     path('parcours_sub_parcours/<int:idg>/<int:id>/', list_sub_parcours_group, name='list_sub_parcours_group'), # parcours d'un parcours
 
@@ -325,7 +326,8 @@ urlpatterns = [
     path('ajax/chargethemes_parcours', ajax_chargethemes_parcours, name='ajax_chargethemes_parcours'),
     path('ajax/chargethemes_exercise', ajax_chargethemes_exercise, name='ajax_chargethemes_exercise'),
 
-    path('ajax_all_parcourses', ajax_all_parcourses, name='ajax_all_parcourses'),     
+    path('ajax_all_parcourses', ajax_all_parcourses, name='ajax_all_parcourses'),  
+    path('ajax_all_folders', ajax_all_folders, name='ajax_all_folders'),  
     path('ajax_course_custom_show_shared', ajax_course_custom_show_shared, name='ajax_course_custom_show_shared'),  
 
 

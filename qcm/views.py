@@ -1257,6 +1257,159 @@ def ajax_all_parcourses(request):
     return JsonResponse(data)
 
 
+
+def all_folders(request):
+    teacher = request.user.teacher
+    #parcours_ids = Parcours.objects.values_list("id",flat=True).filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_evaluation = is_eval, is_share = 1,level__in = teacher.levels.all()).exclude(teacher=teacher).order_by('level').distinct()
+    parcours_ids = []  
+
+    parcourses , tab_id = [] , [] 
+    for p_id in parcours_ids :
+        if not p_id in tab_id :
+            p =  Parcours.objects.get(pk = p_id)
+            if p.exercises.count() > 0 :
+                parcourses.append(p)
+                tab_id.append(p_id)
+ 
+    try :
+        group_id = request.session.get("group_id",None)
+        if group_id :
+            group = Group.objects.get(pk = group_id)
+        else :
+            group = None   
+    except :
+        group = None
+
+    try :
+        parcours_id = request.session.get("parcours_id",None)
+        if parcours_id :
+            parcours = Parcours.objects.get(pk = parcours_id)
+        else :
+            parcours = None   
+    except :
+        parcours = None
+
+
+    if request.user.school != None :
+        inside = True
+    else :
+        inside = False
+
+    #return render(request, 'qcm/all_parcourses.html', { 'teacher' : teacher ,   'parcourses': parcourses , 'inside' : inside , 'communications' : [] , 'parcours' : parcours , 'group' : group })
+    return render(request, 'qcm/list_folders_shared.html', {  'teacher' : teacher ,   'parcourses': parcourses , 'inside' : inside ,   'parcours' : parcours , 'group' : group   })
+
+
+
+
+def ajax_all_folders(request):
+
+    teacher = request.user.teacher
+    data = {}
+    level_id = request.POST.get('level_id',0)
+    subject_id = request.POST.get('subject_id',None)
+
+    teacher_id = get_teacher_id_by_subject_id(subject_id)
+
+    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1,is_folder = 1).exclude(exercises=None ,teacher=teacher).order_by('level')
+
+    keywords = request.POST.get('keywords',None)
+
+    if int(level_id) > 0 :
+        level = Level.objects.get(pk=int(level_id))
+
+        if keywords:
+            parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1,is_folder = 1,
+                                                    exercises__supportfile__title__contains = keywords  , level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
+        else :
+            parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, is_folder = 1,
+                                                        level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
+    else :
+        if keywords:
+            parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1 , is_folder = 1, exercises__supportfile__title__contains = keywords ).exclude(teacher=teacher).order_by('author').distinct()
+        else :
+            parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1,is_folder = 1,).exclude(teacher=teacher).order_by('author').distinct()
+
+
+    data['html'] = render_to_string('qcm/ajax_list_folders.html', {'parcourses' : parcourses, 'teacher' : teacher ,  })
+ 
+    return JsonResponse(data)
+
+
+
+def clone_folder(request, id ):
+    """ cloner un dossier """
+    parcours = Parcours.objects.get(pk = id)
+    prcs          = parcours.leaf_parcours.all()
+    relationships = parcours.parcours_relationship.all() 
+    courses       = parcours.course.all()
+    students       = parcours.students.all()
+    #################################################
+    # clone le parcours
+    #################################################
+    parcours.pk = None
+    parcours.teacher = request.user.teacher
+    parcours.is_publish = 0
+    parcours.is_archive = 0
+    parcours.is_share = 0
+    parcours.is_favorite = 1
+    parcours.code = str(uuid.uuid4())[:8]  
+    parcours.save()
+    
+    parcours.leaf_parcours.set(prcs)
+
+    parcours.students.set(students)
+    #################################################
+    # clone les exercices attachés à un cours 
+    #################################################
+    former_relationship_ids = []
+
+    # ajoute le group au parcours si group    
+    try :
+        group_id = request.session.get("group_id",None)
+        group = Group.objects.get(pk = group_id)
+        parcours.groups.add(group)
+    except :
+        pass
+
+
+    for course in courses :
+
+        old_relationships = course.relationships.all()
+        # clone le cours associé au parcours
+        course.pk = None
+        course.parcours = parcours
+        course.save()
+        for relationship in old_relationships :
+            # clone l'exercice rattaché au cours du parcours 
+            if not relationship.id in former_relationship_ids :
+                relationship.pk = None
+                relationship.parcours = parcours
+                relationship.save()
+            course.relationships.add(relationship)
+            former_relationship_ids.append(relationship.id)
+
+    #################################################
+    # clone tous les exercices rattachés au parcours 
+    #################################################
+    for relationship in relationships :
+        try :
+            relationship.pk = None
+            relationship.parcours = parcours
+            relationship.save()       
+            relationship.students.set(students)
+        except :
+            pass
+
+
+    messages.success(request, "Duplication réalisée avec succès. Bonne utilisation.")
+
+    return redirect('update_parcours',  parcours.id, group_id)
+
+
+
+
+
+
 @csrf_exempt
 def ajax_chargethemes_parcours(request):
     level_id =  request.POST.get("id_level")

@@ -3282,7 +3282,13 @@ body.hold-transition .main-header .logo {
   overflow-x: hidden;
 }
 
-
+.parcours_choice_list {  
+  margin-bottom: 15px;
+  margin-right: 0px;
+  height:600px; 
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 
 .content_title_no_indent {
   margin-left: 0;  

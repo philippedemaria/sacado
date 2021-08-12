@@ -374,9 +374,7 @@
                         {% endif %} 
                         <div class="row">  
                             <div class="col-lg-4 col-xs-4">
-<!--                                 <a href="{% url 'individualise_parcours' parcours.id  %}" class="edit" {% if parcours.is_individualized %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-user"></i> <span class="label_icon">Individual.</span>
-                                </a> 
- -->
+ 
                                 <a href="{% url 'real_time' parcours.id %}" class="edit {% if not sacado_asso %}no_sacado_asso{% endif %}" {% if parcours.is_real_time %} style="color:{{ parcours.color }}" {% endif %} >
                                     <i class="fa fa-fw fa-clock"></i><span class="label_icon">Temps réel.</span>
                                 </a>
@@ -394,26 +392,26 @@
                             </div> 
                         </div>
                     {% else %}
-                    <div class="row extend">    
-                        <div class="col-lg-6 col-xs-6">                                 
-                        {% if parcours.is_evaluation %}   
-                            <a  href="{% url 'result_parcours' parcours.id  %}" class="edit" target="_blank"><i class="fa fa-fw fa-mortar-board"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
-                            </a>   
-                        {% else %}
-                            <a  href="{% url 'stat_evaluation' parcours.id %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon"> Résultats </span>
-                            </a>   
-                        {% endif %} 
-                        </div>                     
-                        <div class="col-lg-6 col-xs-6">
-                            <a href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
-                            </a>
-                        </div> 
-                    </div>
+                        <div class="row extend">    
+                            <div class="col-lg-6 col-xs-6">                                 
+                            {% if parcours.is_evaluation %}   
+                                <a  href="{% url 'result_parcours' parcours.id  %}" class="edit" target="_blank"><i class="fa fa-fw fa-mortar-board"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
+                                </a>   
+                            {% else %}
+                                <a  href="{% url 'stat_evaluation' parcours.id %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon"> Résultats </span>
+                                </a>   
+                            {% endif %} 
+                            </div>                     
+                            <div class="col-lg-6 col-xs-6">
+                                <a href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
+                                </a>
+                            </div> 
+                        </div>
                     {% endif %}
                 </div>
                 {% endif %}
             </div>   
-            {% endfor %}
+        {% endfor %}
         </div>
     {% empty %}
  

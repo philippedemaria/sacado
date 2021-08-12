@@ -1,0 +1,165 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+
+
+    <script>
+        require(['script/ajax-folders_shared']);
+    </script> 
+
+{% endblock %} 
+
+  
+{% block page_title %}
+    {% if parcours %} 
+        <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-folder"></i> </span>
+        {% include 'qcm/breadcrumb.html' %}
+        <small> Les dossiers mutualisés  </small>
+    {% else  %} 
+        <i class="fa fa-folder"></i> <small>Les dossiers mutualisés</small>
+    {% endif  %} 
+{% endblock %}
+
+
+
+{% block page_menu_right %}
+    <li> <a href="{% url 'parcours' %}"   class="btn btn-new"> Mes dossiers et parcours</a> </li>
+{% endblock %}
+
+
+
+
+
+{% block body %}
+<section class="content_main">
+
+<!-- Module de recherche -->
+
+<form method="POST"> 
+    <div class="row" style="margin-left:0px; margin-right:0px; border:1px solid #CCC; background: #F0F0F0;padding-top: 15px; background-image: url({% static 'img/fond_search.png' %});">
+
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="form-group">
+                <select id="id_subject" name="subject" class="form-control select2">
+                    {% for s in teacher.subjects.all %}
+                        <option value="{{s.id}}">{{ s.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4 col-lg-4">
+            <div class="form-group">
+                <select id="id_level" name="level" class="form-control select2" >
+                    <option value=" ">Choisir un niveau</option>
+                    {% for l in teacher.levels.all %}
+                        <option value="{{l.id}}">{{ l.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+            <div class="form-group">
+                <input type="text" name="keywords" id="keywords" placeholder="Mots-clés" class="form-control" />
+                <input type="hidden" name="is_eval" id="is_eval"  value="{{ is_eval }}" />
+            </div>
+        </div>
+    </div>
+    {% csrf_token %}
+            <div class="row" align="center">
+                <div id="loader">
+                </div>
+            </div>  
+
+    {% if parcours %}
+         <input type="hidden" name="parcours_id" id="parcours_id" value="{{parcours.id }}"/>
+    {% endif %}
+
+
+    {% if inside %}   
+        <div class="row" id="courses_details">
+            <div class="col-sm-12 col-md-12">
+                {% comment  %}
+                    {% regroup parcourses by level as level_list  %}
+
+                    {% for level in level_list  %}
+                        <h1 class="thin">{{ level.grouper.name }}</h1>
+                            {% for parcours in level.list  %}
+                                  {% include 'qcm/parcours_shared.html' %}
+                            {% endfor %}
+                            <div style="clear:both"></div>
+                    {% endfor %}
+                {% endcomment %}
+                <div style="height:50px"></div> 
+                Pour trouver des {% if is_eval %}évaluations mutualisées {% else %}parcours mutualisés {% endif  %} , vous devez :                <div style="height:20px"></div>
+                <ol>Sélectionner une matière</ol>
+                <ol>Sélectionner un niveau</ol>
+                <ol>Sélectionner un thème</ol> 
+                <ol>ou choisir un mot clé</ol>
+
+            </div>
+        </div>
+    {% else %} 
+        <div class="alert alert-danger">      
+            <i class="fa fa-warning"></i> Pour récupérer un parcours mutualisé, vous devez souscrire la version établisssement.
+        </div>
+    {% endif %}  
+
+
+
+ 
+        
+               
+
+
+
+
+</form>     
+</section>
+
+
+<div class="modal fade" id="get_course" tabindex="-1" role="dialog" aria-labelledby="get_course">
+    <div class="modal-dialog" role="document"  style="width:850px">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2 id="get_course_title" >Voir un cours</h2>
+            </div>
+
+            <div class="modal-body" id="get_course_body">
+ 
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="clone_course" tabindex="-1" role="dialog" aria-labelledby="clone_course">
+    <div class="modal-dialog" role="document" style="width:850px">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <label >Cloner dans un ou plusieurs de mes parcours ci-dessous </label>
+            </div>
+            <form method="POST">
+                <div class="modal-body" id="get_course_result">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+ 
+{% endblock %}
+
+   
