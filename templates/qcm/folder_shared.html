@@ -16,9 +16,9 @@
             </div> 
         {% endif  %}
         <div class="box_title_vignette"> 
-            <a href="{% url 'show_parcours_visual'  parcours.id  %}" style="color:{{ parcours.color|contrast_color }};">
+            <span class='thin' style="color:{{ parcours.color|contrast_color }};">
                 {{ parcours.title|truncatechars:"28" }}
-            </a>
+            </span>
         </div>
     </div>
     <div class="box_shared_footer">

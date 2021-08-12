@@ -1332,7 +1332,7 @@ def clone_folder(request, id ):
     prcs          = parcours.leaf_parcours.all()
     relationships = parcours.parcours_relationship.all() 
     courses       = parcours.course.all()
-    students       = parcours.students.all()
+
     #################################################
     # clone le parcours
     #################################################
@@ -1344,10 +1344,8 @@ def clone_folder(request, id ):
     parcours.is_favorite = 1
     parcours.code = str(uuid.uuid4())[:8]  
     parcours.save()
-    
-    parcours.leaf_parcours.set(prcs)
+ 
 
-    parcours.students.set(students)
     #################################################
     # clone les exercices attachés à un cours 
     #################################################
@@ -1358,9 +1356,14 @@ def clone_folder(request, id ):
         group_id = request.session.get("group_id",None)
         group = Group.objects.get(pk = group_id)
         parcours.groups.add(group)
+        students = group.students.all()
+        parcours.students.set(students)
+        for p in prcs :
+            p.students.set(students)
+            parcours.leaf_parcours.add(p)
+            print("ici")
     except :
-        pass
-
+        return redirect('index')
 
     for course in courses :
 
@@ -1393,7 +1396,7 @@ def clone_folder(request, id ):
 
     messages.success(request, "Duplication réalisée avec succès. Bonne utilisation.")
 
-    return redirect('update_parcours',  parcours.id, group_id)
+    return redirect('list_parcours_group',  group_id)
 
 
 
