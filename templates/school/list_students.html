@@ -86,7 +86,14 @@
                                 </td>
                                 <td>
                                     <a href="{% url 'update_student_by_admin' user.id  %}"> {{ user.first_name }}</a>
-                                    {% if not user.student %} <i class="fa fa-warning pull-right"></i>{% endif %}  
+                                    {% if not user.student %} <i class="fa fa-warning pull-right"></i>
+
+                                <span class="helper_tip">  <i class="fa fa-warning pull-right"></i>
+                                    <div class="helper_tip_text" >La création de cet élève ne s'est pas déroulée correctment. Cocher la case précédant le nom puis cliquer sur supprimer en haut de page.</div>
+                                </span>
+
+
+                                    {% endif %}  
                                 </td>
                                 <td>
                                     {{ user.email }}   

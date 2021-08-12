@@ -19,31 +19,26 @@
 {% endblock %}
 
 {% block page_menu_right %}
-
-        <li>
-            {% if sacado_asso %} 
-                {% if not is_archive %}
-                    <a href="{% url 'all_quizzes_archived' %}"  class="no_button"><i class="fa fa-archive"></i> Mes quizz archivés ({{ nba }})</a> 
-                {% else %}
-                    <a href="{% url 'list_quizzes' %}"  class="no_button" >Mes quizz  </a> 
-                {% endif %}
-
+    <li>
+        {% if sacado_asso %} 
+            {% if not is_archive %}
+                <a href="{% url 'all_quizzes_archived' %}"  class="no_button"><i class="fa fa-archive"></i> Mes quizz archivés ({{ nba }})</a> 
             {% else %}
-                <a href="#"  class="no_sacado_asso" >{% if not is_archive %}<i class="fa fa-archive"></i>{% endif %} Mes quizz {% if not is_archive %}archivés{% endif %}</a> 
-            {% endif %} 
-        </li>
+                <a href="{% url 'list_quizzes' %}"  class="no_button" >Mes quizz  </a> 
+            {% endif %}
 
+        {% else %}
+            <a href="#"  class="no_sacado_asso" >{% if not is_archive %}<i class="fa fa-archive"></i>{% endif %} Mes quizz {% if not is_archive %}archivés{% endif %}</a> 
+        {% endif %} 
+    </li>
+    <li class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Nouveau quizz <b class="caret"></b> </a>
 
-
-
-        <li class="dropdown">
-            <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Nouveau quizz <b class="caret"></b> </a>
-
-            <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-                <li> <a href="#" data-toggle='modal' data-target='#quizz_choice' >  Créer un quizz</a> </li> 
-                <li> {% if sacado_asso %} <a href="{% url 'all_quizzes' %}" > Récupérer un quizz mutualisé</a> {% else %}<a href="#"  class="no_sacado_asso" > Récupérer un quizz mutualisé </a> {% endif %} </li>         
-            </ul>
-        </li>  
+        <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+            <li> <a href="#" data-toggle='modal' data-target='#quizz_choice' >  Créer un quizz</a> </li> 
+            <li> {% if sacado_asso %} <a href="{% url 'all_quizzes' %}" > Récupérer un quizz mutualisé</a> {% else %}<a href="#"  class="no_sacado_asso" > Récupérer un quizz mutualisé </a> {% endif %} </li>         
+        </ul>
+    </li>  
 {% endblock %}
 
 
