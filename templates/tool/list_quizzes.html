@@ -37,11 +37,11 @@
 
 
         <li class="dropdown">
-            <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Créer un quizz <b class="caret"></b> </a>
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Nouveau quizz <b class="caret"></b> </a>
 
             <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-                <li> <a href="#" data-toggle='modal' data-target='#quizz_choice' >  Nouveau</a> </li> 
-                <li> {% if sacado_asso %} <a href="{% url 'all_quizzes' %}" > Quizz mutualisés</a> {% else %}<a href="#"  class="no_sacado_asso" > Quizz mutualisés</a> {% endif %} </li>         
+                <li> <a href="#" data-toggle='modal' data-target='#quizz_choice' >  Créer un quizz</a> </li> 
+                <li> {% if sacado_asso %} <a href="{% url 'all_quizzes' %}" > Récupérer un quizz mutualisé</a> {% else %}<a href="#"  class="no_sacado_asso" > Récupérer un quizz mutualisé </a> {% endif %} </li>         
             </ul>
         </li>  
 {% endblock %}
