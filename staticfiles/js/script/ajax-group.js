@@ -292,7 +292,60 @@ define(['jquery','bootstrap_popover', 'bootstrap' ], function ($) {
 
 
 
+        $("#choose_parcours").hide() ;
+        $("#choosen_parcours_for_this_level_and_subject").hide() ;
 
+ 
+        $("#id_studentprofile").change(function () {
+
+            if ($("#id_studentprofile").is(":checked")) {
+                $("#choose_parcours").show(500);
+                $("#choosen_parcours_for_this_level_and_subject").show(500);
+                $("#choosen_parcours_by_this_level_and_subject").show(500);
+            } else {
+                $("#choose_parcours").hide(500);
+                $("#choosen_parcours_for_this_level_and_subject").hide(500);
+                $("#choosen_parcours_by_this_level_and_subject").hide(500);
+            }
+
+        });
+  
+
+
+
+        $("#id_recuperation").change(function () {
+                    if ($("#id_recuperation").is(":checked")) {
+
+                        let level_id   = $("#id_level").val();
+                        let subject_id = $("#id_subject").val();
+                        let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+ 
+                            $.ajax(
+                                {
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: {
+                                        'subject_id' :  subject_id, 
+                                        'level_id'   :  level_id, 
+                                        csrfmiddlewaretoken : csrf_token
+                                    },
+                                    url: "ajax_choose_parcours",
+                                    success: function (data) {
+                                        $('#choosen_parcours_by_this_level_and_subject').html("").html(data.html);
+                                    }
+                                }
+                            )
+
+                        $("#choosen_parcours_for_this_level_and_subject").show(500);
+                        $("#choosen_parcours_by_this_level_and_subject").show(500);
+           
+                    } else {
+                        $("#choosen_parcours_for_this_level_and_subject").hide(500);
+                        $("#choosen_parcours_by_this_level_and_subject").hide(500);
+                    }
+                });
+ 
 
 
 

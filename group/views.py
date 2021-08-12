@@ -472,7 +472,7 @@ def create_student_profile_inside(request, nf) :
     name       = last_name + "_e-test"
     username   = get_username_teacher(request,name)
     password   = make_password("sacado2020")  
-    email      =  request.user.email
+    email      = request.user.email
 
     if nf.students.filter( user__username__contains=name).count() == 0 :
         user,created = User.objects.get_or_create(username=username , defaults= { 'last_name' : last_name, 'first_name' : first_name,  'password' : password , 'email' : email, 'user_type' : 0})
@@ -495,6 +495,68 @@ def create_student_profile_inside(request, nf) :
     else :
         st = False
 
+
+    if nf.recuperation : # lorsque l'enseignant souhaite récupérer tous les documents d'un niveau et d'un enseignement
+        parcourses_id = request.POST.getlist("parcours_id")
+
+        for parcours_id in parcourses_id :
+
+            parcours = Parcours.objects.get(pk = parcours_id)
+            if parcours.is_folder :
+                prcs = parcours.leaf_parcours.all()
+
+            relationships = parcours.parcours_relationship.all() 
+            courses = parcours.course.all()
+            #################################################
+            # clone le parcours
+            #################################################
+            parcours.pk = None
+            parcours.teacher = request.user.teacher
+            parcours.is_publish = 0
+            parcours.is_archive = 0
+            parcours.is_share = 0
+            parcours.is_favorite = 1
+            parcours.code = str(uuid.uuid4())[:8]  
+            parcours.save()
+            if parcours.is_folder :
+                parcours.leaf_parcours.set(prcs)
+
+            parcours.groups.add(nf)
+            parcours.students.add(student)
+            #################################################
+            # clone les exercices attachés à un cours 
+            #################################################
+            former_relationship_ids = []
+
+            for course in courses :
+
+                old_relationships = course.relationships.all()
+                # clone le cours associé au parcours
+                course.pk = None
+                course.parcours = parcours
+                course.save()
+                for relationship in old_relationships :
+                    # clone l'exercice rattaché au cours du parcours 
+                    if not relationship.id in former_relationship_ids :
+                        relationship.pk = None
+                        relationship.parcours = parcours
+                        relationship.save()
+                    course.relationships.add(relationship)
+                    former_relationship_ids.append(relationship.id)
+
+            #################################################
+            # clone tous les exercices rattachés au parcours 
+            #################################################
+            for relationship in relationships :
+                try :
+                    relationship.pk = None
+                    relationship.parcours = parcours
+                    relationship.save()       
+                    relationship.students.add(student)
+                except :
+                    pass
+
+
     return st
 
 
@@ -514,11 +576,12 @@ def create_group(request):
                 tested = include_students(request , stdts,nf)
                 if not tested :
                     messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
-        st = False
 
+        st = False
         eleveTest = request.POST.get("studentprofile",None)    
         if eleveTest :
             st = create_student_profile_inside(request, nf)          
+
 
         msg = "Félicitations... Votre groupe est créé !" 
         if st :
@@ -774,6 +837,25 @@ def chargelistgroup(request):
  
  
     return JsonResponse(data)
+
+
+def ajax_choose_parcours(request):
+
+    level_id   = request.POST.get("level_id",None)
+    subject_id = request.POST.get("subject_id",None) 
+
+    if level_id and subject_id :
+        parcours = Parcours.objects.filter(level_id=level_id , subject_id = subject_id , teacher_id = 2480, is_share=1 )
+    else :
+        parcours = Parcours.objects.filter(level_id=0 , subject_id = 0 , teacher_id = 2480, is_share=1 )
+
+    data = {}
+    data['html'] = render_to_string('group/listingOfparcours.html', {  'parcourses':parcours  })
+ 
+ 
+    return JsonResponse(data)
+
+
 
 
 
