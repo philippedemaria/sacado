@@ -147,10 +147,10 @@
                                     <div id="drop_zone_image" class="{% if question.imagefile %}allowed_display{% else %}not_allowed_display{% endif %}">
                                         <div id="drop_zone" class="drop-zone">
                                             {% if question.imagefile  %}
-                                                <p  style="font-size:18px">Remplacer votre image ici. MAX : 700px par 600px</p>
+                                                <p  style="font-size:18px">Remplacer votre image ici. MAX : 700px par 600px (500ko)</p>
                                                 <img src="{{ question.imagefile.url }}" width="300px" />
                                             {% else %} 
-                                                <p class="title">Déposer votre image ici <div style="font-size:20px">MAX : 700px par 600px</div></p>
+                                                <p class="title">Déposer votre image ici <div style="font-size:20px">MAX : 700px par 600px (500ko)</div></p>
                                             {% endif %}  
                                             <div class="preview-container"></div>
                                         </div>
@@ -180,6 +180,7 @@
 
 
                     {% if qtype > 0 %}
+                    <div style="height:30px"></div>
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">                       
@@ -192,7 +193,7 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">                       
-                                <label>Thème de réponse : <em>Couleur de fond des choix possibles</em></label> {{ form.theme |attr:"data-toggle:toggle" |attr:"data-onstyle:default"|attr:"data-offstyle:primary"|attr:"data-on:Blanc"|attr:"data-off:Coloré"}}
+                                <label><em>Couleur de fond des choix possibles</em></label> {{ form.theme |attr:"data-toggle:toggle" |attr:"data-onstyle:default"|attr:"data-offstyle:primary"|attr:"data-on:Blanc"|attr:"data-off:Coloré"}}
                                 <label><em>Lors de la création des choix de réponse, le fond reste coloré.</em></label>
                             </div>                            
                         </div>
