@@ -2,10 +2,22 @@
 {% load static %}
 {% load widget_tweaks %}
 
+{% block require %}
+
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+{% endblock %}
+
+
+
 {% block page_title %}
      Thèmes  
 {% endblock %}    
  
+
+
+
+
 {% block page_menu_right %}
     <li><a href="{% url 'create_theme' %}" class="btn btn-new pull-right" ><i class="fa fa-plus"></i> Nouveau Thème</a>  
 {% endblock %}</li> 
