@@ -43,7 +43,7 @@
 
 
                     <div class="course_body_shared" style="background: white;padding:10px">
-                    {% for course in pcs.list  %}
+                    {% for course in pcs.list|dictsort:"ranking"  %}
                         <li class="course_section">
                             {% if course.title|length > 32 %} 
                               <span title="{{ course.title }}" style="cursor: help">{{ course.title|truncatechars:32 }} </span>
