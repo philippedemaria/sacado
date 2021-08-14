@@ -137,7 +137,7 @@
                             {% elif question.audio and not question.imagefile  %}
                             <div class="row">  
                                 <div class="col-sm-12 col-md-12" align="center">
-                                    <audio controls autoplay>
+                                    <audio controls>
                                         <source src="{{ question.audio.url }}" type="audio/mpeg">
                                         <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
                                     </audio>
@@ -151,7 +151,7 @@
                             </div>
                             <div class="row">  
                                 <div class="col-sm-12 col-md-12" align="center">
-                                    <audio controls autoplay>
+                                    <audio controls>
                                         <source src="{{ question.audio.url }}" type="audio/mpeg">
                                         <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
                                     </audio>
@@ -197,9 +197,15 @@
                                             <div class="col-sm-2 col-md-1 {{ rowcolor }} get_image" style="padding-top: 2px;color:#FFF; padding-left:10px; border-radius : 10px 0px 0px 10px"> 
                                                 <h1 style="font-size:2.5em">{{ choice_letter }} </h1>    
                                             </div>
-                                            <div class="col-sm-10 col-md-11 {% if not question.theme %}{{ rowcolor }}{% endif %}" align="center" style="{% if not question.theme %}color:#FFF;{% endif %} font-size:{% if choice.answer|length > 20 %}1.5{% elif choice.answer|length > 10  %}2.5{% else  %}3{% endif %}em; border-radius : 0px 10px  10px 0px"> 
+
+                                            <div class="col-sm-10 col-md-11 {% if not question.theme %}{{ rowcolor }}{% endif %}" align="center" style="{% if not question.theme %}color:#FFF;{% endif %} font-size:{% if choice.answer|length > 20 %}1.5{% elif choice.answer|length > 10  %}2.5{% else  %}3{% endif %}em; border-radius : 0px 10px  10px 0px">
+                                            {% if choice.imageanswer %}
+                                                <img src="{{ choice.imageanswer.url }}" height="90px" />
+                                            {% else %}
                                                 {{ choice.answer }}
+                                            {% endif %}                                                
                                             </div>
+
                                         </div>  
                                     </div> 
                                 {% endfor %}
