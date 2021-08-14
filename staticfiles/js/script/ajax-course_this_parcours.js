@@ -175,7 +175,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
             if (  $('select[name=level]').val() > 0 )
             {
-                ajax_choice($('select[name=level]'),$('select[name=theme]')) ;            
+                ajax_choice($('select[name=level]'),$('select[name=theme]'),$('select[name=subject]')) ;            
             }
             else 
             {   
@@ -187,7 +187,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
         $('select[name=level]').on('change', function (event) {
 
-                ajax_choice($('select[name=level]'),$('select[name=theme]')) ;            
+                ajax_choice($('select[name=level]'),$('select[name=theme]'),$('select[name=subject]')) ;            
         });
 
 
@@ -195,11 +195,11 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
-        function ajax_choice(param0, param1){
+        function ajax_choice(param0, param1, param2){
 
             if ( param0.val() > 0 ) {var level_id = param0.val() ; console.log(level_id) ;  } else {var level_id = 0 ; console.log(level_id) ; }  
             if ( param1.val() > 0  ) {var theme_id = param1.val() ; console.log(theme_id) ; } else {var theme_id = [] ; console.log(theme_id) ; }  
- 
+            if ( param2.val() > 0  ) {var subject_id = param2.val() ; console.log(subject_id) ; } else {var subject_id = [] ; console.log(subject_id) ; } 
 
             let parcours_id = $("#parcours_id").val();
             let keywords = $("#keywords").val();
@@ -216,6 +216,8 @@ define(['jquery', 'bootstrap'], function ($) {
                     traditional: true,
                     data: {
                         'level_id': level_id,
+                        'subject_id': subject_id,
+
                         'parcours_id': parcours_id,
                         'theme_id': theme_id,
                         'keywords': keywords,
@@ -238,7 +240,7 @@ define(['jquery', 'bootstrap'], function ($) {
  
         $('#keywords').on('keyup', function (event) {
 
-            ajax_choice($('select[name=level]'),$('select[name=theme]')) ;
+            ajax_choice($('select[name=level]'),$('select[name=theme]'),$('select[name=subject]')) ;  
 
         }); 
 

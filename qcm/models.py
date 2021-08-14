@@ -1401,8 +1401,6 @@ class Customexercise(ModelWithCode):
             test = True
         return test
 
-
-
 class Customanswerbystudent(models.Model): # Commentaire et note pour les exercices customisés coté enseignant
 
     customexercise = models.ForeignKey(Customexercise,  on_delete=models.CASCADE,   related_name='customexercise_custom_answer', editable=False)
