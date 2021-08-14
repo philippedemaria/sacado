@@ -6825,21 +6825,21 @@ def ajax_course_custom_show_shared(request):
                 parcours_set.update(exercise.exercises_parcours.all())
 
             parcours_tab = list(parcours_set)
-            courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=teacher_id),is_share = 1, parcours__subject = subject, parcours__in = parcours_tab ) ).exclude(teacher = teacher)
+            courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=teacher_id),is_share = 1, parcours__subject = subject, parcours__in = parcours_tab ).exclude(teacher = teacher) )
 
         else :
-            courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=teacher_id), parcours__subject = subject, parcours__level = level,is_share = 1 ) ).exclude(teacher = teacher)     
+            courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=teacher_id), parcours__subject = subject, parcours__level = level,is_share = 1 ).exclude(teacher = teacher)   )   
     
     else :
-        courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=teacher_id), parcours__subject = subject, is_share = 1 ) ).exclude(teacher = teacher)      
+        courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=teacher_id), parcours__subject = subject, is_share = 1 ).exclude(teacher = teacher)  )     
 
 
     if keywords :
         for keyword in keywords.split(' '):
-            courses += list(Course.objects.filter(Q(title__icontains=keyword)| Q(annoncement__icontains=keyword)| Q(parcours__teacher__user_id=teacher_id), parcours__subject = subject, is_share = 1)).exclude(teacher = teacher)
+            courses += list(Course.objects.filter(Q(title__icontains=keyword)| Q(annoncement__icontains=keyword)| Q(parcours__teacher__user_id=teacher_id), parcours__subject = subject, is_share = 1).exclude(teacher = teacher))
 
     elif int(level_id) == 0 : 
-        courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=teacher_id), parcours__subject = subject, is_share = 1).exclude(teacher = teacher)
+        courses  += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=teacher_id), parcours__subject = subject, is_share = 1).exclude(teacher = teacher))
 
 
     data['html'] = render_to_string(template , {'courses' : courses, 'teacher' : teacher, 'parcours' : parcours  ,  'group': group })
