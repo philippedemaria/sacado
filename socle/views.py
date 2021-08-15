@@ -335,7 +335,7 @@ def update_waiting(request, id):
         if waiting_form.is_valid():
             waiting_form.save()
             messages.success(request, "L'attendu a été créé avec succès !")
-            return redirect('knowledges')
+            return redirect('waitings')
         else:
             print(waiting_form.errors)
 
