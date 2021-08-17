@@ -14,7 +14,7 @@
         <li>{% if sacado_asso and group %}
         		<a href="{% url 'all_folders' %}" > Récupérer un dossier mutualisé</a> 
         	{% else %}
-        		<a href="#"  class="no_sacado_asso" > Récupérer un dossier mutualisé</a> 
+        		<a href="#"  class="no_sacado_asso" title="Ne peut être actif qu'à partir d'un groupe"> Récupérer un dossier mutualisé</a> 
         	{% endif %} 
         </li>
     </ul>

@@ -1886,11 +1886,6 @@ def show_parcours(request, id):
         except :
             parcours_folder = None
 
-
-
-
-
-
     form_reporting = DocumentReportForm(request.POST or None )
  
     context = { 'parcours': parcours, 'teacher': teacher,  'communications' : [] ,  'today' : today , 'skills': skills,  'form_reporting': form_reporting, 'user' : user ,

@@ -233,7 +233,7 @@
 
                     <a href="{% url 'index' %}"  class="btn btn-default"/><i class='fa fa-users'></i> Retour vers Mes groupes</a>
                     {% if parcours %}
-                    <a href="javascript:history.back()"  class="btn btn-default"/><i class='fa fa-th'></i> Retour vers {{ parcours }}</a>
+                    <a href="{% url 'show_parcours' parcours.id %}"  class="btn btn-default"/><i class='fa fa-th'></i> Retour vers {{ parcours }}</a>
                     {% endif %}
                     <a href="{% url 'parcours' %}"><input type="button"  value="Retour vers Mes parcours" class="btn btn-default"/></a>                    
                 </div>
