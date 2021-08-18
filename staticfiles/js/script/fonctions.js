@@ -86,3 +86,29 @@ function check_if_checked() {
 function test_aefe() {
     if (!confirm("Vous devez avoir vos groupes entièrement constitués avant de procéder à l'attribution. Sinon vous devrez réattribuer les élèves manquants. Confirmer l'attribution ?")) return false;
 }
+
+
+function check_checkboxes()
+{
+  var c = document.getElementsByTagName('input');
+  for (var i = 0; i < c.length; i++)
+  {
+    if (c[i].type == 'checkbox')
+    {
+       if (c[i].checked) {return true}
+    }
+  }
+  return false;
+}
+
+function TestDeleteFolder(f1) {
+    if (!confirm('Vous souhaitez supprimer ' + f1 + ' ?')) return false;
+
+    if(check_checkboxes())
+        {
+            alert("Vous devez décocher les parcours de ce dossier et l'enregistrer sans parcours associés. Alors vous pourrez le supprimer dans un second temps.");  
+            return false;
+        }
+        return true;
+
+}
