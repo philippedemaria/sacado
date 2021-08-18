@@ -7682,7 +7682,7 @@ def delete_folder(request,id,idg):
         if parcours.leaf_parcours.count() == 0 :
             parcours.delete()
         else :
-            messages.error(request, "Le dossier "+ parcours.title +" n'est pas vide. La suppression n'est pas possible.")
+            messages.error(request, "Le dossier "+ parcours.title +" n'est pas vide. La suppression n'est pas possible. Vous devez dissocier les parcours en les décochant depuis le dossier "+ parcours.title +".")
     
     else :
         messages.error(request, "Vous ne pouvez pas supprimer le dossier "+ parcours.title +". Contacter le propriétaire.")
