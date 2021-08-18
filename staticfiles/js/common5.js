@@ -59,6 +59,9 @@ requirejs.config({
         "ckeditor_jquery": {
             deps: ['jquery', 'ckeditor']
         },
+        "ckeditor_init": {
+            deps: ['jquery', 'ckeditor']
+        },
         "admin": {
             deps: ['jquery']
         },
@@ -92,7 +95,7 @@ requirejs.config({
     }
 });
 
-require(['jquery', 'bootstrap', 'bootstrap_popover', 'bcPicker', 'mathjax', 'ckeditor',  'datatables', 'uploader',   
+require(['jquery', 'bootstrap', 'bootstrap_popover', 'bcPicker', 'mathjax', 'ckeditor',  'ckeditor_init' ,  'ckeditor_jquery' , 'datatables', 'uploader',   
     'config_select2', 'config_datepicker', 'config_toggle', 'config_colorpicker', 'fonctions_jquery', 'fonctions',   'config_datatable',
     'multiselect', 'ui', 'slimscroll', 'chart']);
 
