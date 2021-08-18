@@ -1361,7 +1361,6 @@ def clone_folder(request, id ):
         for p in prcs :
             p.students.set(students)
             parcours.leaf_parcours.add(p)
-            print("ici")
     except :
         return redirect('index')
 

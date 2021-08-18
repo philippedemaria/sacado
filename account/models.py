@@ -634,3 +634,16 @@ class Response(models.Model):
 
     def __str__(self):
         return f"{self.response}"
+
+
+
+class Newpassword(ModelWithCode):
+    """
+    Modèle de ré initialisation de password.
+    """
+    email = models.CharField(max_length=255 )  
+ 
+
+    def __str__(self):
+        email = self.email
+        return "{}".format(email )

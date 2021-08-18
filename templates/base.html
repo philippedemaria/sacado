@@ -229,7 +229,7 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
-                                <input type="text" placeholder="Renseigner votre courriel" name="email" id="id_email" required class="form-control" />
+                                {{ np_form.email|add_class:"form-control"|attr:"placeholder:Renseigner votre courriel"|attr:"required"}}
                             </div>
                         </div>
                     </div>  

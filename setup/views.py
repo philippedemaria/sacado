@@ -2,7 +2,7 @@ from django.conf import settings # récupération de variables globales du setti
 from django.shortcuts import render,redirect
 from django.forms import formset_factory
 from django.contrib.auth.forms import  UserCreationForm,  AuthenticationForm
-from account.forms import  UserForm, TeacherForm, StudentForm , BaseUserFormSet
+from account.forms import  UserForm, TeacherForm, StudentForm , BaseUserFormSet , NewpasswordForm
 from django.contrib.auth import   logout
 from account.models import  User, Teacher, Student  ,Parent , Adhesion
 from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise, Customanswerbystudent,Writtenanswerbystudent
@@ -158,6 +158,7 @@ def index(request):
         u_form = UserForm()
         t_form = TeacherForm()
         s_form = StudentForm()
+        np_form = NewpasswordForm()
         levels = Level.objects.order_by("ranking")
         try:
             cookie = request.session.get("cookie")
@@ -191,7 +192,7 @@ def index(request):
         i = random.randrange(0, exercise_nb)
         exercise = exercises[i]
 
-        context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 'schools' : schools,'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
+        context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'np_form': np_form, 'levels': levels, 'schools' : schools,'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
                    'cookie': cookie, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, 'rates': rates, 'school_year': school_year, 'subjects': subjects,  'sacado_voyage' : sacado_voyage}
 
         return render(request, 'home.html', context)

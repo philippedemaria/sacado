@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Teacher, User, Student, Parent , Response
+from .models import Teacher, User, Student, Parent , Response , Newpassword
 
 from django.core.exceptions import ValidationError
 from django.forms import BaseFormSet
@@ -124,3 +124,15 @@ class ResponseForm(forms.ModelForm):
     class Meta:
         model = Response
         fields = '__all__'
+
+
+class NewpasswordForm(forms.ModelForm):
+    class Meta:
+        model = Newpassword
+        fields = '__all__'
+
+
+class SetnewpasswordForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ( 'password1', 'password2' )

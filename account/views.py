@@ -23,14 +23,14 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from django.contrib.auth import   logout
 from account.decorators import user_can_read_details, who_can_read_details, can_register, is_manager_of_this_school
-from account.models import User, Teacher, Student, Resultknowledge, Parent , Response
+from account.models import User, Teacher, Student, Resultknowledge, Parent , Response , Newpassword 
 from group.models import Group, Sharing_group
 from qcm.models import Exercise, Parcours, Relationship, Resultexercise, Studentanswer
 from sendmail.models import Communication
 from socle.models import Level
 from socle.models import Theme
 from sendmail.forms import EmailForm
-from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ParentUpdateForm, ManagerUpdateForm, NewUserTForm,ManagerForm , ResponseForm
+from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ParentUpdateForm, ManagerUpdateForm, NewUserTForm,ManagerForm , ResponseForm , NewpasswordForm , SetnewpasswordForm
 from templated_email import send_templated_mail
 from general_fonctions import *
 from school.views import this_school_in_session
@@ -1611,3 +1611,60 @@ def ask_usertype(request):
     return render(request, 'account/oauth_usertype.html', {'levels': levels})
 
 
+##########################################################################################################################
+##
+## password reset
+##
+##########################################################################################################################
+
+
+def passwordResetView(request):
+
+    if request.method == 'POST':
+        form = NewpasswordForm(request.POST)
+        if form.is_valid():
+            this_form = form.save()
+
+    link = "https://sacado.xyz/account/newpassword/"+this_form.code
+    msg = "Bonjour, \nvous venez de demander la réinitialisation de votre mot de passe. Cliquez sur le lien suivant : \n"+ link +"\n\nMerci. \n\n Ceci est un mail automatique, ne pas répondre."
+  
+    send_mail('SacAdo : Ré-initialisation de mot de passe', msg ,settings.DEFAULT_FROM_EMAIL,[this_form.email, ])
+    return redirect("password_reset_done")
+
+
+def passwordResetDoneView(request):
+    return render(request, 'registration/password_reset_done.html', { })
+
+
+
+def passwordResetConfirmView(request, code ):
+    try :
+        np = Newpassword.objects.get(code = code)
+        validlink = True
+        form = SetnewpasswordForm()
+    except :
+        validlink = False
+
+    if request.method == 'POST':
+        form = SetnewpasswordForm(request.POST)
+        if form.is_valid():
+            get_new_password = Newpassword.objects.get(code = code)
+            users = User.objects.filter(email = get_new_password.email, user_type=2)
+            cpt = 0
+            for u in users :
+                u.password = make_password(request.POST.get('password1'))
+                u.save()
+                cpt += 1
+        if cpt > 1 :
+            msg = "Bonjour, \n\n Plusieurs comptes sont associés à cette adresse email : "+ get_new_password.email +"\n\n Votre mot de passe " + request.POST.get('password1') + " est attribué à chaque compte associé à cette adresse mail."
+        else :
+            msg = "Bonjour, \n\n Votre mot de passe " + request.POST.get('password1') + " est attribué."
+ 
+        send_mail('SacAdo : Ré-initialisation de mot de passe', msg ,settings.DEFAULT_FROM_EMAIL,[get_new_password.email, ])
+        return render(request, 'registration/password_reset_complete.html', { })
+
+
+    return render(request, 'registration/password_reset_confirm.html', { 'validlink' : validlink , 'form' : form , 'code' : code , })
+
+
+ 

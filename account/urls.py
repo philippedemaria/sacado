@@ -12,10 +12,19 @@ urlpatterns = [
     path('dashboard', view=DashboardView.as_view(), name='dashboard'),
 
 
-    path('password/reset/', PasswordResetView.as_view(), name='password_reset'),
-    path('password/reset/done/', PasswordResetDoneView.as_view(), name='password_reset_done'),
-    path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    path('reset/done/', PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    #path('password/reset/', PasswordResetView.as_view(), name='password_reset'),
+    #path('password/reset/done/', PasswordResetDoneView.as_view(), name='password_reset_done'),
+    #path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    #path('reset/done/', PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+
+
+    path('password/reset/', passwordResetView, name='password_reset'),
+    path('password/reset/done/', passwordResetDoneView, name='password_reset_done'),
+    path('newpassword/<slug:code>', passwordResetConfirmView, name='password_reset_confirm'),
+ 
+
+
+
 
     path('update_teacher/<int:pk>', update_teacher, name='update_teacher'),
     path('delete_teacher/<int:id>', delete_teacher, name='delete_teacher'),
