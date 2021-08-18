@@ -177,7 +177,7 @@ def index(request):
         nb_student = Student.objects.all().count()
         
         subjects = Subject.objects.all() 
-        schools = School.objects.prefetch_related("country").order_by("country__name")
+        abonnements = Abonnement.objects.filter(is_active =1).prefetch_related("school__country").order_by("school__country__name")
 
         today_start = datetime.date(datetime.now())
 
@@ -192,7 +192,7 @@ def index(request):
         i = random.randrange(0, exercise_nb)
         exercise = exercises[i]
 
-        context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'np_form': np_form, 'levels': levels, 'schools' : schools,'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
+        context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'np_form': np_form, 'levels': levels, 'abonnements' : abonnements,'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
                    'cookie': cookie, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, 'rates': rates, 'school_year': school_year, 'subjects': subjects,  'sacado_voyage' : sacado_voyage}
 
         return render(request, 'home.html', context)

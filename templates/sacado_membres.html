@@ -27,8 +27,8 @@
     <div class="col-sm-12 col-md-6">
         <h5 style="margin-top:20px">MEMBRES BENEFICIAIRES</h5>
 
-        {% for s in schools %}
-                <li> <b>{{ s.name }}</b>,  {{ s.town }},  {{ s.country.name }}   </li>
+        {% for a in abonnements %}
+                <li> <b>{{ a.school.name }}</b>,  {{ a.school.town }},  {{ a.school.country.name }}   </li>
         {% endfor %}
 
     </div>
