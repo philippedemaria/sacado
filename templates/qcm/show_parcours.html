@@ -252,7 +252,7 @@ body{
             {% if sacado_asso %}
                 {% if parcours.teacher != teacher  and  parcours.is_share %}
                     <a href="{% url 'clone_parcours' parcours.id 0 %}" class="btn btn-primary">Cloner ce parcours </a>    
-                    <a href="{% url 'clone_parcours' parcours.id 1 %}" class="btn btn-primary">Cloner ce parcours avec le cour associé</a>  
+                    <a href="{% url 'clone_parcours' parcours.id 1 %}" class="btn btn-primary">Cloner ce parcours avec le cours associé</a>  
                 {% endif %} 
             {% endif %}  
             <input type="button" value="Retour à la page précédente" class="btn btn-default" onclick="javascript:history.back()"/>
