@@ -64,7 +64,7 @@
                     <div class="row consigne_diapo"  align="center">  
                         <div class="col-sm-12 col-md-12">
                             <h1 style="font-size:4em" class="thin"> 
-                                {{ quizz.title}}
+                                {{ quizz.title}} 
                             </h1>
                             {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="700px"  />{% endif %}
                         </div>
@@ -126,17 +126,17 @@
                             <div class="col-sm-12 col-md-12" align="center">
                                 <h1 style="font-size:{{ question.size }}" class="thin"> {{ question.title }} </h1>
                             </div>
-                        </div>
+                        </div> 
  
                             {% if question.imagefile and not question.audio %}
                             <div class="row">  
                                 <div class="col-sm-12 col-md-12" align="center">
-                                     <img src="{{ question.imagefile.url }}" height="{% if question.qtype == 2 %}550{% else %}350{% endif %}px" />
+                                     <img src="{{ question.imagefile.url }}" height="{% if question.qtype == 2 %}550{% else %}350{% endif %}px" /> 
                                 </div>
                             </div>
                             {% elif question.audio and not question.imagefile  %}
                             <div class="row">  
-                                <div class="col-sm-12 col-md-12" align="center">
+                                <div class="col-sm-12 col-md-12" align="center"> 
                                     <audio controls>
                                         <source src="{{ question.audio.url }}" type="audio/mpeg">
                                         <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
@@ -150,16 +150,16 @@
                                 </div>
                             </div>
                             <div class="row">  
-                                <div class="col-sm-12 col-md-12" align="center">
+                                <div class="col-sm-12 col-md-12" align="center"> 
                                     <audio controls>
                                         <source src="{{ question.audio.url }}" type="audio/mpeg">
                                         <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
                                     </audio>
                                 </div>
                             </div>
-                            {% else %}
+                            {% elif question.video  %}
                             <div class="row">  
-                                <div class="col-sm-12 col-md-12" align="center">
+                                <div class="col-sm-12 col-md-12" align="center"> 
                                      {{ question.video|safe }}
                                 </div>
                             </div>
