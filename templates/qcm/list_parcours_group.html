@@ -178,28 +178,28 @@
                             {% if parcours.is_pending_folder_correction %}
                             <i class="fa fa-copyright pull-right" style="font-size:12px;color:{{ parcours.color|contrast_color }};" title="Copies à corriger" ></i> 
                             {% endif %}
-    
-
-                                {% if parcours.title|length > 25 %}
-                                    <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px">{{ parcours.title|truncatechars:"28" }}<div class="helper_tip_text_right">{{ parcours.title }}</div></span>
-                                
-                                    <span style="font-size:12px"> {{ parcours.leaf_parcours.count}} <i class="fa fa-th"></i> </span>
-                                {% else %}
-                                    {{ parcours.title}}
-
-                                    <span style="font-size:12px"> {{ parcours.leaf_parcours.count}} parcours </span>
-                                {% endif %}
 
 
-
-
+                            {% if parcours.title|length > 23 %}
+                                <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px">{{ parcours.title|truncatechars:"26" }}<div class="helper_tip_text_right">{{ parcours.title }}</div></span>
                             
- 
-                                {% if parcours.is_folder_real_time %}
-                                    <sup class="white" title="En composition" style="font-size:12px" >
-                                        <i class="fa fa-fw fa-clock"></i> 
-                                    </sup>
-                                {% endif %}
+                                <span style="font-size:12px"> {{ parcours.leaf_parcours.count}} <i class="fa fa-th"></i> </span>
+                            {% else %}
+                                {{ parcours.title}}
+
+                                <span style="font-size:12px"> {{ parcours.leaf_parcours.count}} parcours </span>
+                            {% endif %}
+
+
+
+
+                        
+
+                            {% if parcours.is_folder_real_time %}
+                                <sup class="white" title="En composition" style="font-size:12px" >
+                                    <i class="fa fa-fw fa-clock"></i> 
+                                </sup>
+                            {% endif %}
 
                         </a>
                         {% else %}
