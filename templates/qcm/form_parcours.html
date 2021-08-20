@@ -223,7 +223,7 @@
                          
                                 {% if teacher.user.id != group.teacher.user.id %}
                                 <div class="alert alert-danger">                                   
-                                    <small>Le propriétaire de ce groupe est <b>{{ group.teacher }}</b>. Vous devriez le sélectionner pour qu'il voit ce parcours dans son tableau de bord.</small>
+                                    <small><b>{{ group.teacher }}</b> est en charge de ce groupe. Vous devriez {% if group.teacher.user.civilite == "Mme" %}la {%else %}le{% endif %} sélectionner pour qu'{% if group.teacher.user.civilite == "Mme" %}elle {%else %}il{% endif %} voit ce parcours dans son tableau de bord.</small>
                                     <label>Parcours co animé avec <span style="font-size:12px">(facultatif)</span></label>
                                     {{ form.coteachers|add_class:"form-control select2"}}
                                     {{ form.coteachers.errors }}
