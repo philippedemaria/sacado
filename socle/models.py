@@ -41,7 +41,7 @@ class Subject(models.Model):
 
     def nb_exercises(self):
         Exercise = apps.get_model('qcm', 'Exercise')
-        return Exercise.objects.filter(theme__subject=self,supportfile__is_title=0).count()*40
+        return Exercise.objects.filter(theme__subject=self,supportfile__is_title=0).count()
 
 
 
