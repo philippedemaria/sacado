@@ -2279,7 +2279,7 @@ a.bilan_title:hover .fa-angle-down,a.bilan_title:focus .fa-angle-down {
 
 
 .edit {
-     color: #AAA;
+     color: #7D7D8C ; /* #AAA; */
      font-size: 16px;
 }
 .edit:hover {
