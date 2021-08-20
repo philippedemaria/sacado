@@ -188,7 +188,7 @@ def index(request):
         
         exercises = Exercise.objects.select_related("supportfile").filter(supportfile__is_title=0, supportfile__is_ggbfile = 1 )
         ex_nb = exercises.count() - 1
-        exercise_nb = ex_nb * 20
+        exercise_nb = ex_nb * 40
         i = random.randrange(0, ex_nb)
         exercise = exercises[i]
 
