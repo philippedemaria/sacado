@@ -3427,7 +3427,7 @@ a:focus {
 .navbar-right > li > a.no_button {
     padding-top: 15px;
     padding-bottom: 10px;
-    color: #777;
+    color: #7D7D8C;
     font-size : 18px ;
     margin-right: 10px;
     font-weight: 400;
@@ -3435,7 +3435,7 @@ a:focus {
 
 
 .navbar-right > li > a.no_button:visited {
-    color : #777;
+    color : #7D7D8C;
 }
 
 .navbar-right > li > a.no_button:focus,.navbar-right > li > a.active,.navbar-right > li > a.no_button:hover{
