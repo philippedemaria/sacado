@@ -90,7 +90,7 @@ function test_aefe() {
 
 function check_checkboxes()
 {
-  var c = document.getElementsByTagName('input');
+  var c = document.getElementsByClassName('folder_line');
   for (var i = 0; i < c.length; i++)
   {
     if (c[i].type == 'checkbox')
