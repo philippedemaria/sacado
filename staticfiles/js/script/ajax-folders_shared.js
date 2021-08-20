@@ -82,3 +82,5 @@ define(['jquery', 'bootstrap'], function ($) {
 
 });
 
+/* code réalisé par Philippe Demaria - tout droit réservé */
+/* code pour sacado */

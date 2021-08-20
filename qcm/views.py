@@ -1,3 +1,8 @@
+#################################
+#### Auteur : philipe Demaria 
+#### pour SACADO
+#################################
+
 from django.conf import settings # récupération de variables globales du settings.py
 from django.shortcuts import render, redirect
 from account.models import  Student, Teacher, User,Resultknowledge, Resultskill, Resultlastskill

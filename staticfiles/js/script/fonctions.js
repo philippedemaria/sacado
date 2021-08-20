@@ -1,3 +1,6 @@
+/* code réalisé par Philippe Demaria - tout droit réservé */
+/* code pour sacado */
+
 function TestDelete(f1) {
     if (!confirm('Vous souhaitez supprimer ' + f1 + ' ?')) return false;
 }

@@ -1,3 +1,7 @@
+#################################
+#### Auteur : philipe Demaria 
+#### pour SACADO
+#################################
 import html
 import random
 import re
