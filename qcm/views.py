@@ -1608,7 +1608,7 @@ def create_parcours(request,idp=0):
  
 
     context = {'form': form,  'parcours_is_folder' : False,   'teacher': teacher,  'groups': groups,  'levels': levels, 'idg': 0,  'parcours_folder': parcours_folder ,  'themes' : themes_tab, 'group_id': group_id , 'parcours': None,  'relationships': [], 'share_groups' : share_groups , 
-               'exercises': [], 'levels': levels, 'themes': themes_tab, 'students_checked': 0 , 'communications' : [],  'group': group , 'role' : True , 'idp' : idp , 'images' : images }
+               'exercises': [], 'levels': levels, 'themes': themes_tab, 'communications' : [],  'group': group , 'role' : True , 'idp' : idp , 'images' : images }
 
     return render(request, 'qcm/form_parcours.html', context)
  
@@ -1721,12 +1721,8 @@ def update_parcours(request, id, idg=0 ):
     if parcours.teacher == teacher :
         role = True
 
-
-
-    students_checked = parcours.students.count()  # nombre d'étudiant dans le parcours
-
     context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'group': group ,  'relationsips': relationships, 'share_groups': share_groups, 'relationships' :  [] ,
-               'exercises': exercises, 'parcours_is_folder' : False, 'levels': levels, 'themes': themes_tab, 'students_checked': students_checked, 'communications' : [], 'role' : role , 'images' : images }
+               'exercises': exercises, 'parcours_is_folder' : False, 'levels': levels, 'themes': themes_tab,  'communications' : [], 'role' : role , 'images' : images }
 
     return render(request, 'qcm/form_parcours.html', context)
 

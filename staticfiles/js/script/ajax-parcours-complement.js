@@ -24,9 +24,10 @@ define(['jquery','bootstrap'], function ($) {
 
 
         $('#folder_parcours').hide(); 
+        $('#folder_parcours_cible').hide(); 
 
         $("#id_is_leaf").on('change', function (event) {
-            $('#folder_parcours').toggle(500);
+            $('#folder_parcours_cible').toggle(500);
         });
 
 
