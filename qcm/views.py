@@ -271,7 +271,7 @@ def get_complement(request, teacher, parcours_or_group):
     if parcours_or_group.teacher == teacher:
         role = True
         access = True
-        
+
     return role, group , group_id , access
 
 
@@ -646,7 +646,7 @@ def peuplate_parcours(request,id):
     parcours = Parcours.objects.get(id=id)
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
- 
+
 
     if not authorizing_access(teacher,parcours, access ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
@@ -779,7 +779,7 @@ def individualise_parcours(request,id):
     relationships = Relationship.objects.filter(parcours = parcours).order_by("ranking")
     students = parcours.students.all()
 
-    customexercises = Customexercise.objects.filter(parcourses = parcours).order_by("ranking")  
+    customexercises = Customexercise.objects.filter(parcourses = parcours).order_by("ranking") 
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
 

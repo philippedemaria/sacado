@@ -272,15 +272,24 @@
                         </div> 
                         {% if parcours.subparcours.all|length == 0 %}
                             <div class="col-lg-4 col-xs-4">
-                            {% if not parcours.is_evaluation %}
-                                <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"  class="edit" {% if parcours.is_sections_exists %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-indent"></i> <span class="label_icon tool_tip">Section.
-                                <div class="tool_tip_text"><label><small>Ajouter une section pour diviser le parcours en parties</small></label></div>
-                                </span> </a>
-                            {% else  %}   
-                                <a href="#" class="edit export_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-upload"></i>  <span class="label_icon tool_tip">Export
-                                <div class="tool_tip_text"><label><small>Ajouter une section pour diviser le parcours en parties</small></label></div>
-                                </span></a>              
-                            {% endif  %}
+                                {% comment %}
+                                    {% if not parcours.is_evaluation %}
+                                        <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"  class="edit" {% if parcours.is_sections_exists %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-indent"></i> <span class="label_icon tool_tip">Section.
+                                        <div class="tool_tip_text"><label><small>Ajouter une section pour diviser le parcours en parties</small></label></div>
+                                        </span> </a>
+                                    {% else  %}   
+                                        <a href="#" class="edit export_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-upload"></i>  <span class="label_icon tool_tip">Export
+                                        <div class="tool_tip_text"><label><small>Ajouter une section pour diviser le parcours en parties</small></label></div>
+                                        </span></a>              
+                                    {% endif  %}
+
+                                {% endcomment %}
+                                    <a  href="{% url 'detail_task_parcours' parcours.id 0 0 %}"   class="edit" {% if parcours.is_task_exists %} style="color:{{ parcours.color }}" {% endif %}>
+                                        {% if not parcours.is_task_exists %}<i class="fa fa-fw fa-calendar"></i>{% else %}<i class="fa fa-fw fa-calendar-check"></i>{% endif %}
+                                         <span class="label_icon">Tâches</span>
+                                    </a> 
+
+
                             </div> 
                         {% endif  %}
 
