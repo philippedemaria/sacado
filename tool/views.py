@@ -1157,9 +1157,6 @@ def create_question(request,idq,qtype):
     return render(request, template , context)
 
 
-
-
- 
 def update_question(request,id,idq,qtype):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -1294,6 +1291,28 @@ def get_this_question(request,id,idquizz):
     print(quizz)
 
     return redirect('create_question' , quizz.id , 0) 
+
+
+def clone_question(request,id,idq,qtype):
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    quizz = Quizz.objects.get(pk = idq)
+    question = Question.objects.get(pk = id)
+    answer_choices = question.choices.all()
+    question.pk = None
+    question.save()
+    quizz.questions.add(question)
+
+    if qtype > 2 :
+        for a in answer_choices :
+            a.pk = None
+            a.question = question
+            a.save()
+
+ 
+    return redirect("create_question", idq=idq , qtype=0)
+
+
 
 
 #######################################################################################################################

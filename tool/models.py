@@ -196,7 +196,6 @@ class Quizz(ModelWithCode):
     teacher       = models.ForeignKey(Teacher, related_name="teacher_quizz", blank=True, on_delete=models.CASCADE, editable=False ) 
     date_modified = models.DateTimeField(auto_now=True)
 
-    #### pour donner une date de remise - Tache 
     levels    = models.ManyToManyField(Level, related_name="quizz", blank=True)
     themes    = models.ManyToManyField(Theme, related_name="quizz", blank=True)
     subject   = models.ForeignKey(Subject, related_name="quizz", blank=True, null = True, on_delete=models.CASCADE)

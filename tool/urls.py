@@ -29,6 +29,7 @@ urlpatterns = [
     path('create_question/<int:idq>/<int:qtype>', create_question, name='create_question'),
     path('update_question/<int:id>/<int:idq>', update_question, name='update_question'),   
     path('delete_question/<int:id>/<int:idq>', delete_question  , name='delete_question'),
+    path('clone_question/<int:id>/<int:idq>/<int:qtype>', clone_question  , name='clone_question'),
 
     path('quizz_actioner', quizz_actioner  , name='quizz_actioner'),
     path('quizz_archived', all_quizzes_archived  , name='all_quizzes_archived'),
