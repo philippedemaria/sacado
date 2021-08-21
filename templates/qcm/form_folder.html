@@ -36,7 +36,7 @@
 
     <small>
     {% if parcours %}
-        Configuration 
+        Configuration du dossier
     {% else %}
          Nouveau dossier   
     {% endif %}
@@ -47,9 +47,7 @@
 
 
 {% block page_menu_right %} 
-    {% if parcours %}
-        {% include 'qcm/submenu_parcours.html' %}
-    {% endif %} 
+ 
 {% endblock %}
 
  
