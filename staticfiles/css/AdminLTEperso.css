@@ -1296,21 +1296,21 @@ li.my_slide{
 }
 
 li.sorted_list{
-  border:1px solid #E0E0E0;
+  border:1px solid #885ba3;
   padding : 5px;
   list-style-type: none;
   font-size: 14px;
-  background-color: #F0F0F0;
+  background-color: #fcf7ff;
   margin: 3px 3px 3px 0;
   cursor: move;
 }
 
 li.sorted_list:hover {
-  border:1px solid #CCC;
+  border:1px solid #5d3873;
   padding : 5px;
   list-style-type: none;
   font-size: 14px;
-  background-color: #E0E0E0;
+  background-color: #f5e6ff;
   margin: 3px 3px 3px 0;
   cursor: move;
 }
