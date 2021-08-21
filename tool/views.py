@@ -1310,7 +1310,7 @@ def clone_question(request,id,idq,qtype):
             a.save()
 
  
-    return redirect("create_question", idq=idq , qtype=0)
+    return redirect("update_question", id = question.id , idq=quizz.id , qtype=qtype)
 
 
 
