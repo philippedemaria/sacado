@@ -7528,7 +7528,7 @@ def create_folder(request,idg):
 
     parcourses = set()
     for student in group.students.all() :
-        parcourses.update(student.students_to_parcours.filter(teacher = teacher,is_archive=0).exclude(is_folder=1,is_leaf=1))
+        parcourses.update(student.students_to_parcours.filter(teacher = teacher,is_archive=0).exclude(is_folder=1))
 
     if request.method == "POST" :
         lp = []            
@@ -7576,9 +7576,10 @@ def update_folder(request,id,idg):
     try :
         group = Group.objects.get(pk = idg)     
         group_id = group.id
-        parcourses = set()
+        parcourses = set(Parcours.objects.filter(teacher = teacher,is_archive=0, subject = parcours.subject, level = parcours.level ).exclude(is_folder=1))
         for student in group.students.all() :
             parcourses.update(student.students_to_parcours.filter(teacher = teacher,is_archive=0).exclude(is_folder=1))
+ 
         group_exists = True
         images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id = group.subject).exclude(vignette=" ").distinct()
 
