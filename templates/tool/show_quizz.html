@@ -100,7 +100,7 @@
                         </div> 
                     </li>
                     <li class="my_slide">
-                        <input type="hidden" value="{{ question.duration }}" id="duration{{ forloop.counter }}" /> 
+                        <input type="hidden" value="{{ question.duration }}" id="duration{{ forloop.counter }}" />  
                         <div class="row">  
                             <div class="col-sm-2 col-md-2" align="left">
                                 <img src="{% if question.calculator %}{% static 'img/calculator.png' %}{% else %}{% static 'img/no_calculator.png' %}{% endif %}" height="50px" />
@@ -124,7 +124,7 @@
                         </div> 
                         <div class="row">  
                             <div class="col-sm-12 col-md-12" align="center">
-                                <h1 style="font-size:{{ question.size }}" class="thin"> {{ question.title }} </h1>
+                                <h1 style="font-size:{% if question.size %}{{ question.size }}{% else %}32px{% endif %}" class="thin"> {{ question.title }} </h1>
                             </div>
                         </div> 
  
