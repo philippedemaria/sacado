@@ -7579,7 +7579,7 @@ def update_folder(request,id,idg):
         parcourses = set(Parcours.objects.filter(teacher = teacher,is_archive=0, subject = parcours.subject, level = parcours.level ).exclude(is_folder=1))
         for student in group.students.all() :
             parcourses.update(student.students_to_parcours.filter(teacher = teacher,is_archive=0).exclude(is_folder=1))
- 
+
         group_exists = True
         images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id = group.subject).exclude(vignette=" ").distinct()
 
@@ -7614,7 +7614,8 @@ def update_folder(request,id,idg):
 
             if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
                 nf.vignette = request.POST.get("this_image_selected",None)
-            nf.save()  
+            nf.save()
+            form.save_m2m()  
             nf.leaf_parcours.set(lp)
             ##################################################
             ## Suppression des élèves 
