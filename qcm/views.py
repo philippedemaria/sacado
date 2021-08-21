@@ -1712,11 +1712,16 @@ def update_parcours(request, id, idg=0 ):
         if Sharing_group.objects.filter(group_id=group_id, teacher = teacher).exists() :
             sh_group = Sharing_group.objects.get(group_id=group_id, teacher = teacher)
             role = sh_group.role 
+        elif group.teacher == teacher :
+            role = True
+        else :
+            role = False
     else :
         group_id = None
         group = None
         request.session["group_id"] = None
         role = False
+
 
     if parcours.teacher == teacher :
         role = True
@@ -7542,7 +7547,7 @@ def create_folder(request,idg):
         if form.is_valid():
             nf = form.save(commit=False)
             nf.author = teacher
-            nf.teacher = teacher
+            nf.teacher = group.teacher
             nf.is_evaluation = 0
             nf.is_folder = 1
             nf.level = group.level
@@ -7574,7 +7579,7 @@ def update_folder(request,id,idg):
     form         = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher)
 
     try :
-        group = Group.objects.get(pk = idg)     
+        group = Group.objects.get(pk = idg)   
         group_id = group.id
         parcourses = set(Parcours.objects.filter(teacher = teacher,is_archive=0, subject = parcours.subject, level = parcours.level ).exclude(is_folder=1))
         for student in group.students.all() :
@@ -7583,6 +7588,47 @@ def update_folder(request,id,idg):
         group_exists = True
         images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id = group.subject).exclude(vignette=" ").distinct()
 
+        if request.method == "POST" :
+            lp = []            
+            subparcours =  request.POST.getlist('subparcours')
+            for pi in subparcours :
+                p = Parcours.objects.get(pk = pi)
+                p.is_leaf = 1
+                p.save()
+                lp.append(p)
+
+            if form.is_valid():
+                nf = form.save(commit=False)
+                nf.author = teacher
+                nf.teacher = group.teacher
+                nf.is_evaluation = 0
+                nf.is_folder = 1
+                if group_exists : 
+                    nf.level = group.level
+                    nf.subject = group.subject
+     
+
+                if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
+                    nf.vignette = request.POST.get("this_image_selected",None)
+                nf.save()
+                form.save_m2m()  
+                nf.leaf_parcours.set(lp)
+                ##################################################
+                ## Suppression des élèves 
+                if group_exists :
+                    for stu in group.students.exclude(user__username__contains="_e-test") :
+                        nf.students.remove(stu)
+                ## Insertion des nouveaux élèves
+                for s in request.POST.getlist("these_students"):
+                    nf.students.add(s)
+                ##################################################
+                if group_exists :
+                    return redirect ("list_parcours_group", idg ) 
+                else :
+                    return redirect ("index" ) 
+            else:
+                print(form.errors)
+
     except :
         group = None
         group_id = None
@@ -7590,48 +7636,7 @@ def update_folder(request,id,idg):
         parcourses = teacher.teacher_parcours.all()
         images = [] 
         parcourses = teacher.teacher_parcours.all()
-        images = [] 
-
-    if request.method == "POST" :
-        lp = []            
-        subparcours =  request.POST.getlist('subparcours')
-        for pi in subparcours :
-            p = Parcours.objects.get(pk = pi)
-            p.is_leaf = 1
-            p.save()
-            lp.append(p)
-
-        if form.is_valid():
-            nf = form.save(commit=False)
-            nf.author = teacher
-            nf.teacher = teacher
-            nf.is_evaluation = 0
-            nf.is_folder = 1
-            if group_exists : 
-                nf.level = group.level
-                nf.subject = group.subject
- 
-
-            if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
-                nf.vignette = request.POST.get("this_image_selected",None)
-            nf.save()
-            form.save_m2m()  
-            nf.leaf_parcours.set(lp)
-            ##################################################
-            ## Suppression des élèves 
-            if group_exists :
-                for stu in group.students.exclude(user__username__contains="_e-test") :
-                    nf.students.remove(stu)
-            ## Insertion des nouveaux élèves
-            for s in request.POST.getlist("these_students"):
-                nf.students.add(s)
-            ##################################################
-            if group_exists :
-                return redirect ("list_parcours_group", idg ) 
-            else :
-                return redirect ("index" ) 
-        else:
-            print(form.errors)
+        images = []    
 
     context = {'form': form, 'parcours_is_folder' : True,   'teacher': teacher,  'group': group, 'groups': groups, 'share_groups': share_groups, 'group_id': group_id,  'parcours': parcours, 'parcourses' : parcourses , 'images' : images ,   'relationships': [], 'role' : True }
 

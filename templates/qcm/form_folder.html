@@ -55,6 +55,19 @@
 
 {% block body %}  
 <section class="content_main">
+
+    {% if parcours %}
+        {% if parcours.author != parcours.teacher and parcours.teacher != request.user.teacher %}
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="alert alert-info">
+                    Le dossier est créé par <b>{{ parcours.author }}</b> pour {% if parcours.teacher.user.civilite == "Mme" %}sa{% else %}son{% endif %} collège <b>{{ parcours.teacher }}</b>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    {% endif %}
+
     <form action="" method="POST" enctype='multipart/form-data'> 
     <div class="row">
         <div class="col-sm-12 col-md-8">

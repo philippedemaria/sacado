@@ -115,7 +115,7 @@
                                 </a> 
                                 <label class="pull-right">
                                     <input type="checkbox" value="{{ group.id }}" name="groups"
-                                        {% if parcours in sg.group.group_parcours.all  %}
+                                        {% if parcours in group.group_parcours.all  %}
                                             checked 
                                         {% elif request.session.group_id %}
                                             {% if  request.session.group_id == sg.group.id %}
