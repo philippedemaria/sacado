@@ -118,7 +118,7 @@ class Group(ModelWithCode):
                 nbef += 1
 
         data["count_students"] = snt
-        data["students"] = students.values("user__id", "user__last_name", "user__first_name").exclude(user__username__contains= "_e-test") 
+        data["students"] = students.values("user__id", "user__last_name", "user__first_name").exclude(user__username__contains= "_e-test").order_by("user__last_name") 
         data["nb_parcours"] = nb
         data["nb_parcours_visible"] = nbp
         data["nb_parcours_favorite"] = nbf
