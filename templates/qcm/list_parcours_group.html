@@ -180,8 +180,8 @@
                             {% endif %}
 
 
-                            {% if parcours.title|length > 22 %}
-                                <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px">{{ parcours.title|truncatechars:"26" }}<div class="helper_tip_text_right">{{ parcours.title }}</div></span>
+                            {% if parcours.title|length > 20 %}
+                                <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px">{{ parcours.title|truncatechars:"22" }}<div class="helper_tip_text_right">{{ parcours.title }}</div></span>
                             
                                 <span style="font-size:12px"> {{ parcours.leaf_parcours.count}} <i class="fa fa-th"></i> </span>
                             {% else %}
