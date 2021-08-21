@@ -252,7 +252,7 @@
 
 
                     <hr/>
-                    <label><b>Ce dossier contient les parcours déjà créés suivant</b></label>
+                    <label><b>Cocher les parcours à insérer dans ce dossier</b></label>
                     {% for p in parcourses|dictsort:"title" %}
                         {% get_is_leaf p parcours as is_leaf %}
                         <li class="sanspuce folder_line" id="delete_from_folder{{ p.id }}">
