@@ -104,6 +104,12 @@
     {% if inside %}   
         <div class="row" id="courses_details">
             <div class="col-sm-12 col-md-12">
+                <div class="alert alert-info">
+                    Lors de votre recherche, vos parcours ne vous sont pas montrés. Ils sont déjà à vous.<br/> Seuls les parcours des équipes de votre établissement et de l'équipe SACADO vous sont proposés. 
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-md-12">
                 {% comment  %}
                     {% regroup parcourses by level as level_list  %}
 
@@ -121,23 +127,14 @@
                 <ol>Sélectionner un niveau</ol>
                 <ol>Sélectionner un thème</ol> 
                 <ol>ou choisir un mot clé</ol>
-
             </div>
+
         </div>
     {% else %} 
         <div class="alert alert-danger">      
             <i class="fa fa-warning"></i> Pour récupérer un parcours mutualisé, vous devez souscrire la version établisssement.
         </div>
     {% endif %}  
-
-
-
- 
-        
-               
-
-
-
 
 </form>     
 </section>
