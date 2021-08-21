@@ -395,9 +395,9 @@ class Parcours(ModelWithCode):
     def __str__(self):
         if self.level :
             if self.coteachers.count() > 0 :
-                return "[CoA] : {} ({})".format(self.title, self.level.name)
+                return "[CoA] : {} ({})".format(self.title, self.level.shortname)
             else :
-                return "{} ({})".format(self.title, self.level.name)
+                return "{} ({})".format(self.title, self.level.shortname)
         else :
             return "{}".format(self.title)
 
