@@ -55,13 +55,14 @@
                 <tbody>
                     {% for quizz in quizzes %}
                         <tr id="this_quizz{{quizz.id}}">
-                            <td>
+                            <td style="position: relative">
                                 {% if not is_archive %}
                                 <input type="checkbox" name="selected_quizz" value="{{ quizz.id}}"/> 
                                 {% endif  %}
-
-
-                                <a href="{% url 'update_quizz' quizz.id  %}"> {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="200px" />{% endif %}{{ quizz.title }}</a>
+                                {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="110px" style="position: absolute; bottom:0; right:0" />{% endif %}
+                                <a href="{% url 'update_quizz' quizz.id  %}"> 
+                                    {{ quizz.title }}
+                                </a>
                                 {% if quizz.is_random %}
                                     <span class="helper_tip"  style="line-height: 30px"> <i class="fa fa-random" style="font-size:12px"></i> 
                                         <div class="helper_tip_text" >Questions aléatoires </div>
