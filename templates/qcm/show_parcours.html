@@ -194,7 +194,7 @@ body{
 
             
                 <hr/>
-                <h1 class="thin">Les quizz associés</h1>
+                <h1 class="thin">Les quizz associés <a href="#" data-toggle='modal' data-target='#quizz_choice' class="size18" ><i class="fa fa-window-restore fa-fw"></i>  Nouveau quizz</a> </h1>
 
 
                 {% for q in parcours.quizz.all %}
@@ -241,6 +241,8 @@ body{
                         <img src="{% static 'img/quizz_slide.png' %}" width="250px"   />
                     </div>
                 {% endfor %}
+
+
             </div>
         </div>  
     {% endif %} 
