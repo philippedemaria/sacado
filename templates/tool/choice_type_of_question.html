@@ -10,7 +10,7 @@
         {% if parcours %}
             <a href="{% url 'show_parcours' parcours.id %}" style="color:parcours.color" > {{ parcours.title }} </a><img src="{% static 'img/angle-right.png' %}"/> Quizz <img src="{% static 'img/angle-right.png' %}"/> Question
         {% else %}
-            <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> </a>  Les quizz <img src="{% static 'img/angle-right.png' %}"/>  Forme de la question
+            <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> </a>  Les quizz <small>({{ quizz.duration|time_done }})</small><img src="{% static 'img/angle-right.png' %}"/>  Forme de la question
         {% endif %}
         
 

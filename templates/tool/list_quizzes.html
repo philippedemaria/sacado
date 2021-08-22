@@ -92,6 +92,7 @@
                                         <small>privé</small> 
                                     </div>
                                 {% endif %}
+                                {{ quizz.duration|time_done }}
                             </td>
                             <td>{% for p in quizz.parcours.all %}
                                     {{ p }}{% if not forloop.last %}, {% endif %} 

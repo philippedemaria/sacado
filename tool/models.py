@@ -237,6 +237,12 @@ class Quizz(ModelWithCode):
     def quizz_generated(self,group):
         return self.generate_quizz.filter(group=group).order_by("-date_created")
 
+    def duration(self):
+        d = 0
+        for q in self.questions.filter(is_publish=1) :
+            d += q.duration + self.interslide
+        return d
+
 
 def time_zone_user(user):
     try :
