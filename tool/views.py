@@ -234,14 +234,22 @@ def clone_quizz(request, id_quizz):
     quizz.code = str(uuid.uuid4())[:8]  
     quizz.save()
 
+    tab_id , t_idd = [] , []
     for q in questions :
+        tab_id.append(q.id)
         q.pk = None
         q.save()
+        t_idd.append(q.id)
         quizz.questions.add(q)
-        for c in q.choices.all():
+
+    i = 0
+    for tid in tab_id :
+        quest = Question.objects.get(pk=tid)
+        for c in quest.choices.all():
             c.pk = None
-            c.question = q
+            c.question_id = t_idd[i]
             c.save()
+        i+=1
 
 
     for l in levels :
@@ -282,7 +290,7 @@ def ajax_chargethemes_quizz(request):
 
 
 def list_quizzes(request):
-    
+
     request.session["parcours_id"] = False
     teacher = request.user.teacher 
     quizzes = teacher.teacher_quizz.filter(is_archive=0)
