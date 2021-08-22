@@ -73,7 +73,7 @@
     {% endif %}    
 
     <div class="row">
-        <div class="col-lg-{% if courses|length > 0 %}10{% else %}12{% endif %} col-xs-12">
+        <div class="col-lg-{% if courses|length > 0 or quizzes|length > 0 %}10{% else %}12{% endif %} col-xs-12">
             {% for rc in relationships_customexercises %}
                 <!-- SECTION --> 
                 {% if rc.exercise.supportfile.is_title %}       
@@ -559,7 +559,7 @@
         </div>
 
 
-        {% if courses|length > 0 %}      
+        {% if courses|length > 0 or quizzes|length > 0 %}      
         <div class="col-lg-2 col-xs-12">
             <h4 class='thin' style="color:{{ parcours.color }}">Le cours du parcours</h4>
             <ul class="nav nav-pills nav-stacked admin-menu">
@@ -595,27 +595,22 @@
 
             </ul>
 
-            <hr/>
+            {% if courses|length > 0  %} <hr/>{% endif %}
+
             <h4 class='thin' style="color:{{ parcours.color }}">Les quizz</h4>
 
-                {% for quizz in quizzes %}
+                {% for q in quizzes %}
                     <li class="menu_course" style="padding:5px">
- 
+                      
+                        {% if sacado_asso %} 
 
-                            {% if sacado_asso %}
-                                {% if  quizz.is_video %}
-                                    <div class="alert alert-danger"><i class="fa fa-ban"></i> Version projetable en classe</div>
+                            {% include 'tool/quizz_card.html' %}
 
-                                {% else %}
-
-                                    <a  href="{% url 'show_quizz_parcours_student'  quizz.id  parcours.id %}" 
-                                        style="color:{{g.color}}"
-                                        class="quizz_action" target="_blank" >
-                                       {{ quizz.title }} <small>{{ quizz.code }}</small>
-                                    </a>
-
-                                {% endif %}
-                            {% endif %}
+                        {% else %}
+                            <div class="alert alert-danger">
+                                <i class="fa fa-ban"></i> Version établissement nécessaire
+                            </div>
+                        {% endif %}
 
                     </li>
                 {% endfor %}

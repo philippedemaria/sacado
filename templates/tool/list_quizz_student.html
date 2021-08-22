@@ -54,7 +54,7 @@
                                {% elif gquizz.quizz.is_numeric and not gquizz.quizz.is_video %}
                                     <a href="{% url 'goto_quizz_student' gquizz.id  %}"><i class="fa fa-desktop fa-fw"></i> 
                                 {% else %}
-                                    <a href=" "><i class="fa fa-pencil-square fa-fw"></i>  
+                                    <a href="{% url 'show_quizz' quizz.id  %}"><i class="fa fa-pencil-square fa-fw"></i>  
                                 {% endif %} {{ gquizz.quizz.title }} </a>
 
                                 <b><small>> 

@@ -21,7 +21,12 @@
 
 
 {% block page_menu_right %}
+
+    {% if request.user.user_type == 2 %}
     <a href="{% url 'list_quizzes' %}" class="btn btn-new">Mes quizz</a>
+  
+    {% endif %}
+
 {% endblock %}
 
 
