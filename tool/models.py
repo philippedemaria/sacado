@@ -213,13 +213,13 @@ class Quizz(ModelWithCode):
     nb_slide     = models.PositiveIntegerField(default=0, editable=False)  # Nombre de diapositive si le quizz est randomisé
     is_video     = models.BooleanField(default=0, verbose_name="Type de passation")  # Vidéo projection
 
+
     is_back      = models.BooleanField(default=0, verbose_name="Retour arrière ?")  
     is_ranking   = models.BooleanField(default=0, verbose_name="Ordre aléatoire des questions ?")  
     is_shuffle   = models.BooleanField(default=0, verbose_name="Ordre aléatoire des réponses ?") 
-    is_result    = models.BooleanField(default=0, verbose_name="Réponse en fin de quizz ?")
+    is_result    = models.BooleanField(default=0, verbose_name="Afficher les réponses ?")
 
     is_archive   = models.BooleanField(default=0, verbose_name="Archivé ?")
-
     interslide   = models.PositiveIntegerField(default=10, blank=True, verbose_name="Temps entre les questions")
 
     start = models.DateTimeField(null=True, blank=True, verbose_name="Début de publication")

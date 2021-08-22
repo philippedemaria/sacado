@@ -5,17 +5,64 @@
 <table class="table  table-hover standard_tab_1000" style="width:100%">
     <thead> 
         <tr>
-            <td>Question</td>
-            <td>Réponse proposé</td>
-            <td>Correction</td>
-            <td>Score</td>
+            <th>Question</th>
+            <th>Choix et solution</th>
+            {% if score %} 
+            <th>Réponse proposée</th>
+            {% endif  %} 
         </tr>
     </thead> 
     <tbody>
-        {% for a in  ans  %} 
+
+        {% for question in  questions  %} 
             <tr>
-                <td>{{a.question.title|safe}}</td>
-                <td> 
+                <td>{{ question.title|safe}}</td>
+                    {% if question.imagefile %}
+                        <img src="{{ question.imagefile.url }}" width="150px">
+                    {% endif %}
+                    {% if question.audio %}
+                        <div class="col-sm-12 col-md-12" align="center"> 
+                            <audio controls>
+                                <source src="{{ question.audio.url }}" type="audio/mpeg">
+                                <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                            </audio>
+                        </div>
+                    {% endif %}
+                    {% if question.video %}
+                        <div class="row">  
+                            <div class="col-sm-12 col-md-12" align="center"> 
+                                 {{ question.video|safe }}
+                            </div>
+                        </div>
+                    {% endif %}
+
+
+                <td>
+
+                    {% if question.qtype == 1 %}
+                        {% if  question.is_correct %}
+                            <span class="btn btn-default">VRAI <i class="fa fa-check text-success"></i> </span>  <span class="btn btn-default">FAUX <i class="fa fa-times text-danger"></i></span>
+                        {% else %} 
+                            <span class="btn btn-default">VRAI <i class="fa fa-check text-danger"></i> </span>  <span class="btn btn-default">FAUX <i class="fa fa-times text-success"></i> </span>
+                        {% endif %}
+                    {% else %}
+                        {% for c in question.choices.all %}
+                            <span class="btn btn-default">{{ c.answer }}
+                            {% if c.is_correct %}
+                                <i class="fa fa-check text-success"></i>
+                            {% else %}
+                                <i class="fa fa-times text-danger"></i>
+                            {% endif %}
+
+                            {% if c.imagefile %}
+                                <img src="{{ c.imagefile.url }}" width="150px">
+                            {% endif %}
+                            </span>
+                        {% endfor %}
+                    {% endif %}
+                </td>
+                {% if score %} 
+                <td>
                     {% if a.is_correct %}<i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif %}
                     {% if a.question.qtype == 1 %}
                         {% if  a.answer == "1" %}VRAI{% else %} FAUX {% endif %}
@@ -25,30 +72,16 @@
                         {{ a.get_choice_with_these }}
                     {% endif %}
                 </td>
-                <td>
-                    {% if a.question.qtype == 1 %}
-                        {% if  a.question.is_correct %}VRAI{% else %} FAUX {% endif %}
-                    {% else %}
-                        {% for c in a.question.choices.all %}
-                            {% if c.is_correct %}
-                                {% if c.imagefile %}
-                                    <img src="{{ c.imagefile.url }}" width="200px">
-                                {% else %}
-                                    {{ c.answer }}
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                </td>
-                <td>{{a.score}}</td>
+                {% endif %} 
             </tr>
         {% endfor %}
+
     </tbody>
 </table>
   
     <div class="row" align="center">
         <div class="col-sm-12 col-md-12" >     
-            <h3 style="padding: 10px; background-color: #5d4391; color: #FFF;">Score : {{ score }} / {{ total }}</h3>
+            <h3 style="padding: 10px; background-color: #5d4391; color: #FFF;">{% if score %} Score : {{ score }} / {{ total }}{% else %}Réponses non enregistrées{% endif %}</h3>
         </div>
     </div> 
 

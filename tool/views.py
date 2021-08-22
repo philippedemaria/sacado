@@ -1023,15 +1023,23 @@ def goto_quizz_student(request,id):
 
 def ajax_show_my_result(request):
 
-    gquizz = request.POST.get("gquizz")
-    ans = Answerplayer.objects.filter(gquizz=gquizz,student = request.user.student)
+    gquizz_id = request.POST.get("gquizz")
+
+    gquizz = Generate_quizz.objects.get(pk= gquizz_id)
+
+    questions = gquizz.quizz.questions.filter(is_publish=1).order_by("ranking")
+
     score, total = 0 , 0
-    for a  in ans :
-        score += a.score
-        total += a.question.point
+    for question in questions :
+        try :
+            a = Answerplayer.objects.get(gquizz=gquizz,question=question,student = request.user.student)
+            score += a.score
+            total += a.question.point
+        except :
+            score = False
 
     data = {}
-    data['html'] = render_to_string('tool/quizz_student_results.html', {'ans' : ans, 'gquizz' : gquizz , 'total' : total, 'score' : score,  })
+    data['html'] = render_to_string('tool/quizz_student_results.html', {'questions' : questions, 'gquizz' : gquizz , 'total' : total, 'score' : score,  })
  
     return JsonResponse(data)
 
