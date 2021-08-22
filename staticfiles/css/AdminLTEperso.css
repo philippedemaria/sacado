@@ -1041,7 +1041,7 @@ a.selector_question:hover {
 }
 
 a.delete_question{
-  color : #7D7D8C;
+  color : #B0B9C9 ;  /*#7D7D8C;*/
 }
 a.delete_question:hover{
   color : #cb2131;
@@ -2279,7 +2279,7 @@ a.bilan_title:hover .fa-angle-down,a.bilan_title:focus .fa-angle-down {
 
 
 .edit {
-     color: #7D7D8C ; /* #AAA; */
+     color: #B0B9C9/* #7D7D8C ; /* #AAA; */
      font-size: 16px;
 }
 .edit:hover {
@@ -3427,7 +3427,7 @@ a:focus {
 .navbar-right > li > a.no_button {
     padding-top: 15px;
     padding-bottom: 10px;
-    color: #7D7D8C;
+    color: #B0B9C9;
     font-size : 18px ;
     margin-right: 10px;
     font-weight: 400;
@@ -3435,7 +3435,7 @@ a:focus {
 
 
 .navbar-right > li > a.no_button:visited {
-    color : #7D7D8C;
+    color : #B0B9C9;
 }
 
 .navbar-right > li > a.no_button:focus,.navbar-right > li > a.active,.navbar-right > li > a.no_button:hover{
