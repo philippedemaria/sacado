@@ -96,6 +96,15 @@ class QuizzForm(forms.ModelForm):
 		self.fields['groups']   = forms.ModelMultipleChoiceField(queryset = all_groups.order_by("level")  , required=False)
 		self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset = all_parcours.order_by("level"), required=False)
 
+		if 'initial' in kwargs:
+			kwarg   = kwargs.get("initial")
+			level   = kwarg["levels"]
+			subject = kwarg["subject"]
+
+			thms = level.themes.filter(subject=subject).order_by("name")
+			self.fields['themes'] = forms.ModelMultipleChoiceField(queryset = thms, required=False)
+
+
 	def clean_content(self):
 		content = self.cleaned_data['imagefile']
 		validation_file(content) 

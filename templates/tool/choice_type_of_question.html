@@ -4,11 +4,20 @@
 {% load item_tags %}
 
 
-{% block page_title %}
-        <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> </a>  Les quizz <img src="{% static 'img/angle-right.png' %}"/>  Choix du type de la question
+{% block page_title %}        
+
+
+        {% if parcours %}
+            <a href="{% url 'show_parcours' parcours.id %}" style="color:parcours.color" > {{ parcours.title }} </a><img src="{% static 'img/angle-right.png' %}"/> Quizz <img src="{% static 'img/angle-right.png' %}"/> Question
+        {% else %}
+            <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> </a>  Les quizz <img src="{% static 'img/angle-right.png' %}"/>  Forme de la question
+        {% endif %}
+        
+
 {% endblock %}
 
 {% block page_menu_right %}
+ 
     <a href="{% url 'list_quizzes' %}" class="btn btn-new pull-right" >  Mes quizz </a> 
     <a href="{% url 'show_quizz' quizz.id %}" target="_blank" class="btn btn-new pull-right">Lire le quizz</a>
 {% endblock %}

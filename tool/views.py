@@ -282,7 +282,8 @@ def ajax_chargethemes_quizz(request):
 
 
 def list_quizzes(request):
-
+    
+    request.session["parcours_id"] = False
     teacher = request.user.teacher 
     quizzes = teacher.teacher_quizz.filter(is_archive=0)
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
@@ -1100,6 +1101,15 @@ def create_question(request,idq,qtype):
     quizz = Quizz.objects.get(pk = idq)
     questions = quizz.questions.order_by("ranking")
 
+    parcours_id = request.session.get("parcours_id", None)
+    if parcours_id :
+        parcours = Parcours.objects.values('id', 'title', 'color').get(pk = parcours_id)
+    else :
+        parcours = None
+
+    print(parcours)
+
+
     form = QuestionForm(request.POST or None, request.FILES or None, quizz = quizz)
     all_questions = Question.objects.filter(is_publish=1)
     
@@ -1124,7 +1134,7 @@ def create_question(request,idq,qtype):
 
  
     bgcolors = ["bgcolorRed", "bgcolorBlue","bgcolorOrange", "bgcolorGreen"] 
-    context = { 'quizz': quizz, 'questions': questions,  'form' : form, 'qtype' : qtype , 'all_questions' : all_questions , "quizz_id" : quizz.id , "question" : None   }
+    context = { 'quizz': quizz, 'questions': questions,  'form' : form, 'qtype' : qtype , 'all_questions' : all_questions , "quizz_id" : quizz.id , "question" : None  , "parcours" : parcours   }
 
 
     if quizz.is_random :
@@ -1166,7 +1176,12 @@ def update_question(request,id,idq,qtype):
     question = Question.objects.get(pk = id)
     form = QuestionForm(request.POST or None, request.FILES or None, instance = question,  quizz = quizz)
 
-    
+    parcours_id = request.session.get("parcours_id", None)
+    if parcours_id :
+        parcours = Parcours.objects.values('id', 'title', 'color').get(pk = parcours_id)
+    else :
+        parcours = None
+
     if qtype > 2 :
         formSet = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct') , extra=0)
         form_ans = formSet(request.POST or None,  request.FILES or None, instance = question)
@@ -1187,7 +1202,7 @@ def update_question(request,id,idq,qtype):
 
  
     bgcolors = ["bgcolorRed","bgcolorBlue","bgcolorOrange","bgcolorGreen"] 
-    context = { 'quizz': quizz, 'questions': questions,  'form' : form, 'qtype' : qtype , "question" : question  }
+    context = { 'quizz': quizz, 'questions': questions,  'form' : form, 'qtype' : qtype , "question" : question , "parcours" : parcours   }
 
     #Choix des questions
     if qtype == 0 :

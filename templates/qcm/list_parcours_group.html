@@ -31,13 +31,7 @@
 
         {% include 'qcm/submenu_creation_new_parcours.html' %}
  
-
-        <li>
-            <a href="{% url 'create_folder' group.id %}"  class="btn btn-new helper_tip"> Créer un dossier  <i class="fa fa-question-circle"></i></span>
-                <div class="helper_tip_text_flex" >Un dossier permet de regrouper plusieurs parcours. </div>   
-            </a>
-        </li>  
-
+        {% include 'qcm/submenu_creation_folder.html' %}
     {% endif %}
 {% endblock %}
 

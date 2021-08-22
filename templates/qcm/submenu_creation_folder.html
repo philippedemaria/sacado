@@ -1,0 +1,21 @@
+{% if group %}
+<li class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-green"> Nouveau dossier <b class="caret"></b> </a>
+
+    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+ 
+        <li>  
+            <a href="{% url 'create_folder' group.id %}"> Créer un dossier 
+            </a>
+        </li>
+        <li>{% if sacado_asso %}
+        		<a href="{% url 'all_folders' %}" > Récupérer un dossier mutualisé</a> 
+        	{% else %}
+        		<a href="#"  class="no_sacado_asso" title="Ne peut être actif qu'à partir d'un groupe"> Récupérer un dossier mutualisé</a> 
+        	{% endif %} 
+        </li>
+    </ul>
+</li> 
+{% endif %}
+
+ 

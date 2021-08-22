@@ -31,16 +31,8 @@
     {% if role %}
         {% include 'qcm/submenu_creation_evaluation.html' %}
 
-
-        <li class="dropdown">
-            <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Nouveau parcours <b class="caret"></b> </a>
-
-            <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-                <li> <a href="{% url 'create_parcours' 0 %}"  > Créer un parcours</a> </li> 
-                <li> {% if sacado_asso %} <a href="{% url 'all_parcourses' 0 %}" > Récupérer un parcours mutualisé</a> {% else %}<a href="#"  class="no_sacado_asso" > Récupérer un parcours mutualisé</a> {% endif %} </li>         
-                <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"> Récupérer un parcours par défaut</a></li>
-            </ul>
-        </li>  
+        {% include 'qcm/submenu_creation_new_parcours.html' %}
+  
     {% endif %}
 {% endblock %}
 

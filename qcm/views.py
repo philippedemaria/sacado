@@ -17,6 +17,7 @@ from group.models import Group , Sharing_group
 from school.models import Stage, School
 from qcm.models import  Parcours , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage , DocumentReport , Tracker
 from qcm.forms import ParcoursForm ,  RemediationForm, UpdateParcoursForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm
+from tool.forms import QuizzForm
 from socle.models import  Theme, Knowledge , Level , Skill , Waiting , Subject
 from django.http import JsonResponse 
 from django.core import serializers
@@ -1879,6 +1880,7 @@ def show_parcours(request, id):
     skills = Skill.objects.all()
 
     parcours_folder_id = request.session.get("parcours_folder_id",None)
+    request.session["parcours_id"] = parcours.id
     parcours_folder = None
     if parcours_folder_id :
         parcours_folder = Parcours.objects.get(pk = parcours_folder_id)
@@ -1894,8 +1896,10 @@ def show_parcours(request, id):
             parcours_folder = None
 
     form_reporting = DocumentReportForm(request.POST or None )
+
+    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, initial={'parcours': parcours , 'groups': group , 'subject': parcours.subject , 'levels': parcours.level , 'groups': group })
  
-    context = { 'parcours': parcours, 'teacher': teacher,  'communications' : [] ,  'today' : today , 'skills': skills,  'form_reporting': form_reporting, 'user' : user ,
+    context = { 'parcours': parcours, 'teacher': teacher,  'communications' : [] ,  'today' : today , 'skills': skills,  'form_reporting': form_reporting, 'user' : user , 'form' : form ,
                'students_from_p_or_g': students_p_or_g,   'nb_exo_visible': nb_exo_visible , 'nb_students_p_or_g' : nb_students_p_or_g ,  'relationships_customexercises': relationships_customexercises,
                'nb_exo_only': nb_exo_only,'group_id': group_id, 'group': group, 'role' : role, 'parcours_group' : parcours_group , 'parcours_folder' : parcours_folder   }
 

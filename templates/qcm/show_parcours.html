@@ -10,6 +10,7 @@
 
     <script>
         require(['script/ajax-parcours']);
+        require(['script/ajax-quizz-complement']);
     </script> 
 {% endblock %} 
 
@@ -199,10 +200,14 @@ body{
                 {% for q in parcours.quizz.all %}
                     <div class="card">
 
-                        <div style="position: absolute; padding: 10px;">
+                        <div style="position: absolute; padding: 10px;width:100%">
                             <a href="{% url 'update_quizz' q.id  %}" target="_blank" style="font-weight: normal;">
-                                 {{ q }} 
+                                 {{ q }}  
                             </a>
+ 
+                            <a href="{% url 'create_question' q.id 0  %}" class="pull-right edit">
+                                <i class="fa fa-edit pull-right" ></i>
+                            </a>     
                         </div> 
          
                         {% if group %}
@@ -443,6 +448,29 @@ body{
         </div>
     </div>
 </div>
+
+
+
+<div class="modal fade" id="quizz_choice" tabindex="-1" role="dialog" aria-labelledby="quizz_choice">
+    <div class="modal-dialog" role="document" style="width: 750px;">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h1 class='thin'>Création du quizz</h1>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'create_quizz' %}" method="POST"  enctype='multipart/form-data'>
+                    {% include 'tool/form_quizz_items.html' %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 {% endblock %}
 
  

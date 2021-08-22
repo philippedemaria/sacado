@@ -57,10 +57,9 @@ urlpatterns = [
 
 
     path('list_questions', list_questions, name='list_questions'),
-
-    path('create_question/<int:id>/<int:qtype>', create_question, name='create_question'),
+ 
     path('update_question/<int:id>/<int:idq>/<int:qtype>', update_question, name='update_question'),
-    path('delete_question/<int:id>/<int:idq>', delete_question, name='delete_question'),
+ 
 
     path('remove_question/<int:id>/<int:idq>', remove_question, name='remove_question'), # from a quizz
     path('show_question/<int:id>', show_question, name='show_question'), 

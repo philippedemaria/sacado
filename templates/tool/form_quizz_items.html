@@ -197,12 +197,9 @@
 
         <div class="col-sm-12 col-md-10"> 
             <label>Thèmes : </label>
-            {% if quizz %}
+ 
                 {{ form.themes|add_class:"form-control select2" }}
-            {% else %} 
-                <select id="id_themes" name="themes" class="form-control select2" multiple>
-                </select>                       
-            {% endif %}
+ 
         </div>
     </div>
 
