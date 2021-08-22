@@ -128,11 +128,17 @@
         {% else %}         
         <li {% if 'parcours_peuplate/' in request.path %} class="active" {% endif %}><a href="{% url 'peuplate_parcours' parcours.id   %}"><i class="fa fa-laptop fa-fw"></i> Sélectionner les exercices</a>   </li>
         <li> <a href="#" data-toggle='modal' data-target='#quizz_choice' ><i class="fa fa-window-restore fa-fw"></i>  Créer un quizz</a> </li> 
+
+
+
             {% if sacado_asso %}
+
+                <li {% if 'all_quizzes/' in request.path %} class="active" {% endif %}><a href="{% url 'all_quizzes' %}"><i class="fa fa-copy fa-fw"></i>  Récupérer un quizz</a>   </li>          
                 <li {% if 'parcours_new_exercice/' in request.path %} class="active" {% endif %}>
                     <a href="{% url 'parcours_create_custom_exercise' parcours.id  1 %}" ><i class="fa fa-plus fa-fw"></i> Créer un exercice personnalisé</a> 
                 </li> 
             {% else %}
+                <li><a href="#"  class="no_sacado_asso" title="Version établissement requise"><i class="fa fa-copy fa-fw"></i>  Récupérer un quizz</a>   </li> 
                 <li>
                     <a href="#" class="no_sacado_asso" title="Version établissement requise"><i class="fa fa-plus fa-fw"></i> Créer un exercice personnalisé</a> 
                 </li> 

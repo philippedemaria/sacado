@@ -201,9 +201,14 @@ def all_quizzes(request):
 
     teacher = request.user.teacher 
     quizzes = Quizz.objects.filter(is_share =1 ).exclude(teacher =teacher )
+
+    parcours_id = request.session.get("parcours_id",None)  
+    if parcours_id :
+        parcours = Parcours.objects.get(pk = parcours_id)
+ 
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher)
-    return render(request, 'tool/all_quizzes.html', {'quizzes': quizzes , 'form': form, 'teacher':teacher   })
+    return render(request, 'tool/all_quizzes.html', {'quizzes': quizzes , 'form': form, 'teacher':teacher , 'parcours':parcours     })
 
 
 
@@ -228,11 +233,16 @@ def clone_quizz(request, id_quizz):
     qrandoms = quizz.qrandoms.all()
     themes = quizz.themes.all()
 
-    
     quizz.pk = None
     quizz.teacher = teacher
-    quizz.code = str(uuid.uuid4())[:8]  
+    quizz.code = str(uuid.uuid4())[:8]
     quizz.save()
+
+    parcours_id = request.session.get("parcours_id",None)  
+    if parcours_id :
+        parcours = Parcours.objects.get(pk = parcours_id)
+        quizz.parcours.add(parcours) 
+
 
     tab_id , t_idd = [] , []
     for q in questions :
