@@ -1,6 +1,6 @@
 {% for q in quizz %}
-
-	<div class="quizz_card" style=" border-radius: 5px;
+ 
+	<div class="quizz_card" style=" border-radius: 5px; float:left;
 							{% if q.vignette %}
 								background-image: url('{{ q.vignette.url }}'); background-size: cover; 
 							{% endif %}">
@@ -13,8 +13,7 @@
 			<p><a href="{% url 'clone_quizz' q.id %}">Récupérer le quizz</a></p>
 
 		</div>
-
 	</div>
-
+ 
 {% endfor %}
  
