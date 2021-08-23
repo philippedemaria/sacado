@@ -4,13 +4,14 @@
 							{% if q.vignette %}
 								background-image: url('{{ q.vignette.url }}'); background-size: cover; 
 							{% endif %}">
-		<div style="padding:10px">
-			<h2 class="thin">{{ q.title }}</h2>
+		<div style="padding:10px; background-color: #FFF; opacity:0.8;border-radius:30px;">
+			<h2>{{ q.title }}</h2>
 			<p>{{ q.questions.count }} diapo-questions</p>
 
-			<p><a href="{% url 'show_quizz_shared' q.id %}" target="_blank">Voir le quizz</a></p>
-
-			<p><a href="{% url 'clone_quizz' q.id %}">Récupérer le quizz</a></p>
+			<p>
+				<a href="{% url 'show_quizz_shared' q.id %}" target="_blank" class="btn btn-primary btn-xs">Voir</a> 
+				<a href="{% url 'clone_quizz' q.id %}"  class="btn btn-primary btn-xs">Récupérer</a>
+			</p>
 
 		</div>
 	</div>

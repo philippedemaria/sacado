@@ -195,12 +195,22 @@ def delete_my_tool(request):
 ########## Quizz
 ############################################################################################################
 ############################################################################################################
+def user_list_of_school(teacher):
+    if teacher.sacado :
+        user_ids = list(teacher.user.school.users.values_list('id', flat=True).filter(user_type=2))
+        user_ids.append(2480)
+    else :
+        user_ids = [2480]
 
+    print(user_ids)
+    return user_ids
 
 def all_quizzes(request):
 
     teacher = request.user.teacher 
-    quizzes = Quizz.objects.filter(is_share =1 ).exclude(teacher =teacher )
+
+    user_ids = user_list_of_school(teacher)
+    quizzes = Quizz.objects.filter(is_share =1 , teacher_id__in=user_ids  ).exclude(teacher =teacher )
 
     parcours_id = request.session.get("parcours_id",None)  
     if parcours_id :
@@ -216,8 +226,11 @@ def all_quizzes(request):
 
 def ajax_shared_quizzes(request):
 
-    teacher = request.user.teacher 
-    quizzes = Quizz.objects.filter(is_share =1 , teacher_id=2480 ).exclude(teacher =teacher )
+    teacher = request.user.teacher
+
+    user_ids = user_list_of_school(teacher)
+
+    quizzes = Quizz.objects.filter(is_share = 1 , teacher_id__in = user_ids ).exclude(teacher = teacher )
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher)
     return render(request, 'tool/all_quizzes.html', {'quizzes': quizzes , 'form': form, 'teacher':teacher   })

@@ -112,6 +112,15 @@ class User(AbstractUser):
     def is_creator(self):
         return self.is_staff == True
 
+    @property
+    def sacado(self):
+        """
+        L'enseignant est un membre bénéficiaire de sacado
+        """
+        sacado_asso = False
+        if self.school  :
+            sacado_asso = True
+        return sacado_asso
 
 
 
