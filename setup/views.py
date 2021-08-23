@@ -215,6 +215,12 @@ def logout_view(request):
     return render(request, 'home.html', context)
 
 
+
+def saml_metadata(request): #Protection saml pour le GAR
+    return redirect('index')
+
+
+
 def send_message(request):
     ''' traitement du formulaire de contact de la page d'accueil et du paiement de l'adhésion par virement bancaire '''
     name = request.POST.get("name")
