@@ -6,7 +6,7 @@
 							{% endif %}">
 		<div style="padding:10px; background-color: #FFF; opacity:0.8;border-radius:30px;">
 			<h2>{{ q.title }}</h2>
-			<p>{{ q.questions.count }} diapo-questions</p>
+			<p>{{ q.questions.count }} questions, <small>{{ q.duration|time_done }}</small> </p>
 
 			<p>
 				<a href="{% url 'show_quizz_shared' q.id %}" target="_blank" class="btn btn-primary btn-xs">Voir</a> 
