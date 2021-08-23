@@ -217,7 +217,7 @@ def all_quizzes(request):
 def ajax_shared_quizzes(request):
 
     teacher = request.user.teacher 
-    quizzes = Quizz.objects.filter(is_share =1 ).exclude(teacher =teacher )
+    quizzes = Quizz.objects.filter(is_share =1 , teacher_id=2480 ).exclude(teacher =teacher )
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher)
     return render(request, 'tool/all_quizzes.html', {'quizzes': quizzes , 'form': form, 'teacher':teacher   })
