@@ -1,9 +1,10 @@
+{% load item_tags %}
 {% for q in quizz %}
  
 	<div class="quizz_card" style=" border-radius: 5px; float:left;
-							{% if q.vignette %}
-								background-image: url('{{ q.vignette.url }}'); background-size: cover; 
-							{% endif %}">
+		{% if q.vignette %}
+			background-image: url('{{ q.vignette.url }}'); background-size: cover; 
+		{% endif %}">
 		<div style="padding:10px; background-color: #FFF; opacity:0.8;border-radius:30px;">
 			<h2>{{ q.title }}</h2>
 			<p>{{ q.questions.count }} questions, <small>{{ q.duration|time_done }}</small> </p>

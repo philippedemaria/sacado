@@ -201,8 +201,6 @@ def user_list_of_school(teacher):
         user_ids.append(2480)
     else :
         user_ids = [2480]
-
-    print(user_ids)
     return user_ids
 
 def all_quizzes(request):
