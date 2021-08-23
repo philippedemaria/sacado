@@ -208,7 +208,7 @@ def all_quizzes(request):
     teacher = request.user.teacher 
 
     user_ids = user_list_of_school(teacher)
-    quizzes = Quizz.objects.filter(is_share =1 , teacher_id__in = user_ids  ).exclude(teacher =teacher ).distinct()
+    quizzes = Quizz.objects.filter(is_share = 1 , teacher_id__in = user_ids  ).exclude(teacher = teacher )
 
     parcours_id = request.session.get("parcours_id",None)  
     if parcours_id :
@@ -218,7 +218,7 @@ def all_quizzes(request):
  
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher)
-    return render(request, 'tool/all_quizzes.html', {'quizzes': quizzes , 'form': form, 'teacher':teacher , 'parcours':parcours     })
+    return render(request, 'tool/all_quizzes.html', {'quizzes': quizzes , 'form': form, 'teacher':teacher , 'parcours':parcours }) 
 
 
 
@@ -295,17 +295,20 @@ def ajax_chargethemes_quizz(request):
     level =  Level.objects.get(pk = id_level)
     thms_id = request.POST.getlist("theme_id")
     quizz = set()
+
+    user_ids = user_list_of_school(teacher)
+
     if len(thms_id) > 0 :
         if thms_id[0] != "" :
             for thm_id in thms_id :
                 th = Theme.objects.get(pk=thm_id)
-                quizz.update(Quizz.objects.filter(subject_id = id_subject, themes=th, levels = level , is_share = 1).exclude(teacher=teacher)) 
+                quizz.update(Quizz.objects.filter(subject_id = id_subject, themes=th, levels = level , is_share = 1, teacher_id__in = user_ids ).exclude(teacher=teacher)) 
         else :
-            quizz.update(Quizz.objects.filter(subject_id = id_subject, levels = level , is_share = 1).exclude(teacher=teacher))    
+            quizz.update(Quizz.objects.filter(subject_id = id_subject, levels = level , is_share = 1, teacher_id__in = user_ids ).exclude(teacher=teacher))    
     else :
         thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject).order_by("name")
         data['themes'] = list(thms)
-        quizz.update(Quizz.objects.filter(subject_id = id_subject, levels = level , is_share = 1).exclude(teacher=teacher))         
+        quizz.update(Quizz.objects.filter(subject_id = id_subject, levels = level , is_share = 1, teacher_id__in = user_ids).exclude(teacher=teacher))         
 
     data['html'] = render_to_string('tool/ajax_list_quizz_shared.html', {'quizz' : quizz, })
 
