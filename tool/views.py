@@ -208,7 +208,7 @@ def all_quizzes(request):
     teacher = request.user.teacher 
 
     user_ids = user_list_of_school(teacher)
-    quizzes = Quizz.objects.filter(is_share =1 , teacher_id__in=user_ids  ).exclude(teacher =teacher )
+    quizzes = Quizz.objects.filter(is_share =1 , teacher_id__in = user_ids  ).exclude(teacher =teacher ).distinct()
 
     parcours_id = request.session.get("parcours_id",None)  
     if parcours_id :
