@@ -430,8 +430,9 @@ def show_quizz_shared(request,id):
 def result_quizz(request,id):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
-    g_quizz = Generate_quizz.objects.get(pk= id, quizz__teacher = request.user.teacher)
-    context = {  "g_quizz" : g_quizz }
+    gquizz = Generate_quizz.objects.get(pk= id)
+    questions = gquizz.quizz.questions.filter(is_publish=1).order_by("ranking")
+    context = {  "gquizz" : gquizz  , 'questions' : questions }
 
     return render(request, 'tool/result_quizz.html', context)
 
@@ -442,10 +443,10 @@ def result_quizz(request,id):
 def delete_historic_quizz(request,id):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
-    g_quizz = Generate_quizz.objects.get(pk= id)
+    gquizz = Generate_quizz.objects.get(pk= id)
 
-    if g_quizz.quizz.teacher == request.user.teacher :
-        g_quizz.delete()
+    if gquizz.quizz.teacher == request.user.teacher :
+        gquizz.delete()
 
     return redirect("list_quizzes")
 
@@ -913,26 +914,25 @@ def list_quizz_student(request):
 
 
 def store_quizz_solution(gquizz_id,student,q_id, solutions,t):
-    """ Enregistrement des solutions postées """
+    """ Enregistrement des solutions postées 
+    par les id des choices proposés"""
     answer,sep = "" , ","
     i , score  = 1 , 0
     is_correct = 0
-    for s in solutions : # est de la forme a-b où a est la réponse et b l'id de la question
-        ans      = s
-        print(q_id)
+    for ans in solutions : # est une liste d'id des réponses choisies par les réponses proposées
         question = Question.objects.get(pk=q_id)
         if question.qtype == 1 :
             if int(ans) == question.is_correct :
                 is_correct = 1
                 score      = question.point
         elif question.qtype == 2 :
-            choices = Choice.objects.filter(question = question)
+            choices = question.choices.all()
             for choice in choices :
                 if ans == choice.answer :
                     is_correct = 1
                     score      = question.point
         else :
-            choices  = Choice.objects.values_list('id',flat=True).filter(question = question,is_correct=1)
+            choices  = question.choice.values_list('id',flat=True).filter(is_correct=1)
             corrects = 0
             a = ""
             if int(ans) in choices :
@@ -944,6 +944,8 @@ def store_quizz_solution(gquizz_id,student,q_id, solutions,t):
         if i == len(solutions):
             sep = ""
         answer += str(escape_chevron(ans))+sep
+
+        i +=1
  
     timer = int(t)
     answ, create_ans = Answerplayer.objects.get_or_create(gquizz_id = gquizz_id , student=student,question = question, qrandom_id = None, defaults={ "answer"  : answer , "score"  : score ,"timer"  : timer , "is_correct" : is_correct} )
@@ -969,7 +971,7 @@ def goto_quizz_student(request,id):
         gquizz_id                    = gquizz.id
         request.session["gquizz_id"] = gquizz_id
 
-        if quizz.is_ranking :
+        if gquizz.quizz.is_ranking :
             random.shuffle(question_ids)
         
         request.session["question_ids"] = question_ids
@@ -1002,10 +1004,9 @@ def goto_quizz_student(request,id):
     end_of_quizz   = False
 
     solutions  = request.POST.getlist("solution", None)
-
-    
+ 
     stop_time  = time.time()
-    if solutions :
+    if solutions and len(solutions) > 0 :
         q_id    = request.POST.get("question_id")
         start_time_tab = request.POST.get("start_time").split(",")
         start_time =  int(start_time_tab[0])
@@ -1038,7 +1039,6 @@ def goto_quizz_student(request,id):
     quizz_nav_prev = quizz_nav - 1
 
 
-
     context = {  "gquizz" : gquizz , "question" : question , 'duration' : duration , "quizz_nav" : quizz_nav, "quizz_nav_prev" : quizz_nav_prev ,"end_of_quizz" : end_of_quizz ,"stop_time" : stop_time  }
 
     return render(request, 'tool/pass_quizz_student.html', context)
@@ -1049,9 +1049,10 @@ def goto_quizz_student(request,id):
 
 def ajax_show_my_result(request):
 
-    gquizz_id = request.POST.get("gquizz")
 
-    gquizz = Generate_quizz.objects.get(pk= gquizz_id)
+    student   = request.user.student
+    gquizz_id = request.POST.get("gquizz")
+    gquizz    = Generate_quizz.objects.get(pk= gquizz_id)
 
     questions = gquizz.quizz.questions.filter(is_publish=1).order_by("ranking")
 
@@ -1065,7 +1066,7 @@ def ajax_show_my_result(request):
             score = False
 
     data = {}
-    data['html'] = render_to_string('tool/quizz_student_results.html', {'questions' : questions, 'gquizz' : gquizz , 'total' : total, 'score' : score,  })
+    data['html'] = render_to_string('tool/quizz_student_results.html', {'questions' : questions, 'gquizz' : gquizz , 'total' : total, 'score' : score, 'student' : student })
  
     return JsonResponse(data)
 
@@ -1148,10 +1149,7 @@ def create_question(request,idq,qtype):
         parcours = Parcours.objects.values('id', 'title', 'color').get(pk = parcours_id)
     else :
         parcours = None
-
-    print(parcours)
-
-
+ 
     form = QuestionForm(request.POST or None, request.FILES or None, quizz = quizz)
     all_questions = Question.objects.filter(is_publish=1)
     

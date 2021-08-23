@@ -154,6 +154,7 @@
                                                            <i class="fa fa-play fa-xs"></i> 
                                                         {% endif %}
                                                         </small> 
+                                                        {% if  quizz.is_numeric %}
                                                         <a  {% if quizz.is_random %}
                                                                 {% if quizz.is_numeric %}
                                                                     href="{% url 'result_quizz'  gq.id %}" 
@@ -168,7 +169,10 @@
                                                                 href="{% url 'result_quizz'  gq.id %}"
                                                             {% endif %}>
                                                             {{ gq.code }} <small>Résultats</small> 
-                                                        </a>       
+                                                        </a>
+                                                        {% else %}
+                                                           {{ gq.code }} 
+                                                        {% endif %}
                                                     </li>
                                                 {% endfor %}
  
@@ -197,7 +201,7 @@
                                     <div class="alert alert-danger"><i class="fa fa-ban"></i> Aucune question actuellement</div> 
                                     {% endif  %}
                                 {% else  %}
-                                    <div class="alert alert-danger"><i class="fa fa-ban"></i> Version numérique sans fiche</div> 
+                                    <div class="text-info" style="margin-bottom: 10px;"><i class="fa fa-desktop"></i> Version numérique sans fiche </div> 
                                 {% endif  %}
                                 <a href="{% url 'delete_quizz'  quizz.id %}"  class="quizz_action"  onclick="return TestDelete('ce quizz')"><i class="fa fa-trash"></i>  Supprimer</a> 
                             </td>

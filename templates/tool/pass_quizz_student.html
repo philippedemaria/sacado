@@ -11,7 +11,7 @@
 
 
 {% block page_title %}
-   <a href="{% url 'list_quizzes' %}" ><i class="fa fa-gamepad"></i> </a>  Quizz 
+   <a href="{% url 'list_quizzes' %}" ><i class="fa fa-gamepad"></i> </a>  Quizz  <img width="25px" src="{% static 'img/angle-right.png' %}"/> {{ gquizz.quizz.title }} <small> {{ gquizz.quizz.code }}</small>
  
 {% endblock %}
 
@@ -22,7 +22,6 @@
         <button id="question_{{ question.id }}" class="btn btn-default thisquestion"> Q{{ forloop.counter }} </button> 
     {% endfor %}
  
-
 {% endblock %}
 
 
@@ -41,16 +40,14 @@
 {% if  quizz_nav == 0 %}
     <div class="row consigne_diapo"  align="center">  
         <div class="col-sm-12 col-md-12">
-            <h1 style="font-size:4em;line-height: 200px;" class="thin"> 
-                {{ gquizz.quizz.title}}
-            </h1>
-            {% if gquizz.quizz.vignette %}<img src="{{ gquizz.quizz.vignette.url }}" width="700px"  />{% endif %}
+ 
+            {% if gquizz.quizz.vignette %}<img src="{{ gquizz.quizz.vignette.url }}" width="300px"  />{% endif %}
         </div>
     </div>
     <div class="row" >  
         <div class="col-sm-12 col-md-12">
-            <h1 style="font-size:3em;line-height: 80px;" > Consignes.</h1>
-            <span style="font-size:2em; text-align: left;" >    
+            <h1 style="line-height: 80px;" > Consignes.</h1>
+            <span style="font-size:1.2em; text-align: left;" >    
                 Durée : <b>{% if duration %} {{ duration|date:"i" }} min{% else %}Temps libre{% endif %}</b><br/>
                 Nombre de questions : <b>{{ gquizz.quizz.questions.count}}</b><br/>
                 Vous devez répondre à chaque question.<br/> Le type de question est indiqué en haut de page.<br/>
@@ -115,19 +112,19 @@
         <div class="row"> 
             <div class="col-sm-12 col-md-6 bgcolorBlue white"  align="center" style="border-radius : 10px ">
                 <label style="font-size:3.5em" class="thin">
-                    VRAI <input type="radio" name="solution" value="1" class="answer_quizz" {% if "1" in this_answer  %}checked{% endif %} >
+                    VRAI <input type="radio" name="solution" value="1" class="answer_quizz" {% if 1 in this_answer.answer  %}checked{% endif %} >
                 </label>  
             </div> 
 
             <div class="col-sm-12 col-md-6 bgcolorRed white"  align="center" style="border-radius : 10px ">
-                <label style="font-size:3.5em" class="thin">FAUX <input type="radio" name="solution" value="0"  {% if "0" in this_answer    %}checked{% endif %}  class="answer_quizz"></label>  
+                <label style="font-size:3.5em" class="thin">FAUX <input type="radio" name="solution" value="0"  {% if 0 in this_answer.answer    %}checked{% endif %}  class="answer_quizz"></label>  
             </div> 
         </div> 
     {% elif question.qtype == 2 %}
         {% get_ans_for_this_question gquizz question student as this_answer %}
         <div class="row"> 
             <div class="col-sm-12 col-md-12"  align="center" style="border-radius : 10px ">
-                <input type="text" name="solution" id="solution" required class="quizz_box_answer quizz_font40"  value="{{ this_answer }}" >
+                <input type="text" name="solution" id="solution" required class="quizz_box_answer quizz_font40"  value="{{ this_answer.answer }}" >
             </div> 
         </div> 
     {% elif question.qtype > 2 %}   
@@ -140,7 +137,7 @@
                     <div class="col-sm-12 col-md-12 {{ rowcolor }}" align="center" 
                          style="color:#FFF; font-size:{% if choice.answer|length > 20 %}1.5{% elif choice.answer|length > 10  %}2.5{% else  %}3{% endif %}em; border-radius :  10px  "> 
                          {{ choice.answer }}
-                         <input type="{% if question.qtype == 3 %}checkbox{% else %}radio{% endif %}" name="solution" value="{{ choice.id }}" {% if choice.id in this_answer %}checked{% endif %}   class="answer_quizz"> 
+                         <input type="{% if question.qtype == 3 %}checkbox{% else %}radio{% endif %}" name="solution" value="{{ choice.id }}" {% if choice.id in this_answer.answer %}checked{% endif %}   class="answer_quizz"> 
                     </div>
                 </div>  
             </div> 

@@ -504,6 +504,23 @@ class Student(ModelWithCode):
         return data
 
 
+    def score_quizz(self, g_quizz) :
+
+        data = {}
+        questions = g_quizz.quizz.questions.all() # toutes les questions
+        score = self.questions_player.filter(  question__in= questions, is_correct = 1).count()
+        nbre_total = self.questions_player.filter( question__in= questions).count()
+        try :
+            data["percent"]  = int(100 * score/nbre_total)
+            data["score"] = score
+        except :
+            data["percent"] = "A"
+            data["score"] = "A"
+        return data
+
+
+
+
 class Teacher(models.Model):
     """
     Modèle représentant un enseignant.

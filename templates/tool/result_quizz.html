@@ -12,14 +12,14 @@
 
 
 {% block page_title %}
-    <a href="{% url 'list_quizzes' %}" ><i class="fa fa-cubes"></i> Résultats</a>  <img width="25px" src="{% static 'img/angle-right.png' %}"/> {{ g_quizz.quizz.title}} <img width="25px" src="{% static 'img/angle-right.png' %}"/> 
-    <small>{{ g_quizz.quizz.code}}</small>
+    <a href="{% url 'list_quizzes' %}" ><i class="fa fa-cubes"></i> Résultats</a>  <img width="25px" src="{% static 'img/angle-right.png' %}"/> {{ gquizz.quizz.title}} <img width="25px" src="{% static 'img/angle-right.png' %}"/> 
+    <small>{{ gquizz.quizz.code}}</small>
 {% endblock %}
 
 
 
 {% block page_menu_right %}
-    <a href="{% url 'list_quizzes' %}" class="btn btn-new pull-right">Liste de mes quizz</a>  
+    <a href="{% url 'list_quizzes' %}" class="btn btn-new pull-right">Mes quizz</a>  
 {% endblock %}
 
 
@@ -27,37 +27,51 @@
 <section class="content_main"> 
     <div class="row">
         <div class="col-sm-12 col-md-8">
-            {% for qr in g_quizz.generate_qr.all %}
+            {% for question in questions %}
             <div class="row">    
-                <div class="card" style="padding:15px">
-                <h4 >Question {{ qr.ranking }}. </h4>
-                {{ qr.qr_text|safe }}
+                <div class="card" style="padding:15px; width:90%">
+                <h4 >Question {{ question.ranking }}. </h4>
+                {{ question.title|safe }}
                 </div> 
-
-                {% for student in g_quizz.group.students.all|dictsort:"user.last_name" %}
-                    {% get_is_correct_answer_quizz_random qr student  as is_correct %}
-                    <button class="btn btn-{% if is_correct == 'A' %}default{% elif is_correct  %}success{% else %}danger{%  endif %}">{{ student.user }}</button>    
+                <div class="col-sm-12 col-md-12">
+                {% for student in gquizz.group.students.all|dictsort:"user.last_name" %}
+ 
+                    {% get_real_ans_for_this_question  question  gquizz  student as dict_answer %} 
+                    <span class="btn btn-{% if dict_answer.is_correct %}success{% else %}danger{% endif %}">{{ student.user }}
+                        <small>
+                        {% if question.qtype < 3 %} 
+                            {{ dict_answer.answer }} 
+                        {% else %}
+                            {% for a in dict_answer.answer %}
+                                {{ a }}  
+                                {% if not forloop.last %}<br/>{% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        </small>
+                    
+                    </span>    
                 {% endfor %}
+                </div>
             </div>
             <hr/>
             {% endfor %}
         </div>
         <div class="col-sm-12 col-md-4">
-            <table class="table table-bordered table-hover">
+            <table  class="table table-bordered table-hover standard_tab_sort">
                 <thead>
                 <tr>
                     <th>Nom</th>
                     <th>Score</th>
-                    <th>SF</th>
+                    <th> </th>
                 </tr>
                 </thead>
                 <tbody>
-                    {% for student in g_quizz.group.students.all %}
-                    {% get_score_quizz_random student g_quizz as data_global %}
+                    {% for student in gquizz.group.students.all|dictsort:"user.last_name" %}
+                    {% get_score_quizz  student gquizz as data_global %}
                         <tr>
                             <td>{{ student.user }}</td>
-                            <td style="text-align: center;"><input type="text" name="mark" value="{{ data_global.score  }}" style="text-align: center;width:40px; border:transparent" /></td>
-                            <td style="text-align: center;"><input type="text" name="mark" value=" " style="text-align: center;width:40px; border:transparent" /></td>
+                            <td style="text-align: center;"><b>{{ data_global.score  }}</b> / {{ questions.count}}</td>
+                            <td style="text-align: center;">{{ data_global.percent  }}%</td>
                         </tr>
                     {% endfor %}
             </table>

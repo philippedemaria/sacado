@@ -1,12 +1,14 @@
- 
-
-
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
 
 <table class="table  table-hover standard_tab_1000" style="width:100%">
     <thead> 
         <tr>
             <th>Question</th>
+            {% if gquizz.quizz.is_result %} 
             <th>Choix et solution</th>
+            {% endif  %} 
             {% if score %} 
             <th>Réponse proposée</th>
             {% endif  %} 
@@ -16,7 +18,7 @@
 
         {% for question in  questions  %} 
             <tr>
-                <td>{{ question.title|safe}}</td>
+                <td>{{ question.title|safe}}
                     {% if question.imagefile %}
                         <img src="{{ question.imagefile.url }}" width="150px">
                     {% endif %}
@@ -35,8 +37,8 @@
                             </div>
                         </div>
                     {% endif %}
-
-
+                </td>
+                {% if gquizz.quizz.is_result %} 
                 <td>
 
                     {% if question.qtype == 1 %}
@@ -61,16 +63,26 @@
                         {% endfor %}
                     {% endif %}
                 </td>
+                {% endif %}
                 {% if score %} 
                 <td>
-                    {% if a.is_correct %}<i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif %}
-                    {% if a.question.qtype == 1 %}
-                        {% if  a.answer == "1" %}VRAI{% else %} FAUX {% endif %}
-                    {% elif a.question.qtype == 2 %}
-                        {{ a.answer }}
+                    {% get_real_ans_for_this_question  question  gquizz  student as dict_answer %}  
+
+                    {% if question.qtype < 3 %} 
+                        {{ dict_answer.answer }} 
+                            {% if gquizz.quizz.is_result %}
+                                {% if dict_answer.is_correct %}<i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif %} </small>
+                            {% endif %}
                     {% else %}
-                        {{ a.get_choice_with_these }}
+                        {% for a in dict_answer.answer %}
+                            {{ a }}  
+                            {% if not forloop.last %}<br/>{% endif %}
+                        {% endfor %}
+                            {% if gquizz.quizz.is_result %}
+                            <small> {% if dict_answer.is_correct %}<i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif %} </small>
+                            {% endif %}
                     {% endif %}
+
                 </td>
                 {% endif %} 
             </tr>
@@ -78,13 +90,13 @@
 
     </tbody>
 </table>
-  
+{% if gquizz.quizz.is_result %}
     <div class="row" align="center">
         <div class="col-sm-12 col-md-12" >     
             <h3 style="padding: 10px; background-color: #5d4391; color: #FFF;">{% if score %} Score : {{ score }} / {{ total }}{% else %}Réponses non enregistrées{% endif %}</h3>
         </div>
     </div> 
-
+{% endif %}
 <script>
     MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 </script>

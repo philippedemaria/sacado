@@ -170,10 +170,48 @@ class Question(models.Model):
 
 
     def ans_for_this_question (self,q, student):
-        ans = Answerplayer.objects.get(gquizz = q , student= student , question = self)
-        return ans.answer
+        """
+        retourne  la réponse de 'élève pour un quizz avec une question sous forme d'id.
+        """
+        try :
+            answerplayer = self.questions_player.filter( gquizz = q , student= student  ).last()
+            return answerplayer
+        except :
+            return ""
 
 
+
+    def real_ans_for_this_question (self,gquizz, student):
+        """
+        retourne  la réponse de 'élève pour un quizz avec une question sous forme du choix proposé.
+        """
+        this_answer = dict()
+        answer      = []
+        is_correct  = 0 
+        try : 
+            answerplayer = self.questions_player.filter( gquizz = gquizz , student= student  ).last()
+            if answerplayer.is_correct :
+                is_correct = 1
+            if self.qtype == 1 : # VRAI - FAUX
+                answer = "FAUX"
+                if int(answerplayer.answer) == 1 :
+                    answer = "VRAI"
+            elif  self.qtype == 2 : # réponse écrite
+                    answer = answerplayer.answer
+            else :
+                tab = answerplayer.answer.split(",") # liste des id des choix réponses
+                answer = []
+                for id_c in tab:
+                    choice = Choice.objects.get(pk=id_c)
+                    if choice.imageanswer :
+                        answer.append(choice.imageanswer)
+                    else :
+                        answer.append(choice.answer)
+        except :
+            pass
+        this_answer["answer"]     = answer
+        this_answer["is_correct"] =   is_correct  
+        return this_answer
 
 class Choice(models.Model):
     """
@@ -285,17 +323,33 @@ class Generate_quizz(ModelWithCode):
 
 
     def ans_for_this_question (self,q, student):
-        ans = Answerplayer.objects.get(gquizz = self , student= student , question = q)
         t = []
-        if q.qtype == 2 :
-            t = ans.answer
-        else :
-            if ans.answer :
-                a_tab = ans.answer.split(',')
-                for a in a_tab :
-                    t.append(int(a))
+        try :
+            ans = Answerplayer.objects.get(gquizz = self , student= student , question = q)
+            
+            if q.qtype == 2 :
+                t = ans.answer
+            else :
+                if ans.answer :
+                    a_tab = ans.answer.split(',')
+                    for a in a_tab :
+                        t.append(int(a))
+        except :
+            pass
         return t
 
+
+
+
+
+    def restart_gquizz (self, student):
+
+        nb_ans = Answerplayer.objects.filter(gquizz = self , student= student).count()
+        nb_q   =  self.quizz.questions.count()
+        test   = True
+        if nb_ans >= nb_q :
+            test = False
+        return test
 
 
 class Generate_qr(models.Model):

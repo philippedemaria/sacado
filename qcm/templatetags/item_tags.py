@@ -199,9 +199,20 @@ def get_timer(obj,student):
 @register.simple_tag
 def get_ans_for_this_question(obj,q, student): 
     """
-    retourne  la réposne pour un quizz avec une question de type 1.
+    retourne  la réponse pour un quizz avec une question. peutn être sous forme d'id.
     """
     return obj.ans_for_this_question(q, student) 
+
+
+
+@register.simple_tag
+def get_real_ans_for_this_question(obj,q, student): 
+    """
+    retourne  la réponse pour un quizz avec une question sous forme du choix proposé.
+    """
+    return obj.real_ans_for_this_question(q, student) 
+
+
 
 
 
@@ -807,6 +818,13 @@ def get_is_correct_answer_quizz_random(obj, student):
     return obj.is_correct_answer_quizz_random(student)  
 
 
+@register.simple_tag 
+def get_is_correct_answer_quizz(obj, student):
+    """
+    obj = qr ,  prédicat : question juste ou fausse par élève
+    """
+    return obj.is_correct_answer_quizz_random(student)  
+
 
 @register.simple_tag 
 def get_score_quizz_random(obj, g_quizz):
@@ -816,6 +834,12 @@ def get_score_quizz_random(obj, g_quizz):
     return obj.score_quizz_random(g_quizz)  
 
 
+@register.simple_tag 
+def get_score_quizz(obj, g_quizz):
+    """
+    obj = student ,  renvoie par élève le score total au quizz et le niveau de knowledge
+    """
+    return obj.score_quizz(g_quizz)  
 
 
 @register.simple_tag 
@@ -833,3 +857,12 @@ def get_nb_level_subject(obj, subject_id):
     Donne le nombre d'exercices sur un niveau dans une matière donnée
     """
     return obj.nb_level_subject(subject_id)  
+
+
+@register.simple_tag 
+def is_can_gquizz_restart(obj, student):
+    """
+    Détermine si un élève a déjà fini son quizz depuis la page tool/list_quizz_student.html
+    """
+    return obj.restart_gquizz(student)  
+

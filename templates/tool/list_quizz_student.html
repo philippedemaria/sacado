@@ -36,11 +36,12 @@
                     <th>Matière</th>
                     <th>Code</th>
                     <th>Titre</th>
-                    <th>Correction et score</th>
+                    <th>Correction </th>
                 </tr>
                 </thead>
                 <tbody>
                     {% for gquizz in gquizzes %}
+                        {% is_can_gquizz_restart gquizz student as restart_gquizz %}
                         <tr style="font-size:20px">
                             <td> 
                                {{ gquizz.quizz.subject.shortname }}
@@ -50,9 +51,21 @@
                             </td>
                             <td  style="position: relative;height:90px">
                                {% if  gquizz.quizz.is_video %}
-                                    <a href="{% url 'play_quizz_student'  %}">{{ gquizz.quizz.title }}</a><br/><small> Jeu vidéo projeté</small> 
+                                    {{ gquizz.quizz.title }} 
+
+                                    <a href="{% url 'play_quizz_student'  %}" class="btn btn-primary btn-xs">Lancer</a><br/><small> Jeu vidéo projeté</small> 
+
+
                                {% elif gquizz.quizz.is_numeric and not gquizz.quizz.is_video %}
-                                    <a href="{% url 'goto_quizz_student' gquizz.id  %}">{{ gquizz.quizz.title }}</a><br/><small> Numérique sur terminal</small> 
+                                    {{ gquizz.quizz.title }} 
+                                    
+                                    {% if  restart_gquizz %}
+                                        <a href="{% url 'goto_quizz_student' gquizz.id  %}" class="btn btn-primary btn-xs">Démarrer</a>
+                                    {% else %}
+                                        <a href="#" class="btn btn-default btn-xs show_my_quizz_result" data-toggle='modal'  data-target='#my_quizz_results' data-gquizz="{{ gquizz.id }}">Déjà renseigné</a>
+                                    {% endif %}
+                                    <br/><small> Numérique sur terminal</small>
+                                    
                                 {% else %}
                                     <a href="{% url 'show_quizz' gquizz.quizz.id  %}"> {{ gquizz.quizz.title }}</a><br/><small> Réponse sur papier</small>  
                                 {% endif %} 
@@ -70,13 +83,12 @@
                                 <br/> <small>{{ gquizz.quizz.duration|time_done }}</small>
                             </td>
                             <td>
-                                {% if gquizz.quizz.is_result %}
-                                    {% if gquizz.student_show %}
-                                        <small><a href="#" data-toggle='modal' class="show_my_quizz_result" data-target='#my_quizz_results' data-gquizz="{{ gquizz.id }}">Lire</a></small>
-                                    {% endif %}
+                                {% if gquizz.quizz.is_result and not restart_gquizz %}
+                                    <small><a href="#" data-toggle='modal' class="show_my_quizz_result" data-target='#my_quizz_results' data-gquizz="{{ gquizz.id }}">Lire</a></small>
                                 {% else %}
-                                    <small class="text-danger">Votre enseignant doit <br/>déverrouiller la correction</small>
+                                    <small  class="text-danger">Votre enseignant n'a pas encore<br/> publié les réponses</small>
                                 {% endif %}
+
                             </td>
                         </tr>
                     {% endfor %} 
