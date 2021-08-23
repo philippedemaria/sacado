@@ -205,6 +205,8 @@ def all_quizzes(request):
     parcours_id = request.session.get("parcours_id",None)  
     if parcours_id :
         parcours = Parcours.objects.get(pk = parcours_id)
+    else :
+        parcours = None
  
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher)
