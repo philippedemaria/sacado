@@ -7720,6 +7720,32 @@ def parcours_delete_from_folder(request):
     return JsonResponse(data)
 
 
+ 
+@parcours_exists
+def delete_folder_and_contents(request,id,idg):
+
+    teacher = request.user.teacher 
+    parcours = Parcours.objects.get(id=id) 
+
+    if parcours.teacher == teacher or request.user.is_superuser :
+        for p in parcours.leaf_parcours.all()  :
+            p.delete()
+        parcours.delete()
+        messages.success(request, "Le dossier "+ parcours.title +" et les parcours associés sont supprimés.")
+    
+    else :
+        messages.error(request, "Vous ne pouvez pas supprimer le dossier "+ parcours.title +". Contacter le propriétaire.")
+    
+    if idg == 0 :
+        return redirect ("parcours" )  
+    else :
+        return redirect ("list_parcours_group", idg )  
+
+
+
+
+
+
 
 
 def actioner(request):
