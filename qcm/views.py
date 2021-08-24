@@ -1397,12 +1397,13 @@ def clone_folder(request, id ):
         # clone tous les exercices rattachés au parcours 
         #################################################
         for relationship in pc.parcours_relationship.all()  :
-
-            relationship.pk = None
-            relationship.parcours_id = new_parcours_id_tab[i]
-            relationship.save()    
-            relationship.students.set(students)
-
+            try :
+                relationship.pk = None
+                relationship.parcours_id = new_parcours_id_tab[i]
+                relationship.save()    
+                relationship.students.set(students)
+            except :
+                pass
         i += 1
 
     messages.success(request, "Duplication réalisée avec succès. Bonne utilisation.")
