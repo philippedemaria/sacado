@@ -1230,6 +1230,39 @@ li.my_slide{
   }
 
  
+.size3em{
+  font-size : 3em;
+}
+ 
+.size25em{
+  font-size : 2.5em;
+}
+ 
+.size2em{
+  font-size : 2em;
+}
+.size15em{
+  font-size : 1.5em;
+}
+ 
+ 
+@media (max-width:750px){ /* Pour une largeur de max 750 -> Convient pour les smart phones */
+
+    .size3em{
+      font-size : 1.5em;
+    }
+     
+    .size25em, .size2em, .size15em {
+      font-size : 1em;
+    }
+     
+ 
+ 
+}
+
+
+
+
  /****************************************** qrandom **************************************/
 
 
