@@ -782,9 +782,7 @@ def peuplate_parcours_evaluation(request,id):
 def individualise_parcours(request,id):
     teacher = request.user.teacher
     parcours = Parcours.objects.get(pk = id)
-    relationships = Relationship.objects.filter(parcours = parcours).order_by("ranking")
-    students = parcours.students.all()
-
+    relationships = parcours.parcours_relationship.order_by("ranking")
     customexercises = Customexercise.objects.filter(parcourses = parcours).order_by("ranking") 
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
@@ -794,7 +792,7 @@ def individualise_parcours(request,id):
         return redirect('index')
  
 
-    context = {'relationships': relationships, 'parcours': parcours,     'communications':[],     'students': students,  'form': None,  
+    context = {'relationships': relationships, 'parcours': parcours,     'communications':[],  'form': None,  
                     'teacher': teacher, 'customexercises' : customexercises ,
                   'exercises': None , 
                   'levels': None , 
@@ -1334,11 +1332,9 @@ def ajax_all_folders(request):
 
 def clone_folder(request, id ):
     """ cloner un dossier """
-    parcours = Parcours.objects.get(pk = id)
+    parcours      = Parcours.objects.get(pk = id)
     prcs          = parcours.leaf_parcours.all()
-    relationships = parcours.parcours_relationship.all() 
-    courses       = parcours.course.all()
-
+ 
     #################################################
     # clone le parcours
     #################################################
@@ -1350,62 +1346,65 @@ def clone_folder(request, id ):
     parcours.is_favorite = 1
     parcours.code = str(uuid.uuid4())[:8]  
     parcours.save()
- 
 
     #################################################
     # clone les exercices attachés à un cours 
     #################################################
     former_relationship_ids = []
-
+    new_parcours_id_tab , parcours_id_tab = [] , []
     # ajoute le group au parcours si group    
-    try :
-        group_id = request.session.get("group_id",None)
-        group = Group.objects.get(pk = group_id)
-        parcours.groups.add(group)
-        students = group.students.all()
-        parcours.students.set(students)
-        for p in prcs :
-            p.students.set(students)
-            p.teacher = request.user.teacher
-            p.save()
-            parcours.leaf_parcours.add(p)
-    except :
-        return redirect('index')
 
-    for course in courses :
+    group_id = request.session.get("group_id",None)
+    group = Group.objects.get(pk = group_id)
+    parcours.groups.add(group)
+    students = group.students.all()
+    parcours.students.set(students)
+    for p in prcs :
+        parcours_id_tab.append(p.id) # liste des parcours du dossiers
+        p.pk = None
+        p.code = str(uuid.uuid4())[:8] 
+        p.teacher = request.user.teacher
+        p.is_publish = 0
+        p.is_archive = 0
+        p.is_share = 0
+        p.is_favorite = 1
+        p.save()
+        p.students.set(students)
+        new_parcours_id_tab.append(p.id)
+        parcours.leaf_parcours.add(p)
 
-        old_relationships = course.relationships.all()
-        # clone le cours associé au parcours
-        course.pk = None
-        course.parcours = parcours
-        course.save()
-        for relationship in old_relationships :
-            # clone l'exercice rattaché au cours du parcours 
-            if not relationship.id in former_relationship_ids :
-                relationship.pk = None
-                relationship.parcours = parcours
-                relationship.save()
-            course.relationships.add(relationship)
-            former_relationship_ids.append(relationship.id)
+    i = 0
+    for pid in parcours_id_tab : # liste des parcours du dossiers
+        pc      = Parcours.objects.get(pk = pid)
+        for course in pc.course.all() :
+            old_relationships = course.relationships.all()
+            # clone le cours associé au parcours
+            course.pk = None
+            course.parcours_id = new_parcours_id_tab[i]
+            course.save()
+            # clone l'exercice rattaché au cours du parcours
+            for relationship in old_relationships : 
+                if not relationship.id in former_relationship_ids :
+                    relationship.pk = None
+                    relationship.parcours_id = new_parcours_id_tab[i]
+                    relationship.save()
+                course.relationships.add(relationship)
+                former_relationship_ids.append(relationship.id)
+        #################################################
+        # clone tous les exercices rattachés au parcours 
+        #################################################
+        for relationship in pc.parcours_relationship.all()  :
 
-    #################################################
-    # clone tous les exercices rattachés au parcours 
-    #################################################
-    for relationship in relationships :
-        try :
             relationship.pk = None
-            relationship.parcours = parcours
-            relationship.save()       
+            relationship.parcours_id = new_parcours_id_tab[i]
+            relationship.save()    
             relationship.students.set(students)
-        except :
-            pass
 
+        i += 1
 
     messages.success(request, "Duplication réalisée avec succès. Bonne utilisation.")
 
     return redirect('list_parcours_group',  group_id)
-
-
 
 
 

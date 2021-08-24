@@ -378,12 +378,16 @@
                     <a href="{% url 'delete_folder' parcours.id  group.id %}" class="btn btn-danger"  onclick="return TestDeleteFolder('ce dossier')"> 
                         <i class="fa fa-trash"> </i>   Supprimer
                     </a>
-
+                    <a href="{% url 'delete_folder_and_contents' parcours.id  group.id %}" class="btn btn-danger"  onclick="return TestDeleteFolder('ce dossier et ses contenus ( ses contenus seront effacés === sans possibilité de les récupérer === ) ')"> 
+                        <i class="fa fa-trash"> </i>   Supprimer avec ses contenus
+                    </a>
                 {% else %}
                     <a href="{% url 'delete_folder' parcours.id  0 %}" class="btn btn-danger"  onclick="return TestDeleteFolder('ce dossier')"> 
                         <i class="fa fa-trash"> </i>   Supprimer
                     </a>
-                    
+                    <a href="{% url 'delete_folder_and_contents' parcours.id  0%}" class="btn btn-danger"  onclick="return TestDeleteFolder('ce dossier et ses contenus ( ses contenus seront effacés === sans possibilité de les récupérer === ) ')"> 
+                        <i class="fa fa-trash"> </i>   Supprimer avec ses contenus
+                    </a>
                 {% endif %}  
 
 
