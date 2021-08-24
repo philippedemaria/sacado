@@ -1383,13 +1383,16 @@ def clone_folder(request, id ):
             course.parcours_id = new_parcours_id_tab[i]
             course.save()
             # clone l'exercice rattaché au cours du parcours
-            for relationship in old_relationships : 
-                if not relationship.id in former_relationship_ids :
-                    relationship.pk = None
-                    relationship.parcours_id = new_parcours_id_tab[i]
-                    relationship.save()
-                course.relationships.add(relationship)
-                former_relationship_ids.append(relationship.id)
+            try :
+                for relationship in old_relationships : 
+                    if not relationship.id in former_relationship_ids :
+                        relationship.pk = None
+                        relationship.parcours_id = new_parcours_id_tab[i]
+                        relationship.save()
+                    course.relationships.add(relationship)
+                    former_relationship_ids.append(relationship.id)
+            except :
+                pass
         #################################################
         # clone tous les exercices rattachés au parcours 
         #################################################
