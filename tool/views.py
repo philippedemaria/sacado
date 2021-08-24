@@ -932,7 +932,7 @@ def store_quizz_solution(gquizz_id,student,q_id, solutions,t):
                     is_correct = 1
                     score      = question.point
         else :
-            choices  = question.choice.values_list('id',flat=True).filter(is_correct=1)
+            choices  = question.choices.values_list('id',flat=True).filter(is_correct=1)
             corrects = 0
             a = ""
             if int(ans) in choices :
