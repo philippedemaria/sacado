@@ -250,9 +250,10 @@ def create_accounting(request,tp):
  
     form     = AccountingForm(request.POST or None )
     form_abo = AbonnementForm(request.POST or None )
-    formSet = inlineformset_factory( Accounting , Detail , fields=('accounting','description','amount',) , extra=0)
-    form_ds = formSet(request.POST or None)
-    
+    formSet  = inlineformset_factory( Accounting , Detail , fields=('accounting','description','amount',) , extra=0)
+    form_ds  = formSet(request.POST or None)
+    today    = datetime.now()
+
     if request.method == "POST":
         if form.is_valid():
             nf = form.save(commit = False)
@@ -271,6 +272,8 @@ def create_accounting(request,tp):
                     nf.is_credit = 1
                 else :
                     nf.is_credit = 0
+            else :
+                nf.acting = today
             nf.save()
 
             form_ds = formSet(request.POST or None, instance = nf)
@@ -1225,7 +1228,7 @@ def reset_all_students_sacado(request):
 
 @user_passes_test(user_is_board)
 def accountings(request):
-
+    """ page d'accueil de la comptabilité"""
 
     this_day     = datetime.now() 
     this_year    = this_day.year
@@ -1242,22 +1245,33 @@ def accountings(request):
     start_date   = datetime(this_year, 1, 1)
     end_date     = datetime(this_year, 12, 31)
 
-    product , charge , actif = 0 , 0 , 0
-    accountings   = Accounting.objects.values_list("amount","is_credit","acting").filter(date__gte = start_date  , date__lte = end_date)
+    product , charge , actif  , commission_paypal, result_bank , result_paypal = 0 , 0 , 0 , 0 , 0 , 0
+    accountings   = Accounting.objects.values_list("amount","is_credit","acting","objet","is_paypal").filter(date__gte = start_date  , date__lte = end_date)
 
+    charges_list = list()
     for a in accountings :
-        if a[1] and a[2] != None:
+        if a[1] and a[2] != None and a[4] == 0: #Crédit encaissé en banque non paypal
             actif += a[0]
-        elif a[1] and a[2] == None:
+        elif a[1] and a[2] == None and a[4] == 0: #Crédit en attente non paypal
             product += a[0] 
-        else :
-            charge += a[0]
+        elif a[1]  and a[4] == 1: #Crédit encaissé en banque paypal
+            result_paypal += a[0]
+        elif a[1] == 0  and a[4] == 1: #Débit commission paypal
+            commission_paypal += a[0]
+        elif a[1] == 0 and a[4] == 0: #débit non paypal
+            dico    = dict()
+            dico["objet"]  = a[3]
+            dico["amount"] = a[0]
+            charges_list.append(dico)
+            charge += abs(a[0])
 
     result       = actif - charge
-    total        = actif + product
+    total        = actif + product + result_paypal
+
+
         
-    context = { 'charge': charge, 'product': product , 'result': result , 'actif': actif , 'total': total ,  'nb_schools': nb_schools , 'abonnements': abonnements ,   
-                'nb_schools': nb_schools , 'nb_schools_fr': nb_schools_fr , 'nb_schools_no_fr': nb_schools_no_fr ,  'nb_schools_no_pay': nb_schools_no_pay }  
+    context = { 'charge': charge, 'product': product , 'result': result , 'actif': actif , 'total': total , 'result_paypal' : result_paypal ,  'nb_schools': nb_schools , 'abonnements': abonnements , 'charges_list' : charges_list ,
+                'this_year' : this_year , 'nb_schools': nb_schools , 'nb_schools_fr': nb_schools_fr , 'nb_schools_no_fr': nb_schools_no_fr ,  'nb_schools_no_pay': nb_schools_no_pay , 'commission_paypal' : commission_paypal }  
 
 
 
@@ -1333,7 +1347,51 @@ def bank_activities(request):
 
 @user_passes_test(user_is_board)
 def bank_bilan(request):
-    context = {  }
+    """ page d'accueil de la comptabilité"""
+
+    this_day     = datetime.now() 
+    this_year    = this_day.year
+
+    abonnements = Abonnement.objects.filter(date_start__lte = this_day  , date_stop__gte = this_day).order_by("school__country__name")
+
+    nb_schools        = abonnements.count()
+    nb_schools_fr     = abonnements.filter(is_active = 1, school__country_id = 5).count()
+    nb_schools_no_fr  = abonnements.filter(is_active = 1).exclude(school__country_id =5).count() 
+    nb_schools_no_pay = abonnements.filter(is_active = 0).count()
+
+
+
+    start_date   = datetime(this_year, 1, 1)
+    end_date     = datetime(this_year, 12, 31)
+
+    product , charge , actif  , commission_paypal, result_bank , result_paypal = 0 , 0 , 0 , 0 , 0 , 0
+    accountings   = Accounting.objects.values_list("amount","is_credit","acting","objet","is_paypal").filter(date__gte = start_date  , date__lte = end_date)
+
+    charges_list = list()
+    for a in accountings :
+        if a[1] and a[2] != None and a[4] == 0: #Crédit encaissé en banque non paypal
+            actif += a[0]
+        elif a[1] and a[2] == None and a[4] == 0: #Crédit en attente non paypal
+            product += a[0] 
+        elif a[1]  and a[4] == 1: #Crédit encaissé en banque paypal
+            result_paypal += a[0]
+        elif a[1] == 0  and a[4] == 1: #Débit commission paypal
+            commission_paypal += a[0]
+        elif a[1] == 0 and a[4] == 0: #débit non paypal
+            dico    = dict()
+            dico["objet"]  = a[3]
+            dico["amount"] = a[0]
+            charges_list.append(dico)
+            charge += abs(a[0])
+
+    result       = actif - charge
+    total        = actif + product + result_paypal
+
+
+        
+    context = { 'charge': charge, 'product': product , 'result': result , 'actif': actif , 'total': total , 'result_paypal' : result_paypal ,  'nb_schools': nb_schools , 'abonnements': abonnements , 'charges_list' : charges_list ,
+                'this_year' : this_year , 'nb_schools': nb_schools , 'nb_schools_fr': nb_schools_fr , 'nb_schools_no_fr': nb_schools_no_fr ,  'nb_schools_no_pay': nb_schools_no_pay , 'commission_paypal' : commission_paypal }  
+
 
     return render(request, 'association/bank_bilan.html', context )   
 

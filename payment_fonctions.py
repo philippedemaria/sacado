@@ -20,4 +20,5 @@ def accounting_adhesion(school, today , acting, user, is_active , observation ):
     else : 
         Accounting.objects.filter(pk=accounting.id).update(  date=today ,  amount = fee )
 
+
     return accounting.id

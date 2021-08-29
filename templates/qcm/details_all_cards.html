@@ -285,9 +285,9 @@
                     </div>
                </div> 
             <hr style="padding:0px; margin:10px 0px"/><br>
-                {% for skill in rc.parcours.subject.skill.all %}
+                {% for skill in rc.parcours.subject.skill.all %}  
                       <label style="font-size:10px">
-                      <input type="checkbox" name="skills" data-relationship_id="{{rc.id}}" value="{{skill.id}}" class="skill_selector" {% if skill in rc.skills.all %} checked {% endif %}  />
+                      <input type="checkbox" name="skills" data-relationship_id="{{rc.id}}" value="{{skill.id}}" class="skill_selector" {% if skill in rc.skills.all %} checked  {% endif %}  />
                       {{ skill }}
                       </label>{% if not forloop.last %}<br>{% endif %}
                 {% empty %}
