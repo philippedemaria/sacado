@@ -149,7 +149,9 @@ define(['jquery',  'bootstrap' ], function ($) {
         });
 
 
-
+        $('#display_init').on('click', function (event) {
+            $('.no_display_init').toggle(300) ; 
+        });
  
 
  

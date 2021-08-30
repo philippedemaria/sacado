@@ -223,17 +223,17 @@ def convert_seconds_in_time(secondes):
             minutes = f'0{minutes}'
         return "{}:{}:{}".format(hours, minutes, sec)
 
-def send_to_teachers(level) : # envoie d'une notification au enseignant du niveau coché lorsqu'un exercice est posté
+def send_to_teachers(level,subject,topic) : # envoie d'une notification au enseignant du niveau coché lorsqu'un exercice est posté
     rcv = []
-    teachers = Teacher.objects.filter(levels=level)
+    teachers = Teacher.objects.filter(levels=level,subjects=subject)
     for t in teachers :
         if t.exercise_post :
             if t.user.email : 
                 rcv.append(t.user.email)
 
-    msg = "Un nouvel exercice vient d'être publié sur SacAdo sur le niveau "+str(level)
+    msg = "Un "+ str(topic) + " vient d'être publié sur SacAdo sur le niveau "+str(level.name)+" en "+str(subject.name)
 
-    sending_mail("Nouvel exercice SacAdo",  msg , settings.DEFAULT_FROM_EMAIL , rcv)
+    sending_mail(str(topic) +" SacAdo",  msg , settings.DEFAULT_FROM_EMAIL , rcv)
  
 
 def students_from_p_or_g(request,parcours) :
@@ -304,10 +304,6 @@ def group_has_parcourses(group,is_evaluation ,is_archive ):
                 pses_tab.append(p)
  
     return pses_tab
-
-
-
-
 
 
 
@@ -1520,6 +1516,11 @@ def create_parcours(request,idp=0):
         nf.author = teacher
         nf.teacher = teacher
         nf.is_evaluation = 0
+        if nf.share :
+            try :   
+                send_to_teachers(nf.level,nf.subject,"Nouveau parcours")
+            except :
+                pass
 
         if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
             nf.vignette = request.POST.get("this_image_selected",None)
@@ -3719,7 +3720,10 @@ def create_supportfile(request):
             nf.author = teacher
             if is_ggbfile :
                 nf.annoncement = unescape_html(cleanhtml(nf.annoncement)) 
-            send_to_teachers(nf.level)        
+            try :   
+                send_to_teachers(nf.level,nf.theme.subject,"Nouvel exercice")
+            except:
+                pass      
             nf.save()
             form.save_m2m()
             # le supprot GGB est placé comme exercice par défaut.
@@ -3753,7 +3757,10 @@ def create_supportfile_knowledge(request,id):
             nf.knowledge = knowledge
             if is_ggbfile :
                 nf.annoncement = unescape_html(cleanhtml(nf.annoncement)) 
-            #send_to_teachers(nf.level)    
+            try :
+                send_to_teachers(nf.level,nf.theme.subject,"Nouvel exercice")   
+            except :
+                pass 
             nf.save()
             form.save_m2m()
             # le support GGB est placé comme exercice par défaut.

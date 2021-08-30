@@ -24,16 +24,25 @@
 
 
 {% block body %} 
-<section class="content_main"> 
+<section class="content_main">
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <a id="display_init" class="btn btn-default"> Afficher/cacher les résultats par élève</a>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-sm-12 col-md-8">
             {% for question in questions %}
             <div class="row">    
                 <div class="card" style="padding:15px; width:90%">
-                <h4 >Question {{ question.ranking }}. </h4>
+
+                {% get_success_percent question gquizz as percent_success %}
+                <h4 >Question {{ question.ranking }}. <span class="pull-right">{{ percent_success }}</span> </h4>
                 {{ question.title|safe }}
                 </div> 
-                <div class="col-sm-12 col-md-12">
+                <div class="col-sm-12 col-md-12 no_display_init">
                 {% for student in gquizz.group.students.all|dictsort:"user.last_name" %}
  
                     {% get_real_ans_for_this_question  question  gquizz  student as dict_answer %} 
@@ -56,7 +65,7 @@
             <hr/>
             {% endfor %}
         </div>
-        <div class="col-sm-12 col-md-4">
+        <div class="col-sm-12 col-md-4 no_display_init">
             <table  class="table table-bordered table-hover standard_tab_sort">
                 <thead>
                 <tr>

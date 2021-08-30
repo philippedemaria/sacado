@@ -864,5 +864,15 @@ def is_can_gquizz_restart(obj, student):
     """
     Détermine si un élève a déjà fini son quizz depuis la page tool/list_quizz_student.html
     """
-    return obj.restart_gquizz(student)  
+    return obj.restart_gquizz(student)
+
+
+
+@register.simple_tag 
+def get_success_percent(obj, gquizz):
+    """
+    Détermine le pourcentage de bonne réponse à une question du gquizz
+    """
+    return obj.success_percent(gquizz)
+
 

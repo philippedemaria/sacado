@@ -213,6 +213,18 @@ class Question(models.Model):
         this_answer["is_correct"] =   is_correct  
         return this_answer
 
+    def success_percent (self,gquizz):
+        good_answerplayers = self.questions_player.filter( gquizz = gquizz,is_correct = 1 ).count()
+        answerplayers = self.questions_player.filter( gquizz = gquizz ).count()
+        try : 
+            percent = str(int(good_answerplayers/answerplayers)*100) +"%"
+        except :
+            percent = "Non traité"
+ 
+        return percent
+
+
+
 class Choice(models.Model):
     """
     Modèle représentant un associé.
