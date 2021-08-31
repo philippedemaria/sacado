@@ -1164,7 +1164,10 @@ def register_by_csv(request, key, idg=0):
         for line in lines:
             try:
                 # loop over the lines and save them in db. If error , store as string and then display
-                fields = line.split(";")
+                if ";" in line:
+                    fields = line.split(";")
+                elif "," in line:
+                    fields = line.split(",")
                 ln = str(fields[0]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
                 fn = str(fields[1]).lower().capitalize()
                 username = get_username(request , ln, fn)
