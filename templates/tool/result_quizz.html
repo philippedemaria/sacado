@@ -39,7 +39,7 @@
                 <div class="card" style="padding:15px; width:90%">
 
                 {% get_success_percent question gquizz as percent_success %}
-                <h4 >Question {{ question.ranking }}. <span class="pull-right">{{ percent_success }}</span> </h4>
+                <h4 >Question {{ forloop.counter }}. <span class="pull-right">{{ percent_success }}</span> </h4>
                 {{ question.title|safe }}
                 </div> 
                 <div class="col-sm-12 col-md-12 no_display_init">
