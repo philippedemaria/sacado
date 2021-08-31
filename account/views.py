@@ -1161,8 +1161,6 @@ def register_by_csv(request, key, idg=0):
 
         lines = file_data.split("\r\n")
         # loop over the lines and save them in db. If error , store as string and then display
-        destinataires = []
-
         for line in lines:
             try:
                 # loop over the lines and save them in db. If error , store as string and then display
@@ -1174,7 +1172,6 @@ def register_by_csv(request, key, idg=0):
                 try:
                     if fields[2] != "":
                         email = fields[2]
-                        destinataires.append(email)
                     else:
                         email = ""
                 except:
@@ -1200,20 +1197,15 @@ def register_by_csv(request, key, idg=0):
                             g.students.remove(student)
                     group.students.add(student)
 
+
+                sending_mail('Création de compte sur Sacado',
+                  f'Bonjour {user}, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {user.username} \r\n\r\nVotre mot de passe est : sacado2020 \r\n\r\nVous pourrez le modifier une fois connecté à votre espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
+                  settings.DEFAULT_FROM_EMAIL,
+                  [email,])
+
+
             except:
                 pass
-
-
-
-
-
-
-        sending_mail('Création de compte sur Sacado',
-              f'Bonjour {user}, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {user.username} \r\n\r\nVotre mot de passe est : sacado2020 \r\n\r\nVous pourrez le modifier une fois connecté à votre espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
-              settings.DEFAULT_FROM_EMAIL,
-              destinataires)
-
-
 
 
         if key == User.TEACHER:
