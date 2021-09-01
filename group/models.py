@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import date
 from account.models import Student, Teacher, ModelWithCode, generate_code
+from school.models import School
 from socle.models import Level, Subject , Waiting
 from account.models import ModelWithCode
 from django.apps import apps
@@ -17,15 +18,15 @@ class Group(ModelWithCode):
     color          = models.CharField(max_length=255, default='#46119c', blank=True, null=True, verbose_name="Couleur*")
     students       = models.ManyToManyField(Student, related_name="students_to_group", blank=True, verbose_name="Élèves*")
     teacher        = models.ForeignKey(Teacher, blank=True, null=True, on_delete=models.CASCADE, related_name="groups", verbose_name="Enseignant*")
-    level          = models.ForeignKey(Level, on_delete=models.PROTECT, related_name="groups", verbose_name="Niveau*")
+    level          = models.ForeignKey(Level, on_delete=models.CASCADE, related_name="groups", verbose_name="Niveau*")
     assign         = models.BooleanField(default=1)
     suiviparent    = models.BooleanField(default=0)
     studentprofile = models.BooleanField(default=0)
     lock           = models.BooleanField(default=0)
     recuperation   = models.BooleanField(default=0)
     teachers       = models.ManyToManyField(Teacher, blank=True,   editable=False, through="Sharing_group", related_name="teacher_group")
-    subject        = models.ForeignKey(Subject, default = "" ,  null=True, on_delete=models.PROTECT, related_name="subject_group", verbose_name="Matière*")
- 
+    subject        = models.ForeignKey(Subject, default = "" ,  null=True, on_delete=models.CASCADE, related_name="subject_group", verbose_name="Matière*")
+    school         = models.ForeignKey(School, default = "" ,  editable=False, blank=True,  null=True, on_delete=models.CASCADE, related_name="school_group" ) 
 
     class Meta:
         ordering = ['name']

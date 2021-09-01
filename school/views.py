@@ -249,11 +249,13 @@ def school_groups(request):
 	if not authorizing_access_school(teacher, school):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. ")
 		return redirect('index')
-
-
-
+		
 	users = school.users.filter(user_type=2)
 	groups = Group.objects.filter(teacher__user__in=users).order_by("level__ranking")
+
+	for g in groups :
+		g.school = school
+		g.save()
 
 	return render(request, 'school/list_groups.html', { 'communications' : [],'groups': groups, "school" : school })
 
@@ -861,13 +863,13 @@ def send_account(request, id):
 		school = this_school_in_session(request)
 		for user in school.users.filter(user_type=2):
 			if user.email : 
-				msg = f'Bonjour, votre compte Sacado est disponible.\r\n\r\nVotre identifiant est {user.username} \r\n\r\n\ Pour une première connexion, le mot de passe est : sacado2020 . Il faut le modifier lors de la première connexion.\r\n\r\n Dans le cas contraire, utilisez votre mot de passe habituel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.'
+				msg = f'Bonjour, votre compte Sacado est disponible.\r\n\r\nVotre identifiant est {user.username} \r\n\r\nPour une première connexion, le mot de passe est : sacado2020 . Il faut le modifier lors de la première connexion.\r\n\r\n Dans le cas contraire, utilisez votre mot de passe habituel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.'
 				send_mail('Compte Sacado', msg ,'info@sacado.xyz', [user.email])
 
 	else:
 		user = User.objects.get(id=id)
 		if user.email : 
-			msg = f'Bonjour, votre compte Sacado est disponible.\r\n\r\nVotre identifiant est {user.username} \r\n\r\n\ Pour une première connexion, le mot de passe est : sacado2020 . Il faut le modifier lors de la première connexion.\r\n\r\n Dans le cas contraire, utilisez votre mot de passe habituel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.'
+			msg = f'Bonjour, votre compte Sacado est disponible.\r\n\r\nVotre identifiant est {user.username} \r\n\r\nPour une première connexion, le mot de passe est : sacado2020 . Il faut le modifier lors de la première connexion.\r\n\r\n Dans le cas contraire, utilisez votre mot de passe habituel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.'
 			send_mail('Compte Sacado', msg ,'info@sacado.xyz', [user.email])
 
 	
@@ -1051,11 +1053,13 @@ def group_to_teacher(request):
     if request.method == "POST" :
         group_ids = request.POST.getlist("groups")
         teacher_id = int(request.POST.get("teacher"))
+
+        Group.objects.filter(school = school).update(teacher_id = None) 
  
         for group_id in group_ids :
         	Group.objects.filter(pk = group_id).update(teacher_id = teacher_id)  
 
-        return redirect('admin_tdb') 
+        return redirect('group_to_teacher') 
  
 
     context = {'groups': groups,  'teachers': teachers ,   'communications' : [] , 'school' : school  }

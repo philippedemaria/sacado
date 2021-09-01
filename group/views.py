@@ -569,6 +569,8 @@ def create_group(request):
     if form.is_valid():
         nf = form.save(commit=False)
         nf.teacher = teacher
+        if teacher.user.school :
+            nf.school = school
         nf.save()
         stdts = request.POST.get("students")
         if stdts : 
@@ -618,6 +620,8 @@ def update_group(request, id):
         nf = form.save(commit = False)
         nf.teacher = teacher
         nf.code = group.code
+        if teacher.user.school :
+            nf.school = school
         nf.save()
         stdts = request.POST.get("students")
         if stdts : 

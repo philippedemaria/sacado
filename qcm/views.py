@@ -7067,8 +7067,8 @@ def update_demand(request, id):
  
     demand = Demand.objects.get(id=id)
     demand_form = DemandForm(request.POST or None, instance=demand, )
-    teacher = Teacher.objects.get(user= request.user)
-
+    teacher = request.user.teacher
+    
     if request.method == "POST" :
         if demand_form.is_valid():
             nf =  form.save(commit = False)
@@ -7109,6 +7109,11 @@ def show_demand(request, id ):
     teacher = Teacher.objects.get(user = user)
     context = {  'demands': demands, 'teacher': teacher , 'parcours': None , 'group_id' : None, 'communications' : []}
     return render(request, 'qcm/demand/show_demand.html', context)
+
+
+
+
+
 
  
 @csrf_exempt
