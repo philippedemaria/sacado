@@ -7740,11 +7740,16 @@ def parcours_delete_from_folder(request):
 def delete_folder_and_contents(request,id,idg):
 
     teacher = request.user.teacher 
-    parcours = Parcours.objects.get(id=id) 
+    parcours = Parcours.objects.get(id=id)
+
+    if not authorizing_access(teacher,parcours, True ):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
 
     if parcours.teacher == teacher or request.user.is_superuser :
         for p in parcours.leaf_parcours.all()  :
-            p.delete()
+            if p.teacher == teacher or request.user.is_superuser :
+                p.delete()
         parcours.delete()
         messages.success(request, "Le dossier "+ parcours.title +" et les parcours associés sont supprimés.")
     
