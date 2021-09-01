@@ -110,7 +110,12 @@ def sharing_teachers(request,group, teachers):
 
 @user_is_superuser
 def list_schools(request):
-	schools = School.objects.all()
+
+	schools = list()
+	today = datetime.now()
+	abonnements = Abonnement.objects.filter( date_stop__gte=today, date_start__lte=today,is_active = 1 ).order_by("school__country")
+	for a in abonnements :
+		schools.append(a.school)
 	return render(request, 'school/lists.html', { 'communications' : [], 'schools': schools})
 
 
