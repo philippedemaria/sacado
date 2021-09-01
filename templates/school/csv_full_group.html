@@ -9,12 +9,13 @@
     <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common2.js' %}"></script> 
     <script>   
         require(['script/ajax-dashboard']);
+        require(['script/full_csv']);
     </script>
 {% endblock %}
  
  
 {% block page_title %}
-    <i class='fa fa-users'></i> {{ school.name}} <img src="{% static 'img/angle-right.png' %}"/>    Initialisation des groupes et des élèves
+    <i class='fa fa-users'> </i><a href="{% url 'admin_tdb' %}"/>{{ school.name}}</a> <img src="{% static 'img/angle-right.png' %}"/>    Initialisation des groupes et des élèves
 {% endblock %}
  
 
@@ -35,15 +36,29 @@
 <section class="content_main"> 
 
     <div class="alert alert-danger alert-dismissible" role="alert" id="alert_intro">
-        <strong>MODE EXPERT. <br/>Avant de lancer votre fichier csv, assurez-vous que tous les élèves ont été supprimés de la base de données.</strong> <br>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+          </button>
+
+        <strong> Avant de lancer votre fichier csv, assurez-vous que tous les élèves ont été supprimés de la base de données.</strong> <br>
 
         <i class="fa fa-warning fa-2x"></i> Votre fichier csv doit être <strong>encodé en utf-8</strong> et les données doivent vérifier le format imposé (ci-dessous). Ces données doivent être séparées d'un <strong>point virgule (;)</strong>.  
         <div style="margin:20px 0px; color:#207247">
         <img src="{% static 'img/excel.png' %}" height="50px"/> Utilisateur Excel : choisir Enregistrer sous : CSV UTF-8 (délimité par des points-virgules) (*.csv)
         </div>
+            
+        {% include 'help_utf.html' %}
+    </div>    
+    <form action="{% url 'csv_full_group' %}" method="POST" enctype="multipart/form-data" > 
+        <h3 class="thin">Gestion des identifiants</h3>        
+        <ul>
+            <li><label>Laisser SACADO attribuer des identifiants aux élèves <input type="radio" id="show_without_username" name="manage_username" value="auto" /></label> </li> 
+            <li><label> Gérer manuellement les identifiants des élèves <input type="radio" id="show_with_username" name="manage_username" value="hand" /></label></li>
+        </ul>      
 
 
-        Cinq champs sont demandés :
+        <div id="without_username">
+            Vous avez choisi la gestion automatisée des identifiants par SACADO. Cinq champs sont demandés dans cet ordre bien précis :
             <ul style="margin:10px">
                 <li>Classe</li>
                 <li>Code du niveau <i class="fa fa-warning"></i> Noter le code du niveau : CP = 1 | CE1 = 2 | CE2 = 3 ..... 6ème = 6 | 5ème = 7 | ... 2nde = 10 | Term = 12</li>
@@ -51,38 +66,52 @@
                 <li>Prénom</li>                
                 <li>Courriel, optionnel mais préférable pour la correspondance et les notifications.</li>
             </ul> 
-            Ces cinq données s'écrivent sur une seule ligne. Dans l'exemple ci-dessous, 4 personnes sont enregistrées.<br>
+            Les cinq données  par utilisateur s'écrivent sur une seule ligne. Dans l'exemple ci-dessous, 4 personnes sont enregistrées.<br>
             <pre style="font-size:20px">4ème1;8;T;Alan;alan.turing@enigma.edu <br>4ème1;8;Agnesi;Maria<br>4ème2;8;Chasles;Michel;michel.chasles@vector.edu<br>3ème2;9;de Fermat;Pierre;pierre.fermat@rsa.edu</pre>
+            {% include 'help_utf.html' %}
+        </div>
+
+        <div id="with_username">
+            Vous avez choisi la gestion manuelle des identifiants.  Six champs sont demandés dans cet ordre bien précis :
+            <ul style="margin:10px">
+                <li>Classe</li>
+                <li>Code du niveau <i class="fa fa-warning"></i> Noter le code du niveau : CP = 1 | CE1 = 2 | CE2 = 3 ..... 6ème = 6 | 5ème = 7 | ... 2nde = 10 | Term = 12</li>
+                <li>Identifiant</li>
+                <li>Nom</li>
+                <li>Prénom</li>                
+                <li>Courriel, optionnel mais préférable pour la correspondance et les notifications.</li>
+            </ul> 
+            Les cinq données  par utilisateur s'écrivent sur une seule ligne. Dans l'exemple ci-dessous, 4 personnes sont enregistrées.<br>
+            <pre style="font-size:20px">4ème1;8;alan.T;T;Alan;alan.turing@enigma.edu <br>4ème1;8;A.maria;Agnesi;Maria<br>4ème2;8;Ch.michel;Chasles;Michel;michel.chasles@vector.edu<br>3ème2;9;dfpierre;de Fermat;Pierre;pierre.fermat@rsa.edu</pre>
+            {% include 'help_utf.html' %}
+        </div>
 
 
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
 
-    <div class="preloader" id="preloader_groups"></div>
 
-    <form action="{% url 'csv_full_group' %}" method="POST" enctype="multipart/form-data" > 
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="name" >Fichier CSV : </label>
-                         <input type="file" name="csv_file" id="csv_file" required="True" class="btn btn-default">
-                 
+        <div class="preloader" id="preloader_groups"></div>
+
+
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="name" >Fichier CSV : </label>
+                             <input type="file" name="csv_file" id="csv_file" required="True" class="btn btn-default">
+                     
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12" style="margin-bottom:10px;">
-                <div class="form-group">                    
-                    <button class="btn btn-primary" id="televerser_groups"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span> Téléverser </button>
-                    <a href="javascript:history.back()"  class="btn btn-default" > Annuler</a>
-                    <i class="fa fa-warning text-danger"></i> Le téléversement peut prendre plusieurs minutes.
-                </div> 
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12" style="margin-bottom:10px;">
+                    <div class="form-group">                    
+                        <button class="btn btn-primary" id="televerser_groups"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span> Téléverser </button>
+                        <a href="javascript:history.back()"  class="btn btn-default" > Annuler</a>
+                        <i class="fa fa-warning text-danger"></i> Le téléversement peut prendre plusieurs minutes.
+                    </div> 
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
 </section>
 
 

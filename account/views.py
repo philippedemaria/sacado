@@ -76,7 +76,20 @@ def get_username(request ,ln, fn):
  
     return un 
 
-
+def get_username_manuel(texte):
+    """
+    retourne un username
+    """
+    ok = True
+    i = 0
+    un = str(texte)  
+    while ok:
+        if User.objects.filter(username=un).count() == 0:
+            ok = False
+        else:
+            i += 1
+            un = un + str(i)
+    return un
                  
 
 def list_teacher(request):
@@ -1157,28 +1170,41 @@ def register_by_csv(request, key, idg=0):
         try:
             file_data = csv_file.read().decode("utf-8")
         except UnicodeDecodeError:
-            return HttpResponse('Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
+            return HttpResponse('Erreur..... Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
 
         lines = file_data.split("\r\n")
         # loop over the lines and save them in db. If error , store as string and then display
         for line in lines:
-            try:
+            try : 
                 # loop over the lines and save them in db. If error , store as string and then display
                 if ";" in line:
                     fields = line.split(";")
                 elif "," in line:
                     fields = line.split(",")
-                ln = str(fields[0]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
-                fn = str(fields[1]).lower().capitalize()
-                username = get_username(request , ln, fn)
                 password = make_password("sacado2020")
-                try:
-                    if fields[2] != "":
-                        email = fields[2]
-                    else:
+
+                if request.POST.get("manage_username") == "auto" :
+                    ln = str(fields[0]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
+                    fn = str(fields[1]).lower().capitalize()
+                    username =  get_username(request,ln,fn)
+                    try:
+                        if fields[2] != "":
+                            email = fields[4]
+                        else:
+                            email = ""
+                    except:
                         email = ""
-                except:
-                    email = "" 
+                else :
+                    ln = str(fields[0]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
+                    fn = str(fields[1]).lower().capitalize()
+                    username =  get_username_manuel(str(fields[2]))
+                    try:
+                        if fields[3] != "":
+                            email = fields[3]
+                        else:
+                            email = ""
+                    except:
+                        email = ""
 
                 if key == User.TEACHER:  # Enseignant
                     user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,
@@ -1196,18 +1222,16 @@ def register_by_csv(request, key, idg=0):
                                                                          'is_extra': 0})
                     student, creator = Student.objects.get_or_create(user=user, level=group.level, task_post=1)
                     if not creator : #Si l'élève n'est pas créé alors il existe dans des groupes. On l'efface de ses anciens groupes pour l'inscrire à nouveau !
-                        for g in student.student_group.all():
+                        for g in student.students_to_group.all():
                             g.students.remove(student)
                     group.students.add(student)
 
-
-                sending_mail('Création de compte sur Sacado',
-                  f'Bonjour {user}, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {user.username} \r\n\r\nVotre mot de passe est : sacado2020 \r\n\r\nVous pourrez le modifier une fois connecté à votre espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
-                  settings.DEFAULT_FROM_EMAIL,
-                  [email,])
-
-
-            except:
+                if email != "" :
+                    sending_mail('Création de compte sur Sacado',
+                      f'Bonjour {user}, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {user.username} \r\n\r\nVotre mot de passe est : sacado2020 \r\n\r\nVous pourrez le modifier une fois connecté à votre espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
+                      settings.DEFAULT_FROM_EMAIL,
+                      [email,])
+            except :
                 pass
 
 

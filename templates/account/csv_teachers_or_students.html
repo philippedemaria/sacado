@@ -9,6 +9,7 @@
     <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3.js' %}"></script> 
     <script>   
         require(['script/ajax-dashboard']);
+        require(['script/full_csv']);
     </script>
 {% endblock %}
  
@@ -44,6 +45,10 @@
 
 
     <div class="alert alert-danger alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+      </button>
+
         <strong>Avant de lancer votre fichier csv, assurez-vous que tous les {% if is_teacher %}enseignants{% else %}élèves{% endif %} ont été supprimés de la base de données.</strong> <br>
             {% if is_teacher %}
             <div class="alert alert-info">
@@ -53,30 +58,55 @@
                         Procédure à donner au collègue <b>déjà inscrit</b> : A partir de l'icone <i class="fa fa-user"></i> <small>Compte</small>, sélectionner Rejoindre un établissement et suivre les indications.
             </div>
             {% endif %}
-        <i class="fa fa-warning fa-2x"></i> Votre fichier csv doit être <strong>encodé en utf-8</strong> et les données doivent vérifier le format imposé (comme exemple). Ces données doivent être séparées d'un <strong>point virgule (;)</strong>.  3 champs sont demandés :
-            <ul style="margin:10px">
-                <li>Nom</li>
-                <li>Prénom</li>                
-                <li>Courriel, {% if idg > 0  %}optionnel mais préférable pour la correspondance et les notifications.{% else %}renseigner votre adresse professionnelle si vous en avez une.{% endif %}</li>
-            </ul> 
-            Ces trois données s'écrivent sur une seule ligne. Dans l'exemple ci-dessous, 4 personnes sont enregistrées.<br>
-            <pre style="font-size:20px">Turing;Alan{% if idg == 0  %};alan.turing@enigma.edu{% endif  %}<br>Agnesi;Maria;maria.agnesi@curves.edu<br>Chasles;Michel{% if idg == 0  %};michel.chasles@vector.edu {% endif %}<br>de Fermat;Pierre;pierre.fermat@rsa.edu</pre>
-            <i class="fa fa-support"></i> Le logiciel NotePad++ fait bien le travail ou directement avec l'exportation PRONOTE.
 
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-      </button>
+            <b>Le fichier CSV doit être enregistré au format UTF-8.</b><br/>{% include 'help_utf.html' %}
+
+
     </div>
-
-
-
- 
 
     {% if idg > 0  %}
     <form action="{% url 'register_by_csv' 0 idg %}" method="POST" enctype="multipart/form-data" > 
     {% else %}
     <form action="{% url 'register_by_csv' 2 0 %}" method="POST" enctype="multipart/form-data" > 
     {% endif %}
+
+
+        <h3 class="thin">Gestion des identifiants</h3>        
+        <ul>
+            <li><label>Laisser SACADO attribuer des identifiants <input type="radio" id="show_without_username" name="manage_username" value="auto" /></label> </li> 
+            <li><label> Gérer manuellement les identifiants <input type="radio" id="show_with_username" name="manage_username" value="hand" /></label> <small>Vous devez alors impérativement renseigner les identifiants dans le fichier csv.</small></li>
+        </ul>      
+
+
+        <div id="without_username">
+            Vous avez choisi la gestion automatisée des identifiants par SACADO.  3 champs sont demandés :
+            <ul style="margin:10px">
+                <li>Nom</li>
+                <li>Prénom</li>                
+                <li>Courriel, {% if idg > 0  %}optionnel mais préférable pour la correspondance et les notifications.{% else %}renseigner votre adresse professionnelle si vous en avez une.{% endif %}</li>
+            </ul> 
+            Les trois données par utilisateur s'écrivent sur une seule ligne. Dans l'exemple ci-dessous, 4 personnes sont enregistrées.<br>
+            <pre style="font-size:20px">Turing;Alan{% if idg == 0  %};alan.turing@enigma.edu{% endif  %}<br>Agnesi;Maria;maria.agnesi@curves.edu<br>Chasles;Michel{% if idg == 0  %};michel.chasles@vector.edu {% endif %}<br>de Fermat;Pierre;pierre.fermat@rsa.edu</pre>
+        </div>
+
+        <div id="with_username">
+            Vous avez choisi la gestion manuelle des identifiants.   4 champs sont demandés :
+            <ul style="margin:10px">
+                <li>Nom</li>
+                <li>Prénom</li> 
+                <li>Identifiant</li>            
+                <li>Courriel, {% if idg > 0  %}optionnel mais préférable pour la correspondance et les notifications.{% else %}renseigner votre adresse professionnelle si vous en avez une.{% endif %}</li>
+            </ul> 
+            Les quatre données par utilisateur s'écrivent sur une seule ligne. Dans l'exemple ci-dessous, 4 personnes sont enregistrées.<br>
+            <pre style="font-size:20px">Turing;Alan;T.Alan;{% if idg == 0  %};alan.turing@enigma.edu{% endif  %}<br>Agnesi;Maria;AgensiM;maria.agnesi@curves.edu<br>Chasles;Michel;ChaslesMichel;{% if idg == 0  %};michel.chasles@vector.edu {% endif %}<br>de Fermat;Pierre;pfermat;pierre.fermat@rsa.edu</pre>
+            
+        </div>
+
+
+
+
+ 
+
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 {% csrf_token %}

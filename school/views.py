@@ -972,7 +972,7 @@ def csv_full_group(request):
         try:
             file_data = csv_file.read().decode("utf-8")
         except UnicodeDecodeError:
-            return HttpResponse('Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
+            return HttpResponse('Erreur..... Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
 
         lines = file_data.split("\r\n")
         # loop over the lines and save them in db. If error , store as string and then display
@@ -980,20 +980,37 @@ def csv_full_group(request):
         for line in lines:
             try : 
                 # loop over the lines and save them in db. If error , store as string and then display
-                fields = line.split(";")
-                ln = str(fields[2]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
-                fn = str(fields[3]).lower().capitalize()
-                level = fields[1]
-                group_name = str(fields[0])
-                username =  get_username(ln,fn)
+                if ";" in line:
+                    fields = line.split(";")
+                elif "," in line:
+                    fields = line.split(",")
+
                 password = make_password("sacado2020")
-                try:
-                    if fields[4] != "":
-                        email = fields[4]
-                    else:
+                group_name = str(fields[0])
+                level = fields[1]
+                if request.POST.get("manage_username") == "auto" :
+                    ln = str(fields[2]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
+                    fn = str(fields[3]).lower().capitalize()
+                    username =  get_username(ln,fn)
+                    try:
+                        if fields[4] != "":
+                            email = fields[4]
+                        else:
+                            email = ""
+                    except:
                         email = ""
-                except:
-                    email = ""
+                else :
+                    ln = str(fields[3]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
+                    fn = str(fields[4]).lower().capitalize()
+                    username =  get_username(str(fields[2]),school[:2])
+                    try:
+                        if fields[5] != "":
+                            email = fields[5]
+                        else:
+                            email = ""
+                    except:
+                        email = ""
+                    
                 teacher = Teacher.objects.get(user = request.user)
 
                 if group_name not in group_history :

@@ -703,6 +703,18 @@ a.no_visual_link{
   top:12px;
 }
 
+
+ /******************************************** Quizz  ********************************************/
+
+#without_username, #with_username, #show_help_utf{
+  display:none;
+  border-radius: 4px;
+  border: 1px solid #CCC;
+  background-color: #F0F0F0;
+  padding: 15px;
+}
+
+
  /******************************************** Quizz  ********************************************/
 #body_question{
   margin-bottom: 20px;
