@@ -116,7 +116,8 @@ def list_schools(request):
 	abonnements = Abonnement.objects.filter( date_stop__gte=today, date_start__lte=today,is_active = 1 ).order_by("school__country")
 	for a in abonnements :
 		schools.append(a.school)
-	return render(request, 'school/lists.html', { 'communications' : [], 'schools': schools})
+	nb = len(schools)
+	return render(request, 'school/lists.html', { 'communications' : [], 'schools': schools, 'nb': nb})
 
 
 @user_is_superuser
