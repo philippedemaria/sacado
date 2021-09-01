@@ -3,7 +3,7 @@ from django.utils import timezone
 from account.models import Teacher, Student, User
 from qcm.models import Parcours, Studentanswer, Exercise, Demand
 from school.models import School
-from association.models import Accounting , Rate
+from association.models import Accounting , Rate , Abonnement
 from sendmail.models import Email, Message
 from socle.models import Level
 from school.models import School
@@ -67,26 +67,18 @@ def menu(request):
             ### Permet de vérifier qu'un enseignant est dans un établissement sacado
 
             sacado_asso, sacado_is_active = is_sacado_asso(teacher.user,today)
-            renew_propose = False
+ 
             ### Rapelle le renouvellement de la cotisation
-            renew = request.session.get("renewal", None)
-            if not renew :
+            renew_hidden = request.session.get("renewal", False)
+            if not renew_hidden :
                 rates = Rate.objects.all() #tarifs en vigueur 
-                school_year = rates.first().year #tarifs pour l'année scolaire
-                school_year_tab = school_year.split("-")
-                renew_date = datetime(int(school_year_tab[0]),5,15)
-                next_renew_date = datetime(int(school_year_tab[1]),5,15)
-                renewal = True
-                if Accounting.objects.filter(school = teacher.user.school,   date__gte=renew_date, date__lte=next_renew_date,is_active = 1 ).count() == 1:
-                    renewal = False
-                    request.session["renewal"] = True
+                today = datetime.now()
 
-                renew_propose = False
-                now =  datetime.now()
-                if now > datetime(int(today.year),5,15) and renewal :
-                    renew_propose = True
-
-            return {'today': today, 'index_tdb' : False , 'nbe': nbe, 'levels': levels, 'renew_propose' : renew_propose ,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso , "is_pending_studentanswers" : is_pending_studentanswers  }
+                if Abonnement.objects.filter(school = teacher.user.school,   date_stop__gte=today, date_start__lte=today,is_active = 1 ).count() == 1:
+                    renew_hidden = True
+                    request.session["renewal"] = renew_hidden
+ 
+            return {'today': today, 'index_tdb' : False , 'nbe': nbe, 'levels': levels, 'renew_propose' : renew_hidden ,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso , "is_pending_studentanswers" : is_pending_studentanswers  }
 
         elif request.user.is_student:
             
