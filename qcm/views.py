@@ -1516,7 +1516,7 @@ def create_parcours(request,idp=0):
         nf.author = teacher
         nf.teacher = teacher
         nf.is_evaluation = 0
-        if nf.share :
+        if nf.is_share :
             try :   
                 send_to_teachers(nf.level,nf.subject,"Nouveau parcours")
             except :

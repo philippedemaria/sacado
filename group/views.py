@@ -621,7 +621,7 @@ def update_group(request, id):
         nf.teacher = teacher
         nf.code = group.code
         if teacher.user.school :
-            nf.school = school
+            nf.school = teacher.user.school
         nf.save()
         stdts = request.POST.get("students")
         if stdts : 
