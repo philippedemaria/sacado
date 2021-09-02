@@ -1010,7 +1010,7 @@ def csv_full_group(request):
                 else :
                     ln = str(fields[2]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
                     fn = str(fields[3]).lower().capitalize()
-                    username =  get_username(str(fields[4]),school[:2])
+                    username =  get_username(str(fields[4]),school.name[:2])
                     try:
                         if fields[5] != "":
                             email = fields[5]
