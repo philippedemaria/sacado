@@ -4,7 +4,7 @@ from django.forms import formset_factory
 from django.contrib.auth.forms import  UserCreationForm,  AuthenticationForm
 from account.forms import  UserForm, TeacherForm, StudentForm , BaseUserFormSet , NewpasswordForm
 from django.contrib.auth import   logout
-from account.models import  User, Teacher, Student  ,Parent , Adhesion
+from account.models import  User, Teacher, Student  , Parent , Adhesion
 from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise, Customanswerbystudent,Writtenanswerbystudent
 from tool.models import Quizz, Question, Choice
 from group.models import Group, Sharing_group
@@ -216,8 +216,50 @@ def logout_view(request):
 
 
 
-def saml_metadata(request): #Protection saml pour le GAR
-    return redirect('index')
+def ressource_sacado(request): #Protection saml pour le GAR
+    
+    dico_received = request.headers # dictionnaire récupéré par le GAR
+    last_name  = dico_received["last_name"]
+    first_name = dico_received["first_name"]
+    user_type  = dico_received["user_type"]
+    
+    email      = dico_received["email"]
+    closure    = dico_received["closure"]
+    time_zone  = dico_received["time_zone"]
+    is_extra   = 0
+    is_manager = 0 
+    school     = dico_received["school"]
+    cgu        = 1
+    is_testeur = 0
+    country    = school.country
+    is_board   = 0
+
+    username   = dico_received["username"]
+    password   = make_password(dico_received["password"]) # quel est le format du mot de passe ?
+
+ 
+
+    if Abonnement.objects.filter( school = school ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
+
+
+        user, created = User.objects.get_or_create(username = username, school = school , user_type = user_type , defaults = { "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : date_end_dateformat })
+        if user_type == 1 and created :
+            level      = dico_received["level"]
+            student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 1 , "level" : level })
+        elif user_type == 2 and created :
+            levels      = dico_received["levels"]
+            subjects    = dico_received["sibjects"] 
+            teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 1 , "exercise_post" : 1 })        
+ 
+
+        user = authenticate(username=username, password=password)
+        login(request, user)
+        request.session["user_id"] = request.user.id
+
+        return redirect('dashboard')
+    else :
+        messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
+        return redirect('index')   
 
 
 
@@ -279,8 +321,8 @@ def school_adhesion(request):
             if token :
                 if int(token) == 7 :
                     school_commit = form.save(commit=False)
-                    school_exists, created = School.objects.get_or_create(name = school_commit.name, town = school_commit.town , country = school_commit.country , code_acad = school_commit.code_acad , defaults={ 'nbstudents' : school_commit.nbstudents , 'address' : school_commit.address ,'complement' : school_commit.complement , }  )
-                   
+                    school_exists, created = School.objects.get_or_create(name = school_commit.name, town = school_commit.town , country = school_commit.country , code_acad = school_commit.code_acad , defaults={ 'nbstudents' : school_commit.nbstudents , 'address' : school_commit.address ,'complement' : school_commit.complement , 'gar' : school_commit.gar }  )
+
                     if not created :
                         # si l'établisseent est déjà créé, on la modifie et on récupère son utilisateur.
                         School.objects.filter(pk = school_exists.id).update(town = school_commit.town , country = school_commit.country , code_acad = school_commit.code_acad , nbstudents = school_commit.nbstudents , address = school_commit.address , complement = school_commit.complement )
@@ -319,7 +361,7 @@ def school_adhesion(request):
 
 
                     acting, is_active  = None , False # date d'effet, user, le paiement est payé non ici... doit passer par la vérification
-                    observation =   "Paiement en ligne "             
+                    observation =   "Paiement en ligne"             
  
                     accounting_id = accounting_adhesion(school_exists, today , acting, user, is_active , observation) # création de la facturation
                     ########################################################################################################################
@@ -327,7 +369,7 @@ def school_adhesion(request):
                     ########################################################################################################################
                     date_start, date_stop = date_abonnement(today)
 
-                    abonnement, abo_created = Abonnement.objects.get_or_create(school = school_exists, date_start = date_start, date_stop = date_stop,  accounting_id = accounting_id , is_gar = 0 , defaults={ 'user' : user, 'is_active' : 0}  )
+                    abonnement, abo_created = Abonnement.objects.get_or_create(school = school_exists, date_start = date_start, date_stop = date_stop,  accounting_id = accounting_id , is_gar = school_exists.gar , defaults={ 'user' : user, 'is_active' : 0}  )
 
                     ########################################################################################################################
                     #############  FIN  Abonnement
