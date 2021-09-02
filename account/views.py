@@ -1234,7 +1234,6 @@ def register_by_csv(request, key, idg=0):
             except :
                 pass
 
-
         if key == User.TEACHER:
             return redirect('school_teachers')
         else:
