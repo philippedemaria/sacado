@@ -32,11 +32,10 @@ def web_abonnement_xml(abonnement,new):
 
 def date_abonnement(today):
     """Création d'un abonnement dans la base de données"""
+    date_start = today.isoformat() # Année en cours
     if today < datetime( today.year,5,30) :
-        date_start = today.isoformat() # Année en cours
         date_stop  = datetime(today.year,7,14).isoformat() # Année en cours
     else :
-        date_start = datetime(today.year,9,1).isoformat() # Année en cours
         date_stop  = datetime(today.year+1,7,14).isoformat() # Année suivante
 
     return date_start, date_stop

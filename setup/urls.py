@@ -28,7 +28,7 @@ urlpatterns = [
     path('iban_asking/<int:school_id>/<int:user_id>', iban_asking, name='iban_asking'),  
 
 
-    path('GAR/saml/metadata', saml_metadata, name='gar'),
+    path('ressource/sacado', ressource_sacado , name='ressource_sacado'),
 
     ############################################################################################
     #######  SACADO Cahier de vacances payant
