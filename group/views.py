@@ -665,7 +665,6 @@ def delete_all_groups(request) :
 
     all_contents = request.POST.get("all_contents",None)
     group_ids = request.POST.getlist('group_ids')
-    print(group_ids)
     for g_id in group_ids :
         group = Group.objects.get(pk=g_id)
         if all_contents == "1" :
