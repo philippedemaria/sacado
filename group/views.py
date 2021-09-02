@@ -570,7 +570,7 @@ def create_group(request):
         nf = form.save(commit=False)
         nf.teacher = teacher
         if teacher.user.school :
-            nf.school = school
+            nf.school = teacher.user.school
         nf.save()
         stdts = request.POST.get("students")
         if stdts : 
