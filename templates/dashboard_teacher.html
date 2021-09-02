@@ -17,8 +17,6 @@
             {% get_group_parcours_counter group  teacher as data %}
                 <!-- small box -->
                 <div class="small-box" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}">
-                    
-
                     <!-- modal qui affiche la liste des élèves -->
                     <div class="group_show  group_show{{group.id }} no_visu_on_load"> 
                         <form action="" method="POST">
