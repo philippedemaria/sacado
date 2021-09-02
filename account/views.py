@@ -1189,15 +1189,15 @@ def register_by_csv(request, key, idg=0):
                     username =  get_username(request,ln,fn)
                     try:
                         if fields[2] != "":
-                            email = fields[4]
+                            email = fields[2]
                         else:
                             email = ""
                     except:
                         email = ""
                 else :
-                    ln = str(fields[0]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
-                    fn = str(fields[1]).lower().capitalize()
-                    username =  get_username_manuel(str(fields[2]))
+                    ln = str(fields[1]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
+                    fn = str(fields[2]).lower().capitalize()
+                    username =  get_username_manuel(str(fields[0]))
                     try:
                         if fields[3] != "":
                             email = fields[3]
