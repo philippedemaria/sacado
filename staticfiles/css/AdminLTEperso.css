@@ -704,7 +704,7 @@ a.no_visual_link{
 }
 
 
- /******************************************** Quizz  ********************************************/
+ /******************************************** Account csv  ********************************************/
 
 #without_username, #with_username, #show_help_utf{
   display:none;
@@ -713,7 +713,9 @@ a.no_visual_link{
   background-color: #F0F0F0;
   padding: 15px;
 }
-
+#help_from_tdb{
+  display:none;
+}
 
  /******************************************** Quizz  ********************************************/
 #body_question{

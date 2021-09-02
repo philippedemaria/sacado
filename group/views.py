@@ -50,31 +50,6 @@ from general_fonctions import *
 
 
 
-def get_username(request ,ln, fn):
-    """
-    retourne un username
-    """
-    ok = True
-    i = 0
-    code = str(uuid.uuid4())[:3] 
-
-    if request.user.school :
-        suffixe = request.user.school.country.name[2]
-    else :
-        suffixe = ""    
-    un = str(ln) + "." + str(fn)[0] + "_" + suffixe + code 
-
-    while ok:
- 
-        if User.objects.filter(username=un).count() == 0:
-            ok = False
-        else:
-            i += 1
-            un = un + str(i)
- 
-    return un  
-
-
 def get_username_teacher(request ,ln):
     """
     retourne un username

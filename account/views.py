@@ -48,48 +48,6 @@ def logout_view(request):
     logout(request)
     return redirect('index')
 
-
-
-
-def get_username(request ,ln, fn):
-    """
-    retourne un username
-    """
-    ok = True
-    i = 0
-    code = str(uuid.uuid4())[:3] 
-
-    if request.user.school :
-        suffixe = request.user.school.country.name[2]
-    else :
-        suffixe = ""
-    name = str(ln).replace(" ","_")    
-    un = name + "." + str(fn)[0] + "_" + suffixe + code 
-
-    while ok:
- 
-        if User.objects.filter(username=un).count() == 0:
-            ok = False
-        else:
-            i += 1
-            un = un + str(i)
- 
-    return un 
-
-def get_username_manuel(texte):
-    """
-    retourne un username
-    """
-    ok = True
-    i = 0
-    un = str(texte)  
-    while ok:
-        if User.objects.filter(username=un).count() == 0:
-            ok = False
-        else:
-            i += 1
-            un = un + str(i)
-    return un
                  
 
 def list_teacher(request):
@@ -1142,9 +1100,6 @@ def register_teacher_from_admin(request):
                    'new': new, })
 
  
-
-
-
 #@can_register
 #@is_manager_of_this_school
 def register_by_csv(request, key, idg=0):
@@ -1159,80 +1114,42 @@ def register_by_csv(request, key, idg=0):
     if request.method == "POST":
         # try:
         csv_file = request.FILES["csv_file"]
-        if not csv_file.name.endswith('.csv'):
-            messages.error(request, "Le fichier n'est pas format CSV")
-            return HttpResponseRedirect(reverse("register_teacher_csv"))
-        # if file is too large, return
-        if csv_file.multiple_chunks():
-            messages.error(request, "Le fichier est trop lourd (%.2f MB)." % (csv_file.size / (1000 * 1000),))
-            return HttpResponseRedirect(reverse("register_teacher_csv"))
+        file_data = authorize_csv(csv_file)
 
-        try:
-            file_data = csv_file.read().decode("utf-8")
-        except UnicodeDecodeError:
-            return HttpResponse('Erreur..... Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
+   
 
         lines = file_data.split("\r\n")
         # loop over the lines and save them in db. If error , store as string and then display
         for line in lines:
-            try : 
-                # loop over the lines and save them in db. If error , store as string and then display
-                if ";" in line:
-                    fields = line.split(";")
-                elif "," in line:
-                    fields = line.split(",")
-                password = make_password("sacado2020")
+            # loop over the lines and save them in db. If error , store as string and then display
+            ln, fn, username , password , email , group_name , level = separate_values(request, line, False)  
 
-                if request.POST.get("manage_username") == "auto" :
-                    ln = str(fields[0]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
-                    fn = str(fields[1]).lower().capitalize()
-                    username =  get_username(request,ln,fn)
-                    try:
-                        if fields[2] != "":
-                            email = fields[2]
-                        else:
-                            email = ""
-                    except:
-                        email = ""
-                else :
-                    ln = str(fields[0]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
-                    fn = str(fields[1]).lower().capitalize()
-                    username =  get_username_manuel(str(fields[2]))
-                    try:
-                        if fields[3] != "":
-                            email = fields[3]
-                        else:
-                            email = ""
-                    except:
-                        email = ""
+            if key == User.TEACHER:  # Enseignant
+                user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,
+                                                  school=this_school_in_session(request), time_zone=request.user.time_zone,
+                                                  is_manager=0,
+                                                  defaults={'username': username, 'password': password,
+                                                            'is_extra': 0})
+                Teacher.objects.get_or_create(user=user, notification=1, exercise_post=1)
+                group = None
+            else:  # Student
+                user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=0,
+                                                           school=this_school_in_session(request),
+                                                           time_zone=request.user.time_zone, is_manager=0,
+                                                           defaults={'username': username, 'password': password,
+                                                                     'is_extra': 0})
+                student, creator = Student.objects.get_or_create(user=user, level=group.level, task_post=1)
+                if not creator : #Si l'élève n'est pas créé alors il existe dans des groupes. On l'efface de ses anciens groupes pour l'inscrire à nouveau !
+                    for g in student.students_to_group.all():
+                        g.students.remove(student)
+                group.students.add(student)
 
-                if key == User.TEACHER:  # Enseignant
-                    user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,
-                                                      school=this_school_in_session(request), time_zone=request.user.time_zone,
-                                                      is_manager=0,
-                                                      defaults={'username': username, 'password': password,
-                                                                'is_extra': 0})
-                    Teacher.objects.get_or_create(user=user, notification=1, exercise_post=1)
-                    group = None
-                else:  # Student
-                    user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=0,
-                                                               school=this_school_in_session(request),
-                                                               time_zone=request.user.time_zone, is_manager=0,
-                                                               defaults={'username': username, 'password': password,
-                                                                         'is_extra': 0})
-                    student, creator = Student.objects.get_or_create(user=user, level=group.level, task_post=1)
-                    if not creator : #Si l'élève n'est pas créé alors il existe dans des groupes. On l'efface de ses anciens groupes pour l'inscrire à nouveau !
-                        for g in student.students_to_group.all():
-                            g.students.remove(student)
-                    group.students.add(student)
-
-                if email != "" :
-                    sending_mail('Création de compte sur Sacado',
-                      f'Bonjour {user}, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {user.username} \r\n\r\nVotre mot de passe est : sacado2020 \r\n\r\nVous pourrez le modifier une fois connecté à votre espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
-                      settings.DEFAULT_FROM_EMAIL,
-                      [email,])
-            except :
-                pass
+            if email != "" :
+                sending_mail('Création de compte sur Sacado',
+                  f'Bonjour {user}, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {user.username} \r\n\r\nVotre mot de passe est : sacado2020 \r\n\r\nVous pourrez le modifier une fois connecté à votre espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
+                  settings.DEFAULT_FROM_EMAIL,
+                  [email,])
+ 
 
         if key == User.TEACHER:
             return redirect('school_teachers')
@@ -1268,29 +1185,17 @@ def register_users_by_csv(request,key):
         if csv_file.multiple_chunks():
             messages.error(request, "Le fichier est trop lourd (%.2f MB)." % (csv_file.size / (1000 * 1000),))
             return HttpResponseRedirect(reverse("register_teacher_csv"))
-
         try:
             file_data = csv_file.read().decode("utf-8")
         except UnicodeDecodeError:
-            return HttpResponse('Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
-
+            return HttpResponse('Erreur..... Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
+ 
         lines = file_data.split("\r\n")
         # loop over the lines and save them in db. If error , store as string and then display
         for line in lines:
-            try:
-                # loop over the lines and save them in db. If error , store as string and then display
-                fields = line.split(";")
-                ln = str(fields[0]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
-                fn = str(fields[1]).lower().capitalize()
-                username = get_username(request , ln, fn)
-                password = make_password("sacado2020")
-                try:
-                    if fields[2] != "":
-                        email = fields[2]
-                    else:
-                        email = ""
-                except:
-                    email = "" 
+            try : 
+     
+                ln, fn, username , password , email , group_name , level = separate_values(request, line, False)
 
                 if key == User.TEACHER:  # Enseignant
                     user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,
@@ -1305,10 +1210,10 @@ def register_users_by_csv(request,key):
                                                                time_zone=request.user.time_zone, is_manager=0,
                                                                defaults={'username': username, 'password': password,
                                                                          'is_extra': 0})
-                    student, creator = Student.objects.get_or_create(user=user, level=group.level, task_post=1)
-
-            except:
+                    student, creator = Student.objects.get_or_create(user=user, level_id=level, task_post=1)
+            except :
                 pass
+     
 
         if key == User.TEACHER:
             return redirect('school_teachers')

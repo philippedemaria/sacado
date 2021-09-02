@@ -5,12 +5,111 @@ import csv
 import pytz
 from datetime import datetime 
 from django.utils import timezone
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect , HttpResponse
 from django.shortcuts import  redirect
 from school.models import Stage
-
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+  
 from operator import attrgetter
-from django.core.mail import send_mail 
+from django.core.mail import send_mail
+from django.apps import apps
+import uuid
+
+
+
+def get_username(request ,ln, fn):
+    """
+    retourne un username
+    """
+    User = apps.get_model('account', 'User')
+    ok = True
+    i = 0
+    code = str(uuid.uuid4())[:3] 
+
+    if request.user.school :
+        suffixe = request.user.school.country.name[2]
+    else :
+        suffixe = ""
+    name = str(ln).replace(" ","_")    
+    un = name + "." + str(fn)[0] + "_" + suffixe + code 
+
+    while ok:
+ 
+        if User.objects.filter(username=un).count() == 0:
+            ok = False
+        else:
+            i += 1
+            un = un + str(i)
+ 
+    return un 
+
+def get_username_manuel(texte):
+    """
+    retourne un username
+    """
+    User = apps.get_model('account', 'User')
+    ok = True
+    i = 0
+    un = str(texte)  
+    while ok:
+        if User.objects.filter(username=un).count() == 0:
+            ok = False
+        else:
+            i += 1
+            un = un + str(i)
+    return un
+
+
+
+
+def separate_values(request, line, is_group) :
+             
+    if ";" in line:
+        fields = line.split(";")
+    elif "," in line:
+        fields = line.split(",")
+
+    password = make_password("sacado2020")
+
+    if is_group :
+        group_name = str(fields[0])
+        level = fields[1]
+        i ,j ,k , l = 2, 3, 4 , 5 
+    else :
+        group_name = None
+        level = fields[0]
+        i ,j ,k , l =  1, 2 , 3 , 4
+
+    ln = cleanhtml(str(fields[i]).replace(' ', '').replace('\ufeff', '').lower().capitalize())
+    fn = cleanhtml( str(fields[j]).lower().capitalize())
+ 
+    if request.POST.get("manage_username") == "auto" :
+        username =  get_username(request, ln,fn)
+        try:
+            if fields[k] != "":
+                email = fields[k]
+            else:
+                email = ""
+        except:
+            email = ""
+    else :
+        username = get_username_manuel(str(fields[k]))
+ 
+        try:
+            if fields[l] != "":
+                email = fields[l]
+            else:
+                email = ""
+        except:
+            email = ""
+
+ 
+
+    return ln, fn, username , password , email , group_name , level
+
+
+ 
 
 
 

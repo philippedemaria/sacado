@@ -52,20 +52,7 @@ def authorizing_access_school(teacher, school) :
 		return False
 
 
-def get_username(ln, fn):
-    """
-    retourne un username
-    """
-    ok = True
-    i = 0
-    un = str(ln) + "." + str(fn)[0]
-    while ok:
-        if User.objects.filter(username=un).count() == 0:
-            ok = False
-        else:
-            i += 1
-            un = un + str(i)
-    return un
+
 
 
 def this_school_in_session(request):
@@ -976,48 +963,20 @@ def csv_full_group(request):
         if csv_file.multiple_chunks():
             messages.error(request, "Le fichier est trop lourd (%.2f MB)." % (csv_file.size / (1000 * 1000),))
             return HttpResponseRedirect(reverse("register_teacher_csv"))
-
         try:
             file_data = csv_file.read().decode("utf-8")
         except UnicodeDecodeError:
             return HttpResponse('Erreur..... Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
+ 
 
         lines = file_data.split("\r\n")
         # loop over the lines and save them in db. If error , store as string and then display
         group_history = []
         for line in lines:
-            try : 
-                # loop over the lines and save them in db. If error , store as string and then display
-                if ";" in line:
-                    fields = line.split(";")
-                elif "," in line:
-                    fields = line.split(",")
-
-                password = make_password("sacado2020")
-                group_name = str(fields[0])
-                level = fields[1]
-                if request.POST.get("manage_username") == "auto" :
-                    ln = str(fields[2]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
-                    fn = str(fields[3]).lower().capitalize()
-                    username =  get_username(ln,fn)
-                    try:
-                        if fields[4] != "":
-                            email = fields[4]
-                        else:
-                            email = ""
-                    except:
-                        email = ""
-                else :
-                    ln = str(fields[2]).replace(' ', '').replace('\ufeff', '').lower().capitalize()
-                    fn = str(fields[3]).lower().capitalize()
-                    username =  get_username(str(fields[4]),school.name[:2])
-                    try:
-                        if fields[5] != "":
-                            email = fields[5]
-                        else:
-                            email = ""
-                    except:
-                        email = ""
+            try :
+                ln, fn, username , password , email , group_name , level = separate_values(request, line, True)
+  
+ 
                     
                 teacher = Teacher.objects.get(user = request.user)
 
@@ -1031,7 +990,7 @@ def csv_full_group(request):
                                                            time_zone=request.user.time_zone, is_manager=0,
                                                            defaults={'username': username, 'password': password, 'cgu' : 1 ,
                                                                      'is_extra': 0})
-                student, creator = Student.objects.get_or_create(user=user, level=group.level, task_post=1)
+                student, creator = Student.objects.get_or_create(user=user, level= group.level, task_post=1)
                 if creator : #Si l'élève n'est pas créé alors il existe dans des groupes. On l'efface de ses anciens groupes pour l'inscrire à nouveau !
                     group.students.add(student)
             except :

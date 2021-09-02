@@ -11,7 +11,7 @@ from socle.models import Level, Knowledge, Skill, Subject
 from school.models import School, Country
 
 from templated_email import send_templated_mail
-from general_fonctions import *
+#from general_fonctions import *
 
 from django.conf import settings # récupération de variables globales du settings.py
 

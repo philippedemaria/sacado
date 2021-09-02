@@ -2,8 +2,10 @@
 {% load static %}
 
 
+{% comment %}
+Ce fichier permet d'enregistrer des élèves ou des enseignants dans la base de données 
  
-
+{% endcomment %}
 
 {% block require %}
     <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common2.js' %}"></script> 
@@ -42,6 +44,12 @@
  
 
 
+    {% if key > 0  %}
+    <form action="{% url 'register_users_by_csv' 2  %}" method="POST" enctype="multipart/form-data" > 
+    {% else %}
+    <form action="{% url 'register_users_by_csv' 0 %}" method="POST" enctype="multipart/form-data" > 
+    {% endif %}
+
     <div class="alert alert-danger alert-dismissible" role="alert">
 
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -57,26 +65,28 @@
     </div>
         <h3 class="thin">Gestion des identifiants</h3>        
         <ul>
-            <li><label>Laisser SACADO attribuer des identifiants aux élèves <input type="radio" id="show_without_username" name="manage_username" value="auto" /></label> </li> 
-            <li><label> Gérer manuellement les identifiants des élèves <input type="radio" id="show_with_username" name="manage_username" value="hand" /></label></li>
+            <li><label>Laisser SACADO attribuer des identifiants  <input type="radio" id="show_without_username" name="manage_username" value="auto" /></label> </li> 
+            <li><label> Gérer manuellement les identifiants  <input type="radio" id="show_with_username" name="manage_username" value="hand" /></label> <small>Vous devez alors impérativement renseigner les identifiants dans le fichier csv.</small></li>
         </ul>      
 
 
         <div id="without_username">
-            Vous avez choisi la gestion automatisée des identifiants par SACADO.  3 champs sont demandés :
+            Vous avez choisi la gestion automatisée des identifiants par SACADO.  4 champs sont demandés :
             <ul style="margin:10px">
+                <li>Niveau de classe <i class="fa fa-warning"></i> Noter le code du niveau : CP = 1 | CE1 = 2 | CE2 = 3 ..... 6ème = 6 | 5ème = 7 | ... 2nde = 10 | Term = 12</li>
                 <li>Nom</li>
                 <li>Prénom</li>                
                 <li>Courriel, {% if idg > 0  %}optionnel mais préférable pour la correspondance et les notifications.{% else %}renseigner votre adresse professionnelle si vous en avez une.{% endif %}</li>
             </ul> 
             Ces trois données s'écrivent sur une seule ligne. Dans l'exemple ci-dessous, 4 personnes sont enregistrées.<br>
-            <pre style="font-size:20px">Turing;Alan{% if idg == 0  %};alan.turing@enigma.edu{% endif  %}<br>Agnesi;Maria;maria.agnesi@curves.edu<br>Chasles;Michel{% if idg == 0  %};michel.chasles@vector.edu {% endif %}<br>de Fermat;Pierre;pierre.fermat@rsa.edu</pre>
+            <pre style="font-size:20px">1;Turing;Alan{% if idg == 0  %};alan.turing@enigma.edu{% endif  %}<br>1;Agnesi;Maria;maria.agnesi@curves.edu<br>2;Chasles;Michel{% if idg == 0  %};michel.chasles@vector.edu {% endif %}<br>3;de Fermat;Pierre;pierre.fermat@rsa.edu</pre>
  
         </div>
 
         <div id="with_username">
-            4 champs sont demandés :
+            5 champs sont demandés :
             <ul style="margin:10px">
+                <li>Niveau de classe <i class="fa fa-warning"></i> Noter le code du niveau : CP = 1 | CE1 = 2 | CE2 = 3 ..... 6ème = 6 | 5ème = 7 | ... 2nde = 10 | Term = 12</li> 
                 <li>Nom</li>
                 <li>Prénom</li> 
                 <li>Identifiant</li>            
@@ -84,17 +94,12 @@
             </ul> 
             Ces trois données s'écrivent sur une seule ligne. Dans l'exemple ci-dessous, 4 personnes sont enregistrées.<br>
  
-            <pre style="font-size:20px">4ème1;8;T;Alan;alan.T;alan.turing@enigma.edu <br>4ème1;8;Agnesi;Maria;A.maria<br>4ème2;8;Chasles;Michel;Ch.michel;michel.chasles@vector.edu<br>3ème2;9;de Fermat;Pierre;dfpierre;pierre.fermat@rsa.edu</pre>
+            <pre style="font-size:20px">1;Turing;Alan;alan.T;alan.turing@enigma.edu <br>1;Agnesi;Maria;A.maria<br>2;Chasles;Michel;Ch.michel;michel.chasles@vector.edu<br>3;de Fermat;Pierre;dfpierre;pierre.fermat@rsa.edu</pre>
  
         </div>
 
  
 
-    {% if key > 0  %}
-    <form action="{% url 'register_users_by_csv' 2  %}" method="POST" enctype="multipart/form-data" > 
-    {% else %}
-    <form action="{% url 'register_users_by_csv' 0 %}" method="POST" enctype="multipart/form-data" > 
-    {% endif %}
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 {% csrf_token %}
