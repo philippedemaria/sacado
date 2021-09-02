@@ -1052,27 +1052,17 @@ def list_parcours_group(request,id):
         return redirect('index')
 
  
-    parcours_tab = []
     students = group.students.all()
 
-
+    parcours_tab = set()
+    parcours_tab.update(group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),  is_favorite=1).order_by("is_evaluation","ranking"))
     for student in students :
         if access :
-            #if group.subject :
-            #    pcs = Parcours.objects.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),subject= group.subject, students= student, is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation","ranking")
-            #else :
-            pcs = Parcours.objects.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),students= student, is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation","ranking")
+            parcours_tab.update(student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),  is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation","ranking"))
         else :
-            #if group.subject :
-            #    pcs = student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), is_favorite=1 ,subject= group.subject ).exclude(is_leaf=1).order_by("is_evaluation","ranking")
-            #else :
-            pcs = student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), is_favorite=1 ).exclude(is_leaf=1).order_by("is_evaluation","ranking")
-        for parcours in pcs : 
-            if parcours not in parcours_tab   :
-                parcours_tab.append(parcours)
-            if len(parcours_tab) == teacher.teacher_parcours.count() :
-                break
+            parcours_tab.update(student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), is_favorite=1 ).exclude(is_leaf=1).order_by("is_evaluation","ranking") )
 
+ 
     ###efface le realtime de plus de 2 h
     clear_realtime(parcours_tab , today.now() ,  3600 )
 

@@ -109,9 +109,16 @@
                     <div class="form-group list_choice">         
                     <label>Choisir les élèves parmi</label>   <br>  
                         {% for group in groups %}
-                            {% if group.students.count > 0 %}
+                                {% with group.students.count as nb_group  %}
                                 <a data-toggle="collapse" data-target="#demo{{ group.id }}" style="color:{{ group.color}};cursor:pointer">
-                                    {{ group.name|truncatechars:15 }} <small><i class="fa fa-caret-down"></i></small> 
+                                    {{ group.name|truncatechars:15 }} 
+                                    <small>
+                                        {% if nb_group == 0 %}
+                                            <small style="color:#cb2131">Groupe sans élève</small>
+                                        {% else %}
+                                        <i class="fa fa-caret-down"></i>
+                                        {% endif %}
+                                    </small> 
                                 </a> 
                                 <label class="pull-right">
                                     <input type="checkbox" value="{{ group.id }}" name="groups"
@@ -122,14 +129,17 @@
                                                 checked
                                             {% endif %}
                                         {% endif %}
-                                        class="select_all" /><small> tous  </small> 
+                                        class="select_all" />
+                                        <small>
+                                        {% if nb_group == 0 %}
+                                            Attribué au groupe
+                                        {% else %}
+                                            tous
+                                        {% endif %}
+                                        </small> 
                                 </label>
-                            {% else %}
-                                <span style="color:{{ group.color}}">
-                                   <small><i class="fa fa-caret-right"></i></small>  {{ group.name|truncatechars:15 }} 
-                                </span> 
-                                <small style="color:#cb2131">Groupe sans élève. Ce parcours ne lui sera pas affecté.</small>
-                            {% endif %}<br>
+                                {% endwith %}
+                                <br>
 
                           <div id="demo{{ group.id }}" class="collapse" >
                                 <div class="form-group">

@@ -97,6 +97,7 @@ class Group(ModelWithCode):
             profilTest = False
 
         parcourses = set()
+        parcourses.update(self.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),  is_favorite=1).order_by("is_evaluation","ranking"))
         for student in students:
             if self.subject and self.level : 
                 parcourses.update(student.students_to_parcours.filter(Q(author=teacher)|Q(teacher=teacher)|Q(coteachers=teacher),level = self.level,subject = self.subject).exclude(is_leaf=1))
