@@ -11,6 +11,9 @@ urlpatterns = [
     path('update/<int:id>/', update_group, name='update_group'),
     path('delete/<int:id>/', delete_group, name='delete_group'),
 
+    path('delete_all_groups', delete_all_groups , name='delete_all_groups'),
+
+
     path('show/<int:id>/', show_group, name='show_group'), 
     path('result/<int:id>/', result_group, name='result_group'),
     path('result_group_exercise/<int:id>/', result_group_exercise, name='result_group_exercise'),

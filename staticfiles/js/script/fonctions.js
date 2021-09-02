@@ -115,3 +115,8 @@ function TestDeleteFolder(f1) {
         return true;
 
 }
+
+
+function delete_all_these_groups(f) {
+     if (!confirm('Vous souhaitez supprimer '+f+' ? \nToutes leurs données actuelles seront perdues. \nCette action est irréversible si vous cliquez sur OK.')) return false;
+ }

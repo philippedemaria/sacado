@@ -30,6 +30,8 @@
 
 {% block body %}
     <section class="content_list"> 
+        <form action="{% url 'delete_all_groups' %}"  method="POST">     
+        {% csrf_token %}     
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 <table class="table table-bordered table-hover standard_tab_sort">
@@ -44,6 +46,7 @@
                         {% for group in groups %}
                             <tr>
                                 <td style="width:150px ; border-left:5px solid {{group.color}}">
+                                    <input type="checkbox" name="group_ids" value="{{ group.id }}" />
                                     <a href="{% url 'update_group_school'  group.id %}" style="color:{{group.color}}">{{ group.name }} </a>
                                     <span style="color:#CCC; font-size: 10px" class="pull-right tool_tip" >
                                     {% if group.lock %}
@@ -103,8 +106,12 @@
 
 
         <div class="row">
+
             <div class="col-sm-12 col-md-12">     
-                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+                <button class="btn btn-warning" name="only_group" value="1" onclick="return delete_all_these_groups('ce.s groupe.s')" >Supprimer la sélection des groupes</button>  
+                <button class="btn btn-danger"  name="all_contents" value="1" onclick="return delete_all_these_groups('ce.s groupe.s et les élèves associés')" >Supprimer la sélection des groupes avec leurs élèves </button>
+  
+                <a href="{% url 'index' %}"  class="btn btn-default" >Tableau de bord </a>
             </div>
         </div>
     </section>
