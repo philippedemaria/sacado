@@ -57,28 +57,36 @@ section{
 
 
 
-      <div class="row" style="font-size:200px;">
-         DÉSOLÉ... 
+      <div class="row" style="font-size:40px;">
+          Hummm ???..... si vous êtes arrivez sur cette page c'est qu'il y a eu une erreur d'aiguillage. DÉSOLÉ... 
+        </br>Vous pouvez nous écrier pour signaler le problème rencontré.
+        </br>Merci d'aider Sacado à devenir meilleur.
       </div>
 
 
-
-            <div style="text-align: center; background-color:#FFF; border-radius: 50%; padding:10px;height:250px;width:250px;margin-right: auto; margin-left: auto">
-
-                <img src="{% static 'img/sacado_color.png' %}" />
-
-            </div>
-
-
-
-                 <div class="row" style="font-weight:100">
-                  ... Accès interdit ...
+              <form action="{% url 'send_message' %}" method="post" >
+                  {% csrf_token %}
+                <div class="form-group">
+                  <input type="text" name="name" class="form-control" id="name" placeholder="Nom" {% if request.user.is_authenticated %}value="{{ request.user.last_name }}"{% endif %} required />
+                </div>
+                <div class="form-group">
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Email" {% if request.user.is_authenticated %}value="{{ request.user.email }}"{% endif %} required />
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="subject" id="subject" placeholder="Objet" data-rule="minlen:4" data-msg="Au moins 8 caractères" required />
+                </div>
+                <div class="form-group">
+                  <textarea class="form-control" name="message" rows="5" required data-msg="Ecrire votre message" placeholder="Message"></textarea>
                 </div>
 
+                <div class="form-group">
+                  <img src="{% static 'img/som_token.png' %}" />
+                  <input type="text" name="token" class="form-control" id="token" placeholder="Ecrire le résultat de la somme"  />
+                </div>
 
+                <div class="text-center"><button type="submit" class="btn btn-sacado">Envoyer</button></div>
+              </form>
 
-
- 
     <div class="row" style="text-align: right;">
       <a href="javascript:history.back()" style="color:#FFF; font-size:20px">Retour</a>
     </div>
