@@ -300,10 +300,6 @@ def include_students(request , liste, group):
 
 
 
-
-
-
-
 def include_students_in_a_model(request, liste,model):
  
     students_tab = liste.split("\r\n")
@@ -312,8 +308,8 @@ def include_students_in_a_model(request, liste,model):
     for student_tab in students_tab :
         details = student_tab.split(";")
         try:
-            fname = cleanhtml(details[0].replace(" ", ""))
-            lname = cleanhtml(details[1].replace(" ", ""))
+            lname = cleanhtml(details[0].replace(" ", ""))
+            fname = cleanhtml(details[1].replace(" ", ""))
             password = make_password("sacado2020")
             username = get_username(request,fname , lname)
 
