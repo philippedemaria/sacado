@@ -20,5 +20,4 @@ staticfiles/img/img_psd
 logs/
 
 media/
-sacado/settings.py
 qcm/__pycache__/views.cpython-36.pyc

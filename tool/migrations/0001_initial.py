@@ -65,7 +65,6 @@ class Migration(migrations.Migration):
                 ('ranking', models.PositiveIntegerField(blank=True, default=0, editable=False, null=True)),
                 ('size', models.PositiveIntegerField(choices=[(16, '16'), (24, '24'), (32, '32'), (40, '40'), (48, '48'), (56, '56')], default=32, verbose_name='Taille de police')),
                 ('theme', models.BooleanField(default=0, verbose_name='Thème ?')),
-                ('themeeee', models.BooleanField(default=0, verbose_name='Thème ?')),
                 ('knowledge', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='question', to='socle.Knowledge')),
                 ('students', models.ManyToManyField(blank=True, editable=False, related_name='questions', through='tool.Answerplayer', to='account.Student')),
             ],

@@ -667,11 +667,8 @@ def delete_all_groups(request) :
     group_ids = request.POST.getlist('group_ids')
     print(group_ids)
     for g_id in group_ids :
-        print(g_id)
         group = Group.objects.get(pk=g_id)
-        print(group)
         if all_contents == "1" :
-            print("ici")
             for s in group.students.all():
                 s.user.delete()
         group.delete()
