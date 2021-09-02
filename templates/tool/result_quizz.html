@@ -44,7 +44,6 @@
                 </div> 
                 <div class="col-sm-12 col-md-12 no_display_init">
                 {% for student in gquizz.group.students.all|dictsort:"user.last_name" %}
- 
                     {% get_real_ans_for_this_question  question  gquizz  student as dict_answer %} 
                     <span class="btn btn-{% if dict_answer.is_correct %}success{% else %}danger{% endif %}">{{ student.user }}
                         <small>
@@ -57,7 +56,6 @@
                             {% endfor %}
                         {% endif %}
                         </small>
-                    
                     </span>    
                 {% endfor %}
                 </div>
