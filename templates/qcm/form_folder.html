@@ -119,17 +119,10 @@
                     <label>Choisir les élèves parmi</label>{% if not group %}</br>{% endif %}
 
                         {% if group %}
-                            {% if group.students.count > 0 %}
-
-                            <label class="pull-right"><input type="checkbox" value="{{ group.id }}" name="groups" class="select_all" /><small> tous  </small> 
-                                                               </label>
-                            {% else %}
-                                <span style="color:{{ group.color}}">
-                                   <small><i class="fa fa-caret-right"></i></small>  {{ group.name|truncatechars:15 }} 
-                                </span> 
-                                <small style="color:#cb2131">Groupe sans élève. Ce parcours ne lui sera pas affecté.</small>
-                            {% endif %}<br>
-
+                            {% with group.students.count as nb_group  %}
+                            <label class="pull-right"><input type="checkbox" value="{{ group.id }}" name="groups" class="select_all" {% if nb_group == 0 %} checked {% endif %} /><small> tous</small> 
+                            </label>
+                            <br>
                             <div id="demo{{ group.id }}" >
                                     <div class="form-group">
                                         {% for s in group.students.all|dictsort:"user.last_name"  %}
@@ -153,7 +146,8 @@
                                             </label><br>
                                         {% endfor %}
                                     </div>
-                            </div> 
+                            </div>
+                            {% endwith %}
                         {% else %}
 
                             {% for group in groups %}
