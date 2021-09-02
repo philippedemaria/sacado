@@ -98,24 +98,30 @@
                 </div>
             </div>
         </div>
-        {% if tp > 0 or accounting %}
-        <div class="row">
 
+        <div class="row">
+            {% if tp > 0 or accounting %}
  
-            <div class="col-sm-4 col-md-2 col-lg-1">
+            <div class="col-sm-3 col-md-3 col-lg-1">
                 <div class="form-group">
                     <label>Compte</label>
                 </div>
             </div>
-            <div class="col-sm-8 col-md-4 col-lg-6">
+            <div class="col-sm-6 col-md-6 col-lg-8">
                 <div class="form-group">
                     {{ form.plan |add_class:"form-control select2"|attr:"placeholder:Forme"}}  
                     {{ form.plan.errors }}
                 </div>
             </div>
- 
+            {% endif %}            
+            <div class="col-sm-3 col-md-3 col-lg-2">
+                <div class="form-group">
+                    {{ form.is_paypal |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Paypal"|attr:"data-off:Banque"}} 
+                    {{ form.is_paypal.errors }}
+                </div>
+            </div> 
         </div>
-        {% endif %}
+
         <div class="row">
             {% if tp == 2 %}
             <div class="col-sm-2 col-md-2 col-lg-1">
@@ -136,24 +142,21 @@
                 </div>
             </div>
         </div>
-        {% if accounting %}
+
         <div class="row">
-            <div class="col-sm-8 col-md-4 col-lg-3">
-                <div class="form-group">
-                    {{ form.is_paypal |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Paypal"|attr:"data-off:Banque"}} 
-                    {{ form.is_paypal.errors }}
-                </div>
-            </div>            
-            <div class="col-sm-3 col-md-6 col-lg-2">
+     
+        {% if accounting %}                   
+            <div class="col-sm-3 col-md-4 col-lg-4">
                     {{ form.acting |add_class:"form-control datetimepicker"|attr:"placeholder:Date de paiement"}}  
                     {{ form.acting.errors }}
             </div>
-            <div class="col-sm-3 col-md-6 col-lg-2">
+            <div class="col-sm-3 col-md-4 col-lg-4">
                     {{ form.mode |add_class:"form-control select2"}}  
                     {{ form.mode.errors }}
             </div>
+        {% endif %}    
         </div>
-        {% endif %}
+
 
  
         <div class="row">
@@ -217,11 +220,11 @@
 
                 <div id="formsetZone">
                         <div class="row">
-                            <div class="col-sm-1 col-md-1" >
+                            <div class="col-sm-5 col-md-5" >
                                 <div class="form-group"><br/>
                                     <a href="#"  class="btn btn-info add_more" >Ajouter une description et son montant</a>
                                 </div>
-                            </div>                        
+                            </div>                            
                         </div>
 
 
