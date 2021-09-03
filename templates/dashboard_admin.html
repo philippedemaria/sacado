@@ -25,6 +25,14 @@
 
 {% block body %}
 <section class="content_main"> 
+{% if not sacado_asso %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-xs-12 alert alert-danger">
+            Vous n'avez plus la version Etablissement
+        </div>
+    </div>
+{% endif %}
+
     {% if request.user.is_manager %}
     <form  action="" method="POST" >        
         {% csrf_token %}
