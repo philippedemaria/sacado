@@ -149,13 +149,15 @@ def association_index(request):
         if m > 12 :
             year = today_start.year -1
             m = m%12
-        sep = ","
-        if run == 11 :
-            sep = ""
+        sep = ""
+        if run > 0 and run < 12 :
+            sep = ","
         date_start   = datetime(year,m,1)
         date_stop    = datetime(year,m,days[m-1])
-        n = User.objects.filter(date_joined__lte=date_stop, date_joined__gte=date_start,user_type=2).count()
-        string += str(n)+sep
+        n = Teacher.objects.filter(user__date_joined__lte=date_stop, user__date_joined__gte=date_start ).count()
+        print(date_start,date_stop,n)
+        string += sep+str(n)
+        print(string)
         run += 1
 
  
