@@ -139,13 +139,11 @@ def association_index(request):
     days         = [31,28,31,30,31,30,31,31,30,31,30,31]
     month_start  = today_start.month
     list_months  = months[month_start:12] + months[0:month_start]
-    print(list_months)
+
     list_reals   = []
     for i in range(month_start+1,13+month_start) :
         list_reals.append(i)
     year   = today_start.year -1
-
-    print(list_reals)
 
     string = ""
     run = 0
@@ -156,12 +154,11 @@ def association_index(request):
         sep = ""
         if run > 0 and run < 12 :
             sep = ","
-        date_start   = datetime(year,m,1)
-        date_stop    = datetime(year,m,days[m-1])
+        date_start   = datetime(year,m,1,0,0,0)
+        date_stop    = datetime(year,m,days[m-1],23,59,59)
         n = Teacher.objects.filter(user__date_joined__lte=date_stop, user__date_joined__gte=date_start ).count()
         print(date_start,date_stop,n)
         string += sep+str(n)
-        print(string)
         run += 1
 
  
