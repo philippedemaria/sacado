@@ -1146,7 +1146,7 @@ def register_by_csv(request, key, idg=0):
                 group.students.add(student)
 
             if is_username_changed :
-                list_names += ln+" "+fn+" : "+username+";"
+                list_names += ln+" "+fn+" : "+username+"; "
 
             if email != "" :
                 sending_mail('Création de compte sur Sacado',
@@ -1224,7 +1224,7 @@ def register_users_by_csv(request,key):
                     student, creator = Student.objects.get_or_create(user=user, level_id=level, task_post=1)
 
                 if is_username_changed :
-                    list_names += ln+" "+fn+" : "+username+";"
+                    list_names += ln+" "+fn+" : "+username+"; "
 
             except :
                 pass
@@ -1615,4 +1615,17 @@ def passwordResetConfirmView(request, code ):
     return render(request, 'registration/password_reset_confirm.html', { 'validlink' : validlink , 'form' : form , 'code' : code , })
 
 
+
+def init_password_teacher(request, id ):
+
+    teacher = Teacher.objects.get(pk=id)
+    password =  str(uuid.uuid4())[:8]
+    teacher.user.password = make_password(password)
  
+    msg = "Bonjour, \n\n Votre nouveau mot de passe : " + password + "\nest attribué. Il est généré automatiquement.\n\n Vous pouvez le modifer via votre profil. Ceci est un mail automatique, ne pas répondre.\n\nL'équipe SACADO."
+    
+    if teacher.user.email :
+        send_mail('SacAdo : Ré-initialisation de mot de passe', msg ,settings.DEFAULT_FROM_EMAIL,[teacher.user.email, ])
+
+
+    return redirect('list_teacher') 

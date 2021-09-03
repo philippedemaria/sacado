@@ -135,7 +135,30 @@ def association_index(request):
     nb_students  = Student.objects.all().count()#.exclude(user__username__contains="_e-test_")
     nb_exercises = Exercise.objects.filter(supportfile__is_title=0).count()
     nb_schools   = School.objects.all().count()
+    months       = [1,2,3,4,5,6,7,8,9,10,11,12]
+    days         = [31,28,31,30,31,30,31,31,30,31,30,31]
+    month_start  = today_start.month
+    list_months  = months[month_start:11] + months[0:month_start]
+    list_reals   = []
+    for i in range(month_start,12+month_start) :
+        list_reals.append(i)
+    year   = today_start.year
+    string = ""
+    run = 0
+    for m in list_reals :        
+        if m > 12 :
+            year = today_start.year -1
+            m = m%12
+        sep = ","
+        if run == 11 :
+            sep = ""
+        date_start   = datetime(year,m,1)
+        date_stop    = datetime(year,m,days[m-1])
+        n = User.objects.filter(date_joined__lte=date_stop, date_joined__gte=date_start,user_type=2).count()
+        string += str(n)+sep
+        run += 1
 
+ 
     nb_answers   = Studentanswer.objects.filter(date__gte= today_start).count() + Customanswerbystudent.objects.filter(date__gte= today_start).count() + Writtenanswerbystudent.objects.filter(date__gte= today_start).count()
     if Holidaybook.objects.all() :
         holidaybook  = Holidaybook.objects.values("is_display").get(pk=1)
@@ -144,6 +167,7 @@ def association_index(request):
 
     context = { 'nb_teachers': nb_teachers , 'nb_students': nb_students , 'nb_exercises': nb_exercises, 
                 'nb_schools': nb_schools, 'nb_answers': nb_answers, 'holidaybook': holidaybook ,
+                'list_months': list_months, 'string': string,  'month_start' : month_start ,  
                 }
 
     return render(request, 'association/dashboard.html', context )

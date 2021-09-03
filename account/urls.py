@@ -26,7 +26,7 @@ urlpatterns = [
     path('password/reset/done/', passwordResetDoneView, name='password_reset_done'),
     path('newpassword/<slug:code>', passwordResetConfirmView, name='password_reset_confirm'),
  
-
+    path('init_password_teacher/<int:id>', init_password_teacher, name='init_password_teacher'),
 
 
 

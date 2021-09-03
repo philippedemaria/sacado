@@ -60,11 +60,12 @@
                     <tbody>
                         {% for teacher in teachers %}
                             <tr>
-                                <td style="min-width:200px">
+                                <td style="min-width:250px">
                                     <a href="{% url 'update_teacher' teacher.id %}">{{ teacher.last_name }}  {{ teacher.first_name }}</a> 
 
-                                    {% if request.user.is_superuser %} 
-                                        <a href="{% url 'delete_teacher' teacher.id %}" class="pull-right"><i class="fa fa-trash"></i></a>
+                                    {% if request.user.is_superuser %}
+                                        <a href="{% url 'delete_teacher' teacher.id %}" class="pull-right edit" onclick="return TestDelete('cet enseignant')"><i class="fa fa-trash"></i></a>
+                                        <a href="{% url 'init_password_teacher' teacher.id %}" class="pull-right edit" onclick="return TestDelete('cet exercice')"><i class="fa fa-gavel"></i></a>
                                     {% endif %}
 
                                 </td>

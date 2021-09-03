@@ -132,10 +132,60 @@
             <p>Exercices traités ce jour  </p>
         </div>
     </div>
-
-
     {% endif %} 
 
+    <hr/>
+ 
+    <div class="row">
+        <div class="col-lg-12 col-12 text-center">
+
+            <canvas id="myChart" style="width:100%;max-height:400px"></canvas>
+
+        </div>
+    </div>
 
 </section> 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+ 
+
+
+<script>
+
+const months     = ['janvier','février','mars','avril','mai','juin','juillet','aout','septembre','octobre','novembre','décembre'] ;
+var month_start  = {{ month_start }} ;
+
+newList = [];
+
+for (let i=month_start;i<12;i++){
+    newList.push(months[i]);
+}
+for (let j=0;j<month_start;j++){
+    newList.push(months[j]);
+}
+
+var xValues =  newList  ;
+var yValues = [ {{ string }} ];
+var barColors = ["violet", "violet","violet","violet","violet", "violet","violet","violet","violet", "violet","violet","violet" ];
+
+new Chart("myChart", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "Statistiques des inscriptions ENSEIGNANT sur les 12 derniers mois"
+    }
+  }
+});
+</script>
+
+
 {% endblock %}
