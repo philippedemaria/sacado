@@ -81,7 +81,7 @@ def separate_values(request, line, is_group) :
         level = fields[0]
         i ,j ,k , l =  1, 2 , 3 , 4
 
-    ln = cleanhtml(str(fields[i]).replace(' ', '').replace('\ufeff', '').lower().capitalize())
+    ln = cleanhtml(str(fields[i]).lower().capitalize()) #.replace(' ', '').replace('\ufeff', '')
     fn = cleanhtml( str(fields[j]).lower().capitalize())
  
     if request.POST.get("manage_username") == "auto" :
