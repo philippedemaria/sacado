@@ -157,7 +157,6 @@ def association_index(request):
         date_start   = datetime(year,m,1,0,0,0)
         date_stop    = datetime(year,m,days[m-1],23,59,59)
         n = Teacher.objects.filter(user__date_joined__lte=date_stop, user__date_joined__gte=date_start ).count()
-        print(date_start,date_stop,n)
         string += sep+str(n)
         run += 1
 
