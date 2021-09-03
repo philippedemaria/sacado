@@ -65,7 +65,6 @@ def menu(request):
                 is_pending_studentanswers = True
  
             ### Permet de vérifier qu'un enseignant est dans un établissement sacado
-
             sacado_asso, sacado_is_active = is_sacado_asso(teacher.user,today)
  
             ### Rapelle le renouvellement de la cotisation
