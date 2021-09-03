@@ -202,13 +202,14 @@
             <p><b>Importation des élèves</b>, 5 façons s'offrent à vous :</p>
  
                 <ul>
-                    <li>Par Initialisation par CSV : <a href="{% url 'csv_full_group'  %}" class="btn btn-default btn-accueil"  > Initialiser tous les groupes d'élèves </a> Le fichier .CSV doit contenir les <b>groupes</b>, leurs <b>niveaux</b> et les <b>données des  élèves</b>. <em>Pratique en début d'année pour initaliser tous les groupes. Il faut s'assurer que la base de doonées est vidée. </em></li>
-                    <li>Par Gestion des élèves : 
- 
-                                    <a href="{% url 'school_students' %}"><i class="fa fa-arrow-circle-right"></i> Gestion des élèves </a>
-                                .  Le fichier .CSV doit contenir les  <b>données des  élèves</b> et leurs <b>niveaux</b> de scolarisation. <em>A utiliser pour remplir les élèves sans ce soucier de leurs classes. </em></li>
+                    <li>Par Initialisation par CSV : <a href="{% url 'csv_full_group'  %}" class="btn btn-default btn-accueil"  > Initialiser tous les groupes d'élèves </a> Le fichier .CSV doit contenir les <b>groupes</b>, leur <b>niveau</b> et les <b>données des  élèves</b>. <em>Pratique en début d'année pour initaliser tous les groupes. <span style="color:#cb2131">Il faut s'assurer qu'il n'existe pas de groupe, ni d'élève.</span> </em></li>
+
                     <li>Par Gestion des groupes par CSV :  <a href="{% url 'school_groups' %}"><i
-                                        class="fa fa-arrow-circle-right"></i> Gestion des groupes </a>.  Le fichier .CSV doit contenir seulement les <b>données des élèves</b>. <a href="#" class="btn btn-xs btn-default" title="Ajouter plusieurs élèves à ce groupe avec du CSV" > + <i class="fa fa-users text-success"></i> csv</a> <em>Pratique pour ajouter des élèves aux groupes. </em></li>         
+                                        class="fa fa-arrow-circle-right"></i> Gestion des groupes </a>.  Le fichier .CSV doit contenir seulement les <b>données des élèves</b>. <a href="#" class="btn btn-xs btn-default" title="Ajouter plusieurs élèves à ce groupe avec du CSV" > + <i class="fa fa-users text-success"></i> csv</a> <em>Pratique pour ajouter des élèves aux groupes. </em></li>   
+
+                    <li>Par Gestion des élèves : <a href="{% url 'school_students' %}"><i class="fa fa-arrow-circle-right"></i> Gestion des élèves </a>
+                                .  Le fichier .CSV doit contenir les  <b>données des  élèves</b> et leurs <b>niveaux</b> de scolarisation. <em>A utiliser pour remplir les élèves sans affectation à leur classe. </em></li>
+
                     <li>Par Création de groupe par CSV :  <a href="{% url 'create_group' %}"><i
                                         class="fa fa-arrow-circle-right"></i> Création </a>.  Lors de la création  d'un groupe, on peut insérer les élèves du groupe. Il faut donc la <b>liste des élèves</b> du groupe </li>
                     <li>Un par un  :  Mais alors là vous allez pleurer... </li>                                     
