@@ -73,6 +73,15 @@ function get_this_confirmation(f1) {
 
 function check_if_checked() {
 
+
+    var checked_groups = document.getElementsByClassName("select_all") ; 
+    var leng = 0 ;
+    for(let i = 0; i < checked_groups.length ; i++) {
+        if(checked_groups[i].checked) {
+          leng++;
+        }
+    }
+
     var checkeds = document.getElementsByClassName("check_if_check") ;
     var len = 0 ;
     for(let i = 0; i < checkeds.length ; i++) {
@@ -80,7 +89,9 @@ function check_if_checked() {
           len++;
         }
     }
-    if (len == 0) {
+    
+    var tot = leng + len
+    if (tot == 0) {
             if (!confirm("Vous devriez sélectionner au moins un élève. Si vous n'avez pas encore d'élèves, créez-vous un profil élève dans chacun de vos groupes. Confirmez l'enregistrement sans élève ?")) return false ;             
             } 
 }

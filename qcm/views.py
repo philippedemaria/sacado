@@ -1467,6 +1467,15 @@ def lock_all_exercises_for_student(dateur,parcours):
                     res = Exerciselocker.objects.get(student = student ,  customexercise = ce, custom = 1)
                     res.delete() 
 
+# def assign_all_documents(nf , group_ckeched_ids):
+#     """" fontion à mettre dans create et update ne fonctionnepas pour l'instant....todo ......"""
+#     nf.groups.set(group_ckeched_ids)
+#     for group_ckeched_id in group_ckeched_ids :
+#         group_ckeched = Group.objects.get(pk = group_ckeched_id)
+#         parcourses = group_ckeched.group_parcours.all()
+#         for s in group_ckeched.students.all() :
+#             nf.students.add(s)
+#             attribute_all_documents_to_student(parcourses,s)
 
 
 def create_parcours(request,idp=0):
@@ -1535,8 +1544,11 @@ def create_parcours(request,idp=0):
 
         for group_ckeched_id in group_ckeched_ids :
             group_ckeched = Group.objects.get(pk = group_ckeched_id)
+            parcourses = group_ckeched.group_parcours.all()
             for s in group_ckeched.students.all() :
                 nf.students.add(s)
+                attribute_all_documents_to_student(parcourses,s)
+
         ################################################
         ### Si idp > 0 alors idp est le parcours dossier
         if idp > 0 :
@@ -1659,8 +1671,18 @@ def update_parcours(request, id, idg=0 ):
             form.save_m2m()
 
             nf.groups.clear()
-            nf.groups.set(request.POST.getlist('groups'))
+            group_ckeched_ids = request.POST.getlist('groups')
+            nf.groups.set(group_ckeched_ids)
             
+
+            for group_ckeched_id in group_ckeched_ids :
+                group_ckeched = Group.objects.get(pk = group_ckeched_id)
+                parcourses = group_ckeched.group_parcours.all()
+                for s in group_ckeched.students.all() :
+                    nf.students.add(s)
+                    attribute_all_documents_to_student(parcourses,s)
+                    
+
 
             for pid in request.POST.getlist("folder_parcours") :
                 parcours_folder = Parcours.objects.get(pk = pid)

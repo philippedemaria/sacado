@@ -35,14 +35,14 @@ def get_username(request ,ln, fn):
     un = name + "." + str(fn)[0] + "_" + suffixe + code 
 
     while ok:
- 
         if User.objects.filter(username=un).count() == 0:
             ok = False
         else:
             i += 1
             un = un + str(i)
- 
     return un 
+
+
 
 def get_username_manuel(texte):
     """
@@ -51,14 +51,16 @@ def get_username_manuel(texte):
     User = apps.get_model('account', 'User')
     ok = True
     i = 0
-    un = str(texte)  
+    un = str(texte)
+    is_changed = False 
     while ok:
         if User.objects.filter(username=un).count() == 0:
             ok = False
         else:
             i += 1
             un = un + str(i)
-    return un
+            is_changed = True 
+    return un , is_changed
 
 
 
@@ -86,6 +88,7 @@ def separate_values(request, line, is_group) :
  
     if request.POST.get("manage_username") == "auto" :
         username =  get_username(request, ln,fn)
+        is_username_changed = False
         try:
             if fields[k] != "":
                 email = fields[k]
@@ -94,8 +97,7 @@ def separate_values(request, line, is_group) :
         except:
             email = ""
     else :
-        username = get_username_manuel(str(fields[k]))
- 
+        username , is_username_changed = get_username_manuel(str(fields[k]))
         try:
             if fields[l] != "":
                 email = fields[l]
@@ -104,9 +106,7 @@ def separate_values(request, line, is_group) :
         except:
             email = ""
 
- 
-
-    return ln, fn, username , password , email , group_name , level
+    return ln, fn, username , password , email , group_name , level , is_username_changed
 
 
  

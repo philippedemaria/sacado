@@ -1119,10 +1119,11 @@ def register_by_csv(request, key, idg=0):
    
 
         lines = file_data.split("\r\n")
-        # loop over the lines and save them in db. If error , store as string and then display
+        # loop over the lines and save them in db. If error , store as string and then display = []
+        list_names = ""
         for line in lines:
             # loop over the lines and save them in db. If error , store as string and then display
-            ln, fn, username , password , email , group_name , level = separate_values(request, line, False)  
+            ln, fn, username , password , email , group_name , level , is_username_changed = separate_values(request, line, False)  
 
             if key == User.TEACHER:  # Enseignant
                 user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,
@@ -1144,11 +1145,20 @@ def register_by_csv(request, key, idg=0):
                         g.students.remove(student)
                 group.students.add(student)
 
+            if is_username_changed :
+                list_names += ln+" "+fn+" : "+username+";"
+
             if email != "" :
                 sending_mail('Création de compte sur Sacado',
                   f'Bonjour {user}, votre compte Sacado est maintenant disponible.\r\n\r\nVotre identifiant est {user.username} \r\n\r\nVotre mot de passe est : sacado2020 \r\n\r\nVous pourrez le modifier une fois connecté à votre espace personnel.\r\n\r\nPour vous connecter, redirigez-vous vers https://sacado.xyz.\r\n\r\nCeci est un mail automatique. Ne pas répondre.',
-                  settings.DEFAULT_FROM_EMAIL,
-                  [email,])
+                  settings.DEFAULT_FROM_EMAIL, [email,])
+
+        if len(list_names) >  0 :
+            if key == User.TEACHER:
+                user_type = " enseignants "
+            else :
+                user_type = " élèves "
+            messages.error(request,"Les identifiants des "+user_type+" suivants ont été modifiés lors de la création "+list_names)
  
 
         if key == User.TEACHER:
@@ -1191,11 +1201,12 @@ def register_users_by_csv(request,key):
             return HttpResponse('Erreur..... Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
  
         lines = file_data.split("\r\n")
+        list_names = ""
         # loop over the lines and save them in db. If error , store as string and then display
         for line in lines:
             try : 
      
-                ln, fn, username , password , email , group_name , level = separate_values(request, line, False)
+                ln, fn, username , password , email , group_name , level , is_username_changed = separate_values(request, line, False)
 
                 if key == User.TEACHER:  # Enseignant
                     user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,
@@ -1211,9 +1222,19 @@ def register_users_by_csv(request,key):
                                                                defaults={'username': username, 'password': password,
                                                                          'is_extra': 0})
                     student, creator = Student.objects.get_or_create(user=user, level_id=level, task_post=1)
+
+                if is_username_changed :
+                    list_names += ln+" "+fn+" : "+username+";"
+
             except :
                 pass
      
+        if len(list_names) >  0 :
+            if key == User.TEACHER:
+                user_type = " enseignants "
+            else :
+                user_type = " élèves "
+            messages.error(request,"Les identifiants des "+user_type+" suivants ont été modifiés lors de la création "+list_names)
 
         if key == User.TEACHER:
             return redirect('school_teachers')

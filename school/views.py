@@ -972,12 +972,12 @@ def csv_full_group(request):
         lines = file_data.split("\r\n")
         # loop over the lines and save them in db. If error , store as string and then display
         group_history = []
+        list_names = ""
         for line in lines:
             try :
-                ln, fn, username , password , email , group_name , level = separate_values(request, line, True)
+                ln, fn, username , password , email , group_name , level , is_username_changed = separate_values(request, line, True)
   
- 
-                    
+  
                 teacher = Teacher.objects.get(user = request.user)
 
                 if group_name not in group_history :
@@ -993,8 +993,17 @@ def csv_full_group(request):
                 student, creator = Student.objects.get_or_create(user=user, level= group.level, task_post=1)
                 if creator : #Si l'élève n'est pas créé alors il existe dans des groupes. On l'efface de ses anciens groupes pour l'inscrire à nouveau !
                     group.students.add(student)
+                if is_username_changed :
+                    list_names += ln+" "+fn+" : "+username+"; "
             except :
                 pass
+ 
+        if len(list_names) >  0 :
+            if key == User.TEACHER:
+                user_type = " enseignants "
+            else :
+                user_type = " élèves "
+            messages.error(request,"Les identifiants des "+user_type+" suivants ont été modifiés lors de la création "+list_names)
  
         return redirect('admin_tdb')
     else:
