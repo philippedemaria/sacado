@@ -138,16 +138,20 @@ def association_index(request):
     months       = [1,2,3,4,5,6,7,8,9,10,11,12]
     days         = [31,28,31,30,31,30,31,31,30,31,30,31]
     month_start  = today_start.month
-    list_months  = months[month_start:11] + months[0:month_start]
+    list_months  = months[month_start:12] + months[0:month_start]
+    print(list_months)
     list_reals   = []
-    for i in range(month_start,12+month_start) :
+    for i in range(month_start+1,13+month_start) :
         list_reals.append(i)
-    year   = today_start.year
+    year   = today_start.year -1
+
+    print(list_reals)
+
     string = ""
     run = 0
     for m in list_reals :        
         if m > 12 :
-            year = today_start.year -1
+            year = today_start.year
             m = m%12
         sep = ""
         if run > 0 and run < 12 :
