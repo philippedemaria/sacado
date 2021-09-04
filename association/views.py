@@ -131,7 +131,7 @@ def delete_formule(request, id):
 def association_index(request):
 
 
-    Student.objects.get(user_id=27293).delete()
+    Teacher.objects.get(user_id=27293).delete()
 
 
 
