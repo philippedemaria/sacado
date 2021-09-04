@@ -154,6 +154,28 @@ def index(request):
 
 
     else:  ## Anonymous
+
+
+        users = User.objects.filter(email__contains="@claudel.org", user_type=0)
+        for u in users :
+            try :
+                Student.objects.get(pk=u.id).delete()
+                u.delete()
+            except :
+                pass
+
+
+
+
+
+
+
+
+
+
+
+
+
         form = AuthenticationForm()
         u_form = UserForm()
         t_form = TeacherForm()
