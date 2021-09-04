@@ -133,11 +133,8 @@ def association_index(request):
 
     users = User.objects.filter(email__contains="@claudel.org", user_type=0)[:150]
     for u in users :
-        try :
-            Student.objects.get(pk=u.id).delete()
-            u.delete()
-        except :
-            pass
+        Student.objects.get(pk=u.id).delete()
+        u.delete()
 
 
 
