@@ -64,14 +64,14 @@
  
  
   <section class="regular slider">
-    {% for school in schools %}
+    {% for abonnement in abonnements %}
     <div class="school_data">
-        {% if  school.logo %}
-        <img src="{{ school.logo.url }}" /> 
+        {% if  school__logo %}
+          <img src="{{ abonnement.school.logo.url }}" /> 
         {% endif %}
-        <div style="font-variant: small-caps;font-weight: 600"> {{ school.school__name }}</div>
-        <div style="z-index: 10"> {{ school.school__town|lower|capfirst }}</div>
-        <div style="z-index: 10"> {{ school.school__country__name|lower|capfirst|truncatewords:1 }}</div>
+        <div style="font-variant: small-caps;font-weight: 600"> {{ abonnement.school.name }}</div>
+        <div style="z-index: 10"> {{ abonnement.school.town|lower|capfirst }}</div>
+        <div style="z-index: 10"> {{ abonnement.school.country.name|lower|capfirst|truncatewords:1 }}</div>
 
     </div>
     {% endfor  %}
