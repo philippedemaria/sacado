@@ -66,7 +66,7 @@
   <section class="regular slider">
     {% for school in schools %}
     <div class="school_data">
-        {% if  school.logo.url %}
+        {% if  school.logo %}
         <img src="{{ school.logo.url }}" /> 
         {% endif %}
         <div style="font-variant: small-caps;font-weight: 600"> {{ school.school__name }}</div>
