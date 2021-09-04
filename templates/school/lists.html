@@ -49,8 +49,8 @@
                           <a href="{% url 'update_school'  school.id %}" > {{ school.name }}</a> 
                           <a href="{% url 'delete_school'  school.id %}" class="pull-right" onclick="return TestDelete('{{ school.name }}')"><i class="fa fa-trash"></i> </a>
                           {% if school.logo %}
-                            <img src="{{ school.logo.url }}" width="60px" class="pull-right"  />
-                          {%  endif  %}
+                            <img src="{{ school.logo.url }}" width="40px" />
+                          {% endif %}
                       </td>
                       <td>
                           {{ school.town }}
