@@ -30,7 +30,9 @@
     <link href="{% static 'index/css/style.css' %}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'plugins/select2/select2.css' %}"/>
 
-
+ 
+    <link rel="stylesheet" type="text/css" href="{% static 'index/slick/slick.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'index/slick/slick-theme.css' %}">
 
 
 </head>
@@ -121,15 +123,6 @@
             </div>
             <div class="modal-body">
                 <img src="{% static 'img/map.png' %}" width="770px" />
-
-
-                <div class="row">
-                    <table class='table'>
-                         {% for sc in schools %}
-                            <tr><td>{{ sc.name }}</td><td> {{ sc.town }}</td><td> {{ sc.country.name }}</td></tr>
-                         {% endfor %}
-                    </table>
-                </div>
             </div>
         </div>
     </div>
@@ -445,6 +438,7 @@
 <script src="{% static 'js/lib/select2.min.js' %}"></script>      
 <script src="{% static 'js/script/config-select2-accueil.js' %}"></script> 
 <script src="{% static 'js/lib/bootstrap-toggle.min.js' %}"></script> 
+<script src="{% static 'index/slick/slick.js' %}"></script>
 {% endblock %}
 
 </body>

@@ -36,11 +36,7 @@ Intro Section -
         <div class="col-xs-12" >
           <a href="#" data-toggle='modal' data-target='#sacadopopup'  class="btn btn-index"> <span class="sacado">SACADO </span><br>Version<br>Établissement <small>RGPD compatible</small></a>
         </div>
-        {%  comment %}
-        <div class="col-xs-12" >
-          <a href="{% url 'student_to_association' %}" class="btn btn-index"> <span class="sacado">SACADO </span><br>Aide<br>Perso  </a>
-        </div>
-        {%  endcomment %}
+ 
 
         <div class="row justify-content-center align-self-center intro-info order-md-first order-last" style="padding-bottom:20px">
             <div class="col-xs-12 col-md-12 col-lg-6">
@@ -382,65 +378,46 @@ Intro Section -
     <section id="about" class="wow fadeIn">
       <div class="container">
         <div class="row">
+            <div class="col-lg-5 col-md-5">
+                <h3>Progressivité et Programmes </h3>
 
-          <div class="col-lg-5 col-md-5">
-          <h3>Progressivité et Programmes </h3>
+                <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/2/02-Maths-CP-attendus-eduscol_1114732.pdf" target="_blank"> CP - Repère de progressivité</a></li>
 
-      <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/2/02-Maths-CP-attendus-eduscol_1114732.pdf" target="_blank"> CP - Repère de progressivité</a></li>
+                <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/4/04-Maths-CE1-attendus-eduscol_1114734.pdf" target="_blank"> CE1 - Repère de progressivité</a></li>
 
-      <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/4/04-Maths-CE1-attendus-eduscol_1114734.pdf" target="_blank"> CE1 - Repère de progressivité</a></li>
-
-      <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/6/06-Maths-CE2-attendus-eduscol_1114736.pdf" target="_blank"> CE2 - Repère de progressivité</a></li>
-
-
-      <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/8/08-Maths-CM1-attendus-eduscol_1114738.pdf" target="_blank">CM1 - Repère de progressivité</a></li>
-
-      <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/0/10-Maths-CM2-attendus-eduscol_1114740.pdf" target="_blank">CM2 - Repère de progressivité</a></li>
-
-      <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/2/12-Maths-6e-attendus-eduscol_1114742.pdf" target="_blank">6<sup>ème</sup> - Repère de progressivité</a> </li>
+                <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/6/06-Maths-CE2-attendus-eduscol_1114736.pdf" target="_blank"> CE2 - Repère de progressivité</a></li>
 
 
-      <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/4/14-Maths-5e-attendus-eduscol_1114744.pdf" target="_blank">5<sup>ème</sup> - Repère de progressivité</a> </li>
+                <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/8/08-Maths-CM1-attendus-eduscol_1114738.pdf" target="_blank">CM1 - Repère de progressivité</a></li>
 
-      <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/6/16-Maths-4e-attendus-eduscol_1114746.pdf" target="_blank">4<sup>ème</sup> - Repère de progressivité </a></li>
+                <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/0/10-Maths-CM2-attendus-eduscol_1114740.pdf" target="_blank">CM2 - Repère de progressivité</a></li>
 
-      <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/8/18-Maths-3e-attendus-eduscol_1114748.pdf" target="_blank">3<sup>ème</sup> - Repère de progressivité </a></li>
-
-      <li class="sanspuce"><a href="https://cache.media.education.gouv.fr/file/SP1-MEN-22-1-2019/95/7/spe631_annexe_1062957.pdf" target="_blank">2<sup>nde</sup> - Programme </a></li>
-
-      <li class="sanspuce"><a href="https://cache.media.education.gouv.fr/file/SP1-MEN-22-1-2019/16/8/spe632_annexe_1063168.pdf" target="_blank">1<sup>ère</sup> - Programme </a></li>
-
-      <li class="sanspuce"><a href="https://cache.media.education.gouv.fr/file/SPE8_MENJ_25_7_2019/90/7/spe246_annexe_1158907.pdf" target="_blank">T<sup>ale</sup> - Programme </a> </li>
+                <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/2/12-Maths-6e-attendus-eduscol_1114742.pdf" target="_blank">6<sup>ème</sup> - Repère de progressivité</a> </li>
 
 
-         <img src="{% static 'img/logo-france.jpg' %}" width="150px" class="img-fluid"/>
+                <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/4/14-Maths-5e-attendus-eduscol_1114744.pdf" target="_blank">5<sup>ème</sup> - Repère de progressivité</a> </li>
+
+                <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/6/16-Maths-4e-attendus-eduscol_1114746.pdf" target="_blank">4<sup>ème</sup> - Repère de progressivité </a></li>
+
+                <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/8/18-Maths-3e-attendus-eduscol_1114748.pdf" target="_blank">3<sup>ème</sup> - Repère de progressivité </a></li>
+
+                <li class="sanspuce"><a href="https://cache.media.education.gouv.fr/file/SP1-MEN-22-1-2019/95/7/spe631_annexe_1062957.pdf" target="_blank">2<sup>nde</sup> - Programme </a></li>
+
+                <li class="sanspuce"><a href="https://cache.media.education.gouv.fr/file/SP1-MEN-22-1-2019/16/8/spe632_annexe_1063168.pdf" target="_blank">1<sup>ère</sup> - Programme </a></li>
+
+                <li class="sanspuce"><a href="https://cache.media.education.gouv.fr/file/SPE8_MENJ_25_7_2019/90/7/spe246_annexe_1158907.pdf" target="_blank">T<sup>ale</sup> - Programme </a> </li>
 
 
-          </div>
+                <img src="{% static 'img/logo-france.jpg' %}" width="150px" class="img-fluid"/>
+
+
+            </div>
 
             <div class="col-lg-7 col-md-7">
                 <header class="section-header">
                     <h3>A propos de l'asso <span class="sacado">SACADO</span></h3>
                 </header>
                 <div class="about-content">
-<!-- 
-                    <h3>Les attendus et savoir faire des exercices sont issus des programmes officiels de l'éducation
-                        nationale.</h3>
-                    <p>En aucun cas, ces exercices se substituent aux attentes des enseignants mais sont un complément
-                        pour un travail en autonomie.</p>
-
-                    <h3>Les contributeurs <span class="sacado">SACADO</span></h3>
-                    <p>
-                        Audrey, Bruno, Mehdi, Philippe ..... Surtout Bruno
-                    </p>
-                    <h3>Le code </h3>
-                    <p>
-                        Audrey, Raphaël, Philippe
-                    </p>
-                    <h3>La veille <span class="sacado">SACADO</span></h3>
-                    <p>
-                        Hélène, Julie, David, Nicolas ...<br> et nos élèves...
-                    </p> -->
 
                     <div class="index_label_icone" >
                       <a href="#"  data-toggle='modal' data-target='#actu'  >
@@ -482,13 +459,22 @@ Intro Section -
                       </a>
                     </div>
 
- 
+
                      <div class="index_label_icone" >
                       <a href="#"  data-toggle='modal' data-target='#helpus'  ><img src="{% static 'img/index_helpus.png' %}" class="index_icone"/> Aider  
                       </a>
                     </div>
- 
+
                 </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 20px">
+            <div class="col-lg-2 col-md-3 col-xs-12" style="text-align: right;font-size:14px;position:relative;">
+                Les établissements <br/>nous <br/>font <br/>confiance 
+                <img src="{% static 'img/sacadoA1.png' %}" style="text-align: right;font-size:14px;width: 30px;position: absolute; bottom:10px; right:10px;" />
+            </div>
+            <div class="col-lg-10 col-md-9 col-xs-12" >
+                  {% include 'schools_slider.html'  %}
             </div>
         </div>
       </div>

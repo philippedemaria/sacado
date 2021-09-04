@@ -1,0 +1,79 @@
+{% load static%}
+  <style type="text/css">
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .slider {
+        width: 90%;
+        margin-left:20px;
+    }
+
+    .slick-slide {
+      margin: 0px 20px;
+    }
+
+    .slick-slide img {
+      width: 50px;
+      position: absolute;
+      bottom:10px;
+      right:10px;
+      border-radius: 50%;
+      z-index: 10;
+      -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      -moz-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .slick-prev:before,
+    .slick-next:before {
+      color: #0056b3;
+    }
+
+
+    .slick-slide {
+      transition: all ease-in-out .3s;
+      opacity: .2;
+    }
+    
+    .slick-active {
+      opacity: 1;
+    }
+
+    .slick-current {
+      opacity: 1;
+    }
+    .school_data{
+      background-color: #f4f2ff ;
+      border-radius: 10px;
+      color :  #5d4391  ; 
+      padding : 20px;
+      height : 140px;
+      font-size:14px;
+      -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      -moz-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+  </style> 
+ 
+ 
+  <section class="regular slider">
+    {% for school in schools %}
+    <div class="school_data">
+        {% if  school.logo.url %}
+        <img src="{{ school.logo.url }}" /> 
+        {% endif %}
+        <div style="font-variant: small-caps;font-weight: 600"> {{ school.school__name }}</div>
+        <div style="z-index: 10"> {{ school.school__town|lower|capfirst }}</div>
+        <div style="z-index: 10"> {{ school.school__country__name|lower|capfirst|truncatewords:1 }}</div>
+
+    </div>
+    {% endfor  %}
+  </section>
+ 
