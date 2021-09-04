@@ -210,7 +210,7 @@
             <p><b>Importation des élèves</b>, 5 façons s'offrent à vous :</p>
  
                 <ul>
-                    <li>Par Initialisation par CSV : <a href="{% if sacado_asso %}{% url 'csv_full_group'  %}{% else %}#{% endif %}" class="btn btn-default btn-accueil"  > Initialiser tous les groupes d'élèves </a> Le fichier .CSV doit contenir les <b>groupes</b>, leur <b>niveau</b> et les <b>données des  élèves</b>. <em><b>Pratique en début d'année pour initaliser tous les groupes</b>. <span style="color:#cb2131">Il faut s'assurer qu'il n'existe pas de groupe, ni d'élève.</span> </em></li>
+                    <li>Par Initialisation par CSV : <a href="{% if sacado_asso %}{% url 'csv_full_group'  %}{% else %}#{% endif %}" class="btn btn-default btn-accueil"  > Initialiser tous les groupes d'élèves </a> Le fichier .CSV doit contenir les <b>groupes</b>, leur <b>niveau</b> et les <b>données des  élèves</b>. <em><b>Pratique en début d'année pour initialiser tous les groupes</b>. <span style="color:#cb2131">Il faut s'assurer qu'il n'existe pas de groupe, ni d'élève.</span> </em></li>
 
                     <li>Par Gestion des groupes par CSV :  <a href="{% if sacado_asso %}{% url 'school_groups' %}{% else %}#{% endif %}"><i
                                         class="fa fa-arrow-circle-right"></i> Gestion des groupes </a>.  Le fichier .CSV doit contenir seulement les <b>données des élèves</b>. <a href="#" class="btn btn-xs btn-default" title="Ajouter plusieurs élèves à ce groupe avec du CSV" > + <i class="fa fa-users text-success"></i> csv</a> <em>Pratique pour ajouter des élèves aux groupes. </em></li>   
