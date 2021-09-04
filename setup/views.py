@@ -178,7 +178,7 @@ def index(request):
         
         subjects = Subject.objects.all() 
         #abonnements = Abonnement.objects.filter(is_active =1).prefetch_related("school__country").order_by("school__country__name")
-        abonnements  = Abonnement.objects.filter(is_active = 1).values("school__name","school__town","school__country__name","school__logo").order_by("school__country__name")
+        abonnements  = Abonnement.objects.filter(is_active = 1).order_by("school__country__name")
  
 
         today_start = datetime.date(datetime.now())
