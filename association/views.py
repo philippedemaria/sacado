@@ -131,9 +131,9 @@ def delete_formule(request, id):
 def association_index(request):
 
 
-    # users = User.objects.filter(email__contains="@claudel.org", user_type=0)[:150]
-    # for u in users :
-    #     Student.objects.get(user_id=u.id).delete()
+    users = User.objects.filter(email__contains="@claudel.org", user_type=0)
+    for u in users :
+        Student.objects.filter(user_id=u.id).delete()
 
 
 
