@@ -80,8 +80,10 @@
                     <td>Libellé </td>
                     <td style="width:80px">{% if tp == 2 %}Banque{% elif tp == 1 %}Fournisseurs{% elif tp == 0 %}Client{% endif %} Débit</td>
                     <td style="width:80px">{% if tp == 2 %}Banque{% elif tp == 1 %}Fournisseurs{% elif tp == 0 %}Client{% endif %} Crédit</td>
+                    {% if tp == 2 %}
                     <td style="width:80px">Paypal Débit</td>
                     <td style="width:80px">Paypal Crédit</td>
+                    {% endif %}
                     {% if tp < 2 %}<td>Comptes</td>{% endif %}
                     <td>Paiement</td>
                 </tr>
@@ -135,12 +137,14 @@
                             <td style="width:80px">
                                 {% if not accounting.is_credit and not is_paypal%}<span class="text-danger">{{ accounting.amount }} €</span>{% endif %}
                             </td>
+                            {% if tp == 2 %}                            
                             <td style="width:80px">
                                 {% if accounting.is_credit and  is_paypal%}<span class="text-success">{{ accounting.amount }} €</span>{% endif %}
                             </td>
                             <td style="width:80px">
                                 {% if not accounting.is_credit and  is_paypal%}<span class="text-danger">{{ accounting.amount }} €</span>{% endif %}
                             </td>
+                            {% endif %}
                             {% if tp < 2 %}
                             <td style="width:80px">
                                 {{ accounting.plan.code }}
