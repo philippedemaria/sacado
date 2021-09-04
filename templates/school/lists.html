@@ -48,7 +48,11 @@
               <tbody>
                     {% for school in schools %}
                     <tr> 
-                      <td> {{ school.country.name }}</td>                    
+                      <td> {{ school.country.name }}
+                          {% if school.logo %}
+                            <img src="{{ school.country.name }}" width="60px"/>
+                          {%  endif  %}
+                      </td>                    
                       <td><a href="{% url 'update_school'  school.id %}" > {{ school.name }}</a> <a href="{% url 'delete_school'  school.id %}" class="pull-right" onclick="return TestDelete('{{ school.name }}')"><i class="fa fa-trash"></i> </a></td>
                       <td>
                           {{ school.town }}
