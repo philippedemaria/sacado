@@ -285,7 +285,9 @@ def create_accounting(request,tp):
             nf = form.save(commit = False)
             nf.user = request.user
             forme = request.POST.get("forme",None)
-            nf.chrono = create_chrono(Accounting, forme) # Create_chrono dans general_functions.py
+            nf.chrono = str(uuid.uuid4())[:5]
+            if tp == 0 : 
+                nf.chrono = create_chrono(Accounting, forme) # Create_chrono dans general_functions.py
             nf.tp = tp
             if tp == 0 :
                 nf.tp = 18
@@ -356,7 +358,9 @@ def update_accounting(request, id):
             nf = form.save(commit = False)
             nf.user = request.user
             forme = request.POST.get("forme", None)
-            nf.chrono = update_chrono(Accounting, accounting, forme)
+            nf.chrono = str(uuid.uuid4())[:5]
+            if tp == 0 :
+                nf.chrono = update_chrono(Accounting, accounting, forme)
             nf.save()
 
             for form_d in form_ds :
