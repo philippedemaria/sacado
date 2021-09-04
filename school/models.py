@@ -5,6 +5,11 @@ from datetime import datetime , timedelta
 from django.db.models import Q
 
 
+
+def image_directory_path(instance, filename):
+    return "schools/{}".format(filename)
+
+
 class Country(models.Model):
     name = models.CharField(max_length=255, verbose_name="Nom") 
  
@@ -25,6 +30,7 @@ class School(models.Model):
     rythme              = models.BooleanField(default=1, verbose_name="Rythme")# Nord ou Sud
     is_active           = models.BooleanField(default=0,   editable=False)
     gar                 = models.BooleanField(default=0, verbose_name="Connexion via le GAR souhaitée")
+    logo                = models.ImageField(upload_to=image_directory_path, verbose_name="Logo de l'établissement", blank=True, default="")
 
     def __str__(self):
         return "{} - {} - {}".format(self.name, self.town, self.country.name)

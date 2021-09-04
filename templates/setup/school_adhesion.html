@@ -30,7 +30,7 @@
 
 
 
-    <form action="" method="POST"  >
+    <form action="" method="POST" enctype='multipart/form-data'>
         <div class="row">   
             <div class="col-sm-12 col-md-12">
                 <div class="alert alert-danger">
@@ -48,7 +48,11 @@
                       {{ form.name |add_class:"form-control" }}
                       {{ form.name.errors }}
                   </div>
-
+                  <div class="form-group">
+                      <label>Logo de l'établissement : <em>(optionnel)</em></label>
+                      {{ form.logo }}
+                      {{ form.logo.errors }}
+                  </div>
                   <div class="form-group">                
                       {{ form.code_acad.label_tag }} <small>Pour les établissements sans UAI, renseigner 999efe</small>
                       {{ form.code_acad |add_class:"form-control" }}

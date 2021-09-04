@@ -109,7 +109,7 @@ def list_schools(request):
 
 @user_is_superuser
 def create_school(request):
-	form = SchoolForm(request.POST or None)
+	form = SchoolForm(request.POST or None, request.FILES  or None)
 	
 	if form.is_valid():
 		school = form.save()
@@ -124,7 +124,7 @@ def create_school(request):
 def update_school(request,id):
 
 	school = School.objects.get(id=id)
-	form = SchoolForm(request.POST or None, instance=school)
+	form = SchoolForm(request.POST or None, request.FILES  or None, instance=school)
 
 	nb_total = school.users.filter(user_type=0).count()
 	nb = 150

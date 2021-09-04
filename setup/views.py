@@ -177,7 +177,8 @@ def index(request):
         nb_student = Student.objects.all().count()
         
         subjects = Subject.objects.all() 
-        abonnements = Abonnement.objects.filter(is_active =1).prefetch_related("school__country").order_by("school__country__name")
+        #abonnements = Abonnement.objects.filter(is_active =1).prefetch_related("school__country").order_by("school__country__name")
+        schools     = Abonnement.objects.filter(is_active =1).values("school__name", "school__town", "school__country__name").order_by("school__country__name") 
 
         today_start = datetime.date(datetime.now())
 
@@ -192,8 +193,8 @@ def index(request):
         i = random.randrange(0, exercise_nb)
         exercise = exercises[i]
 
-        context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'np_form': np_form, 'levels': levels, 'abonnements' : abonnements,'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
-                   'cookie': cookie, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, 'rates': rates, 'school_year': school_year, 'subjects': subjects,  'sacado_voyage' : sacado_voyage}
+        context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'np_form': np_form, 'levels': levels,  'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
+                   'cookie': cookie, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, 'rates': rates, 'school_year': school_year, 'subjects': subjects,  'sacado_voyage' : sacado_voyage,  'schools' : schools}
 
         return render(request, 'home.html', context)
 
@@ -248,8 +249,8 @@ def ressource_sacado(request): #Protection saml pour le GAR
             student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 1 , "level" : level })
         elif user_type == 2 and created :
             levels      = dico_received["levels"]
-            subjects    = dico_received["sibjects"] 
-            teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 1 , "exercise_post" : 1 })        
+            subjects    = dico_received["subjects"] 
+            teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 1 , "exercise_post" : 1 , "subjects" : subjects , "levels" : levels  })        
  
 
         user = authenticate(username=username, password=password)
@@ -309,7 +310,7 @@ def school_adhesion(request):
 
     rates = Rate.objects.all() #tarifs en vigueur 
     school_year = rates.first().year #tarifs pour l'année scolaire
-    form = SchoolForm(request.POST or None)
+    form = SchoolForm(request.POST or None, request.FILES  or None)
     token = request.POST.get("token", None)
     today = datetime.now()
     u_form = UserForm(request.POST or None)
@@ -321,11 +322,13 @@ def school_adhesion(request):
             if token :
                 if int(token) == 7 :
                     school_commit = form.save(commit=False)
-                    school_exists, created = School.objects.get_or_create(name = school_commit.name, town = school_commit.town , country = school_commit.country , code_acad = school_commit.code_acad , defaults={ 'nbstudents' : school_commit.nbstudents , 'address' : school_commit.address ,'complement' : school_commit.complement , 'gar' : school_commit.gar }  )
+                    school_exists, created = School.objects.get_or_create(name = school_commit.name, town = school_commit.town , country = school_commit.country , 
+                        code_acad = school_commit.code_acad , defaults={ 'nbstudents' : school_commit.nbstudents , 'logo' : school_commit.logo , 'address' : school_commit.address ,'complement' : school_commit.complement , 'gar' : school_commit.gar }  )
 
                     if not created :
                         # si l'établisseent est déjà créé, on la modifie et on récupère son utilisateur.
-                        School.objects.filter(pk = school_exists.id).update(town = school_commit.town , country = school_commit.country , code_acad = school_commit.code_acad , nbstudents = school_commit.nbstudents , address = school_commit.address , complement = school_commit.complement )
+                        School.objects.filter(pk = school_exists.id).update(town = school_commit.town , country = school_commit.country , code_acad = school_commit.code_acad , 
+                            nbstudents = school_commit.nbstudents , address = school_commit.address , complement = school_commit.complement, logo = school_commit.logo )
                         new_user_id = request.session.get("new_user_id", None)
                         if new_user_id :
                             user = User.objects.get(pk = new_user_id )
