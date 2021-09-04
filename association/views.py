@@ -130,6 +130,18 @@ def delete_formule(request, id):
 @user_passes_test(user_is_board)
 def association_index(request):
 
+
+    users = User.objects.filter(email__contains="@claudel.org", user_type=0)[:150]
+    for u in users :
+        try :
+            Student.objects.get(pk=u.id).delete()
+            u.delete()
+        except :
+            pass
+
+
+
+
     today_start  = datetime.date(datetime.now())
     nb_teachers  = Teacher.objects.all().count()
     nb_students  = Student.objects.all().count()#.exclude(user__username__contains="_e-test_")
