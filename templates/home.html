@@ -72,7 +72,7 @@ Intro Section -
 
 
 
-                <div class="row" style="margin-top: 50px; margin-bottom: 50px">
+                <div class="row" style="margin-top: 40px; margin-bottom: 20px">
                     <div class="col-xs-12 col-md-12 col-lg-6">
                         <a href="#" data-toggle='modal' data-target='#connexion' class="btn btn-primary">
                             Se connecter
@@ -88,7 +88,7 @@ Intro Section -
 
 
 
-                <div style="margin: 10px 0px 20px 0px;">
+                <div style="margin: 0px 0px 30px 0px;">
                     <img src="{% static 'img/edge.png' %}" width="35px"/>
                     <img src="{% static 'img/chrome.png' %}" width="35px"/>
                     <img src="{% static 'img/safari.png' %}" width="35px"/>
@@ -108,32 +108,11 @@ Intro Section -
                     <img src="{% static 'img/pronote.png' %}" height="50px" width="50px" style="margin-left: 20px; margin-right: 10px; vertical-align: baseline"/> Export CSV <br/>des résultats  
 
                 </div>
-                <div class="row" style="margin-top:20px">
+                <div class="row" style="margin-top:30px">
  
                     <img src="{% static 'img/gar.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/> <span style="color:#cb2131">En phase d'accrochage. Perturbations possibles. </span>
 
                 </div>
-
-
-                <br>
-
-
-                    <div class="row counters">
-                        <div class="col-lg-4 col-4 text-center">
-                            <span data-toggle="counter-up">{{ nb_teacher }}</span>
-                            <p>Enseignants</p>
-                        </div>
-                        <div class="col-lg-4 col-4 text-center">
-                            <span data-toggle="counter-up">{{ nb_student }}</span>
-                            <p>Elèves</p>
-                        </div>
- 
-                        <div class="col-lg-4 col-4 text-center">
-                            <span data-toggle="counter-up">{{ nb_student_answers }}</span>
-                            <p>Exercices traités <a href="#" data-toggle='modal' data-target='#worldwide' > <i class="fa fa-globe"></i></a></p>
-                        </div>
-                    </div>
- 
             </div>
             <div class="col-xs-12 col-md-12 col-lg-6 no_mobile_exercises" >
                 <small style="margin-left:150px">Cliquez sur l'écran pour tester l'exercice en cours.</small>
@@ -152,19 +131,29 @@ Intro Section -
 
                     </a>
                 </div>
+            </div> 
+        </div>
 
- 
-
-                <div class="row" style="margin-top:20px">
-                  <small style="margin-left:150px">Les établissements qui font confiance à <span class="">SACADO</span></small>
-                    <div class="col-lg-12 col-md-12 col-xs-12" >
-                          {% include 'schools_slider.html'  %}
+        <div class="row" style="margin-bottom: 40px">
+            <div class="col-xs-12 col-md-4 col-lg-4" >
+                <div class="row counters">
+                    <div class="col-lg-4 col-4 text-center">
+                        <span data-toggle="counter-up">{{ nb_teacher }}</span>
+                        <p>Enseignants</p>
+                    </div>
+                    <div class="col-lg-4 col-4 text-center">
+                        <span data-toggle="counter-up">{{ nb_student }}</span>
+                        <p>Elèves</p>
                     </div>
                 </div>
+            </div>
+            <div class="col-xs-12 col-md-8 col-lg-8">
+
+                  <small style="margin-left:150px">Les établissements qui font confiance à <span class="">SACADO</span></small>
+
+                          {% include 'schools_slider.html'  %}
 
             </div>
-
-
         </div>
     </div>
   </section><!-- #intro -->
