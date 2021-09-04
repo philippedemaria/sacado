@@ -66,7 +66,7 @@
   <section class="regular slider">
     {% for abonnement in abonnements %}
     <div class="school_data">
-        {% if  abonnement.school.logo.url %}
+        {% if  abonnement.school.logo %}
           <img src="{{ abonnement.school.logo.url }}" /> 
         {% endif %}
         <div style="font-variant: small-caps;font-weight: 600"> {{ abonnement.school.name }}</div>
