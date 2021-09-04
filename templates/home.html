@@ -88,7 +88,18 @@ Intro Section -
 
 
 
-
+                <div style="margin: 10px 0px 20px 0px;">
+                    <img src="{% static 'img/edge.png' %}" width="35px"/>
+                    <img src="{% static 'img/chrome.png' %}" width="35px"/>
+                    <img src="{% static 'img/safari.png' %}" width="35px"/>
+                    <i class="fa fa-apple"></i>
+                    <a href="https://java.com/fr/download/help/mac_install.xml"
+                       target="_blank" >
+                        <small>Pour safari, installer Java si nécessaire.</small>
+                    </a>
+                    <img src="{% static 'img/firefox.png' %}" width="35px"/>
+                        <small>Soucis possibles</small>
+                </div>
 
                 <div class="row" style="margin-top:0px">
  
@@ -125,6 +136,7 @@ Intro Section -
  
             </div>
             <div class="col-xs-12 col-md-12 col-lg-6 no_mobile_exercises" >
+                <small>Cliquez sur l'exercice pour tester les exercices <span class="sacado">SACADO</span>.</small>
                 <div style="position: relative;text-align:center">
                     <a href="{% url 'show_exercise'   exercise.id     %}" target="_blank">
                         <img src="{{ exercise.supportfile.imagefile.url }}" width="400"
@@ -141,23 +153,14 @@ Intro Section -
                     </a>
                 </div>
 
-                <div class="row" style="color:#cb2131;margin-top:20px; padding-left : 230px;">
-                      <a href="#"  data-toggle='modal' data-target='#videosacado' class="btn btn-primary" style="background-color: #0056b3"><img src="{% static 'img/video_icon.png' %}" height="50px" style="margin-left: 5px; "/> Découvrir Sacado </a>
+ 
+
+                <div class="row" style="margin-top: 20px">
+                    <div class="col-lg-12 col-md-12 col-xs-12" >
+                          {% include 'schools_slider.html'  %}
+                    </div>
                 </div>
 
-
-                <div style="margin-top: 20px; padding-left : 40px;text-align:center;">
-                    <img src="{% static 'img/edge.png' %}" width="35px"/>
-                    <img src="{% static 'img/chrome.png' %}" width="35px"/>
-                    <img src="{% static 'img/safari.png' %}" width="35px"/>
-                    <i class="fa fa-apple"></i>
-                    <a href="https://java.com/fr/download/help/mac_install.xml"
-                       target="_blank" >
-                        <small>Pour safari, installer Java si nécessaire.</small>
-                    </a>
-                    <img src="{% static 'img/firefox.png' %}" width="35px"/>
-                        <small>Soucis possibles</small>
-                </div>
             </div>
 
 
@@ -466,15 +469,6 @@ Intro Section -
                     </div>
 
                 </div>
-            </div>
-        </div>
-        <div class="row" style="margin-top: 20px">
-            <div class="col-lg-2 col-md-3 col-xs-12" style="text-align: right;font-size:14px;position:relative;">
-                Les établissements <br/>nous <br/>font <br/>confiance 
-                <img src="{% static 'img/sacadoA1.png' %}" style="text-align: right;font-size:14px;width: 30px;position: absolute; bottom:10px; right:10px;" />
-            </div>
-            <div class="col-lg-10 col-md-9 col-xs-12" >
-                  {% include 'schools_slider.html'  %}
             </div>
         </div>
       </div>

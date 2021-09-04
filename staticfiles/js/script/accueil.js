@@ -495,8 +495,8 @@ $(document).ready(function () {
 
 
       $(".regular").slick({
-            slidesToShow: 4,
-            slidesToScroll: 4,
+            slidesToShow: 2,
+            slidesToScroll: 2,
             autoplay: false,
             autoplaySpeed: 2000,        
             dots: false,
