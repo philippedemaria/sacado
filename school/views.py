@@ -541,19 +541,28 @@ def delete_selected_students(request):
 
 
 	user_ids = request.POST.getlist("user_ids")
-	for user_id in user_ids :
-		user = User.objects.get(pk=user_id)
-		try :
-			student = Student.objects.get(user_id=user_id)
-		except :
-			pass
-		user.delete()
-		try :
-			clear_detail_student(student)
-			student.delete()
-		except :
-			pass
+	ebep = request.POST.get("ebep", None)
 
+	if ebep : 
+		for user_id in user_ids :
+			student = Student.objects.get(user_id=user_id)
+			if student.ebep :
+				Student.objects.filter(user_id=user_id).update(ebep = False)
+			else :
+				Student.objects.filter(user_id=user_id).update(ebep = True)
+	else :
+		for user_id in user_ids :
+			user = User.objects.get(pk=user_id)
+			try :
+				student = Student.objects.get(user_id=user_id)
+				clear_detail_student(student)
+				student.delete()
+			except :
+				pass
+			try :
+				user.delete()
+			except :
+				pass
 
 
 	return redirect('school_students')

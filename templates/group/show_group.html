@@ -26,7 +26,7 @@
         <span style="color:{{ group.color }}"><i class="fa fa-arrow-circle-right"></i> {{ group.name }}   </span>
             <img src="{% static 'img/angle-right.png' %}"/> <small>Détails</small> <img src="{% static 'img/angle-right.png' %}"/>
 
-             <a href="{% url 'print_ids' group.id  %}" class="btn btn-default"><img src="{% static 'img/pdf.png' %}" width="18px" >  Télécharger les identifiants des élèves</a>
+            <a href="{% url 'print_ids' group.id  %}" class="btn btn-default"><img src="{% static 'img/pdf.png' %}" width="18px" >  Télécharger les identifiants des élèves</a>
 
 {% endblock %}
 
@@ -142,6 +142,7 @@
                             <tr>
                                 <td>
                                     {{ student.user.last_name|lower|title }}
+                                    {% if student.ebep %}<i class="fa fa-key" title="Elève à Besoins Educatifs Particuliers"></i> {% endif %}
                                 </td>
                                 <td>
                                     {{ student.user.first_name|lower|title }}
@@ -156,6 +157,11 @@
                                     {% if student.user.last_login %}{{ student.user.last_login|date:"Y m d, H:i"  }}{% else %}Jamais{% endif %}
                                 </td>
                                 <td>
+                                    <a href="{% url 'ebep'  student.user.id  group.id  %}" class="helper_tip"   style="color:#007EE2;" onclick="return ebepSelectedStudents('cet élève')"  > 
+                                        <small>EBEP</small><div class="helper_tip_text">
+                                            Elèves à Besoins Educatifs Particuliers
+                                        </div></a> 
+                                    <small>|</small> 
                                     <a href="{% url 'detail_student_all_views'  student.user.id   %}"  style="font-size: 11px"> 
                                        voir le bilan  
                                     </a> 

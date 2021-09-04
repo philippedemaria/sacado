@@ -82,7 +82,10 @@
                         {% for user in users %}
                             <tr>
                                 <td><input type="checkbox" name="user_ids" value="{{ user.id }}" />
-                                    <a href="{% url 'update_student_by_admin' user.id  %}">{{ user.last_name }} </a>   
+                                    <a href="{% url 'update_student_by_admin' user.id  %}">{{ user.last_name }} </a>
+                                    {% if  user.student.ebep %}
+                                       <i class="fa fa-key pull-right" title="Elèves à Besoins Educatifs Particuliers"></i>
+                                    {% endif %}   
                                 </td>
                                 <td>
                                     <a href="{% url 'update_student_by_admin' user.id  %}"> {{ user.first_name }}</a>
@@ -121,8 +124,11 @@
 
 
         <div class="row">
-            <div class="col-sm-12 col-md-12">          <input type="submit" value="Supprimer les élèves sélectionnés" class="btn btn-danger" onclick="return deleteSelectedStudents()"/>   
-                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+            <div class="col-sm-12 col-md-12">          
+                <input type="submit" name="delete" value="Supprimer les élèves sélectionnés" class="btn btn-danger" onclick="return deleteSelectedStudents()" />   
+                
+                <input type="submit" name="ebep" value="Ajouter/Enlever les outils inclusifs aux élèves sélectionnés" class="btn btn-primary" onclick="return ebepSelectedStudents('ces élèves')" />
+                <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
             </div>
         </div>
     </form>           

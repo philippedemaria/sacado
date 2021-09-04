@@ -859,6 +859,17 @@ def detail_student_all_views(request, id):
 
 
 
+def ebep(request,id,idg):
+    student = Student.objects.get(user_id=id)
+    if student.ebep :
+        Student.objects.filter(user_id=id).update(ebep = False)
+    else :
+        Student.objects.filter(user_id=id).update(ebep = True)
+    return redirect('show_group' , idg )
+
+
+
+
 ##############################################################################################################
 ##
 ##    Response from mail after exercise error

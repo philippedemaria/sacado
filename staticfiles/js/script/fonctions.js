@@ -131,3 +131,8 @@ function TestDeleteFolder(f1) {
 function delete_all_these_groups(f) {
      if (!confirm('Vous souhaitez supprimer '+f+' ? \nToutes leurs données actuelles seront perdues. \nCette action est irréversible si vous cliquez sur OK.')) return false;
  }
+
+
+function ebepSelectedStudents(f) {
+     if (!confirm('Vous souhaitez attribuer/retirer les outils inclusifs à '+f+' ?')) return false;
+ }

@@ -126,15 +126,15 @@ class User(AbstractUser):
 
 class Adhesion(models.Model):
     """docstring for Facture"""
-    code = models.CharField(max_length=50,  verbose_name="Code", editable= False) # Insertion du code de la facture.
-    user = models.ForeignKey(User, blank=True,  null=True, related_name="adhesions", on_delete=models.CASCADE, editable= False)
-    file = models.FileField(upload_to=file_directory_path,verbose_name="fichier", blank=True, null= True, default ="", editable= False)
+    code       = models.CharField(max_length=50,  verbose_name="Code", editable= False) # Insertion du code de la facture.
+    user       = models.ForeignKey(User, blank=True,  null=True, related_name="adhesions", on_delete=models.CASCADE, editable= False)
+    file       = models.FileField(upload_to=file_directory_path,verbose_name="fichier", blank=True, null= True, default ="", editable= False)
     date_start = models.DateTimeField(auto_now_add=True, verbose_name="Date de création", editable= False)
-    date_end = models.DateTimeField( verbose_name="Date de fin", editable= False)
-    amount = models.CharField(max_length=10,  verbose_name="Montant", editable= False)
-    menu = models.CharField(max_length=50,  verbose_name="Menu", editable= False)
-    children = models.PositiveIntegerField( default=1,  verbose_name="Nb enfant", editable= False)
-    duration = models.PositiveIntegerField( default=1,  verbose_name="Durée de l'adhésion", editable= False)    
+    date_end   = models.DateTimeField( verbose_name="Date de fin", editable= False)
+    amount     = models.CharField(max_length=10,  verbose_name="Montant", editable= False)
+    menu       = models.CharField(max_length=50,  verbose_name="Menu", editable= False)
+    children   = models.PositiveIntegerField( default=1,  verbose_name="Nb enfant", editable= False)
+    duration   = models.PositiveIntegerField( default=1,  verbose_name="Durée de l'adhésion", editable= False)    
 
     def __str__(self):
         return "{} {}".format(self.user, self.file)
@@ -152,9 +152,10 @@ class Student(ModelWithCode):
     """
     Modèle représentant un élève.
     """
-    user = models.OneToOneField(User, blank=True, related_name="student", on_delete=models.CASCADE, primary_key=True)
-    level = models.ForeignKey(Level, blank=True, related_name="level_student", default='', on_delete=models.PROTECT, verbose_name="Niveau")
+    user      = models.OneToOneField(User, blank=True, related_name="student", on_delete=models.CASCADE, primary_key=True)
+    level     = models.ForeignKey(Level, blank=True, related_name="level_student", default='', on_delete=models.PROTECT, verbose_name="Niveau")
     task_post = models.BooleanField(default=True, verbose_name="Notification de tache ?")
+    ebep      = models.BooleanField(default=False, editable=False)
 
     def __str__(self):
         lname = self.user.last_name.capitalize()

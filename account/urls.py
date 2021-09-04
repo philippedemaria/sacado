@@ -28,7 +28,7 @@ urlpatterns = [
  
     path('init_password_teacher/<int:id>', init_password_teacher, name='init_password_teacher'),
 
-
+    path('ebep/<int:id>/<int:idg>', ebep, name='ebep'),
 
     path('update_teacher/<int:pk>', update_teacher, name='update_teacher'),
     path('delete_teacher/<int:id>', delete_teacher, name='delete_teacher'),
