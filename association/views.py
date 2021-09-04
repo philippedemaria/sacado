@@ -131,11 +131,6 @@ def delete_formule(request, id):
 def association_index(request):
 
 
-    Teacher.objects.get(user_id=27293).delete()
-
-
-
-
     today_start  = datetime.date(datetime.now())
     nb_teachers  = Teacher.objects.all().count()
     nb_students  = Student.objects.all().count()#.exclude(user__username__contains="_e-test_")
