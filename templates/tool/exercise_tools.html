@@ -1,0 +1,92 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+ 
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+
+    <script>
+        require(['script/ajax-tool']);
+    </script> 
+
+{% endblock %}
+
+
+
+{% block page_title %}
+        <a href="{% url 'index' %}" ><i class="fa fa-cloud"></i> </a> Les outils pédagogiques
+{% endblock %}
+
+{% block page_menu_right %}
+
+    {% if request.user.is_superuser %}
+        <a href="" data-toggle="modal" data-target="#toolChoice" class="btn btn-new pull-right"> Créer un outil</a>  
+    {% endif %}
+ 
+{% endblock %}
+
+
+
+
+{% block body %}
+
+ 
+ 
+
+    <section class="content_main"> 
+        <form action="" method="POST" enctype='multipart/form-data'>
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-sm-12 col-md-7">
+                    <div> Niveau : {{  exercise.level.name  }}<br/>
+                    Thème : {{  exercise.theme.name  }}<br/>
+                    Savoir-faire : {{  exercise.knowledge.name  }}
+                    </div>
+                    <div>
+                        <img src="{{  exercise.supportfile.imagefile.url }}" />
+                    </div>
+
+                    <div style="margin-top:30px">
+                        <a href="{% url 'admin_associations' exercise.level.id %}" class="btn btn-default"> Autre exercice</a>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-5">
+                    <table  class="table table-bordered table-hover standard_tab_sort2000">
+                        <thead>
+                        <tr>
+                            <th style="width:30px">Choix</th>
+                            <th>Outils</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for tool in tools %}
+                                <tr id="this_tool_id{{ tool.id }}" {% if tool in exercise.tools.all %} class="exercise_tools" {% endif %}>
+                                    <td>
+                                        <label> 
+                                            <input type="checkbox" {% if tool in exercise.tools.all %} checked {% endif %}
+                                                    name="get_this_tools" class="attribute_this_tool_to_exercise" data-exercise_id="{{ exercise.id }}" data-tool_id="{{ tool.id }}"/> 
+                                            {{ tool.title }}
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'show_tool' tool.id  %}" target="_blank"><img src="{{ tool.imagefile.url }}" height="190px" border="0px" /></a> 
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-md-12">     
+                        <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+                </div>
+            </div>
+        </form>        
+    </section>
+
+
+{% endblock %}

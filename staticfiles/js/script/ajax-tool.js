@@ -113,10 +113,35 @@ define(['jquery',  'bootstrap'], function ($) {
 
 
 
+ 
+        // Affiche dans la modal le modèle pour récupérer un exercice custom
+        $('body').on('click', '.attribute_this_tool_to_exercise' , function (event) {
+
+            let tool_id = $(this).data("tool_id");
+            let exercise_id = $(this).data("exercise_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'tool_id': tool_id,
+                        'exercise_id': exercise_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../ajax_attribute_this_tool_to_exercise",
+                    success: function (data) {
+
+                        $('#this_tool_id'+tool_id).addClass('exercise_tools');
+ 
+                    }
+                }
+            )
+         });
 
 
-
-
+ 
 
 
 

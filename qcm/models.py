@@ -346,6 +346,16 @@ class Exercise(models.Model):
         parcours = self.exercises_parcours.filter(teacher=teacher)
         return parcours
 
+
+    def ebep(self):
+        """l'exercice utilise des outils pour les EBEP"""
+        ok = False
+        if self.tools.count() > 0 :
+            ok = True
+        return ok
+
+
+
 class Parcours(ModelWithCode):
 
     title = models.CharField(max_length=255, verbose_name="Titre")

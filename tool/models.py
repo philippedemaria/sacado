@@ -4,8 +4,8 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from group.models import Group
 from socle.models import *
 from account.models import Student, Teacher, ModelWithCode , User
-from qcm.models import Parcours
-from django.apps import apps
+from qcm.models import Parcours , Exercise
+ 
 from django.utils import   timezone
 from django.db.models import Q
 from random import uniform , randint
@@ -58,7 +58,7 @@ class Tool(models.Model):
     is_publish    = models.BooleanField(default=1, verbose_name="Publié ?")
     is_asso       = models.BooleanField(default=1, verbose_name="Nécessite l'adhésion SACADO ?")
     url           =  models.CharField(max_length=255, default='' ,   blank=True, verbose_name="url de substitution")  
-
+    exercises     = models.ManyToManyField(Exercise, blank=True, related_name='tools', verbose_name="Outils inclusifs", editable=False)
 
     def __str__(self):
         return self.title 

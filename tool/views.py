@@ -3,7 +3,7 @@ from tool.models import Tool , Question  , Choice  , Quizz , Diaporama  , Slide 
 from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm,  DiaporamaForm , SlideForm,QrandomForm, VariableForm , AnswerplayerForm,  VideocopyForm
 from group.models import Group 
 from socle.models import Level, Waiting , Theme
-from qcm.models import  Parcours
+from qcm.models import  Parcours, Exercise
 from account.decorators import  user_is_testeur
 from sacado.settings import MEDIA_ROOT
 from socle.models import Knowledge, Waiting
@@ -179,6 +179,7 @@ def get_this_tool(request):
     return JsonResponse(data)
 
 
+
 def delete_my_tool(request):
 
     data = {} 
@@ -186,6 +187,33 @@ def delete_my_tool(request):
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     tool = Tool.objects.get(pk=tool_id) 
     tool.teachers.remove(request.user.teacher)
+ 
+    return JsonResponse(data)
+
+
+
+def tools_to_exercice(request,id):
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    exercise = Exercise.objects.get(id=id)
+    tools = Tool.objects.all()
+
+    url = 'tool/exercise_tools.html'
+    context = {  'tools': tools,  'exercise': exercise,   }
+
+    return render(request, url , context )
+
+ 
+
+def ajax_attribute_this_tool_to_exercise(request):
+
+    data = {} 
+    tool_id = int(request.POST.get("tool_id"))
+
+    exercise_id = int(request.POST.get("exercise_id"))
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    exercise = Exercise.objects.get(pk=exercise_id) 
+    tool     = Tool.objects.get(pk=tool_id) 
+    tool.exercises.add(exercise)
  
     return JsonResponse(data)
 

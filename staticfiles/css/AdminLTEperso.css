@@ -918,7 +918,9 @@ a.selector_question:hover {
 }
 
 
-
+#ebep_div{
+  display: none;
+}
 
 
 .quizz_action{
@@ -1419,6 +1421,11 @@ li.menu_document:hover, li.menu_document:hover > a {
 /* ********************************************************************************************************
  * Select mastering  
  *********************************************************************************************************/
+
+.exercise_tools{
+  background-color: #f1eef7 ;
+}
+
 
 .card_association{
   border:1PX solid #CCC;

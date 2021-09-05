@@ -121,6 +121,12 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+      $('#use_tools').on('click', function (event) {
+
+            $('#ebep_div').toggle(500) ; 
+
+
+        }); 
 
 
 
