@@ -223,18 +223,16 @@ def convert_seconds_in_time(secondes):
             minutes = f'0{minutes}'
         return "{}:{}:{}".format(hours, minutes, sec)
 
-def send_to_teachers(level,subject,topic) : # envoie d'une notification au enseignant du niveau coché lorsqu'un exercice est posté
-    rcv = []
-    teachers = Teacher.objects.filter(levels=level,subjects=subject)
-    for t in teachers :
-        if t.exercise_post :
-            if t.user.email : 
-                rcv.append(t.user.email)
-
-    msg = "Un "+ str(topic) + " vient d'être publié sur SacAdo sur le niveau "+str(level.name)+" en "+str(subject.name)
-
-    sending_mail(str(topic) +" SacAdo",  msg , settings.DEFAULT_FROM_EMAIL , rcv)
+def sending_to_teachers(teacher , level,subject,topic) : # envoie d'une notification au enseignant du niveau coché lorsqu'un exercice est posté
  
+
+    for u in users :
+        if u.teacher.exercise_post :
+            if u.email : 
+                msg = "Un "+ str(topic) + " vient d'être publié sur SacAdo sur le niveau "+str(level.name)+" en "+str(subject.name)
+                sending_mail(str(topic) +" SacAdo",  msg , settings.DEFAULT_FROM_EMAIL , u.email)
+
+    
 
 def students_from_p_or_g(request,parcours) :
     """
@@ -1482,7 +1480,7 @@ def create_parcours(request,idp=0):
     """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
     teacher         = request.user.teacher
     levels          = teacher.levels.all()
-
+ 
     try :
         group_id = request.session.get("group_id")
         group = Group.objects.get(pk=group_id)
@@ -1517,7 +1515,7 @@ def create_parcours(request,idp=0):
         nf.is_evaluation = 0
         if nf.is_share :
             try :   
-                send_to_teachers(nf.level,nf.subject,"Nouveau parcours")
+                sending_to_teachers(teacher , nf.level,nf.subject,"Nouveau parcours")
             except :
                 pass
 
@@ -3733,7 +3731,7 @@ def create_supportfile(request):
             if is_ggbfile :
                 nf.annoncement = unescape_html(cleanhtml(nf.annoncement)) 
             try :   
-                send_to_teachers(nf.level,nf.theme.subject,"Nouvel exercice")
+                sending_to_teachers(teacher , nf.level,nf.theme.subject,"Nouvel exercice")
             except:
                 pass      
             nf.save()
@@ -3770,7 +3768,7 @@ def create_supportfile_knowledge(request,id):
             if is_ggbfile :
                 nf.annoncement = unescape_html(cleanhtml(nf.annoncement)) 
             try :
-                send_to_teachers(nf.level,nf.theme.subject,"Nouvel exercice")   
+                sending_to_teachers(teacher , nf.level,nf.theme.subject,"Nouvel exercice")   
             except :
                 pass 
             nf.save()
