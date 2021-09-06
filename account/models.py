@@ -122,6 +122,23 @@ class User(AbstractUser):
             sacado_asso = True
         return sacado_asso
 
+    def my_groups(self):
+        group_string = ""
+        try :
+            groups = self.student.students_to_group.all()
+            n , i = groups.count() , 1
+            sep = ""
+            for g in self.student.students_to_group.all():
+                if n == i :
+                    sep = "<br/>"
+                group_string += g.name+" (<small>"+g.teacher.user.last_name +" "+g.teacher.user.first_name+"</small>)"+sep
+                i+=1
+        except : 
+            pass   
+
+        return group_string
+
+
 
 
 class Adhesion(models.Model):

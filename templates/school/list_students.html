@@ -102,9 +102,7 @@
                                     {{ user.email }}   
                                 </td>
                                 <td>  
-                                    {% for g in user.student.students_to_group.all %}
-                                        {{ g.name }} <small>({{ g.teacher.user.last_name }} {{ g.teacher.user.first_name }})</small>{% if not forloop.last%}<br> {% endif %}
-                                    {% endfor %} 
+                                     {{ user.my_groups|safe }} 
                                </td>
                                 <td>
                                      {{ user.last_login }} 
