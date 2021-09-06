@@ -114,28 +114,13 @@ body{
                         <div class="col-sm-12 col-md-6">
                             <div class="init_box">
                                 <a href="#" id="show_new_inscription">
-                                    Je n'ai pas de compte SACADO 
+                                  <img src="{% static 'img/sacadoA1_grey.png' %}" />  Je n'ai pas de compte SACADO 
                                 </a>
-                                <div class="remove_after">
-                                    <br/><br/>
-                                    <img src="{% static 'img/sacadoA1_grey.png' %}" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-6">
-                            <div class="init_box">
-                                <a href="#"  id="show_already">
-                                    J'ai déjà un compte SACADO 
-                                </a>                                
-                                <div class="remove_after">
-                                    <br/><br/>
-                                    <img src="{% static 'img/sacadoA1.png' %}" />
-                                </div>
                             </div>
                         </div>
                     </div>   
                     {% csrf_token %}
-                    <div id="new_inscription" class="no_display toppadding" >
+                    <div   class="  toppadding" >
 
                         <h2 class="thin">S'inscrire à {{ group.name }}<span class="pull-right"><small>{{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}</small></span></h2>
                         <input name="group_id" value="{{ group.id }}" type="hidden" /> 
@@ -225,9 +210,18 @@ body{
                     </div>
                 </form>
                 <form action="" method="POST" >
+                    <div class="row" align="center">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="init_box">
+                                <a href="#"  id="show_already">
+                                    <img src="{% static 'img/sacadoA1.png' %}" />    J'ai déjà un compte SACADO 
+                                </a>                                
+                            </div>
+                        </div>
+                    </div> 
                     {% csrf_token %}
                     <input name="group_id" value="{{ group.id }}" type="hidden" /> 
-                    <div id="already" class="no_display toppadding" >
+                    <div  class="  toppadding" >
                         <h2 class="thin">Rejoindre le groupe {{ group.name }} <span class="pull-right"><small>{{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}</small></span></h2>
                         <div class="row">
                             <div class="col-sm-12 col-md-6">
