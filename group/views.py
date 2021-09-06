@@ -223,7 +223,7 @@ def include_students(request , liste, group):
             fname = str(cleanhtml(details[1])).strip()
             lname = str(cleanhtml(details[0])).strip()
             password = make_password("sacado2020")
-            username = get_username(request,fname , lname)
+            username = get_username(request,lname , fname)
 
 
             try:
@@ -286,7 +286,7 @@ def include_students_in_a_model(request, liste,model):
             lname = cleanhtml(details[0].replace(" ", ""))
             fname = cleanhtml(details[1].replace(" ", ""))
             password = make_password("sacado2020")
-            username = get_username(request,fname , lname)
+            username = get_username(request,lname , fname)
 
             try:
                 for c in details[2] :
