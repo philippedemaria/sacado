@@ -12,7 +12,7 @@
 
 
 {% block page_title %}
-    <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Comptabilité </a>
+    <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Bilan comptable année {{ this_year }} </a>
 {% endblock %} 
 
 {% block page_menu_right %}
@@ -29,125 +29,58 @@
 <section class="content_main"> 
     {% if request.user.is_board %}
 
+
     <div class="row">
+ 
+
         <div class="col-lg-12 col-md-12 col-xs-12">
-            <h1 class="thin">Bilan comptable année {{ this_year }}</h1>
-        </div>
-    </div>
-    <div class="row alert alert-info">
-        <!-- ./col -->
-        <div class="col-lg-4 col-md-4 col-xs-6">
-        
-             Total des charges : {{ charge }} € 
-             <span class="helper_tip"> Détails<i class="fa fa-arrow-circle-right"></i> 
-                <div class="helper_tip_text" style="width:330px" >
-                    {% for c in charges_list %}
-                        {{ c.objet }} <b>{{ c.amount }}</b> {% if not forloop.last %}<br/>{% endif %}
-                    {% endfor %}
-                </div>
-            </span>
-        </div>
-
-        <div class="col-lg-4 col-md-4 col-xs-6">
-            
-             Total des produits : {{ actif }} €
-        </div>
-
-        <div class="col-lg-4 col-md-4 col-xs-6">
-             Résultat de l'année : {{ result }} €
-        </div>
-
-        <div class="col-lg-4 col-md-4 col-xs-4">
-             Commission Paypal : {{ commission_paypal }} €          
-        </div>
-        <div class="col-lg-4 col-md-4 col-xs-4">
-             dont Paypal : {{ result_paypal }} €
-        </div>
-        <div class="col-lg-4 col-md-4 col-xs-4">
-
-        </div>
-
-
- 
-    </div>
-
- 
-
-
-    <hr/>
-
-    <div class="row alert alert-warning">
-        <div class="col-lg-6 col-md-4 col-xs-6">
-            <table class="table bg_white">
+            <table class="table">
+                
                 <tr>
-                    <td>Nombre d'établissements adhérents</td>
-                    <td>{{ nb_schools }}</td>
-                </tr>
-                <tr>
-                    <td>dont établissement français</td>
-                    <td>{{ nb_schools_fr }}</td>
-                </tr>
-                <tr>
-                    <td>dont établissement de l'étranger</td>
-                    <td>{{ nb_schools_no_fr }}</td>
-                </tr>
-                <tr style="background-color: #fcf8e3">
                     <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>En attente de paiement</td>
-                    <td>{{ nb_schools_no_pay }}</td>
-                </tr>
-            </table>
-        </div>
-        <div class="col-lg-6 col-md-4 col-xs-6">
-            <table class="table bg_white">
-                <tr>
-                    <td><b>Paiements encaissés</b></td>
-                    <td><b>{{ actif }} €</b></td>
-                </tr>
-
-                <tr style="background-color: #fcf8e3">
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>En attente de paiement</td>
-                    <td>{{ product }} €</td>
+                    <td>Charges</td>
+                    <td>Produits</td>
+                    <td>Bilan</td>                
                 </tr>                
-                <tr style="background-color: #fcf8e3">
-                    <td></td>
-                    <td></td>
+                <tr>
+                    <td>Banque CA</td>
+                    <td>
+                        {{ charge }} € 
+                         <span class="helper_tip"> Détails </i> 
+                            <div class="helper_tip_text" style="width:330px" >
+                                {% for c in charges_list %}
+                                    {{ c.objet }} <b>{{ c.amount }}</b> {% if not forloop.last %}<br/>{% endif %}
+                                {% endfor %}
+                            </div>
+                        </span>
+                    </td>
+                    <td> {{ actif }} €</td>
+                    <td> </td>             
                 </tr>
                 <tr>
-                    <td>Total attendu</td>
-                    <td>{{ total }} €</td>
+                    <td>Banque Paypal</td>
+                    <td>{{ commission_paypal }} €</td>                    
+                    <td>{{ result_paypal }} €</td> 
+                    <td></td>                
+                </tr>
+                <tr>
+                    <td>En attente</td>
+                    <td>
+                    </td>                    
+                    <td>{{product}}</td>
+                    <td></td>                
                 </tr>
 
-
+                <tr>
+                    <td>Total</td>   
+                    <td>{{ charge }} €</td> 
+                    <td>{{ total }} € </td>   
+                    <th> {{ result }} € </th>                
+                </tr>
             </table>
         </div>
- 
     </div>
-
  
-
-    
-    <div class="col-lg-12 col-xs-12">
-        <table class="table bg_white">
-            {% for a in abonnements %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ a.school.name }}</td>
-                <td>{{ a.school.town }}</td>
-                <td>{{ a.school.country.name }}</td>
-                <td>{% for u in a.school.admin %} <li>{{u.get_full_name}}, {{u.email}}</li> {% endfor %}</td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-
     {% endif %} 
 
 

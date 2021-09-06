@@ -36,6 +36,11 @@ body {
  /*height : 100vh ;*/
 }
 
+.alert-warning{
+  background-color: #f1eef7 ;
+  border : solid 1px #f1eef7 ;
+}
+
 .counter{
   font-size:60px;
 }  

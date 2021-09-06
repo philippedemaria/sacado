@@ -18,8 +18,17 @@ class Plancomptable(models.Model):
     def __str__(self):
         return "{} : {}".format(self.code,self.name)
 
+YEARS = (
+         (2021, "2021-2022"  ), (2022, "2022-2023"  ), (2023, "2023-2024"  ),   (2024, "2024-2025"  ),   (2025, "2025-2026"  ) ,(2026, "2026-2027" ),   
+        )
 
+class Activeyear(models.Model):
 
+    year = models.PositiveIntegerField(default=2021, choices=YEARS , verbose_name="Année") 
+ 
+    def __str__(self):
+        nexty = self.year + 1 
+        return "{}-{}".format(self.year,nexty)
 
 
 
@@ -35,16 +44,13 @@ class Holidaybook(models.Model):
 def accounting_directory_path(instance, filename):
     return "association/{}/{}".format(instance.id, filename)
 
+
 QUALITIES = (
         ("actif", 'membre actif'),    
         ("honneur", "membre d'honneur"),
         ("bienfaiteur", 'membre bienfaiteur'),    
         ("bénéficiaire", "membre bénéficiaire"),
     )
-
-
-
-YEARS = []
 
 
 class Rate(models.Model):

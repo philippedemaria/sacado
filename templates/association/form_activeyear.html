@@ -1,0 +1,64 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+ 
+{% endblock %}
+ 
+
+{% block page_title %}
+    Année en cours
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+{% endblock %}
+
+ 
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+    <form action="" method="POST">
+
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-sm-12 col-lg-6">
+
+ 
+                <div class="form-group">
+                    {{ form.year.label_tag }} <em>50 caractères max.</em><br>
+                    {{ form.year|add_class:"form-control"   }}
+                    {{ form.year.errors }} 
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-12 col-lg-8">
+                        <div class="form-group">
+                            <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+                            <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                                       class="btn btn-default "/></a>
+                        </div>
+                    </div>
+ 
+                </div>
+            </div>
+
+            
+
+
+
+        </div>
+    </form>  
+</section>
+{% endblock %} 

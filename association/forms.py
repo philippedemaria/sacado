@@ -1,5 +1,5 @@
 from django import forms
-from .models import Accounting , Voting , Associate, Document , Section , Detail , Rate , Abonnement , Holidaybook
+from .models import Accounting , Voting , Associate, Document , Section , Detail , Rate , Abonnement , Holidaybook , Activeyear
 from account.models import User
 
 class HolidaybookForm(forms.ModelForm):
@@ -61,4 +61,11 @@ class SectionForm(forms.ModelForm):
 class RateForm(forms.ModelForm):
     class Meta:
         model = Rate 
+        fields = '__all__' 
+
+
+
+class ActiveyearForm(forms.ModelForm):
+    class Meta:
+        model = Activeyear 
         fields = '__all__' 

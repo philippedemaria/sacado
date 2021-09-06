@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from association.models import Accounting,Associate , Voting , Document, Section , Detail , Rate  , Holidaybook, Abonnement
-from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm, DetailForm , RateForm , AbonnementForm , HolidaybookForm
+from association.models import Accounting,Associate , Voting , Document, Section , Detail , Rate  , Holidaybook, Abonnement , Activeyear
+from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm, DetailForm , RateForm , AbonnementForm , HolidaybookForm ,  ActiveyearForm
 from account.models import User, Student, Teacher, Parent ,  Response
 from qcm.models import Exercise, Studentanswer , Customanswerbystudent , Writtenanswerbystudent
 from school.models import School
@@ -46,6 +46,28 @@ import xlwt
  
  
 
+def get_active_year():
+    """ renvoie d'un tuple sous forme 2021-2022  et d'un entier 2021 """
+    try :
+        active_year = Activeyear.objects.get(pk=1)
+        int_year = active_year.year
+    except :
+        today = datetime.now()
+        active_year = this_year_from_today(today)
+        int_year = today.year
+
+    return active_year, int_year
+
+
+def get_active_abonnements():
+    active_year, this_year = get_active_year() # active_year = 2020-2021 ALORS QUE this_year est 2020
+    this_day     = datetime.now() 
+ 
+    start = datetime(this_year,8,31)
+    stop  = datetime(this_year+1,1,31)
+
+    abonnements = Abonnement.objects.filter(date_start__lte = start  , date_stop__gte = stop).order_by("school__country__name")
+    return abonnements
 
 #####################################################################################################################################
 #####################################################################################################################################
@@ -135,7 +157,10 @@ def association_index(request):
     nb_teachers  = Teacher.objects.all().count()
     nb_students  = Student.objects.all().count()#.exclude(user__username__contains="_e-test_")
     nb_exercises = Exercise.objects.filter(supportfile__is_title=0).count()
-    nb_schools   = School.objects.all().count()
+
+    abonnements  = get_active_abonnements()
+    nb_schools   = abonnements.count()
+
     months       = [1,2,3,4,5,6,7,8,9,10,11,12]
     days         = [31,28,31,30,31,30,31,31,30,31,30,31]
     month_start  = today_start.month
@@ -160,7 +185,6 @@ def association_index(request):
         n = Teacher.objects.filter(user__date_joined__lte=date_stop, user__date_joined__gte=date_start ).count()
         string += sep+str(n)
         run += 1
-
  
     nb_answers   = Studentanswer.objects.filter(date__gte= today_start).count() + Customanswerbystudent.objects.filter(date__gte= today_start).count() + Writtenanswerbystudent.objects.filter(date__gte= today_start).count()
     if Holidaybook.objects.all() :
@@ -168,12 +192,40 @@ def association_index(request):
     else :
         holidaybook = False
 
+    active_year, this_year = get_active_year()
+
     context = { 'nb_teachers': nb_teachers , 'nb_students': nb_students , 'nb_exercises': nb_exercises, 
                 'nb_schools': nb_schools, 'nb_answers': nb_answers, 'holidaybook': holidaybook ,
-                'list_months': list_months, 'string': string,  'month_start' : month_start ,  
+                'list_months': list_months, 'string': string,  'month_start' : month_start , 'active_year' : active_year ,
                 }
 
     return render(request, 'association/dashboard.html', context )
+
+
+@user_passes_test(user_is_board)
+def update_activeyear(request):
+    try :
+        a    = Activeyear.objects.get(pk=1)
+        form = ActiveyearForm(request.POST or None , instance = a )
+    except :
+        form = ActiveyearForm(request.POST or None )
+
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+        else :
+            print(form.errors)
+        
+        return redirect('association_index')
+
+    return render(request, 'association/form_activeyear.html', {'form': form   })
+
+
+
+
+
+
+
 
 
 def total(first_date, last_date) :
@@ -199,9 +251,10 @@ def list_accountings(request,tp):
     else :
         accountings = Accounting.objects.exclude(acting=None).order_by("-date")
 
+
+    active_year, this_year = get_active_year() # active_year = 2020-2021 ALORS QUE this_year est 2020
     today = datetime.now()
     this_month = today.month
-    this_year = today.year
 
     first_date_month =  datetime(this_year, this_month, 1)
     first_date_year = datetime(this_year, 1, 1)
@@ -226,7 +279,7 @@ def ajax_total_month(request):
     month = int(request.POST.get("month"))
 
     today = datetime.now()
-    this_year = datetime.now().year
+    active_year, this_year = get_active_year() # active_year = 2020-2021 ALORS QUE this_year est 2020
     first = datetime(this_year, month, 1)
     nb_days=[0,31,28,31,30,31,30,31,31,30,31,30,31]
     first = datetime(this_year, month, 1)
@@ -1259,10 +1312,7 @@ def reset_all_students_sacado(request):
 def accountings(request):
     """ page d'accueil de la comptabilité"""
 
-    this_day     = datetime.now() 
-    this_year    = this_day.year
-
-    abonnements = Abonnement.objects.filter(date_start__lte = this_day  , date_stop__gte = this_day).order_by("school__country__name")
+    abonnements = get_active_abonnements()
 
     nb_schools        = abonnements.count()
     nb_schools_fr     = abonnements.filter(is_active = 1, school__country_id = 5).count()
@@ -1270,7 +1320,7 @@ def accountings(request):
     nb_schools_no_pay = abonnements.filter(is_active = 0).count()
 
  
-  
+    active_year, this_year    = get_active_year() 
     start_date   = datetime(this_year, 1, 1)
     end_date     = datetime(this_year, 12, 31)
 
@@ -1300,7 +1350,7 @@ def accountings(request):
 
         
     context = { 'charge': charge, 'product': product , 'result': result , 'actif': actif , 'total': total , 'result_paypal' : result_paypal ,  'nb_schools': nb_schools , 'abonnements': abonnements , 'charges_list' : charges_list ,
-                'this_year' : this_year , 'nb_schools': nb_schools , 'nb_schools_fr': nb_schools_fr , 'nb_schools_no_fr': nb_schools_no_fr ,  'nb_schools_no_pay': nb_schools_no_pay , 'commission_paypal' : commission_paypal }  
+                'this_year' : this_year , 'active_year' : active_year , 'nb_schools': nb_schools , 'nb_schools_fr': nb_schools_fr , 'nb_schools_no_fr': nb_schools_no_fr ,  'nb_schools_no_pay': nb_schools_no_pay , 'commission_paypal' : commission_paypal }  
 
 
 
@@ -1388,8 +1438,6 @@ def bank_bilan(request):
     nb_schools_no_fr  = abonnements.filter(is_active = 1).exclude(school__country_id =5).count() 
     nb_schools_no_pay = abonnements.filter(is_active = 0).count()
 
-
-
     start_date   = datetime(this_year, 1, 1)
     end_date     = datetime(this_year, 12, 31)
 
@@ -1413,9 +1461,9 @@ def bank_bilan(request):
             charges_list.append(dico)
             charge += abs(a[0])
 
-    result       = actif - charge
-    total        = actif + product + result_paypal
 
+    total        = actif + product + result_paypal
+    result       = total - charge
 
         
     context = { 'charge': charge, 'product': product , 'result': result , 'actif': actif , 'total': total , 'result_paypal' : result_paypal ,  'nb_schools': nb_schools , 'abonnements': abonnements , 'charges_list' : charges_list ,
