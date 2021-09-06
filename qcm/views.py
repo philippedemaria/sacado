@@ -225,7 +225,7 @@ def convert_seconds_in_time(secondes):
 
 def sending_to_teachers(teacher , level,subject,topic) : # envoie d'une notification au enseignant du niveau coché lorsqu'un exercice est posté
  
-
+    users = teacher.user.school.users.filter(user_type=2)
     for u in users :
         if u.teacher.exercise_post :
             if u.email : 
