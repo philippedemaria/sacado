@@ -118,7 +118,7 @@ body{
                     {% csrf_token %}
                     <div   class="  toppadding" >
 
-                        <h3 class="thin">S'inscrire à {{ group.name }}<span class="pull-right"><small>{{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}</small></span></h3>
+                        <h4  style="font-weight: 100">S'inscrire à {{ group.name }}<span class="pull-right"><small>{{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}</small></span></h4>
                         <input name="group_id" value="{{ group.id }}" type="hidden" /> 
                         <div class="row">
                             <div class="col-sm-12 col-md-6">
@@ -215,7 +215,7 @@ body{
                     {% csrf_token %}
                     <input name="group_id" value="{{ group.id }}" type="hidden" /> 
                     <div  class="  toppadding" >
-                        <h3 class="thin">Rejoindre le groupe {{ group.name }} <span class="pull-right"><small>{{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}</small></span></h3>
+                        <h4 style="font-weight: 100">Rejoindre le groupe {{ group.name }} <span class="pull-right"><small>{{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}</small></span></h4>
                         <div class="row">
                             <div class="col-sm-12 col-md-6">
                                 <div class="form-group">
