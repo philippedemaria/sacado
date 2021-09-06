@@ -9,6 +9,7 @@ class Migration(migrations.Migration):
         ('tool', '0002_remove_question_themeeee'),
     ]
 
+
     operations = [
         migrations.AddField(
             model_name='quizz',
