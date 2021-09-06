@@ -8,6 +8,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('tool', '0005_auto_20210727_1526'),
     ]
+    
 
     operations = [
         migrations.AlterField(

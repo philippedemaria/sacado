@@ -9,6 +9,7 @@ class Migration(migrations.Migration):
         ('tool', '0004_auto_20210727_1136'),
     ]
 
+
     operations = [
         migrations.AlterField(
             model_name='diaporama',

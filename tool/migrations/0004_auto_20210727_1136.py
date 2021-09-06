@@ -10,6 +10,8 @@ class Migration(migrations.Migration):
         ('tool', '0003_quizz_is_archive'),
     ]
 
+
+
     operations = [
         migrations.AddField(
             model_name='diaporama',

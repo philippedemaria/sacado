@@ -9,6 +9,8 @@ class Migration(migrations.Migration):
         ('tool', '0006_auto_20210729_1422'),
     ]
 
+
+
     operations = [
         migrations.AlterField(
             model_name='quizz',
