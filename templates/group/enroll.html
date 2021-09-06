@@ -110,7 +110,6 @@ body{
                     </div>
                 {% else %}
                 <form action="" method="POST" id="student_form">
-
                     <div class="row" align="center">
                         <div class="col-sm-12 col-md-6">
                             <div class="init_box">
@@ -225,9 +224,9 @@ body{
                         </div> 
                     </div>
                 </form>
-                <form action="" method="POST" id="student_form">
+                <form action="" method="POST" >
                     {% csrf_token %}
-                        <input name="group_id" value="{{ group.id }}" type="hidden" /> 
+                    <input name="group_id" value="{{ group.id }}" type="hidden" /> 
                     <div id="already" class="no_display toppadding" >
                         <h2 class="thin">Rejoindre le groupe {{ group.name }} <span class="pull-right"><small>{{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}</small></span></h2>
                         <div class="row">
