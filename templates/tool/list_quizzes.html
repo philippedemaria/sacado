@@ -180,7 +180,10 @@
                                     </div>
                                     {% if not forloop.last %}<hr  style="margin:5px; border-color:#CCC">{% endif %}                                           
                                 {% empty %}
-                                    <div class="alert alert-danger"><a href="{% url 'update_quizz' quizz.id  %}">Assigner au moins un de vos groupes</a></div>
+                                    <div class="alert alert-danger">
+                                        <a href="{% url 'show_quizz' quizz.id  %}" class="btn btn-primary btn-xs"><i class="fa fa-play fa-xs"></i> Lire le quizz</a>
+                                        <a href="{% url 'update_quizz' quizz.id  %}"  class="btn btn-default btn-xs" ><i class="fa fa-plus fa-xs"></i> Assigner   un  groupe </a>
+                                    </div>
                                 {% endfor %}
                             </td>
                             <td> 
