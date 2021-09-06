@@ -67,10 +67,15 @@
             <table class="table table-hover display_no_details50">
                 <thead>
                 <tr>
-                    <td>Nom* </td>
-                    <td>Prénom*</td>
-                    <td>Courriel*</td>
-                    <td>Identifiant* </td>
+                    <td>Nom </td>
+                    <td>Prénom </td>
+                    <td>Courriel </td>
+                    <td>Identifiant <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text" >Pour changer un identifiant, le modifier directement. Si l'identifiant choisi n'est pas disponible, la validation ne sa fera pas.</div>
+                            </span>
+
+
+                    </td>
                     <td>Dernière connexion</td>
                     <td><span style=" color:#cb2131">Mot de passe par défaut : <strong>sacado2020</strong> 
                         <span class="helper_tip" style="color:#cb2131"> <i class="fa fa-question-circle"></i>
@@ -150,7 +155,13 @@
                                     {{ student.user.email }}
                                 </td>
                                 <td>
-                                    {{ student.user.username }}
+                                    <input  type="text" 
+                                                id="studentUsername{{ student.user.id }}" 
+                                                data-student_id="{{ student.user.id }}" 
+                                                data-is_name="3" 
+                                                class="updateStudent"  
+                                                value="{{ student.user.username }}" 
+                                                style="background: #f2f0f0; border: none;width:180px" />
                                     <a href="#" data-toggle='modal' class="div_username"  data-target='#div_username' data-username_div="{{ student.user.username }}"  style="font-size: 11px"><i class="fa fa-expand"></i></a>  
                                 </td>
                                 <td>

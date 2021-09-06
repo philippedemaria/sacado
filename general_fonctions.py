@@ -25,21 +25,15 @@ def get_username(request ,ln, fn):
     User = apps.get_model('account', 'User')
     ok = True
     i = 0
-    code = str(uuid.uuid4())[:3] 
-
-    if request.user.school :
-        suffixe = request.user.school.country.name[2]
-    else :
-        suffixe = ""
-    name = str(ln).replace(" ","_")    
-    un = name + "." + str(fn)[0] + "_" + suffixe + code 
-
+    un = str(ln) + "." + str(fn)[0] 
     while ok:
         if User.objects.filter(username=un).count() == 0:
             ok = False
+            is_changed = False 
         else:
             i += 1
             un = un + str(i)
+            is_changed = True 
     return un 
 
 
