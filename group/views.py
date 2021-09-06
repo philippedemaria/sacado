@@ -220,8 +220,8 @@ def include_students(request , liste, group):
     for student_tab in students_tab:
         try:
             details = student_tab.split(";")
-            fname = str(cleanhtml(details[0])).strip()
-            lname = str(cleanhtml(details[1])).strip()
+            fname = str(cleanhtml(details[1])).strip()
+            lname = str(cleanhtml(details[0])).strip()
             password = make_password("sacado2020")
             username = get_username(request,fname , lname)
 
