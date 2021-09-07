@@ -2338,7 +2338,9 @@ a.bilan_title:hover .fa-angle-down,a.bilan_title:focus .fa-angle-down {
 .c5{
   background-color: #4174c9;
 }
-
+.c6{
+  background-color: #cfbbd5;
+}
 
 .edit {
      color: #998fa6 ; /* #AAA; */
