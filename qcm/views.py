@@ -1053,12 +1053,12 @@ def list_parcours_group(request,id):
     students = group.students.all()
 
     parcours_tab = set()
-    parcours_tab.update(group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),  is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation","ranking"))
+    parcours_tab.update(group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject=group.subject, is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation","ranking"))
     for student in students :
         if access :
-            parcours_tab.update(student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),  is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation","ranking"))
+            parcours_tab.update(student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject=group.subject, is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation","ranking"))
         else :
-            parcours_tab.update(student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), is_favorite=1 ).exclude(is_leaf=1).order_by("is_evaluation","ranking") )
+            parcours_tab.update(student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), subject=group.subject, is_favorite=1 ).exclude(is_leaf=1).order_by("is_evaluation","ranking") )
 
  
     ###efface le realtime de plus de 2 h

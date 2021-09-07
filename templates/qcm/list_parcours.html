@@ -48,6 +48,7 @@
                             <th style="width:2px"></th>                  
                             <th style="width:300px">Nom</th>
                             <th>Modif.</th>
+                            <th>Matière</th>
                             <th>Niveau</th>
                             <th style="width:350px">Affecté à 
                                 <span class="helper_tip"> <i class="fa fa-question-circle"></i>
@@ -118,7 +119,7 @@
                                     {% endfor %}
                                 {% else %}
                                     {% if parcours.teacher != teacher %}
-                                        <i class="fa fa-edit text-default fa-xs" aria-hidden="true" ></i></a>
+                                        <i class="fa fa-edit text-default fa-xs" aria-hidden="true" ></i> 
                                     {% else %}
                                         {% if parcours.is_evaluation %}
                                         <a href="{% url 'update_evaluation' parcours.id 0 %}"> <i class="fa fa-edit fa-xs" aria-hidden="true"></i></a> 
@@ -127,7 +128,10 @@
                                         {% endif %}
                                     {% endif %}
                                 {% endif %}
-                            </td> 
+                            </td>
+                            <td>
+                                {% if parcours.subject %}{{ parcours.subject.shortname }}{% else %}<small class="alert-danger">RENSEIGNER LA MATIERE</small>{% endif %}
+                            </td>
                             <td>
                                 <small>
                                     {% if parcours.level %}
@@ -199,26 +203,26 @@
                                 </form>
                             </td>
                             <td>
-                            <form action="" method="POST" enctype='multipart/form-data'>     
-                                {% csrf_token %}
-                                <div class="btn-group"  style="padding:0px;margin:0px;">
-                                    <a href="#" class="btn btn-default btn-publisher publisher"  data-from="1" id="parcours_publisher{{parcours.id}}" 
-                                        data-is_disabled="{% if parcours.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
-                                        data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
-                                        <i class="fa fa-circle-o-notch"></i>
-                                    </a><span class="legend-btn  legend-btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %} size13" id="parcours_statut{{parcours.id}}"  >  
-                                      {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
-                                    </span>
-                                </div>
-                            </form>
-                            <span class="label_icon" style="color:{{ parcours.color   }};">
-                                {% if parcours.is_evaluation %}
-                                    {{  parcours.start|date:"d N Y H:i"  }}   
-                                    {% if parcours.stop %}
-                                       - {{  parcours.stop|date:"d N Y H:i"  }}     
-                                    {% endif %}                                
-                                {% endif %}
-                            </span>
+                                <form action="" method="POST" enctype='multipart/form-data'>     
+                                    {% csrf_token %}
+                                    <div class="btn-group"  style="padding:0px;margin:0px;">
+                                        <a href="#" class="btn btn-default btn-publisher publisher"  data-from="1" id="parcours_publisher{{parcours.id}}" 
+                                            data-is_disabled="{% if parcours.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
+                                            data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
+                                            <i class="fa fa-circle-o-notch"></i>
+                                        </a><span class="legend-btn  legend-btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %} size13" id="parcours_statut{{parcours.id}}"  >  
+                                          {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
+                                        </span>
+                                    </div>
+                                </form>
+                                <span class="label_icon" style="color:{{ parcours.color   }};">
+                                    {% if parcours.is_evaluation %}
+                                        {{  parcours.start|date:"d N Y H:i"  }}   
+                                        {% if parcours.stop %}
+                                           - {{  parcours.stop|date:"d N Y H:i"  }}     
+                                        {% endif %}                                
+                                    {% endif %}
+                                </span>
                             </td>
                         </tr> 
                         {% for prcrs in parcours.leaf_parcours.all %}
@@ -253,7 +257,10 @@
                                         {% endif %}
                                         <i class="fa fa-edit fa-xs" aria-hidden="true"></i></a>
                                     {% endif %}
-                                </td> 
+                                </td>
+                                <td>
+                                    {% if parcours.subject %}{{ parcours.subject.shortname }}{% else %}<small class="alert-danger">RENSEIGNER LA MATIERE</small>{% endif %}
+                                </td>
                                 <td>
                                     {% for l in  prcrs.level_list  %}
                                         <small>{{ l }}{% if not forloop.last %}, {% endif %}</small>
