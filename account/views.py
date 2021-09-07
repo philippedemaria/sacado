@@ -1127,15 +1127,16 @@ def register_by_csv(request, key, idg=0):
         csv_file = request.FILES["csv_file"]
         if not csv_file.name.endswith('.csv'):
             messages.error(request, "Le fichier n'est pas format CSV")
-            return HttpResponseRedirect(reverse("register_teacher_csv"))
+            return HttpResponseRedirect(reverse("register_teacher_csv", args=[key, idg]))
         # if file is too large, return
         if csv_file.multiple_chunks():
             messages.error(request, "Le fichier est trop lourd (%.2f MB)." % (csv_file.size / (1000 * 1000),))
-            return HttpResponseRedirect(reverse("register_teacher_csv"))
+            return HttpResponseRedirect(reverse("register_teacher_csv", args=[key, idg]))
         try:
             file_data = csv_file.read().decode("utf-8")
         except UnicodeDecodeError:
-            return HttpResponse('Erreur..... Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
+            messages.error(request, 'Erreur..... Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
+            return HttpResponseRedirect(reverse("register_teacher_csv", args=[key, idg]))
 
         lines = file_data.split("\r\n")
         # loop over the lines and save them in db. If error , store as string and then display = []

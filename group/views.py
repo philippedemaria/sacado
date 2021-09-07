@@ -219,9 +219,12 @@ def include_students(request , liste, group):
 
     for student_tab in students_tab:
         try:
-            details = student_tab.split(";")
+            if ";" in line:
+                details =  student_tab.split(";")
+            elif "," in line:
+                details =  student_tab.split(",")
+            lname = str(cleanhtml(details[0])).strip()            
             fname = str(cleanhtml(details[1])).strip()
-            lname = str(cleanhtml(details[0])).strip()
             password = make_password("sacado2020")
             username = get_username(request,lname , fname)
 
@@ -283,8 +286,8 @@ def include_students_in_a_model(request, liste,model):
     for student_tab in students_tab :
         details = student_tab.split(";")
         try:
-            lname = cleanhtml(details[0].replace(" ", ""))
-            fname = cleanhtml(details[1].replace(" ", ""))
+            lname = str(cleanhtml(details[0]).replace(" ", "")).strip()            
+            fname = str(cleanhtml(details[1]).replace(" ", "")).strip()
             password = make_password("sacado2020")
             username = get_username(request,lname , fname)
 
@@ -1190,14 +1193,6 @@ def enroll(request, slug):
                 username = request.POST.get("username")
                 user.set_password(password)
                 user.save()
-                # Liste des parcours des élèves du groupe
-                # parcourses = []
-                # for student in group.students.all():
-                #     for p in student.students_to_parcours.filter(teacher=group.teacher) :
-                #         if p not in parcourses :
-                #             parcourses.append(p)
-
-                # Liste des parcours des élèves du groupe
                 parcourses = set()
                 for std in group.students.all():
                     parcourses.update(std.students_to_parcours.filter(teacher=group.teacher))
