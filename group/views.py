@@ -219,9 +219,9 @@ def include_students(request , liste, group):
 
     for student_tab in students_tab:
         try:
-            if ";" in line:
+            if ";" in student_tab:
                 details =  student_tab.split(";")
-            elif "," in line:
+            elif "," in student_tab:
                 details =  student_tab.split(",")
             lname = str(cleanhtml(details[0])).strip()            
             fname = str(cleanhtml(details[1])).strip()
