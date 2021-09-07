@@ -1206,7 +1206,7 @@ def enroll(request, slug):
                 try :    
                     if user_form.cleaned_data['email']:
                         send_mail('Création de compte sur Sacado',
-                                  'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.',
+                                  'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n Votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.',
                                   settings.DEFAULT_FROM_EMAIL,
                                   [request.POST.get("email")])
                 except :

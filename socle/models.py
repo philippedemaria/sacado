@@ -107,6 +107,7 @@ class Level(models.Model):
         ('c3', 'Cycle 3'),
         ('c4', 'Cycle 4'),
         ('c5', 'Cycle 5'),
+        ('c6', 'Post BaC'),
     )
 
     name = models.CharField(max_length=255, null=True, blank=True, verbose_name="Nom")
