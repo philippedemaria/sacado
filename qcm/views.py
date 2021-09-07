@@ -1193,7 +1193,7 @@ def ajax_all_parcourses(request):
 
     teacher_id = get_teacher_id_by_subject_id(subject_id)
 
-    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1,is_evaluation = is_eval).exclude(exercises=None ,teacher=teacher).order_by('level')
+    parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1,is_folder = 0,is_evaluation = is_eval).exclude(exercises=None ,teacher=teacher).order_by('level')
 
     keywords = request.POST.get('keywords',None)
 
