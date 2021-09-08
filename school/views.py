@@ -1035,8 +1035,6 @@ def group_to_teacher(request):
     if request.method == "POST" :
         group_ids = request.POST.getlist("groups")
         teacher_id = int(request.POST.get("teacher"))
-
-        Group.objects.filter(school = school).update(teacher_id = None) 
  
         for group_id in group_ids :
         	Group.objects.filter(pk = group_id).update(teacher_id = teacher_id)  
