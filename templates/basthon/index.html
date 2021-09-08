@@ -5,6 +5,8 @@
 
 
 {% block python %}
+
+
 <link rel="stylesheet" href="{% static 'basthon/fontawesome/css/all.min.css' %}">
 <link rel="stylesheet" href="{% static 'basthon/css/style.css' %}">
 <script src="{% static 'basthon/js/basthon-kernel/basthon.js' %}"></script>
@@ -12,7 +14,8 @@
 
 <script src="{% static 'basthon/ace/ace.js' %}"></script>
 <script src="{% static 'basthon/ace/ext-language_tools.js' %}"></script>
- 
+
+<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script> 
 {% endblock %}
 
 
@@ -34,11 +37,25 @@
       {% if relationship %}
       <div class="row">
           <div class="col-xs-12 col-md-7 consigne" >  
-             {% if relationship.exercise.supportfile.title %} 
-             <label>Enoncé : </label> {{ relationship.exercise.supportfile.title }} <br/>  
-             {% else %} 
-             <label>Enoncé : </label>{% if relationship.instruction   %}  {{ relationship.instruction|safe }}   {% else %} {{ relationship.exercise.supportfile.annoncement|safe }} {% endif %}<br/>
-             {% endif %} 
+
+
+           
+            <b>{{ relationship.exercise.supportfile.title }}</b><br/> 
+         
+             <label>Enoncé : </label>
+
+              {% if relationship.instruction   %} 
+
+                  {{ relationship.instruction|safe }}<br/>   
+
+              {% elif relationship.exercise.supportfile.annoncement %} 
+
+                  {{ relationship.exercise.supportfile.annoncement|safe }} <br/>
+
+              {% endif %}
+ 
+
+ 
               {% for remediation in relationship.relationship_remediation.all %}
                   {% if remediation.consigne %}
                   <audio controls>
