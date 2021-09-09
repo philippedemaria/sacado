@@ -179,6 +179,10 @@ urlpatterns = [
 
     path('get_course_in_this_parcours/<int:id>', get_course_in_this_parcours, name='get_course_in_this_parcours'), 
     path('get_this_course_for_this_parcours/<int:typ>/<int:id_target>/<int:idp>', get_this_course_for_this_parcours, name='get_this_course_for_this_parcours'), 
+
+
+    path('ajax_show_hide_course', ajax_show_hide_course, name='ajax_show_hide_course'),
+    
     ############################################################################################################  
     path('exercise_custom_show_shared', exercise_custom_show_shared, name='exercise_custom_show_shared'),  
 

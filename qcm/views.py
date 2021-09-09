@@ -6872,6 +6872,19 @@ def ajax_course_custom_show_shared(request):
     return JsonResponse(data)
 
 
+def ajax_show_hide_course(request):
+
+    course_id = request.POST.get('course_id',0)
+    data = {}
+    course = Course.objects.get(pk = course_id)
+    if course.is_publish :
+        Course.objects.filter(pk = course_id).update(is_publish=0)
+        data['html'] = False
+    else :
+        Course.objects.filter(pk = course_id).update(is_publish=1)    
+        data['html'] = True
+    return JsonResponse(data)
+
 
 # Semble ne pas etre utilisé ....
 def ajax_course_custom_for_this_parcours(request):

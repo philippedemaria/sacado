@@ -1047,6 +1047,33 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
+        // Individualiser les exercices un par un
+        $('.show_hide').on('click', function (event) {
+
+            let course_id = $(this).data("course_id"); 
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'course_id' : course_id ,
+                        csrfmiddlewaretoken: csrf_token,
+                    },
+                    url: "../../ajax_show_hide_course",
+                    success: function (data) {
+                        
+                        if (data.html) 
+                            { $('#show_hide'+course_id).removeClass('fa-eye-slash'); $('#show_hide'+course_id).addClass('fa-eye'); } 
+                        else                       
+                            { $('#show_hide'+course_id).removeClass('fa-eye'); $('#show_hide'+course_id).addClass('fa-eye-slash'); }
+
+
+                    }
+                }
+            )
+        });
 
 
 

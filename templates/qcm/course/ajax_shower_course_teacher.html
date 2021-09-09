@@ -3,13 +3,18 @@
 
 
  
-<h1 class="thin">  <span id="this_course_title">{{ course.title }}</span>  
+<h1 class="thin">  <span id="this_course_title">{{ course.title }}</span> 
+
+
+ <a href="#" style="font-size: 12px; margin-right:10px;"  class="pull-right">Publier ce cours</a>
 
     {% if  teacher == course.author %}
-    <a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 12px; margin-right:10px;" class="pull-right">Modifier ce cours</a> 
+    <a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 12px; margin-right:10px;" class="pull-right">Modifier ce cours </a> 
     {% else  %}
     <a href="{% url 'delete_course' course.id  parcours.id %}" class="pull-right" style="font-size: 12px;"  onclick="return TestDelete('ce cours')">Supprimer ce cours</a>
     {% endif  %}
+
+
 
 
     <a href="#"  data-toggle='modal' data-target='#view_course'  data-course_id="{{ course.id }}"  style="font-size: 12px; margin-right:10px;" class="pull-right course_viewer">Vidéoprojeter ce cours</a>

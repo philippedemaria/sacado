@@ -53,12 +53,15 @@
                 <input type="hidden" value="{{ parcours.id }}" name="parcours_id" id="parcours_id"/>
                 {% for course in courses %}
                     <li class="{% if forloop.first %}active{% endif %} menu_course">
-                        <a href="#" class="course_viewer" data-course_id="{{ course.id }}" data-parcours_id="{{ course.parcours.id }}" >  <i class="{% if course.is_publish %}fa fa-eye{% else %}fa fa-eye-slash{% endif %}" style="font-size: 12px"></i>  {{ course.title }}
+                        <a href="#" class="course_viewer" data-course_id="{{ course.id }}" data-parcours_id="{{ course.parcours.id }}" >  
+
+                            <i class="{% if course.is_publish %}fa fa-eye{% else %}fa fa-eye-slash{% endif %} show_hide"  id="show_hide{{ course.id }}"  data-course_id="{{ course.id }}" ></i>
+                             {{ course.title }}
 
                             {% if course.relationships.count > 0 %} <sup title="Cours lié à une section"><i class="fa fa-paperclip" style="font-size:8px" ></i></sup> {% endif %}
 
-
-                            <img src="{% static 'img/order_handler_white.png' %}" class="pull-right"/></a>
+                            <img src="{% static 'img/order_handler_white.png' %}" class="pull-right"/>
+                        </a>
                         <input type="hidden" value="{{ course.id }}" class="course_sort" /> 
                     </li>
                 {% endfor %}
@@ -78,7 +81,7 @@
         {% if   course  %}
             <div class="col-md-8 col-xs-12 col-lg-9" id="this_course_viewer">
                 <h1 class="thin">  <span id="this_course_title">{{ course.title }}</span>
-
+                    <a href="#" style="font-size: 14px; margin-right:10px;"  class="pull-right">Publier ce cours</a>
                     {% if  teacher == course.author %}                   
                     <a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 14px; margin-right:10px;" class="pull-right">Modifier ce cours</a> 
                     {% else  %}
