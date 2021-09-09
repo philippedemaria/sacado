@@ -109,7 +109,7 @@
                     <div class="form-group list_choice">         
                     <label>Choisir les élèves parmi</label>   <br>  
                         {% for group in groups %}
-                                {% with group.students.count as nb_group  %}
+                                {% with group.just_students.count as nb_group  %}
                                 <a data-toggle="collapse" data-target="#demo{{ group.id }}" style="color:{{ group.color}};cursor:pointer">
                                     {{ group.name|truncatechars:15 }} 
                                     <small>
@@ -170,7 +170,7 @@
                         {% for sg in share_groups %}
                         <a data-toggle="collapse" data-target="#demosg{{ sg.group.id }}" style="color:{{ sg.group.color}};cursor:pointer">
                             {{ sg.group.name }} <small><i class="fa fa-caret-down"></i></small> </a> 
-                            {% if sg.group.students.count > 0 %}<label class="pull-right">
+                            {% if sg.group.just_students.count > 0 %}<label class="pull-right">
 
                                 <input type="checkbox" value="{{ sg.group.id }}" name="groups" 
                                         {% if parcours in sg.group.group_parcours.all  %}
