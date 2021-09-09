@@ -1553,12 +1553,15 @@ def create_parcours(request,idp=0):
             parcours_folder = Parcours.objects.get(pk = idp)
             parcours_folder.leaf_parcours.add(nf)
         else :
-            folder_parcours = request.POST.getlist("folder_parcours") 
-            parcours_folder.leaf_parcours.set(folder_parcours)          
+            for pid in request.POST.getlist("folder_parcours") :
+                parcours_folder = Parcours.objects.get(pk = pid)
+                parcours_folder.leaf_parcours.add(nf)            
         ################################################
 
         sg_students =  request.POST.getlist('students_sg')
-        nf.students.set(students_sg)
+        for s_id in sg_students :
+            student = Student.objects.get(user_id = s_id)
+            nf.students.add(student)
 
         if nf.stop  :
             locker = 1
@@ -1677,11 +1680,17 @@ def update_parcours(request, id, idg=0 ):
                     nf.students.add(s)
                     attribute_all_documents_to_student(parcourses,s)
                     
-            folder_parcours = request.POST.getlist("folder_parcours") 
-            parcours_folder.leaf_parcours.set(folder_parcours)  
 
+
+            for pid in request.POST.getlist("folder_parcours") :
+                parcours_folder = Parcours.objects.get(pk = pid)
+                parcours_folder.leaf_parcours.add(nf)  
+
+ 
             sg_students =  request.POST.getlist('students_sg')
-            nf.students.set(students_sg)
+            for s_id in sg_students :
+                student = Student.objects.get(user_id = s_id)
+                nf.students.add(student)
 
             try:
                 for exercise in parcours.exercises.all():
@@ -7577,9 +7586,8 @@ def create_folder(request,idg):
             nf.save() 
             nf.groups.add(group) 
             nf.leaf_parcours.set(lp)        
-            ## Insertion des nouveaux élèves
-            these_students =  request.POST.getlist("these_students"):
-            nf.groups.set(these_students)     
+            for s in request.POST.getlist("these_students"):
+                nf.students.add(s)
             return redirect ("list_parcours_group", idg )     
         else:
             print(form.errors)
@@ -7655,8 +7663,8 @@ def update_folder(request,id,idg):
                     for stu in group.students.exclude(user__username__contains="_e-test") :
                         nf.students.remove(stu)
                 ## Insertion des nouveaux élèves
-                these_students =  request.POST.getlist("these_students"):
-                nf.groups.set(these_students)     
+                for s in request.POST.getlist("these_students"):
+                    nf.students.add(s)
                 ##################################################
                 if group_exists :
                     return redirect ("list_parcours_group", group_id ) 
