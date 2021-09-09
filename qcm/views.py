@@ -1566,15 +1566,8 @@ def create_parcours(request,idp=0):
         these_students =  request.POST.getlist("students")
         set_students(nf,these_students) 
 
-
         for s in these_students :
             attribute_all_documents_to_student([nf],s)
-
-
-
-
-
-
 
         ################################################
         ### Si idp > 0 alors idp est le parcours dossier
@@ -4433,6 +4426,7 @@ def create_evaluation(request):
         nf = form.save(commit=False)
         nf.author = teacher
         nf.teacher = teacher
+        nf.is_folder = 0
         nf.is_evaluation = 1
 
         if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
@@ -4441,41 +4435,18 @@ def create_evaluation(request):
         nf.save()
         form.save_m2m()
 
-        nf.students.set(form.cleaned_data.get('students'))
+        these_students =  request.POST.getlist("students")
+        set_students(nf,these_students) 
 
-        group_ckeched_ids = request.POST.getlist('groups')
-        nf.groups.set(group_ckeched_ids)
-
-        for group_ckeched_id in group_ckeched_ids :
-            group_ckeched = Group.objects.get(pk = group_ckeched_id)
-            for s in group_ckeched.students.all() :
-                nf.students.add(s)
-
-
-
-        sg_students =  request.POST.getlist('students_sg')
-        for s_id in sg_students :
-            student = Student.objects.get(user_id = s_id)
-            nf.students.add(student)
-
-
-        i = 0
-        for exercise in form.cleaned_data.get('exercises'):
-            exercise = Exercise.objects.get(pk=exercise.id)
-            relationship = Relationship.objects.create(parcours=nf, exercise=exercise, ranking=i, 
-                                                       duration=exercise.supportfile.duration,
-                                                       situation=exercise.supportfile.situation)
-            relationship.students.set(form.cleaned_data.get('students'))
-            relationship.skills.set(exercise.supportfile.skills.all()) 
-            i += 1
-
-            lock_all_exercises_for_student(nf.lock,nf)
+        for s in these_students :
+            attribute_all_documents_to_student([nf],s)
+ 
 
         for pid in request.POST.getlist("folder_parcours") :
             parcours_folder = Parcours.objects.get(pk = pid)
             parcours_folder.leaf_parcours.add(nf)   
 
-        print(group_id)    
+   
         if request.POST.get("save_and_choose") :
             return redirect('peuplate_parcours', nf.id)
         elif group_id :
@@ -4530,26 +4501,12 @@ def update_evaluation(request, id, idg=0 ):
                 nf.vignette = request.POST.get("this_image_selected",None)
 
             nf.save()
-            nf.students.set(form.cleaned_data.get('students'))
-            group_ckeched_ids = request.POST.getlist('groups')
-            nf.groups.set(group_ckeched_ids)
 
-            for group_ckeched_id in group_ckeched_ids :
-                group_ckeched = Group.objects.get(pk = group_ckeched_id)
-                for s in group_ckeched.students.all() :
-                    nf.students.add(s)
- 
-            sg_students =  request.POST.getlist('students_sg')
-            for s_id in sg_students :
-                student = Student.objects.get(user_id = s_id)
-                nf.students.add(student)
+            these_students =  request.POST.getlist("students")
+            set_students(nf,these_students) 
 
-            try:
-                for exercise in parcours.exercises.all():
-                    relationship = Relationship.objects.get(parcours=nf, exercise=exercise)
-                    relationship.students.set(form.cleaned_data.get('students'))
-            except:
-                pass
+            for s in these_students :
+                attribute_all_documents_to_student([nf],s)
  
             lock_all_exercises_for_student(nf.stop,parcours)
 
