@@ -902,13 +902,6 @@ define(['jquery','bootstrap'], function ($) {
         // Affiche  un cours connaissant le parcours et le cours
         $('.built_diaporama').on('click', function (event) {
      
-               slides = $('#this_course_viewer .projection') ;
-
-               $.each( slides , function( i, val ) { 
-                    $("#ul_slider").append("<li class='my_slide'><div class='consigne_diapo'><div class='col-sm-12 col-md-12'>" + val.innerHTML +"</div></div></li>" );
-                    })
-
-
 
                 var slideBox = $('#ul_slider'),
                     slideWidth = 1200 ,
@@ -929,11 +922,7 @@ define(['jquery','bootstrap'], function ($) {
                     console.log(currentSlideInput+" "+slideWidthInput+" "+slideQuantity) ; 
 
                 }
-
-
-               this_course_title = $('#this_course_title').text() ;
-               $('.this_slider_title').text(this_course_title) ;
-
+ 
 
                $('.nav button').on('click', function(){ 
 
@@ -969,7 +958,7 @@ define(['jquery','bootstrap'], function ($) {
                     });
 
 
-                var screen_size = 1100  ;
+                var screen_size = 1200  ;
 
                 if($('#ul_slider iframe').length) { 
 
@@ -1063,7 +1052,7 @@ define(['jquery','bootstrap'], function ($) {
                     },
                     url: "../../ajax_show_hide_course",
                     success: function (data) {
-                        
+
                         if (data.html) 
                             { $('#show_hide'+course_id).removeClass('fa-eye-slash'); $('#show_hide'+course_id).addClass('fa-eye'); } 
                         else                       

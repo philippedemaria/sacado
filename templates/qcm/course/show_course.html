@@ -97,7 +97,7 @@
                     </a>
                 </h1>
                 <hr>
-                <div >{{ course.annoncement|decode|safe }} </div>
+                <div>{{ course.annoncement|decode|safe }} </div>
             </div>
         {% else %} 
             <div class="col-md-8 col-xs-12 col-lg-9">
@@ -124,7 +124,7 @@
 
 
  
-<div class="modal fade" id="built_diaporama" tabindex="-1" role="dialog" aria-labelledby="built_diaporama">
+<div class="modal fade" id="built_diaporama" class="built_diaporama" tabindex="-1" role="dialog" aria-labelledby="built_diaporama">
     <div class="modal-dialog modal-lg" style="margin:0px" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -148,16 +148,19 @@
                 <!-- Wrapper for slides -->
  
                         <ul id="ul_slider">
+                            {% for c in courses %}
                             <li class="my_slide">
-                                <div class="row consigne_diapo"  align="center">  
+                                <div class="row consigne_diapo">  
                                     <div class="col-sm-12 col-md-12">
-                                            <h1 style="font-size:3em" class="thin this_slider_title"> 
- 
-                                            </h1>
+                                        <h1 style="font-size:3em" class="thin this_slider_title"> 
+                                            {{ c.title }}
+                                        </h1>
+                                        <hr>
+                                        <div>{{ c.annoncement|decode|safe }} </div>
                                     </div>
                                 </div> 
                             </li>
- 
+                            {% endfor %}
                         </ul>
  
                 </div>
