@@ -7614,7 +7614,7 @@ def update_folder(request,id,idg):
         elif len(id_groups_checked) > 0 :
             group = Group.objects.get(pk = id_groups_checked[0])
         group_id = group.id
-        parcourses = teacher.teacher_parcours.filter(is_archive=0, subject = parcours.subject, level = parcours.level  ).exclude(is_folder=1).order_by("title")
+        parcourses = teacher.teacher_parcours.filter(is_archive=0, subject = parcours.subject, level = parcours.level  ).exclude(is_folder=1)
         # parcourses = []
         # p_titles = []
         # parcrses = teacher.teacher_parcours.filter(is_archive=0, subject = parcours.subject, level = parcours.level  ).exclude(is_folder=1).order_by("title")
@@ -7648,6 +7648,9 @@ def update_folder(request,id,idg):
                     nf.level = group.level
                     nf.subject = group.subject
      
+                nf.groups.clear()
+                nf.groups.set(id_groups_checked)
+
 
                 if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
                     nf.vignette = request.POST.get("this_image_selected",None)
