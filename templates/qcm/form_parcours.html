@@ -109,7 +109,7 @@
                     <div class="form-group list_choice">         
                     <label>Choisir les élèves parmi</label>   <br>  
                         {% for group in groups %}
-                                {% with group.just_students.count as nb_group  %}
+                                 
                                 <a data-toggle="collapse" data-target="#demo{{ group.id }}" style="color:{{ group.color}};cursor:pointer">
                                     {{ group.name|truncatechars:15 }} 
                                     <small>
@@ -138,11 +138,11 @@
                                         {% endif %}
                                         </small> 
                                 </label>
-                                {% endwith %}
+               
                                 <br>
 
-                          <div id="demo{{ group.id }}" class="collapse" >
-                                <div class="form-group">
+                          <div id="demo{{ group.id }}" class="collapse" >  
+                                <div class="form-group"> 
                                     {% for s in group.just_students.all|dictsort:"user.last_name"  %}
 
                                         <label>
@@ -150,13 +150,9 @@
                                                     class="selector check_if_check" 
                                                     name="students" 
                                                     value="{{ s.user.id}}"
-
-                                                    {% if parcours %}
-                                                     {% get_in_parcours  s parcours  as bool  %}  
-                                                        {% if bool  %}
+                                                    {% if parcours %}      
+                                                        {% if s in parcours.students.all  %}
                                                             checked 
-                                                        {% elif group_id %}
-                                                            {% if  group_id == sg.group.id  %}checked {% endif %}
                                                         {% endif %}
                                                     {% endif %}> 
                                                     {{ s.user|title}}
@@ -189,15 +185,12 @@
                                         <label>
                                             <input type = "checkbox" 
                                                     class="selector check_if_check" 
-                                                    name="students_sg" 
+                                                    name="students" 
                                                     value="{{ s.user.id}}"
 
                                                     {% if parcours %}
-                                                     {% get_in_parcours  s parcours  as bool  %}  
-                                                        {% if bool  %}
+                                                        {% if s in parcours.students.all  %}
                                                             checked 
-                                                        {% elif group_id %}
-                                                            {% if  group_id == sg.group.id  %}checked {% endif %}
                                                         {% endif %}
                                                     {% endif %} > 
                                                     {{ s.user|title}}

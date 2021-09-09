@@ -182,21 +182,30 @@ def get_seconde_to_math_comp(request):
 
 def set_students(nf,stus) :
     try:
-        nf.students.set(stus)
+        if len(stus) > 0 :
+            nf.students.set(stus)
+        var = True
     except :
-        pass
+        var = False
+    return var
 
 def set_groups(nf,gps) :
     try:
-        nf.groups.set(gps)
+        if len(gps) > 0 :
+            nf.groups.set(gps)        
+        var = True
     except :
-        pass
+        var = False
+    return var
 
 def set_leaf_parcours(nf,folder_parcours) :
     try:
-        nf.leaf_parcours.set(folder_parcours)
+        if len(folder_parcours) > 0 :
+            nf.leaf_parcours.set(folder_parcours)
+        var = True
     except :
-        pass           
+        var = False
+    return var        
 ##################################################################################################################################
 ##################################################################################################################################
 ##################################################################################################################################
@@ -1548,23 +1557,24 @@ def create_parcours(request,idp=0):
 
         nf.save()
         ################################################
-        ### Si le parcours est créé à partir d'un groupe
-        try :
-            set_groups(nf,group)
-        except :
-            pass
         ################################################
         form.save_m2m()
 
-        group_ckeched_ids = request.POST.getlist('groups')
-        set_groups(nf,group_ckeched_ids)
+        #group_ckeched_ids = request.POST.getlist('groups')
+        #set_groups(nf,group_ckeched_ids)
+        ################################################
+        these_students =  request.POST.getlist("students")
+        set_students(nf,these_students) 
 
-        for group_ckeched_id in group_ckeched_ids :
-            group_ckeched = Group.objects.get(pk = group_ckeched_id)
-            parcourses = group_ckeched.group_parcours.all()
-            for s in group_ckeched.students.all() :
-                nf.students.add(s)
-                attribute_all_documents_to_student(parcourses,s)
+
+        for s in these_students :
+            attribute_all_documents_to_student(nf,s)
+
+
+
+
+
+
 
         ################################################
         ### Si idp > 0 alors idp est le parcours dossier
@@ -1574,9 +1584,8 @@ def create_parcours(request,idp=0):
         else :
             folder_parcours =  request.POST.getlist("folder_parcours")
             set_leaf_parcours(nf,folder_parcours)       
-        ################################################
-        students_sg =  request.POST.getlist("students_sg")
-        set_students(nf,students_sg)  
+
+
 
         if nf.stop  :
             locker = 1
@@ -1672,6 +1681,8 @@ def update_parcours(request, id, idg=0 ):
 
     if request.method == "POST":
         if form.is_valid():
+            for s in parcours.students.exclude(user__username__contains= "_e-test"):
+                parcours.students.remove(s)
             nf = form.save(commit=False)
             nf.author = teacher
             nf.teacher = teacher
@@ -1687,21 +1698,17 @@ def update_parcours(request, id, idg=0 ):
             group_ckeched_ids = request.POST.getlist('groups')
             nf.groups.set(group_ckeched_ids)
             
+            these_students =  request.POST.getlist("students")
+            set_students(nf,these_students) 
 
-            for group_ckeched_id in group_ckeched_ids :
-                group_ckeched = Group.objects.get(pk = group_ckeched_id)
-                parcourses = group_ckeched.group_parcours.all()
-                nf.students.set(group_ckeched.students.all() )
-                for s in group_ckeched.students.all() :
-                    attribute_all_documents_to_student(parcourses,s)
+
+            for s in these_students :
+                attribute_all_documents_to_student(nf,s)
                     
 
             folder_parcours =  request.POST.getlist("folder_parcours")
             set_leaf_parcours(nf,folder_parcours)  
-
-            sg_students =  request.POST.getlist('students_sg')
-            set_students(nf,sg_students)
-
+ 
  
             try:
                 for exercise in parcours.exercises.all():
@@ -1742,7 +1749,7 @@ def update_parcours(request, id, idg=0 ):
             role = True
         else :
             role = False
-    else :
+    else : 
         group_id = None
         group = None
         request.session["group_id"] = None
@@ -7598,7 +7605,8 @@ def create_folder(request,idg):
             nf.groups.add(group) 
             nf.leaf_parcours.set(lp)
 
-            set_students(nf,request.POST.getlist("these_students")) 
+            test_fct = set_students(nf,request.POST.getlist("students")) 
+
 
             return redirect ("list_parcours_group", idg )     
         else:
@@ -7651,6 +7659,8 @@ def update_folder(request,id,idg):
                 lp.append(p)
 
             if form.is_valid():
+                for s in parcours.students.exclude(user__username__contains= "_e-test") :
+                    parcours.students.remove(s)
                 nf = form.save(commit=False)
                 nf.author = teacher
                 nf.teacher = group.teacher
@@ -7670,12 +7680,8 @@ def update_folder(request,id,idg):
                 form.save_m2m()  
                 set_leaf_parcours(nf,lp)
                 ##################################################
-                ## Suppression des élèves 
-                if group_exists :
-                    for stu in group.students.exclude(user__username__contains="_e-test") :
-                        nf.students.remove(stu)
                 ## Insertion des nouveaux élèves
-                set_students(nf, request.POST.getlist("these_students") )
+                test_fct = set_students(nf, request.POST.getlist("students"))
                 ##################################################
                 if group_exists :
                     return redirect ("list_parcours_group", group_id ) 

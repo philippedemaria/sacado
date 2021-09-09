@@ -592,7 +592,8 @@ class Parcours(ModelWithCode):
         data["students"] = intersection
         return data 
  
-
+    def just_students(self):
+        return self.students.exclude(user__username__contains="_e-test").order_by("user__last_name")
 
 
     def is_task_exists(self):
