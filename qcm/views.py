@@ -1691,8 +1691,8 @@ def update_parcours(request, id, idg=0 ):
             for group_ckeched_id in group_ckeched_ids :
                 group_ckeched = Group.objects.get(pk = group_ckeched_id)
                 parcourses = group_ckeched.group_parcours.all()
+                nf.students.set(group_ckeched.students.all() )
                 for s in group_ckeched.students.all() :
-                    nf.students.add(s)
                     attribute_all_documents_to_student(parcourses,s)
                     
 
