@@ -53,6 +53,7 @@ from reportlab.lib.utils import ImageReader
 from reportlab.lib.enums import TA_JUSTIFY,TA_LEFT,TA_CENTER,TA_RIGHT
 from html import escape
 from operator import attrgetter
+from itertools import chain
 cm = 2.54
 import os
 import re
@@ -1080,14 +1081,15 @@ def list_parcours_group(request,id):
  
     students = group.students.all()
 
-    parcours_tab = set()
-    parcours_tab.update(group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject=group.subject, is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation","ranking"))
+    parcours_tab = set(group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject=group.subject, is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation"))
+ 
     for student in students :
         if access :
-            parcours_tab.update(student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject=group.subject, is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation","ranking"))
+            parcours_tab.update(student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject=group.subject, is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation"))
         else :
-            parcours_tab.update(student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), subject=group.subject, is_favorite=1 ).exclude(is_leaf=1).order_by("is_evaluation","ranking") )
+            parcours_tab.update(student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), subject=group.subject, is_favorite=1 ).exclude(is_leaf=1).order_by("is_evaluation") )
 
+    parcours_tab = sorted(parcours_tab, key=attrgetter('is_evaluation')) #set trié par ranking
  
     ###efface le realtime de plus de 2 h
     clear_realtime(parcours_tab , today.now() ,  3600 )
@@ -1702,33 +1704,33 @@ def update_parcours(request, id, idg=0 ):
 
             nf.save()
             form.save_m2m()
-
-            nf.groups.clear()
-            group_ckeched_ids = request.POST.getlist('groups')
-            nf.groups.set(group_ckeched_ids)
             
-            these_students =  request.POST.getlist("students")
-            set_students(nf,these_students) 
+            affectation = request.POST.get("affectation",None)
+            if affectation :
+                nf.groups.clear()
+                group_ckeched_ids = request.POST.getlist('groups')
+                nf.groups.set(group_ckeched_ids)
+                
+                these_students =  request.POST.getlist("students")
+                set_students(nf,these_students) 
 
 
-            for s in these_students :
-                t = attribute_all_documents_to_student([nf],s)
-                print(t)
-                    
-
-            folder_parcours =  request.POST.getlist("folder_parcours")
-            set_leaf_parcours(nf,folder_parcours)  
+                for s in these_students :
+                    t = attribute_all_documents_to_student([nf],s)
  
- 
-            try:
-                for exercise in parcours.exercises.all():
-                    relationship = Relationship.objects.get(parcours=nf, exercise=exercise)
-                    if len( form.cleaned_data.get('students') ) > 0  : 
-                        relationship.students.set(form.cleaned_data.get('students'))
-                    if len(sg_students) > 0  : 
-                        relationship.students.set(sg_students)
-            except:
-                pass
+                folder_parcours =  request.POST.getlist("folder_parcours")
+                set_leaf_parcours(nf,folder_parcours)  
+     
+     
+                try:
+                    for exercise in parcours.exercises.all():
+                        relationship = Relationship.objects.get(parcours=nf, exercise=exercise)
+                        if len( form.cleaned_data.get('students') ) > 0  : 
+                            relationship.students.set(form.cleaned_data.get('students'))
+                        if len(sg_students) > 0  : 
+                            relationship.students.set(sg_students)
+                except:
+                    pass
             
             lock_all_exercises_for_student(nf.stop,parcours)
 
@@ -4520,12 +4522,14 @@ def update_evaluation(request, id, idg=0 ):
                 nf.vignette = request.POST.get("this_image_selected",None)
 
             nf.save()
+            affectation = request.POST.get("affectation",None)
 
-            these_students =  request.POST.getlist("students")
-            set_students(nf,these_students) 
+            if affectation :
+                these_students =  request.POST.getlist("students")
+                set_students(nf,these_students) 
 
-            for s in these_students :
-                attribute_all_documents_to_student([nf],s)
+                for s in these_students :
+                    attribute_all_documents_to_student([nf],s)
  
             lock_all_exercises_for_student(nf.stop,parcours)
 
@@ -7646,19 +7650,22 @@ def update_folder(request,id,idg):
                 if group_exists : 
                     nf.level = group.level
                     nf.subject = group.subject
-     
-                nf.groups.clear()
-                nf.groups.set(id_groups_checked)
+
 
 
                 if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
                     nf.vignette = request.POST.get("this_image_selected",None)
                 nf.save()
-                form.save_m2m()  
+                form.save_m2m() 
                 set_leaf_parcours(nf,lp)
                 ##################################################
                 ## Insertion des nouveaux élèves
-                test_fct = set_students(nf, request.POST.getlist("students"))
+                affectation = request.POST.get("affectation",None)
+                if affectation :     
+                    nf.groups.clear()
+                    nf.groups.set(id_groups_checked)
+
+                    test_fct = set_students(nf, request.POST.getlist("students"))
                 ##################################################
                 if group_exists :
                     return redirect ("list_parcours_group", group_id ) 

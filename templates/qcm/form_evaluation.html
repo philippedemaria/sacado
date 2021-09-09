@@ -138,20 +138,9 @@
 
 
 
- 
-{% block save_evaluation %}
-<div class="row" style="margin-top:40px">
-    <div class="col-sm-12 col-md-7">
-        <div class="form-group">
-            <input value="Enregistrer cette évaluation" type="submit" class="btn btn-primary"/>
 
-            <input value="Enregistrer cette évaluation et choisir les exercices" type="submit" name="save_and_choose" class="btn btn-primary"/>
-
-            <a href="javascript:history.back()"><input type="button" value="Annuler"
-                                                       class="btn btn-default "/></a>
-        </div>
-    </div> 
-    <div class="col-sm-12 col-md-5">
+{% block save_evaluation %}    
+    <div class="col-sm-12 col-md-4">
             {% if parcours %}
                 <a href="{% url 'clone_parcours' parcours.id  1 %}" class="btn btn-info"  onclick="return TestDuplicate('cette évaluation')"> 
                     <i class="fa fa-clone"> </i>   Dupliquer
@@ -167,5 +156,5 @@
             </a>
             {% endif %}  
     </div>
-</div>  
+ 
 {% endblock %}

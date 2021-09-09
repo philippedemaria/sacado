@@ -374,20 +374,25 @@
     </div>
 
 
-    {% block save_evaluation %}
+    
     <div class="row" style="margin-top:40px">
-        <div class="col-sm-12 col-md-7">
+        <div class="col-sm-12 col-md-8">
             <div class="form-group">
-                <input value="Enregistrer ce parcours" type="submit" class="btn btn-primary" onclick="return check_if_checked()" />
+                {% if parcours  %}
+                    <input value="Modifier sans affecter d'élève (rapide)" type="submit" name="saver" class="btn btn-primary" onclick="return check_if_checked()" />
+                    <input value="Modifier et choisir les exercices" type="submit" name="save_and_choose" class="btn btn-primary" onclick="return check_if_checked();"/>
+                    <input value="Modifier et réaffecter des élèves" type="submit" name="affectation" class="btn btn-darkgreen" onclick="return check_if_checked()" />   
+                {% else  %}
+                    <input value="Enregistrer" type="submit" name="saver" class="btn btn-primary" onclick="return check_if_checked()" />
+                    <input value="Enregistrer et choisir les exercices" type="submit" name="save_and_choose" class="btn btn-primary" onclick="return check_if_checked();"/>
+                {% endif %}
 
-                <input value="Enregistrer ce parcours et choisir les exercices" type="submit" name="save_and_choose" class="btn btn-primary" onclick="return check_if_checked();"/>
                 <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
- 
- 
             </div>
         </div> 
 
-        <div class="col-sm-12 col-md-5">
+        {% block save_evaluation %}
+        <div class="col-sm-12 col-md-4">
         {% if parcours %}
                 
                 <a href="{% url 'clone_parcours' parcours.id  1 %}" class="btn btn-info"  onclick="return TestDuplicate('ce parcours')"> 
@@ -409,8 +414,9 @@
     
         {% endif %}  
         </div>
+        {% endblock %}
     </div>  
-    {% endblock %}
+
     </form>      
 </section>   
 
