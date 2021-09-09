@@ -1468,30 +1468,46 @@ def ajax_chargethemes_exercise(request):
  
  
 
+def lock_all_exercises_for_this_student(parcours,student):
+
+    dateur = parcours.stop
+    for exercise in  parcours.exercises.all() :
+        relationship = Relationship.objects.get(parcours=parcours, exercise = exercise) 
+        if dateur :
+            result, created = Exerciselocker.objects.get_or_create(student = student , relationship = relationship, custom = 0, defaults={"lock" : dateur})
+            if not created :
+                Exerciselocker.objects.filter(student = student , relationship = relationship, custom = 0).update(lock = dateur)
+        else :
+            if Exerciselocker.objects.filter(student = student , relationship = relationship, custom = 0).exists():
+                res = Exerciselocker.objects.get(student = student , relationship = relationship, custom = 0)
+                res.delete() 
+
+    for ce in Customexercise.objects.filter(parcourses = parcours) :
+        if dateur :    
+            result, created = Exerciselocker.objects.get_or_create(student = student , customexercise = ce, custom = 1, defaults={"lock" : dateur})
+            if not created :
+                Exerciselocker.objects.filter(student = student , customexercise = ce, custom = 1).update(lock = dateur)
+        else :
+            if Exerciselocker.objects.filter(student = student , customexercise = ce, custom = 1).exists():
+                res = Exerciselocker.objects.get(student = student ,  customexercise = ce, custom = 1)
+                res.delete() 
+
+
+
 
 def lock_all_exercises_for_student(dateur,parcours):
 
     for student in parcours.students.all() :
-        for exercise in  parcours.exercises.all() :
-            relationship = Relationship.objects.get(parcours=parcours, exercise = exercise) 
-            if dateur :
-                result, created = Exerciselocker.objects.get_or_create(student = student , relationship = relationship, custom = 0, defaults={"lock" : dateur})
-                if not created :
-                    Exerciselocker.objects.filter(student = student , relationship = relationship, custom = 0).update(lock = dateur)
-            else :
-                if Exerciselocker.objects.filter(student = student , relationship = relationship, custom = 0).exists():
-                    res = Exerciselocker.objects.get(student = student , relationship = relationship, custom = 0)
-                    res.delete() 
+        lock_all_exercises_for_this_student(parcours,student)
 
-        for ce in Customexercise.objects.filter(parcourses = parcours) :
-            if dateur :    
-                result, created = Exerciselocker.objects.get_or_create(student = student , customexercise = ce, custom = 1, defaults={"lock" : dateur})
-                if not created :
-                    Exerciselocker.objects.filter(student = student , customexercise = ce, custom = 1).update(lock = dateur)
-            else :
-                if Exerciselocker.objects.filter(student = student , customexercise = ce, custom = 1).exists():
-                    res = Exerciselocker.objects.get(student = student ,  customexercise = ce, custom = 1)
-                    res.delete() 
+
+
+
+ 
+
+
+
+
 
 # def assign_all_documents(nf , group_ckeched_ids):
 #     """" fontion à mettre dans create et update ne fonctionnepas pour l'instant....todo ......"""
@@ -1970,6 +1986,10 @@ def ordering_number_for_student(parcours,student):
 def show_parcours_student(request, id):
 
     parcours = Parcours.objects.get(id=id)
+
+    if parcours.stop :
+        lock_all_exercises_for_this_student(parcours,request.user.student)
+
     user = request.user
     student = user.student
     today = time_zone_user(user)
@@ -4440,7 +4460,6 @@ def create_evaluation(request):
 
         for s in these_students :
             attribute_all_documents_to_student([nf],s)
- 
 
         for pid in request.POST.getlist("folder_parcours") :
             parcours_folder = Parcours.objects.get(pk = pid)
