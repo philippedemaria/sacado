@@ -178,6 +178,25 @@ def get_seconde_to_math_comp(request):
 
     return redirect('admin_tdb' )
 
+
+
+def set_students(nf,stus) :
+    try:
+        nf.students.set(stus)
+    except :
+        pass
+
+def set_groups(nf,gps) :
+    try:
+        nf.groups.set(gps)
+    except :
+        pass
+
+def set_leaf_parcours(nf,folder_parcours) :
+    try:
+        nf.leaf_parcours.set(folder_parcours)
+    except :
+        pass           
 ##################################################################################################################################
 ##################################################################################################################################
 ##################################################################################################################################
@@ -1531,14 +1550,14 @@ def create_parcours(request,idp=0):
         ################################################
         ### Si le parcours est créé à partir d'un groupe
         try :
-            nf.groups.add(group)
+            set_groups(nf,group)
         except :
             pass
         ################################################
         form.save_m2m()
 
         group_ckeched_ids = request.POST.getlist('groups')
-        nf.groups.set(group_ckeched_ids)
+        set_groups(nf,group_ckeched_ids)
 
         for group_ckeched_id in group_ckeched_ids :
             group_ckeched = Group.objects.get(pk = group_ckeched_id)
@@ -1554,10 +1573,10 @@ def create_parcours(request,idp=0):
             parcours_folder.leaf_parcours.add(nf)
         else :
             folder_parcours =  request.POST.getlist("folder_parcours")
-            parcours_folder.leaf_parcours.set(folder_parcours)       
+            set_leaf_parcours(nf,folder_parcours)       
         ################################################
         students_sg =  request.POST.getlist("students_sg")
-        nf.students.set(students_sg)  
+        set_students(nf,students_sg)  
 
         if nf.stop  :
             locker = 1
@@ -1678,11 +1697,10 @@ def update_parcours(request, id, idg=0 ):
                     
 
             folder_parcours =  request.POST.getlist("folder_parcours")
-            parcours_folder.leaf_parcours.set(folder_parcours)  
+            set_leaf_parcours(nf,folder_parcours)  
 
- 
             sg_students =  request.POST.getlist('students_sg')
-            nf.students.add(sg_students)
+            set_students(nf,sg_students)
 
  
             try:
@@ -7578,10 +7596,9 @@ def create_folder(request,idg):
                 nf.vignette = request.POST.get("this_image_selected",None)
             nf.save() 
             nf.groups.add(group) 
-            nf.leaf_parcours.set(lp) 
+            nf.leaf_parcours.set(lp)
 
-            these_students =  request.POST.getlist("these_students")
-            nf.students.set(these_students)
+            set_students(nf,request.POST.getlist("these_students")) 
 
             return redirect ("list_parcours_group", idg )     
         else:
@@ -7651,15 +7668,14 @@ def update_folder(request,id,idg):
                     nf.vignette = request.POST.get("this_image_selected",None)
                 nf.save()
                 form.save_m2m()  
-                nf.leaf_parcours.set(lp)
+                set_leaf_parcours(nf,lp)
                 ##################################################
                 ## Suppression des élèves 
                 if group_exists :
                     for stu in group.students.exclude(user__username__contains="_e-test") :
                         nf.students.remove(stu)
                 ## Insertion des nouveaux élèves
-                these_students =  request.POST.getlist("these_students")
-                nf.students.set(these_students)
+                set_students(nf, request.POST.getlist("these_students") )
                 ##################################################
                 if group_exists :
                     return redirect ("list_parcours_group", group_id ) 
