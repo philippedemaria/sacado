@@ -1568,7 +1568,7 @@ def create_parcours(request,idp=0):
 
 
         for s in these_students :
-            attribute_all_documents_to_student(nf,s)
+            attribute_all_documents_to_student([nf],s)
 
 
 
@@ -1703,7 +1703,8 @@ def update_parcours(request, id, idg=0 ):
 
 
             for s in these_students :
-                attribute_all_documents_to_student(nf,s)
+                t = attribute_all_documents_to_student([nf],s)
+                print(t)
                     
 
             folder_parcours =  request.POST.getlist("folder_parcours")
