@@ -7562,7 +7562,7 @@ def create_folder(request,idg):
 
     parcourses = set()
     for student in group.students.all() :
-        parcourses.update(student.students_to_parcours.filter(teacher = teacher,is_archive=0).exclude(is_folder=1))
+        parcourses.update( student.students_to_parcours.filter(teacher = teacher,is_archive=0).exclude(is_folder=1) )
 
     if request.method == "POST" :
         lp = []            
@@ -7598,21 +7598,33 @@ def create_folder(request,idg):
  
 
 
-
+import time
 def update_folder(request,id,idg):
     """ 'parcours_is_folder' : True pour les vignettes et différencier si folder ou pas """
-    teacher      = request.user.teacher
-    groups       = teacher.groups.all() 
-    share_groups = teacher.teacher_group.all() 
-    parcours     = Parcours.objects.get(id=id)
-    form         = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher)
+    teacher           = request.user.teacher
+    groups            = teacher.groups.all() 
+    share_groups      = teacher.teacher_group.all() 
+    parcours          = Parcours.objects.get(id=id)
+    form              = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher)
+    id_groups_checked = request.POST.getlist('groups')
 
     try :
-        group = Group.objects.get(pk = idg)   
+        if idg > 0 :
+            group = Group.objects.get(pk = idg)
+        elif len(id_groups_checked) > 0 :
+            group = Group.objects.get(pk = id_groups_checked[0])
         group_id = group.id
-        parcourses = set(Parcours.objects.filter(teacher = teacher,is_archive=0, subject = parcours.subject, level = parcours.level ).exclude(is_folder=1))
-        for student in group.students.all() :
-            parcourses.update(student.students_to_parcours.filter(teacher = teacher,is_archive=0).exclude(is_folder=1))
+        parcourses = teacher.teacher_parcours.filter(is_archive=0, subject = parcours.subject, level = parcours.level  ).exclude(is_folder=1).order_by("title")
+        # parcourses = []
+        # p_titles = []
+        # parcrses = teacher.teacher_parcours.filter(is_archive=0, subject = parcours.subject, level = parcours.level  ).exclude(is_folder=1).order_by("title")
+        # for p in parcrses :
+        #     if not p.title in p_titles :
+        #         p_titles.append(p.title)
+        #         parcourses.append(p)
+
+        # for student in group.students.all() :
+        #     parcourses.update(student.students_to_parcours.filter(teacher = teacher,is_archive=0, subject = parcours.subject, level = parcours.level ).exclude(is_folder=1))
 
         group_exists = True
         images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id = group.subject).exclude(vignette=" ").distinct()
@@ -7652,7 +7664,7 @@ def update_folder(request,id,idg):
                     nf.students.add(s)
                 ##################################################
                 if group_exists :
-                    return redirect ("list_parcours_group", idg ) 
+                    return redirect ("list_parcours_group", group_id ) 
                 else :
                     return redirect ("index" ) 
             else:
@@ -7662,11 +7674,9 @@ def update_folder(request,id,idg):
         group = None
         group_id = None
         group_exists = False
-        parcourses = teacher.teacher_parcours.all()
+        parcourses = teacher.teacher_parcours.filter(is_archive=0, subject = parcours.subject, level = parcours.level  ).exclude(is_folder=1).order_by("title")
         images = [] 
-        parcourses = teacher.teacher_parcours.all()
-        images = []    
-
+ 
     context = {'form': form, 'parcours_is_folder' : True,   'teacher': teacher,  'group': group, 'groups': groups, 'share_groups': share_groups, 'group_id': group_id,  'parcours': parcours, 'parcourses' : parcourses , 'images' : images ,   'relationships': [], 'role' : True }
 
     return render(request, 'qcm/form_folder.html', context)
