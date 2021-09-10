@@ -1081,7 +1081,7 @@ def list_parcours_group(request,id):
  
     students = group.students.all()
 
-    parcours_tab = set(group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject__in=teacher.subjects.all(), is_favorite=1, leaf_parcours=None).order_by("is_evaluation"))
+    parcours_tab = set(group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher)).filter(Q(leaf_parcours=None)|Q(is_folder = 1) , subject__in=teacher.subjects.all(), is_favorite=1).order_by("is_evaluation"))
 
     for student in students :
         if access :
