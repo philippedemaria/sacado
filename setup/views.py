@@ -225,7 +225,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     #for key, value in request.items():
     #    gars.append((key,value))
 
-    test = "coucou"
+    test = request 
     
     # dico_received = request.META['X-GAR']
     # last_name  = dico_received["last_name"]
@@ -246,10 +246,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     # username   = dico_received["username"]
     # password   = make_password("sacado_gar") # quel est le format du mot de passe ?
 
-
-
     # if Abonnement.objects.filter( school = school ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
-
 
     #     user, created = User.objects.get_or_create(username = username, school = school , user_type = user_type , defaults = { "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : date_end_dateformat })
     #     if user_type == 1 and created :
@@ -260,7 +257,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
     #         subjects    = dico_received["subjects"] 
     #         teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 1 , "exercise_post" : 1 , "subjects" : subjects , "levels" : levels  })        
  
-
     #     user = authenticate(username=username, password=password)
     #     login(request, user)
     #     request.session["user_id"] = request.user.id
