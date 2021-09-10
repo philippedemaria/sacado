@@ -221,48 +221,50 @@ def logout_view(request):
 
 def ressource_sacado(request): #Protection saml pour le GAR
     
-    dico_received = request.headers # dictionnaire récupéré par le GAR
-    last_name  = dico_received["last_name"]
-    first_name = dico_received["first_name"]
-    user_type  = dico_received["user_type"]
+    # dico_received = request.META['x-gar']
+    # last_name  = dico_received["last_name"]
+    # first_name = dico_received["first_name"]
+    # user_type  = dico_received["profil"]
     
-    email      = dico_received["email"]
-    closure    = dico_received["closure"]
-    time_zone  = dico_received["time_zone"]
-    is_extra   = 0
-    is_manager = 0 
-    school     = dico_received["school"]
-    cgu        = 1
-    is_testeur = 0
-    country    = school.country
-    is_board   = 0
+    # email      = dico_received["email"]
+    # closure    = dico_received["closure"]
+    # time_zone  = dico_received["time_zone"]
+    # is_extra   = 0
+    # is_manager = 0 
+    # school     = dico_received["school"]
+    # cgu        = 1
+    # is_testeur = 0
+    # country    = school.country
+    # is_board   = 0
 
-    username   = dico_received["username"]
-    password   = make_password(dico_received["password"]) # quel est le format du mot de passe ?
+    # username   = dico_received["username"]
+    # password   = make_password("sacado_gar") # quel est le format du mot de passe ?
 
+
+
+    # if Abonnement.objects.filter( school = school ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
+
+
+    #     user, created = User.objects.get_or_create(username = username, school = school , user_type = user_type , defaults = { "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : date_end_dateformat })
+    #     if user_type == 1 and created :
+    #         level      = dico_received["level"]
+    #         student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 1 , "level" : level })
+    #     elif user_type == 2 and created :
+    #         levels      = dico_received["levels"]
+    #         subjects    = dico_received["subjects"] 
+    #         teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 1 , "exercise_post" : 1 , "subjects" : subjects , "levels" : levels  })        
  
 
-    if Abonnement.objects.filter( school = school ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
+    #     user = authenticate(username=username, password=password)
+    #     login(request, user)
+    #     request.session["user_id"] = request.user.id
 
-
-        user, created = User.objects.get_or_create(username = username, school = school , user_type = user_type , defaults = { "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : date_end_dateformat })
-        if user_type == 1 and created :
-            level      = dico_received["level"]
-            student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 1 , "level" : level })
-        elif user_type == 2 and created :
-            levels      = dico_received["levels"]
-            subjects    = dico_received["subjects"] 
-            teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 1 , "exercise_post" : 1 , "subjects" : subjects , "levels" : levels  })        
- 
-
-        user = authenticate(username=username, password=password)
-        login(request, user)
-        request.session["user_id"] = request.user.id
-
-        return redirect('dashboard')
-    else :
-        messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
-        return redirect('index')   
+    #     return redirect('dashboard')
+    # else :
+    #     messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
+    #return redirect('index')
+    context = { }
+    return render(request, 'index', context)   
 
 
 
