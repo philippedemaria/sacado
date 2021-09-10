@@ -221,9 +221,11 @@ def logout_view(request):
 
 def ressource_sacado(request): #Protection saml pour le GAR
 
-    gars= []
-    for key, value in request.items():
-        gars.append((key,value))
+    gars = []
+    #for key, value in request.items():
+    #    gars.append((key,value))
+
+    test = "coucou"
     
     # dico_received = request.META['X-GAR']
     # last_name  = dico_received["last_name"]
@@ -267,7 +269,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     # else :
     #     messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
     
-    context = { 'gars' : gars }
+    context = { 'gars' : gars , 'test' : test }
     return render(request, 'setup/gar_test.html', context)
 
 
