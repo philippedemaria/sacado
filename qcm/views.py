@@ -1081,13 +1081,13 @@ def list_parcours_group(request,id):
  
     students = group.students.all()
 
-    parcours_tab = set(group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),  subject__in=teacher.subjects.all(), is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation"))
+    parcours_tab = set(group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject__in=teacher.subjects.all(), is_favorite=1, leaf_parcours=None).order_by("is_evaluation"))
 
     for student in students :
         if access :
-            parcours_tab.update(student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject=group.subject, is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation"))
+            parcours_tab.update(student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject=group.subject, is_favorite=1, leaf_parcours=None).order_by("is_evaluation"))
         else :
-            parcours_tab.update(student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), subject=group.subject, is_favorite=1 ).exclude(is_leaf=1).order_by("is_evaluation") )
+            parcours_tab.update(student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), subject=group.subject, is_favorite=1 , leaf_parcours=None).order_by("is_evaluation") )
 
     parcours_tab = sorted(parcours_tab, key=attrgetter('is_evaluation')) #set trié par ranking
  
