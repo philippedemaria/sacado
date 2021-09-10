@@ -1081,19 +1081,7 @@ def list_parcours_group(request,id):
  
     students = group.students.all()
 
-
-    print(group.subject.id)
-
-    parcours_tabd = set(group.group_parcours.values_list("id",flat=True).filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject__in=teacher.subjects.all() ))
-    print(parcours_tabd)
-
-
     parcours_tab = set(group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),  subject__in=teacher.subjects.all(), is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation"))
-    print(parcours_tab)
-
-
-
-
 
     for student in students :
         if access :
@@ -1725,10 +1713,11 @@ def update_parcours(request, id, idg=0 ):
                 
                 these_students =  request.POST.getlist("students")
                 set_students(nf,these_students) 
-
-
                 for s in these_students :
                     t = attribute_all_documents_to_student([nf],s)
+
+                
+
  
                 folder_parcours =  request.POST.getlist("folder_parcours")
                 set_leaf_parcours(nf,folder_parcours)  
