@@ -398,7 +398,7 @@ class Parcours(ModelWithCode):
     folder_parcours = models.ManyToManyField('self',  blank=True,  related_name="subparcours_parcours",  verbose_name="Nom de parcours")  
     
     is_folder = models.BooleanField(default=0, verbose_name="Dossier")
-    leaf_parcours = models.ManyToManyField('self',  blank=True,  related_name="subparcours_parcours",  verbose_name="Nom du dossier")# from_parcours_id est le dossier et from_parcours_id est le parcours  
+    leaf_parcours = models.ManyToManyField('self',  blank=True,  related_name="subparcours_parcours",  verbose_name="Nom du dossier")# from_parcours_id est le dossier et to_parcours_id est les parcours  
 
 
     def __str__(self):

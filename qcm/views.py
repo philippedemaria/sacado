@@ -1596,8 +1596,6 @@ def create_parcours(request,idp=0):
             folder_parcours =  request.POST.getlist("folder_parcours")
             set_leaf_parcours(nf,folder_parcours)       
 
-
-
         if nf.stop  :
             locker = 1
         else :
@@ -1716,13 +1714,6 @@ def update_parcours(request, id, idg=0 ):
                 for s in these_students :
                     t = attribute_all_documents_to_student([nf],s)
 
-
-
- 
-                folder_parcours =  request.POST.getlist("folder_parcours")
-                set_leaf_parcours(nf,folder_parcours)  
-     
-     
                 try:
                     for exercise in parcours.exercises.all():
                         relationship = Relationship.objects.get(parcours=nf, exercise=exercise)
@@ -1732,6 +1723,9 @@ def update_parcours(request, id, idg=0 ):
                             relationship.students.set(sg_students)
                 except:
                     pass
+
+            #folder_parcours =  request.POST.getlist("folder_parcours")
+            #set_leaf_parcours(nf,folder_parcours)       
             
             lock_all_exercises_for_student(nf.stop,parcours)
 
@@ -7657,15 +7651,12 @@ def update_folder(request,id,idg):
                 for s in parcours.students.exclude(user__username__contains= "_e-test") :
                     parcours.students.remove(s)
                 nf = form.save(commit=False)
-                nf.author = teacher
                 nf.teacher = group.teacher
                 nf.is_evaluation = 0
                 nf.is_folder = 1
                 if group_exists : 
                     nf.level = group.level
                     nf.subject = group.subject
-
-
 
                 if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
                     nf.vignette = request.POST.get("this_image_selected",None)
