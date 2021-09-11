@@ -600,11 +600,25 @@
             <h4 class='thin' style="color:{{ parcours.color }}">Les quizz</h4>
 
                 {% for q in quizzes %}
-                    <li class="menu_course" style="padding:5px">
+                    <li class="menu_course" style="padding:5px; margin-bottom:2px">
                       
                         {% if sacado_asso %} 
 
-                            {% include 'tool/quizz_card.html' %}
+                            <div class="card" style="float:none">
+                                <a href="{% url 'show_quizz' q.id  %}" target="_blank" style="font-weight: normal;">
+                                <div style="position: absolute; padding: 10px;width:100%; height:75px; background-color: #FFF; opacity:0.85">
+                                    {{ q }}  
+                                </div> 
+                                <div style="position: absolute; padding-left: 10px; width:100%; top:55px; background-color: #FFF; opacity:0.85">
+                                    <small>{{ q.questions.count }} diapos</small>  
+                                </div> 
+                                {% if q.vignette %}
+                                    <img src="{{ q.vignette.url }}" width="170px" height="100px"  />
+                                {% else %}
+                                    <img src="{% static 'img/quizz_slide.png' %}" width="170px"   />
+                                {% endif %}
+                                </a>
+                            </div>
 
                         {% else %}
                             <div class="alert alert-danger">
