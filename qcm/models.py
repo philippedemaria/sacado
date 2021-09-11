@@ -829,11 +829,16 @@ class Parcours(ModelWithCode):
         return submit
 
     def p_is_leaf(self,parcours):
-        test = False
+        data = {}
+        data["check"] , data["is_used"] = False , False
         if parcours :
             if self in parcours.leaf_parcours.all() : 
-                test = True
-        return test
+                data["check"]   = True
+            elif self.is_leaf :
+                data["folder"] = Parcours.objects.filter( folder_parcours = self).values_list("title",flat=True) 
+                data["is_used"] = True
+        print(data)
+        return data
 
 
     def is_real_time(self):

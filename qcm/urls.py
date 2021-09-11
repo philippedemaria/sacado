@@ -63,6 +63,9 @@ urlpatterns = [
     path('parcours_group/<int:id>/', list_parcours_group, name='list_parcours_group'), # parcours d'un groupe
     path('parcours_sub_parcours/<int:idg>/<int:id>/', list_sub_parcours_group, name='list_sub_parcours_group'), # parcours d'un parcours
 
+    path('ajax_subparcours_check', ajax_subparcours_check, name='ajax_subparcours_check'), # parcours d'un parcours
+
+
     path('parcours_peuplate/<int:id>/', peuplate_parcours, name='peuplate_parcours'),
     path('parcours_individualise/<int:id>/', individualise_parcours, name='individualise_parcours'),#modif idp en id pour la sécurité
     path('ajax_populate', ajax_populate, name='ajax_populate'),

@@ -1081,13 +1081,13 @@ def list_parcours_group(request,id):
  
     students = group.students.all()
 
-    parcours_tab = set(group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher)).filter(Q(leaf_parcours=None)|Q(is_folder = 1) , subject__in=teacher.subjects.all(), is_favorite=1).order_by("is_evaluation"))
+    parcours_tab = set(group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher)  , level=group.level  , subject=group.subject , subject__in=teacher.subjects.all(), is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation"))
 
     for student in students :
         if access :
-            parcours_tab.update(student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject=group.subject, is_favorite=1, leaf_parcours=None).order_by("is_evaluation"))
+            parcours_tab.update(student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), level=group.level  , subject=group.subject, is_favorite=1, leaf_parcours=None).order_by("is_evaluation"))
         else :
-            parcours_tab.update(student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), subject=group.subject, is_favorite=1 , leaf_parcours=None).order_by("is_evaluation") )
+            parcours_tab.update(student.students_to_parcours.filter(Q(teacher=teacher)|Q(author=teacher), subject=group.subject, level=group.level  , is_favorite=1 , leaf_parcours=None).order_by("is_evaluation") )
 
     parcours_tab = sorted(parcours_tab, key=attrgetter('is_evaluation')) #set trié par ranking
  
@@ -1108,7 +1108,6 @@ def list_sub_parcours_group(request,idg,id):
     role, group , group_id , access = get_complement(request, teacher, parcours)
     request.session["parcours_id"] = parcours.id
     request.session["group_id"] = group_id
-
     request.session["parcours_folder_id"] = parcours.id
 
     if not authorizing_access(teacher,parcours, True ):
@@ -7623,17 +7622,7 @@ def update_folder(request,id,idg):
         elif len(id_groups_checked) > 0 :
             group = Group.objects.get(pk = id_groups_checked[0])
         group_id = group.id
-        parcourses = teacher.teacher_parcours.filter(Q(leaf_parcours = parcours)|Q(leaf_parcours = None), teacher = teacher , is_archive=0 ,  subject = parcours.subject , level = parcours.level ).exclude(is_folder=1)
-        # parcourses = []
-        # p_titles = []
-        # parcrses = teacher.teacher_parcours.filter(is_archive=0, subject = parcours.subject, level = parcours.level  ).exclude(is_folder=1).order_by("title")
-        # for p in parcrses :
-        #     if not p.title in p_titles :
-        #         p_titles.append(p.title)
-        #         parcourses.append(p)
-
-        # for student in group.students.all() :
-        #     parcourses.update(student.students_to_parcours.filter(teacher = teacher,is_archive=0, subject = parcours.subject, level = parcours.level ).exclude(is_folder=1))
+        parcourses = teacher.teacher_parcours.filter(  is_archive=0 ,  subject = parcours.subject , level = parcours.level ).exclude(is_folder=1)
 
         group_exists = True
         images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id = group.subject).exclude(vignette=" ").distinct()
@@ -7661,7 +7650,6 @@ def update_folder(request,id,idg):
                 if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
                     nf.vignette = request.POST.get("this_image_selected",None)
                 nf.save()
-                nf.leaf_parcours.clear()
                 form.save_m2m() 
                 set_leaf_parcours(nf,lp)
                 ##################################################
@@ -7793,8 +7781,14 @@ def delete_folder_and_contents(request,id,idg):
 
 
 
-
-
+def ajax_subparcours_check(request):
+    parcours_id =  request.POST.get("parcours_id",None) 
+    if parcours_id :
+        Parcours.objects.filter( pk = int(parcours_id)).update(is_leaf=0)
+ 
+    data = {}
+         
+    return JsonResponse(data)
 
 
 

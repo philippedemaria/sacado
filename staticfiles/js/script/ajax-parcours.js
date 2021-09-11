@@ -849,13 +849,6 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
-
-
-
-
-
-
-
         // ====================================================================================================================
         // ====================================================================================================================
         // ============================================       Mes accordions       ============================================ 
@@ -1066,8 +1059,23 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
-
-
+        // Affiche connaissant l'exercice  et le cours
+        $('.subparcours_selector').on('change', function (event) {
+            let parcours_id = $(this).val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        csrfmiddlewaretoken: csrf_token,
+                        'parcours_id': parcours_id,
+                    },
+                    url: "../../../ajax_subparcours_check",
+ 
+                }
+            )
+        });
 
 
 

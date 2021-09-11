@@ -340,18 +340,19 @@
                     </tr> 
                     {% endblock %}
 
-                    <!-- affiche la possibilité de mettre le parcours dans un dossier si le parcours est créé hors du dossier -->
-                    {% if idp == 0 or parcours %}
- 
-                     <tr id="folder_parcours"  style="background-color: #fff7f7; color:#f27979">
-                        <td><label>Récupération après erreur <span class="helper_tip"> <i class="fa fa-question-circle text-danger"></i>
-                                <div class="helper_tip_text" >Après une erreur de manipulation, un parcours peut être mal positionné. Utiliser cette fonctionnalité pour transformer ce parcours en dossier.</div>
-                                 </label></td>
-                        <td>{{ form.is_folder|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
-                        <td>{{ form.is_folder.errors }}</td>
-                    </tr>
-                    {% endif %}
 
+                        
+                    {% comment %}
+                        <!-- affiche la possibilité de mettre le parcours dans un dossier si le parcours est créé hors du dossier -->
+                        {% if idp == 0 or parcours %}
+     
+                         <tr id="folder_parcours"  style="background-color: #fff7f7; color:#f27979">
+                            <td><label>Dossier <span class="helper_tip"> <i class="fa fa-question-circle text-danger"></i> </td>
+                            <td>{{ form.is_folder|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                            <td>{{ form.is_folder.errors }}</td>
+                        </tr>
+                        {% endif %}
+                    {% endcomment %}
 
 
             </table>
