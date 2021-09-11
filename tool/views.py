@@ -1430,8 +1430,19 @@ def play_printing_teacher(request, id):
     response['Content-Disposition'] = 'attachment; filename="fiche_reponse_'+str(quizz.id)+'.pdf"'
     p = canvas.Canvas(response)
 
+    img_file = 'https://sacado.xyz/static/img/sacado-icon-couleur.jpg'
+    x_start , y_start = 20 , 760
+    p.drawImage(img_file, x_start, y_start, width=50, preserveAspectRatio=True )
+    x_starting , y_starting = 540 , 760
+    p.drawImage(img_file, x_starting, y_starting, width=50, preserveAspectRatio=True )
+
+    p.setFont("Helvetica", 8)
+    p.drawString(24, 750, "SACADO"  )
+    p.setFont("Helvetica", 8)
+    p.drawString(544, 750, "SACADO"  )
+
     p.setFont("Helvetica", 16)
-    p.drawString(75, 800, quizz.title +"                                    "+quizz.title )    
+    p.drawString(75, 800, quizz.title +"                               "+quizz.title )    
 
     p.setFont("Helvetica", 12)
     p.drawString(75, 770, "Classe  : ________________________           Classe  : _______________________ " )  
@@ -1443,14 +1454,29 @@ def play_printing_teacher(request, id):
         p.drawString(75, 740-30*i, string0)
 
 
-    p.line(75, 740-30*(i+1) ,550,740-30*(i+1) )
+    p.line(75, 740-30*(i+1) ,550,735-30*(i+1) )
+
+    x_start , y_start = 20 , 735-30*(i+2)
+    p.drawImage(img_file, x_start, y_start, width=50, preserveAspectRatio=True )
+    x_starting , y_starting = 540 , 735-30*(i+2)
+    p.drawImage(img_file, x_starting, y_starting, width=50, preserveAspectRatio=True )
+
+
+    p.setFont("Helvetica", 8)
+    p.drawString(24, 725-30*(i+2), "SACADO"  )
+    p.setFont("Helvetica", 8)
+    p.drawString(544, 725-30*(i+2), "SACADO"  )
+
+
 
     p.setFont("Helvetica", 16)
-    p.drawString(75, 740-30*(i+2), quizz.title +"                                    "+quizz.title )    
+    p.drawString(75, 740-30*(i+2), quizz.title +"                               "+quizz.title )    
 
     p.setFont("Helvetica", 12)
     p.drawString(75, 740-30*(i+3), "Classe  : ________________________           Classe  : _______________________ " )  
     p.drawString(75, 740-30*(i+4), "Nom :  _________________________            Nom :  _________________________" )  
+
+
 
     for j in range(1,quizz.questions.count()+1) :
         p.setFont("Helvetica", 12)  
