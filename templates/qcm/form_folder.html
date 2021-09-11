@@ -258,8 +258,9 @@
                     {% for p in parcourses|dictsort:"title" %}
                         {% get_is_leaf p parcours as data_leaf %}
                         <li class="sanspuce folder_line" id="delete_from_folder{{ p.id }}">
+
                             <label {% if data_leaf.is_used %} style="color:#CCC" title="Déjà utilisé dans un autre parcours  {% endif %}">
-                                <input type="checkbox" name="subparcours" value="{{ p.id }}" {% if data_leaf.check %} checked {% elif data_leaf.is_used %} disabled {% endif %} class="subparcours_selector" />
+                                <input type="checkbox" name="subparcours" value="{{ p.id }}" {% if data_leaf.check %} checked  {% endif %} class="subparcours_selector" />
                                  {{ p.title }}
                             <div class="background_parcours" {% if not p.vignette %} style="background-color: {{ p.color }}" {% endif %}>
                                 {% if p.vignette %}
