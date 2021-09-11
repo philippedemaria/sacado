@@ -212,8 +212,11 @@ def ajax_attribute_this_tool_to_exercise(request):
     exercise_id = int(request.POST.get("exercise_id"))
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     exercise = Exercise.objects.get(pk=exercise_id) 
-    tool     = Tool.objects.get(pk=tool_id) 
-    tool.exercises.add(exercise)
+    tool     = Tool.objects.get(pk=tool_id)
+    if exercise in tool.exercises.all() :
+        tool.exercises.remove(exercise)
+    else :
+        tool.exercises.add(exercise)
  
     return JsonResponse(data)
 
@@ -1451,7 +1454,7 @@ def play_printing_teacher(request, id):
 
     for j in range(1,quizz.questions.count()+1) :
         p.setFont("Helvetica", 12)  
-        string0 = str(j)+". _____________________________          " + str(i)+". _____________________________" 
+        string0 = str(j)+". _____________________________          " + str(j)+". _____________________________" 
         p.drawString(75, 740-30*(i+4)-30*j, string0)
 
 
