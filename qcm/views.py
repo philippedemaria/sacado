@@ -7568,7 +7568,7 @@ def create_folder(request,idg):
 
     parcourses = set()
     for student in group.students.all() :
-        parcourses.update( student.students_to_parcours.filter( Q(leaf_parcours = parcours)|Q(leaf_parcours = None), teacher = teacher , is_archive=0 ,  subject = parcours.subject , level = parcours.level ).exclude(is_folder=1) )
+        parcourses.update( student.students_to_parcours.filter(  teacher = teacher , is_archive=0 ,  subject = group.subject , level = group.level ).exclude(is_folder=1) )
 
     if request.method == "POST" :
         lp = []            
