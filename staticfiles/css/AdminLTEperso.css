@@ -93,6 +93,36 @@ hr.divider {
   height:75px;
 }
 
+
+
+.imagefile{
+    float:left;
+    width:150px;
+    transition: all 0.5s linear; 
+    margin:5px; 
+}
+
+.imagefile:hover{
+    width:500px;
+    box-shadow: 0px 0px 30px rgba(70, 17, 156, 0.7);
+}
+
+
+.smallimagefile{
+    float:left;
+    width:50px;
+    transition: all 0.5s linear; 
+    margin:5px; 
+}
+
+.smallimagefile:hover{
+    width:400px;
+    box-shadow: 0px 0px 30px rgba(70, 17, 156, 0.7);
+}
+
+
+
+
 .double_bottom_padding{
   margin-bottom: 20px;
 }
@@ -1822,34 +1852,8 @@ text-align: right;
       display: inline;
     }
 
-    .imagefile{
-      float:left;
-      width:150px;
-      transition: all 0.5s linear; 
-      margin:5px; 
-    }
-
-    .imagefile:hover{
-      width:500px;
-      box-shadow: 0px 0px 30px rgba(70, 17, 156, 0.7);
-    }
-
 }
 
-
-
-
-.smallimagefile{
-  float:left;
-  width:50px;
-  transition: all 0.5s linear; 
-  margin:5px; 
-}
-
-.smallimagefile:hover{
-  width:400px;
-  box-shadow: 0px 0px 30px rgba(70, 17, 156, 0.7);
-}
 
 
 .circle{
