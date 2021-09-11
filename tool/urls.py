@@ -24,7 +24,7 @@ urlpatterns = [
 
     path('show_quizz_shared/<int:id>', show_quizz_shared, name='show_quizz_shared'), 
 
-    path('tools_to_exercice/<int:id>', tools_to_exercice, name='tools_to_exercice'), 
+    path('tools_to_exercise/<int:id>', tools_to_exercise, name='tools_to_exercise'), 
     path('ajax_attribute_this_tool_to_exercise', ajax_attribute_this_tool_to_exercise, name='ajax_attribute_this_tool_to_exercise'), 
 
 

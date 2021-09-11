@@ -51,12 +51,17 @@
                     <div style="margin-top:30px">
                         <a href="{% url 'admin_associations' exercise.level.id %}" class="btn btn-default"> Autre exercice</a>
                     </div>
+
+                    <div style="margin-top:30px" class="alert alert-info">
+                        Pour sélectionner les outils, il suffit de les cocher. Pas besoin d'enregistrer.
+                    </div>
+
                 </div>
                 <div class="col-sm-12 col-md-5">
                     <table  class="table table-bordered table-hover standard_tab_sort2000">
                         <thead>
                         <tr>
-                            <th style="width:30px">Choix</th>
+                            <th>Choix</th>
                             <th>Outils</th>
                         </tr>
                         </thead>
@@ -71,7 +76,7 @@
                                         </label>
                                     </td>
                                     <td>
-                                        <a href="{% url 'show_tool' tool.id  %}" target="_blank"><img src="{{ tool.imagefile.url }}" height="190px" border="0px" /></a> 
+                                        <a href="{% url 'show_tool' tool.id  %}" target="_blank"><img src="{{ tool.imagefile.url }}" class="smallimagefile" border="0px" /></a> 
                                     </td>
                                 </tr>
                             {% endfor %}

@@ -192,7 +192,7 @@ def delete_my_tool(request):
 
 
 
-def tools_to_exercice(request,id):
+def tools_to_exercise(request,id):
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     exercise = Exercise.objects.get(id=id)
     tools = Tool.objects.all()
