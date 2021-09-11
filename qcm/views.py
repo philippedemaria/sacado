@@ -7646,6 +7646,7 @@ def update_folder(request,id,idg):
                 if group_exists : 
                     nf.level = group.level
                     nf.subject = group.subject
+                    nf.groups.add(group)
 
                 if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
                     nf.vignette = request.POST.get("this_image_selected",None)
