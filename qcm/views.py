@@ -7661,6 +7661,7 @@ def update_folder(request,id,idg):
                 if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
                     nf.vignette = request.POST.get("this_image_selected",None)
                 nf.save()
+                nf.leaf_parcours.clear()
                 form.save_m2m() 
                 set_leaf_parcours(nf,lp)
                 ##################################################
