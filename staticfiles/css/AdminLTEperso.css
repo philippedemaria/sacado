@@ -1822,21 +1822,21 @@ text-align: right;
       display: inline;
     }
 
+    .imagefile{
+      float:left;
+      width:150px;
+      transition: all 0.5s linear; 
+      margin:5px; 
+    }
 
+    .imagefile:hover{
+      width:500px;
+      box-shadow: 0px 0px 30px rgba(70, 17, 156, 0.7);
+    }
 
 }
 
-.imagefile{
-  float:left;
-  width:150px;
-  transition: all 0.5s linear; 
-  margin:5px; 
-}
 
-.imagefile:hover{
-  width:500px;
-  box-shadow: 0px 0px 30px rgba(70, 17, 156, 0.7);
-}
 
 
 .smallimagefile{
