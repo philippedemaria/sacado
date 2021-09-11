@@ -7606,7 +7606,7 @@ def create_folder(request,idg):
  
 
 
-import time
+
 def update_folder(request,id,idg):
     """ 'parcours_is_folder' : True pour les vignettes et différencier si folder ou pas """
     teacher           = request.user.teacher
@@ -7656,7 +7656,6 @@ def update_folder(request,id,idg):
                 ## Insertion des nouveaux élèves
                 affectation = request.POST.get("affectation",None)
                 if affectation :     
-                    nf.groups.clear()
                     nf.groups.set(id_groups_checked)
 
                     test_fct = set_students(nf, request.POST.getlist("students"))
