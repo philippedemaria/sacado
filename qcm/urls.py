@@ -33,16 +33,16 @@ urlpatterns = [
     path('parcours_delete_folder_and_contents/<int:id>/<int:idg>/', delete_folder_and_contents, name='delete_folder_and_contents'),  
     path('parcours_delete_from_folder', parcours_delete_from_folder, name='parcours_delete_from_folder'), 
 
+    path('ajax_group_to_parcours', ajax_group_to_parcours, name='ajax_group_to_parcours'), 
+
+
     path('parcours_tasks_and_publishes/<int:id>/', parcours_tasks_and_publishes, name='parcours_tasks_and_publishes'), # gestion des taches
     path('show_parcours_visual/<int:id>/', show_parcours_visual, name='show_parcours_visual'), 
 
     path('replace_exercise_into_parcours', replace_exercise_into_parcours, name='replace_exercise_into_parcours'), #Déplacer un execice de parcours
 
-
     path('actioner', actioner, name='actioner'), #archiver ou supprimer une sélection
  
-
-
     # Résultats d'un parcours
     path('parcours_result/<int:id>/', result_parcours, name='result_parcours'), 
     path('parcours_result_theme/<int:id>/<int:idt>/', result_parcours_theme, name='result_parcours_theme'),  # Je ne sais pas si cette route est utilisée ?????

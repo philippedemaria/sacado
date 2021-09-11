@@ -1,4 +1,6 @@
+ 
 {% load widget_tweaks %}
+ 
 <div class="row">
     <div class="col-sm-12 col-md-6">
         <div class="form-group">
@@ -19,7 +21,13 @@
     <div class="col-sm-12 col-md-8">
         <div class="form-group">
             {{ u_form.email.label_tag }}
-            {{ u_form.email |add_class:"form-control email" }}
+
+            {% if 'adhesion' in request.path  %}
+                {{ u_form.email |add_class:"form-control email"|attr:"required" }}
+            {% else %}
+                {{ u_form.email |add_class:"form-control email" }}
+            {% endif %}
+            
             {{ u_form.email.errors }}
         </div>
     </div>

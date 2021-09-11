@@ -150,7 +150,7 @@
                                                     class="selector check_if_check" 
                                                     name="students" 
                                                     value="{{ s.user.id}}"
-                                                    {% if parcours %}      
+                                                    {% if parcours and group in parcours.groups.all %}      
                                                         {% if s in parcours.students.all  %}
                                                             checked 
                                                         {% endif %}
@@ -188,7 +188,7 @@
                                                     name="students" 
                                                     value="{{ s.user.id}}"
 
-                                                    {% if parcours %}
+                                                    {% if parcours and group in parcours.groups.all %}
                                                         {% if s in parcours.students.all  %}
                                                             checked 
                                                         {% endif %}

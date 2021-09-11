@@ -551,22 +551,21 @@ class Parcours(ModelWithCode):
         return name
 
     def group_list(self):
-        Group = apps.get_model("group.Group")
-        group_ids = self.students.values_list('students_to_group', flat=True)
-        groups = Group.objects.filter(teacher=self.teacher, pk__in=group_ids)
+        if self.is_folder :
+            Group = apps.get_model("group.Group")
+            group_ids = self.students.values_list('students_to_group', flat=True)
+            groups = Group.objects.filter(teacher=self.teacher, pk__in=group_ids)
+        else :
+            groups = self.groups.all()
         return groups
 
     def shared_group_list(self):
 
         Sharing_group = apps.get_model('group', 'Sharing_group')
-        students = self.students.all() 
-        group_tab = []
-        for s  in students :
-            sh_groups = Sharing_group.objects.filter(group__students = s )
-            for sh_group  in sh_groups :
-                if sh_group not in group_tab:
-                    group_tab.append(sh_group) 
+        group_tab = Sharing_group.objects.filter(teacher = self.teacher)
         return group_tab 
+
+
 
     def parcours_shared(self):
 
@@ -835,6 +834,7 @@ class Parcours(ModelWithCode):
             if self in parcours.leaf_parcours.all() : 
                 data["check"]   = True
             elif self.is_leaf :
+                #data["folder"] = Parcours.objects.filter( folder_parcours = self).values_list("title",flat=True) 
                 data["is_used"] = True
         return data
 

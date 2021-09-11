@@ -259,7 +259,7 @@
         </div>
     </div>
     {%  endif  %}
-    {% if 'qcm/' in request.path and not 'qcm/show' in request.path  %}
+    {% if 'qcm/' in request.path and not 'qcm/show' in request.path and not 'create' in request.path and not 'update' in request.path %}
         {% include 'qcm/order_list.html' %}
     {%  endif  %}
 {%  endif  %}
@@ -282,7 +282,7 @@
         </div>
     </div>
     <hr>
-{% if not user.country and user.user_type == 2  %} 
+    {% if not user.country and user.user_type == 2  %} 
    
     <div class="row">
         <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
@@ -298,7 +298,7 @@
         </div>
     </div>
 
-{% endif %}
+    {% endif %}
 
     <div class="row">
         <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
@@ -455,13 +455,14 @@
     </form>
 </div>
 
+{% if not 'create' in request.path %}
 <div class="notification-container-right dismissR" id="notification-perso">
     <div class="row">
         <div class="col-lg-12 col-xs-12" id="detail_of_student">
         </div>
     </div>
 </div>
-
+{% endif %}
 {%  if request.user.is_superuser %}
 <div class="notification-container dismiss"  id="notification-admin">
     {%  if user.is_manager  %}

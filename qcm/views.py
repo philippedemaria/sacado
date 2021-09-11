@@ -193,7 +193,7 @@ def set_students(nf,stus) :
 def set_groups(nf,gps) :
     try:
         if len(gps) > 0 :
-            nf.groups.set(gps)        
+            nf.groups.set(gps)   
         var = True
     except :
         var = False
@@ -1577,8 +1577,8 @@ def create_parcours(request,idp=0):
         ################################################
         form.save_m2m()
 
-        #group_ckeched_ids = request.POST.getlist('groups')
-        #set_groups(nf,group_ckeched_ids)
+        group_ckeched_ids = request.POST.getlist('groups')
+        set_groups(nf,group_ckeched_ids)
         ################################################
         these_students =  request.POST.getlist("students")
         set_students(nf,these_students) 
@@ -1591,9 +1591,7 @@ def create_parcours(request,idp=0):
         if idp > 0 :
             parcours_folder = Parcours.objects.get(pk = idp)
             parcours_folder.leaf_parcours.add(nf)
-        else :
-            folder_parcours =  request.POST.getlist("folder_parcours")
-            set_leaf_parcours(nf,folder_parcours)       
+      
 
         if nf.stop  :
             locker = 1
@@ -1601,14 +1599,7 @@ def create_parcours(request,idp=0):
             locker = 0 
 
         i = 0
-        for exercise in form.cleaned_data.get('exercises'):
-            exercise = Exercise.objects.get(pk=exercise.id)
-            relationship = Relationship.objects.create(parcours=nf, exercise=exercise, ranking=i, is_lock = locker ,
-                                                       duration=exercise.supportfile.duration,
-                                                       situation=exercise.supportfile.situation)
-            relationship.students.set(form.cleaned_data.get('students'))
-            relationship.skills.set(exercise.supportfile.skills.all()) 
-            i += 1
+ 
 
         lock_all_exercises_for_student(nf.stop,nf)  
 
@@ -1662,8 +1653,10 @@ def update_parcours(request, id, idg=0 ):
     parcours = Parcours.objects.get(id=id)
     folder_parcourses = teacher.teacher_parcours.filter(leaf_parcours= parcours).order_by("level") 
  
-    form = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher, initial={ 'folder_parcours' : folder_parcourses })
 
+    form = UpdateParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher )
+
+    
     """ affiche le parcours existant avant la modif en ajax"""
     exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
     """ fin """
@@ -1699,17 +1692,21 @@ def update_parcours(request, id, idg=0 ):
             if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
                 nf.vignette = request.POST.get("this_image_selected",None)
 
+            nf.leaf_parcours.set( folder_parcourses )
+
             nf.save()
             form.save_m2m()
-            
+ 
+            group_ckeched_ids = request.POST.getlist('groups')
+            test = set_groups(nf, group_ckeched_ids)
+
+
+
             affectation = request.POST.get("affectation",None)
             if affectation :
-                nf.groups.clear()
-                group_ckeched_ids = request.POST.getlist('groups')
-                nf.groups.set(group_ckeched_ids)
+
                 
                 these_students =  request.POST.getlist("students")
-                set_students(nf,these_students) 
                 for s in these_students :
                     t = attribute_all_documents_to_student([nf],s)
 
@@ -7796,7 +7793,6 @@ def actioner(request):
 
     teacher = request.user.teacher 
     idps = request.POST.getlist("selected_parcours") 
-    print(request.POST.get("action") , idps)
     if  request.POST.get("action") == "deleter" :  
         for idp in idps :
             parcours = Parcours.objects.get(id=idp) 
@@ -7811,7 +7807,6 @@ def actioner(request):
             
             else :
                 messages.error(request, "Vous ne pouvez pas supprimer le dossier "+ parcours.title +". Contacter le propriétaire.")
-
     else: 
 
         for idp in idps :
@@ -7829,7 +7824,20 @@ def actioner(request):
 
 
 
+def ajax_group_to_parcours(request):
+    """ reaffecter un groupe à un parcours"""
+    teacher     = request.user.teacher 
+    parcours_id = request.POST.get("parcours_id",None) 
+    group_id    = request.POST.get("group_id",None) 
 
+    if parcours_id and group_id :
+        parcours = Parcours.objects.get(pk = parcours_id)
+        group    = Group.objects.get(pk = group_id)
+        parcours.groups.add(group)
+    data = {} 
+    data['html'] = "<small><i class='fa fa-check text-success'></i> Attribué à "+ group.name  +"</small>"    
+
+    return JsonResponse(data)
 
 
 

@@ -50,7 +50,7 @@
                             <th>Modif.</th>
                             <th>Matière</th>
                             <th>Niveau</th>
-                            <th style="width:350px">Affecté à 
+                            <th style="width:350px">Affecté au groupe 
                                 <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                 <div class="helper_tip_text" >Le profil élève d'un enseignant n'est pas pris en compte. </div>
                                 </span>
@@ -67,7 +67,7 @@
                     </thead>
                     <tbody>
                     {% for parcours in parcourses|dictsortreversed:"is_favorite" %}
-                        <tr {% if not parcours.is_publish %} style="background-color:#F4F4F4;" {% endif  %}>
+                        <tr {% if not parcours.is_publish %} style="border-left-color:#cb2131; border-left-style: 3px solid" {% endif  %}>
                             <td style="text-align:center; padding-bottom: 0px;"> 
 
                                 <input type="checkbox" name="selected_parcours" value="{{ parcours.id}}"/>
@@ -144,17 +144,16 @@
                                 </small>
                             </td> 
                             <td>
-
+                                <div id="gp{{ parcours.id }}"> 
                                 {% for g in  parcours.groups.all  %}
                                     {% get_parcours_group_students_count parcours g as nb_st %}
                                         <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g.name }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
-                                {% empty %}
+                                {% empty %}  
                                     {% if parcours.groups.count == 0 %}
                                         {% if parcours.is_folder %}
                                             <small> 
-                                            {% for g in  parcours.group_list  %}
-                                            {% get_parcours_group_students_count parcours g as nb_st %}
-                                                {{ g.name }}({{ nb_st.nb}}){% if not forloop.last %}, {% endif %}
+                                            {% for g in parcours.group_list  %}
+                                                <a href="#" data-parcours_id="{{ parcours.id }}"   data-group_id="{{ g.id }}"  class="btn-xs btn-danger group_to_folder" >Attribuer à {{ g.name }}</a>  
                                             {% endfor %}
                                             </small>
                                         {% else %}
@@ -162,9 +161,8 @@
                                             <i class="fa fa-users"></i> Renseigner les groupes associés
                                         </a>
                                         {% endif %}
-
                                     {% elif parcours.students.count %}
-                                        <small>
+                                        <small>{{ parcours.students.count }} élèves.
                                         {% if parcours.shared_group_list|length == 0  %}
                                             <form action="#" method="POST">
                                                 Ce parcours contient des élèves qui n'appartiennent pas à vos groupes.
@@ -178,13 +176,13 @@
                                              Groupe co-animé
                                         {% endif %}
                                         </small>
-
                                     {% else %}
                                         <a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-xs btn-danger">
                                             <i class="fa fa-mortar-board"></i> Affecter des élèves à {% if parcours.is_evaluation %}cette évaluation{% else %}ce parcours{% endif %}
                                         </a>
                                     {% endif %}
-                                {% endfor %} 
+                                {% endfor %}
+                                </div> 
                             </td>
                             <td style="padding-left: 40px ">
                                 {% if  parcours.shared_group_list   %}
@@ -226,7 +224,7 @@
                             </td>
                         </tr> 
                         {% for prcrs in parcours.leaf_parcours.all %}
-                            <tr {% if not prcrs.is_publish %} style="background-color:#F4F4F4;" {% endif  %} {% if prcrs.students.count %}class="collapsed subparcours{{ forloop.parentloop.counter }}"{% endif %} >
+                            <tr {% if not prcrs.is_publish %} style="border-left-color:#F4F4F4; border-left-style: 3px solid" {% endif  %} {% if prcrs.students.count %}class="collapsed subparcours{{ forloop.parentloop.counter }}"{% endif %} >
                                 <td style="text-align:center">
                                     <svg width="1em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-bar-right" fill="{{ parcours.color }}" >
                                       <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
@@ -272,8 +270,6 @@
                                             <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g.name }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
                                     {% empty %}
                                         {% if prcrs.students.count %}
-
-
                                             <small>
                                             {% if prcrs.shared_group_list|length == 0  %}
                                                 <form action="#" method="POST">

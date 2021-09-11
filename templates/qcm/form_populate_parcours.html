@@ -153,90 +153,13 @@
             </div>
 
      
-     
-            <div class="row">
-     
-
-     
-
-                <div class="col-sm-12 col-md-8">
-                    <div class="form-group">
-                        <a href="javascript:history.back()"><input type="button" value="Annuler"
-                                                                   class="btn btn-subsacado "/></a>
-                    </div>
-                </div>
-
-
-
-     
-     
-
-            </div>   
+  
         </form>
      
     </div>    
 </div> 
 
-
-<div class="modal fade bd-example-modal-lg" id="help"  tabindex="-1" role="dialog" aria-labelledby="help" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document" style="margin:0px!important">
-
-        {% if user.user_type == 2 %}
-            <div class="modal-content help" >
  
-
-
-                <div class="helpdiv_help_title_page"  style="margin-top:130px;left:175px">
-                    <img src="{% static 'img/fleche_bottom_left.png' %}" width="40px" />
-
-                    <div class="help_groupe" style="float:left" >
-                        Cocher/décocher pour placer un exercice dans le parcours. Enregistrement automatique.
-                    </div>
-
-                </div>
-
-                <div class="helpdiv_help_acces" style="margin-top:50px">
-                    Indicateur de publication du parcours<img src="{% static 'img/fleche_up_right.png' %}" width="40px" style="vertical-align: bottom" />
-                </div>
-
-
-                <div class="helpdiv_help_acces" style="margin-top:40px;right:140px;border-top: 2px #FFF solid">
-                    Menu contextuel
-                </div>
-
-
-
-                <div class="helpdiv_help_title_page"  style="margin-top:200px;left:500px">
-
-                    <div class="help_groupe" style="float:left" >
-                       Code de l'exercice<br>Durée estimée<br>Nombre de situations requises pour l'enregistrement du score.
-                    </div>
-
-                </div>
-
-
-                <div class="helpdiv_help_menu_right_bar" style="margin-top:100px">            
-
-                    <br><br> <br><br> <img src="{% static 'img/fleche_bottom_left.png' %}" width="40px" />
-                    <div class="help_groupe" style="float:left" >
- 
-                            <h2>Liste des exercices</h2> 
-                            Au chargement de la page, la liste des exercices déjà dans le parcours est montrée.<br><br> 
-                            Après la sélection des niveaux et thèmes, la liste des exercices souhaitée apparait.<br><i class="fa fa-warning"></i> Seuls les savoir faire du niveau du groupe seront évalués.
-                            <br><br>
-                            Passer la souris sur une vignette pour l'agrandir.
-
- 
-                    </div>
-
-                </div>
- 
-                    
-
-            </div>
-        {% endif %}
-    </div>
-</div>
 
  {% endblock %}
 
