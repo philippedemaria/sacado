@@ -835,9 +835,7 @@ class Parcours(ModelWithCode):
             if self in parcours.leaf_parcours.all() : 
                 data["check"]   = True
             elif self.is_leaf :
-                data["folder"] = Parcours.objects.filter( folder_parcours = self).values_list("title",flat=True) 
                 data["is_used"] = True
-        print(data)
         return data
 
 
