@@ -202,11 +202,11 @@ body{
 
                         <div style="position: absolute; padding: 10px;width:100%; height:80px; background-color: #FFF; opacity:0.85">
                             <a href="{% url 'update_quizz' q.id  %}" target="_blank" style="font-weight: normal;">
-                                 {{ q }}  
+                                 {{ q }}  <i class="fa fa-cogs fa-xs pull-right edit" ></i>
                             </a>
-
-                            <a href="{% url 'create_question' q.id 0  %}" class="pull-right edit">
-                                <i class="fa fa-edit pull-right" ></i>
+                            <br/>
+                            <a href="{% url 'create_question' q.id 0  %}" class="pull-right edit" title="Modifier les paramètres">
+                                <i class="fa fa-edit  fa-xs  pull-right" title="Rajouter une question"></i>
                             </a>     
 
 
