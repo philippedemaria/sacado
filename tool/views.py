@@ -355,7 +355,7 @@ def list_quizzes(request):
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher)
     is_archive = False
     nba = teacher.teacher_quizz.filter(  is_archive=1).count()
-    return render(request, 'tool/list_quizzes.html', {'quizzes': quizzes , 'form': form,  'teacher': teacher, 'is_archive' : is_archive, 'nba' : nba  })
+    return render(request, 'tool/list_quzizes.html', {'quizzes': quizzes , 'form': form,  'teacher': teacher, 'is_archive' : is_archive, 'nba' : nba  })
 
 
 
