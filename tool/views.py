@@ -414,7 +414,11 @@ def update_quizz(request,id):
         nf.save()
         form.save_m2m()
 
-        return redirect('list_quizzes' )
+        parcours_id = request.session.get("parcours_id")
+        if parcours_id :
+            return redirect('show_parcours' , parcours_id )
+        else :
+            return redirect('list_quizzes' )
     else:
         print(form.errors)
 
