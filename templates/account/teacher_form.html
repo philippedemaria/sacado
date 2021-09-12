@@ -56,14 +56,19 @@
 
             {% if not 'admin' in request.path %} 
             <div class="row">
-                <div class="col-sm-12 col-md-4">
+                <div class="col-sm-10 col-md-4">
                     <div class="form-group">
                         {{ user_form.username.label_tag }}
                         {{ user_form.username |add_class:"form-control" }}
                         {{ user_form.username.errors }}
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-offset-2 col-md-4">
+                <div class="col-sm-2 col-md-2">
+                    <div class="form-group">
+                        <div id="ajaxresult"></div>
+                    </div>
+                </div>
+                <div class="col-sm-12  col-md-6">
                     <div class="form-group {% if not teacher.user.country  %} alert alert-danger{% endif %}"> 
                         <label>Pays :  {% if not teacher.user.country  %} A renseigner{% endif %}</label>
                         {{ user_form.country |add_class:"form-control select2" }}
@@ -289,7 +294,7 @@
             <div class="row" style="margin-top:20px">
                 <div class="col-sm-12 col-md-6">
                     <div class="form-group">
-                        <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+                        <input value="Enregistrer" type="submit" id="submitter" class="btn btn-primary"/>
                             {% if request.user.is_superuser %}
                                 <input value="Enregistrer et retour à toute la liste des enseignants" type="submit" name="listing" class="btn btn-info"/>
                             {% endif  %} 

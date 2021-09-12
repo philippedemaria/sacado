@@ -42,7 +42,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     $("#ajaxresult").html(data["html"]);
 
                     if(data["test"]) { $("#submitter").attr("disabled", false ) ;} else { $("#submitter").attr("disabled", true ) ;}
-                }
+                } 
             });
         });
 
