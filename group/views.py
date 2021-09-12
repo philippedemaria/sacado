@@ -1571,6 +1571,9 @@ def print_ids(request, id):
     response['Content-Disposition'] = 'attachment; filename="identifiants_groupe'+group.name+'.pdf"'
     p = canvas.Canvas(response)
     i = 1
+
+    img_file = 'https://sacado.xyz/static/img/sacado-icon-couleur.jpg'
+    x_start  = 20
     for student in group.students.exclude(user__username = request.user.username) :
 
     # Create the HttpResponse object with the appropriate PDF headers.
@@ -1583,6 +1586,10 @@ def print_ids(request, id):
         p.drawString(75, 880-100*i, string1)
         p.drawString(75, 860-100*i, string2)
         p.line(75, 830-100*i,550,830-100*i)
+    
+        y_start = 860-100*i
+        p.drawImage(img_file, x_start, y_start, width=50, preserveAspectRatio=True )
+
         if i%8 == 0 :
             i = 1
             p.showPage()
