@@ -84,9 +84,9 @@
                 {% endif %}
         </div>
     </div> 
-    <div class="row">  
+    <div class="row" align="center"  style="width:80%;padding:10px ; margin-right: auto; margin-left:auto; background-color: #f1eef7 ;">  
         <div class="col-sm-12 col-md-12"align="center">
-            <h1 style="font-size:3.5em" class="thin"> {{ question.title }} </h1>
+            <h1 style="font-size:2.5em"  >  {{ question.title }}  </h1>
         </div>
     </div>
     {% if question.imagefile %}
@@ -112,12 +112,12 @@
         <div class="row"> 
             <div class="col-sm-12 col-md-6 bgcolorBlue white"  align="center" style="border-radius : 10px ">
                 <label style="font-size:3.5em" class="thin">
-                    VRAI <input type="radio" name="solution" value="1" class="answer_quizz" {% if 1 in this_answer.answer  %}checked{% endif %} >
+                    VRAI <input type="radio" name="solution" value="1" {% if 1 in this_answer.answer  %}checked{% endif %}    class="answer_quizz_vf">
                 </label>  
             </div> 
 
             <div class="col-sm-12 col-md-6 bgcolorRed white"  align="center" style="border-radius : 10px ">
-                <label style="font-size:3.5em" class="thin">FAUX <input type="radio" name="solution" value="0"  {% if 0 in this_answer.answer    %}checked{% endif %}  class="answer_quizz"></label>  
+                <label style="font-size:3.5em" class="thin">FAUX <input type="radio" name="solution" value="0"  {% if 0 in this_answer.answer    %}checked{% endif %}  class="answer_quizz_vf"></label>  
             </div> 
         </div> 
     {% elif question.qtype == 2 %}
@@ -129,21 +129,22 @@
         </div> 
     {% elif question.qtype > 2 %}   
         {% for choice in question.choices.all %}
-            {% cycle 'bgcolorRed' 'bgcolorBlue' 'bgcolorOrange' 'bgcolorGreen' as rowcolor silent %} 
+ 
             {% cycle 'A' 'B' 'C' 'D'  as choice_letter silent %}
-            <div class="col-sm-12 col-md-6" style="padding-right: 20px ; margin-bottom: 20px ; font-size:1.2em; border-radius : 10px">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6" style="margin-bottom: 5px ; font-size:1.2em; border-radius : 10px;background-color: #f1eef7 ;">
                 <div class="row" >
                     {% get_ans_for_this_question gquizz question student as this_answer %}
-                    <div class="col-sm-12 col-md-12 {{ rowcolor }} {% if choice.answer|length > 20 %}size15em{% elif choice.answer|length > 10  %}size25em{% else  %}size3em{% endif %}em" align="center" 
-                         style="color:#FFF; border-radius : 10px"> 
-                         {{ choice.answer }}
+                    <div class="col-sm-12 col-md-12  col-lg-12 col-xl-6 {{ rowcolor }}"  
+                         style="color:#5d4391;  padding: 5px; font-size : 1.5em">  
                          <input type="{% if question.qtype == 3 %}checkbox{% else %}radio{% endif %}" name="solution" value="{{ choice.id }}" {% if choice.id in this_answer.answer %}checked{% endif %}   class="answer_quizz"> 
+                         {{ choice.answer }}
+                        
                     </div>
                 </div>  
             </div> 
         {% endfor %}
         {% resetcycle %}
-        {% resetcycle %}
+ 
     {% endif %}
 
 <div style="height:40px"></div>
@@ -156,9 +157,9 @@
         {% endif %}  
     </div>
 </div> 
-<div class="row" align="right" > 
+<div class="row" > 
     <div class="col-sm-12 col-md-12" >
-        <button type="submit" class="btn btn-primary"><i class="fa fa-caret-right"></i> Enregistrement de la réponse</button>
+        <button type="submit" class="btn btn-success"><i class="fa fa-caret-right"></i> Enregistrement de la réponse</button>
     </div>
 </div> 
 {% else %}

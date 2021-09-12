@@ -598,36 +598,38 @@
             {% if courses|length > 0  %} <hr/>{% endif %}
 
             <h4 class='thin' style="color:{{ parcours.color }}">Les quizz</h4>
+                {% if sacado_asso %}    
+                    {% for q in quizzes %}
+             
+                        {% for gq in q.generate_quizz.all     %}
+                        <li style="padding:5px; margin-bottom:2px;list-style: none">
+                          
 
-                {% for q in quizzes %}
-                    <li class="menu_course" style="padding:5px; margin-bottom:2px">
-                      
-                        {% if sacado_asso %} 
+                                <div class="card" style="float:none; margin:5px;">
+                                    <a {% if q.is_numeric and not q.is_video %} href="{% url 'goto_quizz_student' gq.id  %}" {% else %} href="{% url 'show_quizz' gq.id  %}" {% endif %} target="_blank" style="font-weight: normal;"> 
+                                        <div style="position: absolute; padding: 10px;width:100%; height:75px; background-color: #FFF; opacity:0.85">
+                                            {{ q.title|truncatechars:28 }} <small><i class="fa fa-barcode fa-xs"></i> {{ gq.code }} <br/> {{ q.questions.count }} diapos</small>  </small>
+                                        </div> 
+                                        {% if q.vignette %}
+                                            <img src="{{ q.vignette.url }}" width="200px" height="1é0px" border=0 />
+                                        {% else %}
+                                            <img src="{% static 'img/quizz_slide.png' %}" width="200px" border=0  />
+                                        {% endif %}
+                                    </a>
+                                </div>
 
-                            <div class="card" style="float:none">
-                                <a href="{% url 'show_quizz' q.id  %}" target="_blank" style="font-weight: normal;">
-                                <div style="position: absolute; padding: 10px;width:100%; height:75px; background-color: #FFF; opacity:0.85">
-                                    {{ q }}  
-                                </div> 
-                                <div style="position: absolute; padding-left: 10px; width:100%; top:55px; background-color: #FFF; opacity:0.85">
-                                    <small>{{ q.questions.count }} diapos</small>  
-                                </div> 
-                                {% if q.vignette %}
-                                    <img src="{{ q.vignette.url }}" width="170px" height="100px"  />
-                                {% else %}
-                                    <img src="{% static 'img/quizz_slide.png' %}" width="170px"   />
-                                {% endif %}
-                                </a>
-                            </div>
+                        </li>
+                        {% endfor %}
 
-                        {% else %}
-                            <div class="alert alert-danger">
-                                <i class="fa fa-ban"></i> Version établissement nécessaire
-                            </div>
-                        {% endif %}
 
-                    </li>
-                {% endfor %}
+                    {% endfor %}
+
+                {% else %}
+                    <div class="alert alert-danger">
+                        <i class="fa fa-ban"></i> Version établissement nécessaire
+                    </div>
+                {% endif %}
+
         </div>
         {% endif %}          
     </div>

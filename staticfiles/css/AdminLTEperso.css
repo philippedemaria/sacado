@@ -762,10 +762,19 @@ a.no_visual_link{
 .answer_quizz{
     width: 5%;
     height: 1em;
+    z-index: 1000;
+}
+
+.answer_quizz_vf{
+    width: 5%;
+    height: 1em;
     position: absolute;
     z-index: 1000;
     right: 30px;
 }
+
+
+
 
 .quizz_box {
     width: 100%;
