@@ -209,7 +209,10 @@ define(['jquery','bootstrap_popover', 'bootstrap' ], function ($) {
                             else 
                             {$('#studentUsername'+student_id).val(value);}
 
-                        }
+                        },
+                         error: function(){
+                            alert(" L'identifiant "+value+" est déjà utilisé. En choisir un autre.") ; 
+                         }
                     }
                 )
             }
