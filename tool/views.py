@@ -313,7 +313,10 @@ def clone_quizz(request, id_quizz):
     for t in themes :
         quizz.themes.add(t)
 
-    return redirect('list_quizzes')
+    if parcours_id :
+        return redirect('show_parcours' , parcours_id )
+    else :
+        return redirect('list_quizzes')
  
 
 
