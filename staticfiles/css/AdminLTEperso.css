@@ -741,6 +741,26 @@ a.no_visual_link{
   top:12px;
 }
 
+ /******************************************** Account csv  ********************************************/
+.webinaire{
+ 
+  padding:20px;
+  background-color: #f1eef7 ;
+
+}
+
+.webinaire_index{
+  position: absolute;
+  width:400px;
+  height:40px;
+  top : -10px;
+  left:35%;
+  background-color: #f1eef7 ;
+  border-radius: 3px;
+  font-size: 16px;
+  padding:10px;
+}
+
 
  /******************************************** Account csv  ********************************************/
 

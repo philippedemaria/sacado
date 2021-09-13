@@ -1,0 +1,120 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+    {% if webinaire %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+{% endblock %}
+
+
+{% block page_title %}
+      Webinaire   <img src="{% static 'img/angle-right.png' %}"/>  {% if theme %}
+                                                                                 <small>Modification</small>
+                                                                                {% else %}
+                                                                                 <small>Nouveau webinaire</small>
+                                                                                {% endif %} 
+{% endblock %}
+
+{% block page_menu_right %}
+{% endblock %}
+
+{% block body  %}  
+
+ 
+
+
+
+
+ 
+<section class="content_main"> 
+    <form method="post" action="" enctype='multipart/form-data'>
+    <div class="col-sm-8 col-md-8">
+          {% csrf_token %}
+              <div class="row">
+                  <div class="col-sm-12 col-md-12">
+                      <div class="form-group">
+                          <label>{{ form.title.label_tag }}</label>
+                          {{ form.title |add_class:"form-control" }}
+                          {{ form.title.errors }}
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-sm-12 col-md-12">
+                      <div class="form-group">
+                          <label>{{ form.is_publish.label_tag }}</label>
+                          {{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                          {{ form.is_publish.errors }}
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-sm-6 col-md-3">
+                      <div class="form-group">
+                          <label>{{ form.date_time.label_tag }}</label>
+                          {{ form.date_time |add_class:"form-control datetimepicker" }}
+                          {{ form.date_time.errors }}
+                      </div>
+                  </div>
+                  <div class="col-sm-6 col-md-3">
+                      <div class="form-group">
+                          <label>{{ form.duration.label_tag }} (en minutes)</label>
+                          {{ form.duration |add_class:"form-control" }} 
+                          {{ form.duration.errors }}
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-sm-12 col-md-12">
+                      <div class="form-group">
+                          <label>{{ form.topic.label_tag }}</label><br/>
+                          {{ form.topic  }}
+                          {{ form.topic.errors }}
+                      </div>
+                  </div>
+              </div>
+ 
+              <div class="row">
+                  <div class="col-sm-12 col-md-12">
+                      <div class="form-group">
+                          <label>{{ form.imagefile.label_tag }}</label>
+                          {{ form.imagefile |add_class:"form-control btn btn-default" }}
+                          {{ form.imagefile.errors }}
+                      </div>
+                  </div>
+              </div>
+
+ 
+
+              <div class="row">
+                  <div class="col-sm-12 col-md-12">
+                      {% if webinaire %}
+                      <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>   
+                      {% else %}
+                      <button type="submit" class="btn btn-primary">Créer le webinaire</button> 
+                      {% endif %}
+                      <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
+                  </div>
+              </div>
+    </div>
+    <div class="col-sm-4 col-md-4">
+
+              <div class="row">
+                  <div class="col-sm-12 col-md-12">
+                      {% if webinaire.imagefile %}
+                          <img src="{{ webinaire.imagefile.url }}" width="300px"/>
+                      {% endif %}
+                  </div>
+              </div>
+
+    </div>          
+    </form>
+
+</section>
+{% endblock  %}   

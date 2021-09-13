@@ -50,6 +50,20 @@ urlpatterns = [
     path('play_quizz_start', play_quizz_start, name='play_quizz_start'), 
 
     path('ajax_get_subject/', ajax_get_subject, name='ajax_get_subject'),#gère les div des subjects sur la page d'accuril des exercices.
+
+
+
+    ############################################################################################
+    #######  WEBINAIRE
+    ############################################################################################
+    path('webinaire_list', webinaire_list, name='webinaires'), 
+    path('webinaire_create', webinaire_create, name='webinaire_create'),
+    path('webinaire_update/<int:id>/', webinaire_update, name='webinaire_update'),
+    path('webinaire_delete/<int:id>/', webinaire_delete, name='webinaire_delete'), 
+    path('webinaire_register', webinaire_register, name='webinaire_register'), 
+    path('webinaire_registrar/<int:id>/<int:key>/', webinaire_registrar, name='webinaire_registrar'), 
+
+    path('webinaire_show/<int:id>/', webinaire_show, name='webinaire_show'), 
 ]
 
 

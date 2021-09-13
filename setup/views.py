@@ -1,45 +1,53 @@
 from django.conf import settings # récupération de variables globales du settings.py
 from django.shortcuts import render,redirect
 from django.forms import formset_factory
-from django.contrib.auth.forms import  UserCreationForm,  AuthenticationForm
-from account.forms import  UserForm, TeacherForm, StudentForm , BaseUserFormSet , NewpasswordForm
+
 from django.contrib.auth import   logout
-from account.models import  User, Teacher, Student  , Parent , Adhesion
-from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise, Customanswerbystudent,Writtenanswerbystudent
-from tool.models import Quizz, Question, Choice
-from group.models import Group, Sharing_group
-from association.models import Accounting , Detail , Rate , Abonnement , Holidaybook
-from group.views import student_dashboard
-from setup.models import Formule  
-from school.models import Stage , School
-from sendmail.models import Communication
-from school.forms import  SchoolForm
-from socle.models import Level, Subject
+from django.contrib.auth.forms import  UserCreationForm,  AuthenticationForm
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
+from django.forms import BaseFormSet
+from django.utils import formats, timezone
+from django.contrib import messages
+
+from django.views.decorators.csrf import csrf_exempt
+from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.db.models import Count, Q
+
+from account.decorators import is_manager_of_this_school
+from account.forms import  UserForm, TeacherForm, StudentForm , BaseUserFormSet , NewpasswordForm
+from account.models import  User, Teacher, Student  , Parent , Adhesion
+from association.models import Accounting , Detail , Rate , Abonnement , Holidaybook
+from group.models import Group, Sharing_group
+from group.views import student_dashboard
+from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise, Customanswerbystudent,Writtenanswerbystudent
+from sendmail.models import Communication
+from setup.forms import WebinaireForm
+from setup.models import Formule , Webinaire
+from school.models import Stage , School
+from school.forms import  SchoolForm
+from school.gar import *
+from socle.models import Level, Subject
+from tool.models import Quizz, Question, Choice
+
 from datetime import date, datetime , timedelta
-from django.utils import formats, timezone
-from django.contrib import messages
-from django.views.decorators.csrf import csrf_exempt
-from django.template.loader import render_to_string
+
+from itertools import chain
+from general_fonctions import *
+from payment_fonctions import *
+
 import random
 import pytz
 import uuid
 import time
 import os
-from itertools import chain
-from account.decorators import is_manager_of_this_school
-from general_fonctions import *
-from payment_fonctions import *
-from school.gar import *
 import fileinput 
 import random
-from django.contrib.auth.hashers import make_password
-from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ValidationError
-from django.forms import BaseFormSet
-from django.forms import formset_factory
+
+ 
 ##############   bibliothèques pour les impressions pdf    #########################
 import os
 from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
@@ -108,7 +116,6 @@ def index(request):
         if request.user.is_teacher:
 
             teacher = request.user.teacher
-
             grps = teacher.groups.order_by("level") 
             shared_grps_id = Sharing_group.objects.filter(teacher=teacher).values_list("group_id", flat=True) 
             # sgps = []
@@ -132,12 +139,12 @@ def index(request):
 
             request.session["tdb"] = True
 
-
+            webinaire = Webinaire.objects.filter(date_time__gte=today,is_publish=1).first()
  
             template = 'dashboard.html'
             context = {'this_user': this_user, 'teacher': teacher, 'groups': groups,  'parcours': None, 'today' : today , 'timer' : timer , 'nb_teacher_level' : nb_teacher_level , 
                        'relationships': relationships, 'parcourses': parcourses, 'index_tdb' : index_tdb,
-                       'communications': communications, 'parcours_tab': parcours_tab, 
+                       'communications': communications, 'parcours_tab': parcours_tab, 'webinaire': webinaire,
                        }
         
         elif request.user.is_student:  ## student
@@ -1199,5 +1206,93 @@ def play_quizz_start(request):
     context = {  "quizz" : quizz , "question" : question , "n" : n}
     return render(request, 'tool/play_quizz_start.html', context)
 
+############################################################################################
+#######  WEBINAIRE
+############################################################################################
 
 
+def webinaire_register(request):
+
+    today = time_zone_user(request.user) 
+    webinaire = Webinaire.objects.filter(date_time__gte=today,is_publish=1).first()
+    nb_places = 20 - webinaire.users.count()
+    return render(request, 'setup/form_webinaire_register.html', {'webinaire': webinaire , 'nb_places' : nb_places })
+
+
+def webinaire_registrar(request,id,key):
+
+    if request.user.is_superuser :
+        webinaire = Webinaire.objects.get(id=id)
+        if key == 1:
+            webinaire.users.add(request.user)
+        else :
+            webinaire.users.remove(request.user)
+
+    return redirect('index') 
+
+
+
+def webinaire_show(request,id):
+    if request.user.is_superuser :
+        webinaire = Webinaire.objects.get(id=id)
+        return render(request, 'setup/show_webinaire.html', {'webinaire': webinaire })
+    else :
+        return redirect('index') 
+
+
+
+def webinaire_list(request):
+    if request.user.is_superuser :
+        webinaires = Webinaire.objects.all()
+        return render(request, 'setup/list_webinaires.html', {'webinaires': webinaires })
+    else :
+        return redirect('index') 
+
+
+
+def webinaire_create(request):
+
+    if request.user.is_superuser :
+        form = WebinaireForm(request.POST or None ,  request.FILES or None  )
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Le webinaire a été créé avec succès !')
+            return redirect('webinaires')
+        else:
+            print(form.errors)
+        context = {'form': form, 'communications' : [] , 'webinaire': None  }
+
+        return render(request, 'setup/form_webinaire.html', context)
+    else :
+        return redirect('index') 
+
+
+
+def webinaire_update(request, id):
+
+    if request.user.is_superuser :
+        webinaire = Webinaire.objects.get(id=id)
+        form = WebinaireForm(request.POST or None, request.FILES or None, instance=webinaire )
+        if request.method == "POST" :
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Le webinaire a été modifié avec succès !')
+                return redirect('webinaires')
+            else:
+                print(theme_form.errors)
+
+        context = {'form': form,  'webinaire': webinaire,   }
+
+        return render(request, 'setup/form_webinaire.html', context )
+    else :
+        return redirect('index')  
+
+
+def webinaire_delete(request, id):
+    if request.user.is_superuser :
+        webinaire = Webinaire.objects.get(id=id)
+        webinaire.delete()
+
+        return redirect('webinaires')
+    else :
+        return redirect('index') 

@@ -1,0 +1,77 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block require %}
+
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+{% endblock %}
+
+
+
+{% block page_title %}
+     Webinaires  
+{% endblock %}    
+ 
+
+
+
+
+{% block page_menu_right %}
+    <li><a href="{% url 'webinaire_create' %}" class="btn btn-new pull-right" ><i class="fa fa-plus"></i> Nouveau webinaire</a>  
+{% endblock %}</li> 
+ 
+ 
+ 
+
+{% block  body %} 
+
+<section class="content_main"> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table class="table table-bordered table-hover standard_tab_sort2000" style="width:100%">
+                  <thead>
+                      <tr>
+                        <th>Titre</th>
+                        <th>Date-Heure</th>                  
+                        <th>Sujet</th> 
+                        <th>Durée</th>
+                        <th>Participants</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                        {% for w in webinaires %}
+                        <tr> 
+                          <td>
+                             <a href="{% url 'webinaire_update' w.id %}">{{ w.title }} </a> 
+                              <a href="{% url 'webinaire_delete' w.id %}"  onclick="return TestDelete('ce thème')"><i class='fa fa-trash pull-right'></i></a>  
+                              <a href="{% url 'webinaire_show' w.id %}" ><i class='fa fa-eye pull-right'></i></a>                        
+                          </td>
+                          <td>
+                             {{ w.date_time|date:"Y-d-m à H:i:s" }} 
+                          </td>
+                          <td>
+                             {{ w.topic|safe }} 
+                          </td>
+                          <td>
+                             {{ w.duration }} min.
+                          </td>
+                          <td>  
+                            {{ w.users.count }} 
+                          </td> 
+                        </tr>
+                        {% endfor %}
+                  </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+ 
+
+
+{% endblock  %}   
+
+
+ 

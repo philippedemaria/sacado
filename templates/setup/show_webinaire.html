@@ -1,0 +1,119 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+ 
+{% block require %}
+ 
+    {% if accounting %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+
+ 
+ 
+{% endblock %}
+
+
+
+{% block page_title %}
+      Webinaire : {{ webinaire.title }} 
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+
+<li class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button" >  Webinaires  <b class="caret"></b> </a>
+    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+       
+        <li>  <a href="{% url 'webinaires' %}"  > Liste </a>   </li>
+        <li>  <a href="{% url 'webinaire_create' %}"  > Nouveau </a>   </li>
+    </ul>
+</li>
+
+{% endblock %}
+ 
+ 
+
+
+{% block body %}
+<div class="content_main" style="font-size: 18px">  
+    <div style="margin-bottom: 5px ; padding:10px;font-size:1.2em; border-radius : 10px;background-color: #f1eef7 ;">
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+              <div class="row">
+                  <div class="col-sm-12 col-md-12">
+                      <div class="form-group">
+                          <label>Titre : </label> {{ webinaire.title }}
+                      </div>
+                  </div>
+              </div>    
+              <div class="row">
+                  <div class="col-sm-12 col-md-12">
+                      <div class="form-group">
+                          <label>Date : </label> {{ webinaire.date_time|date:"d F Y à H:i:s" }} 
+                      </div> 
+                  </div>
+              </div> 
+              <div class="row">
+                  <div class="col-sm-12 col-md-12">
+                      <div class="form-group">
+                          <label>Durée : </label> {{ webinaire.duration  }} min.
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-sm-12 col-md-12">
+                      <div class="form-group">
+                           <label>Sujet : </label> {{ webinaire.topic|safe }} 
+                      </div>
+                  </div>    
+              </div>
+              {% if request.user.is_superuser %}
+              <div class="row">        
+                  <div class="col-sm-12 col-md-8">
+                      <div class="form-group">
+                          <label> Participants  [{{ webinaire.users.count }}] : </label> {% for u in webinaire.users.all %} {{ u }} {% if not forloop.last %}, {% endif %} {% endfor %}
+                      </div>
+                  </div>       
+              </div>
+              <div class="row">
+                  <div class="col-sm-12 col-md-12">
+                      <div class="form-group">
+                          <label>Date d'enregistrement : </label> {{ webinaire.date_created }}  
+                      </div>
+                  </div>
+              </div>  
+              {% if  webinaire.date_created != webinaire.date_modified %}
+              <div class="row">
+                  <div class="col-sm-12 col-md-12">
+                      <div class="form-group">
+                          <label>Date de modification : </label> {{ webinaire.date_modified }}  
+                      </div>
+                  </div>
+              </div>  
+              {% endif %}
+              {% endif %}
+          </div>
+          <div class="col-sm-12 col-lg-6">
+              {% if webinaire.imagefile %}
+                  <img src="{{ webinaire.imagefile.url }}" width="500px" />
+              {% endif %}
+          </div>
+      </div>
+    </div>
+        {% block registrar %}
+        {% endblock %} 
+ 
+        <div class="row" style="margin-top:20px">        
+ 
+            <div class="col-sm-6 col-md-3">
+                                    <a href="javascript:history.back()"><input type="button" value="Retour"
+                                                               class="btn btn-default "/></a>
+            </div>
+        </div> 
+ 
+</div> 
+{% endblock %}
