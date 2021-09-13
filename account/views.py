@@ -1144,7 +1144,8 @@ def register_by_csv(request, key, idg=0):
         for line in lines:
             try : 
             # loop over the lines and save them in db. If error , store as string and then display
-                ln, fn, username , password , email , group_name , level , is_username_changed = separate_values(request, line, False)  
+                simple = request.POST.get("simple",None)
+                ln, fn, username , password , email , group_name , level , is_username_changed = separate_values(request, line, False,simple)  
 
                 if key == User.TEACHER:  # Enseignant
                     user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,
@@ -1228,8 +1229,8 @@ def register_users_by_csv(request,key):
         # loop over the lines and save them in db. If error , store as string and then display
         for line in lines:
             try : 
-     
-                ln, fn, username , password , email , group_name , level , is_username_changed = separate_values(request, line, False)
+                simple = request.POST.get("simple",None)
+                ln, fn, username , password , email , group_name , level , is_username_changed = separate_values(request, line, False , simple)
 
                 if key == User.TEACHER:  # Enseignant
                     user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,

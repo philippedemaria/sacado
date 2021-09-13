@@ -79,8 +79,12 @@
 
 
         <div id="without_username">
-            Vous avez choisi la gestion automatisée des identifiants par SACADO.  3 champs sont demandés :
-            <ul style="margin:10px">
+            <p>Vous avez choisi la gestion automatisée des identifiants par SACADO. </p>
+            <p>Quel niveau de complexité souhaitez-vous pour ces identifiants élèves ? 
+                <label><input type="radio" name="simple" value=0 /> Facile</label>
+                <label><input type="radio" name="simple" value=1 /> Complexe</label>
+            </p>
+            <ul style="margin:10px"> 3 champs sont demandés :
                 <li>Nom</li>
                 <li>Prénom</li>                
                 <li>Courriel, {% if idg > 0  %}optionnel mais préférable pour la correspondance et les notifications.{% else %}renseigner votre adresse professionnelle si vous en avez une.{% endif %}</li>

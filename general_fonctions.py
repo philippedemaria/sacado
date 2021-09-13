@@ -16,6 +16,25 @@ from django.core.mail import send_mail
 from django.apps import apps
 import uuid
 
+def get_strong_username(request ,ln, fn):
+    """
+    retourne un username plus compliqué
+    """
+    User = apps.get_model('account', 'User')
+    ok = True
+    i = 0
+    code = str(uuid.uuid4())[:3] 
+    name = str(ln).replace(" ","_")    
+    un = str(name) + str(fn)[0] + "_" +   code 
+    while ok:
+        if User.objects.filter(username=un).count() == 0:
+            ok = False
+            is_changed = False 
+        else:
+            i += 1
+            un = un + str(i)
+            is_changed = True 
+    return un 
 
 
 def get_username(request ,ln, fn):
@@ -25,7 +44,7 @@ def get_username(request ,ln, fn):
     User = apps.get_model('account', 'User')
     ok = True
     i = 0
-    un = str(ln) + "." + str(fn)[0] 
+    un = str(ln) + "." + str(fn)[0]+str(uuid.uuid4())[:2] 
     while ok:
         if User.objects.filter(username=un).count() == 0:
             ok = False
@@ -59,7 +78,7 @@ def get_username_manuel(texte):
 
 
 
-def separate_values(request, line, is_group) :
+def separate_values(request, line, is_group,simple) :
              
     if ";" in line:
         fields = line.split(";")
@@ -81,7 +100,10 @@ def separate_values(request, line, is_group) :
     fn = cleanhtml( str(fields[j]).lower().capitalize())
  
     if request.POST.get("manage_username") == "auto" :
-        username =  get_username(request, ln,fn)
+        if simple == 1 :
+            username =  get_strong_username(request, ln,fn)
+        else :
+            username =  get_username(request, ln,fn)
         is_username_changed = False
         try:
             if fields[k] != "":
@@ -99,7 +121,6 @@ def separate_values(request, line, is_group) :
                 email = ""
         except:
             email = ""
-
     return ln, fn, username , password , email , group_name , level , is_username_changed
 
 

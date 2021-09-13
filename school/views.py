@@ -984,7 +984,8 @@ def csv_full_group(request):
         list_names = ""
         for line in lines:
             try :
-                ln, fn, username , password , email , group_name , level , is_username_changed = separate_values(request, line, True)
+                simple = request.POST.get("simple",None)
+                ln, fn, username , password , email , group_name , level , is_username_changed = separate_values(request, line, True, simple)
   
                 teacher = Teacher.objects.get(user = request.user)
 
@@ -993,12 +994,15 @@ def csv_full_group(request):
                     if created_group :
                     	group_history.append(group_name)
 
+
                 user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=0,
                                                            school= school, 
                                                            time_zone=request.user.time_zone, is_manager=0,
                                                            defaults={'username': username, 'password': password, 'cgu' : 1 ,
                                                                      'is_extra': 0})
+ 
                 student, creator = Student.objects.get_or_create(user=user, level= group.level, task_post=1)
+
                 if creator : #Si l'élève n'est pas créé alors il existe dans des groupes. On l'efface de ses anciens groupes pour l'inscrire à nouveau !
                     group.students.add(student)
                 if is_username_changed :

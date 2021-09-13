@@ -4110,6 +4110,8 @@ def execute_exercise(request, idp,ide):
     context = {'exercise': exercise,  'start_time' : start_time,  'student' : student,  'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today , 'communications' : [] , 'relationships' : [] }
     return render(request, 'qcm/show_relation.html', context)
 
+
+
 @csrf_exempt    
 def store_the_score_relation_ajax(request):
 
