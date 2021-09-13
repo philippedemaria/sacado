@@ -2,31 +2,31 @@ define(['jquery', 'bootstrap'], function ($) {
     $(document).ready(function () {
         console.log("chargement ajax-ggb-score.js OK");
 
-   $('#message_alert').css("display","none") ; 
-   $('#ggb_applet_container').css("display","block") ; 
-    $('#preloader').css("display","block") ; 
+  //$('#message_alert').css("display","none") ; 
+  //$('#ggb_applet_container').css("display","block") ; 
+  // $('#preloader').css("display","block") ; 
 
-    $('#show_ggb').css("display","none") ; 
+  //$('#show_ggb').css("display","none") ; 
 
-  $(window).on('load', function () {
-    if ($('#preloader').length) {
-      $('#preloader').fadeOut('slow', function () {
-        $(this).remove();
-      });
-    }
+  // $(window).on('load', function () {
+  //   if ($('#preloader').length) {
+  //     $('#preloader').fadeOut('slow', function () {
+  //       $(this).remove();
+  //     });
+  //   }
     
-  });
+  // });
 
  
-  $(window).on('load', function () {
-    if ($('#preload_div').length) {
-      $('#preload_div').fadeOut('slow', function () {
-        $(this).remove();
-        $('#show_ggb').css("display","block") ; 
-      });
-    }
+  // $(window).on('load', function () {
+  //   if ($('#preload_div').length) {
+  //     $('#preload_div').fadeOut('slow', function () {
+  //       $(this).remove();
+  //       $('#show_ggb').css("display","block") ; 
+  //     });
+  //   }
     
-  });
+  // });
  
 
 
