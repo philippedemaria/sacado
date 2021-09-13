@@ -1625,7 +1625,8 @@ def create_parcours(request,idp=0):
         group_id = request.session.get("group_id",None)        
         if group_id :
             group = Group.objects.get(pk = group_id)
-            images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id=group.subject).exclude(vignette=" ").distinct()
+            teacher_id = get_teacher_id_by_subject_id(id_subject)
+            images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id=group.subject, teacher__user_id= teacher_id).exclude(vignette=" ").distinct()
         else :
             group = None
         
@@ -1744,7 +1745,7 @@ def update_parcours(request, id, idg=0 ):
         group_id = idg
         request.session["group_id"] = idg
         group = Group.objects.get(pk = group_id)
-        images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id=group.subject).exclude(vignette=" ").distinct()
+        images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id=group.subject, teacher__user_id= teacher_id).exclude(vignette=" ").distinct()
         if Sharing_group.objects.filter(group_id=group_id, teacher = teacher).exists() :
             sh_group = Sharing_group.objects.get(group_id=group_id, teacher = teacher)
             role = sh_group.role 
@@ -4411,7 +4412,7 @@ def create_evaluation(request):
 
             try : 
                 folder_parcourses = teacher.teacher_parcours.filter(leaf_parcours= parcours).order_by("level") 
-                images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id=group.subject).exclude(vignette=" ").distinct()
+                images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id=group.subject, teacher__user_id= teacher_id).exclude(vignette=" ").distinct()
                 form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level, 'folder_parcours' : folder_parcourses  })
             except :
                 form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level,   }  )
@@ -4543,7 +4544,7 @@ def update_evaluation(request, id, idg=0 ):
         group_id = idg
         request.session["group_id"] = idg
         group = Group.objects.get(pk = group_id) 
-        images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id=group.subject).exclude(vignette=" ").distinct()
+        images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id=group.subject, teacher__user_id= teacher_id).exclude(vignette=" ").distinct()
     else :
         group_id = None
         group = None
@@ -7561,8 +7562,8 @@ def create_folder(request,idg):
     teacher = request.user.teacher 
     group = Group.objects.get(pk = idg)
     form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, initial = {'subject': group.subject,'level': group.level  })
-    images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id = group.subject).exclude(vignette=" ").distinct()
-
+    images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id=group.subject, teacher__user_id= teacher_id).exclude(vignette=" ").distinct()
+    
     parcourses = set()
     for student in group.students.all() :
         parcourses.update( student.students_to_parcours.filter(  teacher = teacher , is_archive=0 ,  subject = group.subject , level = group.level ).exclude(is_folder=1) )
@@ -7622,7 +7623,7 @@ def update_folder(request,id,idg):
         parcourses = teacher.teacher_parcours.filter(  is_archive=0 ,  subject = parcours.subject , level = parcours.level ).exclude(is_folder=1)
 
         group_exists = True
-        images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id = group.subject).exclude(vignette=" ").distinct()
+        images = group.level.level_parcours.values_list("vignette", flat = True).filter(subject_id=group.subject, teacher__user_id= teacher_id).exclude(vignette=" ").distinct()
 
         if request.method == "POST" :
             lp = []            
