@@ -385,9 +385,34 @@ def create_accounting(request,tp):
         return redirect('list_accountings',tp)
  
 
-    context = {'form': form, 'form_ds': form_ds, 'form_abo' : form_abo , 'tp' : tp  }
+    context = {'form': form, 'form_ds': form_ds, 'form_abo' : form_abo , 'tp' : tp , 'accounting' : None }
 
     return render(request, 'association/form_accounting.html', context)
+
+
+def web_abonnement_xml(abonnement,new):
+
+    #Webservice du GAR
+    #header = "<?xml version='1.0' encoding='UTF-8'?><abonnement xmlns='http://www.atosworldline.com/wsabonnement/v1.0/'>" + host
+    #header = { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' }
+
+    dico   = dict()
+    dico["idAbonnement"]          = "ABO" + str(abonnement.school.id)
+    dico["commentaireAbonnement"] = "Abonnement à SacAdo"
+    dico["idDistributeurCom"]     = "46173_832020065"
+    dico["idRessource"]           = "ark:/46173/00001.p" # En production, il faut enlever le p 
+    dico["typeIdRessource"]       = "ark"      
+    dico["libelleRessource"]      = "SACADO"
+    dico["debutValidite"]         = abonnement.date_start.isoformat()
+    dico["finValidite"]           = abonnement.date_stop.isoformat() #.strftime("%Y-%m-%d")
+    if new :  
+        dico["uai"]               = abonnement.school.code_acad 
+    dico["categorieAffectation"]  = "transferable"
+    dico["typeAffectation"]       = "ETABL"
+    dico["nbLicenceGlobale"]      = "ILLIMITE"     
+    dico["publicCible"]           = "ELEVE"
+    dico["publicCible"]           = "ENSEIGNANT"
+ 
 
 
 
@@ -433,10 +458,21 @@ def update_accounting(request, id):
                     fa.user = request.user
                     fa.accounting = accounting
                     fa.school = nf.school
+                    if nf.mode == "Période de test" :
+                        fa.is_active = 1
+                        Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
+
                     if nf.acting:
                         fa.is_active = 1
                         Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
                         Accounting.objects.filter(pk = accounting.id).update(tp = 3)
+
+                    if fa.is_gar:
+                        try :
+                            web_abonnement_xml(abonnement,new)
+                        except :
+                            pass
+
                     fa.save()
                 else :
                     accounting.abonnement.delete()

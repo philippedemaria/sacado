@@ -18,7 +18,7 @@
 {% block page_title %}
 <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-desktop"></i> </span>
     {% include 'qcm/breadcrumb.html' %}
-    <small>  Cours   </small>
+    <small>  Cours   </small>  
 {% endblock %}
 
 
@@ -53,10 +53,13 @@
                 <input type="hidden" value="{{ parcours.id }}" name="parcours_id" id="parcours_id"/>
                 {% for course in courses %}
                     <li class="{% if forloop.first %}active{% endif %} menu_course">
-                        <a href="#" class="course_viewer" data-course_id="{{ course.id }}" data-parcours_id="{{ course.parcours.id }}" >  
+                        <a href="#" {% if sacado_asso %} class="course_viewer"  {% elif course.author_id == request.user_id %} class="course_viewer" {% else %} title="Version établissement requise"  {% endif  %} data-course_id="{{ course.id }}" data-parcours_id="{{ course.parcours.id }}" >  
 
                             <i class="{% if course.is_publish %}fa fa-eye{% else %}fa fa-eye-slash{% endif %} show_hide"  id="show_hide{{ course.id }}"  data-course_id="{{ course.id }}" ></i>
-                             {{ course.title }}
+                             {{ course.title }}   
+                             {% if not sacado_asso and course.author_id != request.user.teacher_id %}
+                                <i class="fa fa-times text-danger"></i>
+                             {% endif  %}
 
                             {% if course.relationships.count > 0 %} <sup title="Cours lié à une section"><i class="fa fa-paperclip" style="font-size:8px" ></i></sup> {% endif %}
 

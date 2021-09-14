@@ -26,7 +26,13 @@
 
 {% block page_title %}  
     
-        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a>  Opération {% if tp == 0 %}Client{% elif tp == 1 %}Fournisseur{% else %}Banque{% endif %}
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a>  Opération 
+        {% if accounting %}
+            {% if accounting.tp == 0 %}Client{% elif accounting.tp == 1 %}Fournisseur{% else %}Banque{% endif %}
+        {% else %}
+            {% if tp == 0 %}Client{% elif tp == 1 %}Fournisseur{% else %}Banque{% endif %}
+        {% endif %}
+
   
 {% endblock %}
 

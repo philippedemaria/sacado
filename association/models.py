@@ -135,6 +135,8 @@ class Accounting(models.Model):
     """ Accounting   """
 
     TYPES = (
+
+        ("Période de test", "Période d'essai"),
         ("par carte de crédit", "Carte de crédit"),
         ("par virement bancaire", "Virement bancaire"),
         ("en espèces", "Espèces"),

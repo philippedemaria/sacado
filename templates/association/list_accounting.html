@@ -109,6 +109,7 @@
 
                             </td> 
                             <td>
+            
                                 {%  if accounting.mode == "par virement bancaire" %}
                                     <span class="helper_tip"> <i class="fa fa-send"></i>
                                         <div class="helper_tip_text" >par virement bancaire</div>
@@ -126,7 +127,16 @@
                                         <div class="helper_tip_text" >par carte de crédit</div>
                                     </span>
                                 {% endif %}
-                                 {{ accounting.objet }}
+                
+                                {{ accounting.objet }}
+
+                                {%  if accounting.mode == "Période de test" %}
+                                    <span class="text-danger">Période d'essai jusqu'au {{ accounting.abonnement.date_stop|date:"d N Y" }}</span>
+                                {% endif %}  
+
+
+
+
                             </td>
 
 

@@ -1,6 +1,6 @@
 define(['jquery', 'bootstrap' ], function ($) {
     $(document).ready(function () {
-        console.log("chargement JS ajax-qrandom.js OK");
+        console.log("chargement JS ajax-accounting.js OK");
 
 
         $(".details_beneficiaire").hide();
@@ -42,19 +42,19 @@ define(['jquery', 'bootstrap' ], function ($) {
 
 
 
-            $(document).on('click', '.remove_more', function () {
-                var total_form = $('#id_details-TOTAL_FORMS') ;
-                var totalForms = parseInt(total_form.val())-1  ;
+        $(document).on('click', '.remove_more', function () {
+            var total_form = $('#id_details-TOTAL_FORMS') ;
+            var totalForms = parseInt(total_form.val())-1  ;
 
-                $('#duplicate'+totalForms).remove();
-                total_form.val(totalForms)
-            });
+            $('#duplicate'+totalForms).remove();
+            total_form.val(totalForms)
+        });
 
 
+        $(".abonnement_div").hide();
 
-            $(".abonnement_div").hide();
- 
-            $("body").on('change', '#id_is_abonnement', function (event) {
+
+        $("body").on('change', '#id_is_abonnement', function (event) {
 
                 var value = $("#id_school").val() ;
 
@@ -75,6 +75,39 @@ define(['jquery', 'bootstrap' ], function ($) {
 
 
 
+        // $("body").on('change', '#id_mode', function (event) {  
+
+        //     var id_mode = $("#id_mode").val() ;
+
+        //     if(id_mode == "Période de test")
+
+        //         {
+
+        //         var date_start = $("#id_date_start").val(); 
+
+        //         var date_tab = date_start.split(" ");
+
+        //         if (date_tab[0].indexOf("/") >= 0)
+        //             { 
+        //                 var date_split = date_tab[0].split("/"); 
+        //                 var day   = date_split[0] ;
+        //                 var month = date_split[1] ;
+        //                 var year  = date_split[2] ;
+        //             }
+        //         else
+        //             { 
+        //                 var date_split = date_tab[0].split("-"); 
+        //                 var day   = date_split[2] ;
+        //                 var month = date_split[1] ;
+        //                 var year  = date_split[0] ;
+        //             }
+
+        //         var date_stop = year +"-"+ month +"-"+ day +" 00:00"
+
+        //         $("#id_date_stop").val(date_stop);
+        //         }
+
+        // });
 
 
 
