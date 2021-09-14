@@ -10,13 +10,17 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-12 col-md-6">  
+    <div class="col-sm-12 col-md-4">  
         {{ form.is_asso.label_tag }}<br/>
         {{ form.is_asso |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
     </div>
-    <div class="col-sm-12 col-md-6">  
+    <div class="col-sm-12 col-md-4">  
         {{ form.is_publish.label_tag }}<br/>
         {{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
+    </div>
+    <div class="col-sm-12 col-md-4">  
+        {{ form.is_ebep.label_tag }}<br/>
+        {{ form.is_ebep |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
     </div>
 </div>
 <hr/>

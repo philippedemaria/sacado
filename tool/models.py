@@ -57,6 +57,7 @@ class Tool(models.Model):
     imagefile     = models.ImageField(upload_to=tool_directory_path,   verbose_name="Image", default="")
     is_publish    = models.BooleanField(default=1, verbose_name="Publié ?")
     is_asso       = models.BooleanField(default=1, verbose_name="Nécessite l'adhésion SACADO ?")
+    is_ebep       = models.BooleanField(default=0, verbose_name="Outils EBEP ?")
     url           =  models.CharField(max_length=255, default='' ,   blank=True, verbose_name="url de substitution")  
     exercises     = models.ManyToManyField(Exercise, blank=True, related_name='tools', verbose_name="Outils inclusifs", editable=False)
 
