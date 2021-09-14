@@ -42,7 +42,7 @@
         {% if not rc.exercise.supportfile.is_ggbfile %}
           <div style="position: absolute; left : 30px; top:41px;" id="annoncement{{rc.id}}">   
               <span class="helper_tip btn btn-default">Consigne
-                <div class="helper_tip_text_right"> {% if rc.instruction %}    {{rc.instruction|insert_tags:45|safe}}    {% else %}      {{ rc.exercise.supportfile.annoncement|insert_tags:45|safe }}  {% endif %}</div> 
+                <div class="helper_tip_text_right"> {% if rc.instruction %}    {{rc.instruction|safe}}    {% else %}      {{ rc.exercise.supportfile.annoncement|safe }}  {% endif %}</div> 
               </span>
           </div>
         {% endif %}
