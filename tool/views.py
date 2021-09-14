@@ -100,7 +100,7 @@ def list_tools(request):
     if request.user.is_superuser :
         tools = Tool.objects.all()
     else :
-        tools = Tool.objects.filter(is_publish=1).exclude(teachers = teacher)
+        tools = Tool.objects.filter(is_publish=1, is_ebep=0).exclude(teachers = teacher)
     form = ToolForm(request.POST or None, request.FILES or None   )
     return render(request, 'tool/list_tools.html', {'form': form , 'tools' : tools })
 
