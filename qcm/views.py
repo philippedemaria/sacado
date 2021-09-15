@@ -1589,7 +1589,7 @@ def create_parcours(request,idp=0):
         group_ckeched_ids = request.POST.getlist('groups')
         set_groups(nf,group_ckeched_ids)
         ################################################
-        these_students =  request.POST.getlist("students")
+        these_students =  request.POST.getlist("these_students")
         set_students(nf,these_students) 
 
         for s in these_students :
@@ -1715,7 +1715,7 @@ def update_parcours(request, id, idg=0 ):
             if affectation :
 
                 
-                these_students =  request.POST.getlist("students")
+                these_students =  request.POST.getlist("these_students")
                 for s in these_students :
                     t = attribute_all_documents_to_student([nf],s)
 
@@ -1728,9 +1728,6 @@ def update_parcours(request, id, idg=0 ):
                             relationship.students.set(sg_students)
                 except:
                     pass
-
-            #folder_parcours =  request.POST.getlist("folder_parcours")
-            #set_leaf_parcours(nf,folder_parcours)       
             
             lock_all_exercises_for_student(nf.stop,parcours)
 
@@ -7603,7 +7600,7 @@ def create_folder(request,idg):
             nf.groups.add(group) 
             nf.leaf_parcours.set(lp)
 
-            test_fct = set_students(nf,request.POST.getlist("students")) 
+            test_fct = set_students(nf,request.POST.getlist("these_students")) 
 
 
             return redirect ("list_parcours_group", idg )     
@@ -7669,7 +7666,7 @@ def update_folder(request,id,idg):
                 if affectation :     
                     nf.groups.set(id_groups_checked)
 
-                    test_fct = set_students(nf, request.POST.getlist("students"))
+                    test_fct = set_students(nf, request.POST.getlist("these_students"))
                 ##################################################
                 if group_exists :
                     return redirect ("list_parcours_group", group_id ) 
