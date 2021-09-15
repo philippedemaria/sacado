@@ -39,8 +39,8 @@ define(['jquery',  'bootstrap'], function ($) {
 
             if($('iframe').length) { 
 
-                width = 1.5*parseInt($('body').find("iframe").attr("width"));
-                height = 1.5*parseInt($('body').find("iframe").attr("height")); 
+                width = 1.2*parseInt($('body').find("iframe").attr("width"));
+                height = 1.2*parseInt($('body').find("iframe").attr("height")); 
                 coeff = width/height                                    
 
                 if (width < screen_size){
