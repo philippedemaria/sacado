@@ -455,8 +455,7 @@ def accountings(request):
 def list_accountings(request,tp):
 
     active_year, this_year    = get_active_year() 
-    date_start   = datetime(this_year, 8, 31)
-    date_stop    = datetime(this_year+1, 8, 31)
+ 
 
     if tp == 0 :
         accountings = get_accountings().filter(plan__code__gte=700)
