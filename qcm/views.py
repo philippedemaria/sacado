@@ -984,9 +984,14 @@ def ajax_individualise_this_exercise(request):
     custom = int(request.POST.get("custom"))
     if custom :
         rc = Customexercise.objects.get(pk=relationship_id)
+        try :
+            parcours = rc.parcourses.first()
+        except :
+            parcours = None
     else :
         rc = Relationship.objects.get(pk=relationship_id)
         parcours = rc.parcours
+
     
     students = rc.students.all
     data = {}
@@ -1101,7 +1106,7 @@ def list_parcours_group(request,id):
     parcours_tab = sorted(parcours_tab, key=attrgetter('is_evaluation')) #set trié par ranking
  
     ###efface le realtime de plus de 2 h
-    clear_realtime(parcours_tab , today.now() ,  3600 )
+    #clear_realtime(parcours_tab , today.now() ,  3600 )
 
     return render(request, 'qcm/list_parcours_group.html', {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group': group,  'parcours' : None , 'communications' : [] , 'relationships' : [] , 'role' : role , 'today' : today })
 
@@ -1126,7 +1131,7 @@ def list_sub_parcours_group(request,idg,id):
     parcours_tab = parcours.leaf_parcours.order_by("is_evaluation", "ranking")
 
     ###efface le realtime de plus de 2 h
-    clear_realtime(parcours_tab , today.now() ,  3600 )
+    #clear_realtime(parcours_tab , today.now() ,  3600 )
 
     context = {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group , 'parcours' : parcours,  'parcours_folder' : parcours,   'communications' : [] , 'relationships' : [] , 'role' : True , 'today' : today }
 

@@ -60,14 +60,38 @@ def get_active_year():
 
 
 def get_active_abonnements():
-    active_year, this_year = get_active_year() # active_year = 2020-2021 ALORS QUE this_year est 2020
-    this_day     = datetime.now() 
- 
-    start = datetime(this_year,8,31)
-    stop  = datetime(this_year+1,1,31)
 
-    abonnements = Abonnement.objects.filter(date_start__lte = start  , date_stop__gte = stop).order_by("school__country__name")
+    active_year, this_year = get_active_year() # active_year = 2020-2021 ALORS QUE this_year est 2020
+    start = datetime(this_year,7,15)
+    stop  = datetime(this_year+1,9,1)
+
+    abonnements = Abonnement.objects.filter(date_start__gte = start , date_stop__lte = stop).exclude(accounting__date_payment = None).order_by("school__country__name")
     return abonnements
+
+
+def get_pending_abonnements():
+
+    active_year, this_year = get_active_year() # active_year = 2020-2021 ALORS QUE this_year est 2020
+    start = datetime(this_year,7,15)
+    stop  = datetime(this_year+1,9,1)
+
+    abonnements = Abonnement.objects.filter(date_start__gte = start , date_stop__lte = stop, accounting__date_payment = None).order_by("school__country__name")
+    return abonnements
+
+
+
+
+def get_accountings():
+
+    active_year, this_year = get_active_year() 
+    date_start   = datetime(this_year, 8, 31)
+    date_stop    = datetime(this_year+1, 8, 31)
+
+    accountings = Accounting.objects.filter(date__gte = date_start , date__lte = date_stop )
+
+    return accountings
+
+
 
 #####################################################################################################################################
 #####################################################################################################################################
@@ -230,7 +254,7 @@ def update_activeyear(request):
 
 def total(first_date, last_date) :
 
-    accountings = Accounting.objects.filter(acting__lte=last_date, acting__gte=first_date).exclude(acting=None)
+    accountings = Accounting.objects.filter(date_payment__lte=last_date, date_payment__gte=first_date).exclude(date_payment=None)
     total_amount = 0
     total_amount_active = 0
     for a in accountings :
@@ -242,19 +266,55 @@ def total(first_date, last_date) :
 
 
 
+
+
 @user_passes_test(user_is_board)
-def list_accountings(request,tp):
-    if tp == 0 :
-        accountings = Accounting.objects.filter(tp=tp,acting=None).exclude(is_paypal=1).order_by("-date")
-    elif tp == 1 :
-        accountings = Accounting.objects.filter(tp=tp,acting=None).order_by("-date")
-    else :
-        accountings = Accounting.objects.exclude(acting=None).order_by("-date")
+def adhesions(request):
 
-
-    active_year, this_year = get_active_year() # active_year = 2020-2021 ALORS QUE this_year est 2020
     today = datetime.now()
     this_month = today.month
+ 
+
+    activeyear, year = get_active_year()
+
+ 
+
+    first_date_month =  datetime(year, this_month, 1)
+    first_date_year  = datetime(year, 1, 1)
+
+    if this_month > 0 and this_month < 8 :
+        this_year = this_year - 1
+    first_date_schoolyear = datetime(year, 9, 1)
+
+    total_month = total(first_date_month, today)
+    total_year = total(first_date_year, today)
+    total_shoolyear =  total(first_date_schoolyear, today)
+
+    date_start = datetime(year, 8, 31)
+    date_stop  = datetime(year+1, 8, 31)
+
+    abonnements = Abonnement.objects.filter(is_active=1  ).order_by("-accounting__date")    
+
+    context =  {'abonnements': abonnements , 'total_month': total_month, 'total_year': total_year, 'total_shoolyear': total_shoolyear ,'this_month' :this_month, 'activeyear' : activeyear }
+ 
+    return render(request, 'association/adhesions.html', context )
+
+
+
+
+
+
+
+@user_passes_test(user_is_board)
+def list_paypal(request):
+
+
+    accountings = get_accountings().filter(is_paypal=1).order_by("-date")
+
+
+    today = datetime.now()
+    this_month = today.month
+    this_year = today.year
 
     first_date_month =  datetime(this_year, this_month, 1)
     first_date_year = datetime(this_year, 1, 1)
@@ -267,7 +327,153 @@ def list_accountings(request,tp):
     total_year = total(first_date_year, today)
     total_shoolyear =  total(first_date_schoolyear, today)
 
-    return render(request, 'association/list_accounting.html', {'accountings': accountings , 'tp' : tp , 'total_month': total_month, 'total_year': total_year, 'total_shoolyear': total_shoolyear ,'this_month' :this_month })
+
+    context =  {'accountings': accountings , 'total_month': total_month, 'total_year': total_year, 'total_shoolyear': total_shoolyear ,'this_month' :this_month }
+ 
+    return render(request, 'association/list_accounting.html', context )
+
+
+
+@user_passes_test(user_is_board)
+def bank_activities(request):
+    context = { }
+
+    return render(request, 'association/bank_activities.html', context )
+
+
+
+@user_passes_test(user_is_board)
+def bank_bilan(request):
+    """ page d'accueil de la comptabilité"""
+
+    this_day     = datetime.now() 
+    this_year    = this_day.year
+
+    abonnements = Abonnement.objects.filter(date_start__lte = this_day  , date_stop__gte = this_day).order_by("school__country__name")
+
+    nb_schools        = abonnements.count()
+    nb_schools_fr     = abonnements.filter(is_active = 1, school__country_id = 5).count()
+    nb_schools_no_fr  = abonnements.filter(is_active = 1).exclude(school__country_id =5).count() 
+    nb_schools_no_pay = abonnements.filter(is_active = 0).count()
+
+    start_date   = datetime(this_year, 1, 1)
+    end_date     = datetime(this_year, 12, 31)
+
+    product , charge , actif  , commission_paypal, result_bank , result_paypal = 0 , 0 , 0 , 0 , 0 , 0
+    accountings   = Accounting.objects.values_list("amount","is_credit","date_payment","objet","is_paypal").filter(date__gte = start_date  , date__lte = end_date)
+
+    charges_list = list()
+    for a in accountings :
+        if a[1] and a[2] != None and a[4] == 0: #Crédit encaissé en banque non paypal
+            actif += a[0]
+        elif a[1] and a[2] == None and a[4] == 0: #Crédit en attente non paypal
+            product += a[0] 
+        elif a[1]  and a[4] == 1: #Crédit encaissé en banque paypal
+            result_paypal += a[0]
+        elif a[1] == 0  and a[4] == 1: #Débit commission paypal
+            commission_paypal += a[0]
+        elif a[1] == 0 and a[4] == 0: #débit non paypal
+            dico    = dict()
+            dico["objet"]  = a[3]
+            dico["amount"] = a[0]
+            charges_list.append(dico)
+            charge += abs(a[0])
+
+
+    total        = actif + product + result_paypal
+    result       = total - charge
+
+        
+    context = { 'charge': charge, 'product': product , 'result': result , 'actif': actif , 'total': total , 'result_paypal' : result_paypal ,  'nb_schools': nb_schools , 'abonnements': abonnements , 'charges_list' : charges_list ,
+                'this_year' : this_year , 'nb_schools': nb_schools , 'nb_schools_fr': nb_schools_fr , 'nb_schools_no_fr': nb_schools_no_fr ,  'nb_schools_no_pay': nb_schools_no_pay , 'commission_paypal' : commission_paypal }  
+
+
+    return render(request, 'association/bank_bilan.html', context )   
+
+ 
+
+
+
+@user_passes_test(user_is_board)
+def accountings(request):
+    """ page d'accueil de la comptabilité"""
+
+    abonnements = get_active_abonnements() 
+
+    nb_schools        = abonnements.count()
+    nb_schools_fr     = abonnements.filter(school__country_id = 5).count()
+    nb_schools_no_fr  = abonnements.exclude(school__country_id =5).count() 
+    nb_schools_no_pay = get_pending_abonnements().count()
+
+ 
+    active_year, this_year    = get_active_year() 
+    start_date   = datetime(this_year, 8, 31)
+    end_date     = datetime(this_year+1, 8, 31)
+
+    product , charge , actif  , commission_paypal, result_bank , result_paypal = 0 , 0 , 0 , 0 , 0 , 0
+    accountings   = Accounting.objects.values_list("amount","is_credit","date_payment","objet","is_paypal").filter(date__gte = start_date  , date__lte = end_date)
+
+
+    charges_list = list()
+    for a in accountings :
+        if a[1] and a[2] != None and a[4] == 0: #Crédit encaissé en banque non paypal
+            actif += a[0]
+        elif a[1] and a[2] == None and a[4] == 0: #Crédit en attente non paypal
+            product += a[0] 
+        elif a[1]  and a[4] == 1: #Crédit encaissé en banque paypal
+            result_paypal += a[0]
+        elif a[1] == 0  and a[4] == 1: #Débit commission paypal
+            commission_paypal += a[0]
+        elif a[1] == 0 and a[4] == 0: #débit non paypal
+            dico    = dict()
+            dico["objet"]  = a[3]
+            dico["amount"] = a[0]
+            charges_list.append(dico)
+            charge += abs(a[0])
+
+    actif += result_paypal
+    result       = actif - charge
+    total        = actif + product  
+
+        
+    context = { 'charge': charge, 'product': product , 'result': result , 'actif': actif , 'total': total , 'result_paypal' : result_paypal ,  'nb_schools': nb_schools , 'abonnements': abonnements , 'charges_list' : charges_list ,
+                'this_year' : this_year , 'active_year' : active_year , 'nb_schools': nb_schools , 'nb_schools_fr': nb_schools_fr , 'nb_schools_no_fr': nb_schools_no_fr ,  'nb_schools_no_pay': nb_schools_no_pay , 'commission_paypal' : commission_paypal }  
+
+
+
+    return render(request, 'association/accountings.html', context )
+
+
+
+
+@user_passes_test(user_is_board)
+def list_accountings(request,tp):
+
+    active_year, this_year    = get_active_year() 
+    date_start   = datetime(this_year, 8, 31)
+    date_stop    = datetime(this_year+1, 8, 31)
+
+    if tp == 0 :
+        accountings = get_accountings().filter(plan__code__gte=700)
+    elif  tp == 1 :
+        accountings = get_accountings().filter(plan__code__gte=600, plan__code__lt=700 )
+    else :
+        accountings = get_accountings().exclude(date_payment=None)
+
+    active_year, this_year = get_active_year() # active_year = 2020-2021 ALORS QUE this_year est 2020
+    today = datetime.now()
+    this_month = today.month
+
+    first_date_month =  datetime(this_year, this_month, 1)
+
+    if this_month > 0 and this_month < 8 :
+        this_year = this_year - 1
+    first_date_schoolyear = datetime(this_year, 9, 1)
+
+    total_month     = total(first_date_month, today)
+    total_shoolyear = total(first_date_schoolyear, today)
+
+    return render(request, 'association/list_accounting.html', {'accountings': accountings , 'tp' : tp , 'total_month': total_month,  'total_shoolyear': total_shoolyear ,'this_month' :this_month })
 
 
 
@@ -287,7 +493,7 @@ def ajax_total_month(request):
 
 
     data['html'] = "<label><b>"+str(total(first, last)).replace(".",",")+" € </b></label>"
-    rows = Accounting.objects.values_list("id", flat = True).filter(acting__lte=last, acting__gte=first).exclude(acting=None)
+    rows = Accounting.objects.values_list("id", flat = True).filter(date_payment__lte=last, date_payment__gte=first).exclude(date_payment=None)
     data['rows'] = list(rows)
     data['len']  = len(list(rows))
     return JsonResponse(data)
@@ -310,7 +516,7 @@ def ajax_total_period(request):
         from_date = str_to_date(from_date)
         to_date = str_to_date(to_date)
 
-        rows = Accounting.objects.values_list("id", flat = True).filter(acting__lte=to_date,acting__gte=from_date).exclude(acting=None)
+        rows = Accounting.objects.values_list("id", flat = True).filter(date_payment__lte=to_date,date_payment__gte=from_date).exclude(date_payment=None)
         data['rows'] = list(rows)
         data['html'] = str(total(from_date, to_date)) +" €"
         data['len']  = len(list(rows))
@@ -344,19 +550,20 @@ def create_accounting(request,tp):
                 nf.chrono = create_chrono(Accounting, forme) # Create_chrono dans general_functions.py
             nf.tp = tp
             if tp == 0 :
-                nf.tp = 18
+                nf.plan = 18
                 if forme == "FACTURE" :
                     nf.is_credit = 1
                 else :
                     nf.is_credit = 0
             elif tp == 1 :
                 if forme == "AVOIR" :
-                    nf.is_credit = 1
+                    nf.is_credit = 0 
                 else :
-                    nf.is_credit = 0
+                    nf.is_credit = 1
             else :
-                nf.acting = today
+                nf.date_payment = today
             nf.save()
+
 
             form_ds = formSet(request.POST or None, instance = nf)
             for form_d in form_ds :
@@ -368,7 +575,12 @@ def create_accounting(request,tp):
             for d in details :
                 som += d.amount
 
-            Accounting.objects.filter(pk = nf.id).update(amount=som)
+
+
+            if  tp == 1 :
+                Accounting.objects.filter(pk = nf.id).update(amount=-som)
+            else :
+                Accounting.objects.filter(pk = nf.id).update(amount=som)
 
             if nf.is_abonnement :
                 if form_abo.is_valid():
@@ -376,7 +588,7 @@ def create_accounting(request,tp):
                     fa.user = request.user
                     fa.accounting = nf
                     fa.school = nf.school
-                    if nf.acting:
+                    if nf.date_payment:
                         fa.active = 1
                     fa.save()
         else :
@@ -423,7 +635,7 @@ def update_accounting(request, id):
     is_credit =  accounting.is_credit
     try :
         abonnement = accounting.abonnement 
-        form_abo = AbonnementForm(request.POST or None, instance=accounting.abonnement  )
+        form_abo = AbonnementForm(request.POST or None, instance= abonnement  )
     except :
         abonnement = False
         form_abo = AbonnementForm(request.POST or None )
@@ -458,14 +670,9 @@ def update_accounting(request, id):
                     fa.user = request.user
                     fa.accounting = accounting
                     fa.school = nf.school
-                    if nf.mode == "Période de test" :
+                    if nf.mode == "Période de test" or  nf.date_payment:
                         fa.is_active = 1
                         Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
-
-                    if nf.acting:
-                        fa.is_active = 1
-                        Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
-                        Accounting.objects.filter(pk = accounting.id).update(tp = 3)
 
                     if fa.is_gar:
                         try :
@@ -475,7 +682,7 @@ def update_accounting(request, id):
 
                     fa.save()
                 else :
-                    accounting.abonnement.delete()
+                    print(form_abo.errors)
 
         else :
             print(form.errors)
@@ -728,8 +935,8 @@ def print_accounting(request, id ):
     #########################################################################################
     elements.append(Spacer(0,1*inch)) 
     label_facture = ""
-    if accounting.acting  :
-        label_facture = "Facture réglée le " + str(accounting.acting.strftime("%d-%m-%Y")) +" "+accounting.mode
+    if accounting.date_payment  :
+        label_facture = "Facture réglée le " + str(accounting.date_payment.strftime("%d-%m-%Y")) +" "+accounting.mode
 
     facture = Paragraph(  label_facture  , normal )
     elements.append(facture)
@@ -968,7 +1175,7 @@ def export_bilan(request):
     font_style = xlwt.XFStyle()
 
 
-    accountings = Accounting.objects.filter(acting__gte=date_start_obj, acting__lte=date_end_obj).values_list('date', 'acting', 'is_credit' , 'objet', 'beneficiaire','school', 'address', 'complement',  'town', 'country', 'contact', 'observation', 'amount', 'user' ).order_by("date")
+    accountings = Accounting.objects.filter(date_payment__gte=date_start_obj, date_payment__lte=date_end_obj).values_list('date', 'date_payment', 'is_credit' , 'objet', 'beneficiaire','school', 'address', 'complement',  'town', 'country', 'contact', 'observation', 'amount', 'user' ).order_by("date")
     ############  Gestion des selects multiples #####################################
     row_n = 0
     for accounting in accountings :
@@ -1344,169 +1551,4 @@ def reset_all_students_sacado(request):
 
 
 
-@user_passes_test(user_is_board)
-def accountings(request):
-    """ page d'accueil de la comptabilité"""
-
-    abonnements = get_active_abonnements()
-
-    nb_schools        = abonnements.count()
-    nb_schools_fr     = abonnements.filter(is_active = 1, school__country_id = 5).count()
-    nb_schools_no_fr  = abonnements.filter(is_active = 1).exclude(school__country_id =5).count() 
-    nb_schools_no_pay = abonnements.filter(is_active = 0).count()
-
- 
-    active_year, this_year    = get_active_year() 
-    start_date   = datetime(this_year, 1, 1)
-    end_date     = datetime(this_year, 12, 31)
-
-    product , charge , actif  , commission_paypal, result_bank , result_paypal = 0 , 0 , 0 , 0 , 0 , 0
-    accountings   = Accounting.objects.values_list("amount","is_credit","acting","objet","is_paypal").filter(date__gte = start_date  , date__lte = end_date)
-
-    charges_list = list()
-    for a in accountings :
-        if a[1] and a[2] != None and a[4] == 0: #Crédit encaissé en banque non paypal
-            actif += a[0]
-        elif a[1] and a[2] == None and a[4] == 0: #Crédit en attente non paypal
-            product += a[0] 
-        elif a[1]  and a[4] == 1: #Crédit encaissé en banque paypal
-            result_paypal += a[0]
-        elif a[1] == 0  and a[4] == 1: #Débit commission paypal
-            commission_paypal += a[0]
-        elif a[1] == 0 and a[4] == 0: #débit non paypal
-            dico    = dict()
-            dico["objet"]  = a[3]
-            dico["amount"] = a[0]
-            charges_list.append(dico)
-            charge += abs(a[0])
-
-    result       = actif - charge
-    total        = actif + product + result_paypal
-
-
-        
-    context = { 'charge': charge, 'product': product , 'result': result , 'actif': actif , 'total': total , 'result_paypal' : result_paypal ,  'nb_schools': nb_schools , 'abonnements': abonnements , 'charges_list' : charges_list ,
-                'this_year' : this_year , 'active_year' : active_year , 'nb_schools': nb_schools , 'nb_schools_fr': nb_schools_fr , 'nb_schools_no_fr': nb_schools_no_fr ,  'nb_schools_no_pay': nb_schools_no_pay , 'commission_paypal' : commission_paypal }  
-
-
-
-    return render(request, 'association/accountings.html', context )
-
-
-
-
-
-@user_passes_test(user_is_board)
-def adhesions(request):
-    accountings = Accounting.objects.exclude(school=None).order_by("-date")
-    today = datetime.now()
-    this_month = today.month
-    this_year = today.year
-
-    first_date_month =  datetime(this_year, this_month, 1)
-    first_date_year = datetime(this_year, 1, 1)
-
-    if this_month > 0 and this_month < 8 :
-        this_year = this_year - 1
-    first_date_schoolyear = datetime(this_year, 9, 1)
-
-    total_month = total(first_date_month, today)
-    total_year = total(first_date_year, today)
-    total_shoolyear =  total(first_date_schoolyear, today)
-
-
-    context =  {'accountings': accountings , 'total_month': total_month, 'total_year': total_year, 'total_shoolyear': total_shoolyear ,'this_month' :this_month }
- 
-    return render(request, 'association/adhesions.html', context )
-
-
-
-
-
-
-
-@user_passes_test(user_is_board)
-def list_paypal(request):
-    accountings = Accounting.objects.filter(is_paypal=1).order_by("-date")
-
-
-    today = datetime.now()
-    this_month = today.month
-    this_year = today.year
-
-    first_date_month =  datetime(this_year, this_month, 1)
-    first_date_year = datetime(this_year, 1, 1)
-
-    if this_month > 0 and this_month < 8 :
-        this_year = this_year - 1
-    first_date_schoolyear = datetime(this_year, 9, 1)
-
-    total_month = total(first_date_month, today)
-    total_year = total(first_date_year, today)
-    total_shoolyear =  total(first_date_schoolyear, today)
-
-
-    context =  {'accountings': accountings , 'total_month': total_month, 'total_year': total_year, 'total_shoolyear': total_shoolyear ,'this_month' :this_month }
- 
-    return render(request, 'association/list_accounting.html', context )
-
-
-
-@user_passes_test(user_is_board)
-def bank_activities(request):
-    context = { }
-
-    return render(request, 'association/bank_activities.html', context )
-
-
-
-@user_passes_test(user_is_board)
-def bank_bilan(request):
-    """ page d'accueil de la comptabilité"""
-
-    this_day     = datetime.now() 
-    this_year    = this_day.year
-
-    abonnements = Abonnement.objects.filter(date_start__lte = this_day  , date_stop__gte = this_day).order_by("school__country__name")
-
-    nb_schools        = abonnements.count()
-    nb_schools_fr     = abonnements.filter(is_active = 1, school__country_id = 5).count()
-    nb_schools_no_fr  = abonnements.filter(is_active = 1).exclude(school__country_id =5).count() 
-    nb_schools_no_pay = abonnements.filter(is_active = 0).count()
-
-    start_date   = datetime(this_year, 1, 1)
-    end_date     = datetime(this_year, 12, 31)
-
-    product , charge , actif  , commission_paypal, result_bank , result_paypal = 0 , 0 , 0 , 0 , 0 , 0
-    accountings   = Accounting.objects.values_list("amount","is_credit","acting","objet","is_paypal").filter(date__gte = start_date  , date__lte = end_date)
-
-    charges_list = list()
-    for a in accountings :
-        if a[1] and a[2] != None and a[4] == 0: #Crédit encaissé en banque non paypal
-            actif += a[0]
-        elif a[1] and a[2] == None and a[4] == 0: #Crédit en attente non paypal
-            product += a[0] 
-        elif a[1]  and a[4] == 1: #Crédit encaissé en banque paypal
-            result_paypal += a[0]
-        elif a[1] == 0  and a[4] == 1: #Débit commission paypal
-            commission_paypal += a[0]
-        elif a[1] == 0 and a[4] == 0: #débit non paypal
-            dico    = dict()
-            dico["objet"]  = a[3]
-            dico["amount"] = a[0]
-            charges_list.append(dico)
-            charge += abs(a[0])
-
-
-    total        = actif + product + result_paypal
-    result       = total - charge
-
-        
-    context = { 'charge': charge, 'product': product , 'result': result , 'actif': actif , 'total': total , 'result_paypal' : result_paypal ,  'nb_schools': nb_schools , 'abonnements': abonnements , 'charges_list' : charges_list ,
-                'this_year' : this_year , 'nb_schools': nb_schools , 'nb_schools_fr': nb_schools_fr , 'nb_schools_no_fr': nb_schools_no_fr ,  'nb_schools_no_pay': nb_schools_no_pay , 'commission_paypal' : commission_paypal }  
-
-
-    return render(request, 'association/bank_bilan.html', context )   
-
- 
  

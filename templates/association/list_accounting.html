@@ -6,7 +6,7 @@
 {% block require %}
  
 
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3_withoutMathJax.js' %}"></script>
 
      <script>
         require(['script/ajax-list_accounting']);
@@ -19,7 +19,7 @@
 {% block page_title %}
         <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Journal des opérations 
 
-        {% if tp == 0 %}Client{% elif tp == 1 %}Fournisseur{% else %}Banque{% endif %}
+        {% if tp == 0 %}Client{% elif tp == 1 %}Fournisseur{% elif   'list_paypal' in request.path  %} PAYPAL {% else %}Banque{% endif %}
 
         <a href="#" data-toggle='modal' data-target='#e_bilans' class="btn btn-default btn-xs"> <i class="fa fa-file-excel-o fa-xs text-success"></i> Exporter le bilan</a>
         <a href="#" data-toggle='modal' data-target='#p_bilans' class="btn btn-default btn-xs"> <i class="fa fa-file-pdf-o fa-xs text-danger"></i> Imprimer le bilan</a>
@@ -54,9 +54,7 @@
                     </select>  
                 :</label> <span id="this_month"><b>{{ total_month }} €</b></span>
             </div>
-            <div class="col-sm-4 col-md-2">
-                <label>Année civile : <b>{{ total_year }} € </b></label><br/>
-            </div>
+ 
             <div class="col-sm-4 col-md-2">
                 <label>Année scolaire : <b>{{ total_shoolyear}} € </b></label><br/>
             </div>
@@ -76,16 +74,11 @@
                 <tr>                     
                     <td style="width:120px">Chrono</td>                     
                     <td style="width:120px">Date</td>                        
-                    <td style="width:300px">{% if tp == 2 %}Client/Fournisseurs{% elif tp == 1 %}Fournisseurs/autre{% elif tp == 0 %}Client{% endif %}   </td>
+                    <td  >{% if tp == 2 %}Client/Fournisseurs{% elif tp == 1 %}Fournisseurs/autre{% elif tp == 0 %}Client{% endif %}   </td>
                     <td>Libellé </td>
-                    <td style="width:80px">{% if tp == 2 %}Banque{% elif tp == 1 %}Fournisseurs{% elif tp == 0 %}Client{% endif %} Débit</td>
-                    <td style="width:80px">{% if tp == 2 %}Banque{% elif tp == 1 %}Fournisseurs{% elif tp == 0 %}Client{% endif %} Crédit</td>
-                    {% if tp == 2 %}
-                    <td style="width:80px">Paypal Débit</td>
-                    <td style="width:80px">Paypal Crédit</td>
-                    {% endif %}
+                    <td style="width:80px">{% if tp == 2 %}Payé{% elif tp == 1 %}Paiement fait{% elif tp == 0 %}Reste à payer{% endif %}  </td>
+                    <td style="width:80px">{% if tp == 2 %}Reçu{% elif tp == 1 %}Reste à payer{% elif tp == 0 %}Paiement fait{% endif %}</td>
                     {% if tp < 2 %}<td>Comptes</td>{% endif %}
-                    <td>Paiement</td>
                 </tr>
                 </thead>
                 <tbody>
@@ -100,16 +93,13 @@
                             <td><span class="helper_tip"><a href="{% url 'update_accounting'  accounting.id %}" >
                                 {% if accounting.beneficiaire  %} {{ accounting.beneficiaire }} {% else %}{{ accounting.school.name }}, {{ accounting.school.country.name }} {% endif %}
                                     <div class="helper_tip_text" > {{ accounting.observation|safe }}</div>
-                                
                                 </a></span>
 
                                 <a href="{% url 'delete_accounting'  accounting.id %}" class="pull-right"  onclick="return TestDelete('cette facture')"><i class="fa fa-trash"></i> </a>
                                 <a href="{% url 'print_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-print"></i> </a>
                                 <a href="{% url 'show_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-eye"></i> </a>
-
                             </td> 
                             <td>
-            
                                 {%  if accounting.mode == "par virement bancaire" %}
                                     <span class="helper_tip"> <i class="fa fa-send"></i>
                                         <div class="helper_tip_text" >par virement bancaire</div>
@@ -133,28 +123,32 @@
                                 {%  if accounting.mode == "Période de test" %}
                                     <span class="text-danger">Période d'essai jusqu'au {{ accounting.abonnement.date_stop|date:"d N Y" }}</span>
                                 {% endif %}  
-
-
-
-
                             </td>
 
 
-
-                            <td style="width:80px">
-                                {% if accounting.is_credit and not is_paypal%}<span class="text-success">{{ accounting.amount }} €</span>{% endif %}
-                            </td>
-                            <td style="width:80px">
-                                {% if not accounting.is_credit and not is_paypal%}<span class="text-danger">{{ accounting.amount }} €</span>{% endif %}
-                            </td>
-                            {% if tp == 2 %}                            
-                            <td style="width:80px">
-                                {% if accounting.is_credit and  is_paypal%}<span class="text-success">{{ accounting.amount }} €</span>{% endif %}
-                            </td>
-                            <td style="width:80px">
-                                {% if not accounting.is_credit and  is_paypal%}<span class="text-danger">{{ accounting.amount }} €</span>{% endif %}
-                            </td>
+                            {% if tp == 2 %}
+                                <td style="width:80px">
+                                    {% if accounting.tp == 1  %}<span class="text-danger">{{ accounting.amount }} €</span>{% endif %}
+                                </td>
+                                <td style="width:80px">
+                                    {% if accounting.tp  == 0  %}<span class="text-success">{{ accounting.amount }} €</span>{% endif %}
+                                </td>
+                            {% elif tp == 1 %}
+                                <td style="width:80px">
+                                    {% if accounting.date_payment  %}<span class="text-success">{{ accounting.amount }} €</span>{% endif %} 
+                                </td>
+                                <td style="width:80px">
+                                     <span class="text-danger">{{ accounting.amount }} €</span> 
+                                </td>
+                            {% else %}
+                                <td style="width:80px">
+                                    {% if accounting.plan.code > 700 %}<span class="text-danger">{{ accounting.amount }} €</span>{% endif %}
+                                </td>
+                                <td style="width:80px">
+                                    {% if accounting.date_payment  %}<span class="text-success">{{ accounting.amount }} €</span>{% endif %}
+                                </td>
                             {% endif %}
+
                             {% if tp < 2 %}
                             <td style="width:80px">
                                 {{ accounting.plan.code }}
@@ -163,9 +157,6 @@
                                 </span>
                             </td>
                             {% endif %}
-                            <td>
-                                 {{ accounting.acting|date:"d N Y" }}
-                            </td>
                         </tr>
 
                     {% endfor %}

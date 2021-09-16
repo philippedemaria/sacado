@@ -169,8 +169,8 @@ class Accounting(models.Model):
 
     observation = RichTextUploadingField( blank=True, default="", null=True, verbose_name="Observation")
 
-    acting = models.DateTimeField(null=True, blank=True, verbose_name="Date d'effet")
-    date = models.DateTimeField(auto_now_add=True)
+    date_payment = models.DateTimeField(null=True, blank=True, verbose_name="Date d'effet") # date de paiement
+    date = models.DateTimeField(auto_now_add=True) # date de création de la facture
     user = models.ForeignKey(User, related_name="accontings", null=True, blank=True,  on_delete=models.CASCADE, editable=False)
     is_active = models.BooleanField(default=0, verbose_name="Actif")
     is_abonnement = models.BooleanField(default=0, verbose_name="Abonnement")

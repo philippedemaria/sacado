@@ -379,7 +379,7 @@ def school_adhesion(request):
                     acting, is_active  = None , False # date d'effet, user, le paiement est payé non ici... doit passer par la vérification
                     observation =   "Paiement en ligne"             
  
-                    accounting_id = accounting_adhesion(school_exists, today , acting, user, is_active , observation) # création de la facturation
+                    accounting_id = accounting_adhesion(school_exists, today , today, user, is_active , observation) # création de la facturation
                     ########################################################################################################################
                     #############  Abonnement
                     ########################################################################################################################

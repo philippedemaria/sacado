@@ -17,8 +17,8 @@
 
 
 {% block page_title %}
-        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Abonnements Etablissements
-
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Abonnements {{ activeyear}}
+ 
         <a href="#" data-toggle='modal' data-target='#e_bilans' class="btn btn-default btn-xs"> <i class="fa fa-file-excel-o fa-xs text-success"></i> Exporter le bilan</a>
         <a href="#" data-toggle='modal' data-target='#p_bilans' class="btn btn-default btn-xs"> <i class="fa fa-file-pdf-o fa-xs text-danger"></i> Imprimer le bilan</a>
 {% endblock %}
@@ -78,57 +78,49 @@
                     <td>Object </td>
                     <td>Mode </td>
                     <td style="width:80px">Montant</td>
-                    <td style="width:80px">Débit/crédit</td>
                     <td style="width:150px">Date de valeur</td>
-                    <td>Ville</td>
-                    <td>Pays</td>
+                    <td>Ville/Pays</td>
                     <td>Contacts</td>
                 </tr>
                 </thead>
                 <tbody>
-                    {% for accounting in accountings %}
+                    {% for abonnement in abonnements %}
                         <tr id="this_tr_{{ accounting.id }}" class="this_tr_all">
                             <td>
-                                <span >{{ accounting.chrono }}</span> 
+                                <span >{{ abonnement.accounting.chrono }}</span> 
                             </td>                            
                             <td>
-                                <span >{{ accounting.date|date:"Y-m-d" }} </span> 
+                                <span >{{ abonnement.accounting.date|date:"Y-m-d" }} </span> 
                             </td>
                             <td>
-                                <span class="helper_tip">{% if accounting.beneficiaire  %} {{ accounting.beneficiaire }} {% else %}{{ accounting.school.name }}, {{ accounting.school.country.name }} {% endif %}
-                                    <div class="helper_tip_text" > {{ accounting.observation|safe }}</div>
+                                <span class="helper_tip">{% if abonnement.accounting.beneficiaire  %} {{ abonnement.accounting.beneficiaire }} {% else %}{{ abonnement.accounting.school.name }}, {{ abonnement.accounting.school.country.name }} {% endif %}
+                                    <div class="helper_tip_text" > {{ abonnement.accounting.observation|safe }}</div>
                                 
                                 </span>
 
                             </td> 
                             <td>
-                                <a href="{% url 'update_accounting'  accounting.id %}" >{{ accounting.objet }}</a>
+                                <a href="{% url 'update_accounting'  abonnement.accounting.id %}" >{{ abonnement.accounting.objet }}</a>
 
-                                <a href="{% url 'print_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-print"></i> </a>
-                                <a href="{% url 'show_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-eye"></i> </a>
+                                <a href="{% url 'print_accounting'  abonnement.accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-print"></i> </a>
+                                <a href="{% url 'show_accounting'  abonnement.accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-eye"></i> </a>
 
                             </td>
                             <td>
-                                 {{ accounting.mode }}    <br>
+                                <span class="text-{% if abonnement.accounting.mode == 'Période de test' %}danger{% else %}success{% endif %}">  {{ abonnement.accounting.mode }}   <br>
                             </td>
                             <td>
-                                 {{ accounting.amount }} €  <br>
+                                 {{ abonnement.accounting.amount }} €  <br>
                             </td>
                             <td>
-                                {% if accounting.is_credit %}<span class="text-success">Crédit</span>{% else %}<span class="text-danger">Débit</span>{% endif %}
-                            </td>
-                            <td>
-                                 {{ accounting.acting|date:"Y-m-d" }}
+                                 {{ abonnement.accounting.date_payment|date:"Y-m-d" }}
                             </td>
 
                             <td>
-                                 {{ accounting.school.town }} 
-                            </td>
-                            <td>
-                                 {{ accounting.school.country.name }} 
+                                 {{ abonnement.accounting.school.town }} - {{ abonnement.accounting.school.country.name }} 
                             </td>
                             <td style="font-size: 10px">
-                                 {% for u in accounting.school.admin %} <li>{{u.get_full_name}}, {{u.email}}</li> {% endfor %}
+                                 {% for u in abonnement.accounting.school.admin %} <li>{{u.get_full_name}}, {{u.email}}</li> {% endfor %}
                             </td>
 
 

@@ -7,7 +7,7 @@
 
    
 {% block require %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2_withoutMathJax.js' %}"></script>
 {% endblock %} 
 
 
@@ -59,36 +59,30 @@
         <div class="col-lg-6 col-md-4 col-xs-6">
             <table class="table bg_white">
                 <tr>
-                    <td><b>Paiements encaissés</b></td>
+                    <td><b>Paiements encaissés </b><small>(dont Paypal)</small></td>
                     <td><b>{{ actif }} €</b></td>
                 </tr>
 
-                <tr style="background-color: #f1eef7">
-                    <td></td>
-                    <td></td>
-                </tr>
                 <tr>
                     <td>En attente de paiement</td>
                     <td>{{ product }} €</td>
                 </tr>                
-                <tr style="background-color: #f1eef7">
-                    <td></td>
-                    <td></td>
-                </tr>
                 <tr>
-                    <td>Total attendu</td>
+                    <td>Total attendu <small>(dont Paypal)</small></td>
                     <td>{{ total }} €</td>
                 </tr>
-
-
+                <tr>
+                    <td class="text-danger">Charges</td>
+                    <td class="text-danger"><b>{{ charge }} €</b></td>
+                </tr>
             </table>
         </div>
  
     </div>
 
- 
-
-    
+    <div class="col-lg-12 col-xs-12">
+        Etablissements adhérents
+    </div>
     <div class="col-lg-12 col-xs-12">
         <table class="table bg_white">
             {% for a in abonnements %}

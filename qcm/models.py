@@ -411,6 +411,15 @@ class Parcours(ModelWithCode):
             return "{}".format(self.title)
 
 
+    def contains_student(self):
+        contains = False
+        if self.students.count() > 0 :
+            contains = True
+        return contains
+
+
+
+
     def isnot_shared(self) :
         test = False
         if self.groups.exclude(teacher_id=2480).count()>1:
@@ -617,11 +626,12 @@ class Parcours(ModelWithCode):
     def is_individualized(self):
 
         test = False
-        nb_students_parcours = self.students.count() # élève du parcours
+        students_parcours = self.students.all() # élève du parcours
         relation_ships = self.parcours_relationship.all()
         for r in relation_ships :
-            if r.students.count() != nb_students_parcours :
-                test = True 
+            if r.students.count() != self.students.count() :
+                test = True
+            break 
         return test 
 
     def is_courses_exists(self):
