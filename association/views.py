@@ -410,8 +410,7 @@ def accountings(request):
 
  
     active_year, this_year    = get_active_year() 
-    start_date   = datetime(this_year, 8, 31)
-    end_date     = datetime(this_year+1, 8, 31)
+ 
 
     product , charge , actif  , commission_paypal, result_bank , result_paypal = 0 , 0 , 0 , 0 , 0 , 0
     accountings   = get_accountings().values_list("amount","is_credit","date_payment","objet","is_paypal") 
@@ -472,7 +471,7 @@ def list_accountings(request,tp):
 
     if this_month > 0 and this_month < 8 :
         this_year = this_year - 1
-    first_date_schoolyear = datetime(this_year, 5, 1)
+    first_date_schoolyear = datetime(this_year, 5, 1) ##### A CHANGER  
 
     total_month     = total(first_date_month, today)
     total_shoolyear = total(first_date_schoolyear, today)
