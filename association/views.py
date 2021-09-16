@@ -473,7 +473,7 @@ def list_accountings(request,tp):
     total_month     = total(first_date_month, today)
     total_shoolyear = total(first_date_schoolyear, today)
 
-    return render(request, 'association/list_accounting.html', {'accountings': accountings , 'tp' : tp , 'total_month': total_month,  'total_shoolyear': total_shoolyear ,'this_month' :this_month })
+    return render(request, 'association/list_accounting.html', {'accountings': accountings ,  'active_year' : active_year ,  'tp' : tp , 'total_month': total_month,  'total_shoolyear': total_shoolyear ,'this_month' :this_month })
 
 
 
