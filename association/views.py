@@ -257,7 +257,7 @@ def update_activeyear(request):
 
 def total(first_date, last_date) :
 
-    accountings = Accounting.objects.filter(date_payment__lte=last_date, date_payment__gte=first_date).exclude(date_payment=None)
+    accountings =  Accounting.objects.filter(date_payment__gte=first_date, date_payment__lte=last_date).exclude(date_payment=None)
     total_amount = 0
     total_amount_active = 0
     for a in accountings :

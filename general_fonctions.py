@@ -85,16 +85,22 @@ def separate_values(request, line, is_group,simple) :
     elif "," in line:
         fields = line.split(",")
 
-    password = make_password("sacado2020")
-
-    if is_group :
+    if is_group == 0 :
         group_name = str(fields[0])
         level = fields[1]
         i ,j ,k , l = 2, 3, 4 , 5 
-    else :
+
+    elif is_group == 1 :
+
         group_name = None
         level = fields[0]
         i ,j ,k , l =  1, 2 , 3 , 4
+
+    elif is_group == 2 :
+
+        group_name = None
+        level = None
+        i ,j ,k , l =  0, 1 , 2 , 3
 
     ln = cleanhtml(str(fields[i]).lower().capitalize()) #.replace(' ', '').replace('\ufeff', '')
     fn = cleanhtml( str(fields[j]).lower().capitalize())
@@ -121,6 +127,9 @@ def separate_values(request, line, is_group,simple) :
                 email = ""
         except:
             email = ""
+
+    password = make_password("sacado2020")
+            
     return ln, fn, username , password , email , group_name , level , is_username_changed
 
 

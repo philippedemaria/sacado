@@ -985,7 +985,7 @@ def csv_full_group(request):
         for line in lines:
             try :
                 simple = request.POST.get("simple",None)
-                ln, fn, username , password , email , group_name , level , is_username_changed = separate_values(request, line, True, simple)
+                ln, fn, username , password , email , group_name , level , is_username_changed = separate_values(request, line, 0 , simple) # 0 donne la forme du CSV
   
                 teacher = Teacher.objects.get(user = request.user)
 
