@@ -472,7 +472,7 @@ def list_accountings(request,tp):
 
     if this_month > 0 and this_month < 8 :
         this_year = this_year - 1
-    first_date_schoolyear = datetime(this_year, 9, 1)
+    first_date_schoolyear = datetime(this_year, 5, 1)
 
     total_month     = total(first_date_month, today)
     total_shoolyear = total(first_date_schoolyear, today)
