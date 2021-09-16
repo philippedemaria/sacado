@@ -414,7 +414,7 @@ def accountings(request):
     end_date     = datetime(this_year+1, 8, 31)
 
     product , charge , actif  , commission_paypal, result_bank , result_paypal = 0 , 0 , 0 , 0 , 0 , 0
-    accountings   = Accounting.objects.values_list("amount","is_credit","date_payment","objet","is_paypal").filter(date__gte = start_date  , date__lte = end_date)
+    accountings   = get_accountings().values_list("amount","is_credit","date_payment","objet","is_paypal") 
 
 
     charges_list = list()
@@ -436,10 +436,12 @@ def accountings(request):
 
     actif += result_paypal
     result       = actif - charge
-    total        = actif + product  
+    total        = actif + product
+
+    today = datetime.now()
 
         
-    context = { 'charge': charge, 'product': product , 'result': result , 'actif': actif , 'total': total , 'result_paypal' : result_paypal ,  'nb_schools': nb_schools , 'abonnements': abonnements , 'charges_list' : charges_list ,
+    context = { 'today' : today , 'charge': charge, 'product': product , 'result': result , 'actif': actif , 'total': total , 'result_paypal' : result_paypal ,  'nb_schools': nb_schools , 'abonnements': abonnements , 'charges_list' : charges_list ,
                 'this_year' : this_year , 'active_year' : active_year , 'nb_schools': nb_schools , 'nb_schools_fr': nb_schools_fr , 'nb_schools_no_fr': nb_schools_no_fr ,  'nb_schools_no_pay': nb_schools_no_pay , 'commission_paypal' : commission_paypal }  
 
 

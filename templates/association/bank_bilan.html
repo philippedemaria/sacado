@@ -45,21 +45,14 @@
                 <tr>
                     <td>Banque CA</td>
                     <td>
-                        {{ charge }} € 
-                         <span class="helper_tip"> Détails </i> 
-                            <div class="helper_tip_text" style="width:330px" >
-                                {% for c in charges_list %}
-                                    {{ c.objet }} <b>{{ c.amount }}</b> {% if not forloop.last %}<br/>{% endif %}
-                                {% endfor %}
-                            </div>
-                        </span>
+ 
                     </td>
                     <td> {{ actif }} €</td>
                     <td> </td>             
                 </tr>
                 <tr>
                     <td>Banque Paypal</td>
-                    <td>{{ commission_paypal }} €</td>                    
+                    <td> </td>                    
                     <td>{{ result_paypal }} €</td> 
                     <td></td>                
                 </tr>
@@ -73,7 +66,15 @@
 
                 <tr>
                     <td>Total</td>   
-                    <td>{{ charge }} €</td> 
+                    <td>{{ charge }} € 
+                         <span class="helper_tip"> Détails </i> 
+                            <div class="helper_tip_text" style="width:330px" >
+                                {% for c in charges_list %}
+                                    {{ c.objet }} <b>{{ c.amount }}</b> {% if not forloop.last %}<br/>{% endif %}
+                                {% endfor %}
+                            </div>
+                        </span>
+                    </td> 
                     <td>{{ total }} € </td>   
                     <th> {{ result }} € </th>                
                 </tr>
