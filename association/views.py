@@ -84,8 +84,8 @@ def get_pending_abonnements():
 def get_accountings():
 
     active_year, this_year = get_active_year() 
-    date_start   = datetime(this_year, 8, 31)
-    date_stop    = datetime(this_year+1, 8, 31)
+    date_start   = datetime(this_year, 8, 1)
+    date_stop    = datetime(this_year+1, 8, 1)
 
     accountings = Accounting.objects.filter(date__gte = date_start , date__lte = date_stop )
 
