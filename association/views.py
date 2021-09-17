@@ -553,7 +553,7 @@ def create_accounting(request,tp):
                 nf.chrono = create_chrono(Accounting, forme) # Create_chrono dans general_functions.py
             nf.tp = tp
             if tp == 0 :
-                nf.plan = 18
+                nf.plan_id = 18
                 if forme == "FACTURE" :
                     nf.is_credit = 1
                 else :
