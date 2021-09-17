@@ -168,7 +168,7 @@
                     <div class="row" style="margin: 10px 0px"> 
                         <div class="col-sm-3 col-md-2">
                             Compte cible
-                        </div>  
+                        </div>
                         <div class="col-sm-9 col-md-8">
                             {{ form.is_paypal |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Paypal"|attr:"data-off:Crédit Agricole"}} 
                             {{ form.is_paypal.errors }} 
@@ -178,18 +178,10 @@
                 </div>
             </div>
             <div class="col-sm-12 col-md-4">
- 
+                {% if tp == 0 or accoutning %}
                 <div class="alert alert-warning"> 
                     Abonnement
                     <table class="table">
-                        {% if not accounting %}
-                        <tr>
-                            <td colspan ="2">                                
-                                {{ form.mode |add_class:"form-control select2"}}  
-                                {{ form.mode.errors }}
-                            </td>
-                        </tr>
-                        {% endif %}
                         <tr>
                             <td>Actif ?</td><td>{{ form.is_abonnement |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}  {{ form.is_abonnement.errors }}</td>
                         </tr>
@@ -204,7 +196,7 @@
                         </tr>
                     </table>
                 </div>
- 
+                {% endif %}
             </div>
         </div>
         {{ form_ds.management_form }} 
