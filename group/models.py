@@ -189,10 +189,10 @@ class Group(ModelWithCode):
         submit = False
 
         for student in self.students.all() :
-            if student.student_custom_answer.filter(is_corrected = 0) :
+            if student.student_custom_answer.filter(is_corrected = 0, parcours__subject= self.subject) :
                 submit = True 
                 break
-            if student.student_written_answer.filter(is_corrected = 0) :
+            if student.student_written_answer.filter(is_corrected = 0, relationship__parcours__subject= self.subject) :
                 submit = True 
                 break
         return submit
