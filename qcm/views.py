@@ -1100,7 +1100,7 @@ def list_parcours_group(request,id):
     ###efface le realtime de plus de 2 h
     #clear_realtime(parcours_tab , today.now() ,  3600 )
     nb_bases = bases.count()
-    print(nb_bases)
+ 
     context =  { 'folders': folders , 'teacher' : teacher , 'group': group,  'parcours' : None ,  'role' : role , 'today' : today ,
                  'parcourses': parcourses , 'evaluations' : evaluations , 'nb_bases' : nb_bases }
 
@@ -1570,20 +1570,21 @@ def create_parcours(request,idp=0):
             except :
                 pass
 
-        nf.save()
-        form.save_m2m()
-
-        if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
-            nf.vignette = request.POST.get("this_image_selected",None)
-
 
         if idp > 0 :
             parcours_folder.leaf_parcours.add(nf)
             nf.is_leaf = 1
-            nf.save()
-            nf.students.set(parcours_folder.students.all())
         else :
             nf.is_folder = 0
+
+        nf.save()
+        form.save_m2m()
+
+        nf.students.set(parcours_folder.students.all())
+
+        if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
+            nf.vignette = request.POST.get("this_image_selected",None)
+
 
         for g in form.cleaned_data.get("groups") :
             nf.students.set(g.students.all())
@@ -1598,7 +1599,7 @@ def create_parcours(request,idp=0):
         elif group_id and idp == 0 :
             return redirect('list_parcours_group' , group_id)                
         elif group_id and idp > 0 :
-                return redirect('list_sub_parcours_group' , group_id, nf.pk) 
+                return redirect('list_sub_parcours_group' , group_id, idp ) 
         else:
             return redirect('parcours')
     else:
@@ -1620,26 +1621,12 @@ def update_parcours(request, id, idg=0 ):
 
     teacher = Teacher.objects.get(user_id=request.user.id)
     levels = teacher.levels.all()
- 
     parcours = Parcours.objects.get(id=id)
+    leaf = parcours.is_leaf
+    print(leaf)
     folder_parcourses = teacher.teacher_parcours.filter(leaf_parcours= parcours).order_by("level") 
  
-
     form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher )
-
-    
-    """ affiche le parcours existant avant la modif en ajax"""
-    exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
-    """ fin """
-    themes_tab = []
-    for level in levels:
-        for theme in level.themes.all():
-            if not theme in themes_tab:
-                themes_tab.append(theme)
-
-    groups = Group.objects.filter(teacher=teacher).prefetch_related('students').order_by("level")
-    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
-
 
     share_groups = Sharing_group.objects.filter(teacher  = teacher,role=1).order_by("group__level")
     if len(share_groups)>0 :
@@ -1654,8 +1641,8 @@ def update_parcours(request, id, idg=0 ):
     if request.method == "POST":
         if form.is_valid():
             nf = form.save(commit=False)
-            nf.author = teacher
-            nf.teacher = teacher
+            print(leaf)
+            nf.is_leaf = leaf
             nf.is_evaluation = 0
 
             if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
@@ -1686,13 +1673,14 @@ def update_parcours(request, id, idg=0 ):
 
         else :
             print(form.errors)
+
+
     images = []
     if idg > 0 and idg < 99999999999 :
-        group_id = idg
         request.session["group_id"] = idg
-        group = Group.objects.get(pk = group_id)
+        group = Group.objects.get(pk = idg)
         images = get_images_for_parcours_or_folder(group)
-        if Sharing_group.objects.filter(group_id=group_id, teacher = teacher).exists() :
+        if Sharing_group.objects.filter(group_id=idg, teacher = teacher).exists() :
             sh_group = Sharing_group.objects.get(group_id=group_id, teacher = teacher)
             role = sh_group.role 
         elif group.teacher == teacher :
@@ -1709,8 +1697,8 @@ def update_parcours(request, id, idg=0 ):
     if parcours.teacher == teacher :
         role = True
 
-    context = {'form': form, 'parcours': parcours, 'groups': groups, 'idg': idg, 'teacher': teacher, 'group_id': group_id ,  'group': group ,  'relationsips': relationships, 'share_groups': share_groups, 'relationships' :  [] ,
-               'exercises': exercises, 'parcours_is_folder' : False, 'levels': levels, 'themes': themes_tab,  'communications' : [], 'role' : role , 'images' : images }
+    context = {'form': form, 'parcours': parcours,   'idg': idg, 'teacher': teacher, 'group_id': idg ,  'group': group ,  
+                'parcours_is_folder' : False,   'role' : role , 'images' : images }
 
     return render(request, 'qcm/form_parcours.html', context)
 
@@ -7524,8 +7512,6 @@ def create_folder(request,idg):
     """ 'parcours_is_folder' : True pour les vignettes et différencier si folder ou pas """
     teacher = request.user.teacher 
     group = Group.objects.get(pk = idg)
-    print("group",group )
-    print("students",group.students.all())
 
     group_teacher_parcours, intial_dico = get_intial_dico(teacher,group)
 
@@ -7590,10 +7576,8 @@ def update_folder(request,id,idg):
             nf.save() 
             form.save_m2m()            
             nf.groups.add(group)
-            print(group.students.all())
             nf.students.set(group.students.all())        
     
-
             leaf_parcours = form.cleaned_data.get("leaf_parcours")
 
             for l in leaf_parcours :
