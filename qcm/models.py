@@ -364,7 +364,7 @@ class Parcours(ModelWithCode):
     coteachers = models.ManyToManyField(Teacher, blank=True,  related_name="coteacher_parcours",  verbose_name="Enseignant en co-animation")
     subject = models.ForeignKey(Subject, related_name="subject_parcours", on_delete=models.CASCADE, default='', blank=True, null=True, verbose_name="Enseignement")
     
-    groups = models.ManyToManyField(Group,  blank=True,  related_name="group_parcours", editable=False)
+    groups = models.ManyToManyField(Group,  blank=True,  related_name="group_parcours" )
 
     exercises = models.ManyToManyField(Exercise, blank=True, through="Relationship", related_name="exercises_parcours")
     students = models.ManyToManyField(Student, blank=True, related_name='students_to_parcours', verbose_name="Elèves")
@@ -385,7 +385,7 @@ class Parcours(ModelWithCode):
 
     duration = models.PositiveIntegerField(default=2, blank=True, verbose_name="Temps de chargement (min.)")
     start = models.DateTimeField(null=True, blank=True, verbose_name="A partir de")
-    stop = models.DateTimeField(null=True, blank=True, verbose_name="Verrouillage")
+    stop = models.DateTimeField(null=True, blank=True, verbose_name="Date de verrouillage")
 
     zoom = models.BooleanField(default=1, verbose_name="Zoom ?")
 
@@ -402,13 +402,11 @@ class Parcours(ModelWithCode):
 
 
     def __str__(self):
-        if self.level :
-            if self.coteachers.count() > 0 :
-                return "[CoA] : {} ({})".format(self.title, self.level.shortname)
-            else :
-                return "{} ({})".format(self.title, self.level.shortname)
+        if self.coteachers.count() > 0 :
+            return "[CoA] : {}".format(self.title)
         else :
             return "{}".format(self.title)
+ 
 
 
     def contains_student(self):

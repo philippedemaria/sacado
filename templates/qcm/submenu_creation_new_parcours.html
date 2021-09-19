@@ -2,24 +2,20 @@
     <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Nouveau parcours <b class="caret"></b> </a>
 
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-        <li> <a href="{% url 'create_parcours' 0 %}"  > Créer un parcours</a> </li> 
+
+        {% if parcours_folder %}
+        <li> <a href="{% url 'create_parcours' parcours_folder.id %}"  > Créer un parcours  </a> </li>
+        {% else %}
+        <li> <a href="{% url 'create_parcours' 0 %}"  > Créer un parcours <em class="text-danger">externe à un dossier</em></a> </li>
+        {% endif %}
         <li>{% if sacado_asso %} 
         		<a href="{% url 'all_parcourses' 0 %}" > Récupérer un parcours mutualisé</a>
         	{% else %}
         		<a href="#"  class="no_sacado_asso" > Récupérer un parcours mutualisé</a> 
         	{% endif %}
         </li>
-        {% if not '/parcours_group/' in request.path  %}
+        {% if '/parcours_group/' in request.path  %}
         <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"> Récupérer un parcours par défaut</a></li>
-        {% if 'parcours_sub_parcours' not in request.path %}
-        <li class="divider"> </li> 
-        <li>{% if sacado_asso and group %}
-        		<a href="{% url 'all_folders' %}" > Récupérer un dossier mutualisé</a> 
-        	{% else %}
-        		<a href="#"  class="no_sacado_asso" title="Ne peut être actif qu'à partir d'un groupe"> Récupérer un dossier mutualisé</a> 
-        	{% endif %} 
-        </li>
-        {% endif %} 
         {% endif %} 
     </ul>
 </li> 

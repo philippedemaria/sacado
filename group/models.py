@@ -21,7 +21,7 @@ class Group(ModelWithCode):
     level          = models.ForeignKey(Level, on_delete=models.CASCADE, related_name="groups", verbose_name="Niveau*")
     assign         = models.BooleanField(default=1)
     suiviparent    = models.BooleanField(default=0)
-    studentprofile = models.BooleanField(default=0)
+    studentprofile = models.BooleanField(default=1)
     lock           = models.BooleanField(default=0)
     recuperation   = models.BooleanField(default=0)
     teachers       = models.ManyToManyField(Teacher, blank=True,   editable=False, through="Sharing_group", related_name="teacher_group")
@@ -32,13 +32,17 @@ class Group(ModelWithCode):
         ordering = ['name']
 
     def __str__(self):
+        nb = self.students.exclude(user__username__contains= "_e-test").count()
+        eleve ="élève"
+        if nb > 1 :
+            eleves ="élèves"
         if self.level :
             if self.teachers.count() > 0 :
-                return "[CoA] : {} ({})".format(self.name, self.level.shortname)
+                return "[CoA] : {} [{} {}]".format(self.name, nb , eleve)
             else :
-                return "{} ({})".format(self.name, self.level.shortname)
+                return "{} [{} {}]".format(self.name, nb , eleve)
         else :
-            return "{}".format(self.name)
+            return "{} [{} {}]".format(self.name, nb , eleve)
 
     def contrastColorText(self):
         """ donne le noir ou blanc selon la couleur initiale  """

@@ -231,6 +231,28 @@ def attribute_all_documents_to_student(parcourses,student):
         test = False
     return test
 
+def attribute_all_documents_to_students(form, nf ):
+    """  assigner les documents et renvoie Vrai ou Faux suivant l'attribution """
+    students = set()
+    for g in nf.groups.all() :
+        students.update(g.students.all())
+        print(g,g.students.all() )
+
+    nf.students.set(students)
+    relationships = nf.parcours_relationship.all()
+    for r in relationships:
+        r.students.set(students)
+
+    customexercises = nf.parcours_customexercises.all()
+    for c in customexercises:
+        c.students.set(students)
+
+    courses = nf.course.all()
+    for course in courses:
+        course.students.set(students)
+
+ 
+
 
 
 def cleanhtml(raw_html): #nettoie le code des balises HTML

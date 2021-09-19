@@ -227,7 +227,7 @@ def include_students(request , liste, group):
             fname = str(cleanhtml(details[1])).strip()
             password = make_password("sacado2020")
             username = get_username(request,lname , fname)
-
+            email = ""
 
             try:
                 for c in details[2] :
@@ -236,16 +236,13 @@ def include_students(request , liste, group):
                     else :
                         username = cleanhtml(details[2])
             except IndexError:
-                email = ""
+                pass
             
             try:
                 for car in details[3] :
-                    if car == "@":
-                        email = cleanhtml(details[3])
-                    else :
-                        username = cleanhtml(details[3])
+                    email = cleanhtml(details[3])
             except IndexError:
-                email = ""
+                pass
 
             if email != "":
                 send_templated_mail(
@@ -543,32 +540,24 @@ def create_group(request):
     if form.is_valid():
         nf = form.save(commit=False)
         nf.teacher = teacher
+        nf.studentprofile = 1
         if teacher.user.school :
             nf.school = teacher.user.school
         nf.save()
         stdts = request.POST.get("students")
         if stdts : 
             if len(stdts) > 0 :
-                tested = include_students(request , stdts,nf)
-                if not tested :
-                    messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
+                include_students(request , stdts,nf)
+        create_student_profile_inside(request, nf)          
 
-        st = False
-        eleveTest = request.POST.get("studentprofile",None)    
-        if eleveTest :
-            st = create_student_profile_inside(request, nf)          
-
-
-        msg = "Félicitations... Votre groupe est créé !" 
-        if st :
-            msg = msg + " Vous avez demandé un profil élève. Un mail contenant vos identifiant vous est envoyé." 
+        msg = "Félicitations... Votre groupe est créé ! SACADO vous a créé un profil élève associé. Un mail contenant ses identifiants vous est envoyé." 
         messages.success(request, msg )
 
         return redirect("show_group", nf.id)
     else:
         print(form.errors)
 
-    context = {'form': form, 'teacher': teacher, 'group': None, 'communications' : [] , 'students': None,}
+    context = {'form': form, 'teacher': teacher, 'group': None,   'students': None,}
 
     return render(request, 'group/form_group.html', context)
 
@@ -594,27 +583,15 @@ def update_group(request, id):
         nf = form.save(commit = False)
         nf.teacher = teacher
         nf.code = group.code
+        nf.studentprofile = 1
         if teacher.user.school :
             nf.school = teacher.user.school
         nf.save()
         stdts = request.POST.get("students")
         if stdts : 
             if len(stdts) > 0 :
-                tested = include_students(request , stdts,group)
-                if not tested :
-                    messages.error(request, "Erreur lors de l'enregistrement. Un étudiant porte déjà cet identifiant. Modifier le prénom ou le nom.")
-        st = False
-
-        eleveTest = request.POST.get("studentprofile",None)    
-        if eleveTest :
-            st = create_student_profile_inside(request, nf)          
-
-        msg = "Votre groupe est modifié." 
-        if st :
-            msg = msg + " Vous avez demandé un profil élève. Un mail contenant vos identifiant vous est envoyé." 
-        messages.success(request, msg )
-
-
+                include_students(request , stdts,group)
+ 
         return redirect("show_group", group.id)
     else:
         print(form.errors)
@@ -634,30 +611,31 @@ def delete_group(request, id):
     teacher = request.user.teacher
     authorizing_access_group(request,teacher,group )
     if not teacher.user.school :
-        # Si les élèves n'appartiennent pas à un établissement
-        for student in group.students.exclude(user__username = request.user.username).exclude(user__username__contains= "_e-test") :
-            if not student.user.school :
-                if Group.objects.filter(students=student).exclude(pk=group.id) == 0 : 
-                    #Si les élèves n'appartiennent pas à un autre groupe
-                    student.student_user.delete()
-                    student.delete() # alors on les supprime
-        for student in group.students.filter(user__username = request.user.username,user__username__contains= "_e-test") :
+        for student in group.students.all() :
             if not student.user.school :
                 if Group.objects.filter(students=student).exclude(pk=group.id) == 0 : 
                     student.student_user.delete()
-       
-        group.delete()
-        request.session.pop('group', None)
-        request.session.pop('group_id', None)
-        messages.success(request,"Groupe supprimé.")
-        return redirect('index')
-    else :
-        if teacher.user.is_manager and group.teacher.user.school == request.user.school :
+                    student.delete()
+        if group.group_parcours.count() == 0  :
             group.delete()
             request.session.pop('group', None)
             request.session.pop('group_id', None)
             messages.success(request,"Groupe supprimé.")
+        else :
+            messages.error(request,"Le groupe ne peut pas être supprimé. Il contient des dossiers, parcours ou évaluations.")
+        return redirect('index')
+    else :
+        if teacher.user.is_manager and group.teacher.user.school == request.user.school :
+
+            if group.group_parcours.count() == 0  :
+                group.delete()
+                request.session.pop('group', None)
+                request.session.pop('group_id', None)
+                messages.success(request,"Groupe supprimé.")
+            else :
+                messages.error(request,"Le groupe ne peut pas être supprimé. Il contient des dossiers, parcours ou évaluations.")
             return redirect('school_groups')
+ 
         else :
             messages.error(request,"Vous ne pouvez pas supprimer le groupe. Contacter l'administrateur de votre étalissement.")
             return redirect('school_groups')    

@@ -61,14 +61,14 @@
             <div class="row">
                 <div class="col-sm-12 col-md-3">
                     <div class="form-group">
-                        {{ form.name.label_tag }} <font style="font-size:12px">18 lettres max.</font>
+                        <label>Nom : <font style="font-size:12px">18 lettres max.</font></label>
                         {{ form.name |add_class:"form-control" }}
                         {{ form.name.errors }}
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-4">
                     <div class="form-group">
-                        <label>Niveau*: <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                        <label>Niveau : <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                     <div class="helper_tip_text" >Si aucun niveau n'apparait, sélectionner vos niveaux préférés <a href="{% url 'profile' %}">ici</a>.</div>
                                 </span></label>
                         {{ form.level |add_class:"form-control select2" }}
@@ -77,7 +77,7 @@
                 </div>
                 <div class="col-sm-12 col-md-3">
                     <div class="form-group">
-                        <label>Enseignement*:<span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                        <label>Enseignement :<span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                     <div class="helper_tip_text" >Si aucun enseignement n'apparait, sélectionner vos enseignements <a href="{% url 'profile' %}">ici</a>.</div>
                                 </span></label>
                         {{ form.subject |add_class:"form-control select2" }}
@@ -110,16 +110,6 @@
                 </div>
                 {% endif %}
 
-                <div class="col-sm-12 col-md-4">
-                       <label>Profil élève ? <small>(Conseillé)</small>
-                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text" >Ce profil vous donne accès à la vue élève (en VERSION ETABLISSEMENT). si vous avez déjà un compte élève, votre compte élève est associé à ce groupe. <br/>Si création, vous recevrez les identifiants par mail. <br/><i class="fa fa-warning"></i> Ce compte n'apparait pas dans votre liste d'élèves.<br/> <span class="text-danger">Si vous cochez cette option après la création de parcours, il faut les relier à la main via la modification de parcours. </span></div>
-                            </span>
-                        </label> <br>
-                        {{ form.studentprofile  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
-                </div>
- 
-
 
                 {% if group %}
                  <div class="col-sm-12 col-md-4">
@@ -132,12 +122,11 @@
                 </div>
                 {% endif %}
             </div>
-            {% if not group or not group.recuperation %}
                 {% if sacado_asso %}            
-                    <div class="row" id="choose_parcours">
+                    <div class="row">
                         <hr>
                         <div class="col-sm-8 col-md-10">
-                            <label>L'équipe sacAdo vous propose des dossiers, des parcours et des cours déjà créés. Souhaitez-vous les récupérer pour les niveau et enseignement choisis ? <small>Vous pourrez les modifier par la suite. <span class="text-danger"> Si vous devez modifier le niveau ou l'enseignement, recocher ce bouton</span>.</small></label>
+                            <label>L'équipe SACADO vous propose ses dossiers, ses parcours et ses cours déjà créés et testés en classe. Souhaitez-vous les récupérer pour les niveau et enseignement choisis ? <small>Vous pourrez les modifier par la suite. <span class="text-danger">Cocher ce bouton après avoir bien choisi le niveau.</span></small></label>
                         </div>
                         <div class="col-sm-4 col-md-2">
                             {{ form.recuperation  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
@@ -153,17 +142,15 @@
                     <div id="choosen_parcours_by_this_level_and_subject">
                     </div>
                 {% else %}
-                    <div class="row" id="choose_parcours">
-                        <hr>
-                        <div class="col-sm-8 col-md-10">
-                            <label>Souhaitez-vous récupérer des dossiers, des parcours et des cours du niveau et de l'enseignement choisis ? <small>Vous pourrez les modifier par la suite. <span class="text-danger"> Si vous modifiez le niveau ou l'enseignement, recocher ce bouton</span>.</small></label>
+                         <hr>
+                        <div class="col-sm-12 col-md-12 alert alert-warning">
+                            <label>Avec la version établissement, l'équipe SACADO vous propose ses dossiers, ses parcours et ses cours déjà créés et testés en classe. Pensez à la version ETABLISSEMENT. 
+                                <a href="{% url 'get_first_adhesion' %}" target="_blank" style="font-size:10px">Adhérer</a>
+                            </label>
                         </div>
-                        <div class="col-sm-4 col-md-2 alert alert-danger">
-                            <small>Avec la version établissement</small>
-                        </div>
-                    </div>
+
                 {% endif %}
-            {% endif %}
+
 
 
             {% if not sacado_asso %}
@@ -181,8 +168,8 @@
             <div class="row recording" id="teacher_record">
                 <div class="col-sm-12 col-md-12"><hr>
                     <div class="form-group">
-                        <label>Possibilité d'inscrire les élèves par leur prénom et nom.<small><em> L'identifiant et l'adresse mail sont facultatifs. L'identifiant sera alors généré à la volée.</em> <br><span style="color:#cb2131">Respecter le format donné : 1 élève par ligne : nom;prénom;identifiant; email. Ces informations séparées par un ;  <br/>Le mot de passe par défaut est : <b>sacado2020</b>, chaque identifiant élève s'obtient dans le détail du groupe. </span></small></label> <br> 
-                        <textarea name="students" id="students_id"  style="border:1px #CCC solid" class="form-control" rows="10" placeholder="Turing ; Alan ; identifiant ; alan.turing@enigma.com"></textarea>
+                        <label>Possibilité d'inscrire les élèves par leur prénom et nom.<small><em> L'adresse mail est facultative. L'identifiant est généré directement.</em> <br><span style="color:#cb2131">Respecter le format donné : 1 élève par ligne : nom; prénom; email. Ces informations séparées par un ;  <br/>Le mot de passe par défaut est : <b>sacado2020</b>, chaque identifiant élève s'obtient dans le détail du groupe. </span></small></label> <br> 
+                        <textarea name="students" id="students_id"  style="border:1px #CCC solid" class="form-control" rows="10" placeholder="Turing ; Alan ; alan.turing@enigma.com"></textarea>
 
                          <label style="color:#cb2131"><small> <b>Conseil :</b> Après la création du groupe, accéder à votre groupe via Détails et télécharger la liste des identifiants au format pdf pour la distribuer à vos élèves.</span></small></label>
                     </div>

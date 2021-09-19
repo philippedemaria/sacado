@@ -33,7 +33,7 @@ urlpatterns = [
     path('parcours_delete_folder_and_contents/<int:id>/<int:idg>/', delete_folder_and_contents, name='delete_folder_and_contents'),  
     path('parcours_delete_from_folder', parcours_delete_from_folder, name='parcours_delete_from_folder'), 
 
-    path('ajax_group_to_parcours', ajax_group_to_parcours, name='ajax_group_to_parcours'), 
+    #path('ajax_group_to_parcours', ajax_group_to_parcours, name='ajax_group_to_parcours'), 
 
 
     path('parcours_tasks_and_publishes/<int:id>/', parcours_tasks_and_publishes, name='parcours_tasks_and_publishes'), # gestion des taches
@@ -329,7 +329,7 @@ urlpatterns = [
     path('ajax_read_my_production', ajax_read_my_production, name='ajax_read_my_production'),
 
     path('ajax_annotate_exercise_no_made', ajax_annotate_exercise_no_made, name='ajax_annotate_exercise_no_made'),    
-    path('ajax_delete_custom_answer_image', ajax_delete_custom_answer_image, name='ajax_delete_custom_answer_image'),        
+    path('ajax_delete_custom_answer_image', ajax_delete_custom_answer_image, name='ajax_delete_custom_answer_image'),
 
     path('export_notes_after_evaluation', export_notes_after_evaluation, name='export_notes_after_evaluation'),
     path('export_skills_after_evaluation', export_skills_after_evaluation, name='export_skills_after_evaluation'),

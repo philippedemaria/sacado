@@ -36,52 +36,45 @@
 
     <small>  
         {% if parcours %}
-            Configuration du parcours
+            <span style="color : {{ parcours.color }}"> {{ parcours|truncatechars:"18" }}</span> <img src="{% static 'img/angle-right.png' %}"/>  <small>   Configuration </small>
         {% else %}
              Nouveau parcours 
         {% endif %}
-    </small>  
+    </small> 
+
 {% endblock %}
 
-
-
-
-{% block page_menu_right %} 
-    {% if parcours %}
-        {% include 'qcm/submenu_parcours.html' %}
-    {% endif %} 
-{% endblock %}
 
  
+
+{% block page_menu_right %}
+
+
+
+    {% include 'qcm/submenu_creation_evaluation.html' %}
+
+    {% include 'qcm/submenu_creation_new_parcours.html' %}
+
+    {% include 'qcm/submenu_creation_folder.html' %}
+
+{% endblock %} 
 
 
 {% block body %}  
 <section class="content_main">
     <form action="" method="POST" enctype='multipart/form-data'>
     <div class="row">
-        <div class="col-sm-12 col-md-8">
+        <div class="col-sm-12 col-md-4">
             {% csrf_token %}
             <div class="row">
-                <div class="col-sm-12 col-md-3 col-lg-4">
+                <div class="col-sm-7 col-md-8 col-lg-9">
                     <div class="form-group">
                         {{ form.title.label_tag }} <label> <small>(Inférieur à 18 lettres)</small></label>
                         {{ form.title |add_class:"form-control" }}
                         {{ form.title.errors }}
                     </div>
                 </div>
-
-
-                <div class="col-sm-12 col-md-3 col-lg-2">
-                    <div class="form-group">
-                        {% if parcours %}
-                        <label>  Code unique : </label><br/>
-                            <b>{{ parcours.code }}</b>
-                        {% endif %}
- 
-                    </div>
-                </div>
-
-                <div class="col-sm-12  col-md-3  col-lg-2">
+                <div class="col-sm-5  col-md-4 col-lg-3">
                       {{ form.color.label_tag }}      
                                 <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                     <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
@@ -92,8 +85,46 @@
                       </div>
                 </div>
 
+                {% block attibution_groupe %} 
+                <div class="col-sm-12  col-md-12">
+                    <div class="form-group">         
+                        <label>Affecté à mes groupes</label>
+                        {{ form.groups|add_class:"select_all" }}
+                        {{ form.groups.errors }}
 
-                <div class="col-sm-12  col-md-3  col-lg-4">
+ 
+                    </div>
+                    {% if groups|length > 1 %}
+                    <div class="form-group" style="font-size:12px">           
+                        <i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le parcours est partagé entre ces groupes.
+                    </div>
+                    {% endif %}
+                </div>
+                {% endblock %}
+            </div>
+            {% if not parcours.is_leaf %}
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="alert alert-warning">
+                        <div class="row">
+                            <div class="col-sm-2 col-md-1 col-lg-1">
+                                <i class="fa fa-question-circle fa-2x"></i> 
+                            </div>
+                            <div class="col-sm-10 col-md-11 col-lg-11">
+                                <small>Pour inclure ce parcours dans un dossier, aller le dossier désiré et cocher ce parcours.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-sm-12 col-md-4">
+                {% if group_id %}
+                        {{ form.subject.as_hidden}}
+                        {{ form.level.as_hidden  }}
+                {% else %}
+                <div class="col-sm-12  col-md-6">
                     <div class="form-group">
                         <label>Enseignement <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                     <div class="helper_tip_text" >Renseigner la matière  liée à ce parcours. Il vous sera cependant possible de choisir des exercices d'une autre matière. Par exemple, un enseignant de SPC doit renseigner ici SPC et pourra choisir des exercices de Maths plus tard dans ce parcours de SPC. </div>
@@ -102,181 +133,43 @@
                         {{ form.subject |add_class:"form-control select2"|attr:"required" }}
                         {{ form.subject.errors }}
                     </div>
-                </div>
-            </div> 
-            <div class="row">
-                <div class="col-sm-6 col-md-6   col-lg-6">
-                    <div class="form-group list_choice">         
-                    <label>Choisir les élèves parmi</label>   <br>  
-                        {% for group in groups %}
-                                 
-                                <a data-toggle="collapse" data-target="#demo{{ group.id }}" style="color:{{ group.color}};cursor:pointer">
-                                    {{ group.name|truncatechars:15 }} 
-                                    <small>
-                                        {% if nb_group == 0 %}
-                                            <small style="color:#cb2131">Groupe sans élève</small>
-                                        {% else %}
-                                        <i class="fa fa-caret-down"></i>
-                                        {% endif %}
-                                    </small> 
-                                </a> 
-                                <label class="pull-right">
-                                    <input type="checkbox" value="{{ group.id }}" name="groups"
-                                        {% if parcours in group.group_parcours.all  %}
-                                            checked 
-                                        {% elif request.session.group_id %}
-                                            {% if  request.session.group_id == sg.group.id %}
-                                                checked
-                                            {% endif %}
-                                        {% endif %}
-                                        class="select_all" />
-                                        <small>
-                                        {% if nb_group == 0 %}
-                                            Attribuer
-                                        {% else %}
-                                            tous
-                                        {% endif %}
-                                        </small> 
-                                </label>
-               
-                                <br>
-
-                          <div id="demo{{ group.id }}" class="collapse" >  
-                                <div class="form-group"> 
-                                    {% for s in group.just_students.all|dictsort:"user.last_name"  %}
-
-                                        <label>
-                                            <input type = "checkbox" 
-                                                    class="selector check_if_check" 
-                                                    name="these_students" 
-                                                    value="{{ s.user.id}}"
-                                                    {% if parcours and group in parcours.groups.all %}      
-                                                        {% if s in parcours.students.all  %}
-                                                            checked 
-                                                        {% endif %}
-                                                    {% endif %}> 
-                                                    {{ s.user|title}}
-                                        </label><br>
-                                    {% endfor %}
-                                </div>
-                          </div>
-                          <div style="height:5px"></div>
-                        {% endfor %}
-                        {% if share_groups|length > 0 %}<hr><label>Groupes co-animés</label><br>{% endif %}
-                        {% for sg in share_groups %}
-                        <a data-toggle="collapse" data-target="#demosg{{ sg.group.id }}" style="color:{{ sg.group.color}};cursor:pointer">
-                            {{ sg.group.name }} <small><i class="fa fa-caret-down"></i></small> </a> 
-                            {% if sg.group.just_students.count > 0 %}<label class="pull-right">
-
-                                <input type="checkbox" value="{{ sg.group.id }}" name="groups" 
-                                        {% if parcours in sg.group.group_parcours.all  %}
-                                            checked 
-                                        {% elif request.session.group_id %}
-                                            {% if  request.session.group_id == sg.group.id %}
-                                                checked
-                                            {% endif %}
-                                        {% endif %}
-                                        class="select_all_sg" />
-                                <small> tous  </small> </label>{% endif %}<br>
-
-                          <div id="demosg{{ sg.group.id }}" class="collapse" >
-                                <div class="form-group">
-                                    {% for s in sg.group.just_students.all|dictsort:"user.last_name"  %}
-                                        <label>
-                                            <input type = "checkbox" 
-                                                    class="selector check_if_check" 
-                                                    name="these_students" 
-                                                    value="{{ s.user.id}}"
-
-                                                    {% if parcours and group in parcours.groups.all %}
-                                                        {% if s in parcours.students.all  %}
-                                                            checked 
-                                                        {% endif %}
-                                                    {% endif %} > 
-                                                    {{ s.user|title}}
-                                        </label><br>
-                                    {% endfor %}
-                                </div>
-                          </div>
-                          <div style="height:5px"></div>
-                        {% endfor %}
-                    </div>
-
-
-
-
-
-                    {% if groups|length > 1 %}
-                    <div class="form-group" style="font-size:12px">           
-                        <i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le parcours est partagé entre ces groupes.
-                    </div>
-                    {% endif %}
-                </div>
-                <div class="col-sm-6 col-md-6  col-lg-6">
-                    
+                </div> 
+                <div class="col-sm-12  col-md-6">
                     <div class="form-group">
                         <label>Niveau d'enseignement :</label>  
                         {{ form.level|add_class:"form-control select2"|attr:"required"}}
                         {{ form.level.errors }}
                     </div>
-
-                    <div class="form-group">
-                        {% if sacado_asso %}
-                            {% if group %}
-                         
-                                {% if teacher.user.id != group.teacher.user.id %}
-                                <div class="alert alert-danger">                                   
-                                    <small><b>{{ group.teacher }}</b> est en charge de ce groupe. Vous devriez {% if group.teacher.user.civilite == "Mme" %}la {%else %}le{% endif %} sélectionner pour qu'{% if group.teacher.user.civilite == "Mme" %}elle {%else %}il{% endif %} voit ce parcours dans son tableau de bord.</small>
-                                    <label>Parcours co animé avec <span style="font-size:12px">(facultatif)</span></label>
-                                    {{ form.coteachers|add_class:"form-control select2"}}
-                                    {{ form.coteachers.errors }}
-                                </div>                                    
-                                {% endif %}
-
-                            {% else %}
-                                <label>Parcours co animé avec : <span style="font-size:12px">(facultatif)</span></label>
-                                {{ form.coteachers|add_class:"form-control select2"}}
-                                {{ form.coteachers.errors }}
-                            {% endif %}
-                        {% else %}
-                            <label>Parcours co animé avec <span style="font-size:12px">(facultatif)</span></label><br>
-                            <div class="alert alert-danger"><small>Co-animation uniquement avec la version établissement.</small></div>
-                        {% endif %}
-                    </div>
-
- 
-
-
+                </div> 
+                {% endif %}
+                <div class="col-sm-12 col-md-12">
                     {% include 'qcm/insert_vignettes.html' %}
-
- 
-
-
-
-
-                    {% if not parcours.is_folder %} 
-                    <div class="form-group"> 
-                        {% if  parcours %} 
-                            <div style="height:20px"></div>
-                            <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-{% if parcours.exercises.all|length > 0 %}default{% else %}danger{% endif %}" ><i class="fa fa-tasks"></i> Sélectionner les exercices</a>   
-                        {% endif %}   
-                    </div>
-                    {% endif %}  
                 </div>
-            </div>
         </div>
-        <div class="col-sm-12 col-md-4">                      
-            <table class="table">
+        <div class="col-sm-12 col-md-4">                             
+            <table class="table borderless">
+                {% block evaluation %} 
                     <tr>
                         <td>{{ form.is_publish.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text" >Si Non, les élèves ne l'ont pas dans leur tableau de bord et donc ne le voient pas.</div>
+                                <div class="helper_tip_text" >Visible par les élèves.</div>
                             </span></td>
                         <td>{{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
                         <td>{{ form.is_publish.errors }}</td>
                     </tr>
+                    <tr class="publication_div">
+                        <td><label>Date de publication :</label>  
+                            <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <div class="helper_tip_text" >Date à partir de laquelle le parcours est publié.<br/>
+                                        <span class="text-danger">Pour modifier la date, vider le champ.</span>
+                                        </div>
+                            </span>
+                        </td>
+                        <td>{{ form.start|add_class:"form-control datetimepicker"}}</td>
+                        <td></td>
+                    </tr>
                     <tr>
                         <td>{{ form.is_favorite.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text" >Si Oui, l'évaluation est accessible depuis le.s groupe.s au.x.quel.s elle est rattachée. Sinon elle n'est accessible que depuis la liste de vos évaluations.</div>
+                                <div class="helper_tip_text" >Accessible depuis son tableau de bord.</div>
                             </span></td>
                         <td>{{ form.is_favorite |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
                         <td>{{ form.is_favorite.errors }}</td>
@@ -284,7 +177,7 @@
                     <tr>
                         <td>{{ form.is_share.label_tag }}
                             <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text" >Si Oui, l'évaluation est proposée à l'ensemble des collègues de SACADO. Si vous n'avez pas la version établissement, l'évaluation n'est pas mutualisée par défaut.</div>
+                                <div class="helper_tip_text" >Mutualisation à l'ensemble des collègues de son établissement (si version établissement)</div>
                             </span>
                         </td>
                         <td>{{ form.is_share |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
@@ -293,52 +186,34 @@
                     <tr>
                         <td>{{ form.zoom.label_tag }}
                             <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text" >Si Oui, une loupe propose d'agrandir la vignette.</div>
+                                <div class="helper_tip_text" >Loupe au survol des exercices.</div>
                             </span>
                         </td>
                         <td>{{ form.zoom |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
                         <td>{{ form.zoom.errors }}</td>
                     </tr>
-                    {% block evaluation %}
-                    <tr class="publication_div">
-                        <td><label>Date de publication :</label>  
-                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                    <div class="helper_tip_text" >
-                                        Pour modifier la date, supprimer entièrement la date pour obtenir le calendrier actuel. Sinon avec le format anglais natif, vous risquez des soucis de calendrier.
-                                    </div>
-                            </span>
-                        </td>
-                        <td>{{ form.start|add_class:"form-control datetimepicker"}}</td>
-                        <td></td>
-                    </tr>
-                    <tr class="publication_div">
+                    <tr>
                         <td>{{ form.stop.label_tag }} 
-                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                    <div class="helper_tip_text" >
-                                        <small>Le parcours reste publié mais la soumission des exercices est interdite après la date renseignée. Pour dépublier, utiliser le bouton de publication.<br/>
-                                        Pour modifier la date, supprimer entièrement la date pour obtenir le calendrier actuel. Sinon avec le format anglais natif, vous risquez des soucis de calendrier.</small>
-                                    </div>
-                                </span>
+                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text" >Rendu des exercices impossible après la date renseignée. 
+                                    <br/> 
+                                    <span class="text-danger">Pour modifier la date, vider le champ.</span>
+                                </div>
+                            </span>
                         </td>
                         <td>{{ form.stop|add_class:"form-control datetimepicker"}}</td>
                         <td>{{ form.stop.errors}}{% for error in form.non_field_errors %}
                                 <p class="alert alert-danger">{{error}}</p>
                             {% endfor %}</td>
                     </tr>
-                    {% endblock %}
-
- 
-
-                    {% block evaluation_choices %}     
- 
-
+   
                     <tr>
                         <td>{{ form.is_achievement.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                 <div class="helper_tip_text" >Permet aux élèves de regarder l'avancement (en %) de leurs camarades sur le parcours.</div></td>
                         <td>{{ form.is_achievement |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
                         <td>{{ form.is_achievement.errors }}</td>
                     </tr> 
-                    {% endblock %}
+                {% endblock %}
 
 
                         
@@ -365,9 +240,8 @@
         <div class="col-sm-12 col-md-8">
             <div class="form-group">
                 {% if parcours  %}
-                    <input value="Modifier sans affecter d'élève (rapide)" type="submit" name="saver" class="btn btn-primary" onclick="return check_if_checked()" />
-                    <input value="Modifier et choisir les exercices" type="submit" name="save_and_choose" class="btn btn-primary" onclick="return check_if_checked();"/>
-                    <input value="Modifier et réaffecter des élèves" type="submit" name="affectation" class="btn btn-darkgreen" onclick="return check_if_checked()" />   
+                    <input value="Enregistrer les modifications" type="submit" name="saver" class="btn btn-primary" onclick="return check_if_checked()" />
+                    <input value="Enregistrer et choisir les exercices" type="submit" name="save_and_choose" class="btn btn-primary" onclick="return check_if_checked();"/>
                 {% else  %}
                     <input value="Enregistrer" type="submit" name="saver" class="btn btn-primary" onclick="return check_if_checked()" />
                     <input value="Enregistrer et choisir les exercices" type="submit" name="save_and_choose" class="btn btn-primary" onclick="return check_if_checked();"/>

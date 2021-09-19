@@ -11,7 +11,7 @@ from django.conf import settings
 
 from itertools import groupby
 from django.forms.models import ModelChoiceIterator, ModelChoiceField, ModelMultipleChoiceField
-
+from general_fonctions import *
 
 def validation_file(content):
     if content :
@@ -24,12 +24,12 @@ def validation_file(content):
 	    return content
 
 
-
+ 
 class ParcoursForm(forms.ModelForm):
 
 	class Meta:
 		model = Parcours
-		exclude = ("exercises","leaf_parcours","folder_parcours")
+		exclude = ("exercises","leaf_parcours","folder_parcours", "students")
 
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
@@ -37,25 +37,25 @@ class ParcoursForm(forms.ModelForm):
 		self.fields['stop'].required = False
 
 		if teacher:
-			groups = Group.objects.filter(teacher=teacher)
-			students_tab = []
-			for group in groups:
-				for student in group.students.order_by("user__last_name"):
-					students_tab.append(student.user)
-			students = Student.objects.filter(user__in=students_tab).order_by("level__ranking", "user__last_name")					
-			coteachers = Teacher.objects.filter(user__school=teacher.user.school).order_by("user__last_name") 
+			groups        = teacher.groups.all()
+			shared_groups = teacher.teacher_group.all()
+			these_groups  = groups|shared_groups
+			all_groups    = these_groups.order_by("teachers")
+			coteachers    = Teacher.objects.filter(user__school=teacher.user.school).order_by("user__last_name") 
 
-			self.fields['students']	 = forms.ModelMultipleChoiceField(queryset=students, widget=forms.CheckboxSelectMultiple, required=False)
-			self.fields['coteachers']	 = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
-			self.fields['subject']	 = forms.ModelChoiceField(queryset=teacher.subjects.all(),  required=False)
-			self.fields['level']	 = forms.ModelChoiceField(queryset=teacher.levels.order_by("ranking"),  required=False)
+			self.fields['groups']	  = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=False)
+			self.fields['coteachers'] = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
+			self.fields['subject']	  = forms.ModelChoiceField(queryset=teacher.subjects.all(),  required=False)
+			self.fields['level']	  = forms.ModelChoiceField(queryset=teacher.levels.order_by("ranking"),  required=False)
+
+
+
 			
 	def clean(self):
 		"""
 		Vérifie que la fin de l'évaluation n'est pas avant son début
 		"""
 		cleaned_data = super().clean()
-
 		start_date = cleaned_data.get("start")
 		stop_date = cleaned_data.get("stop")
 		try :
@@ -63,55 +63,55 @@ class ParcoursForm(forms.ModelForm):
 				raise forms.ValidationError("La date de verrouillage ne peut pas être antérieure à son début.")
 		except:
 			pass
+		################################################			
+		groups = cleaned_data.get("groups")
+		for g in groups:
+			for s in g.students.all() :
+				attribute_all_documents_to_student([self],s)
 
 
 
-
-class UpdateParcoursForm(forms.ModelForm):
+class FolderForm(forms.ModelForm):
 
 	class Meta:
 		model = Parcours
 		fields = '__all__'
-		exclude = ("exercises","leaf_parcours","folder_parcours")
+		exclude = ("exercises", "folder_parcours", "students")
 
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
-		super(UpdateParcoursForm, self).__init__(*args, **kwargs)
+		level   = kwargs.pop('level')
+		subject = kwargs.pop('subject')
+		super(FolderForm, self).__init__(*args, **kwargs)
 		self.fields['stop'].required = False
 		if teacher:
-			groups = Group.objects.filter(teacher  = teacher)
-			students_tab = []
-			for group in groups :
-				for student in group.students.order_by("user__last_name"):
-					students_tab.append(student.user)
+			groups        = teacher.groups.all()
+			shared_groups = teacher.teacher_group.all()
+			these_groups  = groups|shared_groups
+			all_groups    = these_groups.order_by("teachers")
+			coteachers    = Teacher.objects.filter(user__school=teacher.user.school).order_by("user__last_name")  
 
-			students = Student.objects.filter(user__in = students_tab).order_by("user__last_name") 					
-			coteachers = Teacher.objects.filter(user__school=teacher.user.school).order_by("user__last_name") 
-			leaf_parcourses = teacher.teacher_parcours.filter(is_evaluation=0,is_archive=0,is_leaf = 1).order_by("level") 	
-			folder_parcourses = teacher.teacher_parcours.filter(is_evaluation=0,is_archive=0,is_folder = 1).order_by("level")|teacher.coteacher_parcours.filter(is_evaluation=0,is_archive=0,is_folder = 1).order_by("level") 
+			self.fields['groups']	     = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=False)
+			self.fields['coteachers']    = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
 
-			self.fields['students']	 = forms.ModelMultipleChoiceField(queryset= students, widget=forms.CheckboxSelectMultiple, required=False)
-			self.fields['coteachers']	 = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
-			self.fields['leaf_parcours']	 = forms.ModelMultipleChoiceField(queryset=leaf_parcourses,  required=False)
-			self.fields['folder_parcours']	 = forms.ModelMultipleChoiceField(queryset=folder_parcourses,  required=False)
-			self.fields['subject']	 = forms.ModelChoiceField(queryset=teacher.subjects.all(),  required=False)			
-			self.fields['level']	 = forms.ModelChoiceField(queryset=teacher.levels.order_by("ranking"),  required=False)
-
+		if subject and level :
+			leaf_parcours                = teacher.teacher_parcours.filter(subject=subject,level=level).exclude(is_folder=1).order_by("title")
+			self.fields['leaf_parcours'] = forms.ModelMultipleChoiceField(queryset=leaf_parcours, widget=forms.CheckboxSelectMultiple, required=False)
+ 
 			
 	def clean(self):
-		"""
-		Vérifie que la fin de l'évaluation n'est pas avant son début
-		"""
+ 
 		cleaned_data = super().clean()
 		start_date = cleaned_data.get("start")
 		stop_date = cleaned_data.get("stop")
-
 		try :
 			if stop <= start:
 				raise forms.ValidationError("La date de verrouillage ne peut pas être antérieure à son début.")
 		except:
 			pass
 
+
+ 
 
 class RelationshipForm(forms.ModelForm):
 	class Meta:

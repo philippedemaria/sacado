@@ -26,7 +26,7 @@
         <span style="color:{{ group.color }}"><i class="fa fa-arrow-circle-right"></i> {{ group.name }}   </span>
             <img src="{% static 'img/angle-right.png' %}"/> <small>Détails</small> <img src="{% static 'img/angle-right.png' %}"/>
 
-            <a href="{% url 'print_ids' group.id  %}" class="btn btn-default"><img src="{% static 'img/pdf.png' %}" width="18px" >  Télécharger les identifiants des élèves</a>
+            <a href="{% url 'print_ids' group.id  %}" class="btn btn-default"><i class="fa fa-file-pdf-o"></i>  Télécharger les identifiants des élèves</a>
 
 {% endblock %}
 
@@ -47,20 +47,26 @@
                 <a href="#" data-toggle='modal' data-target='#mdp_code' title="Afficher le code et le mot de passe en plein écran"><i class="fa fa-expand"></i></a>
             </p>
         </div>
+
+        {% if sacado_asso %}
         <div class="col-sm-12 col-md-7"> 
             <form action="" method="POST"> 
                 {% csrf_token %}
                 <p style="color:{{ group.color }}"> 
                     {% for sp in  studentprofiles   %}
-                    <span class="profile_student_incognito" id="profile_incognito{{ sp.user.id }}" >Id élève : {{ sp.user.username }} 
+                    <span class="profile_student_incognito" id="profile_incognito{{ sp.user.id }}" >Ident. élève : {{ sp.user.username }} 
+                        {% comment %}
                         <a href="#" class="delete_student_profile edit" data-student_id="{{ sp.user.id }}" onclick="return TestDelete('votre profil élève')">
                             <i class="fa fa-trash"></i>
                         </a>
+                        {% endcomment %}
                     </span>
                     {% endfor %}
                 </p>
             </form>
         </div>
+        {% endif %}
+
     </div>
     <div class="row">        
         <div class="col-sm-11 col-md-12">
@@ -214,7 +220,7 @@
                 <div class="round" style="background-color: {{ group.color }};">
                     <a href="{% url 'list_parcours_group' group.id %}" style="color: {{ group.color|contrast_color }};" > 
                         <h1 class="sacado"> <br> 
-                            Créer <br> mon premier <br>  parcours
+                            3. Créer <br> mon premier <br>  parcours
                         </h1>
                     </a>
 

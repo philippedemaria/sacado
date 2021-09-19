@@ -45,7 +45,7 @@
                 <table class="table table-hovered display1000"  style="width:100%" >
                     <thead> 
                         <tr> 
-                            <th style="width:2px"></th>                  
+                            <th style="width:30px"></th>                  
                             <th style="width:300px">Nom</th>
                             <th>Modif.</th>
                             <th>Matière</th>
@@ -75,7 +75,7 @@
 
                                 <span class="fa-stack selector_favorite" id="selector_favorite{{ parcours.id }}" data-fav="{% if parcours.is_favorite %}1{% else  %}0{% endif  %}" data-parcours_id="{{ parcours.id }}" style="cursor:pointer">
                                     <i class="fa fa-{% if parcours.is_evaluation %}bullseye{% elif parcours.is_folder %}folder{% else %}square{% endif  %} fa-2x" style="color: {{ parcours.color }} ;"></i>
-                                    <span id="is_favorite_id{{ parcours.id }}">{% if parcours.is_favorite %}<i class="fa fa-star fa-stack-1x" style="font-size: 12px; color:#FFF" ></i>{% endif  %}</span>
+                                    <span id="is_favorite_id{{ parcours.id }}">{% if parcours.is_favorite %}<i class="fa fa-star fa-stack-1x" style="font-size: 12px; color:#FFF" title="Favori" ></i>{% endif  %}</span>
                                 </span>
                             </td>  
                             <td {% if parcours.is_folder %} style="padding-top:15px" {% endif %} >
@@ -223,8 +223,8 @@
                                 </span>
                             </td>
                         </tr> 
-                        {% for prcrs in parcours.leaf_parcours.all %}
-                            <tr {% if not prcrs.is_publish %} style="border-left-color:#F4F4F4; border-left-style: 3px solid" {% endif  %} {% if prcrs.students.count %}class="collapsed subparcours{{ forloop.parentloop.counter }}"{% endif %} >
+                        {% for prcrs in parcours.leaf_parcours.all %}  
+                            <tr  style="display:none"   class="collapsed subparcours{{ forloop.parentloop.counter }}"  >
                                 <td style="text-align:center">
                                     <svg width="1em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-bar-right" fill="{{ parcours.color }}" >
                                       <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>

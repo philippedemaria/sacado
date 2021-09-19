@@ -82,17 +82,8 @@ function check_if_checked() {
         }
     }
 
-    var checkeds = document.getElementsByClassName("check_if_check") ;
-    var len = 0 ;
-    for(let i = 0; i < checkeds.length ; i++) {
-        if(checkeds[i].checked) {
-          len++;
-        }
-    }
-    
-    var tot = leng + len
-    if (tot == 0) {
-            if (!confirm("Vous devriez sélectionner au moins un élève. Si vous n'avez pas encore d'élèves, créez-vous un profil élève dans chacun de vos groupes. Confirmez l'enregistrement sans élève ?")) return false ;             
+    if (leng == 0) {
+            if (!confirm("Vous devriez sélectionner au moins un groupe. Confirmez l'enregistrement sans groupe ?")) return false ;             
             } 
 }
 

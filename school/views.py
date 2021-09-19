@@ -405,7 +405,7 @@ def new_group(request):
 
 			try :
 				if stdts :
-					tested = include_students(request , stdts,group)
+					include_students(request , stdts,group)
 			except :
 				pass
 
@@ -442,7 +442,7 @@ def update_group_school(request,id):
 			stdts = request.POST.get("students")
 			try :
 				if len(stdts) > 0 :
-					tested = include_students(request,stdts,group)
+					include_students(request,stdts,group)
 
 			except :
 				pass

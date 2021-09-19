@@ -54,7 +54,7 @@
 
     {% for parcours_sort in list_parcours %}  
     <div class="row"></div>
-    {% if  parcours_sort.grouper %}<h1 class="thin" id="evaluation" >Evaluations favorites</h1>{% else %}<h1 class="thin" > Parcours favoris</h1>{% endif %}  
+    {% if  parcours_sort.grouper %}<h1 class="thin" id="evaluation" >Mes évaluations</h1>{% else %}<h1 class="thin" >Mes parcours </h1>{% endif %}  
         <div id="parcours_sortable">
         {% for parcours in parcours_sort.list %}  
   
@@ -336,8 +336,6 @@
                         {% if  not parcours.is_folder %}
                         <div class="col-lg-4 col-xs-4">
                             {% if sacado_asso %}
-
- 
                             <a href="{% url 'real_time' parcours.id %}" class="edit" {% if parcours.is_real_time %} style="color:{{ parcours.color }}" {% endif %} >
                                 <i class="fa fa-fw fa-clock"></i><span class="label_icon">Temps réel.</span>
                             </a>
@@ -386,50 +384,16 @@
     {% empty %}
  
 
-        {% if role %}
+ 
+
         <div class="row"> 
             <div class="col-sm-12 col-md-12">
-                <div class="alert alert-danger">Aucun parcours n'est affecté à ce groupe. Tant qu'un groupe ne contient pas d'élève, <strong>vous ne pouvez pas lui attribuer de parcours</strong>. Lorsque vos parcours sont créés, les élèves les rejoignent directement dès leur inscrition via le lien <span style="color:#271942">https://sacado.xyz/group/{{ group.code }}</span><br>
-                <i class="fa fa-bullhorn"></i> <strong>Préparer</strong> maintenant vos parcours, <strong>publier</strong>.  
+                <div class="alert alert-warning">
+                    Ce dossier ne contient encore aucun parcours.
                 </div>
             </div>
         </div>
-        
-        <div class="row"> 
-            <div class="col-sm-12 col-md-12">
-                <h2 class='thin'><i class="fa fa-recycle"></i> 3 façons de disposer de parcours avec <span class="sacado">sacado</span></h2>  
-                    
-
-                        <ol><i class="fa fa-hand-o-right"></i> Les parcours par défaut  <p> Ces parcours contiennent tous les exercices  de  {{ group.level}} proposés par <span class="sacado">sacado</span>, classés par le thème. Vous pouvez les utiliser directement, leur ajouter, leur supprimer des exercices.<br>Choisir le parcours souhaité <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   ><i class="fa fa-caret-right"></i>  Parcours par défaut</a><p></ol>
-                        <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés (<em>Recommandés pour une première utilisation</em>)<p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier une fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur
-
-                            {% if sacado_asso %}
-                                <a href="{% url 'all_parcourses' 0 %}"  ><i class="fa fa-caret-right"></i>  Parcours mutualisés</a>
-                            {% else %}
-                                <a href="#"  class="no_sacado_asso" > <i class="fa fa-caret-right"></i> Parcours mutualisés</a>
-                            {% endif %}
-                        </p></ol>
-                        <ol><i class="fa fa-hand-o-right"></i>  Les parcours personnalisés <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br>  Créer votre parcours personnalisé dans un premier temps puis sélectionner les exercices de votre choix. 
-
-                            {% if parcours %}
-                            <a href="{% url 'create_parcours' parcours.id %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a>
-                            {% else %}
-                            <a href="{% url 'create_parcours' 0 %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a>
-                            {% endif %}
-                        </p></ol>
-
-
-
-            </div>
-        </div>
-        {% else %}
-            <div class="row"> 
-                <div class="col-sm-12 col-md-12">
-                    <div class="alert alert-danger">Aucun parcours n'est affecté à ce groupe. 
-                    </div>
-                </div>
-            </div>
-        {% endif %}
+ 
     {% endfor %}
 
 </form>

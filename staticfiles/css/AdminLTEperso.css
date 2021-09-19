@@ -39,6 +39,7 @@ body {
 .alert-warning{
   background-color: #f1eef7 ;
   border : solid 1px #f1eef7 ;
+  color :  #5d4391 ;
 }
 
 .counter{
@@ -48,6 +49,10 @@ body {
 
 .no_visu_on_load{
   display: none;
+}
+
+.borderless td, .borderless th {
+    border: none;
 }
 
 
@@ -69,6 +74,22 @@ body {
   padding: 20px;
   border: 3px solid #5d4391;
   border-radius:10px 
+}
+
+
+.dossier{
+  text-align:center;
+  width:30px;
+  padding: 6px 9px ;
+  position: absolute;
+  left:0px;
+  top:0px;
+  background-color: #f1eef7;
+  font-size: 10px; 
+  color: #5d4391 ;
+  font-variant-caps: small-caps;
+  border-radius: 0px 0px 0px 3px ;
+  font-weight: 600;
 }
 
 .padding10 {
@@ -132,7 +153,6 @@ hr.divider {
 }
 
 .profile_student_incognito{
-  border : 1px solid #CCC;
   border-radius: 5px;
   background-color: #F0F0F0;
   padding: 3px  10px ;
@@ -224,10 +244,23 @@ border : 0px!important;
 #id_students  ,#id_exercises,#id_courses ,#id_themes   {
   padding-left : 0px ; 
 }
-#id_students li,#id_exercises li ,#id_courses li,#id_themes li  {
+
+
+li label{
+    cursor:pointer;
+    font-size: 14px;
+}
+
+
+#id_students li,#id_exercises li ,#id_courses li,#id_themes li,#id_groups li,#id_leaf_parcours li  {
   list-style: none;
   padding-left : 0px ; 
 }
+
+#id_groups li label,#id_leaf_parcours li label {
+  font-weight: normal;
+}
+
 /* Liste des puces par le form django */
 
 .list_choice{
@@ -361,16 +394,6 @@ label {
 .helper_label_gray{
     font-size: 12px;
     color : #AAA;
-}
-
-li label{
-    cursor:pointer;
-      font-size: 16px;
-}
-
-li label:hover{
-    cursor:pointer;
-    /*font-weight: 700;*/
 }
 
 
@@ -5478,6 +5501,38 @@ li .list_no_indent{
         }
 }
 
+.div_vignette{
+  width:220px;
+  height:300px;
+  overflow-y:auto; 
+  background-color: #f1eef7;
+}
+
+@media only screen and (min-width: 1500px) { 
+
+  .div_vignette{
+      width:430px;
+      height:300px;
+      overflow-y:auto; 
+      background-color: #f1eef7; 
+   }
+
+}
+
+@media only screen and (max-width: 995px) { 
+
+  .div_vignette{
+      width:430px;
+      height:300px;
+      overflow-y:auto; 
+      background-color: #f1eef7; 
+   }
+
+}
+
+
+
+
  
 @media only screen and (max-width: 1350px) { 
       a.student_vignette_title, a.student_vignette_title:focus,a.student_vignette_title:focus{
@@ -5883,7 +5938,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 .helper_tip {
   position: relative;
   opacity:1;
-  color:gray;
+  color:#d1c5de;
   cursor:pointer;
   font-size: 14px;
 
@@ -5897,7 +5952,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   visibility: hidden;
   width: 200px;
   background-color: #FFF;
-  color: #222;
+  color:  #998fa6;
   text-align: left;
   border-radius: 4px;
   padding: 5px;
@@ -5943,7 +5998,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   visibility: hidden;
   width: 420px;
   background-color: #FFF;
-  color: #222;
+  color: #998fa6;
   text-align: center;
   border-radius: 4px;
   padding: 5px;
@@ -5965,7 +6020,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 .helper_tip .helper_tip_text_center {
   visibility: hidden;
   background-color: #FFF;
-  color: #222;
+  color:  #998fa6;
   text-align: left;
   border-radius: 4px;
   padding: 5px;
@@ -6000,7 +6055,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   visibility: hidden;
   width: 200px;
   background-color: #FFF;
-  color: #222;
+  color: #998fa6;
   text-align: left;
   border-radius: 4px;
   padding: 5px!important;
@@ -6030,7 +6085,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   visibility: hidden;
   width: 200px;
   background-color: #FFF;
-  color: #222;
+  color: #998fa6;
   text-align: left;
   border-radius: 4px;
   padding: 5px;
@@ -6225,6 +6280,19 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
   border-radius: 20px;
 }
  
+
+ 
+.btn-create-group{
+  color: #f1eef7;
+  font-size: 60px!important;
+}
+
+.btn-create-group:hover{ 
+  color:#5d4391;
+}
+
+
+
 
 .btn-new  {
   color : #007bff!important;

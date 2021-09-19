@@ -87,7 +87,7 @@
         <li>
             <a href="{% url 'print_statistiques' group.id 0 %}"  
                 class="no_button" id="print_stats">
-                <span id="loading_stats"></span> Imprimer les bilans <img src="{% static 'img/pdf.png' %}" width="15px"/>
+                <span id="loading_stats"></span> Imprimer les bilans <i class="fa fa-file-pdf-o"></i>
             </a>
         </li> 
         {% endcomment %}
@@ -171,7 +171,7 @@
         <li class="divider"></li>
         <li>
             <a href="#" class="no_button no_sacado_asso" id="print_stats" title="version établissement requise">
-                <span id="loading_stats"></span> Imprimer les bilans <img src="{% static 'img/pdf.png' %}" width="15px"/>
+                <span id="loading_stats"></span> Imprimer les bilans <i class="fa fa-file-pdf-o"></i>
             </a>
         </li> 
         {% endcomment %}
@@ -207,13 +207,13 @@
         </li>  
 
         <li {% if 'group/show/' in request.path %} class="active" {% endif %}>
-             <a href="{% url 'show_group' group.id  %}" ><i class="fa fa-arrow-circle-right fa-fw fa-fw"></i>  Lire les détails/Modifier les élèves </a>
+             <a href="{% url 'show_group' group.id  %}" ><i class="fa fa-arrow-circle-right  fa-fw"></i>  Lire les détails/Modifier les élèves </a>
         </li>
         {%  endif %} 
 
 
         <li {% if 'group/print_ids/' in request.path %} class="active" {% endif %}>
-             <a href="{% url 'print_ids' group.id  %}" ><img src="{% static 'img/pdf.png' %}" width="15px" style="margin-right:11px"> Télécharger les identifiants </a>
+             <a href="{% url 'print_ids' group.id  %}" ><i class="fa fa-file-pdf-o  fa-fw"></i> Télécharger les identifiants </a>
         </li>
 
 

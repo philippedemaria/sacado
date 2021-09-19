@@ -1079,31 +1079,31 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
-        // Affiche connaissant l'exercice  et le cours
-        $('.group_to_folder').on('click', function (event) {
+ 
+        // $('.select_this').on('click', function (event) {
 
-            let parcours_id = $(this).data("parcours_id"); 
-            let group_id    = $(this).data("group_id"); 
-            let csrf_token  = $("input[name='csrfmiddlewaretoken']").val();
+        //     let parcours_id = $(this).data("parcours_id"); 
+        //     let group_id    = $(this).data("group_id"); 
+        //     let csrf_token  = $("input[name='csrfmiddlewaretoken']").val();
 
-            $.ajax(
-                {
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        csrfmiddlewaretoken: csrf_token,
-                        'parcours_id': parcours_id,
-                        'group_id': group_id,
-                    },
-                    url: "ajax_group_to_parcours",
-                    success: function (data) {
+        //     $.ajax(
+        //         {
+        //             type: "POST",
+        //             dataType: "json",
+        //             data: {
+        //                 csrfmiddlewaretoken: csrf_token,
+        //                 'parcours_id': parcours_id,
+        //                 'group_id': group_id,
+        //             },
+        //             url: "ajax_group_to_parcours",
+        //             success: function (data) {
 
-                        $('#gp'+ parcours_id ).html( data.html );  
+        //                 $('#gp'+ parcours_id ).html( data.html );  
 
-                    }
-                }
-            )
-        });
+        //             }
+        //         }
+        //     )
+        // });
 
 
 

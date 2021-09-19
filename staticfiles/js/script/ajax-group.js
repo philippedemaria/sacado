@@ -53,27 +53,27 @@ define(['jquery','bootstrap_popover', 'bootstrap' ], function ($) {
 
    
    
-        $('.delete_student_profile').on('click', function () {
+        // $('.delete_student_profile').on('click', function () {
 
-            let student_id = $(this).attr("data-student_id");
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+        //     let student_id = $(this).attr("data-student_id");
+        //     let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
  
-            $.ajax(
-                {
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        'student_id': student_id,
-                        csrfmiddlewaretoken: csrf_token
-                    },
-                    url: "../../ajax_delete_student_profiles",
-                     success: function (data) {
-                        $('#profile_incognito'+student_id).remove();
-                    }
-                }
-            )
+        //     $.ajax(
+        //         {
+        //             type: "POST",
+        //             dataType: "json",
+        //             data: {
+        //                 'student_id': student_id,
+        //                 csrfmiddlewaretoken: csrf_token
+        //             },
+        //             url: "../../ajax_delete_student_profiles",
+        //              success: function (data) {
+        //                 $('#profile_incognito'+student_id).remove();
+        //             }
+        //         }
+        //     )
 
-            });
+        //     });
 
 
 
