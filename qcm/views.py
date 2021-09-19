@@ -1681,7 +1681,7 @@ def update_parcours(request, id, idg=0 ):
         group = Group.objects.get(pk = idg)
         images = get_images_for_parcours_or_folder(group)
         if Sharing_group.objects.filter(group_id=idg, teacher = teacher).exists() :
-            sh_group = Sharing_group.objects.get(group_id=group_id, teacher = teacher)
+            sh_group = Sharing_group.objects.get(group_id=idg, teacher = teacher)
             role = sh_group.role 
         elif group.teacher == teacher :
             role = True
