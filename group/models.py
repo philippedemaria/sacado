@@ -35,8 +35,7 @@ class Group(ModelWithCode):
         nb = self.students.exclude(user__username__contains= "_e-test").count()
         eleve ="élève"
         if nb > 1 :
-            eleves ="élèves"
-        if self.level :
+            eleve ="élèves"
             if self.teachers.count() > 0 :
                 return "[CoA] : {} [{} {}]".format(self.name, nb , eleve)
             else :
