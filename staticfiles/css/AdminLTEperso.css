@@ -142,7 +142,9 @@ hr.divider {
 }
 
 
-
+.box-footer span{
+  cursor: pointer;
+}
 
 .double_bottom_padding{
   margin-bottom: 20px;

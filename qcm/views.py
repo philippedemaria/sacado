@@ -7581,7 +7581,6 @@ def update_folder(request,id,idg):
     if request.method == "POST" :
         if form.is_valid():
             nf = form.save(commit=False)
-            nf.teacher = group.teacher
             nf.is_evaluation = 0
             nf.is_folder = 1
             nf.level = group.level
