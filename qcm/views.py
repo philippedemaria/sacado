@@ -1623,7 +1623,6 @@ def update_parcours(request, id, idg=0 ):
     levels = teacher.levels.all()
     parcours = Parcours.objects.get(id=id)
     leaf = parcours.is_leaf
-    print(leaf)
     folder_parcourses = teacher.teacher_parcours.filter(leaf_parcours= parcours).order_by("level") 
  
     form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher )
@@ -1641,19 +1640,20 @@ def update_parcours(request, id, idg=0 ):
     if request.method == "POST":
         if form.is_valid():
             nf = form.save(commit=False)
-            print(leaf)
+ 
             nf.is_leaf = leaf
             nf.is_evaluation = 0
 
             if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
                 nf.vignette = request.POST.get("this_image_selected",None)
 
-            nf.leaf_parcours.set( folder_parcourses )
+            #nf.leaf_parcours.set( folder_parcourses )
 
             nf.save()
             form.save_m2m()
 
             if "groups" in form.changed_data :
+                print("changed")
                 attribute_all_documents_to_students(form,nf) # Si les groupes sont modifiés alors on attribue les docu aux élèves des groupes.
 
             if "stop" in form.changed_data :
