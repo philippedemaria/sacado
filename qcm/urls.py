@@ -9,6 +9,9 @@ from django.views.decorators.csrf import csrf_exempt
 urlpatterns = [
 
 
+
+    path('get_folder_to_folder', get_folder_to_folder, name='get_folder_to_folder'),
+
     path('parcours', list_parcours, name='parcours'),
     path('evaluations', list_evaluations, name='evaluations'),
     path('archives', list_archives, name='archives'),

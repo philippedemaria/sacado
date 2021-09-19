@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from .models import Parcours, Exercise, Remediation, Relationship, DocumentReport, Supportfile, Course, Comment, Demand, Mastering,Mastering_done, Writtenanswerbystudent, Customexercise,Customanswerimage , Customanswerbystudent, Masteringcustom, Masteringcustom_done, Remediationcustom
+from .models import Folder, Parcours, Exercise, Remediation, Relationship, DocumentReport, Supportfile, Course, Comment, Demand, Mastering,Mastering_done, Writtenanswerbystudent, Customexercise,Customanswerimage , Customanswerbystudent, Masteringcustom, Masteringcustom_done, Remediationcustom
 from account.models import Student , Teacher
 from socle.models import Knowledge, Skill
 from group.models import Group
@@ -74,9 +74,9 @@ class ParcoursForm(forms.ModelForm):
 class FolderForm(forms.ModelForm):
 
 	class Meta:
-		model = Parcours
+		model = Folder
 		fields = '__all__'
-		exclude = ("exercises", "folder_parcours", "students")
+ 
 
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
@@ -95,8 +95,8 @@ class FolderForm(forms.ModelForm):
 			self.fields['coteachers']    = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
 
 		if subject and level :
-			leaf_parcours                = teacher.teacher_parcours.filter(subject=subject,level=level).exclude(is_folder=1).order_by("title")
-			self.fields['leaf_parcours'] = forms.ModelMultipleChoiceField(queryset=leaf_parcours, widget=forms.CheckboxSelectMultiple, required=False)
+			parcours                = teacher.teacher_parcours.filter(subject=subject,level=level).exclude(is_folder=1).order_by("title")
+			self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset=parcours, widget=forms.CheckboxSelectMultiple, required=False)
  
 			
 	def clean(self):

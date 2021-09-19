@@ -15,8 +15,8 @@ from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group , Sharing_group
 from school.models import Stage, School
-from qcm.models import  Parcours , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage , DocumentReport , Tracker
-from qcm.forms import ParcoursForm ,  RemediationForm, FolderForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm
+from qcm.models import  Folder , Parcours , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage , DocumentReport , Tracker
+from qcm.forms import FolderForm , ParcoursForm ,  RemediationForm,  UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm
 from tool.forms import QuizzForm
 from socle.models import  Theme, Knowledge , Level , Skill , Waiting , Subject
 from django.http import JsonResponse 
@@ -63,8 +63,64 @@ import html
 from general_fonctions import *
 
 
+
+
+
 #################################################################
-#Récupération du marocurs Seconde to Maths complémentaires
+# DUplication des folder
+#################################################################
+
+def get_folder_to_folder(request):
+
+    old_folders = Parcours.objects.filter(is_folder=1)[:2]
+
+    for old_folder in old_folders :
+        print(old_folder.title)
+
+        title       = old_folder.title
+        color       = old_folder.color
+        author      = old_folder.author
+        teacher     = old_folder.teacher
+
+        is_share    = old_folder.is_share
+        is_publish  = old_folder.is_publish
+
+        subject     = old_folder.subject
+        level       = old_folder.level
+
+        is_favorite = old_folder.is_favorite
+
+        start       = old_folder.start
+        stop        = old_folder.stop
+
+        vignette    = old_folder.vignette
+        ranking     = old_folder.ranking
+        old_id      = old_folder.id
+
+        folder = Folder.objects.create(title = title , color = color ,  author = author ,  teacher = teacher ,  is_share = is_share ,  is_publish = is_publish ,  subject = subject ,  level = level , is_favorite = is_favorite  , start = start , stop = stop , vignette = vignette , ranking = ranking , old_id = old_id )
+
+        folder.coteachers.set( old_folder.coteachers.all() )
+        folder.groups.set( old_folder.groups.all() )
+        folder.students.set( old_folder.students.all() )
+        folder.parcours.set( old_folder.leaf_parcours.all() )
+
+
+    return redirect('admin_tdb' )
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+#################################################################
+#Récupération du parcours Seconde to Maths complémentaires
 #################################################################
 
 
@@ -7532,7 +7588,6 @@ def create_folder(request,idg):
             nf.save() 
             form.save_m2m()            
             nf.groups.add(group)
-            print(group.students.all())
             nf.students.set(group.students.all())        
     
 

@@ -355,6 +355,10 @@ class Exercise(models.Model):
         return ok
 
 
+
+
+
+
 class Parcours(ModelWithCode):
 
     title = models.CharField(max_length=255, verbose_name="Titre")
@@ -399,7 +403,8 @@ class Parcours(ModelWithCode):
     
     is_folder = models.BooleanField(default=0, verbose_name="Dossier")
     leaf_parcours = models.ManyToManyField('self',  blank=True,  related_name="subparcours_parcours",  verbose_name="Nom du dossier")# from_parcours_id est le dossier et to_parcours_id est les parcours  
-
+    
+    is_trash = models.BooleanField(default=0, verbose_name="Poubelle ?", editable=False)
 
     def __str__(self):
         if self.coteachers.count() > 0 :
@@ -860,6 +865,54 @@ class Parcours(ModelWithCode):
                 test = True
                 break
         return test
+
+
+
+
+
+class Folder(models.Model):
+
+    title = models.CharField(max_length=255, verbose_name="Titre")
+    color = models.CharField(max_length=255, default='#00819F', verbose_name="Couleur")
+    author = models.ForeignKey(Teacher, related_name="author_folders", on_delete=models.CASCADE, default='', blank=True, null=True, verbose_name="Auteur")
+    teacher = models.ForeignKey(Teacher, related_name="teacher_folders", on_delete=models.CASCADE, default='', blank=True, editable=False)
+    coteachers = models.ManyToManyField(Teacher, blank=True,  related_name="coteacher_folders",  verbose_name="Enseignant en co-animation")
+
+    groups = models.ManyToManyField(Group,  blank=True,  related_name="group_folders" )
+
+    students = models.ManyToManyField(Student, blank=True, related_name='students_folders', editable=False)
+    is_share = models.BooleanField(default=0, verbose_name="Mutualisé ?")
+    is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
+
+    subject = models.ForeignKey(Subject, related_name="subject_folders", on_delete=models.CASCADE, default='', blank=True, null=True, verbose_name="Enseignement")
+    level = models.ForeignKey(Level, related_name="level_folders", on_delete=models.CASCADE, default='', blank=True, null=True)
+
+    is_favorite = models.BooleanField(default=1, verbose_name="Favori ?")
+
+    duration = models.PositiveIntegerField(default=2, blank=True, verbose_name="Temps de chargement (min.)")
+    start = models.DateTimeField(null=True, blank=True, verbose_name="A partir de")
+    stop = models.DateTimeField(null=True, blank=True, verbose_name="Date de verrouillage")
+
+    vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Vignette d'accueil", blank=True, default ="")
+    ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
+    parcours = models.ManyToManyField(Parcours ,  blank=True,  related_name="folders" )  
+    
+    is_trash = models.BooleanField(default=0, verbose_name="Poubelle ?", editable=False)
+
+    old_id = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
+
+
+    def __str__(self):
+        return "{}".format(self.title)
+
+
+
+
+
+
+
+
+
 
 
 class Relationship(models.Model):
