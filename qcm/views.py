@@ -72,7 +72,7 @@ from general_fonctions import *
 
 def get_folder_to_folder(request):
 
-    old_folders = Parcours.objects.filter(is_folder=1)[:2]
+    old_folders = Parcours.objects.filter(is_folder=1)[2:]
 
     for old_folder in old_folders :
         print(old_folder.title)
