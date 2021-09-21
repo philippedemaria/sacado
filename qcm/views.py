@@ -4578,7 +4578,7 @@ def create_evaluation(request,idf=0):
         nf.is_evaluation = 1
         if nf.is_share :
             try :   
-                sending_to_teachers(teacher , nf.level,nf.subject,"Nouveau parcours")
+                sending_to_teachers(teacher , nf.level,nf.subject,"Nouvelle évaluation")
             except :
                 pass
 
