@@ -30,7 +30,7 @@
     </a>
 </li>
 
-<li class="dropdown {% if  request.session.tdb  %}active{% endif %}">
+<li class="dropdown {% if  request.session.tdb and 'parcours_group' in request.path %}active{% endif %}">
     <a href="{% url 'index' %}" class="main" >
         <i class="fa fa-tachometer-alt fa-2x"></i> 
         <div class="captionmenu">Tableau de bord</div>
@@ -38,7 +38,7 @@
 </li>
 
 
-<li  class="dropdown {% if not request.session.tdb and 'parcours' in request.path  and not 'evaluation' in request.path and not 'parcourses_all/1/' in request.path %}active{% endif %}">
+<li  class="dropdown {% if not request.session.tdb and 'parcours' in request.path and not 'parcours_group' in request.path  and not 'evaluation' in request.path and not 'parcourses_all/1/' in request.path %}active{% endif %}">
     <a href="{% url 'parcours' %}" class="main" >
         <i class="fa fa-th fa-2x" aria-hidden="true"></i> 
         <div class="captionmenu">Parcours</div>
