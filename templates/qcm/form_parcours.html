@@ -89,11 +89,12 @@
 
  
                     </div>
-                    {% if groups|length > 1 %}
-                    <div class="form-group" style="font-size:12px">           
-                        <i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le parcours est partagé entre ces groupes.
+                    <div class="form-group">  
+                        <div class="alert alert-warning">
+                            <p style="font-size:12px"><i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le parcours est partagé entre ces groupes.</p>
+                            <p style="font-size:12px"><i class="fa fa-users"></i> Vous pourrez individualiser les élèves une fois le parcours créé.</p>
+                        </div>
                     </div>
-                    {% endif %}
                 </div>
                 {% endblock %}
             </div>
