@@ -133,8 +133,9 @@ def index(request):
 
 
             none_folders = Folder.objects.filter(students=None, is_favorite=1 )
-            teacher_parcours = teacher.teacher_parcours
 
+
+            teacher_parcours = teacher.teacher_parcours
             parcours_tab = teacher_parcours.filter(students=None, is_favorite=1, is_archive=0).order_by("is_evaluation") ## Parcours / évaluation favoris non affectés
             parcourses = teacher_parcours.filter(is_evaluation=0, is_favorite =1, is_archive=0).order_by("-is_publish")
 

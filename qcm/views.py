@@ -72,7 +72,7 @@ from general_fonctions import *
 
 # def get_folder_to_folder(request):
 
-#     old_folders = Parcours.objects.filter(is_folder=1)[2:]
+#     old_folders = Parcours.objects.filter(is_folder=1)
 
 #     for old_folder in old_folders :
 #         print(old_folder.title)
@@ -97,7 +97,7 @@ from general_fonctions import *
 #         ranking     = old_folder.ranking
 #         old_id      = old_folder.id
 
-#         folder = Folder.objects.create(title = title , color = color ,  author = author ,  teacher = teacher ,  is_share = is_share ,  is_publish = is_publish ,  subject = subject ,  level = level , is_favorite = is_favorite  , start = start , stop = stop , vignette = vignette , ranking = ranking , old_id = old_id )
+#         folder,created = Folder.objects.get_or_create(title = title , old_id = old_id ,teacher = teacher , defaults={  "is_share" : is_share ,  "is_publish" : is_publish ,  "subject" : subject ,  "level" : level , "is_favorite" : is_favorite  , "start" : start , "stop" : stop , "vignette" : vignette , "ranking" : ranking  } )
 
 #         folder.coteachers.set( old_folder.coteachers.all() )
 #         folder.groups.set( old_folder.groups.all() )
@@ -109,18 +109,18 @@ from general_fonctions import *
 
 
 
-def remove_parcours_folder(request):
+# def remove_parcours_folder(request):
 
-    old_folders = Parcours.objects.filter(is_folder=1) 
+#     old_folders = Parcours.objects.filter(is_folder=1) 
 
-    for old_folder in old_folders :
-        #old_folder.groups.clear()
-        #old_folder.students.clear()
-        #old_folder.coteachers.clear()
-        Parcours.objects.get(pk=old_folder.id).update(is_trash=1)
+#     for old_folder in old_folders :
+#         #old_folder.groups.clear()
+#         #old_folder.students.clear()
+#         #old_folder.coteachers.clear()
+#         Parcours.objects.get(pk=old_folder.id).update(is_trash=1)
 
 
-    return redirect('admin_tdb' )
+#     return redirect('admin_tdb' )
 
  
  
@@ -1253,6 +1253,7 @@ def list_parcours_group(request,id):
 
   
     folders     = group.group_folders.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),    is_favorite=1,  is_archive=0, is_trash=0 ).order_by("ranking")
+ 
 
     bases       = group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),   is_favorite=1, folders = None, is_trash=0)     
     evaluations = bases.filter( is_evaluation=1).order_by("ranking")
