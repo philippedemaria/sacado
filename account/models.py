@@ -402,10 +402,7 @@ class Student(ModelWithCode):
 
     def is_task_exists(self,parcours):
 
-        if parcours.is_folder :
-            relationships = self.students_relationship.filter(parcours__in = parcours.leaf_parcours.filter(is_publish=1)).exclude(date_limit = None)
-        else :
-            relationships = self.students_relationship.filter(parcours = parcours).exclude(date_limit = None)
+        relationships = self.students_relationship.filter(parcours = parcours).exclude(date_limit = None)
 
         if len(relationships) == 0 :
             test = False #Aucune tache créée.
@@ -616,6 +613,15 @@ class Teacher(models.Model):
         if self.teacher_to_test.filter(origin = parcours).count()>0  :
             get = True
         return get
+
+
+
+    def has_groups(self):
+        return self.groups.all() | self.teacher_group.all()
+        
+
+
+
 
 
 class Resultknowledge(models.Model):

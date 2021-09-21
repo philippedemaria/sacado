@@ -5,18 +5,16 @@
 
 {% block require %}
  
-    {% if parcours %}
+ 
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
-    {% else %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
-    {% endif %}
+ 
 
     <script>
         require(['script/ajax-parcours']);
     </script> 
 
     {% block require_complement %}
-        {% if not parcours %}
+        {% if not folder %}
             <script>
                 require(['script/ajax-parcours-complement']);
             </script> 
@@ -34,7 +32,7 @@
       {% include 'qcm/breadcrumb.html' %}
  
     <small style="color : #3b9d26">  
-    {% if parcours %}
+    {% if folder %}
         Configuration du dossier
     {% else %}
          Nouveau dossier   
@@ -61,12 +59,12 @@
 {% block body %}  
 <section class="content_main">
 
-    {% if parcours %}
-        {% if parcours.author != parcours.teacher and parcours.teacher != request.user.teacher %}
+    {% if folder %}
+        {% if folder.author != folder.teacher and folder.teacher != request.user.teacher %}
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 <div class="alert alert-info">
-                    Le dossier est créé par <b>{{ parcours.author }}</b> pour {% if parcours.teacher.user.civilite == "Mme" %}sa{% else %}son{% endif %} collègue <b>{{ parcours.teacher }}</b>
+                    Le dossier est créé par <b>{{ folder.author }}</b> pour {% if folder.teacher.user.civilite == "Mme" %}sa{% else %}son{% endif %} collègue <b>{{ folder.teacher }}</b>
                 </div>
             </div>
         </div>
@@ -102,32 +100,46 @@
                 </div>
             </div> 
 
-            <label><b>Cocher les parcours à insérer dans ce dossier</b></label>
-            {% if not form.leaf_parcours  %}
-                  <div class="alert alert-warning">
-                        <small>Aucun parcours n'est créé encore dans ce niveau et cet enseignement</small>
-                  </div>
-            {% else  %} 
-                    {{ form.leaf_parcours|add_class:"subparcours_selector"  }}
-            {% endif  %}
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <label><b>Partager ce dossier</b></label>
+                        {{ form.groups|add_class:"groups_selector"  }}
+                </div>
+                <div class="col-sm-12 col-md-6" style="overflow-y:auto;height: 350px ">
+                    <label><b>Cocher les parcours à insérer </b></label>
+                    {% if not form.parcours  %}
+                          <div class="alert alert-warning">
+                                <small>Aucun parcours n'est créé encore dans ce niveau et cet enseignement</small>
+                          </div>
+                    {% else  %} 
+                            {{ form.parcours|add_class:"subparcours_selector"  }}
+                    {% endif  %}
+                </div>
+            </div>
         </div>
 
         <div class="col-sm-12 col-md-4" style="position: relative">
-            
+            {% if not group %}  
+            <div class="row">          
+                <div class="col-sm-12 col-md-6" >
+                    <div class="form-group">
+                        <label> Enseignement :</label><br/>
+                        {{ form.subject |add_class:"form-control select2" }}
+                        {{ form.subject.errors }}
+                    </div>
+                </div>    
+                <div class="col-sm-12 col-md-6" >
+                    <div class="form-group">
+                        <label> Niveau :</label><br/>
+                        {{ form.level |add_class:"form-control select2" }}
+                        {{ form.level.errors }}
+                    </div>
+                </div> 
+            </div> 
+            {% endif %}
 
 
-
-
-                    {% if not group %}
-                        <div class="form-group">
-                            <label> Enseignement :</label><br/>
-                            {{ form.subject |add_class:"form-control select2" }}
-                            {{ form.subject.errors }}
-                        </div>
-                    {% endif %}
-
-
-                    {% include 'qcm/insert_vignettes.html' %}
+            {% include 'qcm/insert_vignettes.html' %}
 
         </div>
 
@@ -146,7 +158,7 @@
                     <tr class="publication_div">
                         <td><label>Date de publication</label> 
                             <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text" >Date à partir de laquelle le parcours est publié.<br/>
+                                <div class="helper_tip_text" >Date à partir de laquelle le dossier est publié.<br/>
                                 <span class="text-danger">Pour modifier la date, vider le champ.</span>
                                 </div>
                             </span>
@@ -171,7 +183,7 @@
                     <tr>
                         <td>{{ form.stop.label_tag }} 
                             <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text" >Le parcours reste publié mais le rendu des exercices n'est plus possible après la date renseignée. 
+                                <div class="helper_tip_text" >Le dossier n'est pus publié à partir de cette date. 
                                     <br/> 
                                     <span class="text-danger">Pour modifier la date, vider le champ.</span>
                                 </div>
@@ -199,24 +211,24 @@
         </div> 
 
         <div class="col-sm-12 col-md-4">
-        {% if parcours  %}
-                {% if parcours.is_archive %}
-                    <a href="{% url 'folder_unarchive' parcours.id   %}" class="btn btn-warning"> 
+        {% if folder  %}
+                {% if folder.is_archive %}
+                    <a href="{% url 'folder_unarchive' folder.id   %}" class="btn btn-warning"> 
                         <i class="fa fa-th"> </i>   Désarchiver
                     </a>
                 {% else %}
-                    <a href="{% url 'folder_archive' parcours.id  %}" class="btn btn-warning"  onclick="return TestArchive('ce dossier')"> 
+                    <a href="{% url 'folder_archive' folder.id  %}" class="btn btn-warning"  onclick="return TestArchive('ce dossier')"> 
                         <i class="fa fa-archive"> </i>   Archiver
                     </a>
                 {% endif %}
 
                 {% if group %}
-                    <a href="{% url 'delete_folder' parcours.id  group.id %}" class="btn btn-danger"  onclick="return TestDeleteFolder('ce dossier')"> 
+                    <a href="{% url 'delete_folder' folder.id  group.id %}" class="btn btn-danger"  onclick="return TestDeleteFolder('ce dossier')"> 
                         <i class="fa fa-trash"> </i>   Supprimer
                     </a>
  
                 {% else %}
-                    <a href="{% url 'delete_folder' parcours.id  0 %}" class="btn btn-danger"  onclick="return TestDeleteFolder('ce dossier')"> 
+                    <a href="{% url 'delete_folder' folder.id  0 %}" class="btn btn-danger"  onclick="return TestDeleteFolder('ce dossier')"> 
                         <i class="fa fa-trash"> </i>   Supprimer
                     </a>
                 {% endif %}  

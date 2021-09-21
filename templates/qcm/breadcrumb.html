@@ -6,14 +6,14 @@
 
 {% if group %} <a href="{% url 'list_parcours_group' group.id %}" style="color:{{ group.color }}" >{{ group.name }}</a> <img src="{% static 'img/angle-right.png' %}"/>  {% endif %} 
 
-{% if parcours_folder and group %}
-	<a href="{% url 'list_sub_parcours_group' group.id parcours_folder.id %}" style="color:{{ parcours_folder.color }}" >{{ parcours_folder.title }} </a>   <img src="{% static 'img/angle-right.png' %}"/>  
-{% elif parcours_folder and not group %}
-	<a href="{% url 'index' %}" style="color:{{ parcours_folder.color }}" >Tableau de bord </a>   <img src="{% static 'img/angle-right.png' %}"/> 
-	<span class="helper_tip" style="font-size:36px;color:{{ parcours_folder.color }}" > {{ parcours_folder.title|truncatechars:"18" }}
+{% if folder and group %}
+	<a href="{% url 'list_sub_parcours_group' group.id folder.id %}" style="color:{{ folder.color }}" >{{ folder.title }} </a>   <img src="{% static 'img/angle-right.png' %}"/>  
+{% elif folder and not group %}
+	<a href="{% url 'index' %}" style="color:{{ folder.color }}" >Tableau de bord </a>   <img src="{% static 'img/angle-right.png' %}"/> 
+	<span class="helper_tip" style="font-size:36px;color:{{ folder.color }}" > {{ folder.title|truncatechars:"18" }}
 
-            <div class="helper_tip_text_right thin" style="font-size:36px; color:{{ parcours_folder.color }};">
-                 {{ parcours_folder.title }} 
+            <div class="helper_tip_text_right thin" style="font-size:36px; color:{{ folder.color }};">
+                 {{ folder.title }} 
             </div>
 
 	</span> <img src="{% static 'img/angle-right.png' %}"/>  
@@ -22,7 +22,7 @@
 {% endif %}  
 
 {% if 'parcours_show/' in request.path %}
-	<a href="{% url 'show_parcours' parcours.id %}" class="helper_tip" style="font-size:36px; color:{{ parcours.color }}" >
+	<a href="{% url 'show_parcours' 0 parcours.id %}" class="helper_tip" style="font-size:36px; color:{{ parcours.color }}" >
 	{{ parcours.title|truncatechars:"18" }} 
             <div class="helper_tip_text_right thin" style="font-size:36px; color:{{ parcours.color }};">
                  {{ parcours.title }}  

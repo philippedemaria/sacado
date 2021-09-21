@@ -135,7 +135,7 @@
                     </tr>                                  
                     <tr>
                         <td>
-                            <a href="{% url 'show_parcours' parcours.id   %}"  style="color : {{  parcours.color }}">
+                            <a href="{% url 'show_parcours' 0 parcours.id   %}"  style="color : {{  parcours.color }}">
                                     {% with  parcours.exercises.count as cot %}
                                         {{ cot }} exercice{{ cot|pluralize }}
                                     {% endwith %}
@@ -155,7 +155,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <a href="{% url 'show_parcours' parcours.id  %}"  style="color : {{  parcours.color }}"><i class="fa fa-fw fa-arrow-circle-right"></i> En détails </a>
+                            <a href="{% url 'show_parcours' 0 parcours.id  %}"  style="color : {{  parcours.color }}"><i class="fa fa-fw fa-arrow-circle-right"></i> En détails </a>
                         </td>
                     </tr>
                 </table>

@@ -182,7 +182,7 @@
                     <a href="{% url 'show_evaluation' parcours.id %}" class="btn btn-default" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">Valider et retour à l'évaluation {{ parcours.title }}</a> 
                     <a href="{% url 'evaluations' %}"  class="btn btn-primary">Valider et retour à la liste des évaluations</a> 
                 {% else %}
-                    <a href="{% url 'show_parcours' parcours.id %}" class="btn btn-default" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">Valider et retour au parcours {{ parcours.title }}</a> 
+                    <a href="{% url 'show_parcours' 0 parcours.id %}" class="btn btn-default" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">Valider et retour au parcours {{ parcours.title }}</a> 
                     <a href="{% url 'parcours' %}"  class="btn btn-primary">Valider et retour à la liste des parcours</a>   
                 {% endif  %}
 

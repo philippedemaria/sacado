@@ -3,27 +3,23 @@
 {% load item_tags %}
            
 
-<div  class="box box-widget widget-user-2 div_sorter"  {% if not parcours_sort.grouper %} data-parcours_id ="{{parcours.id}}" {% endif %} 
+<div  class="box box-widget widget-user-2 {% if parcours.is_evaluation %} evaluation_sorter{% else %} parcours_sorter {% endif %}"  data-parcours_id ="{{parcours.id}}"
       style="cursor: move;{% if parcours.vignette %}background-image: url('{{ parcours.vignette.url }}'); background-size: cover; {% endif %}background-color:{{parcours.color }};">
     <div class="handler widget-user-header">
         <!-- Add signet to folder -->
-        {% if parcours.is_folder    %}
-            <img src="{% static 'img/rabat_dossier.png' %}" class="rabat_dossier" />
-        {% elif not parcours.is_folder and parcours.vignette  %}
-            <img src="{% static 'img/rabat_parcours.png' %}" class="rabat_dossier" />
-        {% else  %}
+        {% if parcours.vignette  %}
             <img src="{% static 'img/rabat_parcours.png' %}" class="rabat_dossier" />
         {% endif  %}
 
         <div class="group_show  group_show{{parcours.id }} no_visu_on_load"> 
-            <form action="#" method="POST">
+ 
                 {% csrf_token %}
                 <a  href="#principal_section" class="vue menuactionparcours" data-toggle='modal' style="float:left; margin-right:10px"  
                     data-group_name='{{ group.name }}' data-parcours_id='{{ parcours.id }}' data-target='#listing'> 
                     {% get_parcours_group_students_count parcours group as parcours_group_students %}
                     <span class="label label-default"> {{ parcours_group_students.nb }}<i class="fa fa-users"></i></span>
                 </a> 
-            </form>
+    
             <font style="font-size:11px; color:#AAA">
                 {% for s in parcours_group_students.students|dictsort:"user.last_name"  %}
                 <a  href="#principal_section" class="detail_student_parcours"  data-student_id="{{ s.user.id }}"  
@@ -45,9 +41,6 @@
                 <a href="#" class="subparcours_show_close pull-right" data-parcours_id="{{parcours.id}}" style="color:{{ parcours.color }};"><i class="fa fa-times"></i></a>
                 Parcours 
             </h4> 
-            {% for p in parcours.leaf_parcours.all %} 
-                <li class="sans_puce" {% if p.is_publish %} style="color:{{ parcours.color }};"{% endif %}>{{ p.title }}   </li> 
-            {% endfor %}
         </div>
         <!-- Fenetre accessible par le disc   -->
 
@@ -56,8 +49,8 @@
                 <a href="#" data-parcours_id="{{parcours.id }}" class="overlay_show pull-right">
                     <i class="fa fa-times"></i>
                 </a>
-                <form action="" method="POST" enctype='multipart/form-data'>     
-                    {% csrf_token %}
+   
+ 
                     <div class="btn-group"  style="padding:0px;margin:0px;">
                         <a href="#" class="btn btn-default btn-publisher  publisher"  data-from="2" id="parcours_publisher{{parcours.id}}" 
                             data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
@@ -66,7 +59,7 @@
                           {% if parcours.is_publish %} Publié  {% else %} Non publié {% endif  %} 
                         </span>
                     </div>
-                </form>
+ 
                 {% if parcours.teacher != teacher %}<br><small  style="color:{{ parcours.color }};"><b>Propriétaire :</b>    {{ parcours.teacher }}</small>{% endif %}
                 <br>
                 <span class="label_icon" style="color:{{ parcours.color }};">
@@ -86,10 +79,10 @@
         <div class="group_show  overlay_export{{parcours.id }} no_visu_on_load"> 
             <div class="overlay_expand">
                 <h4 style="color:{{parcours.color }}">Exportation CSV 
-                <a href="#" class="export_shower pull-right" data-parcours_id="{{parcours.id }}"><i class="fa fa-times"></i> </a>
+                <span  class="export_shower pull-right" data-parcours_id="{{parcours.id }}"><i class="fa fa-times"></i> </span>
                 <br><small>Pour exporter vers Pronote, les listes d'élèves Pronote et SACADO doivent être identiques.<span id="loading_export{{ parcours.id }}"></span></small></h4>
                 {% if sacado_asso %}
-                <form action="{% url 'export_note' group.id parcours.id  %}" method="POST" enctype='multipart/form-data'>     {% csrf_token %}
+ 
                     <div class="col-md-6 col-lg-6 col-xs-6">
                         <input type="text" class="form-control" placeholder ="Noté sur ?" name="on_mark" id="on_mark{{ parcours.id }}" />
                     </div>
@@ -97,7 +90,7 @@
                     <div class="col-md-6 col-lg-6 col-xs-6" style="padding-left:5px">
                         <button href="#" class="btn btn-primary exportation_de_note" type="submit" data-parcours_id="{{parcours.id }}"  data-group_id="{{group.id }}"> Export de notes</button>
                     </div>
-                </form>
+ 
                 {% else %}
                     <span style="color:red;font-size: 14px">Action non permise - Version établissement requise.</span>
                 {% endif %}
@@ -108,37 +101,8 @@
             </div> 
         {% endif  %}
         <div class="box_title_vignette"> 
-            {% if parcours.is_folder %}
-            <a href="{% url 'list_sub_parcours_group' group.id parcours.id  %}" style="color:{{ parcours.color|contrast_color }};">
-                {% if parcours.is_pending_folder_correction %}
-                <i class="fa fa-copyright pull-right" style="font-size:12px;color:{{ parcours.color|contrast_color }};" title="Copies à corriger" ></i> 
-                {% endif %}
 
-
-                {% if parcours.title|length > 20 %}
-                    <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px">{{ parcours.title|truncatechars:"22" }}<div class="helper_tip_text_right">{{ parcours.title }}</div></span>
-                
-                    <span style="font-size:12px"> {{ parcours.leaf_parcours.count}} <i class="fa fa-th"></i> </span>
-                {% else %}
-                    {{ parcours.title}}
-
-                    <span style="font-size:12px"> {{ parcours.leaf_parcours.count}} parcours </span>
-                {% endif %}
-
-
-
-
-            
-
-                {% if parcours.is_folder_real_time %}
-                    <sup class="white" title="En composition" style="font-size:12px" >
-                        <i class="fa fa-fw fa-clock"></i> 
-                    </sup>
-                {% endif %}
-
-            </a>
-            {% else %}
-            <a {% if parcours.is_evaluation%} href="{% url 'show_evaluation'  parcours.id  %}" {% else %} href="{% url 'show_parcours'  parcours.id  %}"{% endif %} style="color:{{ parcours.color|contrast_color }};">
+            <a {% if parcours.is_evaluation%} href="{% url 'show_evaluation'  parcours.id  %}" {% else %} href="{% url 'show_parcours' 0 parcours.id  %}"{% endif %} style="color:{{ parcours.color|contrast_color }};">
 
                     {% if parcours.title|length > 26 %}
 
@@ -193,9 +157,9 @@
                     {% endif %}
 
             </a>
-            {% endif %}
 
-            {% if parcours.isnot_shared and not parcours.is_folder %}
+
+            {% if parcours.isnot_shared  %}
             <span class="shared helper_tip" style="color:{{ parcours.color }};">Parcours partagé entre plusieurs groupes <i class="fa fa-question-circle"></i>
                 <div class="helper_tip_text" >
                     {% for g in parcours.groups.all %}
@@ -209,55 +173,6 @@
 
     <!-- box-footer DES FONCTIONNALITES  -->
 
-    {% if parcours.is_folder %}
-    <div class="box-footer" style="position: relative">
-        <div class="dossier">
-            D<br/>O<br/>S<br/>S<br/>I<br/>E<br/>R 
-        </div>  
-        <div class="row extend"> 
-            <div class="col-xs-1 col-md-1 col-lg-1"> 
-            </div>
-            <div class="col-xs-5 col-md-5 col-lg-5">
-                <a href="{% url 'update_folder' parcours.id  group.id  %}"  class="edit"><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span> </a>
-            </div> 
-            <div class="col-xs-5 col-md-5 col-lg-5">
-                <a  href="{% url 'result_parcours' parcours.id  %}" class="edit" target="_blank"><i class="fa fa-fw fa-mortar-board"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
-                </a>   
-            </div>
-        </div>
-        <div class="row extend">
-            <div class="col-xs-1 col-md-1 col-lg-1">  
-            </div>
-            <div class="col-xs-5 col-md-5 col-lg-5">
-                <a href="{% url 'show_course' 0 parcours.id   %}"  class="edit" {% if parcours.is_folder_courses_exists %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-desktop"></i> <span class="label_icon">Cours </span> 
-                </a>
-            </div> 
-            <div class="col-xs-5 col-md-5 col-lg-5">
-                <a  href="{% url 'detail_task_parcours' parcours.id 0 0 %}"   class="edit" {% if parcours.is_task_folder_exists %} style="color:{{ parcours.color }}" {% endif %}>
-                    {% if not parcours.is_task_exists %}<i class="fa fa-fw fa-calendar"></i>{% else %}<i class="fa fa-fw fa-calendar-check"></i>{% endif %}
-                     <span class="label_icon">Tâches</span>
-                </a> 
-            </div>                     
-        </div> 
-        <div class="row">
-            <div class="col-xs-1 col-md-1 col-lg-1"> </div>
-            <div class="col-xs-5 col-md-5 col-lg-5">
-                <a href="#"  class="edit click_subparcours_show"   data-parcours_id="{{parcours.id }}"  {% if parcours.leaf_parcours.all|length > 1 %} style="color:{{ parcours.color }}" {% endif %}>
-                    <i class="fa fa-fw fa-folder{% if parcours.leaf_parcours.all|length > 1 %}-open{% endif%}"></i> <span class="label_icon">Parcours</span> 
-                </a>
-
-                <a href="{% url 'create_parcours' parcours.id %}" style="color:{{ parcours.color }}; font-size: 14px" title="Ajouter un parcours à ce dossier">   
-                     <i class="fa fa-plus-square"></i> 
-                </a>
-
-            </div> 
-            <div class="col-xs-5 col-md-5 col-lg-5">
-                <a href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}" {% if parcours.students.all|length > 1 %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
-                </a>
-            </div>                    
-        </div> 
-    </div>
-    {% else %}
     <div class="box-footer">
         {% if role or parcours.teacher == teacher %}
             <div class="row extend"> 
@@ -289,7 +204,7 @@
                         </a> 
 
                     {% else  %}   
-                        <a href="#" class="edit export_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-upload"></i>  <span class="label_icon">Export</span></a>              
+                        <span href="#" class="edit export_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-upload"></i>  <span class="label_icon">Export</span></span>              
                     {% endif  %}
                     </div> 
                 {% endif  %}
@@ -302,7 +217,7 @@
                     </a>  
                 </div>  
                 <div class="col-lg-4 col-xs-4">
-                    <a  href="{% url 'result_parcours' parcours.id  %}" class="edit" target="_blank"><i class="fa fa-fw fa-mortar-board"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
+                    <a  href="{% url 'result_parcours' parcours.id 0 %}" class="edit" target="_blank"><i class="fa fa-fw fa-mortar-board"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
                     </a>   
                 </div>
                 <div class="col-lg-4 col-xs-4">
@@ -323,8 +238,8 @@
 
 
                     {% else %} 
-                    <a href="#" class="edit export_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-upload"></i>  <span class="label_icon">Export</span>
-                    </a>
+                    <span href="#" class="edit export_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-upload"></i>  <span class="label_icon">Export</span>
+                    </span>
                     {% endif %} 
                 </div>
             </div>
@@ -344,27 +259,27 @@
                 </div>
                  
                 <div class="col-lg-4 col-xs-4">
-                    <a href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
-                    </a>
+                    <span href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
+                    </span>
                 </div> 
             </div>
         {% else %}
             <div class="row extend">    
                 <div class="col-lg-6 col-xs-6">                                 
                 {% if parcours.is_evaluation %}   
-                    <a  href="{% url 'result_parcours' parcours.id  %}" class="edit" target="_blank"><i class="fa fa-fw fa-mortar-board"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
+                    <a  href="{% url 'result_parcours' parcours.id 0 %}" class="edit" target="_blank"><i class="fa fa-fw fa-mortar-board"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
                     </a>   
                 {% else %}
-                    <a  href="{% url 'stat_evaluation' parcours.id %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon"> Résultats </span>
+                    <a  href="{% url 'stat_evaluation' parcours.id  %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon"> Résultats </span>
                     </a>   
                 {% endif %} 
                 </div>                     
                 <div class="col-lg-6 col-xs-6">
-                    <a href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
-                    </a>
+                    <span href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
+                    </span>
                 </div> 
             </div>
         {% endif %}
     </div>
-    {% endif %}
+
 </div>   

@@ -21,7 +21,7 @@ class MyCronJob(CronJobBase):
     code = str(uuid.uuid4())[:64]    # a unique code
 
     def do(self):
-        Parcours.objects.filter(stop__lt=today).update(is_publish=0)
+        Parcours.objects.filter(stop__lt=today,is_trash=0).update(is_publish=0)
 
 
 class Formule(models.Model):

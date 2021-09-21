@@ -790,7 +790,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         sorter_exercises('#exercise_sortable_list' , ".sorted_exercise_id");
 
 
-        function sorter_parcours_or_folders($div_class , $exercise_class, $choice ) {
+        function sorter_parcours($div_class , $exercise_class, $choice ) {
 
             $($div_class).sortable({
                 start: function( event, ui ) { 
@@ -823,9 +823,11 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
             }
 
-        sorter_parcours_or_folders('#parcours_sortable',".div_sorter",0) ;
-        sorter_parcours_or_folders('#folders_sortable',".div_sorter",1) ;
+        sorter_parcours('#evaluations_sortable',".evaluation_sorter",1) ;
+        sorter_parcours('#parcours_sortable',".parcours_sorter",1) ;
+        sorter_folders('#folders_sortable',".folder_sorter",1) ;
 
+        sorter_parcours('#subparcours_sortable',".parcours_sorter",0) ;
 
         $('#course_sortable').sortable({
             start: function( event, ui ) { 
@@ -853,6 +855,36 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     }); 
                 }
             });
+
+
+        function sorter_folders($div_class , $exercise_class, $choice ) {
+
+            $($div_class).sortable({
+                start: function( event, ui ) { 
+                       $(ui.item).css("box-shadow", "4px 2px 4px gray");
+                   }, 
+                stop: function (event, ui) {
+                    var valeurs = "";
+                    $($exercise_class ).each(function() {
+                        let parcours_id = $(this).attr("data-parcours_id"); 
+                        valeurs = valeurs + parcours_id +"-";
+                    });
+                    $(ui.item).css("box-shadow",  "2px 1px 2px gray");
+
+    
+                    this_url =  "../../ajax/folders_sorter"  ;                   
+  
+                    $.ajax({
+                            data:   { 'valeurs': valeurs    } ,   
+                            type: "POST",
+                            dataType: "json",
+                            url: this_url,
+                        }); 
+                    }
+                });
+
+            }
+
 
         // =================================================================================================================
         // =================================================================================================================           
@@ -1092,7 +1124,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         // ==================================================================================================
         // ==================================================================================================
 
-        function publisher_parcours($actionner,$target,$targetStatut){
+        function publisher_parcours($actionner,$target,$targetStatut, $is_folder){
 
                 $actionner.on('click', function (event) {
                 let parcours_id = $(this).attr("data-parcours_id");
@@ -1100,9 +1132,16 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
                 let from = $(this).attr("data-from");
 
+
+                if( $is_folder) {  is_folder = "yes" ; } else { is_folder = "no" ; }
+
+
                 if( from == "2")  { url_from = "../../ajax/publish_parcours" ; } 
                 else if (from == "0") {  url_from = "../../../ajax/publish_parcours" ;} 
                 else  { url_from = "ajax/publish_parcours" ;} 
+
+
+            
 
                 $.ajax(
                     {
@@ -1112,6 +1151,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                             'parcours_id': parcours_id,
                             'statut': statut,
                             'from': from,
+                            'is_folder': is_folder,
                             csrfmiddlewaretoken: csrf_token
                         },
                         url: url_from ,
@@ -1131,8 +1171,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 }); 
             } ;
 
-            publisher_parcours( $('.publisher') , '#parcours_publisher' ,'#parcours_statut' ) ;
- 
+            publisher_parcours( $('.publisher') , '#parcours_publisher' ,'#parcours_statut' , 0 ) ;
+            publisher_parcours( $('.publisher') , '#folder_publisher' ,'#parcours_statut' , 1 ) ;
  
         // ==================================================================================================
         // ==================================================================================================
@@ -1168,6 +1208,80 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             display_custom_modal($('.select_skill_close'),"#skill");
             display_custom_modal($('.select_constraint_close'),"#detail_constraint");
             display_custom_modal($('.select_note_close'),"#select_note");
+
+            display_custom_modal($('.select_div_group'),"#affectation"); 
+            display_custom_modal($('.select_div_group_close'),"#affectation");
+
+        // ==================================================================================================
+        // ==================================================================================================
+        // =============  Attribution des groupes depuis la liste des parcours
+        // ==================================================================================================
+        // ==================================================================================================
+
+
+            $('.prcrs_selector').on('change', function (event) {
+
+                let group_id = $(this).attr("data-group_id");
+                let status = $(this).attr("data-status");
+                let target_id = $(this).val();
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                let checked = $(this).prop("checked") ;
+                $("#loader"+group_id).html("<i class='fa fa-spinner'></i>") ;
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            'checked': checked,
+                            'group_id': group_id,
+                            'status': status,
+                            'target_id': target_id,
+                            csrfmiddlewaretoken: csrf_token
+                        },
+                        url: "ajax_affectation_to_group" ,
+                        success: function (data) {
+
+                            if ( status == "folder")
+                                { $("#new_group_folder_affected"+target_id).html(data.html); }
+                            else 
+                                { $("#new_group_affected"+target_id).html(data.html); }
+
+                            if ( data.change_link == "change")
+                                { $("#this_folder"+target_id).hide(); }
+                            else 
+                                {$("#no_this_folder"+target_id).show();}
+
+
+                            }  
+                        }) 
+                    });
+
+
+                // Affiche dans la modal la liste des élèves du groupe sélectionné
+                $('.actiontarget').on('click', function (event) {
+                    let status = $(this).attr("data-status");
+                    let target_id = $(this).attr("data-target_id");
+                    let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+                    $.ajax(
+                        {
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                'status': status,
+                                'target_id': target_id,
+                                csrfmiddlewaretoken: csrf_token,
+                            },
+                            url: "ajax_charge_group_from_target",
+                            success: function (data) {
+                                $("#loader"+target_id).html("") ;
+                                $('#modal_group_name').html(data.html_modal_group_name);
+                                $('#list_students').html(data.html_list_students);
+                            }
+                        }
+                    )
+                });
+
 
 
         // ==================================================================================================

@@ -45,7 +45,7 @@
                         </div> 
                     {% endif  %}
                     <div class="box_title_vignette"> 
-                        <a href="{% url 'show_parcours'  parcours.id  %}" style="color:{{ parcours.color|contrast_color }};">
+                        <a href="{% url 'show_parcours' 0 parcours.id  %}" style="color:{{ parcours.color|contrast_color }};">
 
                                 {% if parcours.title|length > 26 %}
                                 <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px;">{{ parcours.title|truncatechars:"29" }}
@@ -122,7 +122,7 @@
                         </div> 
                     {% endif  %}
                     <div class="box_title_vignette"> 
-                        <a href="{% url 'show_parcours'  parcours.id  %}" style="color:{{ parcours.color|contrast_color }};">
+                        <a href="{% url 'show_parcours' 0 parcours.id  %}" style="color:{{ parcours.color|contrast_color }};">
                                 {% if parcours.title|length > 26 %}
                                 <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px;">{{ parcours.title|truncatechars:"29" }}
                                     <div class="helper_tip_text_right" style="font-size:14px;color:{{ parcours.color }};">{{ parcours.title }}

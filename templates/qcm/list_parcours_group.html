@@ -46,47 +46,54 @@
 
 <section class="content_list" id="principal_section"> 
 
-<form action="" methode="POST" id="folders_sortable"> 
+    
     {% if folders.count > 0 %} 
     <div class="row"> 
         <div class="col-sm-12 col-md-12">
             <h1 class="thin"> Mes dossiers  </h1> 
-                {% for parcours in folders  %}  
-                    
-                    {% include 'qcm/folder_parcours_evaluation_tag.html' %}
+                <form action="" methode="POST" id="folders_sortable"> 
+                {% for folder in folders  %}  
+
+                    {% include 'qcm/folder_tag.html' %}
          
                 {% endfor %}
+                </form>    
         </div>
     </div>
     {% endif %}
+    
+    
     {% if parcourses.count > 0 %} 
     <div class="row"> 
         <div class="col-sm-12 col-md-12">
             <h1 class="thin"> Mes parcours  </h1>  
-
+                <form action="" methode="POST" id="parcours_sortable"> 
                 {% for parcours in parcourses  %}  
                     
-                    {% include 'qcm/folder_parcours_evaluation_tag.html' %}
+                    {% include 'qcm/parcours_evaluation_tag.html' %}
          
                 {% endfor %}
+                </form>
         </div>
     </div>
     {% endif %}
+    
+     
     {% if evaluations.count > 0 %} 
     <div class="row"> 
         <div class="col-sm-12 col-md-12">
             <h1 class="thin" id="evaluation">Mes évaluations</h1> 
-                
+                <form action="" methode="POST" id="evaluations_sortable">
                 {% for parcours in evaluations  %}  
                     
-                    {% include 'qcm/folder_parcours_evaluation_tag.html' %}
+                    {% include 'qcm/parcours_evaluation_tag.html' %}
          
                 {% endfor %}
-   
+                </form>
         </div>
     </div>
     {% endif %}
- 
+    
     {% if nb_bases == 0 %} 
         {% if role %}
         <div class="row"> 
@@ -156,7 +163,7 @@
         {% endif %}
     {% endif %}
 
-</form>
+
   
 </section>
 

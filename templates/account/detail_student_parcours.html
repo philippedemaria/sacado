@@ -13,7 +13,7 @@
                         <tr class="no_padding" style="background-color: {{ parcours.color }};color:#eee">
                             <td> 
                                 {% if teacher %}
-                                <a href="{% url 'show_parcours' parcours.id %}" target="_blank" style="color:#FFF" >{{ parcours|truncatechars:"18" }}</a>
+                                <a href="{% url 'show_parcours' 0  parcours.id %}" target="_blank" style="color:#FFF" >{{ parcours|truncatechars:"18" }}</a>
                                 {% else %}
                                 <span style="color: {{ parcours.color|contrast_color }}">{{ parcours|truncatechars:"18" }}</span>
                                 {% endif %}

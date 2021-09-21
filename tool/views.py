@@ -314,7 +314,7 @@ def clone_quizz(request, id_quizz):
         quizz.themes.add(t)
 
     if parcours_id :
-        return redirect('show_parcours' , parcours_id )
+        return redirect('show_parcours' , 0, parcours_id )
     else :
         return redirect('list_quizzes')
  
@@ -416,7 +416,7 @@ def update_quizz(request,id):
 
         parcours_id = request.session.get("parcours_id")
         if parcours_id :
-            return redirect('show_parcours' , parcours_id )
+            return redirect('show_parcours' , 0 ,  parcours_id )
         else :
             return redirect('list_quizzes' )
     else:

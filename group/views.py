@@ -98,14 +98,24 @@ def student_dashboard(request,group_id):
     if int(group_id) > 0 :
         group = Group.objects.get(pk = group_id)
         request.session["group_id"] = group_id 
-        parcourses = student.students_to_parcours.filter(is_evaluation=0, is_publish=1,subject = group.subject,level = group.level).exclude(is_leaf=1).order_by("ranking")
-        evaluations = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_evaluation=1,subject = group.subject)
+
+        folders = student.folders.filter( is_publish=1, subject = group.subject,level = group.level,is_archive=0,is_trash=0).order_by("ranking")
+
+        bases = student.students_to_parcours
+
+        parcourses = bases.filter(is_evaluation=0, subject = group.subject, folders = None, level = group.level,is_trash=0).order_by("ranking")
+
+        evaluations = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), folders = None, is_evaluation=1,subject = group.subject,is_trash=0).order_by("ranking")
         last_exercises_done = student.answers.filter(exercise__knowledge__theme__subject=group.subject).order_by("-date")[:5]
 
+ 
+
+
     else :
+        folders = None
         group = None
-        parcourses = student.students_to_parcours.filter(is_evaluation=0, is_publish=1).exclude(is_leaf=1).order_by("ranking")
-        evaluations = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_evaluation=1)
+        parcourses = student.students_to_parcours.filter(is_evaluation=0, is_publish=1,is_trash=0).order_by("ranking")
+        evaluations = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_evaluation=1,is_trash=0)
         last_exercises_done = student.answers.order_by("-date")[:5]
    
     customexercises_set = set()
@@ -116,20 +126,9 @@ def student_dashboard(request,group_id):
         customexercises_set.update(set(custom_exercises))
     customexercises = list(customexercises_set)
 
-    relation_ships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in=parcourses, date_limit__gte=today).order_by("date_limit")
+    relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in=parcourses, date_limit__gte=today).order_by("date_limit")
+    nb_relationships =  relationships.count()
 
-    leaf_parcourses = Parcours.objects.filter(students=student, is_evaluation=0, is_publish=1,is_leaf=1).order_by("ranking")
-    leaf_relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in= leaf_parcourses, date_limit__gte=today).order_by("date_limit")
-
-    if len(set(relation_ships)) > 0 :
-        relationships = set(relation_ships).update(set(leaf_relationships))
-    else :
-        relationships = set(leaf_relationships)
-
-    nb_relationships = len(leaf_relationships) + relation_ships.count()
-
-    if not relationships :
-        relationships = []
 
     exercise_tab = []
     for r in relationships:
@@ -163,7 +162,7 @@ def student_dashboard(request,group_id):
 
     context = {'student_id': student.user.id, 'student': student, 'relationships': relationships, 'timer' : timer ,  'last_exercises_done' : last_exercises_done, 'responses' : responses ,
                'evaluations': evaluations, 'ratio': ratio, 'today' : today ,  'parcourses': parcourses,   'customexercises': customexercises, 'group' : group , 'groups' : groups ,
-               'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late, 'index_tdb' : True, 
+               'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late, 'index_tdb' : True, 'folders' : folders, 
                'relationships_in_tasks': relationships_in_tasks , }
 
 
@@ -804,8 +803,6 @@ def chargelistgroup(request):
     data['html_modal_group_name'] = parcours.title 
    
     data['html_list_students'] = render_to_string('group/listingOfStudents.html', {  'group':parcours, 'is_remove' : is_remove   })
- 
- 
     return JsonResponse(data)
 
 
@@ -815,9 +812,9 @@ def ajax_choose_parcours(request):
     subject_id = request.POST.get("subject_id",None) 
 
     if level_id and subject_id :
-        parcours = Parcours.objects.filter(level_id=level_id , subject_id = subject_id , teacher_id = 2480, is_share=1 )
+        parcours = Parcours.objects.filter(level_id=level_id , subject_id = subject_id , teacher_id = 2480, is_share=1 ,is_trash=0)
     else :
-        parcours = Parcours.objects.filter(level_id=0 , subject_id = 0 , teacher_id = 2480, is_share=1 )
+        parcours = Parcours.objects.filter(level_id=0 , subject_id = 0 , teacher_id = 2480, is_share=1 ,is_trash=0)
 
     data = {}
     data['html'] = render_to_string('group/listingOfparcours.html', {  'parcourses':parcours  })
@@ -1013,7 +1010,7 @@ def stat_group(request, id):
     for s in group.students.exclude(user__username = request.user.username).order_by("user__last_name") :
         student = {}
         student["name"] = s 
-        parcours = Parcours.objects.filter(students=s,is_publish=1)
+        parcours = Parcours.objects.filter(students=s,is_publish=1,is_trash=0)
         nb_exo_total = 0
         for p in parcours :
             nb_exo_total += Relationship.objects.filter(parcours=p,is_publish=1).count()
@@ -1085,7 +1082,7 @@ def task_group(request, id):
     for s in group.students.order_by("user__last_name"):
         student = {}
         student["name"] = s
-        parcours = Parcours.objects.filter(students=s)
+        parcours = Parcours.objects.filter(students=s,is_trash=0)
         student["parcours"] = parcours
         relationships = Relationship.objects.filter(parcours__in=parcours).exclude(date_limit=None).select_related('exercise')
         done, late, no_done = 0, 0, 0
@@ -1145,7 +1142,7 @@ def associate_exercise_by_parcours(request,id,idt):
     knowledge_id = request.POST.get("knowledge_id_modal") 
     knowledge = Knowledge.objects.get(id=int(knowledge_id))
 
-    parcourses = Parcours.objects.filter(teacher = teacher, level = group.level)
+    parcourses = Parcours.objects.filter(teacher = teacher, level = group.level,is_trash=0)
  
     return redirect('result_group_theme', group.id, theme.id)
 
@@ -1552,7 +1549,7 @@ def print_ids(request, id):
 
     img_file = 'https://sacado.xyz/static/img/sacado-icon-couleur.jpg'
     x_start  = 20
-    for student in group.students.exclude(user__username = request.user.username) :
+    for student in group.students.exclude(user__username__contains= "_e-test") :
 
     # Create the HttpResponse object with the appropriate PDF headers.
         string0 = "Bonjour {} {},".format(student.user.first_name, student.user.last_name) 
@@ -1576,6 +1573,60 @@ def print_ids(request, id):
  
     p.save()
     return response 
+
+
+
+
+
+def print_list_ids(request, id):
+
+    group = Group.objects.get(id=id)
+    teacher = Teacher.objects.get(user=request.user)
+    authorizing_access_group(request,teacher,group ) 
+ 
+    elements = []        
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="Liste_identifiant_SACADO_'+group.name+'.pdf"'
+    doc = SimpleDocTemplate(response,   pagesize=A4, 
+                                        topMargin=0.3*inch,
+                                        leftMargin=0.3*inch,
+                                        rightMargin=0.3*inch,
+                                        bottomMargin=0.3*inch     )
+
+    sample_style_sheet = getSampleStyleSheet()
+
+
+    normal = ParagraphStyle(name='Normal',fontSize=12,)    
+    style_cell = TableStyle(
+            [
+                ('SPAN', (0, 1), (1, 1)),
+                ('TEXTCOLOR', (0, 1), (-1, -1),  colors.Color(0,0.7,0.7))
+            ]
+        )
+
+    logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
+    logo_tab = [[logo, "SACADO \nListes de identifiants par élève" ]]
+    logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
+    logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))
+    elements.append(logo_tab_tab)
+    elements.append(Spacer(0, 0.1*inch))
+ 
+    labels  = [" ", "Nom ","Prénom", "Identifiant"]
+    dataset = []
+
+    i = 1
+    for student in group.students.exclude(user__username__contains= "_e-test") :
+        
+        dataset.append((i, student.user.last_name , student.user.first_name, student.user.username))
+
+    table = Table(dataset, colWidths=[1,2*inch,2*inch,2*inch], rowHeights=30)
+ 
+    elements.append(table)
+    doc.build(elements) 
+    return response
+
+ 
+
 
 
 

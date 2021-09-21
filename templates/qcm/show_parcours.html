@@ -6,7 +6,7 @@
 {% block require %}
  
 
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
 
     <script>
         require(['script/ajax-parcours']);
@@ -20,18 +20,14 @@
 {% block page_title %}
 
 <span style="color:{{ parcours.color }}">  
-    {% if parcours.is_folder %}
-    <i class="fa fa-folder-open"></i>
-    {% else %}
     <i class="fa fa-th"></i> 
-    {% endif %}
 </span>
 
     {% include 'qcm/breadcrumb.html' %}
 
-{% if not parcours.is_folder %}
+
 <small >{{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}</small> 
-    {% endif %}
+
 
     {% if user.is_testeur or user.is_superuser %} 
         <a href="#" data-toggle='modal' data-target='#reporting'>
@@ -152,7 +148,7 @@ body{
                                 <p> contient les parcours suivants : </p>
                                 <ul>
                                 {% for p in parcours.leaf_parcours.all %}
-                                    <li class="sans_puce" style="margin-bottom : 15px">  <a href="{% url 'show_parcours' p.id %}" style="color: {{ p.color }}"><i class="fa fa-th fa-fw fa-small"></i> {{ p }}</a></li>
+                                    <li class="sans_puce" style="margin-bottom : 15px">  <a href="{% url 'show_parcours' 0 p.id %}" style="color: {{ p.color }}"><i class="fa fa-th fa-fw fa-small"></i> {{ p }}</a></li>
                                 {% endfor %}
                                 </ul>
                             </div>

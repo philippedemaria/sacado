@@ -63,19 +63,19 @@
 
                     <div class="small-box-footer" >
                         <div class="row">                                      
-                            <div class="col-lg-12 col-xs-12" style="padding-right:0px;font-size: 12px;margin-bottom:5px; margin-top: 7px">
-                            
-                           
-                                Dossiers/Parcours favoris  
-
-                               <small> ({{ data.nb_parcours_favorite }}) - 
-                             {{ data.nb_parcours_visible }} publié{{ data.nb_parcours_visible|pluralize }}  
-                             {% if data.nb_parcours_favorite == 0 %}
-                                <span class="helper_tip" style="color:{{ group.color|contrast_color }}"> <span style="font-size:12px"><i class="fa fa-warning"></i> </span>
-                                    <div class="helper_tip_text" >Si vous avez créé un dossier ou un parcours, il semble que vous n'ayez pas renseigné le niveau. Ou alors aucun parcours n'est en favori.</div>
-                                </span> 
-                             {% endif %}
-                            </small>
+                            <div class="col-lg-12 col-xs-12" style="padding-right:0px;font-size: 12px;margin-top: 7px">
+                                Dossiers favoris  
+                               <small> ({{ data.nb_folders }}) - 
+                                    {{ data.nb_folders_published }} publié{{ data.nb_folders_published|pluralize }}  
+                                </small>
+                            </div>
+                        </div>
+                        <div class="row">                                      
+                            <div class="col-lg-12 col-xs-12" style="padding-right:0px;font-size: 12px;">
+                                Parcours favoris  
+                                <small> ({{ data.nb_parcours_favorite }}) - 
+                                    {{ data.nb_parcours_visible }} publié{{ data.nb_parcours_visible|pluralize }}  
+                                </small>
 
                             </div>
                         </div>
@@ -87,8 +87,10 @@
                             </div>
                         </div>
 
+
+
                         <div class="row">                                      
-                            <div class="col-lg-12 col-xs-12" style="padding-right:10px; margin-bottom: 18px; margin-top: 15px">
+                            <div class="col-lg-12 col-xs-12" style="padding-right:10px; margin-bottom: 18px; margin-top: 12px">
                             
 
                                 <a href="{% url 'list_parcours_group' group.id  %}" class="btn btn-default btn-accueil" style="width:280px;color:{{ group.color}}"> 
@@ -264,7 +266,7 @@
                                 </div> 
                             {% endif  %}
                             <div class="box_title_vignette"> 
-                                <a {% if parcours.is_evaluation%} href="{% url 'show_evaluation'  parcours.id  %}" {% else %} href="{% url 'show_parcours'  parcours.id  %}"{% endif %}  style="color:{{ parcours.color|contrast_color }};"> {{ parcours.title|truncatechars:"18" }}
+                                <a {% if parcours.is_evaluation%} href="{% url 'show_evaluation'   parcours.id  %}" {% else %} href="{% url 'show_parcours' 0  parcours.id  %}"{% endif %}  style="color:{{ parcours.color|contrast_color }};"> {{ parcours.title|truncatechars:"18" }}
                                     <span style="font-size:12px"> 
                                         {% with parcours.nb_exercises as nb_p_exercises %}
                                             {{ nb_p_exercises }} exercice{{ nb_p_exercises|pluralize }}
@@ -280,7 +282,7 @@
                         <div class="box-footer">
                             <div class="row extend">                              
                                 <div class="col-lg-3 col-xs-3">
-                                    {% if parcours.is_folder %} 
+                                    {% if  is_folder %} 
                                             <a href="{% url 'update_folder' parcours.id 0 %}" class="edit" >   
                                     {% else %}
                                         {% if parcours.is_evaluation %} 

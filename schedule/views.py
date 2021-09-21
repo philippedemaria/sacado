@@ -116,7 +116,7 @@ def calendar_initialize(request):
     if request.user.is_teacher:
         teacher = Teacher.objects.get(user=request.user)
         relationships = Relationship.objects.filter(parcours__teacher=teacher, date_limit__gte=today).exclude(date_limit=None)
-        parcourses = Parcours.objects.filter(teacher=teacher)
+        parcourses = Parcours.objects.filter(teacher=teacher,is_trash=0)
         calendars = Calendar.objects.filter(user=request.user)
         form = EventForm(request.user, request.POST or None)        
         nb_teacher_level = teacher.levels.count()
@@ -156,7 +156,7 @@ def calendar_initialize(request):
 
         ratiowidth = int(0.9*ratio)
         student = Student.objects.get(user=request.user)
-        parcours = Parcours.objects.filter(students = student)
+        parcours = Parcours.objects.filter(students = student,is_trash=0)
         context = {'student' : student ,    'relationships' : relationships ,    'ratio' : ratio ,  'ratiowidth' : ratiowidth ,       'relationships_in_late' : relationships_in_late ,    } 
 
     return render(request, "schedule/base.html" , context )
@@ -182,7 +182,7 @@ def events_json_group(request):
     ### Détermine la liste des parcours du groupe
     parcours_tab , evaluation_tab = [] , []
     for student in students :
-        parcours = Parcours.objects.filter(students = student, teacher = teacher,is_evaluation=0)
+        parcours = Parcours.objects.filter(students = student, teacher = teacher,is_evaluation=0,is_trash=0)
         for p in parcours:
             if p not in parcours_tab :
                 parcours_tab.append(p) ### parcours_tab = liste des parcours du groupe
@@ -216,7 +216,7 @@ def events_json_group(request):
 
     ## Gestion des parcours d'évaluation
     for student in students :
-        evaluations = Parcours.objects.filter(students = student, teacher = teacher,is_evaluation=1)
+        evaluations = Parcours.objects.filter(students = student, teacher = teacher,is_evaluation=1,is_trash=0)
         for e in evaluations:
             if e not in evaluation_tab :
                 evaluation_tab.append(e) ### evaluation_tab = liste des evaluations du groupe

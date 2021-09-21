@@ -100,7 +100,7 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
                 groups = Group.objects.filter(teacher = teacher)
 
                 relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today,exercise__supportfile__is_title=0).order_by("parcours")
-                parcourses = Parcours.objects.filter(teacher=teacher)  # parcours non liés à un groupe
+                parcourses = Parcours.objects.filter(teacher=teacher,is_trash=0) # parcours non liés à un groupe
 
                 communications = Communication.objects.filter(active=1)
                 parcours_tab = Parcours.objects.filter(students=None, teacher=teacher)
@@ -111,7 +111,7 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
             elif self.request.user.is_student:  # Student
                 student = Student.objects.get(user=self.request.user.id)
 
-                parcourses = Parcours.objects.filter(students=student, linked=0, is_evaluation=0, is_publish=1)
+                parcourses = Parcours.objects.filter(students=student, linked=0, is_evaluation=0, is_publish=1,is_trash=0)
                 groups = student.students_to_group.all()
 
                 parcours = []
@@ -138,7 +138,7 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
 
                 ratiowidth = int(0.9*ratio)
 
-                evaluations = Parcours.objects.filter(start__lte=today, stop__gte=today, students=student, is_evaluation=1)
+                evaluations = Parcours.objects.filter(start__lte=today, stop__gte=today, students=student, is_evaluation=1,is_trash=0)
                 studentanswers = Studentanswer.objects.filter(student=student)
 
                 exercises = []
@@ -293,7 +293,7 @@ def register_student(request):
                 code_group = request.POST.get("group")
                 if Group.objects.filter(code=code_group, lock = 0 ).exists():
                     group = Group.objects.get(code=code_group)
-                    parcours = Parcours.objects.filter(teacher=group.teacher, level=group.level)
+                    parcours = Parcours.objects.filter(teacher=group.teacher, level=group.level,is_trash=0)
                 else :
                     parcours = []
                     group = None
@@ -581,7 +581,7 @@ def detail_student(request, id):
         return redirect('index')
 
     today = time_zone_user(request.user) 
-    parcourses_publish = Parcours.objects.filter(students=student,is_publish=1)
+    parcourses_publish = Parcours.objects.filter(students=student,is_publish=1,is_trash=0)
     parcourses = Parcours.objects.filter(students=student)
     
     datas =[]
@@ -642,8 +642,8 @@ def detail_student_theme(request, id,idt):
         messages.error(request, "Erreur...Vous n'avez pas accès à ces résultats.")
         return redirect('index')
 
-    parcourses = Parcours.objects.filter(students=student)
-    parcourses_publish = Parcours.objects.filter(students=student, is_publish=1)
+    parcourses = Parcours.objects.filter(students=student,is_trash=0)
+    parcourses_publish = Parcours.objects.filter(students=student, is_publish=1,is_trash=0)
     today = time_zone_user(request.user)
     theme = Theme.objects.get(pk=idt)
 
@@ -786,7 +786,7 @@ def detail_student_all_views(request, id):
             knowledges.append(relation.exercise.knowledge)
 
 
-    parcourses = student.students_to_parcours.filter(is_folder=0)
+    parcourses = student.students_to_parcours.filter(is_publish=1,is_trash=0).order_by("subject__name")
     relationships = Relationship.objects.filter(parcours__in=parcourses,is_publish=1,exercise__supportfile__is_title=0).exclude(date_limit=None)
 
     done, late, no_done = 0, 0, 0

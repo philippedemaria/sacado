@@ -9,15 +9,15 @@ from django.views.decorators.csrf import csrf_exempt
 urlpatterns = [
 
 
-
-    path('get_folder_to_folder', get_folder_to_folder, name='get_folder_to_folder'),
+    path('remove_parcours_folder', remove_parcours_folder, name='remove_parcours_folder'),
+    #path('get_folder_to_folder', get_folder_to_folder, name='parcours'),
 
     path('parcours', list_parcours, name='parcours'),
     path('evaluations', list_evaluations, name='evaluations'),
     path('archives', list_archives, name='archives'),
     path('evaluations_archives', list_evaluations_archives, name='evaluations_archives'),
 
-    path('parcours_create/<int:idp>/', create_parcours, name='create_parcours'),
+    path('parcours_create/<int:idf>/', create_parcours, name='create_parcours'),
     path('parcours_create_evaluation', create_evaluation, name='create_evaluation'),
     path('parcours_evaluation_update/<int:id>/<int:idg>/', update_evaluation, name='update_evaluation'),
     path('parcours_evaluation_show/<int:id>/', show_evaluation, name='show_evaluation'), 
@@ -26,7 +26,7 @@ urlpatterns = [
     path('parcours_delete/<int:id>/<int:idg>/', delete_parcours, name='delete_parcours'),  
     path('parcours_archive/<int:id>/<int:idg>/', archive_parcours, name='archive_parcours'),
     path('parcours_unarchive/<int:id>/<int:idg>/', unarchive_parcours, name='unarchive_parcours'), 
-    path('parcours_show/<int:id>/', show_parcours, name='show_parcours'), 
+    path('parcours_show/<int:idf>/<int:id>', show_parcours, name='show_parcours'), 
 
     path('parcours_folder/<int:idg>/', create_folder, name='create_folder'),
     path('parcours_folder_archive/<int:id>/', folder_archive, name='folder_archive'),
@@ -36,7 +36,10 @@ urlpatterns = [
     path('parcours_delete_folder_and_contents/<int:id>/<int:idg>/', delete_folder_and_contents, name='delete_folder_and_contents'),  
     path('parcours_delete_from_folder', parcours_delete_from_folder, name='parcours_delete_from_folder'), 
 
-    #path('ajax_group_to_parcours', ajax_group_to_parcours, name='ajax_group_to_parcours'), 
+    path('ajax_charge_group_from_target', ajax_charge_group_from_target, name='ajax_charge_group_from_target'), 
+    path('ajax_affectation_to_group', ajax_affectation_to_group, name='ajax_affectation_to_group'), 
+
+
 
 
     path('parcours_tasks_and_publishes/<int:id>/', parcours_tasks_and_publishes, name='parcours_tasks_and_publishes'), # gestion des taches
@@ -45,12 +48,14 @@ urlpatterns = [
     path('replace_exercise_into_parcours', replace_exercise_into_parcours, name='replace_exercise_into_parcours'), #Déplacer un execice de parcours
 
     path('actioner', actioner, name='actioner'), #archiver ou supprimer une sélection
+    path('unarchive', unarchive, name='unarchive'),
+
  
     # Résultats d'un parcours
-    path('parcours_result/<int:id>/', result_parcours, name='result_parcours'), 
-    path('parcours_result_theme/<int:id>/<int:idt>/', result_parcours_theme, name='result_parcours_theme'),  # Je ne sais pas si cette route est utilisée ?????
-    path('parcours_result_knowledge/<int:id>/', result_parcours_knowledge, name='result_parcours_knowledge'), 
-    path('parcours_result_waiting/<int:id>/', result_parcours_waiting, name='result_parcours_waiting'), 
+    path('parcours_result/<int:id>/<int:is_folder>', result_parcours, name='result_parcours'), 
+    path('parcours_result_theme/<int:id>/<int:idt>/<int:is_folder>', result_parcours_theme, name='result_parcours_theme'),  # Je ne sais pas si cette route est utilisée ?????
+    path('parcours_result_knowledge/<int:id>/<int:is_folder>', result_parcours_knowledge, name='result_parcours_knowledge'), 
+    path('parcours_result_waiting/<int:id>/<int:is_folder>', result_parcours_waiting, name='result_parcours_waiting'), 
 
     path('parcours_progression/<int:id>/<int:idg>', parcours_progression, name='parcours_progression'),
     path('parcours_progression_student/<int:id>', parcours_progression_student, name='parcours_progression_student'),
@@ -64,8 +69,8 @@ urlpatterns = [
     path('parcours_clone/<int:id>/<int:course_on>', clone_parcours, name='clone_parcours'),
     path('parcours_clone_folder/<int:id>', clone_folder, name='clone_folder'),
     path('parcours_group/<int:id>/', list_parcours_group, name='list_parcours_group'), # parcours d'un groupe
-    path('parcours_sub_parcours/<int:idg>/<int:id>/', list_sub_parcours_group, name='list_sub_parcours_group'), # parcours d'un parcours
-
+    path('parcours_sub_parcours/<int:idg>/<int:id>/', list_sub_parcours_group, name='list_sub_parcours_group'), # parcours d'un dossier
+    path('list_sub_parcours_group_student/<int:idg>/<int:id>/', list_sub_parcours_group_student, name='list_sub_parcours_group_student'), # parcours d'un parcours
     path('ajax_subparcours_check', ajax_subparcours_check, name='ajax_subparcours_check'), # parcours d'un parcours
 
 
@@ -256,8 +261,10 @@ urlpatterns = [
     path('ajax_is_favorite', ajax_is_favorite, name='ajax_is_favorite'),
     path('ajax/course_sorter', ajax_course_sorter, name='ajax_course_sorter'),
     path('ajax/parcours_sorter', ajax_parcours_sorter, name='ajax_parcours_sorter'),
+    path('ajax/folders_sorter', ajax_folders_sorter, name='ajax_folders_sorter'),
 
-    path('parcours_show_student/<int:id>/', show_parcours_student, name='show_parcours_student'), 
+
+    path('parcours_show_student/<int:id>', show_parcours_student, name='show_parcours_student'), 
     path('asking_parcours_sacado/<int:pk>', asking_parcours_sacado, name='asking_parcours_sacado'), # pk est la clé du group 
 
 
@@ -270,7 +277,9 @@ urlpatterns = [
     path('ajax_level_exercise', ajax_level_exercise, name='ajax_level_exercise'),
     path('ajax/sort_exercise', ajax_sort_exercise, name='ajax_sort_exercise'), 
     path('ajax/publish', ajax_publish, name='ajax_publish'),  
-    path('ajax/publish_parcours', ajax_publish_parcours, name='ajax_publish_parcours'),  
+    path('ajax/publish_parcours', ajax_publish_parcours, name='ajax_publish_parcours'),
+
+
     path('ajax/dates', ajax_dates, name='ajax_dates'), 
     path('ajax/skills', ajax_skills, name='ajax_skills'), 
     path('ajax/notes', ajax_notes, name='ajax_notes'), 

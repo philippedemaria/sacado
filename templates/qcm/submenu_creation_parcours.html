@@ -1,9 +1,9 @@
 <li> {% if sacado_asso %} <a href="{% url 'all_parcourses' 0 %}"   > Parcours mutualisés</a> {% else %}<a href="#"  class="no_sacado_asso" > Parcours mutualisés</a> {% endif %} </li>
  
 
-{% if parcours  %}
+{% if folder  %}
  
-	<li> <a href="{% url 'create_parcours' parcours.id %}" class="btn btn-new"  > Créer un parcours</a> </li>  
+	<li> <a href="{% url 'create_parcours' folder.id %}" class="btn btn-new"  > Créer un parcours</a> </li>  
  
 {% else %}
 <li> <a href="{% url 'create_parcours' 0 %}" class="btn btn-new"  > Créer un parcours</a> </li>  

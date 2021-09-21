@@ -1,0 +1,230 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2_mini.js' %}"></script>
+    <script>
+        require(['script/ajax-parcours']);
+    </script> 
+{% endblock %}
+
+ 
+
+{% block page_title %}
+    <i class="fa fa-th"></i> Mes dossiers et parcours archivés          
+{% endblock %}
+
+{% block page_menu_right %}
+
+
+    <li class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Créer un parcours <b class="caret"></b> </a>
+
+        <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+     
+     
+            <li> <a href="{% url 'create_parcours' 0 %}"  > Nouveau Parcours</a> </li>  
+
+
+            <li>  
+                {% if sacado_asso %}
+                    <a href="{% url 'all_parcourses' 0 %}"   > Parcours mutualisés</a>
+                {% else %}
+                    <a href="#"  class="no_sacado_asso" > Parcours mutualisés</a>
+                {% endif %}
+            </li>
+
+
+            <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   > Parcours par défaut</a></li>
+
+
+        </ul>
+    </li> 
+{% endblock %}
+
+
+
+
+{% block body  %} 
+ 
+<section class="content_list"> 
+{% include 'preloader.html' %}
+{% if parcourses %}
+<div class="row">    
+   <div class="col-sm-12 col-md-12">
+        <form action="" method="POST" enctype='multipart/form-data'>
+            {% csrf_token %}
+            <table class="table table-hovered standard_tab_sort"  style="width:100%">
+                <thead> 
+                    <tr> 
+                        <th style="width:2px"></th>                  
+                        <th style="width:300px">Nom</th>
+                        <th>Modif.</th>
+                        <th>Niveau</th>
+                        <th>Groupes affectés</th>
+                        <th>Elèves</th>
+                        <th style="width:120px">Publication</th>                    
+                    </tr> 
+                </thead>
+                <tbody>
+                {% for parcours in parcourses %}
+                    <tr {% if not parcours.is_publish %} style="background-color:#F4F4F4;" {% endif  %}>
+                        <td style="text-align:center">
+                            <span class="fa-stack selector_favorite" id="selector_favorite{{ parcours.id }}" data-fav="{% if parcours.is_favorite %}1{% else  %}0{% endif  %}" data-parcours_id="{{ parcours.id }}" style="cursor:pointer">
+                              <i class="fa fa-{% if parcours.is_folder %}folder{% elif parcours.is_evaluation %}bullseye{% else %}square{% endif  %} fa-2x" style="color: {{ parcours.color }} ;"></i>
+                              <span id="is_favorite_id{{ parcours.id }}">{% if parcours.is_favorite %}<i class="fa fa-star fa-stack-1x" style="font-size: 12px; color:#FFF" ></i>{% endif  %}</span>
+                            </span>
+                        </td>  
+                        <td>
+                            <a href="{% url 'show_parcours' 0 parcours.id %}" > {{ parcours.title }}
+                                {% get_is_lock parcours today as is_lock %} 
+                                {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible de soumettre des exercices.
+
+                                    <span class="label_icon text-danger">
+                                        {% if parcours.is_evaluation %}
+                                            {{  parcours.start|date:"d N Y H:i"  }}   
+                                            {% if parcours.stop %}
+                                               - {{  parcours.stop|date:"d N Y H:i"  }}     
+                                            {% endif %}                                
+                                        {% endif %}
+                                    </span>
+
+                                </div></span>{% endif %}
+                            </a>
+
+                            {% if not parcours.is_folder %}
+                            <div style="font-size:14px;margin-top:-5px;">
+                                {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }} - {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }} {% endif %}min. 
+                            </div> 
+                            {% endif %}
+
+
+
+                        </td>  
+                        <td>
+                            {% if parcours.teacher != teacher %}
+                                <i class="fa fa-edit text-default" aria-hidden="true" ></i></a>
+                            {% else %}
+
+                                {% if parcours.is_folder %}
+                                <a href="{% url 'folder_unarchive' parcours.id  %}"> 
+                                {% elif parcours.is_evaluation %}
+                                <a href="{% url 'update_evaluation' parcours.id 0 %}"> 
+                                {% else %}
+                                <a href="{% url 'update_parcours' parcours.id 0 %}">
+                                {% endif %}
+                                {% if parcours.is_folder %}
+                                <i class="fa fa-share" aria-hidden="true" title="désarchiver"></i></a>
+                                {% else %}
+                                <i class="fa fa-edit" aria-hidden="true" title="désarchiver"></i></a>
+                                {% endif %}
+                            {% endif %}
+                        </td> 
+                        <td>
+                            {% for l in  parcours.level_list  %}
+                                <small>{{ l }}{% if not forloop.last %}, {% endif %}</small>
+                            {% endfor %}
+                        </td> 
+                        <td>
+                            {% for g in  parcours.group_list  %}
+                                {% get_parcours_group_students_count parcours g as nb_st %}
+                                <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
+                            {% empty %}
+                                <a href="{% url 'update_parcours' parcours.id 0 %}" class="btn btn-xs btn-danger">{{ parcours.students.count }}<i class="fa fa-users"></i> Affecter des élèves à {% if parcours.is_evaluation %}cette évaluation{% else %}ce parcours{% endif %}</a> 
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <form action="#" method="POST">
+                                {% csrf_token %}
+                                <a href="#groupe_name_anchor" class="vue menuactionparcours" data-toggle='modal' style="float:left; margin-right:10px"  
+                                     data-parcours_id='{{ parcours.id }}' data-target='#listing'> 
+                                    <span class="label label-default"> {{ parcours.students.count }}<i class="fa fa-users"></i></span>
+                                </a>
+                            </form>
+                        </td>
+                        <td>
+                        <form action="" method="POST" enctype='multipart/form-data'>     
+                            {% csrf_token %}
+                            <div class="btn-group"  style="padding:0px;margin:0px;">
+                                <a href="#" class="btn btn-default publisher btn-publisher"  data-from="1" id="parcours_publisher{{parcours.id}}" 
+                                    data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
+                                    <i class="fa fa-circle-o-notch"></i>
+                                </a><span class="legend-btn  legend-btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %} size13" id="parcours_statut{{parcours.id}}"  >  
+                                  {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
+                                </span>
+                            </div>
+                        </form>
+                        </td>
+                    </tr>
+                {% endfor  %} 
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+{% else %}
+    
+<div class="row"> 
+    <div class="col-sm-12 col-md-12">
+        <div class="alert alert-danger">
+            Aucun parcours archivé trouvé.
+        </div>
+    </div>
+</div>
+{% endif  %}
+</section>
+
+    <div class="modal fade bd-example-modal-lg" id="listing" tabindex="-1" role="dialog" aria-labelledby="listing" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>                
+                    <h5 class="modal-title">Liste des élèves - <span id="modal_group_name"></span></h5>
+                </div>
+                <div class="modal-body">
+                    <div id="list_students"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<div class="modal fade" id="parcours_default_modal" tabindex="-1" role="dialog" aria-labelledby="parcours_default_modal">
+    <div class="modal-dialog" role="document" style="width:70%">
+        <div class="modal-content" >
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2 class="thin sacado">Les parcours par défaut</h2>
+                <p>Ces parcours contiennent tous les exercices proposés par <span class="sacado">sacado</span> dans le thème proposé. </p>
+                <form action="{% url 'get_parcours_default'  %}" method="POST" enctype='multipart/form-data'>   
+                    {% csrf_token %}
+                    <p><span class="label label-primary">1</span> Sélectionner le niveau souhaité.</p>
+
+
+                    <p><select name="level_selected_id" id="level_selected_id"  class="form-control select2" data-url="no" required>
+                            <option value=" ">Sélectionner un niveau</option>
+                            {% for level in teacher.levels.all %}
+                            <option value="{{ level.id }}">{{level.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </p>
+
+                    <div id="parcours_shower"> 
+             
+                    </div>  
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock  %}   
+
+
+ 

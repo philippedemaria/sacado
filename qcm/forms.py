@@ -29,15 +29,18 @@ class ParcoursForm(forms.ModelForm):
 
 	class Meta:
 		model = Parcours
-		exclude = ("exercises","leaf_parcours","folder_parcours", "students")
+		exclude = ("exercises" , "students")
 
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
+		folder  = kwargs.pop('folder')
 		super(ParcoursForm, self).__init__(*args, **kwargs)
 		self.fields['stop'].required = False
 
 		if teacher:
 			groups        = teacher.groups.all()
+			if folder :
+				groups    = folder.groups.all()
 			shared_groups = teacher.teacher_group.all()
 			these_groups  = groups|shared_groups
 			all_groups    = these_groups.order_by("teachers")
@@ -70,13 +73,32 @@ class ParcoursForm(forms.ModelForm):
 				attribute_all_documents_to_student([self],s)
 
 
+class Parcours_GroupForm(forms.ModelForm):
+
+	class Meta:
+		model = Parcours
+		fields = ('groups',)
+
+
+	def __init__(self, *args, **kwargs):
+		teacher = kwargs.pop('teacher')
+		super(Parcours_GroupForm, self).__init__(*args, **kwargs)
+ 
+		if teacher:
+			groups        = teacher.groups.all()
+			shared_groups = teacher.teacher_group.all()
+			these_groups  = groups|shared_groups
+			all_groups    = these_groups.order_by("teachers")
+			self.fields['groups']	     = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=False)
+ 
+			
+
 
 class FolderForm(forms.ModelForm):
 
 	class Meta:
 		model = Folder
 		fields = '__all__'
- 
 
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
@@ -95,7 +117,10 @@ class FolderForm(forms.ModelForm):
 			self.fields['coteachers']    = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
 
 		if subject and level :
-			parcours                = teacher.teacher_parcours.filter(subject=subject,level=level).exclude(is_folder=1).order_by("title")
+			parcours                = teacher.teacher_parcours.filter(subject=subject,level=level).order_by("title")
+			self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset=parcours, widget=forms.CheckboxSelectMultiple, required=False)
+		else :
+			parcours                = teacher.teacher_parcours.all().order_by("title")
 			self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset=parcours, widget=forms.CheckboxSelectMultiple, required=False)
  
 			
@@ -111,7 +136,26 @@ class FolderForm(forms.ModelForm):
 			pass
 
 
+class Folder_GroupForm(forms.ModelForm):
+
+	class Meta:
+		model = Folder
+		fields = ('groups',)		
  
+
+	def __init__(self, *args, **kwargs):
+		teacher = kwargs.pop('teacher')
+		super(Folder_GroupForm, self).__init__(*args, **kwargs)
+ 
+		if teacher:
+			groups        = teacher.groups.all()
+			shared_groups = teacher.teacher_group.all()
+			these_groups  = groups|shared_groups
+			all_groups    = these_groups.order_by("teachers")
+			self.fields['groups'] = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=False)
+ 
+			
+
 
 class RelationshipForm(forms.ModelForm):
 	class Meta:

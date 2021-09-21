@@ -116,11 +116,11 @@ def get_score(obj,student):
 
  
 @register.simple_tag 
-def get_min_score_parcours(obj,student,flag): 
+def get_min_score(obj,student): 
     """
     retourne le  score d'un même exercice par élève.
     """
-    return obj.min_score_parcours(student,flag) 
+    return obj.min_score(student) 
 
 
  

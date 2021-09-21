@@ -232,11 +232,10 @@ def attribute_all_documents_to_student(parcourses,student):
     return test
 
 def attribute_all_documents_to_students(form, nf ):
-    """  assigner les documents et renvoie Vrai ou Faux suivant l'attribution """
+    """  assigner les documents   """
     students = set()
     for g in nf.groups.all() :
         students.update(g.students.all())
-        print(g,g.students.all() )
 
     nf.students.set(students)
     relationships = nf.parcours_relationship.all()
@@ -252,6 +251,44 @@ def attribute_all_documents_to_students(form, nf ):
         course.students.set(students)
 
  
+def attribute_all_documents_of_folder_to_group(group,folder):
+    """  assigner les documents   """
+    
+    students = group.students.all()
+    folder.students.set(students)
+    for parcours in folder.parcours.all() :
+        parcours.students.set(students)
+        relationships = parcours.parcours_relationship.all()
+        for r in relationships:
+            r.students.set(students)
+
+        customexercises = parcours.parcours_customexercises.all()
+        for c in customexercises:
+            c.students.set(students)
+
+        courses = parcours.course.all()
+        for course in courses:
+            course.students.set(students)
+
+
+def attribute_all_documents_of_parcours_to_group(group,parcours):
+    """  assigner les documents   """
+    
+    students = group.students.all()
+    parcours.students.set(students)
+    relationships = parcours.parcours_relationship.all()
+    for r in relationships:
+        r.students.set(students)
+
+    customexercises = parcours.parcours_customexercises.all()
+    for c in customexercises:
+        c.students.set(students)
+
+    courses = parcours.course.all()
+    for course in courses:
+        course.students.set(students)
+
+
 
 
 
@@ -325,6 +362,15 @@ def authorizing_access_student(student , parcours_or_group):
             return False
 
 
+def authorizing_access_folder(user , folder): 
+
+    try :
+        if user == folder.teacher or  user in folder.coteachers.all() :
+            return True
+        else :
+            return False
+    except : 
+            return False
 
 def group_has_parcourses(group,is_evaluation ,is_archive ):
     pses_tab = []

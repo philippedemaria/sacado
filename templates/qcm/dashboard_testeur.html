@@ -67,7 +67,7 @@
         </div>
         <div class="col-lg-10 col-md-10 col-xs-12 report_list">
             {% for p in parcourses %}
-                <a href="{% url 'show_parcours'  p.id %}" class="btn btn-new" target="_blank"> {{ p.title }} - {{ p.level }} - {{ p.subject }} </a>
+                <a href="{% url 'show_parcours' 0  p.id %}" class="btn btn-new" target="_blank"> {{ p.title }} - {{ p.level }} - {{ p.subject }} </a>
             {% endfor %}
         </div>
     </div>

@@ -92,22 +92,18 @@ class Group(ModelWithCode):
         students = self.students.all()
         studnts = students.exclude(user__username__contains= "_e-test") 
         snt = studnts.count()
-        profil = students.filter(user__username__contains= "_e-test").count()
-
+        profil = self.students.filter(user__username__contains= "_e-test").count()
+        profilTest = False
         if profil > 0 : 
             profilTest = True
-        else :
-            profilTest = False
+            
 
-        parcourses = set()
-        parcourses.update(self.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),  is_favorite=1).exclude(is_leaf=1).order_by("is_evaluation","ranking"))
-        for student in students:
-            if self.subject and self.level : 
-                parcourses.update(student.students_to_parcours.filter(Q(author=teacher)|Q(teacher=teacher)|Q(coteachers=teacher),level = self.level,subject = self.subject).exclude(is_leaf=1))
-            elif self.level : 
-                parcourses.update(student.students_to_parcours.filter(Q(author=teacher)|Q(teacher=teacher)|Q(coteachers=teacher),level = self.level ).exclude(is_leaf=1)) 
-            elif self.subject : 
-                parcourses.update(student.students_to_parcours.filter(Q(author=teacher)|Q(teacher=teacher)|Q(coteachers=teacher),subject = self.subject ).exclude(is_leaf=1)) 
+        parcourses = self.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), folders=None, is_favorite=1,  is_trash=0) 
+        folders    = self.group_folders.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers=teacher), is_favorite=1,  is_archive=0,  is_trash=0) 
+
+        nb_folders = folders.count()
+        nb_folders_published = folders.filter(is_publish=1).count()
+
 
         data, nb, nbf, nbp, nbef , nbe = {}, 0, 0, 0, 0, 0
         for parcours in parcourses :
@@ -130,39 +126,41 @@ class Group(ModelWithCode):
         data["nb_evaluation_favorite"] = nbef 
         data["nb_evaluation"] = nbe
         data["students_no_test"] = snt
-        data["profiltest"] = profilTest                 
+        data["profiltest"] = profilTest  
+        data["nb_folders"] = nb_folders 
+        data["nb_folders_published"] = nb_folders_published              
 
         return data
 
 
-
-    def parcours(self):
-        parcours_set = set()
-        for student in self.students.all() :
-            parcours_set.update(student.students_to_parcours.filter( subject = self.subject))
-        return list(parcours_set)
-
+    def folders_published(self):
+        data = {}
+        folders = self.group_folders.filter(is_publish = 1, subject = self.subject, level=self.level, is_trash=0)
+        nb_folders_published = folders.count()
+        data["folders"] = folders 
+        data["nb_folders_published"] = nb_folders_published  
+        return data
 
     def parcours_visible(self):
-        parcours_set = set()
-        for student in self.students.all() :
-            parcours_set.update(student.students_to_parcours.filter(is_publish = 1))
-        return list(parcours_set)
+        parcours = self.parcours.filter(is_publish = 1, subject = self.subject, level=self.level, is_trash=0 , folders= None)
+        return parcours
 
-
-    def folders(self):
-        parcours_set = set()
-        for student in self.students.all() :
-            parcours_set.update(student.students_to_parcours.filter(is_folder=1, subject = self.subject))
-        return list(parcours_set)
 
 
     def themes(self):
-        parcours_set = set()
-        for student in self.students.all() :
-            parcours_set.update(student.students_to_parcours.filter(Q(is_folder=1)|Q(is_leaf=0), subject = self.subject))
+        data = {}
+        folders = self.group_folders.filter(is_publish = 1, subject = self.subject, level=self.level, is_trash=0)
+        nb_folders_published = folders.count()
+        data["folders"] = folders 
+        data["nb_folders_published"] = nb_folders_published 
+        parcours = self.group_parcours.filter(subject = self.subject, level=self.level, is_trash=0, is_publish=1 , folders= None)
+        nb_parcours_published = parcours.count()
+        data["parcours"] = parcours 
+        data["nb_parcours_published"] = nb_parcours_published 
 
-        return list(parcours_set)
+        data["nb"] = nb_parcours_published + nb_folders_published
+
+        return data
 
 
 

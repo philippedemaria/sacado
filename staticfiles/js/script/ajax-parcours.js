@@ -1,7 +1,5 @@
 define(['jquery','bootstrap'], function ($) {
     $(document).ready(function () {
-        console.log("chargement JS ajax-parcours.js OK");
-
 
         $(".is_evaluation").attr("checked",false);
 
@@ -371,22 +369,26 @@ define(['jquery','bootstrap'], function ($) {
 
         // Met en favori un parcours
         $('.selector_favorite').on('click' ,function () {
-            let parcours_id = $(this).attr("data-parcours_id"); 
+            let target_id = $(this).attr("data-target_id"); 
             let statut = $(this).attr("data-fav"); 
+            let status = $(this).attr("data-status"); 
+
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
             $.ajax(
                 {
                     type: "POST",
                     dataType: "json",
                     data: {
-                        'parcours_id': parcours_id,
+                        'target_id': target_id,
                         'statut': statut,
+                        'status': status,
+
                         csrfmiddlewaretoken: csrf_token
                     },
                     url: "ajax_is_favorite",
                     success: function (data) {
-                        $('#is_favorite_id'+parcours_id).html(data.statut);
-                        $('#selector_favorite'+parcours_id).attr("data-fav",data.fav);      
+                        $('#is_favorite_id'+target_id).html(data.statut);
+                        $('#selector_favorite'+target_id).attr("data-fav",data.fav);      
                     }
                 }
             )
@@ -548,7 +550,7 @@ define(['jquery','bootstrap'], function ($) {
  
 
         $(".overlay").hide();
-        $(".overlay_show").click(function(){
+        $(".overlay_show").click(function(){ 
             value =  $(this).attr("data-parcours_id"); 
             $('.overlay_show'+value).toggle(500);
         });
@@ -775,21 +777,7 @@ define(['jquery','bootstrap'], function ($) {
         });
 
         */
-        if( $("#id_is_folder").is(":checked")) { $('#leaf_div').show(); } else { $('#leaf_div').hide(); }
-        
-
-        $("#id_is_leaf").on('change', function (event) {
-            $('.folder').toggle(500);
-            $('#leaf_div').toggle(500);
-        });
-
-
-
-        $("#id_is_folder").on('change', function (event) {
-            $('#leaf_div').toggle(500);
-            $('.leaf').toggle(500);
-
-        });
+ 
 
 
         $(".click_subparcours_show").on('click', function (event) {

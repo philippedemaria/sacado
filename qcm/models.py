@@ -355,10 +355,6 @@ class Exercise(models.Model):
         return ok
 
 
-
-
-
-
 class Parcours(ModelWithCode):
 
     title = models.CharField(max_length=255, verbose_name="Titre")
@@ -476,30 +472,17 @@ class Parcours(ModelWithCode):
                 theme_tab.append(data)
         return theme_tab
 
-    def nb_leaf(self,student):
-        nb = self.leaf_parcours.filter(is_publish=1, students=student).count()
-        return nb
+ 
 
     def is_percent(self,student):
         ## Nombre de relationships dans le parcours => nbre  d'exercices
-        if self.is_folder :
-            nb_relationships , nb_customs , nb_customanswerbystudent , nb_studentanswers = 0 , 0, 0 , 0
-            for pcs in self.leaf_parcours.filter(is_publish=1):
-                nb_relationships +=  pcs.parcours_relationship.filter(students = student, is_publish=1,  exercise__supportfile__is_title=0 ).count()
-                nb_customs +=  pcs.parcours_customexercises.filter(students = student, is_publish=1).count()
+ 
+        nb_relationships =  self.parcours_relationship.filter(students = student, is_publish=1,  exercise__supportfile__is_title=0 ).count()
+        nb_customs =  self.parcours_customexercises.filter(students = student, is_publish=1).count()
 
-                ## Nombre de réponse avec exercice unique du parcours
-                nb_studentanswers += Studentanswer.objects.filter(student=student, parcours=pcs).values_list("exercise",flat=True).order_by("exercise").distinct().count()
-                nb_customanswerbystudent += Customanswerbystudent.objects.filter(student=student, customexercise__parcourses=pcs).values_list("customexercise",flat=True).order_by("customexercise").distinct().count()
-
-
-        else :
-            nb_relationships =  self.parcours_relationship.filter(students = student, is_publish=1,  exercise__supportfile__is_title=0 ).count()
-            nb_customs =  self.parcours_customexercises.filter(students = student, is_publish=1).count()
-
-            ## Nombre de réponse avec exercice unique du parcours
-            nb_studentanswers = Studentanswer.objects.filter(student=student, parcours=self).values_list("exercise",flat=True).order_by("exercise").distinct().count()
-            nb_customanswerbystudent = Customanswerbystudent.objects.filter(student=student, customexercise__parcourses=self).values_list("customexercise",flat=True).order_by("customexercise").distinct().count()
+        ## Nombre de réponse avec exercice unique du parcours
+        nb_studentanswers = Studentanswer.objects.filter(student=student, parcours=self).values_list("exercise",flat=True).order_by("exercise").distinct().count()
+        nb_customanswerbystudent = Customanswerbystudent.objects.filter(student=student, customexercise__parcourses=self).values_list("customexercise",flat=True).order_by("customexercise").distinct().count()
 
  
         data = {}
@@ -615,16 +598,7 @@ class Parcours(ModelWithCode):
             test = True
         return test 
 
-    def is_task_folder_exists(self):
-        today = timezone.now()
-        test = False
-        if Relationship.objects.filter(parcours__in= self.leaf_parcours.filter(is_publish=1),date_limit__gte = today).count() > 0 :
-            test = True
-        for p in self.leaf_parcours.filter(is_publish=1):
-            if Customexercise.objects.filter(parcourses= p ,date_limit__gte = today).count() > 0 :
-                test = True
-                break
-        return test 
+
 
     def is_individualized(self):
 
@@ -644,14 +618,6 @@ class Parcours(ModelWithCode):
             test = True
         return test 
 
-    def is_folder_courses_exists(self):
-
-        test = False
-        for p in self.leaf_parcours.all() :
-            if p.course.count() > 0 :
-                test = True
-                break
-        return test 
 
     def is_sections_exists(self) :
 
@@ -683,7 +649,7 @@ class Parcours(ModelWithCode):
 
 
 
-    def min_score_parcours(self,student,flag):
+    def min_score(self,student):
         """
         min score d'un parcours par élève
         """
@@ -691,38 +657,15 @@ class Parcours(ModelWithCode):
         max_tab = []
         nb_done = 0
         exercises = set()
-        if flag == 0 :  # si c'est un parcours
-            exercises.update(self.exercises.filter(supportfile__is_title=0, supportfile__is_ggbfile=1 ))
-            nb_exo_in_parcours =  self.parcours_relationship.filter(is_publish=1,students=student ).count()
-            for exercise in exercises :
-                maxi = self.answers.filter(student=student, exercise = exercise )
-                if maxi.count()>0 :
-                    maximum = maxi.aggregate(Max('point'))
-                    max_tab.append(maximum["point__max"])
-                    nb_done +=1
 
-
-        else : # si c'est un dossier
-            exs = set()
-            nb_exo_in_parcours = 0
- 
-            for p in self.leaf_parcours.filter(is_publish=1):
-                exos = p.exercises.filter(supportfile__is_title=0, supportfile__is_ggbfile=1 )
-                
-                if exos.count() > 0 : 
-                    exercises.update(exos)
- 
-                nb_exo_in_parcours +=  p.parcours_relationship.filter(is_publish=1,students=student ).count()
-        
-                for exercise in exercises :
-                    maxi = p.answers.filter(student=student, exercise = exercise )
-                    if maxi.count()>0 :
-                        maximum = maxi.aggregate(Max('point'))
-                        max_tab.append(maximum["point__max"])
-                        nb_done +=1
-
-
-
+        exercises.update(self.exercises.filter(supportfile__is_title=0, supportfile__is_ggbfile=1 ))
+        nb_exo_in_parcours =  self.parcours_relationship.filter(is_publish=1,students=student ).count()
+        for exercise in exercises :
+            maxi = self.answers.filter(student=student, exercise = exercise )
+            if maxi.count()>0 :
+                maximum = maxi.aggregate(Max('point'))
+                max_tab.append(maximum["point__max"])
+                nb_done +=1
 
         try :
             stage =  student.user.school.aptitude.first()
@@ -840,16 +783,7 @@ class Parcours(ModelWithCode):
 
         return submit
 
-    def p_is_leaf(self,parcours):
-        data = {}
-        data["check"] , data["is_used"] = False , False
-        if parcours :
-            if self in parcours.leaf_parcours.all() : 
-                data["check"]   = True
-            elif self.is_leaf :
-                #data["folder"] = Parcours.objects.filter( folder_parcours = self).values_list("title",flat=True) 
-                data["is_used"] = True
-        return data
+ 
 
 
     def is_real_time(self):
@@ -858,13 +792,7 @@ class Parcours(ModelWithCode):
             test = True
         return test
 
-    def is_folder_real_time(self):
-        test = False
-        for p in self.leaf_parcours.filter(is_publish=1) :
-            if p.tracker.count() > 0 :
-                test = True
-                break
-        return test
+ 
 
 
 
@@ -880,7 +808,7 @@ class Folder(models.Model):
 
     groups = models.ManyToManyField(Group,  blank=True,  related_name="group_folders" )
 
-    students = models.ManyToManyField(Student, blank=True, related_name='students_folders', editable=False)
+    students = models.ManyToManyField(Student, blank=True, related_name='folders', editable=False)
     is_share = models.BooleanField(default=0, verbose_name="Mutualisé ?")
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
 
@@ -888,6 +816,7 @@ class Folder(models.Model):
     level = models.ForeignKey(Level, related_name="level_folders", on_delete=models.CASCADE, default='', blank=True, null=True)
 
     is_favorite = models.BooleanField(default=1, verbose_name="Favori ?")
+    is_archive = models.BooleanField(default=0, verbose_name="Archive ?")
 
     duration = models.PositiveIntegerField(default=2, blank=True, verbose_name="Temps de chargement (min.)")
     start = models.DateTimeField(null=True, blank=True, verbose_name="A partir de")
@@ -895,6 +824,7 @@ class Folder(models.Model):
 
     vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Vignette d'accueil", blank=True, default ="")
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
+
     parcours = models.ManyToManyField(Parcours ,  blank=True,  related_name="folders" )  
     
     is_trash = models.BooleanField(default=0, verbose_name="Poubelle ?", editable=False)
@@ -905,9 +835,165 @@ class Folder(models.Model):
     def __str__(self):
         return "{}".format(self.title)
 
+ 
+
+    def isnot_shared(self) :
+        test = False
+        if self.groups.exclude(teacher_id=2480).count()>1:
+            test = True
+        return test
+
+ 
+
+    def is_affect(self, student):
+        nb_relationships = Relationship.objects.filter(parcours=self, exercise__supportfile__is_title=0,
+                                                       students=student, is_publish=1).count()
+        return nb_relationships
+
+
+    def is_lock(self,today):
+        lock = False
+        try :
+            if self.stop < today :
+                lock = True 
+        except :
+            pass
+        return lock
 
 
 
+    def folder_only_students_count(self):
+
+        data = {}
+        only_students = self.students.exclude(user__username__contains="_e-test")
+
+        data["only_students"]= only_students
+        data["nb"]= only_students.count()
+        return data 
+ 
+     
+    def is_task_exists(self):
+        today = timezone.now()
+        test = False
+        if Relationship.objects.filter(parcours__in= self.parcours.filter(is_publish=1),date_limit__gte = today).count() > 0 :
+            test = True
+        for p in self.parcours.filter(is_publish=1):
+            if Customexercise.objects.filter(parcourses= p ,date_limit__gte = today).count() > 0 :
+                test = True
+                break
+        return test 
+
+
+    def min_score(self,student):
+        """
+        min score d'un parcours par élève
+        """
+        data = {}
+        max_tab = []
+        nb_done = 0
+        exercises = set()
+
+        exs = set()
+        nb_exo_in_parcours = 0
+
+        for p in self.parcours.filter(is_publish=1):
+            exos = p.exercises.filter(supportfile__is_title=0, supportfile__is_ggbfile=1 )
+            
+            if exos.count() > 0 : 
+                exercises.update(exos)
+
+            nb_exo_in_parcours +=  p.parcours_relationship.filter(is_publish=1,students=student ).count()
+    
+            for exercise in exercises :
+                maxi = p.answers.filter(student=student, exercise = exercise )
+                if maxi.count()>0 :
+                    maximum = maxi.aggregate(Max('point'))
+                    max_tab.append(maximum["point__max"])
+                    nb_done +=1
+
+        try :
+            stage =  student.user.school.aptitude.first()
+            up = stage.up
+            med = stage.medium
+            low = stage.low
+        except :
+            up = 85
+            med = 65
+            low = 35
+
+        ### Si l'elève a fait tous les exercices du parcours
+        suff = ""
+        if student.user.civilite =="Mme":
+            suff = "e"
+
+        data["colored"] = "red"
+        data["label"] = ""
+
+        if nb_done == nb_exo_in_parcours :
+            data["size"] = "40px"
+          
+            max_tab.sort()
+            try :
+                score = max_tab[0]
+            except :
+                score = None
+
+            data["boolean"] = True
+
+            if score :
+                if score > up :
+                    data["colored"] = "darkgreen"
+                elif score >  med :
+                    data["colored"] = "green"
+                elif score > low :
+                    data["colored"] = "orange"
+                else :
+                    data["colored"] = "red"
+            else :
+                data["colored"] = "red"
+
+
+
+        ### Si l'elève a fait plus de la moitié des exercices du parcours
+        elif nb_done > nb_exo_in_parcours // 2 :
+            data["size"] = "20px"
+
+            max_tab.sort()
+
+            if len(max_tab)>0 :
+                score = max_tab[0]
+            else :
+                score = None
+
+            data["boolean"] = True
+            if score :
+                if score > up :
+                    data["colored"] = "darkgreen"
+                    data["label"] = "Expert"+suff
+                elif score >  med :
+                    data["colored"] = "green"
+                    data["label"] = "Confirmé"+suff
+                elif score > low :
+                    data["colored"] = "orange"
+                    data["label"] = "Amateur"
+                    if student.user.civilite =="Mme": 
+                        data["label"] = "Amatrice"
+                else :
+                    data["colored"] = "red"
+                    data["label"] = "Débutant"+suff
+            else :
+                data["boolean"] = True
+                data["colored"] = "red"
+                data["label"] = "Débutant"+suff
+        else :
+            data["boolean"] = False
+  
+        return data
+
+
+
+    def nb_parcours_is_publish(self):
+        return self.parcours.filter(is_publish=1, is_trash=0).count()
 
 
 

@@ -1,4 +1,4 @@
-from qcm.models import Parcours, Course, Relationship,Customexercise
+from qcm.models import Parcours, Course, Relationship,Customexercise,Folder
 from account.models import Teacher, Student
 from django.core.exceptions import PermissionDenied
 from group.models import Sharing_group
@@ -110,6 +110,18 @@ def parcours_exists(function):
 
 		if Parcours.objects.filter(pk=kwargs['id']).count() == 0 :
 			messages.error(request, "Le parcours demandé n'existe pas")
+			return redirect("index")
+		else :
+			return function(request, *args, **kwargs)
+
+	return wrap 
+
+
+def folder_exists(function):
+	def wrap(request, *args, **kwargs):
+
+		if Folder.objects.filter(pk=kwargs['id']).count() == 0 :
+			messages.error(request, "Le dossier demandé n'existe pas")
 			return redirect("index")
 		else :
 			return function(request, *args, **kwargs)

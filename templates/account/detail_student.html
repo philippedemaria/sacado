@@ -120,12 +120,21 @@
 
         <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"  style="font-size:18px;{% if 'detail_student_parcours' in request.path %}color:#007EE2{% endif %}"> Suivi par Parcours </a>
             <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-                {% for prcrs in parcourses|dictsortreversed:"is_publish" %} <!-- prcrs permet de comparer parcours avec prcrs et d'activer la classe active si affiché -->
-                    <li {% if 'detail_student_parcours/' in request.path and prcrs.id == parcours.id %}  class="active" {% endif %}>
-                        <a href="{% url 'detail_student_parcours'  student.user.id  prcrs.id  %}" {% if not prcrs.is_publish %} style="color:#BBB" {% endif %} >
-                            <i class="fa fa-caret-right"></i> {{ prcrs.title }}    
-                        </a>
+                {% regroup parcourses by subject as subjects %}
+
+                {% for s in subjects   %}  
+                    <li style="background: {{ s.grouper.color }}; color: {{ s.grouper.color|contrast_color }}; padding:5px ; font-size: 16px;" >
+                         {{ s.grouper }}
                     </li>
+  
+                    {% for prcrs in s.list  %}  
+                        <li {% if 'detail_student_parcours/' in request.path and prcrs.id == parcours.id %}  class="active" {% endif %}>
+                            <a href="{% url 'detail_student_parcours'  student.user.id  prcrs.id  %}" {% if not prcrs.is_publish %} style="color:#BBB" {% endif %} >
+                                <i class="fa fa-caret-right"></i> {{ prcrs.title }}    
+                            </a>
+                        </li> 
+                    {% endfor %}
+ 
                 {% endfor %}
             </ul>
         </li>
@@ -195,6 +204,8 @@
             </table>
        
         {% endblock %}
+
+        <div style="height:40px"></div>
         <div class="row">
             <div class="col-sm-12 col-md-12">     
                     <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>

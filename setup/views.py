@@ -23,7 +23,7 @@ from account.models import  User, Teacher, Student  , Parent , Adhesion
 from association.models import Accounting , Detail , Rate , Abonnement , Holidaybook
 from group.models import Group, Sharing_group
 from group.views import student_dashboard
-from qcm.models import Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise, Customanswerbystudent,Writtenanswerbystudent
+from qcm.models import Folder , Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise, Customanswerbystudent,Writtenanswerbystudent
 from sendmail.models import Communication
 from setup.forms import WebinaireForm
 from setup.models import Formule , Webinaire
@@ -131,9 +131,12 @@ def index(request):
             nb_teacher_level = teacher.levels.count()
             relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("date_limit").order_by("parcours")
 
+
+            none_folders = Folder.objects.filter(students=None, is_favorite=1 )
             teacher_parcours = teacher.teacher_parcours
-            parcours_tab = teacher_parcours.filter(Q(is_folder=1)|Q(is_leaf=0), students=None, is_favorite=1, is_archive=0).order_by("is_evaluation") ## Parcours favoris non affectés
-            parcourses = teacher_parcours.filter(is_evaluation=0, is_favorite =1,is_folder=0 , is_archive=0).order_by("-is_publish")
+
+            parcours_tab = teacher_parcours.filter(students=None, is_favorite=1, is_archive=0).order_by("is_evaluation") ## Parcours / évaluation favoris non affectés
+            parcourses = teacher_parcours.filter(is_evaluation=0, is_favorite =1, is_archive=0).order_by("-is_publish")
 
             communications = Communication.objects.values('id', 'subject', 'texte', 'today').filter(active=1).order_by("-id")
 
@@ -143,7 +146,7 @@ def index(request):
  
             template = 'dashboard.html'
             context = {'this_user': this_user, 'teacher': teacher, 'groups': groups,  'parcours': None, 'today' : today , 'timer' : timer , 'nb_teacher_level' : nb_teacher_level , 
-                       'relationships': relationships, 'parcourses': parcourses, 'index_tdb' : index_tdb,
+                       'relationships': relationships, 'parcourses': parcourses, 'index_tdb' : index_tdb, 'none_folders' : none_folders , 
                        'communications': communications, 'parcours_tab': parcours_tab, 'webinaire': webinaire,
                        }
         
@@ -877,7 +880,7 @@ def save_adhesion(request) :
         group.students.add(student)
 
 
-        parcourses = Parcours.objects.filter(level = level, teacher_id = 2480) # 2480 est SacAdoProf
+        parcourses = Parcours.objects.filter(level = level, teacher_id = 2480,is_trash=0) # 2480 est SacAdoProf
         test = attribute_all_documents_to_student(parcourses, student)
 
         students_in.append(student) # pour associer les enfants aux parents

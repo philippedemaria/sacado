@@ -32,7 +32,7 @@
                                     {% endif %} Accéder</a>
                             </div>
                             <div  class="student_vignette_subtitle"> 
-                                {% with group.themes|length as lgt %}   
+                                {% with group.themes.nb as lgt %}   
                                     <i class="fa fa-folder{% if lgt > 0 %}-open{% endif %}"></i> {{ lgt }}   thème{{ lgt|pluralize }} proposé{{ lgt|pluralize }}
                                 {% endwith %}
                             </div>

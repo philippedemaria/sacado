@@ -3,8 +3,8 @@
 
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
 
-        {% if parcours_folder %}
-        <li> <a href="{% url 'create_parcours' parcours_folder.id %}"  > Créer un parcours  </a> </li>
+        {% if folder %}
+        <li> <a href="{% url 'create_parcours' folder.id %}"  > Créer un parcours  </a> </li>
         {% else %}
         <li> <a href="{% url 'create_parcours' 0 %}"  > Créer un parcours <em class="text-danger">externe à un dossier</em></a> </li>
         {% endif %}

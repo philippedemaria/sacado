@@ -273,7 +273,7 @@ class Knowledge(models.Model):
             exercises = Exercise.objects.filter(supportfile=supportfile, knowledge=self)
             som = 0
             for exercise in exercises:
-                if Parcours.objects.filter(exercises=exercise):
+                if Parcours.objects.filter(exercises=exercise,is_trash=0):
                     som += 1
             boolean = som > 0
 
