@@ -1,186 +1,37 @@
-{% extends 'dashboard.html' %}
+{% extends 'qcm/list_parcours.html' %}
 {% load static %}
 {% load widget_tweaks %}
 {% load item_tags %}
 
 
 {% block require %}
- 
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2_mini.js' %}"></script>
- 
     <script>
         require(['script/ajax-parcours']);
     </script> 
-
-
 {% endblock %}
 
  
 
 {% block page_title %}
-    <i class="fa fa-trophy"></i> Mes évaluations 
+    <i class="fa fa-folder"></i> Mes dossiers 
 {% endblock %}
 
 {% block page_menu_right %}
- 
-   <li><a href="{% url 'evaluations_archives' %}"  class="no_button"><i class="fa fa-archive"></i> Evaluation{{ nb_archive|pluralize }} archivée{{ nb_archive|pluralize }} ({{ nb_archive }})</a></li> 
-{% include 'qcm/submenu_creation_evaluation.html' %} 
 
+    <li><a href="{% url 'create_parcours' 0 %}" class="btn btn-new">Nouvelle évaluation</a></li>
+    <li><a href="{% url 'create_folder' 0 %}" class="btn btn-green">Nouveau dossier</a></li>
+
+    <li><a href="{% url 'evaluations_archives' %}"  class="no_button"><i class="fa fa-archive"></i> Evaluation{{ nb_archive|pluralize }} archivé{{ nb_archive|pluralize }} ({{ nb_archive }})</a></li>
 {% endblock %}
 
 
+{% block typo_eval_parcours  %}
+    <h1 class="thin" style="margin-bottom:0px;"><i class="fa fa-trophy"></i> Mes évaluations</h1> 
+{% endblock  %}
 
-
-{% block body  %} 
-<style>
-body{
-    overflow: hidden;
-}
-</style> 
-<section class="content_list"> 
+{% block modal_boxes  %} 
  
-<div class="row">    
-   <div class="col-sm-12 col-md-12">
-        <table class="table table-hovered standard_tab_sort"  style="width:100%">
-            <thead> 
-                <tr> 
-                    <th></th>                  
-                    <th style="width:150px">Nom</th>
-                    <th>Modif.</th>
-                    <th>Niveau</th>
-                    <th>Groupes affectés</th>
-                    <th>Elèves</th>
-                    <th style="width:130px">Publication</th>                    
-                </tr> 
-            </thead>
-            <tbody>
-            {% for parcours in parcourses %}
-                    <tr style="{% if not parcours.is_publish %}background-color:#F4F4F4;{% endif  %}">
-                        <td style="text-align:center">
-                            <span class="fa-stack">
-                              <i class="fa fa-{% if parcours.is_evaluation %}bullseye{% else %}square{% endif  %} fa-2x" style="color: {{ parcours.color }} ;"></i>
-                              {% if parcours.is_favorite %}<i class="fa fa-star fa-stack-1x" style="font-size: 12px; color:#FFF" ></i>{% endif  %}
-                            </span>
-                        </td>  
-                        <td>
-                            <a href="{% url 'show_evaluation' parcours.id %}" > {{ parcours.title }}
-                                {% get_is_lock parcours today as is_lock %} 
-                                {% if is_lock %}
-                                <span class="helper_tip"><i class="fa fa-lock"></i>
-                                    <div class="helper_tip_text_right" >Le parcours est verrouillé. Il n'est plus possible de soumettre des exercices.<br/>
-                                        <span class="text-danger"> Verrouillée du
-                                                {{  parcours.start|date:"d N Y H:i"  }}   
-                                                {% if parcours.stop %}
-                                                   - {{  parcours.stop|date:"d N Y H:i"  }}     
-                                                {% endif %}                                
-
-                                        </span>
-                                    </div>
-                                </span>
-                                {% endif %}
-
-                            </a>
-
-
-                            
-                             <div style="font-size:14px;margin-top:-5px;">
-                                {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }} - {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }} {% endif %}min. 
-                            </div>
-                        </td>  
-                        <td>
-                            {% if parcours.is_evaluation %}
-                            <a href="{% url 'update_evaluation' parcours.id 0 %}" > 
-                            {% else %}
-                            <a href="{% url 'update_parcours' parcours.id 0 %}" >
-                            {% endif %}<i class="fa fa-edit" aria-hidden="true"></i></a>
-                        </td> 
-                        <td>
-                            {% for l in  parcours.level_list  %}
-                                <small>{{ l }}{% if not forloop.last %}, {% endif %}</small>
-                            {% endfor %}
-                        </td> 
-                        <td>
-                            {% for g in  parcours.group_list  %}
-                                {% get_parcours_group_students_count parcours g as nb_st %}
-                                {% for g in  parcours.group_list  %}
-                                    {% get_parcours_group_students_count parcours g as nb_st %}
-                                    <a href="{% url 'list_parcours_group' g.id %}"><small>{{ g.name }} <small>({{ nb_st.nb}})</small>{% if not forloop.last %}, {% endif %}</small></a>
-                                {% endfor %}
-                            {% empty %}
-                                {% if parcours.students.count %}
-
-
-                                    <small>
-                                    {% if parcours.shared_group_list|length == 0  %}
-                                        <form action="#" method="POST">
-                                            Ce parcours contient des élèves qui n'appartiennent pas à vos groupes.
-                                            <a href="#groupe_name_anchor" class="vue menuactionparcours" data-toggle='modal' 
-                                                data-is_disabled="{% if parcours.shared_group_list|length > 0  %}1{% else %}0{% endif %}" 
-                                                 data-parcours_id='{{ parcours.id }}' data-target='#listing'> 
-                                                 > Retirer des élèves de ce parcours
-                                            </a>
-                                        </form>
-                                    {% else %}
-                                         Groupe co-animé
-                                    {% endif %}
-                                    </small>
-
-                                {% else %}
-                                    <a href="{% url 'update_evaluation' parcours.id 0 %}" class="btn btn-xs btn-danger">
-                                        <i class="fa fa-users"></i> Affecter des élèves à {% if parcours.is_evaluation %}cette évaluation{% else %}ce parcours{% endif %}
-                                    </a>
-                                {% endif %}
-                            {% endfor %} 
-                        </td>
-                        <td>
-                            <form action="#" method="POST">
-                                {% csrf_token %}
-                                <a  href="#groupe_name_anchor" class="vue menuactionparcours" data-toggle='modal' style="float:left; margin-right:10px"  
-                                    data-parcours_id='{{ parcours.id }}' data-target='#listing'> 
-                                    <span class="label label-default"> {{ parcours.students.count }}<i class="fa fa-users"></i></span>
-                                </a>
-                            </form>
-                        </td>
-                        <td>
-                            <form action="" method="POST" enctype='multipart/form-data'>     
-                                {% csrf_token %}
-                                <div class="btn-group"  style="padding:0px;margin:0px;">
-                                    <a href="#" class="btn btn-default btn-publisher publisher"  data-from="1" id="parcours_publisher{{parcours.id}}" 
-                                        data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
-                                        <i class="fa fa-circle-o-notch"></i>
-                                    </a><span class="btn btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %}" id="parcours_statut{{parcours.id}}" style="cursor:auto" >  
-                                      {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
-                                    </span>
-                                </div>
-                            </form>
-
-                        </td>
-                    </tr>
-            {% endfor  %} 
-            </tbody>
-        </table>
-    </div>
-</div>
- 
-</section>
-
-    <div class="modal fade bd-example-modal-lg" id="listing" tabindex="-1" role="dialog" aria-labelledby="listing" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>                
-                    <h5 class="modal-title">Liste des élèves - <span id="modal_group_name"></span></h5>
-                </div>
-                <div class="modal-body">
-                    <div id="list_students"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
 {% endblock  %}   
 
 

@@ -793,11 +793,6 @@ class Parcours(ModelWithCode):
         return test
 
  
-
-
-
-
-
 class Folder(models.Model):
 
     title = models.CharField(max_length=255, verbose_name="Titre")
@@ -872,16 +867,7 @@ class Folder(models.Model):
         return data 
  
      
-    def is_task_exists(self):
-        today = timezone.now()
-        test = False
-        if Relationship.objects.filter(parcours__in= self.parcours.filter(is_publish=1),date_limit__gte = today).count() > 0 :
-            test = True
-        for p in self.parcours.filter(is_publish=1):
-            if Customexercise.objects.filter(parcourses= p ,date_limit__gte = today).count() > 0 :
-                test = True
-                break
-        return test 
+ 
 
 
     def min_score(self,student):
@@ -993,11 +979,62 @@ class Folder(models.Model):
 
 
     def nb_parcours_is_publish(self):
-        return self.parcours.filter(is_publish=1, is_trash=0).count()
+        return self.parcours.filter(is_evaluation=0, is_publish=1, is_trash=0).count()
+
+
+ 
+ 
 
 
 
+    def data_parcours_evaluations(self):
+        data = {}
 
+        data["parcours_exists"] = False
+        data["evaluations_exists"] = False
+        data["is_students"] = False
+        data["is_folder_courses_exists"] = False
+        data["is_folder_task_exists"] = False
+
+
+        parcours        = self.parcours.filter(is_evaluation=0, is_trash=0) 
+        evaluations     = self.parcours.filter(is_evaluation=1, is_trash=0)
+        nb_parcours     = parcours.count()
+        nb_evaluations  = evaluations.count()
+
+        data["parcours"]       = parcours 
+        data["evaluations"]    = evaluations
+        data["nb_parcours"]    = nb_parcours
+        data["nb_evaluations"] = nb_evaluations
+
+        if nb_parcours      :
+            data["is_parcours_exists"]    = True
+        if nb_evaluations   :
+            data["is_evaluations_exists"] = True
+        if self.students.exclude(user__username__contains= "_e-test") :
+            data["is_students"]        = True 
+ 
+        test = False
+        for p in self.parcours.all() :
+            if p.course.count() > 0 :
+                test = True
+                break
+        data["is_folder_courses_exists"] = test
+
+
+        today = timezone.now()
+        tested = False
+        if Relationship.objects.filter(parcours__in= self.parcours.filter(is_publish=1),date_limit__gte = today).count() > 0 :
+            tested = True
+        for p in self.parcours.filter(is_publish=1):
+            if Customexercise.objects.filter(parcourses= p ,date_limit__gte = today).count() > 0 :
+                tested = True
+                break
+
+        data["is_folder_task_exists"] = tested
+
+        return data
+ 
 
 
 

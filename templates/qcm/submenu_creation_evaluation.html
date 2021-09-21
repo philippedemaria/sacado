@@ -4,15 +4,23 @@
 
 <li class="dropdown">
     <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new-evaluation"> Nouvelle évaluation <b class="caret"></b> </a>
-
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-        <li><a href="{% url 'create_evaluation' %}"> Créer une évaluation</a> </li> 
-        <li><a href="{% url 'all_parcourses' 1 %}"> Récupérer un évaluation mutualisée</a> </li>         
-        
+        {% if folder %}
+        <li> <a href="{% url 'create_evaluation' folder.id %}"  > Créer un évaluation  </a> </li>
+        {% else %}
+        <li> <a href="{% url 'create_evaluation' 0 %}"  > Créer un évaluation <em class="text-danger">externe à un dossier</em></a> </li>
+        {% endif %}
+        <li>{% if sacado_asso %} 
+                <a href="{% url 'all_parcourses' 1 %}" > Récupérer un parcours mutualisé</a>
+            {% else %}
+                <a href="#"  class="no_sacado_asso" > Récupérer un parcours mutualisé</a> 
+            {% endif %}
+        </li>
+        {% if '/parcours_group/' in request.path  %}
+        <li> <a href="#" data-toggle="modal" data-target="#parcours_default_modal"> Récupérer un parcours par défaut</a></li>
+        {% endif %} 
     </ul>
 </li>  
-
- 
 {% else %}
  
 
@@ -31,5 +39,3 @@
 
  
 {% endif %}
-
- 

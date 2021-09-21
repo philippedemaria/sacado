@@ -5,6 +5,7 @@
 
 <div  class="box box-widget widget-user-2 folder_sorter"  data-parcours_id ="{{folder.id}}"  
       style="cursor: move;{% if folder.vignette %}background-image: url('{{ folder.vignette.url }}'); background-size: cover; {% endif %}background-color:{{folder.color }};">
+    {% with folder.data_parcours_evaluations as dataset %}
     <div class="handler widget-user-header">
         <!-- Add signet to folder -->
         <img src="{% static 'img/rabat_dossier.png' %}" class="rabat_dossier" />
@@ -34,16 +35,30 @@
         </div>
         </a> 
 
-        <!-- Fenetre accessible par l'icone qui montre les sous folder  -->
+ 
+        <!-- Fenetre accessible par l'icone qui montre les parcours  -->
         <div class="group_show no_visu_on_load" id="folder{{folder.id }}" style="font-size:12px; color:#AAA"> 
             <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ folder.color }};">
                 <a href="#" class="subparcours_show_close pull-right" data-parcours_id="{{folder.id}}" style="color:{{ folder.color }};"><i class="fa fa-times"></i></a>
-                Dossier 
+                Parcours 
             </h4> 
-            {% for p in folder.parcours.all %} 
+            {% for p in dataset.parcours   %} 
                 <li class="sans_puce" {% if p.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ p.title }}   </li> 
             {% endfor %}
         </div>
+        <!-- Fenetre accessible par l'icone qui montre les evaluations  -->
+        <div class="group_show no_visu_on_load" id="evaluations_in{{folder.id }}" style="font-size:12px; color:#AAA"> 
+            <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ folder.color }};">
+                <a href="#" class="subparcours_show_close pull-right" data-parcours_id="{{folder.id}}" style="color:{{ folder.color }};"><i class="fa fa-times"></i></a>
+                Evaluations 
+            </h4> 
+            {% for p in dataset.evaluations  %} 
+                <li class="sans_puce" {% if p.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ p.title }}   </li> 
+            {% endfor %}
+        </div>
+
+
+
         <!-- Fenetre accessible par le disc   -->
 
         <div class="overlay  overlay_show{{folder.id }} no_visu_on_load" > 
@@ -91,35 +106,24 @@
 
                 {% if folder.title|length > 20 %}
                     <span class="helper_tip" style="color:{{ folder.color|contrast_color }};font-size:20px">{{ folder.title|truncatechars:"22" }}<div class="helper_tip_text_right">{{ folder.title }}</div></span>
-                
                     <span style="font-size:12px"> {{ folder.parcours.count}} <i class="fa fa-th"></i> </span>
                 {% else %}
                     {{ folder.title}}
-
                     <span style="font-size:12px"> {{ folder.parcours.count}} parcours </span>
                 {% endif %}
-
-
-
-
-            
 
                 {% if folder.is_folder_real_time %}
                     <sup class="white" title="En composition" style="font-size:12px" >
                         <i class="fa fa-fw fa-clock"></i> 
                     </sup>
                 {% endif %}
-
             </a>
- 
-
- 
         </div>
     </div>
 
     <!-- box-footer DES FONCTIONNALITES  -->
 
- 
+
     <div class="box-footer" style="position: relative">
         <div class="dossier">
             D<br/>O<br/>S<br/>S<br/>I<br/>E<br/>R 
@@ -139,11 +143,18 @@
             <div class="col-xs-1 col-md-1 col-lg-1">  
             </div>
             <div class="col-xs-5 col-md-5 col-lg-5">
-                <a href="{% url 'show_course' 0 folder.id   %}"  class="edit" {% if folder.is_folder_courses_exists %} style="color:{{ folder.color }}" {% endif %} ><i class="fa fa-fw fa-desktop"></i> <span class="label_icon">Cours </span> 
+ 
+                <span href="#"  class="edit click_evaluations_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_evaluations_exists   %} style="color:{{ folder.color }}" {% endif %}>
+                    <i class="fa fa-fw fa-trophy"></i> <span class="label_icon">Evaluations</span> 
+                </span>
+
+                <a href="{% url 'create_evaluation' folder.id %}" style="font-size: 14px" class="edit" title="Ajouter un évaluation à ce dossier">   
+                     <i class="fa fa-plus-circle"></i> 
                 </a>
+
             </div> 
             <div class="col-xs-5 col-md-5 col-lg-5">
-                <a  href="{% url 'detail_task_parcours' folder.id 0 0 %}"   class="edit" {% if folder.is_task_folder_exists %} style="color:{{ folder.color }}" {% endif %}>
+                <a  href="{% url 'detail_task_parcours' folder.id 0 0 %}"   class="edit" {% if dataset.is_folder_task_exists %} style="color:{{ folder.color }}" {% endif %}>
                     {% if not folder.is_task_exists %}<i class="fa fa-fw fa-calendar"></i>{% else %}<i class="fa fa-fw fa-calendar-check"></i>{% endif %}
                      <span class="label_icon">Tâches</span>
                 </a> 
@@ -152,20 +163,31 @@
         <div class="row">
             <div class="col-xs-1 col-md-1 col-lg-1"> </div>
             <div class="col-xs-5 col-md-5 col-lg-5">
-                <span href="#"  class="edit click_subparcours_show"   data-parcours_id="{{folder.id }}"  {% if folder.leaf_parcours.all|length > 1 %} style="color:{{ folder.color }}" {% endif %}>
-                    <i class="fa fa-fw fa-folder{% if folder.parcours.all|length > 1 %}-open{% endif%}"></i> <span class="label_icon">Parcours</span> 
+                <span href="#"  class="edit click_parcours_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_parcours_exists %} style="color:{{ folder.color }}" {% endif %}>
+                    <i class="fa fa-fw fa-folder{% if dataset.nb_parcours > 1 %}-open{% endif%}"></i> <span class="label_icon">Parcours</span> 
                 </span>
 
-                <a href="{% url 'create_parcours' folder.id %}" style="color:{{ folder.color }}; font-size: 14px" title="Ajouter un parcours à ce dossier">   
-                     <i class="fa fa-plus-square"></i> 
+                <a href="{% url 'create_parcours' folder.id %}" style="font-size: 14px" class="edit" title="Ajouter un parcours à ce dossier">   
+                     <i class="fa fa-plus-circle"></i> 
                 </a>
 
             </div> 
             <div class="col-xs-5 col-md-5 col-lg-5">
-                <span href="#" class="edit group_shower" data-parcours_id="{{folder.id }}" {% if folder.students.count > 1 %} style="color:{{ folder.color }}" {% endif %} ><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
+
+                <a href="{% url 'show_course' 0 folder.id   %}"  class="edit" {% if dataset.is_folder_courses_exists %} style="color:{{ folder.color }}" {% endif %} >
+                    <i class="fa fa-fw fa-desktop"></i>  <span class="label_icon">Cours</span>
+                </a>
+
+
+
+                <span href="#" class="edit group_shower pull-right" data-parcours_id="{{folder.id }}" {% if dataset.is_students %} style="color:{{ folder.color }}" {% endif %} >
+                    <i class="fa fa-fw fa-users"></i>  
                 </span>
+
+
             </div>                    
         </div> 
     </div>
+    {% endwith %}
  
 </div>   

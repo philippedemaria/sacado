@@ -780,9 +780,9 @@ define(['jquery','bootstrap'], function ($) {
  
 
 
-        $(".click_subparcours_show").on('click', function (event) {
+        $(".click_parcours_show").on('click', function (event) {
             let parcours_id = $(this).attr("data-parcours_id");
-            $("#subparcours_show"+parcours_id).toggle(500);
+            $("#folder"+parcours_id).toggle(500);
             if( $(this).find("i").hasClass("fa-folder") ) 
 
                 { $(this).find("i").removeClass("fa-folder").addClass("fa-folder-open");}
@@ -791,7 +791,10 @@ define(['jquery','bootstrap'], function ($) {
 
         });
 
-
+        $(".click_evaluations_show").on('click', function (event) {
+            let parcours_id = $(this).attr("data-parcours_id");
+            $("#evaluations_in"+parcours_id).toggle(500);
+        });
 
         // ====================================================================================================================
         // ====================================================================================================================

@@ -88,7 +88,7 @@
 
 <li class="sans_puce">
 {% if sacado_asso %}
-<a href="{% url 'create_evaluation' %}" class="btn btn-primary full_width">Créer une évaluation</a>
+<a href="{% url 'create_evaluation' 0 %}" class="btn btn-primary full_width">Créer une évaluation</a>
 {% else %}
 <a href="#" class="btn btn-default full_width"  style="cursor:not-allowed" title="Version établissement requise." >Créer une évaluation</a> 
 {% endif  %}

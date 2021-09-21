@@ -448,7 +448,7 @@ def create_student_profile_inside(request, nf) :
         user,created = User.objects.get_or_create(username=username , defaults= { 'last_name' : last_name, 'first_name' : first_name,  'password' : password , 'email' : email, 'user_type' : 0})
 
         if created :
-            mesg = "Vous avez demandé un profil élève. Identifiant : "+username+"\n\n Mot de passe : sacado2020 \n\n Ce mot de passe est générique. N'oubliez pas de le modifier. \n\n Merci." 
+            mesg = "Bonjour\n\nVous venez de créer un groupe avec un profil élève. Identifiant : "+username+"\n\n Mot de passe : sacado2020 \n\n Ce mot de passe est générique. N'oubliez pas de le modifier. \n\n Merci." 
             try :
                 send_mail("Identifiant Profil élève",  mesg , settings.DEFAULT_FROM_EMAIL , [email] )
             except :

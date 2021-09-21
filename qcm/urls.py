@@ -18,7 +18,7 @@ urlpatterns = [
     path('evaluations_archives', list_evaluations_archives, name='evaluations_archives'),
 
     path('parcours_create/<int:idf>/', create_parcours, name='create_parcours'),
-    path('parcours_create_evaluation', create_evaluation, name='create_evaluation'),
+    path('parcours_create_evaluation/<int:idf>/', create_evaluation, name='create_evaluation'),
     path('parcours_evaluation_update/<int:id>/<int:idg>/', update_evaluation, name='update_evaluation'),
     path('parcours_evaluation_show/<int:id>/', show_evaluation, name='show_evaluation'), 
  
@@ -111,7 +111,6 @@ urlpatterns = [
 
     #####################################  Modifie les relations par parcours et exercices  ##############################################################  
     path('<int:idp>/<int:ide>/', execute_exercise, name='execute_exercise'),#modif idp en id pour la sécurité 
-    path('delete_evaluation/<int:id>/', delete_evaluation, name='delete_evaluation'), 
     ######################################################################################################################################################
 
     path('associate_parcours/<int:id>/', associate_parcours, name='associate_parcours'),  # id est l'id du groupe auquel le parcours est associé

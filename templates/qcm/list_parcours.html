@@ -15,17 +15,16 @@
 
 {% block page_title %}
     <i class="fa fa-folder"></i> Mes dossiers 
-
 {% endblock %}
 
-{% block page_menu_right %}
 
+
+
+
+{% block page_menu_right %}
     <li><a href="{% url 'create_parcours' 0 %}" class="btn btn-new">Nouveau Parcours</a></li>
     <li><a href="{% url 'create_folder' 0 %}" class="btn btn-green">Nouveau dossier</a></li>
-
     <li><a href="{% url 'archives' %}"  class="no_button"><i class="fa fa-archive"></i> Dossier et parcours archivé{{ nb_archive|pluralize }} ({{ nb_archive }})</a></li>
-
-    
 {% endblock %}
 
 
@@ -196,7 +195,7 @@
     </div>
     <div class="row">    
         <div class="col-sm-12 col-md-12">
-            <h1 class="thin" style="margin-bottom:0px;"><i class="fa fa-th"></i> Mes parcours</h1> 
+            {% block typo_eval_parcours  %}<h1 class="thin" style="margin-bottom:0px;"><i class="fa fa-th"></i> Mes parcours</h1> {% endblock  %}
         </div>
     </div>
     <div class="row">    
@@ -287,10 +286,10 @@
             </div>
         </div>
 {% endif  %}
-
- 
-
 </section>
+
+
+
 
 <div class="modal fade bd-example-modal-lg" id="listing" tabindex="-1" role="dialog" aria-labelledby="listing" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -308,7 +307,7 @@
     </div>
 </div>
 
-
+{% block modal_boxes  %} 
 <div class="modal fade" id="parcours_default_modal" tabindex="-1" role="dialog" aria-labelledby="parcours_default_modal">
     <div class="modal-dialog" role="document" style="width:70%">
         <div class="modal-content" >
@@ -339,7 +338,10 @@
         </div>
     </div>
 </div>
-{% endblock  %}   
+{% endblock  %}  
 
+
+
+{% endblock  %}   
 
  
