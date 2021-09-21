@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 urlpatterns = [
 
 
-    #path('remove_parcours_folder', remove_parcours_folder, name='remove_parcours_folder'),
+    path('remove_parcours_folder', remove_parcours_folder, name='remove_parcours_folder'),
     #path('get_folder_to_folder', get_folder_to_folder, name='parcours'),
 
     path('parcours', list_parcours, name='parcours'),

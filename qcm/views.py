@@ -109,18 +109,18 @@ from general_fonctions import *
 
 
 
-# def remove_parcours_folder(request):
+def remove_parcours_folder(request):
 
-#     old_folders = Parcours.objects.filter(is_folder=1) 
+    old_folders = Parcours.objects.filter(is_folder=1,teacher=1) 
 
-#     for old_folder in old_folders :
-#         #old_folder.groups.clear()
-#         #old_folder.students.clear()
-#         #old_folder.coteachers.clear()
-#         Parcours.objects.get(pk=old_folder.id).update(is_trash=1)
+    for old_folder in old_folders :
+        old_folder.groups.clear()
+        old_folder.students.clear()
+        old_folder.coteachers.clear()
+        Parcours.objects.filter(pk=old_folder.id).update(is_trash=1)
 
 
-#     return redirect('admin_tdb' )
+    return redirect('admin_tdb' )
 
  
  
