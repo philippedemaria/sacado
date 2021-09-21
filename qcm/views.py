@@ -111,7 +111,7 @@ from general_fonctions import *
 
 def remove_parcours_folder(request):
 
-    old_folders = Parcours.objects.filter(is_folder=1,teacher=1) 
+    old_folders = Parcours.objects.filter(is_folder=1) 
 
     for old_folder in old_folders :
         old_folder.groups.clear()
@@ -120,7 +120,7 @@ def remove_parcours_folder(request):
         Parcours.objects.filter(pk=old_folder.id).update(is_trash=1)
 
 
-    return redirect('admin_tdb' )
+    return redirect('index' )
 
  
  
