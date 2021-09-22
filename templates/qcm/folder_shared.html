@@ -3,31 +3,27 @@
 {% load item_tags %}
 
 <div  class="box_shared box-widget widget-user-2" 
-    style="{% if parcours.vignette %}background-image: url('{{ parcours.vignette.url }}'); background-size: cover;{% endif %}; background-color:{{parcours.color }}">
+    style="{% if folder.vignette %}background-image: url('{{ folder.vignette.url }}'); background-size: cover;{% endif %}; background-color:{{folder.color }}">
  
     <div class="handler widget-user-header">
-        {% if parcours.is_evaluation %}   
-            <div class="icon_evaluation">
-                <i class="fa fa-bullseye"></i> 
-            </div>
-        {% endif %}
-        {% if parcours.vignette %}                
-            <div class="box_title_underlay_vignette" style="background-color:{{ parcours.color }};">
+ 
+        {% if folder.vignette %}                
+            <div class="box_title_underlay_vignette" style="background-color:{{ folder.color }};">
             </div> 
         {% endif  %}
         <div class="box_title_vignette"> 
-            <span class='thin' style="color:{{ parcours.color|contrast_color }};">
-                {{ parcours.title|truncatechars:"28" }}
+            <span class='thin' style="color:{{ folder.color|contrast_color }};">
+                {{ folder.title|truncatechars:"28" }}
             </span>
         </div>
     </div>
     <div class="box_shared_footer">
         <div class="row box_shared_label"> 
             <div class="col-lg-12 col-xs-12" style="font-variant:small-caps; font-size: 16px">
-                <b>{{ parcours.subject.name }}</b>
+                <b>{{ folder.subject.name }}</b>
 
 
-                    <a href="{% url 'clone_folder' parcours.id  %}" style="font-variant:small-caps; font-size: 12px;margin-left: 5px"  class="pull-right edit" title="Cloner le dossier"  > <i class="fa fa-clone"></i> </a>                      
+                    <a href="{% url 'clone_folder' folder.id  %}" style="font-variant:small-caps; font-size: 12px;margin-left: 5px"  class="pull-right edit" title="Cloner le dossier"  > <i class="fa fa-clone"></i> </a>                      
 
 
 
@@ -40,12 +36,12 @@
         <div class="row box_shared_label_last"> 
             <div class="col-lg-6 col-xs-6">
  
-                {{ parcours.leaf_parcours.count }} parcours 
+                {{ folder.parcours.count }} parcours 
  
             </div> 
  
             <div class="col-lg-6 col-xs-6">      
-                 {{ parcours.author}} 
+                 {{ folder.author}} 
             </div> 
         </div>
     </div>
