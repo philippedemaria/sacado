@@ -17,6 +17,9 @@
 
 {% block page_title %}
      <a href="{% url 'admin_tdb' %}"> <i class="fa fa-cloud"></i></a> {{ school.name}} <img src="{% static 'img/angle-right.png' %}"/> Groupes 
+
+
+     <a href="{% url 'print_school_ids' %}" class="btn btn-default"><i class="fa fa-list"></i>  Télécharger les identifiants par groupe</a>
 {% endblock %}
 
 {% block page_menu_right %}

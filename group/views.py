@@ -1723,6 +1723,75 @@ def print_list_ids(request, id):
 
  
 
+def print_school_ids(request):
+    """ Imprime la liste des identifiants par groupe """
+    school = request.user.school
+    teacher = request.user
+ 
+
+    if request.user.is_manager  :
+
+        users = school.users.filter(user_type=2)
+        groups = Group.objects.filter(teacher__user__in=users).order_by("level__ranking")
+ 
+     
+        elements = []        
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="Liste_identifiant_SACADO_Etablissement.pdf"'
+        doc = SimpleDocTemplate(response,   pagesize=A4, 
+                                            topMargin=0.3*inch,
+                                            leftMargin=0.3*inch,
+                                            rightMargin=0.3*inch,
+                                            bottomMargin=0.3*inch     )
+
+        sample_style_sheet = getSampleStyleSheet()
+
+
+        normal = ParagraphStyle(name='Normal',fontSize=12,)    
+        style_cell = TableStyle(
+                [
+                    ('SPAN', (0, 1), (1, 1)),
+                    ('TEXTCOLOR', (0, 1), (-1, -1),  colors.Color(0,0.7,0.7))
+                ]
+            )
+ 
+        for group in groups :
+            teacher = Teacher.objects.get(user=request.user)
+
+
+            logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
+            logo_tab = [[logo, "SACADO "+group.name+"\nListes de identifiants par élève" ]]
+            logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
+            logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))
+            elements.append(logo_tab_tab)
+            elements.append(Spacer(0, 0.1*inch))
+         
+            dataset  = [(" ", "Nom ","Prénom", "Identifiant")]
+         
+
+            i = 1
+            for student in group.students.exclude(user__username__contains= "_e-test").order_by("user__last_name") :
+                
+                dataset.append((i, student.user.last_name.capitalize() , student.user.first_name.capitalize() , student.user.username))
+                i +=1
+
+            table = Table(dataset, colWidths=[0.3*inch,2*inch,2*inch,2*inch], rowHeights=20)
+            table.setStyle(TableStyle([
+            ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
+            ('BOX', (0,0), (-1,-1), 0.25, colors.black),
+            ('BACKGROUND',(0,0), (3,0),colors.gray),
+            ])) 
+            elements.append(table)
+            elements.append(PageBreak())
+
+        doc.build(elements) 
+
+        return response
+    else :
+        messages.error(request,"Vous n'êtes pas autorisé à imprimer les listes d'identifiants.")
+        return redirect("school_groups")
+
+
 
 
 

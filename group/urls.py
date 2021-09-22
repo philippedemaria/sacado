@@ -26,6 +26,7 @@ urlpatterns = [
     
     path('print_ids/<int:id>/', print_ids, name='print_ids'),
     path('print_list_ids/<int:id>/', print_list_ids, name='print_list_ids'),
+    path('print_school_ids', print_school_ids, name='print_school_ids'),
 
     path('task_group/<int:id>/', task_group, name='task_group'),
 
