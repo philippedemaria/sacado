@@ -49,9 +49,9 @@
                                 <td>{{ accounting.chrono }}</td>
                                 <td>{{ accounting.objet }}</td>                                
                                 <td>{{ accounting.amount }} €</td>
-                                <td>{% if accounting.acting %}Payé le {{ accounting.acting }}{% else %} En attente de paiement {% endif %}</td>
+                                <td>{% if accounting.date_payment %}Payé le {{ accounting.date_payment }}{% else %} En attente de paiement {% endif %}</td>
                                 <td>
-                                    {% if accounting.acting %}
+                                    {% if accounting.date_payment %}
                                         <a href="{% url 'print_bill_school' accounting.id %}"> Imprimer </a>
                                     {% else %} 
                                         <a href="{% url 'print_accounting' accounting.id %}"  class="btn btn-xs btn-primary"> Imprimer le devis </a>
