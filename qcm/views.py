@@ -934,7 +934,10 @@ def ajax_individualise(request):
     data = {}
     teacher = Teacher.objects.get(user= request.user)
     parcours = Parcours.objects.get(pk = parcours_id)
-    statut = request.POST.get("statut") 
+    statut = request.POST.get("statut")
+
+    is_checked = request.POST.get("is_checked")
+
 
     if not authorizing_access(teacher,parcours , True ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
@@ -942,126 +945,248 @@ def ajax_individualise(request):
 
     custom = int(request.POST.get("custom") )
 
-    if custom :
-        customexercise = Customexercise.objects.get(pk = exercise_id )
 
-        if student_id == 0 : 
-             
-            if statut=="true" or statut == "True" :
-                try :
-                    som = 0
-                    for s in parcours.students.all() :
-                        if Customanswerbystudent.objects.filter(student = s , customexercise = customexercise).count() == 0 :
-                            customexercise.students.remove(s)
-                            som +=1
-                except :
-                    pass
+    if is_checked == "true" :
 
-                statut = 0
-                data["statut"] = "False"
-                data["class"] = "btn btn-danger"
-                data["noclass"] = "btn btn-success"
-                if som == 0 :
-                    data["alert"] = True
+        if custom :
+
+            for customexercise in parcours.parcours_customexercises.filter(is_publish=1 ):
+                if student_id == 0 : # affecte à tous les élèves 
+
+                    if statut=="true" or statut == "True" :
+                        try :
+                            som = 0
+                            for s in parcours.students.all() :
+                                if Customanswerbystudent.objects.filter(student = s , customexercise = customexercise).count() == 0 :
+                                    customexercise.students.remove(s)
+                                    som +=1
+                        except :
+                            pass
+
+                        statut = 0
+                        data["statut"] = "False"
+                        data["class"] = "btn btn-default"
+                        data["noclass"] = "btn btn-success"
+                        if som == 0 :
+                            data["alert"] = True
+                        else :
+                            data["alert"] = False 
+                    else : 
+                        try :
+                            customexercise.students.set(parcours.students.all())
+                        except :
+                            pass
+                        statut = 1    
+                        data["statut"] = "True"
+                        data["class"] = "btn btn-success"
+                        data["noclass"] = "btn btn-default"
+                        data["alert"] = False  
                 else :
-                    data["alert"] = False 
-            else : 
-                try :
-                    customexercise.students.set(parcours.students.all())
-                except :
-                    pass
-                statut = 1    
-                data["statut"] = "True"
-                data["class"] = "btn btn-success"
-                data["noclass"] = "btn btn-danger"
-                data["alert"] = False   
+
+                    student = Student.objects.get(pk = student_id) 
+                    if statut=="true" or statut == "True":
+                        try :
+                            if Customanswerbystudent.objects.filter(student = student , customexercise = customexercise).count() == 0 :
+                                customexercise.students.remove(student)
+                                data["alert"] = False
+                            else :
+                                data["alert"] = True                        
+                        except :
+                            pass
+                        statut = 0
+                        data["statut"] = "False"
+                        data["class"] = "btn btn-default"
+                        data["noclass"] = "btn btn-success" 
+                    else:
+                        statut = 1
+                        try :
+                            customexercise.students.add(student) 
+                        except :
+                            pass
+                        data["statut"] = "True"
+                        data["class"] = "btn btn-default"
+                        data["noclass"] = "btn btn-danger"
+                        data["alert"] = False   
+            
         else :
-            student = Student.objects.get(pk = student_id) 
-            if statut=="true" or statut == "True":
-                try :
-                    if Customanswerbystudent.objects.filter(student = student , customexercise = customexercise).count() == 0 :
-                        customexercise.students.remove(student)
+            for relationship in parcours.parcours_relationship.filter(is_publish=1 ) : 
+                if student_id == 0 :  
+                    if statut=="true" or statut == "True" :
+                        somme = 0
+                        try :
+                            for s in parcours.students.all() :
+                                if Studentanswer.objects.filter(student = s , exercise = exercise, parcours = relationship.parcours).count() == 0 :
+                                    relationship.students.remove(s)
+                                    somme +=1
+                        except :
+                            pass
+                        statut = 0
+                        data["statut"] = "False"
+                        data["class"] = "btn btn-default"
+                        data["noclass"] = "btn btn-success"
+                        if somme == 0 :
+                            data["alert"] = True
+                        else :
+                            data["alert"] = False
+
+                    else : 
+                        relationship.students.set(parcours.students.all())
+                        statut = 1    
+                        data["statut"] = "True"
+                        data["class"] = "btn btn-success"
+                        data["noclass"] = "btn btn-default"
                         data["alert"] = False
-                    else :
-                        data["alert"] = True                        
-                except :
-                    pass
-                statut = 0
-                data["statut"] = "False"
-                data["class"] = "btn btn-danger"
-                data["noclass"] = "btn btn-success" 
-            else:
-                statut = 1
-                try :
-                    customexercise.students.add(student) 
-                except :
-                    pass
-                data["statut"] = "True"
-                data["class"] = "btn btn-success"
-                data["noclass"] = "btn btn-danger"
-                data["alert"] = False   
-    else :
-
-        exercise = Exercise.objects.get(pk = exercise_id)
-        relationship = Relationship.objects.get(parcours=parcours,exercise=exercise) 
-
-        if student_id == 0 :  
-            if statut=="true" or statut == "True" :
-                somme = 0
-                try :
-                    for s in parcours.students.all() :
-                        if Studentanswer.objects.filter(student = s , exercise = exercise, parcours = relationship.parcours).count() == 0 :
-                            relationship.students.remove(s)
-                            somme +=1
-                except :
-                    pass
-                statut = 0
-                data["statut"] = "False"
-                data["class"] = "btn btn-danger"
-                data["noclass"] = "btn btn-success"
-                if somme == 0 :
-                    data["alert"] = True
                 else :
-                    data["alert"] = False
+                    student = Student.objects.get(pk = student_id)  
 
-            else : 
-                relationship.students.set(parcours.students.all())
-                statut = 1    
-                data["statut"] = "True"
-                data["class"] = "btn btn-success"
-                data["noclass"] = "btn btn-danger"
-                data["alert"] = False
-        else :
-            student = Student.objects.get(pk = student_id)  
+                    if statut=="true" or statut == "True":
 
-            if statut=="true" or statut == "True":
+                        if Studentanswer.objects.filter(student = student , parcours = relationship.parcours).count() == 0 :
+                            relationship.students.remove(student)
+                            statut = 0
+                            data["statut"] = "False"
+                            data["class"] = "btn btn-default"
+                            data["noclass"] = "btn btn-success"
+                            data["alert"] = False
 
-                if Studentanswer.objects.filter(student = student , exercise = exercise, parcours = relationship.parcours).count() == 0 :
-                    relationship.students.remove(student)
+                        else :
+                            data["statut"] = "True"
+                            data["class"] = "btn btn-success"
+                            data["noclass"] = "btn btn-default"
+                            data["alert"] = True
+                    else:
+                        statut = 1
+                        relationship.students.add(student) 
+                        data["statut"] = "True"
+                        data["class"] = "btn btn-success"
+                        data["noclass"] = "btn btn-default"
+                        data["alert"] = False
+                if relationship.students.count() != relationship.parcours.students.count() :
+                    data["indiv_hide"] = True
+                else :
+                    data["indiv_hide"] = False
+    
+    else :
+        if custom :
+            customexercise = Customexercise.objects.get(pk = exercise_id )
+            if student_id == 0 : # affecte à tous les élèves 
+                if statut=="true" or statut == "True" :
+                    try :
+                        som = 0
+                        for s in parcours.students.all() :
+                            if Customanswerbystudent.objects.filter(student = s , customexercise = customexercise).count() == 0 :
+                                customexercise.students.remove(s)
+                                som +=1
+                    except :
+                        pass
+
                     statut = 0
                     data["statut"] = "False"
-                    data["class"] = "btn btn-danger"
+                    data["class"] = "btn btn-default"
                     data["noclass"] = "btn btn-success"
-                    data["alert"] = False
-
-                else :
+                    if som == 0 :
+                        data["alert"] = True
+                    else :
+                        data["alert"] = False 
+                else : 
+                    try :
+                        customexercise.students.set(parcours.students.all())
+                    except :
+                        pass
+                    statut = 1    
                     data["statut"] = "True"
                     data["class"] = "btn btn-success"
-                    data["noclass"] = "btn btn-danger"
-                    data["alert"] = True
-            else:
-                statut = 1
-                relationship.students.add(student) 
-                data["statut"] = "True"
-                data["class"] = "btn btn-success"
-                data["noclass"] = "btn btn-danger"
-                data["alert"] = False
-
-        if relationship.students.count() != relationship.parcours.students.count() :
-            data["indiv_hide"] = True
+                    data["noclass"] = "btn btn-default"
+                    data["alert"] = False   
+            else :
+                student = Student.objects.get(pk = student_id) 
+                if statut=="true" or statut == "True":
+                    try :
+                        if Customanswerbystudent.objects.filter(student = student , customexercise = customexercise).count() == 0 :
+                            customexercise.students.remove(student)
+                            data["alert"] = False
+                        else :
+                            data["alert"] = True                        
+                    except :
+                        pass
+                    statut = 0
+                    data["statut"] = "False"
+                    data["class"] = "btn btn-default"
+                    data["noclass"] = "btn btn-success" 
+                else:
+                    statut = 1
+                    try :
+                        customexercise.students.add(student) 
+                    except :
+                        pass
+                    data["statut"] = "True"
+                    data["class"] = "btn btn-success"
+                    data["noclass"] = "btn btn-default"
+                    data["alert"] = False   
+        
         else :
-            data["indiv_hide"] = False
- 
+
+            exercise = Exercise.objects.get(pk = exercise_id)
+            relationship = Relationship.objects.get(parcours=parcours,exercise=exercise) 
+
+            if student_id == 0 :  
+                if statut=="true" or statut == "True" :
+                    somme = 0
+                    try :
+                        for s in parcours.students.all() :
+                            if Studentanswer.objects.filter(student = s , exercise = exercise, parcours = relationship.parcours).count() == 0 :
+                                relationship.students.remove(s)
+                                somme +=1
+                    except :
+                        pass
+                    statut = 0
+                    data["statut"] = "False"
+                    data["class"] = "btn btn-default"
+                    data["noclass"] = "btn btn-success"
+                    if somme == 0 :
+                        data["alert"] = True
+                    else :
+                        data["alert"] = False
+
+                else : 
+                    relationship.students.set(parcours.students.all())
+                    statut = 1    
+                    data["statut"] = "True"
+                    data["class"] = "btn btn-success"
+                    data["noclass"] = "btn btn-default"
+                    data["alert"] = False
+            else :
+                student = Student.objects.get(pk = student_id)  
+
+                if statut=="true" or statut == "True":
+
+                    if Studentanswer.objects.filter(student = student , exercise = exercise, parcours = relationship.parcours).count() == 0 :
+                        relationship.students.remove(student)
+                        statut = 0
+                        data["statut"] = "False"
+                        data["class"] = "btn btn-default"
+                        data["noclass"] = "btn btn-success"
+                        data["alert"] = False
+
+                    else :
+                        data["statut"] = "True"
+                        data["class"] = "btn btn-success"
+                        data["noclass"] = "btn btn-default"
+                        data["alert"] = True
+                else:
+                    statut = 1
+                    relationship.students.add(student) 
+                    data["statut"] = "True"
+                    data["class"] = "btn btn-success"
+                    data["noclass"] = "btn btn-default"
+                    data["alert"] = False
+
+            if relationship.students.count() != relationship.parcours.students.count() :
+                data["indiv_hide"] = True
+            else :
+                data["indiv_hide"] = False
+     
+
     return JsonResponse(data) 
 
 
@@ -1832,9 +1957,6 @@ def update_parcours(request, id, idg=0 ):
             nf.is_evaluation = 0
             if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
                 nf.vignette = request.POST.get("this_image_selected",None)
-
- 
-
             nf.save()
             form.save_m2m()
 
@@ -2226,6 +2348,8 @@ def result_parcours(request, id, is_folder):
             custom_set.update(set(cstm))
         customexercises = list(custom_set)
 
+        target = folder
+
     else :
         parcours = Parcours.objects.get(id=id)
         role, group , group_id , access = get_complement(request, teacher, parcours)
@@ -2233,6 +2357,7 @@ def result_parcours(request, id, is_folder):
         relationships = Relationship.objects.filter(parcours=parcours, exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
         customexercises = parcours.parcours_customexercises.all() 
 
+        target = parcours
 
     themes_tab, historic = [],  []
     for relationship in relationships:
@@ -2254,7 +2379,7 @@ def result_parcours(request, id, is_folder):
 
     stage = get_stage(teacher.user)
 
-    context = {  'customexercises': customexercises, 'relationships': relationships, 'parcours': parcours, 'students': students, 'themes': themes_tab, 'form': form,  'group_id' : group_id  , 'stage' : stage, 'communications' : [] , 'role' : role }
+    context = {  'customexercises': customexercises, 'relationships': relationships, 'parcours': target, 'students': students, 'themes': themes_tab, 'form': form,  'group_id' : group_id  , 'stage' : stage, 'communications' : [] , 'role' : role }
 
     return render(request, 'qcm/result_parcours.html', context )
 
@@ -5709,7 +5834,7 @@ def show_custom_exercise(request,id,idp): # vue pour le prof de l'exercice non a
 #######################################################################################################################################################################
 
   
-def detail_task_parcours(request,id,s,c,is_folder):
+def detail_task_parcours(request,id,s,c):
 
   
     parcours = Parcours.objects.get(pk=id) 
@@ -6739,9 +6864,8 @@ def delete_course(request, idc , id  ):
         return redirect('index')  
 
 
-
 #@user_is_parcours_teacher
-def show_course(request, idc , id , is_folder) :
+def show_course(request, idc , id ) :
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
@@ -6752,13 +6876,8 @@ def show_course(request, idc , id , is_folder) :
     
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
-
-    if  is_folder == 1 :
-        courses = set()
-        for p in parcours.leaf_parcours.all() :
-            courses.update(set(p.course.order_by("ranking"))) 
-    else :    
-        courses = parcours.course.all().order_by("ranking") 
+  
+    courses = parcours.course.all().order_by("ranking") 
 
     if len(courses) > 0 :
         course = list(courses)[0]
@@ -6770,6 +6889,34 @@ def show_course(request, idc , id , is_folder) :
     return render(request, 'qcm/course/show_course.html', context)
 
  
+
+
+
+#@user_is_parcours_teacher
+def show_courses_from_folder(request,  idf ) :
+    """
+    idc : course_id et id = parcours_id pour correspondre avec le decorateur
+    """
+    folder = Folder.objects.get(pk =  idf)
+    teacher = Teacher.objects.get(user= request.user)
+
+    role, group , group_id , access = get_complement(request, teacher, folder)
+    
+    if not teacher_has_permisson_to_folder(request,teacher,folder) :
+        return redirect('index')
+
+    courses = set()
+    for parcours in folder.parcours.filter(is_publish=1) :
+        courses.update(parcours.course.all().order_by("ranking") )
+
+    if len(courses) > 0 :
+        course = list(courses)[0]
+    else :
+        course = None
+ 
+    
+    context = {  'courses': courses, 'course': course, 'teacher': teacher , 'folder': folder , 'group_id' : group_id, 'communications' : [] , 'relationships' : [] , 'group' : group ,  'group_id' : group_id , 'role' : role }
+    return render(request, 'qcm/course/show_courses_from_folder.html', context)
 
 
 
