@@ -427,8 +427,8 @@ define(['jquery','bootstrap'], function ($) {
             )
         });
 
-
-
+        // ===============================================================
+        // ===============================================================
         // Affiche dans la modal la liste des élèves du groupe sélectionné
         $('body').on('click' , '.select_student', function () {
 
@@ -437,8 +437,17 @@ define(['jquery','bootstrap'], function ($) {
             let statut = $(this).attr("data-statut"); 
             let custom = $(this).attr("data-custom"); 
             let student_id = $(this).attr("data-student_id");
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
+            let is_checked = false ;
+            if ($("#select_all_exercices").val()) { 
+                is_checked = $("#select_all_exercices").is(":checked") ;
+            }
+            
+ 
+
+
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            
             if (student_id != 0)
             {  
                 if (statut == "True") {
@@ -469,68 +478,132 @@ define(['jquery','bootstrap'], function ($) {
                         'student_id': student_id,
                         'statut': statut,
                         'custom': custom,
+                        'is_checked' : is_checked ,
                         csrfmiddlewaretoken: csrf_token
                     },
                     url: "../../ajax_individualise",
                     success: function (data) {
 
-                        if (custom == "1"){
+ 
 
-                            if (student_id != 0)
-                                {       
-                                $('#studentCustom'+exercise_id+"-"+student_id).html(data.html);   
-                                $('#studentCustom'+exercise_id+"-"+student_id).attr("data-statut",data.statut);                  
-                                $('#studentCustom'+exercise_id+"-"+student_id).removeClass(data.noclass);
-                                $('#studentCustom'+exercise_id+"-"+student_id).addClass(data.class);
-                                }
-                            else 
-                                { 
-                                $('.selected_studentCustom'+exercise_id).html(data.html);   
-                                $('.selected_studentCustom'+exercise_id).attr("data-statut",data.statut);                  
-                                $('.selected_studentCustom'+exercise_id).removeClass(data.noclass);
-                                $('.selected_studentCustom'+exercise_id).addClass(data.class);                        
+                    if (is_checked)
+                        {
+ 
+                            if (custom == "1"){
+
+                                if (student_id == 0)
+                                    {       
+                                    $('.select_student' ).html(data.html);   
+                                    $('.select_student' ).attr("data-statut",data.statut);                  
+                                    $('.select_student' ).removeClass(data.noclass);
+                                    $('.select_student' ).addClass(data.class);
+                                    }
+                                else 
+                                    { 
+                                    $('.selected_studentCustomExo'+student_id).html(data.html);   
+                                    $('.selected_studentCustomExo'+student_id).attr("data-statut",data.statut);                  
+                                    $('.selected_studentCustomExo'+student_id).removeClass(data.noclass);
+                                    $('.selected_studentCustomExo'+student_id).addClass(data.class);                        
+                                    }
+
+                                $("#loadingCustom"+exercise_id).html("");  
+                                $('#selecteurCustom'+exercise_id).attr("data-statut",data.statut);   
+
+                            }
+                            else{ 
+ 
+                                if (student_id == 0)
+                                    {  
+                                    $('.select_student' ).html(data.html);   
+                                    $('.select_student' ).attr("data-statut",data.statut);                  
+                                    $('.select_student' ).removeClass(data.noclass);
+                                    $('.select_student' ).addClass(data.class);
+                                    }
+                                else 
+                                    { 
+                                    $('.selected_studentExo'+student_id).html(data.html);   
+                                    $('.selected_studentExo'+student_id).attr("data-statut",data.statut);                  
+                                    $('.selected_studentExo'+student_id).removeClass(data.noclass);
+                                    $('.selected_studentExo'+student_id).addClass(data.class);                      
+                                    }
+
+                                if (data.indiv_hide) 
+                                    { $('#individialise_id_student'+exercise_id).removeClass("checkbox_no_display");}
+                                else{
+                                    { $('#individialise_id_student'+exercise_id).addClass("checkbox_no_display");}
                                 }
 
-                            $("#loadingCustom"+exercise_id).html("");  
-                            $('#selecteurCustom'+exercise_id).attr("data-statut",data.statut);   
+                                $("#loading"+exercise_id).html("");  
+                                $('#selecteur'+exercise_id).attr("data-statut",data.statut);    
+
+                            }
 
                         }
-                        else{ 
 
-                            if (student_id != 0)
-                                {       
-                                $('#student'+exercise_id+"-"+student_id).html(data.html);   
-                                $('#student'+exercise_id+"-"+student_id).attr("data-statut",data.statut);                  
-                                $('#student'+exercise_id+"-"+student_id).removeClass(data.noclass);
-                                $('#student'+exercise_id+"-"+student_id).addClass(data.class);
-                                }
-                            else 
-                                { 
-                                $('.selected_student'+exercise_id).html(data.html);   
-                                $('.selected_student'+exercise_id).attr("data-statut",data.statut);                  
-                                $('.selected_student'+exercise_id).removeClass(data.noclass);
-                                $('.selected_student'+exercise_id).addClass(data.class);                      
-                                }
+                    else
+                        {
 
-                            if (data.indiv_hide) 
-                                { $('#individialise_id_student'+exercise_id).removeClass("checkbox_no_display");}
-                            else{
-                                { $('#individialise_id_student'+exercise_id).addClass("checkbox_no_display");}
-                            }
+                            if (custom == "1"){
 
-                            $("#loading"+exercise_id).html("");  
-                            $('#selecteur'+exercise_id).attr("data-statut",data.statut);    
+                                if (student_id != 0)
+                                    {       
+                                    $('#studentCustom'+exercise_id+"-"+student_id).html(data.html);   
+                                    $('#studentCustom'+exercise_id+"-"+student_id).attr("data-statut",data.statut);                  
+                                    $('#studentCustom'+exercise_id+"-"+student_id).removeClass(data.noclass);
+                                    $('#studentCustom'+exercise_id+"-"+student_id).addClass(data.class);
+                                    }
+                                else 
+                                    { 
+                                    $('.selected_studentCustom'+exercise_id).html(data.html);   
+                                    $('.selected_studentCustom'+exercise_id).attr("data-statut",data.statut);                  
+                                    $('.selected_studentCustom'+exercise_id).removeClass(data.noclass);
+                                    $('.selected_studentCustom'+exercise_id).addClass(data.class);                        
+                                    }
+
+                                $("#loadingCustom"+exercise_id).html("");  
+                                $('#selecteurCustom'+exercise_id).attr("data-statut",data.statut);   
 
                             }
+                            else{ 
 
-                        if (data.alert){ alert("Certains exercices ont fait l'objet d'une réponse par certains élèves. Vous ne pouvez plus les dissocier.");}
+                                if (student_id != 0)
+                                    {       
+                                    $('#student'+exercise_id+"-"+student_id).html(data.html);   
+                                    $('#student'+exercise_id+"-"+student_id).attr("data-statut",data.statut);                  
+                                    $('#student'+exercise_id+"-"+student_id).removeClass(data.noclass);
+                                    $('#student'+exercise_id+"-"+student_id).addClass(data.class);
+                                    }
+                                else 
+                                    { 
+                                    $('.selected_student'+exercise_id).html(data.html);   
+                                    $('.selected_student'+exercise_id).attr("data-statut",data.statut);                  
+                                    $('.selected_student'+exercise_id).removeClass(data.noclass);
+                                    $('.selected_student'+exercise_id).addClass(data.class);                      
+                                    }
+
+                                if (data.indiv_hide) 
+                                    { $('#individialise_id_student'+exercise_id).removeClass("checkbox_no_display");}
+                                else{
+                                    { $('#individialise_id_student'+exercise_id).addClass("checkbox_no_display");}
+                                }
+
+                                $("#loading"+exercise_id).html("");  
+                                $('#selecteur'+exercise_id).attr("data-statut",data.statut);    
+
+                            }
+
+                        }
+
+
+                    if (data.alert){ alert("Certains exercices ont fait l'objet d'une réponse par certains élèves. Vous ne pouvez plus les dissocier.");}
 
                     }
                 }
             )
         });
-
-
+        // ===============================================================
+        // ===============================================================
+        
 
         $("#details_evaluation").hide();
         

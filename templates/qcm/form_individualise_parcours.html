@@ -36,9 +36,23 @@
   
      
 <section class="content_main">
+<form action="" method="POST" enctype='multipart/form-data'> 
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="alert alert-warning">
+                <img src="{% static 'img/conseil.png' %}" height="40px"/> Affecter tous les exercices aux élèves choisis au premier exercice  
+                <input id="select_all_exercices"  type="checkbox" data-toggle="toggle" data-onstyle="primary" data-offstyle="default" data-on="Oui" data-off="Non" /> 
+        </div>
+    </div>
+
+
+
+
+ 
     <div class="col-sm-12 col-md-12">
 
-        <form action="" method="POST" enctype='multipart/form-data'> 
+        
             {% csrf_token %}
             {% for relationship in relationships  %} 
 
@@ -126,10 +140,10 @@
                             </span>
 
 
-                        {%  for s in  group.students.all|dictsort:"user.last_name" %}
+                        {%  for s in  group.just_students %}
 
                             {% get_exercise s relationship as has_it %}
-                            <span class="btn btn-{% if has_it %}success{% else  %}default{% endif  %} select_student selected_student{{relationship.exercise.id}}" 
+                            <span class="btn btn-{% if has_it %}success{% else  %}default{% endif  %} select_student selected_student{{relationship.exercise.id}} selected_studentExo{{s.user.id }}" 
                                 id="student{{relationship.exercise.id}}-{{s.user.id }}"
                                 data-student_id="{{ s.user.id }}" data-exercise_id="{{ relationship.exercise.id }}"   data-custom=0 data-parcours_id="{{ relationship.parcours.id }}"  data-statut="{% if has_it %}True{% else  %}False{% endif  %}"  
                                 style="min-width:155px; margin:1px"/>{{ s.user.last_name }} {{ s.user.first_name|truncatechars:4 }}
@@ -242,7 +256,7 @@
                         {%  for s in  customexercise.students.all %}
 
                             {% get_customexercise s customexercise as has_it %}
-                            <span class="btn btn-{% if not s in students %}default{% else %}{% if has_it %}success{% else  %}danger{% endif  %}{% endif  %} select_student selected_studentCustom{{customexercise.id}}" 
+                            <span class="btn btn-{% if not s in students %}default{% else %}{% if has_it %}success{% else  %}danger{% endif  %}{% endif  %} select_student selected_studentCustom{{customexercise.id}} selected_studentCustomExo{{s.user.id }}" 
                                 id="studentCustom{{ customexercise.id}}-{{s.user.id }}"
                                 data-student_id="{{ s.user.id }}" data-exercise_id="{{ customexercise.id }}" data-custom=1  data-parcours_id="{{  parcours.id }}"  data-statut="{% if has_it %}True{% else  %}False{% endif  %}"  
                                 style="min-width:155px; margin:1px"/>{{ s.user.last_name }} {{ s.user.first_name|truncatechars:6 }}</span>
@@ -257,9 +271,10 @@
 
 
   
-        </form>
-     
-    </div>   
+             
+    </div>
+</form>
+ 
 </section>   
 {% endblock %}
 
