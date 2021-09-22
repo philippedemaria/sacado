@@ -1521,9 +1521,9 @@ def ajax_all_folders(request):
     teacher_id = get_teacher_id_by_subject_id(subject_id)
 
     if request.user.is_superuser :
-        parcours_ids = Folder.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).order_by('level')
+        folders = Folder.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).order_by('level')
     else :
-        parcours_ids = Folder.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).exclude(teacher=teacher).order_by('level')
+        folders = Folder.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).exclude(teacher=teacher).order_by('level')
 
     keywords = request.POST.get('keywords',None)
 
@@ -1531,19 +1531,21 @@ def ajax_all_folders(request):
         level = Level.objects.get(pk=int(level_id))
 
         if keywords:
-            parcourses = Folder.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, 
-                                                    exercises__supportfile__title__contains = keywords  , level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
+            parcours_key = Parcours.objects.filter(Q(exercises__supportfile__title__contains = keywords)|Q(exercises__supportfile__annoncement__contains = keywords) )
+            folders = Folder.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, parcours__in=parcours_key ,
+                                             level  =  level   ).exclude(teacher=teacher).order_by('author').distinct()
         else :
-            parcourses = Folder.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1,  
-                                                        level_id = int(level_id) ).exclude(teacher=teacher).order_by('author').distinct()
+            folders = Folder.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1,  
+                                                        level  =  level  ).exclude(teacher=teacher).order_by('author').distinct()
     else :
         if keywords:
-            parcourses = Folder.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1 , title__contains = keywords ).exclude(teacher=teacher).order_by('author').distinct()
+            parcours_key = Parcours.objects.filter(Q(exercises__supportfile__title__contains = keywords)|Q(exercises__supportfile__annoncement__contains = keywords) )
+            folders = Folder.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, parcours__in=parcours_key ).exclude(teacher=teacher).order_by('author').distinct()
         else :
-            parcourses = Folder.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1 ).exclude(teacher=teacher).order_by('author').distinct()
+            folders = Folder.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1 ).exclude(teacher=teacher).order_by('author').distinct()
 
 
-    data['html'] = render_to_string('qcm/ajax_list_folders.html', {'parcourses' : parcourses, 'teacher' : teacher ,  })
+    data['html'] = render_to_string('qcm/ajax_list_folders.html', {'folders' : folders, 'teacher' : teacher ,  })
  
     return JsonResponse(data)
 
@@ -1831,7 +1833,7 @@ def update_parcours(request, id, idg=0 ):
             if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
                 nf.vignette = request.POST.get("this_image_selected",None)
 
-            #nf.leaf_parcours.set( folder_parcourses )
+ 
 
             nf.save()
             form.save_m2m()
