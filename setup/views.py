@@ -132,9 +132,6 @@ def index(request):
             relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("date_limit").order_by("parcours")
 
 
-            none_folders = Folder.objects.filter(students=None, is_favorite=1, is_trash=0 )
-
-
             teacher_parcours = teacher.teacher_parcours
             parcours_tab = teacher_parcours.filter(students=None, is_favorite=1, is_archive=0 ,is_trash=0 ).order_by("is_evaluation") ## Parcours / évaluation favoris non affectés
             parcourses = teacher_parcours.filter(is_evaluation=0, is_favorite =1, is_archive=0,  is_trash=0 ).order_by("-is_publish")
@@ -147,7 +144,7 @@ def index(request):
  
             template = 'dashboard.html'
             context = {'this_user': this_user, 'teacher': teacher, 'groups': groups,  'parcours': None, 'today' : today , 'timer' : timer , 'nb_teacher_level' : nb_teacher_level , 
-                       'relationships': relationships, 'parcourses': parcourses, 'index_tdb' : index_tdb, 'none_folders' : none_folders , 
+                       'relationships': relationships, 'parcourses': parcourses, 'index_tdb' : index_tdb, 
                        'communications': communications, 'parcours_tab': parcours_tab, 'webinaire': webinaire,
                        }
         
