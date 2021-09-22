@@ -52,7 +52,7 @@
                                 <td>{% if accounting.date_payment %}Payé le {{ accounting.date_payment }}{% else %} En attente de paiement {% endif %}</td>
                                 <td>
                                     {% if accounting.date_payment %}
-                                        <a href="{% url 'print_bill_school' accounting.id %}"> Imprimer </a>
+                                        <a href="{% url 'print_bill_school' accounting.id %}" class="btn btn-xs btn-default"><i class="fa fa-print"></i> Imprimer </a>
                                     {% else %} 
                                         <a href="{% url 'print_accounting' accounting.id %}"  class="btn btn-xs btn-primary"> Imprimer le devis </a>
                                         <a href="{% url 'renew_school_adhesion' %}" class="btn btn-xs btn-danger"> En attente de paiement </a>
