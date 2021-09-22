@@ -116,15 +116,16 @@ def index(request):
         if request.user.is_teacher:
 
             teacher = request.user.teacher
-            grps = teacher.groups.order_by("level") 
+            grps = teacher.groups.all() 
             shared_grps_id = Sharing_group.objects.filter(teacher=teacher).values_list("group_id", flat=True) 
             # sgps = []
             # for sg_id in shared_grps_id :
             #     grp = Group.objects.get(pk=sg_id)
             #     sgps.append(grp)
 
-            sgps = Group.objects.filter(pk__in=shared_grps_id).order_by("level")
-            groups =  grps | sgps 
+            sgps    = Group.objects.filter(pk__in=shared_grps_id)
+            groupes =  grps | sgps
+            groups  = groupes.order_by("level__ranking") 
 
 
  
