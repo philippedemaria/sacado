@@ -124,7 +124,9 @@ def index(request):
             #     sgps.append(grp)
 
             sgps = Group.objects.filter(pk__in=shared_grps_id).order_by("level")
-            groups = chain(grps, sgps)
+            groups =  grps | sgps 
+
+
  
 
             this_user = request.user
@@ -134,6 +136,8 @@ def index(request):
 
             teacher_parcours = teacher.teacher_parcours
             parcours_tab = teacher_parcours.filter(students=None, is_favorite=1, is_archive=0 ,is_trash=0 ).order_by("is_evaluation") ## Parcours / évaluation favoris non affectés
+
+            #Menu_right
             parcourses = teacher_parcours.filter(is_evaluation=0, is_favorite =1, is_archive=0,  is_trash=0 ).order_by("-is_publish")
 
             communications = Communication.objects.values('id', 'subject', 'texte', 'today').filter(active=1).order_by("-id")
