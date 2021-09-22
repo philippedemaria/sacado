@@ -172,11 +172,15 @@
 
             </div> 
             <div class="col-xs-5 col-md-5 col-lg-5">
-
-                <a href="{% url 'show_courses_from_folder'  folder.id    %}"  class="edit" {% if dataset.is_folder_courses_exists %} style="color:{{ folder.color }}" {% endif %} >
+                {% if dataset.is_folder_courses_exists %}
+                <a href="{% url 'show_courses_from_folder'  folder.id    %}"  class="edit"  style="color:{{ folder.color }}" >
                     <i class="fa fa-fw fa-desktop"></i>  <span class="label_icon">Cours</span>
                 </a>
-
+                {% else %}
+                <a href=""  class="edit" style="cursor: default;" >
+                    <i class="fa fa-fw fa-desktop"  style="cursor: default;"></i>  <span class="label_icon">Cours</span>
+                </a>
+                {% endif %}
 
 
                 <span href="#" class="edit group_shower pull-right" data-parcours_id="{{folder.id }}" {% if dataset.is_students %} style="color:{{ folder.color }}" {% endif %} >
