@@ -21,7 +21,7 @@
             {% for relationship in relationships %}
             <li class="sans_puce"><i class="fa fa-square" style="color: {{ relationship.parcours.color }}"></i> 
               {{ relationship.date_limit|date:"d.m.y" }} :
-                  <a href="{% url 'detail_task_parcours' relationship.parcours.id relationship.exercise.id 0 0 %}" class="parcours_displayer"> 
+                  <a href="{% url 'detail_task_parcours' relationship.parcours.id relationship.exercise.id 0  %}" class="parcours_displayer"> 
                        {% if  relationship.exercise.supportfile.title %}  
                             {{  relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
                         {% else %}
@@ -36,7 +36,7 @@
         {% regroup relationships by parcours as parcours_list %}
             {% for pcs in parcours_list %}
             <li class="sans_puce"><span class="label" style="background-color: {{ pcs.grouper.color }};border-radius: 50%">{{ pcs.grouper.nb_task }}</span> 
-                <a href="{% url 'detail_task_parcours' pcs.grouper.id 0 0   %}" class="parcours_displayer"> 
+                <a href="{% url 'detail_task_parcours' pcs.grouper.id 0 0 %}" class="parcours_displayer"> 
                     {{ pcs.grouper.title }}
                 </a>        
             </li>

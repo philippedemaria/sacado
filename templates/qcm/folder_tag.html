@@ -153,10 +153,10 @@
 
             </div> 
             <div class="col-xs-5 col-md-5 col-lg-5">
-                <span  class="edit" style="cursor: default;{% if dataset.is_folder_task_exists %}color:{{ folder.color }}{% endif %};">
-                    {% if dataset.is_folder_task_exists %}<i class="fa fa-fw fa-calendar-check"></i>{% else %}<i class="fa fa-fw fa-calendar"></i>{% endif %}
-                     <span class="label_icon" style="cursor: default;">Tâches</span>
-                </span> 
+                <a  href="{% url 'detail_task_parcours' folder.id 0 0 %}"   class="edit" {% if dataset.is_folder_task_exists %} style="color:{{ folder.color }}" {% endif %}>
+                    {% if not folder.is_task_exists %}<i class="fa fa-fw fa-calendar"></i>{% else %}<i class="fa fa-fw fa-calendar-check"></i>{% endif %}
+                     <span class="label_icon">Tâches</span>
+                </a> 
             </div>                     
         </div> 
         <div class="row">
@@ -173,7 +173,7 @@
             </div> 
             <div class="col-xs-5 col-md-5 col-lg-5">
 
-                <a href="{% url 'show_courses_from_folder'  folder.id  %}"  class="edit" {% if dataset.is_folder_courses_exists %} style="color:{{ folder.color }}" {% endif %} >
+                <a href="{% url 'show_course' 0 folder.id   %}"  class="edit" {% if dataset.is_folder_courses_exists %} style="color:{{ folder.color }}" {% endif %} >
                     <i class="fa fa-fw fa-desktop"></i>  <span class="label_icon">Cours</span>
                 </a>
 

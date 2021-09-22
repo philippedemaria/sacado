@@ -79,7 +79,7 @@
                     </td>
                     <td>{{ r.date_limit }} <br/><br/>
 
-                        <a href="{% url 'detail_task_parcours'   r.parcours.id  r.exercise.id  0    %}" class="btn btn-{% if r.date_limit < date_today %}default{% else %}sacado{% endif %} ">En détails</a>
+                        <a href="{% url 'detail_task_parcours'   r.parcours.id  r.exercise.id  0 %}" class="btn btn-{% if r.date_limit < date_today %}default{% else %}sacado{% endif %} ">En détails</a>
                     </td>
                 </tr>  
                 {% endfor %}
@@ -114,7 +114,7 @@
                     </td>
                     <td>{{ c.date_limit }} <br/><br/>
 
-                        <a href="{% url 'detail_task_parcours' parcours.id  c.id  1 0  %}" class="btn btn-{% if c.date_limit < date_today %}default{% else %}default{% endif %} ">En détails</a>
+                        <a href="{% url 'detail_task_parcours' parcours.id  c.id  1   %}" class="btn btn-{% if c.date_limit < date_today %}default{% else %}default{% endif %} ">En détails</a>
                     </td>
                 </tr>  
                 {% endfor %}
