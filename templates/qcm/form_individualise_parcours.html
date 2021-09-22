@@ -22,16 +22,17 @@
       <small> Individualiser </small> 
 {% endblock %}
 
+
+
 {% block page_menu_right %}
-
     {% include 'qcm/submenu_parcours.html' %} 
-
-
 {% endblock %}
 
 
 {% block body %}
  
+
+
   
      
 <section class="content_main">
@@ -125,13 +126,13 @@
                             </span>
 
 
-                        {%  for s in  relationship.students.all|dictsort:"user.last_name" %}
+                        {%  for s in  group.students.all|dictsort:"user.last_name" %}
 
                             {% get_exercise s relationship as has_it %}
-                            <span class="btn btn-{% if not s in students %}default{% else %}{% if has_it %}success{% else  %}danger{% endif  %}{% endif  %} select_student selected_student{{relationship.exercise.id}}" 
+                            <span class="btn btn-{% if has_it %}success{% else  %}default{% endif  %} select_student selected_student{{relationship.exercise.id}}" 
                                 id="student{{relationship.exercise.id}}-{{s.user.id }}"
                                 data-student_id="{{ s.user.id }}" data-exercise_id="{{ relationship.exercise.id }}"   data-custom=0 data-parcours_id="{{ relationship.parcours.id }}"  data-statut="{% if has_it %}True{% else  %}False{% endif  %}"  
-                                style="min-width:155px; margin:1px"/>{{ s.user.last_name }} {{ s.user.first_name|truncatechars:6 }}
+                                style="min-width:155px; margin:1px"/>{{ s.user.last_name }} {{ s.user.first_name|truncatechars:4 }}
                             </span>
 
                         {%  endfor %}

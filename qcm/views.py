@@ -895,6 +895,12 @@ def peuplate_parcours_evaluation(request,id):
 
 
 def individualise_parcours(request,id):
+
+    folder_id = request.session.get("folder_id",None)
+    folder = None
+    if folder_id :
+        folder = Folder.objects.get(pk = folder_id)
+
     teacher = request.user.teacher
     parcours = Parcours.objects.get(pk = id)
     relationships = parcours.parcours_relationship.order_by("ranking")
@@ -908,12 +914,12 @@ def individualise_parcours(request,id):
  
 
     context = {'relationships': relationships, 'parcours': parcours,     'communications':[],  'form': None,  
-                    'teacher': teacher, 'customexercises' : customexercises ,
-                  'exercises': None , 
-                  'levels': None , 
-                  'themes' : None ,
-                   'user': request.user , 
-                   'group_id' : group_id , 'group' : group , 'role' : role }
+                'teacher': teacher, 'customexercises' : customexercises ,
+                'exercises': None , 'folder' : folder ,
+                'levels': None , 
+                'themes' : None ,
+                'user': request.user , 
+                'group_id' : group_id , 'group' : group , 'role' : role }
 
     return render(request, 'qcm/form_individualise_parcours.html', context )
 
@@ -2203,25 +2209,25 @@ def replace_exercise_into_parcours(request):
 
 def result_parcours(request, id, is_folder):
 
-    folder = Folder.objects.get(id=id)
-    students = folder.students.all() # liste des élèves d'un parcours donné 
+
     teacher = request.user.teacher
-
-
-
-    if not teacher_has_permisson_to_parcourses(request,teacher,folder) :
-        return redirect('index')
-
+ 
     if  is_folder == 1 :
-        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all(),exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
+        folder = Folder.objects.get(id=id)
+        role, group , group_id , access = get_complement(request, teacher, folder)
+        students = folder.students.all() # liste des élèves d'un parcours donné 
+        relationships = Relationship.objects.filter(parcours__in=folder.parcours.all(),exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
 
         custom_set = set()
-        for p in parcours.leaf_parcours.all():
+        for p in folder.parcours.all():
             cstm = p.parcours_customexercises.all() 
             custom_set.update(set(cstm))
         customexercises = list(custom_set)
 
     else :
+        parcours = Parcours.objects.get(id=id)
+        role, group , group_id , access = get_complement(request, teacher, parcours)
+        students = parcours.students.all() # liste des élèves d'un parcours donné 
         relationships = Relationship.objects.filter(parcours=parcours, exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
         customexercises = parcours.parcours_customexercises.all() 
 
@@ -2467,9 +2473,12 @@ def result_parcours_waiting(request, id, is_folder):
 
     for k_id in knwldgs :
         k = Knowledge.objects.get(pk = k_id)
-        if k.waiting.name not in waiting_ids :
-            waiting_ids.append(k.waiting.name)
-            waitings.append(k.waiting)
+        try :
+            if k.waiting.name not in waiting_ids :
+                waiting_ids.append(k.waiting.name)
+                waitings.append(k.waiting)
+        except :
+            print(k)
 
 
     stage = get_stage(teacher.user)
@@ -2483,7 +2492,7 @@ def result_parcours_waiting(request, id, is_folder):
 
 def check_level_by_point(student, point):
     point = int(point)
-    if student.user.school :
+    try :
         school = student.user.school
         stage = Stage.objects.get(school = school)
 
@@ -2497,7 +2506,7 @@ def check_level_by_point(student, point):
             level = "danger"
         else :
             level = "default"
-    else : 
+    except : 
         stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
 
         if point > stage["up"]  :
@@ -2510,6 +2519,7 @@ def check_level_by_point(student, point):
             level = "warning"
         else :
             level = "default"
+
     rep = "<i class='fa fa-square text-"+level+" pull-right'></i>"
  
     return rep
