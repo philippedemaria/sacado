@@ -760,8 +760,8 @@ def print_bill_school(request,a_id):
     elements.append(paragraph0)
     elements.append(Spacer(0, 0.5*inch))
 
-    school_datas =  "REF : "+accounting.code +"\n\n"+school.name +"\n"+school.code_acad +  "\n" + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
-    demandeur =  school_datas+   "\n\nMontant de la cotisation : "+str(school.fee())+"€" 
+    school_datas =  "REF : "+accounting.chrono +"\n\n"+school.name +"\n"+school.code_acad +  "\n" + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
+    demandeur =  school_datas+   "\n\nMontant de la cotisation : "+str(school.amount )+"€" 
 
 
     demandeur_tab = [[demandeur, "ASSOCIATION SACADO.XYZ \n2B avenue de la pinède \n83400 La Capte \nHyères \nFrance \n\n\n\n" ]]
