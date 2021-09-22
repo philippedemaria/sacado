@@ -14,10 +14,9 @@
         <div class="group_show  group_show{{folder.id }} no_visu_on_load"> 
             {% with folder.folder_only_students_count as data %}
                 {% csrf_token %}
-                <a  href="#principal_section" class="vue menuactionparcours" data-toggle='modal' style="float:left; margin-right:10px"  
-                    data-group_name='{{ group.name }}' data-parcours_id='{{ folder.id }}' data-target='#listing'> 
-                    <span class="label label-default"> {{ data.nb }}<i class="fa fa-users"></i></span>
-                </a> 
+
+                    <span class="label label-default" style="color:{{ folder.color|contrast_color }};background-color:{{ folder.color }};"> {{ data.nb }}<i class="fa fa-users"></i></span>
+ 
  
             <font style="font-size:11px; color:#AAA"> 
                 {% for s in data.only_students|dictsort:"user.last_name"  %}
