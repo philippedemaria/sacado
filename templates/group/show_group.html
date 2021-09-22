@@ -26,7 +26,8 @@
         <span style="color:{{ group.color }}"><i class="fa fa-arrow-circle-right"></i> {{ group.name }}   </span>
             <img src="{% static 'img/angle-right.png' %}"/> <small>Détails</small> <img src="{% static 'img/angle-right.png' %}"/>
 
-            <a href="{% url 'print_ids' group.id  %}" class="btn btn-default"><i class="fa fa-file-pdf-o"></i>  Télécharger les identifiants des élèves</a>
+            <a href="{% url 'print_list_ids' group.id  %}" class="btn btn-default"><i class="fa fa-list"></i>  Télécharger la liste des identifiants</a>
+            <a href="{% url 'print_ids' group.id  %}" class="btn btn-default"><i class="fa fa-th"></i>  Télécharger les identifiants en étiquette</a>
 
 {% endblock %}
 

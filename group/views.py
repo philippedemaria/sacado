@@ -1715,7 +1715,7 @@ def print_list_ids(request, id):
     table.setStyle(TableStyle([
     ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
     ('BOX', (0,0), (-1,-1), 0.25, colors.black),
-    ('BACKGROUND',(0,0), (1,1),colors.gray, None, (2,2,1)),
+    ('BACKGROUND',(0,0), (3,0),colors.gray),
     ])) 
     elements.append(table)
     doc.build(elements) 

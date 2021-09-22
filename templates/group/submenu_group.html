@@ -213,7 +213,7 @@
 
 
         <li {% if 'group/print_list_ids/' in request.path %} class="active" {% endif %}>
-             <a href="{% url 'print_list_ids' group.id  %}" ><i class="fa fa-file-pdf-o  fa-fw"></i> Télécharger la liste des identifiants </a>
+             <a href="{% url 'print_list_ids' group.id  %}" ><i class="fa fa-list  fa-fw"></i> Télécharger la liste des identifiants </a>
         </li>
 
         <li {% if 'group/print_ids/' in request.path %} class="active" {% endif %}>
