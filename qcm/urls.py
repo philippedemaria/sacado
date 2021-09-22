@@ -187,6 +187,10 @@ urlpatterns = [
     path('parcours_show_course_student/<int:idc>/<int:id>', show_course_student, name='show_course_student'),
     path('course_custom_show_shared', course_custom_show_shared, name='course_custom_show_shared'),  
 
+    path('show_courses_from_folder/<int:idf>/0', show_courses_from_folder, name='show_courses_from_folder'),
+
+
+
     path('get_course_in_this_parcours/<int:id>', get_course_in_this_parcours, name='get_course_in_this_parcours'), 
     path('get_this_course_for_this_parcours/<int:typ>/<int:id_target>/<int:idp>', get_this_course_for_this_parcours, name='get_this_course_for_this_parcours'), 
 
