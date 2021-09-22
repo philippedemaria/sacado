@@ -212,14 +212,14 @@
         {%  endif %} 
 
 
-        <li {% if 'group/print_ids/' in request.path %} class="active" {% endif %}>
-             <a href="{% url 'print_ids' group.id  %}" ><i class="fa fa-file-pdf-o  fa-fw"></i> Télécharger les identifiants </a>
+        <li {% if 'group/print_list_ids/' in request.path %} class="active" {% endif %}>
+             <a href="{% url 'print_list_ids' group.id  %}" ><i class="fa fa-file-pdf-o  fa-fw"></i> Télécharger la liste des identifiants </a>
         </li>
 
-
-<!--         <li {% if 'result_group_exercise/' in request.path %} class="active" {% endif %}>
-            <a  href="{% url 'result_group_exercise'  group.id %}"  ><i class="fa fa-mortar-board fa-fw"></i> Lire le suivi des acquisitions </a> 
-        </li>   -->
+        <li {% if 'group/print_ids/' in request.path %} class="active" {% endif %}>
+             <a href="{% url 'print_ids' group.id  %}" ><i class="fa fa-th  fa-fw"></i> Télécharger les identifiants en étiquette</a>
+        </li>
+ 
 
 
         <li {% if 'schedule' in request.path %} class="active" {% endif %}>

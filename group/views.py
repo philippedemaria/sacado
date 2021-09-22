@@ -34,6 +34,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4, inch, landscape , letter
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image , PageBreak,Frame , PageTemplate
+from reportlab.platypus.tables import Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.colors import yellow, red, black, white, blue
 from reportlab.pdfgen.canvas import Canvas
@@ -41,6 +42,12 @@ from reportlab.lib.utils import ImageReader
 from reportlab.lib.enums import TA_JUSTIFY,TA_LEFT,TA_CENTER,TA_RIGHT
 from html import escape
 cm = 2.54
+
+
+
+
+
+
 #################################################################################
 import re
 import pytz
@@ -1535,7 +1542,7 @@ def print_statistiques(request, group_id, student_id):
 
 
 
-def print_ids(request, id):
+#def print_ids(request, id):
     group = Group.objects.get(id=id)
     teacher = Teacher.objects.get(user=request.user)
 
@@ -1575,6 +1582,90 @@ def print_ids(request, id):
     return response 
 
 
+def print_ids(request, id):
+    group = Group.objects.get(id=id)
+    teacher = Teacher.objects.get(user=request.user)
+    authorizing_access_group(request,teacher,group ) 
+ 
+    elements = []        
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="Etiquette_identifiant_SACADO_'+group.name+'.pdf"'
+    doc = SimpleDocTemplate(response,   pagesize=A4, 
+                                        topMargin=0.3*inch,
+                                        leftMargin=0.3*inch,
+                                        rightMargin=0.3*inch,
+                                        bottomMargin=0.3*inch     )
+
+    sample_style_sheet = getSampleStyleSheet()
+
+ 
+    students = group.students.exclude(user__username__contains= "_e-test").order_by("user__last_name")
+
+    p = canvas.Canvas(response)
+    i = 1
+    img_file = 'https://sacado.xyz/static/img/sacado-icon-couleur.jpg'
+    x_start  = 20
+    for i in range(len(students)//2) :
+        y_start = 860-100*i
+        p.drawImage(img_file, x_start, y_start, width=50, preserveAspectRatio=True )
+
+
+    normal = ParagraphStyle(name='Normal',fontSize=12,)    
+    style_cell = TableStyle(
+            [
+                ('SPAN', (0, 1), (1, 1)),
+                ('TEXTCOLOR', (0, 1), (-1, -1),  colors.Color(0,0.7,0.7))
+            ]
+        )
+
+    logo = Image('https://sacado.xyz/static/img/sacado_print.jpg')
+    logo.drawWidth  = 0.4*inch
+    logo.drawHeight = 1.3*inch 
+    
+ 
+ 
+    dataset  = []
+    grid = [] 
+
+    for i in range(len(students)//2) :
+        liste  =  []
+        for student in students[2*i:2*(i+1)]  :
+            liste.append(logo) 
+            msg = "\n\n{} {},\nun accès à l'interface SACADO,".format(student.user.first_name.capitalize() , student.user.last_name.capitalize())
+            msg += "\nsite d'entrainement personnalisé "
+            msg += "\nauto-corrigé,vous a été fourni."
+            msg += "\nVous pouvez vous connecter sur"
+            msg += "\nsacado.xyz avec le code suivant :"
+            msg += "\n\n            {}".format(student.user.username)
+            liste.append(msg) 
+            grid.append( ('BOX', (0,i), (1,i), 0.25, colors.gray, None, (2,2,1)) )
+            grid.append( ('BOX', (2,i), (3,i), 0.25, colors.gray, None, (2,2,1))  )
+
+
+        dataset.append(liste)
+
+    if len(students)%2==1 :
+        msg = "\n\n{} {}un accès à l'interface SACADO,".format(students[-1].user.first_name.capitalize() , students[-1].user.last_name.capitalize())
+        msg += "\nsite d'entrainement personnalisé "
+        msg += "\nauto-corrigé,vous a été fourni."
+        msg += "\nVous pouvez vous connecter sur"
+        msg += "\nsacado.xyz avec le code suivant :"
+        msg += "\n\n            {}".format(students[-1].user.username)
+        dataset.append( (logo,msg) )
+        grid.append( ('BOX', (0,i+1), (1,i+1), 0.25, colors.gray, None, (2,2,1)) )
+        grid.append( ('BOX', (2,i+1), (3,i+1), 0.25, colors.gray, None, (2,2,1)) )
+
+ 
+    table = Table(dataset, colWidths=[0.5*inch,2.7*inch,0.5*inch,2.7*inch], rowHeights=110)
+    table.setStyle(TableStyle(grid)) 
+    elements.append(table)
+
+    doc.build(elements) 
+
+    return response
+
+
+
 
 
 
@@ -1611,16 +1702,21 @@ def print_list_ids(request, id):
     elements.append(logo_tab_tab)
     elements.append(Spacer(0, 0.1*inch))
  
-    labels  = [" ", "Nom ","Prénom", "Identifiant"]
-    dataset = []
+    dataset  = [(" ", "Nom ","Prénom", "Identifiant")]
+ 
 
     i = 1
-    for student in group.students.exclude(user__username__contains= "_e-test") :
+    for student in group.students.exclude(user__username__contains= "_e-test").order_by("user__last_name") :
         
-        dataset.append((i, student.user.last_name , student.user.first_name, student.user.username))
+        dataset.append((i, student.user.last_name.capitalize() , student.user.first_name.capitalize() , student.user.username))
+        i +=1
 
-    table = Table(dataset, colWidths=[1,2*inch,2*inch,2*inch], rowHeights=30)
- 
+    table = Table(dataset, colWidths=[0.3*inch,2*inch,2*inch,2*inch], rowHeights=20)
+    table.setStyle(TableStyle([
+    ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
+    ('BOX', (0,0), (-1,-1), 0.25, colors.black),
+    ('BACKGROUND',(0,0), (1,1),colors.gray, None, (2,2,1)),
+    ])) 
     elements.append(table)
     doc.build(elements) 
     return response
