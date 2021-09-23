@@ -416,8 +416,8 @@ def teacher_has_parcourses(teacher,is_evaluation ,is_archive ):
     return parcourses
 
 
-def teacher_has_folders(teacher, is_archive ):
-    """
+def teacher_has_folders(teacher ,is_archive ):
+    """ 
     Renvoie les parcours dont le prof est propriétaire et donc les parcours lui sont partagés
     """
     folders    = teacher.teacher_folders.filter( is_archive=is_archive,is_trash=0) 
@@ -1223,7 +1223,15 @@ def list_parcours(request):
     teacher = request.user.teacher
     today = time_zone_user(teacher.user)
 
-    folders = teacher_has_folders(teacher, 0  ) #  is_archive
+    folds = teacher_has_folders(teacher, 0  ) #  is_archive
+
+    folders = []
+    for folder in folds :
+        for p in folder.parcours.all() :
+            if not p.is_evaluation and folder not in folders :
+                folders.append(folder)
+
+
     parcourses = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher),folders=None,is_evaluation=0, is_archive=0,is_trash=0)
     nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,0,1 )   )   
     nb_base = len( folders ) + parcourses.count()
@@ -1336,7 +1344,13 @@ def list_evaluations(request):
     teacher = request.user.teacher
     today = time_zone_user(teacher.user)
 
-    folders = teacher_has_folders(teacher, 0  ) #  is_archive
+    folds = teacher_has_folders(teacher, 0  ) #  is_archive
+    folders = []
+    for folder in folds :
+        for p in folder.parcours.all() :
+            if p.is_evaluation and folder not in folders :
+                folders.append(folder)
+
     parcourses = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher),folders=None,is_evaluation=1,is_archive=0,is_trash=0)
     nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,1,1 )   )   
     nb_base = len( folders ) + parcourses.count()
@@ -3111,20 +3125,20 @@ def ajax_is_favorite(request):
     if status == "parcours" :
         if statut :
             Parcours.objects.filter(pk = target_id).update(is_favorite = 0)
-            data["statut"] = "<i class='fa fa-eye-slash fa-2x text-danger' ></i>"  
+            data["statut"] = "<i class='fa fa-star text-default' ></i>"  
             data["fav"] = 0
         else :
             Parcours.objects.filter(pk = target_id).update(is_favorite = 1)  
-            data["statut"] = "<i class='fa fa-eye fa-2x text-success' ></i>"
+            data["statut"] = "<i class='fa fa-star text-success' ></i>"
             data["fav"] = 1
     else :
         if statut :
             Folder.objects.filter(pk = target_id).update(is_favorite = 0)
-            data["statut"] = "<i class='fa fa-eye-slash  fa-2x  text-danger' ></i>"
+            data["statut"] = "<i class='fa fa-star text-default' ></i>"
             data["fav"] = 0
         else :
             Folder.objects.filter(pk = target_id).update(is_favorite = 1)  
-            data["statut"] = "<i class='fa fa-eye fa-2x text-success' ></i>"
+            data["statut"] = "<i class='fa fa-star   text-success' ></i>"
             data["fav"] = 1     
 
     return JsonResponse(data) 
@@ -3278,6 +3292,49 @@ def ajax_publish_parcours(request):
     return JsonResponse(data) 
 
  
+ 
+
+@csrf_exempt   # PublieDépublie un parcours depuis form_group et show_group
+def ajax_sharer_parcours(request):  
+
+
+
+    parcours_id = request.POST.get("parcours_id")
+    statut = request.POST.get("statut")
+    is_folder = request.POST.get("is_folder")
+
+    print(is_folder, parcours_id , statut )
+    data = {}
+    if statut=="true" or statut == "True":
+        statut = 0
+        data["statut"]  = "false"
+        data["share"]   = "Privé"
+        data["style"]   = "#dd4b39"
+        data["class"]   = "legend-btn-danger"
+        data["noclass"] = "legend-btn-success"
+        data["label"]   = "Privé"
+    else:
+        statut = 1
+        data["statut"]  = "true"
+        data["share"]   = "Mutualisé"
+        data["style"]   = "#00a65a"
+        data["class"]   = "legend-btn-success"
+        data["noclass"] = "legend-btn-danger"
+        data["label"]   = "Mutualisé"
+
+    is_folder = request.POST.get("is_folder")
+
+    print(is_folder, parcours_id , data )
+
+    if is_folder == "no" :
+        Parcours.objects.filter(pk = int(parcours_id)).update(is_share = statut)
+    else :
+        Folder.objects.filter(pk = int(parcours_id)).update(is_share = statut)
+
+    return JsonResponse(data) 
+
+
+
 
 
 @csrf_exempt

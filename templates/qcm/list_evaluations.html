@@ -14,7 +14,7 @@
  
 
 {% block page_title %}
-    <i class="fa fa-folder"></i> Mes dossiers et évaluations
+       Dossiers & Evaluations
 {% endblock %}
 
 {% block page_menu_right %}
@@ -35,4 +35,12 @@
 {% endblock  %}   
 
 
- 
+{% block list_of_evaluation %}
+    {% for parcours in folder.parcours.all %}  
+        {% if   parcours.is_evaluation %}
+        <tr  style="display:none"   class="collapsed subparcours{{ forloop.parentloop.counter }}"  >
+            {% include 'qcm/list_parcours_data.html' %}
+        </tr>
+        {% endif %}  
+    {% endfor  %}
+{% endblock  %}

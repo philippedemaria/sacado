@@ -1117,7 +1117,45 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     }
                 )
                 });   
+        // ==================================================================================================
+        // ==================================================================================================
+        // ============= Mutualisation de parcours
+        // ==================================================================================================
+        // ==================================================================================================
 
+        function sharer_parcours($actionner,$target,$targetStatut, $is_folder){
+
+                $actionner.on('click', function (event) {
+                let parcours_id = $(this).attr("data-parcours_id");
+                let statut = $(this).attr("data-statut");
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                if( $is_folder) {  is_folder = "yes" ; } else { is_folder = "no" ; }
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            'parcours_id': parcours_id,
+                            'statut': statut,
+                            'is_folder': is_folder,
+                            csrfmiddlewaretoken: csrf_token
+                        },
+                        url: "ajax_sharer_parcours" ,
+                        success: function (data) {
+                            $($target+parcours_id).attr("data-statut",data.statut);                  
+                            $($targetStatut+parcours_id).removeClass(data.noclass);
+                            $($targetStatut+parcours_id).addClass(data.class);
+                            $($targetStatut+parcours_id).html("").html(data.label);
+ 
+                        }
+                    }
+                )
+
+                }); 
+            } ;
+
+            sharer_parcours( $('.parcours_sharer') , '#parcours_sharer' ,'#parcours_sharer_statut' , 0 ) ;
+            sharer_parcours( $('.sharer') , '#folder_sharer' ,'#folder_sharer_statut' , 1 ) ;
         // ==================================================================================================
         // ==================================================================================================
         // ============= Publication de parcours
@@ -1172,7 +1210,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             } ;
 
             publisher_parcours( $('.publisher') , '#parcours_publisher' ,'#parcours_statut' , 0 ) ;
-            publisher_parcours( $('.publisher') , '#folder_publisher' ,'#parcours_statut' , 1 ) ;
+            publisher_parcours( $('.publisher') , '#folder_publisher' ,'#folder_statut' , 1 ) ;
  
         // ==================================================================================================
         // ==================================================================================================

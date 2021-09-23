@@ -8,11 +8,11 @@
 
    
     </td>  
-    <td>
+    <td style="text-align:center;" >
         <span class="fa-stack selector_favorite" id="selector_favorite{{ parcours.id }}" data-fav="{% if parcours.is_favorite %}1{% else  %}0{% endif  %}" data-target_id="{{ parcours.id }}" style="cursor:pointer"  data-status="parcours">
             
             <span id="is_favorite_id{{ parcours.id }}">
-                <i class="fa fa-2x {% if parcours.is_favorite %}fa-eye text-success{% else  %}fa-eye-slash text-danger{% endif  %}"></i>
+                <i class="fa  {% if parcours.is_favorite %}fa-star text-success{% else  %}fa-star text-default{% endif  %}"></i>
             </span>
         </span>
     </td> 
@@ -96,6 +96,23 @@
             {% endfor %}
         </div>
     </td>
+
+
+    <td >
+ 
+        <div class="btn-group"  style="padding:0px;margin:0px;">
+            <a href="#" class="btn btn-default btn-publisher parcours_sharer"  data-from="1" id="parcours_sharer{{parcours.id}}" 
+                data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_share }}">  
+                <i class="fa fa-circle-o-notch"></i>
+            </a><span class="legend-btn  legend-btn-{% if not parcours.is_share %}danger{% else  %}success{% endif  %} size13" id="parcours_sharer_statut{{parcours.id}}"  >  
+              {% if parcours.is_share %} Mutualisé  {% else %} Privé {% endif  %} 
+            </span>
+        </div>
+
+
+    </td>
+
+
     <td style="padding-left: 40px ">
         {% if  parcours.coteachers.count > 0   %}
             <i class="fa fa-check text-success"></i> 
@@ -104,19 +121,17 @@
         {% endif %}
     </td>
     <td>
-        <form action="#" method="POST">
-            {% csrf_token %}
+ 
             <a href="#groupe_name_anchor" class="vue vue actiontarget btn btn-default" data-toggle='modal' style="float:left; margin-right:10px"  data-status='parcours'
-                 data-target_id='{{ parcours.id }}' data-status='folder' data-target='#listing' > 
+                 data-target_id='{{ parcours.id }}' data-status='parcours' data-target='#listing' > 
                  <i class="fa fa-users"></i>
             </a>
-        </form>
+ 
     </td>
     <td>
-        <form action="" method="POST" enctype='multipart/form-data'>     
-            {% csrf_token %}
+ 
             <div class="btn-group"  style="padding:0px;margin:0px;">
-                <a href="#" class="btn btn-default btn-publisher publisher"  data-from="1" id="parcours_publisher{{parcours.id}}" 
+                <a href="#" class="btn btn-default btn-publisher publisher"  id="parcours_publisher{{parcours.id}}" 
                     data-is_disabled="{% if parcours.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
                     data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
                     <i class="fa fa-circle-o-notch"></i>
@@ -124,7 +139,7 @@
                   {% if parcours.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
                 </span>
             </div>
-        </form>
+ 
         <span class="label_icon" style="color:{{ parcours.color   }};">
             {% if parcours.is_evaluation %}
                 {{  parcours.start|date:"d N Y H:i"  }}   

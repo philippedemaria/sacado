@@ -279,7 +279,7 @@ urlpatterns = [
     path('ajax/sort_exercise', ajax_sort_exercise, name='ajax_sort_exercise'), 
     path('ajax/publish', ajax_publish, name='ajax_publish'),  
     path('ajax/publish_parcours', ajax_publish_parcours, name='ajax_publish_parcours'),
-
+    path('ajax_sharer_parcours', ajax_sharer_parcours, name='ajax_sharer_parcours'),
 
     path('ajax/dates', ajax_dates, name='ajax_dates'), 
     path('ajax/skills', ajax_skills, name='ajax_skills'), 

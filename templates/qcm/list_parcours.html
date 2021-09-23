@@ -14,7 +14,7 @@
  
 
 {% block page_title %}
-    <i class="fa fa-folder"></i> Mes dossiers et parcours
+   Dossiers & parcours
 {% endblock %}
 
 
@@ -42,7 +42,7 @@
     
     <div class="row">    
         <div class="col-sm-12 col-md-12">
-            <h1 class="thin" style="margin-bottom:0px;"><i class="fa fa-th"></i> Mes dossiers</h1>
+            <h1 class="thin" style="margin-bottom:0px;"> <i class="fa fa-folder"></i> Mes dossiers</h1>
         </div>
     </div>
 
@@ -50,29 +50,30 @@
     <div class="row">    
         <div class="col-sm-12 col-md-12">
             {% csrf_token %}
-            <table class="table table-hovered display1000"  style="width:100%" >
+            <table class="table table-hovered ordering_tab_1000"  style="width:100%" >
                 <thead> 
                     <tr> 
                         <th style="width:20px"></th>
                         <th style="width:50px">Groupe 
                         </th>
-                        <th style="width:50px">
+                        <th style="width:50px; ">
                             <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                            <div class="helper_tip_text" >Accessible depuis un groupe. </div>
+                            <div class="helper_tip_text" style="text-align: right" ><i class="fa fa-star text-success"></i> Accessible<br/>depuis un groupe <br/> <i class="fa fa-star text-default"></i> Inaccessible<br/>depuis un groupe </div>
                             </span>
                         </th>            
                         <th style="width:300px">Nom</th>
                         <th>Modif.</th>
                         <th>Matière</th>
                         <th>Niveau</th>
-                        <th style="width:350px">Affecté au groupe 
+                        <th style="width:250px">Affecté au groupe 
                             <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                             <div class="helper_tip_text" >Le profil élève d'un enseignant n'est pas pris en compte. </div>
                             </span>
 
                         </th>
+                        <th>Mutualisation</th>
                         <th>Coanimation</th>
-                        <th>Elèves
+                        <th style="width:100px">Elèves
                             <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                             <div class="helper_tip_text" >Le profil élève d'un enseignant est pris en compte. </div>
                             </span>
@@ -86,19 +87,16 @@
                     </tr> 
                 </thead>
                 <tbody>
-
                 {% for folder in folders|dictsortreversed:"is_favorite" %}
                     <tr {% if not folder.is_publish %} style="border-left-color:#cb2131; border-left-style: 3px solid" {% endif  %}>
                         <td style="position:relative; text-align:center;"> 
                             <input type="checkbox" name="selected_folders" value="{{ folder.id}}"/>
-
-
                         </td>  
-                        <td>
+                        <td style="text-align:center;" >
                             <span class="fa-stack selector_favorite" id="selector_favorite{{ folder.id }}" data-fav="{% if folder.is_favorite %}1{% else  %}0{% endif  %}" data-target_id="{{ folder.id }}" style="cursor:pointer"  data-status="folder">
                                 
                                 <span id="is_favorite_id{{ folder.id }}" title="Cliquer pour changer l'état">
-                                    <i class="fa fa-2x {% if folder.is_favorite %}fa-eye text-success{% else  %}fa-eye-slash text-danger{% endif  %}"></i>
+                                    <i class="fa {% if folder.is_favorite %}fa-star text-success{% else  %}fa-star text-default{% endif  %}"></i>
                                 </span>
                             </span>
 
@@ -163,6 +161,26 @@
                                 {% endfor %}
                             </div>
                         </td>
+
+
+                        <td style="width:150px;" >
+ 
+
+                                <div class="btn-group"  style="padding:0px;margin:0px;">
+                                    <a href="#" class="btn btn-default btn-publisher  sharer"   id="folder_sharer{{folder.id}}" 
+                                        data-parcours_id="{{folder.id}}" data-statut="{{folder.is_share }}">  
+                                        <i class="fa fa-circle-o-notch"></i>
+                                    </a><span class="legend-btn  legend-btn-{% if folder.is_share %}success{% else  %}danger{% endif  %} size13" id="folder_sharer_statut{{folder.id}}"  >  
+                                      {% if folder.is_share %} Mutualisé  {% else %} Privé {% endif  %} 
+                                    </span>
+                                </div>
+
+ 
+
+                        </td>
+
+
+
                         <td style="padding-left: 40px ">
                             {% if  folder.coteachers.count > 0   %}
                                 <i class="fa fa-check text-success"></i> 
@@ -186,7 +204,7 @@
                                         data-is_disabled="{% if folder.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
                                         data-parcours_id="{{folder.id}}" data-statut="{{folder.is_publish }}">  
                                         <i class="fa fa-circle-o-notch"></i>
-                                    </a><span class="legend-btn  legend-btn-{% if not folder.is_publish %}danger{% else  %}success{% endif  %} size13" id="parcours_statut{{folder.id}}"  >  
+                                    </a><span class="legend-btn  legend-btn-{% if not folder.is_publish %}danger{% else  %}success{% endif  %} size13" id="folder_statut{{folder.id}}"  >  
                                       {% if folder.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
                                     </span>
                                 </div>
@@ -200,12 +218,17 @@
                                 {% endif %}
                             </span>
                         </td>
-                    </tr> 
-                    {% for parcours in folder.parcours.all %}  
-                        <tr  style="display:none"   class="collapsed subparcours{{ forloop.parentloop.counter }}"  >
-                            {% include 'qcm/list_parcours_data.html' %}
-                        </tr>
-                    {% endfor  %} 
+                    </tr>
+                    {% block list_of_evaluation %}
+                        {% for parcours in folder.parcours.all %}  
+                            {% if not parcours.is_evaluation %}
+                            <tr  style="display:none"   class="collapsed subparcours{{ forloop.parentloop.counter }}"  >
+                                {% include 'qcm/list_parcours_data.html' %}
+                            </tr>
+                            {% endif %}  
+                        {% endfor  %}
+                    {% endblock  %}
+
                 {% endfor  %}
 
                 </tbody>
@@ -219,11 +242,11 @@
     </div>
     <div class="row">    
         <div class="col-sm-12 col-md-12">
-            <table class="table table-hovered display1000"  style="width:100%" >
+            <table class="table table-hovered ordering_tab_1000"  style="width:100%" >
                 <thead> 
                     <tr> 
                         <th style="width:30px"></th> 
-                        <th style="width:60px">Groupe</th> 
+                        <th style="width:60px">Dossier</th> 
                         <th style="width:50px"></th> 
                         <th style="width:300px">Nom</th>
                         <th>Modif.</th>
@@ -235,8 +258,9 @@
                             </span>
 
                         </th>
+                        <th  style="width:150px;" >Mutualisation</th>
                         <th>Coanimation</th>
-                        <th>Elèves
+                        <th style="width:100px">Elèves
                             <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                             <div class="helper_tip_text" >Le profil élève d'un enseignant est pris en compte. </div>
                             </span>

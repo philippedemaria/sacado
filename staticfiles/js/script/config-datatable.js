@@ -8,6 +8,11 @@ $('.standard_tab_1000').dataTable( {
 } );
 
 
+$('.ordering_tab_1000').dataTable( {
+    "pageLength": 1000,
+    "info":     false
+} );
+
 
 $('#standard_tab').dataTable( {
     "order": [],
