@@ -5564,7 +5564,7 @@ def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exerci
  
 
   
-def parcours_delete_custom_exercise(request,idcc,id): # Suppression d'un exercice non autocorrigé dans un parcours
+def parcours_delete_custom_exercise(request,idcc,id ): # Suppression d'un exercice non autocorrigé dans un parcours
 
     teacher = Teacher.objects.get(user=request.user)
     custom = Customexercise.objects.get(pk=idcc)
@@ -5572,7 +5572,7 @@ def parcours_delete_custom_exercise(request,idcc,id): # Suppression d'un exercic
     try :
         folder_id = request.session.get("folder_id")
     except :
-        folder = 0
+        folder_id = 0
 
     if not authorizing_access(teacher, custom,True):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
@@ -5585,8 +5585,8 @@ def parcours_delete_custom_exercise(request,idcc,id): # Suppression d'un exercic
         parcours = Parcours.objects.get(pk=id)
         custom.parcourses.remove(parcours)
         custom.delete() 
-        return redirect('show_parcours', folder_id , parcours.id )
-
+        return redirect('show_parcours', folder_id , id )
+ 
 
 
 def write_exercise(request,id): # Coté élève
