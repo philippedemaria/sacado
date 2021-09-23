@@ -1177,15 +1177,14 @@ def enroll(request, slug):
                 user.save()
                 student = Student.objects.create(user=user, level=group.level)
 
-
                 # Affections des DOSSIERS ET parcours
                 parcourses = group.group_parcours.all()
-                attribute_all_documents_to_student(parcourses, student)
+                re = attribute_all_documents_to_student(parcourses, student)
 
                 folders = group.group_folders.all()
                 for folder in folders :
                     folder.students.add(student)
-                    attribute_all_documents_to_student(folder.parcours.all(), student)
+                    r = attribute_all_documents_to_student(folder.parcours.all(), student)
 
 
                 group.students.add(student)
