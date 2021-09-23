@@ -964,7 +964,7 @@ def ajax_individualise(request):
                         except :
                             pass
 
-                        statut = 0
+          
                         data["statut"] = "False"
                         data["class"] = "btn btn-default"
                         data["noclass"] = "btn btn-success"
@@ -977,13 +977,12 @@ def ajax_individualise(request):
                             customexercise.students.set(parcours.students.all())
                         except :
                             pass
-                        statut = 1    
+          
                         data["statut"] = "True"
                         data["class"] = "btn btn-success"
                         data["noclass"] = "btn btn-default"
                         data["alert"] = False  
                 else :
-
                     student = Student.objects.get(pk = student_id) 
                     if statut=="true" or statut == "True":
                         try :
@@ -994,24 +993,25 @@ def ajax_individualise(request):
                                 data["alert"] = True                        
                         except :
                             pass
-                        statut = 0
+ 
                         data["statut"] = "False"
                         data["class"] = "btn btn-default"
                         data["noclass"] = "btn btn-success" 
                     else:
-                        statut = 1
+ 
                         try :
                             customexercise.students.add(student) 
                         except :
                             pass
                         data["statut"] = "True"
-                        data["class"] = "btn btn-default"
-                        data["noclass"] = "btn btn-danger"
-                        data["alert"] = False   
-            
+                        data["class"] = "btn btn-success"
+                        data["noclass"] = "btn btn-default"
+                        data["alert"] = False
+                            
         else :
             for relationship in parcours.parcours_relationship.filter(is_publish=1 ) : 
-                if student_id ==  0  :  
+                if student_id ==  0  :
+                    print(statut)  
                     if statut=="true" or statut == "True" :
                         somme = 0
                         try :

@@ -493,14 +493,14 @@ define(['jquery','bootstrap'], function ($) {
 
                                 if (student_id == 0)
                                     {       
-                                    $('.select_student' ).html(data.html);   
+    
                                     $('.select_student' ).attr("data-statut",data.statut);                  
                                     $('.select_student' ).removeClass(data.noclass);
                                     $('.select_student' ).addClass(data.class);
                                     }
                                 else 
-                                    { 
-                                    $('.selected_studentCustomExo'+student_id).html(data.html);   
+                                    {  
+ 
                                     $('.selected_studentCustomExo'+student_id).attr("data-statut",data.statut);                  
                                     $('.selected_studentCustomExo'+student_id).removeClass(data.noclass);
                                     $('.selected_studentCustomExo'+student_id).addClass(data.class);                        
@@ -514,7 +514,7 @@ define(['jquery','bootstrap'], function ($) {
  
                                 if (student_id == 0)
                                     {  
-                                    $('.select_student' ).html(data.html);   
+ 
                                     $('.select_student' ).attr("data-statut",data.statut);                  
                                     $('.select_student' ).removeClass(data.noclass);
                                     $('.select_student' ).addClass(data.class);
@@ -547,14 +547,14 @@ define(['jquery','bootstrap'], function ($) {
 
                                 if (student_id != 0)
                                     {       
-                                    $('#studentCustom'+exercise_id+"-"+student_id).html(data.html);   
+ 
                                     $('#studentCustom'+exercise_id+"-"+student_id).attr("data-statut",data.statut);                  
                                     $('#studentCustom'+exercise_id+"-"+student_id).removeClass(data.noclass);
                                     $('#studentCustom'+exercise_id+"-"+student_id).addClass(data.class);
                                     }
                                 else 
                                     { 
-                                    $('.selected_studentCustom'+exercise_id).html(data.html);   
+ 
                                     $('.selected_studentCustom'+exercise_id).attr("data-statut",data.statut);                  
                                     $('.selected_studentCustom'+exercise_id).removeClass(data.noclass);
                                     $('.selected_studentCustom'+exercise_id).addClass(data.class);                        
@@ -568,14 +568,14 @@ define(['jquery','bootstrap'], function ($) {
 
                                 if (student_id != 0)
                                     {       
-                                    $('#student'+exercise_id+"-"+student_id).html(data.html);   
+ 
                                     $('#student'+exercise_id+"-"+student_id).attr("data-statut",data.statut);                  
                                     $('#student'+exercise_id+"-"+student_id).removeClass(data.noclass);
                                     $('#student'+exercise_id+"-"+student_id).addClass(data.class);
                                     }
                                 else 
                                     { 
-                                    $('.selected_student'+exercise_id).html(data.html);   
+   
                                     $('.selected_student'+exercise_id).attr("data-statut",data.statut);                  
                                     $('.selected_student'+exercise_id).removeClass(data.noclass);
                                     $('.selected_student'+exercise_id).addClass(data.class);                      
