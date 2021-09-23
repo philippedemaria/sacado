@@ -1175,12 +1175,19 @@ def enroll(request, slug):
                 username = request.POST.get("username")
                 user.set_password(password)
                 user.save()
-
-                parcourses = group.group_parcours.all()
-
-                # Création de Student et affections des parcours
                 student = Student.objects.create(user=user, level=group.level)
+
+
+                # Affections des DOSSIERS ET parcours
+                parcourses = group.group_parcours.all()
                 attribute_all_documents_to_student(parcourses, student)
+
+                folders = group.group_folders.all()
+                for folder in folders :
+                    folder.students.add(student)
+                    attribute_all_documents_to_student(folder.parcours.all(), student)
+
+
                 group.students.add(student)
                 messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation. Connectez-vous avec vos identifiants en cliquant sur le bouton bleu Se connecter.")
                 try :    
