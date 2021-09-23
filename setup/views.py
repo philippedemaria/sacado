@@ -319,7 +319,7 @@ def send_message(request):
         else :
             messages.error(request,"Erreur d'opération....")
     else :
-        messages.error("Oubli de token.")
+        messages.error(request,"Oubli de token.")
 
     return redirect("index")
 
