@@ -307,13 +307,9 @@ def send_message(request):
                 ############################################################  
 
                 send_mail(subject,
-                          "Bonjour, vous venez d'envoyer le message suivant :\n\n" + message+" \n\n" + email +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
-                          settings.DEFAULT_FROM_EMAIL , 
-                          [email,])
-                send_mail(subject,
-                            message+" \n\n" + email +  school_datas,
+                            message+" \n\n Ce mail est envoyé à partir de l'adresse : " + email + "\n\n" + school_datas,
                           settings.DEFAULT_FROM_EMAIL,
-                          [email, "sacado.asso@gmail.com"])
+                          ["sacado.asso@gmail.com" ])
                 messages.success(request,"Message envoyé..... Merci. L'équipe Sacado.")
 
         else :
