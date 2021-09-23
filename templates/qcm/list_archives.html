@@ -14,7 +14,7 @@
  
 
 {% block page_title %}
-    <i class="fa fa-folder"></i> Mes dossiers archivés
+    <i class="fa fa-folder"></i> Mes dossiers et parcours archivés
 
 {% endblock %}
 
@@ -35,6 +35,11 @@
 
 
 <form action="{% url 'unarchive' %}" method="POST" enctype='multipart/form-data'>
+    <div class="row">    
+        <div class="col-sm-12 col-md-12">
+            <h1 class="thin" style="margin-bottom:0px;"><i class="fa fa-th"></i> Mes dossiers archivés</h1> 
+        </div>
+    </div>
     <div class="row">    
         <div class="col-sm-12 col-md-12">
             {% csrf_token %}
