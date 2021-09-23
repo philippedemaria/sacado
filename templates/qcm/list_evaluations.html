@@ -19,7 +19,7 @@
 
 {% block page_menu_right %}
 
-    <li><a href="{% url 'create_parcours' 0 %}" class="btn btn-new">Nouvelle évaluation</a></li>
+    <li><a href="{% url 'create_evaluation' 0 %}" class="btn btn-new-evaluation">Nouvelle évaluation</a></li>
     <li><a href="{% url 'create_folder' 0 %}" class="btn btn-green">Nouveau dossier</a></li>
 
     <li><a href="{% url 'evaluations_archives' %}"  class="no_button"><i class="fa fa-archive"></i> Evaluation{{ nb_archive|pluralize }} archivé{{ nb_archive|pluralize }} ({{ nb_archive }})</a></li>
