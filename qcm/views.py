@@ -5497,7 +5497,8 @@ def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice no
                 nf.is_image = True
             nf.save()
             ceForm.save_m2m()
-            nf.parcourses.add(parcours)            
+            nf.parcourses.add(parcours)  
+            nf.students.set( parcours.students.all() )     
         else :
             print(ceForm.errors)
         return redirect('show_parcours', 0 , parcours.id  )
@@ -5554,6 +5555,7 @@ def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exerci
                 nf.save()
                 ceForm.save_m2m()
                 nf.parcourses.add(parcours)
+                nf.students.set( parcours.students.all() )  
             else :
                 print(ceForm.errors)
             return redirect('show_parcours', 0, parcours.id )
