@@ -5571,10 +5571,8 @@ def parcours_delete_custom_exercise(request,idcc,id ): # Suppression d'un exerci
     teacher = Teacher.objects.get(user=request.user)
     custom = Customexercise.objects.get(pk=idcc)
 
-    try :
-        folder_id = request.session.get("folder_id")
-    except :
-        folder_id = 0
+    folder_id = request.session.get("folder_id",0)
+
 
     if not authorizing_access(teacher, custom,True):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
