@@ -1645,12 +1645,12 @@ def print_ids(request, id):
         dataset.append(liste)
 
     if len(students)%2==1 :
-        msg = "\n\n{} {}un accès à l'interface SACADO,".format(students[-1].user.first_name.capitalize() , students[-1].user.last_name.capitalize())
+        msg = "\n\n{} {}un accès à l'interface SACADO,".format(students[len(students)-1].user.first_name.capitalize() , students[len(students)-1].user.last_name.capitalize())
         msg += "\nsite d'entrainement personnalisé "
         msg += "\nauto-corrigé,vous a été fourni."
         msg += "\nVous pouvez vous connecter sur"
         msg += "\nsacado.xyz avec le code suivant :"
-        msg += "\n\n            {}".format(students[-1].user.username)
+        msg += "\n\n            {}".format(students[len(students)-1].user.username)
         dataset.append( (logo,msg) )
         grid.append( ('BOX', (0,i+1), (1,i+1), 0.25, colors.gray, None, (2,2,1)) )
         grid.append( ('BOX', (2,i+1), (3,i+1), 0.25, colors.gray, None, (2,2,1)) )
