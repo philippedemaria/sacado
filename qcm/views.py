@@ -3635,25 +3635,27 @@ def ajax_detail_parcours(request):
 
 
 
-
-
-
 def delete_relationship(request,idr):
 
-    relation = Relationship.objects.get(pk = idr) 
+    relation = Relationship.objects.get(pk = idr)
+    link =  relation.parcours.id
     if relation.parcours.teacher.user == request.user  :
-        
         relation.delete()
 
-    return redirect("show_parcours" , relation.parcours.id , 0 ) 
+    return redirect("show_parcours" , 0 , link ) 
+
+
     
 def delete_relationship_by_individualise(request,idr, id):
 
-    relation = Relationship.objects.get(pk = idr) 
+    relation = Relationship.objects.get(pk = idr)
+    link =  relation.parcours.id
     if relation.parcours.teacher.user == request.user  :
         relation.delete()
 
-    return redirect("individualise_parcours" , relation.parcours.id   ) 
+    return redirect("individualise_parcours" , link   ) 
+
+
 
 def remove_students_from_parcours(request):
 
