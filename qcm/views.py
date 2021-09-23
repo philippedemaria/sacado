@@ -2126,7 +2126,6 @@ def rcs_for_realtime(parcours):
 
 
 
-@parcours_exists
 def show_parcours(request, idf = 0, id=0):
     """ show parcours coté prof """
     if idf > 0 :
