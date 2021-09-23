@@ -906,6 +906,8 @@ def individualise_parcours(request,id):
     relationships = parcours.parcours_relationship.order_by("ranking")
     customexercises = Customexercise.objects.filter(parcourses = parcours).order_by("ranking") 
 
+    nb_rc = relationships.count() + customexercises.count()
+
     role, group , group_id , access = get_complement(request, teacher, parcours)
 
     if not authorizing_access(teacher,parcours, access ):
@@ -914,9 +916,9 @@ def individualise_parcours(request,id):
  
 
     context = {'relationships': relationships, 'parcours': parcours,     'communications':[],  'form': None,  
-                'teacher': teacher, 'customexercises' : customexercises ,
+                'teacher': teacher, 'customexercises' : customexercises , 'nb_rc' : nb_rc ,
                 'exercises': None , 'folder' : folder ,
-                'levels': None , 
+                 'levels': None , 
                 'themes' : None ,
                 'user': request.user , 
                 'group_id' : group_id , 'group' : group , 'role' : role }
