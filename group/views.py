@@ -1175,10 +1175,8 @@ def enroll(request, slug):
                 username = request.POST.get("username")
                 user.set_password(password)
                 user.save()
-                parcourses = set()
-                for std in group.students.all():
-                    parcourses.update(std.students_to_parcours.filter(teacher=group.teacher))
 
+                parcourses = group.group_parcours.all()
 
                 # Création de Student et affections des parcours
                 student = Student.objects.create(user=user, level=group.level)

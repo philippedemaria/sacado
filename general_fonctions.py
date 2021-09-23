@@ -231,6 +231,8 @@ def attribute_all_documents_to_student(parcourses,student):
         test = False
     return test
 
+
+
 def attribute_all_documents_to_students(form, nf ):
     """  assigner les documents   """
     students = set()
