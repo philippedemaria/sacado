@@ -44,16 +44,12 @@ class ParcoursForm(forms.ModelForm):
 			shared_groups = teacher.teacher_group.all()
 			these_groups  = groups|shared_groups
 			all_groups    = these_groups.order_by("teachers")
-			coteachers    = Teacher.objects.filter(user__school=teacher.user.school).order_by("user__last_name") 
 
 			self.fields['groups']	  = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=False)
-			self.fields['coteachers'] = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
 			self.fields['subject']	  = forms.ModelChoiceField(queryset=teacher.subjects.all(),  required=False)
 			self.fields['level']	  = forms.ModelChoiceField(queryset=teacher.levels.order_by("ranking"),  required=False)
 
 
-
-			
 	def clean(self):
 		"""
 		Vérifie que la fin de l'évaluation n'est pas avant son début
@@ -71,6 +67,9 @@ class ParcoursForm(forms.ModelForm):
 		for g in groups:
 			for s in g.students.all() :
 				attribute_all_documents_to_student([self],s)
+
+ 
+
 
 
 class Parcours_GroupForm(forms.ModelForm):

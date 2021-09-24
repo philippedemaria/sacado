@@ -1406,16 +1406,16 @@ def list_parcours_group(request,id):
         return redirect('index')
 
   
-    folders     = group.group_folders.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),    is_favorite=1,  is_archive=0, is_trash=0 ).order_by("ranking")
+    folders     = group.group_folders.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject = group.subject, level = group.level ,   is_favorite=1,  is_archive=0, is_trash=0 ).order_by("ranking")
  
 
-    bases       = group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),   is_favorite=1, folders = None, is_trash=0)     
+    bases       = group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject = group.subject, level = group.level ,   is_favorite=1, folders = None, is_trash=0)     
     evaluations = bases.filter( is_evaluation=1).order_by("ranking")
     parcourses  = bases.exclude(is_evaluation=1).order_by("ranking")
     ###efface le realtime de plus de 2 h
     #clear_realtime(parcours_tab , today.now() ,  3600 )
     nb_bases = bases.count() + folders.count()
- 
+
     context =  { 'folders': folders , 'teacher' : teacher , 'group': group,  'parcours' : None ,  'role' : role , 'today' : today ,
                  'parcourses': parcourses , 'evaluations' : evaluations , 'nb_bases' : nb_bases }
 
@@ -1847,23 +1847,95 @@ def lock_all_exercises_for_student(dateur,parcours):
 
 
 
+def set_coanimation_teachers(nf, group_ids,teacher):
+
+    try :
+        historic_teachers = []
+        if len(group_ids) > 0 : # récupération de la vignette précréée et insertion dans l'instance du parcours.
+            for group_id in group_ids :
+                g = Group.objects.get(pk=group_id)
+                if teacher != g.teacher :
+                    if not g.teacher in historic_teachers :
+                        historic_teachers.append(g.teacher)
+                        nf.coteachers.add(g.teacher)
+                        test = True
+    except :
+        test = False
+    return test
+
+
+
+def change_coanimation_teachers(nf, parcours , group_ids,teacher): # target = parcours, eval 
+
+    try :
+        old_groups = target.groups.values_list("id",flat=True)
+     
+        reset_group_ids = [gid for gid in old_groups if not gid in group_ids]
+        for group_id in reset_group_ids :
+            g = Group.objects.get(pk=group_id)
+            if teacher != g.teacher :
+                for r  in parcours.parcours_relationship.all():
+                    r.pk = None
+                    r.teacher = g.teacher
+                    r.save()
+                for c  in parcours.course.all():
+                    c.pk = None
+                    c.teacher = g.teacher
+                    c.save()
+                for rc  in parcours.parcours_customexercises.all():
+                    rc.pk = None
+                    rc.teacher = g.teacher
+                    rc.save()   
+                parcours.pk = None
+                parcours.teacher = g.teacher
+                parcours.save()
+
+        new_group_ids = [gid for gid in group_ids if not gid in old_groups]
+        set_coanimation_teachers(nf, new_group_ids ,teacher)
+        test = True
+    except :
+        test = False
+
+    return test
+
+
+
+def change_folder_coanimation_teachers(nf, parcours , folder , group_ids,teacher):  
+
+    try :
+        old_groups = target.groups.values_list("id",flat=True)
+     
+        reset_group_ids = [gid for gid in old_groups if not gid in group_ids]
+        for group_id in reset_group_ids :
+            g = Group.objects.get(pk=group_id)
+            if teacher != g.teacher :
+                for parcours in parcours.folders.all():
+                    for r  in parcours.parcours_relationship.all():
+                        r.pk = None
+                        r.teacher = g.teacher
+                        r.save()
+                    for c  in parcours.course.all():
+                        c.pk = None
+                        c.teacher = g.teacher
+                        c.save()
+                    for rc  in parcours.parcours_customexercises.all():
+                        rc.pk = None
+                        rc.teacher = g.teacher
+                        rc.save()   
+                    parcours.pk = None
+                    parcours.teacher = g.teacher
+                    parcours.save()
+
+        new_group_ids = [gid for gid in group_ids if not gid in old_groups]
+        set_coanimation_teachers(nf, new_group_ids ,teacher)
+        test = True
+    except :
+        test = False
+
+    return test
+
 
  
-
-
-
-
-
-# def assign_all_documents(nf , group_ckeched_ids):
-#     """" fontion à mettre dans create et update ne fonctionnepas pour l'instant....todo ......"""
-#     nf.groups.set(group_ckeched_ids)
-#     for group_ckeched_id in group_ckeched_ids :
-#         group_ckeched = Group.objects.get(pk = group_ckeched_id)
-#         parcourses = group_ckeched.group_parcours.all()
-#         for s in group_ckeched.students.all() :
-#             nf.students.add(s)
-#             attribute_all_documents_to_student(parcourses,s)
-
 
 def create_parcours(request,idf=0):
     """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
@@ -1904,7 +1976,11 @@ def create_parcours(request,idf=0):
 
         nf.save()
         form.save_m2m()
- 
+
+        # Gestion de la coanimation
+        # group_ids = request.POST.getlist("groups",[])
+        # coanim = set_coanimation_teachers(nf,  group_ids,teacher) 
+
 
         if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
             nf.vignette = request.POST.get("this_image_selected",None)
@@ -1973,8 +2049,10 @@ def update_parcours(request, id, idg=0 ):
             form.save_m2m()
 
             if "groups" in form.changed_data :
-                print("changed")
                 attribute_all_documents_to_students(form,nf) # Si les groupes sont modifiés alors on attribue les docu aux élèves des groupes.
+
+                #change_coanimation_teachers(nf, parcours , target , group_ids,teacher)
+
 
             if "stop" in form.changed_data :
                 lock_all_exercises_for_student(nf.stop,parcours)
@@ -4772,7 +4850,11 @@ def create_evaluation(request,idf=0):
 
         nf.save()
         form.save_m2m()
- 
+
+        # Gestion de la coanimation
+        # group_ids = request.POST.getlist("groups",[])
+        # coanim = set_coanimation_teachers(nf,  group_ids,teacher) 
+
 
         if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
             nf.vignette = request.POST.get("this_image_selected",None)
@@ -7924,6 +8006,13 @@ def create_folder(request,idg):
                 nf.vignette = request.POST.get("this_image_selected",None)
             nf.save() 
             form.save_m2m()
+
+            # Gestion de la coanimation
+            # group_ids = request.POST.getlist("groups",[])
+            # coanim = set_coanimation_teachers(nf,  group_ids,teacher) 
+
+
+
             if group :    
                 nf.groups.add(group)
                 nf.students.set(group.students.all())

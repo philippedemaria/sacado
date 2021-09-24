@@ -97,7 +97,7 @@ def student_dashboard(request,group_id):
         else :
             template = "dashboard.html" 
     else :
-        template =  "group/dashboard_group.html" 
+        template =  "group/dashboard_group.html"  
 
     today = time_zone_user(request.user)        
     timer = today.time()
@@ -115,14 +115,14 @@ def student_dashboard(request,group_id):
         evaluations = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), folders = None, is_evaluation=1,subject = group.subject,is_trash=0).order_by("ranking")
         last_exercises_done = student.answers.filter(exercise__knowledge__theme__subject=group.subject).order_by("-date")[:5]
 
- 
-
-
     else :
-        folders = None
-        group = None
-        parcourses = student.students_to_parcours.filter(is_evaluation=0, is_publish=1,is_trash=0).order_by("ranking")
-        evaluations = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_evaluation=1,is_trash=0)
+
+        folders = student.folders.filter( is_publish=1,is_archive=0,is_trash=0).order_by("ranking")
+        group   = student.students_to_group.first()
+
+        bases = student.students_to_parcours
+        parcourses = bases.filter(is_evaluation=0, folders = None, is_publish=1,is_trash=0).order_by("ranking")
+        evaluations = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), folders = None, is_evaluation=1,is_trash=0).order_by("ranking")
         last_exercises_done = student.answers.order_by("-date")[:5]
    
     customexercises_set = set()

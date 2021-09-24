@@ -136,8 +136,8 @@ def index(request):
 
 
             teacher_parcours = teacher.teacher_parcours
-            parcours_tab = teacher_parcours.filter(students=None, is_favorite=1, is_archive=0 ,is_trash=0 ).order_by("is_evaluation") ## Parcours / évaluation favoris non affectés
-
+            parcours_tab = teacher_parcours.filter(students=None, is_favorite=1, is_archive=0 ,is_trash=0 ).order_by("is_evaluation") ## Parcours / évaluation favoris non affecté
+            
             #Menu_right
             parcourses = teacher_parcours.filter(is_evaluation=0, is_favorite =1, is_archive=0,  is_trash=0 ).order_by("-is_publish")
 
