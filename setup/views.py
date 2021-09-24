@@ -237,10 +237,10 @@ def ressource_sacado(request): #Protection saml pour le GAR
     gars = []
     # for key, value in request.items():
     #     gars.append((key,value))
-    test = request 
+    test = request.headers 
  
 
-    # dico_received = request.META['X-GAR']
+    # dico_received = request
     # last_name  = dico_received["last_name"]
     # first_name = dico_received["first_name"]
     # user_type  = dico_received["profil"]
