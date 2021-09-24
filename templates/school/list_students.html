@@ -75,7 +75,8 @@
                     <thead>
                     <tr>
                         <th>Nom</th>
-                        <th>Prénom</th>                        
+                        <th>Prénom</th> 
+                        <th>Identifiant</th>                
                         <th>Courriel</th>
                         <th>Groupe</th>
                         <th>Dernière connexion</th>
@@ -101,6 +102,9 @@
 
 
                                     {% endif %}  
+                                </td>
+                                <td>
+                                    {{ user.username }}   
                                 </td>
                                 <td>
                                     {{ user.email }}   
