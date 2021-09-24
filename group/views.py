@@ -1705,7 +1705,11 @@ def print_list_ids(request, id):
     logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))
     elements.append(logo_tab_tab)
     elements.append(Spacer(0, 0.1*inch))
- 
+
+    paragraph = Paragraph( "Initialement, tous les élèves ont le même mot de passe : sacado2020" , normal )
+    elements.append(paragraph)
+    elements.append(Spacer(0, 0.1*inch))
+    
     dataset  = [(" ", "Nom ","Prénom", "Identifiant")]
  
 
