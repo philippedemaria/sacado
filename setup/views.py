@@ -235,16 +235,15 @@ def logout_view(request):
 def ressource_sacado(request): #Protection saml pour le GAR
 
     gars = []
-    #for key, value in request.items():
-    #    gars.append((key,value))
-
+    # for key, value in request.items():
+    #     gars.append((key,value))
     test = request 
-    
+ 
+
     # dico_received = request.META['X-GAR']
     # last_name  = dico_received["last_name"]
     # first_name = dico_received["first_name"]
     # user_type  = dico_received["profil"]
-    
     # email      = dico_received["email"]
     # closure    = dico_received["closure"]
     # time_zone  = dico_received["time_zone"]
@@ -269,7 +268,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     #         levels      = dico_received["levels"]
     #         subjects    = dico_received["subjects"] 
     #         teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 1 , "exercise_post" : 1 , "subjects" : subjects , "levels" : levels  })        
- 
+
     #     user = authenticate(username=username, password=password)
     #     login(request, user)
     #     request.session["user_id"] = request.user.id
