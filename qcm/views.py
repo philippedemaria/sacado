@@ -1453,10 +1453,9 @@ def list_sub_parcours_group_student(request,idg,id):
     folder  = Folder.objects.get(pk = id) 
     group   = Group.objects.get(pk = idg) 
 
-    bases = student.students_to_parcours.filter(groups=group, is_publish=1,is_trash=0,folders=folder)
-
-    parcourses = bases.filter(is_evaluation = 0).order_by("ranking")
-    evaluations = bases.filter(is_evaluation = 1).order_by("ranking")
+    bases = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),   groups = group ,  is_trash=0,folders=folder)
+    parcourses = bases.filter( is_evaluation=0,  is_trash=0).order_by("ranking")
+    evaluations = bases.filter( is_evaluation=1, is_trash=0).order_by("ranking")
 
     context = {'parcourses': parcourses , 'evaluations': evaluations , 'student' : student , 'group' : group ,  'folder' : folder,    'today' : today }
 
@@ -4908,7 +4907,7 @@ def show_evaluation(request, id):
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
 
- 
+    print(parcours.students.order_by("user__last_name"))
 
     skills = Skill.objects.all()
 

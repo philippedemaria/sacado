@@ -95,8 +95,7 @@
             {% endfor  %}   
             {%  if evaluations %}
             <div class="row"></div> 
-            <hr/>
-            <h2 class='thin'>Evaluations</h2>
+            <h2 class='thin'>Mes évaluations</h2>
                 {%  for evaluation in  evaluations %} 
                     {% get_min_score evaluation student as data_min %} 
                     <div class="small-box-student" style="background-color:{{evaluation.color }};color:{{evaluation.color|contrast_color }};">
