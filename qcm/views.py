@@ -3297,13 +3297,10 @@ def ajax_publish_parcours(request):
 @csrf_exempt   # PublieDépublie un parcours depuis form_group et show_group
 def ajax_sharer_parcours(request):  
 
-
-
     parcours_id = request.POST.get("parcours_id")
     statut = request.POST.get("statut")
     is_folder = request.POST.get("is_folder")
-
-    print(is_folder, parcours_id , statut )
+ 
     data = {}
     if statut=="true" or statut == "True":
         statut = 0
@@ -3323,9 +3320,7 @@ def ajax_sharer_parcours(request):
         data["label"]   = "Mutualisé"
 
     is_folder = request.POST.get("is_folder")
-
-    print(is_folder, parcours_id , data )
-
+ 
     if is_folder == "no" :
         Parcours.objects.filter(pk = int(parcours_id)).update(is_share = statut)
     else :
@@ -4942,7 +4937,9 @@ def correction_exercise(request,id,idp,ids=0):
 
     teacher = Teacher.objects.get(user=request.user)
     stage = get_stage(teacher.user)
-    formComment = CommentForm(request.POST or None )
+    formComment = CommentForm(request.POST or None)
+
+    folder_id = request.session.get("folder_id",None)
 
     comments = Comment.objects.filter(teacher = teacher)
 
@@ -4967,7 +4964,7 @@ def correction_exercise(request,id,idp,ids=0):
             w_a = False 
             annotations = []
 
-        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage , 'comments' : comments   , 'formComment' : formComment , 'custom':  False , 'nb':nb, 'w_a':w_a, 'annotations':annotations,  'communications' : [] ,  'parcours' : relationship.parcours , 'parcours_id': relationship.parcours.id, 'group' : None , 'student' : student }
+        context = {'relationship': relationship,  'teacher': teacher, 'stage' : stage , 'comments' : comments , 'folder_id' : folder_id   , 'formComment' : formComment , 'custom':  False , 'nb':nb, 'w_a':w_a, 'annotations':annotations,  'communications' : [] ,  'parcours' : relationship.parcours , 'parcours_id': relationship.parcours.id, 'group' : None , 'student' : student }
  
         return render(request, 'qcm/correction_exercise.html', context)
     else :

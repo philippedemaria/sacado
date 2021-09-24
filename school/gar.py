@@ -6,11 +6,11 @@ import requests
 def web_abonnement_xml(abonnement,new):
 
 	#Webservice du GAR
-	#header = "<?xml version='1.0' encoding='UTF-8'?><abonnement xmlns='http://www.atosworldline.com/wsabonnement/v1.0/'>" + host
+	#header = "<?xml version='1.0' encoding='UTF-8'?><abonnement xmlns='http://www.atosworldline.com/wsabonnement/v1.0/'>"
 	#header = { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' }
 
 	dico   = dict()
-	dico["idAbonnement"]          = "ABO" + str(abonnement.school.id)
+	dico["idAbonnement"]          = "ABO_SACADO_" + str(abonnement.school.code_acad)
 	dico["commentaireAbonnement"] = "Abonnement à SacAdo"
 	dico["idDistributeurCom"]     = "46173_832020065"
 	dico["idRessource"]	          = "ark:/46173/00001.p" # En production, il faut enlever le p 
@@ -44,7 +44,7 @@ def date_abonnement(today):
 
 def create_abonnement(today,school,accounting_id,user):
     """Création d'un abonnement dans la base de données"""
-    host   = "https://abonnement.partenaire.test-gar.education.fr/" 
+    host   = "https://abonnement.partenaire.test-gar.education.fr/" # Adresse d'envoi
     # Date d'abonnement du 1 septembre au 14 juillet
     date_start, date_stop = date_abonnement(today)
 

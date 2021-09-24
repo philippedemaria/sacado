@@ -1270,6 +1270,15 @@ class Relationship(models.Model):
             test = True
         return test
 
+
+    def just_students(self) :  
+        return self.students.exclude(user__username__contains= "_e-test").order_by("user__last_name")
+
+ 
+
+
+
+
 class Studentanswer(models.Model):
 
     parcours = models.ForeignKey(Parcours,  on_delete=models.CASCADE, blank=True, null=True,  related_name='answers', editable=False)
@@ -1473,8 +1482,7 @@ class Customexercise(ModelWithCode):
         return submit
 
     def result_k_s(self,k_s, student, parcours_id,typ):
-        Stage = apps.get_model('school', 'Stage')
-
+ 
         if typ == 1 :
             if Correctionskillcustomexercise.objects.filter(customexercise = self, parcours_id = parcours_id, student = student, skill = k_s).exists() :
                 c = Correctionskillcustomexercise.objects.get(customexercise = self, parcours_id = parcours_id, student = student, skill = k_s)    
@@ -1489,32 +1497,28 @@ class Customexercise(ModelWithCode):
                 point = -1  
  
         if student.user.school :
-            school = student.user.school
-            stage = Stage.objects.get(school = school)
 
-            if point > stage.up :
-                level = 4
-            elif point > stage.medium :
-                level = 3
-            elif point > stage.low :
-                level = 2
-            elif point > -1 :
-                level = 1
-            else :
-                level = 0
+            school = student.user.school
+            try :
+                stage  = school.aptitude.first()
+                stage = { "low" : stage.low ,  "medium" : stage.medium   ,  "up" : stage.up  }
+            except :
+                stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
+
+ 
         else : 
             stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
  
-            if point > stage["up"]  :
-                level = 4
-            elif point > stage["medium"]  :
-                level = 3
-            elif point > stage["low"]  :
-                level = 2
-            elif point > -1 :
-                level = 1
-            else :
-                level = 0
+        if point > stage["up"]  :
+            level = 4
+        elif point > stage["medium"]  :
+            level = 3
+        elif point > stage["low"]  :
+            level = 2
+        elif point > -1 :
+            level = 1
+        else :
+            level = 0
         return level
 
     def mark_to_this(self,student,parcours_id):
@@ -1597,6 +1601,12 @@ class Customexercise(ModelWithCode):
         if self.customexercise_exerciselocker.filter(student = student).count()>0:
             test = True
         return test
+
+
+    def just_students(self) :  
+        return self.students.exclude(user__username__contains= "_e-test").order_by("user__last_name")
+
+
 
 class Customanswerbystudent(models.Model): # Commentaire et note pour les exercices customisés coté enseignant
 

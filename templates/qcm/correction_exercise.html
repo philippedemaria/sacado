@@ -70,9 +70,16 @@
     {% if student %}
         <h4 style="color:#999">Remis par <span  style="color:#5d4391">{{ student }}</span>, le {% if w_a %}{{ w_a.date|date:"D d M Y"}}{% endif %}{% if c_e %}{{ c_e.date|date:"D d M Y"}}{% endif %}</h4>
     {% else %}
-        <a href="{% url 'show_parcours' parcours.id %}">
-            <input type="button" value="Retour au parcours" class="btn btn-default "/>
-        </a>
+
+        {% if folder_id %}
+            <a href="{% url 'show_parcours' folder_id parcours.id %}">
+                <input type="button" value="Retour au parcours" class="btn btn-default "/>
+            </a>
+        {% else %}
+            <a href="{% url 'show_parcours' 0 parcours.id %}">
+                <input type="button" value="Retour au parcours" class="btn btn-default "/>
+            </a>
+        {% endif %}
     {% endif %}
 
 
@@ -103,7 +110,7 @@
                     </thead>
                     <tbody>
                     {% block liste_student %} 
-                        {% for stud in relationship.students.all|dictsort:"user.last_name" %}
+                        {% for stud in relationship.just_students %}
                             <tr>
                                 <td {% if student %}{% if student == stud %} style="background-color: #F0F0F0;"{% endif %}{% endif %}>
                                     {% get_done relationship stud as done %}
