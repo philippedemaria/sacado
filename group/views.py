@@ -1639,8 +1639,8 @@ def print_ids(request, id):
             msg += "\nsite d'entrainement personnalisé "
             msg += "\nauto-corrigé,vous a été fourni."
             msg += "\nVous pouvez vous connecter sur"
-            msg += "\nsacado.xyz avec le code suivant :"
-            msg += "\n\n            {}".format(student.user.username)
+            msg += "\nsacado.xyz avec les identifiants suivants :"
+            msg += "\n   Id : {} \n   Mot de passe : sacado2020".format(student.user.username)
             liste.append(msg) 
             grid.append( ('BOX', (0,i), (1,i), 0.25, colors.gray, None, (2,2,1)) )
             grid.append( ('BOX', (2,i), (3,i), 0.25, colors.gray, None, (2,2,1))  )
@@ -1654,7 +1654,7 @@ def print_ids(request, id):
         msg += "\nauto-corrigé,vous a été fourni."
         msg += "\nVous pouvez vous connecter sur"
         msg += "\nsacado.xyz avec le code suivant :"
-        msg += "\n\n            {}".format(students[len(students)-1].user.username)
+        msg += "\n   Id : {} \n   Mot de passe : sacado2020".format(students[len(students)-1].user.username)          
         dataset.append( (logo,msg) )
         grid.append( ('BOX', (0,i+1), (1,i+1), 0.25, colors.gray, None, (2,2,1)) )
         grid.append( ('BOX', (2,i+1), (3,i+1), 0.25, colors.gray, None, (2,2,1)) )
@@ -1769,10 +1769,13 @@ def print_school_ids(request):
             logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))
             elements.append(logo_tab_tab)
             elements.append(Spacer(0, 0.1*inch))
-         
+
+            paragraph = Paragraph( "Initialement, tous les élèves ont le même mot de passe : sacado2020" , normal )
+            elements.append(paragraph)
+            elements.append(Spacer(0, 0.1*inch))
+
             dataset  = [(" ", "Nom ","Prénom", "Identifiant")]
          
-
             i = 1
             for student in group.students.exclude(user__username__contains= "_e-test").order_by("user__last_name") :
                 
