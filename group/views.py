@@ -449,7 +449,7 @@ def create_student_profile_inside(request, nf) :
     name       = last_name + "_e-test"
     username   = get_username_teacher(request,name)
     password   = make_password("sacado2020")  
-    email      = request.user.email
+    email      = ""
 
     if nf.students.filter( user__username__contains=name).count() == 0 :
         user,created = User.objects.get_or_create(username=username , defaults= { 'last_name' : last_name, 'first_name' : first_name,  'password' : password , 'email' : email, 'user_type' : 0})

@@ -49,9 +49,9 @@
 
           
           <!-- Exercice dissocié  -->  
-          
-          <div  style="position: absolute; right : 0px; top:60px;" title="Cet exercice est indiviualisé à certains élèves" id="individialise_id_student{{  rc.exercise.id }}" 
-                {% if  rc.students.count == nb_students_p_or_g %} class="checkbox_no_display" {% endif %}>   
+  
+          <div  style="position: absolute; right : 0px; top:66px;" title="Cet exercice est indiviualisé à certains élèves" id="individialise_id_student{{  rc.exercise.id }}" 
+                {% if  rc.just_students.count == parcours.just_students.count  %} class="checkbox_no_display" {% endif %}>   
             <a href="#card{{rc.id}}" class="detail_parcours btn btn-warning"  data-custom=0
                data-exercise_id="{{ rc.exercise.id }}"  data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}">
               <i class="fa fa-user"></i>
@@ -529,9 +529,9 @@
                   </div>
               </a>
           {% endif %}
-          
+
           <!-- Exercice dissocié  -->  
-          {% if  data.nb != nb_students_p_or_g %}    
+          {% if  data.nb != parcours.just_students.count %}    
           <div  style="position: absolute; right : 0px; top:60px;" title="Cet exercice est indiviualisé à certains élèves" >   
               <a href="#customcard{{rc.id}}" class="detail_parcours btn btn-warning" data-custom=1
                  data-exercise_id="{{ rc.id }}"  data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}">
