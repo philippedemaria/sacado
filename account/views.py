@@ -1596,11 +1596,18 @@ def passwordResetView(request):
         if form.is_valid():
             this_form = form.save()
 
-    link = "https://sacado.xyz/account/newpassword/"+this_form.code
-    msg = "Bonjour, \nvous venez de demander la réinitialisation de votre mot de passe. Cliquez sur le lien suivant : \n"+ link +"\n\nMerci. \n\n Ceci est un mail automatique, ne pas répondre."
-  
-    send_mail('SacAdo : Ré-initialisation de mot de passe', msg ,settings.DEFAULT_FROM_EMAIL,[this_form.email, ])
-    return redirect("password_reset_done")
+            link = "https://sacado.xyz/account/newpassword/"+this_form.code
+            msg = "Bonjour, \nvous venez de demander la réinitialisation de votre mot de passe. Cliquez sur le lien suivant : \n"+ link +"\n\nMerci. \n\n Ceci est un mail automatique, ne pas répondre."
+          
+            send_mail('SacAdo : Ré-initialisation de mot de passe', msg ,settings.DEFAULT_FROM_EMAIL,[this_form.email, ])
+            return redirect("password_reset_done")
+        else :
+            messages.error(request, "une erreur est survenue. Contacter l'équipe SACADO.")
+            return redirect('index')
+
+    else :
+        messages.error(request, "une erreur est survenue. Contacter l'équipe SACADO.")
+        return redirect('index')
 
 
 def passwordResetDoneView(request):
