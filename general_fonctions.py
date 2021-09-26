@@ -254,24 +254,6 @@ def attribute_all_documents_to_students(form, nf ):
         course.students.set(students)
 
  
-def attribute_all_documents_of_folder_to_group(group,folder):
-    """  assigner les documents   """
-    
-    students = group.students.all()
-    folder.students.set(students)
-    for parcours in folder.parcours.all() :
-        parcours.students.set(students)
-        relationships = parcours.parcours_relationship.all()
-        for r in relationships:
-            r.students.set(students)
-
-        customexercises = parcours.parcours_customexercises.all()
-        for c in customexercises:
-            c.students.set(students)
-
-        courses = parcours.course.all()
-        for course in courses:
-            course.students.set(students)
 
 
 def attribute_all_documents_of_parcours_to_group(group,parcours):
@@ -291,6 +273,16 @@ def attribute_all_documents_of_parcours_to_group(group,parcours):
     for course in courses:
         course.students.set(students)
 
+
+
+
+def attribute_all_documents_of_folder_to_group(group,folder):
+    """  assigner les documents   """
+    
+    students = group.students.all()
+    folder.students.set(students)
+    for parcours in folder.parcours.all() :
+        attribute_all_documents_of_parcours_to_group(group,parcours)
 
 
 
