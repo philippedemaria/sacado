@@ -2797,7 +2797,10 @@ def stat_evaluation(request, id):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
-    students = students_from_p_or_g(request,parcours) 
+    try : 
+        students = parcours.only_students(group)
+    except:
+        students = students_from_p_or_g(request,parcours) 
 
     for s in students :
         student = get_student_result_from_eval(s, parcours, exercises,relationships,skills, knowledges,parcours_duration) 
