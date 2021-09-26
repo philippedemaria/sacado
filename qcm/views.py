@@ -2350,7 +2350,7 @@ def result_parcours(request, id, is_folder):
     else :
         parcours = Parcours.objects.get(id=id)
         role, group , group_id , access = get_complement(request, teacher, parcours)
-        students = parcours.students.all() # liste des élèves d'un parcours donné 
+        students =  parcours.only_students(group)
         relationships = Relationship.objects.filter(parcours=parcours, exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
         customexercises = parcours.parcours_customexercises.all() 
 
