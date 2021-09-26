@@ -70,9 +70,14 @@
                     {% block tab_title %}                                       
                     <td> 
                         {% for relationship in relationships %}
-                            <img src="{{ relationship.exercise.supportfile.imagefile.url }}" width="30px" style="margin:0px" />
+                            <span class="img_bulle">
+                                <img src="{{ relationship.exercise.supportfile.imagefile.url }}" width="28px" style="margin:0px" />
+                                <div class="img_shower">
+                                    <img src="{{ relationship.exercise.supportfile.imagefile.url }}" width="400px"  />
+                                </div>
+                            </span>
                         {% endfor %}  
-                        {% for customexercise in customexercises %}
+                        {% for customexercise in customexercises  %}
                             <img src="{{ customexercise.imagefile.url }}" width="30px"/>
                         {% endfor %} 
 
