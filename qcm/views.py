@@ -92,6 +92,21 @@ from general_fonctions import *
 #Récupération du parcours Seconde to Maths complémentaires
 #################################################################
 
+def folders_contains_evaluation(folds, is_eval) :
+    folders = []
+    if is_eval :
+        for folder in folds :
+            for p in folder.parcours.all() :
+                if p.is_evaluation and folder not in folders :
+                    folders.append(folder)
+    else :
+        for folder in folds :
+            for p in folder.parcours.all() :
+                if not p.is_evaluation and folder not in folders :
+                    folders.append(folder)
+    return folders
+
+
 
 def get_teacher_id_by_subject_id(subject_id):
 
@@ -1171,45 +1186,6 @@ def ajax_individualise_this_exercise(request):
     return JsonResponse(data)
 
 
-
-
-
-
-
-def list_parcours(request):
-
-    teacher = request.user.teacher
-    today = time_zone_user(teacher.user)
-
-    folds = teacher_has_folders(teacher, 0  ) #  is_archive
-
-    folders = []
-    for folder in folds :
-        for p in folder.parcours.all() :
-            if not p.is_evaluation and folder not in folders :
-                folders.append(folder)
-
-
-    parcourses = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher),folders=None,is_evaluation=0, is_archive=0,is_trash=0)
-    nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,0,1 )   )   
-    nb_base = len( folders ) + parcourses.count()
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
- 
-    groups = teacher.has_groups()
-
-    if request.session.has_key("group_id"):
-        del request.session["group_id"]
-    else :
-        print("group_id non supprimé de la session") 
-
-    if request.session.has_key("folder_id"):
-        del request.session["folder_id"]
-    else:
-        print("folder_id non supprimé") 
-
-    return render(request, 'qcm/list_parcours.html', { 'folders' : folders , 'parcourses' : parcourses , 'nb_base' : nb_base ,  'groups' : groups ,
-                    'parcours' : None , 'group' : None , 'today' : today ,  'teacher' : teacher , 'nb_archive' : nb_archive })
-
  
 
 def ajax_affectation_to_group(request):
@@ -1275,8 +1251,36 @@ def ajax_charge_group_from_target(request):
     return JsonResponse(data)
  
 
+############################################################################################################################################
+############################################################################################################################################
+##################     Listes dossiers parcours évaluation archives  #######################################################################
+############################################################################################################################################
+############################################################################################################################################
 
+def list_parcours(request):
+
+    teacher = request.user.teacher
+    today   = time_zone_user(teacher.user)
+
+    folds   = teacher_has_folders(teacher, 0  ) #  is_archive
+    folders = folders_contains_evaluation(folds, False)
+
+    parcourses = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher),folders=None,is_evaluation=0, is_archive=0,is_trash=0)
+    nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,0,1 )   )   
+    nb_base = len( folders ) + parcourses.count()
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
  
+    groups = teacher.has_groups()
+
+    if request.session.has_key("group_id"):
+        del request.session["group_id"]
+    if request.session.has_key("folder_id"):
+        del request.session["folder_id"]
+
+    return render(request, 'qcm/list_parcours.html', { 'folders' : folders , 'parcourses' : parcourses , 'nb_base' : nb_base ,  'groups' : groups ,
+                    'parcours' : None , 'group' : None , 'today' : today ,  'teacher' : teacher , 'nb_archive' : nb_archive })
+
+
 
 
 def list_archives(request):
@@ -1295,19 +1299,13 @@ def list_archives(request):
 
 
 
-
-
 def list_evaluations(request):
 
     teacher = request.user.teacher
     today = time_zone_user(teacher.user)
 
     folds = teacher_has_folders(teacher, 0  ) #  is_archive
-    folders = []
-    for folder in folds :
-        for p in folder.parcours.all() :
-            if p.is_evaluation and folder not in folders :
-                folders.append(folder)
+    folders = folders_contains_evaluation(folds, True)
 
     parcourses = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher),folders=None,is_evaluation=1,is_archive=0,is_trash=0)
     nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,1,1 )   )   
@@ -1318,13 +1316,8 @@ def list_evaluations(request):
 
     if request.session.has_key("group_id"):
         del request.session["group_id"]
-    else :
-        print("group_id non supprimé de la session") 
-
     if request.session.has_key("folder_id"):
         del request.session["folder_id"]
-    else:
-        print("folder_id non supprimé") 
 
     return render(request, 'qcm/list_evaluations.html', { 'folders' : folders , 'parcourses' : parcourses , 'nb_base' : nb_base ,  'groups' : groups ,
                     'parcours' : None , 'group' : None , 'today' : today ,  'teacher' : teacher , 'nb_archive' : nb_archive })
@@ -1365,13 +1358,11 @@ def list_parcours_group(request,id):
 
   
     folders     = group.group_folders.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject = group.subject, level = group.level ,   is_favorite=1,  is_archive=0, is_trash=0 ).order_by("ranking")
- 
-
     bases       = group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject = group.subject, level = group.level ,   is_favorite=1, folders = None, is_trash=0)     
     evaluations = bases.filter( is_evaluation=1).order_by("ranking")
     parcourses  = bases.exclude(is_evaluation=1).order_by("ranking")
-    ###efface le realtime de plus de 2 h
-    #clear_realtime(parcours_tab , today.now() ,  3600 )
+    ###efface le realtime de plus de 30min
+    clear_realtime(parcours_tab , today.now() ,  1800 )
     nb_bases = bases.count() + folders.count()
 
     context =  { 'folders': folders , 'teacher' : teacher , 'group': group,  'parcours' : None ,  'role' : role , 'today' : today ,
@@ -1397,7 +1388,7 @@ def list_sub_parcours_group(request,idg,id):
     parcours_tab = folder.parcours.filter(is_trash=0).order_by("is_evaluation", "ranking")
 
     ###efface le realtime de plus de 2 h
-    #clear_realtime(parcours_tab , today.now() ,  3600 )
+    clear_realtime(parcours_tab , today.now() ,  1800 )
 
     context = {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group ,  'folder' : folder,   'role' : role , 'today' : today }
 
@@ -1420,7 +1411,11 @@ def list_sub_parcours_group_student(request,idg,id):
     return render(request, 'qcm/list_sub_parcours_group_student.html', context )
 
 
-
+############################################################################################################################################
+############################################################################################################################################
+##################   Fin des listes dossiers parcours évaluation archives  #################################################################
+############################################################################################################################################
+############################################################################################################################################
 
 
 def parcours_progression(request,id,idg):
