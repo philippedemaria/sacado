@@ -449,7 +449,6 @@
                <i class="fa fa-share-square"></i>
             </span>                                   
 
-            <span class="btn btn-warning" style="cursor:auto">
 
             <a href = "#" data-toggle = 'modal'
                 data-target = '#individualisation_exercice'  
@@ -464,9 +463,6 @@
             </a>
 
 
-
-
-            </span>
 
             <!-- Suppression de l'exercice dans ce parcours  -->
             <a href="{% url 'delete_relationship' rc.id %}" class="white horizontalmargin5"   title="Supprimer cet exercice de ce parcours" style="font-size:14px;color:{{ parcours.color|contrast_color }}" onclick="return TestDelete('cet exercice de ce parcours')"  >
