@@ -78,62 +78,29 @@ def get_username_teacher(request ,ln):
 
 
 
-def get_all_documents_from_group(group):
+def get_all_documents_from_group(group,student):
 
     f,fp,fr,fc,p,r,c = 0,0,0,0,0,0,0
     for folder  in group.group_folders.all() :
         folder.students.add(student)
         f += 1
-        for parcours in folder.parcours.all() : 
-            fp += 1
-            relationships = parcours.parcours_relationship.all() 
-            courses = parcours.course.all()
-            #################################################
-            # clone le parcours
-            #################################################
-            parcours.pk = None
-            parcours.teacher = request.user.teacher
-            parcours.is_publish = 0
-            parcours.is_archive = 0
-            parcours.is_share = 0
-            parcours.is_favorite = 1
-            parcours.code = str(uuid.uuid4())[:8]  
-            parcours.save()
+        for parcours in folder.parcours.all() :
+            fp+=1 
             parcours.groups.add(group)
             parcours.students.add(student)
-            #################################################
-            # clone les exercices attachés à un cours 
-            #################################################
-            former_relationship_ids = []
+ 
 
-            for course in courses :
+            for course in parcours.course.all() :
                 fc += 1
-                old_relationships = course.relationships.all()
-                # clone le cours associé au parcours
-                course.pk = None
-                course.parcours = parcours
-                course.save()
-                for relationship in old_relationships :
-                    # clone l'exercice rattaché au cours du parcours 
-                    if not relationship.id in former_relationship_ids :
-                        relationship.pk = None
-                        relationship.parcours = parcours
-                        relationship.save()
-                    course.relationships.add(relationship)
-                    former_relationship_ids.append(relationship.id)
+                course.students.add(student)
 
             #################################################
             # clone tous les exercices rattachés au parcours 
             #################################################
-            for relationship in relationships :
-                try :
-                    relationship.pk = None
-                    relationship.parcours = parcours
-                    relationship.save()       
-                    relationship.students.add(student)
-                    fr += 1
-                except :
-                    pass
+            for relationship in parcours.parcours_relationship.all() :    
+                relationship.students.add(student)
+                fr += 1
+
 
     for parcours in group.group_parcours.filter(folders=None) : 
 
@@ -142,18 +109,9 @@ def get_all_documents_from_group(group):
         #################################################
         # clone le parcours
         #################################################
-        parcours.pk = None
-        parcours.teacher = request.user.teacher
-        parcours.is_publish = 0
-        parcours.is_archive = 0
-        parcours.is_share = 0
-        parcours.is_favorite = 1
-        parcours.code = str(uuid.uuid4())[:8]  
-        parcours.save()
-        p += 1
-
         parcours.groups.add(group)
         parcours.students.add(student)
+        p += 1
         #################################################
         # clone les exercices attachés à un cours 
         #################################################
@@ -161,40 +119,31 @@ def get_all_documents_from_group(group):
 
         for course in courses :
             c += 1
-            old_relationships = course.relationships.all()
-            # clone le cours associé au parcours
-            course.pk = None
-            course.parcours = parcours
-            course.save()
-            for relationship in old_relationships :
-                # clone l'exercice rattaché au cours du parcours 
-                if not relationship.id in former_relationship_ids :
-                    relationship.pk = None
-                    relationship.parcours = parcours
-                    relationship.save()
-                course.relationships.add(relationship)
-                former_relationship_ids.append(relationship.id)
+            course.students.add(student)
 
         #################################################
         # clone tous les exercices rattachés au parcours 
         #################################################
-        for relationship in relationships :
-            try :
-                relationship.pk = None
-                relationship.parcours = parcours
-                relationship.save()       
-                relationship.students.add(student)
-                f += 1
-            except :
-                pass
+        for relationship in parcours.parcours_relationship.all() : 
+            relationship.students.add(student)
+            r += 1
 
-    return "Récupération de {} dossiers contenant {} parcours, {} exercices, {} cours et  {} parcours, {} exercices, {} cours".format(f,fp,fr,fc,p,r,c)
+ 
 
+def set_username_student_profile(name):
+    ok = True
+    i = 0
+    code = str(uuid.uuid4())[:3]    
+    un = name + "_" + code 
 
-
-
-
-
+    while ok:
+        if User.objects.filter(username=un).count() == 0:
+            ok = False
+        else:
+            i += 1
+            un = un + str(i)
+ 
+    return un 
 
 
 
@@ -203,17 +152,18 @@ def set_student_profile(request):
 
     groups = Group.objects.all() 
 
+    groups = Group.objects.all()     
+
     for group in groups :
         if group.students.filter(user__username__contains=  "_e-test").count() == 0 :
             group.studentprofile = 1
             group.save()
 
-            group.teacher.user.unsername+"_e-test"+str(uuid.uuid4)[:4]
+            group.teacher.user.username+"_e-test"+str(uuid.uuid4)[:4]
 
             first_name = str(group.teacher.user.first_name).replace(" ", "")
             last_name  = str(group.teacher.user.last_name).replace(" ","") 
-            name       = last_name + "_e-test"
-            username   = get_username_teacher(request,name)
+            username   = group.teacher.user.username+"_e-test"+str(uuid.uuid4)[:4]
             password   = make_password("sacado2020")  
             email      = ""
 
@@ -222,23 +172,12 @@ def set_student_profile(request):
 
             if created :
                 mesg = "Bonjour\n\nSACADO vient de vous rajouter un profil élève à votre groupe. Identifiant : "+username+"\n\n Mot de passe : sacado2020 \n\n Ce mot de passe est générique. N'oubliez pas de le modifier. \n\n Merci." 
-                try :
-                    send_mail("Identifiant Profil élève",  mesg , settings.DEFAULT_FROM_EMAIL , [email] )
-                except :
-                    pass
                 code = str(uuid.uuid4())[:8]                 
                 student = Student.objects.create(user=user, level=group.level, code=code)
-
             else :
                 student = Student.objects.get(user=user)
-
-            st = True   
             group.students.add(student)
- 
-
-            get_all_documents_from_group(group)
- 
- 
+            get_all_documents_from_group(group,student)
 
     return redirect('index' )  
 
