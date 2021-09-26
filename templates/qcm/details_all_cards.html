@@ -450,7 +450,22 @@
             </span>                                   
 
             <span class="btn btn-warning" style="cursor:auto">
-              <i class="fa fa-user"></i>
+
+            <a href = "#" data-toggle = 'modal'
+                data-target = '#individualisation_exercice'  
+                class = "individualiser horizontalmargin5" 
+                data-nb = "{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" 
+                data-relationship_id = "{{ rc.id }}"
+                data-group_id = "{{ group.id }}"   
+                data-custom = 0  title = "Individualiser cet exercice" 
+                style = "font-size:14px;color:{{ parcours.color|contrast_color }}">
+
+                <i class="fa fa-users"></i> 
+            </a>
+
+
+
+
             </span>
 
             <!-- Suppression de l'exercice dans ce parcours  -->
