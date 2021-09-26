@@ -509,9 +509,6 @@
 
     <!-- Partie sur laquelle est posée l'image  -->                  
     <div class="card-image">
-
-
-         
           <div style="position: absolute; left : 30px; top:41px;" id="annoncement{{rc.id}}"   >   
               <span class="helper_tip btn btn-default">
                       Consigne {% if rc.text_cor or  rc.video_cor or  rc.file_cor %}+ correction 
@@ -531,7 +528,7 @@
           {% endif %}
 
           <!-- Exercice dissocié  -->  
-          {% if  data.nb != parcours.just_students.count %}    
+          {% if  data.nb != parcours.just_students.count %}     
           <div  style="position: absolute; right : 0px; top:60px;" title="Cet exercice est indiviualisé à certains élèves" >   
               <a href="#customcard{{rc.id}}" class="detail_parcours btn btn-warning" data-custom=1
                  data-exercise_id="{{ rc.id }}"  data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}">

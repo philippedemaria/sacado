@@ -42,17 +42,13 @@ from reportlab.lib.utils import ImageReader
 from reportlab.lib.enums import TA_JUSTIFY,TA_LEFT,TA_CENTER,TA_RIGHT
 from html import escape
 cm = 2.54
-
-
-
-
-
-
 #################################################################################
 import re
 import pytz
 from datetime import datetime 
 from general_fonctions import *
+
+
 
 
 
@@ -79,6 +75,185 @@ def get_username_teacher(request ,ln):
             un = un + str(i)
  
     return un 
+
+
+
+def get_all_documents_from_group(group):
+
+    f,fp,fr,fc,p,r,c = 0,0,0,0,0,0,0
+    for folder  in group.group_folders.all() :
+        folder.students.add(student)
+        f += 1
+        for parcours in folder.parcours.all() : 
+            fp += 1
+            relationships = parcours.parcours_relationship.all() 
+            courses = parcours.course.all()
+            #################################################
+            # clone le parcours
+            #################################################
+            parcours.pk = None
+            parcours.teacher = request.user.teacher
+            parcours.is_publish = 0
+            parcours.is_archive = 0
+            parcours.is_share = 0
+            parcours.is_favorite = 1
+            parcours.code = str(uuid.uuid4())[:8]  
+            parcours.save()
+            parcours.groups.add(group)
+            parcours.students.add(student)
+            #################################################
+            # clone les exercices attachés à un cours 
+            #################################################
+            former_relationship_ids = []
+
+            for course in courses :
+                fc += 1
+                old_relationships = course.relationships.all()
+                # clone le cours associé au parcours
+                course.pk = None
+                course.parcours = parcours
+                course.save()
+                for relationship in old_relationships :
+                    # clone l'exercice rattaché au cours du parcours 
+                    if not relationship.id in former_relationship_ids :
+                        relationship.pk = None
+                        relationship.parcours = parcours
+                        relationship.save()
+                    course.relationships.add(relationship)
+                    former_relationship_ids.append(relationship.id)
+
+            #################################################
+            # clone tous les exercices rattachés au parcours 
+            #################################################
+            for relationship in relationships :
+                try :
+                    relationship.pk = None
+                    relationship.parcours = parcours
+                    relationship.save()       
+                    relationship.students.add(student)
+                    fr += 1
+                except :
+                    pass
+
+    for parcours in group.group_parcours.filter(folders=None) : 
+
+        relationships = parcours.parcours_relationship.all() 
+        courses = parcours.course.all()
+        #################################################
+        # clone le parcours
+        #################################################
+        parcours.pk = None
+        parcours.teacher = request.user.teacher
+        parcours.is_publish = 0
+        parcours.is_archive = 0
+        parcours.is_share = 0
+        parcours.is_favorite = 1
+        parcours.code = str(uuid.uuid4())[:8]  
+        parcours.save()
+        p += 1
+
+        parcours.groups.add(group)
+        parcours.students.add(student)
+        #################################################
+        # clone les exercices attachés à un cours 
+        #################################################
+        former_relationship_ids = []
+
+        for course in courses :
+            c += 1
+            old_relationships = course.relationships.all()
+            # clone le cours associé au parcours
+            course.pk = None
+            course.parcours = parcours
+            course.save()
+            for relationship in old_relationships :
+                # clone l'exercice rattaché au cours du parcours 
+                if not relationship.id in former_relationship_ids :
+                    relationship.pk = None
+                    relationship.parcours = parcours
+                    relationship.save()
+                course.relationships.add(relationship)
+                former_relationship_ids.append(relationship.id)
+
+        #################################################
+        # clone tous les exercices rattachés au parcours 
+        #################################################
+        for relationship in relationships :
+            try :
+                relationship.pk = None
+                relationship.parcours = parcours
+                relationship.save()       
+                relationship.students.add(student)
+                f += 1
+            except :
+                pass
+
+    return "Récupération de {} dossiers contenant {} parcours, {} exercices, {} cours et  {} parcours, {} exercices, {} cours".format(f,fp,fr,fc,p,r,c)
+
+
+
+
+
+
+
+
+
+
+def set_student_profile(request):
+
+    groups = Group.objects.all() 
+
+    for group in groups :
+        if group.students.filter(user__username__contains=  "_e-test").count() == 0 :
+            group.studentprofile = 1
+            group.save()
+
+            group.teacher.user.unsername+"_e-test"+str(uuid.uuid4)[:4]
+
+            first_name = str(group.teacher.user.first_name).replace(" ", "")
+            last_name  = str(group.teacher.user.last_name).replace(" ","") 
+            name       = last_name + "_e-test"
+            username   = get_username_teacher(request,name)
+            password   = make_password("sacado2020")  
+            email      = ""
+
+     
+            user,created = User.objects.get_or_create(username=username , defaults= { 'last_name' : last_name, 'first_name' : first_name,  'password' : password , 'email' : email, 'user_type' : 0})
+
+            if created :
+                mesg = "Bonjour\n\nSACADO vient de vous rajouter un profil élève à votre groupe. Identifiant : "+username+"\n\n Mot de passe : sacado2020 \n\n Ce mot de passe est générique. N'oubliez pas de le modifier. \n\n Merci." 
+                try :
+                    send_mail("Identifiant Profil élève",  mesg , settings.DEFAULT_FROM_EMAIL , [email] )
+                except :
+                    pass
+                code = str(uuid.uuid4())[:8]                 
+                student = Student.objects.create(user=user, level=group.level, code=code)
+
+            else :
+                student = Student.objects.get(user=user)
+
+            st = True   
+            group.students.add(student)
+ 
+
+            get_all_documents_from_group(group)
+ 
+ 
+
+    return redirect('index' )  
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -176,15 +351,7 @@ def student_dashboard(request,group_id):
     return template, context
 
 
-
-
-#def student_parcours_studied(student):  
-    parces = student.students_to_parcours.all()
-    if parces.filter(linked=1,is_publish=1).count() > 0 :
-        parcourses = parces
-    else :
-        parcourses = parces.filter(linked=0)
-    return parcourses
+ 
 
 
 def knowledges_of_a_student(student):
@@ -472,67 +639,7 @@ def create_student_profile_inside(request, nf) :
     else :
         st = False
 
-
-    if nf.recuperation : # lorsque l'enseignant souhaite récupérer tous les documents d'un niveau et d'un enseignement
-        parcourses_id = request.POST.getlist("parcours_id")
-
-        for parcours_id in parcourses_id :
-
-            parcours = Parcours.objects.get(pk = parcours_id)
-            if parcours.is_folder :
-                prcs = parcours.leaf_parcours.all()
-
-            relationships = parcours.parcours_relationship.all() 
-            courses = parcours.course.all()
-            #################################################
-            # clone le parcours
-            #################################################
-            parcours.pk = None
-            parcours.teacher = request.user.teacher
-            parcours.is_publish = 0
-            parcours.is_archive = 0
-            parcours.is_share = 0
-            parcours.is_favorite = 1
-            parcours.code = str(uuid.uuid4())[:8]  
-            parcours.save()
-            if parcours.is_folder :
-                parcours.leaf_parcours.set(prcs)
-
-            parcours.groups.add(nf)
-            parcours.students.add(student)
-            #################################################
-            # clone les exercices attachés à un cours 
-            #################################################
-            former_relationship_ids = []
-
-            for course in courses :
-
-                old_relationships = course.relationships.all()
-                # clone le cours associé au parcours
-                course.pk = None
-                course.parcours = parcours
-                course.save()
-                for relationship in old_relationships :
-                    # clone l'exercice rattaché au cours du parcours 
-                    if not relationship.id in former_relationship_ids :
-                        relationship.pk = None
-                        relationship.parcours = parcours
-                        relationship.save()
-                    course.relationships.add(relationship)
-                    former_relationship_ids.append(relationship.id)
-
-            #################################################
-            # clone tous les exercices rattachés au parcours 
-            #################################################
-            for relationship in relationships :
-                try :
-                    relationship.pk = None
-                    relationship.parcours = parcours
-                    relationship.save()       
-                    relationship.students.add(student)
-                except :
-                    pass
-
+    get_all_documents_from_group(nf)
 
     return st
 

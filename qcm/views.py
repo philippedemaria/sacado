@@ -67,67 +67,25 @@ from general_fonctions import *
 
 
 #################################################################
-# DUplication des folder
+# Duplication des folder
 #################################################################
+ 
 
-# def get_folder_to_folder(request):
+ 
+ 
 
-#     old_folders = Parcours.objects.filter(is_folder=1)
+# def remove_parcours_folder(request):
+
+#     old_folders = Parcours.objects.filter(is_folder=1) 
 
 #     for old_folder in old_folders :
-#         print(old_folder.title)
-
-#         title       = old_folder.title
-#         color       = old_folder.color
-#         author      = old_folder.author
-#         teacher     = old_folder.teacher
-
-#         is_share    = old_folder.is_share
-#         is_publish  = old_folder.is_publish
-
-#         subject     = old_folder.subject
-#         level       = old_folder.level
-
-#         is_favorite = old_folder.is_favorite
-
-#         start       = old_folder.start
-#         stop        = old_folder.stop
-
-#         vignette    = old_folder.vignette
-#         ranking     = old_folder.ranking
-#         old_id      = old_folder.id
-
-#         folder,created = Folder.objects.get_or_create(title = title , old_id = old_id ,teacher = teacher , defaults={  "is_share" : is_share ,  "is_publish" : is_publish ,  "subject" : subject ,  "level" : level , "is_favorite" : is_favorite  , "start" : start , "stop" : stop , "vignette" : vignette , "ranking" : ranking  } )
-
-#         folder.coteachers.set( old_folder.coteachers.all() )
-#         folder.groups.set( old_folder.groups.all() )
-#         folder.students.set( old_folder.students.all() )
-#         folder.parcours.set( old_folder.leaf_parcours.all() )
+#         old_folder.groups.clear()
+#         old_folder.students.clear()
+#         old_folder.coteachers.clear()
+#         Parcours.objects.filter(pk=old_folder.id).update(is_trash=1)
 
 
-#     return redirect('admin_tdb' )
-
-
-
-def remove_parcours_folder(request):
-
-    old_folders = Parcours.objects.filter(is_folder=1) 
-
-    for old_folder in old_folders :
-        old_folder.groups.clear()
-        old_folder.students.clear()
-        old_folder.coteachers.clear()
-        Parcours.objects.filter(pk=old_folder.id).update(is_trash=1)
-
-
-    return redirect('index' )
-
- 
- 
-
-
-
-
+#     return redirect('index' )
 
 
 #################################################################
@@ -4934,8 +4892,6 @@ def show_evaluation(request, id):
     relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
-
-    print(parcours.students.order_by("user__last_name"))
 
     skills = Skill.objects.all()
 

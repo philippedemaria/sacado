@@ -155,6 +155,7 @@ class Supportfile(models.Model):
         parcours = Parcours.objects.filter(exercises__in= exercises, author=teacher)
         return parcours
 
+
 class Exercise(models.Model):
     level = models.ForeignKey(Level, related_name="exercises", on_delete=models.PROTECT, verbose_name="Niveau")
     theme = models.ForeignKey(Theme, related_name="exercises", on_delete=models.PROTECT, verbose_name="Thème")
@@ -1036,8 +1037,6 @@ class Folder(models.Model):
         return data
  
 
-
-
 class Relationship(models.Model):
     exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.CASCADE,  editable= False)
     parcours = models.ForeignKey(Parcours, on_delete=models.CASCADE,  related_name='parcours_relationship',  editable= False)
@@ -1275,10 +1274,6 @@ class Relationship(models.Model):
         return self.students.exclude(user__username__contains= "_e-test").order_by("user__last_name")
 
  
-
-
-
-
 class Studentanswer(models.Model):
 
     parcours = models.ForeignKey(Parcours,  on_delete=models.CASCADE, blank=True, null=True,  related_name='answers', editable=False)
@@ -1302,6 +1297,7 @@ class Resultggbskill(models.Model): # Pour récupérer tous les scores des comp�
     def __str__(self):
         return f"{self.skill} : {self.point}"
 
+
 class Resultexercise(models.Model):  # Last result
 
     student = models.ForeignKey(Student, related_name="results_e", default="",
@@ -1315,6 +1311,7 @@ class Resultexercise(models.Model):  # Last result
 
     class Meta:
         unique_together = ['student', 'exercise']
+
 
 class Writtenanswerbystudent(models.Model): # Commentaire pour les exercices non autocorrigé coté enseignant
 
@@ -1413,7 +1410,7 @@ class Customexercise(ModelWithCode):
 
     def percent_student_done_parcours_exercice(self, parcours):
 
-        students = self.students.all()
+        students = self.students.exclude(user__username__contains= "_e-test") 
         nb_student = len(students)
         nb_exercise_done = Customanswerbystudent.objects.filter(student__in= students, customexercise__parcourses = parcours, customexercise = self).values_list("student",flat= True).order_by("student").distinct().count()
         
@@ -1426,6 +1423,7 @@ class Customexercise(ModelWithCode):
         data["percent"] = percent
         data["nb_done"] = nb_exercise_done
         return data
+
 
     def is_done(self,student):
         done = False
