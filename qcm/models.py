@@ -878,7 +878,13 @@ class Folder(models.Model):
         data["nb"]= only_students.count()
         return data 
  
-     
+  
+    def only_students_folder(self):
+
+ 
+        only_students = self.students.exclude(user__username__contains="_e-test").order_by("user__last_name")
+ 
+        return only_students    
  
 
 

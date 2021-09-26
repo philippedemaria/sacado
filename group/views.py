@@ -80,30 +80,21 @@ def get_username_teacher(request ,ln):
 
 def get_all_documents_from_group(group,student):
 
-    f,fp,fr,fc,p,r,c = 0,0,0,0,0,0,0
+ 
     for folder  in group.group_folders.all() :
         folder.students.add(student)
-        f += 1
         for parcours in folder.parcours.all() :
-            fp+=1 
             parcours.groups.add(group)
             parcours.students.add(student)
- 
-
             for course in parcours.course.all() :
-                fc += 1
                 course.students.add(student)
-
             #################################################
             # clone tous les exercices rattachés au parcours 
             #################################################
             for relationship in parcours.parcours_relationship.all() :    
                 relationship.students.add(student)
-                fr += 1
-
 
     for parcours in group.group_parcours.filter(folders=None) : 
-
         relationships = parcours.parcours_relationship.all() 
         courses = parcours.course.all()
         #################################################
@@ -111,14 +102,7 @@ def get_all_documents_from_group(group,student):
         #################################################
         parcours.groups.add(group)
         parcours.students.add(student)
-        p += 1
-        #################################################
-        # clone les exercices attachés à un cours 
-        #################################################
-        former_relationship_ids = []
-
         for course in courses :
-            c += 1
             course.students.add(student)
 
         #################################################
@@ -126,7 +110,7 @@ def get_all_documents_from_group(group,student):
         #################################################
         for relationship in parcours.parcours_relationship.all() : 
             relationship.students.add(student)
-            r += 1
+ 
 
  
 
@@ -145,46 +129,7 @@ def set_username_student_profile(name):
  
     return un 
 
-
-
-
-def set_student_profile(request):
-
-    groups = Group.objects.all() 
-
-    groups = Group.objects.all()     
-
-    for group in groups :
-        if group.students.filter(user__username__contains=  "_e-test").count() == 0 :
-            group.studentprofile = 1
-            group.save()
-
-            group.teacher.user.username+"_e-test"+str(uuid.uuid4)[:4]
-
-            first_name = str(group.teacher.user.first_name).replace(" ", "")
-            last_name  = str(group.teacher.user.last_name).replace(" ","") 
-            username   = group.teacher.user.username+"_e-test"+str(uuid.uuid4)[:4]
-            password   = make_password("sacado2020")  
-            email      = ""
-
-     
-            user,created = User.objects.get_or_create(username=username , defaults= { 'last_name' : last_name, 'first_name' : first_name,  'password' : password , 'email' : email, 'user_type' : 0})
-
-            if created :
-                mesg = "Bonjour\n\nSACADO vient de vous rajouter un profil élève à votre groupe. Identifiant : "+username+"\n\n Mot de passe : sacado2020 \n\n Ce mot de passe est générique. N'oubliez pas de le modifier. \n\n Merci." 
-                code = str(uuid.uuid4())[:8]                 
-                student = Student.objects.create(user=user, level=group.level, code=code)
-            else :
-                student = Student.objects.get(user=user)
-            group.students.add(student)
-            get_all_documents_from_group(group,student)
-
-    return redirect('index' )  
-
-
-
-
-
+ 
 
 
 
@@ -568,18 +513,15 @@ def create_student_profile_inside(request, nf) :
                 pass
             code = str(uuid.uuid4())[:8]                 
             student = Student.objects.create(user=user, level=nf.level, code=code)
+            nf.students.add(student)
+            get_all_documents_from_group(nf,student)
 
         else :
             student = Student.objects.get(user=user)
-
         st = True   
-        nf.students.add(student)
 
     else :
         st = False
-
-    get_all_documents_from_group(nf)
-
     return st
 
 

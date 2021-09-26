@@ -149,6 +149,11 @@
                             {% if request.user.is_authenticated %}
                                 {% if user.is_teacher %} 
                                     <li>
+                                        <a href="https://sacado.xyz/ressources/prise_en_main.pdf" target ="_blank" class="btn btn-outline-danger" >
+                                            Prise en main  <img src="{% static 'img/pdf.png' %}" width="15px"/>
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a href="{% url 'tutos_video_sacado' %}" class="btn btn-outline-danger" >
                                             Les tutos en vidéo
                                         </a>

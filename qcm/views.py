@@ -2336,7 +2336,7 @@ def result_parcours(request, id, is_folder):
     if  is_folder == 1 :
         folder = Folder.objects.get(id=id)
         role, group , group_id , access = get_complement(request, teacher, folder)
-        students = folder.students.all() # liste des élèves d'un parcours donné 
+        students = folder.only_students_folder() # liste des élèves d'un parcours donné 
         relationships = Relationship.objects.filter(parcours__in=folder.parcours.all(),exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
 
         custom_set = set()

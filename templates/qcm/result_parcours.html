@@ -67,11 +67,19 @@
                 <thead>
                 <tr>
                     <th>Nom et prénom</th>
-                    {% block tab_title %} 
-                        <th>
-                              Exercices publiés dans le parcours   
-                        </th>    
-                    {% endblock %} 
+                    {% block tab_title %}                                       
+                    <td> 
+                        {% for relationship in relationships %}
+                            <img src="{{ relationship.exercise.supportfile.imagefile.url }}" width="30px" style="margin:0px" />
+                        {% endfor %}  
+                        {% for customexercise in customexercises %}
+                            <img src="{{ customexercise.imagefile.url }}" width="30px"/>
+                        {% endfor %} 
+
+
+
+                    </td>       
+                    {% endblock %}  
                 </tr>
                 </thead>
                 <tbody>

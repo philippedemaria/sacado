@@ -5,9 +5,6 @@ from .views import *
 urlpatterns = [
 
 
-    path('set_student_profile', set_student_profile, name='set_student_profile'),
-
-
     path('dashboard/<int:id>', dashboard_group, name='dashboard_group'),
 
     path('', list_groups, name='groups'),
