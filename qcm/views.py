@@ -1361,6 +1361,7 @@ def list_parcours_group(request,id):
     bases       = group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject = group.subject, level = group.level ,   is_favorite=1, folders = None, is_trash=0)     
     evaluations = bases.filter( is_evaluation=1).order_by("ranking")
     parcourses  = bases.exclude(is_evaluation=1).order_by("ranking")
+    parcours_tab = evaluations | parcourses
     ###efface le realtime de plus de 30min
     clear_realtime(parcours_tab , today.now() ,  1800 )
     nb_bases = bases.count() + folders.count()
