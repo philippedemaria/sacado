@@ -44,7 +44,8 @@ def get_username(request ,ln, fn):
     User = apps.get_model('account', 'User')
     ok = True
     i = 0
-    un = str(ln) + "." + str(fn)[0]+str(uuid.uuid4())[:2] 
+    name = str(ln).replace(" ","_") 
+    un = str(name) + "." + str(fn)[0]+str(uuid.uuid4())[:2] 
     while ok:
         if User.objects.filter(username=un).count() == 0:
             ok = False
