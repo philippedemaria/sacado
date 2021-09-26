@@ -122,52 +122,7 @@ body{
 
 
         {% if relationships_customexercises|length == 0   %}
-            {% if parcours.is_folder %}
-                <div class="row">
-                    <div class="col-sm-12 col-md-1">
-                    </div>
-                    <div class="col-sm-12 col-md-2" style="margin :40px 0px 0px 0px">
-                        <i class="fa fa-folder-open fa-10x" style="color: {{ parcours.color }}"></i>
 
-
-                        <div >
-                            <a href="{% url 'create_parcours' 0 %}"  class="btn btn-default btn-xs" > Créer un parcours personnalisé</a>
-                        </div>
-                        {% if sacado_asso %}                                  
-                        <div>
-                            <a href="{% url 'all_parcourses' 0 %}"  class="btn btn-default btn-xs" style="margin-top :10px" > Choisir un parcours mutualisé</a>
-                        </div>
-                        {% endif  %}
-
-                    </div>
-                    <div class="col-sm-12 col-md-9" style="margin :40px 0px 0px 0px">
-
-                        <h1 class="thin" style="color:{{ parcours.color }}" >{{ parcours }} </h1>
-                        <div class="row">
-                            <div class="col-sm-12 col-md-6" style="margin :40px 0px 0px 0px">
-                                <p> contient les parcours suivants : </p>
-                                <ul>
-                                {% for p in parcours.leaf_parcours.all %}
-                                    <li class="sans_puce" style="margin-bottom : 15px">  <a href="{% url 'show_parcours' 0 p.id %}" style="color: {{ p.color }}"><i class="fa fa-th fa-fw fa-small"></i> {{ p }}</a></li>
-                                {% endfor %}
-                                </ul>
-                            </div>
-                            <div class="col-sm-12 col-md-6" style="margin :40px 0px 0px 0px">
-                                <p> contient les cours suivants : </p>
-                                <ul>
-                                {% for p in parcours.leaf_parcours.all %}
-                                    {% for c in p.course.all %}
-                                        <li class="sans_puce">  <a href="{% url 'show_course' c.id c.parcours.id %}" style="color: {{ c.color }}"><i class="fa fa-desktop fa-fw fa-small"></i> {{ c }}</a></li>
-                                    {% endfor %}
-                                {% endfor %}
-                                </ul>
-                            </div>
-                        </div> 
-                    </div>
-                </div>
-
-
-            {% else %}
                 <div class="row">
                     <div class="col-sm-3 col-md-3" style="margin:40px">
                     <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-danger"> Associer des exercices SACADO à {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
@@ -176,7 +131,7 @@ body{
                     <a href="{% url 'parcours_create_custom_exercise' parcours.id 0  %}" class="btn btn-danger"> Créer un exercice personnalisé dans {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
                     </div> 
                 </div> 
-            {% endif %}
+
         {% endif %}
 
 
