@@ -1,6 +1,8 @@
 define(['jquery','bootstrap'], function ($) {
     $(document).ready(function () {
 
+        console.log("chargement JS ajax-parcours.js OK");
+
         $(".is_evaluation").attr("checked",false);
 
         // ================================================================ 
@@ -1040,6 +1042,7 @@ define(['jquery','bootstrap'], function ($) {
         $('.individualiser').on('click', function (event) {
             let nb = $(this).data("nb"); 
             let custom = $(this).data("custom");
+            let group_id = $(this).data("group_id"); console.log(group_id) ; 
             let relationship_id = $(this).data("relationship_id");            
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
@@ -1050,6 +1053,7 @@ define(['jquery','bootstrap'], function ($) {
                     data: {
                         'custom': custom,
                         'relationship_id' : relationship_id ,
+                        'group_id' : group_id ,
                         csrfmiddlewaretoken: csrf_token,
                     },
                     url: "../../ajax_individualise_this_exercise",

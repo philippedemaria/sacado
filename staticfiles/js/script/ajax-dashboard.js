@@ -1,8 +1,7 @@
 define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
     $(document).ready(function () {
         console.log("chargement JS ajax-dashboard.js OK");
-        console.log("dashboard chargé celui-ci.");
-
+ 
 
           $(window).on('load', function () {
             if ($('#preloader').length) {

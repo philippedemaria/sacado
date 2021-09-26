@@ -586,10 +586,20 @@ class Parcours(ModelWithCode):
         data["students"] = intersection
         return data 
  
+
     def just_students(self):
         return self.students.exclude(user__username__contains="_e-test").order_by("user__last_name")
 
 
+
+    def only_students(self,group):
+        if group :
+            return self.students.filter(students_to_group=group).exclude(user__username__contains="_e-test").order_by("user__last_name")            
+        else :
+            return self.students.exclude(user__username__contains="_e-test").order_by("user__last_name")
+
+
+ 
     def is_task_exists(self):
         today = timezone.now()
         test = False
@@ -611,6 +621,7 @@ class Parcours(ModelWithCode):
                 test = True
             break 
         return test 
+
 
     def is_courses_exists(self):
 

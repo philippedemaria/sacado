@@ -449,7 +449,11 @@ def get_exercises_by_knowledge(obj,student,group):
     return obj.exercices_by_knowledge(student,group)
 
 
- 
+@register.simple_tag  
+def get_only_students(obj,group):
+    return obj.only_students(group)
+
+
 
 @register.simple_tag 
 def get_exercise_used(obj,parcours_tab): 

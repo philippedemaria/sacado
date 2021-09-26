@@ -982,9 +982,9 @@ def ajax_individualise(request):
                         data["alert"] = False
                             
         else :
+            print("ici") 
             for relationship in parcours.parcours_relationship.filter(is_publish=1 ) : 
                 if student_id ==  0  :
-                    print(statut)  
                     if statut=="true" or statut == "True" :
                         somme = 0
                         try :
@@ -1014,7 +1014,7 @@ def ajax_individualise(request):
 
                 else :
                     student = Student.objects.get(pk = student_id)  
-
+  
                     if statut=="true" or statut == "True":
 
                         if Studentanswer.objects.filter(student = student , parcours = relationship.parcours).count() == 0 :
@@ -1167,7 +1167,9 @@ def ajax_individualise(request):
 def ajax_individualise_this_exercise(request):
 
     relationship_id = int(request.POST.get("relationship_id"))
-    custom = int(request.POST.get("custom"))
+    custom          = int(request.POST.get("custom"))
+    group_id        = request.POST.get("group_id",None) 
+
     if custom :
         rc = Customexercise.objects.get(pk=relationship_id)
         try :
@@ -1176,10 +1178,15 @@ def ajax_individualise_this_exercise(request):
             parcours = None
     else :
         rc = Relationship.objects.get(pk=relationship_id)
-        parcours = rc.parcours
+        parcours = rc.parcours 
 
-    
-    students = rc.students.all
+    if group_id :
+        group    = Group.objects.get(pk=group_id)
+        students = group.students.exclude(user__username__contains="_e-test").order_by("user__last_name")
+    else :
+        students = rc.students.exclude(user__username__contains="_e-test").order_by("user__last_name") 
+
+
     data = {}
     data['html'] = render_to_string('qcm/ajax_individualise_this_exercise.html', {'rc' : rc, 'parcours' : parcours, 'students' : students, })
 

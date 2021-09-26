@@ -5,22 +5,52 @@
 
 <div class="row">
     <div class="col-sm-12 col-md-6">
-        <img src="{{ rc.exercise.supportfile.imagefile.url }}" width="400px" />  
+        <img src="{{ rc.exercise.supportfile.imagefile.url }}" width="400px" />
+
+
+        <hr/>
+        <span class="btn btn-info select_student" 
+            id="selecteur{{relationship.exercise.id}}"    
+            data-student_id="0"   data-custom=0
+            data-exercise_id="{{ rc.exercise.id }}" 
+            data-statut="False"   
+            data-parcours_id="{{ rc.parcours.id }}"  style="min-width:75px; margin:1px; margin-right:0px" >Attribuer à tous les élèves
+
+            <input  type="checkbox"  style="display:none"
+            data-student_id="0"    data-custom=0
+            data-exercise_id="{{ rc.exercise.id }}" 
+            data-statut="False"   
+            data-parcours_id="{{ rc.parcours.id }}" />
+        </span>
+        <span class="btn btn-warning select_student" 
+            id="selecteur{{rc.exercise.id}}"    
+            data-student_id="0"    data-custom=0
+            data-exercise_id="{{ rc.exercise.id }}" 
+            data-statut="True"   
+            data-parcours_id="{{ rc.parcours.id }}"  style="min-width:75px; margin:1px; margin-left:0px" >Détacher tous les élèves
+
+            <input  type="checkbox"  style="display:none"
+            data-student_id="0"    data-custom=0
+            data-exercise_id="{{ rc.exercise.id }}" 
+            data-statut="True"   
+            data-parcours_id="{{ rc.parcours.id }}" />
+        </span>
+
     </div> 
     <div class="col-sm-12 col-md-6">
         <h3>{{ rc.exercise.supportfile.title|decode}}</h3>
         <hr/>
  
-          
+
 
 
  
         <form action="" method="POST" enctype='multipart/form-data'> 
             {% csrf_token %}
-            {%  for s in  parcours.students.all|dictsort:"user.last_name" %}
+            {%  for s in  students %}
 
                 {% get_exercise s rc as has_it %}
-                <span class="btn btn-{% if not s in students %}default{% else %}{% if has_it %}success{% else  %}danger{% endif  %}{% endif  %} select_student selected_student{{rc.exercise.id}}" 
+                <span class="btn btn-{% if has_it %}success{% else  %}default{% endif  %} select_student selected_student{{rc.exercise.id}}" 
                     id="student{{rc.exercise.id}}-{{s.user.id }}"
                     data-student_id="{{ s.user.id }}" data-exercise_id="{{ rc.exercise.id }}"   data-custom=0 data-parcours_id="{{ rc.parcours.id }}"  data-statut="{% if has_it %}True{% else  %}False{% endif  %}"  
                     style="min-width:155px; margin:1px">
@@ -28,6 +58,7 @@
 
                     {{ s.user.last_name }} {{ s.user.first_name|truncatechars:6 }}
                 </span>
+
             {%  endfor %}
         </form>
      </div> 
@@ -36,4 +67,3 @@
  
  
        
- 

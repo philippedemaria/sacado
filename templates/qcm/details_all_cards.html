@@ -2,6 +2,8 @@
 {% load item_tags %}
 {% load widget_tweaks %}
 
+{% get_only_students  parcours group as  only_real_student %}
+
 {% if rc.exercise %}
 <div class="card_freeze" style="{% if not rc.is_publish %}background-color: #F5F5F5{% else %}background:#FFF{% endif %}" id="card{{rc.id}}">
     <!-- Entete de la card  -->
@@ -47,11 +49,11 @@
           </div>
         {% endif %}
 
-          
+ 
+ 
           <!-- Exercice dissocié  -->  
-  
           <div  style="position: absolute; right : 0px; top:66px;" title="Cet exercice est indiviualisé à certains élèves" id="individialise_id_student{{  rc.exercise.id }}" 
-                {% if  rc.just_students.count == parcours.just_students.count  %} class="checkbox_no_display" {% endif %}>   
+                {% if  rc.just_students.count == only_real_student.count  %} class="checkbox_no_display" {% endif %}>   
             <a href="#card{{rc.id}}" class="detail_parcours btn btn-warning"  data-custom=0
                data-exercise_id="{{ rc.exercise.id }}"  data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}">
               <i class="fa fa-user"></i>
@@ -451,11 +453,12 @@
             </span>                                   
 
  
-            <a href = "#" data-toggle = 'modal' 
+            <a href = "#" data-toggle = 'modal'
                 data-target = '#individualisation_exercice'  
                 class = "individualiser horizontalmargin5" 
                 data-nb = "{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" 
-                data-relationship_id = "{{ rc.id }}"  
+                data-relationship_id = "{{ rc.id }}"
+                data-group_id = "{{ group.id }}"   
                 data-custom = 0  title = "Individualiser cet exercice" 
                 style = "font-size:14px;color:{{ parcours.color|contrast_color }}">
 
@@ -528,8 +531,8 @@
           {% endif %}
 
           <!-- Exercice dissocié  -->  
-          {% if  data.nb != parcours.just_students.count %}     
-          <div  style="position: absolute; right : 0px; top:60px;" title="Cet exercice est indiviualisé à certains élèves" >   
+          {% if  data.nb != only_real_student.count %}     
+          <div  style="position: absolute; right : 0px; top:60px;" title="Cet exercice est indiviualisé à certains élèves"  >   
               <a href="#customcard{{rc.id}}" class="detail_parcours btn btn-warning" data-custom=1
                  data-exercise_id="{{ rc.id }}"  data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}">
                 <i class="fa fa-user"></i>
@@ -713,7 +716,17 @@
                <i class="fa fa-share-square"></i>
             </span>                                   
  
- 
+             <a href = "#" data-toggle = 'modal'
+                data-target = '#individualisation_exercice'  
+                class = "individualiser horizontalmargin5" 
+                data-nb = "{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" 
+                data-relationship_id = "{{ rc.id }}"
+                data-group_id = "{{ group.id }}"   
+                data-custom = 1  title = "Individualiser cet exercice" 
+                style = "font-size:14px;color:{{ parcours.color|contrast_color }}">
+
+                <i class="fa fa-users"></i> 
+            </a>
 
  
             <span class="horizontalmargin5">
