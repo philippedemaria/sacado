@@ -38,6 +38,18 @@ define(['jquery', 'bootstrap'], function ($) {
  
             $("#loader").html("<i class='fa fa-spinner fa-pulse fa-10x fa-fw'></i>");
             
+            let listing    = "no";
+            if ( $("#listing") ){
+                if ( $("#listing").is(":checked") )
+                {
+                    listing = "yes";  
+                }
+                else
+                {
+                    listing = "no"; 
+                }
+
+            }
  
 
             $.ajax(
@@ -49,13 +61,24 @@ define(['jquery', 'bootstrap'], function ($) {
                         'subject_id'   : subject_id,
                         'level_id'     : level_id,
                         'keywords'     : keywords,
+                        'listing'      : listing,
                         csrfmiddlewaretoken: csrf_token
                     },
                     url:"../../ajax_all_folders",
                     success: function (data) {
- 
+
+
                         $('#courses_details').html("").html(data.html);
-                        $("#loader").html("").hide(); 
+                        $("#loader").html("").hide();
+                        $("#before_choice").hide(); 
+                        $("#after_choice").show(); 
+                        if ( listing == "yes" )
+                                                {
+                                                    $("#listing").prop('checked',true);
+                                                } else {
+                                                    $("#listing").prop('checked',false);
+                                                }
+ 
                         
                         }
                     }
@@ -74,6 +97,12 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+ 
+        $('#listing').on('change', function (event) {
+
+            ajax_choice($('select[name=level]'),$('select[name=theme]')) ;
+
+        }); 
 
 
 

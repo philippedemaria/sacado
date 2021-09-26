@@ -62,13 +62,37 @@
                 </select>
             </div>
         </div>
-        <div class="col-sm-12 col-md-12 col-lg-4">
+        <div class="col-sm-12 col-md-4 col-lg-5">
             <div class="form-group">
                 <input type="text" name="keywords" id="keywords" placeholder="Mots-clés" class="form-control" />
                 <input type="hidden" name="is_eval" id="is_eval"  value="{{ is_eval }}" />
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+
+            <div class="alert alert-warning">            
+                
+
+                    <img src="{% static 'img/conseil.png' %}" height="40px" />
+
+                <span id="before_choice"> 
+                    Lors de votre recherche, vos dossiers ne vous sont pas montrés. Ils sont déjà à vous. Seuls les dossiers de votre établissement et de l'équipe SACADO vous sont proposés.
+                </span>
+                <span class="no_visu_on_load" id="after_choice"> Adapter l'affichage de votre recherche
+                        <input id="listing"  type="checkbox" data-toggle="toggle" data-onstyle="primary" data-offstyle="default" data-on="Liste" data-off="Vignettes" data-width="130"/> 
+                </span>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
     {% csrf_token %}
             <div class="row" align="center">
                 <div id="loader">

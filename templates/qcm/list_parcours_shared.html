@@ -101,13 +101,30 @@
     {% endif %}
 
 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+
+            <div class="alert alert-warning">            
+                
+
+                    <img src="{% static 'img/conseil.png' %}" height="40px" />
+
+                <span id="before_choice"> 
+                    Lors de votre recherche, vos parcours ne vous sont pas montrés. Ils sont déjà à vous. Seuls les parcours de votre établissement et de l'équipe SACADO vous sont proposés.
+                </span>
+                <span class="no_visu_on_load" id="after_choice"> Adapter l'affichage de votre recherche
+                        <input id="listing"  type="checkbox" data-toggle="toggle" data-onstyle="primary" data-offstyle="default" data-on="Liste" data-off="Vignettes" data-width="130"/> 
+                </span>
+
+            </div>
+
+        </div>
+    </div>
+
+
     {% if inside %}   
         <div class="row" id="courses_details">
-            <div class="col-sm-12 col-md-12">
-                <div class="alert alert-warning">
-                   <img src="{% static 'img/conseil.png' %}" height="40px" /> Lors de votre recherche, vos parcours ne vous sont pas montrés. Ils sont déjà à vous. Seuls les parcours de votre établissement et de l'équipe SACADO vous sont proposés. 
-                </div>
-            </div>
+ 
 
             <div class="col-sm-12 col-md-12">
                 {% comment  %}

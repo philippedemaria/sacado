@@ -1,0 +1,64 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+<div class="col-sm-12 col-md-12">
+    <h1 class="thin"> 
+    	Légende :
+                    <span style="font-variant:small-caps; font-size: 20px;margin-right: 5px;color:#5d4391" ><i class="fa fa-eye"></i>  Voir le parcours </span>
+                    <span style="font-variant:small-caps; font-size: 20px;margin-right: 5px;color:#5d4391" > <i class="fa fa-clone"></i> Cloner le parcours</span>     	
+                    <span style="font-variant:small-caps; font-size: 20px;margin-right: 5px;color:#5d4391" > <i class="fa fa-folder"></i> Cloner le parcours et ses cours associés</span>
+                   
+                    
+
+    </h1>
+</div>
+
+
+<div class="col-sm-12 col-md-12">
+{% for parcours in parcourses  %} 
+<div class="col-sm-12 col-md-12">
+	<div class="row" style="height:60px;padding:5px;border-bottom: 1px solid #CCC;">
+
+
+	    <div class="col-xs-2 col-lg-md-1 col-lg-1" style="position:relative; text-align:center;height:60px;
+	            background-image:url({% if parcours.vignette %}{{ parcours.vignette.url }}{% endif %});
+	                background-repeat: no-repeat;
+	                background-size: 50px 50px;"> 
+	    </div> 
+	    <div class="col-xs-5 col-md-3 col-lg-3">
+
+	        {{ parcours.title }}
+
+	        <div style="font-size:14px;margin-top:5px;">
+	            {% with nbp=parcours.nb_exercises %}
+	                {{ nbp }} exercice{{ nbp|pluralize }}
+	            {% endwith %}
+	        </div> 
+	   
+	    </div>  
+	    <div class="col-xs-5 col-md-3 col-lg-3">
+	            {{ parcours.teacher }}
+	    </div>  
+	    <div class="col-xs-12 col-md-5 col-lg-5">
+		     {% if parcours.course.all|length > 0 %}
+		    <a href="{% url 'clone_parcours' parcours.id 1 %}" style="font-variant:small-caps; font-size: 12px;margin-left: 5px; font-variant-caps: normal;"  > Cloner le parcours et ses cours associés </a> |
+		    {% endif %}
+		    <a href="{% url 'clone_parcours' parcours.id 0 %}" style="font-variant:small-caps; font-size: 12px;margin-left: 5px; font-variant-caps: normal;"  > Cloner le parcours uniquement </a> |                      
+		    <a href="{% url 'show_parcours_visual'  parcours.id  %}" style="font-variant:small-caps; font-size: 12px; font-variant-caps: normal;"      > Voir le parcours</a>
+		</div>
+
+	</div>
+
+	</div>
+
+{% empty %} 
+    <div class="alert alert-danger"> Aucun résultat de votre recherche  </div> 
+
+{% endfor %} 
+</div>
+
+<script type="text/javascript"> 
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>

@@ -1541,36 +1541,41 @@ def ajax_all_parcourses(request):
 
                 if keywords :
                     parcourses = Parcours.objects.filter( Q(teacher__user_id=teacher_id)|Q(exercises__supportfile__title__icontains = keywords) |Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  ,is_share = 1, is_evaluation = is_eval, 
-                                                        exercises__knowledge__theme__in = themes_tab,  teacher__user__school = teacher.user.school,  level_id = int(level_id),is_trash=0).exclude(teacher=teacher).order_by('author').distinct()
+                                                        exercises__knowledge__theme__in = themes_tab,  teacher__user__school = teacher.user.school,  level_id = int(level_id),is_trash=0).exclude(teacher=teacher).order_by('teacher').distinct()
                 else :
-                    parcourses = Parcours.objects.filter(Q(teacher__user_id=teacher_id),is_share = 1, is_evaluation = is_eval,  teacher__user__school = teacher.user.school,
-                                                        exercises__knowledge__theme__in = themes_tab, level_id = int(level_id),is_trash=0).exclude(teacher=teacher).order_by('author').distinct()  
+                    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, is_evaluation = is_eval, 
+                                                            exercises__knowledge__theme__in = themes_tab, level_id = int(level_id),is_trash=0).exclude(teacher=teacher).order_by('teacher').distinct() 
                     
             else :
                 if keywords :            
                     parcourses = Parcours.objects.filter(Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains= keywords) |Q(teacher__user__last_name__icontains = keywords)   |Q(exercises__supportfile__title__icontains = keywords),is_share = 1, is_evaluation = is_eval,
-                                                            teacher__user__school = teacher.user.school ,  level_id = int(level_id) ,is_trash=0).exclude(teacher=teacher).order_by('author').distinct()
+                                                            teacher__user__school = teacher.user.school ,  level_id = int(level_id) ,is_trash=0).exclude(teacher=teacher).order_by('teacher').distinct()
 
                 else :
                     parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, is_evaluation = is_eval,
-                                                            level_id = int(level_id),is_trash=0).exclude(teacher=teacher).order_by('author').distinct()
+                                                            level_id = int(level_id),is_trash=0).exclude(teacher=teacher).order_by('teacher').distinct()
 
         else :
             if keywords:
                 parcourses = Parcours.objects.filter( Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  |Q(exercises__supportfile__title__icontains = keywords),teacher__user__school = teacher.user.school,is_share = 1,is_evaluation = is_eval,
-                                                        level_id = int(level_id) ,is_trash=0).exclude(teacher=teacher).order_by('author').distinct()
+                                                        level_id = int(level_id) ,is_trash=0).exclude(teacher=teacher).order_by('teacher').distinct()
             else :
                 parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, is_evaluation = is_eval,
-                                                        level_id = int(level_id) ,is_trash=0).exclude(teacher=teacher).order_by('author').distinct()
+                                                        level_id = int(level_id) ,is_trash=0).exclude(teacher=teacher).order_by('teacher').distinct()
     else :
         if keywords:
             parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  ,is_share = 1 , is_evaluation = is_eval,exercises__supportfile__title__icontains = keywords,is_trash=0).exclude(teacher=teacher).order_by('author').distinct()
         else :
-            parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1,  is_evaluation = is_eval,is_trash=0).exclude(teacher=teacher).order_by('author').distinct()
+            parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1,  is_evaluation = is_eval,is_trash=0).exclude(teacher=teacher).order_by('teacher').distinct()
 
-
-    data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : parcourses, 'teacher' : teacher ,  })
+    listing = request.POST.get('listing',None)
+    if listing == "yes" :
+        data['html'] = render_to_string('qcm/ajax_list_parcours_listing.html', {'parcourses' : parcourses, 'teacher' : teacher ,  }) 
+    else :
+        data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : parcourses, 'teacher' : teacher ,  })
  
+
+
     return JsonResponse(data)
 
 
@@ -1614,6 +1619,7 @@ def ajax_all_folders(request):
     data = {}
     level_id = request.POST.get('level_id',0)
     subject_id = request.POST.get('subject_id',None)
+    listing = request.POST.get('listing',None)
 
     teacher_id = get_teacher_id_by_subject_id(subject_id)
 
@@ -1641,8 +1647,10 @@ def ajax_all_folders(request):
         else :
             folders = Folder.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1 ).exclude(teacher=teacher).order_by('author').distinct()
 
-
-    data['html'] = render_to_string('qcm/ajax_list_folders.html', {'folders' : folders, 'teacher' : teacher ,  })
+    if listing == "yes" :
+        data['html'] = render_to_string('qcm/ajax_list_folders_listing.html', {'folders' : folders, 'teacher' : teacher ,  }) 
+    else :
+        data['html'] = render_to_string('qcm/ajax_list_folders.html', {'folders' : folders, 'teacher' : teacher ,  })
  
     return JsonResponse(data)
 

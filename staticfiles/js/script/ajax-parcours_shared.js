@@ -93,10 +93,6 @@ define(['jquery', 'bootstrap'], function ($) {
         });
 
 
-
-
-
-
         function ajax_choice(param0, param1){
 
  
@@ -104,9 +100,23 @@ define(['jquery', 'bootstrap'], function ($) {
             if ( param0.val() > 0 ) {var level_id = param0.val() ; console.log(level_id) ;  } else {var level_id = 0 ; console.log(level_id) ; }  
             if ( param1.val() > 0  ) {var theme_id = param1.val() ; console.log(theme_id) ; } else {var theme_id = [] ; console.log(theme_id) ; }  
  
-            let is_eval = $("#is_eval").val();
+            let is_eval    = $("#is_eval").val();
             let subject_id = $("#id_subject").val();
-            let keywords = $("#keywords").val();
+            let keywords   = $("#keywords").val();
+            let listing    = "no";
+
+            if ( $("#listing") ){
+                if ( $("#listing").is(":checked") )
+                {
+                    listing = "yes";  
+                }
+                else
+                {
+                    listing = "no"; 
+                }
+
+            }
+
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
  
             $("#loader").html("<i class='fa fa-spinner fa-pulse fa-10x fa-fw'></i>");
@@ -124,14 +134,24 @@ define(['jquery', 'bootstrap'], function ($) {
                         'level_id'     : level_id,
                         'theme_id'     : theme_id,
                         'keywords'     : keywords,
+                        'listing'      : listing,
                         csrfmiddlewaretoken: csrf_token
                     },
                     url:"../../ajax_all_parcourses",
                     success: function (data) {
  
                         $('#courses_details').html("").html(data.html);
-                        $("#loader").html("").hide(); 
-                        
+                        $("#loader").html("").hide();
+                        $("#before_choice").hide(); 
+                        $("#after_choice").show(); 
+                        if ( listing == "yes" )
+                                                {
+                                                    $("#listing").prop('checked',true);
+                                                } else {
+                                                    $("#listing").prop('checked',false);
+                                                }
+ 
+
                         }
                     }
                 )
@@ -148,6 +168,12 @@ define(['jquery', 'bootstrap'], function ($) {
         }); 
 
 
+ 
+        $('#listing').on('change', function (event) {
+
+            ajax_choice($('select[name=level]'),$('select[name=theme]')) ;
+
+        }); 
 
 
 

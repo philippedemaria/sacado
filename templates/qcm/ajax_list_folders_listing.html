@@ -1,0 +1,70 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+<div class="col-sm-12 col-md-12">
+    <h1 class="thin"> </h1>
+</div>
+
+
+<div class="col-sm-12 col-md-12">
+{% for folder in folders  %} 
+
+
+<div class="col-sm-12 col-md-12">
+	<div class="row" style="height:60px;padding:5px;border-bottom: 1px solid #CCC;">
+
+
+	    <div class="col-xs-2 col-lg-md-1 col-lg-1" style="position:relative; text-align:center;height:60px;
+	            background-image:url({% if folder.vignette %}{{ folder.vignette.url }}{% endif %});
+	                background-repeat: no-repeat;
+	                background-size: 50px 50px;"> 
+	    </div> 
+	    <div class="col-xs-5 col-md-3 col-lg-3">
+
+	         {{ folder.title }} 
+
+	        <div style="font-size:14px;margin-top: 5px;">
+	            {{ folder.parcours.count }} parcours 
+	        </div> 
+	   
+	    </div>  
+	    <div class="col-xs-5 col-md-3 col-lg-3">
+	            {{ folder.teacher }}
+	    </div>  
+	    <div class="col-xs-12 col-md-5 col-lg-5">
+ 
+		    <a href="{% url 'clone_folder' folder.id %}" style="font-variant:small-caps; font-size: 12px;margin-left: 5px; font-variant-caps: normal;"  > Cloner le dossier et son contenu </a>  
+		    
+		</div>
+
+	</div>
+
+</div>
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% empty %} 
+    <div class="alert alert-danger"> Aucun résultat de votre recherche  </div> 
+
+{% endfor %} 
+</div>
+
+<script type="text/javascript"> 
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>
