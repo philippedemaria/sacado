@@ -36,6 +36,11 @@ body {
  /*height : 100vh ;*/
 }
 
+.sacado_color_text{
+  color:  #5d4391 ;
+}
+
+
 .alert-warning{
   background-color: #f1eef7 ;
   border : solid 1px #f1eef7 ;
