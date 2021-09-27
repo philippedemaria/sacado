@@ -6,7 +6,7 @@
         {% if folder %}
         <li> <a href="{% url 'create_parcours' folder.id %}"  > Créer un parcours  </a> </li>
         {% else %}
-        <li> <a href="{% url 'create_parcours' 0 %}"  > Créer un parcours <em class="text-danger">externe à un dossier</em></a> </li>
+        <li> <a href="{% url 'create_parcours' 0 %}"  > Créer un parcours <em class="text-danger"> non affecté.</em></a> </li>
         {% endif %}
         <li>{% if sacado_asso %} 
         		<a href="{% url 'all_parcourses' 0 %}" > Récupérer un parcours mutualisé  

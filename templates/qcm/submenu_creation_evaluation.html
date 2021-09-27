@@ -8,7 +8,7 @@
         {% if folder %}
         <li> <a href="{% url 'create_evaluation' folder.id %}"  > Créer un évaluation  </a> </li>
         {% else %}
-        <li> <a href="{% url 'create_evaluation' 0 %}"  > Créer un évaluation <em class="text-danger">externe à un dossier</em></a> </li>
+        <li> <a href="{% url 'create_evaluation' 0 %}"  > Créer un évaluation <em class="text-danger">non affectée</em></a> </li>
         {% endif %}
         <li>{% if sacado_asso %} 
                 <a href="{% url 'all_parcourses' 1 %}" > Récupérer une évaluation mutualisée

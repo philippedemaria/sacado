@@ -1686,6 +1686,8 @@ def clone_folder(request, id ):
         p.pk = None
         p.code = str(uuid.uuid4())[:8] 
         p.teacher = request.user.teacher
+        p.subject = group.subject
+        p.level = group.level
         p.is_publish = 0
         p.is_archive = 0
         p.is_share = 0
@@ -2899,18 +2901,6 @@ def clone_parcours(request, id, course_on ):
     parcours.is_favorite = 1
     parcours.code = str(uuid.uuid4())[:8]  
     parcours.save()
-    # ajoute le parcours cloné dans le dossier prcrs
-    try :
-        prcrs_id = request.session.get("parcours_id",None)
-        if prcrs_id :
-            prcrs = Parcours.objects.get(pk = prcrs_id)
-            prcrs.leaf_parcours.add(parcours)
-        else :
-            prcrs = None   
-    except :
-        prcrs_id = None
-        prcrs = None
-
 
     # ajoute le group au parcours si group    
     try :
