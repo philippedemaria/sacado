@@ -2908,9 +2908,8 @@ def clone_parcours(request, id, course_on ):
         if group_id :
             group = Group.objects.get(pk = group_id)
             parcours.groups.add(group)
-            if prcrs_id : 
-                Parcours.objects.filter(pk = prcrs_id).update(subject = group.subject)
-                Parcours.objects.filter(pk = prcrs_id).update(level = group.level)
+            Parcours.objects.filter(pk = parcours.id).update(subject = group.subject)
+            Parcours.objects.filter(pk = parcours.id).update(level = group.level)
         else :
             group = None   
     except :
