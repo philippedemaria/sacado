@@ -611,6 +611,7 @@ def associate_parcours(request,id):
         parcours, created = Parcours.objects.get_or_create(title=theme.name, color=group.color, author=teacher, teacher=teacher, level=group.level, subject = group.subject, is_favorite = 1,  is_share = 0, linked = 1)
         exercises = Exercise.objects.filter(level= group.level,theme = theme, theme__subject = group.subject , supportfile__is_title=0)
         parcours.students.set(group.students.all())
+        parcours.groups.add(group)
         i  = 0
         for e in exercises:
             relationship, created = Relationship.objects.get_or_create(parcours = parcours, exercise=e, ranking = i)
