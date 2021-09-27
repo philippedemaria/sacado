@@ -23,7 +23,7 @@
 
  
     {% if group %}
-         <small>{{ group.name }}    <img src="{% static 'img/angle-right.png' %}"/> {{ group.students.count }} élèves</small> 
+         <small>{{ group.name }}    <img src="{% static 'img/angle-right.png' %}"/> {{ group.just_students.count }} élèves</small> 
     {% else %}
          <small>Nouveau groupe</small> 
     {% endif %}
