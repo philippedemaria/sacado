@@ -2953,13 +2953,10 @@ def clone_parcours(request, id, course_on ):
 
 
     if group_id :
-        if parcours.is_evaluation :
-            return redirect('update_evaluation',  parcours.id, group_id)
-        else :
-            return redirect('update_parcours',  parcours.id, group_id)
+        return redirect('list_parcours_group', group_id)
     else :
         if parcours.is_evaluation :
-            return redirect('update_evaluation' , parcours.id, 0)
+            return redirect('all_parcourses' , 1 )
         else :
             return redirect('all_parcourses', 0 )
 
