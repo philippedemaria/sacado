@@ -82,7 +82,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="label label-default"> {{ group.students.count }}<i class="fa fa-users"></i></span>
+                                    <span class="label label-default"> {{ group.just_students.count }}<i class="fa fa-users"></i></span>
                                         {% for s in group.students|exclude_teacher  %} 
                                            <font style="font-size:14px">    <a  href="{% url 'update_student'  s.user.id group.id  %}"> {{s}} </a>{% if not forloop.last %}, {% endif %} </font>
                                         {% empty %}
