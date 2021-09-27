@@ -24,7 +24,7 @@ def get_strong_username(request ,ln, fn):
     ok = True
     i = 0
     code = str(uuid.uuid4())[:3] 
-    name = str(ln).replace(" ","_")    
+    name = str(ln).replace(" ","")    
     un = str(name) + str(fn)[0] + "_" +   code 
     while ok:
         if User.objects.filter(username=un).count() == 0:
@@ -44,7 +44,7 @@ def get_username(request ,ln, fn):
     User = apps.get_model('account', 'User')
     ok = True
     i = 0
-    name = str(ln).replace(" ","_") 
+    name = str(ln).replace(" ","") 
     un = str(name) + "." + str(fn)[0]+str(uuid.uuid4())[:2] 
     while ok:
         if User.objects.filter(username=un).count() == 0:
