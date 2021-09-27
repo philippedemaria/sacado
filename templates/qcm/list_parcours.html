@@ -148,7 +148,7 @@
 
                             <span id="new_group_folder_affected{{ folder.id}}">
                             {% for g in  folder.groups.all  %}
-                                <small>{{ g.name }} <small>({{ g.students.count }})</small>{% if not forloop.last %}, {% endif %}</small>
+                                <small>{{ g.name }} <small>({{ g.just_students.count }})</small>{% if not forloop.last %}, {% endif %}</small>
                             {% endfor %}
                             </span>
 

@@ -1214,7 +1214,7 @@ def ajax_affectation_to_group(request):
             parcours.groups.add(group)
             attribute_all_documents_of_parcours_to_group(group,parcours)
         for g in parcours.groups.all():
-            html += "<small>"+g.name +" (<small>"+ str(g.students.count())+"</small>)</small> "
+            html += "<small>"+g.name +" (<small>"+ str(g.just_students_count())+"</small>)</small> "
 
     else :
         folder   = Folder.objects.get(pk=target_id)
@@ -1224,7 +1224,7 @@ def ajax_affectation_to_group(request):
             folder.groups.add(group)
             attribute_all_documents_of_folder_to_group(group,folder)
         for g in folder.groups.all():
-            html += "<small>"+g.name +" (<small>"+ str(g.students.count())+"</small>)</small> "
+            html += "<small>"+g.name +" (<small>"+ str(g.just_students_count())+"</small>)</small> "
         change_link = "change"
 
     data['html']        = html
@@ -1240,9 +1240,6 @@ def ajax_charge_group_from_target(request):
     status    = request.POST.get('status')
     target_id = request.POST.get('target_id')
 
-    print(status , target_id)
- 
- 
     if status == "parcours" :
         parcours = Parcours.objects.get(pk=target_id)        
         groups   = parcours.groups.all()
@@ -1954,12 +1951,11 @@ def update_parcours(request, id, idg=0 ):
             nf.save()
             form.save_m2m()
 
-            if "groups" in form.changed_data :
-                attribute_all_documents_to_students(form,nf) # Si les groupes sont modifiés alors on attribue les docu aux élèves des groupes.
-
-                #Gestion de la coanimation
-                group_ids = request.POST.getlist("groups",[])
-                change_coanimation_teachers(nf, parcours , group_ids , teacher)
+            #if "groups" in form.changed_data :
+            attribute_all_documents_to_students(form,nf) # Si les groupes sont modifiés alors on attribue les docu aux élèves des groupes.
+            #Gestion de la coanimation
+            group_ids = request.POST.getlist("groups",[])
+            change_coanimation_teachers(nf, parcours , group_ids , teacher)
 
 
             if "stop" in form.changed_data :
@@ -4831,15 +4827,11 @@ def update_evaluation(request, id, idg=0 ):
             nf.save()
             form.save_m2m()
 
-            if "groups" in form.changed_data :
-                attribute_all_documents_to_students(form,nf) # Si les groupes sont modifiés alors on attribue les docu aux élèves des groupes.
-
-
-                #Gestion de la coanimation
-                group_ids = request.POST.getlist("groups",[])
-                change_coanimation_teachers(nf, evaluation , group_ids , teacher)
-
-
+            #if "groups" in form.changed_data :
+            attribute_all_documents_to_students(form,nf) # Si les groupes sont modifiés alors on attribue les docu aux élèves des groupes.
+            #Gestion de la coanimation
+            group_ids = request.POST.getlist("groups",[])
+            change_coanimation_teachers(nf, evaluation , group_ids , teacher)
 
             if "stop" in form.changed_data :
                 lock_all_exercises_for_student(nf.stop,evaluation)

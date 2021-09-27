@@ -85,6 +85,13 @@ class Group(ModelWithCode):
         return self.students.exclude(user__username__contains="_e-test").order_by("user__last_name")
 
 
+    def just_students_count(self):
+        return self.students.exclude(user__username__contains="_e-test").count()
+
+
+
+
+
     def parcours_counter(self,teacher):
         """
         Donne le nombre total de parcours/évaluations, le nombre de visibles et de publiés du groupe
