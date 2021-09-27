@@ -1890,13 +1890,12 @@ def create_parcours(request,idf=0):
 
         if idf == 0 :
             for g in form.cleaned_data.get("groups") :
-                nf.students.set(g.students.all())
+                students = g.students.all()
+                nf.students.set(students)
         else :
             students = folder.students.all()
             folder.parcours.add(nf)
             nf.students.set(students)
-
-        attribute_all_documents_to_students(form,nf) # Si les groupes sont modifiés alors on attribue les docu aux élèves des groupes.
         ################################################
 
         lock_all_exercises_for_student(nf.stop,nf)  
@@ -1951,10 +1950,11 @@ def update_parcours(request, id, idg=0 ):
             nf.save()
             form.save_m2m()
 
-            #if "groups" in form.changed_data :
-            attribute_all_documents_to_students(form,nf) # Si les groupes sont modifiés alors on attribue les docu aux élèves des groupes.
             #Gestion de la coanimation
             group_ids = request.POST.getlist("groups",[])
+            for gid in group_ids :
+                attribute_all_documents_of_parcours_to_group(Group.objects.get(pk=gid), parcours)
+
             change_coanimation_teachers(nf, parcours , group_ids , teacher)
 
 
@@ -4774,7 +4774,6 @@ def create_evaluation(request,idf=0):
             folder.parcours.add(nf)
             nf.students.set(students)
 
-        attribute_all_documents_to_students(form,nf) # Si les groupes sont modifiés alors on attribue les docu aux élèves des groupes.
         ################################################
         lock_all_exercises_for_student(nf.stop,nf)  
 
@@ -4827,10 +4826,9 @@ def update_evaluation(request, id, idg=0 ):
             nf.save()
             form.save_m2m()
 
-            #if "groups" in form.changed_data :
-            attribute_all_documents_to_students(form,nf) # Si les groupes sont modifiés alors on attribue les docu aux élèves des groupes.
-            #Gestion de la coanimation
             group_ids = request.POST.getlist("groups",[])
+            for gid in group_ids :
+                attribute_all_documents_of_parcours_to_group(Group.objects.get(pk=gid), evaluation)
             change_coanimation_teachers(nf, evaluation , group_ids , teacher)
 
             if "stop" in form.changed_data :
@@ -7968,6 +7966,11 @@ def update_folder(request,id,idg):
 
             #Gestion de la coanimation
             group_ids = request.POST.getlist("groups",[])
+            for gid in group_ids:
+                group = Group.objects.get(pk=gid)
+                attribute_all_documents_of_folder_to_group(group,folder)
+
+
             change_coanimation_teachers(nf, folder , group_ids , teacher)
 
 

@@ -234,14 +234,15 @@ def attribute_all_documents_to_student(parcourses,student):
 
 
 
-def attribute_all_documents_to_students(form, nf ):
+def attribute_all_documents_to_students(groups, nf ):
     """  assigner les documents   """
     students = set()
-    for g in nf.groups.all() :
+    for g in groups : 
         students.update(g.students.all())
 
     nf.students.set(students)
     relationships = nf.parcours_relationship.all()
+        
     for r in relationships:
         r.students.set(students)
 
