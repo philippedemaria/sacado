@@ -608,8 +608,8 @@ def associate_parcours(request,id):
     theme_theme_ids = request.POST.getlist("themes")
     for theme_id in theme_theme_ids :
         theme = Theme.objects.get(pk = int(theme_id))
-        parcours, created = Parcours.objects.get_or_create(title=theme.name, color=group.color, author=teacher, teacher=teacher, level=group.level,  is_favorite = 1,  is_share = 0, linked = 1)
-        exercises = Exercise.objects.filter(level= group.level,theme = theme, supportfile__is_title=0)
+        parcours, created = Parcours.objects.get_or_create(title=theme.name, color=group.color, author=teacher, teacher=teacher, level=group.level, subject = group.subject, is_favorite = 1,  is_share = 0, linked = 1)
+        exercises = Exercise.objects.filter(level= group.level,theme = theme, theme__subject = group.subject , supportfile__is_title=0)
         parcours.students.set(group.students.all())
         i  = 0
         for e in exercises:
