@@ -1163,8 +1163,14 @@ def enroll(request, slug):
                 student = Student.objects.create(user=user, level=group.level)
 
                 # Affections des DOSSIERS ET parcours
-                re = attribute_all_documents(group,student)
-                messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation. Connectez-vous avec vos identifiants en cliquant sur le bouton bleu Se connecter.")
+                messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation. Connectez-vous avec vos identifiants en cliquant sur le bouton bleu Se connecter.")                
+                test = attribute_all_documents(group,student)
+
+                if test :
+                    messages.success(request, "Les documents du groupe ont été attribué à {} {}.".format(user.first_name, user.last_name))
+                else :
+                    messages.error(request, "Les documents du groupe n'ont pas pu être attribué à {} {}.".format(user.first_name, user.last_name))
+
                 try :    
                     if user_form.cleaned_data['email']:
                         send_mail('Création de compte sur Sacado',
@@ -1182,8 +1188,12 @@ def enroll(request, slug):
 
             user = authenticate(username=username, password=password)
             if user :
-                re = attribute_all_documents(group, user.student)
-                messages.success(request, "Vous avez rejoint le groupe avec succès ! Connectez-vous avec vos identifiants en cliquant sur le bouton bleu Se connecter.")
+                messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation. Connectez-vous avec vos identifiants en cliquant sur le bouton bleu Se connecter.")  
+                test = attribute_all_documents(group,user.student)                
+                if test :
+                    messages.success(request, "Les documents du groupe ont été attribué à {} {}.".format(user.first_name, user.last_name))
+                else :
+                    messages.error(request, "Les documents du groupe n'ont pas pu être attribué à {} {}.".format(user.first_name, user.last_name))
             else :
                 messages.error(request,"Utilisateur inconnu")
 
