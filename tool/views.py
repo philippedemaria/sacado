@@ -1,4 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from django.core import serializers
+from django.template.loader import render_to_string
+from django.contrib import messages
+from django.core.mail import send_mail
+
 from tool.models import Tool , Question  , Choice  , Quizz , Diaporama  , Slide ,Qrandom ,Variable , VariableImage , Generate_quizz , Generate_qr , Answerplayer , Display_question ,  Videocopy
 from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm,  DiaporamaForm , SlideForm,QrandomForm, VariableForm , AnswerplayerForm,  VideocopyForm
 from group.models import Group 
@@ -7,11 +13,8 @@ from qcm.models import  Parcours, Exercise
 from account.decorators import  user_is_testeur
 from sacado.settings import MEDIA_ROOT
 from socle.models import Knowledge, Waiting
-from django.http import JsonResponse
-from django.core import serializers
-from django.template.loader import render_to_string
-from django.contrib import messages
-from django.core.mail import send_mail
+from qcm.views import  get_teacher_id_by_subject_id
+
 import uuid
 from django.contrib.auth.hashers import make_password
 from django.views.decorators.csrf import csrf_exempt
@@ -331,6 +334,7 @@ def ajax_chargethemes_quizz(request):
     quizz = set()
 
     user_ids = user_list_of_school(teacher)
+    teacher_id = get_teacher_id_by_subject_id(id_subject)
 
     if len(thms_id) > 0 :
         if thms_id[0] != "" :
@@ -342,7 +346,9 @@ def ajax_chargethemes_quizz(request):
     else :
         thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject).order_by("name")
         data['themes'] = list(thms)
-        quizz.update(Quizz.objects.filter(subject_id = id_subject, levels = level , is_share = 1, teacher_id__in = user_ids).exclude(teacher=teacher))         
+ 
+        quizzes = Quizz.objects.filter(Q(teacher_id = teacher_id)|Q(teacher_id__in = user_ids), subject_id = id_subject,  is_share = 1 ).exclude(teacher=teacher)
+        quizz.update( quizzes )          
 
     data['html'] = render_to_string('tool/ajax_list_quizz_shared.html', {'quizz' : quizz, })
 
