@@ -275,64 +275,61 @@ def include_students(request , liste, group):
     students_tab = liste.split("\r\n")
 
     for student_tab in students_tab:
+ 
+        if ";" in student_tab:
+            details =  student_tab.split(";")
+        elif "," in student_tab:
+            details =  student_tab.split(",")
+        lname = str(cleanhtml(details[0])).strip()            
+        fname = str(cleanhtml(details[1])).strip()
+        password = make_password("sacado2020")
+        username = get_username(request,lname , fname)
+        email = ""
+
         try:
-            if ";" in student_tab:
-                details =  student_tab.split(";")
-            elif "," in student_tab:
-                details =  student_tab.split(",")
-            lname = str(cleanhtml(details[0])).strip()            
-            fname = str(cleanhtml(details[1])).strip()
-            password = make_password("sacado2020")
-            username = get_username(request,lname , fname)
-            email = ""
-
-            try:
-                for c in details[2] :
-                    if c == "@":
-                        email = cleanhtml(details[2])
-                    else :
-                        username = cleanhtml(details[2])
-            except IndexError:
-                pass
-            
-            try:
-                for car in details[3] :
-                    email = cleanhtml(details[3])
-            except IndexError:
-                pass
-
-            if email != "":
-                send_templated_mail(
-                    template_name="student_registration_by_teacher",
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[email],
-                    context={"last_name": lname, "first_name": fname, "username": username}, )
-
-            user, created = User.objects.get_or_create(username=username,
-                                                       defaults={"last_name": lname, "first_name": fname,  "time_zone": request.user.time_zone,
-                                                                 "password": password, "email": email, "school": request.user.school, "country": request.user.country,
-                                                                 "user_type": User.STUDENT})
-
-            if created:
-                student = Student.objects.create(user=user, level=group.level)
-                group.students.add(student)
-                parcourses = set()
-                for student in group.students.all():
-                    parcourses.update(student.students_to_parcours.all())
-
-                attribute_all_documents_to_student(parcourses, student)
- 
-
- 
-            else:
-                messages.error(request, "Erreur lors de l'enregistrement. L'identifiant {} est déjà utilisé. Modifier le prénom ou le nom.".format(username))
-                break
-        except:
+            for c in details[2] :
+                if c == "@":
+                    email = cleanhtml(details[2])
+                else :
+                    username = cleanhtml(details[2])
+        except IndexError:
+            pass
+        
+        try:
+            for car in details[3] :
+                email = cleanhtml(details[3])
+        except IndexError:
             pass
 
+        if email != "":
+            send_templated_mail(
+                template_name="student_registration_by_teacher",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email],
+                context={"last_name": lname, "first_name": fname, "username": username}, )
+
+        user, created = User.objects.get_or_create(username=username,
+                                                   defaults={"last_name": lname, "first_name": fname,  "time_zone": request.user.time_zone,
+                                                             "password": password, "email": email, "school": request.user.school, "country": request.user.country,
+                                                             "user_type": User.STUDENT})
+
+        if created:
+            code = str(uuid.uuid4())[:8] # code pour la relation avec les parents
+            student = Student.objects.create(user=user, level=group.level, code=code)
+        else :
+            student = Student.objects.get(user=user)
+
+        test = attribute_all_documents(group,student)
+
+        if test :
+            messages.success(request, "Les documents du groupe ont été attribué à {} {}.".format(fname, lname))
+        else :
+            messages.error(request, "Les documents du groupe n'ont pas pu être attribué à {} {}.".format(fname, lname))
+
+ 
 
 
-def include_students_in_a_model(request, liste,model):
+#def include_students_in_a_model(request, liste,model):
  
     students_tab = liste.split("\r\n")
     tested = False
@@ -1166,16 +1163,7 @@ def enroll(request, slug):
                 student = Student.objects.create(user=user, level=group.level)
 
                 # Affections des DOSSIERS ET parcours
-                parcourses = group.group_parcours.all()
-                re = attribute_all_documents_to_student(parcourses, student)
-
-                folders = group.group_folders.all()
-                for folder in folders :
-                    folder.students.add(student)
-                    r = attribute_all_documents_to_student(folder.parcours.all(), student)
-
-
-                group.students.add(student)
+                re = attribute_all_documents(group,student)
                 messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation. Connectez-vous avec vos identifiants en cliquant sur le bouton bleu Se connecter.")
                 try :    
                     if user_form.cleaned_data['email']:
@@ -1194,12 +1182,7 @@ def enroll(request, slug):
 
             user = authenticate(username=username, password=password)
             if user :
-                # Liste des parcours des élèves du groupe
-                parcourses = set()
-                for std in group.students.all():
-                    parcourses.update(std.students_to_parcours.filter(teacher=group.teacher))
-                attribute_all_documents_to_student(parcourses,  user.student)
-                group.students.add(  user.student)
+                re = attribute_all_documents(group, user.student)
                 messages.success(request, "Vous avez rejoint le groupe avec succès ! Connectez-vous avec vos identifiants en cliquant sur le bouton bleu Se connecter.")
             else :
                 messages.error(request,"Utilisateur inconnu")

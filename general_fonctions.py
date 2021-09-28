@@ -255,8 +255,6 @@ def attribute_all_documents_to_students(groups, nf ):
         course.students.set(students)
 
  
-
-
 def attribute_all_documents_of_parcours_to_group(group,parcours):
     """  assigner les documents   """
     
@@ -275,8 +273,6 @@ def attribute_all_documents_of_parcours_to_group(group,parcours):
         course.students.set(students)
 
 
-
-
 def attribute_all_documents_of_folder_to_group(group,folder):
     """  assigner les documents   """
     
@@ -284,6 +280,53 @@ def attribute_all_documents_of_folder_to_group(group,folder):
     folder.students.set(students)
     for parcours in folder.parcours.all() :
         attribute_all_documents_of_parcours_to_group(group,parcours)
+
+
+def attribute_all_documents(group,student):
+    """  assigner les documents   """
+    # Assigne les dossiers et leurs contenus 
+    group.students.add(student)
+    for folder in group.group_folders.all():
+        folder.students.add(student)
+
+        for parcours in folder.parcours.all():
+            parcours.students.add(student)
+
+            relationships = parcours.parcours_relationship.all()
+            for r in relationships:
+                r.students.add(student)
+
+            customexercises = parcours.parcours_customexercises.all()
+            for c in customexercises:
+                c.students.add(student)
+
+            courses = parcours.course.all()
+            for course in courses:
+                course.students.add(student)
+
+    # Assigne les parcours et leurs contenus 
+    for parcours in group.group_parcours.filter(folders=None):
+        parcours.students.add(student)
+
+        relationships = parcours.parcours_relationship.all()
+        for r in relationships:
+            r.students.add(student)
+
+        customexercises = parcours.parcours_customexercises.all()
+        for c in customexercises:
+            c.students.add(student)
+
+        courses = parcours.course.all()
+        for course in courses:
+            course.students.add(student)
+    test = True
+ 
+    return test
+
+
+
+
+
 
 
 
