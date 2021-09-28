@@ -81,7 +81,7 @@ requirejs.config({
     }
 });
 
-require(['jquery', 'bootstrap', 'mathjax', 'config_datatable',   'multiselect', 'ui',]);
+require(['jquery', 'bootstrap', 'mathjax', 'config_datatable',   'multiselect', 'ui', 'fonctions',  ]);
 
 // suppression de admin dans le chargement  : 'admin', 
 //  'mathjax',  'ckeditor', 'ckeditor_init', 'ckeditor_jquery', 'config_toggle', 'slimscroll', 'chart'

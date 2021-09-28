@@ -8076,6 +8076,8 @@ def ajax_subparcours_check(request):
     return JsonResponse(data)
 
 
+
+
 def actioner(request):
 
     teacher = request.user.teacher 
@@ -8084,23 +8086,61 @@ def actioner(request):
     if  request.POST.get("action") == "deleter" :  
         for idp in idps :
             parcours = Parcours.objects.get(id=idp) 
-            if parcours.teacher == teacher or request.user.is_superuser :
-                if parcours.parcours_relationship.count() > 0 :
-                    messages.error(request, "Le parcours "+ parcours.title +" n'est pas vide. La suppression n'est pas possible.")
-                else :
-                    Parcours.objects.filter(pk = idp).update(is_trash=1)
-            else :
-                messages.error(request, "Vous ne pouvez pas supprimer le parcours "+ parcours.title +". Contacter le propriétaire.")
-        
+            parcours.students.clear()
+
+            if not authorizing_access(teacher, parcours, False ):
+                messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+                return redirect('index')
+
+            for r in parcours.parcours_relationship.all() :
+                r.students.clear()
+                r.skills.clear()
+                ls = r.relationship_exerciselocker.all()
+                for l in ls :
+                    l.delete()
+                r.delete()
+
+            for c in parcours.course.all() :
+                c.students.clear()
+                c.creators.clear()
+                c.delete()
+
+            studentanswers = Studentanswer.objects.filter(parcours = parcours)
+            for s in studentanswers :
+                s.delete()
+            parcours.delete()
+ 
+
         for idf in idfs :
-            folder = Folder.objects.get(id=idf) 
-            if folder.teacher == teacher or request.user.is_superuser :
-                if folder.parcours.count() > 0 :
-                    messages.error(request, "Le dossier "+ folder.title +" n'est pas vide. La suppression n'est pas possible.")
-                else :
-                    Folder.objects.filter(pk = idf).update(is_trash=1)
-            else :
-                messages.error(request, "Vous ne pouvez pas supprimer le dossier "+ folder.title +". Contacter le propriétaire.")
+            folder = Folder.objects.get(id=idf)
+            for parcours in folder.parcours.all():
+                parcours = Parcours.objects.get(id=idp) 
+                parcours.students.clear()
+
+                if not authorizing_access(teacher, parcours, False ):
+                    messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+                    return redirect('index')
+
+                for r in parcours.parcours_relationship.all() :
+                    r.students.clear()
+                    r.skills.clear()
+                    ls = r.relationship_exerciselocker.all()
+                    for l in ls :
+                        l.delete()
+                    r.delete()
+
+                for c in parcours.course.all() :
+                    c.students.clear()
+                    c.creators.clear()
+                    c.delete()
+
+                studentanswers = Studentanswer.objects.filter(parcours = parcours)
+                for s in studentanswers :
+                    s.delete()
+                parcours.delete()
+            folder.delete()
+
+ 
     else: 
 
         for idp in idps :
