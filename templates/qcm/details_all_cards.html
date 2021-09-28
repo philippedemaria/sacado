@@ -4,6 +4,7 @@
 
 {% get_only_students  parcours group as  only_real_student %}
 
+
 {% if rc.exercise %}
 <div class="card_freeze" style="{% if not rc.is_publish %}background-color: #F5F5F5{% else %}background:#FFF{% endif %}" id="card{{rc.id}}">
     <!-- Entete de la card  -->
@@ -55,7 +56,7 @@
           <div  style="position: absolute; right : 0px; top:66px;" title="Cet exercice est indiviualisé à certains élèves" id="individialise_id_student{{  rc.exercise.id }}" 
                 {% if  rc.just_students.count == only_real_student.count  %} class="checkbox_no_display" {% endif %}>   
             <span class="btn btn-warning" style="cursor:auto">
-              <i class="fa fa-user"></i>
+              <i class="fa fa-user"></i>  {{ rc.just_students.count }} -- {{only_real_student.count  }}
             </span>
  
           </div>

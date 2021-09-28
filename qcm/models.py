@@ -617,7 +617,7 @@ class Parcours(ModelWithCode):
         students_parcours = self.students.all() # élève du parcours
         relation_ships = self.parcours_relationship.all()
         for r in relation_ships :
-            if r.students.count() != self.students.count() :
+            if r.students.exclude(user__username__contains="_e-test").count() != self.students.exclude(user__username__contains="_e-test").count() :
                 test = True
             break 
         return test 
@@ -1138,8 +1138,8 @@ class Relationship(models.Model):
 
     def percent_student_done_parcours_exercice(self,parcours):
 
-        students = self.students.all()
-        nb_student = len(students)
+        students = self.students.exclude(user__username__contains="_e-test")
+        nb_student = students.count()
 
         if self.exercise.supportfile.is_ggbfile :
             nb_exercise_done = Studentanswer.objects.filter(student__in= students, parcours= parcours, exercise = self.exercise).values_list("student",flat= True).order_by("student").distinct().count()

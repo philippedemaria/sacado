@@ -983,7 +983,7 @@ def ajax_individualise(request):
                         data["alert"] = False
                             
         else :
-            print("ici") 
+
             for relationship in parcours.parcours_relationship.filter(is_publish=1 ) : 
                 if student_id ==  0  :
                     if statut=="true" or statut == "True" :
@@ -5882,15 +5882,9 @@ def detail_task_parcours(request,id,s,c):
 
     if s == 0 : # groupe
 
-        if is_folder == 1 :
-            relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in = parcours.leaf_parcours.all(), exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")
-            custom_set = set()
-            for p in folder.parcours.all():
-                custom_set.update(Customexercise.objects.filter(parcourses = p ))
-            customexercises = list(custom_set)
-        else :
-            relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours =parcours,exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit") 
-            customexercises = Customexercise.objects.filter( parcourses = parcours,  )
+ 
+        relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours =parcours,exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit") 
+        customexercises = Customexercise.objects.filter( parcourses = parcours,  )
 
 
         context = {'relationships': relationships, 'customexercises': customexercises ,  'parcours': parcours ,  'today':today ,  'communications' : [] ,  'date_today':date_today ,  'group_id' : group_id ,  'role' : role ,  }

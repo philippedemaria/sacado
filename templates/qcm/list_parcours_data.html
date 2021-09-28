@@ -76,7 +76,7 @@
     <td style="position:relative">
         <span id="new_group_affected{{ parcours.id}}">
         {% for g in  parcours.groups.all  %}
-            <small>{{ g.name }} <small>({{ g.students.count }})</small>{% if not forloop.last %}, {% endif %}</small>
+            <small>{{ g.name }} <small>({{ g.just_students.count }})</small>{% if not forloop.last %}, {% endif %}</small>
         {% endfor %}
         </span>
         <span class="select_div_group"  data-relationship_id="{{parcours.id}}"   title="Ajouter des groupes" ><i class="fa fa-plus-circle helper_tip"></i></span> 

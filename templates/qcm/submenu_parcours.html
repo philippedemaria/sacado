@@ -177,6 +177,16 @@
 
         </li> 
 
+        {% if group %}
+        <li {% if 'parcours_progression/' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'parcours_progression' parcours.id  group.id %}"><i class="fa fa-navicon fa-fw"></i> <span class="tool_tip">Avancement
+                <div class="tool_tip_text"><label><small>Avancement des exercices du groupe </small></label></div>
+            </span>
+            </a> 
+        </li> 
+        {% endif %} 
+
+
     </ul>
 </li>
 {% endif %}

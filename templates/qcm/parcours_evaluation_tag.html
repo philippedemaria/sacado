@@ -178,9 +178,9 @@
             <div class="row extend"> 
                 <div class="col-lg-4 col-xs-4">
                 {% if parcours.is_evaluation %}
-                    <a href="{% url 'update_evaluation' parcours.id  group.id  %}"  class="edit"><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span> </a>
+                    <a href="{% url 'update_evaluation' parcours.id  group.id  %}" style="color:{{ parcours.color}}"><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span> </a>
                 {% else  %}
-                    <a href="{% url 'update_parcours' parcours.id  group.id  %}"  class="edit"><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span> </a>
+                    <a href="{% url 'update_parcours' parcours.id  group.id  %}"  style="color:{{ parcours.color}}"><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span> </a>
                 {% endif  %}
                 </div> 
 
@@ -222,12 +222,7 @@
                 </div>
                 <div class="col-lg-4 col-xs-4">
                     {% if not parcours.is_evaluation %}
-                    <!-- <a  href="{% url 'detail_task_parcours' parcours.id 0 0 %}"   class="edit" {% if parcours.is_task_exists %} style="color:{{ parcours.color }}" {% endif %}>
-                        {% if not parcours.is_task_exists %}<i class="fa fa-fw fa-calendar"></i>{% else %}<i class="fa fa-fw fa-calendar-check"></i>{% endif %}
-                         <span class="label_icon tool_tip">Tâches
-                            <div class="tool_tip_text"><label><small>Gérer les tâches données aux élèves </small></label></div>
-                         </span>
-                    </a> --> 
+    
 
 
 
