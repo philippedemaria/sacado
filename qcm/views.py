@@ -7950,7 +7950,8 @@ def update_folder(request,id,idg):
             for gid in group_ids:
                 group = Group.objects.get(pk=gid)
                 attribute_all_documents_of_folder_to_group(group,folder)
-
+                parcours_ids = request.POST.getlist("parcours",[])
+                group.group_parcours.set(parcours_ids)
 
             change_coanimation_teachers(nf, folder , group_ids , teacher)
 
