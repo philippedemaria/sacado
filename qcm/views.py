@@ -1371,6 +1371,8 @@ def list_parcours_group(request,id):
     clear_realtime(parcours_tab , today.now() ,  1800 )
     nb_bases = bases.count() + folders.count()
 
+    print(nb_bases)
+
     context =  { 'folders': folders , 'teacher' : teacher , 'group': group,  'parcours' : None ,  'role' : role , 'today' : today ,
                  'parcourses': parcourses , 'evaluations' : evaluations , 'nb_bases' : nb_bases }
 
@@ -1858,15 +1860,23 @@ def create_parcours(request,idf=0):
         group_id = None
         request.session["group_id"]  = None 
 
+
+
+
     if idf > 0 :
         folder = Folder.objects.get(pk = idf)
         form   = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = folder , initial = {'subject': folder.subject,'level': folder.level,'groups': folder.groups.all()   })
     else :
-        folder = False
-        if group_id :
-            form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = None ,  initial = {'subject': group.subject,'level': group.level,'groups': group   })
-        else : 
-            form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher , folder = None )
+        folder_id = request.session.get("folder_id",None)
+        if folder_id :
+            folder = Folder.objects.get(pk=folder_id)
+            form   = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = folder , initial = {'subject': folder.subject,'level': folder.level,'groups': folder.groups.all()   })
+        else :
+            folder = None
+            if group_id :
+                form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = None ,  initial = {'subject': group.subject,'level': group.level,'groups': group   })
+            else : 
+                form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher , folder = None )
 
 
     if form.is_valid():
@@ -1894,6 +1904,10 @@ def create_parcours(request,idf=0):
         if idf == 0 :
             for g in form.cleaned_data.get("groups") :
                 students = g.students.all()
+                nf.students.set(students)
+            if folder :
+                students = folder.students.all()
+                folder.parcours.add(nf)
                 nf.students.set(students)
         else :
             students = folder.students.all()
@@ -1933,6 +1947,12 @@ def update_parcours(request, id, idg=0 ):
     parcours = Parcours.objects.get(id=id)
  
     form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher , folder = None )
+    
+    folder_id = request.session.get("folder_id",None)
+    if folder_id :
+        folder = Folder.objects.get(pk=folder_id)
+    else :
+        folder = None
 
     share_groups = Sharing_group.objects.filter(teacher  = teacher,role=1).order_by("group__level")
     if len(share_groups)>0 :
@@ -1968,9 +1988,9 @@ def update_parcours(request, id, idg=0 ):
                 return redirect('peuplate_parcours', nf.id)
             elif idg == 99999999999:
                 return redirect('index')
-            elif request.session.get("parcours_folder_id",None) :
-                parcours_folder_id = request.session.get("parcours_folder_id",None)
-                return redirect('list_sub_parcours_group' , idg , parcours_folder_id )  
+            elif request.session.get("folder_id",None) :
+                folder_id = request.session.get("folder_id",None)
+                return redirect('list_sub_parcours_group' , idg , folder_id )  
             elif idg > 0:
                 return redirect('list_parcours_group', idg)     
             else:
@@ -2002,7 +2022,7 @@ def update_parcours(request, id, idg=0 ):
     if parcours.teacher == teacher :
         role = True
 
-    context = {'form': form, 'parcours': parcours,   'idg': idg, 'teacher': teacher, 'group_id': idg ,  'group': group ,  
+    context = {'form': form, 'parcours': parcours,   'idg': idg, 'teacher': teacher, 'group_id': idg ,  'group': group ,  'folder': folder ,  
                 'is_folder' : False,   'role' : role , 'images' : images }
 
     return render(request, 'qcm/form_parcours.html', context)
@@ -2672,7 +2692,7 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
     nb_exo  = len(studentanswer_tab) +  nb_exo_ce
     student["nb_exo"] = nb_exo
     duration, score, total_numexo, good_answer = 0, 0, 0, 0
-    tab, tab_date = [], []
+    tab, tab_date  , tab_title_exo  = [], [], []
     student["legal_duration"] = parcours.duration
     total_nb_exo = len(relationships)
     student["total_nb_exo"] = total_nb_exo       
@@ -2685,6 +2705,8 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
         tab.append(studentanswer.point)
         tab_date.append(studentanswer.date)
         tab_date.sort()
+ 
+    student["tab_title_exo"] = tab_title_exo
     try :
         if len(student_tab)>1 :
             average_score = int(score/len(student_tab))
@@ -2746,7 +2768,7 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
                     score_custom +=  float(cen.point)
             except :
                 pass
-
+ 
     student["score_custom"] = score_custom
     student["tab_custom"] = cen
     student["score_total"] = int(score_total)
@@ -6417,6 +6439,14 @@ def export_results_after_evaluation(request):
                             alignment= TA_CENTER,
                             )
 
+    style_cell = TableStyle(
+            [
+                ('SPAN', (0, 1), (1, 1)),
+                ('TEXTCOLOR', (0, 1), (-1, -1),  colors.Color(0,0.7,0.7))
+            ]
+        )
+
+
     title = ParagraphStyle('title',  fontSize=20, textColor=colors.HexColor("#00819f"),)                   
     title_black = ParagraphStyle('title', fontSize=20, )
     subtitle = ParagraphStyle('title', fontSize=16,  textColor=colors.HexColor("#00819f"),)
@@ -6426,6 +6456,7 @@ def export_results_after_evaluation(request):
     yellow = ParagraphStyle(name='Normal',fontSize=12,  textColor=colors.HexColor("#ffb400"),)
     green = ParagraphStyle(name='Normal',fontSize=12,  textColor=colors.HexColor("#1bc074"),)
     blue = ParagraphStyle(name='Normal',fontSize=12,  textColor=colors.HexColor("#005e74"),)
+    small = ParagraphStyle(name='Normal',fontSize=10,)    
 
     stage = get_stage(request.user)    
     exercises = []
@@ -6435,13 +6466,21 @@ def export_results_after_evaluation(request):
         parcours_duration += r.duration
         exercises.append(r.exercise)
 
+    group_id = request.session.get("group_id",None) 
+    try :
+        if group_id :
+            group = Group.objects.get(pk = group_id )
+            students = parcours.only_students(group)
+        else :
+            students = students_from_p_or_g(request,parcours)
+    except:
+        students = students_from_p_or_g(request,parcours)
 
-    for s in parcours.students.order_by("user__last_name") :
+    for s in students :
         skills =  skills_in_parcours(request,parcours) 
         knowledges = knowledges_in_parcours(parcours)
-        data_student = get_student_result_from_eval(s, parcours, exercises,relationships,skills, knowledges,parcours_duration) 
+        data_student = get_student_result_from_eval(s, parcours, exercises,relationships,skills, knowledges,parcours_duration)
 
- 
         #logo = Image('D:/uwamp/www/sacado/static/img/sacadoA1.png')
         logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
         logo_tab = [[logo, "SACADO \nSuivi des acquisitions de savoir faire" ]]
@@ -6474,7 +6513,7 @@ def export_results_after_evaluation(request):
         ##########################################################################
         #### Nombre d'exercices traités
         ##########################################################################
-        paragraph = Paragraph( "Durée du travail (h:m:s) : " + str(data_student["duration"]) , normal )
+        paragraph = Paragraph( "Durée du travail (h:m) : " + str(data_student["duration"]) , normal )
         elements.append(paragraph)
         elements.append(Spacer(0, 0.1*inch)) 
 
@@ -6565,33 +6604,40 @@ def export_results_after_evaluation(request):
             elements.append(Spacer(0, 0.1*inch)) 
 
             i = 1
-            for score in data_student["score_tab"] :
-                paragraph = Paragraph( "Exercice "+str(i)+" : "+str(score)+"%"  , normal )
-                elements.append(paragraph)
+            dataset  = []
+            for answer in data_student["score_tab"] :
+                dataset.append( (str(i)+". " , unescape_html(answer.exercise.supportfile.title) ,  str(answer.point) + "%") ) 
+                i += 1 
+
+            if len(dataset) > 0 :
+                table = Table(dataset, colWidths=[0.2*inch, 6.9*inch,0.7*inch], rowHeights=20)
+                elements.append(table)
+                elements.append(Spacer(0, 0.3*inch)) 
+                ##########################################################################
+                #### Note sur
+                ##########################################################################
+                exo_sacado = request.POST.get("exo_sacado",0)  
+                if data_student["percent"] != "" :
+
+                    final_mark = float(data_student["score_total"]) * (float(mark_on) - float(exo_sacado)) + float(data_student["percent"]) * float(exo_sacado)/100
+
+                    coefficient = data_student["nb_exo"]  /  data_student["total_nb_exo"] 
+                    final_mark = math.ceil( coefficient *  final_mark)
+                    paragraphsco = Paragraph( "Note globale : " + str(final_mark)+"/"+mark_on  , normal )
+                else :
+                    paragraphsco = Paragraph( "Note globale : NE"  , normal )
+
                 elements.append(Spacer(0, 0.1*inch)) 
-                i += 1
-
-            elements.append(Spacer(0, 0.2*inch)) 
-            ##########################################################################
-            #### Note sur
-            ##########################################################################
-
-            exo_sacado = request.POST.get("exo_sacado",0)  
-
-            if data_student["percent"] != "" :
-
-                final_mark = float(data_student["score_total"]) * (float(mark_on) - float(exo_sacado)) + float(data_student["percent"]) * float(exo_sacado)/100
-
-                coefficient = data_student["nb_exo"]  /  data_student["total_nb_exo"] 
-                final_mark = math.ceil( coefficient *  final_mark)
-                paragraphsco = Paragraph( "Note globale : " + str(final_mark)  , normal )
+                elements.append(paragraphsco)
+                elements.append(Spacer(0, 0.1*inch))
+                paragraphscoExplain = Paragraph( "Cette note prend en compte les résultats par rapport au nombre d'exercices traités."   , small )
+                elements.append(paragraphscoExplain)
+                elements.append(Spacer(0, 0.1*inch)) 
             else :
-                paragraphsco = Paragraph( "Note globale : NE"  , normal )
-
+                paragraphNull = Paragraph( "Aucun exercice n'a été traité."   , normal )
+                elements.append(paragraphNull)
+                elements.append(Spacer(0, 0.1*inch)) 
  
-            elements.append(paragraphsco)
-            elements.append(Spacer(0, 0.3*inch)) 
-
         if signature : 
             paragraph = Paragraph( "Signature parent "   , subtitle )
             elements.append(paragraph)

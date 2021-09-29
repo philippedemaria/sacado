@@ -325,12 +325,6 @@ def attribute_all_documents(group,student):
 
 
 
-
-
-
-
-
-
 def cleanhtml(raw_html): #nettoie le code des balises HTML
     cleantext = re.sub('<.*?>', '', raw_html)
     cleantext = re.sub('\n', '', cleantext)

@@ -6,7 +6,7 @@
 
 {% if group %} <a href="{% url 'list_parcours_group' group.id %}" style="color:{{ group.color }}" >{{ group.name }}</a> <img src="{% static 'img/angle-right.png' %}"/>  {% endif %} 
 
-{% if folder and group %}
+{% if folder and group %} 
 	<a href="{% url 'list_sub_parcours_group' group.id folder.id %}"   class="helper_tip" style="font-size:36px;color:{{ folder.color }}" > {{ folder.title|truncatechars:"18" }}</a>
 		{% if folder.title.count > 18 %}
 	            <div class="helper_tip_text_right thin" style="font-size:36px; color:{{ folder.color }};">
@@ -18,7 +18,7 @@
 		<img src="{% static 'img/angle-right.png' %}"/>  
 
 
-{% elif folder and not group %}
+{% elif folder and not group %} 
 
 	<a href="{% url 'index' %}" style="color:{{ folder.color }}" >Tableau de bord </a>   
 	<img src="{% static 'img/angle-right.png' %}"/> 
@@ -32,18 +32,17 @@
             </div>
 	</span> <img src="{% static 'img/angle-right.png' %}"/>  
  	{% endif %}  
-
-
+   
 
 {% endif %}  
 
 {% if parcours %} 
 	<a href="{% url 'show_parcours' 0 parcours.id %}" class="helper_tip" style="font-size:36px; color:{{ parcours.color }}" >
-	{{ parcours.title|truncatechars:"18" }} 
+	{{ parcours.title|truncatechars:"18" }}  
 
 	{% if parcours.title.count > 18 %}
         <div class="helper_tip_text_right thin" style="font-size:36px; color:{{ parcours.color }};">
-             {{ parcours.title }}  
+             {{ parcours.title }}   
         </div>
  	{% endif %}  
 
