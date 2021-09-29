@@ -6513,7 +6513,7 @@ def export_results_after_evaluation(request):
         ##########################################################################
         #### Nombre d'exercices traités
         ##########################################################################
-        paragraph = Paragraph( "Durée du travail (h:m) : " + str(data_student["duration"]) , normal )
+        paragraph = Paragraph( "Durée du travail (h:m:s) : " + str(data_student["duration"]) , normal )
         elements.append(paragraph)
         elements.append(Spacer(0, 0.1*inch)) 
 
