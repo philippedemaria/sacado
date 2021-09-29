@@ -98,7 +98,7 @@
         </div>
         <div class="situation">
              <i class="fa fa-refresh fa-5x"  style="color : #5d4391"></i>
-            <p>{{ relation.situation }} question{{ relation.situation|pluralize }}</p>
+            <p>{{ relation.situation }} situation{{ relation.situation|pluralize }}</p>
         </div>
         <div class="situation" > 
         {% if  parcours.maxexo > -1 %}
@@ -480,6 +480,17 @@
                           alert("Vous êtes en évaluation. L'exercice est fini. Passer à l'exercice suivant.") ;
                           applet.setValue("fini", 0) ; 
                       }
+
+
+
+                   if (  numexo == situation   ) 
+                        {
+                          alert("Vous devez enregistrer cet exercice.") ;
+                        }
+
+
+
+
 
 
 

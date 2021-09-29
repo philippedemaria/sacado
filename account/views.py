@@ -357,11 +357,6 @@ def update_student(request, id,idg=0):
                   {'user_form': user_form, 'form': student_form, 'student': student, 'communications' : [],  'idg': idg  , 'today' : today })
 
 
-
-
-
-
-
 def switch_teacher_student(request,idg): #idg = group_id  
     """
     Updete par un admin d'un établissement
@@ -381,9 +376,6 @@ def switch_teacher_student(request,idg): #idg = group_id
     return redirect("index")
 
 
-
-
-
 def switch_student_teacher(request): #idg = group_id  
     """
     Update par un admin d'un établissement
@@ -392,7 +384,6 @@ def switch_student_teacher(request): #idg = group_id
     student  = request.user.student
     group    = student.students_to_group.last()
     user     = group.teacher.user
-
     try :
         user = authenticate(username= user.username, password = password)
         login(request, user)
@@ -400,7 +391,6 @@ def switch_student_teacher(request): #idg = group_id
         messages.success(request,"Vous êtes revenu sur l'interface Enseignant.")
     except :
         messages.error(request,"Erreur de mot de passe.")
-
     return redirect("index")
 
 
