@@ -370,7 +370,7 @@ def switch_teacher_student(request,idg): #idg = group_id
     request.session["user_id_switch_student_teacher"] = request.user.id
     group = Group.objects.get(pk = idg)
     try :
-        student  = group.students.filter(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test"), user__email = user.email).last()
+        student  = group.students.filter(user__username__contains= "_e-test").last()
         user = authenticate(username=student.user.username, password = "sacado2020")
         login(request, user)
         request.session["user_id"] = request.user.id
