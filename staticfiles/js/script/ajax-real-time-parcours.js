@@ -89,7 +89,7 @@ define(['jquery',  'bootstrap', ], function ($) {
           // il n'y a pas de verbes GET/POST, etc en websocket
           // on envoie les messages et c'est tout.
           for (var i=0; i < 10; i++) {
-            write('Envoie des données');
+            write('Envoi des données');
             socket.send(i + " - " + new Date());
           }
 

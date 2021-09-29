@@ -2675,7 +2675,7 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
     customexercises = parcours.parcours_customexercises.filter(students=s).order_by("ranking")
 
     student = {"percent" : "" , "total_numexo" : "" , "good_answer" : "" , "test_duration" : False ,  "duration" : "" , "average_score" : "" ,"last_connexion" : "" ,"median" : "" ,"score" : "" ,"score_tab" : "" }
-    student.update({"total_note":"", "details_note":"" ,  "detail_skill":"" ,  "detail_knowledge":"" , "ajust":"" , })
+    student.update({"total_note":"", "details_note":"" ,  "detail_skill":"" ,  "detail_knowledge":"" , "ajust":"" , "tab_title_exo":"" , })
     student["name"] = s
 
     studentanswers =  Studentanswer.objects.filter(student=s,  exercise__in = exercises , parcours=parcours).order_by("-date")
@@ -2706,54 +2706,41 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
         tab_date.append(studentanswer.date)
         tab_date.sort()
  
-    student["tab_title_exo"] = tab_title_exo
+
     try :
+        student["tab_title_exo"] = tab_title_exo        
+        student["good_answer"] = int(good_answer)
+        student["total_numexo"] = int(total_numexo)
+        student["last_connexion"] = studentanswer.date
+        student["score"] = int(score)
+        student["score_tab"] = student_tab
+        student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100)
+        student["ajust"] = math.ceil( (nb_exo / total_nb_exo ) * int(good_answer)/int(total_numexo) * 100  ) 
+
+        if duration > parcours_duration : 
+            student["test_duration"] = True
+        else :
+            student["test_duration"] = False 
+
+        if duration > 0 :
+            student["duration"] = convert_seconds_in_time(duration)
+        else :
+            student["duration"] = ""
+
         if len(student_tab)>1 :
             average_score = int(score/len(student_tab))
-            if duration > 0 :
-                student["duration"] = convert_seconds_in_time(duration)
-            else :
-                student["duration"] = ""
             student["average_score"] = int(average_score)
-            student["good_answer"] = int(good_answer)
-            student["total_numexo"] = int(total_numexo)
-            student["last_connexion"] = studentanswer.date
-            student["score"] = int(score)
-            student["score_tab"] = student_tab
-            if duration > parcours_duration : 
-                student["test_duration"] = True
-            else :
-                student["test_duration"] = False 
             tab.sort()
             if len(tab)%2 == 0 :
                 med = (tab[len(tab)//2-1]+tab[(len(tab))//2])/2 ### len(tab)-1 , ce -1 est causé par le rang 0 du tableau
             else:
                 med = tab[(len(tab)-1)//2]
             student["median"] = int(med)
-            student["percent"] = math.ceil( int(good_answer)/int(total_numexo) * 100 )  
-            student["ajust"] = math.ceil( (nb_exo / total_nb_exo ) * int(good_answer)/int(total_numexo) * 100  )   
+  
         else :
-            try :
-                average_score = int(score)
-                if duration > 0 :
-                    student["duration"] = convert_seconds_in_time(duration)
-                else :
-                    student["duration"] = ""
-                student["average_score"] = int(score)
-                student["last_connexion"]  = studentanswer.date
-                if duration > parcours_duration : 
-                    student["test_duration"] = True
-                else :
-                    student["test_duration"] = False 
-                student["median"] = int(score)
-                student["score"] = int(score)
-                student["score_tab"] = tab
-                student["good_answer"] = int(good_answer)
-                student["total_numexo"] = int(total_numexo)
-                student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100)
-                student["ajust"] = math.ceil( (nb_exo / total_nb_exo ) * int(good_answer)/int(total_numexo) * 100  )   
-            except :
-                pass         
+            average_score = int(score)
+            student["average_score"] = int(score)
+            student["median"] = int(score)     
     except :
         pass
 
@@ -6480,8 +6467,9 @@ def export_results_after_evaluation(request):
         skills =  skills_in_parcours(request,parcours) 
         knowledges = knowledges_in_parcours(parcours)
         data_student = get_student_result_from_eval(s, parcours, exercises,relationships,skills, knowledges,parcours_duration)
+ 
 
-        #logo = Image('D:/uwamp/www/sacado/static/img/sacadoA1.png')
+        logo = Image('D:/uwamp/www/sacado/static/img/sacadoA1.png')
         logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
         logo_tab = [[logo, "SACADO \nSuivi des acquisitions de savoir faire" ]]
         logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
@@ -6605,8 +6593,8 @@ def export_results_after_evaluation(request):
 
             i = 1
             dataset  = []
-            for answer in data_student["score_tab"] :
-                dataset.append( (str(i)+". " , unescape_html(answer.exercise.supportfile.title) ,  str(answer.point) + "%") ) 
+            for st_answer in data_student["score_tab"] :
+                dataset.append( (str(i)+". " , unescape_html(st_answer.exercise.supportfile.title) ,  str(st_answer.point) + "%") ) 
                 i += 1 
 
             if len(dataset) > 0 :

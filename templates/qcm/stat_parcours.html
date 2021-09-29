@@ -112,7 +112,7 @@ body{
                                     {{  stat.detail_skill|safe }}
                                 </td>
                                 <td style="text-align: center;" id="redoDuration{{ stat.name.user.id }}">{{ stat.duration  }}</td>
-                                <td style="text-align: center;" id="redoScore{{ stat.name.user.id }}">
+                                <td style="text-align: center;" id="redoScore{{ stat.name.user.id }}"> 
                                     {% for s in stat.score_tab  %} 
                                         <span class="helper_tip white btn btn-{% if s.point < stage.low %}danger{% elif s.point < stage.medium %}warning{% else %}success{% endif %}" 
                                                 {% if s.point < stage.up and  stage.medium < s.point %}  style="background-color: #62d85a" {% endif %} >
