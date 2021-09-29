@@ -436,7 +436,7 @@ class Parcours(ModelWithCode):
 
         if self.maxexo == -1   :
             is_ok = True
-            
+
         data["is_ok"] = is_ok
         data["nbleft"] = nbleft
 
@@ -1276,10 +1276,12 @@ class Relationship(models.Model):
         nbleft = self.maxexo - nbs
         if nbleft == 0  :
             is_ok = False
+        if self.maxexo == -1   :
+            is_ok = True 
+                       
         data["is_ok"] = is_ok
         data["nbleft"] = nbleft
-        if self.maxexo == -1   :
-            is_ok = True
+
         return data
 
 
