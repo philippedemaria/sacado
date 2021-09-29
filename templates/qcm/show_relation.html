@@ -158,22 +158,37 @@
 
           <div class='justify-content-center'  style="position:relative">
               {% if parcours.is_evaluation %}
-                  {% if parcours_available.nbleft > 0 or available.nbleft > 0 %}
-                      <div class="alert alert-danger" style="width:750px; position:absolute;z-index: 500;"  role="alert" id="message_alerte">
-                          <h2>Cet exercice est proposé dans une <b>évaluation</b></h2> 
-                          <br/>Vous devez répondre à <b>{{ relation.situation }} question{{ relation.situation|pluralize  }}</b>.<br/>
-                            {% if parcours.is_stop %}
- 
-                              <h3>Finir l'exercice avant d'en sortir.</h3>
- 
-                              <p></p>
-                              <a href="#" class="btn btn-danger" data-dismiss="alert" aria-label="close">J'ai compris, enlever ce bandeau.</a>  
-                            {% else %}
-                              <br/>
-                              <small><em>Cliquez sur la croix pour faire disparaitre ce bandeau  </em></small><i class="fas fa-long-arrow-alt-right"></i> 
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                            {% endif %}
-                      </div> 
+
+
+                  {% if parcours_available.is_ok   %}
+
+
+                      {% if available.is_ok %} 
+                          <div class="alert alert-danger" style="width:750px; position:absolute;z-index: 500;"  role="alert" id="message_alerte">
+                              <h2>Cet exercice est proposé dans une <b>évaluation</b></h2> 
+                              <br/>Vous devez répondre à <b>{{ relation.situation }} question{{ relation.situation|pluralize  }}</b>.<br/>
+                                {% if parcours.is_stop %}
+     
+                                  <h3>Finir l'exercice avant d'en sortir.</h3>
+     
+                                  <p></p>
+                                  <a href="#" class="btn btn-danger" data-dismiss="alert" aria-label="close">J'ai compris, enlever ce bandeau.</a>  
+                                {% else %}
+                                  <br/>
+                                  <small><em>Cliquez sur la croix pour faire disparaitre ce bandeau  </em></small><i class="fas fa-long-arrow-alt-right"></i> 
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                {% endif %}
+                          </div>
+
+                      {% else   %}
+                          <div style="width:750px; height : 550px; position:absolute; z-index:1000; opacity: 0.9; background-color: #FFF" >
+                          </div>
+
+                              <div class="alert alert-danger" style="position:absolute; z-index:1001; top: 150px; text-align:center" >
+                                  <b><i class="fa fa-lock fa-10x"></i><br/><br/> Vous avez atteint la limite des tentatives. Vous ne pouvez plus soumettre le résultat.</b>
+                              </div>
+                      {% endif   %}
+
                   {% else   %}
                       <div style="width:750px; height : 550px; position:absolute; z-index:1000; opacity: 0.9; background-color: #FFF" >
                       </div>
@@ -182,6 +197,14 @@
                               <b><i class="fa fa-lock fa-10x"></i><br/><br/> Vous avez atteint la limite des tentatives. Vous ne pouvez plus soumettre le résultat.</b>
                           </div>
                   {% endif   %}
+
+
+
+
+
+
+
+
               {% endif %}
 
  
@@ -220,7 +243,7 @@
                                 <b>Cet exercice est verrouillé. Vous ne pouvez plus soumettre le résultat.</b>
                               </div>
 
-                            {% else %}
+                            {% else %} 
 
                                 {% include 'qcm/is_evaluation.html' %}
 
@@ -229,8 +252,8 @@
 
                         {% else %}  
 
-
-                            {% if available.is_ok %}
+ 
+                            {% if available.is_ok %} 
 
                                 {% include 'qcm/is_evaluation.html' %}
 

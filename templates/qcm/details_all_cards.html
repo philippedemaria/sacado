@@ -217,12 +217,12 @@
                         <input type="number" name="situation" data-relationship_id="{{rc.id}}" id="situation{{rc.id}}" min="1" max="10" step="1"  data-type ="2" data-custom=0  value="{{ rc.situation  }}" class="details_relation" /> Nbre mini requis</label><br>
 
                         {% if parcours.is_evaluation %}  
-                        <label  style="font-size: 12px;">Réalisations</label><br>
+                        <label  style="font-size: 12px;">Tentatives</label><br>
                         <input type="number" name="maxexo" min="1" max="10" step="1" data-relationship_id="{{rc.id}}" id="maxexo{{rc.id}}"   data-type ="2" data-custom=0  value="{{ rc.maxexo  }}" class="maxexo" />
  
   
                         <span class="helper_tip"> <label  style="font-size: 10px;"> Nbre maxi </label><i class="fa fa-question-circle"></i>
-                            <div class="helper_tip_text red" >Ce nombre détermine le nombre maximum de fois que chaque exercice peut être fait. Ce maximum peut être déterminé exercice par exercice après la création. <br/> Laisser 0 pour ne pas borner le nombre de réalisation.</div>
+                            <div class="helper_tip_text red" >Ce nombre détermine le nombre maximum de fois que chaque exercice peut être fait. <br/> Laisser -1 pour ne pas définir le nombre d'essai.</div>
                         </span>
                         {% endif %}   
 

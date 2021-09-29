@@ -1273,6 +1273,7 @@ class Relationship(models.Model):
         data = {}
         is_ok = True
         nbs = Studentanswer.objects.filter(parcours=self.parcours , exercise= self.exercise,student = student ).count()
+ 
         nbleft = self.maxexo - nbs
         if nbleft == 0  :
             is_ok = False

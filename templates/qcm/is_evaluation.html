@@ -1,18 +1,24 @@
 {% if parcours.is_evaluation %}
 
 
- 	{% if parcours_available.nbleft > 0 or available.nbleft > 0 %}
- 
- 		<span id="is_storage"></span>
+ 	{% if parcours_available.is_ok   %}
 
- 		{% if parcours.is_stop %}
-    		<input  class="btn btn-primary parcours_is_stop"   type="submit" id="submit_button_evaluation"  value="Passer à l'exercice suivant"  />
-		 {% else %}
-    		<input  class="btn btn-primary"   type="submit" id="submit_button_evaluation"  value="Enregistrer l'exercice"  />
+	 		<span id="is_storage"></span>
+
+
+		 		{% if available.is_ok %} 
+ 				
+				 		{% if parcours.is_stop  %}  
+				    		<input  class="btn btn-primary parcours_is_stop"   type="submit" id="submit_button_evaluation"  value="Passer à l'exercice suivant"  />
+						 {% else %} 
+				    		<input  class="btn btn-primary"   type="submit" id="submit_button_evaluation"  value="Enregistrer l'exercice"  />
+						{% endif %}
+ 
+
+
+				{% endif %}
+
 		{% endif %}
- 
- 	{% endif %}
-
 {% else %}
 
     <input  class="btn btn-primary"   type="submit" id="submit_button_relation"  value="Enregistrer le résultat"  />
