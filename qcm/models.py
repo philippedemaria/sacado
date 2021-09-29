@@ -433,10 +433,13 @@ class Parcours(ModelWithCode):
         nbleft = self.maxexo - nbs
         if nbleft == 0  :
             is_ok = False
-        data["is_ok"] = is_ok
-        data["nbleft"] = nbleft
+
         if self.maxexo == -1   :
             is_ok = True
+            
+        data["is_ok"] = is_ok
+        data["nbleft"] = nbleft
+
         return data
 
 
