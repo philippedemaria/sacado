@@ -1113,6 +1113,23 @@ class Relationship(models.Model):
         return task
 
 
+    def score_and_time(self, student):
+        scores_times_tab = []
+        if student.answers.filter(exercise=self.exercise,parcours=self.parcours ).exists():
+            studentanswers = student.answers.filter(exercise=self.exercise,parcours=self.parcours)
+            for studentanswer in studentanswers:
+                scores_times = {}
+                scores_times["score"] = studentanswer.point
+                scores_times["time"] = convert_time(studentanswer.secondes)
+                scores_times["numexo"] = studentanswer.numexo
+                scores_times["date"] = studentanswer.date
+                scores_times_tab.append(scores_times)
+        return scores_times_tab
+
+
+
+
+
     def constraint_to_this_relationship(self,student): # Contrainte. 
     
         under_score = True # On suppose que l'élève n'a pas obtenu le score minimum dans les exercices puisqu'il ne les a pas fait. 
@@ -1310,6 +1327,8 @@ class Studentanswer(models.Model):
 
     def __str__(self):        
         return "{}".format(self.exercise.knowledge.name)
+
+
 
 class Resultggbskill(models.Model): # Pour récupérer tous les scores des compétences d'une relationship
     student = models.ForeignKey(Student, related_name="student_resultggbskills", default="", on_delete=models.CASCADE, editable=False)

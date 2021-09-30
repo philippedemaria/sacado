@@ -709,8 +709,11 @@ def detail_student_parcours(request, id,idp):
         return redirect('index')
 
     parcours = Parcours.objects.get(pk=idp)
+    # Affichage dans le menu
     parcourses = student.students_to_parcours.all()
     themes = student.level.themes.all()
+    ########################################
+
     relationships = parcours.parcours_relationship.filter( students = student, is_publish = 1).order_by("ranking")
     today = time_zone_user(request.user)
     if request.user.is_teacher:
@@ -733,7 +736,7 @@ def detail_student_parcours(request, id,idp):
             return redirect('index') 
 
     else:
-        group = Group.objects.filter(students=student).last()
+        group = parcours.groups.filter(students=student).last()
         context = {'relationships': relationships, 'parcours': parcours, 'themes': themes, 'parcourses': parcourses,  'sprev_id': None , 'group' : group , 'communications' : [], 'today' : today ,
                    'snext_id': None, 'student': student}
 

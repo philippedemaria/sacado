@@ -516,20 +516,30 @@ def knowledges_in_parcours(parcours):
                 knowledges.append(sk)
     return knowledges
 
-def total_by_skill_by_student(skill,relationships, parcours,student) : # résultat d'un élève par comptétnece sur un parcours donné
+
+def total_by_skill_by_student(skill,relationships, parcours,student) : # résultat d'un élève par compétence sur un parcours donné
     total_skill = 0            
     scs = student.student_correctionskill.filter(skill = skill, parcours = parcours)
     nbs = scs.count()
-
+ 
     for sc in scs :
         total_skill += int(sc.point)
 
     # Ajout éventuel de résultat sur la compétence sur un exo SACADO
-    result_sacado_skills = Resultggbskill.objects.filter(skill= skill,student=student, relationship__in = relationships) 
+    exercise_ids = relationships.values_list("exercise_id").filter(skills = skill  )
+    print(exercise_ids) 
+    result_sacado_skills = student.answers.filter(parcours= parcours , exercise_id__in = exercise_ids   ) 
+
+
+    #student.student_resultggbskills.filter(skill= skill, relationship__in = relationships)
+
+    print(result_sacado_skills) 
+
+
     for rss in result_sacado_skills :
         total_skill += rss.point
         nbs += 1
-
+    print(total_skill)
     ################################################################
 
     if nbs != 0 :
@@ -549,7 +559,7 @@ def total_by_knowledge_by_student(knowledge,relationships, parcours,student) : #
         total_knowledge += int(sk.point)
 
     # Ajout éventuel de résultat sur la compétence sur un exo SACADO
-    result_sacado_knowledges = Studentanswer.objects.filter(parcours= parcours,student=student, exercise__knowledge = knowledge) 
+    result_sacado_knowledges = student.answers.filter(parcours= parcours , exercise__knowledge = knowledge) 
     for rsk in result_sacado_knowledges :
         total_knowledge += rsk.point
         nbk += 1
@@ -1973,11 +1983,11 @@ def update_parcours(request, id, idg=0 ):
             nf.save()
             form.save_m2m()
 
-            #Gestion de la coanimation
+
             group_ids = request.POST.getlist("groups",[])
             for gid in group_ids :
-                attribute_all_documents_of_parcours_to_group(Group.objects.get(pk=gid), parcours)
-
+                attribute_all_documents_of_parcours_to_group(Group.objects.get(pk=gid), nf)
+            #Gestion de la coanimation
             change_coanimation_teachers(nf, parcours , group_ids , teacher)
 
 
@@ -2678,34 +2688,29 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
     student.update({"total_note":"", "details_note":"" ,  "detail_skill":"" ,  "detail_knowledge":"" , "ajust":"" , "tab_title_exo":"" , })
     student["name"] = s
 
-    studentanswers =  Studentanswer.objects.filter(student=s,  exercise__in = exercises , parcours=parcours).order_by("-date")
-
-    studentanswer_tab , student_tab  = [], []
-    for studentanswer in studentanswers :
-        if studentanswer.exercise not in studentanswer_tab :
-            studentanswer_tab.append(studentanswer.exercise)
-            student_tab.append(studentanswer)
-
+    studentanswer_ids =  Studentanswer.objects.values_list("id",flat=True).distinct().filter(student=s,  exercise__in = exercises , parcours=parcours).order_by("-date")
+  
     #nb_exo_w = s.student_written_answer.filter(relationship__exercise__in = studentanswer_tab, relationship__parcours = parcours, relationship__is_publish = 1 ).count()
     nb_exo_ce = s.student_custom_answer.filter(parcours = parcours, customexercise__is_publish = 1 ).count()
     #nb_exo  = len(studentanswer_tab) + nb_exo_w + nb_exo_ce
-    nb_exo  = len(studentanswer_tab) +  nb_exo_ce
+    nb_exo  = studentanswer_ids.count()  +  nb_exo_ce
     student["nb_exo"] = nb_exo
     duration, score, total_numexo, good_answer = 0, 0, 0, 0
-    tab, tab_date  , tab_title_exo  = [], [], []
+    tab, tab_date  , tab_title_exo , student_tab  = [], [], [] , []
     student["legal_duration"] = parcours.duration
     total_nb_exo = len(relationships)
     student["total_nb_exo"] = total_nb_exo       
 
-    for studentanswer in  student_tab : 
+    for studentanswer_id in  studentanswer_ids : 
+        studentanswer = Studentanswer.objects.get(pk=studentanswer_id)
         duration += int(studentanswer.secondes)
         score += int(studentanswer.point)
         total_numexo += int(studentanswer.numexo)
         good_answer += int(studentanswer.numexo*studentanswer.point/100)
         tab.append(studentanswer.point)
         tab_date.append(studentanswer.date)
-        tab_date.sort()
- 
+        tab_title_exo.append(studentanswer.exercise.supportfile.title)
+        student_tab.append(studentanswer)
 
     try :
         student["tab_title_exo"] = tab_title_exo        
@@ -2776,6 +2781,8 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
 
     student["detail_knowledge"] = detail_knowledge 
 
+
+ 
     return student
 
 
@@ -4824,7 +4831,10 @@ def update_evaluation(request, id, idg=0 ):
 
             group_ids = request.POST.getlist("groups",[])
             for gid in group_ids :
-                attribute_all_documents_of_parcours_to_group(Group.objects.get(pk=gid), evaluation)
+                group = Group.objects.get(pk=gid)
+                attribute_all_documents_of_parcours_to_group( group , nf)
+
+            #Gestion de la coanimation
             change_coanimation_teachers(nf, evaluation , group_ids , teacher)
 
             if "stop" in form.changed_data :
@@ -7983,7 +7993,7 @@ def update_folder(request,id,idg):
             group_ids = request.POST.getlist("groups",[])
             for gid in group_ids:
                 group = Group.objects.get(pk=gid)
-                attribute_all_documents_of_folder_to_group(group,folder)
+                attribute_all_documents_of_folder_to_group(group,nf)
                 parcours_ids = request.POST.getlist("parcours",[])
                 group.group_parcours.set(parcours_ids)
 

@@ -127,9 +127,6 @@ def index(request):
             groupes =  grps | sgps
             groups  = groupes.order_by("level__ranking") 
 
-
- 
-
             this_user = request.user
             nb_teacher_level = teacher.levels.count()
             relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("date_limit").order_by("parcours")

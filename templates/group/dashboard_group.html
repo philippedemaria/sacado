@@ -162,7 +162,11 @@
                             <small><i class="fa fa-graduation-cap"></i></small>
                         </div>
                         <div class="small-box-footer-max">
-                            <h2 class="white thin">{{ evaluation.title }} 
+                            <h2 class="white thin">
+                                {{ evaluation.title|truncatechars:"19" }}
+
+
+
                                 {% if  evaluation.stop %}{% if  evaluation.stop < today %}<sup><i class="fa fa-lock fa-xs" style="font-size:12px;"></i></sup>{% endif %}{% endif %}  
                             </h2>
                            
