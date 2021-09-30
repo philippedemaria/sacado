@@ -79,7 +79,7 @@ body{
                                     <form  action="" method="POST">{% csrf_token %} 
 
                                         <a href="#" class="detail_student_exercise"  data-student_id="{{  stat.name.user.id }}"  data-parcours_id="{{ parcours.id }}"  >   
-                                        {{ stat.name.user_id  }} {{ stat.name|truncatechars:"30"  }}
+                                          {{ stat.name|truncatechars:"30"  }}
                                         </a> 
                                         <div class="pull-right"> 
                                         <a href="#" data-toggle='modal'
