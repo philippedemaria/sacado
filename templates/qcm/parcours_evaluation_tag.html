@@ -270,7 +270,7 @@
                 {% endif %} 
                 </div>                     
                 <div class="col-lg-6 col-xs-6">
-                    <span href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
+                    <span href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}" {% if parcours.just_students.count > 0 %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
                     </span>
                 </div> 
             </div>
