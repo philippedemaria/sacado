@@ -94,11 +94,30 @@ body{
                                               <i class="icon-ban-circle icon-stack-base text-error"></i>
                                             </span>
                                             {% endif %}
-                                        </a>                                         
-                                    </div>  
+                                        </a>
+                                        </div> <br/>
+                                        <span class="helper_tip"><small>{{ stat.name.user.last_login|date:"d N Y  H:i"  }} </small> <div class="helper_tip_text_right" >Dernière connexion</div>
+                                        </span>  
+
+                                        <br/> 
+                                    {% if parcours.is_evaluation  %}
+                                    <div  style="padding-top:13px;font-size: 10px">
+                                        {% if sacado_asso %} 
+                                            <span href="#" class="redo_eval"  data-student_id="{{  stat.name.user.id }}" 
+                                                    style="cursor:pointer;color:#007EE2;"  data-student_name="{{  stat.name.user  }}"  
+                                                                            data-parcours_id="{{ parcours.id }}" 
+                                                                            data-parcours_title="{{ parcours.title }}" > Reproposer l'évaluation à cet élève </span>
+                                         
+                     
+                                        {% endif %} 
+                    
+                                    </div>
+                                    {% endif %} 
+
+
+
                                     </form> 
-                                    <span class="helper_tip"><small>{{ stat.name.user.last_login|date:"d N Y  H:i"  }} </small> <div class="helper_tip_text_right" >Dernière connexion</div>
-                                    </span>  
+
                                 </td>
                                 <td style="text-align: center;"><span id="redoNbr{{ stat.name.user.id }}">{{ stat.nb_exo  }}</span>/{{ stat.total_nb_exo  }}
                                     <span class="helper_tip"><i class="fa fa-question-circle"></i>
@@ -185,22 +204,7 @@ body{
                                     </div>  
                                     {% endif %} 
 
-                                    {% if parcours.is_evaluation  %}
-                                    <div class="stat_mark_round helper_tip" style="padding-top:13px">
-                                        {% if sacado_asso %} 
-                                            <form  action="" method="POST">{% csrf_token %} 
-                                                <span class="redo_eval" data-student_id="{{  stat.name.user.id }}" 
-                                                    style="cursor:pointer"  data-student_name="{{  stat.name.user  }}"  
-                                                                            data-parcours_id="{{ parcours.id }}" 
-                                                                            data-parcours_title="{{ parcours.title }}" > <i class="fa fa-redo"></i> </span>
-                                            </form>
-                                        {% else %} 
-                                        <i class="fa fa-redo"></i>
-                                        {% endif %} 
-                                            <div class="helper_tip_text" > Effacer les résultats de cet élève et lui reproposer l'évaluation
-                                            </div>
-                                    </div>
-                                    {% endif %} 
+
 
                                 </td>  
                             </tr>

@@ -527,19 +527,13 @@ def total_by_skill_by_student(skill,relationships, parcours,student) : # résult
 
     # Ajout éventuel de résultat sur la compétence sur un exo SACADO
     exercise_ids = relationships.values_list("exercise_id").filter(skills = skill  )
-    print(exercise_ids) 
+
     result_sacado_skills = student.answers.filter(parcours= parcours , exercise_id__in = exercise_ids   ) 
-
-
     #student.student_resultggbskills.filter(skill= skill, relationship__in = relationships)
-
-    print(result_sacado_skills) 
-
-
     for rss in result_sacado_skills :
         total_skill += rss.point
         nbs += 1
-    print(total_skill)
+
     ################################################################
 
     if nbs != 0 :
