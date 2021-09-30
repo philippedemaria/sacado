@@ -5312,8 +5312,8 @@ li .list_no_indent{
   z-index: 10;
   background: rgba(0, 0, 0, 0.3);
   text-decoration: none;
-  top: 135px;
-  height:150px;
+  top: 165px;
+  height:120px;
   width:100%;
   opacity: 0.95;
   font-size: 16px;  
@@ -5513,7 +5513,7 @@ li .list_no_indent{
         }
 
       .student_vignette_subtitle{
-        margin-top: 20px;
+        margin-top: 10px;
         margin-right: 30px;
         font-size:18px;  
         color:#FFF; 
@@ -5538,7 +5538,7 @@ li .list_no_indent{
         }
 
       .student_vignette_subtitle{
-        margin-top: 20px;
+        margin-top: 10px;
         margin-right: 30px;
         font-size:14px;  
         color:#FFF; 

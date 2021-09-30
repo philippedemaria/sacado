@@ -8,9 +8,9 @@
             <!-- ******************************************************************************************** -->
             <!-- *************************************** Parcours ******************************************* -->
             {% for group in groups %}
-                    <div class="small-box-student"  style="background-color:{{group.subject.color }}; ">
+                    <div class="small-box-student"  style="background-color:{{group.subject.color }};{% if group.subject  %}{% if group.subject.vignette %}background-image: url('{{ group.subject.vignette.url }}'); background-size: cover; {% endif %}{% endif %}">
                                         <!-- <img src="{{ group.subject.image.url }}" />-->
-                        <h1 style="font-variant: small-caps ;color:{{group.subject.color|contrast_color }};margin-top: 85px;padding-left:7px;font-size:50px">
+                        <h1 style="font-variant: small-caps ;color:{{group.subject.color|contrast_color }};margin-top: 115px;padding-left:7px;font-size:50px">
                         {% if group.subject.name|length > 13 %}
                         {{ group.subject.name }}
                         {% else %}
@@ -22,7 +22,6 @@
                             </span>
                             <span class="white thin pull-right"  style="color:{{group.subject.color|contrast_color }}; font-size:14px;">{{ group.level.name }}  
                             </span>
-                            <br> 
                             <br> 
                             <br> 
                             <div style="text-align: center">

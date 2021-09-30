@@ -31,10 +31,25 @@ def level_name(level):
     return my_level
 
 
+def directory_path(instance, filename):
+    return "subject_images/{}".format(filename)
+
+
+
+class Vignette(models.Model):
+    name = models.CharField(max_length=255, verbose_name="Nom")
+    imagefile = models.ImageField(upload_to=directory_path,  verbose_name="Image" )
+    def __str__(self):
+        return "{}".format(self.name)
+
+
+
 class Subject(models.Model):
     name = models.CharField(max_length=255, verbose_name="Nom")
     color = models.CharField(max_length=255, default ="" , editable=False)
     shortname = models.CharField(max_length=10, default ="" , verbose_name="Abréviation")
+    vignettes = models.ManyToManyField(Vignette, blank=True, through="Vignettesubject", related_name="vignettes_subject")
+
  
     def __str__(self):
         return "{}".format(self.shortname)
@@ -161,6 +176,15 @@ class Level(models.Model):
 
 
 
+
+class Vignettesubject(models.Model):
+    subject = models.ForeignKey(Subject,  null=True, blank=True,   related_name='subject_vignettesubject', on_delete=models.CASCADE,  editable= False)
+    vignette = models.ForeignKey(Vignette, on_delete=models.CASCADE,  related_name='vignette_vignettesubject',  editable= False)
+    ranking = models.PositiveIntegerField(default=0, editable=False)
+    level =  models.ForeignKey(Level, on_delete=models.CASCADE,  related_name='level_vignettesubject',  editable= False)
+
+    def __str__(self):
+        return "Vignettesubject : {}".format(self.subject   )
 
 
 
