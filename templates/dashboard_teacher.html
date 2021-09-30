@@ -105,7 +105,7 @@
                             </div>
                         </div>
 
-                        {% if data.nb_parcours == 0 %}
+                        {% if data.nb_documents == 0 %}
                             <div class="row">                                      
                                 <div class="col-lg-6 col-xs-6" style="padding-right:0px">
                                     <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:20px; color:{{ group.color|contrast_color }};"><i class="fa fa-arrow-circle-right"></i><span class="small_displayer"> Détails </span></a>    

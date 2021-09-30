@@ -273,7 +273,6 @@ def count_unique(datas):
 def include_students(request , liste, group):
 
     students_tab = liste.split("\r\n")
-
     for student_tab in students_tab:
  
         if ";" in student_tab:
