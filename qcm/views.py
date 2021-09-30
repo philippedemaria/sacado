@@ -1211,6 +1211,7 @@ def ajax_affectation_to_group(request):
     html        = ""
     change_link = "no"
 
+ 
     if status == "parcours" :
         parcours = Parcours.objects.get(pk=target_id)        
         if checked == "false" :

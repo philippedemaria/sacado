@@ -34,7 +34,8 @@
 {% block body %}
     <section class="content_list"> 
         <form action="{% url 'delete_all_groups' %}"  method="POST">     
-        {% csrf_token %}     
+        {% csrf_token %}  
+        {% if groups %}   
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 <table class="table table-bordered table-hover standard_tab_sort">
@@ -68,16 +69,16 @@
                                       <a href="{% url 'update_teacher' sg.teacher.user.id %}">
                                         {{ sg.teacher.user.civilite }} {{ sg.teacher.user.first_name }} {{ sg.teacher.user.last_name }} 
                                         ({% if sg.role %} 
-                                            <span class="tool_tip">E</i>
+                                            <span class="tool_tip">E 
                                                 <div class="tool_tip_text" >Editeur. L'enseignant peut créer, modifier les parcours.</div>
                                             </span>
                                         {% else %}
-                                            <span class="tool_tip">L</i>
+                                            <span class="tool_tip">L 
                                                 <div class="tool_tip_text" >Lecteur. L'enseignant accède aux parcours et résultats sans pouvoir modifier. </div>
                                             </span>
                                         {% endif %})
                                       </a>
-                                      {% if not forloop.last %}<br>{% endif %}
+                                      {% if not forloop.last %}<br/>{% endif %}
                                      {% endfor %}
                                     </div>
                                 </td>
@@ -101,12 +102,19 @@
                                 </td> 
 
                             </tr>
-
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
+        {% else %}                        
+            <div class="round" style="background-color: #5d4391; padding-top: 60px;color:#FFF"> 
+                <a href="{% url 'get_school_students' %}"  onclick="return getAllStudents()">Récupérer <br/> les comptes <br/>élèves déjà <br/> existants</a>
+            </div> 
+        {% endif %}
+
+
+
 
 
         <div class="row">
