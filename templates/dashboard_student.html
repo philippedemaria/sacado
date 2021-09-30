@@ -8,9 +8,9 @@
             <!-- ******************************************************************************************** -->
             <!-- *************************************** Parcours ******************************************* -->
             {% for group in groups %}
-                    <div class="small-box-student_index"  style="background-color:{{group.subject.color }};">
+                    <div class="small-box-student"  style="background-color:{{group.subject.color }};">
                                         <!-- <img src="{{ group.subject.image.url }}" />-->
-                        <h1 style="font-variant: small-caps ;color:{{group.subject.color|contrast_color }};margin-top: 115px;padding-left:7px;font-size:50px">
+                        <h1 style="font-variant: small-caps ;color:{{group.subject.color|contrast_color }};margin-top: 85px;padding-left:7px;font-size:50px">
                         {% if group.subject.name|length > 13 %}
                         {{ group.subject.shortname }}
                         {% else %}
