@@ -253,9 +253,9 @@ def register_student_from_admin(request):
                 parcourses = this_student.students_to_parcours.all()
                 student = Student.objects.create(user=u_form, level=group.level, task_post=1)
                 group.students.add(student)
-                attribute_all_documents_to_student(parcourses, student)
+                attribute_all_documents(group,student) 
             except :
-                pass
+                print("attribution et création non établies")
 
             send_templated_mail(
                 template_name="student_registration",
@@ -302,11 +302,11 @@ def register_student(request):
                 user.save()
                 student = Student.objects.create(user=user, level=group.level)
                 try :
-                    group.students.add(student)
+                    attribute_all_documents(group,student)
                 except :
-                    pass
+                    print("Attribution et création non établies")
 
-                attribute_all_documents_to_student(parcours,student) ### Dans general_fonction
+
 
                 user = authenticate(username=username, password=password)
                 login(request, user)

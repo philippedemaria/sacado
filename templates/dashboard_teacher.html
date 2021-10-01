@@ -26,8 +26,6 @@
                         <font style="color:#CCC">
                             {% for s in data.students %} 
                                 <a href="{% url 'detail_student_all_views'  s.user__id   %}" class="small_users"> {{s.user__last_name|lower|capfirst}} {{s.user__first_name|lower|capfirst}}</a>{% if not forloop.last %}, {% endif %}
-                            {% empty %}
-                                Aucun élève (excepté votre compte test éventuel)
                             {% endfor %}
                         </font>
                         <div style="clear:both"></div>
