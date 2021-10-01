@@ -133,14 +133,6 @@ def set_username_student_profile(name):
 
 
 
-
-
-
-
-
-
-
-
 def student_dashboard(request,group_id):
 
     student = Student.objects.get(user=request.user.id)
