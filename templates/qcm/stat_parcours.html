@@ -99,20 +99,20 @@ body{
                                         <span class="helper_tip"><small>{{ stat.name.user.last_login|date:"d N Y  H:i"  }} </small> <div class="helper_tip_text_right" >Dernière connexion</div>
                                         </span>  
 
-                                        <br/> 
-                                    {% if parcours.is_evaluation  %}
-                                    <div  style="padding-top:13px;font-size: 10px">
-                                        {% if sacado_asso %} 
-                                            <span href="#" class="redo_eval"  data-student_id="{{  stat.name.user.id }}" 
-                                                    style="cursor:pointer;color:#007EE2;"  data-student_name="{{  stat.name.user  }}"  
-                                                                            data-parcours_id="{{ parcours.id }}" 
-                                                                            data-parcours_title="{{ parcours.title }}" > Reproposer l'évaluation à cet élève </span>
-                                         
-                     
+        
+                                        {% if parcours.is_evaluation  %}
+                                        <div  style="padding-top:(px">
+                                            {% if sacado_asso %} 
+                                                <span href="#" class="redo_eval btn btn-new"  data-student_id="{{  stat.name.user.id }}" 
+                                                        style="cursor:pointer;color:#007EE2;font-size: 10px"  data-student_name="{{  stat.name.user  }}"  
+                                                                                data-parcours_id="{{ parcours.id }}" 
+                                                                                data-parcours_title="{{ parcours.title }}" > Reproposer l'évaluation à cet élève </span>
+                                             
+                         
+                                            {% endif %} 
+                        
+                                        </div>
                                         {% endif %} 
-                    
-                                    </div>
-                                    {% endif %} 
 
 
 
