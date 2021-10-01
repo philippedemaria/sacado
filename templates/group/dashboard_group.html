@@ -90,12 +90,6 @@
 
 
 
-
-
-
-
-
-
             <!-- *************************************** Parcours ******************************************* -->
             {% for parcours in parcourses %}
                     {% get_percent parcours student as data %}  
@@ -126,12 +120,9 @@
                                     {% endif %} Accéder aux {% if parcours.is_folder %}parcours{% else  %}exercices{% endif %}</a>
                                 </div>
                                 <div  class="student_vignette_subtitle" style="color:{{parcours.color|contrast_color }};">    
-                                    {% if parcours.is_folder %}
-                                            {% get_nb_leaf parcours student as nb_leaf %} 
-                                             <i class="fa fa-folder{% if nb_leaf > 0 %}-open{% endif %}"></i> {{ nb_leaf  }} parcours
-                                    {% else  %}
-                                            {{ data.nb }}/{{ data.nb_total }} exercice{{ data.nb_total|pluralize }} étudié{{ data.nb_total|pluralize }} <span style="color:{{parcours.color|contrast_color }};font-size:12px ">{{ data.pc }}% </span>
-                                    {% endif %}
+  
+                                        {{ data.nb }}/{{ data.nb_total }} exercice{{ data.nb_total|pluralize }} étudié{{ data.nb_total|pluralize }} <span style="color:{{parcours.color|contrast_color }};font-size:12px ">{{ data.pc }}% </span>
+                
                                     {% if parcours.course.all|length > 0 %}  
                                     <a href="{% url 'show_course_student' 0 parcours.id %}" class="pull-right" style="color:{{parcours.color|contrast_color }};" title="Rappels de cours" target="_blank"  >
                                         <i class="fa fa-desktop"></i>  

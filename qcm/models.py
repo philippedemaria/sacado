@@ -751,11 +751,15 @@ class Parcours(ModelWithCode):
                         data["label"] = "Amatrice"
                 else :
                     data["colored"] = "red"
-                    data["label"] = "Débutant"+suff
+                    data["label"] = "Explorateur"
+                    if student.user.civilite =="Mme": 
+                        data["label"] = "Exploratrice"
             else :
                 data["boolean"] = True
                 data["colored"] = "red"
-                data["label"] = "Débutant"+suff
+                data["label"] = "Explorateur"
+                if student.user.civilite =="Mme": 
+                    data["label"] = "Exploratrice"
         else :
             data["boolean"] = False
   
