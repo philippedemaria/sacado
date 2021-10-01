@@ -34,13 +34,16 @@ class ParcoursForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
 		folder  = kwargs.pop('folder')
+		group   = kwargs.pop('group')
 		super(ParcoursForm, self).__init__(*args, **kwargs)
 		self.fields['stop'].required = False
 
 		if teacher:
 			groups        = teacher.groups.all()
 			if folder :
-				groups    = folder.groups.all()
+				groups    = folder.groups.filter(level=folder.level)
+			if group :
+				groups    = teacher.groups.filter(level=group.level)
 			shared_groups = teacher.teacher_group.all()
 			these_groups  = groups|shared_groups
 			all_groups    = these_groups.order_by("teachers")

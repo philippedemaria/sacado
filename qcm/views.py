@@ -755,7 +755,7 @@ def peuplate_parcours(request,id):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
-    form = ParcoursForm(request.POST or None , instance=parcours, teacher = parcours.teacher , folder = None )
+    form = ParcoursForm(request.POST or None , instance=parcours, teacher = parcours.teacher , folder = None ,   group = None)
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
     """ affiche le parcours existant avant la modif en ajax""" 
     exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
@@ -823,7 +823,7 @@ def peuplate_parcours_evaluation(request,id):
 
 
 
-    form = ParcoursForm(request.POST or None , instance=parcours, teacher = teacher , folder = None )
+    form = ParcoursForm(request.POST or None , instance=parcours, teacher = teacher , folder = None,   group = None )
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
     """ affiche le parcours existant avant la modif en ajax""" 
     exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
@@ -1881,26 +1881,15 @@ def create_parcours(request,idf=0):
         request.session["group_id"]  = None 
 
 
-
-
     if idf > 0 :
         folder = Folder.objects.get(pk = idf)
-        form   = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = folder , initial = {'subject': folder.subject,'level': folder.level,'groups': folder.groups.all()   })
+        form   = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = folder , group = group ,  initial = {'subject': folder.subject,'level': folder.level,'groups': folder.groups.all()   })
     else :
-        # folder_id = request.session.get("folder_id",None)
-        # if folder_id :
-        #     folder = Folder.objects.get(pk=folder_id)
-        #     form   = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = folder , initial = {'subject': folder.subject,'level': folder.level,'groups': folder.groups.all()   })
-        # else :
-        #     folder = None
-        #     if group_id :
-        #         form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = None ,  initial = {'subject': group.subject,'level': group.level,'groups': group   })
-        #     else : 
         folder = False
         if group_id :
-            form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = None ,  initial = {'subject': group.subject,'level': group.level,'groups': group   })
+            form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = None ,   group = group , initial = {'subject': group.subject,'level': group.level,'groups': group   })
         else : 
-            form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher , folder = None )
+            form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher , folder = None ,   group = group )
     
     if form.is_valid():
         nf = form.save(commit=False)
@@ -1968,14 +1957,21 @@ def update_parcours(request, id, idg=0 ):
     teacher = Teacher.objects.get(user_id=request.user.id)
     levels = teacher.levels.all()
     parcours = Parcours.objects.get(id=id)
+
+    if idg > 0 :
+        group = Group.objects.get(pk=idg)
+    else :
+        group = None
  
-    form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher , folder = None )
-    
     folder_id = request.session.get("folder_id",None)
     if folder_id :
         folder = Folder.objects.get(pk=folder_id)
     else :
         folder = None
+
+    form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher , folder = folder,   group = group )
+    
+
 
     share_groups = Sharing_group.objects.filter(teacher  = teacher,role=1).order_by("group__level")
     if len(share_groups)>0 :
@@ -4753,13 +4749,13 @@ def create_evaluation(request,idf=0):
 
     if idf > 0 :
         folder = Folder.objects.get(pk = idf)
-        form   = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = folder , initial = {'subject': folder.subject,'level': folder.level,'groups': folder.groups.all()   })
+        form   = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = folder,   group = group , initial = {'subject': folder.subject,'level': folder.level,'groups': folder.groups.all()   })
     else :
         folder = False
         if group_id :
-            form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = None ,  initial = {'subject': group.subject,'level': group.level,'groups': group   })
+            form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = None,   group = group ,  initial = {'subject': group.subject,'level': group.level,'groups': group   })
         else : 
-            form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher , folder = None )
+            form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher , folder = None,   group = group )
 
 
     if form.is_valid():
@@ -4829,8 +4825,13 @@ def update_evaluation(request, id, idg=0 ):
     teacher = Teacher.objects.get(user_id=request.user.id)
     levels = teacher.levels.all()
     evaluation = Parcours.objects.get(id=id)
+
+    if idg > 0 :
+        group = Group.objects.get(pk = idg)
+    else :
+        group = None
  
-    form = ParcoursForm(request.POST or None, request.FILES or None, instance=evaluation, teacher=teacher , folder = None )
+    form = ParcoursForm(request.POST or None, request.FILES or None, instance=evaluation, teacher=teacher , folder = None,   group = group )
 
     share_groups = Sharing_group.objects.filter(teacher  = teacher,role=1).order_by("group__level")
     if len(share_groups)>0 :
