@@ -50,13 +50,13 @@
           </div>
         {% endif %}
 
- 
+          {% get_students_from_group_and_rc rc group as data_rc %}
  
           <!-- Exercice dissocié  -->  
           <div  style="position: absolute; right : 0px; top:66px;" title="Cet exercice est indiviualisé à certains élèves" id="individialise_id_student{{  rc.exercise.id }}" 
-                {% if  rc.just_students.count == only_real_student.count  %} class="checkbox_no_display" {% endif %}>   
+                {% if  data_rc.nb == only_real_student.count  %} class="checkbox_no_display" {% endif %}>   
             <span class="btn btn-warning" style="cursor:auto">
-              <i class="fa fa-user"></i>  {{ rc.just_students.count }} -- {{only_real_student.count  }}
+              <i class="fa fa-user"></i>  {{ data_rc.nb }} 
             </span>
  
           </div>
@@ -530,8 +530,10 @@
               </a>
           {% endif %}
 
-          <!-- Exercice dissocié  -->  
-          {% if  data.nb != only_real_student.count %}     
+          <!-- Exercice dissocié  -->
+          {% get_students_from_group_and_rc rc group as data_rc %}
+
+          {% if  data_rc.nb == only_real_student.count  %}  
           <div  style="position: absolute; right : 0px; top:60px;" title="Cet exercice est indiviualisé à certains élèves"  >   
               <a href="#customcard{{rc.id}}" class="detail_parcours btn btn-warning" data-custom=1
                  data-exercise_id="{{ rc.id }}"  data-num_exo="{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" data-parcours_id="{{ parcours.id }}">
@@ -539,6 +541,11 @@
               </a>
           </div>
           {% endif %}
+ 
+          
+
+
+
 
           <!-- Pour ces deux actions, on ne modifie pas relationship_id en customexercise_id pour utiliser la même fonction Jquery dans dashboard.js  -->
           <!-- Publication  -->

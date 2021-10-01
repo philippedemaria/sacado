@@ -876,6 +876,22 @@ class Folder(models.Model):
 
 
 
+    def group_and_folder_only_students(self,group):
+
+        data = {}
+        group_students = group.students.all()
+        #print(group, group_students)
+        o_students = self.students.exclude(user__username__contains="_e-test")
+        #print(self , o_students)
+        only_students = [s for s in o_students if s in group_students]
+        data["only_students"]= only_students
+        data["nb"]= len(only_students)
+        return data 
+
+
+
+
+
     def folder_only_students_count(self):
 
         data = {}
@@ -884,7 +900,7 @@ class Folder(models.Model):
         data["only_students"]= only_students
         data["nb"]= only_students.count()
         return data 
- 
+
   
     def only_students_folder(self):
 
@@ -1317,6 +1333,19 @@ class Relationship(models.Model):
     def just_students(self) :  
         return self.students.exclude(user__username__contains= "_e-test").order_by("user__last_name")
 
+
+    def group_and_rc_only_students(self,group):
+
+        data = {}
+        group_students = group.students.all()
+        o_students = self.students.exclude(user__username__contains="_e-test")
+        only_students = [s for s in o_students if s in group_students]
+        data["only_students"]= only_students
+        data["nb"]= len(only_students)
+        return data 
+
+
+
  
 class Studentanswer(models.Model):
 
@@ -1649,6 +1678,20 @@ class Customexercise(ModelWithCode):
 
     def just_students(self) :  
         return self.students.exclude(user__username__contains= "_e-test").order_by("user__last_name")
+
+
+    def group_and_rc_only_students(self,group):
+
+        data = {}
+        group_students = group.students.all()
+        o_students = self.students.exclude(user__username__contains="_e-test")
+        only_students = [s for s in o_students if s in group_students]
+        data["only_students"]= only_students
+        data["nb"]= len(only_students)
+        return data 
+
+
+
 
 
 

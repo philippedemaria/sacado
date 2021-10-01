@@ -45,7 +45,7 @@ class ParcoursForm(forms.ModelForm):
 			these_groups  = groups|shared_groups
 			all_groups    = these_groups.order_by("teachers")
 
-			self.fields['groups']	  = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=False)
+			self.fields['groups']	  = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("level","name"), widget=forms.CheckboxSelectMultiple, required=False)
 			self.fields['subject']	  = forms.ModelChoiceField(queryset=teacher.subjects.all(),  required=False)
 			self.fields['level']	  = forms.ModelChoiceField(queryset=teacher.levels.order_by("ranking"),  required=False)
 
@@ -133,6 +133,32 @@ class FolderForm(forms.ModelForm):
 				raise forms.ValidationError("La date de verrouillage ne peut pas être antérieure à son début.")
 		except:
 			pass
+
+
+		groups    = cleaned_data.get("groups") # liste de tous mes groupes
+		all_students = set()
+		for group in groups :    #################################  TODO Mettre dans la méthode clean du forms
+			group_students = group.students.all()
+			all_students.update( group_students )
+
+		parcours_ids    = cleaned_data.get("parcours") # liste de tous mes groupes
+		for parcours in parcours_ids :
+			parcours.students.set(all_students)
+
+			relationships = parcours.parcours_relationship.all()
+			for r in relationships:
+				r.students.set(all_students)
+
+			customexercises = parcours.parcours_customexercises.all()
+			for c in customexercises:
+				c.students.set(all_students)
+
+			courses = parcours.course.all()
+			for course in courses:
+				course.students.set(all_students)
+
+
+
 
 
 class Folder_GroupForm(forms.ModelForm):

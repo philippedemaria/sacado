@@ -880,3 +880,22 @@ def get_success_percent(obj, gquizz):
     return obj.success_percent(gquizz)
 
 
+
+@register.simple_tag 
+def get_students_from_group_and_folder(obj, group):
+    """
+    Détermine le pourcentage de bonne réponse à une question du gquizz
+    """
+    return obj.group_and_folder_only_students(group)
+
+
+
+
+@register.simple_tag 
+def get_students_from_group_and_rc(obj, group):
+    """
+    Détermine le pourcentage de bonne réponse à une question du gquizz
+    """
+    return obj.group_and_rc_only_students(group)
+
+

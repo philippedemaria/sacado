@@ -1222,7 +1222,8 @@ def ajax_affectation_to_group(request):
             parcours.groups.remove(group)
         else :
             parcours.groups.add(group)
-            attribute_all_documents_of_parcours_to_group(group,parcours)
+            groups = (group,)
+            attribute_all_documents_of_groups_to_all_new_student(groups)
         for g in parcours.groups.all():
             html += "<small>"+g.name +" (<small>"+ str(g.just_students_count())+"</small>)</small> "
 
@@ -1232,7 +1233,8 @@ def ajax_affectation_to_group(request):
             folder.groups.remove(group)
         else :
             folder.groups.add(group)
-            attribute_all_documents_of_folder_to_group(group,folder)
+            groups = (group,)
+            attribute_all_documents_of_groups_to_all_new_student(groups)
         for g in folder.groups.all():
             html += "<small>"+g.name +" (<small>"+ str(g.just_students_count())+"</small>)</small> "
         change_link = "change"
@@ -1850,6 +1852,17 @@ def change_coanimation_teachers(nf, target , group_ids , teacher): # target = pa
     return test
 
 
+
+def all_attributions_for_this_nf(group_ids,nf) :
+
+    all_students = set()
+    groups = list()
+    for gid in group_ids :
+        group = Group.objects.get(pk=gid)
+        all_students.update(group.students.all())
+        groups.append(group)
+    attribute_all_documents_of_groups_to_all_new_student(groups)
+    nf.students.set(all_students)
  
 
 def create_parcours(request,idf=0):
@@ -1874,18 +1887,21 @@ def create_parcours(request,idf=0):
         folder = Folder.objects.get(pk = idf)
         form   = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = folder , initial = {'subject': folder.subject,'level': folder.level,'groups': folder.groups.all()   })
     else :
-        folder_id = request.session.get("folder_id",None)
-        if folder_id :
-            folder = Folder.objects.get(pk=folder_id)
-            form   = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = folder , initial = {'subject': folder.subject,'level': folder.level,'groups': folder.groups.all()   })
-        else :
-            folder = None
-            if group_id :
-                form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = None ,  initial = {'subject': group.subject,'level': group.level,'groups': group   })
-            else : 
-                form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher , folder = None )
-
-
+        # folder_id = request.session.get("folder_id",None)
+        # if folder_id :
+        #     folder = Folder.objects.get(pk=folder_id)
+        #     form   = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = folder , initial = {'subject': folder.subject,'level': folder.level,'groups': folder.groups.all()   })
+        # else :
+        #     folder = None
+        #     if group_id :
+        #         form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = None ,  initial = {'subject': group.subject,'level': group.level,'groups': group   })
+        #     else : 
+        folder = False
+        if group_id :
+            form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher, folder = None ,  initial = {'subject': group.subject,'level': group.level,'groups': group   })
+        else : 
+            form = ParcoursForm(request.POST or None, request.FILES or None, teacher = teacher , folder = None )
+    
     if form.is_valid():
         nf = form.save(commit=False)
         nf.author = teacher
@@ -1900,27 +1916,23 @@ def create_parcours(request,idf=0):
         nf.save()
         form.save_m2m()
 
-        #Gestion de la coanimation
-        group_ids = request.POST.getlist("groups",[])
-        coanim = set_coanimation_teachers(nf,  group_ids,teacher) 
-
-
+        if folder :
+            folder.parcours.add(nf)
+ 
         if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
             nf.vignette = request.POST.get("this_image_selected",None)
 
-        if idf == 0 :
-            for g in form.cleaned_data.get("groups") :
-                students = g.students.all()
-                nf.students.set(students)
-            if folder :
-                students = folder.students.all()
-                folder.parcours.add(nf)
-                nf.students.set(students)
-        else :
-            students = folder.students.all()
-            folder.parcours.add(nf)
-            nf.students.set(students)
+ 
+        group_ids = request.POST.getlist("groups",[])
+        groups = set()
+        for gid in group_ids :
+            group = Group.objects.get(pk = gid)
+            groups.update( group.students.all() )
+        nf.students.set(groups)
         ################################################
+        #Gestion de la coanimation
+        coanim = set_coanimation_teachers(nf,  group_ids,teacher) 
+
 
         lock_all_exercises_for_student(nf.stop,nf)  
 
@@ -1937,11 +1949,15 @@ def create_parcours(request,idf=0):
  
  
 
-    context = {'form': form,  'folder' : False,   'teacher': teacher, 'idg': 0,  'folder':  folder ,  'group_id': group_id , 'parcours': None, 
+    context = {'form': form,     'teacher': teacher, 'idg': 0,  'folder':  folder ,  'group_id': group_id , 'parcours': None, 
                'exercises': [], 'levels': levels, 'communications' : [],  'group': group , 'role' : True ,  'images' : images }
 
     return render(request, 'qcm/form_parcours.html', context)
  
+
+
+
+
 
 
 
@@ -1980,10 +1996,12 @@ def update_parcours(request, id, idg=0 ):
             nf.save()
             form.save_m2m()
 
-
             group_ids = request.POST.getlist("groups",[])
+            groups = set()
             for gid in group_ids :
-                attribute_all_documents_of_parcours_to_group(Group.objects.get(pk=gid), nf)
+                group = Group.objects.get(pk = gid)
+                groups.update( group.students.all() )
+            nf.students.set(groups)
             #Gestion de la coanimation
             change_coanimation_teachers(nf, parcours , group_ids , teacher)
 
@@ -4728,7 +4746,6 @@ def create_evaluation(request,idf=0):
         group_id = request.session.get("group_id")
         group    = Group.objects.get(pk=group_id)
         images   = get_images_for_parcours_or_folder(group)
-        print("--------------> ",images)
     except :
         group    = None
         group_id = None
@@ -4761,8 +4778,15 @@ def create_evaluation(request,idf=0):
 
         #Gestion de la coanimation
         group_ids = request.POST.getlist("groups",[])
-        coanim = set_coanimation_teachers(nf,  group_ids,teacher) 
+        groups = set()
+        for gid in group_ids :
+            group = Group.objects.get(pk = gid)
+            groups.update( group.students.all() )
+        nf.students.set(groups)
 
+
+        coanim = set_coanimation_teachers(nf,  group_ids,teacher) 
+ 
 
         if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
             nf.vignette = request.POST.get("this_image_selected",None)
@@ -4828,13 +4852,15 @@ def update_evaluation(request, id, idg=0 ):
             form.save_m2m()
 
             group_ids = request.POST.getlist("groups",[])
+            groups = set()
             for gid in group_ids :
-                group = Group.objects.get(pk=gid)
-                attribute_all_documents_of_parcours_to_group( group , nf)
-
+                group = Group.objects.get(pk = gid)
+                groups.update( group.students.all() )
+            nf.students.set(groups)
+            
             #Gestion de la coanimation
             change_coanimation_teachers(nf, evaluation , group_ids , teacher)
-
+ 
             if "stop" in form.changed_data :
                 lock_all_exercises_for_student(nf.stop,evaluation)
 
@@ -5826,7 +5852,7 @@ def asking_parcours_sacado(request,pk):
     parcourses = teacher.teacher_parcours.filter(level = level, subject = subject)
 
 
-    test = attribute_all_documents_to_student(parcourses, student)
+    test = attribute_all_documents_of_groups_to_a_new_students((group,), student)
 
     if test :
         test_string = "Je viens de récupérer les exercices."
@@ -7913,6 +7939,7 @@ def create_folder(request,idg):
     if idg > 0 :
         group_id = idg
         group = Group.objects.get(pk = idg)
+        students = group.students.all()
         form = FolderForm(request.POST or None, request.FILES or None, teacher = teacher, subject = group.subject, level = group.level, initial = {'subject': group.subject,'level': group.level,'groups': group ,'coteachers': group.teacher  } )
         images = get_images_for_parcours_or_folder(group)
     else :
@@ -7920,6 +7947,7 @@ def create_folder(request,idg):
         group = None
         form = FolderForm(request.POST or None, request.FILES or None, teacher = teacher, subject = None, level = None, initial = None )
         images = []
+        students = None
 
     if request.method == "POST" :
         if form.is_valid():
@@ -7936,15 +7964,20 @@ def create_folder(request,idg):
             nf.save() 
             form.save_m2m()
 
-            #Gestion de la coanimation
-            group_ids = request.POST.getlist("groups",[])
-            coanim = set_coanimation_teachers(nf,  group_ids,teacher) 
 
+            group_ids = request.POST.getlist("groups",[])
+            all_students = set()
+            for goup_id in group_ids :    #################################  TODO Mettre dans la méthode clean du forms
+                group = Group.objects.get(pk = goup_id)
+                group_students = group.students.all()
+                all_students.update( group_students )
+            nf.students.set(all_students) 
+
+            #Gestion de la coanimation
+            coanim = set_coanimation_teachers(nf,  group_ids,teacher)
 
 
             if group :    
-                nf.groups.add(group)
-                nf.students.set(group.students.all())
                 return redirect ("list_parcours_group", idg ) 
             else :
                 return redirect ("parcours") 
@@ -7985,22 +8018,21 @@ def update_folder(request,id,idg):
             if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
                 nf.vignette = request.POST.get("this_image_selected",None)
             nf.save() 
-            form.save_m2m()            
+            form.save_m2m()  
 
-            #Gestion de la coanimation
             group_ids = request.POST.getlist("groups",[])
-            for gid in group_ids:
-                group = Group.objects.get(pk=gid)
-                attribute_all_documents_of_folder_to_group(group,nf)
-                parcours_ids = request.POST.getlist("parcours",[])
-                group.group_parcours.set(parcours_ids)
+            all_students = set()
+            for goup_id in group_ids :    #################################  TODO Mettre dans la méthode clean du forms
+                group = Group.objects.get(pk = goup_id)
+                group_students = group.students.all()
+                all_students.update( group_students )
+            nf.students.set(all_students) 
+
 
             change_coanimation_teachers(nf, folder , group_ids , teacher)
 
 
             if group_id :
-                nf.groups.add(group)
-                nf.students.set(group.students.all())
                 return redirect ("list_parcours_group", group_id )
             else :
                 return redirect ("parcours")

@@ -234,62 +234,122 @@ def attribute_all_documents_to_student(parcourses,student):
 
 
 
-def attribute_all_documents_to_students(groups, nf ):
-    """  assigner les documents   """
-    students = set()
-    for g in groups : 
-        students.update(g.students.all())
+# def attribute_all_documents_to_students(groups, nf ):
+#     """  assigner les documents   """
+#     students = set()
+#     for g in groups : 
+#         students.update(g.students.all())
 
-    nf.students.set(students)
-    relationships = nf.parcours_relationship.all()
+#     nf.students.set(students)
+#     relationships = nf.parcours_relationship.all()
         
-    for r in relationships:
-        r.students.set(students)
+#     for r in relationships:
+#         r.students.set(students)
 
-    customexercises = nf.parcours_customexercises.all()
-    for c in customexercises:
-        c.students.set(students)
+#     customexercises = nf.parcours_customexercises.all()
+#     for c in customexercises:
+#         c.students.set(students)
 
-    courses = nf.course.all()
-    for course in courses:
-        course.students.set(students)
+#     courses = nf.course.all()
+#     for course in courses:
+#         course.students.set(students)
 
  
-def attribute_all_documents_of_parcours_to_group(group,parcours):
-    """  assigner les documents   """
+# def attribute_all_documents_of_parcours_to_group(group,parcours):
+#     """  assigner les documents   """
     
-    students = group.students.all()
-    parcours.students.set(students)
-    relationships = parcours.parcours_relationship.all()
-    for r in relationships:
-        r.students.set(students)
+#     students = group.students.all()
+#     parcours.students.set(students)
+#     relationships = parcours.parcours_relationship.all()
+#     for r in relationships:
+#         r.students.set(students)
 
-    customexercises = parcours.parcours_customexercises.all()
-    for c in customexercises:
-        c.students.set(students)
+#     customexercises = parcours.parcours_customexercises.all()
+#     for c in customexercises:
+#         c.students.set(students)
 
-    courses = parcours.course.all()
-    for course in courses:
-        course.students.set(students)
+#     courses = parcours.course.all()
+#     for course in courses:
+#         course.students.set(students)
 
 
-def attribute_all_documents_of_folder_to_group(group,folder):
-    """  assigner les documents   """
+# def attribute_all_documents_of_folder_to_group(group,folder):
+#     """  assigner les documents   """
     
-    students = group.students.all()
-    folder.students.set(students)
-    for parcours in folder.parcours.all() :
-        attribute_all_documents_of_parcours_to_group(group,parcours)
+#     students = group.students.all()
+#     folder.students.set(students)
+#     for parcours in folder.parcours.all() :
+#         attribute_all_documents_of_parcours_to_group(group,parcours)
 
 
-def attribute_all_documents(group,student):
+# def attribute_all_documents(group,student):
+#     """  assigner les documents   """
+#     # Assigne les dossiers et leurs contenus 
+#     group.students.add(student)
+#     for folder in group.group_folders.all():
+#         folder.students.add(student)
+
+#         for parcours in folder.parcours.all():
+#             parcours.students.add(student)
+
+#             relationships = parcours.parcours_relationship.all()
+#             for r in relationships:
+#                 r.students.add(student)
+
+#             customexercises = parcours.parcours_customexercises.all()
+#             for c in customexercises:
+#                 c.students.add(student)
+
+#             courses = parcours.course.all()
+#             for course in courses:
+#                 course.students.add(student)
+
+#     # Assigne les parcours et leurs contenus 
+#     for parcours in group.group_parcours.filter(folders=None):
+#         parcours.students.add(student)
+
+#         relationships = parcours.parcours_relationship.all()
+#         for r in relationships:
+#             r.students.add(student)
+
+#         customexercises = parcours.parcours_customexercises.all()
+#         for c in customexercises:
+#             c.students.add(student)
+
+#         courses = parcours.course.all()
+#         for course in courses:
+#             course.students.add(student)
+#     test = True
+ 
+#     return test
+
+
+
+
+def attribute_all_documents_of_groups_to_a_new_student(groups, student):
     """  assigner les documents   """
-    # Assigne les dossiers et leurs contenus 
-    group.students.add(student)
-    for folder in group.group_folders.all():
-        folder.students.add(student)
+    # Assigne les dossiers et leurs contenus à aprtir d'un groupe
+    for group in groups :
+        for folder in group.group_folders.all():
+            folder.students.add(student)
 
-        for parcours in folder.parcours.all():
+            for parcours in folder.parcours.all():
+                parcours.students.add(student)
+
+                relationships = parcours.parcours_relationship.all()
+                for r in relationships:
+                    r.students.add(student)
+
+                customexercises = parcours.parcours_customexercises.all()
+                for c in customexercises:
+                    c.students.add(student)
+
+                courses = parcours.course.all()
+                for course in courses:
+                    course.students.add(student)
+
+        # Assigne les parcours et leurs contenus 
+        for parcours in group.group_parcours.filter(folders=None):
             parcours.students.add(student)
 
             relationships = parcours.parcours_relationship.all()
@@ -303,25 +363,73 @@ def attribute_all_documents(group,student):
             courses = parcours.course.all()
             for course in courses:
                 course.students.add(student)
-
-    # Assigne les parcours et leurs contenus 
-    for parcours in group.group_parcours.filter(folders=None):
-        parcours.students.add(student)
-
-        relationships = parcours.parcours_relationship.all()
-        for r in relationships:
-            r.students.add(student)
-
-        customexercises = parcours.parcours_customexercises.all()
-        for c in customexercises:
-            c.students.add(student)
-
-        courses = parcours.course.all()
-        for course in courses:
-            course.students.add(student)
     test = True
  
     return test
+
+
+
+
+def attribute_all_documents_of_groups_to_all_new_students(groups):
+    """  assigner les documents   """
+    # Assigne les dossiers et leurs contenus à aprtir d'un groupe
+    students = set()
+    for group in groups :
+        students.update(group.students.all()) 
+
+
+    for group in groups :
+        for folder in group.group_folders.all():
+            folder.students.set(students)
+
+            for parcours in folder.parcours.all():
+                parcours.students.set(students)
+
+                relationships = parcours.parcours_relationship.all()
+                for r in relationships:
+                    r.students.set(students)
+
+                customexercises = parcours.parcours_customexercises.all()
+                for c in customexercises:
+                    c.students.set(students)
+
+                courses = parcours.course.all()
+                for course in courses:
+                    course.students.set(students)
+
+        # Assigne les parcours et leurs contenus 
+        for parcours in group.group_parcours.filter(folders=None):
+            parcours.students.set(students)
+
+            relationships = parcours.parcours_relationship.all()
+            for r in relationships:
+                r.students.set(students)
+
+            customexercises = parcours.parcours_customexercises.all()
+            for c in customexercises:
+                c.students.set(students)
+
+            courses = parcours.course.all()
+            for course in courses:
+                course.students.set(students)
+    test = True
+ 
+    return test
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -573,6 +573,12 @@ def update_group(request, id):
         if stdts : 
             if len(stdts) > 0 :
                 include_students(request , stdts,group)
+        try :
+            for s in group.students.all():
+                attribute_all_documents(nf,student)
+        except :
+            pass
+
  
         return redirect("show_group", group.id)
     else:

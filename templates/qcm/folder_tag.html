@@ -12,7 +12,8 @@
 
 
         <div class="group_show  group_show{{folder.id }} no_visu_on_load"> 
-            {% with folder.folder_only_students_count as data %}
+            {% get_students_from_group_and_folder  folder group as data %}
+ 
                 {% csrf_token %}
 
                     <span class="label label-default" style="color:{{ folder.color|contrast_color }};background-color:{{ folder.color }};"> {{ data.nb }}<i class="fa fa-users"></i></span>
@@ -23,7 +24,7 @@
                 <a  href="#principal_section" class="detail_student_parcours"  data-student_id="{{ s.user.id }}"  
                     data-parcours_id="{{ folder.id }}" >{{s}}</a>{% if not forloop.last %}, {% endif %}
                 {% endfor %}
-               {% endwith %} 
+ 
             </font>
             <div style="clear:both"></div>
         </div>
