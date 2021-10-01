@@ -21,3 +21,5 @@ logs/
 
 media/
 qcm/__pycache__/views.cpython-36.pyc
+templates/qcm/simulator.html
+templates/qcm/simulator_c3.html
