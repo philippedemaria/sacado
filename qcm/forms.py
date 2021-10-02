@@ -137,29 +137,23 @@ class FolderForm(forms.ModelForm):
 		except:
 			pass
 
-
 		groups    = cleaned_data.get("groups") # liste de tous mes groupes
-		all_students = set()
-		for group in groups :    #################################  TODO Mettre dans la méthode clean du forms
-			group_students = group.students.all()
-			all_students.update( group_students )
-
+		all_students = Student.objects.filter(students_to_group__in=groups)		
 		parcours_ids    = cleaned_data.get("parcours") # liste de tous mes groupes
 		for parcours in parcours_ids :
 			parcours.students.set(all_students)
 
-			relationships = parcours.parcours_relationship.all()
-			for r in relationships:
-				r.students.set(all_students)
-
-			customexercises = parcours.parcours_customexercises.all()
-			for c in customexercises:
-				c.students.set(all_students)
-
+			for r in parcours.parcours_relationship.all():
+				students_blancklisted = all_students.filter(students_relationship=r)
+				r.students.set(students_blancklisted)
+ 
+			for c in  parcours.parcours_customexercises.all() :
+				students_blancklisted_custom = all_students.filter(students_customexercises=c)
+				c.students.set(students_blancklisted_custom)
+ 
 			courses = parcours.course.all()
 			for course in courses:
-				course.students.set(all_students)
-
+				course.students.set(list_all_students)
 
 
 

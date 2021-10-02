@@ -373,45 +373,47 @@ def attribute_all_documents_of_groups_to_a_new_student(groups, student):
 def attribute_all_documents_of_groups_to_all_new_students(groups):
     """  assigner les documents   """
     # Assigne les dossiers et leurs contenus à aprtir d'un groupe
-    students = set()
+    studts = set()
     for group in groups :
-        students.update(group.students.all()) 
+        studts.update(group.students.all()) 
+    
+    students = list(studts)    
 
 
     for group in groups :
         for folder in group.group_folders.all():
-            folder.students.set(students)
+            folder.students.add(*students)
 
             for parcours in folder.parcours.all():
-                parcours.students.set(students)
+                parcours.students.add(*students)
 
                 relationships = parcours.parcours_relationship.all()
                 for r in relationships:
-                    r.students.set(students)
+                    r.students.add(*students)
 
                 customexercises = parcours.parcours_customexercises.all()
                 for c in customexercises:
-                    c.students.set(students)
+                    c.students.add(*students)
 
                 courses = parcours.course.all()
                 for course in courses:
-                    course.students.set(students)
+                    course.students.add(*students)
 
         # Assigne les parcours et leurs contenus 
         for parcours in group.group_parcours.filter(folders=None):
-            parcours.students.set(students)
+            parcours.students.add(*students)
 
             relationships = parcours.parcours_relationship.all()
             for r in relationships:
-                r.students.set(students)
+                r.students.add(*students)
 
             customexercises = parcours.parcours_customexercises.all()
             for c in customexercises:
-                c.students.set(students)
+                c.students.add(*students)
 
             courses = parcours.course.all()
             for course in courses:
-                course.students.set(students)
+                course.students.add(*students)
     test = True
  
     return test

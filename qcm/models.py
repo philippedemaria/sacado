@@ -1111,7 +1111,6 @@ class Folder(models.Model):
         if nb_evaluations   :
             data["is_evaluations_exists"] = True
         if len(all_students) > 0:
-            print( self.students.exclude(user__username__contains= "_e-test") )
             data["is_students"]        = True 
  
         test = False
@@ -1409,7 +1408,7 @@ class Relationship(models.Model):
 
 
 
- 
+
 class Studentanswer(models.Model):
 
     parcours = models.ForeignKey(Parcours,  on_delete=models.CASCADE, blank=True, null=True,  related_name='answers', editable=False)
@@ -1756,6 +1755,14 @@ class Customexercise(ModelWithCode):
 
 
 
+
+class Blacklist(models.Model):
+    relationship   = models.ForeignKey(Relationship,  null=True, blank=True, on_delete=models.CASCADE,  related_name='relationship_individualisation',   editable= False)
+    customexercise = models.ForeignKey(Customexercise,  null=True, blank=True, on_delete=models.CASCADE,  related_name='customexercise_individualisation',   editable= False)
+    student        = models.ForeignKey(Student, null=True, blank=True, on_delete=models.CASCADE,  related_name='student_individualisation',  editable= False)
+    
+    def __str__(self):
+        return f"{self.relationship} : {self.student}" 
 
 
 class Customanswerbystudent(models.Model): # Commentaire et note pour les exercices customisés coté enseignant

@@ -15,7 +15,7 @@ from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group , Sharing_group
 from school.models import Stage, School
-from qcm.models import  Folder , Parcours , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage , DocumentReport , Tracker
+from qcm.models import  Folder , Parcours , Blacklist , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage , DocumentReport , Tracker
 from qcm.forms import FolderForm , Folder_GroupForm , ParcoursForm , Parcours_GroupForm, RemediationForm,  UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm
 from tool.forms import QuizzForm
 from socle.models import  Theme, Knowledge , Level , Skill , Waiting , Subject
@@ -943,6 +943,7 @@ def ajax_individualise(request):
                                 if Customanswerbystudent.objects.filter(student = s , customexercise = customexercise).count() == 0 :
                                     customexercise.students.remove(s)
                                     som +=1
+                                Blacklist.objects.get_or_create(customexercise=customexercise, student = s ,relationship = None   )
                         except :
                             pass
 
@@ -957,6 +958,9 @@ def ajax_individualise(request):
                     else : 
                         try :
                             customexercise.students.set(parcours.students.all())
+                            for s in parcours.students.all():
+                                if Blacklist.objects.filter(customexercise=customexercise, student = s ).count()  > 0:
+                                    Blacklist.objects.get(customexercise=customexercise, student = s ).delete()
                         except :
                             pass
           
@@ -970,6 +974,7 @@ def ajax_individualise(request):
                         try :
                             if Customanswerbystudent.objects.filter(student = student , customexercise = customexercise).count() == 0 :
                                 customexercise.students.remove(student)
+                                Blacklist.objects.get_or_create(customexercise=customexercise, student = student , relationship = None   )
                                 data["alert"] = False
                             else :
                                 data["alert"] = True                        
@@ -982,7 +987,9 @@ def ajax_individualise(request):
                     else:
  
                         try :
-                            customexercise.students.add(student) 
+                            customexercise.students.add(student)
+                            if Blacklist.objects.filter(customexercise=customexercise, student = student , relationship = None   ).count()  > 0 :
+                                Blacklist.objects.get(customexercise=customexercise, student = student , relationship = None   ).delete() 
                         except :
                             pass
                         data["statut"] = "True"
@@ -1002,6 +1009,7 @@ def ajax_individualise(request):
                                 if Studentanswer.objects.filter(student = s , exercise = exercise, parcours = relationship.parcours).count() == 0 :
                                     relationship.students.remove(s)
                                     somme +=1
+                                Blacklist.objects.get_or_create(customexercise=None, student = s ,relationship = relationship   )
                         except :
                             pass
        
@@ -1015,7 +1023,9 @@ def ajax_individualise(request):
 
                     else : 
                         relationship.students.set(parcours.students.all())
-     
+                        for s in parcours.students.all():
+                            if Blacklist.objects.filter(relationship=relationship, student = s ).count() > 0 :
+                                Blacklist.objects.get(relationship=relationship, student = s ).delete()   
                         data["statut"] = "True"
                         data["class"] = "btn btn-success"
                         data["noclass"] = "btn btn-default"
@@ -1028,6 +1038,7 @@ def ajax_individualise(request):
 
                         if Studentanswer.objects.filter(student = student , parcours = relationship.parcours).count() == 0 :
                             relationship.students.remove(student)
+                            Blacklist.objects.get_or_create(relationship=relationship, student = student , customexercise = None   )
                             data["statut"] = "False"
                             data["class"] = "btn btn-default"
                             data["noclass"] = "btn btn-success"
@@ -1040,7 +1051,9 @@ def ajax_individualise(request):
                             data["alert"] = True
 
                     else:
-                        relationship.students.add(student) 
+                        relationship.students.add(student)
+                        if Blacklist.objects.filter(relationship=relationship, student = student , customexercise = None   ).count()  > 0 :
+                            Blacklist.objects.get(relationship=relationship, student = student , customexercise = None   ).delete()
                         data["statut"] = "True"
                         data["class"] = "btn btn-success"
                         data["noclass"] = "btn btn-default"
@@ -1063,6 +1076,7 @@ def ajax_individualise(request):
                             if Customanswerbystudent.objects.filter(student = s , customexercise = customexercise).count() == 0 :
                                 customexercise.students.remove(s)
                                 som +=1
+                            Blacklist.objects.get_or_create(customexercise=customexercise, student = s ,relationship = None   )    
                     except :
                         pass
 
@@ -1077,6 +1091,9 @@ def ajax_individualise(request):
                 else : 
                     try :
                         customexercise.students.set(parcours.students.all())
+                        for s in parcours.students.all() :
+                            if Blacklist.objects.filter(customexercise=customexercise, student = s ,relationship = None   ).count() > 0 :
+                                Blacklist.objects.get(customexercise=customexercise, student = s ,relationship = None   ).delete()
                     except :
                         pass
                     statut = 1    
@@ -1090,6 +1107,7 @@ def ajax_individualise(request):
                     try :
                         if Customanswerbystudent.objects.filter(student = student , customexercise = customexercise).count() == 0 :
                             customexercise.students.remove(student)
+                            Blacklist.objects.get_or_create(customexercise=customexercise, student = student ,relationship = None   )
                             data["alert"] = False
                         else :
                             data["alert"] = True                        
@@ -1102,7 +1120,9 @@ def ajax_individualise(request):
                 else:
 
                     try :
-                        customexercise.students.add(student) 
+                        customexercise.students.add(student)
+                        if Blacklist.objects.filter(customexercise=customexercise, student = student ,relationship = None   ).count()  > 0 :
+                            Blacklist.objects.get(customexercise=customexercise, student = student ,relationship = None   ).delete()
                     except :
                         pass
                     data["statut"] = "True"
@@ -1122,6 +1142,7 @@ def ajax_individualise(request):
                             if Studentanswer.objects.filter(student = s , exercise = exercise, parcours = relationship.parcours).count() == 0 :
                                 relationship.students.remove(s)
                                 somme +=1
+                            Blacklist.objects.get_or_create(customexercise=customexercise, student = student ,relationship = None   )
                     except :
                         pass
                     data["statut"] = "False"
@@ -1134,6 +1155,8 @@ def ajax_individualise(request):
 
                 else : 
                     relationship.students.set(parcours.students.all())
+                    for s in parcours.students.all() :
+                        Blacklist.objects.get_or_create(relationship=relationship, student = s ,customexercise = None   )
                     data["statut"] = "True"
                     data["class"] = "btn btn-success"
                     data["noclass"] = "btn btn-default"
@@ -1145,6 +1168,7 @@ def ajax_individualise(request):
 
                     if Studentanswer.objects.filter(student = student , exercise = exercise, parcours = relationship.parcours).count() == 0 :
                         relationship.students.remove(student)
+                        Blacklist.objects.get_or_create(relationship=relationship, student = student ,customexercise = None   )
                         data["statut"] = "False"
                         data["class"] = "btn btn-default"
                         data["noclass"] = "btn btn-success"
@@ -1157,6 +1181,9 @@ def ajax_individualise(request):
                         data["alert"] = True
                 else:
                     relationship.students.add(student) 
+                    if Blacklist.objects.filter(relationship=relationship, student = student ,customexercise = None ).count() > 0 :
+                        Blacklist.objects.get(relationship=relationship, student = student ,customexercise = None ).delete()
+                    
                     data["statut"] = "True"
                     data["class"] = "btn btn-success"
                     data["noclass"] = "btn btn-default"
@@ -7966,7 +7993,7 @@ def create_folder(request,idg):
             nf.save() 
             form.save_m2m()
 
-
+            # Tous les élèves des groupes cochés sont affecté au nouveau dossier
             group_ids = request.POST.getlist("groups",[])
             all_students = set()
             for goup_id in group_ids :    #################################  TODO Mettre dans la méthode clean du forms
@@ -8022,6 +8049,7 @@ def update_folder(request,id,idg):
             nf.save() 
             form.save_m2m()  
 
+            # Tous les élèves des groupes cochés sont affecté au nouveau dossier
             group_ids = request.POST.getlist("groups",[])
             all_students = set()
             for goup_id in group_ids :    #################################  TODO Mettre dans la méthode clean du forms

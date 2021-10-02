@@ -134,7 +134,7 @@
                             Dans ce dossier <br/>{% if folder.is_publish %}publié <i class="fa fa-circle text-success"></i> {% else %}<span class="text-danger">non publié <i class="fa fa-circle"></i></span>{% endif %}
                         </div>
                         <div class="col-xs-6 col-md-7 col-lg-7"> 
-                            {{  dataset.nb_parcours }} parcours dont {{ dataset.nb_parcours_published }} publié{{ dataset.nb_evaluations_published|pluralize }}  <br/>
+                            {{  dataset.nb_parcours }} parcours dont {{ dataset.nb_parcours_published }} publié{{ dataset.nb_parcours_published|pluralize }}  <br/>
                             {{  dataset.nb_evaluations }} évaluations  dont {{ dataset.nb_evaluations_published }} publiée{{ dataset.nb_evaluations_published|pluralize }}
                         </div>
 
