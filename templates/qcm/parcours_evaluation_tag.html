@@ -83,10 +83,10 @@
 
 
                 {% if parcours.is_publish %}
-                <span class="text-success" id="accueil_text_color{{ parcours.id }}">{% if parcours.is_evaluation %}Cette évaluation{% else %}Ce parcours{% endif %} <span id="accueil_visible{{parcours.id }}">est</span> visible pour vos élèves.</span>
+                <span class="text-success" id="accueil_text_color{{ parcours.id }}">{% if parcours.is_evaluation %}Cette évaluation{% else %}Ce parcours{% endif %} <span id="accueil_visible{{parcours.id }}">est</span> visible par vos élèves.</span>
                 {% else %}
 
-                <span class="text-danger" id="accueil_text_color{{ parcours.id }}">{% if parcours.is_evaluation %}Cette évaluation{% else %}Ce parcours{% endif %} <span id="accueil_visible{{parcours.id }}">n'est pas</span> visible pour vos élèves.</span>
+                <span class="text-danger" id="accueil_text_color{{ parcours.id }}">{% if parcours.is_evaluation %}Cette évaluation{% else %}Ce parcours{% endif %} <span id="accueil_visible{{parcours.id }}">n'est pas</span> visible par vos élèves.</span>
                 {% endif %}
 
             </div>
