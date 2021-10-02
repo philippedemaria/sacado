@@ -29,8 +29,15 @@
             <div style="clear:both"></div>
         </div>
 
-        <a href="#" data-parcours_id="{{parcours.id }}" class="overlay_show white">
-        <div class="disc {% if  parcours.is_evaluation %}disce{% endif %} disc{{parcours.id }}" style="background-color:{% if parcours.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
+        <a href="#" data-parcours_id="{{parcours.id }}" class="overlay_show white" >
+        <div class="{% if not parcours.is_publish %}
+                        disc_persistant
+                    {% else %}
+                        disc 
+                        {% if  parcours.is_evaluation %}disce{% endif %}
+                    {% endif %}
+
+                         disc{{parcours.id }}" style="background-color:{% if parcours.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
              <i class="fa fa-circle-o-notch"></i>
         </div>
         </a> 
@@ -72,6 +79,16 @@
                 </span>
                 <br>
                 <span style="color:{{ parcours.color }};">Code parcours : <b>{{ parcours.code }}</b></span>
+                <br>
+
+
+                {% if parcours.is_publish %}
+                <span class="text-success" id="accueil_text_color{{ parcours.id }}">{% if parcours.is_evaluation %}Cette évaluation{% else %}Ce parcours{% endif %} <span id="accueil_visible{{parcours.id }}">est</span> visible pour vos élèves.</span>
+                {% else %}
+
+                <span class="text-danger" id="accueil_text_color{{ parcours.id }}">{% if parcours.is_evaluation %}Cette évaluation{% else %}Ce parcours{% endif %} <span id="accueil_visible{{parcours.id }}">n'est pas</span> visible pour vos élèves.</span>
+                {% endif %}
+
             </div>
         </div>
         <!-- Fin de la fenetre  -->

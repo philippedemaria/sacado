@@ -695,27 +695,18 @@ def chargelisting(request):
 
 def student_select_to_school(request):
 
+    # récupération du groupe et de l'élève
     group_id = int(request.POST.get("group_id"))
     student_id = int(request.POST.get("student_id"))
     group = Group.objects.get(id=group_id) 
     student = Student.objects.get(user_id=student_id) 
 
-
-    p_tab = []    
-    for std in group.students.all() :
-        parcourses = std.students_to_parcours.all()
-        for p in parcourses :
-            if not p in p_tab :
-                p_tab.append(p)
-                
-    for p in p_tab:
-        p.students.add(student)
-        relationships = p.parcours_relationship.all()
-        for r in relationships:
-            r.students.add(student)
-
     group.students.add(student)
 
+    groups = [group]
+
+    test = attribute_all_documents_of_groups_to_a_new_student(groups, student)
+    print(test)
 
     data = {}
 

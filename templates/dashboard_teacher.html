@@ -110,20 +110,7 @@
                                 </div>
                                 <div class="col-lg-6 col-xs-6" style="padding-right:0px">
                                     <a  href="#"  class="label_small_box group_shower" data-group_id="{{group.id }}" style="font-size:20px; color:{{ group.color|contrast_color }};"><i class="fa fa-users"></i><span class="helper_tip small_displayer" style="color:{{ group.color|contrast_color }};"> {{ data.snt }} élève{{ data.snt|pluralize }}
-
-
-                                        {% if data.profiltest %}
-                                                    <div class="helper_tip_text" >
-                                                        Vous avez un profil élève pour ce groupe.
-                                                    </div>
-                                        {% else  %}
-                                                    <div class="helper_tip_text" >
-                                                        Vous n'avez pas de profil élève pour ce groupe
-                                                    </div>
-                                        {% endif  %}
-
-
-                                    </span> </a>   
+                                    </a>   
                                 </div>
                             </div>
                         {% else  %}
@@ -137,17 +124,8 @@
                                 </div> 
                                 <div class="col-lg-4 col-xs-4" style="padding-right:0px">
                                     <a  href="#"  class="label_small_box group_shower" data-group_id="{{group.id }}" style="font-size:15px; color:{{ group.color|contrast_color }};"><i class="fa fa-users"></i>
-                                        <span class="helper_tip small_displayer"  style="color:{{ group.color|contrast_color }};"> Élève{{ data.snt|pluralize }}
-
-                                    {% if data.profiltest %}
-                                                <div class="helper_tip_text" >
-                                                     Votre profil élève n'est pas pris en compte dans la liste de vos élèves.
-                                                </div> 
-                                        {% else  %}
-                                                    <div class="helper_tip_text" >
-                                                        Vous n'avez pas de profil élève pour ce groupe
-                                                    </div>
-                                    {% endif  %}
+                                        <span class="helper_tip small_displayer"  style="color:{{ group.color|contrast_color }};"> 
+                                            Élève{{ data.snt|pluralize }}
                                         </span> 
                                     </a>   
                                 </div>

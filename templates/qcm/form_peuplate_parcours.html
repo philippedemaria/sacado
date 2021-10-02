@@ -84,6 +84,9 @@
                     <div id="loader">
                     </div>
                     <div id="content_exercises" class="list_choice">
+                        <div class="alert alert-warning">
+                            Si vous sélectionnez des exercices d'un autre niveau que celui de votre groupe, leurs scores n'entrent pas nécessairement dans les résultats. Les statistiques pourraient être faussées. 
+                        </div>
                     {% if parcours %}
                         <table class="table">
                         {% regroup  exercises by theme.name as theme_list %}  
@@ -173,7 +176,6 @@
                 </div>
             </div> 
 
- 
         </form>
                 
             <div class="col-sm-12 col-md-12 col-lg-12" style="margin-top: 20px">
@@ -188,11 +190,7 @@
 
                 {% if parcours %}
                     {% if group %}
-                        {% if parcours.is_leaf %}
-                            <a href="{% url 'list_sub_parcours_group' group.id parcours.id%}" class="btn btn-default" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}">Valider et retour au groupe</a> 
-                        {% else %}
-                            <a href="{% url 'list_parcours_group' group.id %}"  class="btn btn-default" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}">Valider et retour au groupe</a>   
-                        {% endif  %}
+                        <a href="{% url 'list_parcours_group' group.id %}"  class="btn btn-default" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}">Valider et retour au groupe</a>   
                     {% endif  %}
                 {% endif  %}
                 </div>

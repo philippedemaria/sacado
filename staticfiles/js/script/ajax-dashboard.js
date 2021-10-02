@@ -1200,6 +1200,21 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
                             if( from =="2" || from =="0") { 
                             $('.disc'+parcours_id).css("background-color",data.style); 
+                            $('.disc'+parcours_id).css("background-color",data.style); 
+
+                            if (data.statut) {
+                                $('#accueil_visible'+parcours_id).html("est"); 
+                                $('#accueil_text_color'+parcours_id).removeClass("text-danger");  
+                                $('#accueil_text_color'+parcours_id).addClass("text-success");                          
+                            }
+                            else {
+                                $('#accueil_visible'+parcours_id).html("n'est pas");  
+                                $('#accueil_text_color'+parcours_id).removeClass("text-success");  
+                                $('#accueil_text_color'+parcours_id).addClass("text-danger");  
+                            }
+
+
+
                             }  
                         }
                     }

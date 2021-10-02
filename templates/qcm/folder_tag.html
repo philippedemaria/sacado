@@ -5,7 +5,8 @@
 
 <div  class="box box-widget widget-user-2 folder_sorter"  data-parcours_id ="{{folder.id}}"  
       style="cursor: move;{% if folder.vignette %}background-image: url('{{ folder.vignette.url }}'); background-size: cover; {% endif %}background-color:{{folder.color }};">
-    {% with folder.data_parcours_evaluations as dataset %}
+
+    {% get_data_parcours_evaluations_from_group_folder folder group as dataset %}
     <div class="handler widget-user-header">
         <!-- Add signet to folder -->
         <img src="{% static 'img/rabat_dossier.png' %}" class="rabat_dossier" />
@@ -104,13 +105,11 @@
                 {% endif %}
 
 
-                {% if folder.title|length > 20 %}
-                    <span class="helper_tip" style="color:{{ folder.color|contrast_color }};font-size:20px">{{ folder.title|truncatechars:"22" }}<div class="helper_tip_text_right">{{ folder.title }}</div></span>
-                    <span style="font-size:12px"> {{ folder.parcours.count}} <i class="fa fa-th"></i> </span>
-                {% else %}
-                    {{ folder.title}}
-                    <span style="font-size:12px"> {{ folder.parcours.count}} parcours </span>
-                {% endif %}
+
+                    <span class="helper_tip" style="color:{{ folder.color|contrast_color }};font-size:20px">{{ folder.title|truncatechars:"30" }}
+                        <div class="helper_tip_text_right">{{ folder.title }}</div></span>
+ 
+
 
                 {% if folder.is_folder_real_time %}
                     <sup class="white" title="En composition" style="font-size:12px" >
@@ -124,74 +123,85 @@
     <!-- box-footer DES FONCTIONNALITES  -->
 
 
-    <div class="box-footer" style="position: relative">
-        <div class="dossier">
-            D<br/>O<br/>S<br/>S<br/>I<br/>E<br/>R 
-        </div>  
-        <div class="row extend"> 
-            <div class="col-xs-1 col-md-1 col-lg-1"> 
-            </div>
-            <div class="col-xs-5 col-md-5 col-lg-5">
-                <a href="{% url 'update_folder' folder.id  group.id  %}" class="edit" style="color:{{ folder.color}};"><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span> </a>
-            </div> 
-            <div class="col-xs-5 col-md-5 col-lg-5">
-                <a  href="{% url 'result_parcours' folder.id 1 %}" class="edit" target="_blank"><i class="fa fa-fw fa-mortar-board"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
-                </a>   
-            </div>
-        </div>
-        <div class="row extend">
-            <div class="col-xs-1 col-md-1 col-lg-1">  
-            </div>
-            <div class="col-xs-5 col-md-5 col-lg-5">
+    <div class="box-footer" style="position: relative; padding-top: 0px;">
  
-                <span href="#"  class="edit click_evaluations_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_evaluations_exists   %} style="color:{{ folder.color }}" {% endif %}>
-                    <i class="fa fa-fw fa-trophy"></i> <span class="label_icon">Evaluations</span> 
-                </span>
-
-                <a href="{% url 'create_evaluation' folder.id %}" style="font-size: 14px" class="edit" title="Ajouter un évaluation à ce dossier">   
-                     <i class="fa fa-plus-circle"></i> 
-                </a>
-
-            </div> 
-            <div class="col-xs-5 col-md-5 col-lg-5">
-                <span  class="edit" style="cursor: default;{% if dataset.is_folder_task_exists %}color:{{ folder.color }}{% endif %};">
-                    {% if dataset.is_folder_task_exists %}<i class="fa fa-fw fa-calendar-check"></i>{% else %}<i class="fa fa-fw fa-calendar"></i>{% endif %}
-                     <span class="label_icon" style="cursor: default;">Tâches</span>
-                </span> 
-            </div>                     
-        </div> 
-        <div class="row">
-            <div class="col-xs-1 col-md-1 col-lg-1"> </div>
-            <div class="col-xs-5 col-md-5 col-lg-5">
-                <span href="#"  class="edit click_parcours_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_parcours_exists %} style="color:{{ folder.color }}" {% endif %}>
-                    <i class="fa fa-fw fa-folder{% if dataset.nb_parcours > 1 %}-open{% endif%}"></i> <span class="label_icon">Parcours</span> 
-                </span>
-
-                <a href="{% url 'create_parcours' folder.id %}" style="font-size: 14px" class="edit" title="Ajouter un parcours à ce dossier">   
-                     <i class="fa fa-plus-circle"></i> 
-                </a>
-
-            </div> 
-            <div class="col-xs-5 col-md-5 col-lg-5">
-                {% if dataset.is_folder_courses_exists %}
-                <a href="{% url 'show_courses_from_folder'  folder.id    %}"  class="edit"  style="color:{{ folder.color }}" >
-                    <i class="fa fa-fw fa-desktop"></i>  <span class="label_icon">Cours</span>
-                </a>
-                {% else %}
-                <a href=""  class="edit" style="cursor: default;" >
-                    <i class="fa fa-fw fa-desktop"  style="cursor: default;"></i>  <span class="label_icon">Cours</span>
-                </a>
-                {% endif %}
 
 
-                <span href="#" class="edit group_shower pull-right" data-parcours_id="{{folder.id }}" {% if dataset.is_students %} style="color:{{ folder.color }}" {% endif %} >
-                    <i class="fa fa-fw fa-users"></i>  
-                </span>
+
+                <div class="row dossier"> 
+
+                        <div class="col-xs-6 col-md-5 col-lg-5 "> 
+                            Dans ce dossier <br/>{% if folder.is_publish %}publié <i class="fa fa-circle text-success"></i> {% else %}<span class="text-danger">non publié <i class="fa fa-circle"></i></span>{% endif %}
+                        </div>
+                        <div class="col-xs-6 col-md-7 col-lg-7"> 
+                            {{  dataset.nb_parcours }} parcours dont {{ dataset.nb_parcours_published }} publié{{ dataset.nb_evaluations_published|pluralize }}  <br/>
+                            {{  dataset.nb_evaluations }} évaluations  dont {{ dataset.nb_evaluations_published }} publiée{{ dataset.nb_evaluations_published|pluralize }}
+                        </div>
+
+                </div>
 
 
-            </div>                    
-        </div> 
-    </div>
-    {% endwith %}
+
+                <div class="row extend_parcours"> 
+                    <div class="col-xs-6 col-md-6 col-lg-6">
+                        <a href="{% url 'update_folder' folder.id  group.id  %}" class="edit" style="color:{{ folder.color}};"><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Configuration</span> </a>
+                    </div> 
+                    <div class="col-xs-5 col-md-5 col-lg-5">
+                        <a  href="{% url 'result_parcours' folder.id 1 %}" class="edit" target="_blank"><i class="fa fa-fw fa-mortar-board"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
+                        </a>   
+                    </div>
+                </div>
+
+                <div class="row extend_parcours">
+                    <div class="col-xs-6 col-md-6 col-lg-6">
+         
+                        <span href="#"  class="edit click_evaluations_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_evaluations_exists   %} style="color:{{ folder.color }}" {% endif %}>
+                            <i class="fa fa-fw fa-trophy"></i> <span class="label_icon">Evaluations</span> 
+                        </span>
+
+                        <a href="{% url 'create_evaluation' folder.id %}" style="font-size: 14px" class="edit" title="Ajouter un évaluation à ce dossier">   
+                             <i class="fa fa-plus-circle"></i> 
+                        </a>
+
+                    </div> 
+                    <div class="col-xs-5 col-md-5 col-lg-5">
+                        <span  class="edit" style="cursor: default;{% if dataset.is_folder_task_exists %}color:{{ folder.color }}{% endif %};">
+                            {% if dataset.is_folder_task_exists %}<i class="fa fa-fw fa-calendar-check"></i>{% else %}<i class="fa fa-fw fa-calendar"></i>{% endif %}
+                             <span class="label_icon" style="cursor: default;">Tâches</span>
+                        </span> 
+                    </div>                     
+                </div> 
+                <div class="row extend_parcours">
+                    <div class="col-xs-6 col-md-6 col-lg-6">
+                        <span href="#"  class="edit click_parcours_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_parcours_exists %} style="color:{{ folder.color }}" {% endif %}>
+                            <i class="fa fa-fw fa-folder{% if dataset.nb_parcours > 1 %}-open{% endif%}"></i> <span class="label_icon">Parcours</span> 
+                        </span>
+
+                        <a href="{% url 'create_parcours' folder.id %}" style="font-size: 14px" class="edit" title="Ajouter un parcours à ce dossier">   
+                             <i class="fa fa-plus-circle"></i> 
+                        </a>
+
+                    </div> 
+                    <div class="col-xs-5 col-md-5 col-lg-5">
+                        {% if dataset.is_folder_courses_exists %}
+                        <a href="{% url 'show_courses_from_folder'  folder.id    %}"  class="edit"  style="color:{{ folder.color }}" >
+                            <i class="fa fa-fw fa-desktop"></i>  <span class="label_icon">Cours</span>
+                        </a>
+                        {% else %}
+                        <a href=""  class="edit" style="cursor: default;" >
+                            <i class="fa fa-fw fa-desktop"  style="cursor: default;"></i>  <span class="label_icon">Cours</span>
+                        </a>
+                        {% endif %}
+
+
+                        <span href="#" class="edit group_shower pull-right" data-parcours_id="{{folder.id }}" {% if dataset.is_students %} style="color:{{ folder.color }}" {% endif %} >
+                            <i class="fa fa-fw fa-users"></i>  
+                        </span>
+
+
+                    </div>                    
+                </div> 
+            </div>
  
+
 </div>   

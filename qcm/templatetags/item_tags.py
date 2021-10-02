@@ -899,3 +899,13 @@ def get_students_from_group_and_rc(obj, group):
     return obj.group_and_rc_only_students(group)
 
 
+
+
+
+@register.simple_tag 
+def get_data_parcours_evaluations_from_group_folder(obj, group):
+    """
+    Détermine le pourcentage de bonne réponse à une question du gquizz
+    """
+    return obj.data_parcours_evaluations_from_group(group)
+

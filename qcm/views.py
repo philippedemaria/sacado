@@ -128,13 +128,11 @@ def get_teacher_id_by_subject_id(subject_id):
 def get_images_for_parcours_or_folder(group):
     try :
         sacadoprof_id = get_teacher_id_by_subject_id(group.subject.id)
-        print(sacadoprof_id)
         images = set()
         imags = Folder.objects.values_list("vignette", flat = True).filter(Q(teacher_id= sacadoprof_id)|Q(teacher= group.teacher),level_id=group.level.id, subject_id=group.subject.id).exclude(vignette=" ").distinct()
         images.update(imags)
         imgs = Parcours.objects.values_list("vignette", flat = True).filter(Q(teacher_id= sacadoprof_id)|Q(teacher= group.teacher), level_id=group.level.id, subject_id=group.subject.id).exclude(vignette=" ").distinct()
         images.update(imgs)
-        print(imags)
     except :
         images = []
     return images
