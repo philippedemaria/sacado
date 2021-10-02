@@ -30,30 +30,21 @@
             <div style="clear:both"></div>
         </div>
 
-        <a href="#" data-parcours_id="{{folder.id }}" class="overlay_show white">
-        <div class="disc   disc{{folder.id }}" style="background-color:{% if folder.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
-             <i class="fa fa-circle-o-notch"></i>
-        </div>
+        <span data-parcours_id="{{folder.id }}" class="overlay_show white" style="cursor:pointer">
+            <div class="disc   disc{{folder.id }}" style="background-color:{% if folder.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
+                 <i class="fa fa-circle-o-notch"></i>
+            </div>
 
 
-        <div class="{% if not folder.is_publish %}
-                        disc_persistant
-                    {% else %}
-                        disc 
-                    {% endif %}
-                    disc{{folder.id }}" style="background-color:{% if folder.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
-             <i class="fa fa-circle-o-notch"></i>
-        </div>
-
-
-
-
-
-
-
-
-
-        </a> 
+            <div class="{% if not folder.is_publish %}
+                            disc_persistant
+                        {% else %}
+                            disc 
+                        {% endif %}
+                        disc{{folder.id }}" style="background-color:{% if folder.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
+                 <i class="fa fa-circle-o-notch"></i>
+            </div>
+        </span> 
 
  
         <!-- Fenetre accessible par l'icone qui montre les parcours  -->
