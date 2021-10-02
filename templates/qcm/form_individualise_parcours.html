@@ -51,7 +51,8 @@
             <div class="alert alert-warning">
                 <img src="{% static 'img/conseil.png' %}" height="40px"/> Affecter tous les exercices aux élèves choisis au premier exercice  
                 <input id="select_all_exercices"  type="checkbox" data-toggle="toggle" data-onstyle="primary" data-offstyle="default" data-on="Oui" data-off="Non" /> 
-        </div>
+            </div>
+        </div>    
     </div>
     {% if nb_rc == 0 %}
     <div class="row">
@@ -63,7 +64,7 @@
         </div>
     </div>
     {% endif %}
- 
+
         <div class="col-sm-12 col-md-12">
             {% csrf_token %}
             {% for relationship in relationships  %} 
@@ -271,8 +272,8 @@
                     </div>   
                 </div>                
             {% endfor %}
- 
-    </div>
+        </div>
+
 </form>
 
 
