@@ -3295,6 +3295,7 @@ def ajax_publish_parcours(request):
         data["class"] = "legend-btn-danger"
         data["noclass"] = "legend-btn-success"
         data["label"] = "Non publié"
+        data["is_publish_label"] = "<span class='text-danger'>non publié <i class='fa fa-circle'></i>"
     else:
         statut = 1
         data["statut"] = "true"
@@ -3308,6 +3309,7 @@ def ajax_publish_parcours(request):
         data["class"] = "legend-btn-success"
         data["noclass"] = "legend-btn-danger"
         data["label"] = "Publié"
+        data["is_publish_label"] = "publié <i class='fa fa-circle text-success'></i>"
 
     is_folder = request.POST.get("is_folder")
     if is_folder == "no" :
