@@ -128,11 +128,13 @@ def get_teacher_id_by_subject_id(subject_id):
 def get_images_for_parcours_or_folder(group):
     try :
         sacadoprof_id = get_teacher_id_by_subject_id(group.subject.id)
+        print(sacadoprof_id)
         images = set()
-        imags = group.group_folders.values_list("vignette", flat = True).filter(Q(teacher_id= sacadoprof_id)|Q(teacher= group.teacher), subject_id=group.subject.id).exclude(vignette=" ").distinct()
+        imags = Folder.objects.values_list("vignette", flat = True).filter(Q(teacher_id= sacadoprof_id)|Q(teacher= group.teacher),level_id=group.level.id, subject_id=group.subject.id).exclude(vignette=" ").distinct()
         images.update(imags)
-        imgs = group.group_parcours.values_list("vignette", flat = True).filter(Q(teacher_id= sacadoprof_id)|Q(teacher= group.teacher), subject_id=group.subject.id).exclude(vignette=" ").distinct()
+        imgs = Parcours.objects.values_list("vignette", flat = True).filter(Q(teacher_id= sacadoprof_id)|Q(teacher= group.teacher), level_id=group.level.id, subject_id=group.subject.id).exclude(vignette=" ").distinct()
         images.update(imgs)
+        print(imags)
     except :
         images = []
     return images
@@ -1874,6 +1876,7 @@ def create_parcours(request,idf=0):
     try :
         group_id = request.session.get("group_id")
         group    = Group.objects.get(pk=group_id)
+        print(group)
         images   = get_images_for_parcours_or_folder(group)
     except :
         group    = None
