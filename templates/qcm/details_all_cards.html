@@ -53,7 +53,7 @@
           {% get_students_from_group_and_rc rc group as data_rc %}
  
           <!-- Exercice dissocié  -->  
-          <div  style="position: absolute; right : 0px; top:66px;" title="Cet exercice est indiviualisé à certains élèves" id="individialise_id_student{{  rc.exercise.id }}" 
+          <div  style="position: absolute; right : 0px; top:60px;" title="Cet exercice est indiviualisé à certains élèves" id="individialise_id_student{{  rc.exercise.id }}" 
                 {% if  data_rc.nb == only_real_student.count  %} class="checkbox_no_display" {% endif %}>   
             <span class="btn btn-warning" style="cursor:auto">
               <i class="fa fa-user"></i>  {{ data_rc.nb }} 
@@ -255,9 +255,11 @@
                </div> 
               <hr style="padding:0px; margin:10px 0px"/><br>
                 {% if rc.exercise.supportfile.is_ggbfile %}
-                <a href="{% url 'show_this_exercise' rc.exercise.id %}" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice</a>
+                <a href="{% url 'show_this_exercise' rc.exercise.id %}" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice <i class="fa fa-barcode"></i> {{ rc.exercise.supportfile.code }}
+
+                </a>
                 {% else %}
-                <a href="{% url 'show_write_exercise' rc.id %}" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice</a>
+                <a href="{% url 'show_write_exercise' rc.id %}" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice <i class="fa fa-barcode"></i> {{ rc.exercise.supportfile.code }}</a>
                 {% endif %}
                 <br><br>                
                 <a href="#card{{rc.id}}" class="copy" 
@@ -394,8 +396,6 @@
 
 
 
- 
-            <span class="horizontalmargin5"><a href="#" style="font-size:14px;color:{{ parcours.color|contrast_color }}" class="copy_link" title="Code de l'exercice" data-code="{{ rc.exercise.supportfile.code}}"><i class="fa fa-barcode"></i></a></span> 
 
             <span class="horizontalmargin5"><a href="{% url 'create_mastering' rc.id  %}" title="Parcours de maîtrise à partir de cet exercice" style="font-size:14px;color:{{ parcours.color|contrast_color }}"><i class="fa fa-sitemap"></i></a></span> 
 
@@ -407,7 +407,7 @@
             {% endif %}
 
 
-
+ 
 
             {% if rc.exercise.supportfile.is_ggbfile %}
             <!-- Appel des situations et durée -->
@@ -450,6 +450,17 @@
                <i class="fa fa-share-square"></i>
             </span>                                   
 
+             <a href = "#" data-toggle = 'modal'
+                data-target = '#reset_exercice'  
+                class = "reset horizontalmargin5" 
+                data-nb = "{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" 
+                data-relationship_id = "{{ rc.id }}"
+                data-group_id = "{{ group.id }}"   
+                data-custom = 0    title = "Effacer les résultats de cet exercice" 
+                style = "font-size:14px;color:{{ parcours.color|contrast_color }}">
+
+                <i class="fa fa-refresh"></i> 
+            </a>
 
             <a href = "#" data-toggle = 'modal'
                 data-target = '#individualisation_exercice'  
@@ -649,7 +660,7 @@
                     </div>
                </div> 
               <hr style="padding:0px; margin:10px 0px"/><br> 
-                <a href="{%  url 'show_custom_exercise'  rc.id  parcours.id %}" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice</a>
+                <a href="{%  url 'show_custom_exercise'  rc.id  parcours.id %}" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice <i class="fa fa-barcode"></i> {{ rc.code }}</a>
                 <br><br>                
                 <a href="#customcard{{rc.id}}" class="copy" data-exercise_id="{{ rc.id}}" data-custom=1 data-parcours_id="{{ parcours.id}}" style="font-size:14px"><i class="fa fa-clipboard fa-fw"></i> Copier pour coller dans une autre page</a> 
                 <br><br>   

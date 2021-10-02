@@ -1229,7 +1229,50 @@ def ajax_individualise_this_exercise(request):
     return JsonResponse(data)
 
 
+def ajax_reset_this_exercise(request):
+
+    relationship_id = int(request.POST.get("relationship_id"))
+    group_id        = request.POST.get("group_id",None) 
+
+    rc = Relationship.objects.get(pk=relationship_id)
+    parcours = rc.parcours 
+
+    if group_id :
+        group    = Group.objects.get(pk=group_id)
+        students = group.students.exclude(user__username__contains="_e-test").order_by("user__last_name")
+    else :
+        students = rc.students.exclude(user__username__contains="_e-test").order_by("user__last_name") 
+
+    data = {}
+    data['html'] = render_to_string('qcm/ajax_reset_this_exercise.html', {'rc' : rc, 'parcours' : parcours, 'students' : students, })
+
+    return JsonResponse(data)
  
+
+
+@csrf_exempt   
+def ajax_reset(request):  
+
+    exercise_id = int(request.POST.get("exercise_id"))
+    parcours_id = int(request.POST.get("parcours_id"))
+    student_id  = int(request.POST.get("student_id"))
+    teacher     = Teacher.objects.get(user= request.user)
+    parcours    = Parcours.objects.get(pk = parcours_id)
+
+    if not authorizing_access(teacher,parcours , True ):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
+    data = {}
+    if student_id != 0 :
+        Studentanswer.objects.filter( parcours_id = parcours_id , exercise_id = exercise_id , student_id = student_id ).delete()
+    else :
+        Studentanswer.objects.filter( parcours_id = parcours_id , exercise_id = exercise_id ).delete()
+
+    return JsonResponse(data) 
+
+
+
 
 def ajax_affectation_to_group(request):
     group_id    = request.POST.get('group_id') 

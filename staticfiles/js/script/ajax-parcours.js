@@ -603,6 +603,54 @@ define(['jquery','bootstrap'], function ($) {
                 }
             )
         });
+
+
+
+        $('body').on('click' , '.reseted_student', function () {
+
+            let parcours_id = $(this).attr("data-parcours_id");
+            let exercise_id = $(this).attr("data-exercise_id");
+            let student_id  = $(this).attr("data-student_id");
+            let csrf_token  = $("input[name='csrfmiddlewaretoken']").val();
+            
+            if (student_id != 0)
+            {  
+                if (!confirm('Vous souhaitez effacer les résultats pour cet élève  ?')) return false;                    
+            }
+            else
+            {    
+                if (!confirm("Vous souhaitez effacer les résultats pour  tout votre groupe ?")) return false;
+            }
+
+
+            $.ajax( 
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'parcours_id': parcours_id,
+                        'exercise_id': exercise_id,
+                        'student_id' : student_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../ajax_reset",
+                    success: function (data) {
+
+                        if (student_id != 0)
+                            {       
+                                $('#check_reseted_student'+student_id).html("<i class='fa fa-check text-success'></i>");                 
+                            }
+                        else 
+                            { 
+                                $('.check_reseted_student').html("<i class='fa fa-check text-success'></i>");                        
+                            }
+                    }
+                }
+            )
+        });
+
+
+
         // ===============================================================
         // ===============================================================
         
@@ -1035,6 +1083,33 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
+        // Individualiser les exercices un par un
+        $('.reset').on('click', function (event) {
+            let nb = $(this).data("nb"); 
+            let custom = $(this).data("custom");
+            let group_id = $(this).data("group_id"); console.log(group_id) ; 
+            let relationship_id = $(this).data("relationship_id");            
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'custom': custom,
+                        'relationship_id' : relationship_id ,
+                        'group_id' : group_id ,
+                        csrfmiddlewaretoken: csrf_token,
+                    },
+                    url: "../../ajax_reset_this_exercise",
+                    success: function (data) {
+                        $('#reset_this_exercise_nb').html(nb);
+                        $('#reset_this_exercise').html(data.html);
+
+                    } 
+                }
+            )
+        });
 
 
 

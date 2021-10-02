@@ -78,6 +78,8 @@ urlpatterns = [
     path('parcours_individualise/<int:id>/', individualise_parcours, name='individualise_parcours'),#modif idp en id pour la sécurité
     path('ajax_populate', ajax_populate, name='ajax_populate'),
     path('ajax_individualise', ajax_individualise , name='ajax_individualise'),
+    path('ajax_reset', ajax_reset , name='ajax_reset'),
+
 
     path('result_parcours_exercise_students/<int:id>/', result_parcours_exercise_students, name='result_parcours_exercise_students'),#modif idp en id pour la sécurité
     path('result_parcours_skill/<int:id>/', result_parcours_skill, name='result_parcours_skill'),#modif idp en id pour la sécurité
@@ -104,7 +106,7 @@ urlpatterns = [
     path('ajax/course_viewer', ajax_course_viewer, name='ajax_course_viewer'),
     path('parcours_get_course', ajax_parcours_get_course, name='ajax_parcours_get_course'),
     path('ajax_individualise_this_exercise', ajax_individualise_this_exercise, name='ajax_individualise_this_exercise'),
-
+    path('ajax_reset_this_exercise', ajax_reset_this_exercise, name='ajax_reset_this_exercise'),
 
     path('real_time/<int:id>', real_time, name='real_time'),
     path('ajax_real_time_live', ajax_real_time_live, name='ajax_real_time_live'),
