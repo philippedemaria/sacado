@@ -1086,7 +1086,6 @@ def get_the_teacher_profile(request,idt):
     request.session["get_the_admin_id"] = teacher.user_id
     request.session["teacher_to_get_the_profile_password"] = get_the_password
     request.session["teacher_to_get_the_profile_id"] = user.id
-    print( request.session.items() )
 
     messages.error(request, "Attention vous naviguez avec le profil de "+teacher_to_get_the_profile.user.first_name+" "+teacher_to_get_the_profile.user.last_name)   
     return redirect('index')
