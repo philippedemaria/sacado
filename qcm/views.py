@@ -2106,13 +2106,15 @@ def update_parcours_or_evaluation(request, is_eval, id, idg=0 ):
         request.session["group_id"] = None
         role = False
 
-
-    if Sharing_group.objects.filter(group_id=idg, teacher = teacher).exists() :
-        sh_group = Sharing_group.objects.get(group_id=idg, teacher = teacher)
-        role = sh_group.role 
-    elif group.teacher == teacher :
-        role = True
-    else :
+    try :
+        if Sharing_group.objects.filter(group_id=idg, teacher = teacher).exists() :
+            sh_group = Sharing_group.objects.get(group_id=idg, teacher = teacher)
+            role = sh_group.role 
+        elif group.teacher == teacher :
+            role = True
+        else :
+            role = False
+    except :
         role = False
 
     ############################################################################################## 
