@@ -404,10 +404,14 @@ class Parcours(ModelWithCode):
     is_trash = models.BooleanField(default=0, verbose_name="Poubelle ?", editable=False)
 
     def __str__(self):
-        if self.coteachers.count() > 0 :
-            return "[CoA] : {}".format(self.title)
-        else :
+        try :
+            if self.coteachers.count() > 0 :
+                return "[CoA] : {}".format(self.title)
+            else :
+                return "{}".format(self.title)
+        except :
             return "{}".format(self.title)
+
  
 
 

@@ -40,13 +40,22 @@ class ParcoursForm(forms.ModelForm):
 
 		if teacher:
 			groups        = teacher.groups.all()
+			if teacher.teacher_group.filter(group_folders=folder) : 
+				shared_groups = teacher.teacher_group.filter(group_folders=folder)
+			else :
+				shared_groups = teacher.teacher_group.all()
 			if folder :
-				groups    = folder.groups.filter(level=folder.level)
+				groups    = folder.groups.all()
 			if group :
-				groups    = teacher.groups.filter(level=group.level)
-			shared_groups = teacher.teacher_group.all()
+				if teacher.groups.filter(level=group.level,group_folders=folder) :
+					groups    = teacher.groups.filter(level=group.level,group_folders=folder)
+				else :
+					groups    = teacher.groups.filter(level=group.level)
+				
 			these_groups  = groups|shared_groups
 			all_groups    = these_groups.order_by("teachers")
+ 
+
 
 			self.fields['groups']  = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("level","name"), widget=forms.CheckboxSelectMultiple,  required=False)
 			self.fields['subject'] = forms.ModelChoiceField(queryset=teacher.subjects.all(),  required=False)
@@ -68,6 +77,7 @@ class ParcoursForm(forms.ModelForm):
 		################################################			
 		groups = cleaned_data.get("groups")
 		for g in groups:
+			print(g)
 			for s in g.students.all() :
 				attribute_all_documents_to_student([self],s)
 
@@ -109,8 +119,8 @@ class FolderForm(forms.ModelForm):
 		super(FolderForm, self).__init__(*args, **kwargs)
 		self.fields['stop'].required = False
 		if teacher:
-			groups        = teacher.groups.all()
-			shared_groups = teacher.teacher_group.all()
+			groups        = teacher.groups.filter(level = level , subject = subject)
+			shared_groups = teacher.teacher_group.filter(level = level , subject = subject)
 			these_groups  = groups|shared_groups
 			all_groups    = these_groups.order_by("teachers")
 			coteachers    = Teacher.objects.filter(user__school=teacher.user.school).order_by("user__last_name")  
@@ -119,10 +129,10 @@ class FolderForm(forms.ModelForm):
 			self.fields['coteachers']    = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
 
 		if subject and level :
-			parcours                = teacher.teacher_parcours.filter(subject=subject,level=level).order_by("title")
+			parcours                = teacher.teacher_parcours.filter(subject=subject,level=level,is_trash=0).order_by("title")
 			self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset=parcours, widget=forms.CheckboxSelectMultiple, required=False)
 		else :
-			parcours                = teacher.teacher_parcours.all().order_by("title")
+			parcours                = teacher.teacher_parcours.filter(is_trash=0).order_by("title")
 			self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset=parcours, widget=forms.CheckboxSelectMultiple, required=False)
  
 			

@@ -79,7 +79,10 @@
  
                 <div class="col-sm-12  col-md-12">
                     <div class="form-group">         
-                        <label>Affecter à mes groupes du même niveau</label>
+                        <label>Affecter à mes groupes :</label> {% if group %}
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                    <div class="helper_tip_text" >Les groupes proposés sont du même niveau que le groupe {{ group.name }} {% if folder %} et contiennent le dossier {{ folder.title }}.{% endif %} </div>
+                                </span> {% endif %}
                         {{ form.groups|add_class:"select_all" }}
                         {{ form.groups.errors }}
 
