@@ -1078,7 +1078,7 @@ def get_the_teacher_profile(request,idt):
 
  
 
-    context = {'groups': groups,  'teachers': teachers ,   'communications' : [] , 'school' : school  }
+    context = { }
 
     return render(request, 'school/group_to_teacher.html', context )
 
