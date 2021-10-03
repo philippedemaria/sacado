@@ -265,12 +265,14 @@ def count_unique(datas):
 def include_students(request , liste, group):
 
     students_tab = liste.split("\r\n")
+
     for student_tab in students_tab:
- 
+
         if ";" in student_tab:
             details =  student_tab.split(";")
         elif "," in student_tab:
             details =  student_tab.split(",")
+
         lname = str(cleanhtml(details[0])).strip()            
         fname = str(cleanhtml(details[1])).strip()
         password = make_password("sacado2020")
@@ -303,78 +305,80 @@ def include_students(request , liste, group):
                                                    defaults={"last_name": lname, "first_name": fname,  "time_zone": request.user.time_zone,
                                                              "password": password, "email": email, "school": request.user.school, "country": request.user.country,
                                                              "user_type": User.STUDENT})
-
         if created:
             code = str(uuid.uuid4())[:8] # code pour la relation avec les parents
             student = Student.objects.create(user=user, level=group.level, code=code)
         else :
             student = Student.objects.get(user=user)
+        group.students.add(student)
 
-        test = attribute_all_documents(group,student)
+        groups = [group]
+        test = attribute_all_documents_of_groups_to_a_new_student(groups, student)
 
         if test :
             messages.success(request, "Les documents du groupe ont été attribué à {} {}.".format(fname, lname))
         else :
             messages.error(request, "Les documents du groupe n'ont pas pu être attribué à {} {}.".format(fname, lname))
 
+
  
 
 
-#def include_students_in_a_model(request, liste,model):
+# def include_students_in_a_model(request, liste,model):
  
-    students_tab = liste.split("\r\n")
-    tested = False
-    n = 0
-    for student_tab in students_tab :
-        details = student_tab.split(";")
-        try:
-            lname = str(cleanhtml(details[0]).replace(" ", "")).strip()            
-            fname = str(cleanhtml(details[1]).replace(" ", "")).strip()
-            password = make_password("sacado2020")
-            username = get_username(request,lname , fname)
+#     students_tab = liste.split("\r\n")
+#     tested = False
+#     n = 0
+#     for student_tab in students_tab :
+#         details = student_tab.split(";")
+#         try:
+#             lname = str(cleanhtml(details[0]).replace(" ", "")).strip()            
+#             fname = str(cleanhtml(details[1]).replace(" ", "")).strip()
+#             password = make_password("sacado2020")
+#             username = get_username(request,lname , fname)
 
-            try:
-                for c in details[2] :
-                    if c == "@":
-                        email = cleanhtml(details[2])
-                    else :
-                        username = cleanhtml(details[2])
-            except IndexError:
-                email = ""
+#             try:
+#                 for c in details[2] :
+#                     if c == "@":
+#                         email = cleanhtml(details[2])
+#                     else :
+#                         username = cleanhtml(details[2])
+#             except IndexError:
+#                 email = ""
                 
 
-            try:
-                for car in details[3] :
-                    if car == "@":
-                        email = cleanhtml(details[3])
-                    else :
-                        username = cleanhtml(details[3])
-            except IndexError:
-                email = ""
+#             try:
+#                 for car in details[3] :
+#                     if car == "@":
+#                         email = cleanhtml(details[3])
+#                     else :
+#                         username = cleanhtml(details[3])
+#             except IndexError:
+#                 email = ""
  
-            try :
-                if email != "" :
-                    send_mail("Inscription SacAdo", "Bonjour "+fname+", \n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : "+username+"\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , settings.DEFAULT_FROM_EMAIL , [email])
-            except :
-                pass
+#             try :
+#                 if email != "" :
+#                     send_mail("Inscription SacAdo", "Bonjour "+fname+", \n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : "+username+"\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , settings.DEFAULT_FROM_EMAIL , [email])
+#             except :
+#                 pass
 
 
 
-            user = User.objects.create(last_name=str(lname), first_name=str(fname), username=username, password=password, email=email,user_type=0)
-            code = str(uuid.uuid4())[:8] # code pour la relation avec les parents
-            student = Student.objects.create(user=user, level=group.level, code=code)
-            model.students.add(student)
-            n +=1 
-        except:
-            pass
-    if n == len(students_tab) :
-        tested = True
+#             user = User.objects.create(last_name=str(lname), first_name=str(fname), username=username, password=password, email=email,user_type=0)
+#             code = str(uuid.uuid4())[:8] # code pour la relation avec les parents
+#             student = Student.objects.create(user=user, level=group.level, code=code)
+#             model.students.add(student)
+#             n +=1 
+#         except:
+#             pass
+#     if n == len(students_tab) :
+#         tested = True
 
-    return tested
+#     return tested
 
 
 
-#def convert_seconds_in_time(secondes):
+def convert_seconds_in_time(secondes):
     if secondes < 60:
         return "{}s".format(secondes)
     elif secondes < 3600:
@@ -575,7 +579,7 @@ def update_group(request, id):
                 include_students(request , stdts,group)
         try :
             for s in group.students.all():
-                attribute_all_documents(nf,student)
+                attribute_all_documents_of_groups_to_a_new_student((nf,), student)
         except :
             pass
 
@@ -704,9 +708,7 @@ def student_select_to_school(request):
     group.students.add(student)
 
     groups = [group]
-
     test = attribute_all_documents_of_groups_to_a_new_student(groups, student)
-    print(test)
 
     data = {}
 
@@ -1149,10 +1151,11 @@ def enroll(request, slug):
                 user.set_password(password)
                 user.save()
                 student = Student.objects.create(user=user, level=group.level)
-
+                group.students.add(student)
                 # Affections des DOSSIERS ET parcours
                 messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation. Connectez-vous avec vos identifiants en cliquant sur le bouton bleu Se connecter.")                
-                test = attribute_all_documents(group,student)
+                groups = [group]
+                test = attribute_all_documents_of_groups_to_a_new_student(groups, student)
 
                 if test :
                     messages.success(request, "Les documents du groupe ont été attribué à {} {}.".format(user.first_name, user.last_name))
@@ -1175,9 +1178,11 @@ def enroll(request, slug):
             password = request.POST.get("this_password")
 
             user = authenticate(username=username, password=password)
+            group.students.add(user.student)
             if user :
                 messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation. Connectez-vous avec vos identifiants en cliquant sur le bouton bleu Se connecter.")  
-                test = attribute_all_documents(group,user.student)                
+                groups = [group]
+                test = attribute_all_documents_of_groups_to_a_new_student(groups, user.student)             
                 if test :
                     messages.success(request, "Les documents du groupe ont été attribué à {} {}.".format(user.first_name, user.last_name))
                 else :
