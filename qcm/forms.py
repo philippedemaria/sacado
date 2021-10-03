@@ -141,15 +141,17 @@ class FolderForm(forms.ModelForm):
 		all_students = Student.objects.filter(students_to_group__in=groups)		
 		parcours_ids    = cleaned_data.get("parcours") # liste de tous mes groupes
 		for parcours in parcours_ids :
+
+			parcours.groups.set(groups)
 			parcours.students.set(all_students)
 
 			for r in parcours.parcours_relationship.all():
-				students_blancklisted = all_students.filter(students_relationship=r)
-				r.students.set(students_blancklisted)
+				students_no_blacklisted = all_students.filter(students_relationship=r)
+				r.students.set(students_no_blacklisted)
  
 			for c in  parcours.parcours_customexercises.all() :
-				students_blancklisted_custom = all_students.filter(students_customexercises=c)
-				c.students.set(students_blancklisted_custom)
+				students_no_blacklisted_custom = all_students.filter(students_customexercises=c)
+				c.students.set(students_no_blacklisted_custom)
  
 			courses = parcours.course.all()
 			for course in courses:
@@ -157,26 +159,7 @@ class FolderForm(forms.ModelForm):
 
 
 
-
-class Folder_GroupForm(forms.ModelForm):
-
-	class Meta:
-		model = Folder
-		fields = ('groups',)		
  
-
-	def __init__(self, *args, **kwargs):
-		teacher = kwargs.pop('teacher')
-		super(Folder_GroupForm, self).__init__(*args, **kwargs)
- 
-		if teacher:
-			groups        = teacher.groups.all()
-			shared_groups = teacher.teacher_group.all()
-			these_groups  = groups|shared_groups
-			all_groups    = these_groups.order_by("teachers")
-			self.fields['groups'] = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=False)
- 
-			
 
 
 class RelationshipForm(forms.ModelForm):
