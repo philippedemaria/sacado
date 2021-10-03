@@ -63,6 +63,9 @@
                             <tr>
                                 <td>
                                     <a href="{% url 'update_teacher' teacher.id %}">{{ teacher.last_name }}  {{ teacher.first_name }}</a>   
+
+
+                                    <a href="{% url 'get_the_teacher_profile' teacher.id %}" class="pull-right"><i class="fa fa-wrench"></i></a>   
                                 </td>
                                 <td>
                                     {{ teacher.email }}   

@@ -1061,6 +1061,30 @@ def ajax_get_this_school_in_session(request):
 
 
 
+
+
+
+def get_the_teacher_profile(request,idt):
+
+    school = this_school_in_session(request)
+    teacher = Teacher.objects.get(user = request.user)
+    if not authorizing_access_school(teacher, school):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
+    teacher_to_get_the_profile = Teacher.objects.get(pk=idt)
+    teacher.helping            = teacher.user.password # le passwrd de l'admin est mis de coté 
+    teacher.password           = teacher_to_get_the_profile.user.password # le passwrd de l'admin est remplacé par celui du demandeur.
+
+ 
+
+    context = {'groups': groups,  'teachers': teachers ,   'communications' : [] , 'school' : school  }
+
+    return render(request, 'school/group_to_teacher.html', context )
+
+
+
+
 ###############################################################################################
 ###############################################################################################
 ######  Exports des résultats 

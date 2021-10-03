@@ -210,7 +210,12 @@
                         Notifications
                             {% if sacado_asso %}
                              <table class="table">
-                                    
+                                <tr>
+                                    <td><label><small> Permettre l'aide à distance ?</small></label></td>
+                                    <td>{{ teacher_form.helping_right |attr:"data-toggle:toggle" |attr:"data-onstyle:danger"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}    
+                                        {{ teacher_form.helping_right.errors }}
+                                    </td>                            
+                                </tr> 
                                 <tr>
                                     <td><label><small> Recevoir chaque fois qu'un élève effectue une tache ?</small></label></td>
                                     <td>{{ teacher_form.notification |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}    

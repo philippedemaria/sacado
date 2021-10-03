@@ -1399,11 +1399,15 @@ class Relationship(models.Model):
     def group_and_rc_only_students(self,group):
 
         data = {}
-        group_students = group.students.all()
-        o_students = self.students.exclude(user__username__contains="_e-test")
-        only_students = [s for s in o_students if s in group_students]
-        data["only_students"]= only_students
-        data["nb"]= len(only_students)
+        try :
+            group_students = group.students.all()
+            o_students = self.students.exclude(user__username__contains="_e-test")
+            only_students = [s for s in o_students if s in group_students]
+            data["only_students"]= only_students
+            data["nb"]= len(only_students)
+        except :
+            pass
+
         return data 
 
 

@@ -21,6 +21,9 @@ urlpatterns = [
     path('groups', school_groups, name='school_groups'),
     path('level_groups', school_level_groups, name='school_level_groups'),
     
+    path('get_the_teacher_profile/<int:idt>', get_the_teacher_profile, name='get_the_teacher_profile'),
+
+
 
     path('get_school', get_school, name='get_school'),
     path('school_accounting', school_accounting, name='school_accounting'),
@@ -63,5 +66,9 @@ urlpatterns = [
     path('export_pdf_all_students_school', export_pdf_all_students_school, name='export_pdf_all_students_school'),
     path('reset_all_students_school', reset_all_students_school, name='reset_all_students_school'),
     path('reset_all_groups_school', reset_all_groups_school, name='reset_all_groups_school'),
+
+
+
+
 
 ]
