@@ -4888,8 +4888,7 @@ def create_evaluation(request,idf=0):
         elif group_id and idf > 0 :
                 return redirect('list_sub_parcours_group' , group_id, idf ) 
         else:
-            return redirect('parcours')
-    else:
+            return redirect('evaluations')
         print(form.errors)
  
     context = {'form': form,  'folder' : False,   'teacher': teacher, 'idg': 0,  'folder':  folder ,  'group_id': group_id , 'parcours': None, 
