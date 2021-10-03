@@ -148,7 +148,7 @@
 
                             <span id="new_group_folder_affected{{ folder.id}}">
                             {% for g in  folder.groups.all  %}
-                                <small>{{ g.shortname }} <small>({{ g.just_students.count }})</small>{% if not forloop.last %}, {% endif %}</small>
+                                <small>{{ g.name }} <small>({{ g.just_students.count }})</small>{% if not forloop.last %}, {% endif %}</small>
                             {% endfor %}
                             </span>
 
@@ -164,7 +164,7 @@
                                 {% for g in groups %}  
                                       <label style="font-size:10px"> 
                                       <input type="checkbox" name="affectation" data-group_id="{{g.id}}" data-status="folder" value="{{folder.id}}" class="prcrs_selector" {% if g in folder.groups.all %} checked  {% endif %}  />
-                                      {{ g.shortname }} <span id="loader{{g.id}}"></span>
+                                      {{ g.name }} <span id="loader{{g.id}}"></span>
                                       </label>{% if not forloop.last %}<br>{% endif %}
                                 {% endfor %}
                             </div>
