@@ -311,7 +311,6 @@ def include_students(request , liste, group):
         else :
             student = Student.objects.get(user=user)
         group.students.add(student)
-
         groups = [group]
         test = attribute_all_documents_of_groups_to_a_new_student(groups, student)
 
@@ -577,12 +576,7 @@ def update_group(request, id):
         if stdts : 
             if len(stdts) > 0 :
                 include_students(request , stdts,group)
-        try :
-            for s in group.students.all():
-                attribute_all_documents_of_groups_to_a_new_student((nf,), student)
-        except :
-            pass
-
+ 
  
         return redirect("show_group", group.id)
     else:
