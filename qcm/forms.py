@@ -153,7 +153,7 @@ class FolderForm(forms.ModelForm):
  
 			courses = parcours.course.all()
 			for course in courses:
-				course.students.set(list_all_students)
+				course.students.set(all_students)
 
 
 
