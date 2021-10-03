@@ -22,7 +22,7 @@ urlpatterns = [
     path('level_groups', school_level_groups, name='school_level_groups'),
     
     path('get_the_teacher_profile/<int:idt>', get_the_teacher_profile, name='get_the_teacher_profile'),
-
+    path('get_reverse_the_teacher_profile', get_reverse_the_teacher_profile, name='get_reverse_the_teacher_profile'),
 
 
     path('get_school', get_school, name='get_school'),

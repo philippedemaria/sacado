@@ -2265,8 +2265,6 @@ def show_parcours(request, idf = 0, id=0):
     parcours_folder_id = request.session.get("folder_id",None)
     request.session["parcours_id"] = parcours.id
  
- 
-
     form_reporting = DocumentReportForm(request.POST or None )
 
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, initial={'parcours': parcours , 'groups': group , 'subject': parcours.subject , 'levels': parcours.level , 'groups': group })

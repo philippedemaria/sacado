@@ -1,19 +1,28 @@
 {% load static %}
-<li  class='dropdown'>
 
+
+
+
+<li  class='dropdown'>
     <a href="#" class="righter" id="mobile_version_button_closer">
         <i class="fa fa-times closer_tab"></i>
     </a>
-    <a href="{% url 'logout' %}" class="main"><img src="{% static 'img/sacadoLogo.png' %}" style="vertical-align: text-bottom;" width="35px"/>
 
-        <div class="captionmenu sacado_menu">
-         SACADO
-        </div>
-    </a>
- 
+    {% if request.session.get_the_profile %}
+        <a href="{% url 'get_reverse_the_teacher_profile' %}" class="main"><img src="{% static 'img/sacadoLogo.png' %}" style="vertical-align: text-bottom;" width="35px"/>
 
+            <div class="captionmenu sacado_menu">
+             SACADO
+            </div>
+        </a>
+    {% else %}
+        <a href="{% url 'logout' %}" class="main"><img src="{% static 'img/sacadoLogo.png' %}" style="vertical-align: text-bottom;" width="35px"/>
 
-
+            <div class="captionmenu sacado_menu">
+             SACADO
+            </div>
+        </a>
+    {% endif %}
 
 </li>
 

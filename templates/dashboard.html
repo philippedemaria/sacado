@@ -86,6 +86,13 @@
     </ul>
 </nav>
 
+{% if request.session.get_the_profile %} 
+<div style="height:100%; width:50%; position: absolute; top:0px; left:90px;background-color:#FFBABA; color:#6A0E0E;z-index:-1; text-align: right">
+    <i class="fa fa-help fa-3x"></i> 
+    <b>Aide en ligne - Prise en main à distance</b><br/>Cliquer sur <img src="{% static 'img/sacadoLogo.png' %}" style="vertical-align: text-bottom;" width="15px"/> dans le menu pour terminer
+</div>
+{% endif %}
+
 <div class="content-wrapper">
     <div class="content_title" id="content_title_page">
         <h1 class="thin">

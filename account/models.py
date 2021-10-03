@@ -547,8 +547,6 @@ class Teacher(models.Model):
     subjects      = models.ManyToManyField(Subject, related_name="teacher", verbose_name="Enseignements")
     is_mailing    = models.BooleanField(default=0, verbose_name="Réception de messages ?")
     helping_right = models.BooleanField(default=0, verbose_name="Aide à distance ?")
-    helping       = models.CharField(max_length=255, blank=True, null = True, editable=False)
-
 
     def __str__(self):
         return f"{self.user.last_name.capitalize()} {self.user.first_name.capitalize()}"

@@ -23,6 +23,7 @@ from general_fonctions import *
 from payment_fonctions import *
 from django.conf import settings # récupération de variables globales du settings.py
 from django.db.models import Avg, Count, Min, Sum
+from django.contrib.auth import login, authenticate, logout
 ############### bibliothèques pour les impressions pdf  #########################
 import os
 from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
@@ -437,8 +438,6 @@ def update_group_school(request,id):
 			form.save()
 
 			sharing_teachers(request,group,teachers)
-
-
 			stdts = request.POST.get("students")
 			try :
 				if len(stdts) > 0 :
@@ -1061,26 +1060,53 @@ def ajax_get_this_school_in_session(request):
 
 
 
+###############################################################################################
+###############################################################################################
+######  Contrôle à distance
+###############################################################################################
+###############################################################################################
 
-
-
+from django.contrib.auth.hashers import make_password
 def get_the_teacher_profile(request,idt):
 
-    school = this_school_in_session(request)
-    teacher = Teacher.objects.get(user = request.user)
+    school  = this_school_in_session(request)
+    teacher = request.user.teacher
     if not authorizing_access_school(teacher, school):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
     teacher_to_get_the_profile = Teacher.objects.get(pk=idt)
-    teacher.helping            = teacher.user.password # le passwrd de l'admin est mis de coté 
-    teacher.password           = teacher_to_get_the_profile.user.password # le passwrd de l'admin est remplacé par celui du demandeur.
+    get_the_password           = teacher_to_get_the_profile.user.password # le passwrd du demandeur est enregistré
+    teacher_to_get_the_profile.user.set_password("0__sacado2020__9")
+    teacher_to_get_the_profile.user.save()
 
- 
+    user = authenticate(username=teacher_to_get_the_profile.user.username, password="0__sacado2020__9")
+    login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+    request.session["get_the_profile"] = True
+    request.session["get_the_admin_id"] = teacher.user_id
+    request.session["teacher_to_get_the_profile_password"] = get_the_password
+    request.session["teacher_to_get_the_profile_id"] = user.id
+    print( request.session.items() )
 
-    context = { }
+    messages.error(request, "Attention vous naviguez avec le profil de "+teacher_to_get_the_profile.user.first_name+" "+teacher_to_get_the_profile.user.last_name)   
+    return redirect('index')
 
-    return render(request, 'school/group_to_teacher.html', context )
+
+
+
+def get_reverse_the_teacher_profile(request):
+
+	get_the_admin_id                    = request.session.get("get_the_admin_id") 
+	teacher_to_get_the_profile_password = request.session.get("teacher_to_get_the_profile_password") 
+	teacher_to_get_the_profile_id       = request.session.get("teacher_to_get_the_profile_id") 
+
+	User.objects.filter(pk=teacher_to_get_the_profile_id).update(password=teacher_to_get_the_profile_password) 
+	logout(request)
+	messages.success(request, "Déconnexion du profil réussi. Accès à distance terminé.")  
+
+	return redirect('index')
+
+
 
 
 
