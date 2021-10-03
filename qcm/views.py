@@ -2167,17 +2167,13 @@ def update_parcours_or_evaluation(request, is_eval, id, idg=0 ):
             if "stop" in form.changed_data :
                 lock_all_exercises_for_student(nf.stop,parcours)
 
-            print(idg)
 
             if request.POST.get("save_and_choose") :
                 return redirect('peuplate_parcours', nf.id)
             elif idg == 99999999999:
                 return redirect('index')
             elif request.session.get("folder_id",None) :
-                folder_id = request.session.get("folder_id",None)
                 return redirect('list_sub_parcours_group' , idg , folder_id )
-            elif idf :
-                return redirect('list_sub_parcours_group' , idg , idf )   
             elif idg > 0:
                 return redirect('list_parcours_group', idg)     
             else:
