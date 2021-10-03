@@ -2030,19 +2030,28 @@ def update_parcours(request, id, idg=0 ):
     initial_ctx = {}
     if idg > 0 :
         group = Group.objects.get(pk=idg)
-        initial_ctx = {  'groups': group , 'subject': group.subject , 'levels': group.level }
+        initial_ctx = {  'groups': [group]  , 'subject': group.subject , 'levels': group.level }
     else :
-        group = None
- 
+        group_id = request.session.get("group_id",None)
+        if group_id > 0 :
+            group = Group.objects.get(pk=idg)
+            initial_ctx = {  'groups': [group]  , 'subject': group.subject , 'levels': group.level }
+        else :
+            group = None
+            initial_ctx = {  'groups': None }
+
     folder_id = request.session.get("folder_id",None)
     if folder_id :
         folder = Folder.objects.get(pk=folder_id)
-        initial_ctx = {  'groups': group , 'subject': folder.subject , 'levels': folder.level }
+        initial_ctx = {  'groups': [group] , 'subject': folder.subject , 'levels': folder.level }
     else :
         folder = None
+        initial_ctx = {  'groups': None }
+
 
     form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher , folder = folder,   group = group , initial= initial_ctx )
  
+
     share_groups = Sharing_group.objects.filter(teacher  = teacher,role=1).order_by("group__level")
     if len(share_groups)>0 :
         sharing = True
@@ -2063,16 +2072,15 @@ def update_parcours(request, id, idg=0 ):
             form.save_m2m()
 
             group_ids = request.POST.getlist("groups",[])
-            groups = set()
+            grps = set()
             for gid in group_ids :
                 group = Group.objects.get(pk = gid)
-                groups.update( group.students.all() )
-            nf.students.set(groups)
+                grps.update( group.students.all() )
+            nf.students.set(grps)
 
             if folder :
                 folder.parcours.add(nf)
 
-            nf.students.set(groups)
             #Gestion de la coanimation
             change_coanimation_teachers(nf, parcours , group_ids , teacher)
 
@@ -4900,19 +4908,41 @@ def update_evaluation(request, id, idg=0 ):
     teacher = Teacher.objects.get(user_id=request.user.id)
     levels = teacher.levels.all()
     evaluation = Parcours.objects.get(id=id)
-
-    if idg > 0 :
-        group = Group.objects.get(pk = idg)
-    else :
-        group = None
  
-    form = ParcoursForm(request.POST or None, request.FILES or None, instance=evaluation, teacher=teacher , folder = None,   group = group )
+    
+    initial_ctx = {}
+    if idg > 0 :
+        group = Group.objects.get(pk=idg)
+        initial_ctx = {  'groups': [group]  , 'subject': group.subject , 'levels': group.level }
+    else :
+        group_id = request.session.get("group_id",None)
+        if group_id > 0 :
+            group = Group.objects.get(pk=idg)
+            initial_ctx = {  'groups': [group]  , 'subject': group.subject , 'levels': group.level }
+        else :
+            group = None
+            initial_ctx = {  'groups': None }
+
+    folder_id = request.session.get("folder_id",None)
+    if folder_id :
+        folder = Folder.objects.get(pk=folder_id)
+        initial_ctx = {  'groups': [group] , 'subject': folder.subject , 'levels': folder.level }
+    else :
+        folder = None
+        initial_ctx = {  'groups': None }
+
+
+    form = ParcoursForm(request.POST or None, request.FILES or None, instance=evaluation, teacher=teacher , folder = None,   group = group ,   initial = initial_ctx  )
 
     share_groups = Sharing_group.objects.filter(teacher  = teacher,role=1).order_by("group__level")
     if len(share_groups)>0 :
         sharing = True
     else :
         sharing = False
+
+
+
+
 
     if not authorizing_access(teacher, evaluation, sharing ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
