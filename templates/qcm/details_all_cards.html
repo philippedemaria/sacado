@@ -2,7 +2,7 @@
 {% load item_tags %}
 {% load widget_tweaks %}
 
-{% get_only_students  parcours group as  only_real_student %}
+
 
 
 {% if rc.exercise %}
@@ -50,8 +50,9 @@
           </div>
         {% endif %}
  
+          {% if group %}
           {% get_students_from_group_and_rc rc group as data_rc %}
- 
+          {% get_only_students  parcours group as  only_real_student %}
           <!-- Exercice dissocié  -->  
           <div  style="position: absolute; right : 0px; top:60px;" title="Cet exercice est indiviualisé à certains élèves" id="individialise_id_student{{  rc.exercise.id }}" 
                 {% if  data_rc.nb == only_real_student.count  %} class="checkbox_no_display" {% endif %}>   
@@ -60,7 +61,9 @@
             </span>
  
           </div>
-          
+ 
+
+        {% endif %}
 
           <!-- Publication  -->
           <div href="#card{{rc.id}}" class="action_content {% if  rc.is_publish %}btn btn-success{% else %}btn btn-danger{% endif %}"  style="position: absolute; right : 0px; top:90px;" id="publisher{{rc.id}}"  data-relationship_id="{{rc.id}}" data-statut="{{rc.is_publish }}" data-custom="0" title="Publier l'exercice" >   
@@ -542,6 +545,7 @@
           {% endif %}
 
           <!-- Exercice dissocié  -->
+          {% if  group  %}  
           {% get_students_from_group_and_rc rc group as data_rc %}
 
           {% if  data_rc.nb == only_real_student.count  %}  
@@ -553,7 +557,7 @@
           </div>
           {% endif %}
  
-          
+          {% endif %}
 
 
 
