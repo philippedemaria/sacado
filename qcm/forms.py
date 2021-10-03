@@ -48,9 +48,9 @@ class ParcoursForm(forms.ModelForm):
 			these_groups  = groups|shared_groups
 			all_groups    = these_groups.order_by("teachers")
 
-			self.fields['groups']	  = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("level","name"), widget=forms.CheckboxSelectMultiple, required=False)
-			self.fields['subject']	  = forms.ModelChoiceField(queryset=teacher.subjects.all(),  required=False)
-			self.fields['level']	  = forms.ModelChoiceField(queryset=teacher.levels.order_by("ranking"),  required=False)
+			self.fields['groups']  = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("level","name"), widget=forms.CheckboxSelectMultiple,  required=False)
+			self.fields['subject'] = forms.ModelChoiceField(queryset=teacher.subjects.all(),  required=False)
+			self.fields['level']   = forms.ModelChoiceField(queryset=teacher.levels.order_by("ranking"),  required=False)
 
 
 	def clean(self):

@@ -1470,8 +1470,6 @@ def list_sub_parcours_group(request,idg,id):
     request.session["folder_id"] = folder.id
     request.session["group_id"] = group_id
  
-
-
     parcours_tab = folder.parcours.filter(is_trash=0).order_by("is_evaluation", "ranking")
 
     ###efface le realtime de plus de 2 h
@@ -2029,21 +2027,22 @@ def update_parcours(request, id, idg=0 ):
     levels = teacher.levels.all()
     parcours = Parcours.objects.get(id=id)
 
+    initial_ctx = {}
     if idg > 0 :
         group = Group.objects.get(pk=idg)
+        initial_ctx = {  'groups': group , 'subject': group.subject , 'levels': group.level }
     else :
         group = None
  
     folder_id = request.session.get("folder_id",None)
     if folder_id :
         folder = Folder.objects.get(pk=folder_id)
+        initial_ctx = {  'groups': group , 'subject': folder.subject , 'levels': folder.level }
     else :
         folder = None
 
-    form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher , folder = folder,   group = group )
-    
-
-
+    form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher , folder = folder,   group = group , initial= initial_ctx )
+ 
     share_groups = Sharing_group.objects.filter(teacher  = teacher,role=1).order_by("group__level")
     if len(share_groups)>0 :
         sharing = True
@@ -2068,6 +2067,11 @@ def update_parcours(request, id, idg=0 ):
             for gid in group_ids :
                 group = Group.objects.get(pk = gid)
                 groups.update( group.students.all() )
+            nf.students.set(groups)
+
+            if folder :
+                folder.parcours.add(nf)
+
             nf.students.set(groups)
             #Gestion de la coanimation
             change_coanimation_teachers(nf, parcours , group_ids , teacher)
@@ -2267,7 +2271,7 @@ def show_parcours(request, idf = 0, id=0):
  
     form_reporting = DocumentReportForm(request.POST or None )
 
-    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, initial={'parcours': parcours , 'groups': group , 'subject': parcours.subject , 'levels': parcours.level , 'groups': group })
+    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, initial={'parcours': parcours ,   'subject': parcours.subject , 'levels': parcours.level , 'groups': group })
  
     context = { 'parcours': parcours, 'teacher': teacher,  'communications' : [] ,  'today' : today , 'skills': skills,  'form_reporting': form_reporting, 'user' : user , 'form' : form , 
                   'nb_exo_visible': nb_exo_visible ,   'relationships_customexercises': relationships_customexercises,
