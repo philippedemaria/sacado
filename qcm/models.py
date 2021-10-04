@@ -1141,9 +1141,6 @@ class Folder(models.Model):
  
 
 
-
-
-
 class Relationship(models.Model):
     exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.CASCADE,  editable= False)
     parcours = models.ForeignKey(Parcours, on_delete=models.CASCADE,  related_name='parcours_relationship',  editable= False)
@@ -1243,9 +1240,12 @@ class Relationship(models.Model):
 
         return header 
 
-    def percent_student_done_parcours_exercice(self,parcours):
 
-        students = self.students.exclude(user__username__contains="_e-test")
+
+
+    def percent_student_done_parcours_exercice_group(self,parcours,group):
+
+        students = self.students.filter( students_to_group = group).exclude(user__username__contains="_e-test")
         nb_student = students.count()
 
         if self.exercise.supportfile.is_ggbfile :
@@ -1262,6 +1262,16 @@ class Relationship(models.Model):
         data["percent"] = percent
         data["nb_done"] = nb_exercise_done
         return data
+
+
+ 
+
+
+
+
+
+
+
 
     def is_submit(self,student):
         submit = False

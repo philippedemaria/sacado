@@ -8,35 +8,78 @@
             <!-- ******************************************************************************************** -->
             <!-- *************************************** Parcours ******************************************* -->
             {% for group in groups %}
-                    <div class="small-box-student"  style="background-color:{{group.subject.color }};">
-                                        <!-- <img src="{{ group.subject.image.url }}" />-->
-                        <h1 style="font-variant: small-caps ;color:{{group.subject.color|contrast_color }};margin-top: 85px;padding-left:7px;font-size:50px">
-                        {% if group.subject.name|length > 13 %}
-                        {{ group.subject.shortname }}
-                        {% else %}
-                        {{ group.subject.name }}
-                        {% endif %}
-                        </h1>
-                        <div class="small-box-footer-max">
-                            <span class="white thin" style="color:{{group.subject.color|contrast_color }}; font-size:14px;">{{ group.teacher.user.civilite }} {{ group.teacher.user.last_name }}
-                            </span>
-                            <span class="white thin pull-right"  style="color:{{group.subject.color|contrast_color }}; font-size:14px;">{{ group.level.name }}  
-                            </span>
-                            <br> 
-                            <br> 
-                            <div style="text-align: center">
-                            <a href="{% url 'dashboard_group' group.id %}" class="btn btn-default btn-accueil">  
-                                    {%  if is_task_exists %}
-                                        <i class="fa fa-calendar-check" style="color:red"></i>
-                                    {% endif %} Accéder</a>
-                            </div>
-                            <div  class="student_vignette_subtitle"> 
-                                {% with group.themes.nb as lgt %}   
-                                    <i class="fa fa-folder{% if lgt > 0 %}-open{% endif %}"></i> {{ lgt }}   thème{{ lgt|pluralize }} proposé{{ lgt|pluralize }}
-                                {% endwith %}
+ 
+ 
+
+
+                    <div  class="box box-widget widget-user-2 folder_sorter"   
+                          style="cursor: move;{% if folder.vignette %}background-image: url('{{ group.vignette.url }}'); background-size: cover; {% endif %}background-color:{{group.subject.color }};">
+                        <div class="handler widget-user-header">
+                            <!-- Add signet to folder -->
+                            <img src="{% static 'img/rabat_dossier.png' %}" class="rabat_dossier" />
+
+                            {% if folder.vignette %}                
+                                <div class="box_title_underlay_vignette" style="background-color:{{ folder.color }};">
+                                </div> 
+                            {% endif  %}
+                            <div style="font-size:30px;color:{{ folder.color|contrast_color }};font-weight: 100;position: absolute;bottom: 0px;"> 
+                                {% if group.subject.name|length > 30 %}
+                                    {{ group.subject.shortname }}
+                                    {% else %}
+                                    {{ group.subject.name }}
+                                {% endif %}
+         
                             </div>
                         </div>
-                    </div>
+                        <!-- box-footer DES FONCTIONNALITES  -->
+                        <div class="box-footer" style="position: relative; padding-top: 0px;">
+                            <div class="row dossier" style="font-size:20px;font-weight: 100;" > 
+
+ 
+                                    <div class="col-xs-6 col-md-6 col-lg-6"> 
+                                        {{ group.teacher.user.civilite }} {{ group.teacher.user.last_name }}
+                                    </div>
+                                    <div class="col-xs-6 col-md-6 col-lg-6" align="right"> 
+                                        {{ group.level.name }}  
+                                    </div>
+
+                            </div>
+                            <div class="row extend_student"> 
+                                <div class="col-xs-12 col-md-12 col-lg-12"> 
+                                    <div style="text-align: center"><br/>
+                                        <a href="{% url 'dashboard_group' group.id %}" class="btn btn-default btn-accueil">  
+                                                {%  if is_task_exists %}
+                                                    <i class="fa fa-calendar-check" style="color:red"></i>
+                                                {% endif %} Accéder
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row extend_student"> 
+                                <div class="col-xs-12 col-md-12 col-lg-12"> 
+                                    {% with group.themes.nb as lgt %}   
+                                        <i class="fa fa-folder{% if lgt > 0 %}-open{% endif %}"></i> {{ lgt }}   thème{{ lgt|pluralize }} proposé{{ lgt|pluralize }}
+                                    {% endwith %}
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>   
+
+
+
+
+
+
+
+
+
+
+
+
+
             {% endfor  %}   
 
             

@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from .models import Folder, Parcours, Exercise, Remediation, Relationship, DocumentReport, Supportfile, Course, Comment, Demand, Mastering,Mastering_done, Writtenanswerbystudent, Customexercise,Customanswerimage , Customanswerbystudent, Masteringcustom, Masteringcustom_done, Remediationcustom
+from .models import Folder, Parcours, Blacklist, Exercise, Remediation, Relationship, DocumentReport, Supportfile, Course, Comment, Demand, Mastering,Mastering_done, Writtenanswerbystudent, Customexercise,Customanswerimage , Customanswerbystudent, Masteringcustom, Masteringcustom_done, Remediationcustom
 from account.models import Student , Teacher
 from socle.models import Knowledge, Skill
 from group.models import Group
@@ -55,8 +55,6 @@ class ParcoursForm(forms.ModelForm):
 			these_groups  = groups|shared_groups
 			all_groups    = these_groups.order_by("teachers")
  
-
-
 			self.fields['groups']  = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("level","name"), widget=forms.CheckboxSelectMultiple,  required=False)
 			self.fields['subject'] = forms.ModelChoiceField(queryset=teacher.subjects.all(),  required=False)
 			self.fields['level']   = forms.ModelChoiceField(queryset=teacher.levels.order_by("ranking"),  required=False)
@@ -150,26 +148,26 @@ class FolderForm(forms.ModelForm):
 		groups    = cleaned_data.get("groups") # liste de tous mes groupes
 		all_students = Student.objects.filter(students_to_group__in=groups)		
 		parcours_ids    = cleaned_data.get("parcours") # liste de tous mes groupes
+		
 		for parcours in parcours_ids :
 
 			parcours.groups.set(groups)
-			parcours.students.set(all_students)
+			parcours.students.set(all_students)		
 
 			for r in parcours.parcours_relationship.all():
-				students_no_blacklisted = all_students.filter(students_relationship=r)
+				blacklisted_student_ids = Blacklist.objects.values_list("student").filter(relationship=r).exclude(student__user__username__contains="_e-test")
+				students_no_blacklisted = [s for s in all_students if s not in  blacklisted_student_ids]
 				r.students.set(students_no_blacklisted)
- 
+
 			for c in  parcours.parcours_customexercises.all() :
-				students_no_blacklisted_custom = all_students.filter(students_customexercises=c)
+				blacklisted_student_customexercises_ids = Blacklist.objects.values_list("student").filter(customexercise=c).exclude(student__user__username__contains="_e-test")
+				students_customexercises_no_blacklisted = [s for s in all_students if s not in  blacklisted_student_customexercises_ids]
 				c.students.set(students_no_blacklisted_custom)
- 
+
 			courses = parcours.course.all()
 			for course in courses:
 				course.students.set(all_students)
 
-
-
- 
 
 
 class RelationshipForm(forms.ModelForm):

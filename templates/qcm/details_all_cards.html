@@ -16,7 +16,7 @@
                        
           <div class="card-score">
  
-              {%  get_percent_student_done_parcours_exercice   rc   parcours   as    data %}
+              {%  get_percent_student_done_parcours_exercice_group   rc   parcours group  as    data %}
  
  
               <div class="progress">
@@ -509,7 +509,7 @@
                        
           <div class="card-score">
  
-              {%  get_percent_student_done_parcours_exercice   rc  parcours    as    data %} 
+              {%  get_percent_student_done_parcours_exercice_group   rc   parcours   group  as    data %}
  
               <div class="progress">
                 <div class="progress-bar bg-success" role="progressbar" style="width: {{ data.percent }}%;{% if not rc.is_publish %}color: #F5F5F5{% endif %};background-color: {{rc.parcours.color }};" aria-valuenow="{{ data.percent }}" aria-valuemin="0" aria-valuemax="100">{{ data.percent }}%</div>
