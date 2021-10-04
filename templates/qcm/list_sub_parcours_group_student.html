@@ -59,9 +59,9 @@
                             </div> 
                         {% endif  %}
                         <div class="box_title_vignette"> 
-                            {% if parcours.title|length > 30 %}
+                            {% if parcours.title|length > 25 %}
                                 <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px;font-weight: 100;cursor:help">
-                                    {{ parcours.title|truncatechars:"30" }}
+                                    {{ parcours.title|truncatechars:"25" }}
                                     <div class="helper_tip_text_right">{{ parcours.title }}</div>
                                 </span>
                             {% else  %}
