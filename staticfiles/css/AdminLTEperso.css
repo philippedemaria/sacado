@@ -157,17 +157,6 @@ hr.divider {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 .box-footer span{
   cursor: pointer;
 }
@@ -5938,6 +5927,19 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   margin: 10px 0;
 }
 
+
+.dashboard_student {
+
+  padding: 0px 10px;
+
+}
+
+
+
+
+
+
+
 @media (max-width: 991px) {
   .chart-legend > li {
     float: left;
@@ -7190,7 +7192,9 @@ text-align: center;
   padding-bottom: 5px;
 }
 
-
+.super_extend{
+  padding-top: 5px;
+}
 
 .extend_student_title{
   font-size: 16px;

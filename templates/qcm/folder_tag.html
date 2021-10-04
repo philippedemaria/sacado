@@ -160,8 +160,12 @@
                             </span>
                         </div>
                         <div class="col-xs-6 col-md-7 col-lg-7"> 
-                            {{  dataset.nb_parcours }} parcours dont {{ dataset.nb_parcours_published }} publié{{ dataset.nb_parcours_published|pluralize }}  <br/>
-                            {{  dataset.nb_evaluations }} évaluations  dont {{ dataset.nb_evaluations_published }} publiée{{ dataset.nb_evaluations_published|pluralize }}
+                            {{  dataset.nb_parcours }} parcours dont {{ dataset.nb_parcours_published }} publié{{ dataset.nb_parcours_published|pluralize }} {% if not  dataset.parcours_care %} 
+                            <i class="fa fa-circle text-danger" style="font-size:8px"></i>{% endif %} <br/>
+
+
+                            {{  dataset.nb_evaluations }} évaluations  dont {{ dataset.nb_evaluations_published }} publiée{{ dataset.nb_evaluations_published|pluralize }}{% if not dataset.evaluations_care %} 
+                            <i class="fa fa-circle text-danger" style="font-size:8px"></i>{% endif %}
                         </div>
 
                 </div>

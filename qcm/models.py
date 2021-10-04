@@ -1048,6 +1048,7 @@ class Folder(models.Model):
         data["nb_parcours"]    = nb_parcours
         data["nb_evaluations"] = nb_evaluations
 
+
         if nb_parcours      :
             data["is_parcours_exists"]    = True
         if nb_evaluations   :
@@ -1124,6 +1125,11 @@ class Folder(models.Model):
                 test = True
                 break
         data["is_folder_courses_exists"] = test
+
+
+        data["parcours_care"]    = ( nb_parcours == nb_parcours_published)
+        data["evaluations_care"] =  ( nb_evaluations == nb_evaluations_published )
+
 
 
         today = timezone.now()
@@ -1564,10 +1570,10 @@ class Customexercise(ModelWithCode):
                     levels.append(sb)       
         return levels
 
-    def percent_student_done_parcours_exercice(self, parcours):
+    def percent_student_done_parcours_exercice_group(self, parcours,group):
 
-        students = self.students.exclude(user__username__contains= "_e-test") 
-        nb_student = len(students)
+        students = self.students.filter( students_to_group = group).exclude(user__username__contains="_e-test")
+        nb_student = students.count()
         nb_exercise_done = Customanswerbystudent.objects.filter(student__in= students, customexercise__parcourses = parcours, customexercise = self).values_list("student",flat= True).order_by("student").distinct().count()
         
         try :
