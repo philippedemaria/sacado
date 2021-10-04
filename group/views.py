@@ -157,8 +157,6 @@ def student_dashboard(request,group_id):
 
         #folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0,is_trash=0).order_by("ranking")
         folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0, groups = group , is_trash=0).order_by("ranking")
-
-        print(folders)
         
         bases = student.students_to_parcours
 
@@ -535,9 +533,6 @@ def create_group(request):
             if len(stdts) > 0 :
                 include_students(request , stdts,nf)
         create_student_profile_inside(request, nf)          
-
-        msg = "Félicitations... Votre groupe est créé ! SACADO vous a créé un profil élève associé. Un mail contenant ses identifiants vous est envoyé." 
-        messages.success(request, msg )
 
         return redirect("show_group", nf.id)
     else:
