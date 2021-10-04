@@ -72,7 +72,9 @@
                     </div>
 
                     <div style="width:{{ data.pc }}%; height:5px; background-color: #39fa5a;font-size:6px;text-align: right;color:#FFF;position: absolute;top:170px;z-index:99;border-radius :0% 10% 10% 0%;"></div>
-                    <div style="width:100%; height:5px; background-color: #f1eef7;font-size:6px;text-align: right;color:#FFF;position: absolute;top:170px;z-index:90;"></div>
+                    {% if data.pc > 0 %}
+                    <div style="width:100%; height:5px; background-color: #e9e6f0;font-size:6px;text-align: right;color:#FFF;position: absolute;top:170px;z-index:90;"></div>
+                    {% endif %}
                     <!-- box-footer DES FONCTIONNALITES  -->
                     <div class="box-footer" style="position: relative; padding-top: 2px;">
 
