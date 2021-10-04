@@ -672,19 +672,25 @@ class Parcours(ModelWithCode):
         """
         min score d'un parcours par élève
         """
+ 
         data = {}
         max_tab = []
         nb_done = 0
         exercises = set()
-
         exercises.update(self.exercises.filter(supportfile__is_title=0, supportfile__is_ggbfile=1 ))
+
         nb_exo_in_parcours =  self.parcours_relationship.filter(is_publish=1,students=student ).count()
+
         for exercise in exercises :
-            maxi = self.answers.filter(student=student, exercise = exercise )
+            maxi = self.answers.filter( student=student , exercise = exercise )
             if maxi.count()>0 :
                 maximum = maxi.aggregate(Max('point'))
                 max_tab.append(maximum["point__max"])
                 nb_done +=1
+
+        data["nb_cours"] = self.course.filter( is_publish =1 , students=student ).count()
+        data["nb_quizz"] = self.quizz.filter( is_publish = 1 ).count()
+        data["nb_exercise"] = nb_exo_in_parcours
 
         try :
             stage =  student.user.school.aptitude.first()
@@ -704,33 +710,15 @@ class Parcours(ModelWithCode):
         data["colored"] = "red"
         data["label"] = ""
 
-        if nb_done == nb_exo_in_parcours :
-            data["size"] = "40px"
-          
-            max_tab.sort()
-            try :
-                score = max_tab[0]
-            except :
-                score = None
+        try :
+            opacity = nb_exo_in_parcours/nb_done + 0.1
+        except:
+            opacity = 0.2
 
-            data["boolean"] = True
-
-            if score :
-                if score > up :
-                    data["colored"] = "darkgreen"
-                elif score >  med :
-                    data["colored"] = "green"
-                elif score > low :
-                    data["colored"] = "orange"
-                else :
-                    data["colored"] = "red"
-            else :
-                data["colored"] = "red"
+        data["opacity"] = opacity
 
 
-
-        ### Si l'elève a fait plus de la moitié des exercices du parcours
-        elif nb_done > nb_exo_in_parcours // 2 :
+        if nb_done > nb_exo_in_parcours // 2 :
             data["size"] = "20px"
 
             max_tab.sort()
@@ -766,7 +754,7 @@ class Parcours(ModelWithCode):
                     data["label"] = "Exploratrice"
         else :
             data["boolean"] = False
-  
+
         return data
 
  
@@ -925,11 +913,13 @@ class Folder(models.Model):
         exercises = set()
 
         exs = set()
-        nb_exo_in_parcours = 0
-
-        for p in self.parcours.filter(is_publish=1):
+        nb_exo_in_parcours , nb_cours , nb_quizz = 0 , 0 , 0
+        parcours_set = set()
+        for p in self.parcours.filter(is_publish=1, students=student):
             exos = p.exercises.filter(supportfile__is_title=0, supportfile__is_ggbfile=1 )
-            
+            nb_cours += p.quizz.values_list("id").filter( is_publish=1 ).distinct().count()
+            nb_quizz += p.course.values_list("id").filter( is_publish=1 , students=student ).distinct().count()
+
             if exos.count() > 0 : 
                 exercises.update(exos)
 
@@ -941,6 +931,17 @@ class Folder(models.Model):
                     maximum = maxi.aggregate(Max('point'))
                     max_tab.append(maximum["point__max"])
                     nb_done +=1
+
+
+
+        data["nb_parcours"]    = self.parcours.filter(is_evaluation = 0, is_publish=1, students=student).count()
+        data["nb_evaluations"] = self.parcours.filter(is_evaluation = 1, is_publish=1, students=student).count()
+
+        data["nb_cours"] = nb_cours
+        data["nb_quizz"] = nb_quizz
+
+
+
 
         try :
             stage =  student.user.school.aptitude.first()

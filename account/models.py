@@ -182,7 +182,7 @@ class Student(ModelWithCode):
 
 
     def nb_parcours(self):
-        nb = self.students_to_parcours.all().count()
+        nb = self.students_to_parcours.filter(is_publish=1).count()
         return nb
 
 

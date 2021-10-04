@@ -1,0 +1,94 @@
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+           
+{% get_min_score folder student as data_min %}
+
+<div  class="box box-widget widget-user-2 folder_sorter"  data-parcours_id ="{{folder.id}}"  
+      style="cursor: move;{% if folder.vignette %}background-image: url('{{ folder.vignette.url }}'); background-size: cover; {% endif %}background-color:{{folder.color }};">
+
+
+    <div class="handler widget-user-header">
+        <!-- Add signet to folder -->
+        <img src="{% static 'img/rabat_dossier.png' %}" class="rabat_dossier" />
+
+
+         {% if  student.user.school %}  
+            {% if  data_min.boolean %}
+            <div class="background_badge" >
+            <i class="fa fa-trophy" style="color:{{ data_min.colored }};font-size: {{ data_min.size }};z-index:999999; "></i><br/><font style="font-size:12px;color:{{folder.color }};">{{ data_min.label }}</font>
+            </div>
+            {% endif  %}
+        {% endif  %}
+  
+        {% if folder.vignette %}                
+            <div class="box_title_underlay_vignette" style="background-color:{{ folder.color }};">
+            </div> 
+        {% endif  %}
+        <div class="box_title_vignette"> 
+ 
+ 
+ 
+
+                <span class="helper_tip" style="color:{{ folder.color|contrast_color }};font-size:20px;font-weight: 100">{{ folder.title|truncatechars:"30" }}
+                <div class="helper_tip_text_right">{{ folder.title }}</div></span>
+ 
+ 
+        </div>
+    </div>
+
+ 
+
+    <!-- box-footer DES FONCTIONNALITES  -->
+
+
+    <div class="box-footer" style="position: relative; padding-top: 0px;">
+ 
+
+
+
+        <div class="row dossier"> 
+
+                <div class="col-xs-12 col-md-12 col-lg-12"> 
+                   <b style="font-size: 12px">Dans ce dossier </b>
+                </div>
+                <div class="col-xs-6 col-md-6 col-lg-6"> 
+                    {{  data_min.nb_parcours }} parcours  <br/>
+                    {{  data_min.nb_evaluations }} évaluations 
+                </div>
+                <div class="col-xs-6 col-md-6 col-lg-6"> 
+                    {{  data_min.nb_cours }} cours  <br/>
+                    {{  data_min.nb_quizz }} quizz  
+
+
+                </div>
+
+        </div>
+
+
+
+        <div class="row extend_student"> 
+
+                <div class="col-xs-12 col-md-12 col-lg-12"> 
+                   <div style="text-align: center"><br/>
+                            <a href="{% url 'list_sub_parcours_group_student' group.id folder.id  %}" style="background-color : {{ folder.color }};"  class="btn btn-accueil-student"  >  
+                                    {%  if is_task_exists %}
+                                        <i class="fa fa-calendar-check" style="color:red"></i>
+                                    {% endif %} Accéder</a>
+                            </div>
+   
+                </div>
+
+
+        </div>
+
+    </div>
+ 
+
+</div>   
+
+
+
+
+
+ 

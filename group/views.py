@@ -143,10 +143,7 @@ def student_dashboard(request,group_id):
 
 
     if groups.count() > 1  :
-        if int(group_id)  > 0  :
-            template =  "group/dashboard_group.html" 
-        else :
-            template = "dashboard.html" 
+        template = "dashboard.html" 
     else :
         template =  "group/dashboard_group.html"  
 
@@ -154,11 +151,15 @@ def student_dashboard(request,group_id):
     timer = today.time()
 
     if int(group_id) > 0 :
+
         group = Group.objects.get(pk = group_id)
         request.session["group_id"] = group_id 
 
-        folders = student.folders.filter( is_publish=1, subject = group.subject,level = group.level,is_archive=0,is_trash=0).order_by("ranking")
+        #folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0,is_trash=0).order_by("ranking")
+        folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0, groups = group , is_trash=0).order_by("ranking")
 
+        print(folders)
+        
         bases = student.students_to_parcours
 
         parcourses = bases.filter(is_evaluation=0, subject = group.subject, folders = None, level = group.level,is_trash=0).order_by("ranking")
@@ -167,8 +168,8 @@ def student_dashboard(request,group_id):
         last_exercises_done = student.answers.filter(exercise__knowledge__theme__subject=group.subject).order_by("-date")[:5]
 
     else :
-
-        folders = student.folders.filter( is_publish=1,is_archive=0,is_trash=0).order_by("ranking")
+        group = student.students_to_group.first()
+        folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0, groups = group , is_trash=0).order_by("ranking")
         group   = student.students_to_group.first()
 
         bases = student.students_to_parcours
