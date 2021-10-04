@@ -78,12 +78,12 @@
 
                         <div class="row extend_student" > 
                             <div class="col-xs-4 col-md-4 col-lg-4" align="center"> 
-                                <div class="extend_student_body"><i class="fa fa-mortar-board"></i></div>
+                                <a href="{% url 'show_course_student' 0 parcours.id %}"><div class="extend_student_body"><i class="fa fa-mortar-board"></i></div></a>
                                 <div class="extend_student_nb">{{ data_min.nb_cours }}</div>                                
                                 <div class="extend_student_title">Cours</div>                                
                             </div>
                             <div class="col-xs-4 col-md-4 col-lg-4" align="center"> 
-                                <div class="extend_student_body"><i class="fa fa-laptop"></i></div> 
+                                <a href="{% url 'show_parcours_student' parcours.id   %}"><div class="extend_student_body"><i class="fa fa-laptop"></i></div></a> 
                                 <div class="extend_student_nb">{{  data_min.nb_exercise }}</div>                                                                 
                                 <div class="extend_student_title">Exercices</div>
                             </div>
