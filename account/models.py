@@ -14,7 +14,7 @@ from templated_email import send_templated_mail
 #from general_fonctions import *
 
 from django.conf import settings # récupération de variables globales du settings.py
-
+from general_fonctions import *
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
@@ -532,6 +532,28 @@ class Student(ModelWithCode):
             data["percent"] = "A"
             data["score"] = "A"
         return data
+
+
+    def documents_counter_by_student(self,group):
+        """
+        Donne le nombre total de parcours/évaluations, le nombre de visibles et de publiés du groupe
+        """
+        today   = time_zone_user(self.user) 
+        bases = self.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subject = group.subject, level = group.level ,  folders=None,    is_archive=0, is_trash=0) 
+        nb_folders = self.folders.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subject = group.subject, level = group.level ,  is_archive=0,  is_trash=0).count() 
+        nb         = bases.filter( is_evaluation = 0).count() 
+        nbe        = bases.filter( is_evaluation = 1).count() 
+
+        data = {}
+
+        data["nb_parcours"] = nb
+        data["nb_evaluations"] = nbe 
+        data["nb_folders"] = nb_folders 
+
+        return data
+
+
+
 
 
 

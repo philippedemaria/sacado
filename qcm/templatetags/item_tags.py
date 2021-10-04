@@ -622,6 +622,19 @@ def get_constraint_to_this_relationship(obj, student):
 
 
 
+
+
+
+@register.simple_tag 
+def get_documents_counter_by_student(obj, group): 
+    """
+    Compte
+    """
+    return obj.documents_counter_by_student(group)
+
+
+
+
 @register.simple_tag 
 def get_an_association_knowledge_supportfile(obj, supportfile): 
     """

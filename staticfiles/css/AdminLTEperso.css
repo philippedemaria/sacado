@@ -584,6 +584,20 @@ label {
   margin-right: -10px;
 }
 
+.dossier_index{
+  background-color: #f1eef7;
+  font-size: 10px; 
+  color: #5d4391 ;
+  font-size:12px;
+  font-weight: 100; 
+  padding-top: 2px;
+}
+
+
+
+
+
+
  /******************************************** real_time_live  **************************************/
 
 .no_live{
@@ -2355,6 +2369,10 @@ width:100%;
 
 
 
+.gray_sacado {
+  color: #998fa6 ;
+  font-size: 14px;
+}
 
 
 
@@ -5918,7 +5936,6 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   border-top-right-radius: 0;
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
-  border-top: 1px solid #f4f4f4;
   padding: 10px 10px;
   background-color: #ffffff;
 }

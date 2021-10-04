@@ -140,6 +140,10 @@ class Group(ModelWithCode):
         return data
 
 
+
+    
+
+
     def folders_published(self):
         data = {}
         folders = self.group_folders.filter(is_publish = 1, subject = self.subject, level=self.level, is_trash=0)
