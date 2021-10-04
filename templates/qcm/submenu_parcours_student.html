@@ -1,0 +1,6 @@
+{% load static %}
+
+ 
+    <li><a href="{% url 'show_course_student' 0 parcours.id %}" class="btn btn-new-violet"><i class="fa fa-mortar-board" ></i> Le cours</a></li>
+    <li><a href="{% url 'show_parcours_student' parcours.id %}" class="btn btn-new-violet"><i class="fa fa-desktop" ></i> Les exercices</a></li>
+    <li><a href="{% url 'list_parcours_quizz_student' parcours.id %}" class="btn btn-new-violet"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Les quizz</a></li>

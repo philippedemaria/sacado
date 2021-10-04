@@ -137,4 +137,7 @@ urlpatterns = [
     path('create_videocopy/new', create_videocopy, name='create_videocopy'),   
     path('delete_videocopy/<int:id>', delete_videocopy, name='delete_videocopy'),
 
+
+
+    path('show_quizz_student/<int:idgq>', show_quizz_student, name='show_quizz_student'), 
 ] 

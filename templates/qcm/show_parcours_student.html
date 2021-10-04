@@ -19,14 +19,10 @@
 
 
 {% block page_title %}
-<span  style="color:{{ parcours.color }}"> <i class="fa fa-th"></i>  
+<span  style="color:{{ parcours.color }}"> <i class="fa fa-desktop" ></i>
 
-    {% include 'breadcrumb_student.html' %}
-
-     <img src="{% static 'img/angle-right.png' %}"/>  {{ parcours.title }} 
+    {% include 'qcm/breadcrumb_student.html' %}
      
-     
-    <img src="{% static 'img/angle-right.png' %}"/> 
     <small class="thin">{{ nb_exercises }} exercice{{ nb_exercises|pluralize }} 
 
     {% if parcours.is_achievement %}
@@ -37,13 +33,21 @@
 </span>
 {% endblock %}
 
-{% block page_menu_right %} 
-{% if today %}
- <font style="font-size:16px">{{ today|date:"d N Y, H:i" }}</font> <a href="{%  url 'profile' %}" style="font-size:11px" title="Régler le fuseau horaire"><i class="fa fa-clock"></i></a>
-{% endif %}
-{% endblock %}
 
- 
+
+{% block page_menu_right %} 
+
+
+        
+    {% include 'qcm/submenu_parcours_student.html' %}
+
+
+
+    {% if today %}
+     <font style="font-size:16px">{{ today|date:"d N Y, H:i" }}</font> <a href="{%  url 'profile' %}" style="font-size:11px" title="Régler le fuseau horaire"><i class="fa fa-clock"></i></a>
+    {% endif %}
+    {% endblock %}
+
 
 {% block body %}
  
@@ -73,7 +77,7 @@
     {% endif %}    
 
     <div class="row">
-        <div class="col-lg-{% if courses|length > 0 or quizzes|length > 0 %}10{% else %}12{% endif %} col-xs-12">
+        <div class="col-lg-12 col-xs-12">
             {% for rc in relationships_customexercises %}
                 <!-- SECTION --> 
                 {% if rc.exercise.supportfile.is_title %}       
@@ -557,81 +561,6 @@
                 {% endif %}             
             {% endfor %}
         </div>
-
-
-        {% if courses|length > 0 or quizzes|length > 0 %}      
-        <div class="col-lg-2 col-xs-12">
-            <h4 class='thin' style="color:{{ parcours.color }}">Le cours du parcours</h4>
-            <ul class="nav nav-pills nav-stacked admin-menu">
-                {% for course in courses %}
-                    <li class="{% if forloop.first %}active{% endif %} menu_course">
-                        <a href="#" data-toggle='modal' data-target='#menu_course{{ forloop.counter }}'  data-relation_id='{{ rc.id }}' class="header_shower"> {{ course.title }}</a> 
-                    
-
-                        <div class="modal fade" id="menu_course{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="menu_course{{ forloop.counter }}">
-                            <div class="modal-dialog" role="document"  style="width:95%;color:#000">
-                                <div class="modal-content" style="padding-top :0px;">
-                                    <div class="modal-header">
-                                        <h3>{{ course.title }}
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button> 
-                                        </h3>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-lg-12 col-xs-12">   
-                                                {{ course.annoncement|safe }}
-                                            </div>   
-                                        </div> 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </li>
-
-                {% endfor %}
-
-            </ul>
-
-            {% if courses|length > 0  %} <hr/>{% endif %}
-
-            <h4 class='thin' style="color:{{ parcours.color }}">Les quizz</h4>
-                {% if sacado_asso %}    
-                    {% for q in quizzes %}
-             
-                        {% for gq in q.generate_quizz.all     %}
-                        <li style="padding:5px; margin-bottom:2px;list-style: none">
-                          
-
-                                <div class="card" style="float:none; margin:5px;">
-                                    <a {% if q.is_numeric and not q.is_video %} href="{% url 'goto_quizz_student' gq.id  %}" {% else %} href="{% url 'show_quizz' gq.id  %}" {% endif %} target="_blank" style="font-weight: normal;"> 
-                                        <div style="position: absolute; padding: 10px;width:100%; height:75px; background-color: #FFF; opacity:0.85">
-                                            {{ q.title|truncatechars:28 }} <small><i class="fa fa-barcode fa-xs"></i> {{ gq.code }} <br/> {{ q.questions.count }} diapos</small>  </small>
-                                        </div> 
-                                        {% if q.vignette %}
-                                            <img src="{{ q.vignette.url }}" width="200px" height="1é0px" border=0 />
-                                        {% else %}
-                                            <img src="{% static 'img/quizz_slide.png' %}" width="200px" border=0  />
-                                        {% endif %}
-                                    </a>
-                                </div>
-
-                        </li>
-                        {% endfor %}
-
-
-                    {% endfor %}
-
-                {% else %}
-                    <div class="alert alert-danger">
-                        <i class="fa fa-ban"></i> Version établissement nécessaire
-                    </div>
-                {% endif %}
-
-        </div>
-        {% endif %}          
     </div>
 </section>
  

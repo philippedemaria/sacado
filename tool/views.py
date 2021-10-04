@@ -457,6 +457,21 @@ def show_quizz(request,id):
 
 
 
+
+ 
+def show_quizz_student(request,idgq):
+    """ permet à un prof de voir son quizz """
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    gquizz = Generate_quizz.objects.get(pk= idgq)
+    quizz = gquizz.quizz
+    questions = gquizz.quizz.questions.filter(is_publish=1).order_by("ranking")
+    context = {  "quizz" : quizz , "questions" : questions }
+
+    return render(request, 'tool/show_quizz.html', context)
+
+
+
 def show_quizz_shared(request,id):
     """ permet à un prof de voir le quizz mutualisé """
     

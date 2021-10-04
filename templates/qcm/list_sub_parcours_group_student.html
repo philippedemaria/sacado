@@ -20,20 +20,12 @@
 {% block page_title %}
        <span style="color:{{ group.color  }}"><i class="fa fa-folder-open"></i></span>  
 
-        {% include 'qcm/breadcrumb.html' %}
+        {% include 'qcm/breadcrumb_student.html' %}
 {% endblock %}
 
 {% block page_menu_right %}
 
 
- 
-
-    {% if role %}
-        {% include 'qcm/submenu_creation_evaluation.html' %}
-
-        {% include 'qcm/submenu_creation_new_parcours.html' %}
-  
-    {% endif %}
 {% endblock %}
 
 {% block css_files %}
@@ -67,8 +59,14 @@
                             </div> 
                         {% endif  %}
                         <div class="box_title_vignette"> 
-                            <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px;font-weight: 100">{{ parcours.title|truncatechars:"30" }}
-                            <div class="helper_tip_text_right">{{ parcours.title }}</div></span>
+                            {% if parcours.title|length > 30 %}
+                                <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px;font-weight: 100;cursor:help">
+                                    {{ parcours.title|truncatechars:"30" }}
+                                    <div class="helper_tip_text_right">{{ parcours.title }}</div>
+                                </span>
+                            {% else  %}
+                                 <span style="color:{{ parcours.color|contrast_color }};font-size:20px;font-weight: 100">{{ parcours.title }}</span>
+                            {% endif  %}
                         </div>
                         <div style="font-size:47px;color:#39fa5a;opacity:0.5;position: absolute;right:0px;font-weight: 100;top:125px;z-index:99; " >{{ data.pc }}%</div>
                     </div>
@@ -88,7 +86,7 @@
                                 <div class="extend_student_title">Exercices</div>
                             </div>
                             <div class="col-xs-4 col-md-4 col-lg-4" align="center">  
-                                <div class="extend_student_body"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></div>
+                                <a href="{% url 'list_parcours_quizz_student' parcours.id %}"><div class="extend_student_body"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></div></a>
                                 <div class="extend_student_nb">{{ data_min.nb_quizz }}</div>                                                                
                                 <div class="extend_student_title">Quizz</div>
                             </div>    

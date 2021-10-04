@@ -1484,12 +1484,13 @@ def list_sub_parcours_group(request,idg,id):
     return render(request, 'qcm/list_sub_parcours_group.html', context )
 
 
-def list_sub_parcours_group_student(request,idg,id):
+def list_sub_parcours_group_student(request,idg,idf):
 
     student = request.user.student
     today   = time_zone_user(request.user)
-    folder  = Folder.objects.get(pk = id) 
-    group   = Group.objects.get(pk = idg) 
+    folder  = Folder.objects.get(pk = idf) 
+    group   = Group.objects.get(pk = idg)
+    request.session["folder_id"] = folder.id 
 
     bases = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),   groups = group ,  is_trash=0,folders=folder)
     parcourses = bases.filter( is_evaluation=0,  is_trash=0).order_by("ranking")
@@ -2430,12 +2431,14 @@ def show_parcours_student(request, id):
     relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number_for_student(parcours,student)
     nb_exercises = len(relationships_customexercises)
 
-    courses = parcours.course.filter(Q(is_publish=1)|Q(publish_start__lte=today,publish_end__gte=today)).order_by("ranking")
-    quizzes = parcours.quizz.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)).order_by("-date_modified")
+    nb_courses = parcours.course.filter(Q(is_publish=1)|Q(publish_start__lte=today,publish_end__gte=today)).count()
+    nb_quizzes = parcours.quizz.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)).count()
 
-    context = { 'stage' : stage , 'relationships_customexercises': relationships_customexercises, 'folder': folder,
-                'courses':courses , 'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only, 
-                'today': today , 'quizzes': quizzes ,   }
+
+
+    context = { 'stage' : stage , 'relationships_customexercises': relationships_customexercises, 'folder': folder, 'nb_courses' : nb_courses , 
+                'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only,  'nb_quizzes' : nb_quizzes ,
+                'today': today ,    }
 
     return render(request, 'qcm/show_parcours_student.html', context)
 
@@ -2461,6 +2464,18 @@ def show_folder_student(request, id):
  
 
 
+
+ 
+def list_parcours_quizz_student(request, idp):
+
+    parcours = Parcours.objects.get(id=idp)
+    user = request.user
+    today = time_zone_user(user)
+    quizzes = parcours.quizz.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)).order_by("-date_modified")
+
+    context = { 'quizzes': quizzes ,   'parcours': parcours , 'today' : today ,  }
+
+    return render(request, 'qcm/list_parcours_quizz_student.html', context)
 
 
 
@@ -7936,7 +7951,7 @@ def create_folder(request,idg):
         group_id = idg
         group = Group.objects.get(pk = idg)
         students = group.students.all()
-        form = FolderForm(request.POST or None, request.FILES or None, teacher = teacher, subject = group.subject, level = group.level, initial = {'subject': group.subject,'level': group.level,'groups': [group] ,'coteachers': group.teacher.all()  } )
+        form = FolderForm(request.POST or None, request.FILES or None, teacher = teacher, subject = group.subject, level = group.level, initial = {'subject': group.subject,'level': group.level,'groups': [group] ,'coteachers': group.teachers.all()  } )
         images = get_images_for_parcours_or_folder(group)
     else :
         group_id = None        

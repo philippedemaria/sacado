@@ -1,0 +1,86 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4_withoutMathJax.js' %}"></script>
+ 
+    <script>
+        require(['script/ajax-parcours']);
+    </script> 
+
+
+{% endblock %}
+
+ 
+
+{% block page_title %}
+<span  style="color:{{ parcours.color }}"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>  
+ 
+
+        {% include 'qcm/breadcrumb_student.html' %}   <span style="color:{{ parcours.color  }}"> <small class="thin">Les quizz</small></span>  
+{% endblock %}
+
+{% block page_menu_right %}
+
+
+        
+    {% include 'qcm/submenu_parcours_student.html' %}
+
+  
+{% endblock %}
+
+{% block css_files %}
+{% endblock %}
+
+
+
+{% block body  %}
+
+{% include 'preloader.html' %}
+
+<section class="content_list" id="principal_section"> 
+
+ 
+        {% if sacado_asso %}    
+            {% for q in quizzes %}
+     
+                {% for gq in q.generate_quizz.all     %}
+
+                    <div class="col-xs-6 col-md-4 col-lg-3" align="center"> 
+
+                        <div class="card" style="float:none; margin:5px;width:250px">
+                            <a {% if q.is_numeric and not q.is_video %} href="{% url 'goto_quizz_student' gq.id  %}" target="_blank"{% else %} href="{% url 'show_quizz_student' gq.id  %}" {% endif %}  style="font-weight: normal;"> 
+                                <div style="position: absolute; padding: 10px;width:100%; height:75px; background-color: #FFF; opacity:0.85">
+                                    {{ q.title|truncatechars:28 }} <small><br/><i class="fa fa-barcode fa-xs"></i> {{ gq.code }} <br/> {{ q.questions.count }} diapos</small>  </small>
+                                </div> 
+                                {% if q.vignette %}
+                                    <img src="{{ q.vignette.url }}" width="200px" height="120px" border=0 />
+                                {% else %}
+                                    <img src="{% static 'img/quizz_slide.png' %}" width="200px" border=0  />
+                                {% endif %}
+                            </a>
+                        </div>
+                    </div>
+
+    
+                {% endfor %}
+
+
+            {% endfor %}
+
+        {% else %}
+            <div class="alert alert-danger">
+                <i class="fa fa-ban"></i> Version établissement nécessaire
+            </div>
+        {% endif %}
+
+  
+</section>
+
+ 
+
+{% endblock  %}   

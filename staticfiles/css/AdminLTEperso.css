@@ -6434,6 +6434,29 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 }
 
 
+/********************************************* violet hover :  #5d4391 ************************************/
+/********************************************* violet light :  #f1eef7 ************************************/
+
+.btn-new-violet {
+  color : #998fa6!important;
+  border-radius: 20px; /*radius des boutons*/
+  border: 1px solid #998fa6;
+  margin-right: 5px;
+}
+.btn-new-violet:hover, .btn-new-violet:hover > a ,
+.btn-new-violet:active, .btn-new-violet:active > a ,
+.btn-new-violet.hover,  .btn-new-violet.hover > a   {
+  background-color: #f1eef7!important;/*   #dd4b39!important;*/
+  color: #5d4391!important;
+  text-decoration: none;
+}
+
+
+
+
+
+
+
 
 .btn-green  {
   color : #3b9d26!important;

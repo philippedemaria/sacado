@@ -6,8 +6,6 @@
 
 <div  class="box box-widget widget-user-2 folder_sorter"  data-parcours_id ="{{folder.id}}"  
       style="cursor: move;{% if folder.vignette %}background-image: url('{{ folder.vignette.url }}'); background-size: cover; {% endif %}background-color:{{folder.color }};">
-
-
     <div class="handler widget-user-header">
         <!-- Add signet to folder -->
         <img src="{% static 'img/rabat_dossier.png' %}" class="rabat_dossier" />
@@ -36,17 +34,8 @@
  
         </div>
     </div>
-
- 
-
     <!-- box-footer DES FONCTIONNALITES  -->
-
-
     <div class="box-footer" style="position: relative; padding-top: 0px;">
- 
-
-
-
         <div class="row dossier"> 
 
                 <div class="col-xs-12 col-md-12 col-lg-12"> 
@@ -64,27 +53,17 @@
                 </div>
 
         </div>
-
-
-
         <div class="row extend_student"> 
-
-                <div class="col-xs-12 col-md-12 col-lg-12"> 
-                   <div style="text-align: center"><br/>
-                            <a href="{% url 'list_sub_parcours_group_student' group.id folder.id  %}" style="background-color : {{ folder.color }};"  class="btn btn-accueil-student"  >  
-                                    {%  if is_task_exists %}
-                                        <i class="fa fa-calendar-check" style="color:red"></i>
-                                    {% endif %} Accéder</a>
-                            </div>
-   
+            <div class="col-xs-12 col-md-12 col-lg-12"> 
+                <div style="text-align: center"><br/>
+                    <a href="{% url 'list_sub_parcours_group_student' group.id folder.id  %}" style="background-color : {{ folder.color }};"  class="btn btn-accueil-student"  >  
+                        {%  if is_task_exists %}
+                            <i class="fa fa-calendar-check" style="color:red"></i>
+                        {% endif %} Accéder</a>
                 </div>
-
-
+            </div>
         </div>
-
     </div>
- 
-
 </div>   
 
 
