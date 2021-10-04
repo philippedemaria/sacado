@@ -151,7 +151,7 @@ def student_dashboard(request,group_id):
     timer = today.time()
 
     if int(group_id) > 0 :
-
+        template =  "group/dashboard_group.html"  
         group = Group.objects.get(pk = group_id)
         request.session["group_id"] = group_id 
 
