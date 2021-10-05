@@ -922,3 +922,8 @@ def get_data_parcours_evaluations_from_group_folder(obj, group):
     """
     return obj.data_parcours_evaluations_from_group(group)
 
+
+@register.simple_tag 
+def get_publish_parcours_inside_folder (obj,folders,student):
+    """Détermine si un parcours est publié et s'il est dans un dossier publié """
+    return obj.publish_parcours_inside_folder(folders,student)  

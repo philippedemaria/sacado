@@ -422,6 +422,13 @@ class Parcours(ModelWithCode):
         return contains
 
 
+    def publish_parcours_inside_folder(self, folders, student) :
+        """Détermine si un parcours est publié et s'il est dans un dossier publié """
+        is_publish = self.is_publish
+        nb_folders_published = self.folders.filter(students=student, is_publish=1).count()
+        if nb_folders_published > 0 :
+            is_publish = False
+        return is_publish
 
 
     def isnot_shared(self) :

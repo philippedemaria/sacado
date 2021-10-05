@@ -1352,6 +1352,7 @@ def list_parcours(request):
     folders = folders_contains_evaluation(folds, False)
 
     parcourses = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher),folders=None,is_evaluation=0, is_archive=0,is_trash=0)
+
     nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,0,1 )   )   
     nb_base = len( folders ) + parcourses.count()
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche

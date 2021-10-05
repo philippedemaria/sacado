@@ -148,9 +148,7 @@ class FolderForm(forms.ModelForm):
 		groups    = cleaned_data.get("groups") # liste de tous mes groupes
 		all_students = Student.objects.filter(students_to_group__in=groups)		
 		parcours_ids    = cleaned_data.get("parcours") # liste de tous mes groupes
-
-		print(all_students)	
-
+	
 		for parcours in parcours_ids :
 
 			parcours.groups.set(groups)
@@ -162,8 +160,6 @@ class FolderForm(forms.ModelForm):
 				blacklisted_student_ids = Blacklist.objects.values_list("student").filter(relationship=r).exclude(student__user__username__contains="_e-test")
 				students_no_blacklisted = [s for s in all_students if s not in  blacklisted_student_ids]
 				r.students.set(students_no_blacklisted)
-
-				print("==========================>" , students_no_blacklisted)	
 
 			for c in  parcours.parcours_customexercises.all() :
 				blacklisted_student_customexercises_ids = Blacklist.objects.values_list("student").filter(customexercise=c).exclude(student__user__username__contains="_e-test")

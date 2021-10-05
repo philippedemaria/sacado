@@ -128,10 +128,12 @@
                     </li>
   
                     {% for prcrs in s.list  %}  
-                        <li {% if 'detail_student_parcours/' in request.path and prcrs.id == parcours.id %}  class="active" {% endif %}>
-                            <a href="{% url 'detail_student_parcours'  student.user.id  prcrs.id  %}" {% if not prcrs.is_publish %} style="color:#BBB" {% endif %} >
+                        <li {% if 'detail_student_parcours/' in request.path and prcrs.id == parcours.id %}  class="active" {% endif %}> 
+                            {% get_publish_parcours_inside_folder prcrs prcrs.folders.all  student as publish_filter %}  
+                            <a {% if publish_filter %}href="#"  style="color:#BBB;cursor:not-allowed" {% else %} href="{% url 'detail_student_parcours'  student.user.id  prcrs.id  %}" {% endif %} >
                                 <i class="fa fa-caret-right"></i> {{ prcrs.title }}    
                             </a>
+
                         </li> 
                     {% endfor %}
  
