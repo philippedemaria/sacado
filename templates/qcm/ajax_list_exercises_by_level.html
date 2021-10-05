@@ -94,7 +94,7 @@
                                                                         <i class="fa fa-fw fa-save"></i> {{ exercise.supportfile.situation}} situation{{ exercise.supportfile.situation|pluralize}} minimum<br>
                                                                         {% endif %}
 
-                                                                        <i class="fa fa-fw fa-copyright"></i>
+                                                                        <i class="fa fa-fw fa-cogs"></i>
                                                                         {% if exercise.supportfile.skills.count > 0 %}
                                                                             {% for skill in exercise.supportfile.skills.all %}
                                                                             {{ skill.name}}{% if not forloop.last %}, {% endif %}
