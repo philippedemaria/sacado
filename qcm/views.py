@@ -1446,8 +1446,9 @@ def list_parcours_group(request,id):
     #On sort du dossier donc on enlève sa clé de la session
     request.session.pop('folder_id', None)
 
-    folders     = group.group_folders.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject = group.subject, level = group.level ,   is_favorite=1,  is_archive=0, is_trash=0 ).order_by("ranking")
-    bases       = group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject = group.subject, level = group.level ,   is_favorite=1, folders = None, is_trash=0)     
+    folders     = group.group_folders.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject = group.subject, level = group.level ,   is_favorite=1,  is_archive=0, is_trash=0 ).distinct().order_by("ranking")
+
+    bases       = group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject = group.subject, level = group.level ,   is_favorite=1, folders = None, is_trash=0).distinct()
     evaluations = bases.filter( is_evaluation=1).order_by("ranking")
     parcourses  = bases.exclude(is_evaluation=1).order_by("ranking")
     parcours_tab = evaluations | parcourses
