@@ -67,5 +67,9 @@ urlpatterns = [
     path('update_formule/<int:id>/', update_formule, name='update_formule'),
     path('delete_formule/<int:id>/', delete_formule, name='delete_formule'),
 
+
+    path('all_schools', all_schools, name='all_schools'),
+
+
 ]
  

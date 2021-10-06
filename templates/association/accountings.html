@@ -81,10 +81,19 @@
     </div>
 
     <div class="col-lg-12 col-xs-12">
-        Etablissements adhérents
+        Etablissements adhérents <i class="fa fa-hand-o-right"></i><a href="{% url 'all_schools' %}"> Tous les établissements</a>
     </div>
     <div class="col-lg-12 col-xs-12">
-        <table class="table bg_white">
+        <table class="table bg_white standard_tab_sort300">
+            <thead>
+                <tr>
+                    <td></td>
+                    <td>Nom</td>
+                    <td>Ville</td>
+                    <td>Pays</td>
+                    <td>Admin</td>
+                </tr>
+            </thead>
             {% for a in abonnements %}
             <tr>
                 <td>{{ forloop.counter }}</td>

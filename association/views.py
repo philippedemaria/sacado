@@ -177,6 +177,16 @@ def delete_formule(request, id):
 #####################################################################################################################################
 
 
+
+@user_passes_test(user_is_board)
+def all_schools(request):
+    schools = School.objects.all()
+    context = { 'schools': schools}
+
+    return render(request, 'association/all_schools.html', context ) 
+
+
+
 @user_passes_test(user_is_board)
 def association_index(request):
 

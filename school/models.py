@@ -100,6 +100,11 @@ class School(models.Model):
         return f
 
 
+    def adhesion(self) : 
+        today = datetime.now()
+        return self.abonnement.filter(date_start__lte=today, date_stop__gte=today ).count()
+
+ 
  
 class Stage(models.Model):
     """" Niveau d'aquisition """
