@@ -5,8 +5,8 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect
-from socle.models import  Knowledge, Level, Theme, Skill , Waiting , Subject , Vignettesubject
-from socle.forms import  LevelForm, KnowledgeForm,  ThemeForm,MultiKnowledgeForm , SkillForm, MultiSkillForm , WaitingForm , MultiWaitingForm 
+from socle.models import  Knowledge, Level, Theme, Skill , Waiting , Subject , Vignette
+from socle.forms import  LevelForm, KnowledgeForm,  ThemeForm,MultiKnowledgeForm , SkillForm, MultiSkillForm , WaitingForm , MultiWaitingForm, SubjectForm
 from account.models import Teacher, Student
 from django.contrib import messages
 from account.decorators import user_can_create
@@ -380,36 +380,62 @@ def list_subjects(request):
 @user_is_superuser
 def create_subject(request):
 
-    form = inlineformset_factory( Subject , Vignettesubject , fields=('subject','vignette','level') , extra=1)
-    teacher = Teacher.objects.get(user=request.user)
-    if form.is_valid():
-        form.save()
-        messages.success(request, 'Le savoir faire a été créé avec succès !')
-        return redirect('subjects')
-    else:
-        print(form.errors)
 
-    context = {'form': form,  'subject': None ,   'teacher': teacher }
+    teacher = Teacher.objects.get(user=request.user)
+    subject_form = SubjectForm(request.POST or None, instance=subject )
+    formSet = inlineformset_factory( Subject , Vignette , fields=('subject','imagefile','level') , extra=1)
+ 
+    if request.method == "POST":
+        if form.is_valid():
+            nf = form.save()
+ 
+            form_ds = formSet(request.POST or None,request.FILES or None, instance = nf)
+            for form_d in form_ds :
+                if form_d.is_valid():
+                    form_d.save()
+        else :
+            print(form.errors)
+        
+        return redirect('subjects')
+
+    context = {'form': form, 'formSet': formSet,   }
 
     return render(request, 'socle/form_subject.html', context)
 
+
+
+
+
+
 @user_is_superuser
 def update_subject(request, id):
-    
+
+
     teacher = Teacher.objects.get(user=request.user)
-    subject = Subject.objects.get(id=id)
-    form = inlineformset_factory( Subject , Vignettesubject , fields=('subject','vignette','level') , extra=1)
-    if request.method == "POST" :
-        if subject_form.is_valid():
-            subject_form.save()
-            messages.success(request, 'Le savoir faire a été modifié avec succès !')
-            return redirect('subjects')
-        else:
-            print(subject_form.errors)
+    subject = Subject.objects.get(pk= id)
 
-    context = {'form': subject_form,  'subject': subject,  'teacher': teacher  }
+    form = SubjectForm(request.POST or None, instance=subject )
+    formSet = inlineformset_factory( Subject , Vignette , fields=('subject','imagefile','level') , extra=0)
+    form_ds = formSet(request.POST or None,request.FILES or None, instance = subject)
 
-    return render(request, 'socle/form_subject.html', context )
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+
+            for form_d in form_ds :
+                if form_d.is_valid():
+                    form_d.save()
+        else :
+            print(form.errors)
+        
+        return redirect('subjects')
+ 
+
+    context = {'form': form, 'form_ds': form_ds,   }
+
+    return render(request, 'socle/form_subject.html', context)
+
+ 
 
 @user_is_superuser
 def delete_subject(request, id):

@@ -5,17 +5,29 @@
 
 
 {% block require %}
+ 
+
+
     {% if subject %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4_withoutMathJax.js' %}"></script>
     {% else %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script>
+        require(['script/ajax-subject']);
+    </script> 
     {% endif %}
+ 
+
+
+
+
+
 {% endblock %}
 
  
 
 {% block page_title %}
-     Niveau  <img src="{% static 'img/angle-right.png' %}"/>  
+     Enseignement  <img src="{% static 'img/angle-right.png' %}"/>  
      {% if subject %}
      <small>Modification</small>
     {% else %}
@@ -79,6 +91,73 @@
                         </div>
                     </div>
                 </div>
+                {{ form_ds.management_form }} 
+                <script id="rowToClone" type="text/template">
+                    <div id="duplicate">  
+                        <div class="row" >
+                            <div class="col-sm-6 col-md-6 col-lg-6" > 
+                                <div class="form-group">
+                                    {{ form_ds.empty_form.imagefile|add_class:"form-control"  }}
+                                </div> 
+                            </div>
+                            <div class="col-sm-5 col-md-5 col-lg-5" > 
+                                <div class="form-group">
+                                    {{ form_ds.empty_form.level|add_class:"select2 form-control"  }}
+                                </div> 
+                            </div>
+                            <div class="col-sm-1 col-md-1 col-lg-1">
+                                <div class="form-group" >
+                                   <div class="delete_button"></div>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="row" id="cloningZone">                            
+
+                        </div>
+                    </div>
+                </script> 
+ 
+                <div id="formsetZone">
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6" >
+                            Les vignettes par niveau
+                        </div>  
+                        <div class="col-sm-6 col-md-6" >
+                            <a href="#"  class="btn btn-info add_more" >Ajouter </a><br/><br/>
+                        </div>                            
+                    </div>
+
+
+                    {% for form in form_ds %}
+                    <div id="duplicate0">  
+                        <div class="row" >
+                            <div class="col-sm-6 col-md-6" > 
+                                <div class="form-group">
+                                    <label>Niveau</label><br/>
+                                    {{ form.imagefile|add_class:"btn btn-default form-control" }}
+                                </div> 
+                            </div>
+                            <div class="col-sm-5 col-md-5 col-lg-5" > 
+                                <div class="form-group">
+                                    <label>Niveau</label><br/>
+                                    {{ form.level|add_class:"select2 form-control" }}
+                                </div> 
+                            </div>
+                            <div class="col-sm-1 col-md-1">
+                                <div class="form-group" > <br/>
+                                   <div class="delete_button"></div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+
+                        {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+
+                    {% endfor %}   
+                </div>
+ 
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
                         
