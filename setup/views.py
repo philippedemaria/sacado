@@ -199,7 +199,7 @@ def index(request):
 
         nb_student_answers = Studentanswer.objects.filter(date__gte= today_start).count() + Customanswerbystudent.objects.filter(date__gte= today_start).count() + Writtenanswerbystudent.objects.filter(date__gte= today_start).count()
         
-        exercises = Exercise.objects.select_related("supportfile").filter(supportfile__is_title=0, supportfile__is_ggbfile = 1 )
+        exercises = Exercise.objects.select_related("supportfile").filter(supportfile__is_title=0 )
         exercise_nb = exercises.count() - 1
  
         i = random.randrange(0, exercise_nb)
