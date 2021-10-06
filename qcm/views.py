@@ -303,16 +303,15 @@ def convert_seconds_in_time(secondes):
 
 
 def sending_to_teachers(teacher , level,subject,topic) : # envoie d'une notification au enseignant du niveau coché lorsqu'un exercice est posté
-    
-    users = teacher.user.school.users.filter(user_type=2)
-    for u in users :
-        try :
+    try :
+        users = teacher.user.school.users.filter(user_type=2)
+        for u in users :
             if u.teacher.exercise_post :
                 if u.email : 
                     msg = "Un "+ str(topic) + " vient d'être publié sur SacAdo sur le niveau "+str(level.name)+" en "+str(subject.name)
                     sending_mail(str(topic) +" SacAdo",  msg , settings.DEFAULT_FROM_EMAIL , u.email)
-        except :
-            pass
+    except :
+        pass
 
     
 
