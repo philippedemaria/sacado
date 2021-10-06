@@ -2,7 +2,7 @@ from django.db import models
 from datetime import date
 from account.models import Student, Teacher, ModelWithCode, generate_code
 from school.models import School
-from socle.models import Level, Subject , Waiting
+from socle.models import Level, Subject , Waiting , Vignette
 from account.models import ModelWithCode
 from django.apps import apps
 from django.utils import timezone
@@ -250,6 +250,21 @@ class Group(ModelWithCode):
         data["access"] = access
 
         return data
+
+
+def vignette(self):
+
+    try :
+        url = Vignette.objects.values("imagefile").get(level=self.level, subject=self.subject)
+        is_exists = True
+    except :
+        url = False 
+        is_exists = False
+
+    data = {}
+    data["is_exists"] = is_exists
+    data["url"] = url
+    return data
 
 
 
