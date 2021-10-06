@@ -234,25 +234,28 @@ def attribute_all_documents_to_student(parcourses,student):
 
 
 
-# def attribute_all_documents_to_students(groups, nf ):
-#     """  assigner les documents   """
-#     students = set()
-#     for g in groups : 
-#         students.update(g.students.all())
+def attribute_all_documents_to_students(parcourses, students ):
+    """  assigner les documents   """
+    try :
+        for p in parcourses:
+            p.students.set(students)
 
-#     nf.students.set(students)
-#     relationships = nf.parcours_relationship.all()
-        
-#     for r in relationships:
-#         r.students.set(students)
+            relationships = p.parcours_relationship.all()
+            for r in relationships:
+                r.students.set(students)
 
-#     customexercises = nf.parcours_customexercises.all()
-#     for c in customexercises:
-#         c.students.set(students)
+            customexercises = p.parcours_customexercises.all()
+            for c in customexercises:
+                c.students.set(students)
 
-#     courses = nf.course.all()
-#     for course in courses:
-#         course.students.set(students)
+            courses = p.course.all()
+            for course in courses:
+                course.students.set(students)
+
+        test = True
+    except :
+        test = False
+    return test
 
  
 # def attribute_all_documents_of_parcours_to_group(group,parcours):
@@ -486,34 +489,25 @@ def dt_naive_to_timezone(naive_date,timezone_user):
 def authorizing_access(teacher ,parcours_or_group, sharing_group): #sharing_group est un booléen
 
     try : 
-        if  teacher == parcours_or_group.teacher or  sharing_group :
-            return True
-        else :
-            return False
+        return teacher == parcours_or_group.teacher or  sharing_group 
     except : 
-            return False
+        return False
 
 
 def authorizing_access_student(student , parcours_or_group): 
 
     try :
-        if student in parcours_or_group.students.all() :
-            return True
-        else :
-            return False
+        return student in parcours_or_group.students.all()
     except : 
-            return False
+        return False
 
 
 def authorizing_access_folder(user , folder): 
 
     try :
-        if user == folder.teacher or  user in folder.coteachers.all() :
-            return True
-        else :
-            return False
+        return  user == folder.teacher or  user in folder.coteachers.all() 
     except : 
-            return False
+        return False
 
 def group_has_parcourses(group,is_evaluation ,is_archive ):
     pses_tab = []

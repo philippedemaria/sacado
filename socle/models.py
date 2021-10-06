@@ -46,7 +46,7 @@ class Vignette(models.Model):
 
 class Subject(models.Model):
     name = models.CharField(max_length=255, verbose_name="Nom")
-    color = models.CharField(max_length=255, default ="" , editable=False)
+    color = models.CharField(max_length=255, default ="" , verbose_name="Couleur")
     shortname = models.CharField(max_length=10, default ="" , verbose_name="Abréviation")
     vignettes = models.ManyToManyField(Vignette, blank=True, through="Vignettesubject", related_name="vignettes_subject")
 

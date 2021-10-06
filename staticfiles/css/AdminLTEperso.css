@@ -5750,9 +5750,6 @@ li .list_no_indent{
 
 
 @media (max-width: 767px) {
-  .box {
-    text-align: center;
-  }
   .box .icon {
     display: none;
   }
@@ -6459,7 +6456,7 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 .btn-new-violet {
   color : #998fa6!important;
   border-radius: 20px; /*radius des boutons*/
-  border: 1px solid #998fa6;
+  border: 1px solid #998fa6!important;
   margin-right: 5px;
 }
 .btn-new-violet:hover, .btn-new-violet:hover > a ,

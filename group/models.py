@@ -89,6 +89,11 @@ class Group(ModelWithCode):
         return self.students.exclude(user__username__contains="_e-test").count()
 
 
+    def data_image(self):
+
+        image = self.subjet.subject_vignettesubject.values_list("vignette__imagefile").filter(level=self.level).first()
+
+        return image
 
 
 

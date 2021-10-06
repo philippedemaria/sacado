@@ -887,9 +887,16 @@ class Folder(models.Model):
         data["nb"]= len(only_students)
         return data 
 
+    def is_coanimation(self) :
+        is_co = False 
+        if self.coteachers.count() > 0 :
+            is_co = True 
 
-
-
+        for parcours in self.parcours.all() :
+            if parcours.coteachers.count()>0 :
+                is_co = True
+                break
+        return is_co
 
     def folder_only_students_count(self):
 
@@ -1258,8 +1265,11 @@ class Relationship(models.Model):
 
     def percent_student_done_parcours_exercice_group(self,parcours,group):
 
-        students = self.students.filter( students_to_group = group).exclude(user__username__contains="_e-test")
-        nb_student = students.count()
+        parcours_students = set(self.students.exclude(user__username__contains="_e-test"))
+        group_students    = set(self.students.all())
+        students          = parcours_students.intersection(group_students) 
+        nb_student        = len(students)
+
 
         if self.exercise.supportfile.is_ggbfile :
             nb_exercise_done = Studentanswer.objects.filter(student__in= students, parcours= parcours, exercise = self.exercise).values_list("student",flat= True).order_by("student").distinct().count()

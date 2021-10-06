@@ -73,19 +73,10 @@
                         <th>Modif.</th>
                         <th>Matière</th>
                         <th>Niveau</th>
-                        <th style="width:250px">Affecté au groupe 
-                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                            <div class="helper_tip_text" >Le profil élève d'un enseignant n'est pas pris en compte. </div>
-                            </span>
-
-                        </th>
+                        <th style="width:250px">Affecté au groupe </th>
                         <th>Mutualisation</th>
                         <th>Coanimation</th>
-                        <th style="width:100px">Elèves
-                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                            <div class="helper_tip_text" >Le profil élève d'un enseignant est pris en compte. </div>
-                            </span>
-                        </th>
+                        <th style="width:100px">Elèves</th>
                         <th style="width:120px">Publication 
                             <span class="helper_tip"> 
                             <i class="fa fa-question-circle"></i>
@@ -190,7 +181,7 @@
 
 
                         <td style="padding-left: 40px ">
-                            {% if  folder.coteachers.count > 0   %}
+                            {% if  folder.is_coanimation   %}
                                 <i class="fa fa-check text-success"></i> 
                             {% else %}
                                 <i class="fa fa-times text-danger"></i>

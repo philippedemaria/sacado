@@ -69,7 +69,7 @@ urlpatterns = [
     path('parcours_clone/<int:id>/<int:course_on>', clone_parcours, name='clone_parcours'),
     path('parcours_clone_folder/<int:id>', clone_folder, name='clone_folder'),
     path('parcours_group/<int:id>/', list_parcours_group, name='list_parcours_group'), # parcours d'un groupe
-    path('parcours_sub_parcours/<int:idg>/<int:id>/', list_sub_parcours_group, name='list_sub_parcours_group'), # parcours d'un dossier
+    path('parcours_sub_parcours/<int:idg>/<int:idf>/', list_sub_parcours_group, name='list_sub_parcours_group'), # parcours d'un dossier
     path('list_sub_parcours_group_student/<int:idg>/<int:idf>/', list_sub_parcours_group_student, name='list_sub_parcours_group_student'), # parcours d'un parcours
     path('ajax_subparcours_check', ajax_subparcours_check, name='ajax_subparcours_check'), # parcours d'un parcours
 

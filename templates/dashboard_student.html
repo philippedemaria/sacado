@@ -10,10 +10,8 @@
             {% for group in groups %}
  
                     {% get_documents_counter_by_student  student group as dataset  %}
-
-
                     <div  class="box box-widget widget-user-2 folder_sorter"   
-                          style="cursor: move;{% if group.vignette %}background-image: url('{{ group.vignette.url }}'); background-size: cover; {% endif %}background-color:{{group.subject.color }};">
+                          style="cursor: move;{% if folder.vignette %}background-image: url('{{ group.vignette.url }}'); background-size: cover; {% endif %}background-color:{{group.subject.color }};">
                         <div class="handler widget-user-header">
                             {% if folder.vignette %}                
                                 <div class="box_title_underlay_vignette" style="background-color:{{ folder.color }};">
@@ -30,17 +28,24 @@
                         <!-- box-footer DES FONCTIONNALITES  -->
                         <div class="box-footer dashboard_student" style="position: relative; padding-top: 0px;">
                             <div class="row dossier_index"  > 
+                                <div class="col-xs-6 col-md-6 col-lg-6"> 
+                                    {% with group.themes.nb as lgt %}   
+                                        <i class="fa fa-folder{% if lgt > 0 %}-open{% endif %}"></i> {{ lgt }}   Dossier{{ lgt|pluralize }} 
+                                    {% endwith %}
+                                </div>
                                 <div class="col-xs-6 col-md-6 col-lg-6">
                                     {% with dataset.nb_folders  as nbf %}   
-                                        <i class="fa fa-folder{% if nbf > 0 %}-open{% endif %}"></i> {{ nbf }}   dossier{{ nbf|pluralize }} 
+                                        <i class="fa fa-folder{% if nbf > 0 %}-open{% endif %}"></i> {{ nbf }}   Dossier{{ nbf|pluralize }} 
                                     {% endwith %}
                                 </div>
                                 <div class="col-xs-6 col-md-6 col-lg-6">
                                     {% with dataset.nb_parcours as nb %}   
-                                        <i class="fa fa-desktop"></i> {{ nb }}   parcours<br/>
+                                        <i class="fa fa-desktop"></i> {{ nb }}   Parcours
                                     {% endwith %}
+                                </div>
+                                <div class="col-xs-6 col-md-6 col-lg-6">
                                     {% with dataset.nb_evaluations as nbe %}   
-                                        <i class="fa fa-trophy"></i> {{ nbe }} évaluation{{ nbe|pluralize }}
+                                        <i class="fa fa-trophy"></i> {{ nbe }} Evaluation{{ nbe|pluralize }}
                                     {% endwith %}
                                 </div>
                             </div>
@@ -65,23 +70,8 @@
                                     {{ group.level.name }}  
                                 </div>
                             </div>
-
-
                         </div>
                     </div>   
-
-
-
-
-
-
-
-
-
-
-
-
-
             {% endfor  %}   
 
             

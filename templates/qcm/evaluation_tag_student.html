@@ -1,0 +1,58 @@
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+     
+
+
+
+<div  class="box box-widget widget-user-2 folder_sorter"  style="{% if evaluation.vignette %}background-image: url('{{evaluation.vignette.url }}');background-size: 100% 100%;{% endif  %} background-color:{{evaluation.color }}"> 
+    <div class="handler widget-user-header">
+         {% if  student.user.school %}  
+            {% if  data_min.boolean %}
+            <div class="background_badge" >
+            <i class="fa fa-trophy" style="color:{{ data_min.colored }};font-size: {{ data_min.size }};z-index:999999; "></i><br/><font style="font-size:12px;color:{{evaluation.color }};">{{ data_min.label }}</font>
+            </div>
+            {% endif  %}
+        {% endif  %}
+  
+        {% if evaluation.vignette %}                
+            <div class="box_title_underlay_vignette" style="background-color:{{ evaluation.color }};">
+            </div> 
+        {% endif  %}
+        <div class="box_title_vignette"> 
+            {% if evaluation.title|length > 23 %}
+                <span class="helper_tip" style="color:{{ evaluation.color|contrast_color }};font-size:20px;font-weight: 100;cursor:help">
+                    {{ evaluation.title|truncatechars:"23" }}
+                    <div class="helper_tip_text_right">{{ evaluation.title }}</div>
+                </span>
+            {% else  %}
+                 <span style="color:{{ evaluation.color|contrast_color }};font-size:20px;font-weight: 100">{{ evaluation.title }}</span>
+            {% endif  %}
+        </div>
+        <div style="font-size:47px;color:#39fa5a;opacity:0.5;position: absolute;right:0px;font-weight: 100;top:125px;z-index:99; " >{{ data.pc }}%</div>
+    </div>
+
+    <div style="width:{{ data.pc }}%; height:5px; background-color: #39fa5a;font-size:6px;text-align: right;color:#FFF;position: absolute;top:170px;z-index:99;border-radius :0% 10% 10% 0%;"></div>
+    {% if data.pc > 0 %}
+    <div style="width:100%; height:5px; background-color: #e9e6f0;font-size:6px;text-align: right;color:#FFF;position: absolute;top:170px;z-index:90;"></div>
+    {% endif %}
+    <!-- box-footer DES FONCTIONNALITES  -->
+    <div class="box-footer" style="position: relative; padding-top: 2px;height:125px">
+
+        <p class="white thin">{{ evaluation.title }} 
+            {% if  evaluation.stop %}{% if  evaluation.stop < today %}<sup><i class="fa fa-lock fa-xs" style="font-size:12px;"></i></sup>{% endif %}{% endif %}  
+        </p>
+       
+        <div style="text-align: center; margin-top: 20px; margin-bottom: 20px">
+         <a href="{% url 'show_parcours_student' evaluation.id  %}" class="btn btn-new-violet"  style="width:200px;"><i class="fa fa-arrow-circle-right"></i> Démarrer</a>
+        </div>
+        <div class="row">
+            <div class="col-md-5  col-lg-6  col-sm-5" style="color: #998fa6;">
+                <i class="fa fa-clock-o"></i>  {{ evaluation.evaluation_duration }} min 
+            </div>
+            <div class="col-md-5  col-lg-6  col-sm-5" style="color: #998fa6;">
+                {{ evaluation.nb_exercises }} exercice{{ evaluation.exercises.count|pluralize }} 
+            </div>
+        </div>
+    </div>
+</div>  

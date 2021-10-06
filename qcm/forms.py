@@ -41,9 +41,9 @@ class ParcoursForm(forms.ModelForm):
 		if teacher:
 			groups        = teacher.groups.all()
 			if teacher.teacher_group.filter(group_folders=folder) : 
-				shared_groups = teacher.teacher_group.filter(group_folders=folder)
+				shared_groups = teacher.teacher_group.filter(group_folders=folder, level = group.level, subject = group.subject)
 			else :
-				shared_groups = teacher.teacher_group.all()
+				shared_groups = teacher.teacher_group.filter(level = group.level, subject = group.subject)
 			if folder :
 				groups    = folder.groups.all()
 			if group :
@@ -51,6 +51,8 @@ class ParcoursForm(forms.ModelForm):
 					groups    = teacher.groups.filter(level=group.level,group_folders=folder)
 				else :
 					groups    = teacher.groups.filter(level=group.level)
+
+			print(groups , shared_groups)
 				
 			these_groups  = groups|shared_groups
 			all_groups    = these_groups.order_by("teachers")
@@ -72,16 +74,9 @@ class ParcoursForm(forms.ModelForm):
 				raise forms.ValidationError("La date de verrouillage ne peut pas être antérieure à son début.")
 		except:
 			pass
-		################################################			
-		groups = cleaned_data.get("groups")
-		for g in groups:
-			print(g)
-			for s in g.students.all() :
-				attribute_all_documents_to_student([self],s)
+
 
  
-
-
 
 class Parcours_GroupForm(forms.ModelForm):
 
@@ -127,10 +122,10 @@ class FolderForm(forms.ModelForm):
 			self.fields['coteachers']    = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
 
 		if subject and level :
-			parcours                = teacher.teacher_parcours.filter(subject=subject,level=level,is_trash=0).order_by("title")
+			parcours                = teacher.teacher_parcours.filter(subject=subject,level=level,is_trash=0,is_archive=0).order_by("title")
 			self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset=parcours, widget=forms.CheckboxSelectMultiple, required=False)
 		else :
-			parcours                = teacher.teacher_parcours.filter(is_trash=0).order_by("title")
+			parcours                = teacher.teacher_parcours.filter(is_trash=0,is_archive=0).order_by("title")
 			self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset=parcours, widget=forms.CheckboxSelectMultiple, required=False)
  
 			
@@ -145,30 +140,7 @@ class FolderForm(forms.ModelForm):
 		except:
 			pass
 
-		groups    = cleaned_data.get("groups") # liste de tous mes groupes
-		all_students = Student.objects.filter(students_to_group__in=groups)		
-		parcours_ids    = cleaned_data.get("parcours") # liste de tous mes groupes
-	
-		for parcours in parcours_ids :
 
-			parcours.groups.set(groups)
-			parcours.students.set(all_students)	
-
-
-
-			for r in parcours.parcours_relationship.all():
-				blacklisted_student_ids = Blacklist.objects.values_list("student").filter(relationship=r).exclude(student__user__username__contains="_e-test")
-				students_no_blacklisted = [s for s in all_students if s not in  blacklisted_student_ids]
-				r.students.set(students_no_blacklisted)
-
-			for c in  parcours.parcours_customexercises.all() :
-				blacklisted_student_customexercises_ids = Blacklist.objects.values_list("student").filter(customexercise=c).exclude(student__user__username__contains="_e-test")
-				students_customexercises_no_blacklisted = [s for s in all_students if s not in  blacklisted_student_customexercises_ids]
-				c.students.set(students_no_blacklisted_custom)
-
-			courses = parcours.course.all()
-			for course in courses:
-				course.students.set(all_students)
 
 
 

@@ -3,9 +3,10 @@ from datetime import datetime
 from django.core import serializers
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect
-from socle.models import  Knowledge, Level, Theme, Skill , Waiting
-from socle.forms import  LevelForm, KnowledgeForm,  ThemeForm,MultiKnowledgeForm , SkillForm, MultiSkillForm , WaitingForm , MultiWaitingForm
+from socle.models import  Knowledge, Level, Theme, Skill , Waiting , Subject , Vignettesubject
+from socle.forms import  LevelForm, KnowledgeForm,  ThemeForm,MultiKnowledgeForm , SkillForm, MultiSkillForm , WaitingForm , MultiWaitingForm 
 from account.models import Teacher, Student
 from django.contrib import messages
 from account.decorators import user_can_create
@@ -366,3 +367,52 @@ def ajax_chargewaitings(request):
  
     return JsonResponse(data)
 
+
+
+
+@user_is_superuser
+def list_subjects(request):
+ 
+    subjects = Subject.objects.order_by("name")
+
+    return render(request, 'socle/list_subjects.html', { 'subjects': subjects})
+
+@user_is_superuser
+def create_subject(request):
+
+    form = inlineformset_factory( Subject , Vignettesubject , fields=('subject','vignette','level') , extra=1)
+    teacher = Teacher.objects.get(user=request.user)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Le savoir faire a été créé avec succès !')
+        return redirect('subjects')
+    else:
+        print(form.errors)
+
+    context = {'form': form,  'subject': None ,   'teacher': teacher }
+
+    return render(request, 'socle/form_subject.html', context)
+
+@user_is_superuser
+def update_subject(request, id):
+    
+    teacher = Teacher.objects.get(user=request.user)
+    subject = Subject.objects.get(id=id)
+    form = inlineformset_factory( Subject , Vignettesubject , fields=('subject','vignette','level') , extra=1)
+    if request.method == "POST" :
+        if subject_form.is_valid():
+            subject_form.save()
+            messages.success(request, 'Le savoir faire a été modifié avec succès !')
+            return redirect('subjects')
+        else:
+            print(subject_form.errors)
+
+    context = {'form': subject_form,  'subject': subject,  'teacher': teacher  }
+
+    return render(request, 'socle/form_subject.html', context )
+
+@user_is_superuser
+def delete_subject(request, id):
+    subject = Subject.objects.get(id=id)
+    subject.delete()
+    return redirect('subjects')

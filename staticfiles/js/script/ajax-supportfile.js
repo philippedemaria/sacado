@@ -37,7 +37,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     },
                     url: "../../ajax_populate",
                     success: function (data) {
-                        if (data.no_store) { alert("Vous ne pouvez pas enregistrer cet exercice. Un exercice similaire est déjà dans ce parcours.")}
+                        if (data.no_store) { alert("Vous ne pouvez pas enregistrer cet exercice. Cet exercice est déjà dans ce parcours.")}
                             else
                             {
                                 $('#is_selected'+exercise_id).html(data.html);   
@@ -72,7 +72,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                         url: "../../ajax_populate_mastering",
                         success: function (data) {
 
-                            if (data.no_store) { alert("Vous ne pouvez pas enregistrer cet exercice. Un exercice similaire est déjà dans ce parcours.")}
+                            if (data.no_store) { alert("Vous ne pouvez pas enregistrer cet exercice. Cet exercice est déjà dans ce parcours.")}
                                 else
                                 { 
                                     $('#is_selected'+exercise_id).html(data.html);   

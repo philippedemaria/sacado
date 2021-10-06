@@ -1,0 +1,94 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+{% block require %}
+    {% if subject %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+{% endblock %}
+
+ 
+
+{% block page_title %}
+     Niveau  <img src="{% static 'img/angle-right.png' %}"/>  
+     {% if subject %}
+     <small>Modification</small>
+    {% else %}
+     <small>Nouveau niveau</small>
+    {% endif %} 
+{% endblock %}
+
+{% block page_menu_right %}
+{% endblock %}
+
+{% block body  %} 
+<section class="content_main"> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <form method="post" action="" enctype='multipart/form-data'>
+            {% csrf_token %}
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <label>{{ form.name.label_tag }}</label>
+                            {{ form.name |add_class:"form-control" }}
+                            {{ form.name.errors }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5  col-md-4 col-lg-3">
+                            <label>{{ form.color.label_tag }} </label>     
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                        <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
+                                    </span>
+                          <div id="color-picker-component" class="input-group colorpicker-component">
+                              {{ form.color.as_hidden }}
+                              <span class="input-group-addon"><i></i></span>
+                          </div>
+                    </div>
+
+                    <div class="col-sm-7 col-md-8 col-lg-9">
+                        <div class="form-group">
+                            <label>{{ form.shortname.label_tag }}</label>
+                            {{ form.shortname |add_class:"form-control" }}
+                            {{ form.shortname.errors }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <label>{{ form.image.label_tag }}</label>
+                            {{ form.image |add_class:"form-control" }}
+                            {{ form.image.errors }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <label>{{ form.themes.label_tag }}</label>
+                            {{ form.themes }}
+                            {{ form.themes.errors }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        
+                        <button type="submit" class="btn btn-primary">{% if subject %}Enregistrer les modifications{% else %}Créer le niveau{% endif %}</button>   
+                        
+                        <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock  %}   

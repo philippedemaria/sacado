@@ -1,0 +1,60 @@
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+     
+
+
+
+<div  class="box box-widget widget-user-2 folder_sorter"  style="{% if parcours.vignette %}background-image: url('{{parcours.vignette.url }}');{% endif  %} background-size: 100% 100%;background-color:{{parcours.color }}"> 
+    <div class="handler widget-user-header">
+         {% if  student.user.school %}  
+            {% if  data_min.boolean %}
+            <div class="background_badge" >
+            <i class="fa fa-trophy" style="color:{{ data_min.colored }};font-size: {{ data_min.size }};z-index:999999; "></i><br/><font style="font-size:12px;color:{{parcours.color }};">{{ data_min.label }}</font>
+            </div>
+            {% endif  %}
+        {% endif  %}
+  
+        {% if parcours.vignette %}                
+            <div class="box_title_underlay_vignette" style="background-color:{{ parcours.color }};">
+            </div> 
+        {% endif  %}
+        <div class="box_title_vignette"> 
+            {% if parcours.title|length > 23 %}
+                <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px;font-weight: 100;cursor:help">
+                    {{ parcours.title|truncatechars:"23" }}
+                    <div class="helper_tip_text_right">{{ parcours.title }}</div>
+                </span>
+            {% else  %}
+                 <span style="color:{{ parcours.color|contrast_color }};font-size:20px;font-weight: 100">{{ parcours.title }}</span>
+            {% endif  %}
+        </div>
+        <div style="font-size:47px;color:#39fa5a;opacity:0.5;position: absolute;right:0px;font-weight: 100;top:125px;z-index:99; " >{{ data.pc }}%</div>
+    </div>
+
+    <div style="width:{{ data.pc }}%; height:5px; background-color: #39fa5a;font-size:6px;text-align: right;color:#FFF;position: absolute;top:170px;z-index:99;border-radius :0% 10% 10% 0%;"></div>
+    {% if data.pc > 0 %}
+    <div style="width:100%; height:5px; background-color: #e9e6f0;font-size:6px;text-align: right;color:#FFF;position: absolute;top:170px;z-index:90;"></div>
+    {% endif %}
+    <!-- box-footer DES FONCTIONNALITES  -->
+    <div class="box-footer" style="position: relative; padding-top: 2px;">
+
+        <div class="row extend_student" > 
+            <div class="col-xs-4 col-md-4 col-lg-4" align="center"> 
+                <a href="{% url 'show_course_student' 0 parcours.id %}"><div class="extend_student_body"><i class="fa fa-mortar-board"></i></div></a>
+                <div class="extend_student_nb">{{ data_min.nb_cours }}</div>                                
+                <div class="extend_student_title">Cours</div>                                
+            </div>
+            <div class="col-xs-4 col-md-4 col-lg-4" align="center"> 
+                <a href="{% url 'show_parcours_student' parcours.id   %}"><div class="extend_student_body"><i class="fa fa-laptop"></i></div></a> 
+                <div class="extend_student_nb">{{  data_min.nb_exercise }}</div>                                                                 
+                <div class="extend_student_title">Exercices</div>
+            </div>
+            <div class="col-xs-4 col-md-4 col-lg-4" align="center">  
+                <a href="{% url 'list_parcours_quizz_student' parcours.id %}"><div class="extend_student_body"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></div></a>
+                <div class="extend_student_nb">{{ data_min.nb_quizz }}</div>                                                                
+                <div class="extend_student_title">Quizz</div>
+            </div>    
+        </div>
+    </div>
+</div>  

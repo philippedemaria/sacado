@@ -1,5 +1,5 @@
 from django import forms 
-from socle.models import   Theme, Knowledge, Level, Skill, Waiting
+from socle.models import   Theme, Knowledge, Level, Skill, Waiting , Subject
  
 
  
@@ -70,3 +70,11 @@ class MultiSkillForm(forms.ModelForm):
 	class Meta:
  		model = Skill  
  		fields = '__all__'
+
+
+
+
+class SubjectForm(forms.ModelForm):
+	class Meta:
+ 		model = Subject  
+ 		fields = '__all__' 

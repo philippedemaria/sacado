@@ -67,89 +67,26 @@
 
 
             <!-- *************************************** Parcours ******************************************* -->
-            {% for parcours in parcourses %}
-                    {% get_percent parcours student as data %}  
-                    {% get_min_score parcours student as data_min %}
+            {%  if parcourses %}
+            <div class="row"></div> 
+                <h2 class='thin'>Mes parcours</h2>
+                {% for parcours in parcourses %}
+                        {% get_percent parcours student as data %}  
+                        {% get_min_score parcours student as data_min %}
+                        
+                        {% include 'qcm/parcours_tag_student.html' %}
 
-                    <!-- small box -->
-                        <div class="small-box-student" style="{% if parcours.vignette %}background-image: url('{{parcours.vignette.url }}');{% endif  %} background-size: 100% 100%;background-color:{{parcours.color }}">
-                            {% if  student.user.school %}  
-                                {% if  data_min.boolean %}
-                                <div class="background_badge" >
-                                <i class="fa fa-trophy" style="color:{{ data_min.colored }};font-size: {{ data_min.size }} "></i><br/><font style="font-size:12px;color:{{parcours.color }};">{{ data_min.label }}</font>
-                                </div>
-                                {% endif  %}
-                            {% endif  %}
-                            {% if not parcours.vignette %}
-                            <div class="icon-student">
-                                 {{ data.pc }}%
-                            </div>
-                            {% endif  %}
-                            <div class="small-box-footer-max" {% if parcours.vignette %}style="background-color:{{parcours.color }};color:{{parcours.color|contrast_color }};"{% endif  %}  >
-                                <h2 class="thin" style="color:{{parcours.color|contrast_color }};"> {{ parcours.title|truncatechars:"17" }} </h2> 
-                                
-                                <br> 
-                                <div style="text-align: center;margin-top: 5px">
-                                <a href="{% url 'show_parcours_student'  parcours.id %}" class="btn btn-default btn-accueil"> {% get_tasks student parcours  as is_task_exists %} 
-                                    {%  if is_task_exists %}
-                                        <i class="fa fa-calendar-check" style="color:red"></i>
-                                    {% endif %} Accéder aux {% if parcours.is_folder %}parcours{% else  %}exercices{% endif %}</a>
-                                </div>
-                                <div  class="student_vignette_subtitle" style="color:{{parcours.color|contrast_color }};">    
-  
-                                        {{ data.nb }}/{{ data.nb_total }} exercice{{ data.nb_total|pluralize }} étudié{{ data.nb_total|pluralize }} <span style="color:{{parcours.color|contrast_color }};font-size:12px ">{{ data.pc }}% </span>
-                
-                                    {% if parcours.course.all|length > 0 %}  
-                                    <a href="{% url 'show_course_student' 0 parcours.id %}" class="pull-right" style="color:{{parcours.color|contrast_color }};" title="Rappels de cours" target="_blank"  >
-                                        <i class="fa fa-desktop"></i>  
-                                    </a>
-                                    {% endif  %}
-                                </div>
-                            </div>
-                        </div>
-            {% endfor  %}   
-
+                {% endfor  %}   
+            {% endif %}  
             <!-- ******************************************************************************************** -->
             <!-- ************************************* Evaluations ****************************************** -->
             {%  if evaluations %}
             <div class="row"></div> 
-            <hr/>
-            <h2 class='thin'>Evaluations</h2>
+            <h2 class='thin'>Mes évaluations</h2>
                 {%  for evaluation in  evaluations %} 
+                    {% get_percent evaluation student as data %}  
                     {% get_min_score evaluation student as data_min %} 
-                    <div class="small-box-student" style="background-color:{{evaluation.color }};color:{{evaluation.color|contrast_color }};">
-                        {% if  student.user.school %}  
-                            {% if  data_min.boolean %}
-                            <div class="background_badge" >
-                            <i class="fa fa-trophy" style="color:{{ data_min.colored }};font-size: {{ data_min.size }} "></i><br/><font style="font-size:12px;color:{{parcours.color }};">{{ data_min.label }}</font>
-                            </div>
-                            {% endif  %}
-                        {% endif  %}
-                        <div class="icon-student">
-                            <small><i class="fa fa-graduation-cap"></i></small>
-                        </div>
-                        <div class="small-box-footer-max">
-                            <h2 class="white thin">
-                                {{ evaluation.title|truncatechars:"19" }}
-
-
-
-                                {% if  evaluation.stop %}{% if  evaluation.stop < today %}<sup><i class="fa fa-lock fa-xs" style="font-size:12px;"></i></sup>{% endif %}{% endif %}  
-                            </h2>
-                           
-                            <div style="text-align: center; margin-top: 20px; margin-bottom: 20px">
-                             <a href="{% url 'show_parcours_student' evaluation.id  %}" class="btn btn-default btn-accueil"><i class="fa fa-arrow-circle-right"></i> Démarrer</a>
-                            </div>
-                            <p>
-                                <div class="col-md-6  col-lg-6  col-sm-6">
-                                    <i class="fa fa-clock-o"></i>  {{ evaluation.evaluation_duration }} min 
-                                </div>
-                                <div class="col-md-6  col-lg-6  col-sm-6">
-                                    {{ evaluation.nb_exercises }} exercice{{ evaluation.exercises.count|pluralize }} 
-                                </div>
-                            </p>
-                        </div>
-                    </div>
+                    {% include 'qcm/evaluation_tag_student.html' %}
                 {% endfor %}
             {% endif %}  
             <!-- ******************************************************************************************** -->

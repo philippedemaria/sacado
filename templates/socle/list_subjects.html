@@ -1,0 +1,75 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+{% block require %}
+
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+{% endblock %}
+
+
+ 
+{% block page_title %}
+     Niveaux 
+{% endblock %}
+
+{% block page_menu_right %}
+    <li><a href="{% url 'create_subject' %}" class="btn btn-new pull-right" ><i class="fa fa-plus"></i> Nouvel enseignement</a> </li> 
+{% endblock %}
+
+
+{% block  body %}
+<section class="content_main"> 
+
+    <div class="row"> 
+        <div class="col-sm-12 col-md-12">
+            <table class="table table-bordered table-hover standard_tab_sort2000" style="width:100%">
+                  <thead>
+                      <tr>
+                        <th style="width:10px"> </th>                       
+                        <th  style="width:300px">Nom</th>                  
+                        <th>Abréviations</th> 
+                        <th>Images associées</th> 
+                      </tr>
+                  </thead>
+                  <tbody>
+                        {% for subject in subjects %}
+                        <tr> 
+                          <td style="background-color:{{ subject.color }}">
+                          </td>
+                          <td>
+                             <a href="{% url 'update_subject' subject.id %}">{{ subject.name }} </a> 
+                              <a href="{% url 'delete_subject' subject.id %}"  onclick="return TestDelete('ce niveau')"><i class='fa fa-trash pull-right'></i></a>
+                          </td>
+                          <td >
+                             {{ subject.shortname }}
+                          </td>
+                          <td >
+                               {% for v in subject.subject_vignettesubject.all  %}   
+                                <div style="width:50px">
+                                  <img src="{{ v.imagefile.url  }}" width="50px"><br/>
+                                  {{ v.level.shortname }}
+                                </div>
+ 
+                              {% endfor %} 
+                          </td>
+                        </tr>
+                        {% endfor %}
+                  </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+ 
+
+
+
+{% endblock  %}   
+
+
+ 

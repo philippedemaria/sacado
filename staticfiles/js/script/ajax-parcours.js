@@ -423,7 +423,7 @@ define(['jquery','bootstrap'], function ($) {
                         $('#selector_e'+exercise_id).attr("data-statut",data.statut);                  
                         $('#selector_e'+exercise_id).removeClass(data.noclass);
                         $('#selector_e'+exercise_id).addClass(data.class);
-                        if (data.no_store) { alert("Vous ne pouvez pas enregistrer cet exercice. Un exercice similaire est déjà dans ce parcours.")}
+                        if (data.no_store) { alert("Vous ne pouvez pas enregistrer cet exercice. Cet exercice est déjà dans ce parcours.")}
                     }
                 }
             )

@@ -160,9 +160,11 @@ def student_dashboard(request,group_id):
         
         bases = student.students_to_parcours
 
-        parcourses = bases.filter(is_evaluation=0, subject = group.subject, folders = None, level = group.level,is_trash=0).order_by("ranking")
+        bases = group.group_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students =student , subject = group.subject, level = group.level , folders = None, is_archive =0 , is_trash=0).distinct()
 
-        evaluations = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), folders = None, is_evaluation=1,subject = group.subject,is_trash=0).order_by("ranking")
+        parcourses = bases.filter(is_evaluation=0).order_by("ranking")
+        evaluations = bases.filter(is_evaluation=1).order_by("ranking")
+
         last_exercises_done = student.answers.filter(exercise__knowledge__theme__subject=group.subject).order_by("-date")[:5]
 
     else :
@@ -752,7 +754,7 @@ def student_remove_from_school(request):
 
     group.students.remove(student)
 
-    groups = student.students_to_group.exclude(students__user__username = request.user.username)
+    groups = student.students_to_group.exclude(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test"))
     gr = ""
     for g in groups :
         gr = gr +str(g.name)+" "
@@ -836,7 +838,7 @@ def result_group(request, id):
 
     parcourses_tab = []
     parcourses_student_tab, exercise_tab = [] ,  []
-    for student in group.students.exclude(user__username = request.user.username).order_by("user__id"):
+    for student in group.students.exclude(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test")).order_by("user__id"):
         parcourses = student_parcours_studied(student) 
         if parcourses in parcourses_student_tab :
             break
@@ -872,7 +874,7 @@ def result_group_theme(request, id, idt):
 
     teacher = Teacher.objects.get(user=request.user)
     group = Group.objects.get(id=id)
-    students = group.students.exclude(user__username = request.user.username).order_by("user__last_name")
+    students = group.students.exclude(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test")).order_by("user__last_name")
 
     authorizing_access_group(request,teacher,group ) 
  
@@ -906,7 +908,7 @@ def result_group_exercise(request, id):
 
     sender_mail(request,form)
 
-    students = group.students.exclude(user__username = request.user.username).order_by("user__last_name")
+    students = group.students.exclude(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test")).order_by("user__last_name")
 
     context = {'group': group, 'form': form , 'stage' : stage  , 'students' : students  , 'teacher': teacher, 'theme' : None  , 'communications' : [], 'relationships': [] , 'parcours_tab' : [] , 'parcours' : None  }
 
@@ -919,7 +921,7 @@ def result_group_skill(request, id):
 
     group = Group.objects.get(id=id)
     skills = Skill.objects.filter(subject=group.subject)
-    students = group.students.exclude(user__username = request.user.username).order_by("user__last_name")
+    students = group.students.exclude(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test")).order_by("user__last_name")
     teacher = Teacher.objects.get(user=request.user)
 
     authorizing_access_group(request,teacher,group ) 
@@ -939,7 +941,7 @@ def result_group_skill(request, id):
 def result_group_waiting(request, id):
 
     group = Group.objects.get(id=id)
-    students = group.students.exclude(user__username = request.user.username).order_by("user__last_name")
+    students = group.students.exclude(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test")).order_by("user__last_name")
     teacher = Teacher.objects.get(user=request.user)
 
     waitings = group.level.waitings.filter(theme__subject=group.subject)
@@ -961,7 +963,7 @@ def result_group_theme_exercise(request, id, idt):
     theme = Theme.objects.get(id=idt)
     stage = get_stage(group)
     teacher = Teacher.objects.get(user=request.user)
-    students = group.students.exclude(user__username = request.user.username).order_by("user__last_name")
+    students = group.students.exclude(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test")).order_by("user__last_name")
     authorizing_access_group(request,teacher,group ) 
 
     context = {  'group': group, 'form': form, 'theme': theme, 'students': students, 'teacher': teacher, "slug" : theme.slug , 'stage' : stage   , 'communications' : [], 'relationships': [] , 'parcours': None  }
@@ -979,7 +981,7 @@ def stat_group(request, id):
     authorizing_access_group(request,teacher,group ) 
 
     stats = []
-    for s in group.students.exclude(user__username = request.user.username).order_by("user__last_name") :
+    for s in group.students.exclude(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test")).order_by("user__last_name") :
         student = {}
         student["name"] = s 
         parcours = Parcours.objects.filter(students=s,is_publish=1,is_trash=0)
@@ -1051,7 +1053,7 @@ def task_group(request, id):
 
 
     stats = []
-    for s in group.students.order_by("user__last_name"):
+    for s in group.students.exclude(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test")).order_by("user__last_name"):
         student = {}
         student["name"] = s
         parcours = Parcours.objects.filter(students=s,is_trash=0)
@@ -1200,7 +1202,7 @@ def print_statistiques(request, group_id, student_id):
 
 
     if student_id == 0  :
-        students = group.students.exclude(user__username = request.user.username).order_by("user__last_name")
+        students = group.students.exclude(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test")).order_by("user__last_name")
         title_of_report = group.name+"_"+str(timezone.now().date())
 
         knows = Knowledge.objects.filter(level = group.level).order_by("level")
