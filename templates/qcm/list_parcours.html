@@ -8,6 +8,7 @@
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2_mini.js' %}"></script>
     <script>
         require(['script/ajax-parcours']);
+        require(['script/ajax-parcours_inside_data']);
     </script> 
 {% endblock %}
 
@@ -48,17 +49,13 @@
 <form action="{% url 'actioner' %}" method="POST" enctype='multipart/form-data'>
 
     
-    <div class="row">    
-        <div class="col-sm-12 col-md-12">
-            <h1 class="thin sacado_color_text" style="margin-bottom:0px;"> <i class="fa fa-folder"></i> Mes dossiers</h1>
-        </div>
-    </div>
+
 
 
     <div class="row">    
         <div class="col-sm-12 col-md-12">
             {% csrf_token %}
-            <table class="table table-hovered ordering_tab_1000"  style="width:100%" >
+            <table class="table table-hovered display_no_details100"  style="width:100%" >
                 <thead> 
                     <tr> 
                         <th style="width:20px"></th>
@@ -234,11 +231,8 @@
             </table>
         </div>
     </div>
-    <div class="row">    
-        <div class="col-sm-12 col-md-12">
-            {% block typo_eval_parcours  %}<h1 class="thin sacado_color_text" style="margin-bottom:0px;"><i class="fa fa-th"></i> Mes parcours</h1> {% endblock  %}
-        </div>
-    </div>
+
+
     <div class="row">    
         <div class="col-sm-12 col-md-12">
             <table class="table table-hovered ordering_tab_1000"  style="width:100%" >

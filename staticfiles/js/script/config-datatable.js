@@ -77,9 +77,19 @@ $('table.display1000').DataTable({
 
  $('table.display_no_details50').DataTable({
         "pageLength": 50,
-        "paging": false,
-        "info":     false               
+        "paging"    : false,
+        "info"      :     false               
     } );
+
+
+ $('table.display_no_details100').DataTable({
+        "pageLength": 100,
+        "paging"    : false,
+        "info"      : false               
+    } );
+
+
+
 
 
 });

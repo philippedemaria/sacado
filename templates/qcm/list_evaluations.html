@@ -4,13 +4,14 @@
 {% load item_tags %}
 
 
+
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2_mini.js' %}"></script>
     <script>
         require(['script/ajax-parcours']);
+        require(['script/ajax-evaluations_inside_data']);
     </script> 
 {% endblock %}
-
  
 
 {% block page_title %}
@@ -28,9 +29,6 @@
 {% endblock %}
 
 
-{% block typo_eval_parcours  %}
-    <h1 class="thin" style="margin-bottom:0px;"><i class="fa fa-trophy"></i> Mes évaluations</h1> 
-{% endblock  %}
 
 {% block modal_boxes  %} 
  
