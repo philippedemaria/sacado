@@ -41,7 +41,7 @@ urlpatterns = [
     path('subjects', list_subjects, name='subjects'),
     path('create_subject', create_subject, name='create_subject'),
     path('update_subject/<int:id>/', update_subject, name='update_subject'),
-    path('delete_subject/<int:id>/', delete_subject, name='delete_subject'),
+
 
 
  

@@ -436,9 +436,3 @@ def update_subject(request, id):
     return render(request, 'socle/form_subject.html', context)
 
  
-
-@user_is_superuser
-def delete_subject(request, id):
-    subject = Subject.objects.get(id=id)
-    subject.delete()
-    return redirect('subjects')
