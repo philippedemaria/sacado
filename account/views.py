@@ -305,8 +305,6 @@ def register_student(request):
                 except :
                     print("Attribution et création non établies")
 
-
-
                 user = authenticate(username=username, password=password)
                 login(request, user)
                 request.session["user_id"] = request.user.id
