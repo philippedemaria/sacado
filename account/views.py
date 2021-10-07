@@ -249,10 +249,13 @@ def register_student_from_admin(request):
 
             # On récupère les parcours, exercices et cours du premier élève de ce groupe et on les attribue au nouvel élève.
             try :
-                parcourses = this_student.students_to_parcours.all()
                 student = Student.objects.create(user=u_form, level=group.level, task_post=1)
                 group.students.add(student)
-                attribute_all_documents_of_groups_to_a_new_student([group], student)
+                test = attribute_all_documents_of_groups_to_a_new_student([group], student)
+                phrase = ""
+                if test :
+                    phrase = " Les documents du groupe lui ont été attribués."
+                messages.success(request, 'Le profil a été changé avec succès !'+phrase)
             except :
                 print("attribution et création non établies")
 
