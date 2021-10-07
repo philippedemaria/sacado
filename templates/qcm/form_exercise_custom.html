@@ -140,7 +140,7 @@ ul#id_skills li{
                                         <div class="helper_tip_text">La vignette d'accueil propose un visuel de votre exercice. Sans vignette de votre part, SACADO associe une vignette par défaut.(Facultatif)</div>
                                     </span>
 
-                                {% if customexercise.imagefile.url %}
+                                {% if customexercise.imagefile  %}
                                     <img src="{{ customexercise.imagefile.url }}" width ="250px" />
                                 {% endif %}
 
