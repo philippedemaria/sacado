@@ -126,7 +126,7 @@
             {% endif %}
 
         {% else %}         
-        <li {% if 'parcours_peuplate/' in request.path %} class="active" {% endif %}><a href="{% url 'peuplate_parcours' parcours.id   %}"><i class="fa fa-laptop fa-fw"></i> Sélectionner les exercices</a>   </li>
+        <li {% if 'parcours_peuplate/' in request.path %} class="active" {% endif %}><a href="{% url 'peuplate_parcours' parcours.id   %}"><i class="fa fa-cloud fa-fw"></i> Sélectionner les exercices</a>   </li>
         <li> <a href="#" data-toggle='modal' data-target='#quizz_choice' ><i class="fa fa-window-restore fa-fw"></i>  Créer un quizz</a> </li> 
 
 
