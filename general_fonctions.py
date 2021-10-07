@@ -354,7 +354,6 @@ def attribute_all_documents_of_groups_to_a_new_student(groups, student):
         # Assigne les parcours et leurs contenus 
         for parcours in group.group_parcours.filter(folders=None):
             parcours.students.add(student)
-
             relationships = parcours.parcours_relationship.all()
             for r in relationships:
                 r.students.add(student)

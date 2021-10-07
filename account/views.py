@@ -348,10 +348,14 @@ def update_student(request, id,idg=0):
             student_f.save()
             messages.success(request, 'Le profil a été changé avec succès !')
         if idg == 0 :
-            group = Group.objects.get(pk=idg)
-            attribute_all_documents_of_groups_to_a_new_student([group], student)            
             return redirect('school_students')
         else:
+            group = Group.objects.get(pk=idg)
+            test = attribute_all_documents_of_groups_to_a_new_student([group], student)
+            phrase = ""
+            if test :
+                phrase = " Les documents du groupe lui ont été attribués."
+            messages.success(request, 'Le profil a été changé avec succès !'+phrase)
             return redirect('school_groups')
 
     return render(request, 'account/student_form.html',
