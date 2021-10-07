@@ -2054,6 +2054,10 @@ def create_parcours_or_evaluation(request,create_or_update,is_eval, idf):
             else :
                 texte = "Nouveau parcours"
             sending_to_teachers(teacher , nf.level , nf.subject,texte)
+
+        if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
+            nf.vignette = request.POST.get("this_image_selected",None)
+
         nf.save()
         form.save_m2m()
 
@@ -2077,8 +2081,6 @@ def create_parcours_or_evaluation(request,create_or_update,is_eval, idf):
         coanim = set_coanimation_teachers(nf,  group_ids,teacher) 
  
 
-        if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
-            nf.vignette = request.POST.get("this_image_selected",None)
 
         ################################################
         lock_all_exercises_for_student(nf.stop,nf)  
@@ -2167,7 +2169,9 @@ def update_parcours_or_evaluation(request, is_eval, id, idg=0 ):
         if form.is_valid():
             nf = form.save(commit=False)
             nf.is_evaluation = is_eval
-            nf.vignette = request.POST.get("this_image_selected",None)
+            if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
+                nf.vignette = request.POST.get("this_image_selected",None)
+            print(nf.vignette)
             nf.save()
             form.save_m2m()
 
@@ -8007,7 +8011,8 @@ def create_folder(request,idg):
                 nf.subject = group.subject
             else :
                 nf.teacher = teacher
-            nf.vignette = request.POST.get("this_image_selected",None)
+            if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
+                nf.vignette = request.POST.get("this_image_selected",None)
             nf.save() 
             form.save_m2m()
 
