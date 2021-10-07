@@ -57,11 +57,10 @@
           <div  style="position: absolute; right : 0px; top:60px;" title="Cet exercice est indiviualisé à certains élèves" id="individialise_id_student{{  rc.exercise.id }}" 
                 {% if  data_rc.nb == only_real_student.count  %} class="checkbox_no_display" {% endif %}>   
             <span class="btn btn-warning" style="cursor:auto">
-              <i class="fa fa-user"></i>  {{ data_rc.nb }} 
+              <i class="fa fa-user"></i><span id="nb_indiv_id_student"> {{ data_rc.nb }} </span>  
             </span>
  
           </div>
- 
 
         {% endif %}
 
@@ -552,7 +551,7 @@
           <div  style="position: absolute; right : 0px; top:60px;" title="Cet exercice est indiviualisé à certains élèves"  >   
               <a href="#customcard{{rc.id}}" class="detail_parcours btn btn-warning" data-custom=1
                  data-exercise_id="{{ rc.id }}"  data-num_exo="{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" data-parcours_id="{{ parcours.id }}">
-                <i class="fa fa-user"></i>
+                <i class="fa fa-user"></i><span id="nb_indiv_id_student">{{ data_rc.nb }} </span> 
               </a>
           </div>
           {% endif %}
@@ -747,7 +746,7 @@
                 data-custom = 1  title = "Individualiser cet exercice" 
                 style = "font-size:14px;color:{{ parcours.color|contrast_color }}">
 
-                <i class="fa fa-users"></i> 
+                <i class="fa fa-users"></i>
             </a>
 
  

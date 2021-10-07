@@ -1065,10 +1065,11 @@ def ajax_individualise(request):
 
 
             if relationship.students.count() != relationship.parcours.students.count() :
+                data["indiv_nb"]   = relationship.students.count()
                 data["indiv_hide"] = True
             else :
                 data["indiv_hide"] = False
-    
+                data["indiv_nb"]   = relationship.students.count()
     else :
         if custom :
             customexercise = Customexercise.objects.get(pk = exercise_id )
@@ -1194,10 +1195,11 @@ def ajax_individualise(request):
                     data["alert"] = False
 
             if relationship.students.count() != relationship.parcours.students.count() :
+                data["indiv_nb"]   = relationship.students.count()
                 data["indiv_hide"] = True
             else :
                 data["indiv_hide"] = False
-     
+                data["indiv_nb"]   = relationship.students.count()
 
     return JsonResponse(data) 
 

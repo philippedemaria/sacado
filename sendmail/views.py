@@ -317,6 +317,11 @@ def create_discussion(request):
 				new_fm.discussion = new_f
 				new_fm.save()
 
+				try :
+					for teacher in Teacher.objects.filter(is_mailing=1).values_list("user__email",flat=True).distinct():
+						send_mail("sacado Forum : " +new_f.discussion  , cleanhtml(unescape_html(new_f.texte)) +"\n Pour répondre connectez-vous à Sacado : https://sacado.xyz", settings.DEFAULT_FROM_EMAIL, [teacher.user.email] )
+				except :
+					pass
 				return redirect('emails')
 
 			else :

@@ -530,7 +530,9 @@ define(['jquery','bootstrap'], function ($) {
                                     }
 
                                 if (data.indiv_hide) 
-                                    { $('#individialise_id_student'+exercise_id).removeClass("checkbox_no_display");}
+                                    { $('#individialise_id_student'+exercise_id).removeClass("checkbox_no_display");
+                                      $('#nb_indiv_id_student'+exercise_id).attr("data-statut",data.indiv_nb); 
+                                    }
                                 else{
                                     { $('#individialise_id_student'+exercise_id).addClass("checkbox_no_display");}
                                 }
@@ -584,7 +586,10 @@ define(['jquery','bootstrap'], function ($) {
                                     }
 
                                 if (data.indiv_hide) 
-                                    { $('#individialise_id_student'+exercise_id).removeClass("checkbox_no_display");}
+                                    { 
+                                        $('#individialise_id_student'+exercise_id).removeClass("checkbox_no_display");
+                                        $('#nb_indiv_id_student'+exercise_id).attr("data-statut",data.indiv_nb);  
+                                    }
                                 else{
                                     { $('#individialise_id_student'+exercise_id).addClass("checkbox_no_display");}
                                 }
