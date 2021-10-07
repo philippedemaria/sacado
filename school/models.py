@@ -87,25 +87,33 @@ class School(models.Model):
         """ cotisation pour un établissement suivant le nombre de ses élèves"""
         try :
             Rate = apps.get_model('association', 'Rate')            
-            rate = Rate.objects.filter(is_active  =  1, quantity__gte=self.nbstudents).order_by("quantity").first()
+            rate = Rate.objects.filter( is_active  =  1, quantity__gte = self.nbstudents ).order_by("quantity").first()
             today = datetime.now()
             limit = datetime(today.year,6,30)
             f = rate.amount
             if today < limit :
                 f = rate.discount
-
         except :
             f = "Nous contacter"
-
         return f
 
 
     def adhesion(self) : 
         today = datetime.now()
-        return self.abonnement.filter(date_start__lte=today, date_stop__gte=today ).count()
+        return self.abonnement.filter( date_start__lte=today , date_stop__gte=today ).count()
 
- 
- 
+
+    def active_accounting(self) :
+        today = datetime.now()
+        try :
+            account  = self.abonnement.filter( is_active = 1 , date_start__lte = today , date_stop__gte = today ).last()
+        except :
+            account  = False
+        print(account)
+        return account
+
+
+
 class Stage(models.Model):
     """" Niveau d'aquisition """
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='aptitude', editable=False)

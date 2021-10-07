@@ -162,20 +162,20 @@ class Accounting(models.Model):
     address = models.CharField(max_length=255, blank=True, verbose_name="Adresse")
     complement = models.CharField(max_length=255, blank=True, verbose_name="Complément d'adresse")
     town = models.CharField(max_length=255, blank=True, verbose_name="Complément d'adresse")
-    country = models.ForeignKey(Country, related_name="accontings", blank=True,  null=True,  on_delete=models.SET_NULL, verbose_name="Pays")
+    country = models.ForeignKey(Country, related_name="accountings", blank=True,  null=True,  on_delete=models.SET_NULL, verbose_name="Pays")
     contact = models.CharField(max_length=255, blank=True ,  verbose_name="Contact")
 
-    school = models.ForeignKey(School, related_name="accontings", blank=True, null=True,  on_delete=models.CASCADE, verbose_name="Etablissement")  
+    school = models.ForeignKey(School, related_name="accountings", blank=True, null=True,  on_delete=models.CASCADE, verbose_name="Etablissement")  
 
     observation = RichTextUploadingField( blank=True, default="", null=True, verbose_name="Observation")
 
     date_payment = models.DateTimeField(null=True, blank=True, verbose_name="Date d'effet") # date de paiement
     date = models.DateTimeField(auto_now_add=True) # date de création de la facture
-    user = models.ForeignKey(User, related_name="accontings", null=True, blank=True,  on_delete=models.CASCADE, editable=False)
+    user = models.ForeignKey(User, related_name="accountings", null=True, blank=True,  on_delete=models.CASCADE, editable=False)
     is_active = models.BooleanField(default=0, verbose_name="Actif")
     is_abonnement = models.BooleanField(default=0, verbose_name="Abonnement")
     ticket = models.FileField(upload_to=accounting_directory_path, blank=True, verbose_name="Justificatif",  default="" )
-    plan = models.ForeignKey(Plancomptable, default=17, related_name="plan_accontings", blank=True,  null=True,  on_delete=models.SET_NULL, verbose_name="Plan comptable")
+    plan = models.ForeignKey(Plancomptable, default=17, related_name="plan_accountings", blank=True,  null=True,  on_delete=models.SET_NULL, verbose_name="Plan comptable")
     tp  = models.PositiveIntegerField(default=0, editable=False)
 
     def __str__(self):
