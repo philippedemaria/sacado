@@ -399,7 +399,7 @@ define(['jquery','bootstrap'], function ($) {
 
 
  
-        $('.selector_e').on('click' ,function () {
+        $('body').on('click' , '.selector_e', function () {
 
             let parcours_id = $(this).attr("data-parcours_id"); 
             let exercise_id = $(this).attr("data-exercise_id"); 
@@ -423,7 +423,7 @@ define(['jquery','bootstrap'], function ($) {
                         $('#selector_e'+exercise_id).attr("data-statut",data.statut);                  
                         $('#selector_e'+exercise_id).removeClass(data.noclass);
                         $('#selector_e'+exercise_id).addClass(data.class);
-                        if (data.no_store) { alert("Vous ne pouvez pas enregistrer cet exercice. Cet exercice est déjà dans ce parcours.")}
+                        $('#nb_exercises').html("").html(data.nb+" exercice.s");     
                     }
                 }
             )

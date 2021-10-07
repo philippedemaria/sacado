@@ -742,6 +742,9 @@ def ajax_populate(request):
             data["html"] = "<i class='fa fa-times'></i>"
             data["no_store"] = True
 
+    Relationship.objects.filter(parcours_id=parcours_id , exercise__supportfile = exercise.supportfile ).count() == 0            
+    data["nb"] = parcours.exercises.count()
+
     return JsonResponse(data) 
 
 

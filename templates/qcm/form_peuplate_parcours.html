@@ -21,7 +21,7 @@
 {% block page_title %}
     <span style="color:{{ parcours.color }}"><i class="fa fa-cloud"></i>     
         {% include 'qcm/breadcrumb.html' %}
-         <small> Sélection des exercices</small>  
+         <small> Sélection des exercices -  <span id="nb_exercises" style="color:{{ parcours.color }}">{{ parcours.exercises.count }} exercice{{ parcours.exercises.count|pluralize }} </span></small>
 {% endblock %}
 
 {% block page_menu_right %}
