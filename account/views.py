@@ -249,11 +249,10 @@ def register_student_from_admin(request):
 
             # On récupère les parcours, exercices et cours du premier élève de ce groupe et on les attribue au nouvel élève.
             try :
-                this_student = group.students.first()
                 parcourses = this_student.students_to_parcours.all()
                 student = Student.objects.create(user=u_form, level=group.level, task_post=1)
                 group.students.add(student)
-                attribute_all_documents(group,student) 
+                attribute_all_documents_of_groups_to_a_new_student([group], student)
             except :
                 print("attribution et création non établies")
 
@@ -302,7 +301,7 @@ def register_student(request):
                 user.save()
                 student = Student.objects.create(user=user, level=group.level)
                 try :
-                    attribute_all_documents(group,student)
+                    attribute_all_documents_of_groups_to_a_new_student([group], student)
                 except :
                     print("Attribution et création non établies")
 
@@ -349,6 +348,8 @@ def update_student(request, id,idg=0):
             student_f.save()
             messages.success(request, 'Le profil a été changé avec succès !')
         if idg == 0 :
+            group = Group.objects.get(pk=idg)
+            attribute_all_documents_of_groups_to_a_new_student([group], student)            
             return redirect('school_students')
         else:
             return redirect('school_groups')
