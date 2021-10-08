@@ -618,6 +618,68 @@ def create_accounting(request,tp):
 
 
 
+
+
+@user_passes_test(user_is_board) 
+def renew_accounting(request,ids):
+ 
+
+    school   = School.objects.get(pk=ids)
+    form     = AccountingForm(request.POST or None , initial = { 'school' : school, })
+    form_abo = AbonnementForm(request.POST or None )
+    formSet  = inlineformset_factory( Accounting , Detail , fields=('accounting','description','amount',) , extra=0)
+    form_ds  = formSet(request.POST or None)
+    today    = datetime.now()
+
+    if request.method == "POST":
+        if form.is_valid():
+            nf = form.save(commit = False)
+            nf.user = request.user
+            forme = request.POST.get("forme",None)
+            nf.chrono = str(uuid.uuid4())[:5]
+            nf.chrono = create_chrono(Accounting, forme) # Create_chrono dans general_functions.py
+            nf.plan_id = 18
+            if forme == "FACTURE" :
+                nf.is_credit = 1
+            else :
+                nf.is_credit = 0
+
+            nf.save()
+
+            form_ds = formSet(request.POST or None, instance = nf)
+            for form_d in form_ds :
+                if form_d.is_valid():
+                    form_d.save()
+
+            som = 0         
+            details = nf.details.all()
+            for d in details :
+                som += d.amount
+
+            Accounting.objects.filter(pk = nf.id).update(amount=som)
+
+            if nf.is_abonnement :
+                if form_abo.is_valid():
+                    fa = form_abo.save(commit = False)
+                    fa.user = request.user
+                    fa.accounting = nf
+                    fa.school = nf.school
+                    if nf.date_payment:
+                        fa.active = 1
+                    fa.save()
+        else :
+            print(form.errors)
+        
+        return redirect('all_schools',)
+ 
+
+    context = {'form': form, 'form_ds': form_ds, 'form_abo' : form_abo , 'tp' : 0 , 'accounting' : None }
+
+    return render(request, 'association/form_accounting.html', context)
+
+
+
+
 @user_passes_test(user_is_board)
 def update_accounting(request, id):
 

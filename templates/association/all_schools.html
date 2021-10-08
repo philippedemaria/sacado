@@ -1,5 +1,4 @@
 {% extends 'dashboard.html' %}
-
 {% load widget_tweaks %}
 {% load static %}
 {% load item_tags %}
@@ -16,56 +15,49 @@
 {% endblock %} 
 
 {% block page_menu_right %}
-
-
-{% include 'association/menubar.html' %}
-
-
-
+    {% include 'association/menubar.html' %}
 {% endblock %}
 
 
 {% block body %}
 <section class="content_main"> 
     {% if request.user.is_board %}
- 
-    <div class="col-lg-12 col-xs-12">
-        <table class="table bg_white standard_tab_sort300">
-            <thead>
+        <div class="col-lg-12 col-xs-12">
+            <table class="table bg_white standard_tab_sort300">
+                <thead>
+                    <tr>
+                        <td></td>
+                        <td>Nom</td>
+                        <td>Ville</td>
+                        <td>Pays</td>
+                        <td>Admin</td>
+                    </tr>
+                </thead>
+                {% for school in schools %}
                 <tr>
-                    <td></td>
-                    <td>Nom</td>
-                    <td>Ville</td>
-                    <td>Pays</td>
-                    <td>Admin</td>
+                    <td>
+                        {% if school.adhesion %}
+                            <span style="font-size:1px;color:#FFF">1</span><i class="fa fa-check text-success"></i>
+                        {% else %}
+                            <span style="font-size:1px;color:#FFF">0</span><i class="fa fa-times text-danger"></i>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ school.name }}
+                        {% if school.active_accounting %}
+                            <a href="{% url 'update_accounting'  school.active_accounting.id %}" class="pull-right"><i class="fa fa-euro"></i></a>
+                        {% else %}
+                            <a href="{% url 'renew_accounting' school.id %}" class="pull-right"><i class="fa fa-credit-card"></i></a>
+                        {% endif %}
+               
+                    </td>
+                    <td>{{ school.town }}</td>
+                    <td>{{ school.country.name }}</td>
+                    <td>{% for u in school.admin %} <li>{{u.get_full_name}}, {{u.email}}</li> {% endfor %}</td>
                 </tr>
-            </thead>
-            {% for school in schools %}
-            <tr>
-                <td>
-                    {% if school.adhesion %}
-                        <span style="font-size:1px;color:#FFF">1</span><i class="fa fa-check text-success"></i>
-                    {% else %}
-                        <span style="font-size:1px;color:#FFF">0</span><i class="fa fa-times text-danger"></i>
-                    {% endif %}
-                </td>
-                <td>
-                    {{ school.name }}
-                    {% if school.active_accounting %}
-                        <a href="{% url 'update_accounting'  school.active_accounting.id %}" class="pull-right"><i class="fa fa-euro"></i></a>
-                    {% endif %}
-           
-                </td>
-                <td>{{ school.town }}</td>
-                <td>{{ school.country.name }}</td>
-                <td>{% for u in school.admin %} <li>{{u.get_full_name}}, {{u.email}}</li> {% endfor %}</td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-
+                {% endfor %}
+            </table>
+        </div>
     {% endif %} 
-
-
 </section> 
 {% endblock %}

@@ -21,6 +21,9 @@ urlpatterns = [
     path('delete/<int:id>/', delete_accounting, name='delete_accounting'),
     path('show/<int:id>/', show_accounting, name='show_accounting'), 
     path('print/<int:id>/', print_accounting, name='print_accounting'), 
+    path('renew/<int:ids>/', renew_accounting, name='renew_accounting'),
+
+
 
     path('new_voting/<int:id>/', create_voting, name='create_voting'),
  

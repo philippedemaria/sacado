@@ -722,10 +722,10 @@
 
 
             <span class="horizontalmargin5"><a href="#" style="font-size:14px;color:{{ parcours.color|contrast_color }}" class="copy_link" title="Code de l'exercice" data-code="{{ rc.code}}"><i class="fa fa-barcode"></i></a></span> 
-
+            {% comment %}
             <!-- Appel des parcours de maitrise -->
             <span class="horizontalmargin5"><a href="{% url 'create_mastering_custom' rc.id parcours.id %}" title="Parcours de maîtrise à partir de cet exercice" style="font-size:14px;color:{{ parcours.color|contrast_color }}"><i class="fa fa-sitemap"></i></a></span> 
-              
+            {% endcomment %}
             <!-- Appel des situations et durée -->
             <span class="custom_select_details horizontalmargin5"  data-customexercise_id="{{ rc.id }}" id="clock{{rc.id}}"  title="Modifier le temps"><!-- l'id permet de modifier après ajax le temps -->
                   {{ rc.duration }} min. 

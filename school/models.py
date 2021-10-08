@@ -109,7 +109,6 @@ class School(models.Model):
             account  = self.abonnement.filter( is_active = 1 , date_start__lte = today , date_stop__gte = today ).last()
         except :
             account  = False
-        print(account)
         return account
 
 
