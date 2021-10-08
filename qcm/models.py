@@ -1266,7 +1266,7 @@ class Relationship(models.Model):
     def percent_student_done_parcours_exercice_group(self,parcours,group):
 
         parcours_students = set(self.students.exclude(user__username__contains="_e-test"))
-        group_students    = set(self.students.all())
+        group_students    = set(group.students.all())
         students          = parcours_students.intersection(group_students) 
         nb_student        = len(students)
 
@@ -1285,15 +1285,6 @@ class Relationship(models.Model):
         data["percent"] = percent
         data["nb_done"] = nb_exercise_done
         return data
-
-
- 
-
-
-
-
-
-
 
 
     def is_submit(self,student):
