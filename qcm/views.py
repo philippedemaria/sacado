@@ -1885,16 +1885,19 @@ def lock_all_exercises_for_this_student(parcours,student):
     for exercise in  parcours.exercises.all() :
         relationship = Relationship.objects.get(parcours=parcours, exercise = exercise) 
         if dateur :
+            if Exerciselocker.objects.filter(student = student , relationship = relationship, custom = 0 ) :
+                Exerciselocker.objects.filter(student = student , relationship = relationship, custom = 0 ).delete()
             result, created = Exerciselocker.objects.get_or_create(student = student , relationship = relationship, custom = 0, defaults={"lock" : dateur})
             if not created :
                 Exerciselocker.objects.filter(student = student , relationship = relationship, custom = 0).update(lock = dateur)
         else :
-            if Exerciselocker.objects.filter(student = student , relationship = relationship, custom = 0).exists():
-                res = Exerciselocker.objects.get(student = student , relationship = relationship, custom = 0)
+            for res in Exerciselocker.objects.filter (student = student , relationship = relationship, custom = 0) :
                 res.delete() 
 
     for ce in Customexercise.objects.filter(parcourses = parcours) :
-        if dateur :    
+        if dateur :
+            if Exerciselocker.objects.filter(student = student , customexercise = ce, custom = 1 ) :
+                Exerciselocker.objects.filter(student = student , customexercise = ce, custom = 1 ).delete()
             result, created = Exerciselocker.objects.get_or_create(student = student , customexercise = ce, custom = 1, defaults={"lock" : dateur})
             if not created :
                 Exerciselocker.objects.filter(student = student , customexercise = ce, custom = 1).update(lock = dateur)
