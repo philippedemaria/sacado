@@ -679,14 +679,13 @@ class Parcours(ModelWithCode):
         """
         min score d'un parcours par élève
         """
- 
         data = {}
         max_tab = []
         nb_done = 0
         exercises = set()
         exercises.update(self.exercises.filter(supportfile__is_title=0, supportfile__is_ggbfile=1 ))
 
-        nb_exo_in_parcours =  self.parcours_relationship.filter(is_publish=1,students=student ).count()
+        nb_exo_in_parcours =  self.parcours_relationship.filter(is_publish=1,students=student, exercise__supportfile__is_title=0 ).count() 
 
         for exercise in exercises :
             maxi = self.answers.filter( student=student , exercise = exercise )
@@ -695,7 +694,7 @@ class Parcours(ModelWithCode):
                 max_tab.append(maximum["point__max"])
                 nb_done +=1
 
-        data["nb_cours"] = self.course.filter( is_publish =1 , students=student ).count()
+        data["nb_cours"] = self.course.filter( is_publish =1 ).count()
         data["nb_quizz"] = self.quizz.filter( is_publish = 1 ).count()
         data["nb_exercise"] = nb_exo_in_parcours
 
@@ -931,8 +930,8 @@ class Folder(models.Model):
         parcours_set = set()
         for p in self.parcours.filter(is_publish=1, students=student):
             exos = p.exercises.filter(supportfile__is_title=0, supportfile__is_ggbfile=1 )
-            nb_cours += p.quizz.values_list("id").filter( is_publish=1 ).distinct().count()
-            nb_quizz += p.course.values_list("id").filter( is_publish=1 , students=student ).distinct().count()
+            nb_cours += p.course.values_list("id").filter( is_publish=1 ).distinct().count()
+            nb_quizz += p.quizz.values_list("id").filter( is_publish=1 , students=student ).distinct().count()
 
             if exos.count() > 0 : 
                 exercises.update(exos)
