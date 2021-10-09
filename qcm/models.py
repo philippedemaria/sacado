@@ -810,6 +810,37 @@ class Parcours(ModelWithCode):
         return test
 
  
+    def nb_exercices_and_cours(self):
+
+        data = {}
+ 
+        exercises = self.parcours_relationship.filter( exercise__supportfile__is_title=0 ) 
+        courses   = self.course.all()
+
+        nb_exercises_published = exercises.filter(is_publish = 1).count() 
+        nb_cours_published     = courses.filter(is_publish = 1).count() 
+
+        nb_exercises = exercises.count()
+        nb_cours     = courses.count()
+
+ 
+        data["nb_exercises"]            = nb_exercises
+        data["nb_cours"]                = nb_cours
+        data["nb_exercises_published"]  = nb_exercises_published
+        data["nb_cours_published"]      = nb_cours_published
+
+        data["exercises_care"] = ( nb_exercises == nb_exercises_published)
+        data["cours_care"]     = ( nb_cours == nb_cours_published )
+
+        return data
+
+
+
+
+
+
+
+ 
 class Folder(models.Model):
 
     title = models.CharField(max_length=255, verbose_name="Titre")
@@ -1100,7 +1131,7 @@ class Folder(models.Model):
 
         group_students  = group.students.exclude(user__username__contains= "_e-test")
         folder_students = self.students.exclude(user__username__contains= "_e-test")
-        all_students    = [s for s in folder_students if s in  group_students]
+        all_students    = group_students.intersection(folder_students)
 
 
         parcours        = self.parcours.filter(is_evaluation=0, is_trash=0) 
