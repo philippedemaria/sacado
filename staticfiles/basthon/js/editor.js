@@ -7,7 +7,7 @@ function control_script() {
  
     document.getElementsByName('answer')[0].value = editor.getValue();
     var script = document.getElementsByName('answer')[0].value;
-    if (!confirm('Vous envoyez le script suivant :\n'+ script+'\n Confirmer ? ' )) return false;
+    if (!confirm('Vous envoyez le script suivant :\n\n'+ script+'\n Confirmer ? ' )) return false;
 }
 
 
