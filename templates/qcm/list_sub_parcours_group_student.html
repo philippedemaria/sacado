@@ -42,7 +42,6 @@
         {% for parcours in parcourses %}
             {% get_percent parcours student as data %}  
             {% get_min_score parcours student as data_min %}
-            {{ data_min }}
             {% include 'qcm/parcours_tag_student.html' %}
         {% endfor  %}   
 

@@ -931,7 +931,7 @@ class Folder(models.Model):
         for p in self.parcours.filter(is_publish=1, students=student):
             exos = p.exercises.filter(supportfile__is_title=0, supportfile__is_ggbfile=1 )
             nb_cours += p.course.values_list("id").filter( is_publish=1 ).distinct().count()
-            nb_quizz += p.quizz.values_list("id").filter( is_publish=1 , students=student ).distinct().count()
+            nb_quizz += p.quizz.values_list("id").filter( is_publish=1 ).distinct().count()
 
             if exos.count() > 0 : 
                 exercises.update(exos)
