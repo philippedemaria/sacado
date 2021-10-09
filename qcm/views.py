@@ -1459,6 +1459,7 @@ def list_parcours_group(request,id):
 
     evaluations = bases.filter( is_evaluation=1).order_by("ranking")
     parcourses  = bases.exclude(is_evaluation=1).order_by("ranking")
+
     parcours_tab = evaluations | parcourses
 
     ###efface le realtime de plus de 30min
@@ -1478,6 +1479,7 @@ def list_sub_parcours_group(request,idg,idf):
     today   = time_zone_user(teacher.user)
     folder  = Folder.objects.get(pk = idf) 
     group   = Group.objects.get(pk = idg) 
+
  
     role, group , group_id , access = get_complement(request, teacher, folder )
     request.session["folder_id"] = folder.id
