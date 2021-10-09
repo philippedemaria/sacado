@@ -2,12 +2,21 @@
 {% load static %}
 {% load item_tags %}
 
-
+{% if rc.exercise %}
 <div class="row">
     <div class="col-sm-12 col-md-6">
-        <img src="{{ rc.exercise.supportfile.imagefile.url }}" width="400px" />
 
-
+        {% if rc.exercise %}
+            <img  src="{{ rc.exercise.supportfile.imagefile.url }}"  width="400px" />
+        {% else %} 
+            {% if rc.imagefile %}
+                <img  src="{{ rc.imagefile.url }}"  width="400px" />
+            {% elif rc.is_python %} 
+                <img  src="{% static 'img/python.jpg' %}"  width="400px" />
+            {% else %} 
+                <img  src="{% static 'img/custom_exercise.jpg' %}"  width="400px" />
+            {% endif %} 
+        {% endif %}
         <hr/>
         <span class="btn btn-info select_student" 
             id="selecteur{{relationship.exercise.id}}"    
@@ -38,7 +47,13 @@
 
     </div> 
     <div class="col-sm-12 col-md-6">
-        <h3>{{ rc.exercise.supportfile.title|decode}}</h3>
+
+        {% if rc.exercise %}
+            <h3>{{ rc.exercise.supportfile.title|decode}}</h3>
+        {% else %}
+            <h3>{{ rc.instruction|decode|cleanhtml }}</h3>
+        {% endif %}
+
         <hr/>
  
 
@@ -50,10 +65,16 @@
             {%  for s in  students %}
 
                 {% get_exercise s rc as has_it %}
+
+ 
+
                 <span class="btn btn-{% if has_it %}success{% else  %}default{% endif  %} select_student selected_student{{rc.exercise.id}}" 
                     id="student{{rc.exercise.id}}-{{s.user.id }}"
                     data-student_id="{{ s.user.id }}" data-exercise_id="{{ rc.exercise.id }}"   data-custom=0 data-parcours_id="{{ rc.parcours.id }}"  data-statut="{% if has_it %}True{% else  %}False{% endif  %}"  
                     style="min-width:155px; margin:1px">
+
+
+
 
 
                     {{ s.user.last_name }} {{ s.user.first_name|truncatechars:6 }}
@@ -64,6 +85,85 @@
      </div> 
 </div> 
           
+{% else %}
+
+<div class="row">
+    <div class="col-sm-12 col-md-6">
+
+            {% if rc.imagefile %}
+                <img  src="{{ rc.imagefile.url }}"  width="400px" />
+            {% elif rc.is_python %} 
+                <img  src="{% static 'img/python.jpg' %}"  width="400px" />
+            {% else %} 
+                <img  src="{% static 'img/custom_exercise.jpg' %}"  width="400px" />
+            {% endif %} 
+
+        <hr/>
+        <span class="btn btn-info select_student" 
+            id="selecteur{{relationship.exercise.id}}"    
+            data-student_id="0"   data-custom=1
+            data-exercise_id="{{ rc.id }}" 
+            data-statut="False"   
+            data-parcours_id="{{ parcours.id }}"  style="min-width:75px; margin:1px; margin-right:0px" >Attribuer à tous les élèves
+
+            <input  type="checkbox"  style="display:none"
+            data-student_id="0"    data-custom=1
+            data-exercise_id="{{ rc.id }}" 
+            data-statut="False"   
+            data-parcours_id="{{ parcours.id }}" />
+        </span>
+        <span class="btn btn-warning select_student" 
+            id="selecteur{{rc.exercise.id}}"    
+            data-student_id="0"    data-custom=1
+            data-exercise_id="{{ rc.id }}" 
+            data-statut="True"   
+            data-parcours_id="{{ parcours.id }}"  style="min-width:75px; margin:1px; margin-left:0px" >Détacher tous les élèves
+
+            <input  type="checkbox"  style="display:none"
+            data-student_id="0"    data-custom=1
+            data-exercise_id="{{ rc.id }}" 
+            data-statut="True"   
+            data-parcours_id="{{ parcours.id }}" />
+        </span>
+
+    </div> 
+    <div class="col-sm-12 col-md-6">
  
+            <h3>{{ rc.instruction|decode|cleanhtml }}</h3>
+ 
+
+        <hr/>
+ 
+
+
+
+ 
+        <form action="" method="POST" enctype='multipart/form-data'> 
+            {% csrf_token %}
+            {%  for s in  students %}
+
+                {% get_exercise s rc as has_it %}
+
+                    <span class="btn btn-{% if has_it %}success{% else  %}default{% endif  %} select_student selected_studentCustom{{rc.id}}" 
+                    id="studentCustom{{rc.id}}-{{s.user.id }}"
+                    data-student_id="{{ s.user.id }}" data-exercise_id="{{ rc.id }}"   data-custom=1 data-parcours_id="{{ parcours.id }}"  data-statut="{% if has_it %}True{% else  %}False{% endif  %}"  
+                    style="min-width:155px; margin:1px">
+
+
+
+
+                    {{ s.user.last_name }} {{ s.user.first_name|truncatechars:6 }}
+                </span>
+
+            {%  endfor %}
+        </form>
+     </div> 
+</div>
+
+
+
+ 
+{% endif %}
+
  
        

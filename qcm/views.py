@@ -1110,23 +1110,19 @@ def ajax_individualise(request):
                     data["noclass"] = "btn btn-default"
                     data["alert"] = False   
             else :
-                student = Student.objects.get(pk = student_id) 
+                student = Student.objects.get(pk = student_id)
                 if statut=="true" or statut == "True":
-                    try :
-                        if Customanswerbystudent.objects.filter(student = student , customexercise = customexercise).count() == 0 :
-                            customexercise.students.remove(student)
-                            Blacklist.objects.get_or_create(customexercise=customexercise, student = student ,relationship = None   )
-                            data["alert"] = False
-                        else :
-                            data["alert"] = True                        
-                    except :
-                        pass
+                    if Customanswerbystudent.objects.filter(student = student , customexercise = customexercise).count() == 0 :
+                        customexercise.students.remove(student)
+                        Blacklist.objects.get_or_create(customexercise=customexercise, student = student ,relationship = None   )
+                        data["alert"] = False
+                    else :
+                        data["alert"] = True                        
 
                     data["statut"] = "False"
                     data["class"] = "btn btn-default"
                     data["noclass"] = "btn btn-success" 
                 else:
-
                     try :
                         customexercise.students.add(student)
                         if Blacklist.objects.filter(customexercise=customexercise, student = student ,relationship = None   ).count()  > 0 :
