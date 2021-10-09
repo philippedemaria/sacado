@@ -5788,10 +5788,10 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
     else :
         form_ans = None
 
- 
 
     if request.method == "POST":
         if cForm.is_valid():
+            print( cForm.cleaned_data ,  cForm.cleaned_data['answer']  )
             w_f = cForm.save(commit=False)
             w_f.customexercise = customexercise
             w_f.parcours_id = idp

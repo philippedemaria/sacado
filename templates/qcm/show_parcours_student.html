@@ -508,6 +508,8 @@
                                 <a href="{% url 'write_custom_exercise' rc.id parcours.id %}"> 
                                     {% if rc.imagefile %} 
                                         <img src="{{ rc.imagefile.url }}"  class="image_parcours" >
+                                    {% elif rc.is_python %}
+                                        <img src="{% static 'img/python.png' %}"  class="image_parcours" >
                                     {% else %}
                                         <img src="{% static 'img/custom_exercise.jpg' %}"  class="image_parcours" >
                                     {% endif %}
