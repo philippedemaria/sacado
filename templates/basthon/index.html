@@ -112,7 +112,7 @@
         {% if  is_lock or  relationship.is_lock  %}  
         <button  class="btn btn-primary" disabled="" >Exercice verrouillé</button>   <br/> 
         {% else  %} 
-        <button type="submit" name="submit_code"   id="submit_code" class="btn btn-primary" >Envoyer  le script </button>   
+        <button type="submit" name="submit_code"   id="submit_code" class="btn btn-primary" onclick="return control_script()"  >Envoyer  le script </button>   
         {% endif %}
         <a href="javascript:history.back()"><input type="button" value="Annuler"
                                                                    class="btn btn-default "/></a>
