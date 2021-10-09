@@ -2409,6 +2409,7 @@ def show_parcours(request, idf = 0, id=0):
 
 def ordering_number_for_student(parcours,student):
     """ créer une seule liste des exercices personnalisés et des exercices sacado coté eleve """
+
     listing_ordered = set() 
     relationships = Relationship.objects.filter(parcours=parcours, students=student, is_publish=1).prefetch_related('exercise__supportfile').order_by("ranking")
     customexercises = Customexercise.objects.filter(parcourses=parcours, students=student, is_publish=1).order_by("ranking") 
@@ -2416,6 +2417,7 @@ def ordering_number_for_student(parcours,student):
     listing_ordered.update(customexercises)
 
     listing_order = sorted(listing_ordered, key=attrgetter('ranking')) #set trié par ranking
+
 
 
     nb_exo_only, nb_exo_visible  = [] , []   

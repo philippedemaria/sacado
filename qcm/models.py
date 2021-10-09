@@ -945,16 +945,11 @@ class Folder(models.Model):
                     max_tab.append(maximum["point__max"])
                     nb_done +=1
 
-
-
         data["nb_parcours"]    = self.parcours.filter(is_evaluation = 0, is_publish=1, students=student).count()
         data["nb_evaluations"] = self.parcours.filter(is_evaluation = 1, is_publish=1, students=student).count()
 
         data["nb_cours"] = nb_cours
         data["nb_quizz"] = nb_quizz
-
-
-
 
         try :
             stage =  student.user.school.aptitude.first()
