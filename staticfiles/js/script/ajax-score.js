@@ -40,7 +40,7 @@ define(['jquery', 'bootstrap'], function ($) {
            numexo = parseInt(numexo)  ;
            this_situation = parseInt(situation) ;
 
-                if ( situation  > numexo ) {
+                if ( this_situation  > numexo ) {
                         alert("Vous devez atteindre "+situation+" situations pour enregistrer le résultat.");
                         return false;
                     }
@@ -65,13 +65,16 @@ define(['jquery', 'bootstrap'], function ($) {
            grade = parseInt(grade) ;
            numexo = parseInt(numexo)  ;
 
-           var this_situation = parseInt(situation)  + 1 ;
+           var this_situation = parseInt(situation)   ;
 
 
-                 if ( this_situation != numexo ) {
+                 if ( this_situation > numexo ) {
                         alert("Vous devez effectuer le nombre de "+situation+" situations attendues.");
                         return false;
                     }
+                  else if ( this_situation < numexo ){
+                        alert("Vous devez effectuer le nombre de "+situation+" demandées. Respectez les consignes.");
+                  }
 
             score = grade/(numexo-1) ;
  
