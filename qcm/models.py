@@ -1131,7 +1131,7 @@ class Folder(models.Model):
 
         group_students  = group.students.exclude(user__username__contains= "_e-test")
         folder_students = self.students.exclude(user__username__contains= "_e-test")
-        all_students    = group_students.intersection(folder_students)
+        all_students    = [s for s in folder_students if s in  group_students]
 
 
         parcours        = self.parcours.filter(is_evaluation=0, is_trash=0) 
