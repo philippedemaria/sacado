@@ -129,6 +129,7 @@ urlpatterns = [
 
     path('admin_supportfiles/<int:id>', admin_list_supportfiles, name='admin_supportfiles'),
     path('admin_associations/<int:id>', admin_list_associations, name='admin_associations'),
+    path('admin_associations_ebep/<int:id>', admin_list_associations_ebep, name='admin_associations_ebep'),
     path('gestion_supportfiles', gestion_supportfiles, name='gestion_supportfiles'),
 
 

@@ -15,12 +15,12 @@
 
   
 {% block page_title %}
-    <img src="{% static 'img/ggb.png' %}" width="25px"> Les exercices <img src="{% static 'img/angle-right.png' %}"/>  <small>  <a href="{% url 'admin_associations_ebep' level.id %}">Les outils EBEP</a></small>
+    <img src="{% static 'img/ggb.png' %}" width="25px"> Les outils EBEP
 {% endblock %}
 
 {% block page_menu_right %}
  
-    <li  >{% if request.user.is_superuser and  '/admin' in request.path %}<a href="{% url 'create_supportfile' %}"   class="btn btn-new"><img width="25px" src="{% static 'img/plus.png' %}"/> Nouveau support GGB {% endif  %}</a> </li>
+ 
 
 {% endblock %}
 
@@ -49,10 +49,10 @@
                             </tr>   
                             {% regroup theme.list by knowledge.waiting as waiting_list %} 
                             {% for waiting in waiting_list  %}
-                                <tr  style="background:#aa98cd; cursor: pointer; color: white" id="row{{ waiting.grouper.id }}"  class="opener out"  > 
+                                <tr  style="background:#aa98cd; cursor: pointer; color: white"   > 
                                     <td></td> 
                                     <td>
-                                        <i class="fa fa-caret-right"></i> {{waiting.grouper.name}}
+                                          {{waiting.grouper.name}}
                                     </td>
                                     <td >
 
@@ -61,7 +61,7 @@
  
                                 {% regroup waiting.list by knowledge as knowledge_list %} 
                                 {% for knowledge in knowledge_list  %}
-                                    <tr  style="background:#d4cbe6; cursor: pointer; color: black" id="row{{ knowledge.grouper.id }}" class="opener_k openedrow{{ waiting.grouper.id }} out"> 
+                                    <tr  style="background:#d4cbe6; cursor: pointer; color: black"  > 
                                         <td></td> 
                                         <td>
                                             <i class="fa fa-caret-right"></i> Le savoir faire "<span style="color:#007EE2">{{ knowledge.grouper.name|capfirst }}</span>" est associé 
@@ -79,7 +79,7 @@
                                     </tr>
                                     {% for exercise in knowledge.list  %} 
                                     
-                                    <tr id="new_exercice{{ exercise.id }}" class="this_exercise opener_e openedkrow{{ knowledge.grouper.id }}">
+                                    <tr class="this_exercise">
 
                                         <input type="hidden" value="{{ exercise.id }}" name="this_exercise" ><!--  sert à classer les exercices  -->   
                                         <td style="cursor:pointer"><i class="fa fa-sort"></i></td> 
@@ -88,27 +88,10 @@
                                                 {% include 'qcm/ajax_association.html' %}
                                             </div>
                                         </td>
-                                        <td  style="position: relative;" > <small>A remplacer par</small> 
-                                                <input type="text" id="update_code{{ exercise.id }}" class="form-control" placeholder="code du support" />                               
+                                        <td  style="position: relative;" >
+ 
 
-                                                <a type="submit" href="#row{{ exercise.knowledge.grouper.id }}" data-exercise_id="{{ exercise.id }}" data-action="update" class="btn btn-primary btn-publisher update_association" style="position: absolute;right:11px;top:30px"   ><i class="fa fa-pencil-square-o"></i></a> 
-
-                                                <a href="#row{{ exercise.knowledge.grouper.id }}" 
-                                                    data-exercise_id="{{ exercise.id }}" style="position: absolute;right:11px;top:70px"
-                                                    data-action="delete" 
-                                                    class="btn btn-danger btn-publisher {% if not exercise.is_used %}delete_association{% endif %}"
-                                                     {% if exercise.is_used %} disabled title="Déjà utilisé"{% endif %}  ><i class="fa fa-trash"></i>  
-                                                </a> 
-
-
-
-                                                <a href="#" data-toggle='modal' data-target='#knowledge_modal' data-exercise_id ="{{ exercise.id }}" 
-                                                            class="btn btn-default load_modal" style="position: absolute;right:60px;top:70px" >
-                                                    Modifier le savoir faire
-                                                </a> 
-
-                                                <a href="{% url 'tools_to_exercise' exercise.id %}" 
-                                                    class="btn btn-{% if exercise.ebep %}warning{% else %}default{% endif %}" style="position: absolute;right:60px;top:100px" >
+                                                <a href="{% url 'tools_to_exercise' exercise.id %}" class="btn btn-{% if exercise.ebep %}warning{% else %}default{% endif %}" >
                                                     Outils EBEP
                                                 </a> 
                                             <div id="error_str{{ exercise.id }}" style="color:red"></div>                                        

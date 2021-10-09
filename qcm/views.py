@@ -4190,8 +4190,27 @@ def admin_list_associations(request,id):
     subjects = teacher.subjects.all()
     exercises = level.exercises.filter(theme__subject__in=subjects,supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
 
-    return render(request, 'qcm/list_associations.html', {'exercises': exercises, 'teacher': teacher , 'parcours': None, 'relationships' : [] , 'communications' : []   })
+    return render(request, 'qcm/list_associations.html', {'exercises': exercises, 'teacher': teacher , 'parcours': None ,   'level' : level   })
  
+
+
+
+@user_passes_test(user_is_superuser)
+def admin_list_associations_ebep(request,id):
+    level = Level.objects.get(pk = id)
+    user = request.user
+
+    teacher  = Teacher.objects.get(user=user)
+    subjects = teacher.subjects.all()
+    exercises = level.exercises.filter(theme__subject__in=subjects,supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
+
+    return render(request, 'qcm/list_associations_ebep.html', {'exercises': exercises, 'teacher': teacher , 'parcours': None,   'level' : level  })
+ 
+
+
+
+
+
 
 @user_passes_test(user_is_superuser)
 def gestion_supportfiles(request):
