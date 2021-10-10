@@ -5520,11 +5520,15 @@ def audio_remediation(request):
     relationship = Relationship.objects.get(pk=idr) 
     form = RemediationForm(request.POST or None, request.FILES or None )
 
+    print(relationship)
+
     if form.is_valid():
         nf =  form.save(commit = False)
         nf.mediation = request.FILES.get("id_mediation")
         nf.relationship = relationship
         nf.audio = True
+        print(nf)
+
         nf.save()
     else:
         print(form.errors)

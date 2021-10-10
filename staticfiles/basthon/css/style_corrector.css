@@ -1,18 +1,14 @@
-
 textarea {
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;         /* Opera/IE 8+ */
 }
 
-
 #container {
     width: 100%;
     position: relative;
     margin: auto;
 }
-
-
 
 #editor {
     float:none;
@@ -37,9 +33,3 @@ textarea {
     border-radius: 0.6vw;
     border-width: 0px;
 }
-
-
- 
-
-
-

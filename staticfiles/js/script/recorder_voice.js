@@ -180,7 +180,7 @@
 							fd.append("id_student",id_student);
 						}
 						fd.append("id_mediation",blob, link.download);
-						var url = "../../ajax_audio_comment_all_exercise";
+						var url = "../../../ajax_audio_comment_all_exercise";
 
 
 					}

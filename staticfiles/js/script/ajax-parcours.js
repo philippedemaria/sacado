@@ -741,7 +741,7 @@ define(['jquery','bootstrap'], function ($) {
                         'custom': custom,
                         'student_id': student_id,
                     },
-                    url: "../../ajax_read_my_production",
+                    url: "../ajax_read_my_production",
                     success: function (data) {
                         $('#my_production_paper').html(data.html);
                     }

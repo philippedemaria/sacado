@@ -236,10 +236,10 @@
                                     <script src="{% static 'js/script/recorder_voice.js' %}"></script>
                                 </div>
                             </div>
-                                <input name="id_student" id="id_student" type="hidden"  />
-                                <input name="id_relationship" id="id_relationship" type="hidden"  />
-                                <input name="id_parcours" id="id_parcours" type="hidden"  /> 
-                                <input name="custom" id="custom" type="hidden"  />                               
+                                <input name="id_student" id="id_student" type="hidden" value="{{ student.user.id}}" />
+                                <input name="id_relationship" id="id_relationship" type="hidden"   value="{% if custom %}{{ customexercise.id}}{% else %}{{ relationship.id}}{% endif %}"   />
+                                <input name="id_parcours" id="id_parcours" type="hidden"   value="{% if custom %}{{ parcours.id}}{% else %}{{ relationship.parcours.id}}{% endif %}"  /> 
+                                <input name="custom" id="custom" type="hidden" value="{% if custom %}1{% else %}0{% endif %}" />                               
                         </form>  
                     </div>
                 </div>
