@@ -1290,11 +1290,8 @@ class Relationship(models.Model):
 
     def percent_student_done_parcours_exercice_group(self,parcours,group):
 
-        parcours_students = set(self.students.exclude(user__username__contains="_e-test"))
-        group_students    = set(group.students.all())
-        students          = parcours_students.intersection(group_students) 
+        students          = self.students.filter( students_to_group = group).exclude(user__username__contains="_e-test")
         nb_student        = len(students)
-
 
         if self.exercise.supportfile.is_ggbfile :
             nb_exercise_done = Studentanswer.objects.filter(student__in= students, parcours= parcours, exercise = self.exercise).values_list("student",flat= True).order_by("student").distinct().count()
@@ -1604,6 +1601,8 @@ class Customexercise(ModelWithCode):
         return levels
 
     def percent_student_done_parcours_exercice_group(self, parcours,group):
+
+        print(parcours,group)
 
         students = self.students.filter( students_to_group = group).exclude(user__username__contains="_e-test")
         nb_student = students.count()
