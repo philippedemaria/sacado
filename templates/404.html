@@ -27,30 +27,32 @@ a.sacado{
   text-decoration: none;
   font-family: "Montserrat", sans-serif;
   font-size: 20px;
-  color: #0056b3;
+  color: #b4b2f3;
 }
- 
+
+
 </style>
 </head>
 
 <body>
 
-<section>
+<section style="margin-left: auto;margin-right: auto;width:1000px">
 
       <a class="navbar-brand sacado" href="{% url 'index' %}"><img src="{% static 'img/sacadoA1.png' %}" style="vertical-align: middle;"/>   SACADO </a>
 
-
-
-      <div class="row" style="margin-bottom: 20px;margin-top: 40px;">
-          <p style="font-size:18px;"> Hummm ???..... si vous êtes arrivés sur cette page c'est qu'il y a eu une erreur d'aiguillage. DÉSOLÉ...</p> 
-          <p style="font-size:18px;">Merci d'aider SACADO à devenir meilleur.</p> 
+ 
+      <div class="row">
+          <div class="col-xs-12 col-md-12" >  
+              <img src="{% static 'img/404_500.jpg' %}"/>
+          </div>
       </div>
+ 
 
-
+ 
 
 
     <div class="row" style="text-align: right;">
-      <a href="javascript:history.back()" style="color:#FFF; font-size:20px">Retour</a>
+       <a class="navbar-brand sacado" href="{% url 'index' %}"> Retour SACADO <img src="{% static 'img/sacadoA1.png' %}" style="height:20px;"/></a>
     </div>
 
 
