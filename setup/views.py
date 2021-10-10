@@ -16,6 +16,7 @@ from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.db.models import Count, Q
+from django.shortcuts import render_to_response
 
 from account.decorators import is_manager_of_this_school
 from account.forms import  UserForm, TeacherForm, StudentForm , BaseUserFormSet , NewpasswordForm
