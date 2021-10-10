@@ -215,13 +215,12 @@
                                                <label for="std{{student.user.id}}">{{ student.user.last_name|lower|capfirst }}  </label>
                                             </td>
                                             <td>
-                                                 {{ student.user.first_name|lower|capfirst }} 
+                                                {{ student.user.first_name|lower|capfirst }} 
                                             </td>
                                             <td>
                                                 {% for g in student.students_to_group.all %}{{ g }}{% endfor %}
                                             </td>
                                         </tr>
-
                                     {% endfor %}
                                 </tbody>
                             </table>

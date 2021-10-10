@@ -5,28 +5,50 @@ import requests
 
 def web_abonnement_xml(abonnement,new):
 
-	#Webservice du GAR
-	#header = "<?xml version='1.0' encoding='UTF-8'?><abonnement xmlns='http://www.atosworldline.com/wsabonnement/v1.0/'>"
-	#header = { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' }
+    #Webservice du GAR
+    header = "<?xml version='1.0' encoding='UTF-8'?>"
+    header += "<abonnement xmlns='http://www.atosworldline.com/wsabonnement/v1.0/'>"
+    header += "{ 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' }"
+    header += "<idAbonnement>ABO_SACADO_" + str(abonnement.school.code_acad)+"</idAbonnement>"
+    header += "<commentaireAbonnement>Abonnement à SacAdo</commentaireAbonnement>"
+    header += "<idDistributeurCom>46173_832020065</idDistributeurCom>"
+    header += "<idRessource>ark:/46173/00001.p</idRessource>"
+    header += "<typeIdRessource>46173</typeIdRessource>"
+    header += "<libelleRessource>SACADO</libelleRessource>"
+    header += "<debutValidite>"+abonnement.date_start.isoformat()+"</debutValidite>"
+    header += "<finValidite>"+abonnement.date_stop.isoformat()+"</finValidite>"
+    header += "<anneeFinValidite></anneeFinValidite>"
+    header += "<uaiEtab>"+abonnement.school.code_acad+"</uaiEtab>"
+    header += "<codeNatureUAI></codeNatureUAI>"
+    header += "<categorieAffectation>transferable</categorieAffectation>"
+    header += "<typeAffectation>ETABL</typeAffectation>"
+    header += "<nbLicenceEnseignant></nbLicenceEnseignant>"
+    header += "<nbLicenceEleve></nbLicenceEleve>"
+    header += "<nbLicenceProfDoc></nbLicenceProfDoc>"
+    header += "<nbLicenceGlobale>ILLIMITE</nbLicenceGlobale>"
+    header += "<publicCible>ENSEIGNANT</publicCible>"
+    header += "<publicCible>ELEVE</publicCible>"
+    header += "<nbAccedantSimultane>3000</nbAccedantSimultane>"
+    header += "</abonnement>"
 
-	dico   = dict()
-	dico["idAbonnement"]          = "ABO_SACADO_" + str(abonnement.school.code_acad)
-	dico["commentaireAbonnement"] = "Abonnement à SacAdo"
-	dico["idDistributeurCom"]     = "46173_832020065"
-	dico["idRessource"]	          = "ark:/46173/00001.p" # En production, il faut enlever le p 
-	dico["typeIdRessource"]       = "ark" 	   
-	dico["libelleRessource"]      = "SACADO"
-	dico["debutValidite"]	      = abonnement.date_start.isoformat()
-	dico["finValidite"]	          = abonnement.date_stop.isoformat() #.strftime("%Y-%m-%d")
-	if new :
-		dico["uaiEtab"]	  	      = abonnement.school.code_acad 
-	dico["categorieAffectation"]  = "transferable"
-	dico["typeAffectation"]       = "ETABL"
-	dico["nbLicenceGlobale"]      = "ILLIMITE"	   
-	dico["publicCible"]           = "ELEVE"
-	dico["publicCible"]           = "ENSEIGNANT"
-	return dico
 
+    # dico   = dict()
+    # dico["idAbonnement"]          = "ABO_SACADO_" + str(abonnement.school.code_acad)
+    # dico["commentaireAbonnement"] = "Abonnement à SacAdo"
+    # dico["idDistributeurCom"]     = "46173_832020065"
+    # dico["idRessource"]           = "ark:/46173/00001.p" # En production, il faut enlever le p 
+    # dico["typeIdRessource"]       = "ark"      
+    # dico["libelleRessource"]      = "SACADO"
+    # dico["debutValidite"]         = abonnement.date_start.isoformat()
+    # dico["finValidite"]           = abonnement.date_stop.isoformat() #.strftime("%Y-%m-%d")
+    # if new :
+    #     dico["uaiEtab"]           = abonnement.school.code_acad 
+    # dico["categorieAffectation"]  = "transferable"
+    # dico["typeAffectation"]       = "ETABL"
+    # dico["nbLicenceGlobale"]      = "ILLIMITE"     
+    # dico["publicCible"]           = "ELEVE"
+    # dico["publicCible"]           = "ENSEIGNANT"
+    # return dico
 
 
 
@@ -69,3 +91,7 @@ def create_abonnement(today,school,accounting_id,user):
             abonnement.save()
 
  
+
+
+
+
