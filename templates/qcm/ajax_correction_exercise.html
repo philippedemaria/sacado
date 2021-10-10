@@ -29,6 +29,10 @@
             <div id="{{ a.attr_id }}" class="{{ a.classe }}" style="{{ a.style }}">{{ a.content|safe }}</div>
         {% endfor %}
 
+        {% if relationship.exercise.supportfile.is_python %}
+            {% include 'basthon/python_correction_editor.html' %}
+        {% endif %}
+
     </div>    
 {% else %}
 
@@ -37,6 +41,7 @@
     </div>
 {% endif %}
 </div>
+
 <div class="col-sm-12 col-md-5" style="padding-right:0px">
     {% if relationship.is_mark %}
         {% get_mark_to_this relationship student relationship as this_mark %}  
