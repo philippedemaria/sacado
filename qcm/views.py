@@ -2752,27 +2752,33 @@ def result_parcours_knowledge(request, id, is_folder):
 
     teacher = Teacher.objects.get(user=request.user)
     parcours = Parcours.objects.get(id=id)
-    students = students_from_p_or_g(request,parcours)
+
 
     form = EmailForm(request.POST or None)
  
 
     if  is_folder == 1 :
-        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all(), exercise__supportfile__is_title=0).prefetch_related('exercise__supportfile').order_by("ranking")
+    
+        folder = Folder.objects.get(id=id)
+        students = students_from_p_or_g(request,folder)
+        parcourses = folder.parcours.all()
+        relationships = Relationship.objects.filter(parcours__in=parcourses, exercise__supportfile__is_title=0).prefetch_related('exercise__supportfile').order_by("ranking")
 
         custom_set = set()
-        for p in parcours.leaf_parcours.all():
+        knowledge_set = set()
+        for p in parcourses:
             cstm = p.parcours_customexercises.all() 
             custom_set.update(set(cstm))
-        customexercises = list(custom_set)
 
-        knowledge_set = set()
-        for p in parcours.leaf_parcours.all():
             knw = p.exercises.values_list("knowledge",flat=True).filter(supportfile__is_title=0).order_by("knowledge").distinct()
             knowledge_set.update(set(knw))
+
+        customexercises = list(custom_set)
         knwldgs = list(knowledge_set)        
 
     else :
+        parcours = Parcours.objects.get(id=id)
+        students = students_from_p_or_g(request,parcours)
         relationships = Relationship.objects.filter(parcours=parcours, exercise__supportfile__is_title=0).prefetch_related('exercise__supportfile').order_by("ranking")
         customexercises = parcours.parcours_customexercises.all() 
         knwldgs = parcours.exercises.values_list("knowledge_id",flat=True).filter(supportfile__is_title=0).order_by("knowledge").distinct()
@@ -2816,21 +2822,24 @@ def result_parcours_waiting(request, id, is_folder):
  
 
     if  is_folder == 1:
-        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all(), exercise__supportfile__is_title=0).prefetch_related('exercise__supportfile').order_by("ranking")
+        folder = Folder.objects.get(id=id)
+        students = students_from_p_or_g(request,folder)
+        parcourses = folder.parcours.all()
+        relationships = Relationship.objects.filter(parcours__in=parcourses, exercise__supportfile__is_title=0).prefetch_related('exercise__supportfile').order_by("ranking")
 
         custom_set = set()
-        for p in parcours.leaf_parcours.all():
+        knowledge_set = set()        
+        for p in parcourses:
             cstm = p.parcours_customexercises.all() 
             custom_set.update(set(cstm))
-        customexercises = list(custom_set)
-
-        knowledge_set = set()
-        for p in parcours.leaf_parcours.all():
             knw = p.exercises.values_list("knowledge",flat=True).filter(supportfile__is_title=0).order_by("knowledge").distinct()
             knowledge_set.update(set(knw))
-        knwldgs = list(knowledge_set)        
+        knwldgs = list(knowledge_set)  
+        customexercises = list(custom_set)    
 
     else :
+        parcours = Parcours.objects.get(id=id)
+        students = students_from_p_or_g(request,parcours)
         relationships = Relationship.objects.filter(parcours=parcours, exercise__supportfile__is_title=0).prefetch_related('exercise__supportfile').order_by("ranking")
         customexercises = parcours.parcours_customexercises.all() 
         knwldgs = parcours.exercises.values_list("knowledge_id",flat=True).filter(supportfile__is_title=0).order_by("knowledge").distinct()
