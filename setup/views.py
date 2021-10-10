@@ -10,7 +10,7 @@ from django.core.exceptions import ValidationError
 from django.forms import BaseFormSet
 from django.utils import formats, timezone
 from django.contrib import messages
-
+ 
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 from django.http import JsonResponse
@@ -47,7 +47,6 @@ import os
 import fileinput 
 import random
 
- 
 ##############   bibliothèques pour les impressions pdf    #########################
 import os
 from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
@@ -1013,12 +1012,11 @@ def delete_adhesion(request):
 
 
 
-def csrf_failure(request):
-    context = RequestContext(request)
-    context_dict = {}
-    return render_to_response("csrf_failure.html", context_dict, context)
-
  
+
+def csrf_failure(request, reason=""):
+    ctx = {'message': 'some custom messages'}
+    return render_to_response("csrf_failure.html", ctx) 
 
 ##################################################################################################################
 ##################################################################################################################
