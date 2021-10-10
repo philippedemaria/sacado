@@ -84,9 +84,6 @@
                     <div id="loader">
                     </div>
                     <div id="content_exercises" class="list_choice">
-                        <div class="alert alert-warning">
-                            Si vous sélectionnez des exercices d'un autre niveau que celui de votre groupe, leurs scores n'entrent pas nécessairement dans les résultats. Les statistiques pourraient être faussées. 
-                        </div>
                     {% if parcours %}
                         <table class="table">
                         {% regroup  exercises by theme.name as theme_list %}  
