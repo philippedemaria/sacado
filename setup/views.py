@@ -1010,8 +1010,6 @@ def delete_adhesion(request):
     return redirect("adhesions")
 
 
-
-
  
 
 def csrf_failure(request, reason=""):
