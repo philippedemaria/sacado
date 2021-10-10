@@ -1602,8 +1602,6 @@ class Customexercise(ModelWithCode):
 
     def percent_student_done_parcours_exercice_group(self, parcours,group):
 
-        print(parcours,group)
-
         students = self.students.filter( students_to_group = group).exclude(user__username__contains="_e-test")
         nb_student = students.count()
         nb_exercise_done = Customanswerbystudent.objects.filter(student__in= students, customexercise__parcourses = parcours, customexercise = self).values_list("student",flat= True).order_by("student").distinct().count()
