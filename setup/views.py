@@ -1013,9 +1013,12 @@ def delete_adhesion(request):
 
 
 
-def csrf_failure(request, reason=""):
-    ctx = {}
-    return render_to_response("500.html", ctx)
+def csrf_failure(request):
+    context = RequestContext(request)
+    context_dict = {}
+    return render_to_response("csrf_failure.html", context_dict, context)
+
+ 
 
 ##################################################################################################################
 ##################################################################################################################
