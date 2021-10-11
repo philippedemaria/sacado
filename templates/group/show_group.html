@@ -46,7 +46,15 @@
         <div class="col-sm-12 col-md-4">
             <p style="color:{{ group.color }}">Niveau : <strong>{{ group.level.name }}</strong> - Code : <strong>{{ group.code }}</strong> 
                 <a href="#" data-toggle='modal' data-target='#mdp_code' title="Afficher le code et le mot de passe en plein écran"><i class="fa fa-expand"></i></a>
+
+                <a href="#" data-toggle='modal' data-target='#qr_code' title="Afficher le code et le mot de passe en plein écran">Rejoindre <i class="fa fa-qrcode"></i></a> 
             </p>
+
+
+
+
+
+
         </div>
 
         {% if sacado_asso %}
@@ -356,5 +364,27 @@
         </div>
     </div>
 </div>
+
+
+
+
+<div class="modal fade" id="qr_code" tabindex="-1" role="dialog" aria-labelledby="qr_code" aria-hidden="true">
+    <div class="modal-dialog" role="document" >
+        <div class="modal-content">
+ 
+            <div class="modal-body">
+ 
+                <div class="row" align="center">
+                    <div class="col-lg-12 col-xs-12">
+                        {{ show_qr|safe }}
+                    </div>
+                </div>
+ 
+
+            </div>
+        </div>
+    </div>
+</div>
+
 
 {% endblock %}

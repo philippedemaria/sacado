@@ -47,7 +47,9 @@ import re
 import pytz
 from datetime import datetime 
 from general_fonctions import *
-
+import qrcode
+import qrcode.image.svg
+from io import BytesIO
 
 
 
@@ -648,10 +650,18 @@ def show_group(request, id ):
     role = data['role']
     access = data['access']
     authorizing_access_group(request,teacher,group )
+
+    factory = qrcode.image.svg.SvgImage
+    img = qrcode.make('https://sacado.xyz/group/'+group.code , image_factory=factory, box_size=40)
+    stream = BytesIO()
+    img.save(stream)
+ 
+    show_qr = stream.getvalue().decode()
+
     studentprofiles = group.students.filter(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test")).order_by("user__last_name")
     students = group.students.exclude( user__username__contains= "_e-test").order_by("user__last_name")
 
-    context = {  'group': group,  'communications' : [] , 'teacher' : group.teacher , 'students' : students , 'studentprofiles' : studentprofiles }
+    context = {  'group': group,  'communications' : [] , 'teacher' : group.teacher , 'students' : students , 'studentprofiles' : studentprofiles , 'show_qr' : show_qr }
 
     return render(request, 'group/show_group.html', context )
 
