@@ -1155,7 +1155,7 @@ def enroll(request, slug):
                 student = Student.objects.create(user=user, level=group.level)
                 group.students.add(student)
                 # Affections des DOSSIERS ET parcours
-                messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation. Connectez-vous avec vos identifiants en cliquant sur le bouton bleu Se connecter.")                
+                messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation.")                
                 groups = [group]
                 test = attribute_all_documents_of_groups_to_a_new_student(groups, student)
 
@@ -1172,6 +1172,9 @@ def enroll(request, slug):
                                   [request.POST.get("email")])
                 except :
                     pass 
+                user = authenticate(username=username, password=password)
+                login(request, user)
+                request.session["user_id"] = request.user.id
         else :
 
             username = request.POST.get("this_username")
@@ -1180,9 +1183,11 @@ def enroll(request, slug):
             password = request.POST.get("this_password")
 
             user = authenticate(username=username, password=password)
+            login(request, user)
+            request.session["user_id"] = request.user.id
             group.students.add(user.student)
             if user :
-                messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation. Connectez-vous avec vos identifiants en cliquant sur le bouton bleu Se connecter.")  
+                messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation.")  
                 groups = [group]
                 test = attribute_all_documents_of_groups_to_a_new_student(groups, user.student)             
                 if test :
